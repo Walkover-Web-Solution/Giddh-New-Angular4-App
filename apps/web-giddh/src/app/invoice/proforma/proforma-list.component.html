@@ -1,105 +1,97 @@
 <ng-container appTranslate [file]="'invoice'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
-    <div validateSectionPermission [hasPermission]="hasVoucherListPermissions">
-        <div class="proforma-container">
+<div validateSectionPermission [hasPermission]="hasVoucherListPermissions">
+    <div class="proforma-container">
 
-            <div class="d-flex date-advance-search">
-                <form #invoiceForm="ngForm" novalidate class="form-inline input-grp-date-range-picker position-relative">
-                    <div class="d-flex">
-                        <div class="form-group mr-r1 d-flex">
-                            <div class=" input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
-                                <i class="icon-calender calendar-addon"></i>
-                                <input type="text" name="selectedDateRange"
-                                    [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
-                                    class="giddh-datepicker date-range-picker border-radius-2" />
+        <div class="d-flex date-advance-search">
+            <div class="d-flex">
+                <div class="d-flex btn-wrapper mr-r15">
+                        <!-- select app proforma -->
+                        <div class="select-all-proformas-on-mobile-view mt-1 mr-r15" *ngIf="selectedItems.length > 0">
+                            <div class="checkbox-img mr-1">
+                                <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
+                                <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
                             </div>
-                            <div class="advance-icon cursor-pointer">
-                                <span class="icon-advance-filter" (click)="toggleAdvanceSearchPopup()"
-                                    [tooltip]="commonLocaleData?.app_advance_search"></span>
-                            </div>
-                            <div class="search-icon-block" (click)="openModal(template)">
-                                <i class="icon-search"></i>
+                            {{commonLocaleData?.app_select_all}}
+                        </div>
+                        <!--  -->
+                        <!-- region more items -->
+                        <div *ngIf="selectedItems.length === 1" class="btn-wrapper-more">
+        
+                            <div *ngIf="!isCompany" class="btn-group d-inline-block mr-b1" dropdown #dp="bs-dropdown">
+        
+                                <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
+                                    aria-controls="dropdown-basic">
+                                    {{commonLocaleData?.app_more}}
+                                    <span class="caret"></span>
+                                </button>
+        
+                                <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+        
+                                    <li role="menuitem">
+                                        <a class="dropdown-item cp" href="javascript:void(0)"
+                                            (click)="toggleConfirmationModel(true)">{{commonLocaleData?.app_delete}}</a>
+                                    </li>
+        
+                                </ul>
+        
                             </div>
                         </div>
-
-
+                        <!-- endregion -->
+                        <div *ngIf="voucherType === 'proformas'" class="btn-wrapper">
+                            <button *ngIf="!isCompany" class="btn btn-sky-blue m-0"
+                                (click)="goToInvoice('proformas')">{{localeData?.new_proforma}}</button>
+                        </div>
+        
+                        <div *ngIf="voucherType === 'estimates'" class="btn-wrapper">
+                            <button *ngIf="!isCompany" class="btn btn-sky-blue m-0"
+                                (click)="goToInvoice('estimates')">{{localeData?.new_estimate}}</button>
+                        </div>
+        
                     </div>
-                </form>
-
-                <!-- need to add functionality -->
-                <div class="clear-filter" *ngIf="showResetAdvanceSearchIcon" (click)="resetAdvanceSearch()">
-                    <button class="btn btn-filter mr-0">
-                        <span class="icon-cross"></span> {{commonLocaleData?.app_clear_filter}}
-                    </button>
+                    <form #invoiceForm="ngForm" novalidate class="form-inline input-grp-date-range-picker position-relative">
+                            <div class="d-flex">
+                                <div class="form-group mr-r1 d-flex">
+                                    <div class=" input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                        <i class="icon-calender calendar-addon"></i>
+                                        <input type="text" name="selectedDateRange"
+                                            [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
+                                            class="giddh-datepicker date-range-picker" />
+                                    </div>
+                                    <div class="search-icon-block" (click)="openModal(template)">
+                                        <i class="icon-search"></i>
+                                    </div>
+                                </div>
+            
+            
+                            </div>
+                    </form>
                 </div>
-
-                <div class="d-flex btn-wrapper">
-                    <!-- select app proforma -->
-                    <div class="select-all-proformas-on-mobile-view mt-1 mr-r15" *ngIf="selectedItems.length > 0">
-                        <div class="checkbox-img mr-1">
-                            <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
-                            <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
-                        </div>
-                        {{commonLocaleData?.app_select_all}}
-                    </div>
-                    <!--  -->
-                    <!-- region more items -->
-                    <div *ngIf="selectedItems.length === 1" class="btn-wrapper-more">
-
-                        <div *ngIf="!isCompany" class="btn-group d-inline-block mr-b1" dropdown #dp="bs-dropdown">
-
-                            <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
-                                aria-controls="dropdown-basic">
-                                {{commonLocaleData?.app_more}}
-                                <span class="caret"></span>
-                            </button>
-
-                            <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-
-                                <li role="menuitem">
-                                    <a class="dropdown-item cp" href="javascript:void(0)"
-                                        (click)="toggleConfirmationModel(true)">{{commonLocaleData?.app_delete}}</a>
-                                </li>
-
-                            </ul>
-
-                        </div>
-                    </div>
-                    <!-- endregion -->
-                    <div *ngIf="voucherType === 'proformas'" class="btn-wrapper">
-                        <button *ngIf="!isCompany" class="btn btn-sky-blue m-0"
-                            (click)="goToInvoice('proformas')">{{localeData?.new_proforma}}</button>
-                    </div>
-
-                    <div *ngIf="voucherType === 'estimates'" class="btn-wrapper">
-                        <button *ngIf="!isCompany" class="btn btn-sky-blue m-0"
-                            (click)="goToInvoice('estimates')">{{localeData?.new_estimate}}</button>
-                    </div>
-
-                </div>
+            <!-- need to add functionality -->
+            <div class="clear-filter" *ngIf="showResetAdvanceSearchIcon" (click)="resetAdvanceSearch()">
+                <button class="btn btn-filter mr-0">
+                    <span class="icon-cross"></span> {{commonLocaleData?.app_clear_filter}}
+                </button>
             </div>
 
-            <div class="mobile-search mr-b1">
-                <div class="row">
-                    <div class="col-sm-6 full-width-on-mobile">
-                        <div class="input-container">
-                            <input type="text"
-                                [placeholder]="voucherType === 'proformas' ? localeData?.search_proforma : localeData?.search_estimate"
-                                class=" form-control" #searchBox [formControl]="voucherNumberInput" />
-                        </div>
-                    </div>
-                    <div class="col-sm-6 full-width-on-mobile">
-                        <div class="input-container">
-                            <input type="text" [placeholder]="localeData?.search_customer_name" class=" form-control"
-                                #searchBox name="customerNameInput" [formControl]="customerNameInput" />
-                        </div>
-                    </div>
+            <div class="advance-icon cursor-pointer align-items-center btn btn-primary" (click)="toggleAdvanceSearchPopup()"
+            [tooltip]="commonLocaleData?.app_advance_search">
+                    <span class="pd-r05">Filter</span>
+                    <span class="icon-advance-filter"></span>
                 </div>
-                <div class="d-flex mt-1">
-                    <div *ngIf="voucherType === 'proformas'" class="btn-wrapper mr-r15">
-                        <button *ngIf="!isCompany" class="btn btn-sky-blue m-0"
-                            (click)="goToInvoice('proformas')">{{localeData?.new_proforma}}</button>
+
+            <!--<div class="d-flex btn-wrapper">-->
+                <!-- select app proforma -->
+                <!--<div class="select-all-proformas-on-mobile-view mt-1 mr-r15" *ngIf="selectedItems.length > 0">
+                    <div class="checkbox-img mr-1">
+                        <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
+                        <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
                     </div>
+                    {{commonLocaleData?.app_select_all}}
+                </div>-->
+                <!--  -->
+                <!-- region more items -->
+                <!--<div *ngIf="selectedItems.length === 1" class="btn-wrapper-more">
 
                     <div *ngIf="voucherType === 'estimates'" class="btn-wrapper mr-r15">
                         <button *ngIf="!isCompany" class="btn btn-sky-blue m-0"
@@ -123,12 +115,19 @@
 
                             </ul>
 
-                        </div>
+                    </div>
+                </div>-->
+                <!-- endregion -->
+                <!--<div *ngIf="voucherType === 'proformas'" class="btn-wrapper">
+                    <button *ngIf="!isCompany" class="btn btn-sky-blue m-0"
+                        (click)="goToInvoice('proformas')">{{localeData?.new_proforma}}</button>
+                </div>
 
                     </div>
                 </div>
 
-            </div>
+            </div>-->
+        </div>
 
             <ng-template #template>
                 <div class="modal-header">
@@ -157,7 +156,7 @@
             <!-- select app proforma -->
             <div class="clearfix">
                 <div class="table-responsive remove-responsive invoice-preview">
-                    <table class="table basic table-bordered mr-t15 invoice-table on-mobile-view">
+                    <table class="table basic giddh-table table-bordered mr-t15 invoice-table on-mobile-view">
                         <thead class="thead-background1">
                             <tr>
 
@@ -419,8 +418,8 @@
             <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
 
                 <div [hidden]="show">
-                    <span> {{ title }}</span>
                     <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
+                    <span> {{ title }}</span>
                 </div>
 
                 <div class="input-container" [hidden]="!show">

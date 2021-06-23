@@ -30,7 +30,6 @@
     font-size: 12px;
 }
 .aging-table {
-    max-width: 1170px;
     width: 100%;
     background: transparent;
     min-height: 210px;
@@ -46,16 +45,14 @@
     color: $gray;
 }
 .advance-icon {
-    width: 32px;
-    height: 32px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    font-size: 18px;
-    margin-left: 10px;
+    font-size: 14px;
     border-radius: 5px;
     color: $midnight-blue;
     background: $white;
+    margin-right:0;
 }
 
 .search-field {
@@ -109,6 +106,13 @@ tr.aging-table-top td {
 
 .name-width {
     width: 210px;
+}
+
+.mobile-card-wrapper{
+    .table-responsive{
+        max-height: calc(100vh - 250px);
+        overflow-y: auto;
+    }
 }
 
 // responsive

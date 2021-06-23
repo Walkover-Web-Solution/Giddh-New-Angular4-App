@@ -20,7 +20,7 @@ VERSION:  1
 html,
 body {
     height: 100%;
-    background: $alice-blue-light;
+    //background: $alice-blue-light;
     font-family: "opensans-regular";
     color: $nero;
     -webkit-font-smoothing: antialiased;
@@ -611,6 +611,60 @@ aside-menu-account .container-fluid {
 
 .company-list li:hover .action {
     opacity: 1;
+}
+
+.total-details-box{
+    border: 1px solid $gainsboro;
+    border-radius: 5px;
+    padding: 14px 30px;
+    width: 100%;
+    h5{
+        font-size: 12px;
+        color: $omiod;
+        .number-total{
+            font-size: 16px;
+            font-weight: 800;
+            color: $black;
+        }
+    }
+}
+.count-box{
+    background: $white;
+}
+.opening-box{
+    background: $fog-green;
+    h5{
+        .number-total{
+            color: $success-green;
+        }
+    }
+}
+.sales-purchase{
+    background: $light-orange;
+    h5{
+        .number-total{
+            color: $dull-yellow;
+        }
+    }
+}
+.payment-receipt{
+    background: $pale-blue;
+    h5{
+        .number-total{
+            color: $chetwode-blue;
+        }
+    }
+}
+.closing-box{
+    background: $gray-95;
+}
+.due-box{
+    background: $light-red;
+    h5{
+        .number-total{
+            color: $red;
+        }
+    }
 }
 
 /*manage company detail*/
@@ -2108,8 +2162,8 @@ ul.pills li {
     display: none;
     float: left;
     min-width: 160px;
-    padding: 5px 0;
-    margin: 2px 0 0;
+    padding: 10px 0;
+    margin: 0px 0 0;
     font-size: 14px;
     text-align: left;
     list-style: none;
@@ -2119,6 +2173,12 @@ ul.pills li {
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    li{
+        margin-bottom: 10px;
+        &:last-child{
+            margin-bottom:0;
+        }
+    }
 }
 
 /*invoice pages global styles  */
@@ -2402,15 +2462,13 @@ perfect-scrollbar.ps-show-active
 }
 
 .basic thead tr th {
-    background: $whisper;
-    color: $nero;
     border: 0;
     font-family: "" opensans-semibold "";
     text-transform: capitalize;
 }
 
 .basic tbody tr:hover td {
-    background: $solitude;
+    background: #F0F5FF;
 }
 
 body.fixed {
