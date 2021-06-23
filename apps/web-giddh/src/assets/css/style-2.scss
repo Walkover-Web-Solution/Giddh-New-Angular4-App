@@ -8432,6 +8432,7 @@ body.update-scroll-hidden {
                 display: flex;
                 justify-content: space-between;
                 li{
+                    position: relative;
                     &.active{
                         a{
                             color: $midnight-blue !important;
