@@ -470,6 +470,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public hideEledgerWrap() {
         this.lc.showEledger = false;
+        this.entryUniqueNamesForBulkAction = [];
     }
     /**
      * To change pagination page number
@@ -827,6 +828,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public getBankTransactions(): void {
+        this.entryUniqueNamesForBulkAction = [];
         if (this.trxRequest.accountUniqueName) {
             this.isBankTransactionLoading = true;
 

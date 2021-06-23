@@ -112,11 +112,11 @@ export class SubscriptionsComponent implements OnInit, OnChanges, OnDestroy {
                         
                         this.seletedUserPlans = this.activeCompany.subscription;
 
-                        if (this.seletedUserPlans.startedAt) {
-                            this.subscriptionDates.startedAt = moment(this.seletedUserPlans.startedAt.split("-").reverse().join("-"));
+                        if (this.seletedUserPlans?.startedAt) {
+                            this.subscriptionDates.startedAt = moment(this.seletedUserPlans?.startedAt.split("-").reverse().join("-"));
                         }
-                        if (this.seletedUserPlans.expiry) {
-                            this.subscriptionDates.expiry = moment(this.seletedUserPlans.expiry.split("-").reverse().join("-"));
+                        if (this.seletedUserPlans?.expiry) {
+                            this.subscriptionDates.expiry = moment(this.seletedUserPlans?.expiry.split("-").reverse().join("-"));
                         }
                     }
                 });
@@ -281,11 +281,11 @@ export class SubscriptionsComponent implements OnInit, OnChanges, OnDestroy {
                 companies: this.seletedUserPlans.companies,
                 totalCompanies: this.seletedUserPlans.totalCompanies,
                 userDetails: {
-                    name: this.seletedUserPlans.userDetails.name,
-                    uniqueName: this.seletedUserPlans.userDetails.uniqueName,
-                    email: this.seletedUserPlans.userDetails.email,
-                    signUpOn: this.seletedUserPlans.userDetails.signUpOn,
-                    mobileno: this.seletedUserPlans.userDetails.mobileno
+                    name: this.seletedUserPlans.userDetails?.name,
+                    uniqueName: this.seletedUserPlans.userDetails?.uniqueName,
+                    email: this.seletedUserPlans.userDetails?.email,
+                    signUpOn: this.seletedUserPlans.userDetails?.signUpOn,
+                    mobileno: this.seletedUserPlans.userDetails?.mobileno
                 },
                 additionalTransactions: this.seletedUserPlans.additionalTransactions,
                 createdAt: this.seletedUserPlans.createdAt,
@@ -305,11 +305,11 @@ export class SubscriptionsComponent implements OnInit, OnChanges, OnDestroy {
             this.store.dispatch(this.companyActions.selectedPlan(this.subscriptionPlan));
         } else {
             this.subscriptionRequestObj.userUniqueName = this.loggedInUser.uniqueName;
-            if (this.seletedUserPlans.subscriptionId) {
-                this.subscriptionRequestObj.subscriptionId = this.seletedUserPlans.subscriptionId;
+            if (this.seletedUserPlans?.subscriptionId) {
+                this.subscriptionRequestObj.subscriptionId = this.seletedUserPlans?.subscriptionId;
                 this.patchProfile({ subscriptionRequest: this.subscriptionRequestObj, callNewPlanApi: true });
-            } else if (!this.seletedUserPlans.subscriptionId) {
-                this.subscriptionRequestObj.planUniqueName = this.seletedUserPlans.planDetails.uniqueName;
+            } else if (!this.seletedUserPlans?.subscriptionId) {
+                this.subscriptionRequestObj.planUniqueName = this.seletedUserPlans?.planDetails?.uniqueName;
                 this.patchProfile({ subscriptionRequest: this.subscriptionRequestObj, callNewPlanApi: true });
             }
         }
@@ -439,7 +439,13 @@ export class SubscriptionsComponent implements OnInit, OnChanges, OnDestroy {
      * @returns {string}
      * @memberof SubscriptionsComponent
      */
-    public getSubscribedCompaniesCount(totalCompanies: any, companiesLimit): string {
+    public getSubscribedCompaniesCount(totalCompanies: any, companiesLimit: any): string {
+        if(!totalCompanies) {
+            totalCompanies = 0;
+        }
+        if(!companiesLimit) {
+            companiesLimit = 0;
+        }
         let text = this.localeData?.subscription?.companies_limit;
         text = text?.replace("[TOTAL_COMPANIES]", this.decimalPipe.transform(totalCompanies))?.replace("[PLAN_LIMIT]", this.decimalPipe.transform(companiesLimit));
         return text;

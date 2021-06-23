@@ -13,8 +13,6 @@ import { Router } from '@angular/router';
 @Injectable()
 export class GeneralService {
     invokeEvent: Subject<any> = new Subject();
-    // TODO : It is commented due to we have implement calendly and its under discussion to remove
-    // public talkToSalesModal: BehaviorSubject<boolean> = new BehaviorSubject(false);
     public isCurrencyPipeLoaded: boolean = false;
 
     /** Stores the current organization type */
