@@ -3,7 +3,7 @@
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="reverse-table-report">
         <div class="container-fluid">
-            <div class="mr-t15 input-grp-date-range-picker d-flex">
+            <div class="mr-t15 mr-b15 input-grp-date-range-picker d-flex justify-content-between">
                 <!-- Invoice filter section -->
                 <div class="mr-r1 d-flex flex-sm-row flex-column">
                     <div class="input-group linked-entities mr-r15"
@@ -33,16 +33,12 @@
                             </ng-template>
                         </sh-select>
                     </div>
-                    <div class="d-flex mr-b15">
+                    <div class="d-flex">
                         <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                             <i><img src="assets/images/custom-calender.svg"></i>
                             <input type="text" name="selectedDateRange"
                                 [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
                                 class="giddh-datepicker date-range-picker" />
-                        </div>
-                        <div class="advance-icon cursor-pointer" tooltip="{{commonLocaleData?.app_advance_search}}"
-                            (click)="openModal()">
-                            <span class="icon-advance-filter"></span>
                         </div>
                     </div>
 
@@ -52,6 +48,11 @@
                     <button class="btn btn-filter mr-0" (click)="resetAdvanceSearch()"><span class="icon-cross"></span>
                         {{commonLocaleData?.app_clear_filter}}</button>
                 </div>
+                <div class="advance-icon cursor-pointer btn btn-primary mr-0" tooltip="{{commonLocaleData?.app_advance_search}}"
+                            (click)="openModal()">
+                            <span class="pd-r05">Filter</span>
+                            <span class="icon-advance-filter"></span>
+                        </div>
                 <!-- Invoice filter section ends -->
             </div>
             <div class="invoice-preview  table-responsive">
@@ -61,8 +62,8 @@
                             <th>#</th>
                             <th #receiptNumberParent width="13%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="showReceiptSearchBar">
-                                    <span>{{localeData?.receipt_no_label}}</span>
                                     <i class="icon-search" (click)="searchBy(null, 'receipt', true)"></i>
+                                    <span>{{localeData?.receipt_no_label}}</span>
                                 </div>
                                 <div class="input-container" [hidden]="!showReceiptSearchBar">
                                     <input #receiptNumber
@@ -105,8 +106,8 @@
 
                             <th #customerNameParent width="13%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="showCustomerSearchBar">
-                                    <span>{{localeData?.customer_name_label}}</span>
                                     <i class="icon-search" (click)="searchBy(null, 'customerName', true);"></i>
+                                    <span>{{localeData?.customer_name_label}}</span>
                                 </div>
                                 <div class="input-container" [hidden]="!showCustomerSearchBar">
                                     <input #customerName
@@ -119,8 +120,8 @@
 
                             <th #paymentModeParent width="13%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="showPaymentSearchBar">
-                                    <span>{{localeData?.payment_mode_label}}</span>
                                     <i class="icon-search" (click)="searchBy(null, 'paymentMode', true)"></i>
+                                    <span>{{localeData?.payment_mode_label}}</span>
                                 </div>
                                 <div class="input-container" [hidden]="!showPaymentSearchBar">
                                     <input #paymentMode
@@ -133,8 +134,8 @@
 
                             <th #invoiceNumberParent width="13%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="showInvoiceSearchBar">
-                                    <span>{{localeData?.invoice_no_label}}</span>
                                     <i class="icon-search" (click)="searchBy(null, 'invoiceNumber', true)"></i>
+                                    <span>{{localeData?.invoice_no_label}}</span>
                                 </div>
                                 <div class="input-container" [hidden]="!showInvoiceSearchBar">
                                     <input #invoiceNumber

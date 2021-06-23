@@ -7,7 +7,7 @@
 }
 
 .check-image img {
-    max-height: 17px;
+    max-height: 14px;
     cursor: pointer;
 }
 
@@ -32,7 +32,7 @@
 
 .td-search-box div span {
     /*flex: 1 1 auto;*/
-    padding: 8px 0 8px 10px;
+    padding: 8px 0 8px 0px;
 }
 
 .perform-payment {
@@ -65,7 +65,7 @@
     padding-right: 40px;
     color: $nero;
     border: none;
-    background-color: $white-smoke;
+    background-color: $gray-95;
 }
 
 .td-search-box .input-container i {
@@ -240,10 +240,6 @@ td.card-header.clearfix {
     padding-top: 8px;
 }
 
-.p-0 {
-    padding: 0;
-}
-
 .mobile-table {
     display: none;
 }
@@ -260,6 +256,7 @@ td.card-header.clearfix {
 
 .date-advance-search {
     justify-content: space-between;
+    padding-bottom: 15px !important;
     .input-group {
         width: auto;
     }
@@ -348,7 +345,16 @@ ul.select-action-dropdown {
     color: $nobel;
 }
 
-.advance-icon,
+.advance-icon{
+    width: auto !important;
+    height: auto !important;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    margin-right: 10px;
+}
+
 .search-icon-block {
     width: 36px;
     height: 36px;
@@ -361,15 +367,10 @@ ul.select-action-dropdown {
     border-radius: 5px;
     color: $gray;
     background: $white;
-    color: $gray;
 }
 
 .search-icon-block {
     display: none;
-}
-
-.advance-icon:hover {
-    background: $whisper-color;
 }
 
 .dropdown-toggle.more-btn-dropdown {
@@ -554,7 +555,7 @@ span.icon-export-icon {
     > tbody {
         > tr {
             &:hover {
-                background: rgba(221, 225, 230, 0.5);
+                background: #F0F5FF;
             }
             td {
                 background: transparent !important;
@@ -571,6 +572,11 @@ span.icon-export-icon {
 }
 .cancel-remarks-section {
     min-height: 120px;
+}
+
+.table-responsive{
+    max-height: calc(100vh - 302px);
+    overflow-y: auto;
 }
 
 /* responsive */

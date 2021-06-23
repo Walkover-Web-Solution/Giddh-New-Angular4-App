@@ -70,8 +70,9 @@
                     </div>
                 </div>
             </form>
-
-            <table class="table basic table-bordered pending-table on-mobile-view">
+            
+            <div class="table-responsive">
+            <table class="table basic giddh-table pending-table on-mobile-view">
 
                 <thead class="thead-background1">
                     <tr>
@@ -202,7 +203,7 @@
 
                         </td>
                         <td id="mobile-nested-table">
-                            <table>
+                            <table class="nested-table">
                                 <tr>
                                     <th>{{commonLocaleData?.app_particular}}</th>
                                     <th>{{commonLocaleData?.app_amount}}</th>
@@ -251,6 +252,7 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
         </div>
 
         <div *ngIf="ledgersData?.totalItems > 20"
