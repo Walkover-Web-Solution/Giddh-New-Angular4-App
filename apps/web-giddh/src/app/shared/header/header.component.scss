@@ -11,7 +11,7 @@
     position: fixed;
     top: 57px;
     bottom: 0;
-    min-height: 100vh;
+    min-height: calc(100vh - 60px);
     background-color: $white;
     width: 60px;
     left: 0;
@@ -1321,4 +1321,8 @@ ul.sub-list {
     .modal-lg {
         max-width: 100% !important;
     }
+}
+.schedule-now-link {
+    width: 1px;
+    height: 1px;
 }
