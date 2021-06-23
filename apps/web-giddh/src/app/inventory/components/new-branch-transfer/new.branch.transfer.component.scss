@@ -223,12 +223,6 @@ tfoot td .table-sec.form-group {
 .branch-transfer-report .btn-group a {
     color: $night-rider;
 }
-.branch-transfer-report .basic > thead > tr > th {
-    border-top: 1px solid $gainsboro !important;
-}
-.branch-transfer-report tbody {
-    border-bottom: 1px solid $gainsboro !important;
-}
 .branch-transfer-report ul#dropdown-basic {
     right: 0 !important;
     left: auto !important;
@@ -243,9 +237,6 @@ tfoot td .table-sec.form-group {
 }
 
 .td-search-box div i {
-    margin-top: 3px;
-    color: $olive;
-    padding-right: 8px;
     cursor: pointer;
 }
 

@@ -84,7 +84,7 @@
 }
 
 .check-image img {
-    max-height: 20px;
+    max-height: 14px;
     cursor: pointer;
 }
 .on-mobile-view {
@@ -96,8 +96,7 @@
         margin-bottom: 10px !important;
     }
 }
-.icon-sort-asc,
-.icon-sort-dsc {
+.icon-sort-asc{
     color: $wild-blue-yonder;
 }
 .table-bordered .d-flex {

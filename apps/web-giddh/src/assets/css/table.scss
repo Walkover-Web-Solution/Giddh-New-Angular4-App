@@ -11,7 +11,6 @@
     thead > tr > th {
         vertical-align: middle;
         font-size: 14px;
-        color: #1c1c1c;
         border-left: none;
         border-right: none;
         background: #fff;
@@ -20,9 +19,13 @@
         font-family: "opensans-semibold";
     }
     thead > tr > th {
-        border-top: 1px solid $gainsboro !important;
-        border-bottom: none !important;
+        border-top: none;
         white-space: nowrap;
+        color: $midnight-blue !important;
+        position: sticky !important;
+        top: 0;
+        z-index: 1;
+        border-bottom: 1px solid $link-water !important;
         .d-flex {
             align-items: center;
         }
@@ -30,6 +33,13 @@
             margin-left: 6px;
             cursor: pointer;
         }
+    }
+    thead > .register-table-th > th {
+        color: $black !important;
+        position: relative !important;
+        border-bottom: none !important;
+        background: $light-orange;
+        font-size: 16px;
     }
     thead > tr > th.td-search-box {
         min-width: 190px !important;
@@ -48,19 +58,24 @@
         font-family: "opensans-regular";
         border-bottom: none !important;
         white-space: nowrap !important;
+        color: $omiod;
+        border-top: 1px solid #E7E9EB !important;
         &.text-break {
             white-space: normal !important;
         }
     }
+    tbody > tr > td:first-child{
+        color: #212528;
+    }
     thead > tr > th:first-child,
     tbody > tr > td:first-child {
-        border-left: 1px solid $gainsboro;
+        border-left: none;
         white-space: normal !important;
         word-break: inherit;
     }
     thead > tr > th:last-child,
     tbody > tr > td:last-child {
-        border-right: 1px solid $gainsboro;
+        border-right: none;
     }
     tfoot > tr > td {
         vertical-align: middle !important;
@@ -69,14 +84,14 @@
         white-space: nowrap;
     }
     tbody tr:hover td {
-        background: rgba(221, 225, 230, 0.5);
+        background: #F0F5FF;
     }
     tbody tr:last-child td {
         border-bottom: 1px solid $gainsboro !important;
     }
-    .icon-sort-asc,
-    .icon-sort-dsc {
-        color: $wild-blue-yonder;
+    .icon-sort-asc {
+        color: $omiod;
+        font-size: 16px !important;
     }
     .icon-pointer .active-text-color {
         color: $deep-sky-blue;
@@ -89,7 +104,7 @@
         div {
             display: flex;
             span {
-                padding: 8px 0 8px 10px;
+                padding: 8px 0 8px 0px;
             }
         }
         div i {

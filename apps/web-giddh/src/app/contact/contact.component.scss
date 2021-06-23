@@ -24,7 +24,7 @@
 .aging-table > tbody > tr input[type="checkbox"] {
     position: absolute !important;
     opacity: 0;
-    top: 0px;
+    top: 3px;
 }
 
 .aging-table > tbody > tr:hover input[type="checkbox"] {
@@ -124,7 +124,7 @@ ul.list-unstyled li a {
     min-height: 0px !important;
 }
 .dropdown-menu-right {
-    z-index: 1;
+    z-index: 2;
 }
 .model-position {
     float: right;
@@ -190,11 +190,10 @@ tr:last-child
 
 .position-relative.word-wrap {
     .icon-dots-three-vertical {
-        transform: rotate(90deg);
-        font-size: 20px;
+        font-size: 14px;
         vertical-align: middle;
         display: none;
-        color: $night-rider;
+        color: $omiod;
     }
     &:hover .icon-dots-three-vertical {
         display: block;
@@ -212,7 +211,7 @@ tr.aging-table-top td {
 }
 
 .aging-table {
-    max-width: 1170px;
+    max-width: 100%;
     width: 100%;
     -moz-transform: translate(1px, 0);
     th,
@@ -224,7 +223,7 @@ tr.aging-table-top td {
 }
 
 .table-aging-report {
-    max-width: 1170px;
+    max-width: 100%;
     width: 100%;
 }
 
@@ -238,9 +237,14 @@ tr.aging-table-top td {
     display: inline-block !important;
 }
 
-.more-button li {
-    padding: 5px;
-    cursor: default;
+.more-button {
+    .dropdown-menu{
+        top: auto !important;
+            li {
+                padding: 0px 15px;
+                cursor: default;
+            }
+    }
 }
 
 .more-button li:hover {
@@ -312,8 +316,7 @@ span.input-addon {
 }
 
 .aging-table thead tr th {
-    border-top: 1px solid $gainsboro;
-    border-bottom: 1px solid $gainsboro !important;
+    border-bottom: 1px solid $link-water !important;
     position: relative;
     padding-right: 10px !important;
 }
@@ -327,8 +330,8 @@ span.input-addon {
     justify-content: space-between;
 }
 .customer-name .icon-ellipse {
-    height: 20px;
-    width: 20px;
+    height: 14px;
+    width: 14px;
 }
 .icon-ellipse.open.show {
     display: inline-block !important;
@@ -379,6 +382,20 @@ button.btn.btn-filter span.icon-cross {
 .linked-entities {
     width: 200px;
 }
+
+.mobile-card-wrapper{
+    max-height: calc(100vh - 250px);
+}
+
+.more-button{
+    .btn-default{
+        border-radius: 50% !important;
+        padding: 0px !important;
+        width: 24px;
+        height: 24px;
+    }
+}
+
 /*responsive*/
 @media (max-width: 1024px) {
     .customer-form-inline {

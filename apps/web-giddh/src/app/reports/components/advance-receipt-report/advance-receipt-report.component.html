@@ -3,7 +3,7 @@
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="reverse-table-report">
         <div class="container-fluid">
-            <div class="mr-t15 mr-b15 input-grp-date-range-picker d-flex"
+            <div class="mr-t15 mr-b15 input-grp-date-range-picker d-flex justify-content-between"
                 [ngClass]="{'clear-filter-applicable': showClearFilter}">
                 <!-- Invoice filter section -->
                 <div class="mr-r1 d-flex flex-sm-row flex-column">
@@ -41,10 +41,6 @@
                                 [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
                                 class="giddh-datepicker date-range-picker" />
                         </div>
-                        <div class="advance-icon cursor-pointer" tooltip="{{commonLocaleData?.app_advance_search}}"
-                            (click)="openModal()">
-                            <span class="icon-advance-filter"></span>
-                        </div>
                     </div>
 
                 </div>
@@ -53,6 +49,11 @@
                     <button class="btn btn-filter mr-0" (click)="resetAdvanceSearch()"><span class="icon-cross"></span>
                         {{commonLocaleData?.app_clear_filter}}</button>
                 </div>
+                <div class="advance-icon cursor-pointer btn btn-primary mr-0" tooltip="{{commonLocaleData?.app_advance_search}}"
+                            (click)="openModal()">
+                            <span class="pd-r05">Filter</span>
+                            <span class="icon-advance-filter"></span>
+                        </div>
                 <!-- Invoice filter section ends -->
             </div>
 
@@ -64,8 +65,8 @@
                             <th>#</th>
                             <th #receiptNumberParent width="13%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="showReceiptSearchBar">
-                                    <span>{{localeData?.receipt_no_label}}</span>
                                     <i class="icon-search" (click)="searchBy(null, 'receipt', true)"></i>
+                                    <span>{{localeData?.receipt_no_label}}</span>
                                 </div>
                                 <div class="input-container" [hidden]="!showReceiptSearchBar">
                                     <input #receiptNumber
@@ -108,8 +109,8 @@
 
                             <th #customerNameParent width="13%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="showCustomerSearchBar">
-                                    <span>{{localeData?.customer_name_label}}</span>
                                     <i class="icon-search" (click)="searchBy(null, 'customerName', true);"></i>
+                                    <span>{{localeData?.customer_name_label}}</span>
                                 </div>
                                 <div class="input-container" [hidden]="!showCustomerSearchBar">
                                     <input #customerName
@@ -122,8 +123,8 @@
 
                             <th #paymentModeParent width="13%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="showPaymentSearchBar">
-                                    <span>{{localeData?.payment_mode_label}}</span>
                                     <i class="icon-search" (click)="searchBy(null, 'paymentMode', true)"></i>
+                                    <span>{{localeData?.payment_mode_label}}</span>
                                 </div>
                                 <div class="input-container" [hidden]="!showPaymentSearchBar">
                                     <input #paymentMode
@@ -136,8 +137,8 @@
 
                             <th #invoiceNumberParent width="13%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="showInvoiceSearchBar">
-                                    <span>{{localeData?.invoice_no_label}}</span>
                                     <i class="icon-search" (click)="searchBy(null, 'invoiceNumber', true)"></i>
+                                    <span>{{localeData?.invoice_no_label}}</span>
                                 </div>
                                 <div class="input-container" [hidden]="!showInvoiceSearchBar">
                                     <input #invoiceNumber
@@ -274,7 +275,7 @@
             (click)="handleSorting('desc', column)"
             [ngClass]="{'active-text-color': searchQueryParams.sortBy === column && searchQueryParams.sort === 'asc'}">
         </div>
-        <div class="icon-sort-dsc" *ngIf="searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc'"
+        <div class="icon-sort-asc" *ngIf="searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc'"
             (click)="handleSorting('asc', column)"
             [ngClass]="{'active-text-color': searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc'}">
         </div>
