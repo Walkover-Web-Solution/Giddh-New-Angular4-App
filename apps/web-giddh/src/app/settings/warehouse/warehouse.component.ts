@@ -15,7 +15,6 @@ import { BsModalRef, BsModalService, ModalDirective, ModalOptions } from 'ngx-bo
 import { PageChangedEvent, PaginationComponent } from 'ngx-bootstrap/pagination';
 import { fromEvent, Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-
 import { CommonActions } from '../../actions/common.actions';
 import { CompanyActions } from '../../actions/company.actions';
 import { GeneralActions } from '../../actions/general/general.actions';

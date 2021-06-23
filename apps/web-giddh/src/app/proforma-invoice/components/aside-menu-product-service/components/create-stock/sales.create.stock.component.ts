@@ -136,11 +136,10 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
                 this.stockUnitsDropDown$ = of(unitArr);
             }
         });
-
-        this.getParentGroupData();
     }
 
     public ngOnInit() {
+        this.getParentGroupData();
         // get all groups
         this.formDivBoundingRect.next({
             top: 0,

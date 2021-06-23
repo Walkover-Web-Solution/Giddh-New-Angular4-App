@@ -25,7 +25,7 @@ export class GroupAccountSidebarVM {
     }
 
     public selectGroup(item: IGroupsWithAccounts, currentIndex: number, isSearching: boolean = false) {
-        this.columns.splice(currentIndex + 1, this.columns.length - currentIndex + 1);
+        this.columns.splice(currentIndex + 1, this.columns?.length - currentIndex + 1);
         if (item.groups) {
             item.groups = sortBy(item.groups, ['uniqueName', 'name']);
         }
@@ -37,13 +37,13 @@ export class GroupAccountSidebarVM {
         }
 
         if (isSearching) {
-            let colLength = this.columns.length;
+            let colLength = this.columns?.length;
             this.columns[colLength - 1].IsCreateNewBtnShowable = true;
         }
     }
 
     public handleEvents(eventType: eventsConst, payload: any) {
-        let columnLength = this.columns.length;
+        let columnLength = this.columns?.length;
         switch (eventType) {
             /**
              * group operations
@@ -83,12 +83,12 @@ export class GroupAccountSidebarVM {
             case eventsConst.groupDeleted: {
                 let resp: BaseResponse<string, string> = payload;
                 this.columns.pop();
-                for (let colIndex = 0; colIndex < this.columns.length; colIndex++) {
+                for (let colIndex = 0; colIndex < this.columns?.length; colIndex++) {
                     let col = this.columns[colIndex];
                     let itemIndex = col.Items.findIndex(f => f.uniqueName === resp.queryString.parentUniqueName);
                     if (itemIndex > -1) {
                         // remove all columns first
-                        this.columns.splice(colIndex, this.columns.length);
+                        this.columns.splice(colIndex, this.columns?.length);
                         let fCol = col;
 
                         // add new parent column of finded item
@@ -151,7 +151,7 @@ export class GroupAccountSidebarVM {
 
             case eventsConst.accountDeleted: {
                 let resp: BaseResponse<string, any> = payload;
-                let columnsLength = this.columns.length;
+                let columnsLength = this.columns?.length;
                 this.columns[columnsLength - 1].Items = this.columns[columnsLength - 1].Items?.filter(f => f.uniqueName !== resp.request.accountUniqueName);
                 this.columns[columnsLength - 2].accounts = this.columns[columnsLength - 1].accounts?.filter(f => f.uniqueName !== resp.request.accountUniqueName);
             }

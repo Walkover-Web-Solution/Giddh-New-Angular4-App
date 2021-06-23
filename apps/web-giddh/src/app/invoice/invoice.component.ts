@@ -16,7 +16,6 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
 
-    public tabsDropdown: boolean = false;
     public selectedVoucherType: VoucherTypeEnum;
     public activeTab: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -151,15 +150,6 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
                     break;
                 case 'recurring':
                     pageHeading = this.localeData?.tabs?.recurring;
-                    break;
-                case 'pending':
-                    pageHeading = this.localeData?.tabs?.pending;
-                    break;
-                case 'templates':
-                    pageHeading = this.localeData?.tabs?.templates;
-                    break;
-                case 'settings':
-                    pageHeading = this.localeData?.tabs?.settings;
                     break;
             }
         }

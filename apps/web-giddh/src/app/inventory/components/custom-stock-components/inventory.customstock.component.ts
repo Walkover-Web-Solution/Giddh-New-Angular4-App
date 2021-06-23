@@ -71,6 +71,14 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
             }
         });
 
+        this.activeGroupUniqueName$ = this.store.pipe(select(s => s.inventory.activeGroupUniqueName), takeUntil(this.destroyed$));
+        this.createCustomStockInProcess$ = this.store.pipe(select(s => s.inventory.createCustomStockInProcess), takeUntil(this.destroyed$));
+        this.updateCustomStockInProcess$ = this.store.pipe(select(s => s.inventory.updateCustomStockInProcess), takeUntil(this.destroyed$));
+        this.deleteCustomStockInProcessCode$ = this.store.pipe(select(s => s.inventory.deleteCustomStockInProcessCode), takeUntil(this.destroyed$));
+        this.createCustomStockSuccess$ = this.store.pipe(select(s => s.inventory.createCustomStockSuccess), takeUntil(this.destroyed$));
+    }
+
+    public ngOnInit() {
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((profileData) => {
             if (!isEmpty(profileData)) {
                 this.companyProfile = cloneDeep(profileData);
@@ -93,14 +101,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
                 this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             }
         });
-        this.activeGroupUniqueName$ = this.store.pipe(select(s => s.inventory.activeGroupUniqueName), takeUntil(this.destroyed$));
-        this.createCustomStockInProcess$ = this.store.pipe(select(s => s.inventory.createCustomStockInProcess), takeUntil(this.destroyed$));
-        this.updateCustomStockInProcess$ = this.store.pipe(select(s => s.inventory.updateCustomStockInProcess), takeUntil(this.destroyed$));
-        this.deleteCustomStockInProcessCode$ = this.store.pipe(select(s => s.inventory.deleteCustomStockInProcessCode), takeUntil(this.destroyed$));
-        this.createCustomStockSuccess$ = this.store.pipe(select(s => s.inventory.createCustomStockSuccess), takeUntil(this.destroyed$));
-    }
-
-    public ngOnInit() {
+        
         let activeGroup = null;
         this.activeGroupUniqueName$.pipe(take(1)).subscribe(a => activeGroup = a);
         if (activeGroup) {

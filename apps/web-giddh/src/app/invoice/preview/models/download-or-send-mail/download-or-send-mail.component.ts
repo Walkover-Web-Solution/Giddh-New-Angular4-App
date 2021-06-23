@@ -34,7 +34,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     public showEsign: boolean = false;
     public showEditButton: boolean = false;
     public isErrOccured$: Observable<boolean>;
-    public invoiceType: string[] = [];
+    public invoiceType: string[] = ['Original'];
     public showMore: boolean = false;
     public emailTabActive: boolean = true;
     public downloadTabActive: boolean = false;
@@ -59,6 +59,8 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** this will store screen size */
     public isMobileScreen : boolean = false;
+    /** Stores the current voucher filter applied */
+    public currentVoucherFilter: string;
 
     constructor(
         private _toasty: ToasterService,
@@ -79,7 +81,9 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
         this.isErrOccured$ = this.store.pipe(select(p => p.invoice.invoiceDataHasError), distinctUntilChanged(), takeUntil(this.destroyed$));
         this.voucherDetailsInProcess$ = this.store.pipe(select(p => p.receipt.voucherDetailsInProcess), takeUntil(this.destroyed$));
         this.voucherPreview$ = this.store.pipe(select(p => p.receipt.base64Data), distinctUntilChanged(), takeUntil(this.destroyed$));
+    }
 
+    public ngOnInit() {
         this.voucherPreview$.subscribe((o: any) => {
             if (o) {
 
@@ -127,10 +131,6 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                 this.showEditButton = false;
             }
         });
-
-    }
-
-    public ngOnInit() {
 
         this.store.pipe(select(p => p.invoice.settings), takeUntil(this.destroyed$)).subscribe((o: any) => {
             if (o && o.invoiceSettings) {

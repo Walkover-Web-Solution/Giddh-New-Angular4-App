@@ -39,6 +39,7 @@ export class StateDetailsResponse {
     public lastState: string;
     public companyUniqueName: string;
     public branchUniqueName?: string;
+    public voucherVersion?: 1 | 2;
 }
 
 export class AddressList {
@@ -366,6 +367,7 @@ export class BranchFilterRequest {
     from: string;
     to: string;
     query?: string;
+    companyUniqueName?: string;
 }
 
 export interface OrganizationDetails {

@@ -13,8 +13,6 @@ import { Router } from '@angular/router';
 @Injectable()
 export class GeneralService {
     invokeEvent: Subject<any> = new Subject();
-    // TODO : It is commented due to we have implement calendly and its under discussion to remove
-    // public talkToSalesModal: BehaviorSubject<boolean> = new BehaviorSubject(false);
     public isCurrencyPipeLoaded: boolean = false;
 
     /** Stores the current organization type */
@@ -779,9 +777,9 @@ export class GeneralService {
      */
     public getVisibleMenuItems(module: string, apiItems: Array<any>, itemList: Array<AllItems>): Array<AllItems> {
         const visibleMenuItems = cloneDeep(itemList);
-        itemList.forEach((menuItem, menuIndex) => {
+        itemList?.forEach((menuItem, menuIndex) => {
             visibleMenuItems[menuIndex].items = [];
-            menuItem.items.forEach(item => {
+            menuItem.items?.forEach(item => {
                 const isValidItem = apiItems.find(apiItem => apiItem.uniqueName === item.link);
                 if ((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) {
                     // If items returned from API have the current item which can be shown in branch/company mode, add it

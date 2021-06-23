@@ -98,14 +98,16 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         private searchService: SearchService,
         private _toaster: ToasterService
     ) {
+        
+    }
+
+    public ngOnInit() {
         for (let i = 1; i <= 31; i++) {
             let day = i.toString();
             this.days.push({ label: day, value: day });
         }
         this.store.dispatch(this._settingsTriggersActions.GetTriggers());
-    }
-
-    public ngOnInit() {
+        
         // default value assinged bcz currently there is only single option
         this.newTriggerObj.action = 'webhook';
         this.newTriggerObj.scope = 'closing balance';

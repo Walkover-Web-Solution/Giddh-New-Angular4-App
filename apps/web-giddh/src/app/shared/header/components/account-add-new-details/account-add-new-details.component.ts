@@ -165,9 +165,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private groupWithAccountsAction: GroupWithAccountsAction,
         private invoiceService: InvoiceService) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
-        this.getCountry();
-        this.getCallingCodes();
-        this.getPartyTypes();
+        
     }
 
     /**
@@ -176,6 +174,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public ngOnInit(): void {
+        this.getCountry();
+        this.getCallingCodes();
+        this.getPartyTypes();
+        
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
         }
@@ -436,12 +438,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
         let gstVal: string = gstForm.get('gstNumber').value?.trim();
         gstForm.get('gstNumber').setValue(gstVal?.trim());
-        if (gstVal.length) {
-            if (gstVal.length !== 15) {
+        if (gstVal?.length) {
+            if (gstVal?.length !== 15) {
                 gstForm.get('partyType').reset('NOT APPLICABLE');
             }
 
-            if (gstVal.length >= 2) {
+            if (gstVal?.length >= 2) {
                 this.statesSource$.pipe(take(1)).subscribe(state => {
                     let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
 

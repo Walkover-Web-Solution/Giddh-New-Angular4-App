@@ -137,6 +137,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public commonLocaleData: any = {};
     /** This holds the active locale */
     public activeLocale: string = "";
+    /** This will open company branch switch dropdown */
+    public showCompanyBranchSwitch:boolean = false;
+    /** This will holds true if we added ledger item in local db once */
+    public isItemAdded: boolean = false;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -155,8 +159,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         private groupWithAction: GroupWithAccountsAction,
         private localeService: LocaleService
     ) {
-        // Reset old stored application date
-        this.store.dispatch(this.companyActions.ResetApplicationDate());
         this.activeAccount$ = this.store.pipe(select(appStore => appStore.ledger.account), takeUntil(this.destroyed$));
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(appStore => appStore.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
@@ -231,6 +233,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public ngOnInit(): void {
+        // Reset old stored application date
+        this.store.dispatch(this.companyActions.ResetApplicationDate());
         this.updateIndexDbSuccess$ = this.store.pipe(select(appStore => appStore.general.updateIndexDbComplete), takeUntil(this.destroyed$))
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
             if (selectedCmp && selectedCmp?.uniqueName === this.generalService.companyUniqueName) {
@@ -291,8 +295,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.companyList = orderedCompanies;
             this.companyListForFilter = orderedCompanies;
             this.companies$ = observableOf(orderedCompanies);
-            this.store.dispatch(this.companyActions.setTotalNumberofCompanies(orderedCompanies.length));
         });
+
         this.user$ = this.store.pipe(select(createSelector([(state: AppState) => state.session.user], (user) => {
             if (user && user.user && user.user.name && user.user.name.length > 1) {
                 let name = user.user.name;
@@ -370,6 +374,23 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 this.onItemSelected(data.next, data);
             }
         });
+
+        if(this.router.url.includes("/ledger")) {
+            this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(account => {
+                if(account && !this.isItemAdded) {
+                    this.isItemAdded = true;
+
+                    // save data to db
+                    let item: any = {};
+                    item.time = +new Date();
+                    item.route = this.router.url;
+                    item.parentGroups = account.parentGroups;
+                    item.uniqueName = account.uniqueName;
+                    item.name = account.name;
+                    this.doEntryInDb('accounts', item);
+                }
+            });
+        }
     }
 
     /**
@@ -984,5 +1005,15 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 });
             }
         }
+    }
+
+    /**
+     * It will show/hide company branch switch dropdown
+     *
+     *
+     * @memberof PrimarySidebarComponent
+     */
+    public openCompanyBranchDropdown():void{
+        this.showCompanyBranchSwitch = !this.showCompanyBranchSwitch;
     }
 }
