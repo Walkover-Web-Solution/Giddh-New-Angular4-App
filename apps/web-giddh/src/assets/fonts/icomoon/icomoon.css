@@ -26,7 +26,7 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-copmany-branch-connect:before {
+  .icon-company-branch-connect:before {
     content: "\e9f7";
   }
   .icon-logout:before {
@@ -37,6 +37,9 @@
   }
   .icon-manage-group-acc:before {
     content: "\e9ef";
+  }
+  .icon-vat1:before {
+    content: "\e9fa";
   }
   .icon-e-commerce:before {
     content: "\e9f5";
@@ -830,7 +833,3 @@
   .icon-folder:before {
     content: "\f2334";
   }
-  .icon-company, .icon-branch1{
-      position: relative;
-  }
-
