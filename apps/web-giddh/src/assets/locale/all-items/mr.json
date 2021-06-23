@@ -170,7 +170,7 @@
                 {
                     "label": "व्हॅट अहवाल",
                     "link": "/pages/vat-report",
-                    "icon": "icon-vat",
+                    "icon": "icon-vat1",
                     "description": "व्हॅट फाइल आणि पुनरावलोकन करा",
                     "hide": "sidebar"
                 },
