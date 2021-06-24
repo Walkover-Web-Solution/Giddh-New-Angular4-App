@@ -286,6 +286,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     };
     /** Stores the E-invoice cancellation options */
     public eInvoiceCancellationReasonOptions = [];
+    /** True if user has voucher list permission */
+    public hasVoucherListPermissions: boolean = true;
 
     constructor(
         private store: Store<AppState>,
@@ -636,6 +638,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 this.getVoucher(this.isUniversalDateApplicable);
                 this.store.dispatch(this.invoiceActions.resetBulkEInvoice());
             }
+        });
+
+        this.store.pipe(select(state => state.receipt.hasVoucherListPermissions), takeUntil(this.destroyed$)).subscribe(response => {
+            this.hasVoucherListPermissions = response;
         });
     }
 

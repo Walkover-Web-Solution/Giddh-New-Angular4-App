@@ -71,6 +71,7 @@ import { TranslateDirectiveModule } from '../theme/translate/translate.directive
 import localeEn from '@angular/common/locales/en-GB';
 import localeHi from '@angular/common/locales/hi';
 import localeMr from '@angular/common/locales/mr';
+import { ValidateSectionPermissionDirectiveModule } from './validate-section-permission/validate-section-permission.module';
 registerLocaleData(localeEn);
 registerLocaleData(localeHi);
 registerLocaleData(localeMr);
@@ -194,7 +195,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         MatNativeDateModule,
         MatInputModule,
         CurrencyModule,
-        TranslateDirectiveModule
+        TranslateDirectiveModule,
+        ValidateSectionPermissionDirectiveModule
     ],
     exports: [
         CommonModule,
@@ -247,7 +249,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         AmountFieldComponent,
         CurrencyModule,
         PrimarySidebarComponent,
-        TranslateDirectiveModule
+        TranslateDirectiveModule,
+        ValidateSectionPermissionDirectiveModule
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,
