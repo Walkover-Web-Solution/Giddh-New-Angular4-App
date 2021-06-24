@@ -58,7 +58,7 @@
                                         </sh-select>
                                     </div>
                                 </div>
-                                <form #invoiceForm="ngForm" (ngSubmit)="getVoucherByFilters(invoiceForm)" novalidate
+                                <form #invoiceForm="ngForm" novalidate
                                 class="form-inline input-grp-date-range-picker position-relative">
                                 <div class="form-group mr-r15 d-flex flex-fill">
                                     <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
@@ -363,7 +363,7 @@
                                                         {{localeData?.bulk_payment}}</li>
                                                 </ul>
                                             </div>
-                                            
+
                                         </div>
                                     <div class="pull-left total-details-box mr-r05 border-none opening-box" *ngIf="showFieldFilter.openingBalance">
                                             <h5>
@@ -515,7 +515,7 @@
             <!-- region Aging Report -->
             <tab heading="{{localeData?.aging_report}}" [id]="(activeTab === 'aging-report') ? 'giddh-page-heading': ''"
                 (selectTab)="tabSelected('aging-report')" [active]="activeTab === 'aging-report'">
-                <aging-report [localeData]="localeData" [commonLocaleData]="commonLocaleData"
+                <aging-report *ngIf="activeTab === 'aging-report'" [localeData]="localeData" [commonLocaleData]="commonLocaleData"
                     (creteNewCustomerEvent)="openAddAndManage('customer')"></aging-report>
             </tab>
             <!-- endregion -->
@@ -655,7 +655,7 @@
                     </tr>-->
 
                     <tr>
-                        <th>
+                        <th #searchCustomerContainer (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')">
                             <span class="inline table-checkbox">
                                 <label></label>
                                 <input type="checkbox" *ngIf="selectedCheckedContacts.length"
@@ -664,10 +664,10 @@
                             </span>
                             <div class="d-flex align-items-center">
                                 <div class="mr-r05">
-                                    <i class="icon-search"></i>
+                                    <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showNameSearch, fieldName: 'name',formControl: searchedName,
+                                                    title: commonLocaleData?.app_name}"></ng-container>
                                 </div>
-                                <span>{{commonLocaleData?.app_name}}</span>
-                                <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'name'}">
+                                <ng-container *ngTemplateOutlet="!showNameSearch ? sortingTemplate : '';context: { $implicit: 'name'}">
                                 </ng-container>
                             </div>
                         </th>
@@ -714,10 +714,10 @@
                             </div>
                         </th>
 
-                        <th *ngIf="showFieldFilter.email && showFieldFilter.mobile">
+                        <th *ngIf="showFieldFilter.email || showFieldFilter.mobile">
                             <div class="d-flex">
                                 <div class="flex-fill">
-                                    Contacts
+                                    {{localeData?.contacts}}
                                 </div>
                             </div>
 
@@ -1303,6 +1303,17 @@
                     (datesUpdated)="selectedDate($event)" [keepCalendarOpeningWithRange]="false"
                     [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
             </div>
+        </div>
+    </ng-template>
+
+    <ng-template #searchTemplate let-show let-title="title" let-placeholder="placeholder" let-fieldName="fieldName" let-formControl="formControl">
+        <div [hidden]="show">
+            <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
+            <span> {{ title }}</span>
+        </div>
+        <div class="input-container" [hidden]="!show">
+            <input type="text" [placeholder]="getSearchFieldText(fieldName)" class="w-100" #searchBox
+                [formControl]="formControl" />
         </div>
     </ng-template>
 

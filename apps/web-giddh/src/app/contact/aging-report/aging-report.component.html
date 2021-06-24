@@ -34,7 +34,7 @@
                     </sh-select>
                 </div>
             </div>
-            <form #invoiceForm="ngForm" (ngSubmit)="getVoucherByFilters(invoiceForm)" novalidate
+            <form #invoiceForm="ngForm" novalidate
             class="form-inline input-grp-date-range-picker position-relative">
             <div class="form-group mr-r15 d-flex flex-fill">
                 <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
@@ -210,9 +210,11 @@
                 <td></td>
             </tr>-->
             <tr>
-                <th>
-                    <div class="d-flex align-items-center">{{commonLocaleData?.app_customer_name}}
-                        <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'name'}"></ng-container>
+                <th #searchCustomerContainer (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')">
+                    <div class="d-flex align-items-center">
+                        <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showNameSearch, fieldName: 'name',formControl: searchedName,
+                                                    title: commonLocaleData?.app_customer_name}"></ng-container>
+                        <ng-container *ngTemplateOutlet="!showNameSearch ? sortingTemplate : '';context: { $implicit: 'name'}"></ng-container>
                     </div>
                 </th>
                 <th>
@@ -344,5 +346,28 @@
                 <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref></div>
             </div>
         </div>
+    </div>
+</ng-template>
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true"
+                [ranges]="datePickerOptions" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
+                [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
+                (rangeClicked)="selectedDate($event)"
+                (datesUpdated)="selectedDate($event)" [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>
+<ng-template #searchTemplate let-show let-title="title" let-placeholder="placeholder" let-fieldName="fieldName" let-formControl="formControl">
+    <div [hidden]="show">
+        <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
+        <span> {{ title }}</span>
+    </div>
+    <div class="input-container" [hidden]="!show">
+        <input type="text" [placeholder]="getSearchFieldText(fieldName)" class="w-100" #searchBox
+            [formControl]="formControl" />
     </div>
 </ng-template>

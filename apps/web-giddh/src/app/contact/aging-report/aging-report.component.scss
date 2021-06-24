@@ -113,6 +113,17 @@ tr.aging-table-top td {
         overflow-y: auto;
     }
 }
+.input-container {
+    input {
+        height: 50px;
+        min-width: 100%;
+        padding: 11px;
+        padding-right: 40px;
+        color: $nero;
+        border: none;
+        background-color: $gray-95;
+    }
+}
 
 // responsive
 @media (min-width: 769px) {
