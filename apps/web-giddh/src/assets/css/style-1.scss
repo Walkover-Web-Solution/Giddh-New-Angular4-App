@@ -20,7 +20,6 @@ VERSION:  1
 html,
 body {
     height: 100%;
-    //background: $alice-blue-light;
     font-family: "opensans-regular";
     color: $nero;
     -webkit-font-smoothing: antialiased;
@@ -2468,7 +2467,7 @@ perfect-scrollbar.ps-show-active
 }
 
 .basic tbody tr:hover td {
-    background: #F0F5FF;
+    background: $light-alice-blue;
 }
 
 body.fixed {

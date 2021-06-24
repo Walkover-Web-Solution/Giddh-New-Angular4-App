@@ -23,17 +23,12 @@
     display: flex;
 }
 
-.td-search-box div span {
-    // flex: 1 1 auto;
-    padding-left: 8px;
-}
-
 .td-search-box div i {
-    margin-top: 4px;
+    margin-top: 0px;
     color: $wild-blue-yonder;
     padding-right: 8px;
     cursor: pointer;
-    padding-left: 10px;
+    padding-left: 0px;
 }
 
 .td-search-box {
@@ -42,12 +37,12 @@
 }
 
 .td-search-box .input-container input {
-    height: 50px;
+    height: 36px;
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
     border: none;
-    background-color: $white-smoke;
+    background-color: $gray-95;
 }
 
 .td-search-box .input-container i {
@@ -129,6 +124,7 @@
         word-break: break-word !important;
     }
 }
+
 // responsive
 @media (max-width: 1190px) {
     .recurring-form {
@@ -231,5 +227,12 @@
 @media (min-width: 769px) {
     .search-icon-block {
         display: none;
+    }
+}
+
+@media (min-width: 767px){
+    .table-responsive{
+        max-height: calc(100vh - 245px);
+        overflow-y: auto;
     }
 }

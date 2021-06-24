@@ -196,6 +196,12 @@
             margin-left: 0;
         }
     }
+    .advance-icon{
+        width: auto;
+        margin-left: auto;
+        position: relative;
+        top: -37px;
+    }
 }
 @media (max-width: 575px) {
     .input-grp-date-range-picker {

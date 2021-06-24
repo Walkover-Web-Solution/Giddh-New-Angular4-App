@@ -38,17 +38,16 @@
                         </div>
                     </div>
                     <div class="form-inline d-block flex-row flex-nowrap daybook-filter">
-                        <div class="form-group custom-datepicker" (click)="showGiddhDatepicker($event)">
+                        <div class="form-group custom-datepicker mr-r15" (click)="showGiddhDatepicker($event)">
                             <i class="icon-calender calendar-addon"></i>
                             <input type="text" name="selectedDateRange"
                                 [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
                                 class="giddh-datepicker date-range-picker border-radius-2" />
                         </div>
-                        <div class="form-group cursor-pointer">
-
-
-                            <div class="advance-icon align-items-center" tooltip="Advance Search"
-                                (click)="onOpenAdvanceSearch()">
+                        <div class="form-group cursor-pointer mobile-view float-right">
+                            <div class="advance-icon align-items-center mr-0 btn btn-primary"
+                                [tooltip]="Advance Search" (click)="onOpenAdvanceSearch()">
+                                <span class="pd-r05">Filter</span>
                                 <span class="icon-advance-filter"></span>
                             </div>
 
@@ -75,7 +74,13 @@
                                 (click)="exportDaybook()"
                                 [disabled]="!((daybookData$ | async)?.entries?.length > 0)">{{commonLocaleData?.app_export}}</button>
                         </div>
-
+                        <div class="form-group cursor-pointer desktop-view float-right">
+                                <div class="advance-icon align-items-center btn btn-primary"
+                                    [tooltip]="commonLocaleData?.app_advance_search" (click)="onOpenAdvanceSearch()">
+                                    <span class="pd-r05">Filter</span>
+                                    <span class="icon-advance-filter"></span>
+                                </div>
+                            </div>
                     </div>
                 </div>
             </div>
@@ -87,7 +92,7 @@
                     </div>
 
                     <div class="clearfix trial-balance table-responsive">
-                        <table class="tb-head table-bordered table basic on-mobile-view">
+                        <table class="tb-head table-bordered  giddh-table table basic on-mobile-view">
                             <thead>
                                 <tr>
                                     <th>{{commonLocaleData?.app_date}}</th>

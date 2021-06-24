@@ -187,6 +187,7 @@
         padding: 14px 0;
     }
 }
+
 @media (max-width: 768px) {
     .purchase-order-header {
         margin-bottom: 15px;
@@ -327,5 +328,12 @@
 
     .min-wid-amt {
         min-width: 170px;
+    }
+}
+
+@media (min-width: 767px){
+    .table-responsive{
+        max-height: calc(100vh - 230px);
+        overflow-y: auto;
     }
 }
