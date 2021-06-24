@@ -851,4 +851,18 @@ export class GeneralService {
             }
         }
     }
+
+    /**
+     * Determines if an element is child element to another element
+     *
+     * @param {*} child Element received as child
+     * @param {*} parent Element received as parent
+     * @return {boolean} True, if element is child of another element
+     * @memberof GeneralService
+     */
+    public childOf(c, p): boolean {
+        while ((c = c.parentNode) && c !== p) {
+        }
+        return !!c;
+    }
 }
