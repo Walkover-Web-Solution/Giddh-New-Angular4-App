@@ -20,10 +20,10 @@ export class ValidateSectionPermissionDirective implements OnChanges {
      */
     public ngOnChanges(): void {
         if(!this.hasPermission) {
-            if(!this.elementRef.nativeElement?.parentElement?.parentElement?.querySelector(".giddh-permission-error-message")) {
+            if(!this.elementRef.nativeElement?.parentElement?.parentElement?.querySelector(".giddh-no-permissions-error-message")) {
                 const errorDiv = this.renderer.createElement('div');
                 const errorText = this.renderer.createText(this.errorMessage);
-                errorDiv?.classList?.add("giddh-permission-error-message");
+                errorDiv?.classList?.add("giddh-no-permissions-error-message");
                 this.renderer.appendChild(errorDiv, errorText);
 
                 this.renderer.appendChild(this.elementRef.nativeElement?.parentElement, errorDiv);
@@ -31,6 +31,7 @@ export class ValidateSectionPermissionDirective implements OnChanges {
             this.elementRef.nativeElement?.classList?.add('giddh-no-permissions');
         } else {
             this.elementRef.nativeElement?.classList?.remove('giddh-no-permissions');
+            this.elementRef.nativeElement?.parentElement?.parentElement?.querySelector(".giddh-no-permissions-error-message")?.remove();
         }
     }
 }

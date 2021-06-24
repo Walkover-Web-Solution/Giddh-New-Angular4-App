@@ -286,8 +286,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public eInvoiceCancellationReasonOptions = [];
     /** True if user has voucher list permission */
     public hasVoucherListPermissions: boolean = true;
-    /** True if user has voucher total balance permission */
-    public hasVoucherTotalBalancePermissions: boolean = true;
 
     constructor(
         private store: Store<AppState>,
@@ -1403,10 +1401,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     private parseBalRes(res) {
-        this.hasVoucherTotalBalancePermissions = true;
-        if(res?.statusCode === UNAUTHORISED) {
-            this.hasVoucherTotalBalancePermissions = false;
-        }
         if (res && res.body) {
             this.totalSale = res.body.grandTotal;
             this.totalDue = res.body.totalDue;
