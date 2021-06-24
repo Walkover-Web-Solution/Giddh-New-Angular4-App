@@ -522,6 +522,10 @@ sh-select:focus {
     margin-right: 7px;
     border-radius: 5px;
     background-color: $white;
+    border: 1px solid $gainsboro;
+    padding: 5px;
+    width: 36px;
+    height: 36px;
     img {
         width: 18px;
     }
@@ -768,11 +772,9 @@ sh-select:focus {
 }
 .ledger-head {
     position: sticky;
-    top: 55px;
+    top: 45px;
     z-index: 1;
-    background-color: $alice-blue-light;
     padding-left: 5px;
-    background-color: $alice-blue-light;
 }
 .linked-entities {
     width: 200px;

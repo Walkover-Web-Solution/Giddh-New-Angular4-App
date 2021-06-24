@@ -51,7 +51,7 @@
                 </div>
                 <div class="advance-icon cursor-pointer btn btn-primary mr-0" tooltip="{{commonLocaleData?.app_advance_search}}"
                             (click)="openModal()">
-                            <span class="pd-r05">Filter</span>
+                            <span class="pd-r05">{{commonLocaleData?.app_filter}}</span>
                             <span class="icon-advance-filter"></span>
                         </div>
                 <!-- Invoice filter section ends -->
@@ -278,7 +278,7 @@
             (click)="handleSorting('desc', column)"
             [ngClass]="{'active-text-color': searchQueryParams.sortBy === column && searchQueryParams.sort === 'asc'}">
         </div>
-        <div class="icon-sort-dsc" *ngIf="searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc'"
+        <div class="icon-sort-asc" *ngIf="searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc'"
             (click)="handleSorting('asc', column)"
             [ngClass]="{'active-text-color': searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc'}">
         </div>
