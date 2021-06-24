@@ -4,6 +4,7 @@ import { ProformaFilter, ProformaGetAllVersionsResponse, ProformaGetRequest, Pro
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { VoucherClass } from '../../models/api-models/Sales';
 import { cloneDeep } from '../../lodash-optimized';
+import { UNAUTHORISED } from '../../app.constant';
 
 export interface ProformaState {
     isGenerateInProcess: boolean;
@@ -28,6 +29,7 @@ export interface ProformaState {
     isGenerateInvoiceFromProformaOrEstimatesSuccess: boolean;
     voucherNoForDetails: string;
     voucherNoForDetailsAction: string;
+    hasVoucherListPermissions: boolean;
 }
 
 const initialState: ProformaState = {
@@ -52,7 +54,8 @@ const initialState: ProformaState = {
     isGenerateInvoiceFromProformaOrEstimatesInProcess: false,
     isGenerateInvoiceFromProformaOrEstimatesSuccess: false,
     voucherNoForDetails: null,
-    voucherNoForDetailsAction: null
+    voucherNoForDetailsAction: null,
+    hasVoucherListPermissions: true
 };
 
 export function ProformaReducer(state: ProformaState = initialState, action: CustomActions): ProformaState {
@@ -110,7 +113,8 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
             return {
                 ...state,
                 getAllInProcess: false,
-                [response.request && response.request.isLastInvoicesRequest ? 'lastVouchers' : 'vouchers']: response.status === 'success' ? response.body : null
+                [response.request && response.request.isLastInvoicesRequest ? 'lastVouchers' : 'vouchers']: response.status === 'success' ? response.body : null,
+                hasVoucherListPermissions: (response.status === 'error' && response.statusCode === UNAUTHORISED) ? false : true
             }
         }
         // endregion

@@ -3,11 +3,13 @@ import { CustomTemplateResponse } from '../../models/api-models/Invoice';
 import { INVOICE } from '../../actions/invoice/invoice.const';
 import { CustomActions } from '../customActions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
+import { UNAUTHORISED } from '../../app.constant';
 
 export interface CustomTemplateState {
     sampleTemplates: CustomTemplateResponse[];
     customCreatedTemplates: CustomTemplateResponse[];
     defaultTemplate: CustomTemplateResponse;
+    hasInvoiceTemplatePermissions: boolean;
 }
 
 export const initialState: CustomTemplateState = {
@@ -377,7 +379,8 @@ export const initialState: CustomTemplateState = {
         tableColor: '#f2f3f4',
         templateType: 'gst_template_a',
         name: '',
-    }
+    },
+    hasInvoiceTemplatePermissions: true
 
 };
 
@@ -399,6 +402,9 @@ export function InvoiceTemplateReducer(state = initialState, action: CustomActio
             let res: BaseResponse<CustomTemplateResponse[], string> = action.payload;
             if (res && res.status === 'success') {
                 nextState.customCreatedTemplates = _.sortBy(res.body, [(o) => !o.isDefault]);
+                nextState.hasInvoiceTemplatePermissions = true;
+            } else if(res.status === 'error' && res.statusCode === UNAUTHORISED) {
+                nextState.hasInvoiceTemplatePermissions = false;
             }
             return Object.assign({}, state, nextState);
         }

@@ -33,53 +33,18 @@
             </small>
             <button class="btn pull-left isActive mt-5" (click)="onOpenTemplateModal()">Add New</button>
         </div>
+        <div validateSectionPermission [hasPermission]="hasInvoiceTemplatePermissions">
+            <ng-container *ngFor="let template of customCreatedTemplates; let i = index">
 
-        <ng-container *ngFor="let template of customCreatedTemplates; let i = index">
-
-            <div class="template-grid" *ngIf="template.type === 'invoice' && voucherType==='sales' ">
-                <div class="template-info text-center">
-                    <h3 class="primary-color">{{template.name}}</h3>
-
-                    <span *ngIf="template.isDefault" class="badge btn-sky-blue mr-t2"><i
-                            class="icon-favorite-selected"></i> Default
-                        Template</span>
-                    <span *ngIf="!template.isDefault" class="badge btn-success mr-t2 cp"
-                        (click)="onSetTemplateAsDefault(template,'invoice')"><i class="icon-favorite-selected"></i>
-                        Set as
-                        Default</span>
-                </div>
-
-                <div class="template-action">
-                    <!-- [hidden]="template.uniqueName === 'gst_template_b' || template.uniqueName === 'gst_template_c' || template.uniqueName === 'gst_template_d' || template.uniqueName === 'gst_template_e'" -->
-                    <button class="btn btn-default" (click)="onPreview(template)">
-                        <i class="icon-eye" tooltip="Preview" aria-hidden="true"></i>
-                    </button>
-                    <!-- [hidden]="template.uniqueName === 'gst_template_b' || template.uniqueName === 'gst_template_c' || template.uniqueName === 'gst_template_d' || template.uniqueName === 'gst_template_e'" -->
-                    <button class="btn btn-default" (click)="onUpdateTemplate(template)">
-                        <i class="icon-edit-pencil" tooltip="Edit template" aria-hidden="true"></i>
-                    </button>
-                    <button [disabled]="template.isDefault" class="btn btn-default"
-                        (click)="onDeleteTemplate(template)">
-                        <i class="icon-trash" tooltip="Delete" aria-hidden="true"></i>
-                    </button>
-
-                    <div class="template-meta">
-                        <small class="text-ellipsis">Created by: {{template.createdBy.name}}</small>
-                    </div>
-
-
-                </div>
-            </div>
-
-            <ng-container *ngIf="voucherType === 'credit note' || voucherType === 'debit note'">
-                <div class="template-grid" *ngIf="template.type === 'voucher'">
+                <div class="template-grid" *ngIf="template.type === 'invoice' && voucherType==='sales' ">
                     <div class="template-info text-center">
                         <h3 class="primary-color">{{template.name}}</h3>
 
-                        <span *ngIf="template.isDefaultForVoucher" class="badge btn-sky-blue mr-t2"><i
-                                class="icon-favorite-selected"></i> Default Template</span>
-                        <span *ngIf="!template.isDefaultForVoucher" class="badge btn-success mr-t2 cp"
-                            (click)="onSetTemplateAsDefault(template,'voucher')"><i class="icon-favorite-selected"></i>
+                        <span *ngIf="template.isDefault" class="badge btn-sky-blue mr-t2"><i
+                                class="icon-favorite-selected"></i> Default
+                            Template</span>
+                        <span *ngIf="!template.isDefault" class="badge btn-success mr-t2 cp"
+                            (click)="onSetTemplateAsDefault(template,'invoice')"><i class="icon-favorite-selected"></i>
                             Set as
                             Default</span>
                     </div>
@@ -93,7 +58,7 @@
                         <button class="btn btn-default" (click)="onUpdateTemplate(template)">
                             <i class="icon-edit-pencil" tooltip="Edit template" aria-hidden="true"></i>
                         </button>
-                        <button [disabled]="template.isDefaultForVoucher" class="btn btn-default"
+                        <button [disabled]="template.isDefault" class="btn btn-default"
                             (click)="onDeleteTemplate(template)">
                             <i class="icon-trash" tooltip="Delete" aria-hidden="true"></i>
                         </button>
@@ -105,8 +70,44 @@
 
                     </div>
                 </div>
+
+                <ng-container *ngIf="voucherType === 'credit note' || voucherType === 'debit note'">
+                    <div class="template-grid" *ngIf="template.type === 'voucher'">
+                        <div class="template-info text-center">
+                            <h3 class="primary-color">{{template.name}}</h3>
+
+                            <span *ngIf="template.isDefaultForVoucher" class="badge btn-sky-blue mr-t2"><i
+                                    class="icon-favorite-selected"></i> Default Template</span>
+                            <span *ngIf="!template.isDefaultForVoucher" class="badge btn-success mr-t2 cp"
+                                (click)="onSetTemplateAsDefault(template,'voucher')"><i class="icon-favorite-selected"></i>
+                                Set as
+                                Default</span>
+                        </div>
+
+                        <div class="template-action">
+                            <!-- [hidden]="template.uniqueName === 'gst_template_b' || template.uniqueName === 'gst_template_c' || template.uniqueName === 'gst_template_d' || template.uniqueName === 'gst_template_e'" -->
+                            <button class="btn btn-default" (click)="onPreview(template)">
+                                <i class="icon-eye" tooltip="Preview" aria-hidden="true"></i>
+                            </button>
+                            <!-- [hidden]="template.uniqueName === 'gst_template_b' || template.uniqueName === 'gst_template_c' || template.uniqueName === 'gst_template_d' || template.uniqueName === 'gst_template_e'" -->
+                            <button class="btn btn-default" (click)="onUpdateTemplate(template)">
+                                <i class="icon-edit-pencil" tooltip="Edit template" aria-hidden="true"></i>
+                            </button>
+                            <button [disabled]="template.isDefaultForVoucher" class="btn btn-default"
+                                (click)="onDeleteTemplate(template)">
+                                <i class="icon-trash" tooltip="Delete" aria-hidden="true"></i>
+                            </button>
+
+                            <div class="template-meta">
+                                <small class="text-ellipsis">Created by: {{template.createdBy.name}}</small>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </ng-container>
             </ng-container>
-        </ng-container>
+        </div>    
     </div>
 </div>
 <!-- Template modal -->

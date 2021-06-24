@@ -3,33 +3,33 @@
     <div class="proforma-container">
 
         <div class="d-flex date-advance-search">
-            <form #invoiceForm="ngForm" novalidate class="form-inline input-grp-date-range-picker position-relative">
-                <div class="d-flex">
-                    <div class="form-group mr-r1 d-flex">
-                        <div class=" input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
-                            <i class="icon-calender calendar-addon"></i>
-                            <input type="text" name="selectedDateRange"
-                                [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
-                                class="giddh-datepicker date-range-picker" />
-                        </div>
-                        <div class="advance-icon cursor-pointer">
-                            <span class="icon-advance-filter" (click)="toggleAdvanceSearchPopup()"
-                                [tooltip]="commonLocaleData?.app_advance_search"></span>
-                        </div>
-                        <div class="search-icon-block" (click)="openModal(template)">
-                            <i class="icon-search"></i>
+            <div validateSectionPermission [hasPermission]="hasVoucherListPermissions">
+                <form #invoiceForm="ngForm" novalidate class="form-inline input-grp-date-range-picker position-relative">
+                    <div class="d-flex">
+                        <div class="form-group mr-r1 d-flex">
+                            <div class=" input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                <i class="icon-calender calendar-addon"></i>
+                                <input type="text" name="selectedDateRange"
+                                    [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
+                                    class="giddh-datepicker date-range-picker" />
+                            </div>
+                            <div class="advance-icon cursor-pointer">
+                                <span class="icon-advance-filter" (click)="toggleAdvanceSearchPopup()"
+                                    [tooltip]="commonLocaleData?.app_advance_search"></span>
+                            </div>
+                            <div class="search-icon-block" (click)="openModal(template)">
+                                <i class="icon-search"></i>
+                            </div>
                         </div>
                     </div>
+                </form>
 
-
+                <!-- need to add functionality -->
+                <div class="clear-filter" *ngIf="showResetAdvanceSearchIcon" (click)="resetAdvanceSearch()">
+                    <button class="btn btn-filter mr-0">
+                        <span class="icon-cross"></span> {{commonLocaleData?.app_clear_filter}}
+                    </button>
                 </div>
-            </form>
-
-            <!-- need to add functionality -->
-            <div class="clear-filter" *ngIf="showResetAdvanceSearchIcon" (click)="resetAdvanceSearch()">
-                <button class="btn btn-filter mr-0">
-                    <span class="icon-cross"></span> {{commonLocaleData?.app_clear_filter}}
-                </button>
             </div>
 
             <div class="d-flex btn-wrapper">
@@ -79,18 +79,20 @@
         </div>
 
         <div class="mobile-search mr-b1">
-            <div class="row">
-                <div class="col-sm-6 full-width-on-mobile">
-                    <div class="input-container">
-                        <input type="text"
-                            [placeholder]="voucherType === 'proformas' ? localeData?.search_proforma : localeData?.search_estimate"
-                            class=" form-control" #searchBox [formControl]="voucherNumberInput" />
+            <div validateSectionPermission [hasPermission]="hasVoucherListPermissions">
+                <div class="row">
+                    <div class="col-sm-6 full-width-on-mobile">
+                        <div class="input-container">
+                            <input type="text"
+                                [placeholder]="voucherType === 'proformas' ? localeData?.search_proforma : localeData?.search_estimate"
+                                class=" form-control" #searchBox [formControl]="voucherNumberInput" />
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-6 full-width-on-mobile">
-                    <div class="input-container">
-                        <input type="text" [placeholder]="localeData?.search_customer_name" class=" form-control"
-                            #searchBox name="customerNameInput" [formControl]="customerNameInput" />
+                    <div class="col-sm-6 full-width-on-mobile">
+                        <div class="input-container">
+                            <input type="text" [placeholder]="localeData?.search_customer_name" class=" form-control"
+                                #searchBox name="customerNameInput" [formControl]="customerNameInput" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -154,7 +156,7 @@
             </div>
         </ng-template>
         <!-- select app proforma -->
-        <div class="clearfix">
+        <div class="clearfix" validateSectionPermission [hasPermission]="hasVoucherListPermissions">
             <div class="table-responsive remove-responsive invoice-preview">
                 <table class="table basic table-bordered mr-t15 invoice-table on-mobile-view">
                     <thead class="thead-background1">

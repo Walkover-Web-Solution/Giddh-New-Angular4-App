@@ -42,7 +42,7 @@ import { saveAs } from 'file-saver';
 import { ReceiptService } from "../../services/receipt.service";
 import { InvoicePaymentModelComponent } from './models/invoicePayment/invoice.payment.model.component';
 import { PurchaseRecordService } from '../../services/purchase-record.service';
-import { EInvoiceStatus, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../app.constant';
+import { EInvoiceStatus, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT, UNAUTHORISED } from '../../app.constant';
 import { PurchaseRecordUpdateModel } from '../../purchase/purchase-record/constants/purchase-record.interface';
 import { InvoiceBulkUpdateService } from '../../services/invoice.bulkupdate.service';
 import { PurchaseRecordActions } from '../../actions/purchase-record/purchase-record.action';
@@ -284,6 +284,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     };
     /** Stores the E-invoice cancellation options */
     public eInvoiceCancellationReasonOptions = [];
+    /** True if user has voucher list permission */
+    public hasVoucherListPermissions: boolean = true;
+    /** True if user has voucher total balance permission */
+    public hasVoucherTotalBalancePermissions: boolean = true;
 
     constructor(
         private store: Store<AppState>,
@@ -635,6 +639,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 this.getVoucher(this.isUniversalDateApplicable);
                 this.store.dispatch(this.invoiceActions.resetBulkEInvoice());
             }
+        });
+
+        this.store.pipe(select(state => state.receipt.hasVoucherListPermissions), takeUntil(this.destroyed$)).subscribe(response => {
+            this.hasVoucherListPermissions = response;
         });
     }
 
@@ -1395,6 +1403,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     private parseBalRes(res) {
+        this.hasVoucherTotalBalancePermissions = true;
+        if(res?.statusCode === UNAUTHORISED) {
+            this.hasVoucherTotalBalancePermissions = false;
+        }
         if (res && res.body) {
             this.totalSale = res.body.grandTotal;
             this.totalDue = res.body.totalDue;
