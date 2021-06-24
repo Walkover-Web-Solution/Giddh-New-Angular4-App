@@ -446,7 +446,7 @@
                 [ngClass]="{'active-text-color': advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc'}">
             </div>
 
-            <div class="icon-sort-dsc"
+            <div class="icon-sort-asc"
                 *ngIf="advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'desc'"
                 (click)="sortButtonClicked('asc', column)"
                 [ngClass]="{'active-text-color': advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'desc'}">

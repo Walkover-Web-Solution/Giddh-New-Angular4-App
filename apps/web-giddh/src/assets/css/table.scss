@@ -89,9 +89,9 @@
     tbody tr:last-child td {
         border-bottom: 1px solid $gainsboro !important;
     }
-    .icon-sort-asc,
-    .icon-sort-dsc {
-        color: $wild-blue-yonder;
+    .icon-sort-asc {
+        color: $omiod;
+        font-size: 16px !important;
     }
     .icon-pointer .active-text-color {
         color: $deep-sky-blue;

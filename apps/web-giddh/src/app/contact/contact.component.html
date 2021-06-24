@@ -1137,7 +1137,7 @@
                 [ngClass]="{'active-text-color': key === col && order === 'asc'}">
             </div>
 
-            <div class="icon-sort-dsc text-light-2 d-block font-xxs" *ngIf="key === col && order === 'desc'"
+            <div class="icon-sort-asc text-light-2 d-block font-xxs" *ngIf="key === col && order === 'desc'"
                 (click)="sort(col, 'asc')" [ngClass]="{'active-text-color': key === col && order === 'desc'}"></div>
         </div>
     </ng-template>
