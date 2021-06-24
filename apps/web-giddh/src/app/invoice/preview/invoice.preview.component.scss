@@ -59,7 +59,7 @@
 }
 
 .td-search-box .input-container input {
-    height: 50px;
+    height: 36px;
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
@@ -452,19 +452,6 @@ button.btn.btn-default.ladda-button {
     top: 0;
 }
 
-.invoice-footer h3 {
-    font-size: 16px;
-    color: $nobel;
-    display: inline-block;
-    margin-right: 10px;
-}
-
-.invoice-footer h1 {
-    font-size: 18px;
-    color: $night-rider;
-    display: inline-block;
-}
-
 .add-invoice .btn-group.show {
     display: inline-block !important;
 }
@@ -554,7 +541,7 @@ span.icon-export-icon {
     > tbody {
         > tr {
             &:hover {
-                background: #F0F5FF;
+                background: $light-alice-blue;
             }
             td {
                 background: transparent !important;
@@ -571,11 +558,6 @@ span.icon-export-icon {
 }
 .cancel-remarks-section {
     min-height: 120px;
-}
-
-.table-responsive{
-    max-height: calc(100vh - 302px);
-    overflow-y: auto;
 }
 
 /* responsive */
@@ -665,9 +647,6 @@ span.icon-export-icon {
         left: auto;
         right: 0;
     }
-    .invoice-footer .font-xxlarge {
-        font-size: 20px;
-    }
     .click-dropdown ul {
         left: auto;
         right: 0;
@@ -736,15 +715,6 @@ span.icon-export-icon {
             left: 0;
         }
     }
-    .invoice-footer .font-xxlarge {
-        font-size: 16px;
-    }
-    .invoice-footer h1 {
-        font-size: 18px !important;
-    }
-    .total-due-sale-wrap {
-        display: block !important;
-    }
     .total-due-sale {
         padding-bottom: 5px;
     }
@@ -769,16 +739,9 @@ span.icon-export-icon {
     #dropdown-ddl-newinv {
         right: -20px !important;
     }
-    .invoice-footer {
-        display: flex;
-        padding: 10px 0;
-    }
     .full-width-on-mobile {
         width: 100%;
         margin: 5px 0;
-    }
-    .date-advance-search {
-        flex-direction: column;
     }
     .mobile-search {
         .col-xs-12 {
@@ -883,5 +846,12 @@ span.icon-export-icon {
             right: 0;
             bottom: -50px;
         }
+    }
+}
+
+@media (min-width:767px){
+    .table-responsive{
+        max-height: calc(100vh - 302px);
+        overflow-y: auto;
     }
 }

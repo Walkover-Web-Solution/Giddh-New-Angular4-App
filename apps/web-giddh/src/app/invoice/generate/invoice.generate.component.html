@@ -171,90 +171,89 @@
                                     <i class='fa fa-info-circle' placement="right" [tooltip]="item.errMsg"></i>
                                 </div>
                             </td>
+                        <td *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedInvoices.length === 0"
+                            data-title="#">
+                            <div class=" d-flex justify-content-center">
+                                {{ i + 1}}
+                            </div>
+                        </td>
 
-                            <td *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedInvoices.length === 0"
-                                data-title="#">
-                                <div class="d-flex justify-content-center">
-                                    {{ i + 1}}
-                                </div>
-                            </td>
+                        <td [attr.data-title]="commonLocaleData?.app_date">{{item.entryDate}}</td>
 
-                            <td [attr.data-title]="commonLocaleData?.app_date">{{item.entryDate}}</td>
+                        <td [attr.data-title]="commonLocaleData?.app_particular" class="hide-on-mobile">
+                            <table class="table nested-table particular-nested-table">
+                                <tr *ngFor="let transaction of item.transactions">
+                                    <td class="p-0 border-none">
+                                        {{transaction.particular.name }}
+                                        <span
+                                            *ngIf="transaction.inventory && transaction.inventory.stock">({{transaction.inventory.stock.name}})
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
 
-                            <td [attr.data-title]="commonLocaleData?.app_particular" class="hide-on-mobile">
-                                <table class="table nested-table particular-nested-table">
-                                    <tr *ngFor="let transaction of item.transactions">
-                                        <td class="p-0 border-none">
-                                            {{transaction.particular.name }}
-                                            <span
-                                                *ngIf="transaction.inventory && transaction.inventory.stock">({{transaction.inventory.stock.name}})
-                                            </span>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
+                        <td [attr.data-title]="commonLocaleData?.app_amount" class="hide-on-mobile">
+                            <table class="table nested-table amount-nested-table">
+                                <tr *ngFor="let transaction of item.transactions">
+                                    <td class="text-right p-0 border-none">
+                                        {{item.accountCurrencySymbol}} {{transaction.amount | giddhCurrency }}
+                                    </td>
+                                </tr>
+                            </table>
 
-                            <td [attr.data-title]="commonLocaleData?.app_amount" class="hide-on-mobile">
-                                <table class="table nested-table amount-nested-table">
-                                    <tr *ngFor="let transaction of item.transactions">
-                                        <td class="text-right p-0 border-none">
-                                            {{item.accountCurrencySymbol}} {{transaction.amount | giddhCurrency }}
-                                        </td>
-                                    </tr>
-                                </table>
+                        </td>
+                        <td id="mobile-nested-table">
+                            <table>
+                                <tr>
+                                    <th>{{commonLocaleData?.app_particular}}</th>
+                                    <th>{{commonLocaleData?.app_amount}}</th>
+                                </tr>
+                                <tr *ngFor="let transaction of item.transactions">
 
-                            </td>
-                            <td id="mobile-nested-table">
-                                <table class="nested-table">
-                                    <tr>
-                                        <th>{{commonLocaleData?.app_particular}}</th>
-                                        <th>{{commonLocaleData?.app_amount}}</th>
-                                    </tr>
-                                    <tr *ngFor="let transaction of item.transactions">
+                                    <td>
+                                        {{transaction.particular.name }}
+                                        <span
+                                            *ngIf="transaction.inventory && transaction.inventory.stock">({{transaction.inventory.stock.name}})
+                                        </span>
+                                    </td>
+                                    <td class="text-right">
+                                        {{item.accountCurrencySymbol}} {{transaction.amount | giddhCurrency }}
+                                    </td>
 
-                                        <td>
-                                            {{transaction.particular.name }}
-                                            <span
-                                                *ngIf="transaction.inventory && transaction.inventory.stock">({{transaction.inventory.stock.name}})
-                                            </span>
-                                        </td>
-                                        <td class="text-right">
-                                            {{item.accountCurrencySymbol}} {{transaction.amount | giddhCurrency }}
-                                        </td>
+                                </tr>
 
-                                    </tr>
+                            </table>
+                        </td>
 
-                                </table>
-                            </td>
+                        <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
+                            (clickOutside)="modalUniqueName = ''" [attr.data-title]="commonLocaleData?.app_account">
+                            {{item.account.name}}
+                            <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
+                                [accountUniqueName]="item.account.uniqueName" [from]="ledgerSearchRequest.from"
+                                [to]="ledgerSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName"
+                                [voucherType]="selectedVoucher">
+                            </div>
+                        </td>
 
-                            <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
-                                (clickOutside)="modalUniqueName = ''" [attr.data-title]="commonLocaleData?.app_account">
-                                {{item.account.name}}
-                                <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
-                                    [accountUniqueName]="item.account.uniqueName" [from]="ledgerSearchRequest.from"
-                                    [to]="ledgerSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName"
-                                    [voucherType]="selectedVoucher">
-                                </div>
-                            </td>
-
-                            <td class="text-right" [attr.data-title]="commonLocaleData?.app_total"
-                                [tooltip]="totalPopupTemplate">
-                                {{item.accountCurrencySymbol}}{{item.total.amount | giddhCurrency}}</td>
-                            <ng-template #totalPopupTemplate><span [innerHTML]="item.totalTooltipText"></span>
-                            </ng-template>
-                            <td [attr.data-title]="commonLocaleData?.app_description" class="pending-table-description">
-                                {{ item.description ? item.description : '-' }}</td>
-                    </tbody>
-                    <tbody *ngIf="(isGetAllRequestInProcess$ | async) || (getLedgerDataInProcess$ | async)"
-                        id="centerAlign">
-                        <tr>
-                            <td colspan="8">
-                                <giddh-page-loader></giddh-page-loader>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                        <td class="text-right" [attr.data-title]="commonLocaleData?.app_total"
+                            [tooltip]="totalPopupTemplate">
+                            {{item.accountCurrencySymbol}}{{item.total.amount | giddhCurrency}}</td>
+                        <ng-template #totalPopupTemplate><span [innerHTML]="item.totalTooltipText"></span>
+                        </ng-template>
+                        <td [attr.data-title]="commonLocaleData?.app_description" class="pending-table-description">
+                            {{ item.description ? item.description : '-' }}</td>
+                </tbody>
+                <tbody *ngIf="(isGetAllRequestInProcess$ | async) || (getLedgerDataInProcess$ | async)"
+                    id="centerAlign">
+                    <tr>
+                        <td colspan="8">
+                            <giddh-page-loader></giddh-page-loader>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         </div>
 
             <div *ngIf="ledgersData?.totalItems > 20"

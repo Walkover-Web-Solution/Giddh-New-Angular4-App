@@ -59,7 +59,7 @@
         border-bottom: none !important;
         white-space: nowrap !important;
         color: $omiod;
-        border-top: 1px solid #E7E9EB !important;
+        border-top: 1px solid $dark-fog !important;
         &.text-break {
             white-space: normal !important;
         }
@@ -84,7 +84,7 @@
         white-space: nowrap;
     }
     tbody tr:hover td {
-        background: #F0F5FF;
+        background: $light-alice-blue;
     }
     tbody tr:last-child td {
         border-bottom: 1px solid $gainsboro !important;
@@ -118,7 +118,7 @@
             padding-left: 8px;
         }
         .input-container input {
-            height: 50px;
+            height: 36px;
             min-width: 100%;
             padding: 11px;
             padding-right: 40px;
