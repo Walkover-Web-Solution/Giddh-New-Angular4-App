@@ -106,7 +106,7 @@
                             (clickOutside)="hideListItems()" [tooltip]="localeData?.filter_toggle"
                             [placement]="'right'">
                                 <div dropdownToggle>
-                                        <span class="pd-r05">Filter</span>
+                                        <span class="pd-r05">{{commonLocaleData?.app_filter}}</span>
                                         <span class="icon-advance-filter"></span>
                                 </div>
                                 <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
@@ -581,8 +581,6 @@
                             </div>
 
                         </th>
-
-                        <!--<th *ngIf="showFieldFilter.mobile">{{commonLocaleData?.app_mobile_no}}</th>-->
 
                         <th *ngIf="showFieldFilter.gstin && shouldShowTaxFilter">
                             <div class="d-flex align-items-center">{{commonLocaleData?.app_tax_number}}
