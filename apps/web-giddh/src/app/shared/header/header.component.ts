@@ -380,7 +380,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.selectedCompany = observableOf(selectedCmp);
                 this.selectedCompanyDetails = selectedCmp;
                 this.store.dispatch(this.companyActions.setActiveFinancialYear(selectedCmp.activeFinancialYear));
-
+                this.generalService.voucherApiVersion = selectedCmp.voucherVersion;
                 this.activeCompanyForDb = new CompAidataModel();
                 if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
                     this.activeCompanyForDb.name = this.currentBranch ? this.currentBranch.name : '';
@@ -648,7 +648,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (response && response.status === "success" && response.body) {
                 this.store.dispatch(this.settingsProfileAction.handleCompanyProfileResponse(response));
                 let res = response.body;
-                this.generalService.voucherApiVersion = res.voucherVersion;
                 this.store.dispatch(this.companyActions.setActiveCompanyData(res));
 
                 if (res.countryV2 !== null && res.countryV2 !== undefined) {

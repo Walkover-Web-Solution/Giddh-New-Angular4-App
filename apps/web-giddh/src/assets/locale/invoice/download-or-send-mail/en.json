@@ -3,6 +3,7 @@
     "enter_mobile_no": "Enter mobile no. with countryCode",
     "invoice_copy": "Invoice Copy",
     "transport": "Transport",
+    "original": "Original",
     "download_invoice": "Download Invoice",
     "enter_valid_email_error": "Enter some valid email Id's",
     "invalid_emails": "Invalid email(s).",

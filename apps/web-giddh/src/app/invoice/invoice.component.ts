@@ -16,7 +16,6 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
 
-    public tabsDropdown: boolean = false;
     public selectedVoucherType: VoucherTypeEnum;
     public activeTab: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
