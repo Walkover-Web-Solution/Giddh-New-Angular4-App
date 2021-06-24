@@ -38,7 +38,6 @@
     border-bottom: 1px solid $gainsboro;
     font-family: opensans-semibold;
     font-size: 14px;
-    //border-top: 1px solid $gainsboro;
 }
 
 .basic {
@@ -6983,8 +6982,7 @@ button.btn.btn-filter {
     line-height: initial;
 }
 
-.icon-sort-asc:hover,
-.icon-sort-asc:hover {
+.icon-sort-asc:hover{
     color: $deep-sky-blue !important;
 }
 
