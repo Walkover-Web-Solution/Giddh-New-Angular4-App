@@ -276,7 +276,7 @@
             (click)="handleSorting('desc', column)"
             [ngClass]="{'active-text-color': searchQueryParams.sortBy === column && searchQueryParams.sort === 'asc'}">
         </div>
-        <div class="icon-sort-dsc" *ngIf="searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc'"
+        <div class="icon-sort-asc" *ngIf="searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc'"
             (click)="handleSorting('asc', column)"
             [ngClass]="{'active-text-color': searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc'}">
         </div>
