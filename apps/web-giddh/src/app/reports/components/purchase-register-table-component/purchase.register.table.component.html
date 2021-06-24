@@ -2,24 +2,24 @@
     (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <table class="table basic giddh-table on-mobile-view">
         <thead>
-                        <tr class="register-table-th">
-                            <th>{{purchaseRegisterTotal.particular }}</th>
-                            <th class="text-right">{{purchaseRegisterTotal.purchase | giddhCurrency}}</th>
-                            <th *ngIf="purchaseRegisterTotal.returns" class="text-right">{{purchaseRegisterTotal.returns |
-                                giddhCurrency}}</th>
-                            <th *ngIf="purchaseRegisterTotal.taxTotal" class="text-right">{{purchaseRegisterTotal.taxTotal |
-                                giddhCurrency}}</th>
-                            <th *ngIf="purchaseRegisterTotal.discountTotal" class="text-right">{{purchaseRegisterTotal.discountTotal
-                                | giddhCurrency}}</th>
-                            <th *ngIf="isTcsTdsApplicable && purchaseRegisterTotal.tcsTotal" class="text-right">
-                                {{purchaseRegisterTotal.tcsTotal | giddhCurrency}}</th>
-                            <th *ngIf="isTcsTdsApplicable && purchaseRegisterTotal.tdsTotal" class="text-right">
-                                {{purchaseRegisterTotal.tdsTotal | giddhCurrency}}</th>
-                            <th *ngIf="purchaseRegisterTotal.netPurchase" class="text-right">{{purchaseRegisterTotal.netPurchase |
-                                giddhCurrency}}</th>
-                            <th *ngIf="purchaseRegisterTotal.cumulative" class="text-right">{{purchaseRegisterTotal.cumulative |
-                                giddhCurrency}}</th>
-                        </tr>
+            <tr class="register-table-th">
+                <th>{{purchaseRegisterTotal.particular }}</th>
+                <th class="text-right">{{purchaseRegisterTotal.purchase | giddhCurrency}}</th>
+                <th *ngIf="purchaseRegisterTotal.returns" class="text-right">{{purchaseRegisterTotal.returns |
+                    giddhCurrency}}</th>
+                <th *ngIf="purchaseRegisterTotal.taxTotal" class="text-right">{{purchaseRegisterTotal.taxTotal |
+                    giddhCurrency}}</th>
+                <th *ngIf="purchaseRegisterTotal.discountTotal" class="text-right">{{purchaseRegisterTotal.discountTotal
+                    | giddhCurrency}}</th>
+                <th *ngIf="isTcsTdsApplicable && purchaseRegisterTotal.tcsTotal" class="text-right">
+                    {{purchaseRegisterTotal.tcsTotal | giddhCurrency}}</th>
+                <th *ngIf="isTcsTdsApplicable && purchaseRegisterTotal.tdsTotal" class="text-right">
+                    {{purchaseRegisterTotal.tdsTotal | giddhCurrency}}</th>
+                <th *ngIf="purchaseRegisterTotal.netPurchase" class="text-right">{{purchaseRegisterTotal.netPurchase |
+                    giddhCurrency}}</th>
+                <th *ngIf="purchaseRegisterTotal.cumulative" class="text-right">{{purchaseRegisterTotal.cumulative |
+                    giddhCurrency}}</th>
+            </tr>
             <tr>
                 <th>
                     <div class="d-flex align-items-center">
