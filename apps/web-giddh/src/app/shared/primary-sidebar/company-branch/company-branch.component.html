@@ -19,7 +19,7 @@
         </div>
     </div>
      <!-- branch design option 1 -->
-     <div class="company-branch-opt-1">
+    <div class="company-branch-opt-1" hidden>
         <tabset class="custom-tabs position-relative" #staticTabs>
             <i class="icon-copmany-branch-connect"></i>
             <tab [heading]="commonLocaleData?.app_company" [customClass]="'icon-company'" (selectTab)="tabChanged('branch')">
@@ -117,8 +117,8 @@
             <button (click)="logout()"><i class="icon-logout mr-2 font-18"></i> {{localeData?.logout}}</button>
         </div>
     </div>
-     <!-- branch design option 2 -->
-     <div class="company-branch-opt-2" hidden>
+    <!-- branch design option 2 -->
+    <div class="company-branch-opt-2" >
         <div class="total-company">
             <p class="font-12 d-flex justify-content-between mt-2">
             <span class="company-count">120 Companies</span>

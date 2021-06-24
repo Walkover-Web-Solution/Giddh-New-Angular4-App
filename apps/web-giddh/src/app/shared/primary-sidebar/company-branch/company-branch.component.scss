@@ -51,17 +51,13 @@
             display: none;
         }
     }
-    .total-company{
-        .company-count{
-            color: $comet;
-        }
-    }
-    .company-list {
+
+    .company-list{
         height: calc(100vh  - 325px) !important;
         overflow: auto;
         margin: 0 -20px;
-        padding: 0 20px;
-        padding-bottom: 50px;
+        padding: 0 20px 20px;
+
         ul{
             li{
                 padding: 10px 0;
@@ -333,7 +329,7 @@
 @media screen and (max-height: 768px) {
     .company-branch-dropdown{
         .company-list {
-            height: calc(70vh - 60px)!important;
+            height: calc(70vh - 60px) !important;
         }
     }
 }
