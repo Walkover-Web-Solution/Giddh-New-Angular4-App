@@ -1,39 +1,40 @@
-<div class="template-grid-container">
-    <div class="clearfix" id="template-grid-wrapper">
+<div validateSectionPermission [hasPermission]="hasInvoiceTemplatePermissions">
+    <div class="template-grid-container">
+        <div class="clearfix" id="template-grid-wrapper">
 
-        <label class="mr-b05">Select Design for</label>
+            <label class="mr-b05">Select Design for</label>
 
-        <div class="select-design">
-            <div class="btn-group d-inline-block mr-b1" dropdown triggers="mouseover" #dp="bs-dropdown">
-                <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
-                    aria-controls="dropdown-basic">
-                    {{ (voucherType === "debit note" || voucherType === "credit note") ? 'Credit/Debit Note' :
-                    voucherType | titlecase}}
-                    <span class="caret"></span>
-                </button>
-                <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+            <div class="select-design">
+                <div class="btn-group d-inline-block mr-b1" dropdown triggers="mouseover" #dp="bs-dropdown">
+                    <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
+                        aria-controls="dropdown-basic">
+                        {{ (voucherType === "debit note" || voucherType === "credit note") ? 'Credit/Debit Note' :
+                        voucherType | titlecase}}
+                        <span class="caret"></span>
+                    </button>
+                    <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
 
-                    <li role="menuitem" (click)="voucherTypeChanged('sales')">
-                        <a class="dropdown-item cp" href="javascript:void(0)">Sales</a>
-                    </li>
+                        <li role="menuitem" (click)="voucherTypeChanged('sales')">
+                            <a class="dropdown-item cp" href="javascript:void(0)">Sales</a>
+                        </li>
 
-                    <li role="menuitem" (click)="voucherTypeChanged('debit note')">
-                        <a class="dropdown-item cp" href="javascript:void(0)">Credit/Debit Note</a>
-                    </li>
-                </ul>
+                        <li role="menuitem" (click)="voucherTypeChanged('debit note')">
+                            <a class="dropdown-item cp" href="javascript:void(0)">Credit/Debit Note</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
 
-        <div class="template-grid">
-            <h3 class="text-left">Design Template</h3>
-            <small class="mr-t3 text-left grey d-block">
-                Click to add a template from our gallery. You can customize the template title, columns,and headers in
-                line item
-                table.
-            </small>
-            <button class="btn pull-left isActive mt-5" (click)="onOpenTemplateModal()">Add New</button>
-        </div>
-        <div validateSectionPermission [hasPermission]="hasInvoiceTemplatePermissions">
+            <div class="template-grid">
+                <h3 class="text-left">Design Template</h3>
+                <small class="mr-t3 text-left grey d-block">
+                    Click to add a template from our gallery. You can customize the template title, columns,and headers in
+                    line item
+                    table.
+                </small>
+                <button class="btn pull-left isActive mt-5" (click)="onOpenTemplateModal()">Add New</button>
+            </div>
+            
             <ng-container *ngFor="let template of customCreatedTemplates; let i = index">
 
                 <div class="template-grid" *ngIf="template.type === 'invoice' && voucherType==='sales' ">
@@ -107,61 +108,61 @@
                     </div>
                 </ng-container>
             </ng-container>
-        </div>    
-    </div>
-</div>
-<!-- Template modal -->
-<div bsModal #templateModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
-    <div class="modal-dialog full-modal">
-        <!-- modal-liq-90 class is removed for now-->
-        <div class="modal-content border-radius-none">
-            <invoice-template-modal [templateSections]="currentTemplateSections" [templateId]="templateId"
-                (closeModelEvent)="onCloseTemplateModal()" [editMode]="transactionMode"></invoice-template-modal>
         </div>
     </div>
-    <div class="sticky-footer pd-2">
-        <!--<button class="btn btn-default">Preview</button>-->
-        <div class="pull-right mr-r4" *ngIf="voucherType ==='sales' ">
-            <button [attr.disabled]="isFormInValid ? true : null" *ngIf="transactionMode == 'create'"
-                class="btn btn-success" (click)="createTemplate('invoice')">Save
-            </button>
-            <button [attr.disabled]="isFormInValid ? true : null" *ngIf="transactionMode == 'update'"
-                class="btn btn-success" (click)="updateTemplate('invoice')">Update
-                Template
-            </button>
-            <button class="btn btn-danger mr-r4" (click)="onCloseTemplateModal()">Close</button>
+    <!-- Template modal -->
+    <div bsModal #templateModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
+        <div class="modal-dialog full-modal">
+            <!-- modal-liq-90 class is removed for now-->
+            <div class="modal-content border-radius-none">
+                <invoice-template-modal [templateSections]="currentTemplateSections" [templateId]="templateId"
+                    (closeModelEvent)="onCloseTemplateModal()" [editMode]="transactionMode"></invoice-template-modal>
+            </div>
         </div>
-        <div class="pull-right mr-r4" *ngIf="voucherType === 'credit note' || voucherType === 'debit note'">
-            <button *ngIf="transactionMode == 'create'" class="btn btn-success" (click)="createTemplate('voucher')">Save
-            </button>
-            <button *ngIf="transactionMode == 'update'" class="btn btn-success"
-                (click)="updateTemplate('voucher')">Update
-                Template
-            </button>
-            <button class="btn btn-danger mr-r4" (click)="onCloseTemplateModal()">Close</button>
+        <div class="sticky-footer pd-2">
+            <!--<button class="btn btn-default">Preview</button>-->
+            <div class="pull-right mr-r4" *ngIf="voucherType ==='sales' ">
+                <button [attr.disabled]="isFormInValid ? true : null" *ngIf="transactionMode == 'create'"
+                    class="btn btn-success" (click)="createTemplate('invoice')">Save
+                </button>
+                <button [attr.disabled]="isFormInValid ? true : null" *ngIf="transactionMode == 'update'"
+                    class="btn btn-success" (click)="updateTemplate('invoice')">Update
+                    Template
+                </button>
+                <button class="btn btn-danger mr-r4" (click)="onCloseTemplateModal()">Close</button>
+            </div>
+            <div class="pull-right mr-r4" *ngIf="voucherType === 'credit note' || voucherType === 'debit note'">
+                <button *ngIf="transactionMode == 'create'" class="btn btn-success" (click)="createTemplate('voucher')">Save
+                </button>
+                <button *ngIf="transactionMode == 'update'" class="btn btn-success"
+                    (click)="updateTemplate('voucher')">Update
+                    Template
+                </button>
+                <button class="btn btn-danger mr-r4" (click)="onCloseTemplateModal()">Close</button>
+            </div>
         </div>
     </div>
-</div>
 
-<!--delete custom template confirmation modal -->
-<div bsModal #customTemplateConfirmationModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
-    tabindex="-1">
-    <div class="modal-dialog modal-md">
-        <!-- modal-liq-90 class is removed for now-->
-        <div class="modal-content">
-            <delete-template-confirmation-modal [message]='deleteTemplateConfirmationMessage' [flag]="confirmationFlag"
-                (closeModelEvent)="onCloseConfirmationModal($event)"></delete-template-confirmation-modal>
+    <!--delete custom template confirmation modal -->
+    <div bsModal #customTemplateConfirmationModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
+        tabindex="-1">
+        <div class="modal-dialog modal-md">
+            <!-- modal-liq-90 class is removed for now-->
+            <div class="modal-content">
+                <delete-template-confirmation-modal [message]='deleteTemplateConfirmationMessage' [flag]="confirmationFlag"
+                    (closeModelEvent)="onCloseConfirmationModal($event)"></delete-template-confirmation-modal>
+            </div>
         </div>
     </div>
-</div>
 
-<!--invoice-template-preview-modal -->
-<div bsModal #invoiceTemplatePreviewModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
-    tabindex="-1">
-    <div class="modal-dialog modal-xl">
-        <!-- modal-liq-90 class is removed for now-->
-        <div class="modal-content">
-            <invoice-template-preview-modal (closeModelEvent)="onClosePreviewModal()"></invoice-template-preview-modal>
+    <!--invoice-template-preview-modal -->
+    <div bsModal #invoiceTemplatePreviewModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
+        tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <!-- modal-liq-90 class is removed for now-->
+            <div class="modal-content">
+                <invoice-template-preview-modal (closeModelEvent)="onClosePreviewModal()"></invoice-template-preview-modal>
+            </div>
         </div>
     </div>
 </div>
