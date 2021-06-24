@@ -228,9 +228,9 @@
                             (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
 
                             <div [hidden]="showInvoiceNumberSearch">
-                                <span> {{commonLocaleData?.app_invoice_number}}</span>
                                 <i class="icon-search"
                                     (click)="showInvoiceNumberSearch = true;showCustomerNameSearch = false;"></i>
+                                <span> {{commonLocaleData?.app_invoice_number}}</span>
                             </div>
 
                             <div class="input-container" [hidden]="!showInvoiceNumberSearch">
@@ -374,8 +374,8 @@
     <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
 
         <div [hidden]="show">
-            <span> {{ title }}</span>
             <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
+            <span> {{ title }}</span>
         </div>
 
         <div class="input-container" [hidden]="!show">

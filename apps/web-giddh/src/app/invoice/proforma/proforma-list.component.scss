@@ -52,13 +52,13 @@
 }
 
 .td-search-box .input-container input {
-    height: 50px;
+    height: 36px;
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
     color: $nero;
     border: none;
-    background-color: $white-smoke;
+    background-color: $gray-95;
 }
 
 .td-search-box .input-container i {
@@ -307,6 +307,7 @@ span.icon-advance-filter {
         word-break: break-word !important;
     }
 }
+
 // responsive
 @media (max-width: 991px) {
     .invoice-preview-sidebar {
@@ -370,6 +371,12 @@ span.icon-advance-filter {
         display: block;
         flex-direction: column;
     }
+    .advance-icon{
+        width: auto;
+        margin-left: auto;
+        position: relative;
+        top: -47px;
+    }
 }
 @media (max-width: 420px) {
     .small-loading {
@@ -401,5 +408,12 @@ span.icon-advance-filter {
     }
     .date-advance-search .btn-wrapper {
         display: none;
+    }
+}
+
+@media (min-width: 767px){
+    .table-responsive{
+        max-height: calc(100vh - 245px);
+        overflow-y: auto;
     }
 }

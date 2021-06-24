@@ -371,7 +371,7 @@ button.btn.btn-filter span.icon-cross {
     justify-content: space-between !important;
 }
 
-.mobile-button-filter {
+.customer-footer-box {
     display: none !important;
 }
 .customer-form-inline {
@@ -380,10 +380,6 @@ button.btn.btn-filter span.icon-cross {
 }
 .linked-entities {
     width: 200px;
-}
-
-.mobile-card-wrapper{
-    max-height: calc(100vh - 250px);
 }
 
 .more-button{
@@ -396,7 +392,7 @@ button.btn.btn-filter span.icon-cross {
 }
 .input-container {
     input {
-        height: 50px;
+        height: 36px;
         min-width: 100%;
         padding: 11px;
         padding-right: 40px;
@@ -405,37 +401,21 @@ button.btn.btn-filter span.icon-cross {
         background-color: $gray-95;
     }
 }
+.overflow-x-auto{
+    overflow-x: auto;
+}
 
 /*responsive*/
 @media (max-width: 1024px) {
     .customer-form-inline {
         position: relative;
         display: flex;
-        flex-direction: column;
         align-items: initial;
         .wrap-search-entity {
             display: flex;
         }
         .linked-entities {
-            width: 80%;
             margin-bottom: 0;
-        }
-        .header-left {
-            width: calc(100% - 50px);
-            margin-left: 45px;
-            &.on-company {
-                width: 100%;
-                margin-left: 0;
-                margin-bottom: 0;
-            }
-            .form-group {
-                vertical-align: bottom !important;
-                margin-bottom: 5px;
-                max-width: 100%;
-                input {
-                    width: 100%;
-                }
-            }
         }
     }
     .customer-footer-box {
@@ -450,9 +430,6 @@ button.btn.btn-filter span.icon-cross {
         .btn {
             margin-right: 0;
         }
-    }
-    .customer-form-inline {
-        flex-direction: column;
     }
     .customer-footer-box {
         display: flex;
@@ -469,9 +446,6 @@ button.btn.btn-filter span.icon-cross {
     button.btn.btn-filter {
         margin-left: auto;
         display: flex;
-    }
-    .customer-form-inline {
-        display: block;
     }
     .aging-table > tbody > tr input[type="checkbox"] {
         top: 2px;
@@ -496,9 +470,6 @@ button.btn.btn-filter span.icon-cross {
     }
     .position-relative.word-wrap .icon-dots-three-vertical {
         transform: rotate(0deg);
-    }
-    .on-desktop-view.btn-group {
-        display: none;
     }
     .customer-right-wrap {
         padding-right: 0;
@@ -548,9 +519,6 @@ button.btn.btn-filter span.icon-cross {
 }
 
 @media (max-width: 767px) {
-    .date-range-picker {
-        height: 26px !important;
-    }
     span.input-addon {
         top: 0;
     }
@@ -578,6 +546,43 @@ button.btn.btn-filter span.icon-cross {
     .customer-name .icon-ellipse {
         top: 8px;
     }
+    .customer-form-inline {
+        flex-direction: column;
+    }
+    .on-desktop-view{
+        display:none !important;
+    }
+    .linked-entities {
+        width: 100%;
+    }
+    .wrap-search-entity{
+        margin-bottom: 10px;
+    }
+    .pd-t1-md{
+        flex-direction: column;
+        padding-top:0;
+    }
+    .header-left {
+        width: 100%;
+        display: block !important;
+        margin-left: 0px;
+        margin-right: 0 !important;
+        &.on-company {
+            width: 100%;
+            margin-left: 0;
+            margin-bottom: 0;
+        }
+        .form-group {
+            vertical-align: bottom !important;
+            margin-bottom: 5px;
+            input {
+                width: 100%;
+            }
+        }
+    }
+    .input-grp-date-range-picker{
+        display: none;
+    }
 }
 
 @media (max-width: 575px) {
@@ -590,16 +595,15 @@ button.btn.btn-filter span.icon-cross {
                 top: 0;
             }
             .linked-entities {
-                width: calc(100% - 50px);
+                width: 100%;
                 margin-bottom: 15px;
-                margin-left: 50px;
+                margin-right: 0 !important;
             }
             .header-left {
-                width: calc(100% - 50px);
-                margin-left: 45px;
+                margin-left: 0px;
+                margin-top: 10px;
                 &.on-company {
-                    width: calc(100% - 50px);
-                    margin-left: 45px;
+                    margin-left: 0px;
                 }
             }
         }
@@ -615,17 +619,6 @@ button.btn.btn-filter span.icon-cross {
         padding-bottom: 12px;
         padding-top: 0;
         float: none !important;
-        .customer-inner-box {
-            display: flex;
-            align-items: center;
-            padding-top: 0;
-            h5 {
-                font-size: 16px;
-                .number-total {
-                    font-size: 20px;
-                }
-            }
-        }
     }
     .customer-right-wrap h4.mr-b1.pd-r2 {
         margin-bottom: 10px;
@@ -667,6 +660,15 @@ button.btn.btn-filter span.icon-cross {
     .top-aging-table-top {
         font-size: 14px;
         padding: 8px 3px !important;
+    }
+    .advance-icon{
+        margin-left: auto !important;
+        width: auto !important;
+    }
+    .on-mobile-view{
+        .btn{
+            width:100%;
+        }
     }
 }
 
@@ -730,4 +732,10 @@ button.btn.btn-filter span.icon-cross {
 
 .negative-balance {
     color: $red;
+}
+
+@media (min-width: 767px){
+    .mobile-card-wrapper{
+        max-height: calc(100vh - 250px);
+    }
 }
