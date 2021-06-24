@@ -114,7 +114,7 @@
                     <!-- Section to create New Sales Invoice, Cash Invoice, Credit Note and Debit Note -->
                     <div class="advance-icon cursor-pointer align-items-center btn btn-primary"
                     [tooltip]="commonLocaleData?.app_advance_search" (click)="toggleAdvanceSearchPopup(false)">
-                    <span class="pd-r05">Filter</span> <span class="icon-advance-filter"></span>
+                    <span class="pd-r05">{{commonLocaleData?.app_filter}}</span> <span class="icon-advance-filter"></span>
                 </div>
                     <div class="export-button-wrap" *ngIf="selectedVoucher === 'sales'">
                         <button class="btn btn-primary mr-0"
