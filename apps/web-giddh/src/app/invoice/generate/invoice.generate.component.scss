@@ -11,7 +11,7 @@ table {
 }
 
 .check-image img {
-    max-height: 20px;
+    max-height: 14px;
     cursor: pointer;
 }
 
@@ -252,6 +252,7 @@ span.close-modal.cp.pull-right {
             white-space: normal;
             border-left: none !important;
             border-right: none !important;
+            border-bottom: none !important;
         }
     }
 }
@@ -270,6 +271,7 @@ span.close-modal.cp.pull-right {
         margin-right: 8px;
     }
 }
+
 // responsive
 @media (max-width: 1023px) {
     .pending-advance-search {
@@ -496,5 +498,12 @@ span.close-modal.cp.pull-right {
         flex-direction: row !important;
         margin-top: 10px !important;
         width: 100%;
+    }
+}
+
+@media (min-width: 767px){
+    .table-responsive{
+        max-height: calc(100vh - 285px);
+        overflow-y: auto;
     }
 }

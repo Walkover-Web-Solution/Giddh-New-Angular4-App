@@ -30,18 +30,7 @@
     border-left: none !important;
 }
 
-.basic > tbody > tr td:last-child,
-.basic > thead > tr th:last-child {
-    border-right: 1px solid $gainsboro !important;
-}
-
-.basic > tbody > tr td:first-child,
-.basic > thead > tr th:first-child {
-    border-left: 1px solid $gainsboro !important;
-}
-
 .basic > thead > tr > th {
-    background: $white;
     color: $nero;
     border-right: 1px solid $gainsboro;
     padding: 15px 11px !important;
@@ -49,7 +38,6 @@
     border-bottom: 1px solid $gainsboro;
     font-family: opensans-semibold;
     font-size: 14px;
-    border-top: 1px solid $gainsboro;
 }
 
 .basic {
@@ -467,7 +455,7 @@ input {
 .invoice-control .nav.nav-tabs {
     margin-bottom: 15px;
     padding: 0 0px 0 15px !important;
-    background-color: $alice-blue-light;
+    background-color: $white;
     z-index: 9;
     position: relative;
     top: -4px;
@@ -801,16 +789,20 @@ ul.sub-list {
     position: relative;
 }
 
+.customer-aging .nav.nav-tabs{
+    display: none !important;
+}
+
 .btn-sky-blue {
-    background: $deep-sky-blue;
-    border: 1px solid $deep-sky-blue;
+    background: $faux-cornflower-blue;
+    border: 1px solid $faux-cornflower-blue;
     color: $white;
 }
 
 .btn-sky-blue:hover,
 .btn-sky-blue:focus {
-    background: $deep-sky-blue-hover !important;
-    border-color: $deep-sky-blue-hover;
+    background: $chetwode-blue !important;
+    border-color: $chetwode-blue;
     color: $white;
 }
 
@@ -837,7 +829,7 @@ ul.sub-list {
 
 .aging-table-top td {
     border: 0px solid !important;
-    background: $alice-blue-light !important;
+    background: $white !important;
 }
 
 .aging-table-top .top-aging-table-top {
@@ -1403,7 +1395,6 @@ modal-container.modal {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid $gainsboro;
     color: $gray;
 }
 
@@ -1470,6 +1461,7 @@ input:-ms-input-placeholder,
 input:-moz-placeholder {
     color: $nobel !important;
     font-size: 14px;
+    font-weight: 400 !important;
 }
 
 .form-control:focus {
@@ -1555,7 +1547,7 @@ header .navbar {
 
 .btn-primary {
     background: $white;
-    border-color: $chetwode-blue;
+    border-color: $gainsboro;
     color: $midnight-express;
 }
 
@@ -1585,7 +1577,7 @@ fieldset[disabled] .btn-primary:focus,
 fieldset[disabled] .btn-primary:hover {
     background: $chetwode-blue;
     color: $white;
-    border-color: $chetwode-blue;
+    border-color: $midnight-blue;
 }
 
 .btn {
@@ -1604,7 +1596,7 @@ fieldset[disabled] .btn-primary:hover {
 
 .btn-default {
     background: $white;
-    border-color: $chetwode-blue;
+    border-color: $gainsboro;
     color: $midnight-express;
 }
 
@@ -1617,9 +1609,9 @@ fieldset[disabled] .btn-primary:hover {
 .btn-default:active,
 .btn-default:active:focus,
 .open > .dropdown-toggle.btn-default {
-    background: $chetwode-blue;
+    background: $midnight-blue;
     color: $white;
-    border-color: $chetwode-blue;
+    border-color: $midnight-blue;
 }
 
 .success-btn {
@@ -1838,11 +1830,11 @@ input[type="checkbox"]:before {
     content: "";
     position: absolute;
     left: 3px;
-    top: 4px;
+    top: 3px;
     z-index: 1;
-    width: 12px;
-    height: 7px;
-    border: 2px solid $white;
+    width: 8px;
+    height: 5px;
+    border: 1.5px solid $white;
     border-top-style: none;
     border-right-style: none;
 }
@@ -1852,18 +1844,17 @@ input[type="checkbox"]:after {
     position: absolute;
     top: 0;
     left: 0;
-    border: 1px solid $gainsboro;
-    width: 18px;
-    height: 18px;
+    border: 1px solid $grey-chateau;
+    width: 14px;
+    height: 14px;
     background: $white;
     cursor: pointer;
-    border-radius: 2px;
     visibility: visible;
 }
 
 input[type="checkbox"]:checked:after {
-    background-color: $chetwode-blue;
-    border-color: $chetwode-blue;
+    background-color: $faux-cornflower-blue;
+    border-color: $faux-cornflower-blue;
 }
 
 .tab-pane .list-inline > li {
@@ -6929,29 +6920,13 @@ ul.dropdown-menu p.lead.pd {
 
 .date-advance-search .icon-calender {
     height: 36px !important;
-    border-right: 1px solid $gainsboro !important;
+    border-right: none !important;
     color: $nobel !important;
     cursor: pointer;
 }
 
 .date-advance-search .input-group input.form-control {
     border-color: $gainsboro !important;
-}
-
-.advance-icon {
-    height: 36px !important;
-    width: 36px !important;
-    border: 1px solid $gainsboro !important;
-    color: $gray !important;
-}
-
-.table-bordered > tbody > tr > td,
-.table-bordered > tbody > tr > th,
-.table-bordered > tfoot > tr > td,
-.table-bordered > tfoot > tr > th,
-.table-bordered > thead > tr > td,
-.table-bordered > thead > tr > th {
-    border: 1px solid $gainsboro;
 }
 
 table.basic td {
@@ -7007,8 +6982,7 @@ button.btn.btn-filter {
     line-height: initial;
 }
 
-.icon-sort-asc:hover,
-.icon-sort-dsc:hover {
+.icon-sort-asc:hover{
     color: $deep-sky-blue !important;
 }
 
@@ -8226,10 +8200,6 @@ input.mat-input-element {
         }
     }
 }
-.top-bar.aging-top-bar,
-.top-bar.customer-top-bar {
-    padding-top: 55px !important;
-}
 .top-bar.customer-top-bar.vendor-top-bar {
     padding-top: 15px !important;
 }
@@ -8945,6 +8915,10 @@ body.update-scroll-hidden {
     }
 }
 @media (max-width: 767px) {
+    .customer-aging .nav.nav-tabs{
+        display: flex !important;
+    }
+    
     .setting-sidebar-open {
         #content-wrapper{
             padding-left: 0 !important;
@@ -9327,7 +9301,7 @@ body.update-scroll-hidden {
     }
     .page-has-tabs .custom-tabs .top-bar.customer-top-bar,
     .page-has-tabs .custom-tabs .top-bar.aging-top-bar {
-        margin-top: 0;
+        margin-top: 0px;
     }
     .custom-tabs.hide-header .top-bar {
         margin-top: 10px;
@@ -9617,6 +9591,11 @@ body.update-scroll-hidden {
         top: 30px;
         padding-top: 0;
     }
+    .page-has-tabs .custom-tabs .top-bar.customer-top-bar,
+    .page-has-tabs .custom-tabs .top-bar.aging-top-bar {
+        margin-top: -10px;
+    }
+
 }
 
 @media (max-width: 500px) {
