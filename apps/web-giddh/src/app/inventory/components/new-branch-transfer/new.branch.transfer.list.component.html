@@ -57,15 +57,15 @@
                     <tr (clickOutside)="inlineSearch = null">
                         <th width="3%">#</th>
                         <th width="10%" (click)="sortBranchTransferList('dateOfSupply')">Date <span
-                                [ngClass]="{'sorting-icon icon-pointer': 1 === 1, 'active-text-color' : branchTransferGetRequestParams.sortBy === 'dateOfSupply', 'icon-sort-asc': branchTransferGetRequestParams.sortBy !== 'dateOfSupply' || (branchTransferGetRequestParams.sortBy === 'dateOfSupply' && branchTransferGetRequestParams.sort === 'asc'), 'icon-sort-dsc': branchTransferGetRequestParams.sortBy === 'dateOfSupply' && branchTransferGetRequestParams.sort === 'desc'}"></span>
+                                [ngClass]="{'sorting-icon icon-pointer': 1 === 1, 'active-text-color' : branchTransferGetRequestParams.sortBy === 'dateOfSupply', 'icon-sort-asc': branchTransferGetRequestParams.sortBy !== 'dateOfSupply' || (branchTransferGetRequestParams.sortBy === 'dateOfSupply' && branchTransferGetRequestParams.sort === 'asc'), 'icon-sort-asc': branchTransferGetRequestParams.sortBy === 'dateOfSupply' && branchTransferGetRequestParams.sort === 'desc'}"></span>
                         </th>
                         <th width="20%">Voucher Type</th>
                         <th width="20%">Voucher No.</th>
                         <ng-container *ngIf="currentOrganizationType !== 'BRANCH'">
                             <th width="17%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="inlineSearch == 'sender'">
-                                    <span class="pl-0">Sender</span>
                                     <i class="icon-search" (click)="focusOnColumnSearch('sender');"></i>
+                                    <span class="pl-0">Sender</span>
                                 </div>
                                 <div class="input-container" [hidden]="inlineSearch !== 'sender'">
                                     <input type="text" placeholder="Sender" class="w100" #senderReceiverField
@@ -75,8 +75,8 @@
                             </th>
                             <th width="17%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="inlineSearch == 'receiver'">
-                                    <span class="pl-0">Receiver</span>
                                     <i class="icon-search" (click)="focusOnColumnSearch('receiver');"></i>
+                                    <span class="pl-0">Receiver</span>
                                 </div>
                                 <div class="input-container" [hidden]="inlineSearch !== 'receiver'">
                                     <input type="text" placeholder="Receiver" class="w100" #senderReceiverField
@@ -88,8 +88,8 @@
                         <ng-container *ngIf="currentOrganizationType === 'BRANCH'">
                             <th width="17%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="inlineSearch == 'senderReceiver'">
-                                    <span class="pl-0">Sender/Receiver</span>
                                     <i class="icon-search" (click)="focusOnColumnSearch('senderReceiver');"></i>
+                                    <span class="pl-0">Sender/Receiver</span>
                                 </div>
                                 <div class="input-container" [hidden]="inlineSearch !== 'senderReceiver'">
                                     <input type="text" placeholder="Sender/Receiver" class="w100" #senderReceiverField
@@ -101,8 +101,8 @@
                         </ng-container>
                         <th width="10%" class="td-search-box">
                             <div [hidden]="inlineSearch == 'fromWarehouse'">
-                                <span class="pl-0">From Warehouse</span>
                                 <i class="icon-search" (click)="focusOnColumnSearch('fromWarehouse');"></i>
+                                <span class="pl-0">From Warehouse</span>
                             </div>
                             <div class="input-container" [hidden]="inlineSearch !== 'fromWarehouse'">
                                 <input type="text" placeholder="From Warehouse" class="w100" #warehouseNameField
@@ -112,8 +112,8 @@
                         </th>
                         <th width="10%" class="td-search-box">
                             <div [hidden]="inlineSearch == 'toWarehouse'">
-                                <span class="pl-0">To Warehouse</span>
                                 <i class="icon-search" (click)="focusOnColumnSearch('toWarehouse');"></i>
+                                <span class="pl-0">To Warehouse</span>
                             </div>
                             <div class="input-container" [hidden]="inlineSearch !== 'toWarehouse'">
                                 <input type="text" placeholder="To Warehouse" class="w100" #warehouseNameField
@@ -123,7 +123,7 @@
                         </th>
                         <th width="10%" (click)="sortBranchTransferList('totalAmount')" class="text-right">Total Amount
                             <span
-                                [ngClass]="{'sorting-icon icon-pointer': 1 === 1, 'active-text-color' : branchTransferGetRequestParams.sortBy === 'totalAmount', 'icon-sort-asc': branchTransferGetRequestParams.sortBy !== 'totalAmount' || (branchTransferGetRequestParams.sortBy === 'totalAmount' && branchTransferGetRequestParams.sort === 'asc'), 'icon-sort-dsc': branchTransferGetRequestParams.sortBy === 'totalAmount' && branchTransferGetRequestParams.sort === 'desc'}"></span>
+                                [ngClass]="{'sorting-icon icon-pointer': 1 === 1, 'active-text-color' : branchTransferGetRequestParams.sortBy === 'totalAmount', 'icon-sort-asc': branchTransferGetRequestParams.sortBy !== 'totalAmount' || (branchTransferGetRequestParams.sortBy === 'totalAmount' && branchTransferGetRequestParams.sort === 'asc'), 'icon-sort-asc': branchTransferGetRequestParams.sortBy === 'totalAmount' && branchTransferGetRequestParams.sort === 'desc'}"></span>
                         </th>
                         <th width="10%">Action</th>
                     </tr>
