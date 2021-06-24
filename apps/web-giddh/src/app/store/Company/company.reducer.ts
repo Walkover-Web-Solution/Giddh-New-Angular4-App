@@ -5,7 +5,7 @@ import { SETTINGS_TAXES_ACTIONS } from '../../actions/settings/taxes/settings.ta
 import { CustomActions } from '../customActions';
 import * as moment from 'moment/moment';
 import { IntegratedBankList, IRegistration } from "../../models/interfaces/registration.interface";
-import { DEFAULT_DATE_RANGE_PICKER_RANGES, DatePickerDefaultRangeEnum } from '../../app.constant';
+import { DEFAULT_DATE_RANGE_PICKER_RANGES, DatePickerDefaultRangeEnum, UNAUTHORISED } from '../../app.constant';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 /**
@@ -26,6 +26,7 @@ export interface CurrentCompanyState {
     isTcsTdsApplicable: boolean;
     isGetAllIntegratedBankInProgress: boolean;
     integratedBankList: IntegratedBankList[];
+    hasManageTaxPermission: boolean;
 }
 
 /**
@@ -59,7 +60,8 @@ const initialState: CurrentCompanyState = {
     isTaxUpdatedSuccessfully: false,
     isAccountInfoLoading: false,
     isTcsTdsApplicable: false,
-    isGetAllIntegratedBankInProgress: false
+    isGetAllIntegratedBankInProgress: false,
+    hasManageTaxPermission: false
 };
 
 export function CompanyReducer(state: CurrentCompanyState = initialState, action: CustomActions): CurrentCompanyState {
@@ -79,6 +81,12 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
                     taxes: taxes.body,
                     isTaxesLoading: false,
                     isGetTaxesSuccess: true,
+                    hasManageTaxPermission: true
+                });
+            } else if(taxes.status === 'error' && taxes.statusCode === UNAUTHORISED) {
+                return Object.assign({}, state, {
+                    isTaxesLoading: false,
+                    hasManageTaxPermission: false
                 });
             }
             return Object.assign({}, state, {

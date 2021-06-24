@@ -6,6 +6,7 @@ import { INVOICE_ACTIONS } from 'apps/web-giddh/src/app/actions/invoice/invoice.
 import { ILedgersInvoiceResult, PreviewInvoiceRequest, PreviewInvoiceResponseClass } from 'apps/web-giddh/src/app/models/api-models/Invoice';
 import { VoucherClass, VoucherTypeEnum } from '../../../models/api-models/Sales';
 import { SalesRegisteDetailedResponse, PurchaseRegisteDetailedResponse } from '../../../models/api-models/Reports';
+import { UNAUTHORISED } from '../../../app.constant';
 
 export interface ReceiptState {
     vouchers: ReciptResponse;
@@ -28,6 +29,7 @@ export interface ReceiptState {
     isGetPurchaseDetailsInProcess: boolean;
     isGetPurchaseDetailsSuccess: boolean;
     PurchaseRegisteDetailedResponse: PurchaseRegisteDetailedResponse;
+    hasVoucherListPermissions: boolean;
 }
 
 const initialState: ReceiptState = {
@@ -50,7 +52,8 @@ const initialState: ReceiptState = {
     SalesRegisteDetailedResponse: null,
     isGetPurchaseDetailsInProcess: false,
     isGetPurchaseDetailsSuccess: false,
-    PurchaseRegisteDetailedResponse: null
+    PurchaseRegisteDetailedResponse: null,
+    hasVoucherListPermissions: true
 };
 
 export function Receiptreducer(state: ReceiptState = initialState, action: CustomActions): ReceiptState {
@@ -69,8 +72,13 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
             if (res.status === 'success') {
                 newState[res.request && res.request.isLastInvoicesRequest ? 'lastVouchers' : 'vouchers'] = res.body;
                 newState.isGetAllRequestSuccess = true;
-            } else if (res.status === 'error' && res.code === 'UNAUTHORISED') {
+                newState.hasVoucherListPermissions = true;
+            } else if (res.status === 'error' && res.statusCode === UNAUTHORISED) {
+                if(!newState['vouchers']) {
+                    newState['vouchers'] = {};
+                }
                 newState['vouchers'].items = [];
+                newState.hasVoucherListPermissions = false;
             }
             newState.isGetAllRequestInProcess = false;
             return Object.assign({}, state, newState);
