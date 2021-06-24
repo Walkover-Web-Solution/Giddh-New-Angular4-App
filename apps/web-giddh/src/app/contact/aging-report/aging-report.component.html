@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <div class="top-bar aging-top-bar d-flex justify-content-between">
         <div class="aging-form-inline">
-            <div class="btn-group  pull-left">
+            <div class="btn-group  pull-left on-desktop-view">
                 <button class="btn btn-sky-blue" (click)="creteNewCustomerEvent.emit(true)">
                     {{localeData?.new_customer}}
                 </button>
@@ -45,34 +45,18 @@
                 </div>
             </div>
             </form>
-            <!--<div class="pull-left d-flex wrap-searching-aging">
+        </div>
+        <div class="d-flex justify-content-between">
+            <div class="pull-left d-flex wrap-searching-aging">
                 <div class="form-group search-field max-width-250" [ngClass]="{'default-width':isAdvanceSearchApplied}">
                     <input type="text" [placeholder]="localeData?.name_amount" class="form-control name-width"
                         [(ngModel)]="searchStr" (ngModelChange)="searchStr$.next($event)" />
                     <span class="input-addon">
                         <i class="icon-search"></i>
                     </span>
-                </div>-->
-                <!--<div class="cp advance-clear-filter-icons d-flex">
-                    <div class="advance-icon" (click)="toggleAdvanceSearchPopup()"
-                        tooltip="{{commonLocaleData?.app_advance_search}}">
-                        <span class="icon-advance-filter"></span>
-                    </div>
-                    <span class="refresh-btn" *ngIf="isAdvanceSearchApplied">
-                        <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()">
-                            <i aria-hidden="true" class="icon-refresh"
-                                tooltip="{{commonLocaleData?.app_reset_filter}}"></i>
-                        </a>
-                    </span>
-                </div>-->
-            <!--</div>-->
-            <!--<div class="btn-group  pull-left">
-                <button class="btn btn-sky-blue mr-0" (click)="creteNewCustomerEvent.emit(true)">
-                    {{localeData?.new_customer}}
-                </button>
-            </div>-->
-        </div>
-        <div class="cp advance-clear-filter-icons d-flex float-right">
+                </div>
+            </div>
+            <div class="cp advance-clear-filter-icons d-flex float-right">
                 <div class="advance-icon btn btn-primary" (click)="toggleAdvanceSearchPopup()"
                     tooltip="{{commonLocaleData?.app_advance_search}}">
                     <span class="pd-r05">Filter</span>
@@ -85,6 +69,12 @@
                     </a>
                 </span>
             </div>
+        </div>
+        <div class="btn-group mr-t15 pull-left mobile-view">
+            <button class="btn btn-sky-blue w-100" (click)="creteNewCustomerEvent.emit(true)">
+                {{localeData?.new_customer}}
+            </button>
+        </div>
     </div>
     <div class="row">
         <div class="col-12">
@@ -117,7 +107,7 @@
         </div>
     </div>
     <div class="contact-main aging-page">
-        <div class="pd-b2 mr-b1 on-mobile-view mobile-card-wrapper">
+        <div class="pd-b2 mr-b1 mr-t1 on-mobile-view mobile-card-wrapper">
             <div *ngIf="!isMobileScreen" class="table-responsive">
                 <ng-container *ngTemplateOutlet='mainTable'></ng-container>
             </div>
@@ -132,43 +122,6 @@
         </div>
     </div>
 </div>
-<!--<div class="result-total">
-    <div>
-        <div>
-            <div class="customer-right-wrap">
-                <div class="text-right total-result xs-left pl-2 pr-2">
-                    <h4 class="mr-b1 pr-1">{{commonLocaleData?.app_result_total}}</h4>
-                </div>
-                <div class="bg-white customer-right clearfix w-100">
-                    <table class="text-right w-auto float-right">
-                        <tr>
-                            <td>
-                                <p>{{commonLocaleData?.app_upcoming}}</p>
-                                <h3>
-                                    <span class="d-inline-flex">
-                                        <amount-field [amount]="totalFutureDueAmounts" [currencySymbol]="false"
-                                            [currencyCode]="false">
-                                        </amount-field>/-
-                                    </span>
-                                </h3>
-                            </td>
-                            <td>
-                                <p>{{commonLocaleData?.app_due}}</p>
-                                <h3>
-                                    <span class="d-inline-flex">
-                                        <amount-field [amount]="totalDueAmounts" [currencySymbol]="false"
-                                            [currencyCode]="false">
-                                        </amount-field>/-
-                                    </span>
-                                </h3>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>-->
 <!--region advance_search Modal-->
 <div bsModal #advanceSearch="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
     <div class="modal-dialog">
@@ -198,17 +151,6 @@
 <ng-template #mainTable>
     <table class="table  giddh-table aging-table table-aging-report">
         <thead>
-            <!--<tr class="aging-table-top">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td colspan="4" class="text-center top-aging-table-top">
-                    <p><strong>{{localeData?.due_in_last_days}}</strong></p>
-                    <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions"
-                        [localeData]="localeData" [commonLocaleData]="commonLocaleData"></aging-dropdown>
-                </td>
-                <td></td>
-            </tr>-->
             <tr>
                 <th>
                     <div class="d-flex align-items-center">{{commonLocaleData?.app_customer_name}}
@@ -269,7 +211,7 @@
         <tbody *ngIf="!(getAgingReportRequestInProcess$ | async)">
             <ng-container *ngFor="let entry of (dueAmountReportData$ | async)?.results">
                 <tr *ngIf="(dueAmountReportData$ | async)?.results?.length">
-                    <td [attr.data-title]="commonLocaleData?.app_name">{{ entry.name }}</td>
+                    <td [attr.data-title]="commonLocaleData?.app_name" class="word-break">{{ entry.name }}</td>
                     <td [attr.data-title]="localeData?.group_name">{{ entry.groupName }}</td>
                     <td [attr.data-title]="commonLocaleData?.app_due_amount" class="text-right">
                         <span class="d-flex justify-content-end">

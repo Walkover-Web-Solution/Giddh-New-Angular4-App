@@ -2,10 +2,6 @@
 .flex-fill {
     flex: 1 1 auto;
 }
-.table-responsive{
-    max-height: calc(100vh - 200px);
-    overflow-y: auto;
-}
 .basic > tbody > tr:hover td > a {
     color: $midnight-blue;
 }
@@ -16,12 +12,6 @@
 }
 .width-200px {
     width: 200px;
-}
-.particular {
-    float: right;
-    margin-top: 2px;
-    font-size: 16px;
-    color: $night-rider;
 }
 .bgChange {
     background: $white-smoke;
@@ -48,11 +38,6 @@
     text-align: center;
     line-height: 35px;
 }
-.purchase-footer {
-    .particular {
-        cursor: auto;
-    }
-}
 @media screen and (max-width: 768px) {
     .basic {
         tbody {
@@ -63,5 +48,12 @@
                 }
             }
         }
+    }
+}
+
+@media (min-width: 767px){
+    .table-responsive{
+        max-height: calc(100vh - 200px);
+        overflow-y: auto;
     }
 }

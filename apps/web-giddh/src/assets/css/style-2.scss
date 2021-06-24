@@ -30,16 +30,6 @@
     border-left: none !important;
 }
 
-/*.basic > tbody > tr td:last-child,
-.basic > thead > tr th:last-child {
-    border-right: 1px solid $gainsboro !important;
-}
-
-.basic > tbody > tr td:first-child,
-.basic > thead > tr th:first-child {
-    border-left: 1px solid $gainsboro !important;
-}*/
-
 .basic > thead > tr > th {
     color: $nero;
     border-right: 1px solid $gainsboro;
@@ -812,8 +802,8 @@ ul.sub-list {
 
 .btn-sky-blue:hover,
 .btn-sky-blue:focus {
-    background: $deep-sky-blue-hover !important;
-    border-color: $deep-sky-blue-hover;
+    background: $chetwode-blue !important;
+    border-color: $chetwode-blue;
     color: $white;
 }
 
@@ -1472,6 +1462,7 @@ input:-ms-input-placeholder,
 input:-moz-placeholder {
     color: $nobel !important;
     font-size: 14px;
+    font-weight: 400 !important;
 }
 
 .form-control:focus {
@@ -1606,7 +1597,7 @@ fieldset[disabled] .btn-primary:hover {
 
 .btn-default {
     background: $white;
-    border-color: $midnight-blue;
+    border-color: $gainsboro;
     color: $midnight-express;
 }
 
@@ -6939,22 +6930,6 @@ ul.dropdown-menu p.lead.pd {
     border-color: $gainsboro !important;
 }
 
-//.advance-icon {
-    //height: 36px !important;
-    //width: 36px !important;
-    //border: 1px solid $gainsboro !important;
-    //color: $gray !important;
-//}
-
-/*.table-bordered > tbody > tr > td,
-.table-bordered > tbody > tr > th,
-.table-bordered > tfoot > tr > td,
-.table-bordered > tfoot > tr > th,
-.table-bordered > thead > tr > td,
-.table-bordered > thead > tr > th {
-    border: 1px solid $gainsboro;
-}*/
-
 table.basic td {
     color: $nero;
 }
@@ -8942,6 +8917,10 @@ body.update-scroll-hidden {
     }
 }
 @media (max-width: 767px) {
+    .customer-aging .nav.nav-tabs{
+        display: flex !important;
+    }
+    
     .setting-sidebar-open {
         #content-wrapper{
             padding-left: 0 !important;
@@ -9324,7 +9303,7 @@ body.update-scroll-hidden {
     }
     .page-has-tabs .custom-tabs .top-bar.customer-top-bar,
     .page-has-tabs .custom-tabs .top-bar.aging-top-bar {
-        margin-top: 0;
+        margin-top: 0px;
     }
     .custom-tabs.hide-header .top-bar {
         margin-top: 10px;
@@ -9614,6 +9593,11 @@ body.update-scroll-hidden {
         top: 30px;
         padding-top: 0;
     }
+    .page-has-tabs .custom-tabs .top-bar.customer-top-bar,
+    .page-has-tabs .custom-tabs .top-bar.aging-top-bar {
+        margin-top: -10px;
+    }
+
 }
 
 @media (max-width: 500px) {
