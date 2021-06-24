@@ -6,6 +6,7 @@ export class BaseResponse<TResponce, TRequest> {
     public response?: TResponce;
     public request?: TRequest;
     public queryString?: any;
+    public statusCode?: number;
 }
 
 export interface PagedResponse {
