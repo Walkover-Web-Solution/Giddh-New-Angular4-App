@@ -391,8 +391,16 @@ button.btn.btn-filter span.icon-cross {
         height: 24px;
     }
 }
-.overflow-x-auto{
-    overflow-x: auto;
+.input-container {
+    input {
+        height: 50px;
+        min-width: 100%;
+        padding: 11px;
+        padding-right: 40px;
+        color: $nero;
+        border: none;
+        background-color: $gray-95;
+    }
 }
 
 /*responsive*/
