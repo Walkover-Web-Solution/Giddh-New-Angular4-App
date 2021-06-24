@@ -101,8 +101,8 @@
                 </button>
             </div>
         </div>
-        <div class="table-responsive">
-            <table class="table basic mr-t15 table-bordered giddh-table on-mobile-view">
+        <div class="table-responsive mr-t15">
+            <table class="table basic table-bordered giddh-table on-mobile-view">
                 <thead class="thead-background1" (mouseleave)="showSelectAllItemCheckbox = false">
                     <tr (mouseenter)="showSelectAllItemCheckbox = true">
                         <th class="min-wid-check" width="3%">
@@ -129,10 +129,10 @@
 
                         <th width="15%" class="td-search-box" (clickOutside)="showPurchaseOrderNumberSearch = false">
                             <div>
-                                <span
-                                    [hidden]="showPurchaseOrderNumberSearch || purchaseOrderPostRequest.purchaseOrderNumber">{{localeData?.po_number}}</span>
                                 <i class="icon-search" (click)="showInlineSearch('purchaseOrderNumber', searchBox);"
                                     [hidden]="showPurchaseOrderNumberSearch || purchaseOrderPostRequest.purchaseOrderNumber"></i>
+                                    <span
+                                    [hidden]="showPurchaseOrderNumberSearch || purchaseOrderPostRequest.purchaseOrderNumber">{{localeData?.po_number}}</span>
                             </div>
                             <div class="input-container"
                                 [hidden]="!showPurchaseOrderNumberSearch && !purchaseOrderPostRequest.purchaseOrderNumber">
@@ -144,10 +144,10 @@
 
                         <th width="15%" class="td-search-box" (clickOutside)="showVendorNameSearch = false">
                             <div>
+                                    <i class="icon-search" (click)="showInlineSearch('vendorName', searchBox);"
+                                    [hidden]="showVendorNameSearch || purchaseOrderPostRequest.vendorName"></i>
                                 <span
                                     [hidden]="showVendorNameSearch || purchaseOrderPostRequest.vendorName">{{localeData?.vendor_name}}</span>
-                                <i class="icon-search" (click)="showInlineSearch('vendorName', searchBox);"
-                                    [hidden]="showVendorNameSearch || purchaseOrderPostRequest.vendorName"></i>
                             </div>
                             <div class="input-container"
                                 [hidden]="!showVendorNameSearch && !purchaseOrderPostRequest.vendorName">
