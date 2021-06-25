@@ -10,12 +10,11 @@
             <div class="invoice-control w-100">
                 <div id="setting-tab">
                     <div class="relative">
-                        <div *ngIf="activeTab === 'taxes'">
-                            <hamburger-menu [allowSidebarToggle]="false" [pageHeading]="localeData?.setting_taxes">
-                            </hamburger-menu>
-                            <div class="setting-container">
-                                <setting-taxes></setting-taxes>
-                            </div>
+                    <div *ngIf="activeTab === 'taxes'">
+                        <hamburger-menu [pageHeading]="localeData?.setting_taxes">
+                        </hamburger-menu>
+                        <div class="setting-container">
+                            <setting-taxes></setting-taxes>
                         </div>
 
                     <div *ngIf="activeTab === 'integration'">
