@@ -147,7 +147,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         country: ''
     };
     public currentState: any = '';
-    public isCalendlyModelActivate: boolean = false;
     public forceOpenNavigation: boolean = false;
     /** VAT supported countries to show the Vat Report section in all modules */
     public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
@@ -320,9 +319,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.selectedPage = currentPageResponse.name;
                 }
             }
-        });
-        this.store.pipe(select(s => s.general.isCalendlyModelOpen), takeUntil(this.destroyed$)).subscribe(response => {
-            this.isCalendlyModelActivate = response;
         });
         this.user$ = this.store.pipe(select(createSelector([(state: AppState) => state.session.user], (user) => {
             if (user && user.user && user.user.name && user.user.name.length > 1) {
@@ -707,6 +703,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             /* TO SHOW NOTIFICATIONS */
         } else {
             window['Headway'].init();
+        }
+
+        if (window['SOE'] === undefined) {
+            /* For Schedule now */
+            let scriptTag = document.createElement('script');
+            scriptTag.src = 'https://cdn.oncehub.com/mergedjs/so.js';
+            scriptTag.type = 'text/javascript';
+            scriptTag.defer = true;
+            document.body.appendChild(scriptTag);
+            /* For Schedule now */
         }
 
         if (this.selectedPlanStatus === 'expired') {// active expired
@@ -1156,14 +1162,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             && attrs.getNamedItem('aria-expanded') && attrs.getNamedItem('aria-expanded').nodeValue === 'true');
     }
 
-    public scheduleNow() {
-        let newwindow = window.open('https://app.intercom.io/a/meeting-scheduler/calendar/VEd2SmtLSyt2YisyTUpEYXBCRWg1YXkwQktZWmFwckF6TEtwM3J5Qm00R2dCcE5IWVZyS0JjSXF2L05BZVVWYS0tck81a21EMVZ5Z01SQWFIaG00RlozUT09--c6f3880a4ca63a84887d346889b11b56a82dd98f', 'scheduleWindow', 'height=650,width=1199,left=200,top=100`');
-        if (window.focus) {
-            newwindow.focus();
-        }
-        return false;
-    }
-
     public mouseEnteredOnCompanyName(i: number) {
         this.hoveredIndx = i;
     }
@@ -1318,21 +1316,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     /**
-     *To hide calendly model
+     * To show schedule now model
      *
      * @memberof HeaderComponent
      */
-    public hideScheduleCalendlyModel() {
-        this.store.dispatch(this._generalActions.isOpenCalendlyModel(false));
-    }
-
-    /**
-     *To show calendly model
-     *
-     * @memberof HeaderComponent
-     */
-    public openScheduleCalendlyModel() {
-        this.store.dispatch(this._generalActions.isOpenCalendlyModel(true));
+    public openScheduleModel() {
+        if (window['SOE'] !== undefined) {
+            window['SOE'].prototype.toggleLightBox('giddhbooks');
+        }
     }
 
     /**
