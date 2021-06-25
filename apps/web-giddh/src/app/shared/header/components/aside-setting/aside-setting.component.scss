@@ -33,9 +33,6 @@
     z-index: 999;
     .aside-help-header {
         display: none;
-        .search-field {
-            display: none;
-        }
     }
 }
 :host.in #close {
@@ -71,33 +68,11 @@
     .aside-help-header {
         display: flex;
         justify-content: space-between;
-        padding: 15px 15px;
-        position: sticky;
-        top: 0;
-        background-color: $alice-blue;
-        z-index: 1;
+        padding: 5px 20px;
         flex-direction: column;
-        h2 {
-            font-family: "opensans-semibold";
-            font-size: 18px;
-            color: $midnight-blue;
-        }
         #close {
             position: absolute;
             right: 15px;
-        }
-        .search-field {
-            padding: 20px 0 10px;
-            background-color: $alice-blue;
-            input {
-                border-radius: 20px !important;
-                padding-left: 40px !important;
-            }
-            i {
-                top: 30px;
-                left: 15px;
-                color: gray;
-            }
         }
     }
 }
@@ -112,7 +87,7 @@
     margin-top: 15px;
 }
 .setting-items {
-    padding: 15px 0 0;
+    padding: 5px 0 0;
     ul {
         padding: 0;
         list-style: none;
@@ -184,9 +159,6 @@
         z-index: unset;
         .aside-help-header {
             display: none;
-            .search-field {
-                display: none;
-            }
         }
         .back-to-main-slider {
             display: block;
