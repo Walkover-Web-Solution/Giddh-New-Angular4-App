@@ -114,7 +114,7 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
                 ...state,
                 getAllInProcess: false,
                 [response.request && response.request.isLastInvoicesRequest ? 'lastVouchers' : 'vouchers']: response.status === 'success' ? response.body : null,
-                hasVoucherListPermissions: (response.status === 'error' && response.statusCode === UNAUTHORISED) ? false : true
+                hasVoucherListPermissions: !(response.status === 'error' && response.statusCode === UNAUTHORISED)
             }
         }
         // endregion

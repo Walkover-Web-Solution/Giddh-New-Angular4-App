@@ -42,7 +42,7 @@ import { saveAs } from 'file-saver';
 import { ReceiptService } from "../../services/receipt.service";
 import { InvoicePaymentModelComponent } from './models/invoicePayment/invoice.payment.model.component';
 import { PurchaseRecordService } from '../../services/purchase-record.service';
-import { EInvoiceStatus, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT, UNAUTHORISED } from '../../app.constant';
+import { EInvoiceStatus, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../app.constant';
 import { PurchaseRecordUpdateModel } from '../../purchase/purchase-record/constants/purchase-record.interface';
 import { InvoiceBulkUpdateService } from '../../services/invoice.bulkupdate.service';
 import { PurchaseRecordActions } from '../../actions/purchase-record/purchase-record.action';

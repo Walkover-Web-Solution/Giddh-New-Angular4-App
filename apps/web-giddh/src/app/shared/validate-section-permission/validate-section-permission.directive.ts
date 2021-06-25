@@ -37,13 +37,13 @@ export class ValidateSectionPermissionDirective implements OnChanges, OnDestroy 
                         this.errorMessage = commonLocaleData?.app_giddh_no_permissions;
                     }
 
-                    if(!this.elementRef.nativeElement?.parentElement?.parentElement?.querySelector(".giddh-no-permissions-error-message")) {
+                    if(!this.elementRef.nativeElement?.parentElement?.querySelector(".giddh-no-permissions-error-message")) {
                         const errorDiv = this.renderer.createElement('div');
                         const errorText = this.renderer.createText(this.errorMessage);
-                        errorDiv?.classList?.add("giddh-no-permissions-error-message");
-                        errorDiv?.classList?.add("ml-3");
-                        errorDiv?.classList?.add("mt-2");
                         this.renderer.appendChild(errorDiv, errorText);
+                        this.renderer.addClass(errorDiv, 'giddh-no-permissions-error-message');
+                        this.renderer.addClass(errorDiv, 'ml-3');
+                        this.renderer.addClass(errorDiv, 'mt-2');
 
                         this.renderer.appendChild(this.elementRef.nativeElement?.parentElement, errorDiv);
                     }
@@ -52,7 +52,7 @@ export class ValidateSectionPermissionDirective implements OnChanges, OnDestroy 
             });
         } else {
             this.elementRef.nativeElement?.classList?.remove('giddh-no-permissions');
-            this.elementRef.nativeElement?.parentElement?.parentElement?.querySelector(".giddh-no-permissions-error-message")?.remove();
+            this.elementRef.nativeElement?.parentElement?.querySelector(".giddh-no-permissions-error-message")?.remove();
         }
     }
 

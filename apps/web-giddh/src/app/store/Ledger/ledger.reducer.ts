@@ -93,7 +93,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             }
             return Object.assign({}, state, {
                 transactionInprogress: false,
-                hasLedgerPermission: (transaction.statusCode === UNAUTHORISED) ? false : true
+                hasLedgerPermission: (transaction.statusCode !== UNAUTHORISED)
             });
         case LEDGER.ADVANCE_SEARCH:
             return Object.assign({}, state, { transactionInprogress: true });
