@@ -1034,6 +1034,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if(this.isAdvanceSearchImplemented){
             this.getAdvanceSearchTxn();
         }else{
+            this.isAdvanceSearchImplemented = false;
             this.store.dispatch(this._ledgerActions.GetLedgerBalance(this.trxRequest));
             this.store.dispatch(this._ledgerActions.GetTransactions(this.trxRequest));
         }
