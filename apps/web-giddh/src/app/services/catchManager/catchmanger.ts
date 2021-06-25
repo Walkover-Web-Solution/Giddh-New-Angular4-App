@@ -76,10 +76,11 @@ export class GiddhErrorHandler {
                         data.queryString = queryString;
                     }
                 }
-
             }
-
         }
+
+        data.statusCode = r.status;
+
         return new Observable<BaseResponse<TResponce, TRequest>>((o) => {
             o.next(data);
         });

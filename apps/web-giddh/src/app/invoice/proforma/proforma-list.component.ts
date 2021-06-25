@@ -188,6 +188,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True if user has voucher list permission */
+    public hasVoucherListPermissions: boolean = true;
 
     constructor(private store: Store<AppState>, private proformaActions: ProformaActions, private router: Router, private _cdr: ChangeDetectorRef, private _breakPointObservar: BreakpointObserver, private generalService: GeneralService, private modalService: BsModalService, private commonActions: CommonActions) {
         this.advanceSearchFilter.page = 1;
@@ -445,6 +447,10 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                 this.isAccountUpdated = true;
                 this.store.dispatch(this.commonActions.accountUpdated(false));
             }
+        });
+
+        this.store.pipe(select(state => state.proforma.hasVoucherListPermissions), takeUntil(this.destroyed$)).subscribe(response => {
+            this.hasVoucherListPermissions = response;
         });
     }
 

@@ -18,6 +18,7 @@ import { AccountResponse } from '../../models/api-models/Account';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 import { SETTINGS_TAXES_ACTIONS } from "../../actions/settings/taxes/settings.taxes.const";
 import { cloneDeep, filter, map, orderBy } from '../../lodash-optimized';
+import { UNAUTHORISED } from '../../app.constant';
 
 export interface LinkedAccountsState {
     bankAccounts?: BankAccountsResponse[];
@@ -223,7 +224,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 newState.profileRequest = true;
                 newState.getProfileInProgress = false;
                 return Object.assign({}, state, newState);
-            } else if (response.status === 'error' && response.code === 'UNAUTHORISED') {
+            } else if (response.status === 'error' && response.statusCode === UNAUTHORISED) {
                 return { ...state, updateProfileInProgress: false, getProfileInProgress: false };
             }
             return { ...state, updateProfileInProgress: true, getProfileInProgress: false };
