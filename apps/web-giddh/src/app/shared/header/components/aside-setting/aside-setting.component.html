@@ -2,9 +2,9 @@
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <div class="aside-pane" (clickOutside)="closeAsidePaneIfMobile($event)">
         <div class="aside-help-header relative">
-            <h2>{{localeData?.page_heading}}</h2>
-            <div id="close" class="cursor-pointer" (click)="closeAsidePane($event)"><i class="icon-cross"></i></div>
-            <div class="search-field relative">
+            <h4>{{localeData?.page_heading}}</h4>
+            <div hidden id="close" class="cursor-pointer" (click)="closeAsidePane($event)"><i class="icon-cross"></i></div>
+            <div hidden class="search-field relative">
                 <i class="icon-search position-absolute"></i>
                 <input type="text" class="form-control" name="search" #searchField [(ngModel)]="search"
                     (ngModelChange)="searchMenu($event)" [placeholder]="localeData?.search_settings">
