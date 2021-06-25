@@ -36,7 +36,7 @@
                 <div class="company-list mt-2">
                     <ul class="list-style-none font-14"
                         *ngIf="companyListForFilter && companyListForFilter.length && !(isCompanyRefreshInProcess$ | async)">
-                        <li class="btn-group" dropdown *ngFor="let company of companyListForFilter; let i = index">
+                        <li class="btn-group" dropdown *ngFor="let company of companyListForFilter; let companyIndex = index">
                             <span id="button-basic" dropdownToggle class="dropdown-toggle d-flex align-items-center"
                                 aria-controls="dropdown-basic" (click)="getCompanyBranches(1, company)"> <i
                                     class="icon-company mr-2"></i>
@@ -125,10 +125,9 @@
     <!-- branch design option 2 -->
     <div class="company-branch-opt-2" *ngIf="activeDesign === 2">
         <div class="company-list">
-            <ul class="list-style-none font-14"
-                *ngIf="companyListForFilter && companyListForFilter.length && !(isCompanyRefreshInProcess$ | async)">
+            <ul class="list-style-none font-14" *ngIf="companyListForFilter?.length && !(isCompanyRefreshInProcess$ | async)">
 
-                <ng-container *ngFor="let company of companyListForFilter; let i = index">
+                <ng-container *ngFor="let company of companyListForFilter; let companyIndex = index">
                     <li class="btn-group" *ngIf="!viewingCompany || viewingCompany?.uniqueName === company.uniqueName" dropdown [autoClose]="false" (onHidden)="unsetViewingCompany()">
                         <span id="button-basic" dropdownToggle
                             class="dropdown-toggle active d-flex justify-content-between align-items-center company-name"
