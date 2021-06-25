@@ -64,12 +64,13 @@
         padding-bottom: 50px;
         ul{
             li{
-                padding: 10px 0;
+                padding: 8px 0;
                 cursor: pointer;
                 color: $trout;
                 &.btn-group{
                     display: flex;
                     flex-direction: column;
+                    margin-bottom: 0 !important;
                     span{
                         white-space: normal;
                         word-break: break-all;
@@ -109,12 +110,13 @@
                         padding: 0;
                         li{
                             padding:  0;
+                            margin-bottom: 0;
                             &.show-more-branches, &.create-branch{
                                 padding: 0 20px;
                             }
                             a{
                                 background-color: transparent;
-                                padding:8px 20px;
+                                padding:6px 20px;
                                 &:hover{
                                     background-color: initial !important;
                                     color: initial !important;
@@ -210,7 +212,7 @@
         padding: 5px 0 0;
         border-top: 1px solid $gainsboro;
         background-color: $white;
-        z-index: 990;
+        z-index: 991;
         .profile-name{
             padding: 14px 15px;
             cursor: pointer;
