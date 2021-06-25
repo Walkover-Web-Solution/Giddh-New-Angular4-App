@@ -56,7 +56,6 @@
             display: none;
         }
     }
-
     .company-list{
         height: calc(100vh  - 325px) !important;
         overflow: auto;
@@ -244,7 +243,7 @@
         }
     }
     .custom-tabs {
-        .icon-copmany-branch-connect{
+        .icon-company-branch-connect{
             position: absolute;
             top: 5px;
             left: 100px;
@@ -252,7 +251,7 @@
     }
     .company-branch-opt-2{
         .company-list{
-            height: calc(80vh - 120px) !important;
+            height: calc(90vh - 120px) !important;
             ul{
                 position: relative;
                 li{
@@ -329,14 +328,16 @@
 }
 
 @media screen and (max-height: 800px) {
-    .company-branch-dropdown{
-        .company-list {
-            height: calc(65vh - 60px) !important;
+    .company-branch-dropdown {
+        .company-branch-dropdown{
+            .company-list {
+                height: calc(65vh - 60px) !important;
+            }
         }
-    }
-    .company-branch-opt-2{
-        .company-list{
-            height: calc(75vh - 120px) !important;
+        .company-branch-opt-2{
+            .company-list{
+                height: calc(80vh - 120px) !important;
+            }
         }
     }
 }

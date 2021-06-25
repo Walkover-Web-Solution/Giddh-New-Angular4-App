@@ -178,7 +178,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
-
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response || [];
