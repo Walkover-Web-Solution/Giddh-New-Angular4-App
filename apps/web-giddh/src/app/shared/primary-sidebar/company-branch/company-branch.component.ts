@@ -59,6 +59,12 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
     public activeTab: string = 'company';
     /** This will hold branches list */
     public branchList: any[] = [];
+    /** This holds active sidebar design for testing (1,2) */
+    public activeDesign: number = 1;
+    /** This holds company which we are viewing currently */
+    public viewingCompany: any;
+    /** True if branch tab is disabled */
+    public isBranchTabDisabled: boolean = true;
 
     constructor(
         private store: Store<AppState>,
@@ -103,6 +109,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
                 this.selectedCompany = observableOf(selectedCmp);
                 this.activeCompany = selectedCmp;
                 this.companyInitials = this.generalService.getInitialsFromString(selectedCmp.name);
+                this.activeDesign = (this.activeCompany?.name.charCodeAt(0) <= 77) ? 1 : 2;
             }
         });
     }
@@ -242,7 +249,10 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
      * @param {*} company
      * @memberof CompanyBranchComponent
      */
-    public getCompanyBranches(company: any, reloadBranches?: boolean): void {
+    public getCompanyBranches(design: number, company: any, reloadBranches?: boolean): void {
+        if(design === 2) {
+            this.viewingCompany = company;
+        }
         if (!company.branches || reloadBranches) {
             company.branches = [];
             this.branchRefreshInProcess = true;
@@ -261,6 +271,9 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
                     this.changeDetectorRef.detectChanges();
                 }
             });
+        } else {
+            this.branchList = company.branches;
+            this.companyBranches = company;
         }
     }
 
@@ -272,9 +285,12 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
      */
     public showAllBranches(company: any): void {
         this.companyBranches = company;
-        if (this.staticTabs && this.staticTabs.tabs[1]) {
-            this.staticTabs.tabs[1].active = true;
-        }
+        this.isBranchTabDisabled = false;
+        setTimeout(() => {
+            if (this.staticTabs && this.staticTabs.tabs[1]) {
+                this.staticTabs.tabs[1].active = true;
+            }
+        }, 20);
     }
 
     /**
@@ -285,6 +301,12 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
      */
     public tabChanged(tabName: string): void {
         this.activeTab = tabName;
+        this.searchBranch = "";
+        this.filterBranchList(this.searchBranch);
+
+        if(tabName === "company") {
+            this.isBranchTabDisabled = true;
+        }
     }
 
     /**
@@ -332,5 +354,18 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
                 });
             }
         });
+    }
+
+    /**
+     * This will unset viewing company
+     *
+     * @memberof CompanyBranchComponent
+     */
+    public unsetViewingCompany(): void {
+        setTimeout(() => {
+            this.searchBranch = "";
+            this.viewingCompany = false;
+            this.changeDetectorRef.detectChanges();
+        }, 50);
     }
 }
