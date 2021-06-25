@@ -8421,6 +8421,23 @@ body.update-scroll-hidden {
         }
     }
 }
+.on-setting-page{
+    aside-setting{
+        .aside-pane{
+            .back-to-main-slider{
+                display: block !important;
+                padding: 0 20px;
+            }
+            h4{
+                display: none;
+            }
+        }
+        &::after{
+            display: none;
+        }
+    }
+
+}
 
 /* responsive  starts here*/
 
