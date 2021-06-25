@@ -121,10 +121,3 @@
         </div>
     </div>
 </ng-container>
-<div bsModal #scheduleNowModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <schedule-now *ngIf="scheduleNowModel?.isShown" (closeModal)="scheduleNowModel?.hide();"></schedule-now>
-        </div>
-    </div>
-</div>
