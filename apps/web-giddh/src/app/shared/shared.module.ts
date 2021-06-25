@@ -67,9 +67,7 @@ import { GiddhDaterangepickerComponent } from '../theme/giddh-daterangepicker/gi
 import { GiddhPageLoaderComponent } from './giddh-page-loader/giddh-page-loader.component';
 import { AmountFieldComponent } from './amount-field/amount-field.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
-import { ScheduleNowComponent } from './schedule-now/schedule-now.component';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
-
 import { CompanyBranchComponent } from './primary-sidebar/company-branch/company-branch.component';
 
 import localeEn from '@angular/common/locales/en-GB';
@@ -160,7 +158,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         GiddhPageLoaderComponent,
         AmountFieldComponent,
         PrimarySidebarComponent,
-        ScheduleNowComponent,
         CompanyBranchComponent
     ],
     imports: [
@@ -253,7 +250,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         AmountFieldComponent,
         CurrencyModule,
         PrimarySidebarComponent,
-        ScheduleNowComponent,
         TranslateDirectiveModule,
         CompanyBranchComponent
     ],
