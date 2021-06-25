@@ -7666,7 +7666,16 @@ span#HW_badge_cont:nth-child(3) {
                     i {
                         color: $gray;
                         margin-right: 10px;
-                        font-size: 17px;
+                        font-size: 20px;
+                    }
+                }
+            }
+            &:hover{
+                a {
+                    span {
+                        i {
+                            color: $white;
+                        }
                     }
                 }
             }
