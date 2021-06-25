@@ -936,10 +936,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public getTransactionData() {
-        this.isAdvanceSearchImplemented = false;
         this.closingBalanceBeforeReconcile = null;
-        this.store.dispatch(this._ledgerActions.GetLedgerBalance(this.trxRequest));
-        this.store.dispatch(this._ledgerActions.GetTransactions(this.trxRequest));
+        if(this.isAdvanceSearchImplemented){
+            this.getAdvanceSearchTxn();
+        }else{
+            this.isAdvanceSearchImplemented = false;
+            this.store.dispatch(this._ledgerActions.GetLedgerBalance(this.trxRequest));
+            this.store.dispatch(this._ledgerActions.GetTransactions(this.trxRequest));
+        }
     }
 
     public getCurrencyRate(mode: string = null) {
