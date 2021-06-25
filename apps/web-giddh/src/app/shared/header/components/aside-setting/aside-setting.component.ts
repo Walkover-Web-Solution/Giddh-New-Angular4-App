@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { select, Store } from '@ngrx/store';
 import { take, takeUntil } from 'rxjs/operators';
@@ -34,6 +34,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** This holds the active locale */
     public activeLocale: string = "";
+    public showSettingHeading: boolean = false;
 
     constructor(private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>, private localeService: LocaleService) {
 
@@ -62,6 +63,14 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
                 });
             }
             this.activeLocale = response?.value;
+        });
+
+        this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
+            if (event instanceof NavigationEnd) {
+                if(!this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/user-details")) {
+                    this.showSettingHeading = true;
+                }
+            }
         });
     }
 
@@ -125,7 +134,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     public closeAsidePaneIfMobile(event?): void {
         if (this.isMobileScreen && event && event.target.className !== "icon-bar") {
             this.closeAsideEvent.emit(event);
-        } else if (!this.isMobileScreen) {
+        } else if (!this.isMobileScreen && !this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/user-details")) {
             this.closeAsideEvent.emit(event);
         }
     }
