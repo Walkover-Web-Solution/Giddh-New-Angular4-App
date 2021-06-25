@@ -1,7 +1,6 @@
 <ng-container appTranslate [file]="'header'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
-    <div (mouseover)="expandSidebar();" (mouseout)="collapseSidebar(false, true);" class="nav-left-bar" [ngClass]="{'open': isSidebarExpanded, 'unvisible': companyList.length===0 }"
-        (clickOutside)="closeSidebarMobile($event)">
+    <div (mouseover)="expandSidebar();" (mouseout)="collapseSidebar(false, true);" class="nav-left-bar" [ngClass]="{'open': isSidebarExpanded, 'unvisible': companyList.length===0 }" (clickOutside)="closeSidebarMobile($event)">
         <div class="menu-wrapper">
             <primary-sidebar [isOpen]="sideMenu?.isopen" [apiMenuItems]="apiMenuItems" (newCompany)="createNewCompany()">
             </primary-sidebar>
@@ -21,7 +20,7 @@
                         <button class="btn mr-0" placement="right" (click)="redirectToMobileHome()">
                             <i class="icon-home-new"></i>
                         </button>
-                        <span class="setting-menu-icon" (click)="toggleSidebarPane(true, true)"> <i class="icon-bar"></i>
+                        <span class="setting-menu-icon" (click)="toggleSidebar(true)"> <i class="icon-bar"></i>
                         </span>
                         <span class="mobile-back-btn" (click)="redirectToMobileHome()"><i
                                 class="icon-back-arrow"></i></span>
@@ -54,7 +53,7 @@
                         <a href="javascript:void(0);" id="add-manage" (click)="showManageGroupsModal()"><i
                                 class="icon-master-new1"></i> {{commonLocaleData?.app_master}}</a>
                     </li>
-                    <li *ngIf="!isMobileScreen" class="header-utility-icons" (click)="toggleSidebarPane(true, false)">
+                    <li *ngIf="!isMobileScreen" class="header-utility-icons" (click)="toggleSidebar(false)">
                         <a href="javascript:void(0);"><i class="icon-settings-cog"></i></a>
                     </li>
                     <li class="header-utility-icons">
