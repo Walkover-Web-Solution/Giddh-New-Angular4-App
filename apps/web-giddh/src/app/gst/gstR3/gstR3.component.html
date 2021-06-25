@@ -3,7 +3,7 @@
     <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState === 'in'">
         <tax-sidebar (navigateEvent)="handleNavigation($event)" [activeCompanyGstNumber]="activeCompanyGstNumber" [selectedGstModule]="selectedGstr" (clickOutside)="isMobileScreen ? asideGstSidebarMenuState = 'out' : ''" [exclude]="'#primary-new-header'" class="gst-sidebar" [isMonthSelected]="isMonthSelected" [isGstModule]="true"></tax-sidebar>
     </div>
-    <hamburger-menu [allowSidebarToggle]="false" [pageHeading]="localeData?.page_heading"></hamburger-menu>
+    <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="column content-column gst-filing-container navs-list">
         <div class="tax-engine">
             <div class="hidden-print gstr-summary-head gstr-summary-head d-flex w-100 justify-content-sm-between flex-sm-row flex-column">
