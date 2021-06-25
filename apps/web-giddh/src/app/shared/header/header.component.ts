@@ -1445,6 +1445,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     * @memberof HeaderComponent
     */
     public collapseSidebar(forceCollapse: boolean = false, closeOnHover: boolean = false): void {
+        // console.log(this.sideMenu);
+        // if(closeOnHover && this.sideMenu.isExpanded && (this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details"))) {
+        //     return;
+        // }
+
         if(closeOnHover && this.isSidebarExpanded && document.getElementsByClassName("gst-sidebar-open")?.length > 0) {
             forceCollapse = true;
         }
@@ -1743,5 +1748,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         return (this.currentPageUrl?.indexOf('pages/gstfiling') > -1 ||
             this.currentPageUrl?.indexOf('pages/reports/reverse-charge') > -1 ||
             this.currentPageUrl?.indexOf('pages/invoice/ewaybill') > -1);
+    }
+
+    /**
+     * This toggle's settings sidebar
+     *
+     * @param {boolean} isMobileSidebar
+     * @memberof HeaderComponent
+     */
+    public toggleSidebar(isMobileSidebar: boolean): void {
+        if(this.asideSettingMenuState === "in") {
+            this.toggleSidebarPane(false, isMobileSidebar);
+        } else {
+            this.toggleSidebarPane(true, isMobileSidebar);
+        }
     }
 }
