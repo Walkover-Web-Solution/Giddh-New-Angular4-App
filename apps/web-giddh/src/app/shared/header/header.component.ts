@@ -310,6 +310,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (!this.lastSessionRenewalTime || (this.lastSessionRenewalTime && this.lastSessionRenewalTime.diff(moment(), 'hours') >= 2)) {
                     this.checkAndRenewUserSession();
                 }
+
+                if(this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details")) {
+                    this.toggleSidebarPane(true, false);
+                } else {
+                    this.toggleSidebarPane(false, false);
+                }
             }
             if (event instanceof NavigationStart) {
                 this.navigationEnd = false;
@@ -793,8 +799,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public toggleHelpSupportPane(show: boolean): void {
         setTimeout(() => {
-            this.asideSettingMenuState = 'out';
-            document.querySelector('body').classList.remove('mobile-setting-sidebar');
+            if(show) {
+                this.asideSettingMenuState = 'out';
+                document.querySelector('body').classList.remove('mobile-setting-sidebar');
+            }
             this.asideHelpSupportMenuState = (show && this.asideHelpSupportMenuState === 'out') ? 'in' : 'out';
             this.toggleBodyClass();
         }, (this.asideHelpSupportMenuState === 'out') ? 100 : 0);
@@ -808,23 +816,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleSidebarPane(show: boolean, isMobileSidebar: boolean): void {
-        if(!this.isIpadScreen) {
-            this.isSettingsIconDisabled = (this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/settings/taxes")) || this.router.url.includes("/pages/user-details")
-            if (this.isSettingsIconDisabled) {
-                return;
-            }
-        }
-
         setTimeout(() => {
             this.isMobileSidebar = isMobileSidebar;
             this.asideHelpSupportMenuState = 'out';
-            this.asideSettingMenuState = (show && this.asideSettingMenuState === 'out') ? 'in' : 'out';
+            this.asideSettingMenuState = (show) ? 'in' : 'out';
             this.toggleBodyClass();
 
             if (this.asideSettingMenuState === "in") {
                 document.querySelector('body').classList.add('mobile-setting-sidebar');
-            }
-            else {
+            } else {
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
 
@@ -1383,7 +1383,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public addClassInBodyIfPageHasTabs(): void {
-        this.toggleSidebarPane(false, false);
         this.toggleHelpSupportPane(false);
 
         setTimeout(() => {
@@ -1445,7 +1444,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     * @memberof HeaderComponent
     */
     public collapseSidebar(forceCollapse: boolean = false, closeOnHover: boolean = false): void {
-        if(closeOnHover && this.isSidebarExpanded && (document.getElementsByClassName("gst-sidebar-open")?.length > 0 || document.getElementsByClassName("setting-sidebar-open")?.length > 0)) {
+        if(closeOnHover && this.isSidebarExpanded && document.getElementsByClassName("gst-sidebar-open")?.length > 0) {
             forceCollapse = true;
         }
 
