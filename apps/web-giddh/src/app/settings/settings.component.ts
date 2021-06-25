@@ -52,8 +52,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
         return document.activeElement === document.body;
     }
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /* This will hold the value out/in to open/close setting sidebar popup */
-    public asideSettingMenuState: string = 'in';
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -90,12 +88,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
             '(max-width:767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
-            if (!this.isMobileScreen) {
-                this.asideSettingMenuState = "in";
-                this.toggleBodyClass();
-            } else {
-                this.asideSettingMenuState = "out";
-            }
         });
 
         this._route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
@@ -151,12 +143,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
             if(this.activeTab === "taxes") {
                 this.asideGstSidebarMenuState = "in";
-                this.asideSettingMenuState = "out";
                 document.querySelector('body').classList.remove('setting-sidebar-open');
                 document.querySelector('body').classList.add('gst-sidebar-open');
                 this.toggleGstPane();
             } else {
-                this.asideSettingMenuState = "in";
                 this.asideGstSidebarMenuState = "out";
                 document.querySelector('body').classList.add('setting-sidebar-open');
                 document.querySelector('body').classList.remove('gst-sidebar-open');
@@ -347,33 +337,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will toggle the settings popup
-     *
-     * @param {*} [event]
-     * @memberof SettingsComponent
-     */
-    public toggleSettingPane(event?): void {
-        this.toggleBodyClass();
-
-        if (this.isMobileScreen && event && this.asideSettingMenuState === 'in') {
-            this.asideSettingMenuState = "out";
-        }
-    }
-
-    /**
-     * This will toggle the fixed class on body
-     *
-     * @memberof SettingsComponent
-     */
-    public toggleBodyClass(): void {
-        if (this.asideSettingMenuState === 'in') {
-            document.querySelector('body').classList.add('setting-sidebar-open');
-        } else {
-            document.querySelector('body').classList.remove('setting-sidebar-open');
-        }
-    }
-
-    /**
      * Releases all the observables to avoid memory leaks
      *
      * @memberof SettingsComponent
@@ -381,7 +344,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         document.querySelector('body').classList.remove('setting-sidebar-open');
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.asideSettingMenuState = "out";
         this.asideGstSidebarMenuState = "out";
         this.destroyed$.next(true);
         this.destroyed$.complete();
