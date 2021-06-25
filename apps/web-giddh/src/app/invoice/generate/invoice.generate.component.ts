@@ -151,6 +151,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         { label: '', value: 'lessThanOrEquals' },
         { label: '', value: 'equals' }
     ];
+    /** True if user has pending invoices list permissions */
+    public hasPendingVouchersListPermissions: boolean = true;
 
     constructor(
         private store: Store<AppState>,
@@ -300,6 +302,10 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                 this.isAccountUpdated = true;
                 this.store.dispatch(this.commonActions.accountUpdated(false));
             }
+        });
+
+        this.store.pipe(select(state => state.invoice.hasPendingVouchersListPermissions), takeUntil(this.destroyed$)).subscribe(response => {
+            this.hasPendingVouchersListPermissions = response;
         });
     }
 

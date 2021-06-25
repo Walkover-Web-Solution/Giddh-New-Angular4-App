@@ -430,7 +430,7 @@
                     getDetailedsalesRequestFilter.sort === 'asc'
             }"></div>
 
-        <div class="icon-sort-dsc" *ngIf="
+        <div class="icon-sort-asc" *ngIf="
                 getDetailedsalesRequestFilter.sortBy === col &&
                 getDetailedsalesRequestFilter.sort === 'desc'
             " (click)="sortbyApi('asc', col)" [ngClass]="{

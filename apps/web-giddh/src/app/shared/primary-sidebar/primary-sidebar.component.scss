@@ -132,7 +132,7 @@
             }
         }
         .company-branch-nav{
-            height: calc(100vh - 180px);
+            height: calc(100vh - 110px);
             box-shadow: none;
             border: none;
             margin: 0;
@@ -409,6 +409,11 @@
                     display: none;
                 }
                 &.padding-14{
+                    padding: 14px 10px !important;
+                }
+            }
+            &.padding-14{
+                .branch-connection{
                     padding: 14px 10px !important;
                 }
             }

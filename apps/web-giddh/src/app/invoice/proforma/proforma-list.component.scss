@@ -8,7 +8,7 @@
 }
 
 .check-image img {
-    max-height: 20px;
+    max-height: 14px;
     cursor: pointer;
 }
 
@@ -30,7 +30,7 @@
 
 .td-search-box div span {
     /*flex: 1 1 auto;*/
-    padding: 8px 0 8px 10px;
+    padding: 8px 0 8px 0px;
 }
 
 .td-search-box div i {
@@ -52,13 +52,13 @@
 }
 
 .td-search-box .input-container input {
-    height: 50px;
+    height: 36px;
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
     color: $nero;
     border: none;
-    background-color: $white-smoke;
+    background-color: $gray-95;
 }
 
 .td-search-box .input-container i {
@@ -213,7 +213,6 @@ ul.select-action-dropdown {
     align-items: center;
     border-right: 1px solid $chetwode-blue;
 }
-.advance-icon,
 .search-icon-block {
     width: 36px;
     height: 36px;
@@ -229,11 +228,17 @@ ul.select-action-dropdown {
     align-items: center;
     justify-content: center;
 }
+.advance-icon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    border-radius: 5px;
+    align-items: center;
+    justify-content: center; 
+}
 .search-icon-block {
     display: none;
-}
-.advance-icon:hover {
-    background: $whisper-color;
 }
 button.btn.btn-filter {
     background: $whisper;
@@ -279,7 +284,6 @@ span.icon-advance-filter {
     justify-content: center;
     align-items: center;
     vertical-align: middle;
-    height: 34px;
     color: $gray;
 }
 .checkbox-td,
@@ -303,6 +307,7 @@ span.icon-advance-filter {
         word-break: break-word !important;
     }
 }
+
 // responsive
 @media (max-width: 991px) {
     .invoice-preview-sidebar {
@@ -366,6 +371,12 @@ span.icon-advance-filter {
         display: block;
         flex-direction: column;
     }
+    .advance-icon{
+        width: auto;
+        margin-left: auto;
+        position: relative;
+        top: -47px;
+    }
 }
 @media (max-width: 420px) {
     .small-loading {
@@ -397,5 +408,12 @@ span.icon-advance-filter {
     }
     .date-advance-search .btn-wrapper {
         display: none;
+    }
+}
+
+@media (min-width: 767px){
+    .table-responsive{
+        max-height: calc(100vh - 245px);
+        overflow-y: auto;
     }
 }

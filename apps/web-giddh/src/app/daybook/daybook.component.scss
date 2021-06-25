@@ -36,21 +36,17 @@
     padding-bottom: 5px;
 }
 .advance-icon {
-    width: 36px;
-    height: 36px;
     display: -webkit-inline-box;
     display: inline-flex;
     -webkit-box-pack: center;
     justify-content: center;
     -webkit-box-align: center;
     align-items: center;
-    font-size: 18px;
+    font-size: 14px;
     margin-left: 15px;
     border: 1px solid $gainsboro;
     border-radius: 5px;
-    color: $midnight-blue;
     margin-right: 15px;
-    background: $white;
     cursor: pointer;
 }
 .table > tbody + tbody {
@@ -79,6 +75,9 @@
 }
 .linked-entities {
     width: 200px;
+}
+.mobile-view{
+    display:none !important;
 }
 /*responsive */
 @media (max-width: 768px) {
@@ -112,6 +111,12 @@
     .linked-entities {
         margin-bottom: 0 !important;
     }
+    .desktop-view{
+        display:none !important;
+    }
+    .mobile-view{
+        display:inline-block !important;
+    }
 }
 @media (max-width: 575px) {
     .daybook-filter {
@@ -130,6 +135,12 @@
         display: inline-block;
         margin-bottom: 0;
         vertical-align: middle;
+    }
+}
+@media (min-width: 767px){
+    .table-responsive{
+        max-height: calc(100vh - 340px);
+        overflow-y: auto;
     }
 }
 .daybook-table-tbody > tr {

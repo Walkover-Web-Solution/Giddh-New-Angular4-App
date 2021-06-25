@@ -770,7 +770,7 @@ export class InvoiceActions {
         .pipe(
             ofType(INVOICE.RECURRING.GET_RECURRING_INVOICE_DATA),
             switchMap((action: CustomActions) => this._recurringService.getRecurringVouchers(action.payload)),
-            map(res => this.validateResponse<RecurringInvoice[], string>(res, this.GetAllRecurringInvoicesResponse(res.body), true, this.GetAllRecurringInvoicesResponse(res.body)))));
+            map(res => this.validateResponse<RecurringInvoice[], string>(res, this.GetAllRecurringInvoicesResponse(res.body), true, this.noPermissionsRecurringInvoice()))));
     /**
      * SAVE Recurring Voucher
      */
@@ -1400,6 +1400,18 @@ export class InvoiceActions {
     public resetBulkEInvoice(): CustomActions {
         return {
             type: INVOICE_ACTIONS.RESET_BULK_E_INVOICE_RESPONSE
+        };
+    }
+
+    /**
+     * Sets no permissions flag
+     *
+     * @returns {CustomActions}
+     * @memberof InvoiceActions
+     */
+    public noPermissionsRecurringInvoice(): CustomActions {
+        return {
+            type: INVOICE.RECURRING.NO_PERMISSIONS_RECURRING_INVOICE
         };
     }
 }

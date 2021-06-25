@@ -325,3 +325,5 @@ export enum EInvoiceStatus {
 /** Length of entry description on vouchers */
 export const ENTRY_DESCRIPTION_LENGTH = 100;
 export const EMAIL_REGEX_PATTERN = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+/** This will hold error status code for permission error from API */
+export const UNAUTHORISED = 401;
