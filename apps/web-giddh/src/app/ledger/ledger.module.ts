@@ -28,6 +28,7 @@ import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { TextCaseChangeModule } from '../shared/helpers/directives/textCaseChange/textCaseChange.module';
 import { NumberToWordsModule } from '../shared/helpers/pipes/numberToWords/numberToWords.module';
 import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.module';
+import { ValidateSectionPermissionDirectiveModule } from '../shared/validate-section-permission/validate-section-permission.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
@@ -111,7 +112,8 @@ import { ParticularPipeModule } from './pipes/particular/particular.module';
         InventoryAddStockModule,
         ParticularPipeModule,
         ReplacePipeModule,
-        HamburgerMenuModule
+        HamburgerMenuModule,
+        ValidateSectionPermissionDirectiveModule
     ],
 })
 export class LedgerModule {
