@@ -1,6 +1,8 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
     AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
     Component, ElementRef,
     EventEmitter,
     Input,
@@ -75,7 +77,8 @@ const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make ad
             transition('in => out', animate('400ms ease-in-out')),
             transition('out => in', animate('400ms ease-in-out'))
         ]),
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
     public vm: UpdateLedgerVm;
@@ -98,7 +101,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     @ViewChild('deleteAttachedFileModal', { static: true }) public deleteAttachedFileModal: ModalDirective;
     /** fileinput element ref for clear value after remove attachment **/
-    @ViewChild('fileInputUpdate', { static: true }) public fileInputElement: ElementRef<any>;
+    @ViewChild('fileInputUpdate', { static: false }) public fileInputElement: ElementRef;
     @ViewChild('deleteEntryModal', { static: true }) public deleteEntryModal: ModalDirective;
     @ViewChild('discount', { static: false }) public discountComponent: UpdateLedgerDiscountComponent;
     @ViewChild('tax', { static: false }) public taxControll: TaxControlComponent;
@@ -257,6 +260,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public isHide: boolean = false;
     public condition: boolean = true;
     public condition2: boolean = false;
+    /** Stores the multi-lingual label of current voucher */
+    public currentVoucherLabel: string;
 
     constructor(
         private _accountService: AccountService,
@@ -270,7 +275,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         private store: Store<AppState>,
         private searchService: SearchService,
         private _toasty: ToasterService,
-        private warehouseActions: WarehouseActions
+        private warehouseActions: WarehouseActions,
+        private changeDetectorRef: ChangeDetectorRef
     ) {
 
         this.vm = new UpdateLedgerVm();
@@ -313,7 +319,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
             }
         });
-        this.store.pipe(select(state => state.ledger.refreshLedger), takeUntil(this.destroyed$)).subscribe(response => {
+        this.store.pipe(select(appState => appState.ledger.refreshLedger), takeUntil(this.destroyed$)).subscribe(response => {
             if (response === true) {
                 this.store.dispatch(this._ledgerAction.refreshLedger(false));
                 this.entryAccountUniqueName = "";
@@ -984,6 +990,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.vm.selectedLedger.generateInvoice = true;
         }
         this.isAdvanceReceipt = (event.value === 'advance-receipt');
+        this.currentVoucherLabel = this.generalService.getCurrentVoucherLabel(this.vm.selectedLedger.voucher.shortCode, this.commonLocaleData);
         this.handleAdvanceReceiptChange();
     }
 
@@ -1379,10 +1386,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
                         this.defaultResultsPaginationData.totalPages = this.searchResultsPaginationData.totalPages;
                     }
+                    this.changeDetectorRef.detectChanges();
                 }
             });
         } else {
             this.searchResults = [...this.defaultSuggestions];
+            this.changeDetectorRef.detectChanges();
         }
     }
 
@@ -1829,57 +1838,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
     }
 
-    /*
-     * This will return the adjustment notes text
-     *
-     * @returns {string}
-     * @memberof UpdateLedgerEntryPanelComponent
-     */
-    public getAdjustmentNotes(): string {
-        return this.localeData?.adjustment_notes?.replace("[VOUCHER_NUMBER]", this.vm.selectedLedger?.voucherNumber);
-    }
-
-    /**
-     * This will give text total in currency
-     *
-     * @returns {string}
-     * @memberof UpdateLedgerEntryPanelComponent
-     */
-    public getTotalInCurrency(): string {
-        let totalInCurrency = this.localeData?.total_in_currency;
-        totalInCurrency = totalInCurrency?.replace("[CURRENCY]", this.vm.baseCurrencyDetails?.code);
-        return totalInCurrency;
-    }
-
-    /**
-     * This will give text total in multi currency
-     *
-     * @returns {string}
-     * @memberof UpdateLedgerEntryPanelComponent
-     */
-    public getTotalInMultiCurrency(): string {
-        let totalInCurrency = this.localeData?.total_in_currency;
-        totalInCurrency = totalInCurrency?.replace("[CURRENCY]", this.vm.foreignCurrencyDetails?.code);
-        return totalInCurrency;
-    }
-
-    /**
-     * This will give text adjust voucher
-     *
-     * @returns {string}
-     * @memberof UpdateLedgerEntryPanelComponent
-     */
-    public getAdjustVoucherType(): string {
-        let adjustVoucher = this.localeData?.adjust_voucher;
-        adjustVoucher = adjustVoucher?.replace("[VOUCHER_TYPE]",
-            (this.vm.selectedLedger.voucher.shortCode === AdjustedVoucherType.Sales ? this.commonLocaleData?.app_voucher_types.sales :
-            this.vm.selectedLedger.voucher.shortCode === AdjustedVoucherType.Purchase ? this.commonLocaleData?.app_voucher_types.purchase :
-            this.vm.selectedLedger.voucher.shortCode === AdjustedVoucherType.CreditNote ? this.commonLocaleData?.app_voucher_types.credit_note :
-            this.vm.selectedLedger.voucher.shortCode === AdjustedVoucherType.DebitNote ? this.commonLocaleData?.app_voucher_types.debit_note :
-            this.vm.selectedLedger.voucher.shortCode === AdjustedVoucherType.Payment ? this.commonLocaleData?.app_voucher_types.payment : ''));
-        return adjustVoucher;
-    }
-
     /**
      * Callback for translation response complete
      *
@@ -1992,7 +1950,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         if (this.vm.selectedLedger.voucher && this.vm.selectedLedger.voucher.shortCode === 'rcpt' && this.isAdvanceReceipt) {
                             this.vm.selectedLedger.voucher.shortCode = 'advance-receipt';
                         }
-
+                        this.currentVoucherLabel = this.generalService.getCurrentVoucherLabel(this.vm.selectedLedger.voucher.shortCode, this.commonLocaleData);
                         this.makeAdjustmentCalculation();
 
                         if (this.isPettyCash) {
@@ -2155,6 +2113,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         }
                         this.vm.generatePanelAmount();
                         this.activeAccountSubject.next(this.activeAccount);
+                        this.changeDetectorRef.detectChanges();
                     }
                 });
 

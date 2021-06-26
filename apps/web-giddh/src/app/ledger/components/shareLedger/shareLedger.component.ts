@@ -1,6 +1,6 @@
 import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
 import { AccountsAction } from './../../../actions/accounts.actions';
-import { Component, EventEmitter, Input, Output, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { MagicLinkRequest } from '../../../models/api-models/Ledger';
 import { Store, select } from '@ngrx/store';
@@ -13,7 +13,8 @@ import { ReplaySubject } from 'rxjs';
 @Component({
     selector: 'share-ledger',
     templateUrl: './shareLedger.component.html',
-    styleUrls: ['./shareLedger.component.scss']
+    styleUrls: ['./shareLedger.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class ShareLedgerComponent implements OnDestroy {
@@ -33,7 +34,12 @@ export class ShareLedgerComponent implements OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor(private _ledgerService: LedgerService, private store: Store<AppState>, private _ledgerActions: LedgerActions, private accountActions: AccountsAction) {
+    constructor(
+        private _ledgerService: LedgerService,
+        private store: Store<AppState>,
+        private _ledgerActions: LedgerActions,
+        private accountActions: AccountsAction,
+        private changeDetectorRef: ChangeDetectorRef) {
     }
 
     public checkAccountSharedWith() {
@@ -56,6 +62,7 @@ export class ShareLedgerComponent implements OnDestroy {
             } else {
                 this.magicLink = '';
             }
+            this.changeDetectorRef.detectChanges();
         });
     }
 
@@ -91,6 +98,7 @@ export class ShareLedgerComponent implements OnDestroy {
         this.email = '';
         this.magicLink = '';
         this.isCopied = false;
+        this.changeDetectorRef.detectChanges();
     }
 
     /**

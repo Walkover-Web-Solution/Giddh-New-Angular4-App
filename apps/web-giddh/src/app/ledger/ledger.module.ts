@@ -26,6 +26,7 @@ import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShor
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { TextCaseChangeModule } from '../shared/helpers/directives/textCaseChange/textCaseChange.module';
 import { NumberToWordsModule } from '../shared/helpers/pipes/numberToWords/numberToWords.module';
+import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
@@ -50,6 +51,7 @@ import { ShareLedgerComponent } from './components/shareLedger/shareLedger.compo
 import { UpdateLedgerEntryPanelModule } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.module';
 import { LedgerComponent } from './ledger.component';
 import { LedgerRoutingModule } from './ledger.routing.module';
+import { ParticularPipeModule } from './pipes/particular/particular.module';
 
 @NgModule({
     declarations: [
@@ -105,7 +107,9 @@ import { LedgerRoutingModule } from './ledger.routing.module';
         LedgerDiscountModule,
         UpdateLedgerEntryPanelModule,
         DatepickerWrapperModule,
-        InventoryAddStockModule
+        InventoryAddStockModule,
+        ParticularPipeModule,
+        ReplacePipeModule
     ],
 })
 export class LedgerModule {

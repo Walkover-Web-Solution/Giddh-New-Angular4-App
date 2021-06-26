@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, OnChanges, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, OnChanges, Input, SimpleChanges, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { SettingsFinancialYearService } from '../../../services/settings.financial-year.service';
 import { Store } from '@ngrx/store';
 import { takeUntil } from 'rxjs/operators';
@@ -13,7 +13,8 @@ import { PAGINATION_LIMIT } from '../../../app.constant';
 @Component({
     selector: 'ledger-columnar-report-table',
     templateUrl: './ledger.columnar.report.table.component.html',
-    styleUrls: ['./ledger.columnar.report.table.component.scss']
+    styleUrls: ['./ledger.columnar.report.table.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, OnChanges {
@@ -44,10 +45,13 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor(public settingsFinancialYearService: SettingsFinancialYearService,
+    constructor(
+        public settingsFinancialYearService: SettingsFinancialYearService,
         private store: Store<AppState>,
         private toaster: ToasterService,
-        private ledgerService: LedgerService) {
+        private ledgerService: LedgerService,
+        private changeDetectorRef: ChangeDetectorRef
+    ) {
         this.store.pipe(takeUntil(this.destroyed$)).subscribe(state => {
             if (state && state.session && state.session.companyUniqueName) {
                 this.companyUniqueName = _.cloneDeep(state.session.companyUniqueName);
@@ -146,6 +150,7 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
                 }
             });
         }
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -174,6 +179,18 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
             this.getColumnarReportTable(this.columnarReportExportRequest);
         }
 
+    }
+
+    /**
+     * Tracks the entry by Entry ID
+     *
+     * @param {*} index Index of current entry
+     * @param {*} entry Entry data
+     * @return {*}  {string} Entry ID
+     * @memberof LedgerColumnarReportTableComponent
+     */
+    public trackByEntryId(index: any, entry: any): string {
+        return entry?.entryId;
     }
 
 }
