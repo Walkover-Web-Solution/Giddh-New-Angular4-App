@@ -1,4 +1,5 @@
 import {
+    ChangeDetectionStrategy,
     Component,
     ElementRef,
     EventEmitter,
@@ -32,7 +33,8 @@ import { InventoryService } from '../../../services/inventory.service';
 @Component({
     selector: 'advance-search-model',
     templateUrl: './advance-search.component.html',
-    styleUrls: ['./advance-search.component.scss']
+    styleUrls: ['./advance-search.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges {
@@ -229,6 +231,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         this.bsRangeValue.push(t._d);
         this.advanceSearchRequest.dataToSend = new AdvanceSearchModel();
         this.advanceSearchRequest.page = 1;
+        this.showOtherDetails = false;
         this.setAdvanceSearchForm();
     }
 

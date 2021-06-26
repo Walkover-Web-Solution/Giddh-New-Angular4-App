@@ -282,7 +282,8 @@
 
                     <td class="text-right">
                         <span class="primary-color">
-                            {{ getTotalInCurrency() }}:
+                            {{ localeData?.total_in_currency | replace:'[CURRENCY]':(selectedCurrency === 0) ?
+                            (baseCurrencyDetails?.code || '') : (foreignCurrencyDetails?.code || '')}}:
                             <span class="d-inline-flex">
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="blankLedger.compoundTotal"
@@ -370,7 +371,7 @@
                                 <input [disabled]="isReadOnly" id="ledger-adjust-sale" type="checkbox"
                                     name="adjustSales" (change)="handleVoucherAdjustment()"
                                     [(ngModel)]="isAdjustVoucherSelected">
-                                {{getAdjustVoucherType()}}
+                                {{localeData?.adjust_voucher | replace:'[VOUCHER_TYPE]':currentVoucherLabel}}
                             </td>
                             <td *ngIf="blankLedger.voucherType == 'rcpt' && !shouldShowAdvanceReceipt"
                                 class="pd-r1 pt-2 hidden-xs">
@@ -500,11 +501,14 @@
                 <div class="pull-right">
                     <div class="clearfix">
                         <p class="primary-color d-flex" *ngIf="isLedgerAccountAllowsMultiCurrency">
-                            {{getTotalInMultiCurrency()}}:
-                             <amount-field [amount]="blankLedger.convertedCompoundTotal"
-                                [currencySymbol]="selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol"
-                                [currencyCode]="selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code">
-                            </amount-field>
+                            {{ localeData?.total_in_currency | replace:'[CURRENCY]':(selectedCurrency === 0) ?
+                            (foreignCurrencyDetails?.code || '') : (baseCurrencyDetails?.code || '')}}:
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="blankLedger.convertedCompoundTotal"
+                                    [currencySymbol]="selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol"
+                                    [currencyCode]="selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code">
+                                </amount-field>
+                            </span>
                         </p>
                     </div>
                 </div>

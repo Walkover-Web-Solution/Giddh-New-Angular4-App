@@ -30,7 +30,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let item of reportResponseResult; let itemIndexOfElement = index;">
+                        <tr *ngFor="let item of reportResponseResult; let itemIndexOfElement = index; trackBy: trackByEntryId">
                             <td data-title="#" class="text-center">{{ itemIndexOfElement + 1 }} </td>
                             <td [attr.data-title]="commonLocaleData?.app_date" class="text-center">{{ item.date }} </td>
                             <td [attr.data-title]="commonLocaleData?.app_particulars" class="text-center">{{

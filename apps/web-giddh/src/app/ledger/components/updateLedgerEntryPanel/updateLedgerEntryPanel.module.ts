@@ -12,12 +12,14 @@ import { AmountFieldComponentModule } from '../../../shared/amount-field/amount-
 import { DecimalDigitsModule } from '../../../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { NgxMaskModule } from '../../../shared/helpers/directives/ngx-mask';
 import { NumberToWordsModule } from '../../../shared/helpers/pipes/numberToWords/numberToWords.module';
+import { ReplacePipeModule } from '../../../shared/helpers/pipes/replace/replace.module';
 import { ConfirmModalModule } from '../../../theme/confirm-modal/confirm-modal.module';
 import { ShSelectModule } from '../../../theme/ng-virtual-select/sh-select.module';
 import { TranslateDirectiveModule } from '../../../theme/translate/translate.directive.module';
 import { UpdateLedgerTaxControlComponent } from '../updateLedger-tax-control/updateLedger-tax-control.component';
 import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 import { UpdateLedgerEntryPanelComponent } from './updateLedgerEntryPanel.component';
+import { NgxUploaderModule } from 'ngx-uploader';
 
 @NgModule({
     declarations: [
@@ -40,7 +42,9 @@ import { UpdateLedgerEntryPanelComponent } from './updateLedgerEntryPanel.compon
         BsDatepickerModule,
         AdvanceReceiptAdjustmentModule,
         DecimalDigitsModule,
-        ClickOutsideModule
+        ClickOutsideModule,
+        ReplacePipeModule,
+        NgxUploaderModule
     ],
     exports: [UpdateLedgerEntryPanelComponent]
 })

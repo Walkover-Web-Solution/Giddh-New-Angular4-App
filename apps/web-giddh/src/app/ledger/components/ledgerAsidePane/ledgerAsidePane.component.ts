@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
@@ -8,7 +8,8 @@ import { Observable, ReplaySubject } from 'rxjs';
 @Component({
     selector: 'ledger-aside-pane',
     templateUrl: './ledgerAsidePane.component.html',
-    styleUrls: ['./ledgerAsidePane.component.scss']
+    styleUrls: ['./ledgerAsidePane.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
