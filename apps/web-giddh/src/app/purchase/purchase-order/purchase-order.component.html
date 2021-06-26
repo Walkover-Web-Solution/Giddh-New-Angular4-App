@@ -213,17 +213,11 @@
                         <td [attr.data-title]="localeData?.vendor_name">
                             {{item.vendor?.name}}
                         </td>
-<<<<<<< HEAD
                         <td [attr.data-title]="localeData?.total_amount" [tooltip]="grandTotalPopupTemplate"
                             container="body">
                             <span class="d-flex justify-content-end">
                                 <amount-field [amount]="item.grandTotal?.amountForAccount"
                                     [currencySymbol]="item.grandTotal?.currencyForAccount?.symbol"
-=======
-                        <td [attr.data-title]="localeData?.total_amount">
-                            <span class="d-flex justify-content-md-end">
-                                <amount-field [amount]="item.grandTotal?.amountForAccount" [currencySymbol]="false"
->>>>>>> 265adcd2ac... shalinee | TEST | correct amount alignemnt
                                     [currencyCode]="false">
                                 </amount-field>
                             </span>
