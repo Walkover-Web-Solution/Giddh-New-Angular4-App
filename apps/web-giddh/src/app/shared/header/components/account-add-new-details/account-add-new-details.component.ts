@@ -164,7 +164,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private groupWithAccountsAction: GroupWithAccountsAction,
         private invoiceService: InvoiceService) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
-        
+
     }
 
     /**
@@ -176,7 +176,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.getCountry();
         this.getCallingCodes();
         this.getPartyTypes();
-        
+
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
         }
@@ -245,7 +245,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
             }
         });
-        
+
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
@@ -1070,6 +1070,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
                         this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
                     }
+                    this.changeDetectorRef.detectChanges();
                 }
             });
         } else {
@@ -1080,6 +1081,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             setTimeout(() => {
                 this.preventDefaultGroupScrollApiCall = false;
             }, 500);
+            this.changeDetectorRef.detectChanges();
         }
     }
 

@@ -290,9 +290,9 @@
                 <!-- region bank ledgers-->
                 <div class="clearfix"></div>
                 <div *ngIf="!isMobileScreen">
-                    <h1 class="mr-t2 primary-color" *ngIf="isBankTransactionLoading">
+                    <h1 class="mr-t2 primary-color" [hidden]="!isBankTransactionLoading">
                         {{localeData?.loading_transactions}}</h1>
-                    <section id="eledgerwrap" class="mr-t2" *ngIf="lc.showEledger && !isBankTransactionLoading">
+                    <section id="eledgerwrap" class="mr-t2" [hidden]="(!lc.showEledger || isBankTransactionLoading)">
                         <div class="alert alert-danger ledger-book fade in position-relative pd-r15">
                             <button type="button" class="close">
                                 <span class="font-12 font-weight-normal"
@@ -341,7 +341,7 @@
                                             <tbody>
                                                 <ng-container
                                                     *ngFor="let item of lc.bankTransactionsData; trackBy: trackByTransactionId; let i = index">
-                                                    <ng-container *ngFor="let txn of item.transactions;">
+                                                    <ng-container *ngFor="let txn of item.transactions; trackBy: trackById">
                                                         <ng-container *ngIf="txn.type === 'DEBIT'">
                                                             <tr class="ledger-row row"
                                                                 [ngClass]="{'compound-entry': txn.id === lc.selectedBankTxnUniqueName}">
@@ -496,7 +496,7 @@
                                             <tbody>
                                                 <ng-container
                                                     *ngFor="let item of lc.bankTransactionsData; trackBy: trackByTransactionId; let i = index">
-                                                    <ng-container *ngFor="let txn of item.transactions;">
+                                                    <ng-container *ngFor="let txn of item.transactions; trackBy: trackById">
                                                         <ng-container *ngIf="txn.type === 'CREDIT'">
                                                             <tr class="ledger-row row">
                                                                 <td class="col-3 col-md-3 col-lg-3">
@@ -864,7 +864,7 @@
 
                                     <!-- region debit transaction loop over transactions -->
                                     <tr vr-item tabindex="-1" class="ledger-row row"
-                                        *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions; let i = index;"
+                                        *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions; let i = index; trackBy:trackByTransactionUniqueName"
                                         (dblclick)="showUpdateLedgerModal(txn)" (keydown.enter)="showUpdateLedgerModal(txn)"
                                         [ngClass]="{'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
                                         tooltip="{{txn.description}}" (mouseover)="entryHovered(txn.entryUniqueName)"
@@ -890,7 +890,7 @@
                                             <div class="d-flex align-items-center justify-content-between w-100">
 
                                                 <div class="text-ellipsis">
-                                                    {{ getParticular(txn, 'to') }}
+                                                    {{ txn | particular:'to':localeData?.by_particular:localeData?.to_particular }}
                                                 </div>
 
                                                 <span class="download-invoice-ledger d-flex"
@@ -1157,7 +1157,7 @@
 
                                     <!-- region credit transaction loop over transactions -->
                                     <tr class="ledger-row row"
-                                        *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions; let i = index"
+                                        *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions; let i = index; trackBy:trackByTransactionUniqueName"
                                         (dblclick)="showUpdateLedgerModal(txn)" vr-item tabindex="-1"
                                         (keydown.enter)="showUpdateLedgerModal(txn)"
                                         [ngClass]="{'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
@@ -1187,7 +1187,7 @@
 
                                             <div class="d-flex align-items-center justify-content-between w-100">
                                                 <div class="text-ellipsis">
-                                                    {{ getParticular(txn, 'by') }}
+                                                    {{ txn | particular:'by':localeData?.by_particular:localeData?.to_particular }}
                                                 </div>
 
                                                 <span class="download-invoice-ledger d-flex"

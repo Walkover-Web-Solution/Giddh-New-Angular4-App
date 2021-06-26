@@ -773,7 +773,7 @@
                             <ng-template #adjustmentPopOverTemplate>
                                 <div class="adjusted-info">
                                     <p class="mr-b1"><strong>{{localeData?.adjustment}}</strong></p>
-                                    <p class="info-text">{{getAdjustmentNotes()}}</p>
+                                    <p class="info-text">{{ localeData?.adjustment_notes | replace:'[VOUCHER_NUMBER]':vm.selectedLedger?.voucherNumber}}</p>
                                 </div>
                             </ng-template>
                             <p class="font-12 text-light mr-b1">
@@ -853,7 +853,7 @@
                                     </td>
                                     <td class="text-right">
                                         <span class="primary-color" *ngIf="vm.isMultiCurrencyAvailable">
-                                            {{ getTotalInCurrency() }}:
+                                            {{ localeData?.total_in_currency | replace:'[CURRENCY]':vm.baseCurrencyDetails?.code}}:
                                             <span class="d-inline-flex">
                                                 <amount-field [amount]="vm.compoundTotal"
                                                     [currencySymbol]="vm.baseCurrencyDetails?.symbol"
@@ -960,7 +960,7 @@
                                             [(ngModel)]="isAdjustVoucherSelected"
                                             (click)="checkForGeneratedVoucher($event)"
                                             (change)="handleVoucherAdjustment()">
-                                        {{getAdjustVoucherType()}}
+                                        {{ localeData?.adjust_voucher | replace:'[VOUCHER_TYPE]':currentVoucherLabel}}
                                     </td>
                                     <td *ngIf="vm.selectedLedger.voucher.shortCode == 'advance-receipt' && isAdvanceReceipt"
                                         class="pd-r1 pb-1">
@@ -1066,8 +1066,8 @@
                                     </span>
 
                                     <span *ngIf="vm.isMultiCurrencyAvailable" class="primary-color">
-                                        {{getTotalInMultiCurrency()}}
-                                        :
+                                        {{localeData?.total_in_currency | replace:'[CURRENCY]':vm.foreignCurrencyDetails?.code}}:
+
                                         <span class="d-inline-flex">
                                             <amount-field [amount]="vm.convertedCompoundTotal"
                                                 [currencySymbol]="vm.foreignCurrencyDetails?.symbol"
@@ -1122,7 +1122,7 @@
                                         <input
                                             [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                                             type="file" name="invoiceFile" #fileInputUpdate id="invoiceFile"
-                                            ngFileSelect [uploadInput]="uploadInput"
+                                            ngFileSelect [uploadInput]="uploadInput" [options]="fileUploadOptions"
                                             (uploadOutput)="onUploadOutputUpdate($event)">
                                         <label for="invoiceFile" class="cp font-16">
                                             <i
