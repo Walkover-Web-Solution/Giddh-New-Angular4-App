@@ -72,6 +72,7 @@ import { AccountAddNewDetailsModule } from './header/components/account-add-new-
 import { LedgerDiscountModule } from '../ledger/components/ledgerDiscount/ledgerDiscount.module';
 import { ConfirmationModalModule } from '../common/confirmation-modal/confirmation-modal.module';
 import { DatepickerWrapperModule } from './datepicker-wrapper/datepicker.wrapper.module';
+import { HamburgerMenuModule } from './header/components/hamburger-menu/hamburger-menu.module';
 registerLocaleData(localeEn);
 registerLocaleData(localeHi);
 registerLocaleData(localeMr);
@@ -148,7 +149,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         RevisionHistoryComponent,
         PurchaseOrderPreviewModalComponent,
         PurchaseSendEmailModalComponent,
-        HamburgerMenuComponent,
         GiddhDaterangepickerComponent,
         GiddhPageLoaderComponent,
         PrimarySidebarComponent
@@ -195,7 +195,10 @@ export class PickDateAdapter extends NativeDateAdapter {
         AmountFieldComponentModule,
         AccountAddNewDetailsModule,
         LedgerDiscountModule,
-        ConfirmationModalModule
+        ConfirmationModalModule,
+        DatepickerWrapperModule,
+        HamburgerMenuModule,
+        ValidateSectionPermissionDirectiveModule
     ],
     exports: [
         CommonModule,
@@ -239,7 +242,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         RevisionHistoryComponent,
         PurchaseOrderPreviewModalComponent,
         PurchaseSendEmailModalComponent,
-        HamburgerMenuComponent,
         GiddhPageLoaderComponent,
         CurrencyModule,
         PrimarySidebarComponent,
@@ -249,7 +251,9 @@ export class PickDateAdapter extends NativeDateAdapter {
         AccountAddNewDetailsModule,
         LedgerDiscountModule,
         ConfirmationModalModule,
-        DatepickerWrapperModule
+        DatepickerWrapperModule,
+        HamburgerMenuModule,
+        ValidateSectionPermissionDirectiveModule
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,
