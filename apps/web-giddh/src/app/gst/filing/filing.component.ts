@@ -89,7 +89,6 @@ export class FilingComponent implements OnInit, OnDestroy {
         });
     }
     public ngOnInit() {
-        document.querySelector('body').classList.add('gst-sidebar-open');
         this.breakpointObserver
         this.breakpointObserver
         .observe(['(max-width: 768px)'])

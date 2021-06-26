@@ -55,11 +55,7 @@ const initialState: GeneralState = {
     updateIndexDbInProcess: false,
     openSideMenu: true,
     menuItems: [],
-<<<<<<< HEAD
-    openGstSideMenu: false,
-=======
     openGstSideMenu: false
->>>>>>> 937ed2241f... shalinee | TEST | GST Responsive
 };
 
 export function GeneRalReducer(state: GeneralState = initialState, action: CustomActions): GeneralState {

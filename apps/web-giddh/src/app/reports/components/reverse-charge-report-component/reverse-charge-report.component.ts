@@ -117,9 +117,8 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @memberof ReverseChargeReport
      */
     public ngOnInit(): void {
-        document.querySelector('body').classList.add('gst-sidebar-open');
         this.breakPointObservar.observe([
-            '(max-width: 767px)'
+            '(max-width: 768px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
             if (!this.isMobileScreen) {

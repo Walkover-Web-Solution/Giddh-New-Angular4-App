@@ -132,7 +132,6 @@ export class GstComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        document.querySelector('body').classList.add('gst-sidebar-open');
         this.breakpointObserver
         .observe(['(max-width: 768px)'])
         .pipe(takeUntil(this.destroyed$))
