@@ -84,6 +84,8 @@ export class RecurringComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True if user has voucher list permission */
+    public hasRecurringVoucherListPermissions: boolean = true;
 
     constructor(private store: Store<AppState>,
         private generalService: GeneralService,
@@ -144,6 +146,10 @@ export class RecurringComponent implements OnInit, OnDestroy {
             '(max-width: 1023px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
+        });
+
+        this.store.pipe(select(state => state.invoice.hasRecurringVoucherListPermissions), takeUntil(this.destroyed$)).subscribe(response => {
+            this.hasRecurringVoucherListPermissions = response;
         });
     }
 

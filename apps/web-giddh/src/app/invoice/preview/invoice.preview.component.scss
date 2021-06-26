@@ -7,7 +7,7 @@
 }
 
 .check-image img {
-    max-height: 17px;
+    max-height: 14px;
     cursor: pointer;
 }
 
@@ -32,7 +32,7 @@
 
 .td-search-box div span {
     /*flex: 1 1 auto;*/
-    padding: 8px 0 8px 10px;
+    padding: 8px 0 8px 0px;
 }
 
 .perform-payment {
@@ -59,13 +59,13 @@
 }
 
 .td-search-box .input-container input {
-    height: 50px;
+    height: 36px;
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
     color: $nero;
     border: none;
-    background-color: $white-smoke;
+    background-color: $gray-95;
 }
 
 .td-search-box .input-container i {
@@ -97,7 +97,7 @@
 }
 
 .input-h .td-search-box .input-container input {
-    height: 50px !important;
+    height: 36px !important;
 }
 
 .click-dropdown ul {
@@ -240,10 +240,6 @@ td.card-header.clearfix {
     padding-top: 8px;
 }
 
-.p-0 {
-    padding: 0;
-}
-
 .mobile-table {
     display: none;
 }
@@ -260,6 +256,7 @@ td.card-header.clearfix {
 
 .date-advance-search {
     justify-content: space-between;
+    padding-bottom: 15px !important;
     .input-group {
         width: auto;
     }
@@ -348,7 +345,16 @@ ul.select-action-dropdown {
     color: $nobel;
 }
 
-.advance-icon,
+.advance-icon{
+    width: auto !important;
+    height: auto !important;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    margin-right: 10px;
+}
+
 .search-icon-block {
     width: 36px;
     height: 36px;
@@ -361,15 +367,10 @@ ul.select-action-dropdown {
     border-radius: 5px;
     color: $gray;
     background: $white;
-    color: $gray;
 }
 
 .search-icon-block {
     display: none;
-}
-
-.advance-icon:hover {
-    background: $whisper-color;
 }
 
 .dropdown-toggle.more-btn-dropdown {
@@ -450,19 +451,6 @@ button.btn.btn-default.ladda-button {
     left: 37px !important;
     z-index: 100;
     top: 0;
-}
-
-.invoice-footer h3 {
-    font-size: 16px;
-    color: $nobel;
-    display: inline-block;
-    margin-right: 10px;
-}
-
-.invoice-footer h1 {
-    font-size: 18px;
-    color: $night-rider;
-    display: inline-block;
 }
 
 .add-invoice .btn-group.show {
@@ -554,7 +542,7 @@ span.icon-export-icon {
     > tbody {
         > tr {
             &:hover {
-                background: rgba(221, 225, 230, 0.5);
+                background: $light-alice-blue;
             }
             td {
                 background: transparent !important;
@@ -657,9 +645,6 @@ span.icon-export-icon {
         left: auto;
         right: 0;
     }
-    .invoice-footer .font-xxlarge {
-        font-size: 20px;
-    }
     .click-dropdown ul {
         left: auto;
         right: 0;
@@ -728,15 +713,6 @@ span.icon-export-icon {
             left: 0;
         }
     }
-    .invoice-footer .font-xxlarge {
-        font-size: 16px;
-    }
-    .invoice-footer h1 {
-        font-size: 18px !important;
-    }
-    .total-due-sale-wrap {
-        display: block !important;
-    }
     .total-due-sale {
         padding-bottom: 5px;
     }
@@ -761,16 +737,9 @@ span.icon-export-icon {
     #dropdown-ddl-newinv {
         right: -20px !important;
     }
-    .invoice-footer {
-        display: flex;
-        padding: 10px 0;
-    }
     .full-width-on-mobile {
         width: 100%;
         margin: 5px 0;
-    }
-    .date-advance-search {
-        flex-direction: column;
     }
     .mobile-search {
         .col-xs-12 {
@@ -875,5 +844,12 @@ span.icon-export-icon {
             right: 0;
             bottom: -50px;
         }
+    }
+}
+
+@media (min-width:767px){
+    .table-responsive{
+        max-height: calc(100vh - 302px);
+        overflow-y: auto;
     }
 }

@@ -61,7 +61,7 @@
                         <tr (clickOutside)="inlineSearch = null">
                             <th class="text-center" width="4%">#</th>
                             <th (click)="sortReverseChargeList('entryDate')">{{localeData?.entry_date}} <span
-                                    [ngClass]="{'sorting-icon icon-pointer': true, 'active-text-color' : reverseChargeReportGetRequest.sortBy === 'entryDate', 'icon-sort-asc': !reverseChargeReportGetRequest.sort || reverseChargeReportGetRequest.sortBy !== 'entryDate' || (reverseChargeReportGetRequest.sort === 'asc' && reverseChargeReportGetRequest.sortBy === 'entryDate'), 'icon-sort-dsc': (reverseChargeReportGetRequest.sort === 'desc' && reverseChargeReportGetRequest.sortBy === 'entryDate')}"></span>
+                                    [ngClass]="{'sorting-icon icon-pointer': true, 'active-text-color' : reverseChargeReportGetRequest.sortBy === 'entryDate', 'icon-sort-asc': !reverseChargeReportGetRequest.sort || reverseChargeReportGetRequest.sortBy !== 'entryDate' || (reverseChargeReportGetRequest.sort === 'asc' && reverseChargeReportGetRequest.sortBy === 'entryDate'), 'icon-arrow-down': (reverseChargeReportGetRequest.sort === 'desc' && reverseChargeReportGetRequest.sortBy === 'entryDate')}"></span>
                             </th>
                             <th width="13%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="inlineSearch == 'suppliersName'">
@@ -114,7 +114,7 @@
                             </th>
                             <th class="td-search-box" (click)="sortReverseChargeList('supplierInvoiceDate')">
                                 {{localeData?.suppliers_invoice_date}} <span
-                                    [ngClass]="{'sorting-icon icon-pointer': true, 'active-text-color' : reverseChargeReportGetRequest.sortBy === 'supplierInvoiceDate', 'icon-sort-asc': !reverseChargeReportGetRequest.sort || reverseChargeReportGetRequest.sortBy !== 'supplierInvoiceDate' || (reverseChargeReportGetRequest.sort === 'asc' && reverseChargeReportGetRequest.sortBy === 'supplierInvoiceDate'), 'icon-sort-dsc': (reverseChargeReportGetRequest.sort === 'desc' && reverseChargeReportGetRequest.sortBy === 'supplierInvoiceDate')}"></span>
+                                    [ngClass]="{'sorting-icon icon-pointer': true, 'active-text-color' : reverseChargeReportGetRequest.sortBy === 'supplierInvoiceDate', 'icon-sort-asc': !reverseChargeReportGetRequest.sort || reverseChargeReportGetRequest.sortBy !== 'supplierInvoiceDate' || (reverseChargeReportGetRequest.sort === 'asc' && reverseChargeReportGetRequest.sortBy === 'supplierInvoiceDate'), 'icon-arrow-down': (reverseChargeReportGetRequest.sort === 'desc' && reverseChargeReportGetRequest.sortBy === 'supplierInvoiceDate')}"></span>
                             </th>
                             <th width="13%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="inlineSearch == 'supplierCountry'">
@@ -130,11 +130,11 @@
                             </th>
                             <th (click)="sortReverseChargeList('taxableValue')">{{commonLocaleData?.app_taxable_value}}
                                 <span
-                                    [ngClass]="{'sorting-icon icon-pointer': true, 'active-text-color' : reverseChargeReportGetRequest.sortBy === 'taxableValue', 'icon-sort-asc': !reverseChargeReportGetRequest.sort || reverseChargeReportGetRequest.sortBy !== 'taxableValue' || (reverseChargeReportGetRequest.sort === 'asc' && reverseChargeReportGetRequest.sortBy === 'taxableValue'), 'icon-sort-dsc': (reverseChargeReportGetRequest.sort === 'desc' && reverseChargeReportGetRequest.sortBy === 'taxableValue')}"></span>
+                                    [ngClass]="{'sorting-icon icon-pointer': true, 'active-text-color' : reverseChargeReportGetRequest.sortBy === 'taxableValue', 'icon-sort-asc': !reverseChargeReportGetRequest.sort || reverseChargeReportGetRequest.sortBy !== 'taxableValue' || (reverseChargeReportGetRequest.sort === 'asc' && reverseChargeReportGetRequest.sortBy === 'taxableValue'), 'icon-arrow-down': (reverseChargeReportGetRequest.sort === 'desc' && reverseChargeReportGetRequest.sortBy === 'taxableValue')}"></span>
                             </th>
                             <th>{{commonLocaleData?.app_tax_rate}}</th>
                             <th (click)="sortReverseChargeList('taxAmount')">{{commonLocaleData?.app_tax_amount}} <span
-                                    [ngClass]="{'sorting-icon icon-pointer': true, 'active-text-color' : reverseChargeReportGetRequest.sortBy === 'taxAmount', 'icon-sort-asc': !reverseChargeReportGetRequest.sort || reverseChargeReportGetRequest.sortBy !== 'taxAmount' || (reverseChargeReportGetRequest.sort === 'asc' && reverseChargeReportGetRequest.sortBy === 'taxAmount'), 'icon-sort-dsc': (reverseChargeReportGetRequest.sort === 'desc' && reverseChargeReportGetRequest.sortBy === 'taxAmount')}"></span>
+                                    [ngClass]="{'sorting-icon icon-pointer': true, 'active-text-color' : reverseChargeReportGetRequest.sortBy === 'taxAmount', 'icon-sort-asc': !reverseChargeReportGetRequest.sort || reverseChargeReportGetRequest.sortBy !== 'taxAmount' || (reverseChargeReportGetRequest.sort === 'asc' && reverseChargeReportGetRequest.sortBy === 'taxAmount'), 'icon-arrow-down': (reverseChargeReportGetRequest.sort === 'desc' && reverseChargeReportGetRequest.sortBy === 'taxAmount')}"></span>
                             </th>
                         </tr>
                     </thead>

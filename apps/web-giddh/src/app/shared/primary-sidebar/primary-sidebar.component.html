@@ -1,8 +1,9 @@
 <ng-container appTranslate [file]="'all-items'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <div class="primary-sidebar py-3 position-relative">
-        <div class="company-branch-block pd-l2 pd-r2 position-relative" [ngClass]="{'padding-14': !currentBranch && (currentCompanyBranches$ | async)?.length > 1}">
-            <ul class="list-style-none branch-connection" (click)="openCompanyBranchDropdown()">
+        <div class="company-branch-block pd-l2 pd-r2 position-relative" [ngClass]="{'padding-14': !currentBranch && (currentCompanyBranches$ | async)?.length > 1}" dropdown [autoClose]="false">
+            <ul class="list-style-none branch-connection dropdown-toggle" id="button-company-branch" dropdownToggle
+            aria-controls="dropdown-basic-company-branch" (click)="openCompanyBranchDropdown()">
                 <span class="outer-span" *ngIf="(currentCompanyBranches$ | async)?.length > 1">
                     <span class="inner-span"></span>
                 </span>
@@ -13,7 +14,6 @@
                         dropdownToggle>
                         <div class="d-flex flex-column">
                             <div class="d-flex align-items-center">
-                                <img hidden src="../../../assets/images/logo-icon.svg" class="company-icon mr-r1">
                                 <span class="company-alice mr-r05 text-uppercase">{{companyInitials}}</span>
                                 <span class="d-flex justify-content-between w-100 company-full-name flex-column">
                                     <span class="company-ellipsis">{{selectedCompanyDetails?.name}}</span>

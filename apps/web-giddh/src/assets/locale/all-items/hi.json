@@ -170,7 +170,7 @@
                 {
                     "label": "वैट रिपोर्ट",
                     "link": "/pages/vat-report",
-                    "icon": "icon-vat",
+                    "icon": "icon-vat1",
                     "description": "फ़ाइल और समीक्षा वैट",
                     "hide": "sidebar"
                 },

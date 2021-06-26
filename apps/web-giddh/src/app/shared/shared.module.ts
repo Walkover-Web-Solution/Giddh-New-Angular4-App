@@ -62,9 +62,7 @@ import { HamburgerMenuComponent } from './header/components/hamburger-menu/hambu
 import { GiddhDaterangepickerComponent } from '../theme/giddh-daterangepicker/giddh-daterangepicker.component';
 import { GiddhPageLoaderComponent } from './giddh-page-loader/giddh-page-loader.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
-import { ScheduleNowComponent } from './schedule-now/schedule-now.component';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
-
 import { CompanyBranchComponent } from './primary-sidebar/company-branch/company-branch.component';
 
 import localeEn from '@angular/common/locales/en-GB';
@@ -75,6 +73,7 @@ import { AccountAddNewDetailsModule } from './header/components/account-add-new-
 import { LedgerDiscountModule } from '../ledger/components/ledgerDiscount/ledgerDiscount.module';
 import { ConfirmationModalModule } from '../common/confirmation-modal/confirmation-modal.module';
 import { DatepickerWrapperModule } from './datepicker-wrapper/datepicker.wrapper.module';
+import { ValidateSectionPermissionDirectiveModule } from './validate-section-permission/validate-section-permission.module';
 registerLocaleData(localeEn);
 registerLocaleData(localeHi);
 registerLocaleData(localeMr);
@@ -155,7 +154,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         GiddhDaterangepickerComponent,
         GiddhPageLoaderComponent,
         PrimarySidebarComponent,
-        ScheduleNowComponent,
         CompanyBranchComponent
     ],
     imports: [
@@ -199,7 +197,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         AmountFieldComponentModule,
         AccountAddNewDetailsModule,
         LedgerDiscountModule,
-        ConfirmationModalModule
+        ConfirmationModalModule,
+        ValidateSectionPermissionDirectiveModule
     ],
     exports: [
         CommonModule,
@@ -247,14 +246,14 @@ export class PickDateAdapter extends NativeDateAdapter {
         GiddhPageLoaderComponent,
         CurrencyModule,
         PrimarySidebarComponent,
-        ScheduleNowComponent,
         TranslateDirectiveModule,
         AmountFieldComponentModule,
         AccountAddNewDetailsModule,
         LedgerDiscountModule,
         ConfirmationModalModule,
         DatepickerWrapperModule,
-        CompanyBranchComponent
+        CompanyBranchComponent,
+        ValidateSectionPermissionDirectiveModule
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,

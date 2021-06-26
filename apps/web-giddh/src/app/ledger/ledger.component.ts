@@ -250,6 +250,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True if user has ledger permission */
+    public hasLedgerPermission: boolean = true;
 
     constructor(
         private store: Store<AppState>,
@@ -803,6 +805,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.pipe(select(s => s.company && s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
             this.companyTaxesList = res || [];
         });
+
+        this.store.pipe(select(state => state.ledger.hasLedgerPermission), takeUntil(this.destroyed$)).subscribe(response => {
+            this.hasLedgerPermission = response;
+        });
     }
 
     private assignPrefixAndSuffixForCurrency() {
@@ -930,10 +936,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public getTransactionData() {
-        this.isAdvanceSearchImplemented = false;
         this.closingBalanceBeforeReconcile = null;
-        this.store.dispatch(this._ledgerActions.GetLedgerBalance(this.trxRequest));
-        this.store.dispatch(this._ledgerActions.GetTransactions(this.trxRequest));
+        if(this.isAdvanceSearchImplemented){
+            this.getAdvanceSearchTxn();
+        }else{
+            this.isAdvanceSearchImplemented = false;
+            this.store.dispatch(this._ledgerActions.GetLedgerBalance(this.trxRequest));
+            this.store.dispatch(this._ledgerActions.GetTransactions(this.trxRequest));
+        }
     }
 
     public getCurrencyRate(mode: string = null) {
