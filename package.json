@@ -132,7 +132,7 @@
     "ngx-perfect-scrollbar": "^9.0.0",
     "ngx-quicklink": "^0.2.6",
     "ngx-toastr": "13.0.0",
-    "ngx-uploader": "10.0.0",
+    "ngx-uploader": "11.0.0",
     "node": "^12.16.0",
     "reflect-metadata": "0.1.12",
     "reselect": "4.0.0",
