@@ -231,6 +231,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public accountOtherApplicableDiscount: any[] = [];
     /** Adjustment modal */
     @ViewChild('adjustPaymentModal', { static: true }) public adjustPaymentModal: ModalDirective;
+    /** Stores the multi-lingual label of current voucher */
+    public currentVoucherLabel: string;
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -346,7 +348,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.isAdvanceReceipt = (this.currentTxn) ? this.currentTxn['subVoucher'] === SubVoucher.AdvanceReceipt : false;
         this.isRcmEntry = (this.currentTxn) ? this.currentTxn['subVoucher'] === SubVoucher.ReverseCharge : false;
         this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
-
+        this.currentVoucherLabel = this.generalService.getCurrentVoucherLabel(this.blankLedger?.voucherType, this.commonLocaleData);
         if (this.localeData) {
             this.availableItcList[0].label = this.localeData?.import_goods;
             this.availableItcList[1].label = this.localeData?.import_services;
@@ -1056,6 +1058,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.isAdvanceReceipt = false;
         }
         this.handleAdvanceReceiptChange();
+        this.currentVoucherLabel = this.generalService.getCurrentVoucherLabel(this.blankLedger.voucherType, this.commonLocaleData);
     }
 
     public toggleBodyClass() {
@@ -1566,64 +1569,4 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.saveOtherTax.emit(this.blankLedger);
     }
 
-    /**
-     * This will give text total in currency
-     *
-     * @returns {string}
-     * @memberof NewLedgerEntryPanelComponent
-     */
-    public getTotalInCurrency(): string {
-        let totalInCurrency = this.localeData?.total_in_currency;
-        let currency = "";
-
-        if (this.selectedCurrency === 0) {
-            if (this.baseCurrencyDetails) {
-                currency = this.baseCurrencyDetails.code;
-            }
-        } else {
-            if (this.foreignCurrencyDetails) {
-                currency = this.foreignCurrencyDetails.code;
-            }
-        }
-
-        totalInCurrency = totalInCurrency?.replace("[CURRENCY]", currency);
-        return totalInCurrency;
-    }
-
-    /**
-     * This will give text total in multi currency
-     *
-     * @returns {string}
-     * @memberof NewLedgerEntryPanelComponent
-     */
-    public getTotalInMultiCurrency(): string {
-        let totalInCurrency = this.localeData?.total_in_currency;
-        let currency = "";
-
-        if (this.selectedCurrency === 0) {
-            if (this.foreignCurrencyDetails) {
-                currency = this.foreignCurrencyDetails.code;
-            }
-        } else {
-            if (this.baseCurrencyDetails) {
-                currency = this.baseCurrencyDetails.code;
-            }
-        }
-
-        totalInCurrency = totalInCurrency.replace("[CURRENCY]", currency);
-        return totalInCurrency;
-    }
-
-    /**
-     * This will give text adjust voucher
-     *
-     * @returns {string}
-     * @memberof NewLedgerEntryPanelComponent
-     */
-    public getAdjustVoucherType(): string {
-        let adjustVoucher = this.localeData?.adjust_voucher;
-        adjustVoucher = adjustVoucher.replace("[VOUCHER_TYPE]", (this.blankLedger.voucherType === 'sal' ? this.commonLocaleData?.app_voucher_types.sales : this.blankLedger.voucherType === 'pur' ? this.commonLocaleData?.app_voucher_types.purchase : this.blankLedger.voucherType === 'credit note' ? this.commonLocaleData?.app_voucher_types.credit_note : this.blankLedger.voucherType === 'debit note' ? this.commonLocaleData?.app_voucher_types.debit_note : this.blankLedger.voucherType === 'pay' ? this.commonLocaleData?.app_voucher_types.payment : ''));
-
-        return adjustVoucher;
-    }
 }

@@ -9,6 +9,7 @@ import { TranslateDirectiveModule } from '../../theme/translate/translate.direct
 import { AmountFieldComponentModule } from '../amount-field/amount-field.module';
 import { NgxMaskModule } from '../helpers/directives/ngx-mask';
 import { CurrencyModule } from '../helpers/pipes/currencyPipe/currencyType.module';
+import { ReplacePipeModule } from '../helpers/pipes/replace/replace.module';
 import { AdvanceReceiptAdjustmentComponent } from './advance-receipt-adjustment.component';
 
 @NgModule({
@@ -23,7 +24,8 @@ import { AdvanceReceiptAdjustmentComponent } from './advance-receipt-adjustment.
         NgxMaskModule.forRoot(),
         CurrencyModule,
         TranslateDirectiveModule,
-        ShSelectModule
+        ShSelectModule,
+        ReplacePipeModule
     ],
     exports: [AdvanceReceiptAdjustmentComponent]
 })
