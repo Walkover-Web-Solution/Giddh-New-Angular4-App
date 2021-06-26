@@ -806,7 +806,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.companyTaxesList = res || [];
         });
 
-        this.store.pipe(select(state => state.ledger.hasLedgerPermission), takeUntil(this.destroyed$)).subscribe(response => {
+        this.store.pipe(select(appState => appState.ledger.hasLedgerPermission), takeUntil(this.destroyed$)).subscribe(response => {
             this.hasLedgerPermission = response;
         });
     }

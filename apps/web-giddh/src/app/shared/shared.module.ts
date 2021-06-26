@@ -58,7 +58,6 @@ import { MatInputModule } from '@angular/material/input';
 import { RevisionHistoryComponent } from './revision-history/revision-history.component';
 import { PurchaseOrderPreviewModalComponent } from './purchase-order-preview/purchase-order-preview.component';
 import { PurchaseSendEmailModalComponent } from './purchase-send-email/purchase-send-email.component';
-import { HamburgerMenuComponent } from './header/components/hamburger-menu/hamburger-menu.component';
 import { GiddhDaterangepickerComponent } from '../theme/giddh-daterangepicker/giddh-daterangepicker.component';
 import { GiddhPageLoaderComponent } from './giddh-page-loader/giddh-page-loader.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
@@ -74,6 +73,7 @@ import { LedgerDiscountModule } from '../ledger/components/ledgerDiscount/ledger
 import { ConfirmationModalModule } from '../common/confirmation-modal/confirmation-modal.module';
 import { DatepickerWrapperModule } from './datepicker-wrapper/datepicker.wrapper.module';
 import { ValidateSectionPermissionDirectiveModule } from './validate-section-permission/validate-section-permission.module';
+import { HamburgerMenuModule } from './header/components/hamburger-menu/hamburger-menu.module';
 registerLocaleData(localeEn);
 registerLocaleData(localeHi);
 registerLocaleData(localeMr);
@@ -150,7 +150,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         RevisionHistoryComponent,
         PurchaseOrderPreviewModalComponent,
         PurchaseSendEmailModalComponent,
-        HamburgerMenuComponent,
         GiddhDaterangepickerComponent,
         GiddhPageLoaderComponent,
         PrimarySidebarComponent,
@@ -198,6 +197,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         AccountAddNewDetailsModule,
         LedgerDiscountModule,
         ConfirmationModalModule,
+        DatepickerWrapperModule,
+        HamburgerMenuModule,
         ValidateSectionPermissionDirectiveModule
     ],
     exports: [
@@ -242,7 +243,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         RevisionHistoryComponent,
         PurchaseOrderPreviewModalComponent,
         PurchaseSendEmailModalComponent,
-        HamburgerMenuComponent,
         GiddhPageLoaderComponent,
         CurrencyModule,
         PrimarySidebarComponent,
@@ -253,6 +253,7 @@ export class PickDateAdapter extends NativeDateAdapter {
         ConfirmationModalModule,
         DatepickerWrapperModule,
         CompanyBranchComponent,
+        HamburgerMenuModule,
         ValidateSectionPermissionDirectiveModule
     ],
     entryComponents: [

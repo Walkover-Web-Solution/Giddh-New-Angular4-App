@@ -20,6 +20,7 @@ import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker
 import {
     AccountAddNewDetailsModule,
 } from '../shared/header/components/account-add-new-details/account-add-new-details.module';
+import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
@@ -109,7 +110,8 @@ import { ParticularPipeModule } from './pipes/particular/particular.module';
         DatepickerWrapperModule,
         InventoryAddStockModule,
         ParticularPipeModule,
-        ReplacePipeModule
+        ReplacePipeModule,
+        HamburgerMenuModule
     ],
 })
 export class LedgerModule {
