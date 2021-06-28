@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 # Setup Guide
 
 1. Clone https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App.git.
@@ -12,7 +10,6 @@
 
 5. Run `npm run start` to local serve the project.
 
->>>>>>> 683632aa13... readme Uodate3
 # Angular Style Guide
 
 This is a guide to Angular syntax, conventions, and application structure. This style guide presents preferred conventions to write scalable Angular Apps with syntax that is easy to read, understand, and navigate through.
