@@ -8468,6 +8468,7 @@ body.update-scroll-hidden {
                         position: absolute !important;
                         left: 20px !important;
                         top: 5px;
+                        color: $grey-chateau;
                     }
                 }
                 &.icon-branch1{
@@ -8480,6 +8481,7 @@ body.update-scroll-hidden {
                         position: absolute !important;
                         left: 20px !important;
                         top: 5px;
+                        color: $grey-chateau;
                     }
                 }
             }
@@ -8983,6 +8985,10 @@ body.update-scroll-hidden {
            padding-left: 0 !important;
        }
    }
+    .customer-aging .nav.nav-tabs{
+        display: flex !important;
+    }
+
     .setting-sidebar-open {
         #content-wrapper{
             padding-left: 0 !important;
@@ -10149,4 +10155,7 @@ body.prevent-body-scroll {
 }
 .giddh-no-permissions {
     display: none !important;
+}
+.giddh-no-permissions-error-message {
+    color: $red;
 }
