@@ -8976,10 +8976,10 @@ body.update-scroll-hidden {
     .tax-engine .transactions-list .filter-row .name {
         min-width: 120px;
     }
-    #setting-tab-wrapper .purchase-setting-tab.tab-integration .nav-tabs {
+     #setting-tab-wrapper .purchase-setting-tab.tab-integration .nav-tabs{
         display: inline-block;
     }
-    .e-waybill-tabs.custom-tabs .nav-tabs {
+    .e-waybill-tabs.custom-tabs .nav-tabs{
         position: fixed !important;
     }
     .invoice-modal-content {
@@ -9817,8 +9817,8 @@ body.update-scroll-hidden {
         display: none;
     }
     .modal-dialog {
-        max-width: 600px !important;
-        margin: 56px auto;
+        max-width: 650px !important;
+        margin: 30px auto;
         padding: 0 10px;
     }
     .modal-dialog.modal-xl {
@@ -9827,7 +9827,6 @@ body.update-scroll-hidden {
     .receipt-note-modal {
         max-width: 100% !important;
     }
-
     .po-preview-modal {
         max-width: 100% !important;
         width: 900px !important;
