@@ -218,7 +218,6 @@
         .profile-name{
             padding: 14px 15px;
             cursor: pointer;
-            min-width: 120px;
             .profile-alice {
                 display: inline-flex;
                 width: 24px;
@@ -235,13 +234,12 @@
             button{
                 background-color: $white;
                 border: 1px solid $white;
-                padding: 14px 15px;
+                padding: 14px 0;
                 color: $trout;
                 display: flex;
-                justify-content: center;
-                align-items: center;
+                justify-content: flex-start;
+                align-items: flex-start;
                 min-width: 120px;
-                border-left-color: $dark-fog;
             }
         }
     }
