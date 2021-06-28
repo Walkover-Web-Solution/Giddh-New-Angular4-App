@@ -112,7 +112,7 @@
                             }
                             a{
                                 background-color: transparent;
-                                padding:6px 20px;
+                                padding:5px 20px;
                                 &:hover{
                                     background-color: initial !important;
                                     color: initial !important;
@@ -255,7 +255,7 @@
                     padding: 0;
                     margin: 0 -20px;
                     span{
-                        padding: 6px 20px;
+                        padding: 5px 20px;
                         color: $slate;
                         &.company-name {
                             display: flex !important;
@@ -378,6 +378,15 @@
 }
 .digit-orange{
     color: $orange-new !important;
+}
+.icon-reload{
+    color: $slate;
+}
+.icon-plus, .icon-link-arrow{
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    margin-right: 2px;
 }
 
 @media screen and (max-height: 800px) {
