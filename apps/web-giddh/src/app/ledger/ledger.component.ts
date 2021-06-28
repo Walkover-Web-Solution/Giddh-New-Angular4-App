@@ -494,7 +494,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this._companyActions.getTax());
         // reset redirect state from login action
         this.store.dispatch(this._loginActions.ResetRedirectToledger());
-        
+
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.breakPointObservar.observe([
@@ -927,9 +927,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public getTransactionData() {
         this.closingBalanceBeforeReconcile = null;
-        if(this.isAdvanceSearchImplemented){
+        if (this.isAdvanceSearchImplemented) {
             this.getAdvanceSearchTxn();
-        }else{
+        } else {
             this.isAdvanceSearchImplemented = false;
             this.store.dispatch(this._ledgerActions.GetLedgerBalance(this.trxRequest));
             this.store.dispatch(this._ledgerActions.GetTransactions(this.trxRequest));
