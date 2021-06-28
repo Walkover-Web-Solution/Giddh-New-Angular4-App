@@ -70,6 +70,9 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
                 newState[res.request && res.request.isLastInvoicesRequest ? 'lastVouchers' : 'vouchers'] = res.body;
                 newState.isGetAllRequestSuccess = true;
             } else if (res.status === 'error' && res.code === 'UNAUTHORISED') {
+                if(!newState['vouchers']) {
+                    newState['vouchers'] = {};
+                }
                 newState['vouchers'].items = [];
             }
             newState.isGetAllRequestInProcess = false;
@@ -88,9 +91,9 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
             let newState = _.cloneDeep(state);
             let res: BaseResponse<string, ReciptDeleteRequest> = action.payload;
             if (res.status === 'success') {
-                let indx = newState.vouchers.items.findIndex(f => f.voucherNumber === res.request.invoiceNumber);
+                let indx = newState.vouchers?.items.findIndex(f => f.voucherNumber === res.request.invoiceNumber);
                 if (indx > -1) {
-                    newState.vouchers.items.splice(indx, 1);
+                    newState.vouchers?.items.splice(indx, 1);
                     newState.isDeleteSuccess = true;
                     newState.isDeleteInProcess = false;
                 }
@@ -107,7 +110,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
             let newState = _.cloneDeep(state);
             let res: BaseResponse<string, ReciptRequest> = action.payload;
             if (res.status === 'success') {
-                newState.vouchers.items.map(a => {
+                newState.vouchers?.items.map(a => {
                     if (a.voucherNumber === res.request.voucher.voucherDetails.voucherNumber) {
                         a = res.request;
                     }
@@ -127,7 +130,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
                     ...state,
                     vouchers: {
                         ...vouchers,
-                        items: vouchers.items.map(m => {
+                        items: vouchers?.items.map(m => {
                             if (result.body.type !== VoucherTypeEnum.purchase && (m.voucherNumber === result.body.number) ||
                                 result.body.type === VoucherTypeEnum.purchase && (m.uniqueName === result.body.uniqueName)) {
                                 m.grandTotal.amountForAccount = result.body.grandTotal.amountForAccount;
@@ -213,9 +216,9 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
             let newState = _.cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
             if (res.status === 'success') {
-                let indx = newState.vouchers.items.findIndex((o) => o.voucherNumber === res.request);
+                let indx = newState.vouchers?.items.findIndex((o) => o.voucherNumber === res.request);
                 if (indx > -1) {
-                    newState.vouchers.items.splice(indx, 1);
+                    newState.vouchers?.items.splice(indx, 1);
                 }
                 return Object.assign({}, state, newState);
             }
