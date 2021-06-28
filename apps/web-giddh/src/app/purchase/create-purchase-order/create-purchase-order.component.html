@@ -910,59 +910,36 @@
                                                         </span>
                                                     </span>
                                                 </div>
-
                                                 <div class="hsn-code-dropdown" *ngIf="hsnSacDropdownShow">
-                                                    <div class="d-flex wrap-hsn-sac mb-2">
+                                                    <div class="d-flex wrap-hsn-sac mb-2 mt-3">
                                                         <span>
-                                                            <input type="radio" class="radio-custom radio-theme"
-                                                                name="showCodeType{{entryIdx}}"
-                                                                id="hsnCodeType{{entryIdx}}"
-                                                                [(ngModel)]="transaction.showCodeType" value="hsn">
-                                                            <label for="hsnCodeType{{entryIdx}}"
-                                                                class="radio-custom-label">{{commonLocaleData?.app_hsn_code}}</label>
+                                                            <input type="radio" class="radio-custom radio-theme" name="showCodeType{{entryIdx}}" id="hsnCodeType{{entryIdx}}" [(ngModel)]="transaction.showCodeType" value="hsn">
+                                                            <label for="hsnCodeType{{entryIdx}}" class="radio-custom-label">{{commonLocaleData?.app_hsn_code}}</label>
                                                         </span>
                                                         <span>
-                                                            <input type="radio" class="radio-custom radio-theme"
-                                                                name="showCodeType{{entryIdx}}"
-                                                                id="sacCodeType{{entryIdx}}"
-                                                                [(ngModel)]="transaction.showCodeType" value="sac">
-                                                            <label for="sacCodeType{{entryIdx}}"
-                                                                class="radio-custom-label">{{commonLocaleData?.app_sac_code}}</label>
+                                                            <input type="radio" class="radio-custom radio-theme" name="showCodeType{{entryIdx}}" id="sacCodeType{{entryIdx}}" [(ngModel)]="transaction.showCodeType" value="sac">
+                                                            <label for="sacCodeType{{entryIdx}}" class="radio-custom-label">{{commonLocaleData?.app_sac_code}}</label>
                                                         </span>
                                                     </div>
+                                                    <input type="text" maxLength="10" decimalDigitsDirective [placeholder]="localeData?.hsn_number"
+                                                        name="transaction.hsnNumber_{{entryIdx}}"
+                                                        *ngIf="transaction.showCodeType === 'hsn'"
+                                                        [(ngModel)]="transaction.hsnNumber" />
+                                                    <input type="text" maxLength="10" decimalDigitsDirective [placeholder]="localeData?.sac_number"
+                                                        name="transaction.hsnNumber_{{entryIdx}}"
+                                                        *ngIf="transaction.showCodeType === 'sac'"
+                                                        [(ngModel)]="transaction.sacNumber" />
 
-                                                    <div class="hsn-code-dropdown" *ngIf="hsnSacDropdownShow">
-                                                        <div class="d-flex wrap-hsn-sac mb-2 mt-3">
-                                                            <span>
-                                                                <input type="radio" class="radio-custom radio-theme" name="showCodeType{{entryIdx}}" id="hsnCodeType{{entryIdx}}" [(ngModel)]="transaction.showCodeType" value="hsn">
-                                                                <label for="hsnCodeType{{entryIdx}}" class="radio-custom-label">{{commonLocaleData?.app_hsn_code}}</label>
-                                                            </span>
-                                                            <span>
-                                                                <input type="radio" class="radio-custom radio-theme" name="showCodeType{{entryIdx}}" id="sacCodeType{{entryIdx}}" [(ngModel)]="transaction.showCodeType" value="sac">
-                                                                <label for="sacCodeType{{entryIdx}}" class="radio-custom-label">{{commonLocaleData?.app_sac_code}}</label>
-                                                            </span>
-                                                        </div>
-                                                        <input type="text" maxLength="10" decimalDigitsDirective [placeholder]="localeData?.hsn_number"
-                                                            name="transaction.hsnNumber_{{entryIdx}}"
-                                                            *ngIf="transaction.showCodeType === 'hsn'"
-                                                            [(ngModel)]="transaction.hsnNumber" />
-                                                        <input type="text" maxLength="10" decimalDigitsDirective [placeholder]="localeData?.sac_number"
-                                                            name="transaction.hsnNumber_{{entryIdx}}"
-                                                            *ngIf="transaction.showCodeType === 'sac'"
-                                                            [(ngModel)]="transaction.sacNumber" />
-
-                                                        <div class="btn-group mt-2 pt-1 d-flex">
-                                                            <button class="btn btn-sm btn-success" type="button"
-                                                                (click)="hsnSacDropdownShow=!hsnSacDropdownShow">{{commonLocaleData?.app_save}}
-                                                            </button>
-                                                            <button class="btn btn-sm btn-primary mr-0" type="button"
-                                                                (click)="hideHsnSacEditPopup(transaction)">
-                                                                {{commonLocaleData?.app_cancel}}
-                                                            </button>
-                                                        </div>
+                                                    <div class="btn-group mt-2 pt-1 d-flex">
+                                                        <button class="btn btn-sm btn-success" type="button"
+                                                            (click)="hsnSacDropdownShow=!hsnSacDropdownShow">{{commonLocaleData?.app_save}}
+                                                        </button>
+                                                        <button class="btn btn-sm btn-primary mr-0" type="button"
+                                                            (click)="hideHsnSacEditPopup(transaction)">
+                                                            {{commonLocaleData?.app_cancel}}
+                                                        </button>
                                                     </div>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
