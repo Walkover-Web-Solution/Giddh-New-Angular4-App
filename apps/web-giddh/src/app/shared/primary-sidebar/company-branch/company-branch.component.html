@@ -71,7 +71,8 @@
                                 (click)="changeCompany(companyBranches.uniqueName, '', false)">
                                 <i class="icon-head-branch mr-2"></i>
                                 <span class="d-flex flex-column">
-                                    <span>{{ localeData?.company?.name }}</span>
+                                    <span>{{ company.name }}</span>
+                                    <span class="font-12 text-gray">Company consolidated data</span>
                                 </span>
                             </a>
                         </li>
@@ -94,14 +95,18 @@
             </tab>
         </tabset>
     </div>
-    <div class="profile-user font-12 d-flex justify-content-between align-items-center">
+    <div class="profile-user font-12 d-flex justify-content-start align-items-center">
         <div class="profile-name cursor-pointer d-flex align-items-center"
             [routerLink]="['/pages/user-details/mobile-number']">
             <span class="profile-alice">{{companyInitials}}</span>
-            <span class="ml-2">{{localeData?.profile}}</span>
+            <!-- hide for now -->
+            <!-- <span class="ml-2">{{localeData?.profile}}</span> -->
         </div>
         <div class="profile-logout font-14">
-            <button (click)="logout()"><i class="icon-logout mr-2 font-18"></i> {{localeData?.logout}}</button>
+            <button (click)="logout()">
+                <!-- hide for now -->
+                <!-- <i class="icon-logout mr-2 font-18"></i> -->
+                 {{localeData?.logout}}</button>
         </div>
     </div>
     <!-- branch design option 2 -->
