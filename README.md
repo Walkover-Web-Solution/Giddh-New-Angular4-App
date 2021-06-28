@@ -1,3 +1,15 @@
+# Setup Guide
+
+1. Clone https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App.git.
+
+2. This project requires Node version 14+, install Node from [here](https://nodejs.org/en/).
+
+3. Go inside the cloned directory `Giddh-New-Angular4-App` in any terminal and run these following commands in the terminal to install dependency and start local serve.
+
+4. Run `npm i` for installation of dependencies.
+
+5. Run `npm run start` to local serve the project.
+
 # Angular Style Guide
 
 This is a guide to Angular syntax, conventions, and application structure. This style guide presents preferred conventions to write scalable Angular Apps with syntax that is easy to read, understand, and navigate through.
