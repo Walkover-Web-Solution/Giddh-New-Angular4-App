@@ -411,4 +411,15 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
             return false;
         }
     }
+
+    /**
+     * This will return true if matching branch is active
+     *
+     * @param {string} branchUniqueName
+     * @returns {boolean}
+     * @memberof CompanyBranchComponent
+     */
+    public isActiveBranch(branchUniqueName: string): boolean { 
+        return branchUniqueName === this.generalService.currentBranchUniqueName;
+    }
 }
