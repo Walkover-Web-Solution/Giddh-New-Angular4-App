@@ -397,5 +397,6 @@
     "import_data": "Import Data",
     "companies": "Companies",
     "refresh_manually": "Refresh Manually",
-    "branches": "Branches"
+    "branches": "Branches",
+    "company_consolidated_data": "Company consolidated data"
 }
