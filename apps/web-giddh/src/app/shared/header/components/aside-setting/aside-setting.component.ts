@@ -34,6 +34,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** This holds the active locale */
     public activeLocale: string = "";
+    /** True if we should show heading */
     public showSettingHeading: boolean = false;
 
     constructor(private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>, private localeService: LocaleService) {
@@ -65,11 +66,11 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
             this.activeLocale = response?.value;
         });
 
+        this.showHideSettingsHeading(this.router.url);
+
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationEnd) {
-                if(!this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/user-details")) {
-                    this.showSettingHeading = true;
-                }
+                this.showHideSettingsHeading(event.url);
             }
         });
     }
@@ -178,6 +179,20 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
                 });
                 this.filteredSettingsPageTabs = this.settingsPageTabs;
             }
+        }
+    }
+
+    /**
+     * This will show/hide settings heading
+     *
+     * @param {string} url
+     * @memberof AsideSettingComponent
+     */
+    public showHideSettingsHeading(url: string): void {
+        if(!url.includes("/pages/settings") && !url.includes("/pages/user-details")) {
+            this.showSettingHeading = true;
+        } else {
+            this.showSettingHeading = false;
         }
     }
 }
