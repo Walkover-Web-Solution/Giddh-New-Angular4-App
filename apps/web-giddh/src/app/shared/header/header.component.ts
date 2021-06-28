@@ -222,6 +222,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isSettingsIconDisabled: boolean = false;
     /* This will hold if resolution is 768 consider as ipad screen */
     public isIpadScreen: boolean = false;
+    /** True if sidebar is forcely expanded */
+    public sidebarForcelyExpanded: boolean = false;
+
     /**
      * Returns whether the back button in header should be displayed or not
      *
@@ -1049,6 +1052,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.menuStateChange.emit(false);
         }
 
+        if (e.target.className.toString() !== 'icon-bar' && (this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details"))) {
+            this.store.dispatch(this._generalActions.openSideMenu(false));
+        }
     }
 
     public forceCloseSidebar(event) {
@@ -1432,6 +1438,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public expandSidebar(forceExpand: boolean = false): void {
         if(forceExpand) {
             this.sideBarStateChange(true);
+            this.sidebarForcelyExpanded = true;
         }
         this.isSidebarExpanded = true;
         document.querySelector('.primary-sidebar')?.classList?.remove('sidebar-collapse');
@@ -1444,12 +1451,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     * @memberof HeaderComponent
     */
     public collapseSidebar(forceCollapse: boolean = false, closeOnHover: boolean = false): void {
-        // console.log(this.sideMenu);
-        // if(closeOnHover && this.sideMenu.isExpanded && (this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details"))) {
-        //     return;
-        // }
+        if(closeOnHover && this.sidebarForcelyExpanded && (this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details"))) {
+            return;
+        }
 
-        if(closeOnHover && this.isSidebarExpanded && document.getElementsByClassName("gst-sidebar-open")?.length > 0) {
+        if(closeOnHover && this.isSidebarExpanded && (document.getElementsByClassName("gst-sidebar-open")?.length > 0 || document.getElementsByClassName("setting-sidebar-open")?.length > 0)) {
             forceCollapse = true;
         }
 
@@ -1464,6 +1470,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
 
         if(!this.sideMenu.isExpanded || forceCollapse) {
+            this.sidebarForcelyExpanded = false;
             this.isSidebarExpanded = false;
             document.querySelector('.primary-sidebar')?.classList?.add('sidebar-collapse');
             document.querySelector('.nav-left-bar')?.classList?.add('width-60');
