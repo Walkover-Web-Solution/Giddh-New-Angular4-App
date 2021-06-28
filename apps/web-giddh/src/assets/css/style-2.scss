@@ -8445,7 +8445,6 @@ body.update-scroll-hidden {
                         min-width: 110px;
                         font-family: 'opensans-regular';
                         color: $grey-chateau !important;
-                        padding-left: 40px !important;
                         padding-top: 5px !important;
                     }
                 }
@@ -8462,6 +8461,7 @@ body.update-scroll-hidden {
                         left: 20px !important;
                         top: 5px;
                         color: $grey-chateau;
+                        display: none;
                     }
                 }
                 &.icon-branch1{
@@ -8475,6 +8475,7 @@ body.update-scroll-hidden {
                         left: 20px !important;
                         top: 5px;
                         color: $grey-chateau;
+                        display: none;
                     }
                 }
             }
