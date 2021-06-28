@@ -393,5 +393,6 @@
     "import_data": "आयात आंकड़ा",
     "companies": "कंपनिया",
     "refresh_manually": "रिफ्रेश करें",
-    "branches": "शाखाएं"
+    "branches": "शाखाएं",
+    "company_consolidated_data": "कंपनी समेकित डेटा"
 }
