@@ -36,51 +36,18 @@
                 <div class="company-list mt-2">
                     <ul class="list-style-none font-14"
                         *ngIf="companyListForFilter && companyListForFilter.length && !(isCompanyRefreshInProcess$ | async)">
-                        <li class="btn-group" dropdown *ngFor="let company of companyListForFilter;">
-                            <span id="button-basic" dropdownToggle class="dropdown-toggle d-flex align-items-center"
-                                aria-controls="dropdown-basic" (click)="getCompanyBranches(1, company)"> <i
+                        <li class="btn-group" *ngFor="let company of companyListForFilter;">
+                            <span id="button-basic" class="dropdown-toggle d-flex align-items-center"
+                                aria-controls="dropdown-basic" (click)="getCompanyBranches(1, company); showAllBranches();"> <i
                                     class="icon-company mr-2"></i>
                                 <span class="company-name-right">{{ company.name }}</span>
                             </span>
-                            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
-                                aria-labelledby="button-basic">
-                                <li class="create-branch mt-1" [routerLink]="['/pages/settings/create-branch']"
-                                    *ngIf="activeCompany?.uniqueName === company.uniqueName">
-                                    {{localeData?.create_branch}}
-                                </li>
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center head-branch" href="javascript:;"
-                                        (keydown.enter)="changeCompany(company.uniqueName, false)"
-                                        (click)="changeCompany(company.uniqueName, false)">
-                                        <i class="icon-head-branch mr-2"></i>
-                                        <span class="d-flex flex-column">
-                                            <span>{{ company.name }}</span>
-                                        </span>
-                                    </a>
-                                </li>
-                                <ng-container *ngIf="company.branches?.length > 0">
-                                    <li role="menuitem"
-                                        *ngFor="let branch of company.branches | slice:0:5;">
-                                        <a class="dropdown-item d-flex align-items-center company-branches-list" href="javascript:;"
-                                            (click)="changeBranch(company.uniqueName, branch?.uniqueName, $event)">
-                                            <i class="icon-branch-connect mr-2"></i>
-                                            <span class="d-flex flex-column">
-                                                <span class="branch-alias">{{ branch.alias }}</span>
-                                                <span class="font-12 branch-company-name">{{ company.name }}</span>
-                                            </span>
-                                        </a>
-                                    </li>
-                                </ng-container>
-                                <li class="show-more-branches font-12" *ngIf="company.branches?.length > 5"
-                                    (click)="showAllBranches(company)">{{localeData?.show_more}}</li>
-                            </ul>
                         </li>
                     </ul>
                     <giddh-page-loader *ngIf="(isCompanyRefreshInProcess$ | async)"></giddh-page-loader>
                 </div>
             </tab>
-            <tab [heading]="commonLocaleData?.app_branch" [customClass]="'icon-branch1'"
-                [disabled]="isBranchTabDisabled" (selectTab)="tabChanged('branch')">
+            <tab [heading]="commonLocaleData?.app_branch" [customClass]="'icon-branch1'" (selectTab)="tabChanged('branch')">
                 <div>
                     <p class="font-12 d-flex justify-content-between mt-2">
                         <span>{{branchList?.length}} {{localeData?.branches}}</span>
@@ -93,6 +60,16 @@
                 </div>
                 <div class="company-list branch-list mt-2">
                     <ul class="list-style-none font-14" *ngIf="!branchRefreshInProcess">
+                        <!-- <li *ngIf="showGoToCompany()">
+                            <a class="d-flex align-items-center head-branch" href="javascript:;"
+                                (keydown.enter)="changeCompany(companyBranches.uniqueName, '', false)"
+                                (click)="changeCompany(companyBranches.uniqueName, '', false)">
+                                <i class="icon-head-branch mr-2"></i>
+                                <span class="d-flex flex-column">
+                                    <span>{{ localeData?.goto_company }}</span>
+                                </span>
+                            </a>
+                        </li> -->
                         <li *ngFor="let branch of companyBranches?.branches;">
                             <a class="d-flex align-items-center" href="javascript:;"
                                 (click)="changeBranch(companyBranches.uniqueName, branch?.uniqueName, $event)">
@@ -152,16 +129,16 @@
                                             [routerLink]="['/pages/settings/create-branch']">{{localeData?.create_branch}}</p>
                                     </div>
                                 </li>
-                                <li>
+                                <!-- <li>
                                     <a class="dropdown-item d-flex align-items-center head-branch" href="javascript:;"
-                                        (keydown.enter)="changeCompany(company.uniqueName, false)"
-                                        (click)="changeCompany(company.uniqueName, false)">
+                                        (keydown.enter)="changeCompany(company.uniqueName, '', false)"
+                                        (click)="changeCompany(company.uniqueName, '', false)">
                                         <i class="icon-head-branch mr-2"></i>
                                         <span class="d-flex flex-column">
-                                            <span class="branch-company-name">{{ company.name }}</span>
+                                            <span class="branch-company-name">{{ localeData?.goto_company }}</span>
                                         </span>
                                     </a>
-                                </li>
+                                </li> -->
                                 <ng-container *ngIf="companyBranches?.branches?.length > 0">
                                     <li role="menuitem" *ngFor="let branch of companyBranches?.branches;">
                                         <a class="dropdown-item d-flex align-items-center company-branches-list" href="javascript:;"
