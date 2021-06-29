@@ -1,46 +1,41 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { Observable, ReplaySubject } from 'rxjs';
-import { INameUniqueName } from '../../../models/api-models/Inventory';
 import { IDiscountList, LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
-
-export class UpdateLedgerDiscountData {
-    public particular: INameUniqueName = { name: '', uniqueName: '' };
-    public amount: number = 0;
-}
+import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 
 @Component({
-    selector: 'update-ledger-discount',
-    templateUrl: 'updateLedgerDiscount.component.html',
-    styleUrls: ['./updateLedgerDiscount.component.scss']
+    selector: 'ledger-discount',
+    templateUrl: 'ledger-discount.component.html',
+    styleUrls: [`./ledger-discount.component.scss`]
 })
 
-export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestroy {
+export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
+
+    public get defaultDiscount(): LedgerDiscountClass {
+        return this.discountAccountsDetails[0];
+    }
+
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     @Input() public discountAccountsDetails: LedgerDiscountClass[];
     @Input() public ledgerAmount: number = 0;
-    @Output() public discountTotalUpdated: EventEmitter<number> = new EventEmitter();
+    @Output() public discountTotalUpdated: EventEmitter<{ discountTotal: number, isActive: any, discount: any }> = new EventEmitter();
     @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
+    public discountTotal: number;
+    public discountAccountsList$: Observable<IDiscountList[]>;
+    public discountFromPer: boolean = true;
+    public discountFromVal: boolean = true;
+    public discountPercentageModal: number = 0;
+    public discountFixedValueModal: number = 0;
+    @ViewChild('disInptEle', { static: true }) public disInptEle: ElementRef;
 
     @Input() public discountMenu: boolean;
     @Input() public maskInput: string;
     @Input() public prefixInput: string;
     @Input() public suffixInput: string;
-
-    public discountTotal: number;
-    public discountAccountsList$: Observable<IDiscountList[]>;
-    public appliedDiscount: UpdateLedgerDiscountData[] = [];
-    public discountFromPer: boolean = true;
-    public discountFromVal: boolean = true;
-    public discountPercentageModal: number = 0;
-    public discountFixedValueModal: number = 0;
-
-    public get defaultDiscount(): LedgerDiscountClass {
-        return this.discountAccountsDetails[0];
-    }
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -48,32 +43,48 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
         this.discountAccountsList$ = this.store.pipe(select(p => p.settings.discount.discountList), takeUntil(this.destroyed$));
     }
 
+    public onFocusLastDiv(el) {
+        el.stopPropagation();
+        el.preventDefault();
+        if (!this.discountMenu) {
+            this.discountMenu = true;
+            this.hideOtherPopups.emit(true);
+            return;
+        }
+        let focussableElements = '.ledger-panel input[type=text]:not([disabled]),.ledger-panel [tabindex]:not([disabled]):not([tabindex="-1"])';
+        let focussable = Array.prototype.filter.call(document.querySelectorAll(focussableElements),
+            (element) => {
+                // check for visibility while always include the current activeElement
+                return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement;
+            });
+        let index = focussable.indexOf(document.activeElement);
+        if (index > -1) {
+            let nextElement = focussable[index + 1] || focussable[0];
+            nextElement.focus();
+        }
+        this.hideDiscountMenu();
+        return false;
+    }
+
     public ngOnInit() {
         this.prepareDiscountList();
+
+        if (this.defaultDiscount.discountType === 'FIX_AMOUNT') {
+            this.discountFixedValueModal = this.defaultDiscount.amount;
+        } else {
+            this.discountPercentageModal = this.defaultDiscount.amount;
+        }
         this.change();
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
-        if ('discountAccountsDetails' in changes && !changes.discountAccountsDetails.firstChange && changes.discountAccountsDetails.currentValue !== changes.discountAccountsDetails.previousValue) {
+        if ('discountAccountsDetails' in changes && changes.discountAccountsDetails.currentValue !== changes.discountAccountsDetails.previousValue || changes.ledgerAmount) {
             this.prepareDiscountList();
 
-            /* check if !this.defaultDiscount.discountUniqueName so it's means
-              that this is default discount and we have added it manually not
-             from server side */
-            if (this.defaultDiscount && !this.defaultDiscount.discountUniqueName) {
-                if (this.defaultDiscount.discountType === 'FIX_AMOUNT') {
-                    this.discountFixedValueModal = this.defaultDiscount.discountValue;
-                    this.discountFromPer = false;
-                    this.discountFromVal = true;
-                } else {
-                    this.discountPercentageModal = this.defaultDiscount.discountValue;
-                    this.discountFromVal = false;
-                    this.discountFromPer = true;
-                }
-                if (!Number(this.defaultDiscount.discountValue)) {
-                    this.discountFromVal = true;
-                    this.discountFromPer = true;
-                }
+            if (this.defaultDiscount.discountType === 'FIX_AMOUNT') {
+                this.discountFixedValueModal = this.defaultDiscount.amount;
+            } else {
+                this.discountPercentageModal = this.defaultDiscount.amount;
             }
             this.change();
         }
@@ -88,6 +99,7 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
         if (discountAccountsList && discountAccountsList.length) {
             discountAccountsList.forEach(acc => {
                 let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc.uniqueName);
+
                 if (!hasItem) {
                     let obj: LedgerDiscountClass = new LedgerDiscountClass();
                     obj.amount = acc.discountValue;
@@ -104,11 +116,17 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
     }
 
     public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', val: string) {
-        this.defaultDiscount.amount = parseFloat(val);
-        this.defaultDiscount.discountValue = parseFloat(val);
+        this.defaultDiscount.amount = parseFloat(String(val).replace(/,/g, ''));
+        this.defaultDiscount.discountValue = parseFloat(String(val).replace(/,/g, ''));
         this.defaultDiscount.discountType = type;
 
         this.change();
+
+        if (!val) {
+            this.discountFromVal = true;
+            this.discountFromPer = true;
+            return;
+        }
         if (type === 'PERCENTAGE') {
             this.discountFromPer = true;
             this.discountFromVal = false;
@@ -116,19 +134,14 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
             this.discountFromPer = false;
             this.discountFromVal = true;
         }
-        if (!Number(val)) {
-            this.discountFromVal = true;
-            this.discountFromPer = true;
-            return;
-        }
     }
 
     /**
      * on change of discount amount
      */
-    public change() {
-        this.discountTotal = Number(this.generateTotal() || 0);
-        this.discountTotalUpdated.emit(this.discountTotal);
+    public change(event?: any, discount?: any) {
+        this.discountTotal = giddhRoundOff(this.generateTotal(), 2);
+        this.discountTotalUpdated.emit({ discountTotal: this.discountTotal, isActive: event, discount: discount });
     }
 
     /**
@@ -136,6 +149,14 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
      * @returns {number}
      */
     public generateTotal(): number {
+        if (this.discountAccountsDetails && this.discountAccountsDetails[0]) {
+            if (this.discountAccountsDetails[0].amount) {
+                this.discountAccountsDetails[0].isActive = true;
+            } else {
+                this.discountAccountsDetails[0].isActive = false;
+            }
+        }
+
         let percentageListTotal = this.discountAccountsDetails.filter(f => f.isActive)
             .filter(s => s.discountType === 'PERCENTAGE')
             .reduce((pv, cv) => {
@@ -148,8 +169,8 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
                 return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
             }, 0) || 0;
 
-        let perFromAmount = Math.round(((percentageListTotal * (this.ledgerAmount || 0)) / 100) * 100) / 100;
-        return perFromAmount + Math.round(fixedListTotal * 100) / 100;
+        let perFromAmount = ((percentageListTotal * this.ledgerAmount) / 100);
+        return perFromAmount + fixedListTotal;
     }
 
     public trackByFn(index) {
@@ -160,27 +181,14 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
         this.discountMenu = false;
     }
 
-    public onFocusLastDiv(el) {
-        el.stopPropagation();
-        el.preventDefault();
-        if (!this.discountMenu) {
-            this.discountMenu = true;
-            this.hideOtherPopups.emit(true);
-            return;
+    public toggleDiscountMenu() {
+        this.discountMenu = !this.discountMenu;
+    }
+
+    public discountInputBlur(event) {
+        if (event && event.relatedTarget && this.disInptEle && !this.disInptEle?.nativeElement.contains(event.relatedTarget)) {
+            this.hideDiscountMenu();
         }
-        let focussableElements = '.entrypanel input[type=text]:not([disabled]),.entrypanel [tabindex]:not([disabled]):not([tabindex="-1"])';
-        let focussable = Array.prototype.filter.call(document.querySelectorAll(focussableElements),
-            (element) => {
-                // check for visibility while always include the current activeElement
-                return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement;
-            });
-        let index = focussable.indexOf(document.activeElement);
-        if (index > -1) {
-            let nextElement = focussable[index + 1] || focussable[0];
-            nextElement.focus();
-        }
-        this.hideDiscountMenu();
-        return false;
     }
 
     public ngOnDestroy(): void {

@@ -12,8 +12,8 @@ import { PAGINATION_LIMIT } from '../../../app.constant';
 
 @Component({
     selector: 'ledger-columnar-report-table',
-    templateUrl: './ledger.columnar.report.table.component.html',
-    styleUrls: ['./ledger.columnar.report.table.component.scss'],
+    templateUrl: './ledger-columnar-report-table.component.html',
+    styleUrls: ['./ledger-columnar-report-table.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
