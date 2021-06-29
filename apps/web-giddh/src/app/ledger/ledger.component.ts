@@ -240,7 +240,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** This will hold if import statement modal is visible */
     public isImportStatementVisible: boolean = false;
     /** This will hold bank transactions api response */
-    public bankTransactionsResponse: any = { totalItems: 0, totalPages: 0, page: 1, countPerPage: 500 };
+    public bankTransactionsResponse: any = { totalItems: 0, totalPages: 0, page: 1, countPerPage: 50 };
     /** Set to true the first time advance search modal is opened, done
      * to prevent the API call only when the advance search filter is opened
      * by user and not when the user visits the page
