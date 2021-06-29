@@ -1058,7 +1058,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.isAdvanceReceipt = false;
         }
         this.handleAdvanceReceiptChange();
-        this.currentVoucherLabel = this.generalService.getCurrentVoucherLabel(this.blankLedger.voucherType, this.commonLocaleData);
+        this.currentVoucherLabel = this.generalService.getCurrentVoucherLabel(this.blankLedger?.voucherType, this.commonLocaleData);
     }
 
     public toggleBodyClass() {
