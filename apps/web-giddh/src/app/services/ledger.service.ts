@@ -135,10 +135,14 @@ export class LedgerService {
     public UpdateLedgerTransactions(model: LedgerUpdateRequest, accountUniqueName: string, entryUniqueName: string): Observable<BaseResponse<LedgerResponse, LedgerUpdateRequest>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
+        const clonedRequest = cloneDeep(model);
+        // Delete keys not required by API
+        const keysToDelete = ['discountResources', 'warning', 'otherTaxModal', 'otherTaxesSum', 'refreshLedger', 'actualAmount', 'actualRate', 'unitRates', 'entryVoucherTotals', 'isOtherTaxesApplicable', 'tdsTcsTaxesSum'];
+        keysToDelete.forEach(key => delete model[key]);
         return this._http.put(this.config.apiUrl + LEDGER_API.UNIVERSAL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':entryUniqueName', entryUniqueName), model).pipe(
             map((res) => {
                 let data: BaseResponse<LedgerResponse, LedgerUpdateRequest> = res;
-                data.request = model;
+                data.request = clonedRequest;
                 data.queryString = { accountUniqueName, entryUniqueName };
                 return data;
             }),
