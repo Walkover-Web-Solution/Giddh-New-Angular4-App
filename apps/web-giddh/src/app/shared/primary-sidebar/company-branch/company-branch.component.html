@@ -98,14 +98,9 @@
         <div class="profile-name cursor-pointer d-flex align-items-center"
             [routerLink]="['/pages/user-details/mobile-number']">
             <span class="profile-alice">{{companyInitials}}</span>
-            <!-- hide for now -->
-            <!-- <span class="ml-2">{{localeData?.profile}}</span> -->
         </div>
         <div class="profile-logout font-14">
-            <button (click)="logout()">
-                <!-- hide for now -->
-                <!-- <i class="icon-logout mr-2 font-18"></i> -->
-                 {{localeData?.logout}}</button>
+            <button (click)="logout()">{{localeData?.logout}}</button>
         </div>
     </div>
     <!-- branch design option 2 -->
@@ -153,16 +148,6 @@
                                         </p>
                                     </div>
                                 </li>
-                                <!-- <li>
-                                    <a class="dropdown-item d-flex align-items-center head-branch" href="javascript:;"
-                                        (keydown.enter)="changeCompany(company.uniqueName, '', false)"
-                                        (click)="changeCompany(company.uniqueName, '', false)">
-                                        <i class="icon-head-branch mr-2"></i>
-                                        <span class="d-flex flex-column">
-                                            <span class="branch-company-name">{{ localeData?.goto_company }}</span>
-                                        </span>
-                                    </a>
-                                </li> -->
                                 <ng-container *ngIf="companyBranches?.branches?.length > 0">
                                     <li role="menuitem" *ngFor="let branch of companyBranches?.branches;">
                                         <a class="dropdown-item d-flex align-items-center company-branches-list" [ngClass]="{'active': isActiveBranch(branch?.uniqueName)}" href="javascript:;"
