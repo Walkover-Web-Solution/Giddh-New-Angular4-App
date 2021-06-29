@@ -7,8 +7,8 @@ import { Observable, ReplaySubject } from 'rxjs';
 
 @Component({
     selector: 'ledger-aside-pane',
-    templateUrl: './ledgerAsidePane.component.html',
-    styleUrls: ['./ledgerAsidePane.component.scss'],
+    templateUrl: './ledger-aside-pane.component.html',
+    styleUrls: ['./ledger-aside-pane.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 

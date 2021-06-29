@@ -16,9 +16,9 @@ import { ReplacePipeModule } from '../../../shared/helpers/pipes/replace/replace
 import { ConfirmModalModule } from '../../../theme/confirm-modal/confirm-modal.module';
 import { ShSelectModule } from '../../../theme/ng-virtual-select/sh-select.module';
 import { TranslateDirectiveModule } from '../../../theme/translate/translate.directive.module';
-import { UpdateLedgerTaxControlComponent } from '../updateLedger-tax-control/updateLedger-tax-control.component';
-import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
-import { UpdateLedgerEntryPanelComponent } from './updateLedgerEntryPanel.component';
+import { UpdateLedgerTaxControlComponent } from '../update-ledger-tax-control/update-ledger-tax-control.component';
+import { UpdateLedgerDiscountComponent } from '../update-ledger-discount/update-ledger-discount.component';
+import { UpdateLedgerEntryPanelComponent } from './update-ledger-entry-panel.component';
 import { NgxUploaderModule } from 'ngx-uploader';
 import { AsideMenuSalesOtherTaxesModule } from '../../../sales/aside-menu-sales-other-taxes/aside-menu-sales-other-taxes.module';
 

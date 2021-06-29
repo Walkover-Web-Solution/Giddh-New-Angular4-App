@@ -1,5 +1,5 @@
-import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
-import { AccountsAction } from './../../../actions/accounts.actions';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { AccountsAction } from '../../../actions/accounts.actions';
 import { Component, EventEmitter, Input, Output, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { MagicLinkRequest } from '../../../models/api-models/Ledger';
@@ -12,8 +12,8 @@ import { ReplaySubject } from 'rxjs';
 
 @Component({
     selector: 'share-ledger',
-    templateUrl: './shareLedger.component.html',
-    styleUrls: ['./shareLedger.component.scss'],
+    templateUrl: './share-ledger.component.html',
+    styleUrls: ['./share-ledger.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
