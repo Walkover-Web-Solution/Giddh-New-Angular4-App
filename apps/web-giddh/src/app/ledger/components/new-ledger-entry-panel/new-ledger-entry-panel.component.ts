@@ -68,7 +68,7 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 import { AVAILABLE_ITC_LIST, BlankLedgerVM, TransactionVM } from '../../ledger.vm';
-import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.component';
+import { LedgerDiscountComponent } from '../ledger-discount/ledger-discount.component';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -80,8 +80,8 @@ const NEW_LEDGER_ENTRIES = [
 
 @Component({
     selector: 'new-ledger-entry-panel',
-    templateUrl: 'newLedgerEntryPanel.component.html',
-    styleUrls: ['./newLedgerEntryPanel.component.scss'],
+    templateUrl: 'new-ledger-entry-panel.component.html',
+    styleUrls: ['./new-ledger-entry-panel.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     animations: [
         trigger('slideInOut', [
