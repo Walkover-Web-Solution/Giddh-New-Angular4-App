@@ -67,6 +67,8 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
     public currentCompanyBranches$: Observable<any>;
     /** Stores the branch list of a company */
     public currentCompanyBranches: Array<any>;
+    /** This holds current branch unique name */
+    public currentBranchUniqueName: string = "";
 
     constructor(
         private store: Store<AppState>,
@@ -126,6 +128,14 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
                         this.changeDetectorRef.detectChanges();
                     }
                 });
+            }
+        });
+
+        this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
+            this.currentBranchUniqueName = "";
+
+            if (organization && organization.details && organization.details.branchDetails) {
+                this.currentBranchUniqueName = organization.details.branchDetails.uniqueName;
             }
         });
     }
@@ -396,30 +406,5 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
             this.viewingCompany = false;
             this.changeDetectorRef.detectChanges();
         }, 50);
-    }
-
-    /**
-     * This will return true if need to show go to company option
-     *
-     * @returns {boolean}
-     * @memberof CompanyBranchComponent
-     */
-    public showGoToCompany(): boolean {
-        if(this.activeCompany?.uniqueName !== this.companyBranches?.uniqueName || this.generalService.currentBranchUniqueName) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * This will return true if matching branch is active
-     *
-     * @param {string} branchUniqueName
-     * @returns {boolean}
-     * @memberof CompanyBranchComponent
-     */
-    public isActiveBranch(branchUniqueName: string): boolean { 
-        return branchUniqueName === this.generalService.currentBranchUniqueName;
     }
 }
