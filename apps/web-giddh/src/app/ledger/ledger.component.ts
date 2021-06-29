@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactory
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { Configuration, SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration, SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { ShareLedgerComponent } from 'apps/web-giddh/src/app/ledger/components/shareLedger/shareLedger.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
@@ -240,7 +240,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** This will hold if import statement modal is visible */
     public isImportStatementVisible: boolean = false;
     /** This will hold bank transactions api response */
-    public bankTransactionsResponse: any = { totalItems: 0, totalPages: 0, page: 1, countPerPage: 50 };
+    public bankTransactionsResponse: any = { totalItems: 0, totalPages: 0, page: 1, countPerPage: PAGINATION_LIMIT };
     /** Set to true the first time advance search modal is opened, done
      * to prevent the API call only when the advance search filter is opened
      * by user and not when the user visits the page
