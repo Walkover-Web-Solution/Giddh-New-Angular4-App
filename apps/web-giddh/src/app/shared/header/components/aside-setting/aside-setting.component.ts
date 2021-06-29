@@ -132,10 +132,10 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      * @param {*} [event]
      * @memberof AsideSettingComponent
      */
-    public closeAsidePaneIfMobile(event?): void {
+    public closeAsidePaneIfMobile(event?: any): void {
         if (this.isMobileScreen && event && event.target.className !== "icon-bar") {
             this.closeAsideEvent.emit(event);
-        } else if (!this.isMobileScreen && !this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/user-details")) {
+        } else if (!this.isMobileScreen && event && event.target.className !== "icon-settings-cog" && !this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/user-details")) {
             this.closeAsideEvent.emit(event);
         }
     }
