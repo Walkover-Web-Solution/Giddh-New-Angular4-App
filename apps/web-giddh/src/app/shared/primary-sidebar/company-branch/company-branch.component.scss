@@ -135,6 +135,9 @@
                                 &.company-branches-list{
                                     &.active{
                                         color: $cornflower !important;
+                                        span{
+                                            color: $cornflower !important;
+                                        }
                                     }
                                     .branch-alias, .branch-company-name{
                                         max-width: 150px;
@@ -299,7 +302,7 @@
                                     background-color: $dark-alice-blue;
                                     position: sticky;
                                     top: 0;
-                                    z-index: 991;
+                                    z-index: 990;
                                 }
                                 .icon-down-new{
                                     transform: rotate(180deg)
