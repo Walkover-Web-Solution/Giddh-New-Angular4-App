@@ -176,9 +176,9 @@
         <aside-help-support (closeAsideEvent)="toggleHelpSupportPane(false)"></aside-help-support>
     </div>
     <!-- setting aside pane -->
-    <div class="help-support-aside" *ngIf="asideSettingMenuState === 'in'">
+    <div class="help-support-aside">
         <perfect-scrollbar [scrollIndicators]="true">
-            <aside-setting [ngClass]="{'setting-sidebar': isMobileSidebar}" class="sidebar-slide-right"
+            <aside-setting [ngClass]="{'setting-sidebar': isMobileSidebar, 'sidebar-slide-right': asideSettingMenuState === 'in'}"
                 (closeAsideEvent)="toggleSidebarPane(false, false)"></aside-setting>
         </perfect-scrollbar>
     </div>
