@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { IOption } from '../../../../../theme/ng-select/option.interface';
@@ -10,7 +10,8 @@ import { AccountRequestV2 } from '../../../../../models/api-models/Account';
 @Component({
     selector: 'ledger-aside-pane-account',
     styleUrls: ['./ledger-aside.pane.account.component.scss'],
-    templateUrl: './ledger-aside.pane.account.component.html'
+    templateUrl: './ledger-aside.pane.account.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LedgerAsidePaneAccountComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */

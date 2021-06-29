@@ -1,5 +1,6 @@
 const webpack = require('webpack');
-
+const CompressionPlugin = require('compression-webpack-plugin');
+const zlib = require("zlib");
 module.exports = {
     plugins: [
         new webpack.DefinePlugin({
@@ -16,8 +17,8 @@ module.exports = {
             'STAGING_ENV': JSON.stringify(false),
             'TEST_ENV': JSON.stringify(false),
             'LOCAL_ENV': JSON.stringify(false),
-            'process.env.ENV': 'production',
-            'process.env.NODE_ENV': 'production',
+            'process.env.ENV': JSON.stringify('production'),
+            'process.env.NODE_ENV': JSON.stringify('production'),
             'process.env.isElectron': JSON.stringify(false),
             'process.env.errlyticsNeeded': JSON.stringify(true),
             'process.env.errlyticsKey': JSON.stringify('eTrTpSiedQC4tLUYVDup3RJpc_wFL2QhCaIc0vzpsQA'),
@@ -26,5 +27,18 @@ module.exports = {
             'process.env.APP_FOLDER': JSON.stringify('')
         }),
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+        new CompressionPlugin({
+            filename: "[path][base].br",
+            algorithm: "brotliCompress",
+            test: /\.(js|css|html|svg)$/,
+            compressionOptions: {
+                params: {
+                    [zlib.constants.BROTLI_PARAM_QUALITY]: 11,
+                },
+            },
+            threshold: 0,
+            minRatio: 0.8,
+            deleteOriginalAssets: false
+        })
     ]
 }

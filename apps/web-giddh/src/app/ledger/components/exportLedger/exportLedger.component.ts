@@ -1,5 +1,5 @@
 import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { ExportLedgerRequest, MailLedgerRequest } from '../../../models/api-models/Ledger';
 import { validateEmail } from '../../../shared/helpers/helperFunctions';
@@ -17,7 +17,8 @@ import { GeneralService } from '../../../services/general.service';
 @Component({
     selector: 'export-ledger',
     templateUrl: './exportLedger.component.html',
-    styleUrls: ['./exportLedger.component.scss']
+    styleUrls: ['./exportLedger.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class ExportLedgerComponent implements OnInit {

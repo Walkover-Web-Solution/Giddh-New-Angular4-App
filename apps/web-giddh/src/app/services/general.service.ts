@@ -9,6 +9,7 @@ import { cloneDeep, find } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { Router } from '@angular/router';
+import { AdjustedVoucherType } from '../app.constant';
 
 @Injectable()
 export class GeneralService {
@@ -849,6 +850,25 @@ export class GeneralService {
                     window.location.reload();
                 }, 200);
             }
+        }
+    }
+
+    /**
+     * This will give multi-lingual current voucher label
+     *
+     * @param {string} voucherCode Voucher code
+     * @param {*} commonLocaleData Global context of multi-lingual keys
+     * @return {*} {string} Multi-lingual current voucher label
+     * @memberof GeneralService
+     */
+     public getCurrentVoucherLabel(voucherCode: string, commonLocaleData: any): string {
+        switch(voucherCode) {
+            case AdjustedVoucherType.Sales: case AdjustedVoucherType.SalesInvoice: return commonLocaleData?.app_voucher_types.sales;
+            case AdjustedVoucherType.Purchase: return commonLocaleData?.app_voucher_types.purchase;
+            case AdjustedVoucherType.CreditNote: return commonLocaleData?.app_voucher_types.credit_note;
+            case AdjustedVoucherType.DebitNote: return commonLocaleData?.app_voucher_types.debit_note;
+            case AdjustedVoucherType.Payment: return commonLocaleData?.app_voucher_types.payment;
+            default: return '';
         }
     }
 

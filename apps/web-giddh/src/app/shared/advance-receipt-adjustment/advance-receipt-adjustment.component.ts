@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, Input, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, ViewChild, ElementRef, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { VoucherAdjustments, AdjustAdvancePaymentModal, AdvanceReceiptRequest, Adjustment } from '../../models/api-models/AdvanceReceiptsAdjust';
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 import * as moment from 'moment/moment';
@@ -13,6 +13,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { cloneDeep } from '../../lodash-optimized';
 import { AdjustedVoucherType, SubVoucher } from '../../app.constant';
 import { giddhRoundOff } from '../helpers/helperFunctions';
+import { GeneralService } from '../../services/general.service';
 
 /** Toast message when no advance receipt is found */
 const NO_ADVANCE_RECEIPT_FOUND = 'There is no advanced receipt for adjustment.';
@@ -20,7 +21,8 @@ const NO_ADVANCE_RECEIPT_FOUND = 'There is no advanced receipt for adjustment.';
 @Component({
     selector: 'advance-receipt-adjustment-component',
     templateUrl: './advance-receipt-adjustment.component.html',
-    styleUrls: [`./advance-receipt-adjustment.component.scss`]
+    styleUrls: [`./advance-receipt-adjustment.component.scss`],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
 
@@ -45,6 +47,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     public isFormReset: boolean;
     /** True, if account currency is different than company currency */
     public isMultiCurrencyAccount: boolean;
+    /** Stores the multi-lingual label of current voucher */
+    public currentVoucherLabel: string;
 
     @ViewChild('tdsTypeBox', { static: true }) public tdsTypeBox: ElementRef;
     @ViewChild('tdsAmountBox', { static: true }) public tdsAmountBox: ElementRef;
@@ -96,7 +100,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     constructor(
         private store: Store<AppState>,
         private salesService: SalesService,
-        private toaster: ToasterService) {
+        private toaster: ToasterService,
+        private generalService: GeneralService) {
 
     }
 
@@ -224,7 +229,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                 });
             }
         });
-
     }
 
     /**
@@ -844,24 +848,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will give text adjust voucher
-     *
-     * @returns {string} Returns the adjustment voucher type to show the voucher type that is opened
-     * for adjustment
-     * @memberof UpdateLedgerEntryPanelComponent
-     */
-     public getAdjustVoucherType(): string {
-        let adjustVoucher = this.localeData?.voucher_label;
-        adjustVoucher = adjustVoucher?.replace("[VOUCHER_TYPE]",
-            ((this.adjustedVoucherType === AdjustedVoucherType.Sales || this.adjustedVoucherType === AdjustedVoucherType.SalesInvoice) ? this.commonLocaleData?.app_invoice :
-            this.adjustedVoucherType === AdjustedVoucherType.Purchase ? this.commonLocaleData?.app_voucher_types.purchase :
-            this.adjustedVoucherType === AdjustedVoucherType.CreditNote ? this.commonLocaleData?.app_voucher_types.credit_note :
-            this.adjustedVoucherType === AdjustedVoucherType.DebitNote ? this.commonLocaleData?.app_voucher_types.debit_note :
-            this.adjustedVoucherType === AdjustedVoucherType.Payment ? this.commonLocaleData?.app_voucher_types.payment : ''));
-        return adjustVoucher;
-    }
-
-    /**
      * Returns the Exchange gain/loss text based on total due in home/company currency
      *
      * @return {*}  {string} Exchange gain/loss text
@@ -897,6 +883,15 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             // Exchange gain if home currency weakens as this is Import goods case (purchase) where the due goes negative
             return this.getConvertedBalanceDue() >= 0;
         }
+    }
+
+    /**
+     * Translation complete handler
+     *
+     * @memberof AdvanceReceiptAdjustmentComponent
+     */
+    public translationComplete(): void {
+        this.currentVoucherLabel = this.generalService.getCurrentVoucherLabel(this.adjustedVoucherType, this.commonLocaleData);
     }
 
     /**

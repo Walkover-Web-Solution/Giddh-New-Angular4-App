@@ -208,7 +208,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @param {{ action: string }} userResponse
      * @memberof VatReportTransactionsComponent
      */
-    public closeDownloadOrSendMailPopup(userResponse: { action: string }): void {
+    public closeDownloadOrSendMailPopup(userResponse: any): void {
         this.downloadOrSendMailModel.hide();
         if (userResponse.action === 'closed') {
             this.store.dispatch(this.invoiceActions.ResetInvoiceData());
@@ -233,7 +233,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @param {{ action: string, emails: string[], numbers: string[], typeOfInvoice: string[] }} userResponse
      * @memberof VatReportTransactionsComponent
      */
-    public onDownloadOrSendMailEvent(userResponse: { action: string, emails: string[], numbers: string[], typeOfInvoice: string[] }): void {
+    public onDownloadOrSendMailEvent(userResponse: any): void {
         if (userResponse.action === 'download') {
             this.downloadFile();
         } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
