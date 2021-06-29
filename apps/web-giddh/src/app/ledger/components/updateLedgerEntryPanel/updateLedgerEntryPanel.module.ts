@@ -20,6 +20,7 @@ import { UpdateLedgerTaxControlComponent } from '../updateLedger-tax-control/upd
 import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 import { UpdateLedgerEntryPanelComponent } from './updateLedgerEntryPanel.component';
 import { NgxUploaderModule } from 'ngx-uploader';
+import { AsideMenuSalesOtherTaxesModule } from '../../../sales/aside-menu-sales-other-taxes/aside-menu-sales-other-taxes.module';
 
 @NgModule({
     declarations: [
@@ -44,7 +45,8 @@ import { NgxUploaderModule } from 'ngx-uploader';
         DecimalDigitsModule,
         ClickOutsideModule,
         ReplacePipeModule,
-        NgxUploaderModule
+        NgxUploaderModule,
+        AsideMenuSalesOtherTaxesModule
     ],
     exports: [UpdateLedgerEntryPanelComponent]
 })

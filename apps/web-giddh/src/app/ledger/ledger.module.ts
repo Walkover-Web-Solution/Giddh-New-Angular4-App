@@ -13,6 +13,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ClipboardModule } from 'ngx-clipboard';
 import { NgxUploaderModule } from 'ngx-uploader';
 import { InventoryAddStockModule } from '../inventory/components/add-stock-components/inventory.addstock.module';
+import { AsideMenuSalesOtherTaxesModule } from '../sales/aside-menu-sales-other-taxes/aside-menu-sales-other-taxes.module';
 
 import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
@@ -113,6 +114,7 @@ import { ParticularPipeModule } from './pipes/particular/particular.module';
         ParticularPipeModule,
         ReplacePipeModule,
         HamburgerMenuModule,
+        AsideMenuSalesOtherTaxesModule,
         ValidateSectionPermissionDirectiveModule
     ],
 })
