@@ -21,7 +21,7 @@ import { OrganizationType } from '../models/user-login-state';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { LedgerVM } from '../ledger/ledger.vm';
 import { SalesOtherTaxesModal } from '../models/api-models/Sales';
-import { UpdateLedgerEntryPanelComponent } from '../ledger/components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
+import { UpdateLedgerEntryPanelComponent } from '../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.component';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({

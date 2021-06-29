@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../models/api-models/Sales';
 import { TaxResponse } from '../../models/api-models/Company';
@@ -6,7 +6,8 @@ import { TaxResponse } from '../../models/api-models/Company';
 @Component({
     selector: 'app-aside-menu-sales-other-taxes',
     templateUrl: './aside-menu-sales-other-taxes.html',
-    styleUrls: [`./aside-menu-sales-other-taxes.scss`]
+    styleUrls: [`./aside-menu-sales-other-taxes.scss`],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {

@@ -52,8 +52,8 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 import { AVAILABLE_ITC_LIST } from '../../ledger.vm';
-import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
-import { UpdateLedgerVm } from './updateLedger.vm';
+import { UpdateLedgerDiscountComponent } from '../update-ledger-discount/update-ledger-discount.component';
+import { UpdateLedgerVm } from './update-ledger.vm';
 import { SearchService } from '../../../services/search.service';
 import { WarehouseActions } from '../../../settings/warehouse/action/warehouse.action';
 import { OrganizationType } from '../../../models/user-login-state';
@@ -64,8 +64,8 @@ const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make ad
 
 @Component({
     selector: 'update-ledger-entry-panel',
-    templateUrl: './updateLedgerEntryPanel.component.html',
-    styleUrls: ['./updateLedgerEntryPanel.component.scss'],
+    templateUrl: './update-ledger-entry-panel.component.html',
+    styleUrls: ['./update-ledger-entry-panel.component.scss'],
     animations: [
         trigger('slideInOut', [
             state('in', style({
