@@ -23,7 +23,7 @@ export class ReplacePipe implements PipeTransform {
      * @return {*}  {string} Transformed dynamic text
      * @memberof ReplacePipe
      */
-    transform(value: any, expressionToReplace: string = '', replaceWith: any): string {
+    transform(value: any = '', expressionToReplace: string = '', replaceWith: any): string {
         return value?.replace(expressionToReplace, replaceWith);
     }
 }
