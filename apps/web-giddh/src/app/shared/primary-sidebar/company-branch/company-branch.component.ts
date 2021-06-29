@@ -63,8 +63,12 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
     public activeDesign: number = 1;
     /** This holds company which we are viewing currently */
     public viewingCompany: any;
-    /** True if branch tab is disabled */
-    public isBranchTabDisabled: boolean = true;
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
+    /** Stores the branch list of a company */
+    public currentCompanyBranches: Array<any>;
+    /** This holds current branch unique name */
+    public currentBranchUniqueName: string = "";
 
     constructor(
         private store: Store<AppState>,
@@ -88,6 +92,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
         this.isCompanyRefreshInProcess$ = this.store.pipe(select(state => state.session.isRefreshing), takeUntil(this.destroyed$));
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
 
         this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
             if (!companies || companies.length === 0) {
@@ -110,6 +115,27 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
                 this.activeCompany = selectedCmp;
                 this.companyInitials = this.generalService.getInitialsFromString(selectedCmp.name);
                 this.activeDesign = (this.activeCompany?.name.charCodeAt(0) <= 77) ? 1 : 2;
+
+                if(!this.companyBranches?.branches) {
+                    this.companyBranches = selectedCmp;
+                }
+
+                this.currentCompanyBranches$.subscribe(response => {
+                    if (response && response.length) {
+                        this.currentCompanyBranches = response;
+                        this.companyBranches.branches = response;
+                        this.branchList = response;
+                        this.changeDetectorRef.detectChanges();
+                    }
+                });
+            }
+        });
+
+        this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
+            this.currentBranchUniqueName = "";
+
+            if (organization && organization.details && organization.details.branchDetails) {
+                this.currentBranchUniqueName = organization.details.branchDetails.uniqueName;
             }
         });
     }
@@ -150,14 +176,20 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
      * @param {boolean} [fetchLastState] True, if last state of the company needs to be fetched
      * @memberof CompanyBranchComponent
      */
-    public changeCompany(selectedCompanyUniqueName: string, fetchLastState?: boolean) {
+    public changeCompany(selectedCompanyUniqueName: string, selectBranchUniqueName: string, fetchLastState?: boolean) {
         this.generalService.companyUniqueName = selectedCompanyUniqueName;
         const details = {
             branchDetails: {
-                uniqueName: ''
+                uniqueName: selectBranchUniqueName
             }
         };
-        this.setOrganizationDetails(OrganizationType.Company, details);
+
+        if(selectBranchUniqueName) {
+            this.setOrganizationDetails(OrganizationType.Branch, details);
+        } else {
+            this.setOrganizationDetails(OrganizationType.Company, details);
+        }
+
         this.store.dispatch(this.loginAction.ChangeCompany(selectedCompanyUniqueName, fetchLastState));
     }
 
@@ -280,12 +312,9 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
     /**
      * This will show all branches of company in branch tab
      *
-     * @param {*} company
      * @memberof CompanyBranchComponent
      */
-    public showAllBranches(company: any): void {
-        this.companyBranches = company;
-        this.isBranchTabDisabled = false;
+    public showAllBranches(): void {
         setTimeout(() => {
             if (this.staticTabs && this.staticTabs.tabs[1]) {
                 this.staticTabs.tabs[1].active = true;
@@ -305,7 +334,10 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         this.filterBranchList(this.searchBranch);
 
         if(tabName === "company") {
-            this.isBranchTabDisabled = true;
+            this.companyBranches = this.activeCompany;
+            this.companyBranches.branches = this.currentCompanyBranches;
+            this.branchList = this.currentCompanyBranches;
+            this.changeDetectorRef.detectChanges();
         }
     }
 
@@ -337,23 +369,23 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         event.stopPropagation();
         event.preventDefault();
 
-        if (this.activeCompany?.uniqueName !== companyUniqueName || branchUniqueName === this.generalService.currentBranchUniqueName) {
-            return;
+        if (this.activeCompany?.uniqueName !== companyUniqueName) {
+            this.changeCompany(companyUniqueName, branchUniqueName, false);
+        } else if(branchUniqueName !== this.generalService.currentBranchUniqueName) {
+            const details = {
+                branchDetails: {
+                    uniqueName: branchUniqueName
+                }
+            };
+            this.setOrganizationDetails(OrganizationType.Branch, details);
+            this.companyService.getStateDetails(this.generalService.companyUniqueName).pipe(take(1)).subscribe(response => {
+                if (response && response.body) {
+                    this.router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
+                        this.generalService.finalNavigate(response.body.lastState);
+                    });
+                }
+            });
         }
-
-        const details = {
-            branchDetails: {
-                uniqueName: branchUniqueName
-            }
-        };
-        this.setOrganizationDetails(OrganizationType.Branch, details);
-        this.companyService.getStateDetails(this.generalService.companyUniqueName).pipe(take(1)).subscribe(response => {
-            if (response && response.body) {
-                this.router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
-                    this.generalService.finalNavigate(response.body.lastState);
-                });
-            }
-        });
     }
 
     /**
