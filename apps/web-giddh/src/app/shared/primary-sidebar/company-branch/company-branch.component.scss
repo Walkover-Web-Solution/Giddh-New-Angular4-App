@@ -133,6 +133,9 @@
                                     }
                                 }
                                 &.company-branches-list{
+                                    &.active{
+                                        color: $cornflower !important;
+                                    }
                                     .branch-alias, .branch-company-name{
                                         max-width: 150px;
                                         text-overflow: ellipsis;
@@ -182,6 +185,11 @@
                         background-color: transparent;
                         padding:8px 20px;
                         color: $trout;
+                        white-space: normal;
+                        word-break: break-all;
+                        &.active{
+                            color: $cornflower !important;
+                        }
                         &:hover{
                             background-color: initial !important;
                             color: initial !important;
