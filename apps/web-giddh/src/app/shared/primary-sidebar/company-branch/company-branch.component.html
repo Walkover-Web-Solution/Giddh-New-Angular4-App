@@ -136,7 +136,7 @@
                                     <div class="d-flex flex-column total-branches">
                                         <p class="font-12 d-flex justify-content-between">
                                             <span class="pr-0 pt-0">{{branchList?.length}} {{localeData?.branches}}</span>
-                                            <span class="cursor-pointer pl-0 pt-0" [tooltip]="localeData?.refresh_manually"
+                                            <span class="cursor-pointer pl-0 pt-0" [tooltip]="localeData?.refresh_manually" placement="left"
                                                 (click)="getCompanyBranches(2, company, true)"><i class="icon-reload font-22"></i></span>
                                         </p>
                                         <p *ngIf="activeCompany?.uniqueName !== companyBranches?.uniqueName || currentBranchUniqueName" class="digit-blue pb-2" href="javascript:;" (keydown.enter)="changeCompany(company.uniqueName, '', false)" (click)="changeCompany(company.uniqueName, '', false)">
