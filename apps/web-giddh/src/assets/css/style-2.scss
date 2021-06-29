@@ -8448,11 +8448,16 @@ body.update-scroll-hidden {
                         }
                     }
                     a{
-                        padding: 0 10px !important;
+                        padding: 0 20px !important;
                         min-width: 110px;
                         font-family: 'opensans-regular';
                         color: $grey-chateau !important;
                         padding-top: 5px !important;
+                    }
+                    &.icon-branch1{
+                        a{
+                            padding-left: 0 !important;
+                        }
                     }
                 }
             }
