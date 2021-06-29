@@ -1,4 +1,4 @@
-import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { ExportLedgerRequest, MailLedgerRequest } from '../../../models/api-models/Ledger';
@@ -16,8 +16,8 @@ import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: 'export-ledger',
-    templateUrl: './exportLedger.component.html',
-    styleUrls: ['./exportLedger.component.scss'],
+    templateUrl: './export-ledger.component.html',
+    styleUrls: ['./export-ledger.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 

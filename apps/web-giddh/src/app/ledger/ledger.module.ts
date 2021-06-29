@@ -39,19 +39,19 @@ import { QuickAccountModule } from '../theme/quick-account-component/quickAccoun
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
-import { ExportLedgerComponent } from './components/exportLedger/exportLedger.component';
+import { ExportLedgerComponent } from './components/export-ledger/export-ledger.component';
 import { ImportStatementComponent } from './components/import-statement/import-statement.component';
 import {
     LedgerColumnarReportTableComponent,
-} from './components/ledger-columnar-report-table/ledger.columnar.report.table.component';
+} from './components/ledger-columnar-report-table/ledger-columnar-report-table.component';
 import {
     LedgerAsidePaneAccountComponent,
-} from './components/ledgerAsidePane/component/ledger-aside-pane-account/ledger-aside.pane.account.component';
-import { LedgerAsidePaneComponent } from './components/ledgerAsidePane/ledgerAsidePane.component';
-import { LedgerDiscountModule } from './components/ledgerDiscount/ledgerDiscount.module';
-import { NewLedgerEntryPanelComponent } from './components/newLedgerEntryPanel/newLedgerEntryPanel.component';
-import { ShareLedgerComponent } from './components/shareLedger/shareLedger.component';
-import { UpdateLedgerEntryPanelModule } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.module';
+} from './components/ledger-aside-pane/component/ledger-aside-pane-account/ledger-aside.pane.account.component';
+import { LedgerAsidePaneComponent } from './components/ledger-aside-pane/ledger-aside-pane.component';
+import { LedgerDiscountModule } from './components/ledger-discount/ledger-discount.module';
+import { NewLedgerEntryPanelComponent } from './components/new-ledger-entry-panel/new-ledger-entry-panel.component';
+import { ShareLedgerComponent } from './components/share-ledger/share-ledger.component';
+import { UpdateLedgerEntryPanelModule } from './components/update-ledger-entry-panel/update-ledger-entry-panel.module';
 import { LedgerComponent } from './ledger.component';
 import { LedgerRoutingModule } from './ledger.routing.module';
 import { ParticularPipeModule } from './pipes/particular/particular.module';
