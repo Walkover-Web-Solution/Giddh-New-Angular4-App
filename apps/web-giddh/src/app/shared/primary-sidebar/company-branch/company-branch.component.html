@@ -65,7 +65,7 @@
                 </div>
                 <div class="company-list branch-list mt-2">
                     <ul class="list-style-none font-14" *ngIf="!branchRefreshInProcess">
-                        <li *ngIf="showGoToCompany()">
+                        <li *ngIf="activeCompany?.uniqueName !== companyBranches?.uniqueName || currentBranchUniqueName">
                             <a class="d-flex align-items-center head-branch" href="javascript:;"
                                 (keydown.enter)="changeCompany(companyBranches.uniqueName, '', false)"
                                 (click)="changeCompany(companyBranches.uniqueName, '', false)">
@@ -77,7 +77,7 @@
                             </a>
                         </li>
                         <li *ngFor="let branch of companyBranches?.branches;">
-                            <a class="d-flex align-items-center" [ngClass]="{'active': isActiveBranch(branch?.uniqueName)}" href="javascript:;"
+                            <a class="d-flex align-items-center" [ngClass]="{'active': branch?.uniqueName === currentBranchUniqueName}" href="javascript:;"
                                 (click)="changeBranch(companyBranches.uniqueName, branch?.uniqueName, $event)">
                                 <i class="icon-branch-connect mr-2"></i>
                                 <span class="d-flex flex-column">
@@ -139,7 +139,7 @@
                                             <span class="cursor-pointer pl-0 pt-0" [tooltip]="localeData?.refresh_manually"
                                                 (click)="getCompanyBranches(2, company, true)"><i class="icon-reload font-22"></i></span>
                                         </p>
-                                        <p class="digit-blue pb-2" href="javascript:;" (keydown.enter)="changeCompany(company.uniqueName, '', false)" (click)="changeCompany(company.uniqueName, '', false)">
+                                        <p *ngIf="activeCompany?.uniqueName !== companyBranches?.uniqueName || currentBranchUniqueName" class="digit-blue pb-2" href="javascript:;" (keydown.enter)="changeCompany(company.uniqueName, '', false)" (click)="changeCompany(company.uniqueName, '', false)">
                                             <span class="d-flex align-items-center digit-blue"> <i class="icon-link-arrow font-20"></i> <span class="digit-blue">{{ localeData?.goto_company }}</span> </span>
                                         </p>
                                         <p class="font-14 digit-blue cursor-pointer pr-r2 pt-1"
@@ -151,7 +151,7 @@
                                 </li>
                                 <ng-container *ngIf="companyBranches?.branches?.length > 0">
                                     <li role="menuitem" *ngFor="let branch of companyBranches?.branches;">
-                                        <a class="dropdown-item d-flex align-items-center company-branches-list" [ngClass]="{'active': isActiveBranch(branch?.uniqueName)}" href="javascript:;"
+                                        <a class="dropdown-item d-flex align-items-center company-branches-list" [ngClass]="{'active': branch?.uniqueName === currentBranchUniqueName}" href="javascript:;"
                                             (click)="changeBranch(company.uniqueName, branch?.uniqueName, $event)">
                                             <i class="icon-branch-connect mr-2"></i>
                                             <span class="d-flex flex-column">
