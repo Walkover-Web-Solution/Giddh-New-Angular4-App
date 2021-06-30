@@ -21,7 +21,6 @@ import { SettingTaxesComponent } from './Taxes/setting.taxes.component';
 import { SettingTriggerComponent } from './Trigger/setting.trigger.component';
 import { CreateWarehouseComponent } from './warehouse/create-warehouse/create-warehouse.component';
 import { WarehouseComponent } from './warehouse/warehouse.component';
-import { SettingsServiceModule } from './settings-service.module';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/lib/perfect-scrollbar.interfaces';
 import { TextMaskModule } from 'angular2-text-mask';
@@ -76,7 +75,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ContactModule,
         ReactiveFormsModule,
         CurrencyModule,
-        SettingsServiceModule,
         PerfectScrollbarModule,
         TextMaskModule,
         NgxMaskModule.forRoot(),

@@ -168,7 +168,6 @@ body {
 [class*=" icon-"] {
     /* use !important to prevent issues with browser extensions that change fonts */
     font-family: "icomoon" !important;
-    speak: none;
     font-style: normal;
     font-weight: normal;
     font-variant: normal;
@@ -288,6 +287,7 @@ input {
 .toggle {
     position: relative;
     width: 40px;
+    user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -1168,6 +1168,7 @@ modal-container.modal {
 .list-icon-group li {
     display: flex;
     align-items: center;
+    transition: 1ms all;
     -moz-transition: 1ms all;
     cursor: pointer;
 }
@@ -1869,7 +1870,6 @@ input[type="checkbox"]:checked:after {
 .tab-pane input[type="search"]:after {
     font-family: icomoon !important;
     content: "\e906";
-    speak: none;
     font-style: normal;
     font-weight: 400;
     font-variant: normal;
@@ -2749,6 +2749,7 @@ a.btn.btn-xs.btn-link.pull-right {
 #share-modal select {
     -webkit-appearance: none;
     -webkit-border-radius: 0px;
+    border-radius: 0px;
     margin-left: 10px;
 }
 
@@ -8420,12 +8421,16 @@ body.update-scroll-hidden {
                         }
                     }
                     a{
-                        padding: 0 10px !important;
+                        padding: 0 20px !important;
                         min-width: 110px;
                         font-family: 'opensans-regular';
                         color: $grey-chateau !important;
-                        padding-left: 40px !important;
                         padding-top: 5px !important;
+                    }
+                    &.icon-branch1{
+                        a{
+                            padding-left: 0 !important;
+                        }
                     }
                 }
             }
@@ -8440,6 +8445,8 @@ body.update-scroll-hidden {
                         position: absolute !important;
                         left: 20px !important;
                         top: 5px;
+                        color: $grey-chateau;
+                        display: none;
                     }
                 }
                 &.icon-branch1{
@@ -8452,6 +8459,8 @@ body.update-scroll-hidden {
                         position: absolute !important;
                         left: 20px !important;
                         top: 5px;
+                        color: $grey-chateau;
+                        display: none;
                     }
                 }
             }

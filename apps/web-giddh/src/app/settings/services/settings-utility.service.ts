@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { SettingsServiceModule } from '../settings-service.module';
 
 @Injectable({
-    providedIn: SettingsServiceModule
+    providedIn: 'root'
 })
 export class SettingsUtilityService {
     /** @ignore */

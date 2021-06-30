@@ -1,5 +1,5 @@
 <ng-container appTranslate [file]="'advance-receipt-adjustment'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete()">
     <!-- Adjust Payment modal start -->
     <div class="modal-header">
         <h4 class="modal-title bg pull-left">{{localeData?.page_heading}}</h4>
@@ -24,7 +24,7 @@
                     <div class="col-md-4 text-right font-14 pt-2 xs-left">
                         <p>{{adjustedVoucherType === 'rcpt' ? commonLocaleData?.app_voucher_types?.receipt :
                             (adjustedVoucherType === 'advance-receipt') ?
-                            commonLocaleData?.app_voucher_types?.advance_receipt : getAdjustVoucherType() }}
+                            commonLocaleData?.app_voucher_types?.advance_receipt : localeData?.voucher_label | replace:'[VOUCHER_TYPE]':currentVoucherLabel}}
                             Total: <i class="font-10"></i>
 
                             <span class="d-inline-flex justify-content-end">
