@@ -511,6 +511,12 @@ button.btn.btn-filter span.icon-cross {
     table.on-mobile-view tbody td:before {
         left: 30px;
     }
+    .aging-table span.justify-content-end {
+        justify-content: flex-start !important;
+    }
+    .pd-t1-md {
+        padding-top: 0px;
+    }
 }
 
 @media (max-width: 767px) {

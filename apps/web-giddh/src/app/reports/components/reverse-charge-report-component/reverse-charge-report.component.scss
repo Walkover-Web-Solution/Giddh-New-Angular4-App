@@ -1,21 +1,4 @@
 @import "../../../../assets/css/color.scss";
-
-.invoice-footer {
-    h3 {
-        font-size: 16px;
-        color: $nobel;
-        display: inline-block;
-        margin-right: 10px;
-    }
-}
-.invoice-footer {
-    h1 {
-        font-size: 22px;
-        color: $night-rider;
-        display: inline-block;
-    }
-}
-
 .branch-transfer-report .basic > thead > tr > th {
     border-top: 1px solid $gainsboro !important;
 }
@@ -73,21 +56,10 @@
 .entity-dropdown {
     width: 200px;
 }
-@media (max-width: 1280px) {
-    .invoice-footer {
-        h1 {
-            display: block;
-        }
-    }
-}
+
 @media screen and (max-width: 1199px) {
     .clear-filter {
         margin-left: 15px;
-    }
-}
-@media (max-width: 991px) {
-    .invoice-footer {
-        padding: 15px 0;
     }
 }
 @media only screen and (max-width: 767px) {
@@ -96,13 +68,6 @@
     }
 }
 @media screen and (max-width: 575px) {
-    .invoice-footer {
-        display: block;
-        .total-due-sale-wrap {
-            display: block !important;
-            padding: 0 !important;
-        }
-    }
 
     .input-grp-date-range-picker {
         .input-group.flex-nowrap {
@@ -138,5 +103,12 @@
         .btn-filter {
             margin-top: 15px;
         }
+    }
+}
+
+@media (min-width: 767px){
+    .table-responsive {
+        max-height: calc(100vh - 250px);
+        overflow-y: auto;
     }
 }
