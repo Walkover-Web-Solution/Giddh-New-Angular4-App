@@ -211,6 +211,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isSettingsIconDisabled: boolean = false;
     /* This will hold if resolution is more than 768 to consider as ipad screen */
     public isIpadScreen: boolean = false;
+    /** True if sidebar is forcely expanded */
+    public sidebarForcelyExpanded: boolean = false;
+
     /**
      * Returns whether the back button in header should be displayed or not
      *
@@ -296,6 +299,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
                 if (!this.lastSessionRenewalTime || (this.lastSessionRenewalTime && this.lastSessionRenewalTime.diff(moment(), 'hours') >= 2)) {
                     this.checkAndRenewUserSession();
+                }
+
+                if(this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details")) {
+                    this.toggleSidebarPane(true, false);
+                } else {
+                    this.toggleSidebarPane(false, false);
                 }
             }
             if (event instanceof NavigationStart) {
@@ -769,7 +778,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public toggleHelpSupportPane(show: boolean): void {
         setTimeout(() => {
-            this.asideSettingMenuState = 'out';
+            if(show) {
+                this.asideSettingMenuState = 'out';
+                document.querySelector('body').classList.remove('aside-setting');
+            }
             this.asideInventorySidebarMenuState = 'out'
             document.querySelector('body').classList.remove('mobile-setting-sidebar');
             this.asideHelpSupportMenuState = (show && this.asideHelpSupportMenuState === 'out') ? 'in' : 'out';
@@ -785,44 +797,21 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleSidebarPane(show: boolean, isMobileSidebar: boolean): void {
-        if(!this.isIpadScreen) {
-            this.isSettingsIconDisabled = (this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/settings/taxes")) || this.router.url.includes("/pages/user-details")
-            if (this.isSettingsIconDisabled) {
-                return;
-            }
-        }
-
         setTimeout(() => {
             this.isMobileSidebar = isMobileSidebar;
             this.asideHelpSupportMenuState = 'out';
-            this.asideSettingMenuState = (show && this.asideSettingMenuState === 'out') ? 'in' : 'out';
+            this.asideSettingMenuState = (show) ? 'in' : 'out';
             this.asideInventorySidebarMenuState = (show && this.asideInventorySidebarMenuState === 'out') ? 'in' : 'out';
             this.toggleBodyClass();
 
             if (this.asideSettingMenuState === "in" && this.asideInventorySidebarMenuState === "in") {
                 document.querySelector('body').classList.add('mobile-setting-sidebar');
-            }
-            else {
+                document.querySelector('body').classList.add('aside-setting');
+            } else {
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
+                document.querySelector('body').classList.remove('aside-setting');
             }
-
-
         }, ((this.asideSettingMenuState === 'out') ? 100 : 0) && (this.asideInventorySidebarMenuState === 'out') ? 100 : 0);
-    }
-
-    /**
-     * This will close the settings popup if click outside of popup
-     *
-     * @memberof HeaderComponent
-     */
-    public closeSettingPaneOnOutsideClick(): void {
-        setTimeout(() => {
-            if (this.asideSettingMenuState === "in" && this.asideInventorySidebarMenuState === "in") {
-                this.asideSettingMenuState = 'out';
-                this.asideInventorySidebarMenuState = 'out';
-                document.querySelector('body').classList.remove('mobile-setting-sidebar');
-            }
-        }, 50);
     }
 
     /**
@@ -1029,6 +1018,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.menuStateChange.emit(false);
         }
 
+        if (e.target.className.toString() !== 'icon-bar' && (this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details"))) {
+            this.store.dispatch(this._generalActions.openSideMenu(false));
+        }
     }
 
     public forceCloseSidebar(event) {
@@ -1363,7 +1355,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public addClassInBodyIfPageHasTabs(): void {
-        this.toggleSidebarPane(false, false);
         this.toggleHelpSupportPane(false);
 
         setTimeout(() => {
@@ -1418,6 +1409,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public expandSidebar(forceExpand: boolean = false): void {
         if(forceExpand) {
             this.sideBarStateChange(true);
+            this.sidebarForcelyExpanded = true;
         }
         this.isSidebarExpanded = true;
         document.querySelector('.primary-sidebar')?.classList?.remove('sidebar-collapse');
@@ -1430,6 +1422,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     * @memberof HeaderComponent
     */
     public collapseSidebar(forceCollapse: boolean = false, closeOnHover: boolean = false): void {
+        if(closeOnHover && this.sidebarForcelyExpanded && (this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details"))) {
+            return;
+        }
+
         if(closeOnHover && this.isSidebarExpanded && (document.getElementsByClassName("gst-sidebar-open")?.length > 0 || document.getElementsByClassName("setting-sidebar-open")?.length > 0)) {
             forceCollapse = true;
         }
@@ -1445,6 +1441,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
 
         if(!this.sideMenu.isExpanded || forceCollapse) {
+            this.sidebarForcelyExpanded = false;
             this.isSidebarExpanded = false;
             document.querySelector('.primary-sidebar')?.classList?.add('sidebar-collapse');
             document.querySelector('.nav-left-bar')?.classList?.add('width-60');
@@ -1728,5 +1725,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         return (this.currentPageUrl?.indexOf('pages/gstfiling') > -1 ||
             this.currentPageUrl?.indexOf('pages/reports/reverse-charge') > -1 ||
             this.currentPageUrl?.indexOf('pages/invoice/ewaybill') > -1);
+    }
+
+    /**
+     * This toggle's settings sidebar
+     *
+     * @param {boolean} isMobileSidebar
+     * @memberof HeaderComponent
+     */
+    public toggleSidebar(isMobileSidebar: boolean): void {
+        if(this.asideSettingMenuState === "in") {
+            this.toggleSidebarPane(false, isMobileSidebar);
+        } else {
+            this.toggleSidebarPane(true, isMobileSidebar);
+        }
     }
 }
