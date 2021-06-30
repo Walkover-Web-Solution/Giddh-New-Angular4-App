@@ -8559,6 +8559,11 @@ body.update-scroll-hidden {
 }
 
 @media (max-width: 991px) {
+    .transactions-overview{
+        hr{
+            display: none;
+        }
+    }
     .menu_open {
         .reverse-table-report {
             .input-grp-date-range-picker {
@@ -8804,6 +8809,11 @@ body.update-scroll-hidden {
     }
     .tax-engine .table.transactions-table.on-mobile-view tbody > tr > td {
         max-width: 100% !important;
+        white-space: normal !important;
+        word-break: break-all !important;
+    }
+    .tax-engine .gstr-transactions-summary .table > tbody > tr.row-hover:hover{
+        background-color: transparent;
     }
     .nav-tabs > li {
         float: left;
@@ -8976,7 +8986,7 @@ body.update-scroll-hidden {
     .tax-engine .transactions-list .filter-row .name {
         min-width: 120px;
     }
-     #setting-tab-wrapper .purchase-setting-tab.tab-integration .nav-tabs{
+    #setting-tab-wrapper .purchase-setting-tab.tab-integration .nav-tabs {
         display: inline-block;
     }
     .e-waybill-tabs.custom-tabs .nav-tabs{
@@ -9086,6 +9096,11 @@ body.update-scroll-hidden {
 }
 
 @media (max-width: 767px) {
+    .gst-sidebar-open{
+        .gst-sidebar{
+            left: 0 !important;
+        }
+    }
     .settings-profile-tabs {
         .tab-content {
             padding-top: 25px;
@@ -9345,9 +9360,10 @@ body.update-scroll-hidden {
     .tax-engine .nav-band .nav-tabs {
         white-space: nowrap;
         padding-top: 0 !important;
+        position: static !important;
     }
     .gst-filing-container {
-        padding-top: 38px;
+        padding-top: 0;
     }
     .tax-engine .transactions-overview .gstr-transactions-summary .title {
         padding: 0;
@@ -9413,10 +9429,12 @@ body.update-scroll-hidden {
     .page-has-tabs.setting-sidebar-open .fixed-padding {
         padding-top: 85px !important;
     }
-    .on-setting-page .fixed-padding {
+    .on-setting-page .fixed-padding ,  .page-has-tabs.gst-sidebar-open .fixed-padding {
         padding-top: 90px !important;
     }
-
+    .gst-sidebar-open .gst-menu-icon{
+        display: inline-flex !important;
+    }
     .fixed-padding {
         padding-top: 90px;
     }
@@ -9524,6 +9542,14 @@ body.update-scroll-hidden {
 }
 
 @media (max-width: 575px) {
+    .gst-sidebar-open .daterangepicker {
+        left: auto !important;
+        right: 90px !important;
+    }
+    .filter-band ul{
+        left: auto !important;
+        right: 0 !important;
+    }
     .purchase-setting-tab ul.nav.nav-tabs {
         padding-bottom: 30px !important;
         min-height: 100px;
