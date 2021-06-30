@@ -142,16 +142,8 @@
                                     <a class="dropdown-item">
                                         <input type="checkbox" name="field_filter.mobile"
                                             (ngModelChange)="columnFilter($event, 'mobile')"
-                                            [(ngModel)]="showFieldFilter.mobile" />
-                                        {{commonLocaleData?.app_mobile_no}}</a>
-                                </li>
-
-                                <li role="menuitem">
-                                    <a class="dropdown-item">
-                                        <input type="checkbox" name="field_filter.email"
-                                            (ngModelChange)="columnFilter($event, 'email')"
-                                            [(ngModel)]="showFieldFilter.email" />
-                                        {{commonLocaleData?.app_email_id}}</a>
+                                            [(ngModel)]="showFieldFilter.contact" />
+                                        {{localeData?.contacts}}</a>
                                 </li>
 
                                 <li role="menuitem">
@@ -214,7 +206,8 @@
                                                         class="number-total">{{activeTab === 'customer' ? totalCustomers :
                                                         totalVendors}}</span>
                                                     <span *ngIf="selectedCheckedContacts.length>0"
-                                                        class="number-total">{{selectedCheckedContacts.length}}</span>
+                                                        class="number-total">{{selectedCheckedContacts.length}}/{{activeTab === 'customer' ? totalCustomers :
+                                                        totalVendors}}</span>
                                                     </div>
                                                 </h5>
                                                 <div class="btn-group more-button align-items-center" dropdown>
@@ -573,7 +566,7 @@
                             </div>
                         </th>
 
-                        <th *ngIf="showFieldFilter.email || showFieldFilter.mobile">
+                        <th *ngIf="showFieldFilter.contact">
                             <div class="d-flex">
                                 <div class="flex-fill">
                                     {{localeData?.contacts}}
@@ -801,7 +794,7 @@
                                     </amount-field>
                                 </span>
                             </td>
-                            <td class="text-lowercase word-wrap font-12" *ngIf="showFieldFilter.email && showFieldFilter.mobile"
+                            <td class="text-lowercase word-wrap font-12" *ngIf="showFieldFilter.contact"
                                 [attr.data-title]="commonLocaleData?.app_email">
                                 <div>
                                     {{account.email || '-' }}
@@ -1041,11 +1034,11 @@
                                     </amount-field>
                                 </span>
                             </td>
-                            <td class="word-wrap text-lowercase" *ngIf="showFieldFilter.email "
+                            <td class="word-wrap text-lowercase" *ngIf="showFieldFilter.contact"
                                 [attr.data-title]="commonLocaleData?.app_email">
                                 <div class="table-email ">{{account.email || '-' }}</div>
                             </td>
-                            <td class="word-wrap" *ngIf="showFieldFilter.mobile "
+                            <td class="word-wrap" *ngIf="showFieldFilter.contact"
                                 [attr.data-title]="commonLocaleData?.app_mobile_no">
                                 {{account.mobileNo || '-' }}
                             </td>
