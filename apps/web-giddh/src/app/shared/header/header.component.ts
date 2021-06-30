@@ -805,6 +805,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if(show) {
                 this.asideSettingMenuState = 'out';
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
+                document.querySelector('body').classList.remove('aside-setting');
             }
 
             this.asideHelpSupportMenuState = (show && this.asideHelpSupportMenuState === 'out') ? 'in' : 'out';
@@ -828,8 +829,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             if (this.asideSettingMenuState === "in") {
                 document.querySelector('body').classList.add('mobile-setting-sidebar');
+                document.querySelector('body').classList.add('aside-setting');
             } else {
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
+                document.querySelector('body').classList.remove('aside-setting');
             }
 
         }, ((this.asideSettingMenuState === 'out') ? 100 : 0));
