@@ -8484,11 +8484,16 @@ body.update-scroll-hidden {
     }
 
 }
-// .on-user-page, .on-setting-page{
-//     #content-wrapper{
-//         padding-right: 240px;
-//     }
-// }
+.on-setting-page.aside-setting, .on-user-page.aside-setting{
+    #content-wrapper{
+        padding-right: 240px;
+    }
+}
+.gst-sidebar-open.on-setting-page.aside-setting{
+    #content-wrapper{
+        padding-right: 0;
+    }
+}
 /* responsive  starts here*/
 
 @media (max-width: 1440px) {
