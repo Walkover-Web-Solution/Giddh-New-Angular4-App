@@ -627,6 +627,8 @@ export interface IEwayBillAllList {
     totalItems: number;
     results: Result[];
     size: number;
+    fromDate?: any;
+    toDate?: any;
 }
 
 export interface IAllTransporterDetails {
