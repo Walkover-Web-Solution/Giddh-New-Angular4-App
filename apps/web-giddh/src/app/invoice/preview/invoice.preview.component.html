@@ -68,23 +68,33 @@
                         </button>
                     </div>
                     <div class="d-flex add-invoice">
-                        <!-- Cancel e-invoice button -->
+                        <div class="d-flex justify-content-end">
+                        <!-- Cancel e-invoice button-->
                         <button type="button" class="btn btn-primary desktop-view-btn" *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'sales') && selectedInvoicesList?.length === 1 && selectedInvoicesList[0].irnNumber" (click)="openModal(cancelEInvoiceTemplate)">{{localeData?.cancel_e_invoice}}</button>
+                        <button class="btn btn-default desktop-view-btn" *ngIf="selectedVoucher === 'sales' && selectedInvoicesList.length && isExported" [tooltip]="commonLocaleData?.app_export"
+                            (click)="exportCsvDownload()" [ladda]="exportInvoiceRequestInProcess$ | async"
+                            
+                            data-spinner-size="20px">
+                            <span class="icon-export-icon"></span>
+                        </button>
+                        <!--  E-way bill generation and export to excel for a single selected item in invoice ends sizes -->
+                        </div>
+                        <div class="d-flex">
                         <!-- E-way bill generation and export to excel for a single selected item in invoice sizes -->
                         <div class="desktop-view-btn"
                             *ngIf="(selectedVoucher !== 'purchase' && selectedItems.length > 0) || (selectedItems.length === 1 && selectedVoucher === 'purchase')">
                             <div *ngIf="!isCompany" class="btn-group" dropdown #dp="bs-dropdown">
                                 <button dropdownToggle type="button"
-                                    class="btn more-btn-dropdown desktop-view-btn dropdown-toggle"
+                                    class="btn btn-primary more-btn-dropdown desktop-view-btn dropdown-toggle"
                                     aria-controls="dropdown-basic">
                                     {{commonLocaleData?.app_more}}
                                     <span class="caret"></span>
                                 </button>
-                                <ul *dropdownMenu class="dropdown-menu fixed-dropdown-plus" role="menu"
+                                 <ul *dropdownMenu class="dropdown-menu fixed-dropdown-plus" role="menu"
                                     aria-labelledby="button-basic">
                                     <li role="menuitem"
-                                        *ngIf="selectedVoucher !== 'purchase' && selectedInvoicesList?.length">
-                                        <a class="dropdown-item cp" href="javascript:void(0)"
+                                         *ngIf="selectedVoucher !== 'purchase' && selectedInvoicesList?.length">
+                                            <a class="dropdown-item cp" href="javascript:void(0)"
                                             (click)="toggleBulkUpdatePopup(false);">{{localeData?.bulk_update}}</a>
                                     </li>
                                     <li role="menuitem" *ngIf="selectedItems.length === 1">
@@ -97,31 +107,25 @@
                                             (click)="createBulkEInvoice()"> {{localeData?.create_e_invoice}} </a>
                                     </li>
                                     <li role="menuitem"
-                                        *ngIf="selectedVoucher !== 'purchase' || (selectedItems.length === 1 && selectedVoucher === 'purchase')">
+                                         *ngIf="selectedVoucher !== 'purchase' || (selectedItems.length === 1 && selectedVoucher === 'purchase')">
                                         <a class="dropdown-item cp" href="javascript:void(0)"
                                             (click)="onDeleteBtnClick()">{{commonLocaleData?.app_delete}}</a>
                                     </li>
                                 </ul>
                             </div>
                         </div>
-                        <button class="btn btn-default desktop-view-btn" [tooltip]="commonLocaleData?.app_export"
-                            (click)="exportCsvDownload()" [ladda]="exportInvoiceRequestInProcess$ | async"
-                            *ngIf="selectedVoucher === 'sales' && selectedInvoicesList.length && isExported"
-                            data-spinner-size="20px">
-                            <span class="icon-export-icon"></span>
-                        </button>
-                        <!-- E-way bill generation and export to excel for a single selected item in invoice ends sizes -->
                         <!-- Section to create New Sales Invoice, Cash Invoice, Credit Note and Debit Note -->
                         <div class="advance-icon cursor-pointer align-items-center btn btn-primary"
                         [tooltip]="commonLocaleData?.app_advance_search" (click)="toggleAdvanceSearchPopup(false)">
-                        <span class="pd-r05">{{commonLocaleData?.app_filter}}</span> <span class="icon-advance-filter"></span>
-                    </div>
+                        <span class="pd-r05 d-sm-flex d-none">{{commonLocaleData?.app_filter}}</span> <span class="icon-advance-filter"></span>
+                        </div>
                         <div class="export-button-wrap" *ngIf="selectedVoucher === 'sales'">
                             <button class="btn btn-primary mr-0"
                                 [disabled]="((selectedInvoices && selectedInvoices.length > 0) ? selectedInvoices.length : voucherData && voucherData.totalItems) === 0"
                                 (click)="openModal(bulkExport)">{{commonLocaleData?.app_export}}</button>
                         </div>
                         <!-- Section to create New Sales Invoice, Cash Invoice, Credit Note and Debit Note  ends -->
+                        </div>
                     </div>
                 </div>
                 <!-- For desktop screen sizes ends -->
@@ -129,13 +133,45 @@
                     <!-- Invoice E-way bill, export to excel for a single selected item along with
                         New Sales Invoice, Cash Invoice, Credit Note and Debit Note -->
                     <div class="row">
-                        <div class="col-12 d-flex w-100 align-items-center pb-2">
-                            <!-- Cancel e-invoice button -->
-                            <button type="button" class="btn btn-primary" *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'sales') && selectedInvoicesList?.length === 1" (click)="openModal(cancelEInvoiceTemplate)">{{localeData?.cancel_e_invoice}}</button>
+                        <div class="col-12 d-flex w-100 align-items-center pb-2 justify-content-between export-new-invoice">
+                            <div class="d-flex">
                             <div class="export-button-wrap">
                                 <button class="btn btn-primary"
                                     [disabled]="((selectedInvoices && selectedInvoices.length > 0) ? selectedInvoices.length : voucherData && voucherData.totalItems) === 0"
                                     (click)="openModal(bulkExport)">{{commonLocaleData?.app_export}}</button>
+                            </div>
+                            <div>
+                                    <div class="btn-group" dropdown *ngIf="!isCompany && selectedVoucher === 'sales'"
+                                        [autoClose]="true">
+                                        <button id="ddl-newinv" dropdownToggle type="button"
+                                            class="btn btn-sky-blue dropdown-toggle dropdown-btn-new"
+                                            aria-controls="dropdown-ddl-newinv">
+                                            {{localeData?.new_invoice}}
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul id="dropdown-ddl-newinv" *dropdownMenu class="dropdown-menu" role="menu"
+                                            aria-labelledby="ddl-newinv">
+                                            <li role="menuitem">
+                                                <a class="dropdown-item" href="javascript:;"
+                                                    (click)="goToInvoice('cash')">{{localeData?.cash_invoice}}</a>
+                                            </li>
+                                            <li role="menuitem">
+                                                <a class="dropdown-item" href="javascript:;"
+                                                    (click)="goToInvoice('sales')">{{localeData?.sales_invoice}}</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
+                                        <button *ngIf="!isCompany" class="btn btn-sky-blue m-0"
+                                            (click)="goToInvoice('credit note')">{{localeData?.new_cr_note}}
+                                        </button>
+                                    </div>
+                                    <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
+                                        <button *ngIf="!isCompany" class="btn btn-sky-blue m-0"
+                                            (click)="goToInvoice('debit note')">{{localeData?.new_dr_note}}
+                                        </button>
+                                    </div>
+                            </div>
                             </div>
                             <div class="more-export-btn d-flex mt-1" *ngIf="showAdvanceSearchIcon">
                                 <div class="clear-filter visible-on-mobile" (click)="resetAdvanceSearch()">
@@ -144,6 +180,10 @@
                                     </button>
                                 </div>
                             </div>
+                            <div class="d-flex cancel-filter-export">
+                            <div class="d-flex">
+                            <!-- Cancel e-invoice button-->
+                            <button type="button" class="btn btn-primary" *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'sales') && selectedInvoicesList?.length === 1" (click)="openModal(cancelEInvoiceTemplate)">{{localeData?.cancel_e_invoice}}</button>
                             <div *ngIf="selectedItems.length === 1">
                                 <div *ngIf="!isCompany" class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown"
                                     (mouseleave)="dp.hide()">
@@ -168,42 +208,44 @@
                                     </ul>
                                 </div>
                             </div>
-                            <button class="btn btn-default mr-r15" [tooltip]="commonLocaleData?.app_export"
+                            </div>
+                            <button class="btn btn-default mr-r15" *ngIf="selectedVoucher === 'sales' && selectedInvoicesList.length && isExported" [tooltip]="commonLocaleData?.app_export"
                                 (click)="exportCsvDownload()" [ladda]="exportInvoiceRequestInProcess$ | async"
-                                *ngIf="selectedVoucher === 'sales' && selectedInvoicesList.length && isExported"
+                                
                                 data-spinner-size="20px">
                                 <span class="icon-export-icon"></span>
                             </button>
-                            <div class="btn-group" dropdown *ngIf="!isCompany && selectedVoucher === 'sales'"
-                                [autoClose]="true">
-                                <button id="ddl-newinv" dropdownToggle type="button"
-                                    class="btn btn-sky-blue dropdown-toggle dropdown-btn-new"
-                                    aria-controls="dropdown-ddl-newinv">
-                                    {{localeData?.new_invoice}}
-                                    <span class="caret"></span>
-                                </button>
-                                <ul id="dropdown-ddl-newinv" *dropdownMenu class="dropdown-menu" role="menu"
-                                    aria-labelledby="ddl-newinv">
-                                    <li role="menuitem">
-                                        <a class="dropdown-item" href="javascript:;"
-                                            (click)="goToInvoice('cash')">{{localeData?.cash_invoice}}</a>
-                                    </li>
-                                    <li role="menuitem">
-                                        <a class="dropdown-item" href="javascript:;"
-                                            (click)="goToInvoice('sales')">{{localeData?.sales_invoice}}</a>
-                                    </li>
-                                </ul>
                             </div>
-                            <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
-                                <button *ngIf="!isCompany" class="btn btn-sky-blue m-0"
-                                    (click)="goToInvoice('credit note')">{{localeData?.new_cr_note}}
-                                </button>
-                            </div>
-                            <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
-                                <button *ngIf="!isCompany" class="btn btn-sky-blue m-0"
-                                    (click)="goToInvoice('debit note')">{{localeData?.new_dr_note}}
-                                </button>
-                            </div>
+                        </div>
+                        <div class="col-12 w-100 d-none mr-b1 cancel-more">
+                                <div class="d-flex justify-content-between w-100">
+                                        <!-- Cancel e-invoice button-->
+                                        <button type="button" class="btn btn-primary" *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'sales') && selectedInvoicesList?.length === 1" (click)="openModal(cancelEInvoiceTemplate)">{{localeData?.cancel_e_invoice}}</button>
+                                        <div *ngIf="selectedItems.length === 1">
+                                            <div *ngIf="!isCompany" class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown"
+                                                (mouseleave)="dp.hide()">
+                                                <button dropdownToggle type="button"
+                                                    class="btn mr-r15 more-btn-dropdown btn-default dropdown-toggle"
+                                                    aria-controls="dropdown-basic">
+                                                    {{commonLocaleData?.app_more}}
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul *dropdownMenu class="dropdown-menu fixed-dropdown-plus" role="menu"
+                                                    aria-labelledby="button-basic">
+                                                    <li role="menuitem">
+                                                        <a class="dropdown-item cp" href="javascript:void(0)"
+                                                            (click)="toggleEwayBillPopup()"
+                                                            *ngIf="selectedVoucher === 'sales' && !isMobileView">
+                                                            {{localeData?.generate_eway_bill}}</a>
+                                                    </li>
+                                                    <li role="menuitem">
+                                                        <a class="dropdown-item cp" href="javascript:void(0)"
+                                                            (click)="onDeleteBtnClick()">{{commonLocaleData?.app_delete}}</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        </div>
                         </div>
                     </div>
                 </div>

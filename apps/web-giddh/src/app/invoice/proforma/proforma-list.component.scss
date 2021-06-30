@@ -158,27 +158,10 @@ ul.select-action-dropdown {
     background: $lavender !important;
 }
 .dropdown-toggle.more-btn-dropdown {
-    color: $navy;
-    border: 1px solid $chetwode-blue;
     width: 91px;
-    padding-left: 10px;
-    padding-right: 10px;
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
-    margin-right: 15px;
-    background-color: $white;
-}
-.dropdown-toggle.more-btn-dropdown:hover {
-    background: $chetwode-blue;
-    color: $white !important;
-    border-color: $chetwode-blue;
-}
-.dropdown-toggle.more-btn-dropdown .caret {
-    color: $nobel;
-}
-.dropdown-toggle.more-btn-dropdown:hover .caret {
-    color: $white !important;
 }
 
 .proforma-container {
@@ -284,7 +267,6 @@ span.icon-advance-filter {
     justify-content: center;
     align-items: center;
     vertical-align: middle;
-    color: $gray;
 }
 .checkbox-td,
 .index-no {
@@ -352,9 +334,6 @@ span.icon-advance-filter {
         width: 100%;
         margin-top: 10px !important;
     }
-    .input-grp-date-range-picker .form-group {
-        margin-bottom: 10px;
-    }
     .full-width-on-mobile {
         width: 100%;
         margin: 0;
@@ -371,11 +350,11 @@ span.icon-advance-filter {
         display: block;
         flex-direction: column;
     }
-    .advance-icon{
-        width: auto;
-        margin-left: auto;
-        position: relative;
-        top: -47px;
+    .clear-filter{
+        margin-top: 10px;
+    }
+    .form-inline{
+        align-items: flex-start;
     }
 }
 @media (max-width: 420px) {
@@ -409,11 +388,64 @@ span.icon-advance-filter {
     .date-advance-search .btn-wrapper {
         display: none;
     }
+    .d-sm-none{
+        display: none !important;
+    }
 }
 
 @media (min-width: 767px){
     .table-responsive{
         max-height: calc(100vh - 245px);
         overflow-y: auto;
+    }
+}
+@media (max-width: 599px){
+    .dropdown-toggle.more-btn-dropdown{
+        width: auto !important;
+    }
+    .advance-icon{
+        height: 36px;
+    }
+}
+
+@media (max-width: 428px){
+    .date-advance-search{
+        .more-filter{
+            flex-direction: column;
+            .d-md-none{
+                justify-content: space-between;
+                width: 100%;
+            }
+        }
+    }
+}
+
+@media (max-width: 620px) and (min-width: 576px){
+    .d-md-none{
+        flex-direction: column-reverse;
+        .btn-wrapper-more{
+            margin-top: 10px;
+        }
+    }
+
+    .form-inline{
+        align-items: flex-start;
+    }
+
+    .dropdown-toggle.more-btn-dropdown{
+        width: auto;
+    }
+
+    .flex-column{
+        .d-flex{
+            flex-direction: column-reverse;
+            .btn-wrapper-more{
+                margin-top: 10px;
+                margin-left: auto;
+                .btn{
+                    margin-right:0;
+                }
+            }
+        }
     }
 }

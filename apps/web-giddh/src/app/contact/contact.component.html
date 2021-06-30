@@ -106,7 +106,7 @@
                             (clickOutside)="hideListItems()" [tooltip]="localeData?.filter_toggle"
                             [placement]="'right'">
                                 <div dropdownToggle>
-                                        <span class="pd-r05">{{commonLocaleData?.app_filter}}</span>
+                                        <span class="pd-r05 d-sm-flex d-none">{{commonLocaleData?.app_filter}}</span>
                                         <span class="icon-advance-filter"></span>
                                 </div>
                                 <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
@@ -596,7 +596,7 @@
                             </div>
                         </th>
 
-                        <th *ngIf="showFieldFilter.comment" class="comment-field">{{localeData?.comment}}</th>
+                        <th *ngIf="showFieldFilter.comment" class="comment-field text-break">{{localeData?.comment}}</th>
                         <ng-container *ngFor="let item of (companyCustomFields$ | async)">
                             <th width="10%" *ngIf="item?.uniqueName && showFieldFilter[item?.uniqueName]">{{item.key |
                                 titlecase}}</th>
@@ -802,7 +802,7 @@
                                 </span>
                             </td>
                             <td class="text-lowercase word-wrap font-12" *ngIf="showFieldFilter.email && showFieldFilter.mobile"
-                                [attr.data-title]="commonLocaleData?.app_email">
+                                [attr.data-title]="localeData?.contacts">
                                 <div>
                                     {{account.email || '-' }}
                                 </div>
@@ -817,7 +817,7 @@
                                 [attr.data-title]="commonLocaleData?.app_state">
                                 {{account?.state?.name || '-'}}</td>
                             <td *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx'
-                                [attr.data-title]="localeData?.comment" class="commentField">
+                                [attr.data-title]="localeData?.comment" class="comment-field text-break">
                                 <ng-container *ngIf='updateCommentIdx != idx'>
                                     {{account.comment}}
                                     <span [class.text-gray]="!account.comment" *ngIf="!account.comment">{{
@@ -1041,13 +1041,14 @@
                                     </amount-field>
                                 </span>
                             </td>
-                            <td class="word-wrap text-lowercase" *ngIf="showFieldFilter.email "
-                                [attr.data-title]="commonLocaleData?.app_email">
-                                <div class="table-email ">{{account.email || '-' }}</div>
-                            </td>
-                            <td class="word-wrap" *ngIf="showFieldFilter.mobile "
-                                [attr.data-title]="commonLocaleData?.app_mobile_no">
-                                {{account.mobileNo || '-' }}
+                            <td class="text-lowercase word-wrap font-12" *ngIf="showFieldFilter.email && showFieldFilter.mobile"
+                                [attr.data-title]="localeData?.contacts">
+                                <div>
+                                    {{account.email || '-' }}
+                                </div>
+                                <div>
+                                {{account.mobileNo || '-'}}
+                                </div>
                             </td>
                             <td class="word-wrap" *ngIf="showFieldFilter.gstin  && shouldShowTaxFilter"
                                 [attr.data-title]="commonLocaleData?.app_gstin">

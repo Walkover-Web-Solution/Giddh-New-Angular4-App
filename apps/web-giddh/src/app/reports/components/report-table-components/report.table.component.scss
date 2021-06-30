@@ -10,26 +10,14 @@
 .basic > tfoot > tr > th {
     white-space: nowrap !important;
 }
-.basic > tfoot > tr > th {
-    background: $whisper;
-}
-.table-active {
-    background: $solitude;
-}
 .width-200px {
     width: 200px;
 }
 .basic > tbody > tr > td > a {
     color: $primary;
 }
-.particular {
-    float: right;
-    margin-top: 2px;
-    font-size: 19px;
-    color: $night-rider;
-}
 .bgChange {
-    background: $solitude;
+    background: $white-smoke;
 }
 .btn-sort {
     display: flex !important;
@@ -41,6 +29,10 @@
     border: 1px solid $gainsboro;
     justify-content: center;
     align-items: center;
+}
+.basic > tbody > tr td:first-child,
+.basic > thead > tr th:first-child {
+    border-bottom: 0px;
 }
 .btn-sort i {
     display: block;
@@ -65,5 +57,12 @@
                 }
             }
         }
+    }
+}
+
+@media (min-width: 767px){
+    .table-responsive{
+        max-height: calc(100vh - 200px);
+        overflow-y: auto;
     }
 }

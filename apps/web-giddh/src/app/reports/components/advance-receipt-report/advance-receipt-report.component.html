@@ -50,11 +50,61 @@
                 </div>
                 <div class="advance-icon cursor-pointer btn btn-primary mr-0" tooltip="{{commonLocaleData?.app_advance_search}}"
                             (click)="openModal()">
-                            <span class="pd-r05">{{commonLocaleData?.app_filter}}</span>
+                            <span class="pd-r05 d-sm-flex d-none">{{commonLocaleData?.app_filter}}</span>
                             <span class="icon-advance-filter"></span>
                         </div>
                 <!-- Invoice filter section ends -->
             </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex w-100 justify-content-between">
+                            <div class="pull-left total-details-box mr-r05 border-none opening-box">
+                                    <h5>
+                                        {{localeData?.advanced_receipts}}
+                                        <div>
+                                        <span class="number-total">{{receiptsSummaryData?.advance?.symbol}}{{receiptsSummaryData?.advance?.amount |
+                                                giddhCurrency}}/-</span>
+                                        </div>
+                                    </h5>
+                                </div>
+                            <div class="pull-left total-details-box mr-r05 border-none sales-purchase">
+                                    <h5>
+                                        {{localeData?.normal_receipts}}
+                                        <div>
+                                            <span class="d-inline-flex number-total">
+                                                {{receiptsSummaryData?.normal?.symbol}}{{receiptsSummaryData?.normal?.amount |
+                                                    giddhCurrency}}/-
+                                            </span>
+                                        </div>
+                                    </h5>
+                                </div>
+                                <div class="pull-left total-details-box mr-r05 border-none payment-receipt">
+                                    <h5>
+                                        {{localeData?.total_receipts}}
+                                        <div>
+                                            <span class="d-inline-flex number-total">
+                                                {{receiptsSummaryData?.total?.symbol}}{{receiptsSummaryData?.total?.amount |
+                                                    giddhCurrency}}/-
+                                            </span>
+                                        </div>
+                                    </h5>
+                                </div>
+                                <div class="pull-left total-details-box mr-r05 border-none closing-box">
+                                    <h5>
+                                        {{localeData?.unused_receipts}}
+                                        <div>
+                                            <span class="d-inline-flex number-total">
+                                                {{receiptsSummaryData?.unUsed?.symbol}}{{receiptsSummaryData?.unUsed?.amount |
+                                                    giddhCurrency}}/-
+                                            </span>
+                                        </div>
+                                    </h5>
+                                </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="invoice-preview  table-responsive">
                 <table class="table basic giddh-table on-mobile-view">
                     <thead class="thead-background1">
@@ -217,39 +267,6 @@
                     [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next"
                     [lastText]="commonLocaleData?.app_last">
                 </pagination>
-            </div>
-        </div>
-
-        <div class="mt-5 invoice-footer invoice-footer row">
-            <div class="col-lg-10 col-md-8 col-sm-12 col-12 total-due-sale-wrap">
-                <div class="row">
-                    <div class="col-xl-3 col-md-6 col-sm-12 total-due-sale">
-                        <h3>{{localeData?.advanced_receipts}}</h3>
-                        <h1>{{receiptsSummaryData?.advance?.symbol}}{{receiptsSummaryData?.advance?.amount |
-                            giddhCurrency}}/-
-                        </h1>
-                    </div>
-
-                    <div class="col-xl-3 col-md-6 col-sm-12 total-due-sale">
-                        <h3>{{localeData?.normal_receipts}}</h3>
-                        <h1>{{receiptsSummaryData?.normal?.symbol}}{{receiptsSummaryData?.normal?.amount |
-                            giddhCurrency}}/-
-                        </h1>
-                    </div>
-
-                    <div class="col-xl-3 col-md-6 col-sm-12 total-due-sale">
-                        <h3>{{localeData?.total_receipts}}</h3>
-                        <h1>{{receiptsSummaryData?.total?.symbol}}{{receiptsSummaryData?.total?.amount |
-                            giddhCurrency}}/-</h1>
-                    </div>
-
-                    <div class="col-xl-3 col-md-6 col-sm-12 total-due-sale">
-                        <h3>{{localeData?.unused_receipts}}</h3>
-                        <h1>{{receiptsSummaryData?.unUsed?.symbol}}{{receiptsSummaryData?.unUsed?.amount |
-                            giddhCurrency}}/-
-                        </h1>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
