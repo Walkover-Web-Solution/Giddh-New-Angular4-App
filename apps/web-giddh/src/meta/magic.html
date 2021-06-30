@@ -800,10 +800,7 @@
         var folderPath = '';
 
         var jquery = document.createElement('script');
-        jquery.setAttribute("type","text/javascript");
-        jquery.setAttribute("integrity","sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=");
-        jquery.setAttribute("crossorigin","anonymous");
-        jquery.setAttribute("src",'https://code.jquery.com/jquery-1.12.4.min.js');
+        jquery.src = '../' + folderPath + 'assets/js/jquery-1.11.3.min.js';
         document.head.appendChild(jquery);
 
         jquery.onload = function () {

@@ -55,6 +55,8 @@ import { UpdateLedgerEntryPanelModule } from './components/update-ledger-entry-p
 import { LedgerComponent } from './ledger.component';
 import { LedgerRoutingModule } from './ledger.routing.module';
 import { ParticularPipeModule } from './pipes/particular/particular.module';
+import { PopoverModule } from 'ngx-bootstrap/popover';
+import { ConfirmationModalModule } from '../common/confirmation-modal/confirmation-modal.module';
 
 @NgModule({
     declarations: [
@@ -115,6 +117,8 @@ import { ParticularPipeModule } from './pipes/particular/particular.module';
         ReplacePipeModule,
         HamburgerMenuModule,
         AsideMenuSalesOtherTaxesModule,
+        PopoverModule,
+        ConfirmationModalModule,
         ValidateSectionPermissionDirectiveModule
     ],
 })
