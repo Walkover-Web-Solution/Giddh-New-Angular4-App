@@ -99,7 +99,7 @@ export class GeneralActions {
             map(resp => this.saveSideMenuItems(resp.body))));
 
     constructor(private action$: Actions, private _groupService: GroupService, private _companyService: CompanyService, private _dbService: DbService, private route: Router) {
-        
+
     }
 
     public getGroupWithAccounts(value?: string): CustomActions {

@@ -84,7 +84,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public ngOnInit(): void {
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.breakpointObserver
-        .observe(['(max-width: 767px)'])
+        .observe(['(max-width: 768px)'])
         .pipe(takeUntil(this.destroyed$))
         .subscribe((state: BreakpointState) => {
             this.isMobileScreen = state.matches;
@@ -210,6 +210,15 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                     this.isMonthSelected = true;
                 } else {
                     this.isMonthSelected = false;
+                }
+            }
+        });
+        this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
+            if (this.isMobileScreen) {
+                if (shouldOpen) {
+                    this.asideGstSidebarMenuState = 'in';
+                } else {
+                    this.asideGstSidebarMenuState = 'out';
                 }
             }
         });
