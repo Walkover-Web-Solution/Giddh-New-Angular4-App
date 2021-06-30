@@ -96,8 +96,7 @@ export class AgingAdvanceSearchModal {
 export class CustomerVendorFiledFilter {
     public selectAll: boolean = false;
     public parentGroup: boolean = false;
-    public email: boolean = false;
-    public mobile: boolean = false;
+    public contact: boolean = false;
     public state: boolean = false;
     public gstin: boolean = false;
     public comment: boolean = false;
