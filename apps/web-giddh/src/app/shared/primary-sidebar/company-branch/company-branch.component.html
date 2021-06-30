@@ -21,10 +21,10 @@
     <!-- branch design option 1 -->
     <div class="company-branch-opt-1" *ngIf="activeDesign === 1">
         <tabset class="custom-tabs position-relative" #staticTabs>
-            <i class="icon-copmany-branch-connect"></i>
+            <i class="icon-company-branch-connect"></i>
             <tab [heading]="commonLocaleData?.app_company" [customClass]="'icon-company'"
                 (selectTab)="tabChanged('company')">
-                <div>
+                <div class="wrap-company-refresh">
                     <p class="font-12 d-flex justify-content-between mt-2">
                         <span>{{companyList?.length}} {{localeData?.companies}}</span>
                         <span class="cursor-pointer" [tooltip]="localeData?.refresh_manually"
@@ -50,7 +50,7 @@
                 </div>
             </tab>
             <tab [heading]="commonLocaleData?.app_branch" [customClass]="'icon-branch1'" (selectTab)="tabChanged('branch')">
-                <div>
+                <div class="wrap-company-refresh">
                     <p class="font-12 d-flex justify-content-between mt-2">
                         <span>{{branchList?.length}} {{localeData?.branches}}</span>
                         <span class="cursor-pointer" [tooltip]="localeData?.refresh_manually"
@@ -71,7 +71,7 @@
                                 (click)="changeCompany(companyBranches.uniqueName, '', false)">
                                 <i class="icon-head-branch mr-2"></i>
                                 <span class="d-flex flex-column">
-                                    <span>{{ companyBranches.name }}</span>
+                                    <span class="digit-blue font-semibold">{{ companyBranches.name }}</span>
                                     <span class="font-12 text-gray pt-1">{{localeData?.company_consolidated_data}}</span>
                                 </span>
                             </a>
@@ -100,12 +100,13 @@
             <span class="profile-alice">{{companyInitials}}</span>
         </div>
         <div class="profile-logout font-14">
+            <i class="icon-logout font-18"></i>
             <button (click)="logout()">{{localeData?.logout}}</button>
         </div>
     </div>
     <!-- branch design option 2 -->
     <div class="company-branch-opt-2" *ngIf="activeDesign === 2">
-        <div *ngIf="companyBranches?.branches?.length > 0 && activeTab === 'company' && !viewingCompany">
+        <div *ngIf="companyBranches?.branches?.length > 0 && activeTab === 'company' && !viewingCompany" class="wrap-company-refresh">
             <p class="font-12 d-flex justify-content-between mt-2">
                 <span>{{companyList?.length}} {{localeData?.companies}}</span>
                 <span class="cursor-pointer" [tooltip]="localeData?.refresh_manually"
