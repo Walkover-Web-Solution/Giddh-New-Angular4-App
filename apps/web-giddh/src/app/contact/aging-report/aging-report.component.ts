@@ -88,9 +88,13 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** Datepicker reference */
     @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: ElementRef;
+    /* Selected range label */
     public selectedRangeLabel: any = "";
+    /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
+    /** Stores the current range of date picker */
     public selectedDateRange: any;
+    /* This will store available date ranges */
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** Stores the searched name value for the Name filter */
     public searchedName: FormControl = new FormControl();
@@ -157,7 +161,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                 this.dueAmountReportRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
                 this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                
+
                 this.getDueReport();
             }
         });
@@ -450,6 +454,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         if (fieldName === 'name') {
             return this.localeData?.search_name;
         }
+        return '';
     }
 
     /**

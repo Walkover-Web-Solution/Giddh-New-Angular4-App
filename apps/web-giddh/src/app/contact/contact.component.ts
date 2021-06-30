@@ -300,11 +300,11 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if(dateObj) {
                 this.universalDate = cloneDeep(dateObj);
-                
+
                 setTimeout(() => {
                     this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
                         this.todaySelected = response;
-            
+
                         if (this.universalDate && !this.todaySelected) {
                             this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
                             this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
@@ -315,7 +315,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                             this.fromDate = "";
                             this.toDate = "";
                         }
-                        
+
                         this.getAccounts(this.fromDate, this.toDate, null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                     });
                 }, 100);
@@ -1433,7 +1433,7 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @param {*} el Element reference for focusing
      * @memberof ContactComponent
      */
-    public toggleSearch(fieldName: string, el: any) {
+    public toggleSearch(fieldName: string, el: any): void {
         if (fieldName === 'name') {
             this.showNameSearch = true;
         }

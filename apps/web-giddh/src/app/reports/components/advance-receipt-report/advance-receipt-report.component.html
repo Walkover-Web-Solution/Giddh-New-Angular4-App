@@ -48,7 +48,7 @@
                     <button class="btn btn-filter mr-0" (click)="resetAdvanceSearch()"><span class="icon-cross"></span>
                         {{commonLocaleData?.app_clear_filter}}</button>
                 </div>
-                <div class="advance-icon cursor-pointer btn btn-primary mr-0" tooltip="{{commonLocaleData?.app_advance_search}}"
+                <div class="advance-icon cursor-pointer btn btn-primary mr-0" [tooltip]="commonLocaleData?.app_advance_search"
                             (click)="openModal()">
                             <span class="pd-r05">{{commonLocaleData?.app_filter}}</span>
                             <span class="icon-advance-filter"></span>
