@@ -19,70 +19,69 @@
                         </a> {{localeData?.gstr3b_summary}}
                     </span>
 
-                <div class="btn-group dropdown d-inline-block" dropdown [autoClose]="false" #monthWise="bs-dropdown"
-                    (clickOutside)="monthWise.hide()" [attachOutsideOnClick]="true">
-                    <button id="button-nested" dropdownToggle type="button"
-                        class="dropdown clearfix list-title filter-by return-sel font-large dropdown-toggle pull-left"
-                        aria-controls="dropdown-nested">
-                        <ng-container>
-                            {{ selectedMonth }}
-                        </ng-container>
-                        <span class="caret"></span>
-                    </button>
-                    <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
-                        <li role="menuitem">
-                            <a class="dropdown-item" href="javascript:void(0)">
-                                <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()"
-                                    [showWeeks]="false" [minMode]="'month'"
-                                    (selectionDone)="periodChanged($event);monthWise.hide()"></datepicker>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                    <div class="btn-group dropdown d-inline-block" dropdown [autoClose]="false" #monthWise="bs-dropdown"
+                        (clickOutside)="monthWise.hide()" [attachOutsideOnClick]="true">
+                        <button id="button-nested" dropdownToggle type="button"
+                            class="dropdown clearfix list-title filter-by return-sel font-large dropdown-toggle pull-left"
+                            aria-controls="dropdown-nested">
+                            <ng-container>
+                                {{ selectedMonth }}
+                            </ng-container>
+                            <span class="caret"></span>
+                        </button>
+                        <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
+                            <li role="menuitem">
+                                <a class="dropdown-item" href="javascript:void(0)">
+                                    <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()"
+                                        [showWeeks]="false" [minMode]="'month'"
+                                        (selectionDone)="periodChanged($event);monthWise.hide()"></datepicker>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
 
-                <div class="pull-right download-authenticate-btn">
-                    <ul class="list-inline list-middle">
-                        <li>
-                            <div class="btn-group" dropdown #downloadReport="bs-dropdown" [autoClose]="false"
-                                (clickOutside)="downloadReport.hide()" [attachOutsideOnClick]="true">
-                                <button dropdownToggle type="button" class="btn dropdown-toggle btn-sky-blue mr-0"> <i
-                                        class="icon-download"></i> {{commonLocaleData?.app_download}}
+                    <div class="pull-right download-authenticate-btn">
+                        <ul class="list-inline list-middle">
+                            <li>
+                                <div class="btn-group" dropdown #downloadReport="bs-dropdown" [autoClose]="false"
+                                    (clickOutside)="downloadReport.hide()" [attachOutsideOnClick]="true">
+                                    <button dropdownToggle type="button" class="btn dropdown-toggle btn-sky-blue mr-0"> <i
+                                            class="icon-download"></i> {{commonLocaleData?.app_download}}
+                                        </button>
+                                    <ul id="dropdown-menu" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+                                        aria-labelledby="button-triggers-manual">
+                                        <div class="pd-l2 pd-r2 pd-1">
+                                            <div class="form-group">
+                                                <label>{{commonLocaleData?.app_email_id}} <i class='fa fa-info-circle' tooltip-placement="top"
+                                                        [tooltip]="localeData?.gstr3b?.email_tooltip"></i></label>
+                                                <input type="text" name="userEmail" [(ngModel)]="userEmail" class="form-control"
+                                                    required autocomplete="off" [placeholder]="localeData?.gstr3b?.email_address" />
+                                            </div>
+                                            <div class="clearfix">
+                                                <button class="btn btn-default" (click)="emailGSTR3bSheet(false)"
+                                                    [disabled]="!userEmail">{{commonLocaleData?.app_email_sheet}}</button>
+                                            </div>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li>
+
+                                <div *ngIf="showTaxPro">
+
+                                    <button *ngIf="isCompany" class="btn-2 pull-right btn authenticate-btn"
+                                        [ngClass]="{'btn-success': gstAuthenticated }"
+                                        (click)="returnGstr3B = { via: 'VAYANA' }">{{ gstAuthenticated ? localeData?.filing?.authenticated :
+                                            localeData?.filing?.authenticate}}
                                     </button>
-                                <ul id="dropdown-menu" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
-                                    aria-labelledby="button-triggers-manual">
-                                    <div class="pd-l2 pd-r2 pd-1">
-                                        <div class="form-group">
-                                            <label>{{commonLocaleData?.app_email_id}} <i class='fa fa-info-circle' tooltip-placement="top"
-                                                    [tooltip]="localeData?.gstr3b?.email_tooltip"></i></label>
-                                            <input type="text" name="userEmail" [(ngModel)]="userEmail" class="form-control"
-                                                required autocomplete="off" [placeholder]="localeData?.gstr3b?.email_address" />
-                                        </div>
-                                        <div class="clearfix">
-                                            <button class="btn btn-default" (click)="emailGSTR3bSheet(false)"
-                                                [disabled]="!userEmail">{{commonLocaleData?.app_email_sheet}}</button>
-                                        </div>
-                                    </div>
-                                </ul>
-                            </div>
-                        </li>
 
-                        <li>
+                                </div>
 
-                            <div *ngIf="showTaxPro">
+                            </li>
 
-                                <button *ngIf="isCompany" class="btn-2 pull-right btn authenticate-btn"
-                                    [ngClass]="{'btn-success': gstAuthenticated }"
-                                    (click)="returnGstr3B = { via: 'VAYANA' }">{{ gstAuthenticated ? localeData?.filing?.authenticated :
-                                        localeData?.filing?.authenticate}}
-                                </button>
-
-                            </div>
-
-                        </li>
-
-                    </ul>
-
-
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div class="scroll-y noscroll-x fill body scrollbox">
@@ -894,8 +893,9 @@
                     </div>
                 </div>
             </div>
-        </div>
 
+
+        </div>
     </div>
     <filing-header [isCompany]="isCompany" [currentPeriod]="currentPeriod" [fileGstr3b]="returnGstr3B" [localeData]="localeData" [commonLocaleData]="commonLocaleData"></filing-header>
 </ng-container>
