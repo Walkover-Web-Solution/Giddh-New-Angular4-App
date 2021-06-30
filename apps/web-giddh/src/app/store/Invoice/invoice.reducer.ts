@@ -102,7 +102,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
                 let o: GetAllLedgersOfInvoicesResponse = new GetAllLedgersOfInvoicesResponse();
                 o.results = [];
                 newState.ledgers = o;
-                newState.hasPendingVouchersListPermissions = false;
+                newState.hasPendingVouchersListPermissions = (res.statusCode !== UNAUTHORISED);
                 return Object.assign({}, state, newState);
             }
         }
