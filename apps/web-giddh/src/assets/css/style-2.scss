@@ -7713,7 +7713,7 @@ span#HW_badge_cont:nth-child(3) {
 }
 
 .setting-sidebar-open #content-wrapper{
-    padding-right: 240px;
+    padding-right: 0;
     padding-left: 60px !important;
 }
 .setting-sidebar-open .desktop-header {
@@ -8421,12 +8421,12 @@ body.update-scroll-hidden {
         }
     }
 }
-.on-setting-page{
+.on-setting-page, .on-user-page{
     aside-setting{
         .aside-pane{
             .back-to-main-slider{
                 display: block !important;
-                padding: 0 20px;
+                padding: 0 12px;
             }
             h4{
                 display: none;
@@ -8438,7 +8438,11 @@ body.update-scroll-hidden {
     }
 
 }
-
+// .on-user-page, .on-setting-page{
+//     #content-wrapper{
+//         padding-right: 240px;
+//     }
+// }
 /* responsive  starts here*/
 
 @media (max-width: 1440px) {
