@@ -1,12 +1,6 @@
 {
     "extends": "./tsconfig.json",
     "compilerOptions": {
-        // "allowJs": true,
-        // "allowSyntheticDefaultImports": true,
-        // "noEmit":true,
-        // "noEmitHelpers":true,
-        // "strictNullChecks":false,
-        // "baseUrl": "./src",
         "outDir": "../../dist/out-tsc/apps/web-giddh",
         "types": [],
         "typeRoots": [
