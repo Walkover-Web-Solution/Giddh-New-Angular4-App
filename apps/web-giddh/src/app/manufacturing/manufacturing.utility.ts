@@ -16,12 +16,3 @@ export class LinkedStocks {
     public quantity: number;
     public amount: number;
 }
-
-/*
-product( string: uniquename stock ) ,
-searchOperation(greaterThan , lessThan, greaterThanOrEquals, lessThanOrEquals, equals),
-searchBy (quantityInward , quantityOutward, voucherNumber),
-searchValue( any integer number),
-from (date string),
-to(date string)
-*/

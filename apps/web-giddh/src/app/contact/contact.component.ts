@@ -225,6 +225,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Listens for Master open/close event, required to load the data once master is closed */
     public isAddAndManageOpenedFromOutside$: Observable<boolean>;
+    /** This will store screen size */
+    public isMobileView: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -239,8 +241,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         private _groupWithAccountsAction: GroupWithAccountsAction,
         private _cdRef: ChangeDetectorRef, private _generalService: GeneralService,
         private _route: ActivatedRoute, private _generalAction: GeneralActions,
-        private _router: Router,
-        private _breakPointObservar: BreakpointObserver, private modalService: BsModalService,
+        private breakPointObservar: BreakpointObserver, private modalService: BsModalService,
         private settingsProfileActions: SettingsProfileActions, private groupService: GroupService,
         private settingsBranchAction: SettingsBranchActions,
         public currencyPipe: GiddhCurrencyPipe) {
@@ -261,10 +262,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.selectedCompany = activeCompany;
             }
         });
-
-        this.store.dispatch(this._companyActions.getAllRegistrations());
-        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-        this.getCompanyCustomField();
     }
 
     /**
@@ -303,6 +300,24 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This will return page heading based on active tab
+     *
+     * @param {boolean} event
+     * @memberof ContactComponent
+     */
+    public getPageHeading(): string {
+        if (this.isMobileView) {
+            if (this.activeTab === 'aging-report') {
+                return this.localeData?.aging_report;
+            } else if (this.activeTab !== 'aging-report') {
+                return this.localeData?.customer;
+            }
+        } else {
+            return "";
+        }
+    }
+
     public sort(key, ord = 'asc') {
         this.key = key;
         this.order = ord;
@@ -312,6 +327,9 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.store.dispatch(this._companyActions.getAllRegistrations());
+        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+        this.getCompanyCustomField();
         this.currentOrganizationType = this._generalService.currentOrganizationType;
         this.isAddAndManageOpenedFromOutside$ = this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$));
         // localStorage supported
@@ -357,10 +375,13 @@ export class ContactComponent implements OnInit, OnDestroy {
                     this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, 'true', PAGINATION_LIMIT, term, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                 }
             });
-        this._breakPointObservar.observe([
-            '(max-width: 1023px)'
+
+        this.breakPointObservar.observe([
+            '(max-width: 1023px)',
+            '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result.matches;
+            this.isMobileScreen = result?.breakpoints['(max-width: 1023px)'];
+            this.isMobileView = result?.breakpoints['(max-width: 767px)'];
         });
 
         combineLatest([this._route.params, this._route.queryParams])
@@ -597,12 +618,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.toggleAccountAsidePane();
     }
 
-    //  commenting for now may be use later for reference
-    // public openPaymentAside(acc: string) {
-    //     this.selectedAccForPayment = acc;
-    //     this.togglePaymentPane();
-    // }
-
     public toggleAccountAsidePane(event?): void {
         if (event) {
             event.preventDefault();
@@ -611,15 +626,6 @@ export class ContactComponent implements OnInit, OnDestroy {
 
         this.toggleBodyClass();
     }
-
-    //  commenting for now may be use later for reference
-    // public togglePaymentPane(event?) {
-    //     if (event) {
-    //         event.preventDefault();
-    //     }
-    //     this.paymentAsideMenuState = this.paymentAsideMenuState === 'out' ? 'in' : 'out';
-    //     this.toggleBodyClass();
-    // }
 
     public getUpdatedList(grpName?): void {
         if (grpName) {
@@ -748,7 +754,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                 if (res.status === 'success') {
                     this.updateCommentIdx = null;
                     account.comment = cloneDeep(res.body.description);
-                    this.updateInList(account.uniqueName, account.comment);
                 }
             });
         }, 500);
@@ -757,7 +762,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     // Add Selected Value to Message Body
     public addValueToMsg(val: any) {
         this.typeInTextarea(val.value);
-        // this.messageBody.msg += ` ${val.value} `;
     }
 
     public typeInTextarea(newText) {
@@ -808,8 +812,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                 sort: this.order
             }
         };
-        // uncomment it
-        // request.data = Object.assign({} , request.data, this.formattedQuery);
 
         if (this.messageBody.btn.set === this.commonLocaleData?.app_send_email) {
             return this._companyServices.sendEmail(request).pipe(takeUntil(this.destroyed$))
@@ -838,15 +840,6 @@ export class ContactComponent implements OnInit, OnDestroy {
 
         if (this.mailModal) {
             this.mailModal.hide();
-        }
-    }
-
-    /**
-     * updateInList
-     */
-    public updateInList(accountUniqueName, comment) {
-        if (this.activeTab === 'customer') {
-            //
         }
     }
 
@@ -1046,32 +1039,11 @@ export class ContactComponent implements OnInit, OnDestroy {
         this._companyServices.downloadCSV(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.searchLoader$ = observableOf(false);
             if (res.status === 'success') {
-                let blobData = this.base64ToBlob(res.body, 'text/csv', 512);
+                let blobData = this._generalService.base64ToBlob(res.body, 'text/csv', 512);
                 return saveAs(blobData, `${this.groupUniqueName}.csv`);
             }
         });
 
-    }
-
-    public base64ToBlob(b64Data, contentType, sliceSize) {
-        contentType = contentType || '';
-        sliceSize = sliceSize || 512;
-        let byteCharacters = atob(b64Data);
-        let byteArrays = [];
-        let offset = 0;
-        while (offset < byteCharacters.length) {
-            let slice = byteCharacters.slice(offset, offset + sliceSize);
-            let byteNumbers = new Array(slice.length);
-            let i = 0;
-            while (i < slice.length) {
-                byteNumbers[i] = slice.charCodeAt(i);
-                i++;
-            }
-            let byteArray = new Uint8Array(byteNumbers);
-            byteArrays.push(byteArray);
-            offset += sliceSize;
-        }
-        return new Blob(byteArrays, { type: contentType });
     }
 
     /**
@@ -1182,7 +1154,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         let offset = $('#edit-model-basic').position();
         if (offset) {
             let exactPositionTop = offset.top;
-            let exactPositionLeft = offset.left;
 
             $('#edit-model-basic').css('top', exactPositionTop);
         }
@@ -1236,13 +1207,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         let balancesColsArr = ['openingBalance'];
         let length = Object.keys(this.showFieldFilter).filter(f => this.showFieldFilter[f]).filter(f => balancesColsArr.includes(f)).length;
         this.tableColsPan = length > 0 ? 4 : 3;
-    }
-
-    /*
-    * Register Account navigation
-    * */
-    private registerAccount() {
-        this.router.navigate(['settings'], { queryParams: { tab: 'integration', tabIndex: 1, subTab: 4 } });
     }
 
     private setStateDetails(url) {
@@ -1426,7 +1390,9 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     public formatAmountInCurrency(amount: any): any {
         let formattedAmount = this.currencyPipe.transform(amount);
-        formattedAmount = formattedAmount.replace(/,/g, "");
+        formattedAmount = formattedAmount?.replace(/,/g, "");
+        formattedAmount = formattedAmount?.replace(/'/g, "");
+        formattedAmount = formattedAmount?.replace(/ /g, "");
         return formattedAmount;
     }
 

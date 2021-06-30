@@ -7,7 +7,6 @@
                 <i class="icon-dots-three-vertical"></i>
             </button>
             <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                <!-- <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="onOpenAdvanceSearch()">{{commonLocaleData?.app_advance_search}}</a></li> -->
                 <li role="menuitem"><a class="dropdown-item" id="share-ledger" href="javascript:void(0)"
                         (click)="showShareLedgerModal()">{{localeData?.share_ledger}}</a></li>
                 <li role="menuitem"><a class="dropdown-item" id="export-ledger-mobile-view" href="javascript:void(0)"
@@ -15,7 +14,7 @@
             </ul>
         </div>
         <hamburger-menu
-            [pageHeading]="(lc?.activeAccount?.name) ? (localeData?.page_heading + lc?.activeAccount?.name) + ' ' + commonLocaleData?.app_ac : ''">
+            [pageHeading]="(lc?.activeAccount?.name) ? ((!isMobileScreen ? localeData?.page_heading: '') + lc?.activeAccount?.name) + ' ' + commonLocaleData?.app_ac : ''">
         </hamburger-menu>
         <section class="container ledger-section" [hidden]="isShowLedgerColumnarReportTable">
             <!-- region ledger table-->
@@ -80,8 +79,6 @@
                                     href="javascript:;" (click)="resetAdvanceSearch()"
                                     [tooltip]="commonLocaleData?.app_reset_advance_search">
                                     <i aria-hidden="true" class="icon-refresh"></i>
-                                    <!-- remove text as per shubhendr sir -->
-                                    <!-- {{commonLocaleData?.app_clear_filter}} -->
                                 </a>
                             </div>
 
@@ -106,8 +103,6 @@
                                 *ngIf="isAdvanceSearchImplemented && !isMobileScreen" href="javascript:;"
                                 (click)="resetAdvanceSearch()" [tooltip]="commonLocaleData?.app_reset_advance_search">
                                 <i aria-hidden="true" class="icon-refresh"></i>
-                                <!-- remove as per shubhendra sir comment -->
-                                <!-- {{commonLocaleData?.app_clear_filter}} -->
                             </a>
                             <div class="d-flex xs-mb-1" *ngIf="checkedTrxWhileHovering?.length > 0 && !isMobileScreen">
 
@@ -344,7 +339,8 @@
                                                                         <span class="pd-l05 checkbox-span">
                                                                             <input type="checkbox"
                                                                                 id="{{'transaction-mapped-select-entry-dr-' + i}}"
-                                                                                (click)="selectEntryForBulkAction($event, item)" />
+                                                                                (click)="selectEntryForBulkAction($event, item)"
+                                                                                [disabled]="(currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2)"/>
                                                                         </span>
                                                                         <span class="mr-l05">
                                                                             <input class="form-control" [maxlength]="10"
@@ -371,6 +367,7 @@
                                                                             (viewInitEvent)="debitShSelect?.show()"
                                                                             [options]="searchResults"
                                                                             [(ngModel)]="txn.particular"
+                                                                            [disabled]="(currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2)"
                                                                             [isPaginationEnabled]="true"
                                                                             (scrollEnd)="handleScrollEnd()"
                                                                             (dynamicSearchedQuery)="onSearchQueryChanged($event)"
@@ -497,7 +494,8 @@
                                                                             <input type="checkbox"
                                                                                 id="{{'transaction-mapped-select-entry-cr-' + i}}"
                                                                                 [(ngModel)]="txn.isChecked"
-                                                                                (click)="selectEntryForBulkAction($event, item)" />
+                                                                                (click)="selectEntryForBulkAction($event, item)"
+                                                                                [disabled]="(currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2)"/>
                                                                         </span>
                                                                         <span class="mr-l05">
                                                                             <input class="form-control" [maxlength]="10"
@@ -525,6 +523,7 @@
                                                                             (viewInitEvent)="creditShSelect?.show()"
                                                                             [options]="searchResults"
                                                                             [(ngModel)]="txn.particular"
+                                                                            [disabled]="(currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2)"
                                                                             (selected)="selectAccount($event,txn)"
                                                                             [isPaginationEnabled]="true"
                                                                             (scrollEnd)="handleScrollEnd()"
@@ -763,9 +762,6 @@
                             {{localeData?.pages}}</span>
 
                         <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref>
-                            <!-- <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(lc.transactionData$ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
-        [boundaryLinks]="true">
-        </pagination> -->
                         </div>
 
                     </div>
@@ -1467,9 +1463,6 @@
                         <span class="black ng-binding">{{ (lc.transactionData$ | async)?.totalPages }}
                             {{localeData?.pages}}</span>
                         <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref>
-                            <!-- <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(lc.transactionData$ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
-        [boundaryLinks]="true">
-        </pagination> -->
                         </div>
 
                     </div>
@@ -1531,13 +1524,16 @@
                                         </amount-field>
                                     </span>
                                 </h1>
-                                <span class=" mr-r2 greyTextClr">{{commonLocaleData?.app_debit}} <span
+                                <span class="mr-r2 grey-text-color">{{commonLocaleData?.app_debit}}
+                                    <span
                                         class="digit-blue d-inline-flex">
                                         <amount-field [amount]="(lc.transactionData$ | async)?.debitTransactionsCount"
                                             [currencySymbol]="false" [currencyCode]="false">
                                         </amount-field>
-                                    </span></span><br>
-                                <span class=" mr-r2 greyTextClr">{{commonLocaleData?.app_credit}}
+                                    </span>
+                                </span>
+                                <br>
+                                <span class="mr-r2 grey-text-color">{{commonLocaleData?.app_credit}}
                                     <span class="digit-blue d-inline-flex">
                                         <amount-field [amount]="(lc.transactionData$ | async)?.creditTransactionsCount"
                                             [currencySymbol]="false" [currencyCode]="false">
@@ -1623,7 +1619,7 @@
 
                                 <div class="d-flex debit-credit-amount">
 
-                                    <h1 class="mr-t05 font16 greyTextClr d-flex flex-column">
+                                    <h1 class="mr-t05 font16 grey-text-color d-flex flex-column">
                                         {{commonLocaleData?.app_debit}}
                                         <span class="digit-blue mt-1 d-inline-flex">
                                             <amount-field [amount]="ledgerTxnBalance?.debitTotal"
@@ -1640,7 +1636,7 @@
                                         </span>
                                     </h1>
 
-                                    <h1 class="mr-t05 font16 greyTextClr d-flex flex-column">
+                                    <h1 class="mr-t05 font16 grey-text-color d-flex flex-column">
                                         {{commonLocaleData?.app_credit}}
                                         <span class="digit-blue d-flex mt-1">
                                             <amount-field [amount]="ledgerTxnBalance?.creditTotal"

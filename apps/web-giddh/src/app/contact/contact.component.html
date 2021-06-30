@@ -1,7 +1,7 @@
 <ng-container appTranslate [file]="'contact'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <div class="relative">
-        <hamburger-menu *ngIf="activeTab !== 'vendor'"></hamburger-menu>
+        <hamburger-menu *ngIf="activeTab !== 'vendor'" [pageHeading]="getPageHeading()"></hamburger-menu>
         <hamburger-menu [pageHeading]="localeData?.page_heading" *ngIf="activeTab === 'vendor'"></hamburger-menu>
         <tabset #staticTabs class="custom-tabs" [ngClass]="{'hide-header': activeTab === 'vendor'}">
             <!-- region Customer/Vendor -->
@@ -239,9 +239,7 @@
                             <div>
 
                                 <div *ngIf="!isMobileScreen && !isGetAccountsInProcess">
-                                    <!-- <perfect-scrollbar fxFlex="auto" [scrollIndicators]="true"> -->
                                     <ng-container *ngTemplateOutlet='mainTable'></ng-container>
-                                    <!-- </perfect-scrollbar> -->
                                 </div>
                                 <giddh-page-loader *ngIf="!isMobileScreen && isGetAccountsInProcess">
                                 </giddh-page-loader>
@@ -262,7 +260,7 @@
                                 </div>
 
                                 <div class="bg-white clearfix">
-                                    <div class="customer-right  clearfix width-100">
+                                    <div class="customer-right clearfix width-100">
                                         <table class="text-right">
                                             <tr>
                                                 <td *ngIf="showFieldFilter.openingBalance">
@@ -327,10 +325,8 @@
             <!-- region Aging Report -->
             <tab heading="{{localeData?.aging_report}}" [id]="(activeTab === 'aging-report') ? 'giddh-page-heading': ''"
                 (selectTab)="tabSelected('aging-report')" [active]="activeTab === 'aging-report'">
-                <!--    <div *ngIf="activeTab === 'aging'">-->
                 <aging-report [localeData]="localeData" [commonLocaleData]="commonLocaleData"
                     (creteNewCustomerEvent)="openAddAndManage('customer')"></aging-report>
-                <!--    </div>-->
             </tab>
             <!-- endregion -->
         </tabset>
@@ -383,7 +379,6 @@
                         <h3 class="modal-title bg" id="modal-title-mail-customer">{{messageBody.header.set}}</h3>
                         <span aria-hidden="true" class="close" data-dismiss="modal"
                             [attr.aria-label]="commonLocaleData?.app_close" (click)="mailModal.hide()">×</span>
-                        <!-- <i class="icon-cross text-right close-modal" aria-hidden="true" ></i> -->
                     </div>
 
                     <div class="modal-body pd-l2 pd-r2 clearfix">
@@ -423,15 +418,15 @@
     <div class="abc " *ngIf="accountAsideMenuState === 'in'">
         <aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc"
             [activeAccountDetails]="activeAccountDetails" [isUpdateAccount]="isUpdateAccount"
-            class="account-aside-menu-state  transinherit" [@slideInOut]="accountAsideMenuState"
+            class="account-aside-menu-state  transform-inherit" [@slideInOut]="accountAsideMenuState"
             [commonLocaleData]="commonLocaleData" (closeAsideEvent)="toggleAccountAsidePane($event)"
             (getUpdateList)="getUpdatedList($event)">
         </aside-menu-account>
     </div>
 
     <div class="aside-overlay" *ngIf="paymentAsideMenuState === 'in'"></div>
-    <div class="abc vendorPayNow" *ngIf="paymentAsideMenuState === 'in'">
-        <payment-aside class="account-aside-menu-state transinherit" [selectedAccForPayment]="selectedAccForPayment"
+    <div class="abc vendor-pay-now" *ngIf="paymentAsideMenuState === 'in'">
+        <payment-aside class="account-aside-menu-state transform-inherit" [selectedAccForPayment]="selectedAccForPayment"
             [localeData]="localeData" [commonLocaleData]="commonLocaleData">
         </payment-aside>
     </div>
@@ -527,7 +522,6 @@
                                     {{commonLocaleData?.app_email}}
                                 </div>
                                 <div class="icon-pointer cursor-pointer icon-class-search">
-                                    <!--                        <i class="icon-search"></i>-->
                                 </div>
                             </div>
 
@@ -713,7 +707,6 @@
 
                                             </div>
                                         </div>
-                                        <!-- </ul> -->
 
                                     </div>
                                 </div>
@@ -952,7 +945,6 @@
 
                                             </div>
                                         </div>
-                                        <!-- </ul> -->
 
                                     </div>
                                 </div>

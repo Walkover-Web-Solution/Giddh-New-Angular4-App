@@ -768,10 +768,11 @@ sh-select:focus {
 }
 .ledger-head {
     position: sticky;
-    top: 45px;
+    top: 55px;
     z-index: 1;
     background-color: $alice-blue-light;
     padding-left: 5px;
+    background-color: $alice-blue-light;
 }
 .linked-entities {
     width: 200px;
@@ -1092,27 +1093,7 @@ sh-select:focus {
         padding-top: 0;
     }
 }
-/*comment for now
-@media (min-width: 768px) {
-    .ledger-book:before {
-        content: " ";
-        height: calc(100% - 220px);
-        position: absolute;
-        width: 0;
-        border-left: 1px solid $gainsboro;
-        top: 0px;
-        bottom: 0;
-        z-index: 1;
-        margin: 0 auto;
-        left: 0px;
-        right: 0;
-    }
 
-    table.ledger-footer-1:first-child {
-        border-right: 1px solid $gainsboro;
-    }
-}
-*/
 .ledger-row td:nth-child(3) {
     justify-content: flex-end !important;
 }

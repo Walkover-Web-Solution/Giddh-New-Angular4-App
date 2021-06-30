@@ -22,22 +22,6 @@ export class ManufacturingService {
     }
 
     /**
-     * get manufacturing item details
-     * URL:: company/:companyUniqueName/stock/:stockUniqueName/manufacture/:manufacturingUniqueName
-     */
-    public GetManufacturingItem(model: IManufacturingUnqItemObj): Observable<BaseResponse<ICommonResponseOfManufactureItem, string>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + MANUFACTURING_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', encodeURIComponent(model.stockUniqueName)).replace(':manufacturingUniqueName', model.manufacturingUniqueName)).pipe(
-            map((res) => {
-                let data: BaseResponse<ICommonResponseOfManufactureItem, string> = res;
-                data.queryString = model;
-                return data;
-            }),
-            catchError((e) => this.errorHandler.HandleCatch<ICommonResponseOfManufactureItem, string>(e, '')));
-    }
-
-    /**
      * create manufacturing item
      * URL:: company/:companyUniqueName/stock/:stockUniqueName/manufacture
      * get resuest model and stock uniquename

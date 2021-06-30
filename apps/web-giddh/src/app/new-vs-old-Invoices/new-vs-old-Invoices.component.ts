@@ -120,15 +120,12 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                 }, 0);
                 this.newSalesClientTotal = s.newSales.uniqueCount;
                 this.totalSalesClientTotal = s.totalSales.uniqueCount;
-                // this.clientAllTotal = this.clientTotal + this.newSalesClientTotal + this.totalSalesClientTotal;
                 this.clientAllTotal = s.totalSales.uniqueCount;
                 this.newSalesAmount = s.newSales.total;
                 this.totalSalesAmount = s.totalSales.total;
-                // this.totalAmount = this.crdTotal + this.newSalesAmount + this.totalSalesAmount;
                 this.totalAmount = s.totalSales.total;
                 this.newSalesInvCount = s.newSales.invoiceCount;
                 this.totalSalesInvCount = s.totalSales.invoiceCount;
-                // this.invoiceCountAll = this.invTotal + this.newSalesInvCount + this.totalSalesInvCount;
                 this.invoiceCountAll = s.totalSales.invoiceCount;
             } else {
                 this.clientAllTotal = 0;
@@ -145,25 +142,6 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     }
 
     public go(form?: NgForm) {
-        // if (!this.selectedYear) {
-        //   this.showErrorToast('please select year');
-        //   return;
-        // }
-        //
-        // if (!this.selectedType) {
-        //   this.showErrorToast('please select type');
-        //   return;
-        // }
-        //
-        // if (this.selectedType && this.selectedType === 'month' && !(this.selectedmonth)) {
-        //   this.showErrorToast('please select month');
-        //   return;
-        // }
-        //
-        // if (this.selectedType && this.selectedType === 'quater' && !(this.selectedQuater)) {
-        //   this.showErrorToast('please select quater');
-        //   return;
-        // }
         this.isLoading = true;
         this.NewVsOldInvoicesQueryRequest.type = this.selectedType;
         if (this.NewVsOldInvoicesQueryRequest.type === 'month') {

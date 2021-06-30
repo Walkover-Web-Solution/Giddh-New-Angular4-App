@@ -122,47 +122,6 @@ export class GstDatePeriod {
     public to: string;
 }
 
-export class HsnSummaryResponse {
-    public page: number;
-    public count: number;
-    public totalPages: number;
-    public totalItems: number;
-    public results: HsnSummaryResult[];
-    public size: number;
-}
-
-export class HsnSummaryResult {
-    public totalTransactions: number;
-    public transactionSummary: GstTransactionSummary[];
-    public hsnsac: number;
-    public desc: number;
-    public qty: number;
-    public txval: number;
-    public iamt: number;
-    public camt: number;
-    public csamt: number;
-    public samt: number;
-    public total: number;
-    public uqc: string;
-}
-
-export class NilSummaryResponse {
-    public page: number;
-    public count: number;
-    public totalPages: number;
-    public totalItems: number;
-    public results: NilSummaryResult[];
-    public size: number;
-}
-
-export class NilSummaryResult {
-    public supplyType: string;
-    public registrationType: string;
-    public nilAmount: number;
-    public exemptAmount: number;
-    public nonGstAmount: number;
-}
-
 export class GstTransactionResult {
     public page: number;
     public count: number;
@@ -216,33 +175,6 @@ export class GstOverViewSummary {
     public pos: any;
     public name: string;
     public transactions?: GstOverViewSummary[];
-}
-
-export class TransactionCounts {
-    public gstr1Transactions: number;
-    public gstr2Transactions: number;
-    public uncategorized: number;
-}
-
-export class DocumentIssuedResponse {
-    public page: number;
-    public count: number;
-    public totalPages: number;
-    public totalItems: number;
-    public results: DocumentIssuedResult[];
-    public size: number;
-}
-
-export class DocumentIssuedResult {
-    public num: number;
-    public doc: string;
-    public from: string;
-    public to: string;
-    public totnum: number;
-    public cancel: number;
-    public netIssue: any;
-    public action: string;
-    public custom: string;
 }
 
 export class Gstr1SummaryResponse {
@@ -299,13 +231,6 @@ export class Gstr1SummaryBaseInv {
     public expt_amt: number;
     public nil_amt: number;
     public ngsup_amt: number;
-}
-
-export class Gstr1SummaryBaseNt extends Gstr1SummaryBaseInv {
-    public ntty: string;
-    public nt_num: string;
-    public nt_dt: string;
-    public p_gst: string;
 }
 
 export class B2BSummary {
@@ -376,23 +301,10 @@ export class DocIssueSummary {
     public doc_det: DocIssueSummaryDetails[];
 }
 
-export class CDNURSummary {
-    public typ: string;
-    public ntty: string;
-    public nt_num: string;
-    public nt_dt: string;
-    public p_gst: string;
-    public inum: string;
-    public idt: string;
-    public val: number;
-    public itms: Partial<Gstr1SummaryBaseInvItems[]>;
-}
-
 export class GetGspSessionResponse {
     public vayana: boolean;
     public taxpro: boolean;
 }
-
 
 /**
  *

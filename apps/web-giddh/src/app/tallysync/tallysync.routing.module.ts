@@ -5,13 +5,11 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
-
 import { TallysyncComponent } from './tallysync.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InprogressComponent } from './inprogress/inprogress.component';
 import { CompletedComponent } from './completed/completed.component';
-
 import { NgxUploaderModule } from 'ngx-uploader';
 import { InvoiceUiDataService } from '../services/invoice.ui.data.service';
 import { SelectModule } from '../theme/ng-select/ng-select';

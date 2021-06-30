@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, NgZone, OnDestroy, OnInit, Output, Renderer2, ViewChild, Input, EventEmitter, HostListener } from '@angular/core';
-import { ReplaySubject, Subject, Observable } from 'rxjs';
+import { ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { ALT, BACKSPACE, CAPS_LOCK, CONTROL, DOWN_ARROW, ENTER, ESCAPE, LEFT_ARROW, MAC_META, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, RIGHT_ARROW, SHIFT, TAB, UP_ARROW } from '@angular/cdk/keycodes';
 import { ScrollComponent } from './virtual-scroll/vscroll';
@@ -253,16 +253,6 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             }
         });
-    }
-
-    /**
-     * This function will get called if clicked outside of modal
-     *
-     * @param {*} e
-     * @memberof CommandKComponent
-     */
-    public handleOutSideClick(e: any): void {
-
     }
 
     /**

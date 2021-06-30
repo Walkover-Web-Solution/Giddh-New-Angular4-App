@@ -1,7 +1,7 @@
 import { StockGroupResponse } from '../../../models/api-models/Inventory';
 import { AppState } from '../../../store/roots';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Observable, ReplaySubject, Subscription } from 'rxjs';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
 import { Store, select } from '@ngrx/store';

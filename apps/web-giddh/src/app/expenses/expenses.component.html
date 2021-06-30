@@ -1,10 +1,10 @@
 <ng-container appTranslate [file]="'expenses'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
     <div class="relative">
-        <hamburger-menu></hamburger-menu>
+        <hamburger-menu [pageHeading]="isMobileScreen ? getPageHeading(): ''"></hamburger-menu>
         <div class="clearfix petty-cash">
             <tabset class="custom-tabs" #tabset>
-                <div class="container-fluid pd-t2 mr-b15" *ngIf="!isSelectedRow">
+                <div class="container-fluid mr-b15" *ngIf="!isSelectedRow">
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="d-flex">
@@ -31,6 +31,7 @@
                 </div>
                 <tab [heading]="localeData?.pending" (selectTab)="tabChanged('pending', $event);"
                     [id]="(currentSelectedTab === 'pending') ? 'giddh-page-heading': ''">
+                    <div class="expense-head">
                     <ng-container *ngIf="currentSelectedTab === 'pending'">
                         <app-pending-list #pendingListComponent *ngIf="!isSelectedRow" [isClearFilter]="isClearFilter"
                             [localeData]="localeData" [commonLocaleData]="commonLocaleData"
@@ -51,14 +52,17 @@
                             </div>
                         </div>
                     </ng-container>
+                </div>
                 </tab>
                 <tab [heading]="localeData?.rejected" (selectTab)="tabChanged('rejected', $event);"
                     [id]="(currentSelectedTab === 'rejected') ? 'giddh-page-heading': ''">
+                    <div class="expense-head">
                     <ng-container *ngIf="currentSelectedTab === 'rejected'">
                         <app-rejected-list #rejectedListComponent (isFilteredSelected)="isFilteredSelected($event);"
                             [isClearFilter]="isClearFilter" [localeData]="localeData"
                             [commonLocaleData]="commonLocaleData"></app-rejected-list>
                     </ng-container>
+                </div>
                 </tab>
             </tabset>
         </div>
@@ -73,7 +77,6 @@
         </div>
 
         <div class="modal-body ">
-            <!-- <app-filter-data></app-filter-data> -->
             <div class="row ">
                 <div class="col-sm-5 ">
                     <label class="pd-t05 ">{{commonLocaleData?.app_total_amount}}</label>
@@ -97,8 +100,6 @@
                 <div class="col-sm-5 ">
                 </div>
                 <div class="col-sm-7 ">
-                    <!-- <button type="button " class="btn btn-success " (click)="confirm() ">Add</button>
-                    <button type="button " class="btn btn-danger " (click)="decline() ">Cancel</button> -->
                 </div>
             </div>
         </div>

@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { SettingsAsideFormType } from '../constants/settings.constant';
 import { IForceClear } from '../../models/api-models/Sales';
 import { ToasterService } from '../../services/toaster.service';
@@ -227,9 +226,9 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             }
             let gstVal: string = this.addressForm.get('taxNumber').value?.trim();
             this.addressForm.get('taxNumber').setValue(gstVal);
-            if (gstVal.length) {
+            if (gstVal?.length) {
 
-                if (gstVal.length >= 2) {
+                if (gstVal?.length >= 2) {
                     let currentState = this.addressConfiguration.stateList.find(state => state.code === gstVal.substring(0, 2));
                     if (currentState) {
                         this.addressForm.get('state')?.patchValue(currentState.value);

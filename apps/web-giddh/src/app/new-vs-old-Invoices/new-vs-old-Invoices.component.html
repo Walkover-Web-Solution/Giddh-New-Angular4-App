@@ -64,14 +64,7 @@
                     <div class="head-row">
                         <div class="div-cell">{{localeData?.sales_from}}</div>
                         <div class="div-cell align-end">{{localeData?.clients}}</div>
-                        <div class="div-cell align-end">
-                            {{commonLocaleData?.app_amount}}
-                            <span class="d-inline-flex">
-                                <amount-field [amount]="commonLocaleData?.app_amount" [currencySymbol]="false"
-                                    [currencyCode]="false">
-                                </amount-field>
-                            </span>
-                        </div>
+                        <div class="div-cell align-end">{{commonLocaleData?.app_amount}}</div>
                         <div class="div-cell align-end">{{localeData?.no_invoices}}</div>
                     </div>
                     <div class="div-row">

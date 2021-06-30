@@ -4,6 +4,7 @@ import { AppState } from 'apps/web-giddh/src/app/store';
 import { ReplaySubject } from 'rxjs';
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
 import { takeUntil, take } from 'rxjs/operators';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
     selector: 'hamburger-menu',
@@ -14,14 +15,18 @@ import { takeUntil, take } from 'rxjs/operators';
 export class HamburgerMenuComponent implements OnInit, OnDestroy {
     /* This inputs the heading which is needed to show */
     @Input() public pageHeading: string = '';
+    /** This will hold sidebar toggle state */
+    @Input() public allowSidebarToggle: boolean = true;
 
     /* This will show sidebar is open */
     public sideMenu: { isopen: boolean } = { isopen: true };
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True, when mobile screen size is detected */
+    public isMobileView: boolean = false;
 
-    constructor(private store: Store<AppState>, private generalActions: GeneralActions) {
+    constructor(private store: Store<AppState>, private generalActions: GeneralActions, private breakPointObservar: BreakpointObserver) {
 
     }
 
@@ -37,6 +42,11 @@ export class HamburgerMenuComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.session.commonLocaleData), take(1)).subscribe((response) => {
             this.commonLocaleData = response;
+        });
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileView = result?.breakpoints['(max-width: 767px)'];
         });
     }
 
@@ -57,9 +67,11 @@ export class HamburgerMenuComponent implements OnInit, OnDestroy {
      * @memberof HamburgerMenuComponent
      */
     public sideBarStateChange(openSideMenu: boolean): void {
-        if (this.sideMenu) {
-            this.sideMenu.isopen = openSideMenu;
+        if(this.allowSidebarToggle) {
+            if (this.sideMenu) {
+                this.sideMenu.isopen = openSideMenu;
+            }
+            this.store.dispatch(this.generalActions.openSideMenu(openSideMenu));
         }
-        this.store.dispatch(this.generalActions.openSideMenu(openSideMenu));
     }
 }

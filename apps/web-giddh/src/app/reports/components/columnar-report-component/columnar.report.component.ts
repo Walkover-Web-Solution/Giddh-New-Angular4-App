@@ -81,14 +81,6 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     ) {
         this.exportRequest.fileType = 'xls';
         this.exportRequest.balanceTypeAsSign = false;
-
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany && !this.activeFinancialYear) {
-                this.companyUniqueName = activeCompany.uniqueName;
-                this.activeFinancialYear = activeCompany.activeFinancialYear.uniqueName;
-                this.selectActiveFinancialYear();
-            }
-        });
     }
 
     /**
@@ -97,6 +89,14 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     public ngOnInit(): void {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany && !this.activeFinancialYear) {
+                this.companyUniqueName = activeCompany.uniqueName;
+                this.activeFinancialYear = activeCompany.activeFinancialYear.uniqueName;
+                this.selectActiveFinancialYear();
+            }
+        });
+        
         this.getColumnarRequestModel = new ReportsDetailedRequestFilter();
         this.getColumnarRequestModel.page = 1;
         this.getColumnarRequestModel.count = this.paginationCount;
