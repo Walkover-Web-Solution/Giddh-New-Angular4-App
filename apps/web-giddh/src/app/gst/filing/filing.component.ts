@@ -91,7 +91,7 @@ export class FilingComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.breakpointObserver
-        .observe(['(max-width: 767px)'])
+        .observe(['(max-width: 768px)'])
         .pipe(takeUntil(this.destroyed$))
         .subscribe((state: BreakpointState) => {
             this.isMobileScreen = state.matches;
@@ -255,6 +255,16 @@ export class FilingComponent implements OnInit, OnDestroy {
 
         // get session details
         this.store.dispatch(this._gstAction.GetGSPSession(this.activeCompanyGstNumber));
+
+        this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
+            if (this.isMobileScreen) {
+                if (shouldOpen) {
+                    this.asideGstSidebarMenuState = 'in';
+                } else {
+                    this.asideGstSidebarMenuState = 'out';
+                }
+            }
+        });
     }
 
     /**

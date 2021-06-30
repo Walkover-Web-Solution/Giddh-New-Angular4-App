@@ -99,7 +99,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public searchedGroups: IOption[];
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
     constructor(
         private _fb: FormBuilder,
         private store: Store<AppState>,
@@ -191,8 +190,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                 let arr: IOption[] = [];
                 if (taxes) {
                     if (activeGroup) {
-                        let applicableTaxes = activeGroup.applicableTaxes.map(p => p.uniqueName);
-
+                        let applicableTaxes = activeGroupTaxHierarchy.applicableTaxes.map(p => p.uniqueName);
                         if (activeGroupTaxHierarchy) {
                             // prepare drop down options
                             this.companyTaxDropDown = differenceBy(taxes.map(p => {

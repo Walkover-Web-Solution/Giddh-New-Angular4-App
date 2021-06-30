@@ -614,6 +614,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     } else {
                         if (response.account && response.date) {
                             this.getAllAdvanceReceipts(response.account.uniqueName, response.date);
+                            this.selectedPerformAdjustPaymentAction = false;
                         }
                     }
                 }
