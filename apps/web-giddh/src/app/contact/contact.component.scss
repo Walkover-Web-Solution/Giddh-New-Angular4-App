@@ -403,6 +403,17 @@ button.btn.btn-filter span.icon-cross {
     }
 }
 
+.total-customer-vendor-count{
+    color: #6A6C85 !important;
+    font-weight: 400 !important;
+    font-size: 12px !important;
+    letter-spacing: 1px;
+    strong{
+        color:#1A237E !important;
+        font-size: 16px;
+    }
+}
+
 /*responsive*/
 @media (max-width: 1024px) {
     .customer-form-inline {
@@ -510,6 +521,12 @@ button.btn.btn-filter span.icon-cross {
     }
     table.on-mobile-view tbody td:before {
         left: 30px;
+    }
+    .aging-table span.justify-content-end {
+        justify-content: flex-start !important;
+    }
+    .pd-t1-md {
+        padding-top: 0px;
     }
 }
 

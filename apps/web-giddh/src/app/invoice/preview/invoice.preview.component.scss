@@ -302,10 +302,6 @@ ul.select-action-dropdown {
     background: $lavender !important;
 }
 
-.add-invoice .dropdown-toggle {
-    color: $white;
-}
-
 .invoice-container {
     padding: 0 15px;
 }
@@ -373,8 +369,6 @@ ul.select-action-dropdown {
 }
 
 .dropdown-toggle.more-btn-dropdown {
-    color: $navy !important;
-    border: 1px solid $chetwode-blue;
     width: 80px;
     padding-left: 10px;
     padding-right: 10px;
@@ -382,22 +376,6 @@ ul.select-action-dropdown {
     justify-content: space-between;
     align-items: center;
     margin-right: 15px;
-    color: $midnight-express;
-    background-color: $white;
-}
-
-.dropdown-toggle.more-btn-dropdown:hover {
-    background: $chetwode-blue;
-    color: $white !important;
-    border-color: $chetwode-blue;
-}
-
-.dropdown-toggle.more-btn-dropdown:hover .caret {
-    color: $white !important;
-}
-
-.dropdown-toggle.more-btn-dropdown .caret {
-    color: $nobel;
 }
 
 button.btn.btn-default.ladda-button {
@@ -567,6 +545,24 @@ span.icon-export-icon {
         min-width: 100% !important;
     }
 }
+
+@media (max-width: 1124px){
+    .add-invoice{
+        flex-direction: column-reverse;
+        .justify-content-end{
+            margin-top: 10px;
+        }
+    }
+
+    .ladda-button{
+        margin-right: 0 !important;
+    }
+
+    .input-grp-date-range-picker{
+        align-items: flex-start;
+    }
+}
+
 @media (max-width: 768px) {
     .invoice-table.desktop-table.giddh-table {
         td {
@@ -762,6 +758,28 @@ span.icon-export-icon {
     .visible-on-desktop {
         display: none;
     }
+    .date-advance-search {
+        padding-bottom: 0px !important;
+    }
+
+    .export-new-invoice{
+        align-items: flex-start !important;
+    }
+    .cancel-filter-export{
+        flex-flow: column-reverse;
+        align-items: flex-end;
+        .d-flex{
+            margin-top: 10px;
+        }
+    }
+
+    .more-btn-dropdown{
+        margin-right: 0 !important;
+    }
+
+    .advance-icon{
+        margin-right: 0 !important;
+    }
 }
 
 @media (max-width: 420px) {
@@ -776,14 +794,7 @@ span.icon-export-icon {
 }
 
 @media (max-width: 360px) {
-    .input-grp-date-range-picker .btn {
-        padding-left: 0;
-        padding-top: 10px;
-        padding-bottom: 0;
-    }
-    .small-loading {
-        top: 5px;
-    }
+  
 }
 
 @media (max-width: 320px) {
@@ -841,10 +852,36 @@ span.icon-export-icon {
             margin-right: 0 !important;
             justify-content: space-between;
         }
-        .search-icon-block {
-            position: absolute;
-            right: 0;
-            bottom: -50px;
+        .btn{
+            padding-left: 0;
+            padding-top: 10px;
+            padding-bottom: 0;
+        }
+    }
+
+    .small-loading {
+        top: 5px;
+    }
+
+    .date-advance-search{
+        width: 80%;
+        .input-grp-date-range-picker{
+            width: 90%;
+            .flex-fill{
+                width: 80%;
+            }
+        }
+    }
+
+    .search-icon-block {
+        .icon-search{
+            padding: 0 5px;
+        }
+    }
+
+    .advance-icon{
+        .icon-advance-filter{
+            padding: 2px 0px;
         }
     }
 }
@@ -853,5 +890,16 @@ span.icon-export-icon {
     .table-responsive{
         max-height: calc(100vh - 302px);
         overflow-y: auto;
+    }
+}
+
+@media (max-width: 480px){
+    .cancel-more{
+        display: flex !important;
+    }
+    .cancel-filter-export{
+        .d-flex{
+            display: none !important;
+        }
     }
 }

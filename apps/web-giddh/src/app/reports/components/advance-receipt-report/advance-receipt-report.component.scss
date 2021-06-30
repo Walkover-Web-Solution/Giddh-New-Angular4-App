@@ -112,18 +112,7 @@
 }
 .basic > tbody > tr > td,
 .basic > thead > tr > th {
-    padding: 8px 10px;
-}
-.invoice-footer h3 {
-    font-size: 16px;
-    color: $nobel;
-    display: block;
-    margin-right: 10px;
-}
-.invoice-footer h1 {
-    font-size: 22px;
-    color: $night-rider;
-    display: block;
+    padding: 15px 11px;
 }
 .giddh-table .td-search-box {
     padding-right: 10px !important;
@@ -135,35 +124,12 @@
     width: 200px;
 }
 @media screen and (max-width: 1199px) {
-    .invoice-footer {
-        h1 {
-            font-size: 18px;
-        }
-        h3 {
-            margin-right: 0;
-            margin-bottom: 3px;
-        }
-    }
-    .total-due-sale {
-        margin-bottom: 15px !important;
-    }
+
     .clear-filter {
         margin-left: 15px;
     }
     .reverse-table-report {
         margin-bottom: 100px;
-    }
-}
-@media (max-width: 991px) {
-    .total-due-sale {
-        &:nth-child(1),
-        &:nth-child(2) {
-            margin-bottom: 8px;
-        }
-        h1 {
-            font-size: 16px;
-            margin-top: 5px;
-        }
     }
 }
 @media (max-width: 768px) {
@@ -172,21 +138,6 @@
     }
 }
 @media only screen and (max-width: 767px) {
-    .invoice-footer {
-        position: relative;
-        margin-top: 10px;
-        margin-left: 0;
-        left: 0;
-        .total-due-sale-wrap {
-            padding-left: 0 !important;
-            .total-due-sale {
-                margin-bottom: 15px;
-            }
-        }
-    }
-    .total-due-sale:last-child {
-        margin-bottom: 0px;
-    }
     .entry-date {
         padding: 5px 10px 5px 50% !important;
     }
@@ -241,5 +192,12 @@
             justify-content: end !important;
             margin-left: 0;
         }
+    }
+}
+
+@media (min-width: 767px){
+    .table-responsive{
+        max-height: calc(100vh - 265px);
+        overflow-y: auto;
     }
 }
