@@ -1,32 +1,13 @@
 import { Observable, of, ReplaySubject, combineLatest } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil, auditTime } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, takeUntil, auditTime, take } from 'rxjs/operators';
 import { IOption } from './../../theme/ng-select/option.interface';
-import {
-    ChangeDetectorRef,
-    Component,
-    ElementRef,
-    Input,
-    OnChanges,
-    OnDestroy,
-    OnInit,
-    SimpleChanges,
-    ViewChild
-} from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import * as moment from 'moment/moment';
-import {
-    GenBulkInvoiceFinalObj,
-    GenBulkInvoiceGroupByObj,
-    GenerateBulkInvoiceRequest,
-    GetAllLedgersForInvoiceResponse,
-    GetAllLedgersOfInvoicesResponse,
-    ILedgersInvoiceResult,
-    InvoiceFilterClass,
-    InvoicePreviewDetailsVm
-} from '../../models/api-models/Invoice';
+import { GenBulkInvoiceFinalObj, GenBulkInvoiceGroupByObj, GenerateBulkInvoiceRequest, GetAllLedgersForInvoiceResponse, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, InvoiceFilterClass, InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
@@ -89,10 +70,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public hoveredItemForAction: string = '';
     public clickedHoveredItemForAction: string = '';
     public isGetAllRequestInProcess$: Observable<boolean> = of(true);
-
     public selectedDateRange: any;
     public universalDate$: Observable<any>;
-
     private universalDate: Date[];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private isBulkInvoiceGenerated$: Observable<boolean>;
@@ -105,10 +84,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public voucherDetails: any;
     /** selected pending voucher */
     public selectedItem: InvoicePreviewDetailsVm;
-    /** selected from date */
-    public fromDate: string;
-    /** selected to date */
-    public toDate: string;
     /** is get voucher API call in progress */
     public voucherDetailsInProcess$: Observable<boolean> = of(false);
     /** selected profile currency symbol */
@@ -153,6 +128,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** True if user has pending invoices list permissions */
     public hasPendingVouchersListPermissions: boolean = true;
+    /** True if today selected */
+    public todaySelected: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -206,6 +183,13 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                     }
                     this.ledgersData = response;
                     this.isGetAllRequestInProcess$ = of(false);
+
+                    if(this.todaySelected) {
+                        this.ledgerSearchRequest.dateRange = [response.fromDate, response.toDate];
+                        this.ledgerSearchRequest.from = response.fromDate;
+                        this.ledgerSearchRequest.to = response.toDate;
+                    }
+
                     setTimeout(() => {
                         this.detectChanges();
                     }, 400)
@@ -258,23 +242,33 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.store.pipe(select((state: AppState) => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
                 this.universalDate = cloneDeep(dateObj);
-                this.ledgerSearchRequest.dateRange = this.universalDate;
-                this.fromDate = moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate().toString();
-                this.toDate = moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate().toString();
 
-                this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
-                this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                setTimeout(() => {
+                    this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
+                        this.todaySelected = response;
 
-                this.isUniversalDateApplicable = true;
-                this.getLedgersOfInvoice();
-                this.detectChanges();
-            }
-        });
+                        if (this.universalDate && !this.todaySelected) {
+                            this.ledgerSearchRequest.dateRange = this.universalDate;
 
-        this.universalDate$.subscribe(a => {
-            if (a) {
-                this.ledgerSearchRequest.from = moment(a[0]).format(GIDDH_DATE_FORMAT);
-                this.ledgerSearchRequest.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
+                            this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
+                            this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+
+                            this.ledgerSearchRequest.from = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                            this.ledgerSearchRequest.to = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
+
+                            this.isUniversalDateApplicable = true;
+                        } else {
+                            this.universalDate = [];
+                            this.ledgerSearchRequest.dateRange = this.universalDate;
+                            this.ledgerSearchRequest.from = "";
+                            this.ledgerSearchRequest.to = "";
+                            this.isUniversalDateApplicable = false;
+                        }
+
+                        this.getLedgersOfInvoice();
+                        this.detectChanges();
+                    });
+                }, 100);
             }
         });
 
@@ -502,15 +496,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         };
     }
 
-    public bsValueChange(event: any) {
-        if (event) {
-            this.ledgerSearchRequest.from = moment(event.picker.startDate._d).format(GIDDH_DATE_FORMAT);
-            this.ledgerSearchRequest.to = moment(event.picker.endDate._d).format(GIDDH_DATE_FORMAT);
-            this.isUniversalDateApplicable = false;
-            this.getLedgersOfInvoice();
-        }
-    }
-
     public countAndToggleVar() {
         let total: number = this.ledgersData.results.length;
         let count: number = 0;
@@ -723,12 +708,11 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
+            this.todaySelected = false;
             this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
-            this.ledgerSearchRequest.from = this.fromDate;
-            this.ledgerSearchRequest.to = this.toDate;
+            this.ledgerSearchRequest.from = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.ledgerSearchRequest.to = moment(value.endDate).format(GIDDH_DATE_FORMAT);
             this.isUniversalDateApplicable = false;
             this.getLedgersOfInvoice();
         }
