@@ -37,7 +37,14 @@
             }
         }
     }
-    .advance-icon,
+    .advance-icon{
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 14px;
+        margin-left: 10px;
+        border-radius: 5px;
+    }
     .search-icon-block {
         width: 36px;
         height: 36px;
@@ -73,7 +80,7 @@
 }
 
 .check-img img {
-    max-height: 17px;
+    max-height: 14px;
     cursor: pointer;
 }
 
@@ -118,7 +125,7 @@
 
 .table-checkbox-field {
     img {
-        width: 17px;
+        width: 14px;
     }
 }
 .btn-group.open.show {
@@ -320,9 +327,9 @@
     }
 
     .min-wid-check {
-        min-width: 20px;
+        min-width: 14px;
         .check-img {
-            width: 20px;
+            width: 14px;
         }
     }
 

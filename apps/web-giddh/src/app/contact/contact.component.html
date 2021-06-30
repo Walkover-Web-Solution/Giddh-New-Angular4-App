@@ -105,8 +105,8 @@
                             #filterDropDownList="bs-dropdown" dropdown [autoClose]="false"
                             (clickOutside)="hideListItems()" [tooltip]="localeData?.filter_toggle"
                             [placement]="'right'">
-                                <div dropdownToggle>
-                                        <span class="pd-r05">{{commonLocaleData?.app_filter}}</span>
+                                <div dropdownToggle class="d-flex align-items-center">
+                                        <span class="pd-r05 d-sm-flex d-none">{{commonLocaleData?.app_filter}}</span>
                                         <span class="icon-advance-filter"></span>
                                 </div>
                                 <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
@@ -206,7 +206,7 @@
                                                         class="number-total">{{activeTab === 'customer' ? totalCustomers :
                                                         totalVendors}}</span>
                                                     <span *ngIf="selectedCheckedContacts.length>0"
-                                                        class="number-total">{{selectedCheckedContacts.length}}/{{activeTab === 'customer' ? totalCustomers :
+                                                        class="number-total total-customer-vendor-count"><strong>{{selectedCheckedContacts.length}}</strong>/{{activeTab === 'customer' ? totalCustomers :
                                                         totalVendors}}</span>
                                                     </div>
                                                 </h5>
@@ -581,7 +581,7 @@
                             </div>
                         </th>
 
-                        <th *ngIf="showFieldFilter.comment" class="comment-field">{{localeData?.comment}}</th>
+                        <th *ngIf="showFieldFilter.comment" class="comment-field text-break">{{localeData?.comment}}</th>
                         <ng-container *ngFor="let item of (companyCustomFields$ | async)">
                             <th width="10%" *ngIf="item?.uniqueName && showFieldFilter[item?.uniqueName]">{{item.key |
                                 titlecase}}</th>
@@ -803,7 +803,7 @@
                                 [attr.data-title]="commonLocaleData?.app_state">
                                 {{account?.state?.name || '-'}}</td>
                             <td *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx'
-                                [attr.data-title]="localeData?.comment" class="commentField">
+                                [attr.data-title]="localeData?.comment" class="comment-field text-break">
                                 <ng-container *ngIf='updateCommentIdx != idx'>
                                     {{account.comment}}
                                     <span [class.text-gray]="!account.comment" *ngIf="!account.comment">{{
@@ -1029,12 +1029,12 @@
 
                             </td>
                             <td class="word-wrap text-lowercase" *ngIf="showFieldFilter.contact"
-                                [attr.data-title]="commonLocaleData?.app_email">
-                                <div class="table-email ">{{account.email || '-' }}</div>
-                            </td>
-                            <td class="word-wrap" *ngIf="showFieldFilter.contact"
-                                [attr.data-title]="commonLocaleData?.app_mobile_no">
-                                {{account.mobileNo || '-' }}
+                            [attr.data-title]="commonLocaleData?.app_email">
+                            <div class="table-email ">{{account.email || '-' }}</div>
+                        </td>
+                        <td class="word-wrap" *ngIf="showFieldFilter.contact"
+                            [attr.data-title]="commonLocaleData?.app_mobile_no">
+                            {{account.mobileNo || '-' }}
                             </td>
                             <td class="word-wrap" *ngIf="showFieldFilter.gstin  && shouldShowTaxFilter"
                                 [attr.data-title]="commonLocaleData?.app_gstin">
