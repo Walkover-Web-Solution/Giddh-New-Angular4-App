@@ -233,8 +233,8 @@
                                 <h5>
                                     {{localeData?.opening}}
                                     <div>
-                                        <span *ngIf="activeTab === 'customer' && openingBalance?.type === 'CREDIT' && formatAmountInCurrency(openingBalance?.amount) > 0">-</span>
-                                        <span *ngIf="activeTab === 'vendor' && openingBalance?.type === 'DEBIT' && formatAmountInCurrency(openingBalance?.amount) > 0">-</span>
+                                        <span class="d-inline-flex number-total" *ngIf="activeTab === 'customer' && openingBalance?.type === 'CREDIT' && formatAmountInCurrency(openingBalance?.amount) > 0">-</span>
+                                        <span class="d-inline-flex number-total" *ngIf="activeTab === 'vendor' && openingBalance?.type === 'DEBIT' && formatAmountInCurrency(openingBalance?.amount) > 0">-</span>
                                         <span class="d-inline-flex number-total">
                                             <amount-field [amount]="openingBalance?.amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>/-
                                         </span>
