@@ -224,15 +224,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public get shouldShowBackButton(): boolean {
         return this.router.url && (ROUTES_WITH_HEADER_BACK_BUTTON.includes(this.router.url));
     }
-    /**
-    * Opens the GST side menu in responsive mode
-    *
-    * @memberof HeaderComponent
-    */
-    public openGstSideMenu(): void {
-        this.isGstSideMenuOpened = !this.isGstSideMenuOpened;
-        this.store.dispatch(this._generalActions.openGstSideMenu(this.isGstSideMenuOpened));
-    }
+
     // tslint:disable-next-line:no-empty
     constructor(
         private commonService: CommonService,
@@ -1739,5 +1731,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         } else {
             this.toggleSidebarPane(true, isMobileSidebar);
         }
+    }
+
+    /**
+    * Opens the GST side menu in responsive mode
+    *
+    * @memberof HeaderComponent
+    */
+     public openGstSideMenu(): void {
+        this.isGstSideMenuOpened = !this.isGstSideMenuOpened;
+        this.store.dispatch(this._generalActions.openGstSideMenu(this.isGstSideMenuOpened));
     }
 }

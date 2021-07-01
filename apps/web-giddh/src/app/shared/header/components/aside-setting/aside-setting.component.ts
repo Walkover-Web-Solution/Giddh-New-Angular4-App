@@ -19,7 +19,6 @@ import { LocaleService } from 'apps/web-giddh/src/app/services/locale.service';
 export class AsideSettingComponent implements OnInit, OnDestroy {
     /* Event emitter for close sidebar popup event */
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-    @ViewChild('searchField', { static: true }) public searchField: ElementRef;
 
     public imgPath: string = '';
     public settingsPageTabs: any[] = [];
@@ -54,7 +53,6 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
         });
 
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-        this.searchField?.nativeElement.focus();
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if(this.activeLocale && this.activeLocale !== response?.value) {
@@ -83,34 +81,6 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      */
     public closeAsidePane(event?): void {
         this.closeAsideEvent.emit(event);
-    }
-
-    /**
-     * This will search from the available menu items
-     *
-     * @param {*} search
-     * @memberof AsideSettingComponent
-     */
-    public searchMenu(search: any): void {
-        this.filteredSettingsPageTabs = [];
-
-        if (search && search.trim()) {
-            let loop = 0;
-            this.settingsPageTabs.forEach((section) => {
-                section.forEach(tab => {
-                    if (tab.label.toLowerCase().includes(search.trim().toLowerCase())) {
-                        if (this.filteredSettingsPageTabs[loop] === undefined) {
-                            this.filteredSettingsPageTabs[loop] = [];
-                        }
-
-                        this.filteredSettingsPageTabs[loop].push(tab);
-                    }
-                });
-                loop++;
-            });
-        } else {
-            this.filteredSettingsPageTabs = this.settingsPageTabs;
-        }
     }
 
     /**

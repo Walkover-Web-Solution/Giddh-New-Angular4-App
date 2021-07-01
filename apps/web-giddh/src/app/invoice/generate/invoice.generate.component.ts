@@ -130,6 +130,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public hasPendingVouchersListPermissions: boolean = true;
     /** True if today selected */
     public todaySelected: boolean = false;
+    /** True if custom date selected */
+    public customDateSelected: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -187,6 +189,9 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                         this.ledgerSearchRequest.dateRange = [response.fromDate, response.toDate];
                         this.ledgerSearchRequest.from = response.fromDate;
                         this.ledgerSearchRequest.to = response.toDate;
+
+                        this.selectedDateRange = { startDate: moment(response.fromDate, GIDDH_DATE_FORMAT), endDate: moment(response.toDate, GIDDH_DATE_FORMAT) };
+                        this.selectedDateRangeUi = moment(response.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(response.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
                     }
 
                     setTimeout(() => {
@@ -608,11 +613,18 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
 
     public resetDateSearch() {
         this.ledgerSearchRequest.dateRange = this.universalDate;
-        if (this.universalDate) {
+        this.customDateSelected = false;
+        if (this.universalDate && !this.todaySelected) {
             this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
             this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
 
             this.isUniversalDateApplicable = true;
+        } else {
+            this.universalDate = [];
+            this.ledgerSearchRequest.dateRange = this.universalDate;
+            this.ledgerSearchRequest.from = "";
+            this.ledgerSearchRequest.to = "";
+            this.isUniversalDateApplicable = false;
         }
         this.getLedgersOfInvoice();
         this.insertItemsIntoArr();
@@ -709,7 +721,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.todaySelected = false;
+            this.customDateSelected = true;
             this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.ledgerSearchRequest.from = moment(value.startDate).format(GIDDH_DATE_FORMAT);

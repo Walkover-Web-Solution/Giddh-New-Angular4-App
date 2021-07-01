@@ -28,7 +28,6 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 export class ExpensesComponent implements OnInit, OnDestroy {
     @ViewChild('tabset', { static: true }) tabset: TabsetComponent;
 
-    public universalDate: Date[];
     public universalDate$: Observable<any>;
     public todaySelected: boolean = false;
     public isSelectedRow: boolean = false;
@@ -121,40 +120,44 @@ export class ExpensesComponent implements OnInit, OnDestroy {
             }
         });
 
-        observableCombineLatest(this.universalDate$, this.route.params, this.todaySelected$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
-            if (!Array.isArray(resp[0])) {
-                return;
-            }
-            let dateObj = resp[0];
-            this.todaySelected = resp[2];
-
+        this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
-                this.universalFrom = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.universalTo = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
 
-                this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
-                this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                setTimeout(() => {
+                    this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
+                        this.todaySelected = response;
 
-                if (this.universalFrom && this.universalTo) {
-                    this.pettycashRequest.from = this.universalFrom;
-                    this.pettycashRequest.to = this.universalTo;
-                    this.pettycashRequest.page = 1;
+                        if (universalDate && !this.todaySelected) {
+                            this.universalFrom = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                            this.universalTo = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
 
-                    if (this.pendingListComponent) {
-                        this.pettycashRequest.sort = this.pendingListComponent.pettycashRequest.sort;
-                        this.pettycashRequest.sortBy = this.pendingListComponent.pettycashRequest.sortBy;
-                    }
-                    this.getPettyCashPendingReports(this.pettycashRequest);
+                            this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
+                            this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                            this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                            this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
 
-                    if (this.rejectedListComponent) {
-                        this.pettycashRequest.sort = this.rejectedListComponent.pettycashRequest.sort;
-                        this.pettycashRequest.sortBy = this.rejectedListComponent.pettycashRequest.sortBy;
-                    }
-                    this.getPettyCashRejectedReports(this.pettycashRequest);
-                }
+                            this.pettycashRequest.from = this.universalFrom;
+                            this.pettycashRequest.to = this.universalTo;
+                        } else {
+                            this.pettycashRequest.from = "";
+                            this.pettycashRequest.to = "";
+                        }
+
+                        this.pettycashRequest.page = 1;
+                        if (this.pendingListComponent) {
+                            this.pettycashRequest.sort = this.pendingListComponent.pettycashRequest.sort;
+                            this.pettycashRequest.sortBy = this.pendingListComponent.pettycashRequest.sortBy;
+                        }
+                        this.getPettyCashPendingReports(this.pettycashRequest);
+
+                        if (this.rejectedListComponent) {
+                            this.pettycashRequest.sort = this.rejectedListComponent.pettycashRequest.sort;
+                            this.pettycashRequest.sortBy = this.rejectedListComponent.pettycashRequest.sortBy;
+                        }
+                        this.getPettyCashRejectedReports(this.pettycashRequest);
+                    });
+                }, 100);
             }
         });
 
@@ -246,21 +249,28 @@ export class ExpensesComponent implements OnInit, OnDestroy {
                 this.universalFrom = moment(res[0]).format(GIDDH_DATE_FORMAT);
                 this.universalTo = moment(res[1]).format(GIDDH_DATE_FORMAT);
                 let universalDate = _.cloneDeep(res);
-                this.selectedDateRange = { startDate: moment(res[0]), endDate: moment(res[1]) };
-                this.selectedDateRangeUi = moment(res[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(res[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+
+                if (universalDate && !this.todaySelected) {
+                    this.selectedDateRange = { startDate: moment(res[0]), endDate: moment(res[1]) };
+                    this.selectedDateRangeUi = moment(res[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(res[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                    this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                    this.pettycashRequest.from = this.universalFrom;
+                    this.pettycashRequest.to = this.universalTo;
+                } else {
+                    this.pettycashRequest.from = "";
+                    this.pettycashRequest.to = "";
+                }
+
+                this.pettycashRequest.sortBy = '';
+                this.pettycashRequest.sort = '';
+                this.pettycashRequest.page = 1;
+                this.isFilterSelected = false;
+
+                this.getPettyCashPendingReports(this.pettycashRequest);
+                this.getPettyCashRejectedReports(this.pettycashRequest);
             }
         });
-        this.pettycashRequest.from = this.universalFrom;
-        this.pettycashRequest.to = this.universalTo;
-        this.pettycashRequest.sortBy = '';
-        this.pettycashRequest.sort = '';
-        this.pettycashRequest.page = 1;
-        this.isFilterSelected = false;
-
-        this.getPettyCashPendingReports(this.pettycashRequest);
-        this.getPettyCashRejectedReports(this.pettycashRequest);
     }
 
     public tabChanged(tab: string, e) {
@@ -397,6 +407,19 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         }
         else if (this.currentSelectedTab === 'rejected') {
             return this.localeData?.rejected;
+        }
+    }
+
+    /**
+     * This will get report date to set in datepicker if today is selected
+     *
+     * @param {*} event
+     * @memberof ExpensesComponent
+     */
+    public reportDates(event: any): void {
+        if(this.todaySelected && event) {
+            this.selectedDateRange = { startDate: moment(event[0], GIDDH_DATE_FORMAT), endDate: moment(event[1], GIDDH_DATE_FORMAT) };
+            this.selectedDateRangeUi = moment(event[0], GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(event[1], GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
         }
     }
 }
