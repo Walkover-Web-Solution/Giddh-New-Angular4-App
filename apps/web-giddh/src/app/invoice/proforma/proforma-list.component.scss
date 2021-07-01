@@ -415,6 +415,7 @@ span.icon-advance-filter {
             .d-md-none{
                 justify-content: space-between;
                 width: 100%;
+                flex-direction: row !important;
             }
         }
     }

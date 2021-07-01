@@ -196,93 +196,91 @@
                     </div>
 
                     <div class="top-content">
-                                <div class="d-flex w-100 justify-content-between overflow-x-auto">
-                                        <div class="total-details-box mr-r05 d-flex justify-content-between count-box align-items-end">
-                                                <h5>
-                                                    {{localeData?.contacts}}
-                                                    <div>
-                                                    <span *ngIf="!selectedCheckedContacts.length"
-                                                        class="number-total">{{activeTab === 'customer' ? totalCustomers :
-                                                        totalVendors}}</span>
-                                                    <span *ngIf="selectedCheckedContacts.length>0"
-                                                        class="number-total total-customer-vendor-count"><strong>{{selectedCheckedContacts.length}}</strong>/{{activeTab === 'customer' ? totalCustomers :
-                                                        totalVendors}}</span>
-                                                    </div>
-                                                </h5>
-                                                <div class="btn-group more-button align-items-center" dropdown container="body">
-                                                    <button id="button-basic" dropdownToggle type="button"
-                                                        class="btn btn-default dropdown-toggle mr-0" aria-controls="dropdown-basic">
-                                                        <span class="icon-arrow-down font-12"></span>
-                                                    </button>
-                                                    <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu pd-l1 pd-r1" role="menu"
-                                                        aria-labelledby="button-basic">
-                                                        <li role="menuitem" (click)="openEmailDialog();">
-                                                            {{commonLocaleData?.app_email}}</li>
-                                                        <li role="menuitem" (click)="openSmsDialog();">
-                                                            {{commonLocaleData?.app_sms}}</li>
-                                                        <li role="menuitem" (click)="downloadCSV();">
-                                                            {{commonLocaleData?.app_download_csv}}</li>
-                                                        <li role="menuitem"
-                                                            *ngIf="selectedAccountsList.length>0 && activeTab === 'vendor'"
-                                                            (click)="openBulkPaymentModal(template)">
-                                                            {{localeData?.bulk_payment}}</li>
-                                                    </ul>
-                                                </div>
-
-                                        </div>
-                                        <div class="total-details-box mr-r05 border-none opening-box" *ngIf="showFieldFilter.openingBalance">
-                                                <h5>
-                                                    {{localeData?.opening}}
-                                                    <div>
-                                                    <span *ngIf="activeTab === 'customer' && openingBalance?.type === 'CREDIT' && formatAmountInCurrency(openingBalance?.amount) > 0">-</span>
-                                                    <span *ngIf="activeTab === 'vendor' && openingBalance?.type === 'DEBIT' && formatAmountInCurrency(openingBalance?.amount) > 0">-</span>
-                                                        <span class="d-inline-flex number-total">
-                                                            <amount-field [amount]="openingBalance?.amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>/-
-                                                        </span>
-                                                    </div>
-                                                </h5>
-                                        </div>
-                                        <div class="total-details-box mr-r05 border-none sales-purchase">
-                                                <h5>
-                                                    <span *ngIf="activeTab === 'vendor'">{{commonLocaleData?.app_purchase}}</span>
-                                                    <span *ngIf="activeTab === 'customer'">{{commonLocaleData?.app_sales}}</span>
-                                                    <div>
-                                                        <span class="d-inline-flex number-total">
-                                                        <amount-field [amount]="totalSales" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>/-
-                                                        </span>
-                                                    </div>
-                                                </h5>
-                                        </div>
-                                        <div class="total-details-box mr-r05 border-none payment-receipt">
-                                                <h5>
-                                                    <span *ngIf="activeTab === 'vendor'">{{commonLocaleData?.app_payment}}</span>
-                                                    <span *ngIf="activeTab === 'customer'">{{commonLocaleData?.app_receipt}}</span>
-                                                    <div>
-                                                        <span class="d-inline-flex number-total">
-                                                            <amount-field [amount]="totalReceipts"
-                                                                [currencySymbol]="false" [currencyCode]="false">
-                                                            </amount-field>/-
-                                                        </span>
-                                                    </div>
-                                                </h5>
-                                        </div>
-                                        <div class="total-details-box border-none closing-box">
-                                                <h5>
-                                                    {{localeData?.closing}}
-                                                    <div>
-                                                        <span class="d-inline-flex number-total">
-                                                            <amount-field [amount]="closingBalance"
-                                                                [currencySymbol]="false" [currencyCode]="false">
-                                                            </amount-field>/-
-                                                        </span>
-                                                    </div>
-                                                </h5>
-                                        </div>
+                        <div class="d-flex w-100 justify-content-between overflow-x-auto">
+                            <div class="total-details-box mr-r05 d-flex justify-content-between count-box align-items-end">
+                                <h5>
+                                    {{localeData?.contacts}}
+                                    <div>
+                                        <span *ngIf="!selectedCheckedContacts.length"
+                                        class="number-total">{{activeTab === 'customer' ? totalCustomers :
+                                        totalVendors}}</span>
+                                            <span *ngIf="selectedCheckedContacts.length>0"
+                                            class="number-total total-customer-vendor-count"><strong>{{selectedCheckedContacts.length}}</strong>/{{activeTab === 'customer' ? totalCustomers :
+                                            totalVendors}}</span>
+                                    </div>
+                                </h5>
+                                <div class="btn-group more-button align-items-center" dropdown container="body">
+                                    <button id="button-basic" dropdownToggle type="button"
+                                    class="btn btn-default dropdown-toggle mr-0" aria-controls="dropdown-basic">
+                                        <span class="icon-arrow-down font-12"></span>
+                                    </button>
+                                    <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu pd-l1 pd-r1" role="menu"
+                                    aria-labelledby="button-basic">
+                                        <li role="menuitem" (click)="openEmailDialog();">
+                                        {{commonLocaleData?.app_email}}</li>
+                                        <li role="menuitem" (click)="openSmsDialog();">
+                                        {{commonLocaleData?.app_sms}}</li>
+                                        <li role="menuitem" (click)="downloadCSV();">
+                                        {{commonLocaleData?.app_download_csv}}</li>
+                                        <li role="menuitem"
+                                        *ngIf="selectedAccountsList.length>0 && activeTab === 'vendor'"
+                                        (click)="openBulkPaymentModal(template)">
+                                        {{localeData?.bulk_payment}}</li>
+                                    </ul>
                                 </div>
+                            </div>
+                            <div class="total-details-box mr-r05 border-none opening-box" *ngIf="showFieldFilter.openingBalance">
+                                <h5>
+                                    {{localeData?.opening}}
+                                    <div>
+                                        <span *ngIf="activeTab === 'customer' && openingBalance?.type === 'CREDIT' && formatAmountInCurrency(openingBalance?.amount) > 0">-</span>
+                                        <span *ngIf="activeTab === 'vendor' && openingBalance?.type === 'DEBIT' && formatAmountInCurrency(openingBalance?.amount) > 0">-</span>
+                                        <span class="d-inline-flex number-total">
+                                            <amount-field [amount]="openingBalance?.amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>/-
+                                        </span>
+                                    </div>
+                                </h5>
+                            </div>
+                            <div class="total-details-box mr-r05 border-none sales-purchase">
+                                <h5>
+                                    <span *ngIf="activeTab === 'vendor'">{{commonLocaleData?.app_purchase}}</span>
+                                    <span *ngIf="activeTab === 'customer'">{{commonLocaleData?.app_sales}}</span>
+                                    <div>
+                                        <span class="d-inline-flex number-total">
+                                            <amount-field [amount]="totalSales" [currencySymbol]="false"
+                                            [currencyCode]="false">
+                                            </amount-field>/-
+                                        </span>
+                                    </div>
+                                </h5>
+                            </div>
+                            <div class="total-details-box mr-r05 border-none payment-receipt">
+                                <h5>
+                                    <span *ngIf="activeTab === 'vendor'">{{commonLocaleData?.app_payment}}</span>
+                                    <span *ngIf="activeTab === 'customer'">{{commonLocaleData?.app_receipt}}</span>
+                                    <div>
+                                        <span class="d-inline-flex number-total">
+                                            <amount-field [amount]="totalReceipts"
+                                            [currencySymbol]="false" [currencyCode]="false">
+                                            </amount-field>/-
+                                        </span>
+                                    </div>
+                                </h5>
+                            </div>
+                            <div class="total-details-box border-none closing-box">
+                                <h5>
+                                    {{localeData?.closing}}
+                                    <div>
+                                        <span class="d-inline-flex number-total">
+                                            <amount-field [amount]="closingBalance"
+                                            [currencySymbol]="false" [currencyCode]="false">
+                                            </amount-field>/-
+                                        </span>
+                                    </div>
+                                </h5>
+                            </div>
                         </div>
-
+                    </div>
 
                     <div class="text-center top-aging-table-top separate-top-aging pd-1 mr-t1" *ngIf="isMobileScreen">
                         <p (click)="showGiddhDatepicker($event)">
@@ -505,7 +503,7 @@
             <table class="table on-mobile-view aging-table mr-b260 giddh-table" *ngIf="activeTab !== 'aging'">
                 <thead>
                     <tr>
-                        <th #searchCustomerContainer (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')">
+                        <th #searchCustomerContainer (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')" class="td-search-box">
                             <span class="inline table-checkbox">
                                 <label></label>
                                 <input type="checkbox" *ngIf="selectedCheckedContacts.length"
