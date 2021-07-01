@@ -6,7 +6,7 @@
 
     <!-- filter area-->
     <ng-container>
-        <hamburger-menu class="gst-menu-item" [allowSidebarToggle]="false" [pageHeading]="localeData?.page_heading"></hamburger-menu>
+        <hamburger-menu class="gst-menu-item" [pageHeading]="localeData?.page_heading"></hamburger-menu>
         <div class="text-overdue ss"
             *ngIf="!activeCompanyGstNumber && !isTaxApiInProgress && !taxes?.length && !((gstr1OverviewDataInProgress$ | async) || (gstr2OverviewDataInProgress$ | async))">
             <i class="text-middle">{{localeData?.gst_unavailable_message}}</i>
