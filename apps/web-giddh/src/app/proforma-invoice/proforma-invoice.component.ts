@@ -584,6 +584,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public accountEditingUniqueName: string = "";
     /** Stores the adjustments as a backup that are present on the current opened entry */
     public originalVoucherAdjustments: VoucherAdjustments;
+    /** True, if multi-currency support to voucher adjustment is enabled */
+    public enableVoucherAdjustmentMultiCurrency: boolean;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -647,7 +649,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     ) {
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
         this.advanceReceiptAdjustmentData.adjustments = [];
-
+        this.enableVoucherAdjustmentMultiCurrency = enableVoucherAdjustmentMultiCurrency;
         this.invFormData = new VoucherClass();
         this.activeAccount$ = this.store.pipe(select(p => p.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
         this.newlyCreatedAc$ = this.store.pipe(select(p => p.groupwithaccounts.newlyCreatedAccount), takeUntil(this.destroyed$));
@@ -1109,10 +1111,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             this.calculateAdjustedVoucherTotal(results[0].voucherAdjustments.adjustments);
                             this.advanceReceiptAdjustmentData = results[0].voucherAdjustments;
                             this.originalVoucherAdjustments = cloneDeep(results[0].voucherAdjustments);
-                            if (!this.isMulticurrencyAccount) {
-                                this.adjustPaymentData.totalAdjustedAmount = results[0].voucherAdjustments.totalAdjustmentAmount;
+                            if (this.enableVoucherAdjustmentMultiCurrency) {
+                                if (!this.isMulticurrencyAccount) {
+                                    this.adjustPaymentData.totalAdjustedAmount = results[0].voucherAdjustments.totalAdjustmentAmount;
+                                } else {
+                                    this.adjustPaymentData.convertedTotalAdjustedAmount = results[0].voucherAdjustments.totalAdjustmentCompanyAmount;
+                                }
                             } else {
-                                this.adjustPaymentData.convertedTotalAdjustedAmount = results[0].voucherAdjustments.totalAdjustmentCompanyAmount;
+                                this.adjustPaymentData.totalAdjustedAmount = results[0].voucherAdjustments.totalAdjustmentAmount;
                             }
                             this.isAdjustAmount = true;
                         } else {
@@ -6736,10 +6742,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      *
      * @param {*} data
      * @param {*} address
-     * @param {false} isCompanyAddress
+     * @param {boolean} isCompanyAddress
      * @memberof ProformaInvoiceComponent
      */
-    public selectAddress(data: any, address: any, isCompanyAddress: false): void {
+    public selectAddress(data: any, address: any, isCompanyAddress: boolean = false): void {
         if (data && address) {
             data.address[0] = address.address;
             if (!data.state) {

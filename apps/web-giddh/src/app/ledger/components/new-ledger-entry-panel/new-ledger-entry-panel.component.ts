@@ -1444,8 +1444,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 exchangeRate: this.blankLedger.exchangeRate ?? 1
             },
             accountDetails: {
-                currencySymbol: this.baseCurrencyDetails?.symbol ?? this.blankLedger.baseCurrencyToDisplay?.symbol ?? '',
-                currencyCode: this.baseCurrencyDetails?.code ?? this.blankLedger.baseCurrencyToDisplay?.code ?? ''
+                currencySymbol: enableVoucherAdjustmentMultiCurrency ? this.baseCurrencyDetails?.symbol ?? this.blankLedger.baseCurrencyToDisplay?.symbol ?? '' : this.blankLedger.baseCurrencyToDisplay?.symbol,
+                currencyCode: enableVoucherAdjustmentMultiCurrency ? this.baseCurrencyDetails?.code ?? this.blankLedger.baseCurrencyToDisplay?.code ?? '' : this.blankLedger.baseCurrencyToDisplay?.code
             },
             activeAccountUniqueName: this.activeAccount.uniqueName
         };
