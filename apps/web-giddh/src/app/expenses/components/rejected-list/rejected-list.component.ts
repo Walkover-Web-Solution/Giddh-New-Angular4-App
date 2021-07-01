@@ -37,6 +37,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
     public actionPettycashRequest: ActionPettycashRequest = new ActionPettycashRequest();
     @Input() public isClearFilter: boolean = false;
     @Output() public isFilteredSelected: EventEmitter<boolean> = new EventEmitter();
+    /** This will emit the from and to date returned by api */
     @Output() public reportDates: EventEmitter<any> = new EventEmitter();
 
     constructor(private store: Store<AppState>,
