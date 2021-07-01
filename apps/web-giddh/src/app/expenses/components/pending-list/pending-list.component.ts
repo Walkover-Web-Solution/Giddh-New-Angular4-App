@@ -43,6 +43,7 @@ export class PendingListComponent implements OnInit, OnChanges {
     @Output() public selectedRowInput: EventEmitter<ExpenseResults> = new EventEmitter();
     @Output() public selectedRowToggle: EventEmitter<boolean> = new EventEmitter();
     @Output() public isFilteredSelected: EventEmitter<boolean> = new EventEmitter();
+    /** This will emit the from and to date returned by api */
     @Output() public reportDates: EventEmitter<any> = new EventEmitter();
     @Input() public isClearFilter: boolean = false;
 
