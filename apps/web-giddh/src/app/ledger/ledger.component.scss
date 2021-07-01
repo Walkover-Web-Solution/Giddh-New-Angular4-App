@@ -522,6 +522,7 @@ sh-select:focus {
     padding: 5px;
     width: 36px;
     height: 36px;
+    color: $gray;
     img {
         width: 18px;
     }
@@ -546,17 +547,17 @@ sh-select:focus {
     margin-right: 0;
 }
 .clear-filter-btn {
-    color: $midnight-blue;
+    border-radius: 5px;
+    border: 1px solid $gainsboro;
+    color: $gray;
     font-size: 14px;
-    border: 1px solid $midnight-blue;
-    border-radius: 20px;
-    padding: 0;
     background-color: $white;
-    width: 35px;
-    height: 35px;
+    width: 36px;
+    height: 36px;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 3px;
 }
 .clear-filter-btn i {
     font-size: 16px;
