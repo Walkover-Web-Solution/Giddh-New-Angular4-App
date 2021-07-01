@@ -552,6 +552,10 @@ aside-menu-account .container-fluid {
     overflow: hidden;
 }
 
+.overflow-x-auto{
+    overflow-x: auto;
+}
+
 .resize-none {
     resize: none !important;
 }
@@ -2344,7 +2348,7 @@ bs-datepicker-container {
 }
 
 .input-group {
-    z-index: 1;
+    z-index: 9;
 }
 
 /* added by sarfaraz */
@@ -2693,6 +2697,9 @@ form#groupDetailForm {
 @media (max-width: 575px) {
     .aside-pane {
         max-width: 370px;
+    }
+    .advance-icon{
+        font-size: 16px !important;
     }
 }
 @media (max-width: 375px) {

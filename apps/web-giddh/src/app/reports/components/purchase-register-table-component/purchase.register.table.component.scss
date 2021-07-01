@@ -39,19 +39,19 @@
     line-height: 35px;
 }
 @media screen and (max-width: 768px) {
-    .basic {
-        tbody {
+    .table-responsive {
+        .giddh-table.on-mobile-view {
             tr {
                 td {
                     white-space: normal !important;
-                    word-break: break-all !important;
+                    word-break: break-word;
                 }
             }
         }
     }
 }
 
-@media (min-width: 767px){
+@media (min-width: 769px){
     .table-responsive{
         max-height: calc(100vh - 200px);
         overflow-y: auto;

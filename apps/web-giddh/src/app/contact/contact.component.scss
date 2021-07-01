@@ -149,7 +149,7 @@ ul.list-unstyled li a {
     transform: inherit !important;
 }
 
-td.commentField {
+td.comment-field {
     white-space: normal;
 }
 
@@ -401,10 +401,17 @@ button.btn.btn-filter span.icon-cross {
         background-color: $gray-95;
     }
 }
-.overflow-x-auto{
-    overflow-x: auto;
-}
 
+.total-customer-vendor-count{
+    color: $omiod !important;
+    font-weight: 400 !important;
+    font-size: 12px !important;
+    letter-spacing: 1px;
+    strong{
+        color:$midnight-blue !important;
+        font-size: 16px;
+    }
+}
 /*responsive*/
 @media (max-width: 1024px) {
     .customer-form-inline {
@@ -515,6 +522,9 @@ button.btn.btn-filter span.icon-cross {
     }
     .aging-table span.justify-content-end {
         justify-content: flex-start !important;
+    }
+    .pd-t1-md {
+        padding-top: 0px;
     }
 }
 
@@ -699,7 +709,6 @@ button.btn.btn-filter span.icon-cross {
 
 .td-search-box div span {
     flex: 1 1 auto;
-    padding-left: 8px;
 }
 
 .td-search-box div i {
@@ -717,10 +726,8 @@ button.btn.btn-filter span.icon-cross {
     position: relative;
 }
 .td-search-box .input-container input {
-    min-height: 38px;
+    min-height: 36px;
     width: 100%;
-    padding: 8px;
-    padding-right: 40px;
     border: 0px;
 }
 
@@ -734,7 +741,7 @@ button.btn.btn-filter span.icon-cross {
     color: $red;
 }
 
-@media (min-width: 767px){
+@media (min-width: 769px){
     .mobile-card-wrapper{
         max-height: calc(100vh - 285px);
     }
