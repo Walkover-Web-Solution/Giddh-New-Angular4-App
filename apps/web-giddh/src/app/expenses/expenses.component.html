@@ -17,14 +17,12 @@
                                             class="giddh-datepicker date-range-picker" />
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6" *ngIf="isFilterSelected">
-                            <div class="d-inline-block">
-                                <a href="javascript:void(0)" (click)="clearFilter()"
-                                    class="btn btn-default d-flex align-items-center ml-1"><i
-                                        class=" icon-cross mr-1"></i>
-                                    {{commonLocaleData?.app_clear_filter}}</a>
+                                <div class="d-inline-block clear-filter-div" *ngIf="isFilterSelected">
+                                    <a href="javascript:void(0)" (click)="clearFilter()"
+                                        class="btn btn-default d-flex align-items-center ml-1"><i
+                                            class=" icon-cross mr-1"></i>
+                                        {{commonLocaleData?.app_clear_filter}}</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -37,7 +35,8 @@
                             [localeData]="localeData" [commonLocaleData]="commonLocaleData"
                             (isFilteredSelected)="isFilteredSelected($event);"
                             (selectedRowToggle)="selectedRowToggle($event);"
-                            (selectedRowInput)="selectedRowInput($event);"></app-pending-list>
+                            (selectedRowInput)="selectedRowInput($event);"
+                            (reportDates)="reportDates($event)"></app-pending-list>
                         <div class="main-edit-expense" *ngIf="isSelectedRow">
                             <div class="left-expense">
                                 <app-filter-list *ngIf="localeData?.pending" [selectedRowItem]="selectedRowItem"
@@ -60,7 +59,7 @@
                     <ng-container *ngIf="currentSelectedTab === 'rejected'">
                         <app-rejected-list #rejectedListComponent (isFilteredSelected)="isFilteredSelected($event);"
                             [isClearFilter]="isClearFilter" [localeData]="localeData"
-                            [commonLocaleData]="commonLocaleData"></app-rejected-list>
+                            [commonLocaleData]="commonLocaleData" (reportDates)="reportDates($event)"></app-rejected-list>
                     </ng-container>
                 </div>
                 </tab>
