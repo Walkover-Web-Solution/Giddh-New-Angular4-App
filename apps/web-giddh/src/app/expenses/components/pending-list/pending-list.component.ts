@@ -43,6 +43,7 @@ export class PendingListComponent implements OnInit, OnChanges {
     @Output() public selectedRowInput: EventEmitter<ExpenseResults> = new EventEmitter();
     @Output() public selectedRowToggle: EventEmitter<boolean> = new EventEmitter();
     @Output() public isFilteredSelected: EventEmitter<boolean> = new EventEmitter();
+    @Output() public reportDates: EventEmitter<any> = new EventEmitter();
     @Input() public isClearFilter: boolean = false;
 
     public showSubmittedBySearch: boolean = false;
@@ -94,6 +95,8 @@ export class PendingListComponent implements OnInit, OnChanges {
             if (res) {
                 this.pettyCashPendingReportResponse = res;
                 this.expensesItems = res.results;
+                this.reportDates.emit([res.fromDate, res.toDate]);
+
                 setTimeout(() => {
                     this.detectChanges();
                 }, 500);
