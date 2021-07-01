@@ -47,7 +47,7 @@
                     <div class="advance-icon cursor-pointer align-items-center btn btn-primary btn-group mr-0"
                     #filterDropDownList="bs-dropdown" dropdown [autoClose]="false"
                     (clickOutside)="hideListItems()" [placement]="'right'">
-                    <div dropdownToggle>
+                    <div dropdownToggle class="d-flex align-items-center">
                         <span class="pd-r05 d-sm-flex d-none">{{commonLocaleData?.app_filter}}</span>
                         <span class="icon-advance-filter"></span>
                     </div>
@@ -93,9 +93,8 @@
         </div>
     </div>
 
-    <div class="row mr-0 ml-0">
-        <div class="col-12">
-            <div class="d-flex justify-content-between w-100" *ngIf="SalesRegisteDetailedItems">
+    <div class="top-content pd-l15 pd-r15">
+            <div class="d-flex justify-content-between w-100 overflow-x-auto" *ngIf="SalesRegisteDetailedItems">
                     <div class="total-details-box mr-r05 count-box">
                         <h5>
                             {{localeData?.transaction_count}}
@@ -106,6 +105,7 @@
                             </div>
                         </h5>
                     </div>
+                    <ng-container>
                     <div class="total-details-box mr-r05 border-none opening-box" *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal">
                         <h5>
                             {{commonLocaleData?.app_sales}} 
@@ -197,8 +197,8 @@
                             </div>
                         </h5>
                     </div>
+                    </ng-container>
             </div>
-        </div>
     </div>
     
 

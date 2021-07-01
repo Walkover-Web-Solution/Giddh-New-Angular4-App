@@ -404,12 +404,12 @@ button.btn.btn-filter span.icon-cross {
 }
 
 .total-customer-vendor-count{
-    color: #6A6C85 !important;
+    color: $omiod !important;
     font-weight: 400 !important;
     font-size: 12px !important;
     letter-spacing: 1px;
     strong{
-        color:#1A237E !important;
+        color:$midnight-blue !important;
         font-size: 16px;
     }
 }
@@ -744,7 +744,7 @@ button.btn.btn-filter span.icon-cross {
     color: $red;
 }
 
-@media (min-width: 767px){
+@media (min-width: 769px){
     .mobile-card-wrapper{
         max-height: calc(100vh - 285px);
     }

@@ -76,10 +76,9 @@
             </button>
         </div>
     </div>
-    <div class="row">
-        <div class="col-12">
-            <div class="d-flex w-100 justify-content-between">
-                <div class="pull-left total-due-sale total-details-box opening-box border-none mr-r05">
+    <div class="top-content">
+            <div class="d-flex w-100 justify-content-between overflow-x-auto">
+                <div class="total-due-sale total-details-box opening-box border-none mr-r05">
                         <h5>
                             {{commonLocaleData?.app_upcoming}}
                             <div>
@@ -91,7 +90,7 @@
                             </div>
                         </h5>
                     </div>
-                    <div *ngIf="!(selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'purchase')" class="pull-left total-due-sale total-details-box due-box border-none">
+                    <div class="total-due-sale total-details-box due-box border-none">
                         <h5>
                             {{commonLocaleData?.app_due}}
                             <div>
@@ -103,8 +102,7 @@
                             </div>
                         </h5>
                     </div>
-                </div>
-        </div>
+            </div>
     </div>
     <div class="contact-main aging-page">
         <div class="pd-b2 mr-b1 mr-t1 on-mobile-view mobile-card-wrapper">
@@ -151,12 +149,12 @@
 <ng-template #mainTable>
     <table class="table  giddh-table aging-table table-aging-report">
         <thead>
-            <tr class="aging-table-top">
+            <tr class="aging-table-top" *ngIf="setDueRangeOpen$|async">
                 <td></td>
                 <td></td>
                 <td></td>
                 <td colspan="4" class="text-center top-aging-table-top">
-                    <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions"
+                    <aging-dropdown [options]="agingDropDownoptions"
                         [localeData]="localeData" [commonLocaleData]="commonLocaleData"></aging-dropdown>
                 </td>
                 <td></td>

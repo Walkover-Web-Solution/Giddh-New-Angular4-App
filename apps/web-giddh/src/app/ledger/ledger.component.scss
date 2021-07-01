@@ -563,7 +563,7 @@ sh-select:focus {
     align-items: center;
 }
 .clear-filter-btn i {
-    font-size: 16px;
+    font-size: 18px;
 }
 .search-ledger-field {
     .btn-danger,
@@ -775,6 +775,9 @@ sh-select:focus {
     top: 45px;
     z-index: 1;
     padding-left: 5px;
+}
+.show-if-ledger-open {
+    height: 300px;
 }
 .linked-entities {
     width: 200px;
