@@ -37,6 +37,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
     public actionPettycashRequest: ActionPettycashRequest = new ActionPettycashRequest();
     @Input() public isClearFilter: boolean = false;
     @Output() public isFilteredSelected: EventEmitter<boolean> = new EventEmitter();
+    @Output() public reportDates: EventEmitter<any> = new EventEmitter();
 
     constructor(private store: Store<AppState>,
         private _expenceActions: ExpencesAction,
@@ -74,6 +75,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
             if (res) {
                 this.totalRejectedResponse = res;
                 this.RejectedItems = res.results;
+                this.reportDates.emit([res.fromDate, res.toDate]);
                 setTimeout(() => {
                     this.detectChanges();
                 }, 400);
