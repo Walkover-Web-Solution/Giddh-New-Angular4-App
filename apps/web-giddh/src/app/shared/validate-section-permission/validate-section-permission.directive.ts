@@ -44,6 +44,7 @@ export class ValidateSectionPermissionDirective implements OnChanges, OnDestroy 
                         this.renderer.addClass(errorDiv, 'giddh-no-permissions-error-message');
                         this.renderer.addClass(errorDiv, 'ml-3');
                         this.renderer.addClass(errorDiv, 'mt-2');
+                        this.renderer.addClass(errorDiv, 'no-data');
 
                         this.renderer.appendChild(this.elementRef.nativeElement?.parentElement, errorDiv);
                     }
