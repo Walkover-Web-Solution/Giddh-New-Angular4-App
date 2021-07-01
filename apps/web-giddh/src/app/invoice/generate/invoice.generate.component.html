@@ -41,7 +41,7 @@
                                     </div>
                                     <button
                                         class="clear-filter btn btn-filter align-items-center d-flex justify-content-center"
-                                        *ngIf="!isUniversalDateApplicable && isMobileView" (click)="resetDateSearch()">
+                                        *ngIf="customDateSelected && isMobileView" (click)="resetDateSearch()">
                                         <span class="icon-cross"></span> {{commonLocaleData?.app_clear_filter}}
                                     </button>
                                 </div>
@@ -64,7 +64,7 @@
                         </div>
                         <div class="align-items-center d-flex justify-content-center filter-width">
                             <div class="clear-filter" [ngClass]="{'width-auto' : selectedLedgerItems.length === 0}"
-                                *ngIf="!isUniversalDateApplicable && !isMobileView" (click)="resetDateSearch()">
+                                *ngIf="customDateSelected && !isMobileView" (click)="resetDateSearch()">
                                 <button class="btn btn-filter mr-0">
                                     <span class="icon-cross"></span> {{commonLocaleData?.app_clear_filter}}
                                 </button>

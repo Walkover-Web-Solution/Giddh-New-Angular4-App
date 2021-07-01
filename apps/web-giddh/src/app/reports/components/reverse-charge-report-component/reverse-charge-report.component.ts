@@ -366,7 +366,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         this.reverseChargeReportGetRequest.sort = "";
         this.reverseChargeReportGetRequest.sortBy = "";
         this.reverseChargeReportGetRequest.from = "";
-            this.reverseChargeReportGetRequest.to = "";
+        this.reverseChargeReportGetRequest.to = "";
         if(!this.todaySelected) {
             this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
             this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
