@@ -13,9 +13,6 @@
 .width-200px {
     width: 200px;
 }
-.basic > tbody > tr > td > a {
-    color: $primary;
-}
 .bgChange {
     background: $white-smoke;
 }
@@ -41,11 +38,6 @@
     text-align: center;
     line-height: 35px;
 }
-.sales-register-footer {
-    .particular {
-        cursor: auto;
-    }
-}
 
 @media screen and (max-width: 768px) {
     .table-responsive {
@@ -60,7 +52,7 @@
     }
 }
 
-@media (min-width: 767px){
+@media (min-width: 769px){
     .table-responsive{
         max-height: calc(100vh - 200px);
         overflow-y: auto;

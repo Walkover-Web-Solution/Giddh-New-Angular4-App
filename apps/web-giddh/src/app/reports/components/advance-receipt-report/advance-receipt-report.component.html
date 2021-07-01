@@ -44,7 +44,7 @@
                     </div>
 
                 </div>
-                <div class="clear-filter mr-b15 align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
+                <div class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
                     *ngIf="showClearFilter">
                     <button class="btn btn-filter mr-0" (click)="resetAdvanceSearch()"><span class="icon-cross"></span>
                         {{commonLocaleData?.app_clear_filter}}</button>
@@ -57,10 +57,9 @@
                 <!-- Invoice filter section ends -->
             </div>
 
-            <div class="row">
-                <div class="col-12">
-                    <div class="d-flex w-100 justify-content-between">
-                            <div class="pull-left total-details-box mr-r05 border-none opening-box">
+            <div class="top-content">
+                    <div class="d-flex w-100 justify-content-between overflow-x-auto">
+                            <div class="total-details-box mr-r05 border-none opening-box">
                                     <h5>
                                         {{localeData?.advanced_receipts}}
                                         <div>
@@ -69,7 +68,7 @@
                                         </div>
                                     </h5>
                                 </div>
-                            <div class="pull-left total-details-box mr-r05 border-none sales-purchase">
+                            <div class="total-details-box mr-r05 border-none sales-purchase">
                                     <h5>
                                         {{localeData?.normal_receipts}}
                                         <div>
@@ -80,7 +79,7 @@
                                         </div>
                                     </h5>
                                 </div>
-                                <div class="pull-left total-details-box mr-r05 border-none payment-receipt">
+                                <div class="total-details-box mr-r05 border-none payment-receipt">
                                     <h5>
                                         {{localeData?.total_receipts}}
                                         <div>
@@ -91,7 +90,7 @@
                                         </div>
                                     </h5>
                                 </div>
-                                <div class="pull-left total-details-box mr-r05 border-none closing-box">
+                                <div class="total-details-box mr-r05 border-none closing-box">
                                     <h5>
                                         {{localeData?.unused_receipts}}
                                         <div>
@@ -103,7 +102,6 @@
                                     </h5>
                                 </div>
                     </div>
-                </div>
             </div>
 
             <div class="invoice-preview  table-responsive">

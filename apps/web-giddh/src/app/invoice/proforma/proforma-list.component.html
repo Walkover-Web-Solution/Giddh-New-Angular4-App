@@ -62,8 +62,8 @@
                                 <span class="icon-advance-filter"></span>
                             </div>
                         </div>
-                            <!-- select app proforma *ngIf="selectedItems.length > 0"-->
-                            <div class="select-all-proformas-on-mobile-view mr-t1 ml-auto" >
+                            <!-- select app proforma-->
+                            <div class="select-all-proformas-on-mobile-view mr-t1 ml-auto" *ngIf="selectedItems.length > 0">
                                     <div class="checkbox-img mr-1">
                                         <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
                                         <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">

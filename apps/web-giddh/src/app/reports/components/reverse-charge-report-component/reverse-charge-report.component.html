@@ -1,8 +1,11 @@
 <ng-container appTranslate [file]="'reports/reverse-charge'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu [allowSidebarToggle]="false" [pageHeading]="localeData?.page_heading"></hamburger-menu>
-    <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState === 'in'">
-        <tax-sidebar (navigateEvent)="handleNavigation()" (clickOutside)="isMobileScreen ? asideGstSidebarMenuState = 'out' : ''" [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
+    <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
+        *ngIf="asideGstSidebarMenuState === 'in'">
+        <tax-sidebar (navigateEvent)="handleNavigation()"
+            (clickOutside)="isMobileScreen ? asideGstSidebarMenuState = 'out' : ''" [exclude]="'#primary-new-header'"
+            class="gst-sidebar"></tax-sidebar>
     </div>
     <div class="reverse-table-report">
         <div class="container-fluid">
@@ -55,34 +58,32 @@
                             class="icon-cross"></span>{{commonLocaleData?.app_clear_filter}}</button>
                 </div>
             </div>
-            <div class="row">
-                    <div class="col-12">
-                        <div class="d-flex w-100 justify-content-between">
-                            <div class="pull-left total-due-sale total-details-box opening-box border-none mr-r05">
-                                    <h5>
-                                        {{localeData?.total_taxable_value}}
-                                        <div>
-                                            <span class="d-inline-flex number-total">
-                                                {{activeCompany?.baseCurrencySymbol}}
-                                                {{reverseChargeReportResults?.totalTaxableValue | giddhCurrency }}/-
-                                            </span>
-                                        </div>
-                                    </h5>
-                                </div>
-                                <div class="pull-left total-due-sale total-details-box due-box border-none">
-                                    <h5>
-                                        {{localeData?.total_tax_amount}}
-                                        <div>
-                                            <span class="d-inline-flex number-total">
-                                                {{activeCompany?.baseCurrencySymbol}} {{reverseChargeReportResults?.totalTaxAmount |
-                                                giddhCurrency}}/-
-                                            </span>
-                                        </div>
-                                    </h5>
-                                </div>
+            <div class="top-content">
+                <div class="d-flex w-100 justify-content-between overflow-x-auto">
+                    <div class="total-due-sale total-details-box opening-box border-none mr-r05">
+                        <h5>
+                            {{localeData?.total_taxable_value}}
+                            <div>
+                                <span class="d-inline-flex number-total">
+                                    {{activeCompany?.baseCurrencySymbol}}
+                                    {{reverseChargeReportResults?.totalTaxableValue | giddhCurrency }}/-
+                                </span>
                             </div>
+                        </h5>
+                    </div>
+                    <div class="total-due-sale total-details-box due-box border-none">
+                        <h5>
+                            {{localeData?.total_tax_amount}}
+                            <div>
+                                <span class="d-inline-flex number-total">
+                                    {{activeCompany?.baseCurrencySymbol}} {{reverseChargeReportResults?.totalTaxAmount |
+                                    giddhCurrency}}/-
+                                </span>
+                            </div>
+                        </h5>
                     </div>
                 </div>
+            </div>
             <div class="invoice-preview  table-responsive">
                 <table class="table basic giddh-table on-mobile-view">
                     <thead class="thead-background1">
