@@ -376,14 +376,14 @@
     "sb": "SB",
     "search_branch": "Search Branches",
     "goto_company": "Go to company",
-    "create_branch": "+ Create Branch",
+    "create_branch": "Create Branch",
     "accounts": "Accounts",
     "show_more": "Show more",
     "menu": "Menu",
     "import_export_backup": "Import/Export Data (Backup)",
     "switch_company": "Switch company",
     "search_company": "Search Companies",
-    "create_company": "+ Create Company",
+    "create_company": "Create Company",
     "profile": "Profile",
     "user_profile": "User Profile",
     "api": "API",
@@ -397,5 +397,6 @@
     "import_data": "Import Data",
     "companies": "Companies",
     "refresh_manually": "Refresh Manually",
-    "branches": "Branches"
+    "branches": "Branches",
+    "company_consolidated_data": "Company consolidated data"
 }

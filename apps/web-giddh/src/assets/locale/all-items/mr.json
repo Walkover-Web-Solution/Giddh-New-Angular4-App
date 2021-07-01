@@ -392,5 +392,6 @@
     "import_data": "डेटा आयात करा",
     "companies": "कंपन्या",
     "refresh_manually": "रीफ्रेश",
-    "branches": "शाखा"
+    "branches": "शाखा",
+    "company_consolidated_data": "कंपनी एकत्रित डेटा"
 }

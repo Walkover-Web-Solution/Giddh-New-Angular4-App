@@ -151,6 +151,16 @@
 <ng-template #mainTable>
     <table class="table  giddh-table aging-table table-aging-report">
         <thead>
+            <tr class="aging-table-top">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td colspan="4" class="text-center top-aging-table-top">
+                    <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions"
+                        [localeData]="localeData" [commonLocaleData]="commonLocaleData"></aging-dropdown>
+                </td>
+                <td></td>
+            </tr>
             <tr>
                 <th #searchCustomerContainer (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')">
                     <div class="d-flex align-items-center">

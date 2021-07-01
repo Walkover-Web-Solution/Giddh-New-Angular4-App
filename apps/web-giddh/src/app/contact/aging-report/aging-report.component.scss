@@ -112,6 +112,9 @@ tr.aging-table-top td {
         background-color: $gray-95;
     }
 }
+.top-aging-table-top {
+    background: none !important;
+}
 
 // responsive
 @media (min-width: 769px) {

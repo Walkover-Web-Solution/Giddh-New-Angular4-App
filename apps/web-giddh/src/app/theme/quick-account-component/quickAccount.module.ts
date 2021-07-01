@@ -23,11 +23,4 @@ import { LaddaModule } from 'angular2-ladda';
     entryComponents: [QuickAccountComponent]
 })
 
-export class QuickAccountModule {
-    public static forRoot(): ModuleWithProviders<QuickAccountModule> {
-        return {
-            ngModule: QuickAccountModule,
-            providers: []
-        };
-    }
-}
+export class QuickAccountModule { }

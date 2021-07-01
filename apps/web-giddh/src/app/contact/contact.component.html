@@ -105,7 +105,7 @@
                             #filterDropDownList="bs-dropdown" dropdown [autoClose]="false"
                             (clickOutside)="hideListItems()" [tooltip]="localeData?.filter_toggle"
                             [placement]="'right'">
-                                <div dropdownToggle>
+                                <div dropdownToggle class="d-flex align-items-center">
                                         <span class="pd-r05 d-sm-flex d-none">{{commonLocaleData?.app_filter}}</span>
                                         <span class="icon-advance-filter"></span>
                                 </div>
@@ -142,16 +142,8 @@
                                     <a class="dropdown-item">
                                         <input type="checkbox" name="field_filter.mobile"
                                             (ngModelChange)="columnFilter($event, 'mobile')"
-                                            [(ngModel)]="showFieldFilter.mobile" />
-                                        {{commonLocaleData?.app_mobile_no}}</a>
-                                </li>
-
-                                <li role="menuitem">
-                                    <a class="dropdown-item">
-                                        <input type="checkbox" name="field_filter.email"
-                                            (ngModelChange)="columnFilter($event, 'email')"
-                                            [(ngModel)]="showFieldFilter.email" />
-                                        {{commonLocaleData?.app_email_id}}</a>
+                                            [(ngModel)]="showFieldFilter.contact" />
+                                        {{localeData?.contacts}}</a>
                                 </li>
 
                                 <li role="menuitem">
@@ -204,8 +196,8 @@
                     </div>
 
                     <div class="row">
-                            <div class="col-12">
-                                <div class="d-flex w-100 justify-content-between overflow-x-auto">
+                            <div class="col-md-12">
+                                <div class="d-flex w-100 justify-content-between">
                                         <div class="pull-left total-details-box mr-r05 d-flex justify-content-between count-box">
                                                 <h5>
                                                     {{localeData?.contacts}}
@@ -214,7 +206,8 @@
                                                         class="number-total">{{activeTab === 'customer' ? totalCustomers :
                                                         totalVendors}}</span>
                                                     <span *ngIf="selectedCheckedContacts.length>0"
-                                                        class="number-total">{{selectedCheckedContacts.length}}</span>
+                                                        class="number-total total-customer-vendor-count"><strong>{{selectedCheckedContacts.length}}</strong>/{{activeTab === 'customer' ? totalCustomers :
+                                                        totalVendors}}</span>
                                                     </div>
                                                 </h5>
                                                 <div class="btn-group more-button align-items-center" dropdown>
@@ -237,7 +230,7 @@
                                                     </ul>
                                                 </div>
 
-                                            </div>
+                                        </div>
                                         <div class="pull-left total-details-box mr-r05 border-none opening-box" *ngIf="showFieldFilter.openingBalance">
                                                 <h5>
                                                     {{localeData?.opening}}
@@ -249,8 +242,8 @@
                                                         </span>
                                                     </div>
                                                 </h5>
-                                            </div>
-                                            <div class="pull-left total-details-box mr-r05 border-none sales-purchase">
+                                        </div>
+                                        <div class="pull-left total-details-box mr-r05 border-none sales-purchase">
                                                 <h5>
                                                     <span *ngIf="activeTab === 'vendor'">{{commonLocaleData?.app_purchase}}</span>
                                                     <span *ngIf="activeTab === 'customer'">{{commonLocaleData?.app_sales}}</span>
@@ -262,8 +255,8 @@
                                                         </span>
                                                     </div>
                                                 </h5>
-                                            </div>
-                                            <div class="pull-left total-details-box mr-r05 border-none payment-receipt">
+                                        </div>
+                                        <div class="pull-left total-details-box mr-r05 border-none payment-receipt">
                                                 <h5>
                                                     <span *ngIf="activeTab === 'vendor'">{{commonLocaleData?.app_payment}}</span>
                                                     <span *ngIf="activeTab === 'customer'">{{commonLocaleData?.app_receipt}}</span>
@@ -275,8 +268,8 @@
                                                         </span>
                                                     </div>
                                                 </h5>
-                                            </div>
-                                            <div class="pull-left total-details-box border-none closing-box">
+                                        </div>
+                                        <div class="pull-left total-details-box border-none closing-box">
                                                 <h5>
                                                     {{localeData?.closing}}
                                                     <div>
@@ -287,7 +280,7 @@
                                                         </span>
                                                     </div>
                                                 </h5>
-                                            </div>
+                                        </div>
                                 </div>
                             </div>
                         </div>
@@ -573,7 +566,7 @@
                             </div>
                         </th>
 
-                        <th *ngIf="showFieldFilter.email || showFieldFilter.mobile">
+                        <th *ngIf="showFieldFilter.contact">
                             <div class="d-flex">
                                 <div class="flex-fill">
                                     {{localeData?.contacts}}
@@ -801,8 +794,8 @@
                                     </amount-field>
                                 </span>
                             </td>
-                            <td class="text-lowercase word-wrap font-12" *ngIf="showFieldFilter.email && showFieldFilter.mobile"
-                                [attr.data-title]="localeData?.contacts">
+                            <td class="text-lowercase word-wrap font-12" *ngIf="showFieldFilter.contact"
+                                [attr.data-title]="commonLocaleData?.app_email">
                                 <div>
                                     {{account.email || '-' }}
                                 </div>
@@ -1041,14 +1034,13 @@
                                     </amount-field>
                                 </span>
                             </td>
-                            <td class="text-lowercase word-wrap font-12" *ngIf="showFieldFilter.email && showFieldFilter.mobile"
-                                [attr.data-title]="localeData?.contacts">
-                                <div>
-                                    {{account.email || '-' }}
-                                </div>
-                                <div>
-                                {{account.mobileNo || '-'}}
-                                </div>
+                            <td class="word-wrap text-lowercase" *ngIf="showFieldFilter.contact"
+                                [attr.data-title]="commonLocaleData?.app_email">
+                                <div class="table-email ">{{account.email || '-' }}</div>
+                            </td>
+                            <td class="word-wrap" *ngIf="showFieldFilter.contact"
+                                [attr.data-title]="commonLocaleData?.app_mobile_no">
+                                {{account.mobileNo || '-' }}
                             </td>
                             <td class="word-wrap" *ngIf="showFieldFilter.gstin  && shouldShowTaxFilter"
                                 [attr.data-title]="commonLocaleData?.app_gstin">

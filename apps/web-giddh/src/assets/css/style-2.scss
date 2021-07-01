@@ -168,7 +168,6 @@ body {
 [class*=" icon-"] {
     /* use !important to prevent issues with browser extensions that change fonts */
     font-family: "icomoon" !important;
-    speak: none;
     font-style: normal;
     font-weight: normal;
     font-variant: normal;
@@ -288,6 +287,7 @@ input {
 .toggle {
     position: relative;
     width: 40px;
+    user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -1168,6 +1168,7 @@ modal-container.modal {
 .list-icon-group li {
     display: flex;
     align-items: center;
+    transition: 1ms all;
     -moz-transition: 1ms all;
     cursor: pointer;
 }
@@ -1869,7 +1870,6 @@ input[type="checkbox"]:checked:after {
 .tab-pane input[type="search"]:after {
     font-family: icomoon !important;
     content: "\e906";
-    speak: none;
     font-style: normal;
     font-weight: 400;
     font-variant: normal;
@@ -2749,6 +2749,7 @@ a.btn.btn-xs.btn-link.pull-right {
 #share-modal select {
     -webkit-appearance: none;
     -webkit-border-radius: 0px;
+    border-radius: 0px;
     margin-left: 10px;
 }
 
@@ -8415,8 +8416,8 @@ body.update-scroll-hidden {
                         min-width: 110px;
                         font-family: 'opensans-regular';
                         color: $grey-chateau !important;
-                        padding-left: 40px !important;
                         padding-top: 5px !important;
+                        padding-left: 40px !important;
                     }
                 }
             }
@@ -8431,6 +8432,7 @@ body.update-scroll-hidden {
                         position: absolute !important;
                         left: 20px !important;
                         top: 5px;
+                        color: $grey-chateau;
                     }
                 }
                 &.icon-branch1{
@@ -8443,6 +8445,7 @@ body.update-scroll-hidden {
                         position: absolute !important;
                         left: 20px !important;
                         top: 5px;
+                        color: $grey-chateau;
                     }
                 }
             }
@@ -8920,7 +8923,7 @@ body.update-scroll-hidden {
     .customer-aging .nav.nav-tabs{
         display: flex !important;
     }
-    
+
     .setting-sidebar-open {
         #content-wrapper{
             padding-left: 0 !important;
@@ -9306,7 +9309,7 @@ body.update-scroll-hidden {
         margin-top: 0px;
     }
     .custom-tabs.hide-header .top-bar {
-        margin-top: 10px;
+        margin-top: 28px;
     }
     .invoice-control .nav.nav-tabs {
         padding: 0 0 0 15px !important;

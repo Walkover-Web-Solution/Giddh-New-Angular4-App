@@ -47,33 +47,74 @@
         font-family: 'opensans-regular' !important;
     }
     tab.icon-company{
+        margin: 0 -20px;
         &::before{
             display: none;
         }
     }
     tab.icon-branch1{
+        margin: 0 -20px;
         &::before{
             display: none;
+        }
+    }
+    .company-branch-opt-1{
+        .wrap-company-refresh{
+            padding: 0 20px;
+        }
+        .company-list{
+            ul{
+                li{
+                    span, a{
+                        i{
+                            display:  none;
+                        }
+                    }
+                     &:hover{
+                         span{
+                             background-color: transparent;
+                         }
+                     }
+                }
+            }
         }
     }
     .company-list{
         height: calc(100vh  - 325px) !important;
         overflow: auto;
-        margin: 0 -20px;
-        padding: 0 20px 20px;
+        margin: 0;
+        padding: 0 0 20px;
 
         ul{
             li{
                 padding: 8px 0;
                 cursor: pointer;
                 color: $trout;
+                &:hover{
+                    span{
+                        background-color: #F0F5FF;
+                    }
+                    .dropdown-menu{
+                        span{
+                            background-color: transparent !important;
+                        }
+                    }
+                }
                 &.btn-group{
                     display: flex;
                     flex-direction: column;
                     margin-bottom: 0 !important;
+                    padding: 0  20px;
+                    &:hover{
+                        span{
+                            background-color: $solitude-light !important;
+                        }
+                    }
                     span{
                         white-space: normal;
                         word-break: break-all;
+                        padding: 8px 40px;
+                        margin: 0 -20px;
                         i.icon-company{
                             float: left;
                             width: 14px;
@@ -116,7 +157,7 @@
                             }
                             a{
                                 background-color: transparent;
-                                padding:6px 20px;
+                                padding:5px 20px;
                                 &:hover{
                                     background-color: initial !important;
                                     color: initial !important;
@@ -133,6 +174,13 @@
                                     }
                                 }
                                 &.company-branches-list{
+                                    &.active{
+                                        color: $trout !important;
+                                        background-color: $sunshine !important;
+                                        span{
+                                            color: $trout !important;
+                                        }
+                                    }
                                     .branch-alias, .branch-company-name{
                                         max-width: 150px;
                                         text-overflow: ellipsis;
@@ -175,7 +223,7 @@
             ul{
                 margin: 0 -20px;
                 li{
-                    padding: 0;
+                    padding: 0 20px;
                     cursor: pointer;
                     margin-bottom: 0;
                     a{
@@ -184,6 +232,10 @@
                         color: $trout;
                         white-space: normal;
                         word-break: break-all;
+                        &.active{
+                            color: $trout !important;
+                            background-color: $sunshine !important;
+                        }
                         &:hover{
                             background-color: initial !important;
                             color: initial !important;
@@ -229,19 +281,21 @@
                 justify-content: center;
                 align-items: center;
                 color: $white;
+                letter-spacing: -1px;
             }
         }
         .profile-logout{
+            display: flex;
+            align-items: center;
+            padding: 14px 15px;
+            min-width: 120px;
             button{
                 background-color: $white;
                 border: 1px solid $white;
-                padding: 14px 15px;
                 color: $trout;
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                min-width: 120px;
-                border-left-color: $dark-fog;
             }
         }
     }
@@ -253,16 +307,22 @@
         }
     }
     .company-branch-opt-2{
+        margin: 0 -20px;
+        .wrap-company-refresh{
+            padding: 0 20px;
+        }
         .company-list{
             height: calc(90vh - 120px) !important;
+            overflow-x: hidden;
             ul{
                 position: relative;
                 li{
-                    padding: 0;
+                    padding: 0 20px;
                     margin: 0 -20px;
                     span{
-                        padding: 6px 20px;
+                        padding: 5px 20px;
                         color: $slate;
+                        margin: 0;
                         &.company-name {
                             display: flex !important;
                             align-items: center !important;
@@ -290,6 +350,10 @@
                             span{
                                 &.dropdown-toggle{
                                     padding: 8px 20px;
+                                    span{
+                                        color: $black-pearl;
+                                        font-family: 'opensans-semibold';
+                                    }
                                 }
                                 &.active{
                                     background-color: $dark-alice-blue;
@@ -316,7 +380,8 @@
                         }
                     }
                     a{
-                        padding: 8px 20px !important;
+                        padding: 2px 20px !important;
+                        margin-bottom: 10px;
                     }
                 }
             }
@@ -328,6 +393,18 @@
 }
 .digit-orange{
     color: $orange-new !important;
+}
+.icon-reload{
+    color: $slate;
+}
+.icon-plus, .icon-link-arrow{
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    margin-right: 2px;
+}
+.font-semibold{
+    font-family: 'opensans-semibold';
 }
 
 @media screen and (max-height: 800px) {
