@@ -818,8 +818,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             if (this.asideSettingMenuState === "in") {
                 document.querySelector('body').classList.add('mobile-setting-sidebar');
+                document.querySelector('body').classList.add('aside-setting');
             } else {
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
+                document.querySelector('body').classList.add('aside-setting');
             }
         }, ((this.asideSettingMenuState === 'out') ? 100 : 0));
     }
