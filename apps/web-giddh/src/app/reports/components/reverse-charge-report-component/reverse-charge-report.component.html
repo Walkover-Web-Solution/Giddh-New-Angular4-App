@@ -56,31 +56,31 @@
                 </div>
             </div>
             <div class="top-content">
-                        <div class="d-flex w-100 justify-content-between overflow-x-auto">
-                            <div class="total-due-sale total-details-box opening-box border-none mr-r05">
-                                    <h5>
-                                        {{localeData?.total_taxable_value}}
-                                        <div>
-                                            <span class="d-inline-flex number-total">
-                                                {{activeCompany?.baseCurrencySymbol}}
-                                                {{reverseChargeReportResults?.totalTaxableValue | giddhCurrency }}/-
-                                            </span>
-                                        </div>
-                                    </h5>
-                                </div>
-                                <div class="total-due-sale total-details-box due-box border-none">
-                                    <h5>
-                                        {{localeData?.total_tax_amount}}
-                                        <div>
-                                            <span class="d-inline-flex number-total">
-                                                {{activeCompany?.baseCurrencySymbol}} {{reverseChargeReportResults?.totalTaxAmount |
-                                                giddhCurrency}}/-
-                                            </span>
-                                        </div>
-                                    </h5>
-                                </div>
-                        </div>
+                <div class="d-flex w-100 justify-content-between overflow-x-auto">
+                    <div class="total-due-sale total-details-box opening-box border-none mr-r05">
+                        <h5>
+                            {{localeData?.total_taxable_value}}
+                            <div>
+                                <span class="d-inline-flex number-total">
+                                    {{activeCompany?.baseCurrencySymbol}}
+                                    {{reverseChargeReportResults?.totalTaxableValue | giddhCurrency }}/-
+                                </span>
+                            </div>
+                        </h5>
+                    </div>
+                    <div class="total-due-sale total-details-box due-box border-none">
+                        <h5>
+                            {{localeData?.total_tax_amount}}
+                            <div>
+                                <span class="d-inline-flex number-total">
+                                    {{activeCompany?.baseCurrencySymbol}} {{reverseChargeReportResults?.totalTaxAmount |
+                                    giddhCurrency}}/-
+                                </span>
+                            </div>
+                        </h5>
+                    </div>
                 </div>
+            </div>
             <div class="invoice-preview  table-responsive">
                 <table class="table basic giddh-table on-mobile-view">
                     <thead class="thead-background1">
