@@ -282,10 +282,9 @@
                     </div>
                 </ng-template>
 
-                <div class="row">
-                    <div class="col-12">
-                            <div class="d-flex w-100 justify-content-between">
-                                    <div class="pull-left total-due-sale total-details-box opening-box border-none mr-r05">
+                <div class="top-content">
+                            <div class="d-flex w-100 justify-content-between overflow-x-auto">
+                                    <div class="total-due-sale total-details-box opening-box border-none mr-r05">
                                             <h5>
                                                 {{getTotalText()}}
                                                 <div>
@@ -299,7 +298,7 @@
                                                 </div>
                                             </h5>
                                         </div>
-                                        <div *ngIf="!(selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'purchase')" class="pull-left total-due-sale total-details-box due-box border-none">
+                                        <div *ngIf="!(selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'purchase')" class="total-due-sale total-details-box due-box border-none">
                                             <h5>
                                                 {{commonLocaleData?.app_total_due}}:
                                                 <div>
@@ -312,7 +311,6 @@
                                                 </div>
                                             </h5>
                                         </div>
-                                    </div>
                             </div>
                 </div>
                 <!-- For mobile screen sizes ends -->

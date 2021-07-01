@@ -195,10 +195,9 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                            <div class="col-md-12">
-                                <div class="d-flex w-100 justify-content-between">
-                                        <div class="pull-left total-details-box mr-r05 d-flex justify-content-between count-box">
+                    <div class="top-content">
+                                <div class="d-flex w-100 justify-content-between overflow-x-auto">
+                                        <div class="total-details-box mr-r05 d-flex justify-content-between count-box align-items-end">
                                                 <h5>
                                                     {{localeData?.contacts}}
                                                     <div>
@@ -210,12 +209,12 @@
                                                         totalVendors}}</span>
                                                     </div>
                                                 </h5>
-                                                <div class="btn-group more-button align-items-center" dropdown>
+                                                <div class="btn-group more-button align-items-center" dropdown container="body">
                                                     <button id="button-basic" dropdownToggle type="button"
                                                         class="btn btn-default dropdown-toggle mr-0" aria-controls="dropdown-basic">
                                                         <span class="icon-arrow-down font-12"></span>
                                                     </button>
-                                                    <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
+                                                    <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu pd-l1 pd-r1" role="menu"
                                                         aria-labelledby="button-basic">
                                                         <li role="menuitem" (click)="openEmailDialog();">
                                                             {{commonLocaleData?.app_email}}</li>
@@ -231,7 +230,7 @@
                                                 </div>
 
                                         </div>
-                                        <div class="pull-left total-details-box mr-r05 border-none opening-box" *ngIf="showFieldFilter.openingBalance">
+                                        <div class="total-details-box mr-r05 border-none opening-box" *ngIf="showFieldFilter.openingBalance">
                                                 <h5>
                                                     {{localeData?.opening}}
                                                     <div>
@@ -243,7 +242,7 @@
                                                     </div>
                                                 </h5>
                                         </div>
-                                        <div class="pull-left total-details-box mr-r05 border-none sales-purchase">
+                                        <div class="total-details-box mr-r05 border-none sales-purchase">
                                                 <h5>
                                                     <span *ngIf="activeTab === 'vendor'">{{commonLocaleData?.app_purchase}}</span>
                                                     <span *ngIf="activeTab === 'customer'">{{commonLocaleData?.app_sales}}</span>
@@ -256,7 +255,7 @@
                                                     </div>
                                                 </h5>
                                         </div>
-                                        <div class="pull-left total-details-box mr-r05 border-none payment-receipt">
+                                        <div class="total-details-box mr-r05 border-none payment-receipt">
                                                 <h5>
                                                     <span *ngIf="activeTab === 'vendor'">{{commonLocaleData?.app_payment}}</span>
                                                     <span *ngIf="activeTab === 'customer'">{{commonLocaleData?.app_receipt}}</span>
@@ -269,7 +268,7 @@
                                                     </div>
                                                 </h5>
                                         </div>
-                                        <div class="pull-left total-details-box border-none closing-box">
+                                        <div class="total-details-box border-none closing-box">
                                                 <h5>
                                                     {{localeData?.closing}}
                                                     <div>
@@ -282,7 +281,6 @@
                                                 </h5>
                                         </div>
                                 </div>
-                            </div>
                         </div>
 
 

@@ -70,15 +70,11 @@ span.input-addon {
     border-radius: 5px;
     top: 0;
 }
-tr.aging-table-top {
-    border-bottom: 1px solid $gainsboro;
-}
+
 tr.aging-table-top td {
     padding: 8px 0;
 }
-.aging-table-top + tr > th {
-    border-bottom: none !important;
-}
+
 .refresh-btn {
     width: 36px;
     height: 36px;
@@ -239,7 +235,7 @@ tr.aging-table-top td {
     }
 }
 
-@media (min-width: 767px){
+@media (min-width: 769px){
     .mobile-card-wrapper{
         .table-responsive{
             max-height: calc(100vh - 250px);
