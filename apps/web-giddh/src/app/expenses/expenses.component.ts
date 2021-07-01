@@ -41,13 +41,8 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     public isFilterSelected: boolean = false;
     public currentSelectedTab: string = 'pending';
     public activeTab: string;
-
     public pettycashRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public selectedDate = {
-        dateFrom: '',
-        dateTo: ''
-    };
     public routerSub: any;
     /** Instance of pending list component */
     @ViewChild('pendingListComponent', { read: PendingListComponent, static: false }) public pendingListComponent: PendingListComponent;
@@ -147,8 +142,6 @@ export class ExpensesComponent implements OnInit, OnDestroy {
                     this.pettycashRequest.from = this.universalFrom;
                     this.pettycashRequest.to = this.universalTo;
                     this.pettycashRequest.page = 1;
-                    this.selectedDate.dateFrom = this.pettycashRequest.from;
-                    this.selectedDate.dateTo = this.pettycashRequest.to;
 
                     if (this.pendingListComponent) {
                         this.pettycashRequest.sort = this.pendingListComponent.pettycashRequest.sort;
@@ -245,28 +238,6 @@ export class ExpensesComponent implements OnInit, OnDestroy {
 
     public openModal(filterModal: TemplateRef<any>) {
         this.modalRef = this.modalService.show(filterModal, { class: 'modal-md' });
-    }
-
-    public bsValueChange(event: any) {
-        if (event) {
-            this.pettycashRequest.from = moment(event.picker.startDate._d).format(GIDDH_DATE_FORMAT);
-            this.pettycashRequest.to = moment(event.picker.endDate._d).format(GIDDH_DATE_FORMAT);
-            this.selectedDate.dateFrom = this.pettycashRequest.from;
-            this.selectedDate.dateTo = this.pettycashRequest.to;
-            this.isFilterSelected = true;
-
-            if (this.pendingListComponent && this.pendingListComponent.pettycashRequest) {
-                this.pettycashRequest.sort = this.pendingListComponent.pettycashRequest.sort;
-                this.pettycashRequest.sortBy = this.pendingListComponent.pettycashRequest.sortBy;
-            }
-            this.getPettyCashPendingReports(this.pettycashRequest);
-
-            if (this.rejectedListComponent && this.rejectedListComponent.pettycashRequest) {
-                this.pettycashRequest.sort = this.rejectedListComponent.pettycashRequest.sort;
-                this.pettycashRequest.sortBy = this.rejectedListComponent.pettycashRequest.sortBy;
-            }
-            this.getPettyCashRejectedReports(this.pettycashRequest);
-        }
     }
 
     public clearFilter() {
@@ -399,8 +370,6 @@ export class ExpensesComponent implements OnInit, OnDestroy {
             this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
             this.pettycashRequest.from = this.fromDate;
             this.pettycashRequest.to = this.toDate;
-            this.selectedDate.dateFrom = this.pettycashRequest.from;
-            this.selectedDate.dateTo = this.pettycashRequest.to;
             this.isFilterSelected = true;
 
             if (this.pendingListComponent && this.pendingListComponent.pettycashRequest) {

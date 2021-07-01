@@ -21,6 +21,7 @@ import { UpdateLedgerDiscountComponent } from '../update-ledger-discount/update-
 import { UpdateLedgerEntryPanelComponent } from './update-ledger-entry-panel.component';
 import { NgxUploaderModule } from 'ngx-uploader';
 import { AsideMenuSalesOtherTaxesModule } from '../../../sales/aside-menu-sales-other-taxes/aside-menu-sales-other-taxes.module';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 @NgModule({
     declarations: [
@@ -46,8 +47,9 @@ import { AsideMenuSalesOtherTaxesModule } from '../../../sales/aside-menu-sales-
         ClickOutsideModule,
         ReplacePipeModule,
         NgxUploaderModule,
-        AsideMenuSalesOtherTaxesModule
+        AsideMenuSalesOtherTaxesModule,
+        TooltipModule
     ],
-    exports: [UpdateLedgerEntryPanelComponent]
+    exports: [UpdateLedgerEntryPanelComponent, UpdateLedgerTaxControlComponent, UpdateLedgerDiscountComponent]
 })
 export class UpdateLedgerEntryPanelModule {}
