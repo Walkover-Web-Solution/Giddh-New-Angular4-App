@@ -8,6 +8,7 @@ import { RecurringInvoices } from '../../models/interfaces/RecurringInvoice';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 import { INVOICE_RECEIPT_ACTIONS } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.const';
 import { LEDGER } from 'apps/web-giddh/src/app/actions/ledger/ledger.const';
+import { UNAUTHORISED } from '../../app.constant';
 
 export interface InvoiceState {
     base64Data: string;
@@ -31,7 +32,10 @@ export interface InvoiceState {
     exportInvoicebase64Data: any,
     // To check get all ledgr data API call in progress
     isGetAllLedgerDataInProgress: boolean,
-    isGenerateBulkInvoiceCompleted: boolean
+    isGenerateBulkInvoiceCompleted: boolean,
+    hasRecurringVoucherListPermissions: boolean,
+    hasPendingVouchersListPermissions: boolean,
+    hasInvoiceSettingPermissions: boolean
 }
 
 export const initialState: InvoiceState = {
@@ -52,7 +56,10 @@ export const initialState: InvoiceState = {
     exportInvoiceInprogress: false,
     exportInvoicebase64Data: null,
     isGetAllLedgerDataInProgress: false,
-    isGenerateBulkInvoiceCompleted: false
+    isGenerateBulkInvoiceCompleted: false,
+    hasRecurringVoucherListPermissions: true,
+    hasPendingVouchersListPermissions: true,
+    hasInvoiceSettingPermissions: true
 };
 
 export function InvoiceReducer(state = initialState, action: CustomActions): InvoiceState {
@@ -89,11 +96,13 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
                     });
                 }
                 newState.ledgers = body;
+                newState.hasPendingVouchersListPermissions = true;
                 return Object.assign({}, state, newState);
             } else {
                 let o: GetAllLedgersOfInvoicesResponse = new GetAllLedgersOfInvoicesResponse();
                 o.results = [];
                 newState.ledgers = o;
+                newState.hasPendingVouchersListPermissions = false;
                 return Object.assign({}, state, newState);
             }
         }
@@ -229,6 +238,10 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             let res: BaseResponse<InvoiceSetting, string> = action.payload;
             if (res.status === 'success') {
                 newState.settings = res.body;
+                newState.hasInvoiceSettingPermissions = true;
+                return Object.assign({}, state, newState);
+            } else if(res.status === 'error' && res.statusCode === UNAUTHORISED) {
+                newState.hasInvoiceSettingPermissions = false;
                 return Object.assign({}, state, newState);
             }
             return state;
@@ -345,7 +358,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             return state;
         }
         case INVOICE.RECURRING.GET_RECURRING_INVOICE_DATA_RESPONSE: {
-            const s = { ...state, recurringInvoiceData: { ...state.recurringInvoiceData, recurringInvoices: action.payload } };
+            const s = { ...state, recurringInvoiceData: { ...state.recurringInvoiceData, recurringInvoices: action.payload }, hasRecurringVoucherListPermissions: true };
             return s;
         }
         case INVOICE.RECURRING.CREATE_RECURRING_INVOICE: {
@@ -470,6 +483,12 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
                 ...state,
                 isGenerateBulkInvoiceCompleted: false
             }
+        case INVOICE.RECURRING.NO_PERMISSIONS_RECURRING_INVOICE: 
+            return { 
+                ...state, 
+                recurringInvoiceData: { ...state.recurringInvoiceData, recurringInvoices: null }, 
+                hasRecurringVoucherListPermissions: false 
+            };
         default: {
             return state;
         }
