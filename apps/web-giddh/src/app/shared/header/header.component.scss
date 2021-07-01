@@ -1054,6 +1054,15 @@ aside-setting {
     }
 }
 @media (max-width: 767px) {
+    .setting-sidebar-wrapper {
+        z-index: 999;
+        width: 100%;
+        height: 100%;
+        display: block;
+        background-color: rgba(0, 0, 0, 0.5);
+        position: absolute;
+        top: 0;
+    }
     .gst-menu-icon, .setting-menu-icon {
         padding: 4px 8px;
         display: none;
