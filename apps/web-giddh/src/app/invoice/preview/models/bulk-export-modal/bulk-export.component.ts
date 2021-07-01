@@ -77,7 +77,6 @@ export class BulkExportModal implements OnInit, OnDestroy {
                 this.recipients = result.user.email;
             }
         });
-        return this.recipients;
     }
 
     /**
