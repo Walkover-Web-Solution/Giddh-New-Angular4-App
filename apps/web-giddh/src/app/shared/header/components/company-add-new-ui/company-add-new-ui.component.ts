@@ -116,14 +116,14 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
 
     constructor(private socialAuthService: AuthService, private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions, private _route: Router, private _loginAction: LoginActions, private _companyService: CompanyService, private _generalActions: GeneralActions, private _generalService: GeneralService, private _toaster: ToasterService, private commonActions: CommonActions
     ) {
-        this.isProdMode = PRODUCTION_ENV;
-        this.getCountry();
-        this.getCallingCodes();
-
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(p => p.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
+        this.isProdMode = PRODUCTION_ENV;
+        this.getCountry();
+        this.getCallingCodes();
+        
         this.imgPath = (isElectron || isCordova) ? '' : AppUrl + APP_FOLDER + '';
         this.logedInuser = this._generalService.user;
         if (this._generalService.createNewCompany) {

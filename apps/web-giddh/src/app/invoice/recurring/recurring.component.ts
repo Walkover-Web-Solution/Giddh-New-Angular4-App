@@ -84,11 +84,20 @@ export class RecurringComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True if user has voucher list permission */
+    public hasRecurringVoucherListPermissions: boolean = true;
 
     constructor(private store: Store<AppState>,
         private generalService: GeneralService,
         private _invoiceActions: InvoiceActions, private _breakPointObservar: BreakpointObserver, private modalService: BsModalService) {
         this.recurringData$ = this.store.pipe(takeUntil(this.destroyed$), select(s => s.invoice.recurringInvoiceData.recurringInvoices));
+    }
+
+    openModal(template: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(template);
+    }
+
+    public ngOnInit() {
         this.recurringData$.subscribe(p => {
             if (p && p.recurringVoucherDetails) {
                 let items = _.cloneDeep(p.recurringVoucherDetails);
@@ -101,13 +110,6 @@ export class RecurringComponent implements OnInit, OnDestroy {
                 this.isLoading = false;
             }
         });
-    }
-
-    openModal(template: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(template);
-    }
-
-    public ngOnInit() {
         this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices());
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -144,6 +146,10 @@ export class RecurringComponent implements OnInit, OnDestroy {
             '(max-width: 1023px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
+        });
+
+        this.store.pipe(select(state => state.invoice.hasRecurringVoucherListPermissions), takeUntil(this.destroyed$)).subscribe(response => {
+            this.hasRecurringVoucherListPermissions = response;
         });
     }
 
@@ -214,14 +220,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
             if (this.customerNameInput.value !== null && this.customerNameInput.value !== '') {
                 return;
             }
-        } else if (fieldName === 'accountUniqueName') {
-            // if (this.accountUniqueNameInput.value !== null && this.accountUniqueNameInput.value !== '') {
-            //   return;
-            // }
         }
-        // if (this.filter[fieldName] !== '') {
-        //   return;
-        // }
 
         if (this.childOf(event.target, el)) {
             return;
@@ -278,13 +277,6 @@ export class RecurringComponent implements OnInit, OnDestroy {
         if (fieldName === 'customerName') {
             this.showCustomerNameSearch = true;
             this.showInvoiceNumberSearch = false;
-        } else {
-            // this.showCustomerNameSearch = true;
-            // this.showInvoiceNumberSearch = false;
-            //
-            // setTimeout(() => {
-            //   this.customerSearch.nativeElement.focus();
-            // }, 200);
         }
 
         setTimeout(() => {

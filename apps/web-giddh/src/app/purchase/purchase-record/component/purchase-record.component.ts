@@ -7,6 +7,7 @@ import { take, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { StateDetailsRequest } from '../../../models/api-models/Company';
 import { CompanyActions } from '../../../actions/company.actions';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
     styleUrls: [`./purchase-record.component.scss`],
@@ -22,11 +23,14 @@ export class PurchaseRecordComponent implements OnInit, OnDestroy {
     public refreshPurchaseBill: boolean = false;
     /* This will hold local JSON data */
     public localeData: any = {};
+    /* This will store screen size */
+    public isMobileScreen: boolean = false;
 
     constructor(
         private store: Store<AppState>,
         private generalAction: GeneralActions,
         public route: ActivatedRoute,
+        private breakPointObservar: BreakpointObserver,
         private companyActions: CompanyActions,
         public router: Router
     ) {
@@ -45,6 +49,13 @@ export class PurchaseRecordComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.store.dispatch(this.generalAction.setAppTitle('/pages/purchase-management/purchase'));
         this.saveLastState(this.activeTab);
+
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
+
     }
 
     /**
@@ -76,6 +87,28 @@ export class PurchaseRecordComponent implements OnInit, OnDestroy {
      */
     public purchaseOrderOutput(event: boolean): void {
         this.refreshPurchaseBill = event;
+    }
+    /**
+     * This will return page heading based on active tab
+     *
+     * @param {boolean} event
+     * @memberof PurchaseRecordComponent
+     */
+    public getPageHeading(): string {
+        if(this.isMobileScreen){
+            if(this.activeTab === 'order') {
+                return this.localeData?.purchase_order;
+            }
+            else if(this.activeTab === 'bill') {
+                return this.localeData?.purchase_bill;
+            }
+            else if(this.activeTab === 'settings') {
+                return this.localeData?.settings;
+            }
+        }
+        else {
+            return "" ;
+        }
     }
 
     /**

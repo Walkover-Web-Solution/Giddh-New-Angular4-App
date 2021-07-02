@@ -2,9 +2,8 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
-import { Component, Input, OnDestroy, OnInit, ViewChild, OnChanges, SimpleChange, SimpleChanges, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, OnChanges, SimpleChanges, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
-import * as _ from '../../../lodash-optimized';
 import {
     CompanyResponse
 } from '../../../models/api-models/Company';
@@ -33,6 +32,7 @@ import { SettingsWarehouseService } from '../../../services/settings.warehouse.s
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { InvoiceSetting } from '../../../models/interfaces/invoice.setting.interface';
 import { OrganizationType } from '../../../models/user-login-state';
+import { cloneDeep, isEmpty } from '../../../lodash-optimized';
 
 @Component({
     selector: 'new-branch-transfer',
@@ -151,16 +151,19 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     constructor(private _router: Router, private store: Store<AppState>, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _warehouseService: SettingsWarehouseService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, public bsConfig: BsDatepickerConfig) {
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
         this.getInventorySettings();
+        this.initFormFields();
+    }
+
+    public ngOnInit(): void {
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.store.dispatch(this.invoiceActions.resetTransporterListResponse());
 
-        this.initFormFields();
         this.getTransportersList();
         this.getStock();
 
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((o) => {
-            if (o && !_.isEmpty(o)) {
-                let companyInfo = _.cloneDeep(o);
+            if (o && !isEmpty(o)) {
+                let companyInfo = cloneDeep(o);
                 this.activeCompany = companyInfo;
                 this.inputMaskFormat = this.activeCompany.balanceDisplayFormat ? this.activeCompany.balanceDisplayFormat.toLowerCase() : '';
                 this.getOnboardingForm(companyInfo.countryV2.alpha2CountryCode);
@@ -169,9 +172,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         });
 
         this.getBranches();
-    }
 
-    public ngOnInit(): void {
         transporterModes.map(c => {
             this.transporterMode.push({ label: c.label, value: c.value });
         });
@@ -1328,9 +1329,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.store.dispatch(this.inventoryAction.GetStock());
 
         this.store.pipe(select(p => p.inventory.stocksList), takeUntil(this.destroyed$)).subscribe((o) => {
-            if (o && !_.isEmpty(o)) {
+            if (o && !isEmpty(o)) {
                 this.stockList = [];
-                let stockList = _.cloneDeep(o);
+                let stockList = cloneDeep(o);
 
                 if (stockList && stockList.results) {
                     stockList.results.forEach(key => {

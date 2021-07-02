@@ -238,8 +238,6 @@
                         </ng-container>
                         <span class="text-light" *ngIf="exceedDueAmount<0">
                             {{localeData?.excess_amount}}:
-                            <!-- {{invoiceFormDetails.accountDetails.currencySymbol}} -->
-                            <!-- {{-exceedDueAmount | giddhCurrency}} -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="-exceedDueAmount"
                                     [currencySymbol]="invoiceFormDetails.accountDetails.currencySymbol"

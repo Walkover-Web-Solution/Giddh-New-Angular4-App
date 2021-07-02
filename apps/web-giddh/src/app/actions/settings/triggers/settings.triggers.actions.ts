@@ -13,7 +13,6 @@ import { LocaleService } from '../../../services/locale.service';
 @Injectable()
 export class SettingsTriggersActions {
 
-
     public CreateTrigger$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TRIGGERS_ACTIONS.CREATE_TRIGGERS),
@@ -21,7 +20,6 @@ export class SettingsTriggersActions {
                 return this.settingsTriggersService.CreateTrigger(action.payload).pipe(
                     map(response => this.CreateTriggerResponse(response)));
             })));
-
 
     public CreateTriggerResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -37,7 +35,6 @@ export class SettingsTriggersActions {
                 return { type: 'EmptyAction' };
             })));
 
-
     public UpdateTrigger$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TRIGGERS_ACTIONS.UPDATE_TRIGGERS),
@@ -45,7 +42,6 @@ export class SettingsTriggersActions {
                 return this.settingsTriggersService.UpdateTrigger(action.payload, action.payload.uniqueName).pipe(
                     map(response => this.UpdateTriggerResponse(response)));
             })));
-
 
     public UpdateTriggerResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -61,7 +57,6 @@ export class SettingsTriggersActions {
                 return { type: 'EmptyAction' };
             })));
 
-
     public DeleteTrigger$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TRIGGERS_ACTIONS.DELETE_TRIGGERS),
@@ -69,7 +64,6 @@ export class SettingsTriggersActions {
                 return this.settingsTriggersService.DeleteTrigger(action.payload).pipe(
                     map(response => this.DeleteTriggerResponse(response)));
             })));
-
 
     public DeleteTriggerResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -84,7 +78,6 @@ export class SettingsTriggersActions {
                 }
                 return { type: 'EmptyAction' };
             })));
-
 
     public GetTrigger$: Observable<Action> = createEffect(() => this.action$
         .pipe(

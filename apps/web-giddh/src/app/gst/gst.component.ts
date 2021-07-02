@@ -1,6 +1,3 @@
-/**
- * Created by kunalsaxena on 9/1/17.
- */
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
@@ -10,7 +7,6 @@ import { AlertConfig } from 'ngx-bootstrap/alert';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { filter, take, takeUntil } from 'rxjs/operators';
-
 import { CompanyActions } from '../actions/company.actions';
 import { GstReconcileActions } from '../actions/gst-reconcile/GstReconcile.actions';
 import { InvoicePurchaseActions } from '../actions/purchase-invoice/purchase-invoice.action';
@@ -24,8 +20,7 @@ import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { AppState } from '../store';
 import { IOption } from '../theme/ng-select/ng-select';
 import { GstReport } from './constants/gst.constant';
-
-
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 @Component({
     templateUrl: './gst.component.html',
     styleUrls: ['./gst.component.scss'],
@@ -115,7 +110,8 @@ export class GstComponent implements OnInit, OnDestroy {
         private _toasty: ToasterService,
         private _cdRf: ChangeDetectorRef,
         private gstReconcileService: GstReconcileService,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private breakpointObserver: BreakpointObserver
     ) {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.gstr1TransactionCounts$ = this.store.pipe(select(s => s.gstR.gstr1OverViewData.count), takeUntil(this.destroyed$));
@@ -136,7 +132,16 @@ export class GstComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        this.toggleGstPane();
+        document.querySelector('body').classList.add('gst-sidebar-open');
+        this.breakpointObserver
+        .observe(['(max-width: 768px)'])
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((state: BreakpointState) => {
+            this.isMobileScreen = state.matches;
+            if (!this.isMobileScreen) {
+                this.asideGstSidebarMenuState = 'in';
+            }
+        });
         this.loadTaxDetails();
         let companyUniqueName = null;
         this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
@@ -187,31 +192,15 @@ export class GstComponent implements OnInit, OnDestroy {
                 this.loadTaxReport();
             }
         });
-    }
-    /**
-     * Aside pane toggle fixed class
-     *
-     *
-     * @memberof GstComponent
-     */
-    public toggleBodyClass(): void {
-        if (this.asideGstSidebarMenuState === 'in') {
-            document.querySelector('body').classList.add('gst-sidebar-open');
-        } else {
-            document.querySelector('body').classList.remove('gst-sidebar-open');
-        }
-    }
-    /**
-      * This will toggle the settings popup
-      *
-      * @param {*} [event]
-      * @memberof GstComponent
-      */
-    public toggleGstPane(event?): void {
-        this.toggleBodyClass();
-        if (this.isMobileScreen && event && this.asideGstSidebarMenuState === 'in') {
-          this.asideGstSidebarMenuState = "out";
-        }
+        this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
+            if (this.isMobileScreen) {
+                if (shouldOpen) {
+                    this.asideGstSidebarMenuState = 'in';
+                } else {
+                    this.asideGstSidebarMenuState = 'out';
+                }
+            }
+        });
     }
     /**
      * Unsubscribes from subscription
@@ -234,7 +223,6 @@ export class GstComponent implements OnInit, OnDestroy {
                 to: moment(ev.picker.endDate._d).format(GIDDH_DATE_FORMAT)
             };
             this.isMonthSelected = false;
-            // this.selectedMonth = null;
         } else {
             this.currentPeriod = {
                 from: moment(ev).startOf('month').format(GIDDH_DATE_FORMAT),

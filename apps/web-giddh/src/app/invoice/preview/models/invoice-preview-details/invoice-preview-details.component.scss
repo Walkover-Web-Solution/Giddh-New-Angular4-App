@@ -138,6 +138,7 @@
     background-color: $white;
     border: 1px solid $gainsboro;
     margin-right: 10px;
+    border-radius: 5px;
     span {
         border-left: 1px solid $gainsboro;
         padding: 5px;
@@ -233,6 +234,9 @@
     .img-expand-collapse {
         padding: 50px 50px 0 50px;
     }
+    .pdf-expand-collapse {
+        padding: 50px 0px 0 0px;
+    }
     .image-collapsed {
         max-height: 130px;
         overflow: hidden;
@@ -250,6 +254,12 @@
         // border: 2px dashed #d9d9d9;
         // padding: 10px;
         margin-top: 50px;
+        h5{
+            background-color: $alice-blue-light;
+            strong{
+                color: $midnight-blue;
+            }
+        }
     }
 }
 
@@ -313,7 +323,7 @@
 
 .invoice-detail {
     background-color: $alice-blue-light;
-    padding-bottom: 20px;
+    padding-bottom: 0px;
 }
 
 span.close-modal.cp.pull-right {
@@ -324,6 +334,7 @@ span.close-modal.cp.pull-right {
     width: 34px;
     background-color: $gainsboro-light;
     border: 1px solid $gainsboro;
+    border-radius: 5px;
     position: static;
     transform: inherit;
 }
@@ -357,6 +368,7 @@ span.close-modal.cp.pull-right {
 .invoice-search-box input {
     flex: 1;
     border: 1px solid $gainsboro;
+    border-radius: 5px;
     height: 37px;
     padding: 0 30px;
     background-image: url("../../../../../assets/images/searchIcon.svg");
@@ -474,7 +486,7 @@ label.labeled {
     right: 15px;
     font-size: 14px;
     margin: 15px;
-    top: 0;
+    top: 0px;
     a {
         color: $gray;
         span {

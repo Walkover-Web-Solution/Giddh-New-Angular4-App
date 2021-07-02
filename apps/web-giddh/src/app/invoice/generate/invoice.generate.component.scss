@@ -10,27 +10,10 @@ table {
     table-layout: fixed;
 }
 
-/* .table.basic tbody tr td {
-    background-color: #fff;
-}
-
-.table.basic .table tbody tr td {
-    border: none;
-} */
-
 .check-image img {
     max-height: 20px;
     cursor: pointer;
 }
-
-/*
-.table.basic>tbody>tr>td>table tbody tr td {
-    padding: 5px 0;
-}
-
-tfoot {
-    background: #fff;
-} */
 
 .flex-fill {
     flex: 1 1 auto;
@@ -39,8 +22,6 @@ tfoot {
 .d-flex {
     display: flex;
 }
-
-/*td-in-searchbox_style*/
 
 .td-search-box div {
     display: flex;
@@ -257,6 +238,7 @@ span.close-modal.cp.pull-right {
     width: 34px;
     background-color: $very-light-gray;
     border: 1px solid $gainsboro;
+    border-radius: 5px;
     margin-right: 8px;
     position: static;
     transform: inherit;

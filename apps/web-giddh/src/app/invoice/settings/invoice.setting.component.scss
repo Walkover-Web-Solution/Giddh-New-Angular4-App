@@ -10,10 +10,6 @@
     bottom: 7px;
 }
 
-/* .delete-ico {
-    font-size: 14px;
-} */
-
 .lh-34 {
     line-height: 34px;
 }
@@ -198,6 +194,7 @@ span.viasocket a {
 .delete-verified-icon {
     padding: 6px 10px;
     border: 1px solid $gainsboro;
+    border-radius: 5px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -205,6 +202,12 @@ span.viasocket a {
     height: 36px;
     i.icon-trash {
         font-size: 18px;
+    }
+}
+
+.btn-group{
+    .btn{
+        border-radius: 5px !important;
     }
 }
 

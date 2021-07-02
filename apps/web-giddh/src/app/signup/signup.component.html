@@ -48,10 +48,6 @@
                                                     (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)">Resend
                                                     code</a>
                                             </div>
-
-                                            <!-- <div class="clearfix">
-                                    <small class="">We have sent a verification code to your registered email.</small>
-                                </div> -->
                                         </div>
                                     </form>
                                     <!-- form end/ -->
@@ -70,14 +66,6 @@
                                                 (ngModelChange)="validatePwd($event)" formControlName="password"
                                                 name="password" placeholder="Password" [minlength]="8" [maxlength]="20"
                                                 autocomplete="false" />
-                                            <div class="hint" [hidden]="!showPwdHint">
-                                                <ul>
-                                                    <li>Provide minimum 8 and maximum 20 characters.</li>
-                                                    <li>1 number and 1 special character (@$!%*?&_).</li>
-                                                    <!-- <li>1 uppercase letter.</li>
-                                    <li>1 lowercase letter.</li> -->
-                                                </ul>
-                                            </div>
                                             <button class="btn btn-success btn-lg btn-block mr-t1" type="submit"
                                                 [disabled]="!signUpWithPasswdForm.controls['email'].valid || !signUpWithPasswdForm.controls['password'].value">
                                                 Signup
@@ -88,7 +76,6 @@
                                     <form class="" *ngIf="isSignupWithPasswordSuccess$ | async" id="signupVerifyForm"
                                         [formGroup]="signupVerifyForm" autocomplete="off">
                                         <div class="clearfix">
-                                            <!-- <input class="form-control mr-b1" formControlName="email" type="text" placeholder="Email Id" required> -->
                                             <input class="form-control mr-b1" formControlName="verificationCode"
                                                 type="text" placeholder="Enter verification code here" required>
                                             <div class="clearfix mr-b2">
@@ -112,18 +99,10 @@
                                             (click)="signInWithProviders('google')"><i class="ico-google">
                                                 <img src="./assets/images/new/google_ico.svg" />
                                             </i><span>Signup with Google</span></a></li>
-                                    <!--
-                                        commented code may be it will be used in future
-                                        <li class="linkedin-ico"><a href="javascript:void(0);"
-                                            (click)="signInWithProviders('linkedin')"><i class="fa fa-linkedin"></i></a>
-                                    </li> -->
-
                                 </ul>
                                 <div class="login-with" *ngIf="loginUsing !== 'userName'">
-                                    <!--  -->
                                     Signup with <a class="bold" href="javascript:void(0);"
                                         (click)="loginUsing = 'userName'"> email and password</a>
-                                    <!-- ,<a href="javascript:void(0);" (click)="loginUsing = 'email'">Email</a> -->
                                 </div>
                                 <div class="d-flex align-items-center account mt-1">
                                     <p class="mb-0 mr-2 bold text-light-2">Already have an account?</p> <a

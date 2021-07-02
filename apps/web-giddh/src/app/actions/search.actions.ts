@@ -2,12 +2,11 @@ import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../services/toaster.service';
-import { Action, Store } from '@ngrx/store';
+import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { SearchService } from '../services/search.service';
 import { SearchRequest } from '../models/api-models/Search';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { AppState } from '../store/roots';
 import { CustomActions } from '../store/customActions';
 
 @Injectable()
@@ -30,10 +29,7 @@ export class SearchActions {
                     })));
             })));
 
-    constructor(private action$: Actions,
-        private _toasty: ToasterService,
-        private store: Store<AppState>,
-        private _searchService: SearchService) {
+    constructor(private action$: Actions, private _toasty: ToasterService, private _searchService: SearchService) {
     }
 
     public GetStocksReport(request: SearchRequest, searchReqBody: any): CustomActions {

@@ -6,13 +6,6 @@
         width: auto;
     }
 }
-.voucher-name {
-    cursor: default;
-    pointer-events: none;
-    &:hover {
-        background-color: $deep-sky-blue;
-    }
-}
 
 .current-balance {
     font-size: 14px;
@@ -25,11 +18,6 @@
             background-color: $white !important;
         }
     }
-}
-.debtor-details {
-    display: flex;
-    cursor: default;
-    font-size: 14px;
 }
 .debtor-details-form {
     display: flex;
@@ -54,7 +42,7 @@
             input.form-control {
                 background-color: $white !important;
                 border: 1px solid $gainsboro;
-                border-radius: 2px !important;
+                border-radius: 5px !important;
             }
             &.set-width {
                 width: 30%;

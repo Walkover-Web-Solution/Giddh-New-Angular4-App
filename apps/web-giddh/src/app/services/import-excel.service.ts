@@ -6,7 +6,7 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { IMPORT_EXCEL_API } from './apiurls/import-excel.api';
-import { ImportExcelProcessResponseData, ImportExcelRequestData, ImportExcelResponseData, ImportExcelStatusPaginatedResponse, ImportExcelStatusResponse } from '../models/api-models/import-excel';
+import { ImportExcelProcessResponseData, ImportExcelRequestData, ImportExcelResponseData, ImportExcelStatusPaginatedResponse } from '../models/api-models/import-excel';
 import { Observable } from 'rxjs';
 import { CommonPaginatedRequest } from '../models/api-models/Invoice';
 
@@ -63,18 +63,4 @@ export class ImportExcelService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<ImportExcelStatusPaginatedResponse, string>(e)));
     }
-
-    public importStatusDetails(requestId: string): Observable<BaseResponse<ImportExcelStatusResponse, string>> {
-        const companyUniqueName = this._generalService.companyUniqueName;
-        let url = this.config.apiUrl + IMPORT_EXCEL_API.IMPORT_STATUS_DETAILS
-            .replace(':companyUniqueName', companyUniqueName)
-            .replace(':requestId', requestId);
-
-        return this._http.get(url).pipe(map((res) => {
-            let data: BaseResponse<ImportExcelStatusResponse, string> = res;
-            data.queryString = requestId;
-            return data;
-        }));
-    }
-
 }

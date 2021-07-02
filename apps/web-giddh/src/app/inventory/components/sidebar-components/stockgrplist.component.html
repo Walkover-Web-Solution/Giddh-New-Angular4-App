@@ -8,9 +8,7 @@
                 <i (click)="OpenGroup(grp, $event)" class="icon-arrow-down position-relative"
                     [ngClass]="{'open': grp.isOpen}"></i>
             </a>
-            <!-- *ngIf="grp.isOpen && (activeGroup && activeGroup.uniqueName === grp.uniqueName) && (activeStockUniqueName$ | async)" -->
             <span class="pull-right">
-                <!-- *ngIf="grp.isOpen && (activeGroup && activeGroup.uniqueName === grp.uniqueName)" -->
                 <button class="btn btn-link btn-xs pull-right" (click)="goToManageGroup(grp)"
                     *ngIf="grp.isOpen && (activeGroup && activeGroup.uniqueName === grp.uniqueName) && !(activeStockUniqueName$ | async)">
                     <i class="icon-edit-pencil"> </i>

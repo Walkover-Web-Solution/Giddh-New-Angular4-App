@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, TemplateRef, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, ViewChild, ElementRef, TemplateRef, OnDestroy, Output, EventEmitter, OnInit } from '@angular/core';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal'
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -779,5 +779,30 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                 { label: this.commonLocaleData?.app_warehouse, value: BULK_UPDATE_FIELDS.warehouse }
             ];
         }
+    }
+
+    /**
+     * This will return delivery days text
+     *
+     * @param {number} dueDays
+     * @returns {string}
+     * @memberof PurchaseOrderComponent
+     */
+    public getDeliveryDaysText(dueDays: number): string {
+        let text = "";
+
+        if(dueDays > 0) {
+            if(dueDays === 1) {
+                text = this.localeData?.delivery_in_day;
+            } else {
+                text = this.localeData?.delivery_in_days;
+            }
+            text = text?.replace("[DAYS]", String(dueDays));
+        } else {
+            text = this.localeData?.delayed_by_days;
+            text = text?.replace("[DAYS]", String(this.formatNumber(dueDays)));
+        }
+        
+        return text;
     }
 }

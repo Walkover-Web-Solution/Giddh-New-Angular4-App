@@ -1,7 +1,6 @@
 import { catchError, map } from 'rxjs/operators';
 import { DownloadLedgerAttachmentResponse, DownloadLedgerRequest, ExportLedgerRequest, IELedgerResponse, ILedgerAdvanceSearchRequest, ILedgerAdvanceSearchResponse, IUnpaidInvoiceListResponse, LedgerResponse, LedgerUpdateRequest, MagicLinkRequest, MagicLinkResponse, MailLedgerRequest, ReconcileResponse, TransactionsRequest, TransactionsResponse } from '../models/api-models/Ledger';
 import { Inject, Injectable, Optional } from '@angular/core';
-
 import { HttpWrapperService } from './httpWrapper.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -567,5 +566,19 @@ export class LedgerService {
         this.companyUniqueName = this._generalService.companyUniqueName;
         const url = `${this.config.apiUrl}${LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))}/${attachmentUniqueName}`;
         return this._http.delete(url).pipe(catchError((error) => this.errorHandler.HandleCatch<any, string>(error)));
+    }
+
+    /**
+     * Deletes the bank transactions
+     *
+     * @param {string} accountUniqueName
+     * @param {*} params
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof LedgerService
+     */
+    public deleteBankTransactions(accountUniqueName: string, params: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        const url = `${this.config.apiUrl}${LEDGER_API.DELETE_BANK_TRANSACTIONS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))}`;
+        return this._http.deleteWithBody(url, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, string>(error)));
     }
 }

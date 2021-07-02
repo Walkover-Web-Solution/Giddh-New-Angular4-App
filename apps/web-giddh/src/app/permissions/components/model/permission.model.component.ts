@@ -7,9 +7,9 @@ import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { PermissionActions } from '../../../actions/permission/permission.action';
 import { INewRoleFormObj, IPage, IPageStr, NewRoleFormClass } from '../../permission.utility';
 import { INameUniqueName } from '../../../models/api-models/Inventory';
-import * as _ from '../../../lodash-optimized';
 import { PermissionState } from 'apps/web-giddh/src/app/store/Permission/permission.reducer';
 import { IRoleCommonResponseAndRequest } from 'apps/web-giddh/src/app/models/api-models/Permission';
+import { forEach, omit } from '../../../lodash-optimized';
 
 @Component({
     selector: 'permission-model',
@@ -32,20 +32,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private permissionActions: PermissionActions) {
-        this.store.pipe(select(p => p.permission), takeUntil(this.destroyed$)).subscribe((p: PermissionState) => {
-            if (p.roles && p.roles.length) {
-                this.allRoles = [];
-                _.forEach(p.roles, (role: IRoleCommonResponseAndRequest) => {
-                    this.allRoles.push({ name: role.name, uniqueName: role.uniqueName });
-                });
-            }
-            this.newRoleObj.pageList = [];
-            if (p.pages && p.pages.length) {
-                p.pages.forEach((page: IPageStr) => {
-                    this.newRoleObj.pageList.push({ name: page, isSelected: false });
-                });
-            }
-        });
+        
     }
 
     get isFormValid() {
@@ -59,6 +46,21 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.store.pipe(select(p => p.permission), takeUntil(this.destroyed$)).subscribe((p: PermissionState) => {
+            if (p.roles && p.roles.length) {
+                this.allRoles = [];
+                forEach(p.roles, (role: IRoleCommonResponseAndRequest) => {
+                    this.allRoles.push({ name: role.name, uniqueName: role.uniqueName });
+                });
+            }
+            this.newRoleObj.pageList = [];
+            if (p.pages && p.pages.length) {
+                p.pages.forEach((page: IPageStr) => {
+                    this.newRoleObj.pageList.push({ name: page, isSelected: false });
+                });
+            }
+        });
+        
         this.dropdownHeading = this.localeData?.select_pages;
 
         this.store.dispatch(this.permissionActions.GetAllPages());
@@ -89,9 +91,9 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
         if (this.isFormValid) {
             let data;
             if (this.newRoleObj.isFresh) {
-                data = _.omit(this.newRoleObj, 'uniqueName');
+                data = omit(this.newRoleObj, 'uniqueName');
             } else {
-                data = _.omit(this.newRoleObj, 'pageList');
+                data = omit(this.newRoleObj, 'pageList');
             }
             this.store.dispatch(this.permissionActions.PushTempRoleInStore(data));
             this.closeEvent.emit('save');

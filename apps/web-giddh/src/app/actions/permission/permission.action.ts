@@ -11,10 +11,6 @@ import { CreateNewRoleRequest, CreateNewRoleResponse, IRoleCommonResponseAndRequ
 import { CustomActions } from '../../store/customActions';
 import { LocaleService } from '../../services/locale.service';
 
-/**
- * Created by ad on 04-07-2017.
- */
-
 @Injectable()
 export class PermissionActions {
 
@@ -26,14 +22,12 @@ export class PermissionActions {
                 return this.GetAllPagesResponse(response);
             })));
 
-
     public GetAllPagesResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(PERMISSION_ACTIONS.GET_ALL_PAGES_RESPONSE),
             map(response => {
                 return { type: 'EmptyAction' };
             })));
-
 
     public GetAllPermissions$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -43,14 +37,12 @@ export class PermissionActions {
                 return this.GetAllPermissionsResponse(response);
             })));
 
-
     public GetAllPermissionsResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(PERMISSION_ACTIONS.GET_ALL_PERMISSIONS_RESPONSE),
             map(response => {
                 return { type: 'EmptyAction' };
             })));
-
 
     public GetRoles$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -60,14 +52,12 @@ export class PermissionActions {
                 return this.GetRolesResponse(response);
             })));
 
-
     public GetRolesResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(PERMISSION_ACTIONS.GET_ROLES_RESPONSE),
             map(response => {
                 return { type: 'EmptyAction' };
             })));
-
 
     public CreateRole$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -76,7 +66,6 @@ export class PermissionActions {
                 return this._permissionService.CreateNewRole(action.payload).pipe(
                     map(response => this.CreateRoleResponse(response)));
             })));
-
 
     public CreateRoleResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -92,7 +81,6 @@ export class PermissionActions {
                 return { type: 'EmptyAction' };
             })));
 
-
     public UpdateRole$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(PERMISSION_ACTIONS.UPDATE_ROLE),
@@ -100,7 +88,6 @@ export class PermissionActions {
             map(response => {
                 return this.UpdateRoleResponse(response);
             })));
-
 
     public UpdateRoleResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -116,31 +103,6 @@ export class PermissionActions {
                 return { type: 'EmptyAction' };
             })));
 
-    // @Effect()
-    // private UpdateRole$: Observable<Action> = this.action$
-    //   .ofType(PERMISSION_ACTIONS.UPDATE_ROLE)
-    //   .switchMap((action: CustomActions) => {
-    //     return this._permissionService.UpdateRole(action.payload)
-    //       .map((r) =>
-    //         this.validateResponse(r, {
-    //           type: PERMISSION_ACTIONS.UPDATE_ROLE_RESPONSE,
-    //           payload: action.payload
-    //         }, true));
-    //   });
-
-    // @Effect()
-    // private DeleteRole$: Observable<Action> = this.action$
-    //   .ofType(PERMISSION_ACTIONS.DELETE_ROLE)
-    //   .switchMap((action: CustomActions) => {
-    //     return this._permissionService.DeleteRole(action.payload)
-    //       .map((r) =>
-    //         this.validateResponse(r, {
-    //           type: PERMISSION_ACTIONS.DELETE_ROLE_RESPONSE,
-    //           payload: action.payload
-    //         }, true));
-    //   });
-
-
     public DeleteRole$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(PERMISSION_ACTIONS.DELETE_ROLE),
@@ -148,7 +110,6 @@ export class PermissionActions {
             map(response => {
                 return this.DeleteRoleResponse(response);
             })));
-
 
     public DeleteRoleResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -259,15 +220,5 @@ export class PermissionActions {
         return {
             type: PERMISSION_ACTIONS.REMOVE_NEWLY_CREATED_ROLE_FROM_STORE
         };
-    }
-
-    private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
-        if (response.status === 'error') {
-            if (showToast) {
-                this._toasty.errorToast(response.message);
-            }
-            return errorAction;
-        }
-        return successAction;
     }
 }

@@ -62,13 +62,6 @@ export class CashfreeClass {
     public fakeAccObj: boolean;
 }
 
-export class CashfreeClassResponse {
-    public userName: string;
-    public password: string;
-    public account: INameUniqueName;
-    public autoCapturePayment: boolean;
-}
-
 export class AmazonSellerClass {
     public sellerId: string;
     public mwsAuthToken: string;
@@ -91,7 +84,6 @@ export class PaymentClass {
         this.accountNo = '';
         this.aliasId = '';
         this.accountUniqueName = '';
-        // this.userAmountRangeRequests.push(new UserAmountRangeRequests())
     }
 }
 
@@ -109,9 +101,6 @@ export class UserAmountRangeRequests {
     }
 }
 
-
-
-
 export class Account {
     name: string;
     uniqueName: string;
@@ -125,7 +114,6 @@ export class UserAmountRange {
     maxBankLimit: boolean;
 }
 
-// IRegistration
 export class IntegratedBankList {
     corpId: string;
     userId: string;

@@ -1,5 +1,6 @@
 <ng-container appTranslate [file]="'permissions'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
+    <hamburger-menu> </hamburger-menu>
     <section id="single-role" *ngIf="roleObj && localeData?.page_heading">
         <div class="pd-1 bd-rb clearfix text-center mr-b15">
             <span class="lead">{{ newRole.name }}</span>

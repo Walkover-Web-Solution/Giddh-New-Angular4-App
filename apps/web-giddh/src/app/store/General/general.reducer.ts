@@ -6,8 +6,7 @@ import {
     AccountMoveRequest,
     AccountRequestV2,
     AccountResponse,
-    AccountResponseV2,
-    FlattenAccountsResponse
+    AccountResponseV2
 } from '../../models/api-models/Account';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { States } from '../../models/api-models/Company';
@@ -18,7 +17,6 @@ import {
     MoveGroupRequest,
     MoveGroupResponse
 } from '../../models/api-models/Group';
-import * as _ from '../../lodash-optimized';
 import { cloneDeep } from '../../lodash-optimized';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.interface';
@@ -26,9 +24,6 @@ import { AccountsAction } from '../../actions/accounts.actions';
 import { IAccountsInfo } from '../../models/interfaces/accountInfo.interface';
 import { CustomActions } from '../customActions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
-import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
-import { IPaginatedResponse } from '../../models/interfaces/paginatedResponse.interface';
-import { IUlist } from '../../models/interfaces/ulist.interface';
 import { INameUniqueName } from '../../models/api-models/Inventory';
 import { SALES_ACTIONS } from '../../actions/sales/sales.const';
 import { CurrentPage } from '../../models/api-models/Common';
@@ -38,17 +33,14 @@ export interface GeneralState {
     flattenAccounts: IFlattenAccountsResultItem[];
     states: States;
     addAndManageClosed: boolean;
-    flattenGroups: IFlattenGroupsAccountsDetail[];
-    smartCombinedList: IUlist[];
-    smartList: IUlist[];
     sideMenuBarOpen: boolean;
     headerTitle: { uniqueName: string, additional: { tab: string, tabIndex: number } };
     currentPage: CurrentPage;
-    isCalendlyModelOpen: boolean;
     updateIndexDbInProcess: boolean;
     updateIndexDbComplete: boolean;
     openSideMenu: boolean;
     menuItems: Array<any>;
+    openGstSideMenu: boolean;
 }
 
 const initialState: GeneralState = {
@@ -56,17 +48,14 @@ const initialState: GeneralState = {
     flattenAccounts: null,
     states: null,
     addAndManageClosed: false,
-    flattenGroups: [],
-    smartCombinedList: [],
-    smartList: [],
     sideMenuBarOpen: false,
     headerTitle: null,
     currentPage: null,
-    isCalendlyModelOpen: false,
     updateIndexDbComplete: false,
     updateIndexDbInProcess: false,
     openSideMenu: true,
-    menuItems: []
+    menuItems: [],
+    openGstSideMenu: false,
 };
 
 export function GeneRalReducer(state: GeneralState = initialState, action: CustomActions): GeneralState {
@@ -87,23 +76,6 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             }
             return state;
         }
-        case GENERAL_ACTIONS.GENERAL_GET_FLATTEN_ACCOUNTS_RESPONSE: {
-            let result: BaseResponse<FlattenAccountsResponse, string> = action.payload;
-            if (result.status === 'success') {
-                let arr = result.body.results;
-                arr.map((item: any) => {
-                    let o: any = provideStrings(item.parentGroups);
-                    item.nameStr = o.nameStr;
-                    item.uNameStr = o.uNameStr;
-                    return item;
-                });
-                return {
-                    ...state,
-                    flattenAccounts: arr
-                };
-            }
-            return state;
-        }
         case GENERAL_ACTIONS.GENERAL_GET_ALL_STATES_RESPONSE: {
             let result: BaseResponse<States, string> = action.payload;
             if (result.status === 'success') {
@@ -117,46 +89,6 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         case GENERAL_ACTIONS.RESET_STATES_LIST: {
             return { ...state, states: null };
         }
-        // NEW LOGIC FOR FLATTEN ACCOUNTS AND GROUPS
-        case GENERAL_ACTIONS.RESET_SMART_LIST: {
-            return { ...state, smartList: [] };
-        }
-
-        case GENERAL_ACTIONS.SET_SMART_LIST: {
-            let data: IUlist[] = action.payload;
-            const newState = _.cloneDeep(state);
-            return { ...newState, smartList: data };
-        }
-
-        case GENERAL_ACTIONS.RESET_COMBINED_LIST: {
-            return { ...state, smartCombinedList: [] };
-        }
-
-        case GENERAL_ACTIONS.SET_COMBINED_LIST: {
-            let data: IUlist[] = action.payload;
-            return { ...state, smartCombinedList: data };
-        }
-
-        case GENERAL_ACTIONS.FLATTEN_GROUPS_REQ: {
-            return { ...state, flattenGroups: [] };
-        }
-
-        case GENERAL_ACTIONS.FLATTEN_GROUPS_RES: {
-            let result: BaseResponse<IPaginatedResponse, string> = action.payload;
-            if (result.status === 'success') {
-                let arr = result.body.results;
-                arr.map((item: any) => {
-                    let o: any = provideStrings(item.parentGroups);
-                    item.nameStr = o.nameStr;
-                    item.uNameStr = o.uNameStr;
-                    return item;
-                });
-                return { ...state, flattenGroups: arr };
-            }
-            return state;
-        }
-
-        // END NEW LOGIC
 
         // groups with accounts actions
         case GroupWithAccountsAction.CREATE_GROUP_RESPONSE:
@@ -358,12 +290,6 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
                 ...state, currentPage: action.payload
             }
         }
-
-        case GENERAL_ACTIONS.OPEN_CALENDLY_MODEL: {
-            return {
-                ...state, isCalendlyModelOpen: action.payload
-            }
-        }
         case GENERAL_ACTIONS.OPEN_SIDE_MENU: {
             return {
                 ...state, openSideMenu: action.payload
@@ -425,13 +351,18 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
                 menuItems: action.payload
             }
         }
+        case GENERAL_ACTIONS.OPEN_GST_SIDE_MENU: {
+            return {
+                ...state,
+                openGstSideMenu: action.payload
+            };
+        }
         default:
             return state;
     }
 }
 
 const AddAndActiveGroupFunc = (groups: IGroupsWithAccounts[], gData: BaseResponse<GroupResponse, GroupCreateRequest>, myChildElementIsOpen: boolean): boolean => {
-    // let myChildElementIsOpen = false;
     for (let grp of groups) {
         if (grp.uniqueName === gData.request.parentGroupUniqueName) {
             let newData = new GroupsWithAccountsResponse();

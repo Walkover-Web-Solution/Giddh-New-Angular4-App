@@ -42,14 +42,6 @@ table {
     max-width: 600px;
 }
 
-/* .table.basic tbody tr td {
-    background-color: $white;
-}
-
-.table.basic .table tbody tr td {
-    border: none;
-} */
-
 .check-image img {
     max-height: 20px;
     cursor: pointer;
@@ -58,15 +50,6 @@ table {
 .popover-details {
     display: none;
 }
-
-/*
-.table.basic>tbody>tr>td>table tbody tr td {
-    padding: 5px 0;
-}
-
-tfoot {
-    background: $white;
-} */
 
 .flex-fill {
     flex: 1 1 auto;
@@ -282,11 +265,6 @@ tfoot {
     width: 100% !important;
 }
 
-/*
-.select-style:before{
-  z-index: 1;
-}*/
-
 .text-purple {
     color: $chetwode-blue;
 }
@@ -320,7 +298,7 @@ td.border-right-none {
     align-items: center;
     font-size: 18px;
     border: 1px solid $chetwode-blue;
-    border-radius: 2px;
+    border-radius: 5px;
     color: $midnight-blue;
     background: $white;
 }
@@ -370,6 +348,7 @@ button.btn.btn-filter {
 }
 .icon-btn {
     border: 1px solid $gainsboro;
+    border-radius: 5px;
     height: 36px;
     width: 36px;
     margin-top: 0;

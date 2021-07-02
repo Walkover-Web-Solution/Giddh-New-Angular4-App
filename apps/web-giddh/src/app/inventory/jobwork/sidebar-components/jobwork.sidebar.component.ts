@@ -1,7 +1,7 @@
 import { debounceTime, distinctUntilChanged, map, take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store/roots';
 import { Store, select } from '@ngrx/store';
-import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, Input } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { fromEvent as observableFromEvent, Observable, ReplaySubject } from 'rxjs';
 import { IStocksItem } from '../../../models/interfaces/stocksItem.interface';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
@@ -11,7 +11,7 @@ import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { InvViewService } from '../../inv.view.service';
 
 @Component({
-    selector: 'jobwork-sidebar',  // <home></home>
+    selector: 'jobwork-sidebar',
     templateUrl: './jobwork.sidebar.component.html',
     styleUrls: ['./jobwork.sidebar.component.scss']
 })
@@ -37,15 +37,9 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
         private sideBarAction: SidebarAction,
         private invViewService: InvViewService,
         private router: Router) {
-        this.store.dispatch(this._inventoryAction.GetStock());
         this.stocksList$ = this.store.pipe(select(s => s.inventory.stocksList && s.inventory.stocksList.results), takeUntil(this.destroyed$));
         this.inventoryUsers$ = this.store.pipe(select(s => s.inventoryInOutState.inventoryUsers && s.inventoryInOutState.inventoryUsers), takeUntil(this.destroyed$));
         this.sidebarRect = window.screen.height;
-        this.store.pipe(take(1)).subscribe(state => {
-            if (state.inventory.groupsWithStocks === null) {
-                this.store.dispatch(this.sideBarAction.GetGroupsWithStocksHierarchyMin());
-            }
-        });
     }
 
     @HostListener('window:resize')
@@ -54,6 +48,13 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
     }
 
     public ngOnInit() {
+        this.store.dispatch(this._inventoryAction.GetStock());
+        this.store.pipe(take(1)).subscribe(state => {
+            if (state.inventory.groupsWithStocks === null) {
+                this.store.dispatch(this.sideBarAction.GetGroupsWithStocksHierarchyMin());
+            }
+        });
+
         this.stocksList$.subscribe(res => {
             this.stocksList = res;
         });

@@ -1,5 +1,4 @@
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import * as _ from '../../lodash-optimized';
 import { CustomActions } from '../customActions';
 import { AgingDropDownoptions, DueAmountReportRequest, DueAmountReportResponse, DueRangeRequest } from '../../models/api-models/Contact';
 import { AgingReportActions } from '../../actions/aging-report.actions';
@@ -36,8 +35,6 @@ export const initialState: AgingReportState = {
 };
 
 export function agingReportReducer(state = initialState, action: CustomActions): AgingReportState {
-    // let data: BaseResponse<LogsResponse, LogsRequest> = null;
-    let newState: AgingReportState = null;
     switch (action.type) {
         case AgingReportActions.CREATE_DUE_DAY_RANGE: {
             return Object.assign({}, state, { setDueRangeRequestInFlight: true });
@@ -79,7 +76,6 @@ export function agingReportReducer(state = initialState, action: CustomActions):
             // no payload means error from server
             if (action.payload) {
                 let data: DueAmountReportResponse = _.cloneDeep(action.payload) as DueAmountReportResponse;
-                // data.groupDetails = removeZeroAmountAccount((data.groupDetails));
                 let noData = false;
                 let getAgingReportRequestInFlight = false;
                 if (data.results.length < 1) {

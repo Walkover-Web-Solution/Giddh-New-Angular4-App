@@ -862,15 +862,6 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
                 }
             });
         }
-
-        // const reqArray = parentGrpUnqName ? [parentGrpUnqName] : [];
-        // this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: reqArray }, '', q).takeUntil(this.destroyed$).subscribe(data => {
-        //   if (data.status === 'success') {
-        //     this.sortStockItems(data.body.results);
-        //   } else {
-        //     // this.noResult = true;
-        //   }
-        // });
     }
 
     public sortStockItems(ItemArr) {

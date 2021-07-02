@@ -1,6 +1,5 @@
 import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
-
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { HttpWrapperService } from './httpWrapper.service';
@@ -8,7 +7,6 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { PayNowRequest } from '../contact/contact.component';
 import { CONTACT_API } from './apiurls/contact.api';
 import { ContactAdvanceSearchModal } from "../models/api-models/Contact";
 
@@ -18,15 +16,6 @@ export class ContactService {
 
     constructor(private errorHandler: GiddhErrorHandler, public _http: HttpWrapperService, public _router: Router,
         private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
-    }
-
-    public payNow(body: PayNowRequest): Observable<BaseResponse<any, any>> {
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + 'company/:companyUniqueName/cashfree/transfer'.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), body).pipe(map((res) => {
-            let data: BaseResponse<any, any> = res;
-            data.request = body;
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, body, '')));
     }
 
     /**
@@ -80,15 +69,6 @@ export class ContactService {
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', '')));
         }
-    }
-
-    public GetCashFreeBalance(): Observable<BaseResponse<any, string>> {
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + 'company/:companyUniqueName/cashfree/balance'.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
-            let data: BaseResponse<any, string> = res;
-            data.request = '';
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', '')));
     }
 
     public addComment(comment, accountUniqueName): Observable<BaseResponse<any, string>> {

@@ -357,7 +357,7 @@ ul.select-action-dropdown {
     font-size: 18px;
     margin-left: 10px;
     border: 1px solid $gainsboro;
-    border-radius: 2px;
+    border-radius: 5px;
     color: $gray;
     background: $white;
     color: $gray;
@@ -486,12 +486,14 @@ span.icon-export-icon {
                 display: flex;
                 align-items: center;
                 border: 1px solid $gainsboro;
+                border-radius: 5px;
                 display: none;
                 a {
                     width: 30px;
                     font-size: 20px;
                     color: $gray;
                     border-right: 1px solid $gainsboro;
+                    border-radius: 5px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -873,7 +875,7 @@ span.icon-export-icon {
         .search-icon-block {
             position: absolute;
             right: 0;
-            bottom: -40px;
+            bottom: -50px;
         }
     }
 }

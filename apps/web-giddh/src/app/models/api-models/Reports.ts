@@ -51,8 +51,6 @@ export class Balance {
     public type: string;
 }
 
-////////////////////////////
-
 export interface Account {
     name: string;
     uniqueName: string;

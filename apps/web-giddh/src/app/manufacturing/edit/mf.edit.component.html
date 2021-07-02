@@ -48,37 +48,6 @@
                                     [bsValue]="bsValue" [bsConfig]="{dateInputFormat: giddhDateFormat}" />
                             </div>
                         </div>
-
-                        <!-- <div class="form-group mr-r1" [attachOutsideOnClick]="true" (clickOutside)="showFromDatePicker=false;">
-                            <label class="d-block">Date</label>
-                            <div class="input-group">
-                                <input type="text" name="from" [ngModel]="moment(manufacturingDetails.date).format(giddhDateFormat)" (focus)="showFromDatePicker = true;" class="form-control" required />
-                                <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default"
-                                        (click)="showFromDatePicker = !showFromDatePicker">
-                                        <i class="icon-calender"></i>
-                                    </button>
-                                </span>
-                            </div>
-                            <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
-                                <ul class="my-dropdown-menu calendar-dropdown">
-                                    <li>
-                                        <datepicker name="fromDate" (click)="$event.stopPropagation()" [(ngModel)]="manufacturingDetails.date" (selectionDone)="showFromDatePicker=!showFromDatePicker" [showWeeks]="false"></datepicker>
-                                    </li>
-                                    <li class="pd-1 clearfix pd-t05 pd-b05">
-                                        <span class="btn-group pull-left">
-                                            <button type="button" class="btn btn-xs btn-primary mr-r05"
-                                                (click)="setToday();showFromDatePicker = false;">Today</button>
-                                            <button type="button" class="btn btn-xs btn-success"
-                                                (click)="showFromDatePicker = false">Done</button>
-                                        </span>
-                                        <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate();showFromDatePicker = false;">Clear
-                                        </button>
-                                    </li>
-
-                                </ul>
-                            </div>
-                        </div> -->
                     </div>
                     <div class="col-xs-3 col-sm-3">
                         <div class="form-group">
@@ -124,12 +93,11 @@
                                     <ng-template #unitCode>
                                         <td>{{ stock.stockUnitCode }}</td>
                                     </ng-template>
-                                    <!--<td><input type="text" [(ngModel)]="stock.quantity" name="quantity_{{i}}"></td>-->
                                     <td>{{ stock.rate | number:'1.0-4'}}</td>
-                                    <!--<td><input type="text" [(ngModel)]="stock.rate" name="rate_{{i}}"></td>-->
                                     <td>{{ stock.amount | number:'1.0-2'}}</td>
-                                    <td class="action"><i class="icon-cross" (click)="removeConsumptionItem(i)"
-                                            aria-hidden="true"></i>
+                                    <td class="action"
+                                        *ngIf="(currentOrganizationType === 'COMPANY' && (currentCompanyBranches$ | async)?.length === 1) || currentOrganizationType === 'BRANCH'">
+                                        <i class="icon-cross" (click)="removeConsumptionItem(i)" aria-hidden="true"></i>
                                     </td>
                                 </tr>
 
@@ -168,8 +136,9 @@
 
                                 <tr>
                                     <td colspan="7">
-                                        <button class="btn-link btn px-0"
-                                            (click)="toggleAddLinkedStocks = !toggleAddLinkedStocks">Add New</button>
+                                        <button
+                                            *ngIf="(currentOrganizationType === 'COMPANY' && (currentCompanyBranches$ | async)?.length === 1) || currentOrganizationType === 'BRANCH'"
+                                            class="btn-link btn px-0" (click)="toggleAddLinkedStocks = !toggleAddLinkedStocks">Add New</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -204,9 +173,10 @@
                         <table class="width-100">
                             <thead class="th-caption">
                                 <tr>
-                                    <td class="cp btn-link" (click)="onToggleAddExpensesBlock(toggleAddExpenses);"
-                                        tooltip="Add A/C where expense entries will be done." placement="top"
-                                        colspan="5"><i class="icon-plus" aria-hidden="true"></i> Add Expense
+                                    <td *ngIf="(currentOrganizationType === 'COMPANY' && (currentCompanyBranches$ | async)?.length === 1) || currentOrganizationType === 'BRANCH'"
+                                        class="cp btn-link" (click)="onToggleAddExpensesBlock(toggleAddExpenses);"
+                                        tooltip="Add A/C where expense entries will be done." placement="top" colspan="5"><i class="icon-plus"
+                                            aria-hidden="true"></i> Add Expense
                                     </td>
                                 </tr>
                             </thead>
@@ -222,7 +192,8 @@
                                                 (scrollEnd)="handleLiabilitiesAssetAccountScrollEnd()"
                                                 (dynamicSearchedQuery)="onLiabilitiesAssetAccountSearchQueryChanged($event)"
                                                 [defaultValue]="expense.baseAccount.defaultName"
-                                                [fixedValue]="expense.baseAccount.defaultName">
+                                                [fixedValue]="expense.baseAccount.defaultName"
+                                                [disabled]="(currentOrganizationType === 'COMPANY' && (currentCompanyBranches$ | async)?.length > 1)">
                                             </sh-select>
                                         </div>
                                     </td>
@@ -239,7 +210,8 @@
                                                 (scrollEnd)="handleExpenseAccountScrollEnd()"
                                                 (dynamicSearchedQuery)="onExpenseAccountSearchQueryChanged($event)"
                                                 [defaultValue]="expense.transactions[0].account.defaultName"
-                                                [fixedValue]="expense.transactions[0].account.defaultName">
+                                                [fixedValue]="expense.transactions[0].account.defaultName"
+                                                [disabled]="(currentOrganizationType === 'COMPANY' && (currentCompanyBranches$ | async)?.length > 1)">
                                             </sh-select>
                                         </div>
                                     </td>
@@ -247,7 +219,7 @@
                                         <div class="pd"><input type="text" decimalDigitsDirective [DecimalPlaces]="2"
                                                 required placeholder="Amount"
                                                 [(ngModel)]="expense.transactions[0].amount" name="amount{{i}}"
-                                                class="form-control text-right"></div>
+                                                class="form-control text-right" [readonly]="(currentOrganizationType === 'COMPANY' && (currentCompanyBranches$ | async)?.length > 1)"></div>
                                     </td>
                                     <td class="text-center"><i class="icon-cross" aria-hidden="true"
                                             (click)="removeExpenseItem(i)"></i></td>
@@ -262,7 +234,8 @@
                                             name="baseAccountUniqueName" [placeholder]="'Liability/Asset A/c'"
                                             [enableDynamicSearch]="true" [isPaginationEnabled]="true"
                                             (scrollEnd)="handleLiabilitiesAssetAccountScrollEnd()"
-                                            (dynamicSearchedQuery)="onLiabilitiesAssetAccountSearchQueryChanged($event)">
+                                            (dynamicSearchedQuery)="onLiabilitiesAssetAccountSearchQueryChanged($event)"
+                                            [disabled]="(currentOrganizationType === 'COMPANY' && (currentCompanyBranches$ | async)?.length > 1)">
                                         </sh-select>
                                     </td>
                                     <td class="text-center">
@@ -278,19 +251,19 @@
                                                 [ItemHeight]="56" [enableDynamicSearch]="true"
                                                 [isPaginationEnabled]="true"
                                                 (scrollEnd)="handleExpenseAccountScrollEnd()"
-                                                (dynamicSearchedQuery)="onExpenseAccountSearchQueryChanged($event)">
+                                                (dynamicSearchedQuery)="onExpenseAccountSearchQueryChanged($event)"
+                                                [disabled]="(currentOrganizationType === 'COMPANY' && (currentCompanyBranches$ | async)?.length > 1)">
                                             </sh-select>
                                         </div>
                                     </td>
-                                    <!--|| transactionAccountUniqueName.invalid  || baseAccountUniqueName.invalid-->
                                     <td class="text-right w100">
-                                        <div class="pd"><input type="text" (blur)="addExpense(otherExpenses)"
-                                                decimalDigitsDirective [DecimalPlaces]="2" required placeholder="Amount"
-                                                [(ngModel)]="otherExpenses.transactionAmount" name="transactionAmounts"
-                                                class="form-control text-right" #transactionAmount></div>
+                                        <div class="pd"><input type="text" (blur)="addExpense(otherExpenses)" decimalDigitsDirective [DecimalPlaces]="2"
+                                                required placeholder="Amount" [(ngModel)]="otherExpenses.transactionAmount" name="transactionAmounts"
+                                                class="form-control text-right" #transactionAmount
+                                                [disabled]="(currentOrganizationType === 'COMPANY' && (currentCompanyBranches$ | async)?.length > 1)"></div>
                                     </td>
                                     <td>
-                                        <button [disabled]="transactionAmount.invalid"
+                                        <button [disabled]="transactionAmount.invalid" *ngIf="(currentOrganizationType === 'COMPANY' && (currentCompanyBranches$ | async)?.length === 1) || currentOrganizationType === 'BRANCH'"
                                             (click)="addExpense(otherExpenses)" class="ico-btn p-0 mr-t1"><i
                                                 class="icon-plus text-danger" aria-hidden="true"></i></button>
                                     </td>
@@ -312,12 +285,12 @@
                             <span class="col-xs-5 col-sm-5 text-right"><strong>{{ getCostPerProduct() |
                                     number:'1.0-2'}}</strong></span>
                         </div>
-                        <div class="pull-right mr-t1 clearfix row" *ngIf="!isUpdateCase">
+                        <div class="pull-right mr-t1 clearfix row" *ngIf="!isUpdateCase && ((currentOrganizationType === 'COMPANY' && (currentCompanyBranches$ | async)?.length === 1) || currentOrganizationType === 'BRANCH')">
                             <button type="submit" class="btn btn-sm btn-success" (click)="createEntry();">Save</button>
                             <button type="button" class="btn btn-sm btn-primary"
                                 (click)="goBackToListPage()">Cancel</button>
                         </div>
-                        <div class="pull-right mr-t1 clearfix row" *ngIf="isUpdateCase">
+                        <div class="pull-right mr-t1 clearfix row" *ngIf="isUpdateCase && ((currentOrganizationType === 'COMPANY' && (currentCompanyBranches$ | async)?.length === 1) || currentOrganizationType === 'BRANCH')">
                             <button type="submit" class="btn btn-sm btn-success" (click)="updateEntry()">Update</button>
                             <button type="button" class="btn btn-sm btn-danger" (click)="deleteEntry()">Delete</button>
                         </div>

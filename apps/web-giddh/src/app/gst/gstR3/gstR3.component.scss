@@ -112,14 +112,6 @@ input.gsc-input {
     position: relative;
 }
 
-.tax-engine .gstr3b-header:before {
-    /* content: '';
-    position: absolute;
-    border-bottom: 1px solid $gainsboro;
-    top: 24px;
-    width: 100%; */
-}
-
 .tax-engine .gstr3b-header .sel-tab {
     border: 1px solid $gainsboro;
     border-radius: 25px;
@@ -284,7 +276,7 @@ table {
 
 .tax-engine .summary-content .gstr-3b-report.table > tbody > tr > td {
     font-size: 13px;
-    border: 1px solid #adb4c3 !important;
+    border: 1px solid $faux-cadet-blue !important;
     padding: 6px;
 }
 
@@ -441,7 +433,6 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
     color: $white;
     width: 22px;
     height: 22px;
-    /* padding-top: 3px; */
     text-align: center;
     display: inline-block;
     border-radius: 50%;
@@ -562,12 +553,19 @@ ul#dropdown-menu {
 .pointer-none {
     pointer-events: none !important;
 }
-
+.summary-content {
+    table{
+        th, td{
+            white-space: nowrap !important;
+            word-break: break-all !important;
+        }
+    }
+}
 @media (max-width: 991px) {
     .gstr-summary-head {
         height: auto;
         .dropdown {
-            float: right;
+            float: none;
         }
         .download-authenticate-btn {
             text-align: right;
@@ -592,5 +590,32 @@ ul#dropdown-menu {
     }
     .gstr3b-header {
         margin-top: 0 !important;
+    }
+}
+@media screen and (max-width:575px) {
+    .gstr-summary-head{
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        .wrap-gst-date{
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            padding-bottom: 15px;
+            .font-xlarge{
+                font-size: 16px;
+            }
+            .dropdown{
+                margin-left: 0;
+            }
+        }
+        .download-authenticate-btn {
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+        span{
+            margin-bottom: 10px;
+            padding-right: 0;
+        }
     }
 }
