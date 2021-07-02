@@ -808,6 +808,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(appState => appState.ledger.hasLedgerPermission), takeUntil(this.destroyed$)).subscribe(response => {
             this.hasLedgerPermission = response;
+            this._cdRf.detectChanges();
         });
     }
 
@@ -873,8 +874,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.getTransactionData();
         }
         if (event && event.path) {
-            let classList = event.path.map(m => {
-                return m.classList;
+            let classList = event.path.map(element => {
+                return element.classList;
             });
 
             if (classList && classList instanceof Array) {
