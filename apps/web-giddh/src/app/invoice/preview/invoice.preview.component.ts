@@ -1450,11 +1450,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             let text = this.localeData?.currency_conversion;
             let grandTotalTooltipText = text?.replace("[BASE_CURRENCY]", this.baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
             let balanceDueTooltipText;
-            if (item.gainLoss) {
+            if (enableVoucherAdjustmentMultiCurrency && item.gainLoss) {
                 const gainLossText = this.localeData?.exchange_gain_loss_label?.
                     replace("[BASE_CURRENCY]", this.baseCurrency)?.
                     replace("[AMOUNT]", balanceDueAmountForCompany)?.
-                    replace('[PROFIT_TYPE]', item.gainLoss > 0 ? this.localeData?.exchange_gain : this.localeData?.exchange_loss);
+                    replace('[PROFIT_TYPE]', item.gainLoss > 0 ? this.commonLocaleData?.app_exchange_gain : this.commonLocaleData?.app_exchange_loss);
                 balanceDueTooltipText = `${gainLossText}: ${Math.abs(item.gainLoss)}`;
             } else {
                 balanceDueTooltipText = text?.replace("[BASE_CURRENCY]", this.baseCurrency)?.replace("[AMOUNT]", balanceDueAmountForCompany)?.replace("[CONVERSION_RATE]", balanceDueAmountConversionRate);
@@ -1838,7 +1838,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         let existingInvoices = [];
                         res[0].items = res[0].items?.map((item: ReceiptItem) => {
                             let dueDate = item.dueDate ? moment(item.dueDate, GIDDH_DATE_FORMAT) : null;
-    
+
                             if (dueDate) {
                                 if (dueDate.isAfter(moment()) || ['paid', 'cancel'].includes(item.balanceStatus)) {
                                     item.dueDays = null;
@@ -1853,16 +1853,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                                 // For CR/DR note and Cash/Sales invoice
                                 item = this.addToolTiptext(item);
                             }
-    
+
                             item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, item.uniqueName);
                             if (item.isSelected) {
                                 existingInvoices.push(item.uniqueName);
                             }
-    
+
                             this.itemsListForDetails.push(this.parseItemForVm(item));
                             return item;
                         });
-    
+
                         let selectedInvoices = [];
                         if (this.selectedInvoices && this.selectedInvoices.length > 0) {
                             this.selectedInvoices.forEach(invoice => {
@@ -1870,7 +1870,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                                     selectedInvoices.push(invoice);
                                 }
                             });
-    
+
                             this.selectedInvoices = selectedInvoices;
                         }
 
@@ -1891,7 +1891,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                             }
                             this.showExportButton = false;
                         }
-    
+
                         if (this.selectedInvoices && this.selectedInvoices.length > 0) {
                             voucherData.items.forEach((v) => {
                                 v.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, v.uniqueName);
@@ -1901,7 +1901,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         this.selectedItems = (this.updateSelectedItems) ? this.selectedInvoices : [];
                         this.updateSelectedItems = false;
                     }
-    
+
                     // get voucherDetailsNo so we can open that voucher in details mode
                     if (res[0] && res[1] && res[2]) {
                         this.selectedInvoiceForDetails = null;
@@ -1924,7 +1924,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                             this.cdr.detectChanges();
                         }
                     }, 100);
-    
+
                     if (this.purchaseRecord && this.purchaseRecord.uniqueName) {
                         this.onSelectInvoice(this.purchaseRecord);
                     }

@@ -92,6 +92,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True, if multi-currency support to voucher adjustment is enabled */
+    public enableVoucherAdjustmentMultiCurrency: boolean;
 
     constructor(
         private store: Store<AppState>,
@@ -224,7 +226,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                 });
             }
         });
-
+        this.enableVoucherAdjustmentMultiCurrency = enableVoucherAdjustmentMultiCurrency;
     }
 
     /**
@@ -869,7 +871,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      */
     public getExchangeGainLossText(): string {
         const isProfit = this.isExchangeProfitable();
-        const profitType = isProfit ? this.localeData?.exchange_gain : this.localeData?.exchange_loss;
+        const profitType = isProfit ? this.commonLocaleData?.app_exchange_gain : this.commonLocaleData?.app_exchange_loss;
         const text = `${this.localeData?.exchange_gain_loss_label?.replace('[PROFIT_TYPE]', profitType)} ${this.baseCurrencySymbol}${Math.abs(this.getConvertedBalanceDue())}`;
         return text;
     }
