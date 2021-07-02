@@ -15,7 +15,7 @@ export class InvoiceBulkUpdateService {
     private user: UserDetails;
     private companyUniqueName: string;
     private _: any;
-    private voucherType: string = '';
+    
     constructor(private errorHandler: GiddhErrorHandler, private _http: HttpWrapperService, private _httpClient: HttpClient, private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
         this._ = config._;
         _ = config._;

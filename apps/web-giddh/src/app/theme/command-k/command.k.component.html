@@ -1,7 +1,6 @@
 <ng-container appTranslate [file]="'command-k'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
-    <section [clickOutsideEnabled]="true" [delayClickOutsideInit]="true" [exclude]="defaultExcludedTags"
-        (clickOutside)="handleOutSideClick($event)">
+    <section>
         <section #wrapper [class.isVisible]="isOpen" class="universal-data-list-wrapper">
             <!-- header -->
             <ng-container>

@@ -4,7 +4,6 @@ import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { select, Store } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppState } from '../../store';
-import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { CompanyActions } from '../../actions/company.actions';
 import { TaxResponse } from '../../models/api-models/Company';
@@ -13,6 +12,7 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { IForceClear } from '../../models/api-models/Sales';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { cloneDeep, each, map } from '../../lodash-optimized';
 
 @Component({
     selector: 'setting-taxes',
@@ -66,25 +66,27 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
         private _companyActions: CompanyActions,
         private _settingsTaxesActions: SettingsTaxesActions
     ) {
+        
+    }
+
+    public ngOnInit() {
         for (let i = 1; i <= 31; i++) {
             let day = i.toString();
             this.days.push({ label: day, value: day });
         }
 
         this.store.dispatch(this._companyActions.getTax());
-    }
-
-    public ngOnInit() {
+        
         this.store.pipe(select(p => p.company), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.taxes) {
                 this.forceClear$ = observableOf({ status: true });
-                _.map(o.taxes, (tax) => {
-                    _.each(tax.taxDetail, (t) => {
+                map(o.taxes, (tax) => {
+                    each(tax.taxDetail, (t) => {
                         t.date = moment(t.date, GIDDH_DATE_FORMAT);
                     });
                 });
                 this.onCancel();
-                this.availableTaxes = _.cloneDeep(o.taxes);
+                this.availableTaxes = cloneDeep(o.taxes);
             }
 
             this.isLoading = o.isTaxesLoading;
@@ -110,7 +112,7 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
     }
 
     public updateTax(taxIndex: number) {
-        let selectedTax = _.cloneDeep(this.availableTaxes[taxIndex]);
+        let selectedTax = cloneDeep(this.availableTaxes[taxIndex]);
         this.newTaxObj = selectedTax;
         let message = this.localeData?.tax_update_message;
         message = message?.replace("[TAX_NAME]", this.selectedTax.name);
@@ -134,7 +136,7 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
             } else if (this.confirmationFor === 'delete') {
                 this.store.dispatch(this._settingsTaxesActions.DeleteTax(this.newTaxObj.uniqueName));
             } else if (this.confirmationFor === 'edit') {
-                _.each(this.newTaxObj.taxDetail, (tax) => {
+                each(this.newTaxObj.taxDetail, (tax) => {
                     tax.date = moment(tax.date).format(GIDDH_DATE_FORMAT);
                 });
                 this.store.dispatch(this._settingsTaxesActions.UpdateTax(this.newTaxObj));
@@ -143,13 +145,13 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
     }
 
     public addMoreDateAndPercentage(taxIndex: number) {
-        let taxes = _.cloneDeep(this.availableTaxes);
+        let taxes = cloneDeep(this.availableTaxes);
         taxes[taxIndex].taxDetail.push({ date: null, taxValue: null });
         this.availableTaxes = taxes;
     }
 
     public removeDateAndPercentage(parentIndex: number, childIndex: number) {
-        let taxes = _.cloneDeep(this.availableTaxes);
+        let taxes = cloneDeep(this.availableTaxes);
         taxes[parentIndex].taxDetail.splice(childIndex, 1);
         this.availableTaxes = taxes;
     }
@@ -158,7 +160,7 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
         this.store.pipe(select(p => p.company), take(1)).subscribe((o) => {
             if (o.taxes) {
                 this.onCancel();
-                this.availableTaxes = _.cloneDeep(o.taxes);
+                this.availableTaxes = cloneDeep(o.taxes);
             }
         });
     }

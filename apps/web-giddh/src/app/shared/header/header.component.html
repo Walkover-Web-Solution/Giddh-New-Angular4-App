@@ -1,6 +1,6 @@
 <ng-container appTranslate [file]="'header'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
-    <div class="nav-left-bar" [ngClass]="{'open': sideMenu.isopen, 'unvisible': companyList.length===0 }"
+    <div (mouseover)="expandSidebar();" (mouseout)="collapseSidebar(false, true);" class="nav-left-bar" [ngClass]="{'open': isSidebarExpanded, 'unvisible': companyList.length===0 }"
         (clickOutside)="closeSidebarMobile($event)">
         <div class="menu-wrapper">
             <primary-sidebar [isOpen]="sideMenu?.isopen" [apiMenuItems]="apiMenuItems"
@@ -13,27 +13,6 @@
                 placement="right"></span>
         </div>
     </div>
-
-    <!-- <header class="clearfix header-container desktop-header" *ngIf="false"
-        [ngClass]="{'unvisible': companyList.length===0 , 'menu_open':sideMenu.isopen }">
-        <nav class="navbar ">
-            <div class="container-fluid pd-t1 pd-b1">
-                <div class="navbar-header">
-                    <ul class="nav navbar-nav">
-                    </ul>
-
-                    <div class="giddh_logo">
-
-                    </div>
-
-                    <div class="pull-right">
-                        <button *ngIf="shouldShowBackButton" (click)="navigateToPreviousRoute()"
-                            class="btn btn-primary mr-r15">{{commonLocaleData?.app_back}}</button>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </header> -->
 
     <!-- New header starts -->
     <div class="fixed-padding">
@@ -50,6 +29,7 @@
                         </span>
                         <span class="mobile-back-btn" (click)="redirectToMobileHome()"><i
                                 class="icon-back-arrow"></i></span>
+                        <span *ngIf="showGstIcon()" (click)="openGstSideMenu()" class="gst-menu-icon"> <i class="icon-bar"></i> </span>
                     </li>
                 </ul>
             </div>
@@ -78,7 +58,7 @@
                         <a href="javascript:void(0);" id="add-manage" (click)="showManageGroupsModal()"><i
                                 class="icon-master-new1"></i> {{commonLocaleData?.app_master}}</a>
                     </li>
-                    <li *ngIf="!isMobileScreen" class="header-utility-icons" (click)="toggleSidebarPane(true, false)">
+                    <li *ngIf="!isMobileScreen" [ngClass]="{'disable-icon' : isSettingsIconDisabled && !isIpadScreen}" class="header-utility-icons" (click)="toggleSidebarPane(true, false)">
                         <a href="javascript:void(0);"><i class="icon-settings-cog"></i></a>
                     </li>
                     <li class="header-utility-icons">
@@ -117,8 +97,7 @@
     </div>
     <!--add and manage group account modal -->
     <div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }"
-        class="modal fade full-screen-modal manage-account-popup add-manage-group-acc" role="dialog"
-        (onShown)="onShown()">
+        class="modal fade full-screen-modal manage-account-popup add-manage-group-acc" role="dialog">
         <div class="modal-dialog modal-xl modal-liq-90 mr-0 width-100 h-100">
             <div class="modal-content full-screen-modal">
                 <ng-template element-view-container-ref #addmanage=elementviewcontainerref>
@@ -146,25 +125,6 @@
             </div>
         </div>
     </div>
-    <!--CMD + G modal  -->
-    <ng-template #navigationModal>
-
-        <div class="modal-body" #mdl>
-            <command-k (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)"
-                (groupEmitter)="makeGroupEntryInDB($event)" (selectedItemEmitter)="onItemSelected($event)"
-                [parentEle]="mdl" [isOpen]="true" [setParentWidth]="true" (closeEmitter)="modelRef.hide()"></command-k>
-
-            <div class="shortcuts">
-                <strong>↑</strong> <strong>↓</strong>&nbsp; {{commonLocaleData?.app_to_navigate}} <strong class="mr-l1"
-                    [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp;
-                {{commonLocaleData?.app_to_select}} <strong class="mr-l1"
-                    [attr.aria-label]="commonLocaleData?.app_escape">{{commonLocaleData?.app_esc}}</strong>&nbsp;
-                {{commonLocaleData?.app_to_dismiss}}
-            </div>
-
-        </div>
-
-    </ng-template>
     <ng-template #expiredPlanModel>
         <div class="modal-header">
             <h3 class="modal-title pull-left">{{localeData?.ready_to_upgrade}}</h3>
@@ -187,8 +147,7 @@
                         <button class="btn btn-green" (click)="goToSelectPlan();">{{localeData?.change_plan}}</button>
                     </li>
                     <li><span class="d-inline-block pr-1">{{localeData?.or}}</span> <a class="cursor-pointer"
-                            (click)="openScheduleCalendlyModel();modelRefExpirePlan.hide();">{{localeData?.contact_us}}</a>
-                    </li>
+                        (click)="openScheduleModel();modelRefExpirePlan.hide();">{{localeData?.contact_us}}</a></li>
                 </ul>
             </div>
         </div>
@@ -214,23 +173,11 @@
                             (click)="goToSelectPlan();">{{commonLocaleData?.app_buy_plan}}</button>
                     </li>
                     <li><span class="d-inline-block pr-1">{{localeData?.or}}</span> <a class="cursor-pointer"
-                            (click)="openScheduleCalendlyModel();modelRefCrossLimit.hide();">{{localeData?.contact_us}}</a>
-                    </li>
+                        (click)="openScheduleModel();modelRefCrossLimit.hide();">{{localeData?.contact_us}}</a></li>
                 </ul>
             </div>
         </div>
     </ng-template>
-    <div class="overlay-cal" *ngIf="isCalendlyModelActivate">
-        <div id="scheduleCall" class="tab-pane active vertical-center modal-body">
-            <div class="calendly-box" #reder>
-                <div class="calendly-inline-widget">
-                    <button id="close" class="close-2" (click)="hideScheduleCalendlyModel()"><i
-                            class="icon-cross"></i></button>
-                    <object data="https://calendly.com/sales-accounting-software/talk-to-sale"></object>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!--help & support sidebar  -->
     <div class="help-support-aside" *ngIf="asideHelpSupportMenuState === 'in'"
@@ -258,3 +205,4 @@
         </div>
     </ng-template>
 </ng-container>
+<a class="schedule-now-link" id="SOIBTN_giddhbooks" data-psz="00" data-so-page="giddhbooks" data-delay="1"></a>

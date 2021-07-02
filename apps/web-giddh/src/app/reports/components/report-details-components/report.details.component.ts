@@ -16,7 +16,7 @@ import { CompanyResponse, ActiveFinancialYear } from '../../../models/api-models
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { GeneralService } from '../../../services/general.service';
 import { OrganizationType } from '../../../models/user-login-state';
-
+import { BreakpointObserver } from '@angular/cdk/layout';
 @Component({
     selector: 'reports-details-component',
     templateUrl: './report.details.component.html',
@@ -32,56 +32,6 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     private selectedMonth: string;
     public dateRange: Date[];
     public moment = moment;
-    public datePickerOptions: any = {
-        hideOnEsc: true,
-        // parentEl: '#dp-parent',
-        locale: {
-            applyClass: 'btn-green',
-            applyLabel: 'Go',
-            fromLabel: 'From',
-            format: 'D-MMM-YY',
-            toLabel: 'To',
-            cancelLabel: 'Cancel',
-            customRangeLabel: 'Custom range'
-        },
-        ranges: {
-            'This Month to Date': [
-                moment().startOf('month'),
-                moment()
-            ],
-            'This Quarter to Date': [
-                moment().quarter(moment().quarter()).startOf('quarter'),
-                moment()
-            ],
-            'This Financial Year to Date': [
-                moment().startOf('year').subtract(9, 'year'),
-                moment()
-            ],
-            'This Year to Date': [
-                moment().startOf('year'),
-                moment()
-            ],
-            'Last Month': [
-                moment().subtract(1, 'month').startOf('month'),
-                moment().subtract(1, 'month').endOf('month')
-            ],
-            'Last Quater': [
-                moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
-                moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
-            ],
-            'Last Financial Year': [
-                moment().startOf('year').subtract(10, 'year'),
-                moment().endOf('year').subtract(10, 'year')
-            ],
-            'Last Year': [
-                moment().startOf('year').subtract(1, 'year'),
-                moment().endOf('year').subtract(1, 'year')
-            ]
-        },
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment(),
-        // parentEl: '#dateRangeParent'
-    };
     public financialOptions: IOption[] = [];
     public selectedCompany: CompanyResponse;
     private interval: any;
@@ -100,7 +50,8 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-
+    /* This will hold if it's mobile screen or not */
+    public isMobileScreen: boolean = false;
     constructor(
         private router: Router,
         private store: Store<AppState>,
@@ -108,8 +59,13 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         private companyService: CompanyService,
         private _toaster: ToasterService,
         private settingsBranchAction: SettingsBranchActions,
-        private generalService: GeneralService) {
-
+        private generalService: GeneralService,
+        private breakPointObservar: BreakpointObserver) {
+            this.breakPointObservar.observe([
+                '(max-width: 767px)'
+            ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+                this.isMobileScreen = result.matches;
+            });
     }
 
     ngOnInit() {
@@ -363,9 +319,6 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
             let month = (dt.getMonth() + 1).toString(),
                 year = dt.getFullYear();
 
-            // GET THE FIRST AND LAST DATE OF THE MONTH.
-            //let firstDay = new Date(year, month , 0).toISOString().replace(/T.*/,'').split('-').reverse().join('-');
-            //let lastDay = new Date(year, month + 1, 1).toISOString().replace(/T.*/,'').split('-').reverse().join('-');
             if (parseInt(month) < 10) {
                 month = '0' + month;
             }

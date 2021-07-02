@@ -1,12 +1,12 @@
 import { takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { Component, OnDestroy, OnInit, AfterViewInit, TemplateRef, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ReplaySubject, Observable } from 'rxjs';
 import { AppState } from '../../../store/roots';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SubscriptionsActions } from '../../../actions/userSubscriptions/subscriptions.action';
-import { SubscriptionsUser, CompaniesWithTransaction, UserDetails } from '../../../models/api-models/Subscriptions';
+import { SubscriptionsUser, UserDetails } from '../../../models/api-models/Subscriptions';
 import * as moment from 'moment';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SubscriptionsService } from '../../../services/subscriptions.service';
@@ -25,7 +25,7 @@ import { DecimalPipe } from '@angular/common';
     templateUrl: './subscriptions.component.html'
 })
 
-export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+export class SubscriptionsComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild('addCompanyNewModal', { static: true }) public addCompanyNewModal: ModalDirective;
     @ViewChild('companynewadd', { static: true }) public companynewadd: ElementViewContainerRef;
 
@@ -40,7 +40,6 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
     public allSubscriptions: SubscriptionsUser[] = [];
     public subscriptions$: Observable<SubscriptionsUser[]>;
     public seletedUserPlans: SubscriptionsUser;
-    public selectedPlanCompanies: CompaniesWithTransaction[];
     public isPlanShow: boolean = false;
     public searchString = '';
     public transactions: any;
@@ -110,7 +109,15 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
                 this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
                     if (activeCompany) {
                         this.sortAssociatedCompanies();
-                        this.showCurrentCompanyPlan();
+                        
+                        this.seletedUserPlans = this.activeCompany.subscription;
+
+                        if (this.seletedUserPlans?.startedAt) {
+                            this.subscriptionDates.startedAt = moment(this.seletedUserPlans?.startedAt.split("-").reverse().join("-"));
+                        }
+                        if (this.seletedUserPlans?.expiry) {
+                            this.subscriptionDates.expiry = moment(this.seletedUserPlans?.expiry.split("-").reverse().join("-"));
+                        }
                     }
                 });
             }
@@ -143,7 +150,6 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
                 });
                 this.isLoading = false;
             }
-            this.showCurrentCompanyPlan();
         });
 
         this.activeRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
@@ -151,10 +157,6 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
                 this.isPlanShow = true;
             }
         });
-    }
-
-    public ngAfterViewInit() {
-        this.showCurrentCompanyPlan();
     }
 
     /**
@@ -176,9 +178,6 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
     public selectedSubscriptionPlan(subscription: SubscriptionsUser) {
         if (subscription) {
             this.seletedUserPlans = subscription;
-            if (this.seletedUserPlans && this.seletedUserPlans.companiesWithTransactions) {
-                this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
-            }
         }
     }
 
@@ -191,42 +190,6 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-    }
-
-    /**
-     * This function will set the current company plan
-     *
-     * @memberof SubscriptionsComponent
-     */
-    public showCurrentCompanyPlan() {
-        if (this.activeCompany && this.subscriptions) {
-            let planMatched = false;
-            this.subscriptions.forEach(key => {
-                if (this.activeCompany.subscription && key.subscriptionId === this.activeCompany.subscription.subscriptionId) {
-                    planMatched = true;
-                    this.seletedUserPlans = key;
-                    if (this.seletedUserPlans && this.seletedUserPlans.companiesWithTransactions) {
-                        this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
-                    }
-                }
-            });
-
-            if (!planMatched) {
-                this.seletedUserPlans = this.subscriptions[0];
-                if (this.seletedUserPlans && this.seletedUserPlans.companiesWithTransactions) {
-                    this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
-                }
-            }
-        }
-
-        if (this.seletedUserPlans) {
-            if (this.seletedUserPlans.startedAt) {
-                this.subscriptionDates.startedAt = moment(this.seletedUserPlans.startedAt.split("-").reverse().join("-"));
-            }
-            if (this.seletedUserPlans.expiry) {
-                this.subscriptionDates.expiry = moment(this.seletedUserPlans.expiry.split("-").reverse().join("-"));
-            }
-        }
     }
 
     /**
@@ -318,11 +281,11 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
                 companies: this.seletedUserPlans.companies,
                 totalCompanies: this.seletedUserPlans.totalCompanies,
                 userDetails: {
-                    name: this.seletedUserPlans.userDetails.name,
-                    uniqueName: this.seletedUserPlans.userDetails.uniqueName,
-                    email: this.seletedUserPlans.userDetails.email,
-                    signUpOn: this.seletedUserPlans.userDetails.signUpOn,
-                    mobileno: this.seletedUserPlans.userDetails.mobileno
+                    name: this.seletedUserPlans.userDetails?.name,
+                    uniqueName: this.seletedUserPlans.userDetails?.uniqueName,
+                    email: this.seletedUserPlans.userDetails?.email,
+                    signUpOn: this.seletedUserPlans.userDetails?.signUpOn,
+                    mobileno: this.seletedUserPlans.userDetails?.mobileno
                 },
                 additionalTransactions: this.seletedUserPlans.additionalTransactions,
                 createdAt: this.seletedUserPlans.createdAt,
@@ -342,11 +305,11 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
             this.store.dispatch(this.companyActions.selectedPlan(this.subscriptionPlan));
         } else {
             this.subscriptionRequestObj.userUniqueName = this.loggedInUser.uniqueName;
-            if (this.seletedUserPlans.subscriptionId) {
-                this.subscriptionRequestObj.subscriptionId = this.seletedUserPlans.subscriptionId;
+            if (this.seletedUserPlans?.subscriptionId) {
+                this.subscriptionRequestObj.subscriptionId = this.seletedUserPlans?.subscriptionId;
                 this.patchProfile({ subscriptionRequest: this.subscriptionRequestObj, callNewPlanApi: true });
-            } else if (!this.seletedUserPlans.subscriptionId) {
-                this.subscriptionRequestObj.planUniqueName = this.seletedUserPlans.planDetails.uniqueName;
+            } else if (!this.seletedUserPlans?.subscriptionId) {
+                this.subscriptionRequestObj.planUniqueName = this.seletedUserPlans?.planDetails?.uniqueName;
                 this.patchProfile({ subscriptionRequest: this.subscriptionRequestObj, callNewPlanApi: true });
             }
         }
@@ -476,7 +439,13 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
      * @returns {string}
      * @memberof SubscriptionsComponent
      */
-    public getSubscribedCompaniesCount(totalCompanies: any, companiesLimit): string {
+    public getSubscribedCompaniesCount(totalCompanies: any, companiesLimit: any): string {
+        if(!totalCompanies) {
+            totalCompanies = 0;
+        }
+        if(!companiesLimit) {
+            companiesLimit = 0;
+        }
         let text = this.localeData?.subscription?.companies_limit;
         text = text?.replace("[TOTAL_COMPANIES]", this.decimalPipe.transform(totalCompanies))?.replace("[PLAN_LIMIT]", this.decimalPipe.transform(companiesLimit));
         return text;

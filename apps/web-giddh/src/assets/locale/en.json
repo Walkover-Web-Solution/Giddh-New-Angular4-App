@@ -574,8 +574,6 @@
     "app_renew": "Renew",
     "app_buy_plan": "Buy Plan",
     "app_settings": "Settings",
-    "app_to_navigate": "to navigate",
-    "app_to_select": "to select",
     "app_to_dismiss": "to dismiss",
     "app_company_name": "Company Name",
     "app_currency": "Currency",
@@ -633,7 +631,7 @@
         "due_date_range_created": "Due date range created successfully.",
         "company_created": "Company created successfully.",
         "new_company_created": "New company created successfully.",
-        "universal_date_updated": "'Universal date updated successfully.",
+        "universal_date_updated": "Universal date updated successfully.",
         "subgroup_added": "Sub group added successfully.",
         "group_moved": "Group moved successfully.",
         "group_updated": "Group updated successfully.",
@@ -651,5 +649,6 @@
     },
     "app_download_here": "Download from here",
     "app_irn": "IRN",
-    "app_dashboard": "Dashboard"
+    "app_dashboard": "Dashboard",
+    "app_giddh_no_permissions": "You don't have permission to view this"
 }

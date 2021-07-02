@@ -574,8 +574,6 @@
 	"app_renew": "नवीकरण",
 	"app_buy_plan": "योजना खरीदें",
 	"app_settings": "समायोजन",
-	"app_to_navigate": "नेविगेट करने के लिए",
-	"app_to_select": "चयन करना",
 	"app_to_dismiss": "खारिज करना",
 	"app_company_name": "कंपनी का नाम",
 	"app_currency": "मुद्रा",
@@ -648,5 +646,6 @@
 	},
 	"app_download_here": "यहाँ से डाउनलोड करें",
     "app_irn": "आईआरएन",
-    "app_dashboard": "डैशबोर्ड"
+    "app_dashboard": "डैशबोर्ड",
+    "app_giddh_no_permissions": "आपको इसे देखने की अनुमति नहीं है"
 }

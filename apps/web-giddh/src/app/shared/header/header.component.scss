@@ -18,12 +18,6 @@
     z-index: 991;
     box-shadow: -2px -2px 15px rgba(0, 0, 0, 0.2) !important;
 }
-/*
-Comment for now
-.nav-left-bar.open {
-    box-shadow: -2px -2px 15px rgba(0, 0, 0, 0.2);
-}
-*/
 
 .account-search .input-group-addon {
     color: $charcoal;
@@ -221,14 +215,6 @@ a[vr-item]:focus {
     line-height: 1.3;
 }
 
-/*
-.left-fixed-header > li:hover a,
-.left-fixed-header > li > a:hover span,
-.left-fixed-header > li:hover a span {
-    color: #fff;
-}
-*/
-
 .left-fixed-header [class^="icon-"] {
     font-size: 20px;
     display: none;
@@ -328,6 +314,9 @@ a[vr-item]:focus {
 .nav-left-bar.open {
     left: 0;
     width: 240px;
+    &.width-60{
+        width: 60px;
+    }
 }
 
 .left-sub-menu ul > li > a {
@@ -627,8 +616,6 @@ ul.sub-list {
 .nav-left-bar .company-name-finance-year {
     display: inline;
     padding-left: 0;
-    /*float: right;
-    width: 150px;*/
     position: relative;
     top: -3px;
 }
@@ -982,6 +969,12 @@ ul.sub-list {
                 padding: 3px !important;
                 font-size: 22px;
             }
+            &.disable-icon{
+                i{
+                    color: $gainsboro !important;
+                    cursor: no-drop;
+                }
+            }
         }
     }
 }
@@ -1029,7 +1022,6 @@ ul.sub-list {
         button {
             width: 32px;
             padding: 4px 4px 3px 0;
-            margin-right: 4px !important;
             i {
                 font-size: 22px !important;
             }
@@ -1037,6 +1029,12 @@ ul.sub-list {
     }
 }
 @media (max-width: 767px) {
+    .gst-menu-icon, .setting-menu-icon {
+        padding: 4px 8px;
+        display: none;
+        width: 32px;
+        text-align: center;
+    }
     .fixed-padding {
         padding-top: 90px;
         #primary-new-header.primary-main-header {
@@ -1266,10 +1264,10 @@ ul.sub-list {
             margin: 0 15px;
         }
     }
-    .setting-menu-icon {
-        padding: 4px 8px 4px 2px;
+    .gst-menu-icon, .setting-menu-icon {
+        padding: 4px 8px 4px 8px;
         display: none;
-        width: 27px;
+        width: 32px;
         text-align: center;
     }
     .mobile-back-btn {
@@ -1335,4 +1333,8 @@ ul.sub-list {
     .modal-lg {
         max-width: 100% !important;
     }
+}
+.schedule-now-link {
+    width: 1px;
+    height: 1px;
 }

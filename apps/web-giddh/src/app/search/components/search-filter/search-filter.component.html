@@ -14,7 +14,6 @@
                         formArrayName="searchQuery"
                         *ngFor="let item of searchQueryForm.get('searchQuery')['controls'];let i = index; let l = last;">
                         <div [formGroupName]="i" class="d-flex">
-                            <!-- <label *ngIf="i === 0"> whose</label> -->
                             <label>{{localeData?.whose}}</label>
                             <span class="position-relative form-group">
                                 <select class="form-control" formControlName="queryType" required>

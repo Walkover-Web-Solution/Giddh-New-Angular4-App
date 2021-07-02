@@ -36,10 +36,6 @@ export class AsideTransferPaneComponent implements OnInit, OnDestroy {
         private _inventoryUserAction: InventoryUsersActions,
         private _customStockActions: CustomStockUnitAction,
     ) {
-        this._store.dispatch(this._inventoryAction.GetStock());
-        // dispatch stockunit request
-        this._store.dispatch(this._customStockActions.GetStockUnit());
-        this._store.dispatch(this._inventoryUserAction.getAllUsers());
         this.createStockSuccess$ = this._store.pipe(select(s => s.inventory.createStockSuccess), takeUntil(this.destroyed$));
         this.entrySuccess$ = this._store.pipe(select(s => s.inventoryInOutState.entrySuccess), takeUntil(this.destroyed$));
     }
@@ -55,6 +51,11 @@ export class AsideTransferPaneComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this._store.dispatch(this._inventoryAction.GetStock());
+        // dispatch stockunit request
+        this._store.dispatch(this._customStockActions.GetStockUnit());
+        this._store.dispatch(this._inventoryUserAction.getAllUsers());
+        
         this.stockList$ = this._store.pipe(select(p => p.inventory.stocksList && p.inventory.stocksList.results), takeUntil(this.destroyed$));
 
         this.stockUnits$ = this._store.pipe(select(p => p.inventory.stockUnits), takeUntil(this.destroyed$));

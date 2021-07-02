@@ -61,9 +61,6 @@ export const equalSigns = (ocVal: string) => {
 };
 
 export const stockManufacturingDetailsValidator = (control: AbstractControl) => {
-    // const linkedStockUniqueName = control.get('linkedStockUniqueName');
-    // const linkedQuantity = control.get('linkedQuantity');
-    // const linkedStockUnitCode = control.get('linkedStockUnitCode');
     const linkedStocks = control.get('linkedStocks') as FormArray;
     const manufacturingQuantity = control.get('manufacturingQuantity');
     const manufacturingUnitCode = control.get('manufacturingUnitCode');

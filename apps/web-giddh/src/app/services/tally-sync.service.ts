@@ -17,7 +17,6 @@ export class TallySyncService {
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
-    //
     public getCompletedSync(model: CommonPaginatedRequest) {
         const companyUniqueName = this._generalService.companyUniqueName;
         const url = this.config.apiUrl + TALLY_SYNC_API.COMPLETED
@@ -43,6 +42,4 @@ export class TallySyncService {
             this.errorHandler.HandleCatch<TallySyncResponseData, string>(e))
         );
     }
-
-
 }

@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges, ViewChild, OnDestroy } from '@angular/core';
 import { AccountDetails } from '../../../../models/api-models/tb-pl-bs';
 import { Account, ChildGroup } from '../../../../models/api-models/Search';
-import * as _ from '../../../../lodash-optimized';
 import { FormControl } from '@angular/forms';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { each } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
     selector: 'tb-grid',
@@ -54,17 +54,15 @@ export class TbGridComponent implements OnInit, OnChanges, OnDestroy {
 
     public ngOnChanges(changes: SimpleChanges) {
         if (changes.expandAll && !changes.expandAll.firstChange && changes.expandAll.currentValue !== changes.expandAll.previousValue) {
-            //
             if (this.data$) {
-                // this.cd.detach();
                 this.zone.runOutsideAngular(() => {
                     this.toggleGroupVisibility(this.data$.groupDetails, changes.expandAll.currentValue);
                     if (this.data$) {
                         // always make first level visible ....
-                        _.each(this.data$.groupDetails, (grp: ChildGroup) => {
+                        each(this.data$.groupDetails, (grp: ChildGroup) => {
                             if (grp.isIncludedInSearch) {
                                 grp.isVisible = true;
-                                _.each(grp.accounts, (acc: Account) => {
+                                each(grp.accounts, (acc: Account) => {
                                     if (acc.isIncludedInSearch) {
                                         acc.isVisible = false;
                                     }

@@ -1,15 +1,9 @@
 import { NgModule } from '@angular/core';
-
 import { ContactModule } from '../contact/contact.module';
 import { AsideMenuCreateTaxModule } from '../shared/aside-menu-create-tax/aside-menu-create-tax.module';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
-import { OmitByKeyPipeModule } from '../shared/helpers/pipes/omitBy/omitBy.module';
 import { SharedModule } from '../shared/shared.module';
 import { BranchComponent } from './branch/branch.component';
-import { BunchComponent } from './bunch/bunch.component';
-import { BunchAddCompanyModalComponent } from './bunch/components-modal/add-company/bunch-add-company.component';
-import { CreateBunchModalComponent } from './bunch/components-modal/create-bunch/create-bunch.component';
-import { GetBunchModalComponent } from './bunch/components-modal/get-companies/get-companies.component';
 import { DiscountComponent } from './discount/discount.component';
 import { FinancialYearComponent } from './financial-year/financial-year.component';
 import { SettingIntegrationComponent } from './integration/setting.integration.component';
@@ -41,6 +35,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CreateAddressComponent } from './create-address/create-address.component';
 import { CreateBranchComponent } from './branch/create-branch/create-branch.component';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
+import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -64,10 +59,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         DiscountComponent,
         SettingsTagsComponent,
         SettingTriggerComponent,
-        BunchComponent,
-        CreateBunchModalComponent,
-        BunchAddCompanyModalComponent,
-        GetBunchModalComponent,
         WarehouseComponent,
         CreateWarehouseComponent,
         CreateAddressComponent,
@@ -83,14 +74,14 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ContactModule,
         ReactiveFormsModule,
         CurrencyModule,
-        OmitByKeyPipeModule,
         SettingsServiceModule,
         PerfectScrollbarModule,
         TextMaskModule,
         NgxMaskModule.forRoot(),
         DigitsOnlyModule,
         ShSelectModule,
-        SalesShSelectModule
+        SalesShSelectModule,
+        TaxSidebarModule
     ],
     providers: [
         {

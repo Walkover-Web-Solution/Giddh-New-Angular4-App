@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as moment from 'moment';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { InventoryReportActions } from '../../actions/inventory/inventory.report.actions';
@@ -154,6 +153,18 @@ export class JobworkComponent implements OnInit, OnDestroy {
                 this.showWelcomePage = true;
             }
         }
+
+        this.inventoryReport$ = this._store.pipe(select(p => p.inventoryInOutState.inventoryReport), takeUntil(this.destroyed$), publishReplay(1), refCount());
+
+        this._store.pipe(select(p => ({
+            stocksList: p.inventory.stocksList,
+            inventoryUsers: p.inventoryInOutState.inventoryUsers
+        })), takeUntil(this.destroyed$)).subscribe(p => p.inventoryUsers && p.stocksList &&
+            (this.stockOptions = p.stocksList.results.map(r => ({ label: r.name, value: r.uniqueName, additional: 'stock' }))
+                .concat(p.inventoryUsers.map(r => ({ label: r.name, value: r.uniqueName, additional: 'person' })))));
+    }
+
+    public ngOnInit() {
         // get view from sidebar while clicking on person/stock
 
         this.invViewService.getJobworkActiveView().pipe(takeUntil(this.destroyed$)).subscribe(v => {
@@ -214,18 +225,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
             }
 
         });
-
-        this.inventoryReport$ = this._store.pipe(select(p => p.inventoryInOutState.inventoryReport), takeUntil(this.destroyed$), publishReplay(1), refCount());
-
-        this._store.pipe(select(p => ({
-            stocksList: p.inventory.stocksList,
-            inventoryUsers: p.inventoryInOutState.inventoryUsers
-        })), takeUntil(this.destroyed$)).subscribe(p => p.inventoryUsers && p.stocksList &&
-            (this.stockOptions = p.stocksList.results.map(r => ({ label: r.name, value: r.uniqueName, additional: 'stock' }))
-                .concat(p.inventoryUsers.map(r => ({ label: r.name, value: r.uniqueName, additional: 'person' })))));
-    }
-
-    public ngOnInit() {
+        
         // initialization for voucher type array initially all selected
         this.initVoucherType();
         // Advance search modal
@@ -258,17 +258,6 @@ export class JobworkComponent implements OnInit, OnDestroy {
                 this.showReceiverSearch = false;
             }
         });
-        // this.productUniqueNameInput.valueChanges.pipe(  // enable after api change for product search
-        //   debounceTime(700),
-        //   distinctUntilChanged(),
-        //   takeUntil(this.destroyed$)
-        // ).subscribe(s => {
-        //   this.filter.productName = s;
-        //   this.applyFilters(1, true);
-        //   if (s === '') {
-        //     this.showReceiverSearch = false;
-        //   }
-        // });
 
         // on load first time
         this.stocksList$.subscribe(res => {
