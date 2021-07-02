@@ -336,7 +336,7 @@
                                             </thead>
                                         </table>
                                         <table id="ledger-transaction-left-list" class="width-100"
-                                            (clickOutside)="hideBankLedgerPopup(true)"
+                                            (clickOutside)="hideBankLedgerPopup($event)"
                                             (click)="$event.stopPropagation()">
                                             <tbody>
                                                 <ng-container
@@ -491,7 +491,7 @@
                                             </thead>
                                         </table>
                                         <table id="ledger-transaction-right-list" class="width-100"
-                                            (clickOutside)="hideBankLedgerPopup(true)"
+                                            (clickOutside)="hideBankLedgerPopup($event)"
                                             (click)="$event.stopPropagation()">
                                             <tbody>
                                                 <ng-container
