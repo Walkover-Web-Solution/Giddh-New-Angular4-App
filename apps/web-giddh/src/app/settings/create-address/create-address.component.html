@@ -235,6 +235,7 @@
                                                             class="list-item d-flex">
                                                             <span class="entity-details">
                                                                 <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
+                                                                    <p *ngIf="!option.taxNumber">&nbsp;</p>
                                                                 <div class="item-unique">
                                                                     <p *ngIf="option.taxType && option.taxNumber">
                                                                         {{ option.taxType }} :
