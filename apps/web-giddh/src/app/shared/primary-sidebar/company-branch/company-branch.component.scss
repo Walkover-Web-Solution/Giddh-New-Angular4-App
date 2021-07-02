@@ -37,6 +37,11 @@
             border-bottom-left-radius: 0px !important;
         }
     }
+    .total-company{
+        .company-count{
+            color: $comet;
+        }
+    }
     tab{
         position: relative;
         font-family: 'opensans-regular' !important;
@@ -240,12 +245,6 @@
                             color: initial !important;
 
                         }
-                        .main-company{
-                            text-overflow: ellipsis;
-                            white-space: nowrap;
-                            overflow: hidden;
-                            max-width: 200px;
-                        }
                     }
                     &:hover{
                         a{
@@ -305,7 +304,7 @@
         }
     }
     .custom-tabs {
-        .icon-copmany-branch-connect{
+        .icon-company-branch-connect{
             position: absolute;
             top: 5px;
             left: 100px;
@@ -413,14 +412,16 @@
 }
 
 @media screen and (max-height: 800px) {
-    .company-branch-dropdown{
-        .company-list {
-            height: calc(65vh - 60px) !important;
+    .company-branch-dropdown {
+        .company-branch-dropdown{
+            .company-list {
+                height: calc(65vh - 60px) !important;
+            }
         }
-    }
-    .company-branch-opt-2{
-        .company-list{
-            height: calc(80vh - 120px) !important;
+        .company-branch-opt-2{
+            .company-list{
+                height: calc(80vh - 120px) !important;
+            }
         }
     }
 }
