@@ -82,7 +82,7 @@
 
                                             <!-- added multicurrency feature make it functional to change into appropriate currency -->
                                             <span class="sp-rupees d-flex justify-content-end"
-                                                *ngIf='isMulticurrencyAccount'>
+                                                *ngIf="isMulticurrencyAccount">
                                                 <amount-field
                                                     [amount]="enableVoucherAdjustmentMultiCurrency && isSalesInvoice ? getConvertedBalanceDue() : (invFormData.voucherDetails.balanceDue * exchangeRate)"
                                                     [currencySymbol]="baseCurrencySymbol"
