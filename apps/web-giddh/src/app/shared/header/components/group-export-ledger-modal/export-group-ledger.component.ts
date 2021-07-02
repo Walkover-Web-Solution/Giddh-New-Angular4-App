@@ -30,42 +30,6 @@ export class ExportGroupLedgerComponent implements OnInit {
     public fileType: string = 'pdf';
     public order: string = 'asc';
     public dateRange: { from: string, to: string } = { from: '', to: '' };
-
-    public datePickerOptions: any = {
-        locale: {
-            applyClass: 'btn-green',
-            applyLabel: 'Go',
-            fromLabel: 'From',
-            format: 'D-MMM-YY',
-            toLabel: 'To',
-            cancelLabel: 'Cancel',
-            customRangeLabel: 'Custom range'
-        },
-        ranges: {
-            'Last 1 Day': [
-                moment().subtract(1, 'days'),
-                moment()
-            ],
-            'Last 7 Days': [
-                moment().subtract(6, 'days'),
-                moment()
-            ],
-            'Last 30 Days': [
-                moment().subtract(29, 'days'),
-                moment()
-            ],
-            'Last 6 Months': [
-                moment().subtract(6, 'months'),
-                moment()
-            ],
-            'Last 1 Year': [
-                moment().subtract(12, 'months'),
-                moment()
-            ]
-        },
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment()
-    };
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
@@ -95,7 +59,6 @@ export class ExportGroupLedgerComponent implements OnInit {
 
 
     constructor(private store: Store<AppState>, private _permissionDataService: PermissionDataService, private generalService: GeneralService, private modalService: BsModalService) {
-        //
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -111,7 +74,6 @@ export class ExportGroupLedgerComponent implements OnInit {
                     this.emailTypeSelected = isAdmin ? 'admin-detailed' : 'view-detailed';
                     this.emailTypeMini = isAdmin ? 'admin-condensed' : 'view-condensed';
                     this.emailTypeDetail = isAdmin ? 'admin-detailed' : 'view-detailed';
-
                 }
             });
         }

@@ -1,7 +1,6 @@
 import { Observable, ReplaySubject } from 'rxjs';
-
 import { take, takeUntil } from 'rxjs/operators';
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { ElementViewContainerRef } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -47,10 +46,6 @@ import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/Sett
       .custom-item:hover span {
           color:#5B64C9 !important;
       }
-
-      // .multi-select input.form-control {
-      //     background-image: unset !important;
-      // }
 
       .multi-select .caret {
           display: block !important;
@@ -110,14 +105,15 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
         private store: Store<AppState>
     ) {
         this.discountAccountsList$ = this.store.pipe(select(p => p.settings.discount.discountList), takeUntil(this.destroyed$));
+    }
+
+    public ngOnInit() {
         this.discountAccountsList$.subscribe(data => {
             if (data && data.length) {
                 this.prepareDiscountList();
             }
         });
-    }
 
-    public ngOnInit() {
         if (this.defaultDiscount.discountType === 'FIX_AMOUNT') {
             this.discountFixedValueModal = this.defaultDiscount.amount;
         } else {
@@ -134,7 +130,6 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
             } else {
                 this.discountPercentageModal = this.defaultDiscount.amount;
             }
-            // this.change();
         }
 
         if ('totalAmount' in changes && changes.totalAmount.currentValue !== changes.totalAmount.previousValue) {
@@ -223,7 +218,7 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public trackByFn(index) {
-        return index; // or item.id
+        return index;
     }
 
     public hideDiscountMenu() {

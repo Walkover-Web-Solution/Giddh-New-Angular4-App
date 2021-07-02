@@ -8,8 +8,8 @@ import { AppState } from '../../../../store/roots';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AccountResponseV2 } from '../../../../models/api-models/Account';
 import { AccountsAction } from '../../../../actions/accounts.actions';
-import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 import { GIDDH_EMAIL_REGEX } from '../../../helpers/defaultDateFormat';
+import { clone, cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
     selector: 'share-account-modal',
@@ -58,7 +58,7 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
             entity: 'account',
             entityUniqueName: activeAccount.uniqueName,
         };
-        let selectedPermission = _.clone(this.selectedPermission);
+        let selectedPermission = clone(this.selectedPermission);
         this.store.dispatch(this.accountActions.shareEntity(userRole, selectedPermission.toLowerCase()));
         this.email = '';
         this.selectedPermission = '';
@@ -68,40 +68,12 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.accountActions.unShareEntity(entryUniqueName, 'account', accountUniqueName));
     }
 
-    // public callbackFunction(activeAccount: any, email: string, currentPermission: string, newPermission: string) {
-    //     let userRole = {
-    //       emailId: email,
-    //       entity: 'account',
-    //       entityUniqueName: activeAccount.uniqueName,
-    //       updateInBackground: true,
-    //       newPermission
-    //     };
-
-    //     this.store.dispatch(this.accountActions.updateEntityPermission(userRole, currentPermission));
-    // }
-
     public updatePermission(model: ShareRequestForm, event: any) {
-        let data = _.cloneDeep(model);
+        let data = cloneDeep(model);
         let newPermission = event.target.value;
         data.roleUniqueName = newPermission;
         this.store.dispatch(this.accountActions.updateEntityPermission(data, newPermission, 'account'));
     }
-
-    // public checkIfUserAlreadyHavingPermission(email: string, currentPermission: string, permissionUniqueName: string, activeAccount: any, event: any) {
-    //   this.activeAccountSharedWith$.take(1).subscribe((data) => {
-    //     if (data) {
-    //       let roleIndex = data.findIndex((p) => {
-    //         return p.role.uniqueName === permissionUniqueName;
-    //       });
-    //       if (roleIndex > -1) {
-    //         this._toasty.errorToast(`${email} already have ${permissionUniqueName} permission.`);
-    //         this.store.dispatch(this.accountActions.sharedAccountWith(activeAccount.uniqueName));
-    //       } else {
-    //         this.callbackFunction(activeAccount, email, currentPermission, permissionUniqueName);
-    //       }
-    //     }
-    //   });
-    // }
 
     public closeModal() {
         this.email = '';

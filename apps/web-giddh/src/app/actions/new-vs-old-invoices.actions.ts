@@ -2,11 +2,9 @@ import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
-import { Action, Store } from '@ngrx/store';
+import { Action } from '@ngrx/store';
 import { NewVsOldInvoicesService } from '../services/new-vs-old-invoices.service';
 import { ToasterService } from '../services/toaster.service';
-import { AppState } from '../store';
-import { GeneralService } from '../services/general.service';
 import { CustomActions } from '../store/customActions';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { NewVsOldInvoicesRequest, NewVsOldInvoicesResponse } from '../models/api-models/new-vs-old-invoices';
@@ -30,8 +28,7 @@ export class NewVsOldInvoicesActions {
             }
             ))));
 
-    constructor(private action$: Actions, private _NewVsOldInvoicesService: NewVsOldInvoicesService,
-        private _toasty: ToasterService, private store: Store<AppState>, private _generalService: GeneralService) {
+    constructor(private action$: Actions, private _NewVsOldInvoicesService: NewVsOldInvoicesService, private _toasty: ToasterService) {
     }
 
     public GetNewVsOldInvoicesRequest(queryRequest: NewVsOldInvoicesRequest): CustomActions {

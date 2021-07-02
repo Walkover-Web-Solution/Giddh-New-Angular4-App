@@ -2,7 +2,7 @@ import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { ExportLedgerRequest, MailLedgerRequest } from '../../../models/api-models/Ledger';
-import { base64ToBlob, validateEmail } from '../../../shared/helpers/helperFunctions';
+import { validateEmail } from '../../../shared/helpers/helperFunctions';
 import { ToasterService } from '../../../services/toaster.service';
 import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
 import { some } from '../../../lodash-optimized';
@@ -12,6 +12,7 @@ import { AppState } from 'apps/web-giddh/src/app/store';
 import { Store, select } from '@ngrx/store';
 import { take, takeUntil } from 'rxjs/operators';
 import { download } from '@giddh-workspaces/utils';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: 'export-ledger',
@@ -21,8 +22,6 @@ import { download } from '@giddh-workspaces/utils';
 
 export class ExportLedgerComponent implements OnInit {
     @Input() public accountUniqueName: string = '';
-    // @Input() public from: string = '';
-    // @Input() public to: string = '';
     @Input() public advanceSearchRequest: any;
     @Output() public closeExportLedgerModal: EventEmitter<boolean> = new EventEmitter();
     /** Event emitter to show columnar report table */
@@ -45,7 +44,7 @@ export class ExportLedgerComponent implements OnInit {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor(private _ledgerService: LedgerService, private _toaster: ToasterService, private _permissionDataService: PermissionDataService, private store: Store<AppState>) {
+    constructor(private _ledgerService: LedgerService, private _toaster: ToasterService, private _permissionDataService: PermissionDataService, private store: Store<AppState>, private generalService: GeneralService) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -91,17 +90,16 @@ export class ExportLedgerComponent implements OnInit {
                 if (response.body) {
                     if (response.body.status === "success") {
                         if (response.queryString.fileType === 'xlsx') {
-                            let blob = base64ToBlob(response.body.response, 'application/vnd.ms-excel', 512);
+                            let blob = this.generalService.base64ToBlob(response.body.response, 'application/vnd.ms-excel', 512);
                             return download(`${this.accountUniqueName}.xlsx`, blob, 'application/vnd.ms-excel');
                         } else if (response.queryString.fileType === 'pdf') {
-                            let blob = base64ToBlob(response.body.response, 'application/pdf', 512);
+                            let blob = this.generalService.base64ToBlob(response.body.response, 'application/pdf', 512);
                             return download(`${this.accountUniqueName}.pdf`, blob, 'application/pdf');
                         }
                     } else if (response.body.message) {
                         this._toaster.infoToast(response.body.message);
                     }
                 }
-
             } else {
                 this._toaster.errorToast(response.message, response.code);
             }

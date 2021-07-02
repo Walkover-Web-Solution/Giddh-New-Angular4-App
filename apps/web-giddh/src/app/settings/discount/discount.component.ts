@@ -55,8 +55,6 @@ export class DiscountComponent implements OnInit, OnDestroy {
         private _settingsDiscountAction: SettingsDiscountActions,
         private salesService: SalesService,
         private store: Store<AppState>) {
-        this.getDiscountAccounts();
-
         this.discountList$ = this.store.pipe(select(s => s.settings.discount.discountList), takeUntil(this.destroyed$));
         this.isDiscountListInProcess$ = this.store.pipe(select(s => s.settings.discount.isDiscountListInProcess), takeUntil(this.destroyed$));
         this.isDiscountCreateInProcess$ = this.store.pipe(select(s => s.settings.discount.isDiscountCreateInProcess), takeUntil(this.destroyed$));
@@ -69,6 +67,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.getDiscountAccounts();
         this.store.dispatch(this._settingsDiscountAction.GetDiscount());
 
         this.isDiscountCreateSuccess$.subscribe(s => {

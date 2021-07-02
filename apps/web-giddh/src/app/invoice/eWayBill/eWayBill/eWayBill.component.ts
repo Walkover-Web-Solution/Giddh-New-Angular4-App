@@ -7,7 +7,6 @@ import * as moment from 'moment/moment';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, takeUntil } from 'rxjs/operators';
 import { IEwayBillAllList, IEwayBillCancel, Result, UpdateEwayVehicle, IEwayBillfilter } from '../../../models/api-models/Invoice';
-import { base64ToBlob } from '../../../shared/helpers/helperFunctions';
 import { ToasterService } from '../../../services/toaster.service';
 import { saveAs } from 'file-saver';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -18,6 +17,8 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { LocationService } from '../../../services/location.service';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { Router } from '@angular/router';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -29,6 +30,12 @@ import { GeneralService } from '../../../services/general.service';
 export class EWayBillComponent implements OnInit, OnDestroy {
     @ViewChild('cancelEwayForm', { static: true }) public cancelEwayForm: NgForm;
     @ViewChild('updateVehicleForm', { static: true }) public updateVehicleForm: NgForm;
+    /* This will hold the value out/in to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: string = 'in';
+    /* Aside pane state*/
+    public asideMenuState: string = 'out';
+    /* this will check mobile screen size */
+    public isMobileScreen: boolean = false;
 
     public isGetAllEwaybillRequestInProcess$: Observable<boolean>;
     public isGetAllEwaybillRequestSuccess$: Observable<boolean>;
@@ -158,7 +165,9 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         private modalService: BsModalService,
         private _location: LocationService,
         private _cd: ChangeDetectorRef,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private breakpointObserver: BreakpointObserver,
+        private router: Router
     ) {
         this.EwayBillfilterRequest.count = 20;
         this.EwayBillfilterRequest.page = 1;
@@ -183,6 +192,25 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                 this.statesSource$ = observableOf(this.states);
             }
         });
+
+        this.breakpointObserver
+        .observe(['(max-width: 767px)'])
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((state: BreakpointState) => {
+            this.isMobileScreen = state.matches;
+            if (!this.isMobileScreen) {
+                this.asideGstSidebarMenuState = 'in';
+            }
+        });
+        this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
+            if (this.isMobileScreen) {
+                if (shouldOpen) {
+                    this.asideGstSidebarMenuState = 'in';
+                } else {
+                    this.asideGstSidebarMenuState = 'out';
+                }
+            }
+        });
     }
 
     public selectedDate(value: any) {
@@ -194,7 +222,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        // getALLEwaybillList();
+        document.querySelector('body').classList.add('gst-sidebar-open');
         this.cancelEwaySuccess$.subscribe(p => {
             if (p) {
                 this.store.dispatch(this.invoiceActions.getALLEwaybillList());
@@ -234,7 +262,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                     }));
                 }),
                 map((res) => {
-                    // let data = res.map(item => item.address_components[0].long_name);
                     let data = res.map(item => item.city);
                     this.dataSourceBackup = res;
                     return data;
@@ -326,7 +353,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         this._invoiceService.DownloadEwayBills(this.selectedEway.ewbNo).pipe(takeUntil(this.destroyed$)).subscribe(d => {
 
             if (d.status === 'success') {
-                let blob = base64ToBlob(d.body, 'application/pdf', 512);
+                let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
                 return saveAs(blob, `${this.selectedEway.ewbNo} - ${this.selectedEway.customerName}.pdf`);
             } else {
                 this._toaster.errorToast(d.message);
@@ -338,7 +365,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         this.selectedEway = _.cloneDeep(ewayItem);
         this._invoiceService.DownloadDetailedEwayBills(this.selectedEway.ewbNo).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d.status === 'success') {
-                let blob = base64ToBlob(d.body, 'application/pdf', 512);
+                let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
                 return saveAs(blob, `${this.selectedEway.ewbNo} - ${this.selectedEway.customerName}.pdf`);
             } else {
                 this._toaster.errorToast(d.message);
@@ -412,14 +439,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         if (this.showAdvanceSearchIcon) {
             this.EwayBillfilterRequest.sort = type
             this.EwayBillfilterRequest.sortBy = columnName;
-            // this.advanceSearchFilter.from = this.invoiceSearchRequest.from;
-            // this.advanceSearchFilter.to = this.invoiceSearchRequest.to;
             this.store.dispatch(this.invoiceActions.GetAllEwayfilterRequest(this.preparemodelForFilterEway()));
-        } else {
-            // if (this.invoiceSearchRequest.sort !== type || this.invoiceSearchRequest.sortBy !== columnName) {
-            //   this.invoiceSearchRequest.sort = type;
-            //   this.invoiceSearchRequest.sortBy = columnName;
-            //   this.getVoucher(this.isUniversalDateApplicable);
         }
     }
 
@@ -529,6 +549,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector('body').classList.remove('gst-sidebar-open');
+        this.asideGstSidebarMenuState === 'out';
     }
 
     /**
@@ -553,5 +575,14 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                 { value: '4', label: this.localeData?.cancel_reason_list?.others }
             ];
         }
+    }
+
+    /**
+     * Handles GST Sidebar Navigation
+     *
+     * @memberof EWayBillComponent
+     */
+    public handleNavigation(): void {
+        this.router.navigate(['pages', 'gstfiling']);
     }
 }

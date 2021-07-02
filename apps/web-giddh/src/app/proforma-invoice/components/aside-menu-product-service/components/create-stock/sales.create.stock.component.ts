@@ -46,7 +46,6 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
 
 
     @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
-    @Output() public animateAside: EventEmitter<any> = new EventEmitter();
 
     @ViewChild('uniqueName', { static: false }) public uniqueName: ElementRef;
     @ViewChild('stockName', { static: false }) public stockName: ElementRef;
@@ -143,11 +142,10 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
                 this.stockUnitsDropDown$ = of(unitArr);
             }
         });
-
-        this.getParentGroupData();
     }
 
     public ngOnInit() {
+        this.getParentGroupData();
         // get all groups
         this.formDivBoundingRect.next({
             top: 0,

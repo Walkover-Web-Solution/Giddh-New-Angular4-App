@@ -8,7 +8,6 @@ import { Configuration } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import {
-    LinkedInRequestModel,
     SignupwithEmaillModel,
     SignupWithMobile,
     VerifyEmailModel,
@@ -18,15 +17,13 @@ import {
 import {
     AuthService,
     GoogleLoginProvider,
-    LinkedinLoginProvider,
     SocialUser
 } from "../theme/ng-social-login-module/index";
-import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
 import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
 import { DOCUMENT } from "@angular/common";
-import { ToasterService } from "../services/toaster.service";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { GeneralService } from "../services/general.service";
+import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
 
 @Component({
     selector: "signup",
@@ -64,12 +61,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     public isSignupWithPasswordSuccess$: Observable<boolean>;
     public retryCount: number = 0;
     public signupVerifyEmail$: Observable<string>;
-    private imageURL: string;
-    private email: string;
-    private name: string;
-    private token: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public showLinkedInButton: boolean = false;
     /** Used only to refer in the template */
     public isCordova: boolean = isCordova;
     /** To Observe is google login inprocess */
@@ -81,7 +73,6 @@ export class SignupComponent implements OnInit, OnDestroy {
         private loginAction: LoginActions,
         private authService: AuthService,
         @Inject(DOCUMENT) private document: Document,
-        private _toaster: ToasterService,
         private _generalService: GeneralService
     ) {
         this.urlPath = (isElectron || isCordova) ? "" : AppUrl + APP_FOLDER;
@@ -105,20 +96,6 @@ export class SignupComponent implements OnInit, OnDestroy {
             return state.login.isLoginWithEmailSubmited;
         }), takeUntil(this.destroyed$));
 
-        this.store.pipe(select(state => {
-            return state.login.isVerifyEmailSuccess;
-        }), takeUntil(this.destroyed$)).subscribe((value) => {
-            if (value) {
-                // this.router.navigate(['home']);
-            }
-        });
-        this.store.pipe(select(state => {
-            return state.login.isVerifyMobileSuccess;
-        }), takeUntil(this.destroyed$)).subscribe((value) => {
-            if (value) {
-                // this.router.navigate(['home']);
-            }
-        });
         this.isSignupWithPasswordInProcess$ = this.store.pipe(select(state => {
             return state.login.isSignupWithPasswordInProcess;
         }), takeUntil(this.destroyed$));
@@ -132,7 +109,6 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.signupVerifyEmail$ = this.store.pipe(select(p => p.login.signupVerifyEmail), takeUntil(this.destroyed$));
 
         this.isSocialLogoutAttempted$ = this.store.pipe(select(p => p.login.isSocialLogoutAttempted), takeUntil(this.destroyed$));
-
         contriesWithCodes.map(c => {
             this.countryCodeList.push({ value: c.countryName, label: c.value });
         });
@@ -179,13 +155,6 @@ export class SignupComponent implements OnInit, OnDestroy {
                                 this.store.dispatch(this.loginAction.signupWithGoogle(user.token));
                                 break;
                             }
-                            case "LINKEDIN": {
-                                let obj: LinkedInRequestModel = new LinkedInRequestModel();
-                                obj.email = user.email;
-                                obj.token = user.token;
-                                this.store.dispatch(this.loginAction.signupWithLinkedin(obj));
-                                break;
-                            }
                             default: {
                                 // do something
                                 break;
@@ -212,7 +181,6 @@ export class SignupComponent implements OnInit, OnDestroy {
 
         this.signupVerifyEmail$.subscribe(a => {
             if (a) {
-
                 this.signupVerifyForm.get("email")?.patchValue(a);
             }
         });
@@ -295,36 +263,15 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.loginAction.SignupWithMobileRequest(data));
     }
 
-    /**
-     * Getting data from browser's local storage
-     */
-    public getData() {
-        this.token = localStorage.getItem("token");
-        this.imageURL = localStorage.getItem("image");
-        this.name = localStorage.getItem("name");
-        this.email = localStorage.getItem("email");
-    }
-
     public async signInWithProviders(provider: string) {
         if (Configuration.isElectron) {
 
             const { ipcRenderer } = (window as any).require("electron");
             if (provider === "google") {
                 // google
-                const t = ipcRenderer.send("authenticate", provider);
                 ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
                     this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
                 });
-                //
-                // const t = ipcRenderer.sendSync("authenticate", provider);
-                // this.store.dispatch(this.loginAction.signupWithGoogle(t));
-            } else {
-                // linked in
-                ipcRenderer.send("authenticate", provider);
-                ipcRenderer.once("authenticate-token", (event, res) => {
-                    this.store.dispatch(this.loginAction.LinkedInElectronLogin(res));
-                });
-                // this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
             }
 
         } else if (Configuration.isCordova) {
@@ -336,7 +283,6 @@ export class SignupComponent implements OnInit, OnDestroy {
                 },
                 (obj) => {
                     this.store.dispatch(this.loginAction.signupWithGoogle(obj.accessToken));
-                    // console.log(JSON.stringify(obj)); // do something useful instead of alerting
                 },
                 (msg) => {
                     console.log(('error: ' + msg));
@@ -348,8 +294,6 @@ export class SignupComponent implements OnInit, OnDestroy {
             this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());
             if (provider === "google") {
                 this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
-            } else if (provider === "linkedin") {
-                this.authService.signIn(LinkedinLoginProvider.PROVIDER_ID);
             }
         }
     }

@@ -1,17 +1,12 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Action, Store } from '@ngrx/store';
+import { Action } from '@ngrx/store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Observable, ReplaySubject } from 'rxjs';
-import { CompanyActions } from './company.actions';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 import { CustomActions } from '../store/customActions';
 import { AuthenticationService } from '../services/authentication.service';
 import { ToasterService } from '../services/toaster.service';
-import { AppState } from '../store/index';
-import { CompanyService } from '../services/companyService.service';
-import { GeneralService } from '../services/general.service';
 
 @Injectable()
 export class SessionActions {
@@ -76,19 +71,11 @@ export class SessionActions {
                 return { type: 'EmptyAction' };
             })));
 
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
     constructor(
         public _router: Router,
         private actions$: Actions,
         private auth: AuthenticationService,
-        public _toaster: ToasterService,
-        private store: Store<AppState>,
-        private comapnyActions: CompanyActions,
-        private _companyService: CompanyService,
-        private http: HttpClient,
-        private _generalService: GeneralService,
-        private activatedRoute: ActivatedRoute
+        public _toaster: ToasterService
     ) {
     }
 

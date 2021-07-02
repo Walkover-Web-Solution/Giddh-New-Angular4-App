@@ -7,7 +7,7 @@ import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Compa
 import { CompanyActions } from '../actions/company.actions';
 import { ReplaySubject } from 'rxjs';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
-import { GeneralActions } from '../actions/general/general.actions';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
     selector: 'tb-pl-bs',
@@ -32,6 +32,8 @@ export class TbPlBsComponent implements OnInit, OnDestroy {
      * same route which cancels the previous route with route ID and doesn't highlight the menu item
      */
     public preventTabChangeWithRoute: boolean;
+    /** This will store screen size */
+    public isMobileScreen: boolean = false;
 
     @ViewChild('staticTabsTBPL', { static: true }) public staticTabs: TabsetComponent;
 
@@ -41,7 +43,7 @@ export class TbPlBsComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor(private store: Store<AppState>, private companyActions: CompanyActions, private _route: ActivatedRoute, private router: Router, private _generalActions: GeneralActions) {
+    constructor(private store: Store<AppState>, private companyActions: CompanyActions, private _route: ActivatedRoute, private router: Router, private breakPointObservar: BreakpointObserver,) {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.selectedCompany = activeCompany;
@@ -49,15 +51,43 @@ export class TbPlBsComponent implements OnInit, OnDestroy {
         });
     }
 
+
+    /**
+     * This will return page heading based on active tab
+     *
+     * @param {boolean} event
+     * @memberof InvoiceComponent
+     */
+     public getPageHeading(): string {
+        if(this.isMobileScreen){
+            if(this.CanTBLoad) {
+                return this.localeData?.tabs?.trial_balance;
+            }
+            else if(this.CanPLLoad) {
+                return this.localeData?.tabs?.profit_loss;
+            }
+            else if(this.CanBSLoad) {
+                return this.localeData?.tabs?.balance_sheet;
+            }
+        }
+        else {
+            return " ";
+        }
+    }
+
     public ngOnInit() {
+
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
+
         if (TEST_ENV) {
             this.CanNewTBLoadOnThisEnv = true;
         } else {
             this.CanNewTBLoadOnThisEnv = false;
         }
-
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
 
         this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
             if (val && val.tab && val.tabIndex) {

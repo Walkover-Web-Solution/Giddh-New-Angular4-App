@@ -86,7 +86,6 @@
                                         <span>{{localeData?.grand_total}}</span>
                                     </th>
                                     <th width="16.6%;" class="text-right">
-                                        <!-- {{ data$.forwardedBalance?.amount | giddhCurrency}} -->
                                         <span class="d-inline-flex">
                                             <amount-field [amount]="data$.forwardedBalance?.amount"
                                                 [currencySymbol]="false" [currencyCode]="false">
@@ -94,7 +93,6 @@
                                         </span>
                                     </th>
                                     <th width="16.6%;" class="text-right">
-                                        <!-- {{ data$.debitTotal | giddhCurrency}} -->
                                         <span class="d-inline-flex">
                                             <amount-field [amount]="data$.debitTotal" [currencySymbol]="false"
                                                 [currencyCode]="false">
@@ -102,7 +100,6 @@
                                         </span>
                                     </th>
                                     <th width="16.6%;" class="text-right">
-                                        <!-- {{ data$.creditTotal | giddhCurrency}} -->
                                         <span class="d-inline-flex">
                                             <amount-field [amount]="data$.creditTotal" [currencySymbol]="false"
                                                 [currencyCode]="false">
@@ -111,7 +108,6 @@
                                     </th>
                                     <th width="16.6%;" class="text-right">
                                         <span>
-                                            <!-- {{ data$.closingBalance?.amount | giddhCurrency}} -->
                                             <span class="d-inline-flex">
                                                 <amount-field [amount]="data$.closingBalance?.amount"
                                                     [currencySymbol]="false" [currencyCode]="false">

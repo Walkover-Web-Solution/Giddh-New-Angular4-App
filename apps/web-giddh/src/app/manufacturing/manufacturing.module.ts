@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-
 import { MfEditComponent } from './edit/mf.edit.component';
 import { DeleteManufacturingConfirmationModelComponent } from './edit/modal/confirmation.model.component';
 import { ManufacturingComponent } from './manufacturing.component';

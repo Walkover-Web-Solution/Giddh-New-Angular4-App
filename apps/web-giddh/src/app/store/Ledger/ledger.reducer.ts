@@ -2,12 +2,11 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { DownloadLedgerRequest, LedgerResponse, LedgerUpdateRequest, TransactionsRequest, TransactionsResponse } from '../../models/api-models/Ledger';
 import { AccountResponse, AccountSharedWithResponse } from '../../models/api-models/Account';
 import { LEDGER } from '../../actions/ledger/ledger.const';
-import { FlattenGroupsAccountsResponse } from '../../models/api-models/Group';
-import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { BlankLedgerVM } from '../../ledger/ledger.vm';
 import { CustomActions } from '../customActions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
-import * as _ from '../../lodash-optimized';
+import { cloneDeep } from '../../lodash-optimized';
+import { UNAUTHORISED } from '../../app.constant';
 
 export interface LedgerState {
     account?: AccountResponse;
@@ -16,7 +15,6 @@ export interface LedgerState {
     transactionInprogress: boolean;
     accountInprogress: boolean;
     downloadInvoiceInProcess?: boolean;
-    discountAccountsList?: IFlattenGroupsAccountsDetail;
     ledgerCreateSuccess?: boolean;
     ledgerCreateInProcess?: boolean;
     selectedTxnForEditUniqueName: string;
@@ -33,6 +31,7 @@ export interface LedgerState {
     ledgerBulkActionFailedEntries: string[];
     ledgerTransactionsBalance: any;
     refreshLedger: boolean;
+    hasLedgerPermission: boolean;
 }
 
 export const initialState: LedgerState = {
@@ -51,7 +50,8 @@ export const initialState: LedgerState = {
     ledgerBulkActionSuccess: false,
     ledgerBulkActionFailedEntries: [],
     ledgerTransactionsBalance: null,
-    refreshLedger: false
+    refreshLedger: false,
+    hasLedgerPermission: true
 };
 
 export function ledgerReducer(state = initialState, action: CustomActions): LedgerState {
@@ -87,11 +87,13 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
                     transactionInprogress: false,
                     isAdvanceSearchApplied: false,
                     transcationRequest: transaction.request,
-                    transactionsResponse: prepareTransactions(transaction.body)
+                    transactionsResponse: prepareTransactions(transaction.body),
+                    hasLedgerPermission: true
                 });
             }
             return Object.assign({}, state, {
-                transactionInprogress: false
+                transactionInprogress: false,
+                hasLedgerPermission: (transaction.statusCode !== UNAUTHORISED)
             });
         case LEDGER.ADVANCE_SEARCH:
             return Object.assign({}, state, { transactionInprogress: true });
@@ -131,15 +133,6 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
                 return Object.assign({}, state, { downloadInvoiceInProcess: false });
             }
             return Object.assign({}, state, { downloadInvoiceInProcess: false });
-        case LEDGER.GET_DISCOUNT_ACCOUNTS_LIST_RESPONSE:
-            let discountData: BaseResponse<FlattenGroupsAccountsResponse, string> = action.payload;
-            if (discountData.status === 'success' && discountData.body.results.length > 0) {
-                return Object.assign({}, state, {
-                    discountAccountsList: discountData.body.results.find(r => r.groupUniqueName === 'discount')
-                });
-            } else {
-                return { ...state, discountAccountsList: null };
-            }
         case LEDGER.CREATE_BLANK_LEDGER_REQUEST:
             return Object.assign({}, state, {
                 ledgerCreateSuccess: false,
@@ -150,8 +143,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             if (ledgerResponse.status === 'success') {
                 return Object.assign({}, state, {
                     ledgerCreateSuccess: true,
-                    ledgerCreateInProcess: false,
-                    // transactionsResponse: prepareTransactionOnCreate(ledgerResponse.body, state.transactionsResponse)
+                    ledgerCreateInProcess: false
                 });
             }
             return Object.assign({}, state, {
@@ -190,15 +182,6 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
                 return {
                     ...state,
                     activeAccountSharedWith: sharedAccountData.body
-                };
-            }
-            return state;
-        case LEDGER.LEDGER_UNSHARE_ACCOUNT_RESPONSE:
-            let unSharedAccData: BaseResponse<string, string> = action.payload;
-            if (unSharedAccData.status === 'success') {
-                return {
-                    ...state,
-                    activeAccountSharedWith: state.activeAccountSharedWith.filter(ac => unSharedAccData.request !== ac.userEmail)
                 };
             }
             return state;
@@ -276,7 +259,6 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
                 transactionInprogress: false,
                 accountInprogress: false,
                 downloadInvoiceInProcess: false,
-                discountAccountsList: null,
                 ledgerCreateSuccess: false,
                 isDeleteTrxEntrySuccessfull: false,
                 ledgerCreateInProcess: false,
@@ -311,7 +293,6 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             return Object.assign({}, state, { ledgerBulkActionSuccess: true });
         }
         case LEDGER.GET_CURRENCY_RATE_RESPONSE: {
-            let res = action.payload;
             return state;
         }
         case LEDGER.SELECT_DESELECT_ALL_ENTRIES: {
@@ -322,7 +303,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
         }
         case LEDGER.SELECT_GIVEN_ENTRIES: {
             let res = action.payload as string[];
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             let debitTrx = newState.transactionsResponse.debitTransactions;
             debitTrx = debitTrx.map(f => {
                 res.forEach(c => {
@@ -355,7 +336,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
 
         case LEDGER.DESELECT_GIVEN_ENTRIES: {
             let res = action.payload as string[];
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             let debitTrx = newState.transactionsResponse.debitTransactions;
             debitTrx = debitTrx.map(f => {
                 res.forEach(c => {
@@ -503,25 +484,4 @@ const markCheckedUnChecked = (transactionDetails: TransactionsResponse, mode: 'd
     }
 
     return newResponse;
-};
-
-const prepareTransactionOnCreate = (txnArr, ledgerTransactions) => {
-    _.forEach(txnArr, (txn) => {
-        _.map(txn.transactions, (o) => {
-            o.entryDate = txn.entryDate;
-            o.entryUniqueName = txn.uniqueName;
-            o.voucherNo = txn.voucherNo;
-            o.voucherNumber = txn.voucherNumber;
-            o.voucherGenerated = txn.voucherGenerated;
-            o.voucherGeneratedType = txn.voucher.name;
-            o.attachedFileName = txn.attachedFileName;
-            o.attachedFile = txn.attachedFile;
-            if (o.type === 'DEBIT') {
-                return ledgerTransactions.debitTransactions.push(o);
-            } else {
-                return ledgerTransactions.creditTransactions.push(o);
-            }
-        });
-    });
-    return ledgerTransactions;
 };

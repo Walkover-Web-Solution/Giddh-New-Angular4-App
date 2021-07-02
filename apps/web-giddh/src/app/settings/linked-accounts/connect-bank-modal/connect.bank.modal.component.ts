@@ -176,13 +176,6 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     public ngOnChanges(changes) {
-        // this.isIframeLoading = true;
-        // if (changes.sourceOfIframe.currentValue) {
-        //   this.iframeSrc = this.sourceOfIframe;
-        //   this.isIframeLoading = false;
-        //   this.getIframeUrl(this.iframeSrc);
-        // }
-
         if (changes.providerId && changes.providerId.currentValue) {
             this.step = 2;
             this.providerId = _.cloneDeep(changes.providerId.currentValue);

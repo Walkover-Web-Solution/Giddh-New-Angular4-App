@@ -81,49 +81,51 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         private _route: Router, private companyActions: CompanyActions,
         private settingsProfileActions: SettingsProfileActions, private settingsProfileService: SettingsProfileService, private toasty: ToasterService, public route: ActivatedRoute) {
 
-        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.store.pipe(select(profile => profile.settings.profile), takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && !_.isEmpty(response)) {
                 let companyInfo = _.cloneDeep(response);
-                this._authenticationService.getAllUserSubsciptionPlans(companyInfo.countryV2.alpha2CountryCode).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-                    this.subscriptionPlans = res.body;
 
-                    this.totalMultipleCompanyPlans = 0;
-                    this.totalSingleCompanyPlans = 0;
-                    this.totalFreePlans = 0;
+                if(companyInfo?.countryV2?.alpha2CountryCode) {
+                    this._authenticationService.getAllUserSubsciptionPlans(companyInfo?.countryV2?.alpha2CountryCode).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+                        this.subscriptionPlans = res.body;
 
-                    if (this.subscriptionPlans && this.subscriptionPlans.length > 0) {
-                        this.subscriptionPlans.forEach(item => {
-                            if (!item.subscriptionId && item.planDetails) {
-                                if (item.planDetails.uniqueName !== this.defaultTrialPlan) {
-                                    if (item.planDetails.amount && item.planDetails.companiesLimit > 1) {
+                        this.totalMultipleCompanyPlans = 0;
+                        this.totalSingleCompanyPlans = 0;
+                        this.totalFreePlans = 0;
 
-                                        if (!this.defaultMultipleCompanyPlan) {
-                                            this.defaultMultipleCompanyPlan = item;
+                        if (this.subscriptionPlans && this.subscriptionPlans.length > 0) {
+                            this.subscriptionPlans.forEach(item => {
+                                if (!item.subscriptionId && item.planDetails) {
+                                    if (item.planDetails.uniqueName !== this.defaultTrialPlan) {
+                                        if (item.planDetails.amount && item.planDetails.companiesLimit > 1) {
+
+                                            if (!this.defaultMultipleCompanyPlan) {
+                                                this.defaultMultipleCompanyPlan = item;
+                                            }
+
+                                            this.totalMultipleCompanyPlans++;
+                                        } else if (item.planDetails.amount && item.planDetails.companiesLimit === 1) {
+
+                                            if (!this.defaultSingleCompanyPlan && item.planDetails.name === this.defaultPopularPlan) {
+                                                this.defaultSingleCompanyPlan = item;
+                                            }
+
+                                            this.totalSingleCompanyPlans++;
+                                        } else if (!item.planDetails.amount) {
+
+                                            if (!this.defaultFreePlan) {
+                                                this.defaultFreePlan = item;
+                                            }
+
+                                            this.totalFreePlans++;
                                         }
-
-                                        this.totalMultipleCompanyPlans++;
-                                    } else if (item.planDetails.amount && item.planDetails.companiesLimit === 1) {
-
-                                        if (!this.defaultSingleCompanyPlan && item.planDetails.name === this.defaultPopularPlan) {
-                                            this.defaultSingleCompanyPlan = item;
-                                        }
-
-                                        this.totalSingleCompanyPlans++;
-                                    } else if (!item.planDetails.amount) {
-
-                                        if (!this.defaultFreePlan) {
-                                            this.defaultFreePlan = item;
-                                        }
-
-                                        this.totalFreePlans++;
                                     }
                                 }
-                            }
-                        });
-                    }
-                });
-                this.currentCompany = companyInfo.name;
+                            });
+                        }
+                    });
+                }
+                this.currentCompany = companyInfo?.name;
             }
         });
         this.isUpdateCompanyInProgress$ = this.store.pipe(select(s => s.settings.updateProfileInProgress), takeUntil(this.destroyed$));
@@ -131,6 +133,8 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+        
         this.transactionLimitTooltipContent = this.localeData?.subscription?.transaction_limit_content;
         this.unlimitedUsersTooltipContent = this.localeData?.subscription?.unlimited_users_content;
         this.unlimitedCustomersVendorsTooltipContent = this.localeData?.subscription?.unlimited_customers_content;

@@ -1,8 +1,5 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { WindowRef } from '../shared/helpers/window.object';
-import { TabsetComponent } from 'ngx-bootstrap/tabs';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../services/general.service';
 import { take, takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
@@ -18,14 +15,9 @@ import { SUPPORT_TEAM_NUMBERS } from '../app.constant';
     selector: 'onboarding-component',
     templateUrl: './onboarding.component.html',
     styleUrls: ['./onboarding.component.scss']
-
 })
 
 export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
-    @ViewChild('talkSalesModal', { static: true }) public talkSalesModal: ModalDirective;
-    @ViewChild('supportTab', { static: true }) public supportTab: TabsetComponent;
-    /* Schedule now modal */
-    @ViewChild('scheduleNowModel') public scheduleNowModel: ModalDirective;
     public sideMenu: { isopen: boolean } = { isopen: true };
     public loadAPI: Promise<any>;
     public CompanySettingsObj: any = {};
@@ -40,17 +32,17 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     public commonLocaleData: any = {};
 
     constructor(
-        private _router: Router, private _window: WindowRef, private _generalService: GeneralService,
+        private _router: Router, private _generalService: GeneralService,
         private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions,
         private companyActions: CompanyActions,
         private generalActions: GeneralActions
     ) {
-        this._window.nativeWindow.superformIds = ['Jkvq'];
-        this.supportTeamNumber = SUPPORT_TEAM_NUMBERS[Math.floor(Math.random() * SUPPORT_TEAM_NUMBERS.length)];
+        
     }
 
     public ngOnInit() {
+        this.supportTeamNumber = SUPPORT_TEAM_NUMBERS[Math.floor(Math.random() * SUPPORT_TEAM_NUMBERS.length)];
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         let companyUniqueName = null;
         this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
@@ -90,11 +82,9 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public scheduleNow() {
-        this.scheduleNowModel?.show();
-    }
-
-    public openScheduleModal() {
-        this._generalService.invokeEvent.next("openschedulemodal");
+        if (window['SOE'] !== undefined) {
+            window['SOE'].prototype.toggleLightBox('giddhbooks');
+        }
     }
 
     public sidebarStatusChange(event) {
@@ -102,14 +92,8 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.store.dispatch(this.generalActions.setSideMenuBarState(event));
     }
 
-    public closeModal() {
-        this.talkSalesModal.hide();
-    }
-
     public initInventorySettingObj() {
-
         this.store.dispatch(this.settingsProfileActions.GetInventoryInfo());
-
         this.store.pipe(select(p => p.settings.inventory), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.profileRequest || 1 === 1) {
                 let inventorySetting = _.cloneDeep(o);
@@ -121,11 +105,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     public updateInventorySetting(data) {
         let dataToSaveNew = _.cloneDeep(this.CompanySettingsObj);
         dataToSaveNew.companyInventorySettings = { manageInventory: data };
-
         this.store.dispatch(this.settingsProfileActions.UpdateInventory(dataToSaveNew));
-    }
-    public openScheduleCalendlyModel() {
-        this.store.dispatch(this.generalActions.isOpenCalendlyModel(true));
     }
 
     /**

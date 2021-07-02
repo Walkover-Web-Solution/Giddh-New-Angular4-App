@@ -7,7 +7,6 @@ import { AppState } from '../../../../store';
 import { Observable, ReplaySubject, BehaviorSubject, combineLatest, of } from 'rxjs';
 import { GroupResponse, GroupsTaxHierarchyResponse, MoveGroupRequest } from '../../../../models/api-models/Group';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import * as _ from '../../../../lodash-optimized';
 import { AccountResponseV2 } from '../../../../models/api-models/Account';
 import { CompanyActions } from '../../../../actions/company.actions';
 import { AccountsAction } from '../../../../actions/accounts.actions';
@@ -16,7 +15,7 @@ import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interfac
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import { digitsOnly } from '../../../helpers';
 import { BlankLedgerVM, TransactionVM } from '../../../../ledger/ledger.vm';
-import { cloneDeep } from '../../../../lodash-optimized';
+import { cloneDeep, difference, differenceBy, flatten, flattenDeep, map, omit, union, uniq } from '../../../../lodash-optimized';
 import { LedgerDiscountComponent } from '../../../../ledger/components/ledgerDiscount/ledgerDiscount.component';
 import { TaxControlComponent } from '../../../../theme/tax-control/tax-control.component';
 import { SettingsDiscountActions } from 'apps/web-giddh/src/app/actions/settings/discount/settings.discount.action';
@@ -53,8 +52,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public taxGroupForm: FormGroup;
     public activeGroup$: Observable<GroupResponse>;
     public activeGroupUniqueName$: Observable<string>;
-    public fetchingGrpUniqueName$: Observable<boolean>;
-    public isGroupNameAvailable$: Observable<boolean>;
     public isTaxableGroup$: Observable<boolean>;
     public showEditGroup$: Observable<boolean>;
     public activeGroupSelected$: Observable<string[]>;
@@ -102,7 +99,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public searchedGroups: IOption[];
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
     constructor(
         private _fb: FormBuilder,
         private store: Store<AppState>,
@@ -114,17 +110,15 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     ) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
         this.activeGroupUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupUniqueName), takeUntil(this.destroyed$));
-        this.fetchingGrpUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.fetchingGrpUniqueName), takeUntil(this.destroyed$));
-        this.isGroupNameAvailable$ = this.store.pipe(select(state => state.groupwithaccounts.isGroupNameAvailable), takeUntil(this.destroyed$));
         this.showEditGroup$ = this.store.pipe(select(state => state.groupwithaccounts.showEditGroup), takeUntil(this.destroyed$));
         this.activeGroupSelected$ = this.store.pipe(select(state => {
             if (state.groupwithaccounts.activeAccount) {
                 if (state.groupwithaccounts.activeAccountTaxHierarchy) {
-                    return _.difference(state.groupwithaccounts.activeAccountTaxHierarchy.applicableTaxes.map(p => p.uniqueName), state.groupwithaccounts.activeAccountTaxHierarchy.inheritedTaxes.map(p => p.uniqueName));
+                    return difference(state.groupwithaccounts.activeAccountTaxHierarchy.applicableTaxes.map(p => p.uniqueName), state.groupwithaccounts.activeAccountTaxHierarchy.inheritedTaxes.map(p => p.uniqueName));
                 }
             } else {
                 if (state.groupwithaccounts.activeGroupTaxHierarchy) {
-                    return _.difference(state.groupwithaccounts.activeGroupTaxHierarchy.applicableTaxes.map(p => p.uniqueName), state.groupwithaccounts.activeGroupTaxHierarchy.inheritedTaxes.map(p => p.uniqueName));
+                    return difference(state.groupwithaccounts.activeGroupTaxHierarchy.applicableTaxes.map(p => p.uniqueName), state.groupwithaccounts.activeGroupTaxHierarchy.inheritedTaxes.map(p => p.uniqueName));
                 }
             }
 
@@ -196,18 +190,17 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                 let arr: IOption[] = [];
                 if (taxes) {
                     if (activeGroup) {
-                        let applicableTaxes = activeGroup.applicableTaxes.map(p => p.uniqueName);
-
+                        let applicableTaxes = activeGroupTaxHierarchy?.applicableTaxes.map(p => p.uniqueName);
                         if (activeGroupTaxHierarchy) {
                             // prepare drop down options
-                            this.companyTaxDropDown = _.differenceBy(taxes.map(p => {
+                            this.companyTaxDropDown = differenceBy(taxes.map(p => {
                                 return { label: p.name, value: p.uniqueName };
-                            }), _.flattenDeep(activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
+                            }), flattenDeep(activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
                                 return { label: p.name, value: p.uniqueName };
                             }), 'value');
 
                             if (activeGroupTaxHierarchy.inheritedTaxes && activeGroupTaxHierarchy.inheritedTaxes.length) {
-                                let inheritedTaxes = _.flattenDeep(activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j.uniqueName);
+                                let inheritedTaxes = flattenDeep(activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j.uniqueName);
                                 let allTaxes = applicableTaxes.filter(f => inheritedTaxes.indexOf(f) === -1);
                                 // set value in tax group form
                                 setTimeout(() => {
@@ -301,17 +294,13 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public changePrice(val: string) {
         this.currentTxn.inventory.unit.rate = Number(cloneDeep(val));
         this.currentTxn.amount = Number((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity).toFixed(2));
-        // this.amountChanged();
         this.calculateTotal();
-        // this.calculateCompoundTotal();
     }
 
     public changeQuantity(val: string) {
         this.currentTxn.inventory.quantity = Number(val);
         this.currentTxn.amount = Number((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity).toFixed(2));
-        // this.amountChanged();
         this.calculateTotal();
-        //this.calculateCompoundTotal();
     }
 
     public calculateAmount() {
@@ -350,7 +339,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.currentTxn.inventory.unit.rate = Number((this.currentTxn.amount / this.currentTxn.inventory.quantity).toFixed(2));
             }
         }
-        // this.calculateCompoundTotal();
         if (this.isTotalFirts || this.isAmountFirst) {
             return;
         } else {
@@ -378,10 +366,10 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public flattenGroup(rawList: any[], parents: any[] = []) {
         let listofUN;
-        listofUN = _.map(rawList, (listItem) => {
+        listofUN = map(rawList, (listItem) => {
             let newParents;
             let result;
-            newParents = _.union([], parents);
+            newParents = union([], parents);
             newParents.push({
                 name: listItem.name,
                 uniqueName: listItem.uniqueName
@@ -390,18 +378,18 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             listItem.parentGroups = newParents;
             if (listItem.groups.length > 0) {
                 result = this.flattenGroup(listItem.groups, newParents);
-                result.push(_.omit(listItem, 'groups'));
+                result.push(omit(listItem, 'groups'));
             } else {
-                result = _.omit(listItem, 'groups');
+                result = omit(listItem, 'groups');
             }
             return result;
         });
-        return _.flatten(listofUN);
+        return flatten(listofUN);
     }
 
     public makeGroupListFlatwithLessDtl(rawList: any) {
         let obj;
-        obj = _.map(rawList, (item: any) => {
+        obj = map(rawList, (item: any) => {
             obj = {};
             obj.name = item.name;
             obj.uniqueName = item.uniqueName;
@@ -457,7 +445,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             });
             if (activeAccount) {
-                //
                 this.store.dispatch(this.companyActions.getTax());
                 this.store.dispatch(this.accountsAction.getTaxHierarchy(activeAccount.uniqueName));
             } else {
@@ -538,7 +525,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.activeGroup$.pipe(take(1)).subscribe(grp => activeGroupUniqueName = grp.uniqueName);
 
         if (activeGroupUniqueName) {
-            _.uniq(this.selectedDiscounts);
+            uniq(this.selectedDiscounts);
             let assignDiscountObject: ApplyDiscountRequestV2 = new ApplyDiscountRequestV2();
             assignDiscountObject.uniqueName = this.uniqueName;
             assignDiscountObject.discounts = this.selectedDiscounts;

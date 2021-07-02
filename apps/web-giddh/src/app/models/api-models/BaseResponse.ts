@@ -3,12 +3,10 @@ export class BaseResponse<TResponce, TRequest> {
     public code?: string;
     public message?: string;
     public body?: TResponce;
-    // public body?: any;
     public response?: TResponce;
-    // public response?: any;
     public request?: TRequest;
-    // public request?: any;
     public queryString?: any;
+    public statusCode?: number;
 }
 
 export interface PagedResponse {

@@ -9,11 +9,9 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
 import { select, Store } from '@ngrx/store';
-import { AfterViewInit, Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppState } from '../store';
-import * as _ from '../lodash-optimized';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
-import { CompanyAddComponent } from '../shared/header/components';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { CompanyActions } from '../actions/company.actions';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
@@ -31,6 +29,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { OrganizationType } from '../models/user-login-state';
 import { GeneralService } from '../services/general.service';
+import { cloneDeep, each, find, isEmpty, orderBy } from '../lodash-optimized';
 
 export const IsyncData = [
     { label: 'Debtors', value: 'debtors' },
@@ -89,6 +88,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold if it's mobile screen or not */
     public isMobileScreen: boolean = false;
+    /* This will hold if it's mobile screen or not */
+    public isMobileView: boolean = false;
     /** Holds the observable for universal date */
     public universalDate$: Observable<any>;
 
@@ -98,11 +99,11 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         private invoiceActions: InvoiceActions,
         private inventoryService: InventoryService,
         private settingsBranchActions: SettingsBranchActions,
-        private componentFactoryResolver: ComponentFactoryResolver,
         private companyActions: CompanyActions,
         private settingsProfileActions: SettingsProfileActions,
         private invViewService: InvViewService,
-        private router: Router, private route: ActivatedRoute,
+        private router: Router, 
+        private route: ActivatedRoute,
         private stockReportActions: StockReportActions,
         private sideBarAction: SidebarAction,
         private settingsUtilityService: SettingsUtilityService,
@@ -111,12 +112,11 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         private generalService: GeneralService
     ) {
         this.breakPointObservar.observe([
-            '(max-width:1024px)'
+            '(max-width: 1023px)',
+            '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            if (this.isMobileScreen && !result.matches) {
-                this.setDefaultGroup();
-            }
-            this.isMobileScreen = result.matches;
+            this.isMobileScreen = result?.breakpoints['(max-width: 1023px)'];
+            this.isMobileView = result?.breakpoints['(max-width: 767px)'];
         });
 
         this.activeStock$ = this.store.pipe(select(p => p.inventory.activeStock), takeUntil(this.destroyed$));
@@ -124,13 +124,15 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         this.groupsWithStocks$ = this.store.pipe(select(s => s.inventory.groupsWithStocks), takeUntil(this.destroyed$));
 
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((o) => {
-            if (o && !_.isEmpty(o)) {
-                let companyInfo = _.cloneDeep(o);
+            if (o && !isEmpty(o)) {
+                let companyInfo = cloneDeep(o);
                 this.currentBranch = companyInfo.name;
                 this.currentBranchNameAlias = companyInfo.nameAlias;
             }
         });
+    }
 
+    public ngOnInit() {
         let branchFilterRequest = new BranchFilterRequest();
 
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
@@ -139,20 +141,20 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches], (companies, branches) => {
             if (branches) {
                 if (branches.length) {
-                    _.each(branches, (branch) => {
+                    each(branches, (branch) => {
                         if (branch.addresses && branch.addresses.length) {
-                            branch.addresses = [_.find(branch.addresses, (gst) => gst && gst.isDefault)];
+                            branch.addresses = [find(branch.addresses, (gst) => gst && gst.isDefault)];
                         }
                     });
-                    this.branches$ = observableOf(_.orderBy(branches, 'name'));
+                    this.branches$ = observableOf(orderBy(branches, 'name'));
                 } else if (branches.length === 0) {
                     this.branches$ = observableOf(null);
                 }
             }
             if (companies && companies.length && branches) {
                 let companiesWithSuperAdminRole = [];
-                _.each(companies, (cmp) => {
-                    _.each(cmp.userEntityRoles, (company) => {
+                each(companies, (cmp) => {
+                    each(cmp.userEntityRoles, (company) => {
                         if (company.entity.entity === 'COMPANY' && company.role.uniqueName === 'super_admin') {
                             if (branches && branches.length) {
                                 let existIndx = branches.findIndex((b) => b.uniqueName === cmp.uniqueName);
@@ -165,7 +167,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                         }
                     });
                 });
-                this.companies$ = observableOf(_.orderBy(companiesWithSuperAdminRole, 'name'));
+                this.companies$ = observableOf(orderBy(companiesWithSuperAdminRole, 'name'));
             }
         })), takeUntil(this.destroyed$)).subscribe();
 
@@ -182,9 +184,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.loadBranchAndWarehouseDetails();
             }
         });
-    }
 
-    public ngOnInit() {
         this.isBranchVisible$ = this.store.pipe(select(s => s.inventory.showBranchScreen), takeUntil(this.destroyed$));
         this.store.dispatch(this.companyActions.getTax());
         document.querySelector('body').classList.add('inventory-page');
@@ -245,15 +245,11 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                         this.store.dispatch(this.sideBarAction.GetInventoryGroup(firstElement.uniqueName)); // open first default group
                     } else {
                         this.store.dispatch(this.sideBarAction.GetInventoryGroup(firstElement.uniqueName)); // open first default group
-                        this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest))); // open first default group
+                        this.store.dispatch(this.stockReportActions.GetGroupStocksReport(cloneDeep(this.GroupStockReportRequest))); // open first default group
                     }
                 }
             }
         });
-    }
-
-    public openCreateCompanyModal() {
-        this.loadAddCompanyComponent();
     }
 
     public redirectUrlToActiveTab(type: string, event: any, activeTabIndex?: number, currentUrl?: string) {
@@ -297,14 +293,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
-    public loadAddCompanyComponent() {
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddComponent);
-        let viewContainerRef = this.companyadd.viewContainerRef;
-        viewContainerRef.clear();
-        let componentRef = viewContainerRef.createComponent(componentFactory);
-        (componentRef.instance as CompanyAddComponent).createBranch = true;
-    }
-
     public openAddBranchModal() {
         this.branchModal.show();
     }
@@ -321,7 +309,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         this.selectedCompaniesName = [];
         if (ev.target.checked) {
             this.companies$.pipe(take(1)).subscribe((companies) => {
-                _.each(companies, (company) => {
+                each(companies, (company) => {
                     this.selectedCompaniesUniquename.push(company.uniqueName);
                     this.selectedCompaniesName.push(company);
                 });
@@ -432,7 +420,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.currentBranchAndWarehouseFilterValues.branch !== this.generalService.companyUniqueName ?
                     this.currentBranchAndWarehouseFilterValues.branch : null;
             this.GroupStockReportRequest.warehouseUniqueName = (this.currentBranchAndWarehouseFilterValues.warehouse !== 'all-entities') ? this.currentBranchAndWarehouseFilterValues.warehouse : null;;
-            this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest))); // open first default group
+            this.store.dispatch(this.stockReportActions.GetGroupStocksReport(cloneDeep(this.GroupStockReportRequest))); // open first default group
         });
     }
 
@@ -514,6 +502,29 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
             let currentEntityUniqueName = this.generalService.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : this.generalService.companyUniqueName;
             this.branches = this.branchesWithWarehouse.map((branch: any) => ({ label: `${branch.alias || branch.name}`, value: branch.uniqueName }));
             this.loadBranchWarehouse(currentEntityUniqueName);
+        }
+    }
+
+    /**
+     * This will return page heading based on active tab
+     *
+     * @param {boolean} event
+     * @memberof InventoryComponent
+     */
+     public getPageHeading(): string {
+        if(this.isMobileView){
+            if(this.activeTabIndex === 0) {
+                return "Inventory";
+            }
+            else if(this.activeTabIndex === 1) {
+                return "Job Work";
+            }
+            else if(this.activeTabIndex === 2) {
+                return "Manufacturing";
+            }
+            else if(this.activeTabIndex === 3) {
+                return "Report";
+            }
         }
     }
 }

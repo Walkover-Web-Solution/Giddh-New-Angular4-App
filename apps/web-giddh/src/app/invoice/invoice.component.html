@@ -3,23 +3,6 @@
         <nav class="navbar">
             <div class="invoice-control w-100">
                 <div class="row mr-0 ml-0">
-                    <!--<div class="btn-group" dropdown *ngIf="selectedVoucherType === 'debit note' || selectedVoucherType === 'credit note' && tabsDropdown">
-                        <button id="button1-basic" dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle" aria-controls="dropdown-basic"></button>
-                            <ul id="dropdown1-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                                <li role="menuitem">
-                                    <a class="dropdown-item cp">Debit Note</a>
-                                </li>
-                                <li role="menuitem">
-                                    <a class="dropdown-item cp">Credit Note</a>
-                                </li>
-                                <li role="menuitem">
-                                    <a class="dropdown-item cp">Pending</a>
-                                </li>
-                                <li role="menuitem">
-                                    <a class="dropdown-item cp">Template</a>
-                                </li>
-                            </ul>
-                    </div>-->
                     <div class="btn-group tabs-dropdown" dropdown
                         *ngIf="selectedVoucherType !== 'debit note' && selectedVoucherType !== 'credit note' && tabsDropdown">
                         <button id="button1-basic" dropdownToggle type="button"
@@ -53,11 +36,9 @@
                         </ul>
                     </div>
 
-                    <!--<invoice-page-dd (pageChanged)="goToRoute($event)" (selectVoucher)="voucherChange($event)"></invoice-page-dd>-->
                     <div id="setting-tab" class="w-100">
-                        <hamburger-menu></hamburger-menu>
-                        <ng-template
-                            [ngIf]="selectedVoucherType === 'debit note' || selectedVoucherType === 'credit note'">
+                        <hamburger-menu *ngIf="localeData?.tabs" [pageHeading]="getPageHeading()"></hamburger-menu>
+                        <ng-template [ngIf]="selectedVoucherType === 'debit note' || selectedVoucherType === 'credit note'">
 
 
                             <tabset #staticTabs>
@@ -113,10 +94,7 @@
 
                         </ng-template>
 
-
-                        <ng-template
-                            [ngIf]="selectedVoucherType !== 'debit note' && selectedVoucherType !== 'credit note'">
-
+                        <ng-template [ngIf]="selectedVoucherType !== 'debit note' && selectedVoucherType !== 'credit note'">
                             <tabset #staticTabs>
 
                                 <tab [heading]="localeData?.tabs?.estimates" (selectTab)="tabChanged('estimates', $event);

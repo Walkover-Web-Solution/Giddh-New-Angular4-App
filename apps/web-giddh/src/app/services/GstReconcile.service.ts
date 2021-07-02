@@ -93,8 +93,6 @@ export class GstReconcileService {
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.get(this.config.apiUrl + GSTR_API.GET_OVERVIEW
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            // .replace(':page', requestParam.page)
-            // .replace(':count', requestParam.count)
             .replace(':from', requestParam.from)
             .replace(':to', requestParam.to)
             .replace(':gstin', requestParam.gstin)
@@ -108,13 +106,12 @@ export class GstReconcileService {
                 })
                 , catchError((e) => this.errorHandler.HandleCatch<GstOverViewResult, GstOverViewRequest>(e, '', { requestParam, type })));
     }
+
     public GetGstr3BOverview(type: string, requestParam: GstOverViewRequest): Observable<BaseResponse<Gstr3bOverviewResult, GstOverViewRequest>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.get(this.config.apiUrl + GSTR_API.GET_OVERVIEW
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            // .replace(':page', requestParam.page)
-            // .replace(':count', requestParam.count)
             .replace(':from', requestParam.from)
             .replace(':to', requestParam.to)
             .replace(':gstin', requestParam.gstin)

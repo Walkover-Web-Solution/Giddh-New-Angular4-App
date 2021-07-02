@@ -129,8 +129,6 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
     public change() {
         this.discountTotal = Number(this.generateTotal() || 0);
         this.discountTotalUpdated.emit(this.discountTotal);
-        // this.appliedDiscount = this.generateAppliedDiscounts();
-        // this.appliedDiscountEvent.emit(this.appliedDiscount);
     }
 
     /**
@@ -152,27 +150,10 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
 
         let perFromAmount = Math.round(((percentageListTotal * (this.ledgerAmount || 0)) / 100) * 100) / 100;
         return perFromAmount + Math.round(fixedListTotal * 100) / 100;
-
-        // return this.discountAccountsDetails.map(ds => {
-        //   ds.amount = Number(ds.amount);
-        //   return ds;
-        // }).reduce((pv, cv) => {
-        //   return Number(cv.amount) ? Number(pv) + Number(cv.amount) : Number(pv);
-        // }, 0) || 0;
     }
 
-    // public generateAppliedDiscounts(): UpdateLedgerDiscountData[] {
-    //   return this.discountAccountsDetails.map(p => {
-    //     let discountObj = new UpdateLedgerDiscountData();
-    //     discountObj.particular.name = p.name;
-    //     discountObj.particular.uniqueName = p.particular;
-    //     discountObj.amount = p.amount;
-    //     return discountObj;
-    //   });
-    // }
-
     public trackByFn(index) {
-        return index; // or item.id
+        return index;
     }
 
     public hideDiscountMenu() {
@@ -188,7 +169,6 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
             return;
         }
         let focussableElements = '.entrypanel input[type=text]:not([disabled]),.entrypanel [tabindex]:not([disabled]):not([tabindex="-1"])';
-        // if (document.activeElement && document.activeElement.form) {
         let focussable = Array.prototype.filter.call(document.querySelectorAll(focussableElements),
             (element) => {
                 // check for visibility while always include the current activeElement
