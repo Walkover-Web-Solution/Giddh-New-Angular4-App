@@ -808,6 +808,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(appState => appState.ledger.hasLedgerPermission), takeUntil(this.destroyed$)).subscribe(response => {
             this.hasLedgerPermission = response;
+            this._cdRf.detectChanges();
         });
     }
 
@@ -866,11 +867,29 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.showBankLedgerPanel = true;
     }
 
-    public hideBankLedgerPopup(e?: boolean) {
+    public hideBankLedgerPopup(event?: any) {
         // cuando se emita falso en caso de éxito del mapa de cuenta
-        if (!e) {
+        if (!event) {
             this.getBankTransactions();
             this.getTransactionData();
+        }
+        if (event && event.path) {
+            let classList = event.path.map(element => {
+                return element.classList;
+            });
+
+            if (classList && classList instanceof Array) {
+                const shouldNotClose = classList.some((className: DOMTokenList) => {
+                    if (!className) {
+                        return;
+                    }
+                    return className.contains('entry-picker') || className.contains('currencyToggler') || className.contains('bs-datepicker');
+                });
+
+                if (shouldNotClose) {
+                    return;
+                }
+            }
         }
         if (this.lc.currentBlankTxn) {
             this.lc.currentBlankTxn.showDropdown = false;
@@ -1271,6 +1290,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public resetAdvanceSearch() {
         this.searchText = "";
+        this.isAdvanceSearchImplemented = false;
         if (this.advanceSearchComp) {
             this.advanceSearchComp.resetAdvanceSearchModal();
         }
