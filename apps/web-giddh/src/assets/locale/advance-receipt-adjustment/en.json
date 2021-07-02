@@ -12,7 +12,5 @@
     "voucher_unavailable": "There is no voucher for adjustment.",
     "post_adj": "(Post Adj):",
     "voucher_label": "[VOUCHER_TYPE]",
-    "exchange_gain_loss_label": "Exchange [PROFIT_TYPE]: ",
-    "exchange_gain": "gain",
-    "exchange_loss": "loss"
+    "exchange_gain_loss_label": "Exchange [PROFIT_TYPE]: "
 }

@@ -17,6 +17,8 @@ module.exports = {
             'STAGING_ENV': JSON.stringify(false),
             'TEST_ENV': JSON.stringify(true),
             'LOCAL_ENV': JSON.stringify(false),
+            'enableVoucherAdjustmentMultiCurrency': JSON.stringify(true),
+            'process.env.enableVoucherAdjustmentMultiCurrency': JSON.stringify(true),
             'process.env.ENV': JSON.stringify('production'),
             'process.env.NODE_ENV': JSON.stringify('production'),
             'process.env.isElectron': JSON.stringify(false),
