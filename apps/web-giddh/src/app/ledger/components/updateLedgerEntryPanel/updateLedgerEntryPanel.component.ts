@@ -1726,8 +1726,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 exchangeRate: this.vm.selectedLedger.exchangeRate ?? 1
             },
             accountDetails: {
-                currencySymbol: this.vm.selectedLedger?.particular?.currency?.symbol ?? this.profileObj?.baseCurrencySymbol ?? '',
-                currencyCode: this.vm.selectedLedger?.particular?.currency?.code ?? this.profileObj?.baseCurrency ?? ''
+                currencySymbol: enableVoucherAdjustmentMultiCurrency ? this.vm.selectedLedger?.particular?.currency?.symbol ?? this.profileObj?.baseCurrencySymbol ?? '' : this.profileObj?.baseCurrencySymbol ?? '',
+                currencyCode: enableVoucherAdjustmentMultiCurrency ? this.vm.selectedLedger?.particular?.currency?.code ?? this.profileObj?.baseCurrency ?? '' : this.profileObj?.baseCurrency ?? ''
             },
             activeAccountUniqueName: this.activeAccount.uniqueName
         };

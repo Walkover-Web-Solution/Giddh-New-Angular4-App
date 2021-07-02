@@ -81,11 +81,10 @@
                                             </span>
 
                                             <!-- added multicurrency feature make it functional to change into appropriate currency -->
-                                            <span *ngIf="isSalesInvoice && isMulticurrencyAccount && adjustPaymentBalanceDueData === 0 && invFormData.voucherDetails.balanceDue === 0" class="balance-due">Exchange {{getConvertedBalanceDue() <= 0 ? 'gain' : 'loss'}}:&nbsp;</span>
                                             <span class="sp-rupees d-flex justify-content-end"
                                                 *ngIf='isMulticurrencyAccount'>
                                                 <amount-field
-                                                    [amount]="isSalesInvoice ? getConvertedBalanceDue() : (invFormData.voucherDetails.balanceDue * exchangeRate)"
+                                                    [amount]="enableVoucherAdjustmentMultiCurrency && isSalesInvoice ? getConvertedBalanceDue() : (invFormData.voucherDetails.balanceDue * exchangeRate)"
                                                     [currencySymbol]="baseCurrencySymbol"
                                                     [currencyCode]="companyCurrency">
                                                 </amount-field>
@@ -522,15 +521,15 @@
                                         </span>
 
                                         <!-- added multicurrency feature make it functional to change into appropriate currency -->
-
-                                        <span *ngIf="isSalesInvoice && isMulticurrencyAccount && adjustPaymentBalanceDueData === 0 && invFormData.voucherDetails.balanceDue === 0" class="balance-due">Exchange {{getConvertedBalanceDue() <= 0 ? 'gain' : 'loss'}}:&nbsp;</span>
-                                        <span class="sp-rupees d-flex justify-content-end"
-                                            *ngIf="isMulticurrencyAccount">
-                                            <amount-field
-                                                [amount]="isSalesInvoice && adjustPaymentBalanceDueData === 0 && invFormData.voucherDetails.balanceDue === 0 ? getConvertedBalanceDue(true) : (invFormData.voucherDetails.balanceDue * exchangeRate)"
-                                                [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency">
-                                            </amount-field>
-                                        </span>
+                                        <span *ngIf="enableVoucherAdjustmentMultiCurrency && isSalesInvoice && isMulticurrencyAccount && adjustPaymentBalanceDueData === 0 && invFormData.voucherDetails.balanceDue === 0" class="balance-due">{{localeData?.exchange_label}} {{getConvertedBalanceDue() <= 0 ? commonLocaleData?.app_exchange_gain : commonLocaleData?.app_exchange_loss}}:&nbsp;</span>
+                                            <span class="sp-rupees d-flex justify-content-end"
+                                                *ngIf='isMulticurrencyAccount'>
+                                                <amount-field
+                                                    [amount]="isSalesInvoice && adjustPaymentBalanceDueData === 0 && invFormData.voucherDetails.balanceDue === 0 ? getConvertedBalanceDue(true) : (invFormData.voucherDetails.balanceDue * exchangeRate)"
+                                                    [currencySymbol]="baseCurrencySymbol"
+                                                    [currencyCode]="companyCurrency">
+                                                </amount-field>
+                                            </span>
 
                                         <span class="sp-rupees d-flex justify-content-end"
                                             *ngIf="!isMulticurrencyAccount">
