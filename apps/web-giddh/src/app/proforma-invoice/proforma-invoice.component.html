@@ -82,7 +82,7 @@
 
                                             <!-- added multicurrency feature make it functional to change into appropriate currency -->
                                             <span class="sp-rupees d-flex justify-content-end"
-                                                *ngIf='isMulticurrencyAccount'>
+                                                *ngIf="isMulticurrencyAccount">
                                                 <amount-field
                                                     [amount]="enableVoucherAdjustmentMultiCurrency && isSalesInvoice ? getConvertedBalanceDue() : (invFormData.voucherDetails.balanceDue * exchangeRate)"
                                                     [currencySymbol]="baseCurrencySymbol"
@@ -3517,6 +3517,7 @@
                     (buttonClicked)="handlePurchaseRecordConfirmation($event)"></confirmation-modal>
             </div>
         </div>
+    </div>
 
     <div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #adjustPaymentModal="bs-modal"
         [config]="{ animated: true, ignoreBackdropClick: true }" bsModal role="dialog">
@@ -3529,7 +3530,6 @@
                     (submitClicked)="getAdvanceReceiptAdjustData($event)"
                     [voucherForAdjustment]="voucherForAdjustment">
                 </advance-receipt-adjustment-component>
-            </div>
             </div>
         </div>
     </div>
