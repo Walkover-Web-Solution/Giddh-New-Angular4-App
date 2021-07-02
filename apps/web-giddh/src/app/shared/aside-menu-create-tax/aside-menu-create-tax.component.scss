@@ -1,4 +1,4 @@
-@import "../../../assets/css/color.scss";
+
 
 :host {
     position: fixed;
@@ -20,7 +20,7 @@
     border: 0;
     border-radius: 0;
     background: 0 0;
-    color: $white;
+    color: var(--color-white);
 }
 
 :host .container-fluid {
@@ -40,18 +40,18 @@
     flex-wrap: wrap;
 
     span {
-        border: 1px solid $gainsboro;
+        border: 1px solid var(--color-gainsboro);
         padding: 5px 8px;
         margin: 10px 10px 12px 0px;
-        background-color: $gainsboro-light;
+        background-color: var(--color-gainsboro-light);
     }
 }
 .input-group {
     width: 100%;
 }
 .aside-pane-form {
-    background-color: $white;
-    box-shadow: 0px 3px 6px $black-russian;
+    background-color: var(--color-white);
+    box-shadow: 0px 3px 6px var(--color-black-russian);
     padding: 15px 15px;
     height: calc(100vh - 90px);
     overflow: auto;

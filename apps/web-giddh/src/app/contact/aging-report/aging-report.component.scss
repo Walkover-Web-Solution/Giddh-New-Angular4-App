@@ -1,4 +1,4 @@
-@import "../../../assets/css/color.scss";
+
 .dropdown-menu > li > a {
     padding: 2px 10px;
 }
@@ -44,8 +44,8 @@
     align-items: center;
     font-size: 14px;
     border-radius: 5px;
-    color: $midnight-blue;
-    background: $white;
+    color: var(--color-midnight-blue);
+    background: var(--color-white);
     margin-right:0;
 }
 
@@ -55,25 +55,25 @@
 }
 .search-field input {
     width: 235px;
-    background-color: $whisper !important;
-    border-color: $whisper !important;
+    background-color: var(--color-whisper) !important;
+    border-color: var(--color-whisper) !important;
 }
 .search-field input:focus {
-    background-color: $white !important;
-    border-color: $midnight-express !important;
+    background-color: var(--color-white) !important;
+    border-color: var(--color-midnight-express) !important;
 }
 span.input-addon {
     position: absolute;
     right: 0px;
     padding: 4px 9px;
-    background-color: $chetwode-blue;
-    color: $white;
+    background-color: var(--color-chetwode-blue);
+    color: var(--color-white);
     font-size: 18px;
     border-radius: 5px;
     top: 0;
 }
 tr.aging-table-top {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
 }
 tr.aging-table-top td {
     padding: 8px 0;
@@ -87,8 +87,8 @@ tr.aging-table-top td {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    background-color: $white;
-    border: 1px solid $gainsboro;
+    background-color: var(--color-white);
+    border: 1px solid var(--color-gainsboro);
     margin-left: 10px !important;
 }
 
@@ -109,9 +109,9 @@ tr.aging-table-top td {
         min-width: 100%;
         padding: 11px;
         padding-right: 40px;
-        color: $nero;
+        color: var(--color-nero);
         border: none;
-        background-color: $gray-95;
+        background-color: var(--color-gray-95);
     }
 }
 .top-aging-table-top {
@@ -153,7 +153,7 @@ tr.aging-table-top td {
             align-items: center;
             display: flex;
             i {
-                color: $gray;
+                color: var(--color-gray);
             }
         }
     }
@@ -176,7 +176,7 @@ tr.aging-table-top td {
     .wrap-searching-aging{
         display: flex !important;
         a {
-            color: $gray;
+            color: var(--color-gray);
         }
         .max-width-250 {
             max-width: 250px;

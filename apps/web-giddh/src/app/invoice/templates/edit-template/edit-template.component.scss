@@ -1,11 +1,11 @@
-@import "../../../../assets/css/color.scss";
+
 .template-grid {
-    background: $white;
+    background: var(--color-white);
     max-width: 255px;
     width: 100%;
     padding: 20px;
     min-height: 250px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
     float: left;
     border-radius: 4px;
     margin: 5px 15px 15px 0;
@@ -38,34 +38,34 @@
 
 @import "../../../../../../web-giddh/src/assets/css/color.scss";
 .btn-warning {
-    color: $white;
-    background-color: $bright-yellow;
-    border-color: $bright-yellow;
+    color: var(--color-white);
+    background-color: var(--color-bright-yellow);
+    border-color: var(--color-bright-yellow);
 }
 
 .more-btn-dropdown {
-    border: 1px solid $gainsboro !important;
+    border: 1px solid var(--color-gainsboro) !important;
     box-shadow: none !important;
     border-radius: 5px !important;
     font-size: 14px;
     padding: 5px 10px;
-    background: $white !important;
+    background: var(--color-white) !important;
     width: 160px;
     text-align: left;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    color: $charcoal;
+    color: var(--color-charcoal);
 }
 
 .dropdown-menu > li > a:hover {
-    color: $chetwode-blue;
-    background: $whisper;
+    color: var(--color-chetwode-blue);
+    background: var(--color-whisper);
 }
 .badge {
-    background: $whisper-color;
-    color: $charcoal;
+    background: var(--color-whisper-color);
+    color: var(--color-charcoal);
     font-family: opensans-regular;
     border: none;
     font-weight: 400;
@@ -73,14 +73,14 @@
     border-radius: 50px;
 }
 .badge.btn-success:hover {
-    background: $gainsboro-light;
-    color: $charcoal;
+    background: var(--color-gainsboro-light);
+    color: var(--color-charcoal);
 }
 .badge.btn-sky-blue,
 .badge.btn-sky-blue:hover {
-    background: $jacksons-purple !important;
+    background: var(--color-jacksons-purple) !important;
     border: none !important;
-    color: $white !important;
+    color: var(--color-white) !important;
 }
 .template-grid-container {
     padding: 0 15px;
@@ -100,7 +100,7 @@
 }
 @media (max-width: 414px) {
     .template-grid {
-        background: $gray-95;
+        background: var(--color-gray-95);
         max-width: 100%;
     }
 }

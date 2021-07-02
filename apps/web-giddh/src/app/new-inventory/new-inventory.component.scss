@@ -1,4 +1,4 @@
-@import "../../assets/css/color.scss";
+
 .inventory-header {
     padding-top: 20px;
     justify-content: space-between;
@@ -8,9 +8,9 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        border: 1px solid $gainsboro;
-        color: $gray;
-        background-color: $white;
+        border: 1px solid var(--color-gainsboro);
+        color: var(--color-gray);
+        background-color: var(--color-white);
         cursor: pointer;
     }
     .input-group {
@@ -22,7 +22,7 @@
                 border: none;
             }
             .icon-search1 {
-                border-right: 1px solid $gainsboro;
+                border-right: 1px solid var(--color-gainsboro);
             }
         }
         &.full-width-search-group {
@@ -62,7 +62,7 @@
             i {
                 vertical-align: top;
                 font-size: 18px;
-                color: $gray;
+                color: var(--color-gray);
             }
         }
     }

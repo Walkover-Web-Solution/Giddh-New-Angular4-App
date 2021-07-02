@@ -1,20 +1,20 @@
-@import "../../../../assets/css/color.scss";
+
 
 .ledger-panel {
     overflow: visible;
     .more-details {
-        background-color: $white;
+        background-color: var(--color-white);
         .cheq {
             table {
                 td.remove-invoice {
                     span:first-child {
                         font-size: 25px;
                         vertical-align: middle;
-                        color: $gray;
+                        color: var(--color-gray);
                     }
                     .label {
                         vertical-align: middle;
-                        color: $gray;
+                        color: var(--color-gray);
                         font-size: 13px;
                     }
                 }
@@ -24,7 +24,7 @@
 }
 
 .ledger-panel table tbody tr td a {
-    color: $night-rider;
+    color: var(--color-night-rider);
 }
 
 .item-padding {
@@ -38,7 +38,7 @@
 
 .amount-total {
     font-size: 12px;
-    color: $nobel;
+    color: var(--color-nobel);
     padding-left: 5px;
 }
 
@@ -78,7 +78,7 @@ span.eligible-ITC {
     padding-top: 5px;
     display: inline-block;
     span {
-        color: $deep-sky-blue;
+        color: var(--color-deep-sky-blue);
         font-size: 10px;
     }
 }
@@ -98,7 +98,7 @@ span.eligible-ITC {
 }
 .advance-receipt-edit {
     i {
-        color: $deep-sky-blue;
+        color: var(--color-deep-sky-blue);
     }
 }
 #ledger-unit {
@@ -112,7 +112,7 @@ span.eligible-ITC {
 }
 .collapse-icons {
     font-size: 10px;
-    border: 1px solid $black;
+    border: 1px solid var(--color-black);
     padding: 2px;
 }
 @media only screen and (max-width: 767px) {
@@ -169,7 +169,7 @@ span.eligible-ITC {
     }
 }
 .sh-template {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
 }
 
 /* Rotate animation for spinner in uploading file */

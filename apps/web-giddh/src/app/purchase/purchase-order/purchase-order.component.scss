@@ -1,4 +1,4 @@
-@import "../../../assets/css/color.scss";
+
 
 .date-advance-search {
     justify-content: space-between;
@@ -10,15 +10,15 @@
             width: 230px !important;
             position: relative;
             height: 36px !important;
-            border: 1px solid $gainsboro;
-            background-color: $white;
+            border: 1px solid var(--color-gainsboro);
+            background-color: var(--color-white);
             &:before {
                 position: absolute;
                 content: "";
                 display: block;
                 height: 36px;
                 width: 1px;
-                background-color: $gainsboro;
+                background-color: var(--color-gainsboro);
                 left: 37px !important;
                 z-index: 100;
                 top: 0;
@@ -46,13 +46,13 @@
         align-items: center;
         font-size: 18px;
         margin-left: 10px;
-        border: 1px solid $gainsboro;
+        border: 1px solid var(--color-gainsboro);
         border-radius: 5px;
-        color: $gray;
-        background: $white;
-        color: $gray;
+        color: var(--color-gray);
+        background: var(--color-white);
+        color: var(--color-gray);
         &:hover {
-            background: $whisper-color;
+            background: var(--color-whisper-color);
         }
     }
 }
@@ -83,13 +83,13 @@
             .action-icon {
                 display: flex;
                 align-items: center;
-                border: 1px solid $gainsboro;
+                border: 1px solid var(--color-gainsboro);
                 border-radius: 5px;
                 a {
                     width: 30px;
                     font-size: 18px;
-                    color: $gray;
-                    border-right: 1px solid $gainsboro;
+                    color: var(--color-gray);
+                    border-right: 1px solid var(--color-gainsboro);
                     border-radius: 5px;
                     display: flex;
                     align-items: center;
@@ -99,7 +99,7 @@
                     align-items: stretch;
                     height: 30px;
                     align-items: center;
-                    background-color: $white;
+                    background-color: var(--color-white);
                 }
                 &:last-child {
                     border-right: none !important;
@@ -128,7 +128,7 @@
     .modal-header {
         border-radius: 5px 5px 0 0;
         h4 {
-            color: $white;
+            color: var(--color-white);
         }
     }
     .select-date {
@@ -149,7 +149,7 @@
                 z-index: 2;
                 right: 0;
                 top: 0;
-                color: $gray;
+                color: var(--color-gray);
             }
         }
     }
@@ -160,7 +160,7 @@
         }
     }
     p {
-        color: $dark-gray;
+        color: var(--color-dark-gray);
         font-size: 14px;
     }
     .btn-group {
@@ -218,7 +218,7 @@
     .download-purchase-order {
         width: 30px;
         height: 30px;
-        border: 1px solid $gainsboro;
+        border: 1px solid var(--color-gainsboro);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -226,7 +226,7 @@
         right: 15px;
         top: 3px;
         border-radius: 2px;
-        background-color: $white;
+        background-color: var(--color-white);
     }
     .giddh-table {
         tr {
@@ -283,10 +283,10 @@
     }
 }
 .ontime-delivery {
-    color: $green;
+    color: var(--color-green);
 }
 .late-delivery {
-    color: $red;
+    color: var(--color-red);
 }
 
 @media (max-width: 445px) {

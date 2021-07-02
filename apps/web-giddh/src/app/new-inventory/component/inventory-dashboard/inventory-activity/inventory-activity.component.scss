@@ -1,4 +1,4 @@
-@import "../../../../../assets/css/color.scss";
+
 .activity-block {
     h4 {
         font-family: "opensans-semibold";
@@ -23,55 +23,55 @@
             flex-direction: column;
             text-align: center;
             &.packed {
-                background-color: $chardon;
+                background-color: var(--color-chardon);
                 p {
                     &.value {
-                        color: $cinnabar-orange;
+                        color: var(--color-cinnabar-orange);
                         font-size: 20px;
                     }
                 }
             }
             &.shipped {
-                background-color: $foam;
+                background-color: var(--color-foam);
                 p {
                     &.value {
-                        color: $teal;
+                        color: var(--color-teal);
                         font-size: 20px;
                     }
                 }
             }
             &.delivered {
-                background-color: $blue-romance;
+                background-color: var(--color-blue-romance);
                 p {
                     &.value {
-                        color: $success-green;
+                        color: var(--color-success-green);
                         font-size: 20px;
                     }
                 }
             }
             &.received {
-                background-color: $amour;
+                background-color: var(--color-amour);
                 p {
                     &.value {
-                        color: $bright-pink;
+                        color: var(--color-bright-pink);
                         font-size: 20px;
                     }
                 }
             }
             &.stock-qty {
-                background-color: $inventory-solitude;
+                background-color: var(--color-inventory-solitude);
                 p {
                     &.value {
-                        color: $denim;
+                        color: var(--color-denim);
                         font-size: 20px;
                     }
                 }
             }
             &.job-work-contract {
-                background-color: $inventory-solitude;
+                background-color: var(--color-inventory-solitude);
                 p {
                     &.value {
-                        color: $denim;
+                        color: var(--color-denim);
                         font-size: 20px;
                     }
                 }
@@ -85,7 +85,7 @@
             content: "";
             width: 1px;
             height: 100%;
-            background-color: $gainsboro;
+            background-color: var(--color-gainsboro);
             left: -27px;
         }
         .activity-box {

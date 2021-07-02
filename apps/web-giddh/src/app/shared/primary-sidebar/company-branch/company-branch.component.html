@@ -26,23 +26,25 @@
                 (selectTab)="tabChanged('company')">
                 <div class="wrap-company-refresh">
                     <p class="font-12 d-flex justify-content-between mt-2">
-                        <span>{{companyList?.length}} {{localeData?.companies}}</span>
+                        <span class="company-length">{{companyList?.length}} {{localeData?.companies}}</span>
                         <span class="cursor-pointer" [tooltip]="localeData?.refresh_manually"
                             (click)="refreshCompanies($event)"><i class="icon-reload font-22"></i></span>
                     </p>
-                    <p class="font-14 mt-2 digit-blue cursor-pointer" (click)="openModalCreateNewCompany()">
-                        <i class="icon-plus font-12"></i>
+                    <button class="font-14 mt-2 cursor-pointer btn btn-sky-blue" (click)="openModalCreateNewCompany()">
+                        <i class="icon-plus font-12 mr-2"></i>
                         <span>{{localeData?.create_company}}</span>
-                    </p>
+                    </button>
                 </div>
                 <div class="company-list mt-2">
                     <ul class="list-style-none font-14"
                         *ngIf="companyListForFilter && companyListForFilter.length && !(isCompanyRefreshInProcess$ | async)">
                         <li class="btn-group" *ngFor="let company of companyListForFilter;">
-                            <span id="button-basic" class="dropdown-toggle d-flex align-items-center"
+                            <span id="button-basic" class="dropdown-toggle d-flex align-items-center justify-content-between"
                                 aria-controls="dropdown-basic" (click)="getCompanyBranches(1, company); showAllBranches();"> <i
                                     class="icon-company mr-2"></i>
                                 <span class="company-name-right">{{ company.name }}</span>
+                                <!-- Make branch count dynamic -->
+                                <span class="company-branch-count font-12">200</span>
                             </span>
                         </li>
                     </ul>
@@ -52,7 +54,7 @@
             <tab [heading]="commonLocaleData?.app_branch" [customClass]="'icon-branch1'" (selectTab)="tabChanged('branch')">
                 <div class="wrap-company-refresh">
                     <p class="font-12 d-flex justify-content-between mt-2">
-                        <span>{{branchList?.length}} {{localeData?.branches}}</span>
+                        <span class="company-size">{{branchList?.length}} {{localeData?.branches}}</span>
                         <span class="cursor-pointer" [tooltip]="localeData?.refresh_manually"
                             (click)="getCompanyBranches(1, companyBranches, true)">
                             <i class="icon-reload font-22"></i>
@@ -94,7 +96,7 @@
             </tab>
         </tabset>
     </div>
-    <div class="profile-user font-12 d-flex justify-content-start align-items-center">
+    <div class="profile-user font-12 d-flex justify-content-between align-items-center">
         <div class="profile-name cursor-pointer d-flex align-items-center"
             [routerLink]="['/pages/user-details/mobile-number']">
             <span class="profile-alice">{{companyInitials}}</span>
@@ -112,7 +114,7 @@
                 <span class="cursor-pointer" [tooltip]="localeData?.refresh_manually"
                     (click)="refreshCompanies($event)"><i class="icon-reload font-22"></i></span>
             </p>
-            <p class="font-14 mt-1 mb-2 digit-blue cursor-pointer" (click)="openModalCreateNewCompany()">
+            <p class="font-14 mt-1 mb-2 btn btn-sky-blue cursor-pointer" (click)="openModalCreateNewCompany()">
                 <i class="icon-plus font-12"></i>
                 <span>{{localeData?.create_company}}</span></p>
         </div>
@@ -123,11 +125,12 @@
                         <span id="button-basic" dropdownToggle
                             class="dropdown-toggle active d-flex justify-content-between align-items-center company-name"
                             aria-controls="dropdown-basic" (click)="getCompanyBranches(2, company)">
-                            <span class="p-0 d-flex align-items-center">
+                            <span class="p-0 d-flex align-items-center branch-icon-div">
                                 <i class="icon-company mr-2"></i>
                                 <span class="select-company-name"> {{ company.name }} </span>
                             </span>
-                            <i class="icon-down-new"></i>
+                            <!-- Make branch count dynamic -->
+                            <span class="company-branch-count font-12">200</span>
                         </span>
                         <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
                             aria-labelledby="button-basic">

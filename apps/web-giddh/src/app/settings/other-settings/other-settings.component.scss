@@ -1,4 +1,4 @@
-@import "../../../assets/css/color.scss";
+
 
 .other-information {
     label {
@@ -15,7 +15,7 @@
 
 /*branch other tab design*/
 .other-detail-section {
-    color: $dark-gray;
+    color: var(--color-dark-gray);
     label {
         min-width: 200px;
     }

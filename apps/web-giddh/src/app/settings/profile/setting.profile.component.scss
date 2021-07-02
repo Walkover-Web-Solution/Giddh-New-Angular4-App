@@ -1,4 +1,4 @@
-@import "../../../assets/css/color.scss";
+
 .input-group-addon {
     position: relative;
     position: relative;
@@ -24,7 +24,7 @@
     .form-group {
         .input-group {
             .input-group-addon {
-                border-left: 1px solid $gainsboro !important;
+                border-left: 1px solid var(--color-gainsboro) !important;
             }
             input {
                 border-left: none !important;
@@ -68,7 +68,7 @@
     height: 1px;
     margin: 0.5rem 0;
     overflow: hidden;
-    background-color: $whisper-light;
+    background-color: var(--color-whisper-light);
 }
 
 ::ng-deep .dropdown-item {
@@ -77,7 +77,7 @@
     padding: 3px 7px;
     clear: both;
     font-weight: normal;
-    color: $night-rider;
+    color: var(--color-night-rider);
     text-align: inherit;
     white-space: nowrap;
     background: none;
@@ -87,35 +87,35 @@
 
 ::ng-deep .dropdown-item:focus,
 .dropdown-item:hover {
-    color: $night-rider;
+    color: var(--color-night-rider);
     text-decoration: none;
-    background-color: $white-smoke;
+    background-color: var(--color-white-smoke);
 }
 
 ::ng-deep .dropdown-item.active,
 .dropdown-item:active {
-    background: $solitude;
+    background: var(--color-solitude);
 }
 
 ::ng-deep .dropdown-item.disabled,
 .dropdown-item:disabled {
-    color: $dark-gray;
+    color: var(--color-dark-gray);
     cursor: not-allowed;
     background-color: transparent;
 }
 
 ::ng-deep .dropdown-item.active,
 .dropdown-item:active {
-    background: $solitude;
+    background: var(--color-solitude);
 }
 
 .has-error {
-    border: 1px solid $red;
+    border: 1px solid var(--color-red);
 }
 
 #createCompForm p {
     font-size: 14px;
-    color: $silver;
+    color: var(--color-silver);
     text-align: center;
     margin-left: -28px;
     margin-right: -28px;
@@ -145,7 +145,7 @@
     width: 100%;
 }
 .add-company-detail {
-    background-color: $alice-blue-light;
+    background-color: var(--color-alice-blue)-light;
 }
 
 .phone-code-caret{

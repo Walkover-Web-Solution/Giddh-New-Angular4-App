@@ -1,14 +1,14 @@
-@import "../../../../assets/css/color.scss";
+
 .select-plan-block .your-account span {
-    color: $wistful;
+    color: var(--color-wistful);
     font-size: 14px;
     padding: 4px 0;
     display: inline-block;
 }
 .select-plan-block {
     padding-bottom: 40px;
-    background-color: $white;
-    border: 1px solid $gainsboro;
+    background-color: var(--color-white);
+    border: 1px solid var(--color-gainsboro);
     height: 97%;
 }
 .welcome-msg {
@@ -18,7 +18,7 @@
     position: fixed;
     bottom: 30px;
     width: 100%;
-    color: $dark-gray;
+    color: var(--color-dark-gray);
     padding: 10px;
 }
 .height-auto {
@@ -30,16 +30,16 @@
 .payment-log-list {
     list-style-type: none;
     font-size: 14px;
-    color: $dark-gray;
+    color: var(--color-dark-gray);
 }
 .payment-log-list {
     list-style-type: none;
     font-size: 14px;
-    color: $dark-gray;
+    color: var(--color-dark-gray);
 }
 .payment-log-list > li {
     padding: 0px 0 20px 10px;
-    border-left: 1px dashed $dark-gray;
+    border-left: 1px dashed var(--color-dark-gray);
     position: relative;
     line-height: 10px;
 }
@@ -50,14 +50,14 @@
     position: relative;
     width: 10px;
     height: 10px;
-    background: $lavender;
+    background: var(--color-lavender);
     content: "";
     display: block;
     position: absolute;
     left: -5px;
     top: 0px;
     border-radius: 90px;
-    border: 1px solid $dark-gray;
+    border: 1px solid var(--color-dark-gray);
 }
 .account-aside-menu-state {
     position: fixed;
@@ -73,15 +73,15 @@
     z-index: 999;
 }
 .selected {
-    background-color: $light-sky-blue;
+    background-color: var(--color-light-sky-blue);
 }
 .select-plan-head {
     text-align: center;
-    background: $lavender;
+    background: var(--color-lavender);
     font-size: 18px;
     padding: 20px 15px;
     h2 {
-        color: $midnight-blue;
+        color: var(--color-midnight-blue);
         font-weight: bold;
     }
 }
@@ -105,27 +105,27 @@
 .inner-your-account {
     position: relative;
     z-index: 2;
-    background: $white;
+    background: var(--color-white);
     padding: 30px 15px 15px 30px;
-    box-shadow: 0px 3px 6px $black-russian;
-    border: 1px solid $gainsboro;
+    box-shadow: 0px 3px 6px var(--color-black-russian);
+    border: 1px solid var(--color-gainsboro);
     transition: 0.5s all ease;
 }
 .inner-your-account:hover,
 .inner-your-account.active {
-    background: $lavender;
-    border-color: $midnight-blue;
+    background: var(--color-lavender);
+    border-color: var(--color-midnight-blue);
 }
 .your-account:after,
 .your-account:before {
     content: "";
     display: block;
     width: 100%;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
     height: 100%;
     position: absolute;
     z-index: 1;
-    background: $white;
+    background: var(--color-white);
 }
 .your-account:after {
     top: -10px;
@@ -151,7 +151,7 @@
 }
 .inner-your-account > h3 {
     font-size: 16px;
-    color: $midnight-blue;
+    color: var(--color-midnight-blue);
     font-weight: bold;
     margin-bottom: 5px;
     .plans-head-top {
@@ -169,8 +169,8 @@
 }
 .transactions-popup {
     width: 360px;
-    background: $white;
-    box-shadow: 0px 3px 6px $black-russian;
+    background: var(--color-white);
+    box-shadow: 0px 3px 6px var(--color-black-russian);
     padding: 15px;
     z-index: 9;
     position: absolute;
@@ -182,7 +182,7 @@
     visibility: hidden;
     transition: 0.5s all ease-in;
     .close {
-        color: $nero;
+        color: var(--color-nero);
         opacity: 1;
         font-size: 16px;
         position: absolute;
@@ -213,7 +213,7 @@
         top: 15px;
         width: 60px;
         height: 1px;
-        background: $red;
+        background: var(--color-red);
         transform: rotate(10deg);
     }
 }
@@ -250,12 +250,12 @@
     margin-top: 10px;
 }
 .see-all-features .inner-your-account {
-    border-color: $midnight-blue;
+    border-color: var(--color-midnight-blue);
     margin-bottom: 20px;
 }
 .btn-group .close {
     font-size: 16px;
-    color: $gray;
+    color: var(--color-gray);
     opacity: 1;
 }
 .inner-close {
@@ -263,26 +263,26 @@
     right: 10px;
     top: 10px;
     font-size: 16px;
-    color: $nero;
+    color: var(--color-nero);
 }
 .btn-green:focus {
-    color: $white;
+    color: var(--color-white);
 }
 .plans-head-top {
     min-height: 50px;
 }
 .activation-key-wrapper {
     padding-left: 70px;
-    background-color: $lavender;
-    border: 1px solid $gainsboro;
+    background-color: var(--color-lavender);
+    border: 1px solid var(--color-gainsboro);
 }
 .all-plans {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
 }
 .btn-cancel {
-    background: $very-light-gray;
-    border-color: $gainsboro;
-    color: $night-rider;
+    background: var(--color-very-light-gray);
+    border-color: var(--color-gainsboro);
+    color: var(--color-night-rider);
     font-family: "opensans-semibold" !important;
     margin-bottom: 15px !important;
 }
@@ -403,8 +403,8 @@
         width: 100%;
     }
     .main-row-plans::-webkit-scrollbar-thumb {
-        background-color: $gainsboro;
-        outline: 1px solid $gray;
+        background-color: var(--color-gainsboro);
+        outline: 1px solid var(--color-gray);
         border-radius: 20px;
     }
     .single-plan-for-company {

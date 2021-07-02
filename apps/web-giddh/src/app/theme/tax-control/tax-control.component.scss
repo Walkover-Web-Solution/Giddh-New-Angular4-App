@@ -1,4 +1,4 @@
-@import "../../../assets/css/color.scss";
+
 
 .single-item .dropdown-menu {
     height: 50px !important;
@@ -32,7 +32,7 @@
 sup.mandatory-asterisk {
     font-size: 14px;
     top: 0;
-    color: $red;
+    color: var(--color-red);
 }
 
 .dropdown-menu {

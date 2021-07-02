@@ -1,4 +1,4 @@
-@import "../../../../../assets/css/color.scss";
+
 
 .selling-product-block {
     .box {
@@ -21,7 +21,7 @@
                 position: absolute;
                 width: 1px;
                 height: 100%;
-                background-color: $gainsboro;
+                background-color: var(--color-gainsboro);
                 content: "";
                 top: 0;
                 left: 200px;
@@ -34,7 +34,7 @@
                     font-size: 14px;
                 }
                 .progress-bar {
-                    background-color: $lavender-blue;
+                    background-color: var(--color-lavender-blue);
                     border-radius: 0 10px 10px 0;
                     height: 10px;
                     margin-right: 10px;

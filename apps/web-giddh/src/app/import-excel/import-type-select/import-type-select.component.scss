@@ -1,4 +1,4 @@
-@import "../../../assets/css/color.scss";
+
 .import-type {
     display: flex;
     justify-content: center;
@@ -13,8 +13,8 @@
     align-items: center;
     justify-content: flex-end;
     margin: 0 15px;
-    border: 1px solid $gainsboro;
-    background: $gray-95;
+    border: 1px solid var(--color-gainsboro);
+    background: var(--color-gray-95);
     cursor: pointer;
     transition: all 0.3s ease;
     color: initial;
@@ -34,7 +34,7 @@
 }
 
 .has-error .form-control {
-    border-color: $red !important;
+    border-color: var(--color-red) !important;
 }
 
 .import-type img {
@@ -46,9 +46,9 @@
     width: 100%;
 }
 .text-link-2 {
-    color: $primary !important;
+    color: var(--color-primary) !important;
     &:hover {
-        color: $primary !important;
+        color: var(--color-primary) !important;
     }
 }
 @media (max-width: 991px) {

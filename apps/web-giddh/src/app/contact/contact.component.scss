@@ -1,4 +1,4 @@
-@import "../../assets/css/color.scss";
+
 .dropdown-menu {
     > li {
         > a {
@@ -44,7 +44,7 @@
 
 .icon-pointer.icon-class-search {
     top: 30%;
-    color: $dim-gray;
+    color: var(--color-dim-gray);
 }
 
 .icon-pointer .d-block.font-xxs.glyphicon.glyphicon-triangle-top {
@@ -63,10 +63,10 @@
     right: auto;
     z-index: 1;
     margin: 0;
-    background: $white;
+    background: var(--color-white);
     width: 50%;
     padding: 1px;
-    box-shadow: 1px 0 9px $gray;
+    box-shadow: 1px 0 9px var(--color-gray);
 }
 
 .account-detail-modal-header-div {
@@ -83,7 +83,7 @@
     border-right: 0;
     padding: 11px 10px 10px 10px;
     width: 100%;
-    background: $lavender;
+    background: var(--color-lavender);
 }
 
 .account-detail-custom-title {
@@ -97,25 +97,25 @@
 }
 
 .custom-detail h4 {
-    color: $dark-gray;
+    color: var(--color-dark-gray);
     margin-top: 7px;
     font-size: 14px !important;
     font-family: opensans-regular !important;
 }
 
 ul.list-unstyled li a {
-    color: $black;
+    color: var(--color-black);
 }
 
 .p-modal-tooltip {
     display: block;
     position: absolute;
-    background-color: $white;
+    background-color: var(--color-white);
     z-index: 1000;
     width: 257px;
-    border: 1px solid $pink-swan;
+    border: 1px solid var(--color-pink-swan);
     border-radius: 4px;
-    box-shadow: 0 7px 24px $black-russian;
+    box-shadow: 0 7px 24px var(--color-black-russian);
     top: -2px;
 }
 
@@ -140,8 +140,8 @@ ul.list-unstyled li a {
         margin-top: 0 !important;
     }
     a:hover {
-        color: $chetwode-blue !important;
-        background-color: $lavender;
+        color: var(--color-chetwode-blue) !important;
+        background-color: var(--color-lavender);
     }
 }
 
@@ -184,7 +184,7 @@ td.position-relative.word-wrap.customer-name.vendor-customer-name.cursor-pointer
 tr:last-child td.position-relative.word-wrap.customer-name.cursor-pointer,
 tr:last-child
     td.position-relative.word-wrap.vendor-customer-name.cursor-pointer {
-    border-bottom: 1px solid $gainsboro !important;
+    border-bottom: 1px solid var(--color-gainsboro) !important;
 }
 
 .position-relative.word-wrap {
@@ -192,7 +192,7 @@ tr:last-child
         font-size: 14px;
         vertical-align: middle;
         display: none;
-        color: $omiod;
+        color: var(--color-omiod);
     }
     &:hover .icon-dots-three-vertical {
         display: block;
@@ -228,7 +228,7 @@ tr.aging-table-top td {
 
 #dropdown-basics {
     position: fixed !important;
-    background: $red;
+    background: var(--color-red);
     bottom: initial;
 }
 
@@ -247,16 +247,16 @@ tr.aging-table-top td {
 }
 
 .more-button li:hover {
-    background-color: $lavender;
-    color: $jacksons-purple;
+    background-color: var(--color-lavender);
+    color: var(--color-jacksons-purple);
 }
 
 .btn-primary.active,
 .btn-primary:active,
 .open > .dropdown-toggle.btn-primary {
-    color: $night-rider;
-    background-color: $lavender;
-    border-color: $lavender;
+    color: var(--color-night-rider);
+    background-color: var(--color-lavender);
+    border-color: var(--color-lavender);
     box-shadow: none !important;
 }
 
@@ -268,9 +268,9 @@ tr.aging-table-top td {
 i.icon-options {
     width: 36px;
     height: 36px;
-    border: 1px solid $gainsboro;
-    background-color: $white;
-    color: $gray;
+    border: 1px solid var(--color-gainsboro);
+    background-color: var(--color-white);
+    color: var(--color-gray);
     font-size: 20px;
     padding: 0;
     display: flex;
@@ -280,7 +280,7 @@ i.icon-options {
 }
 
 i.icon-options:hover {
-    background-color: $whisper-color;
+    background-color: var(--color-whisper-color);
 }
 
 .search-field {
@@ -290,20 +290,20 @@ i.icon-options:hover {
 
 .search-field input {
     width: 235px;
-    background-color: $whisper !important;
-    border-color: $whisper !important;
+    background-color: var(--color-whisper) !important;
+    border-color: var(--color-whisper) !important;
 }
 
 .search-field input:focus {
-    background-color: $white !important;
-    border-color: $midnight-express !important;
+    background-color: var(--color-white) !important;
+    border-color: var(--color-midnight-express) !important;
 }
 span.input-addon {
     position: absolute;
     right: 0px;
     padding: 4px 9px;
-    background-color: $chetwode-blue;
-    color: $white;
+    background-color: var(--color-chetwode-blue);
+    color: var(--color-white);
     font-size: 18px;
     border-radius: 5px;
     height: 36px;
@@ -315,7 +315,7 @@ span.input-addon {
 }
 
 .aging-table thead tr th {
-    border-bottom: 1px solid $link-water !important;
+    border-bottom: 1px solid var(--color-link-water) !important;
     position: relative;
     padding-right: 10px !important;
 }
@@ -352,10 +352,10 @@ span.input-addon {
 }
 
 button.btn.btn-filter {
-    background: $whisper-color;
-    border: 1px solid $whisper-color;
+    background: var(--color-whisper-color);
+    border: 1px solid var(--color-whisper-color);
     font-size: 14px;
-    color: $midnight-blue;
+    color: var(--color-midnight-blue);
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
@@ -396,9 +396,9 @@ button.btn.btn-filter span.icon-cross {
         min-width: 100%;
         padding: 11px;
         padding-right: 40px;
-        color: $nero;
+        color: var(--color-nero);
         border: none;
-        background-color: $gray-95;
+        background-color: var(--color-gray-95);
     }
 }
 .overflow-x-auto{
@@ -476,7 +476,7 @@ button.btn.btn-filter span.icon-cross {
         position: fixed;
         bottom: 0;
         width: 100%;
-        background: $white;
+        background: var(--color-white);
         padding: 10px 5px;
         z-index: 1;
         box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
@@ -624,7 +624,7 @@ button.btn.btn-filter span.icon-cross {
         margin-bottom: 10px;
     }
     .customer-right {
-        background: $white;
+        background: var(--color-white);
         padding: 0 15px;
         float: left;
         width: 100%;
@@ -634,7 +634,7 @@ button.btn.btn-filter span.icon-cross {
     }
     .customer-right table tr td {
         padding: 15px;
-        color: $dark-gray;
+        color: var(--color-dark-gray);
         width: 100%;
         display: table;
         text-align: left;
@@ -704,7 +704,7 @@ button.btn.btn-filter span.icon-cross {
 
 .td-search-box div i {
     margin-top: 3px;
-    color: $olive;
+    color: var(--color-olive);
     padding-right: 8px;
     cursor: pointer;
 }
@@ -731,7 +731,7 @@ button.btn.btn-filter span.icon-cross {
 }
 
 .negative-balance {
-    color: $red;
+    color: var(--color-red);
 }
 
 @media (min-width: 767px){

@@ -1,4 +1,4 @@
-@import "../../../assets/css/color.scss";
+
 .flex-container {
     display: flex;
     flex-direction: row;
@@ -12,7 +12,7 @@
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--color-gainsboro);
 }
 
 .flex-fill {
@@ -42,7 +42,7 @@
 
 .td-search-box div i {
     margin-top: 1px;
-    color: $wild-blue-yonder;
+    color: var(--color-wild-blue-yonder);
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -51,7 +51,7 @@
 }
 
 .td-search-box div i:hover {
-    color: $deep-sky-blue;
+    color: var(--color-deep-sky-blue);
 }
 
 .td-search-box {
@@ -63,9 +63,9 @@
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    color: $nero;
+    color: var(--color-nero);
     border: none;
-    background-color: $gray-95;
+    background-color: var(--color-gray-95);
 }
 
 .td-search-box .input-container i {
@@ -76,16 +76,16 @@
 
 .icon-pointer .glyphicon {
     cursor: pointer;
-    color: $wild-blue-yonder;
+    color: var(--color-wild-blue-yonder);
 }
 
 .icon-pointer .glyphicon:hover {
-    color: $deep-sky-blue;
+    color: var(--color-deep-sky-blue);
 }
 
 .dropdown-menu > li > a:hover {
-    color: $chetwode-blue !important;
-    background: $lavender !important;
+    color: var(--color-chetwode-blue) !important;
+    background: var(--color-lavender) !important;
 }
 
 .dropdown-menu {
@@ -104,12 +104,12 @@
     list-style: none;
     position: absolute;
     left: -114px;
-    background-color: $white;
+    background-color: var(--color-white);
     width: 131px;
-    box-shadow: 0px 4px 7px $silver;
+    box-shadow: 0px 4px 7px var(--color-silver);
     border-radius: 3px;
     z-index: 100;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
 }
 
 .click-dropdown {
@@ -119,12 +119,12 @@
 .click-dropdown ul li {
     padding: 3px 6px;
     margin-bottom: 4px;
-    color: $orange;
+    color: var(--color-orange);
     cursor: pointer;
 }
 
 .click-dropdown ul li:hover {
-    background-color: $gainsboro;
+    background-color: var(--color-gainsboro);
 }
 
 .click-dropdown ul li:hover a {
@@ -132,7 +132,7 @@
 }
 
 .click-dropdown ul li a {
-    color: $black;
+    color: var(--color-black);
 }
 
 .invoice-table tr:hover .dropdown-btn {
@@ -151,7 +151,7 @@
 
 .btn.btn-sky-blue:focus,
 .btn.btn-sky-blue:hover {
-    color: $white;
+    color: var(--color-white);
     text-decoration: none;
     outline: none !important;
 }
@@ -189,7 +189,7 @@
 }
 
 td.card-header.clearfix {
-    background-color: $whisper;
+    background-color: var(--color-whisper);
     padding: 10px !important;
 }
 
@@ -199,10 +199,10 @@ td.card-header.clearfix {
 }
 
 .card #invoice-td {
-    border-bottom: 1px solid $gainsboro !important;
+    border-bottom: 1px solid var(--color-gainsboro) !important;
     padding-bottom: 20px !important;
-    background-color: $white-smoke;
-    border-top: 1px solid $gainsboro !important;
+    background-color: var(--color-white-smoke);
+    border-top: 1px solid var(--color-gainsboro) !important;
     padding-top: 10px !important;
 }
 
@@ -236,7 +236,7 @@ td.card-header.clearfix {
 
 .card .more-button .moreBtnWrapper {
     margin-right: 0;
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--color-gainsboro);
     padding-top: 8px;
 }
 
@@ -269,12 +269,12 @@ td.card-header.clearfix {
 
 .icon-pointer {
     cursor: pointer;
-    color: $wild-blue-yonder;
+    color: var(--color-wild-blue-yonder);
     margin-left: 6px;
 }
 
 .icon-pointer .active-text-color {
-    color: $deep-sky-blue;
+    color: var(--color-deep-sky-blue);
 }
 
 .dropdown-btn-new {
@@ -292,19 +292,19 @@ ul.select-action-dropdown {
 }
 
 .select-action-dropdown a {
-    color: $night-rider;
+    color: var(--color-night-rider);
     font-size: 14px;
     padding: 5px 10px;
     display: block;
 }
 
 .select-action-dropdown a:hover {
-    color: $chetwode-blue !important;
-    background: $lavender !important;
+    color: var(--color-chetwode-blue) !important;
+    background: var(--color-lavender) !important;
 }
 
 .add-invoice .dropdown-toggle {
-    color: $white;
+    color: var(--color-white);
 }
 
 .invoice-container {
@@ -317,7 +317,7 @@ ul.select-action-dropdown {
 
 .input-group input.form-control {
     padding-left: 35px !important;
-    border-color: $chetwode-blue;
+    border-color: var(--color-chetwode-blue);
     background-image: url("../../../assets/images/calender-icon.svg") !important;
     background-size: 17px !important;
     background-position: 9px 8px !important;
@@ -330,7 +330,7 @@ ul.select-action-dropdown {
 }
 
 .input-group input.form-control:focus {
-    border-color: $gainsboro;
+    border-color: var(--color-gainsboro);
 }
 
 .icon-calender {
@@ -341,8 +341,8 @@ ul.select-action-dropdown {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid $gainsboro;
-    color: $nobel;
+    border-right: 1px solid var(--color-gainsboro);
+    color: var(--color-nobel);
 }
 
 .advance-icon{
@@ -363,10 +363,10 @@ ul.select-action-dropdown {
     align-items: center;
     font-size: 18px;
     margin-left: 10px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
     border-radius: 5px;
-    color: $gray;
-    background: $white;
+    color: var(--color-gray);
+    background: var(--color-white);
 }
 
 .search-icon-block {
@@ -374,8 +374,8 @@ ul.select-action-dropdown {
 }
 
 .dropdown-toggle.more-btn-dropdown {
-    color: $navy !important;
-    border: 1px solid $chetwode-blue;
+    color: var(--color-navy) !important;
+    border: 1px solid var(--color-chetwode-blue);
     width: 80px;
     padding-left: 10px;
     padding-right: 10px;
@@ -383,22 +383,22 @@ ul.select-action-dropdown {
     justify-content: space-between;
     align-items: center;
     margin-right: 15px;
-    color: $midnight-express;
-    background-color: $white;
+    color: var(--color-midnight-express);
+    background-color: var(--color-white);
 }
 
 .dropdown-toggle.more-btn-dropdown:hover {
-    background: $chetwode-blue;
-    color: $white !important;
-    border-color: $chetwode-blue;
+    background: var(--color-chetwode-blue);
+    color: var(--color-white) !important;
+    border-color: var(--color-chetwode-blue);
 }
 
 .dropdown-toggle.more-btn-dropdown:hover .caret {
-    color: $white !important;
+    color: var(--color-white) !important;
 }
 
 .dropdown-toggle.more-btn-dropdown .caret {
-    color: $nobel;
+    color: var(--color-nobel);
 }
 
 button.btn.btn-default.ladda-button {
@@ -412,10 +412,10 @@ button.btn.btn-default.ladda-button {
 }
 .clear-filter {
     button.btn.btn-filter {
-        background: $whisper;
-        border: 1px solid $whisper;
+        background: var(--color-whisper);
+        border: 1px solid var(--color-whisper);
         font-size: 14px;
-        color: $midnight-blue;
+        color: var(--color-midnight-blue);
         display: inline-flex;
         justify-content: space-between;
         align-items: center;
@@ -431,7 +431,7 @@ button.btn.btn-default.ladda-button {
 }
 
 .btn-link-2 {
-    color: $nero;
+    color: var(--color-nero);
 }
 
 .input-wrapper {
@@ -447,7 +447,7 @@ button.btn.btn-default.ladda-button {
     display: block;
     height: 36px;
     width: 1px;
-    background-color: $gainsboro;
+    background-color: var(--color-gainsboro);
     left: 37px !important;
     z-index: 100;
     top: 0;
@@ -462,10 +462,10 @@ div.remove-capitalize {
 }
 
 span.icon-export-icon {
-    color: $gray;
+    color: var(--color-gray);
 }
 .ladda-button:hover .icon-export-icon {
-    color: $white;
+    color: var(--color-white);
 }
 
 .giddh-table {
@@ -474,14 +474,14 @@ span.icon-export-icon {
             .action-icon {
                 display: flex;
                 align-items: center;
-                border: 1px solid $gainsboro;
+                border: 1px solid var(--color-gainsboro);
                 border-radius: 5px;
                 display: none;
                 a {
                     width: 30px;
                     font-size: 20px;
-                    color: $gray;
-                    border-right: 1px solid $gainsboro;
+                    color: var(--color-gray);
+                    border-right: 1px solid var(--color-gainsboro);
                     border-radius: 5px;
                     display: flex;
                     align-items: center;
@@ -491,7 +491,7 @@ span.icon-export-icon {
                     align-items: stretch;
                     height: 30px;
                     align-items: center;
-                    background-color: $white;
+                    background-color: var(--color-white);
                 }
             }
             .item-selected {
@@ -526,12 +526,12 @@ span.icon-export-icon {
 }
 
 .giddh-table {
-    border-right: 1px solid $gainsboro;
-    border-bottom: 1px solid $gainsboro !important;
+    border-right: 1px solid var(--color-gainsboro);
+    border-bottom: 1px solid var(--color-gainsboro) !important;
     tbody {
         tr {
             &:hover {
-                background: $solitude;
+                background: var(--color-solitude);
                 td {
                     background: transparent !important;
                 }
@@ -542,7 +542,7 @@ span.icon-export-icon {
     > tbody {
         > tr {
             &:hover {
-                background: $light-alice-blue;
+                background: var(--color-light-alice-blue);
             }
             td {
                 background: transparent !important;
@@ -638,7 +638,7 @@ span.icon-export-icon {
         right: 14px;
         box-shadow: 2px 2px 9px rgba(0, 0, 0, 0.1);
         transform: rotate(45deg);
-        background-color: $white;
+        background-color: var(--color-white);
         z-index: -1;
     }
     .click-dropdown ul {
@@ -660,8 +660,8 @@ span.icon-export-icon {
         bottom: 120px;
         z-index: 99;
         line-height: 0;
-        background-color: $vivid-blue;
-        color: $white;
+        background-color: var(--color-vivid-blue);
+        color: var(--color-white);
         box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.3) !important;
         display: block;
     }
@@ -765,7 +765,7 @@ span.icon-export-icon {
 @media (max-width: 420px) {
     .small-loading {
         padding-left: 0;
-        color: $night-rider;
+        color: var(--color-night-rider);
         font-size: 12px;
         position: relative;
         top: 2px;

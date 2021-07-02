@@ -1,4 +1,4 @@
-@import "../../../assets/css/color.scss";
+
 :host {
     display: block;
     position: relative;
@@ -40,11 +40,11 @@ i.close.icon.clear::after {
     content: "✕";
     padding-right: 8px;
     font-weight: 800;
-    color: $gray;
+    color: var(--color-gray);
 }
 
 i.close.icon.clear:hover::after {
-    color: $red;
+    color: var(--color-red);
 }
 
 .clear {
@@ -58,13 +58,13 @@ i.close.icon.clear:hover::after {
     font-weight: 500;
     line-height: 100%;
     opacity: 0.5;
-    color: $black;
+    color: var(--color-black);
     transform: translateY(-50%);
 }
 
 .sh-select-disabled {
-    background-color: $whisper;
-    color: $bay-of-many;
+    background-color: var(--color-whisper);
+    color: var(--color-bay-of-many);
     cursor: not-allowed;
     border-radius: 5px;
 }
@@ -76,7 +76,7 @@ i.close.icon.clear:hover::after {
     font-size: 14px;
     line-height: 30px;
     border-radius: 4px;
-    background-color: $solitude;
+    background-color: var(--color-solitude);
     margin: 8px 0 5px 8px;
 }
 
@@ -92,55 +92,55 @@ i.close.icon.clear:hover::after {
 .chip-close-btn:hover {
     font-weight: 700;
     opacity: 0.5;
-    color: $black;
+    color: var(--color-black);
 }
 
 .header .form-control[readonly] {
-    background-color: $white !important;
-    border: 1px solid $gainsboro;
+    background-color: var(--color-white) !important;
+    border: 1px solid var(--color-gainsboro);
 }
 
 .sh-select-disabled .selected-val,
 .sh-select-disabled .form-control,
 .sh-select-disabled .form-control[readonly] {
-    background: $whisper-light !important;
+    background: var(--color-whisper-light) !important;
     pointer-events: none;
     cursor: not-allowed;
 }
 
 :host(.disabled-ledger) {
     .sh-select-disabled {
-        background: $white !important;
+        background: var(--color-white) !important;
         .selected-val,
         .form-control,
         .form-control[readonly] {
-            background: $white !important;
+            background: var(--color-white) !important;
         }
     }
 }
 
 .selected-val {
-    border: 1px solid $gainsboro !important;
+    border: 1px solid var(--color-gainsboro) !important;
     padding-right: 22px !important;
-    background: $white !important;
+    background: var(--color-white) !important;
 }
 
 .header.open > input[type="text"] {
-    border-color: $gainsboro;
+    border-color: var(--color-gainsboro);
 }
 
 .header .bdr > input[type="text"] {
     border: 0;
 }
 .header .bdr > input[type="text"]::-webkit-input-placeholder {
-    color: $nobel !important;
+    color: var(--color-nobel) !important;
 }
 .header .bdr > input[type="text"]::-moz-placeholder {
-    color: $nobel !important;
+    color: var(--color-nobel) !important;
 }
 .header .bdr > input[type="text"]:-ms-input-placeholder {
-    color: $nobel !important;
+    color: var(--color-nobel) !important;
 }
 .header .bdr > input[type="text"]:-moz-placeholder {
-    color: $nobel !important;
+    color: var(--color-nobel) !important;
 }

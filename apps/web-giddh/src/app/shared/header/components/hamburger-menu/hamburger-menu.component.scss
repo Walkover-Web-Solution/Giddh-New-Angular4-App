@@ -1,4 +1,4 @@
-@import "../../../../../assets/css/color.scss";
+
 .hamburger-menu-icon {
     display: flex;
     align-items: flex-start;
@@ -8,7 +8,7 @@
     li {
         display: flex;
         align-items: center;
-        color: $midnight-blue;
+        color: var(--color-midnight-blue);
         button {
             margin: 10px;
             padding: 0;
@@ -18,7 +18,7 @@
             top: 0;
             left: 0;
             i {
-                color: $white;
+                color: var(--color-white);
             }
         }
     }
@@ -37,7 +37,7 @@
 .disable-icon {
     button{
         i{
-            color: $gainsboro !important;
+            color: var(--color-gainsboro) !important;
             cursor: no-drop;
         }
     }
@@ -57,7 +57,7 @@
                 display: none;
             }
             h4{
-                color: $white;
+                color: var(--color-white);
                 font-size: 16px;
                 text-transform: initial !important;
             }

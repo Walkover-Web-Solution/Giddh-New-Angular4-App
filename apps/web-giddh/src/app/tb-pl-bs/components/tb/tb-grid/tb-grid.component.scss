@@ -1,4 +1,4 @@
-@import "../../../../../assets/css/color.scss";
+
 .liabilities-assets {
     max-width: 760px;
     width: 100%;
@@ -9,7 +9,7 @@
             position: relative;
             z-index: 1;
             font-size: 13px;
-            color: $gray;
+            color: var(--color-gray);
             padding-right: 8px;
             cursor: pointer;
             display: flex;
@@ -37,7 +37,7 @@
 }
 .tb-section {
     padding-left: 7px;
-    background-color: $white;
+    background-color: var(--color-white);
     .search-container {
         padding: 0;
         display: flex;

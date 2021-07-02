@@ -1,4 +1,4 @@
-@import "../../../assets/css/color.scss";
+
 
 @mixin highlight-color($bgColor, $color) {
     background-color: $bgColor !important;
@@ -7,7 +7,7 @@
 .primary-sidebar {
     padding-top: 0 !important;
     .company-branch-block {
-        background-color: $solitude-light;
+        background-color: var(--color-solitude-light);
         ul.branch-connection{
             padding: 14px 0;
         }
@@ -18,7 +18,7 @@
             span.outer-span {
                 width: 12px;
                 height: calc(100% - 54px);
-                border: 2px solid $grey-chateau;
+                border: 2px solid var(--color-grey-chateau);
                 max-height: 100%;
                 min-height: 33px;
                 display: block;
@@ -33,7 +33,7 @@
                     width: 7px;
                     height: 7px;
                     display: block;
-                    background-color: $grey-chateau;
+                    background-color: var(--color-grey-chateau);
                     border-radius: 50%;
                     content: "";
                     left: -4px;
@@ -43,7 +43,7 @@
                     width: 7px;
                     height: 7px;
                     display: block;
-                    background-color: $grey-chateau;
+                    background-color: var(--color-grey-chateau);
                     border-radius: 50%;
                     content: "";
                     bottom: -4px;
@@ -61,19 +61,19 @@
                 font-size: 12px;
             }
             .head-nav {
-                background: $white-smoke;
-                border-bottom: 1px solid $gainsboro;
+                background: var(--color-white-smoke);
+                border-bottom: 1px solid var(--color-gainsboro);
                 margin-bottom: 0;
             }
         }
         h3 {
             font-family: "opensans-semibold";
-            color: $black-pearl;
+            color: var(--color-black)-pearl;
             .company-alice {
                 width: 26px;
                 height: 26px;
                 min-width: 26px;
-                border: 1px solid $black-pearl;
+                border: 1px solid var(--color-black)-pearl;
                 padding: 5px;
                 border-radius: 50px;
                 display: inline-flex;
@@ -116,7 +116,7 @@
         .current-branch-name {
             li {
                 a {
-                    color: $trout;
+                    color: var(--color-trout);
                 }
             }
             .branch-alice {
@@ -139,29 +139,30 @@
             padding: 0;
             width: 100%;
             display: block;
+            border-radius: 0;
         }
     }
     .search-box {
         .input-group-text {
-            background-color: $solitude-new;
+            background-color: var(--color-gray-95);
             padding: 8px !important;
         }
         input {
             border-left: none;
             padding-left: 0 !important;
             border-right: none !important;
-            background-color: $solitude-new !important;
+            background-color: var(--color-gray-95) !important;
             border-top-left-radius: 0px !important;
             border-bottom-left-radius: 0px !important;
             border-top-right-radius: 0px !important;
             border-bottom-right-radius: 0px !important;
             &:focus {
-                border-color: $gainsboro !important;
+                border-color: var(--color-gainsboro) !important;
             }
         }
         .input-group-append {
             font-size: 12px;
-            color: $grey-chateau;
+            color: var(--color-grey-chateau);
             right: 10px;
             top: 0;
             padding: 0 5px;
@@ -169,8 +170,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: $solitude-new;
-            border: 1px solid $gainsboro;
+            background-color: var(--color-gray-95);
+            border: 1px solid var(--color-gray-95);
             border-radius: 5px;
             border-left: none;
             border-top-left-radius: 0px !important;
@@ -192,15 +193,15 @@
                 display: block;
                 i {
                     font-size: 18px;
-                    color: $grey-chateau;
+                    color: var(--color-grey-chateau);
                 }
             }
             .left-fixed-header > li a.active {
-                @include highlight-color($white, $cornflower);
+                @include highlight-color(var(--color-white), var(--color-cornflower));
             }
         }
         p {
-            color: $black-pearl;
+            color: var(--color-black)-pearl;
             font-family: "opensans-semibold";
         }
         ul {
@@ -212,15 +213,15 @@
                 white-space: nowrap;
                 position: relative;
                 a {
-                    color: $trout;
+                    color: var(--color-trout);
                     line-height: 16px;
                     &.show-more {
-                        color: $midnight-blue;
+                        color: var(--color-midnight-blue);
                         text-decoration: underline;
                         font-size: 12px;
                     }
                     &:hover {
-                        color: $cornflower;
+                        color: var(--color-cornflower);
                     }
                 }
             }
@@ -266,20 +267,20 @@
                         }
                     }
                     a {
-                        color: $trout;
+                        color: var(--color-trout);
                         font-family: "opensans-semibold";
                         width: 100%;
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
                         &:hover {
-                            color: $cornflower;
+                            color: var(--color-cornflower);
                         }
                         &.dropdown-toggle {
                             padding: 0 20px;
                         }
                         &.active {
-                            color: $cornflower !important;
+                            color: var(--color-cornflower) !important;
                             background-color: transparent;
                         }
                         &:first-child{
@@ -315,7 +316,7 @@
                             transform: rotate(-85deg);
                         }
                         a {
-                            color: $trout;
+                            color: var(--color-trout);
                             align-items: center;
                             display: flex;
                             font-family: "opensans-regular";
@@ -337,7 +338,7 @@
                         li {
                             padding: 0;
                             a {
-                                color: $trout;
+                                color: var(--color-trout);
                                 align-items: center;
                                 display: flex;
                                 font-family: "opensans-regular";
@@ -351,21 +352,21 @@
                                 }
                                 &.active {
                                     @include highlight-color(
-                                        $cornflower,
-                                        $white
+                                        var(--color-cornflower),
+                                        var(--color-white)
                                     );
                                 }
                             }
                             &:hover {
                                 a {
                                     @include highlight-color(
-                                        $link-water,
-                                        $night-rider
+                                        var(--color-link-water),
+                                        var(--color-night-rider)
                                     );
                                     &.active {
                                         @include highlight-color(
-                                            $cornflower,
-                                            $white
+                                            var(--color-cornflower),
+                                            var(--color-white)
                                         );
                                     }
                                 }
@@ -380,9 +381,9 @@
         i {
             width: 20px;
             height: 20px;
-            background-color: $white;
+            background-color: var(--color-white);
             border-radius: 50%;
-            border: 1px solid $gainsboro;
+            border: 1px solid var(--color-gainsboro);
             transform: rotate(90deg);
             position: absolute;
             top: 70px;
@@ -482,8 +483,8 @@
             position: absolute !important;
             left: 60px !important;
             z-index: 9999999 !important;
-            background-color: $white !important;
-            border: 1px solid $cornflower !important;
+            background-color: var(--color-white) !important;
+            border: 1px solid var(--color-cornflower) !important;
             border-radius: 0;
             width: 180px;
             top: 0px !important;
@@ -545,7 +546,7 @@
                     &:after{
                         position: absolute;
                         content: "";
-                        background-color: $white;
+                        background-color: var(--color-white);
                         width: 100%;
                         height: 100%;
                         left: 40px;
@@ -568,7 +569,7 @@
                             align-items: center;
                             &:hover,
                             &.active {
-                                @include highlight-color($cornflower, $white);
+                                @include highlight-color(var(--color-cornflower), var(--color-white));
                             }
                             a.dropdown-toggle {
                                 padding: 0 10px;
@@ -602,8 +603,8 @@
                             position: absolute !important;
                             left: 60px !important;
                             z-index: 9999999 !important;
-                            background-color: $white !important;
-                            border: 1px solid $cornflower !important;
+                            background-color: var(--color-white) !important;
+                            border: 1px solid var(--color-cornflower) !important;
                             border-radius: 0;
                             width: 180px;
                             top: 0px !important;
@@ -654,14 +655,14 @@
                         span {
                             i {
                                 font-size: 20px;
-                                color: $trout;
+                                color: var(--color-trout);
                                 transform: none;
                             }
                         }
                         i {
                             font-size: 14px;
                             display: inline-flex;
-                            color: $trout;
+                            color: var(--color-trout);
                             width: 14px;
                             height: 14px;
                             justify-content: center;
@@ -677,7 +678,7 @@
                 &:after{
                     position: absolute;
                     content: "";
-                    background-color: $white;
+                    background-color: var(--color-white);
                     width: 100%;
                     height: 100%;
                     left: 40px;
@@ -695,6 +696,7 @@
         }
     }
 }
+
 /*responsive starts here*/
 @media (min-height: 800px) and (max-height: 1024px) {
     .primary-sidebar {
@@ -730,3 +732,4 @@
         }
     }
 }
+

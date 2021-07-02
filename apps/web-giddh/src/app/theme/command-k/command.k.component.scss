@@ -1,4 +1,4 @@
-@import "../../../assets/css/color.scss";
+
 
 :host {
     .search-wrapper {
@@ -6,7 +6,7 @@
         display: flex;
         flex-direction: row;
         align-items: center;
-        background-color: $white;
+        background-color: var(--color-white);
         flex-wrap: wrap !important;
         width: 100% !important;
         max-width: 580px;
@@ -24,7 +24,7 @@
             right: 0;
             width: 4.2rem;
             text-align: center;
-            color: $gray;
+            color: var(--color-gray);
         }
     }
     .vR {
@@ -56,7 +56,7 @@
 }
 
 .universal-data-list-wrapper {
-    background-color: $white;
+    background-color: var(--color-white);
     overflow: auto;
     display: none;
     box-sizing: border-box;
@@ -112,7 +112,7 @@
                 min-height: auto;
             }
             .item-icon {
-                color: $nobel;
+                color: var(--color-nobel);
                 font-size: 14px;
                 .icon-account {
                     font-size: 11px;
@@ -124,7 +124,7 @@
             .item-details {
                 position: relative;
                 font-size: 14px;
-                color: $night-rider;
+                color: var(--color-night-rider);
                 text-transform: capitalize;
                 margin-left: 25px;
                 padding: 5px 0;
@@ -140,10 +140,10 @@
                 }
                 small {
                     font-size: 12px;
-                    color: $gray;
+                    color: var(--color-gray);
                 }
                 .command-hover-text {
-                    color: $white;
+                    color: var(--color-white);
                     right: 0;
                     text-transform: initial;
                     width: 25%;
@@ -157,15 +157,15 @@
             }
             // hover effect
             &.selected {
-                background-color: $chetwode-blue;
+                background-color: var(--color-chetwode-blue);
                 .item-details {
-                    color: $white;
+                    color: var(--color-white);
                     small {
-                        color: $white;
+                        color: var(--color-white);
                     }
                 }
                 .item-icon {
-                    color: $white;
+                    color: var(--color-white);
                 }
             }
         }

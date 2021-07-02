@@ -1,4 +1,4 @@
-@import "../../../assets/css/color.scss";
+
 #inlnImg img {
     max-height: 18px;
 }
@@ -38,7 +38,7 @@
 .disabled-list-item {
     padding: 6px;
     height: 100%;
-    background: $white;
+    background: var(--color-white);
     font-size: 14px;
 }
 .tooltip-box {
@@ -46,7 +46,7 @@
     right: 0;
     top: 0;
     .icon-info {
-        color: $gray;
+        color: var(--color-gray);
     }
 }
 
@@ -57,7 +57,7 @@
     width: calc(100% - 42px);
 }
 .payment-text {
-    color: $gray;
+    color: var(--color-gray);
 }
 .bank-logo {
     img{
@@ -78,7 +78,7 @@
 .plus-cross-btn {
     i {
         padding: 5px 0;
-        color: $gray;
+        color: var(--color-gray);
         font-size: 20px;
     }
 }
@@ -91,8 +91,8 @@
 .custom-multi-select {
     width: 250px;
     li {
-        background: $white-smoke;
-        color: $white;
+        background: var(--color-white-smoke);
+        color: var(--color-white);
         margin: 4px;
         padding: 2px 10px;
         font-size: 14px;
@@ -100,7 +100,7 @@
         cursor: pointer;
         display: inline-block;
         a {
-            color: $gray;
+            color: var(--color-gray);
         }
     }
 }

@@ -1,4 +1,4 @@
-@import "../../../../../assets/css/color.scss";
+
 
 .modal-body .grp-col {
     max-width: 58.333%;
@@ -23,7 +23,7 @@
             }
         }
         i {
-            color: $black !important;
+            color: var(--color-black) !important;
         }
     }
 }

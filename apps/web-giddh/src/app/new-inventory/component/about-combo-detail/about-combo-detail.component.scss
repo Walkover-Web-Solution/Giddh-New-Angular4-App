@@ -1,4 +1,4 @@
-@import "../../../../assets/css/color.scss";
+
 .about-group {
     .group-detail {
         .group-thumbnail {
@@ -18,14 +18,14 @@
     }
     .more-add-button {
         .icon-undo {
-            border: 1px solid $midnight-blue;
+            border: 1px solid var(--color-midnight-blue);
             width: 34px;
             height: 34px;
             display: flex;
             justify-content: center;
             align-items: center;
             border-radius: 40px;
-            color: $midnight-blue;
+            color: var(--color-midnight-blue);
         }
     }
 }
@@ -37,19 +37,19 @@
 .combo-table th,
 .combo-table td,
 .combo-table tbody {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
     border-collapse: collapse;
     min-width: 160px;
 }
 .combo-table th {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
 }
 .combo-table th:first-child,
 .combo-table td:first-child {
     min-width: auto !important;
 }
 .create-group-footer {
-    background-color: $whisper-color;
+    background-color: var(--color-whisper-color);
     height: 60px;
     text-align: left;
     display: flex;

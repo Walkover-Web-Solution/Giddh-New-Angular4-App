@@ -1,4 +1,4 @@
-@import "../../../assets/css/color.scss";
+
 
 .custom-confirmation-modal {
     display: inline-block;
@@ -18,7 +18,7 @@
 
     p {
         font-size: 14px;
-        color: $black;
+        color: var(--color-black);
     }
 }
 @media (max-width: 1366px) {

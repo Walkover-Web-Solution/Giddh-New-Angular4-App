@@ -1,4 +1,4 @@
-@import "../../../../assets/css/color.scss";
+
 .flex-fill {
     flex: 1 1 auto;
 }
@@ -24,7 +24,7 @@
 
 .td-search-box div i {
     margin-top: 1px;
-    color: $wild-blue-yonder;
+    color: var(--color-wild-blue-yonder);
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -41,19 +41,19 @@
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    color: $nero;
+    color: var(--color-nero);
     border: none;
-    background-color: $white-smoke;
+    background-color: var(--color-white-smoke);
 }
 
 .p-modal-tooltip {
     position: absolute;
-    background-color: $white;
+    background-color: var(--color-white);
     z-index: 1000;
     width: 257px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
     border-radius: 4px;
-    box-shadow: 0 7px 24px $black-russian;
+    box-shadow: 0 7px 24px var(--color-black-russian);
 }
 
 .account-detail-modal-div {
@@ -65,7 +65,7 @@
     border-right: 0;
     padding: 11px 10px 10px 10px;
     width: 100%;
-    background: $chablis;
+    background: var(--color-chablis);
 }
 
 .account-detail-custom-title {
@@ -79,7 +79,7 @@
 }
 
 .custom-detail h4 {
-    color: $gray;
+    color: var(--color-gray);
     margin-top: 7px;
     font-size: 14px !important;
     font-family: "opensans-regular" !important;
@@ -87,11 +87,11 @@
 
 .height-82px {
     padding: 10px 10px 15px 10px;
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--color-gainsboro);
 }
 
 ul.list-unstyled li a {
-    color: $black;
+    color: var(--color-black);
 }
 
 .li-link {
@@ -99,7 +99,7 @@ ul.list-unstyled li a {
 }
 
 .btn-group > a {
-    color: $night-rider;
+    color: var(--color-night-rider);
 }
 
 .ac-detail,
@@ -108,16 +108,16 @@ ul.list-unstyled li a {
 }
 
 .main-sale-register-box .sale-register-box p {
-    color: $gray;
+    color: var(--color-gray);
 }
 
 .main-sale-register-box .sale-register-box h4 {
     font-size: 18px;
-    color: $night-rider;
+    color: var(--color-night-rider);
 }
 
 .sales-register p {
-    color: $gray;
+    color: var(--color-gray);
     margin-bottom: 5px;
 }
 .sale-register {
@@ -155,13 +155,13 @@ ul.list-unstyled li a {
 }
 
 .text-purple {
-    color: $chetwode-blue !important;
+    color: var(--color-chetwode-blue) !important;
 }
 
 .sales-register {
-    background: $white;
+    background: var(--color-white);
     padding: 15px;
-    box-shadow: 0px -3px 6px $black-russian;
+    box-shadow: 0px -3px 6px var(--color-black-russian);
     display: flex;
     align-items: center;
     position: fixed;
@@ -227,7 +227,7 @@ ul#dropdown-nested li .caret {
 }
 
 .custom-month-select li:hover a.dropdown-item {
-    background-color: $whisper;
+    background-color: var(--color-whisper);
 }
 
 .custom-month-select button.btn {
@@ -262,11 +262,11 @@ table th {
 }
 .icon-pointer {
     cursor: pointer;
-    color: $wild-blue-yonder;
+    color: var(--color-wild-blue-yonder);
     margin-left: 6px;
 }
 .icon-pointer .active-text-color {
-    color: $deep-sky-blue;
+    color: var(--color-deep-sky-blue);
 }
 .table-middle th .d-flex {
     align-items: center;
@@ -279,20 +279,20 @@ table th {
     justify-content: center;
     -webkit-box-align: center;
     align-items: center;
-    background-color: $white;
+    background-color: var(--color-white);
     font-size: 18px;
-    color: $midnight-blue;
-    border: 1px solid $gainsboro;
+    color: var(--color-midnight-blue);
+    border: 1px solid var(--color-gainsboro);
     border-radius: 5px;
 }
 .top-bar {
     .icon-options {
         width: 36px;
         height: 36px;
-        border: 1px solid $gainsboro;
-        background-color: $white;
+        border: 1px solid var(--color-gainsboro);
+        background-color: var(--color-white);
         border-radius: 5px;
-        color: $gray;
+        color: var(--color-gray);
         font-size: 20px;
         position: relative;
         padding: 7px;
@@ -303,10 +303,10 @@ table th {
 }
 
 .verticle-align-top a {
-    color: $chetwode-blue;
+    color: var(--color-chetwode-blue);
 
     &:hover {
-        color: $deep-sky-blue;
+        color: var(--color-deep-sky-blue);
     }
 }
 
@@ -321,19 +321,19 @@ table th {
     left: 0;
     width: 100%;
     padding: 7px 0px 10px 36px !important;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
     .nav-report {
         li {
             font-family: "opensans-semibold";
             font-size: 20px;
             a {
-                color: $midnight-blue;
+                color: var(--color-midnight-blue);
             }
         }
     }
     .custom-month-select {
         font-family: "opensans-semibold";
-        color: $midnight-blue;
+        color: var(--color-midnight-blue);
         .btn {
             font-size: 19px;
             padding: 0;

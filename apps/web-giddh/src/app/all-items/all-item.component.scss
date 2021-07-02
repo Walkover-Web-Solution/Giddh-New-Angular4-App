@@ -1,4 +1,4 @@
-@import "../../assets/css/color.scss";
+
 
 .giddh-all-items-wrapper {
     .search-any-item {
@@ -14,7 +14,7 @@
             }
             input {
                 height: 50px;
-                background-color: $solitude-new !important;
+                background-color: var(--color-solitude)-new !important;
                 border: none;
                 font-size: 16px;
             }
@@ -22,10 +22,10 @@
     }
     .all-item-block {
         .main-item {
-            border-bottom: 1px solid $solitude-new;
+            border-bottom: 1px solid var(--color-solitude)-new;
             margin-bottom: 20px;
             h3 {
-                color: $persian-blue;
+                color: var(--color-persian-blue);
                 font-family: "opensans-semibold";
                 i {
                     font-size: 22px;
@@ -43,21 +43,21 @@
                         margin-bottom: 5px;
                         display: flex;
                         align-items: center;
-                        color: $trout;
+                        color: var(--color-trout);
                         i {
                             font-size: 22px;
                         }
                     }
                     p {
-                        color: $grey-chateau;
+                        color: var(--color-grey-chateau);
                         font-size: 12px;
                     }
                     &:hover,
                     &.active {
-                        background-color: $cornflower;
+                        background-color: var(--color-cornflower);
                         h4,
                         p {
-                            color: $white;
+                            color: var(--color-white);
                         }
                     }
                 }

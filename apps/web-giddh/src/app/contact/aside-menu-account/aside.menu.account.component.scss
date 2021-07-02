@@ -1,4 +1,4 @@
-@import "../../../assets/css/color.scss";
+
 :host {
     position: fixed;
     left: auto;
@@ -19,7 +19,7 @@
     right: 10px;
     z-index: 9999999;
     background-color: transparent;
-    color: $white;
+    color: var(--color-white);
     font-size: 17px;
     top: 18px;
     margin-right: 0;
@@ -40,8 +40,8 @@
     padding: 0 15px;
 }
 .aside-pane-form {
-    background-color: $white;
-    box-shadow: 0px 3px 6px $black-russian;
+    background-color: var(--color-white);
+    box-shadow: 0px 3px 6px var(--color-black-russian);
     padding: 15px 15px;
     height: calc(100vh - 90px);
     overflow: auto;
