@@ -14,7 +14,7 @@
             }
             input {
                 height: 50px;
-                background-color: var(--color-solitude)-new !important;
+                background-color: var(--color-solitude-new) !important;
                 border: none;
                 font-size: 16px;
             }
@@ -22,7 +22,7 @@
     }
     .all-item-block {
         .main-item {
-            border-bottom: 1px solid var(--color-solitude)-new;
+            border-bottom: 1px solid var(--color-solitude-new);
             margin-bottom: 20px;
             h3 {
                 color: var(--color-persian-blue);

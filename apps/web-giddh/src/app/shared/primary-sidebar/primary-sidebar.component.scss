@@ -68,12 +68,12 @@
         }
         h3 {
             font-family: "opensans-semibold";
-            color: var(--color-black)-pearl;
+            color: 1px solid var(--color-black-pearl);
             .company-alice {
                 width: 26px;
                 height: 26px;
                 min-width: 26px;
-                border: 1px solid var(--color-black)-pearl;
+                border: 1px solid var(--color-black-pearl);
                 padding: 5px;
                 border-radius: 50px;
                 display: inline-flex;
@@ -171,7 +171,7 @@
             justify-content: center;
             align-items: center;
             background-color: var(--color-gray-95);
-            border: 1px solid var(--color-gray-95);
+            border: 1px solid var(--color-gainsboro);
             border-radius: 5px;
             border-left: none;
             border-top-left-radius: 0px !important;
@@ -201,7 +201,7 @@
             }
         }
         p {
-            color: var(--color-black)-pearl;
+            color: 1px solid var(--color-black-pearl);
             font-family: "opensans-semibold";
         }
         ul {

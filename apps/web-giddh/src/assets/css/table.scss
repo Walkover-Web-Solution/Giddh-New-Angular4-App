@@ -65,7 +65,7 @@
         }
     }
     tbody > tr > td:first-child{
-        color: var(--color-black)-pearl;
+        color: var(--color-black)1px solid var(--color-black-pearl);
     }
     thead > tr > th:first-child,
     tbody > tr > td:first-child {

@@ -4,7 +4,7 @@
     padding: 0 20px;
     .search-box {
         .input-group-text {
-            background-color: var(--color-solitude)-new;
+            background-color: var(--color-solitude-new);
             padding: 8px !important;
         }
         input {
@@ -29,7 +29,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: var(--color-solitude)-new;
+            background-color: var(--color-solitude-new);
             border: 1px solid var(--color-gainsboro);
             border-radius: 5px;
             border-left: none;
@@ -393,7 +393,7 @@
                                 &.dropdown-toggle{
                                     padding: 8px 20px;
                                     span{
-                                        color: var(--color-black)-pearl;
+                                        color: var(--color-black)1px solid var(--color-black-pearl);
                                         font-family: 'opensans-semibold';
                                     }
                                 }
