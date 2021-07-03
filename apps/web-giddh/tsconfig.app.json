@@ -16,6 +16,7 @@
     ],
     "files": [
         "src/main.ts",
+        "src/main.electron.ts",
         "src/polyfills.ts"
     ]
 }
