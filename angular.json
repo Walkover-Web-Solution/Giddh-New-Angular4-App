@@ -492,15 +492,14 @@
                                     "with": "apps/web-giddh/src/environments/environment.prod.electron.ts"
                                 }
                             ],
-                            "optimization": false,
+                            "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
-                            "extractCss": false,
-                            "namedChunks": false,
+                            "namedChunks": true,
                             "aot": true,
                             "extractLicenses": false,
                             "vendorChunk": true,
-                            "buildOptimizer": false,
+                            "buildOptimizer": true,
                             "budgets": [
                                 {
                                     "type": "initial",
