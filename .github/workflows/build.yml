@@ -25,7 +25,7 @@ jobs:
         shell: bash
         run: echo "branch_name=${GITHUB_REF##*/}" >> $GITHUB_ENV
         id: extract_branch
-      - if: ${{env.branch_name == 'giddh-2.0' || env.branch_name == 'clickup-#41cdv7'}}
+      - if: ${{env.branch_name == 'giddh-2.0'}}
         run: echo "BUILD_ENV=Test" >> $GITHUB_ENV
       - if: ${{env.branch_name == 'beta-stage'}}
         run: echo "BUILD_ENV=Stage" >> $GITHUB_ENV
