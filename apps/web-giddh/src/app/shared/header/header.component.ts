@@ -501,6 +501,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.collapseSidebar(true);
             }
         });
+        
         this.generalService.isMobileSite.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             this.isMobileSite = s;
             if (this.generalService.companyUniqueName) {
