@@ -78,25 +78,13 @@ registerLocaleData(localeEn);
 registerLocaleData(localeHi);
 registerLocaleData(localeMr);
 
-const getGoogleCredentials = () => {
-    if (PRODUCTION_ENV || isElectron || isCordova) {
-        return {
-            GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com'
-        };
-    } else {
-        return {
-            GOOGLE_CLIENT_ID: '641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com'
-        };
-    }
-};
-
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
 };
 const SOCIAL_CONFIG = (isElectron || isCordova) ? null : new AuthServiceConfig([
     {
         id: GoogleLoginProvider.PROVIDER_ID,
-        provider: new GoogleLoginProvider(getGoogleCredentials().GOOGLE_CLIENT_ID)
+        provider: new GoogleLoginProvider(GOOGLE_CLIENT_ID)
     }
 ], false);
 
