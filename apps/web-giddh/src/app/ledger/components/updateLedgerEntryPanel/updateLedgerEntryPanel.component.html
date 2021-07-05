@@ -802,14 +802,14 @@
                                             <input id="update-ledger-inclusive-tax-edit-mode" type="text"
                                                 class="form-control mr-b1"
                                                 *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode"
-                                                [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency"
+                                                [mask]="vm.inputMaskFormat" [prefix]="item.accountCurrency?.symbol"
                                                 decimalDigitsDirective
                                                 [(ngModel)]="item.adjustmentAmount.amountForAccount" disabled>
                                             <input
                                                 [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                                                 id="update-ledger-inclusive-tax" type="text" class="form-control mr-b1"
                                                 decimalDigitsDirective [mask]="vm.inputMaskFormat"
-                                                [prefix]="vm.selectedPrefixForCurrency"
+                                                [prefix]="item.accountCurrency?.symbol"
                                                 (blur)="adjustedInvoiceAmountChange()"
                                                 *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode"
                                                 [(ngModel)]="item.adjustmentAmount.amountForAccount">
@@ -821,15 +821,20 @@
                                             <label>{{commonLocaleData?.app_tax}}</label>
                                             <input type="text" id="update-ledger-voucher-tax" class="form-control mr-b1"
                                                 decimalDigitsDirective [mask]="vm.inputMaskFormat"
-                                                [prefix]="vm.selectedPrefixForCurrency"
+                                                [prefix]="item.accountCurrency?.symbol"
                                                 [(ngModel)]="item.calculatedTaxAmount" disabled>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <p *ngIf="isAdjustedAmountExcess" class="font-12 text-light">
-                                {{localeData?.excess_amount}}:{{ vm.baseCurrencyDetails?.symbol}}{{adjustedExcessAmount
-                                | giddhCurrency}} <i class="icon-info pointer"
+                                {{localeData?.excess_amount}}:
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="adjustedExcessAmount" [currencySymbol]="vm.baseCurrencyDetails?.symbol"
+                                        [currencyCode]="vm.baseCurrencyDetails?.code">
+                                    </amount-field>
+                                </span>
+                                <i class="icon-info pointer"
                                     [tooltip]="localeData?.adjustment_amount_error"></i></p>
                         </div>
                     </div>
@@ -914,8 +919,10 @@
                                                         </div>
                                                         <div class="item-unique">
                                                             ({{commonLocaleData?.app_due}}:
-                                                            {{ option.additional?.balanceDue?.amountForAccount |
-                                                            giddhCurrency }})
+                                                            <span class="d-inline-flex">
+                                                                <amount-field [amount]="option.additional?.balanceDue?.amountForAccount">
+                                                                </amount-field>
+                                                            </span>
                                                         </div>
                                                     </a>
                                                 </ng-template>

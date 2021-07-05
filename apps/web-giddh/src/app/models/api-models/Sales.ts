@@ -147,6 +147,7 @@ export class AccountDetailsClass {
     public country?: CountryClass;
     public currency?: CurrencyClass;
     public currencySymbol: string = '';
+    public currencyCode?: string = '';
     public customerName: string;
     public mobileNumber?: string;
 
@@ -484,6 +485,7 @@ export class VoucherDetailsClass {
     public balanceStatus?: string;
     public totalAsWords: string;
     public grandTotal: number;
+    public grantTotalAmountForCompany?: number;
     public subTotal: number;
     public totalDiscount?: any;
     public gstTaxesTotal?: any;
@@ -501,6 +503,7 @@ export class VoucherDetailsClass {
     public invoiceLinkingRequest?: IInvoiceLinkingRequest;
     public currencySymbol: string;
     public currency: Currency;
+    public exchangeRate?: number;
 
     constructor() {
         this.customerName = null;
