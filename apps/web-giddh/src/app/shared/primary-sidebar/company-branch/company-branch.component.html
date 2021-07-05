@@ -21,8 +21,7 @@
     <!-- branch design option 1 -->
     <div class="company-branch-opt-1" *ngIf="activeDesign === 1">
         <tabset class="custom-tabs position-relative" #staticTabs>
-            <i class="icon-company-branch-connect"></i>
-            <tab [heading]="commonLocaleData?.app_company" [customClass]="'icon-company'"
+            <tab [heading]="commonLocaleData?.app_company"
                 (selectTab)="tabChanged('company')">
                 <div class="wrap-company-refresh">
                     <p class="font-12 d-flex justify-content-between mr-t1">
@@ -49,7 +48,7 @@
                     <giddh-page-loader *ngIf="(isCompanyRefreshInProcess$ | async)"></giddh-page-loader>
                 </div>
             </tab>
-            <tab [heading]="commonLocaleData?.app_branch" [customClass]="'icon-branch1'" (selectTab)="tabChanged('branch')">
+            <tab [heading]="commonLocaleData?.app_branch" (selectTab)="tabChanged('branch')">
                 <div class="wrap-company-refresh">
                     <p class="font-12 d-flex justify-content-between mr-t1">
                         <span><small>{{branchList?.length}} {{localeData?.branches}}</small></span>
