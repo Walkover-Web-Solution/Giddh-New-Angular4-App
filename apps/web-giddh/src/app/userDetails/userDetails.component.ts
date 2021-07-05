@@ -111,6 +111,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngOnInit() {
+        document.querySelector('body').classList.add('setting-sidebar-open');
         /** To reset isUpdateCompanyInProgress in case of subscription module */
         this.store.dispatch(this.settingsProfileActions.resetPatchProfile());
         
