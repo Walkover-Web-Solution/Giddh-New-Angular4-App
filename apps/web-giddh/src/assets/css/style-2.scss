@@ -7666,7 +7666,16 @@ span#HW_badge_cont:nth-child(3) {
                     i {
                         color: $gray;
                         margin-right: 10px;
-                        font-size: 17px;
+                        font-size: 22px;
+                    }
+                }
+            }
+            &:hover{
+                a {
+                    span {
+                        i {
+                            color: $white;
+                        }
                     }
                 }
             }
@@ -8454,6 +8463,7 @@ body.update-scroll-hidden {
                         color: $grey-chateau !important;
                         padding-top: 5px !important;
                         padding-left: 40px !important;
+                        height: 30px;
                     }
                 }
             }
