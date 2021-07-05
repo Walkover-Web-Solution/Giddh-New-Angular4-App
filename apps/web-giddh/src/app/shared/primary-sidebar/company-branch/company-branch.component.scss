@@ -4,17 +4,17 @@
     padding: 0 20px;
     .search-box {
         .input-group-text {
-            background-color: $solitude-new;
+            background-color: $gray-95;
             padding: 8px !important;
         }
         input {
             border-left: none;
             padding-left: 0 !important;
-            background-color: $solitude-new !important;
+            background-color: $gray-95 !important;
             border-top-left-radius: 0px !important;
             border-bottom-left-radius: 0px !important;
-            border-top-right-radius: 0px !important;
-            border-bottom-right-radius: 0px !important;
+            border-top-right-radius: 5px !important;
+            border-bottom-right-radius: 5px !important;
             &:focus {
                 border-color: $gainsboro !important;
             }
@@ -29,7 +29,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: $solitude-new;
+            background-color: $gray-95;
             border: 1px solid $gainsboro;
             border-radius: 5px;
             border-left: none;
@@ -61,6 +61,19 @@
     .company-branch-opt-1{
         .wrap-company-refresh{
             padding: 0 20px;
+            p{
+                span{
+                    small{
+                        background: $dark-fog;
+                        color: $omiod;
+                        font-size: 10px;
+                        line-height: 12.4px;
+                        font-weight: 700;
+                        padding: 2px;
+                        border-radius: 5px;
+                    }
+                }
+            }
         }
         .company-list{
             ul{
@@ -70,11 +83,11 @@
                             display:  none;
                         }
                     }
-                     &:hover{
-                         span{
-                             background-color: transparent;
-                         }
-                     }
+                    &:hover{
+                        span{
+                            background-color: transparent;
+                        }
+                    }
                 }
             }
         }
@@ -269,14 +282,11 @@
         bottom: 0;
         width: 240px;
         left: 0;
-        padding: 5px 0 0;
         border-top: 1px solid $gainsboro;
         background-color: $white;
         z-index: 991;
         .profile-name{
-            padding: 14px 15px;
             cursor: pointer;
-            min-width: 120px;
             .profile-alice {
                 display: inline-flex;
                 width: 24px;
@@ -293,15 +303,17 @@
         .profile-logout{
             display: flex;
             align-items: center;
-            padding: 14px 15px;
-            min-width: 120px;
             button{
                 background-color: $white;
-                border: 1px solid $white;
-                color: $trout;
+                border: 1px solid $midnight-blue;
+                color: $midnight-blue;
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                font-size: 12px;
+                padding: 5px 10px;
+                border-radius: 5px !important;
+                font-size: 12px;
             }
         }
     }
@@ -405,7 +417,6 @@
 }
 .icon-plus, .icon-link-arrow{
     width: 20px;
-    height: 20px;
     display: inline-flex;
     margin-right: 2px;
 }
