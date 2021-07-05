@@ -1385,6 +1385,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if(this.advanceSearchComp) {
             this.advanceSearchComp.resetAdvanceSearchModal();
         }
+        this.isAdvanceSearchImplemented = false;
         this.trxRequest.page = 0;
         this.search("");
         this.getTransactionData();
