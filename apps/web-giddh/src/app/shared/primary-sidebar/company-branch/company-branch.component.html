@@ -133,7 +133,8 @@
                             <ng-container *ngIf="!branchRefreshInProcess">
                                 <li role="menuitem">
                                     <div class="d-flex flex-column total-branches">
-                                        <span class="pr-0 pt-0 font-12">{{branchList?.length}} {{localeData?.branches}}</span>
+                                        <!-- will be used with next story-->
+                                        <!--<span class="pr-0 pt-0 font-12">{{branchList?.length}} {{localeData?.branches}}</span>-->
                                         <p class="font-12 d-flex justify-content-between">
                                             <span *ngIf="activeCompany?.uniqueName !== companyBranches?.uniqueName || currentBranchUniqueName" class="digit-blue" href="javascript:;" (keydown.enter)="changeCompany(company.uniqueName, '', false)" (click)="changeCompany(company.uniqueName, '', false)">
                                                 <span class="d-flex align-items-center digit-blue"> <i class="icon-link-arrow font-14"></i> <span class="digit-blue font-12">{{ localeData?.goto_company }}</span> </span>

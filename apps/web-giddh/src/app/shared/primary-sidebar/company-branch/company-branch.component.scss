@@ -79,6 +79,10 @@
                     }
                 }
             }
+            .btn-sky-blue{
+                padding: 0px 10px;
+                height: 30px;
+            }
         }
         .company-list{
             ul{
@@ -333,6 +337,23 @@
         margin: 0 -20px;
         .wrap-company-refresh{
             padding: 0 20px;
+            p{
+                span{
+                    small{
+                        background: $dark-fog;
+                        color: $omiod;
+                        font-size: 10px;
+                        line-height: 12.4px;
+                        font-weight: 700;
+                        padding: 2px;
+                        border-radius: 5px;
+                    }
+                }
+            }
+            .btn-sky-blue{
+                padding: 0px 10px;
+                height: 30px;
+            }
         }
         .company-list{
             height: calc(90vh - 120px) !important;
@@ -344,7 +365,6 @@
                     margin: 0 -20px;
                     span{
                         padding: 5px 20px;
-                        color: $slate;
                         margin: 0;
                         &.company-name {
                             display: flex !important;
@@ -399,6 +419,11 @@
                             }
                             .total-branches{
                                 padding: 10px 20px;
+                                .btn-sky-blue{
+                                    width: 145px;
+                                    padding: 0px 10px;
+                                    height: 30px;
+                                }
                             }
                         }
                     }
