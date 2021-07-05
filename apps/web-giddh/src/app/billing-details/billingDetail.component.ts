@@ -75,7 +75,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     public stateGstCode: any[] = [];
     public disableState: boolean = false;
     public isMobileNumberValid: boolean = true;
-    public razorpayAuthKey = RAZORPAY_KEY;
 
     /** Form instance */
     @ViewChild('billingForm', { static: true }) billingForm: NgForm;
