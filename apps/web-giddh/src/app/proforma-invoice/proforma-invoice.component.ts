@@ -425,7 +425,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         gstTaxesTotal: 0,
         subTotal: 0,
         totalTaxableValue: 0,
-        totalAdjustedAmount: 0
+        totalAdjustedAmount: 0,
+        convertedTotalAdjustedAmount: 0
     }
     public applyRoundOff: boolean = true;
     public customerAccount: any = { email: '' };
@@ -584,10 +585,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public showNotesAtLastPage: boolean;
     /** This will hold account unique name which is in edit  */
     public accountEditingUniqueName: string = "";
+    /** Stores the adjustments as a backup that are present on the current opened entry */
+    public originalVoucherAdjustments: VoucherAdjustments;
     /** Length of entry description */
     public entryDescriptionLength: number = ENTRY_DESCRIPTION_LENGTH;
     /** Force clear for billing-shipping dropdown */
     public billingShippingForceClearReactive$: Observable<IForceClear> = observableOf({ status: false });
+    /** True, if multi-currency support to voucher adjustment is enabled */
+    public enableVoucherAdjustmentMultiCurrency: boolean;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -651,7 +656,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     ) {
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
         this.advanceReceiptAdjustmentData.adjustments = [];
-
+        this.enableVoucherAdjustmentMultiCurrency = enableVoucherAdjustmentMultiCurrency;
         this.invFormData = new VoucherClass();
         this.activeAccount$ = this.store.pipe(select(p => p.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
         this.newlyCreatedAc$ = this.store.pipe(select(p => p.groupwithaccounts.newlyCreatedAccount), takeUntil(this.destroyed$));
@@ -1218,7 +1223,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             obj = cloneDeep(convertedRes1) as VoucherClass;
                             this.selectedAccountDetails$.pipe(take(1)).subscribe(acc => {
                                 if (acc) {
-                                    obj.accountDetails.currencySymbol = acc.currencySymbol || '';
+                                    obj.accountDetails.currencySymbol = acc.currencySymbol ?? this.baseCurrencySymbol;
+                                    obj.accountDetails.currencyCode = acc.currency ?? this.companyCurrency;
                                 }
                             });
                             if (this.isPurchaseInvoice) {
@@ -1264,7 +1270,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             this.isInvoiceAdjustedWithAdvanceReceipts = true;
                             this.calculateAdjustedVoucherTotal(results[0].voucherAdjustments.adjustments);
                             this.advanceReceiptAdjustmentData = results[0].voucherAdjustments;
-                            this.adjustPaymentData.totalAdjustedAmount = results[0].voucherAdjustments.totalAdjustmentAmount;
+                            this.originalVoucherAdjustments = cloneDeep(results[0].voucherAdjustments);
+                            if (this.enableVoucherAdjustmentMultiCurrency) {
+                                if (!this.isMulticurrencyAccount) {
+                                    this.adjustPaymentData.totalAdjustedAmount = results[0].voucherAdjustments.totalAdjustmentAmount;
+                                } else {
+                                    this.adjustPaymentData.convertedTotalAdjustedAmount = results[0].voucherAdjustments.totalAdjustmentCompanyAmount;
+                                }
+                            } else {
+                                this.adjustPaymentData.convertedTotalAdjustedAmount = results[0].voucherAdjustments.totalAdjustmentCompanyAmount;
+                                this.adjustPaymentData.totalAdjustedAmount = results[0].voucherAdjustments.totalAdjustmentAmount;
+                            }
                             this.isAdjustAmount = true;
                         } else {
                             this.isInvoiceAdjustedWithAdvanceReceipts = false;
@@ -1788,7 +1804,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     if (response.body.results && response.body.results.length) {
                         response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice.voucherNumber ? invoice.voucherNumber : '-', value: invoice.uniqueName, additional: invoice }))
                     } else {
-                        this.invoiceForceClearReactive$ = observableOf({ status: true });
                         this.invoiceSelected = '';
                     }
                     let invoiceSelected;
@@ -2901,7 +2916,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.invFormData.voucherDetails.balanceDue =
                 giddhRoundOff((((count + this.invFormData.voucherDetails.tcsTotal + this.calculatedRoundOff) - this.invFormData.voucherDetails.tdsTotal) - Number(this.depositAmountAfterUpdate) - this.totalAdvanceReceiptsAdjustedAmount), 2);
         }
+    }
 
+    /**
+     * Returns remaining due in company currency after adjustment with advance receipts
+     *
+     * @param {boolean} returnModValue True, if only absolute value is required
+     * @returns {number} Balance due
+     * @memberof ProformaInvoiceComponent
+     */
+     public getConvertedBalanceDue(returnModValue?: boolean): number {
+        const convertedBalanceDue = parseFloat(Number(
+            this.grandTotalMulDum - this.adjustPaymentData.convertedTotalAdjustedAmount - Number((this.depositAmountAfterUpdate * this.exchangeRate).toFixed(2)) - this.invFormData.voucherDetails.tdsTotal).toFixed(2));
+        return returnModValue ? Math.abs(convertedBalanceDue) : convertedBalanceDue;
     }
 
     public calculateSubTotal() {
@@ -2965,7 +2992,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.calculatedRoundOff = 0;
         }
         this.invFormData.voucherDetails.grandTotal = calculatedGrandTotal;
-        this.grandTotalMulDum = calculatedGrandTotal * this.exchangeRate;
+        this.grandTotalMulDum = Number((calculatedGrandTotal * this.exchangeRate).toPrecision(HIGH_RATE_FIELD_PRECISION));
     }
 
     /**
@@ -3893,15 +3920,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 if (this.isCreditNote || this.isDebitNote) {
                     requestObject['invoiceNumberAgainstVoucher'] = this.invFormData.voucherDetails.voucherNumber;
                 }
-                if ((this.isCreditNote || this.isDebitNote) && this.selectedInvoice) {
-                    const selectedLinkedVoucherType = this.invoiceList.find(invoice => invoice.value === this.selectedInvoice);
-                    requestObject['invoiceLinkingRequest'] = {
-                        linkedInvoices: [{
-                            invoiceUniqueName: this.selectedInvoice,
-                            voucherType: selectedLinkedVoucherType && selectedLinkedVoucherType.additional ?
-                                selectedLinkedVoucherType.additional.voucherType : 'sales'
-                        }]
-                    };
+                if (((this.isCreditNote || this.isDebitNote) && this.selectedInvoice) || this.isSalesInvoice) {
+                    if (this.isSalesInvoice) {
+                        requestObject['invoiceLinkingRequest'] = cloneDeep(this.invFormData?.voucherDetails?.invoiceLinkingRequest);
+                    } else {
+                        const selectedLinkedVoucherType = this.invoiceList.find(invoice => invoice.value === this.selectedInvoice);
+                        requestObject['invoiceLinkingRequest'] = {
+                            linkedInvoices: [{
+                                invoiceUniqueName: this.selectedInvoice,
+                                voucherType: selectedLinkedVoucherType && selectedLinkedVoucherType.additional ?
+                                    selectedLinkedVoucherType.additional.voucherType : 'sales'
+                            }]
+                        };
+                    }
                 }
 
                 /** Tourist scheme is applicable only for voucher type 'sales invoice' and 'cash invoice' and company country code 'AE'   */
@@ -4855,6 +4886,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         voucherDetails.customerUniquename = result.account.uniqueName;
         voucherDetails.grandTotal = result.grandTotal.amountForAccount;
+        voucherDetails.grantTotalAmountForCompany = result.grandTotal.amountForCompany;
         if ([VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote].indexOf(this.invoiceType) > -1) {
             // Credit note and Debit note
             voucherDetails.voucherNumber = result.invoiceNumberAgainstVoucher || '';
@@ -5687,6 +5719,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public openAdjustPaymentModal() {
         this.showAdvanceReceiptAdjust = true;
         this.isAdjustAmount = true;
+        this.invFormData.voucherDetails.exchangeRate = this.exchangeRate;
         this.adjustPaymentModal.show();
     }
 
@@ -5699,6 +5732,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public clickAdjustAmount(event) {
         if (event) {
             this.isAdjustAmount = true;
+            if (!this.advanceReceiptAdjustmentData?.adjustments?.length && this.originalVoucherAdjustments?.adjustments?.length) {
+                // If length of voucher adjustment is 0 i.e., user has changed its original adjustments but has not performed update operation
+                // and voucher already has original adjustments to it then show the
+                // original adjustments in adjustment popup
+                this.advanceReceiptAdjustmentData = cloneDeep(this.originalVoucherAdjustments);
+                this.calculateAdjustedVoucherTotal(this.originalVoucherAdjustments?.adjustments);
+            }
             this.openAdjustPaymentModal();
         } else {
             this.isAdjustAmount = false;
@@ -6868,15 +6908,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      *
      * @param {*} data
      * @param {*} address
-     * @param {false} isCompanyAddress
+     * @param {boolean} isCompanyAddress
      * @memberof ProformaInvoiceComponent
      */
-    public selectAddress(data: any, address: any, isCompanyAddress: false): void {
+    public selectAddress(data: any, address: any, isCompanyAddress: boolean = false): void {
         if (data && address) {
             data.address[0] = address.address;
             if (!data.state) {
                 data.state = {};
             }
+
 
             data.state.code = (isCompanyAddress) ? address.stateCode : (address.state) ? address.state.code : "";
             data.stateCode = data.state.code;
