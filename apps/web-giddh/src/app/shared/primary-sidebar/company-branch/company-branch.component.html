@@ -114,7 +114,7 @@
                 <i class="icon-plus font-12"></i>
                 <span>{{localeData?.create_company}}</span></button>
         </div>
-        <div class="company-list">
+        <div class="company-list mt-2">
             <ul class="list-style-none font-14" *ngIf="companyListForFilter?.length && !(isCompanyRefreshInProcess$ | async)">
                 <ng-container *ngFor="let company of companyListForFilter;">
                     <li class="btn-group" *ngIf="!viewingCompany || viewingCompany?.uniqueName === company.uniqueName" dropdown [autoClose]="false" (onHidden)="unsetViewingCompany()" [ngClass]="{'active': company.uniqueName === activeCompany?.uniqueName}">
@@ -136,7 +136,7 @@
                                             <span *ngIf="activeCompany?.uniqueName !== companyBranches?.uniqueName || currentBranchUniqueName" class="digit-blue" href="javascript:;" (keydown.enter)="changeCompany(company.uniqueName, '', false)" (click)="changeCompany(company.uniqueName, '', false)">
                                                 <span class="d-flex align-items-center digit-blue"> <i class="icon-link-arrow font-14"></i> <span class="digit-blue font-12">{{ localeData?.goto_company }}</span> </span>
                                             </span>
-                                            <span class="cursor-pointer pl-0 pt-0" [tooltip]="localeData?.refresh_manually" placement="left"
+                                            <span class="cursor-pointer pl-0 pt-0 ml-auto" [tooltip]="localeData?.refresh_manually" placement="left"
                                                 (click)="getCompanyBranches(2, company, true)"><i class="icon-reload font-22"></i></span>
                                         </p>
                                         

@@ -316,6 +316,10 @@
                 padding: 5px 10px;
                 border-radius: 5px !important;
                 font-size: 12px;
+                &:hover{
+                    background-color: $midnight-blue;
+                    color: $white;
+                }
             }
         }
     }
@@ -380,7 +384,7 @@
                                     }
                                 }
                             }
-                        }   
+                        }
                     &.btn-group{
                         &.open{
                             span{
