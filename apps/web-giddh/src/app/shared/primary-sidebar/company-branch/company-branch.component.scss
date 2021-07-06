@@ -317,6 +317,10 @@
                 padding: 5px 10px;
                 border-radius: 5px !important;
                 font-size: 12px;
+                &:hover{
+                    background-color: $midnight-blue;
+                    color: $white;
+                }
             }
         }
     }
@@ -364,24 +368,24 @@
                             display: flex !important;
                             align-items: center !important;
                             justify-content: space-between !important;
-                             span{
-                                 i{
-                                    float: left;
-                                    width: 14px;
-                                 }
-                                 span.select-company-name{
-                                    float: left;
-                                    width: 87%;
-                                    padding: 0;
-                                    text-overflow: ellipsis;
-                                    white-space: nowrap;
-                                    overflow: hidden;
-                                    max-width: 150px;
-                                    padding: 3px 0;
-                                 }
-                             }
+                                span{
+                                    i{
+                                        float: left;
+                                        width: 14px;
+                                    }
+                                    span.select-company-name{
+                                        float: left;
+                                        width: 87%;
+                                        padding: 0;
+                                        text-overflow: ellipsis;
+                                        white-space: nowrap;
+                                        overflow: hidden;
+                                        max-width: 150px;
+                                        padding: 3px 0;
+                                    }
+                                }
+                            }
                         }
-                    }
                     &.btn-group{
                         &.open{
                             span{
