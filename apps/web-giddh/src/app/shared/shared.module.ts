@@ -254,6 +254,7 @@ export class PickDateAdapter extends NativeDateAdapter {
         CurrencyModule,
         PrimarySidebarComponent,
         TranslateDirectiveModule,
+        ValidateSectionPermissionDirectiveModule,
         CompanyBranchComponent
     ],
     entryComponents: [
