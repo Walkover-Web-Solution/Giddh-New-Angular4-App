@@ -37,7 +37,7 @@
                 <div class="company-list mt-2">
                     <ul class="list-style-none font-14"
                         *ngIf="companyListForFilter && companyListForFilter.length && !(isCompanyRefreshInProcess$ | async)">
-                        <li class="btn-group" *ngFor="let company of companyListForFilter;">
+                        <li class="btn-group" *ngFor="let company of companyListForFilter;" [ngClass]="{'active': company.uniqueName === activeCompany?.uniqueName}">
                             <span id="button-basic" class="dropdown-toggle d-flex align-items-center"
                                 aria-controls="dropdown-basic" (click)="getCompanyBranches(1, company); showAllBranches();"> <i
                                     class="icon-company mr-2"></i>
@@ -117,7 +117,7 @@
         <div class="company-list">
             <ul class="list-style-none font-14" *ngIf="companyListForFilter?.length && !(isCompanyRefreshInProcess$ | async)">
                 <ng-container *ngFor="let company of companyListForFilter;">
-                    <li class="btn-group" *ngIf="!viewingCompany || viewingCompany?.uniqueName === company.uniqueName" dropdown [autoClose]="false" (onHidden)="unsetViewingCompany()">
+                    <li class="btn-group" *ngIf="!viewingCompany || viewingCompany?.uniqueName === company.uniqueName" dropdown [autoClose]="false" (onHidden)="unsetViewingCompany()" [ngClass]="{'active': company.uniqueName === activeCompany?.uniqueName}">
                         <span id="button-basic" dropdownToggle
                             class="dropdown-toggle active d-flex justify-content-between align-items-center company-name"
                             aria-controls="dropdown-basic" (click)="getCompanyBranches(2, company)">
