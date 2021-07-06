@@ -206,11 +206,11 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         });
     }
 
-    public onChangeSendInvoiceViaSms(isChecked) {
-        if (!isChecked) {
-            this.invoiceSetting.smsContent = '';
-        }
-    }
+    // public onChangeSendInvoiceViaSms(isChecked) {
+    //     if (!isChecked) {
+    //         this.invoiceSetting.smsContent = '';
+    //     }
+    // }
 
     /**
      * Add New Webhook

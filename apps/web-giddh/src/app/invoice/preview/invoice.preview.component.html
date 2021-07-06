@@ -981,7 +981,7 @@
 
                 <!--bulk update modal-->
                 <div bsModal #bulkUpdate="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
-                    <div class="modal-dialog">
+                    <div *ngIf="bulkUpdate?.isShown" class="modal-dialog">
                         <div class="modal-content">
                             <invoice-bulk-update-modal-component (closeModelEvent)="toggleBulkUpdatePopup(true)"
                                 [voucherType]="selectedVoucher" [selectedInvoices]="selectedInvoicesList"
@@ -1089,7 +1089,7 @@
                         [isUpdateMode]="isUpdateMode" [depositAmount]="depositAmount" [invoiceFormDetails]="invFormData"
                         [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
                         (closeModelEvent)="closeAdvanceReceiptModal()" (submitClicked)="getAdvanceReceiptAdjustData($event)"
-                        [isVoucherModule]="true" [voucherForAdjustment]="voucherForAdjustment">
+                        [isVoucherModule]="true" [voucherForAdjustment]="voucherForAdjustment" [adjustedVoucherType]="selectedVoucher">
                     </advance-receipt-adjustment-component>
                 </div>
             </div>
