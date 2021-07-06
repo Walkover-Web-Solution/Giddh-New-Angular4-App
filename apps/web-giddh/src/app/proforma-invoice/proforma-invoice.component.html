@@ -315,6 +315,7 @@
                                                                                 (selected)="fillShippingBillingDetails($event, true); autoFillShippingDetails()"
                                                                                 #statesBilling
                                                                                 [showBottomBorderOnly]="true"
+                                                                                [forceClearReactive]="billingShippingForceClearReactive$ | async"
                                                                                 [options]="statesSource"
                                                                                 name="billingDetails.stateCode"
                                                                                 [(ngModel)]="invFormData.accountDetails.billingDetails.state.code">
@@ -443,6 +444,7 @@
                                                                                     [placeholder]="commonLocaleData?.app_state"
                                                                                     class="select-bdr-bottom"
                                                                                     #statesShipping
+                                                                                    [forceClearReactive]="billingShippingForceClearReactive$ | async"
                                                                                     [showBottomBorderOnly]="true"
                                                                                     (selected)="fillShippingBillingDetails($event, false)"
                                                                                     [options]="statesSource"
@@ -1972,7 +1974,7 @@
                                                 </div>
                                             </div>
                                             <div class="table-row"
-                                                *ngIf="(calculatedRoundOff > 0 || calculatedRoundOff < 0)">
+                                                *ngIf="calculatedRoundOff !== 0">
 
                                                 <div class="table-cell">
                                                     <strong>{{commonLocaleData?.app_round_off}}</strong>

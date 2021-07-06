@@ -192,7 +192,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @ViewChild('itemsContainer', { read: ViewContainerRef, static: false }) container: ViewContainerRef;
     /** Template reference for each entry */
     @ViewChild('entry', { read: TemplateRef, static: false }) template: TemplateRef<any>;
-
+    /** Billing state field instance */
+    @ViewChild('statesBilling', {static: true}) statesBilling: SalesShSelectComponent;
+    /** Billing state field instance */
+    @ViewChild('statesShipping', {static: true}) statesShipping: SalesShSelectComponent;
     public showAdvanceReceiptAdjust: boolean = false;
 
     @Output() public cancelVoucherUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -586,6 +589,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public originalVoucherAdjustments: VoucherAdjustments;
     /** Length of entry description */
     public entryDescriptionLength: number = ENTRY_DESCRIPTION_LENGTH;
+    /** Force clear for billing-shipping dropdown */
+    public billingShippingForceClearReactive$: Observable<IForceClear> = observableOf({ status: false });
     /** True, if multi-currency support to voucher adjustment is enabled */
     public enableVoucherAdjustmentMultiCurrency: boolean;
 
@@ -692,7 +697,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             return firstItem?.first?.filter === nextItem?.first?.filter;
         }), takeUntil(this.destroyed$)).subscribe((queryChanges: QueryList<ShSelectComponent>) => {
             if (this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName) {
-                queryChanges?.first?.show();
+                setTimeout(() => {
+                    queryChanges?.first?.show();
+                });
             }
         });
     }
@@ -2093,6 +2100,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.isOthrDtlCollapsed = false;
         this.forceClear$ = observableOf({ status: true });
         this.invoiceForceClearReactive$ = observableOf({ status: true });
+        this.billingShippingForceClearReactive$ = observableOf({ status: true });
+        if (this.statesBilling?.disabled) {
+            this.statesBilling.disabled = false;
+        }
+        if (this.statesShipping?.disabled) {
+            this.statesShipping.disabled = false;
+        }
         this.invoiceSelected = '';
         this.isCustomerSelected = false;
         this.selectedFileName = '';
@@ -2695,67 +2709,69 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass, fromTransactionField: boolean = false, event?: any) {
-        if (fromTransactionField && this.transactionAmount === trx.amount) {
-            this.transactionAmount = 0;
-            return;
-        }
-        if (event && event.discount && event.isActive) {
-            this.accountAssignedApplicableDiscounts.forEach(item => {
-                if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
-                    item.isActive = event.isActive.target.checked;
-                }
-            });
-        }
-
-        if (event || !this.isUpdateMode) {
-            if (trx.amount && entry && entry.discounts && entry.discounts.length && this.accountAssignedApplicableDiscounts && this.accountAssignedApplicableDiscounts.length) {
-                entry.discounts.map(item => {
-                    let discountItem = this.accountAssignedApplicableDiscounts.find(element => element.uniqueName === item.discountUniqueName);
-                    if (discountItem && discountItem.uniqueName) {
-                        item.isActive = discountItem.isActive;
+        if (trx?.accountName || trx?.accountUniqueName) {
+            if (fromTransactionField && this.transactionAmount === trx.amount) {
+                this.transactionAmount = 0;
+                return;
+            }
+            if (event && event.discount && event.isActive) {
+                this.accountAssignedApplicableDiscounts.forEach(item => {
+                    if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
+                        item.isActive = event.isActive.target.checked;
                     }
                 });
             }
-        }
 
-        if (trx.amount) {
-            let transactionAmount = trx.amount.toString();
-
-            if (this.invFormData.accountDetails.currencySymbol && transactionAmount) {
-                transactionAmount = transactionAmount.replace(this.invFormData.accountDetails.currencySymbol, "");
+            if (event || !this.isUpdateMode) {
+                if (trx.amount && entry && entry.discounts && entry.discounts.length && this.accountAssignedApplicableDiscounts && this.accountAssignedApplicableDiscounts.length) {
+                    entry.discounts.map(item => {
+                        let discountItem = this.accountAssignedApplicableDiscounts.find(element => element.uniqueName === item.discountUniqueName);
+                        if (discountItem && discountItem.uniqueName) {
+                            item.isActive = discountItem.isActive;
+                        }
+                    });
+                }
             }
 
-            if (this.selectedSuffixForCurrency && transactionAmount) {
-                transactionAmount = transactionAmount.replace(this.selectedSuffixForCurrency, "");
+            if (trx.amount) {
+                let transactionAmount = trx.amount.toString();
+
+                if (this.invFormData.accountDetails.currencySymbol && transactionAmount) {
+                    transactionAmount = transactionAmount.replace(this.invFormData.accountDetails.currencySymbol, "");
+                }
+
+                if (this.selectedSuffixForCurrency && transactionAmount) {
+                    transactionAmount = transactionAmount.replace(this.selectedSuffixForCurrency, "");
+                }
+
+                if (!isNaN(Number(transactionAmount))) {
+                    trx.amount = Number(transactionAmount);
+                }
             }
 
-            if (!isNaN(Number(transactionAmount))) {
-                trx.amount = Number(transactionAmount);
+            if (!isNaN(Number(trx.amount))) {
+                trx.amount = Number(trx.amount);
+            } else {
+                trx.amount = 0;
             }
-        }
 
-        if (!isNaN(Number(trx.amount))) {
-            trx.amount = Number(trx.amount);
-        } else {
-            trx.amount = 0;
-        }
+            if (trx.isStockTxn) {
+                trx.rate = Number((trx.amount / trx.quantity).toFixed(this.highPrecisionRate));
+            }
 
-        if (trx.isStockTxn) {
-            trx.rate = Number((trx.amount / trx.quantity).toFixed(this.highPrecisionRate));
-        }
+            if (this.isUpdateMode && (this.isEstimateInvoice || this.isProformaInvoice)) {
+                this.applyRoundOff = true;
+            }
 
-        if (this.isUpdateMode && (this.isEstimateInvoice || this.isProformaInvoice)) {
-            this.applyRoundOff = true;
+            this.calculateTotalDiscountOfEntry(entry, trx, false);
+            this.calculateEntryTaxSum(entry, trx, false);
+            this.calculateEntryTotal(entry, trx);
+            this.calculateOtherTaxes(entry.otherTaxModal, entry);
+            this.calculateTcsTdsTotal();
+            this.calculateBalanceDue();
+            this.checkVoucherEntries();
+            this.transactionAmount = 0;
         }
-
-        this.calculateTotalDiscountOfEntry(entry, trx, false);
-        this.calculateEntryTaxSum(entry, trx, false);
-        this.calculateEntryTotal(entry, trx);
-        this.calculateOtherTaxes(entry.otherTaxModal, entry);
-        this.calculateTcsTdsTotal();
-        this.calculateBalanceDue();
-        this.checkVoucherEntries();
-        this.transactionAmount = 0;
     }
 
     /**
