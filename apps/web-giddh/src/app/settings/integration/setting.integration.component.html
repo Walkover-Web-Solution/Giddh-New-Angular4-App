@@ -213,7 +213,10 @@
                     <ng-template tabHeading>
                         <span class="icon-payment"></span> {{localeData?.payment?.tab_heading}}
                     </ng-template>
-                    <div *ngFor="let regAcc of registeredAccount; let parentIndex=index">
+                    <div class="mb-2 bank-logo">
+                        <img src="assets/images/ICICI-logo.png"/>
+                    </div>
+                    <!-- <div *ngFor="let regAcc of registeredAccount; let parentIndex=index">
 
                         <div class="box clearfix">
                             <div class="d-flex justify-content-between">
@@ -477,7 +480,6 @@
                                             autocomplete="off" [isRequired]="true"></sh-select>
                                     </div>
                                 </div>
-                                <!-- Added this new row make it dynamic -->
                                 <ng-container
                                     *ngFor="let item of regAcc.userAmountRanges; let index = index; let firstIndex = first; let lastIndex = last">
                                     <div class="row">
@@ -594,7 +596,6 @@
                                     <a href="javascript:void(0)" (click)="addNewAmountRangeRow(parentIndex+1)"
                                         class="btn btn-link pl-0 pt-0">{{localeData?.payment?.add_new_row}}</a>
                                 </div>
-                                <!-- New code -->
                                 <div>
                                     <div class="form-group update-btn-wrapper">
                                         <label>&nbsp;</label>
@@ -606,10 +607,10 @@
                                 </div>
                             </form>
                         </div>
-                        <br />
-                    </div>
+                        <br *ngIf="parentIndex !== (registeredAccount?.length - 1) || openNewRegistration" />
+                    </div> -->
                     <!-- Create or add bank account end -->
-                    <div *ngIf="openNewRegistration" class="box clearfix mb-2">
+                    <!-- <div *ngIf="openNewRegistration" class="box clearfix mb-2">
                         <form [formGroup]="addBankForm" (ngSubmit)="onSubmitPaymentform(addBankForm.value)"
                             *ngIf="!(isPaymentAdditionSuccess$ | async)">
                             <div class="row">
@@ -806,12 +807,65 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <button type="button" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)"
+                    </div> -->
+                    <button type="button"
                         class="btn btn-sky-blue mr-r1"
-                        (click)="openNewRegistartionForm()">{{localeData?.payment?.add_more}}</button>
+                        (click)="openCreateNewAccountModal()">{{localeData?.payment?.connect_new_account}}</button>
+                    <p class="mt-2 mb-4 font-14"><a href="https://cadigital.icicibank.com/SmartFormWeb/apps/services/www/SmartFormWeb/desktopbrowser/default/index.html?source=BC-application-Giddh#/" target="_blank">{{localeData?.payment?.open_new_current_account}}</a></p>
+                    
                 </div>
             </tab>
         </tabset>
+    </div>
+    <div bsModal #createNewAccountModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
+        <div class="modal-dialog modal-sm" *ngIf="createNewAccountModal?.isShown">
+            <div class="modal-content">
+                <form autocomplete="off" novalidate name="createNewAccountForm" [formGroup]="createNewAccountForm"
+                class="new-account-form" (ngSubmit)="saveNewAccount()">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Connect ICICI Account</h3>
+                        <span data-dismiss="modal" aria-label="Close" class="close hover-orange" (click)="closeCreateNewAccountModal()">×</span>
+                    </div>
+                    <div class="modal-body">
+                        <div class="clearfix mr-t1">
+                            <label>ICICI Login ID<span class="red-text">*</span>:</label>
+                            <input class="form-control" required formControlName="loginId"
+                                name="loginId" type="text" placeholder="Enter Login ID">
+                        </div>
+                        <div class="clearfix mr-t1">
+                            <label>Account Number<span class="red-text">*</span>:</label>
+                            <input class="form-control" required formControlName="accountNo"
+                                name="accountNo" type="text" decimalDigitsDirective placeholder="Enter Account Number" maxlength="11">
+                        </div>
+                        <div class="clearfix mr-t1">
+                            <label>Link Account<span class="red-text">*</span>:</label>
+                            <sh-select formControlName="accountUniqueName" name="accountUniqueName" placeholder="Select Account" [options]="bankAccounts$ | async" required></sh-select>
+                        </div>
+                        <div class="clearfix mr-t1">
+                            <label>User<span class="red-text">*</span>:</label>
+                            <sh-select formControlName="userUniqueName" name="userUniqueName" placeholder="Select User" [options]="usersList" required></sh-select>
+                        </div>
+                        <div class="clearfix mr-t1">
+                            <label>Payment Updates:</label>
+                            <sh-select formControlName="paymentAlerts" name="paymentAlerts" placeholder="Select Receipients" [options]="paymentAlersUsersList" [multiple]="true" (selected)="selectPaymentAlertUsers($event)" [forceClearReactive]="forceClearPaymentUpdates$ | async" [hasSelectAllOption]="true">
+                                <ng-template #optionTemplate let-option="option">
+                                    <ng-container>
+                                        <a href="javascript:void(0)" class="list-item d-flex">
+                                            <span><input type="checkbox" [checked]="((selectAllRecords !== option.value && paymentAlerts?.includes(option.value)) || selectAllRecords === option.value && paymentAlerts?.length === paymentAlersUsersList?.length)" [value]="option.value"></span>&nbsp;
+                                            <span>
+                                                <div class="item">{{ option.label }}</div>
+                                            </span>
+                                        </a>
+                                    </ng-container>
+                                </ng-template>
+                            </sh-select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success" [disabled]="createNewAccountForm?.invalid">Connect</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </ng-container>
