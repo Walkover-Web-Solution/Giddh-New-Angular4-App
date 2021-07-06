@@ -634,6 +634,8 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
     public showinvoiceTemplatePreviewModal: boolean = false;
     public showtemplateModal: boolean = false;
     public templateType: any;
+    /** True if user has invoice template permissions */
+    public hasInvoiceTemplatePermissions: boolean = true;
 
     constructor(
         private _toasty: ToasterService,
@@ -696,6 +698,10 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                     return 0;
                 });
             }
+        });
+
+        this.store.pipe(select(state => state.invoiceTemplate.hasInvoiceTemplatePermissions), takeUntil(this.destroyed$)).subscribe(response => {
+            this.hasInvoiceTemplatePermissions = response;
         });
     }
 

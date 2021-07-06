@@ -647,5 +647,6 @@
 	},
 	"app_download_here": "येथून डाउनलोड करा",
     "app_irn": "आयआरएन",
-    "app_dashboard": "डॅशबोर्ड"
+    "app_dashboard": "डॅशबोर्ड",
+    "app_giddh_no_permissions": "आपल्याला हे पाहण्याची परवानगी नाही"
 }
