@@ -2105,7 +2105,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.statesBilling.disabled = false;
         }
         if (this.statesShipping?.disabled) {
-            this.statesBilling.disabled = false;
+            this.statesShipping.disabled = false;
         }
         this.invoiceSelected = '';
         this.isCustomerSelected = false;
