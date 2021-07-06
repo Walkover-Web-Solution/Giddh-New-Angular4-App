@@ -48,6 +48,8 @@ export interface ReceiptItem {
     status?: string;
     errorMessage?: string;
     eInvoiceStatusTooltip?: string;
+    gainLoss?: number;
+    exchangeRate?: number;
 }
 
 export interface ReciptResponse {

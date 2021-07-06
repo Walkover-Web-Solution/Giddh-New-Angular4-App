@@ -647,5 +647,7 @@
 	"app_download_here": "यहाँ से डाउनलोड करें",
     "app_irn": "आईआरएन",
     "app_dashboard": "डैशबोर्ड",
-    "app_giddh_no_permissions": "आपको इसे देखने की अनुमति नहीं है"
+    "app_giddh_no_permissions": "आपको इसे देखने की अनुमति नहीं है",
+    "app_exchange_gain": "लाभ",
+    "app_exchange_loss": "हानि"
 }
