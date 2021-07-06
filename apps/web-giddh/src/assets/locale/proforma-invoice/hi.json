@@ -103,5 +103,6 @@
     "purchase_record_footer_note": "यदि नहीं, तो या तो खरीद चालान नंबर या विक्रेता विवरण बदलें.",
     "date_change_confirmation_heading": "तिथि परिवर्तन की पुष्टि",
     "change_single_entry_date": "क्या आप प्रवेश तिथि भी बदलना चाहते हैं?",
-    "change_all_entry_dates": "क्या आप इस तिथि के साथ सभी प्रविष्टियों की तारीख बदलना चाहते हैं?"
+    "change_all_entry_dates": "क्या आप इस तिथि के साथ सभी प्रविष्टियों की तारीख बदलना चाहते हैं?",
+    "exchange_label": "विनिमय"
 }
