@@ -80,7 +80,7 @@
         "select_otp": "Select OTP",
         "approver_name": "Approver Name",
         "select_otp_tooltip": "The OTP will reach the person selected in Approver Name",
-        "open_new_current_account": "Open a new current account",
+        "open_new_current_account": "Open A New ICICI Current Account",
         "otp_types": {
             "bank_otp": "Bank OTP",
             "giddh_otp": "GIDDH OTP"
@@ -98,6 +98,7 @@
         "beneficiary_nick_name": "Beneficiary Nick Name",
         "beneficiary_account_no": "Beneficiary Account No.",
         "ifsc": "IFSC",
-        "add_beneficiary": "Add Beneficiary"
+        "add_beneficiary": "Add Beneficiary",
+        "connect_new_account": "+ Connect New Account"
     }
 }

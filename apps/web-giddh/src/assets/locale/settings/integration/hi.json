@@ -80,7 +80,7 @@
 		"select_otp": "ओटीपी चुनें",
 		"approver_name": "अनुमोदनकर्ता का नाम",
 		"select_otp_tooltip": "ओटीपी अनुमोदनकर्ता के नाम में चयनित व्यक्ति के पास पहुंचेगा",
-		"open_new_current_account": "एक नया चालू खाता खोलें",
+		"open_new_current_account": "ICICI का एक नया चालू खाता खोलें",
 		"otp_types": {
 			"bank_otp": "बैंक ओटीपी",
 			"giddh_otp": "गिद्ध ओटीपी"
@@ -98,6 +98,7 @@
 		"beneficiary_nick_name": "लाभार्थी निक नाम",
 		"beneficiary_account_no": "हिताधिकारी खाता नंबर।",
 		"ifsc": "आईएफएससी",
-		"add_beneficiary": "लाभार्थी जोड़ें"
+		"add_beneficiary": "लाभार्थी जोड़ें",
+        "connect_new_account": "+ Connect New Account"
 	}
 }

@@ -21,7 +21,7 @@ import { TabsetComponent, TabDirective } from "ngx-bootstrap/tabs";
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyActions } from "../../actions/company.actions";
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
-import { Configuration } from "../../app.constant";
+import { Configuration, SELECT_ALL_RECORDS } from "../../app.constant";
 import { AuthenticationService } from "../../services/authentication.service";
 import { IForceClear } from '../../models/api-models/Sales';
 import { EcommerceService } from '../../services/ecommerce.service';
@@ -100,7 +100,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     @ViewChild('removegmailintegration', { static: true }) public removegmailintegration: ModalDirective;
     @ViewChild('paymentForm', { static: true }) paymentForm: NgForm;
     @ViewChild('paymentFormAccountName', { static: true }) paymentFormAccountName: ShSelectComponent;
-
+    @ViewChild('createNewAccountModal', {static: false}) public createNewAccountModal: ModalDirective;
 
     //variable holding account Info
     public registeredAccount;
@@ -158,6 +158,16 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Form Group for create new account form */
+    public createNewAccountForm: FormGroup;
+    /** List of users to receive payment alerts */
+    public paymentAlerts: any[] = [];
+    /** Holds string for select all records */
+    public selectAllRecords: string = SELECT_ALL_RECORDS;
+    /* This will clear the selected payment updates values */
+    public forceClearPaymentUpdates$: Observable<IForceClear> = observableOf({ status: false });
+    /** This will hold users list */
+    public paymentAlersUsersList: any[] = [];
 
     constructor(
         private router: Router,
@@ -294,7 +304,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                                 }
                             }
                             item.selectedUsers = this.usersList.filter(user => item.emailIds?.find(emailId => user.value === emailId)) ?? [];
-                            this.getRegistrationStatus(item);
                             item.userAmountRanges.map(element => {
                                 if (typeof element.maxBankLimit === "boolean") {
                                     element.maxBankLimit = element.maxBankLimit ? 'max' : 'custom';
@@ -347,12 +356,19 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.store.pipe(select(state => state.settings.usersWithCompanyPermissions), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.usersList = [];
+                this.paymentAlersUsersList = [];
+                let index = 0;
+
+                this.paymentAlersUsersList.push({ index: index, label: "Select All", value: this.selectAllRecords });
+                index++;
+
                 response.forEach(user => {
-                    this.usersList.push({ label: user.userName, value: user.emailId });
+                    this.paymentAlersUsersList.push({ index: index, label: user.userName, value: user.userUniqueName });
+                    this.usersList.push({ index: index, label: user.userName, value: user.userUniqueName });
+                    index++;
                 });
             }
         });
-
     }
 
     public ngAfterViewInit() {
@@ -1572,47 +1588,25 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     /**
      * Selects the users
      *
-     * @param {*} user Selected user
      * @param {*} event Select event
-     * @param {*} userIndex Current user index in list
      * @memberof SettingIntegrationComponent
      */
-    public selectUsers(user: any, event: any, userIndex): void {
-        if (event && user) {
-            if (event.target.checked) {
-                user.isSelected = event.target.checked;
-                this.usersList[userIndex].isSelected = true;
-            } else {
-                this.usersList[userIndex].isSelected = false;
-            }
-            this.addBankForm.get('userNames')?.patchValue(this.usersList.filter(ev => ev.isSelected && ev.label).map(user => user.label));
-            this.addBankForm.get('emailIds')?.patchValue(this.usersList.filter(ev => ev.isSelected && ev.value).map(user => user.value));
-        }
-        event.stopPropagation();
-    }
+    public selectPaymentAlertUsers(event: any): void {
+        let isSelectAllChecked = event.filter(ev => ev.value === this.selectAllRecords);
+        let isSelectAllAlreadyChecked = this.paymentAlerts.filter(ev => ev === this.selectAllRecords);
 
-    public removeUser(user: any, isUpdate?: boolean): void {
-        let i = 0;
-        let matchedIndex = -1;
-
-        for (i; i < this.usersList.length; i++) {
-            if (user === this.usersList[i].value) {
-                matchedIndex = i;
-                break;
-            }
-        }
-
-        let indx = -1;
-        if (isUpdate) {
-            indx = this.registeredAccount[this.isBankUpdateInEdit].selectedUsers.findIndex(selectedUser => selectedUser.value === user.value);
-            this.registeredAccount[this.isBankUpdateInEdit].selectedUsers.splice(indx, 1);
+        if(isSelectAllChecked?.length > 0 && isSelectAllAlreadyChecked?.length === 0) {
+            this.paymentAlerts = this.paymentAlersUsersList.map(user => user.value);
+        } else if(isSelectAllAlreadyChecked?.length > 0 && isSelectAllChecked?.length === 0) {
+            this.paymentAlerts = [];
+            this.forceClearPaymentUpdates$ = observableOf({ status: true });
         } else {
-            indx = this.usersList.findIndex(selectedUser => selectedUser.value === user.value);
-            this.usersList[indx].isSelected = false;
+            this.paymentAlerts = event.map(user => user.value);
         }
 
-        if (matchedIndex > -1) {
-            this.usersList[matchedIndex].isSelected = false;
+        if(this.paymentAlerts?.length === 1 && isSelectAllChecked?.length > 0) {
+            this.paymentAlerts = [];
+            this.forceClearPaymentUpdates$ = observableOf({ status: true });
         }
     }
 
@@ -1646,5 +1640,32 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 { label: this.localeData?.amount_limit_types?.custom, value: "custom" },
             ];
         }
+    }
+
+    public openCreateNewAccountModal(): void {
+        this.createNewAccountForm = this._fb.group({
+            bank: ['ICICI'],
+            loginId: ['', Validators.required],
+            accountNo: ['', Validators.compose([Validators.required, Validators.minLength(9), Validators.maxLength(11)])],
+            accountUniqueName: ['', Validators.required],
+            paymentAlerts: [''],
+            userUniqueName: ['', Validators.required],
+            duration: ['UNLIMITED'],
+            maxAmountLimit: ['']
+        });
+
+        this.createNewAccountModal?.show();
+    }
+
+    public saveNewAccount(): void {
+        if(!this.createNewAccountForm?.invalid) {
+            this.createNewAccountForm.get('paymentAlerts')?.patchValue(this.paymentAlerts.map(user => user));
+
+               
+        }
+    }
+
+    public closeCreateNewAccountModal(): void {
+        this.createNewAccountModal?.hide();
     }
 }
