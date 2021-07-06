@@ -326,7 +326,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
             if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
                 this.isIndianCompany = profile.countryV2.alpha2CountryCode === 'IN' ? true : false;
-                if (!this.isIndianCompany && this.selectedTabParent === 4) {
+                if (!this.isIndianCompany && this.selectedTabParent === 3) {
                     this.selectedTabParent = 0;
                     this.selectTab(this.selectedTabParent);
                 }

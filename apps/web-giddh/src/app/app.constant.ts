@@ -303,11 +303,11 @@ export const EMAIL_VALIDATION_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,
 
 /** Settings integration tabs */
 export const SETTING_INTEGRATION_TABS = {
-    SMS: { LABEL: 'sms', VALUE: 0 },
-    EMAIL: { LABEL: 'email', VALUE: 1 },
-    COLLECTION: { LABEL: 'collection', VALUE: 2 },
-    E_COMMERCE: { LABEL: 'ecommerce', VALUE: 3 },
-    PAYMENT: { LABEL: 'payment', VALUE: 4 }
+    // SMS: { LABEL: 'sms', VALUE: 0 },
+    EMAIL: { LABEL: 'email', VALUE: 0 },
+    COLLECTION: { LABEL: 'collection', VALUE: 1 },
+    E_COMMERCE: { LABEL: 'ecommerce', VALUE: 2 },
+    PAYMENT: { LABEL: 'payment', VALUE: 3 }
 };
 
 /** E-invoice statuses */
