@@ -165,19 +165,4 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
             this.showSettingHeading = false;
         }
     }
-
-    /**
-     * Returns true if page url matches the navigation url
-     *
-     * @param {string} tabLink
-     * @returns {boolean}
-     * @memberof AsideSettingComponent
-     */
-    public isActiveLink(tabLink: string): boolean {
-        if(this.router.url.includes(tabLink)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 }
