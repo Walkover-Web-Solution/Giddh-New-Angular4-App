@@ -103,5 +103,6 @@
     "purchase_record_footer_note": "If no then change either purchase invoice number or vendor details.",
     "date_change_confirmation_heading": "Date Change Confirmation",
     "change_single_entry_date": "Do you want to change the entry date as well?",
-    "change_all_entry_dates": "Do you want to change the all entries date with this date?"
+    "change_all_entry_dates": "Do you want to change the all entries date with this date?",
+    "exchange_label": "Exchange"
 }
