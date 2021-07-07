@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';
@@ -8,7 +8,8 @@ import { ReplaySubject } from 'rxjs';
 @Component({
     selector: 'import-statement',
     templateUrl: './import-statement.component.html',
-    styleUrls: ['./import-statement.component.scss']
+    styleUrls: ['./import-statement.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class ImportStatementComponent implements OnDestroy {

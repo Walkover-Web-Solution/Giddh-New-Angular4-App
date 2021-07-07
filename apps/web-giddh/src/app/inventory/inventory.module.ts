@@ -21,7 +21,7 @@ import { SharedModule } from '../shared/shared.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { CurrencyModule } from './../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { InventoryAddGroupComponent } from './components/add-group-components/inventory.addgroup.component';
-import { InventoryAddStockComponent } from './components/add-stock-components/inventory.addstock.component';
+import { InventoryAddStockModule } from './components/add-stock-components/inventory.addstock.module';
 import { InventoryCustomStockComponent } from './components/custom-stock-components/inventory.customstock.component';
 import { InventoryUserComponent } from './components/forms/inventory-user/transfer-inventory-user.component';
 import { InwardNoteComponent } from './components/forms/inward-note/inward-note.component';
@@ -49,7 +49,6 @@ import { ManufacturingComponent } from './manufacturing/manufacturing.component'
         InventoryComponent,
         InventorySidebarComponent,
         InventoryAddGroupComponent,
-        InventoryAddStockComponent,
         InventoryHearderComponent,
         InventoryCustomStockComponent,
         InventoryStockReportComponent,
@@ -79,7 +78,6 @@ import { ManufacturingComponent } from './manufacturing/manufacturing.component'
         InventoryComponent,
         InventorySidebarComponent,
         InventoryAddGroupComponent,
-        InventoryAddStockComponent,
         InventoryHearderComponent,
         InventoryCustomStockComponent,
         InventoryStockReportComponent,
@@ -102,7 +100,8 @@ import { ManufacturingComponent } from './manufacturing/manufacturing.component'
         JobworkSidebarComponent,
         ManufacturingComponent,
         NewBranchTransferAddComponent,
-        NewBranchTransferListComponent
+        NewBranchTransferListComponent,
+        InventoryAddStockModule
     ],
     providers: [ExceptionLogService],
     imports: [
@@ -118,7 +117,8 @@ import { ManufacturingComponent } from './manufacturing/manufacturing.component'
         DigitsOnlyModule,
         NgxMaskModule.forRoot(),
         ProformaInvoiceModule,
-        GiddhRoundOffPipeModule
+        GiddhRoundOffPipeModule,
+        InventoryAddStockModule
     ],
     entryComponents: [PaginationComponent]
 })
