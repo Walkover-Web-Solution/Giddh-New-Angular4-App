@@ -2,6 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import {
     AfterViewInit,
+    ChangeDetectorRef,
     Component,
     ElementRef,
     EventEmitter,
@@ -162,7 +163,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private generalService: GeneralService,
         private groupService: GroupService,
         private groupWithAccountsAction: GroupWithAccountsAction,
-        private invoiceService: InvoiceService) {
+        private invoiceService: InvoiceService,
+        private changeDetectorRef: ChangeDetectorRef) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
 
     }
