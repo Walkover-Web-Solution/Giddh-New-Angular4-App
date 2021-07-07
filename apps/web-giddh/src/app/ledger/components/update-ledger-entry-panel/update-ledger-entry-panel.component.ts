@@ -1203,14 +1203,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public async toggleCurrency() {
         this.vm.selectedCurrencyForDisplay = this.vm.selectedCurrencyForDisplay === 1 ? 0 : 1;
         let rate = 0;
-        if (Number(this.vm.selectedLedger.exchangeRateForDisplay)) {
+        if (Number(this.vm.selectedLedger.exchangeRate)) {
             rate = 1 / this.vm.selectedLedger.exchangeRate;
         }
-        this.vm.selectedLedger = { ...this.vm.selectedLedger, exchangeRate: rate, exchangeRateForDisplay: giddhRoundOff(rate, this.vm.giddhBalanceDecimalPlaces) };
+        this.vm.selectedLedger = { ...this.vm.selectedLedger, exchangeRate: rate };
     }
 
     public exchangeRateChanged() {
-        this.vm.selectedLedger.exchangeRate = Number(this.vm.selectedLedger.exchangeRateForDisplay) || 0;
+        this.vm.selectedLedger.exchangeRate = Number(this.vm.selectedLedger.exchangeRate) || 0;
         if (this.vm.stockTrxEntry && this.vm.stockTrxEntry.inventory && this.vm.stockTrxEntry.inventory.unit && this.vm.selectedLedger && this.vm.selectedLedger.unitRates) {
             const stock = this.vm.stockTrxEntry.unitRate.find(rate => {
                 return rate.stockUnitCode === this.vm.stockTrxEntry.inventory.unit.code;
@@ -1980,8 +1980,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             this.vm.selectedLedger.voucher = { name: '', shortCode: '' };
                             this.vm.selectedLedger.invoicesToBePaid = [];
                         }
-
-                        this.vm.selectedLedger.exchangeRateForDisplay = giddhRoundOff(this.vm.selectedLedger.exchangeRate, this.vm.giddhBalanceDecimalPlaces);
 
                         // divide actual amount with exchangeRate because currently we are getting actualAmount in company currency
                         this.vm.selectedLedger.actualAmount = giddhRoundOff(this.vm.selectedLedger.actualAmount / this.vm.selectedLedger.exchangeRate, this.vm.giddhBalanceDecimalPlaces);
