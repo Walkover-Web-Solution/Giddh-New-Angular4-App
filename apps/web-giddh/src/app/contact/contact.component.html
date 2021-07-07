@@ -1024,13 +1024,14 @@
                                     </span>
 
                             </td>
-                            <td class="word-wrap text-lowercase" *ngIf="showFieldFilter.contact"
+                            <td class="text-lowercase word-wrap font-12" *ngIf="showFieldFilter.contact"
                                 [attr.data-title]="commonLocaleData?.app_email">
-                                <div class="table-email ">{{account.email || '-' }}</div>
-                            </td>
-                            <td class="word-wrap" *ngIf="showFieldFilter.contact"
-                                [attr.data-title]="commonLocaleData?.app_mobile_no">
-                                {{account.mobileNo || '-' }}
+                                <div>
+                                    {{account.email || '-' }}
+                                </div>
+                                <div>
+                                    {{account.mobileNo || '-'}}
+                                </div>
                             </td>
                             <td class="word-wrap" *ngIf="showFieldFilter.gstin  && shouldShowTaxFilter"
                                 [attr.data-title]="commonLocaleData?.app_gstin">
@@ -1039,7 +1040,7 @@
                                 [attr.data-title]="commonLocaleData?.app_state">{{account?.state?.name || '-' }}
                             </td>
                             <td *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx'
-                                [attr.data-title]="localeData?.comment">
+                                [attr.data-title]="localeData?.comment" class="comment-field text-break">
                                 <ng-container *ngIf='updateCommentIdx != idx'>
                                     {{account.comment || '-'}}
                                 </ng-container>
