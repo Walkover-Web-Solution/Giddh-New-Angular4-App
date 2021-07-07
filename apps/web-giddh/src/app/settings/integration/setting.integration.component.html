@@ -3,7 +3,7 @@
     <div class="clearfix">
         <tabset [ngClass]="{'tab-integration': true, 'hide-payment-tab' : !isIndianCompany}" #integrationTab
             id="tab-integration">
-            <tab (selectTab)="loadSmsData($event); tabChanged('sms');">
+            <!-- <tab (selectTab)="loadSmsData($event); tabChanged('sms');">
                 <ng-template tabHeading>
                     <span class="icon-chat2"></span> {{localeData?.sms?.tab_heading}}
                 </ng-template>
@@ -39,7 +39,7 @@
                         </section>
                     </form>
                 </div>
-            </tab>
+            </tab> -->
 
             <tab (selectTab)="loadEmailData($event); tabChanged('email');">
                 <ng-template tabHeading>

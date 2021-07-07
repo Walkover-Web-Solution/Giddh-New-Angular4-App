@@ -334,7 +334,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.trxRequest.to = moment(value.endDate).format(GIDDH_DATE_FORMAT);
         this.todaySelected = true;
         this.lc.blankLedger.entryDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
-        this.getTransactionData();
+
+        if(this.isAdvanceSearchImplemented) {
+            this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName, this.trxRequest.from, this.trxRequest.to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q, this.advanceSearchRequest.branchUniqueName));
+        } else {
+            this.getTransactionData();
+        }
         // Después del éxito de la entrada. llamar para transacciones bancarias
         this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe((data: AccountResponse) => {
             this.getBankTransactions();
@@ -955,14 +960,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public getTransactionData() {
+        this.isAdvanceSearchImplemented = false;
         this.closingBalanceBeforeReconcile = null;
-        if(this.isAdvanceSearchImplemented){
-            this.getAdvanceSearchTxn();
-        }else{
-            this.isAdvanceSearchImplemented = false;
-            this.store.dispatch(this._ledgerActions.GetLedgerBalance(this.trxRequest));
-            this.store.dispatch(this._ledgerActions.GetTransactions(this.trxRequest));
-        }
+        this.store.dispatch(this._ledgerActions.GetLedgerBalance(this.trxRequest));
+        this.store.dispatch(this._ledgerActions.GetTransactions(this.trxRequest));
     }
 
     public getCurrencyRate(mode: string = null) {
@@ -980,10 +981,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this._ledgerService.GetCurrencyRateNewApi(from, to, date).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 let rate = response.body;
                 if (rate) {
-                    this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: rate, exchangeRateForDisplay: giddhRoundOff(rate, this.giddhBalanceDecimalPlaces) };
+                    this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: rate };
                 }
             }, (error => {
-                this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: 1, exchangeRateForDisplay: 1 };
+                this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: 1 };
             }));
         }
     }
@@ -1074,7 +1075,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
             tdsTcsTaxesSum: 0,
             otherTaxType: 'tcs',
             exchangeRate: 1,
-            exchangeRateForDisplay: 1,
             valuesInAccountCurrency: (this.selectedCurrency === 0),
             selectedCurrencyToDisplay: this.selectedCurrency,
             baseCurrencyToDisplay: cloneDeep(this.baseCurrencyDetails),
@@ -2244,7 +2244,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.getCurrencyRate();
                     } else {
                         this.baseCurrencyDetails = this.foreignCurrencyDetails;
-                        this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: 1, exchangeRateForDisplay: 1 };
+                        this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: 1 };
                     }
                     this.selectedCurrency = 0;
                     this.assignPrefixAndSuffixForCurrency();

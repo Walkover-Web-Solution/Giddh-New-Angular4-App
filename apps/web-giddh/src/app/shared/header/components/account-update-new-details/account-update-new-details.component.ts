@@ -1,5 +1,6 @@
 import {
     AfterViewInit,
+    ChangeDetectorRef,
     Component,
     ElementRef,
     EventEmitter,
@@ -56,7 +57,7 @@ import { clone, cloneDeep, differenceBy, flattenDeep, uniq } from 'apps/web-gidd
 @Component({
     selector: 'account-update-new-details',
     templateUrl: './account-update-new-details.component.html',
-    styleUrls: ['./account-update-new-details.component.scss'],
+    styleUrls: ['./account-update-new-details.component.scss']
 })
 
 export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
@@ -211,7 +212,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         private _generalActions: GeneralActions,
         private generalService: GeneralService,
         private groupService: GroupService,
-        private invoiceService: InvoiceService
+        private invoiceService: InvoiceService,
+        private changeDetectorRef: ChangeDetectorRef
     ) {
 
     }
@@ -526,6 +528,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         if (addresses.controls.length === 0) {
             this.addBlankGstForm();
+            this.changeDetectorRef.detectChanges();
         }
     }
 

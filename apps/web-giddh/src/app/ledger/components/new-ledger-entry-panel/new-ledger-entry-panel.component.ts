@@ -1130,11 +1130,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public currencyChange() {
         let rate = 0;
-        if (Number(this.blankLedger.exchangeRateForDisplay)) {
+        if (Number(this.blankLedger.exchangeRate)) {
             rate = 1 / this.blankLedger.exchangeRate;
         }
         this.blankLedger.exchangeRate = rate;
-        this.blankLedger.exchangeRateForDisplay = giddhRoundOff(rate, this.giddhBalanceDecimalPlaces);
         if (this.blankLedger.selectedCurrencyToDisplay === 0) {
             // Currency changed to account currency (currency different from base currency of company)
             this.blankLedger.selectedCurrencyToDisplay = 1;
@@ -1154,7 +1153,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public exchangeRateChanged() {
-        this.blankLedger.exchangeRate = Number(this.blankLedger.exchangeRateForDisplay) || 0;
+        this.blankLedger.exchangeRate = Number(this.blankLedger.exchangeRate) || 0;
         if (this.currentTxn.inventory && this.currentTxn.inventory.unit && this.currentTxn.unitRate) {
             const stock = this.currentTxn.unitRate.find(rate => {
                 return rate.stockUnitCode === this.currentTxn.inventory.unit.code;

@@ -121,10 +121,9 @@
                     flex-direction: column;
                     margin-bottom: 0 !important;
                     padding: 0;
-                    &:hover{
-                        span{
-                            background-color: $solitude-light !important;
-                        }
+                    &.active{
+                        color: $trout !important;
+                        background-color: $light-alice-blue !important;
                     }
                     span{
                         white-space: normal;
@@ -275,7 +274,7 @@
                         overflow: hidden;
                         max-width: 150px;
                         padding: 3px 0;
-                       }
+                    }
                 }
             }
         }
@@ -317,6 +316,10 @@
                 padding: 5px 10px;
                 border-radius: 5px !important;
                 font-size: 12px;
+                &:hover{
+                    background-color: $midnight-blue;
+                    color: $white;
+                }
             }
         }
     }
@@ -364,24 +367,24 @@
                             display: flex !important;
                             align-items: center !important;
                             justify-content: space-between !important;
-                             span{
-                                 i{
-                                    float: left;
-                                    width: 14px;
-                                 }
-                                 span.select-company-name{
-                                    float: left;
-                                    width: 87%;
-                                    padding: 0;
-                                    text-overflow: ellipsis;
-                                    white-space: nowrap;
-                                    overflow: hidden;
-                                    max-width: 150px;
-                                    padding: 3px 0;
-                                 }
-                             }
+                                span{
+                                    i{
+                                        float: left;
+                                        width: 14px;
+                                    }
+                                    span.select-company-name{
+                                        float: left;
+                                        width: 87%;
+                                        padding: 0;
+                                        text-overflow: ellipsis;
+                                        white-space: nowrap;
+                                        overflow: hidden;
+                                        max-width: 150px;
+                                        padding: 3px 0;
+                                    }
+                                }
+                            }
                         }
-                    }
                     &.btn-group{
                         &.open{
                             span{
@@ -402,7 +405,7 @@
                                     transform: rotate(180deg)
                                 }
                             }
-                            background-color: transparent;
+                            background-color: transparent !important;
                             ul{
                                 padding: 0 20px;
                                 li{
