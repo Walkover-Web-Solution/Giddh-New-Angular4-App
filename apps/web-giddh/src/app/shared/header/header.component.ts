@@ -1034,11 +1034,24 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public closeSidebarMobile(e) {
-        if (e.target.className.toString() !== 'icon-bar' && this.isMobileSite) {
+        let excludeElements = ['icon-bar', 'hamburger-menu', 'refresh-manually', 'icon-down-new'];
+        let elementClass = e?.target?.className?.toString();
+        let validElement = true;
+
+        excludeElements.forEach(className => {
+            if(elementClass.indexOf(className) > -1) {
+                validElement = false;
+            }
+        });
+
+        if (validElement && this.isMobileSite) {
             this.sideMenu.isopen = false;
             this.menuStateChange.emit(false);
         }
 
+        if (validElement && !this.isMobileSite && (this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details"))) {
+            this.collapseSidebar(true);
+        }
     }
 
     public forceCloseSidebar(event) {
