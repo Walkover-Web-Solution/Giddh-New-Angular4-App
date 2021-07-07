@@ -386,8 +386,8 @@ button.btn.btn-filter span.icon-cross {
     .btn-default{
         border-radius: 50% !important;
         padding: 0px !important;
-        width: 24px;
-        height: 24px;
+        width: 28px;
+        height: 28px;
     }
 }
 .input-container {
@@ -743,6 +743,6 @@ button.btn.btn-filter span.icon-cross {
 
 @media (min-width: 769px){
     .mobile-card-wrapper{
-        max-height: calc(100vh - 285px);
+        max-height: calc(100vh - 310px);
     }
 }
