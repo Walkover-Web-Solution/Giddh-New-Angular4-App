@@ -27,7 +27,7 @@
                     <p class="font-12 d-flex justify-content-between mr-t1">
                         <span><small>{{companyList?.length}} {{localeData?.companies}}</small></span>
                         <span class="cursor-pointer" [tooltip]="localeData?.refresh_manually"
-                            (click)="refreshCompanies($event)"><i class="icon-reload font-22"></i></span>
+                            (click)="refreshCompanies($event)"><i class="icon-reload refresh-manually font-22"></i></span>
                     </p>
                     <button class="btn btn-sky-blue mr-0" (click)="openModalCreateNewCompany()">
                         <i class="icon-plus font-12"></i>
@@ -54,7 +54,7 @@
                         <span><small>{{branchList?.length}} {{localeData?.branches}}</small></span>
                         <span class="cursor-pointer" [tooltip]="localeData?.refresh_manually"
                             (click)="getCompanyBranches(1, companyBranches, true)">
-                            <i class="icon-reload font-22"></i>
+                            <i class="icon-reload refresh-manually font-22"></i>
                         </span>
                     </p>
                     <button class="btn btn-sky-blue mr-0" [routerLink]="['/pages/settings/create-branch']"
@@ -108,7 +108,7 @@
             <p class="font-12 d-flex justify-content-between mr-t1">
                 <span><small>{{companyList?.length}} {{localeData?.companies}}</small></span>
                 <span class="cursor-pointer" [tooltip]="localeData?.refresh_manually"
-                    (click)="refreshCompanies($event)"><i class="icon-reload font-22"></i></span>
+                    (click)="refreshCompanies($event)"><i class="icon-reload refresh-manually font-22"></i></span>
             </p>
             <button class="btn btn-sky-blue mr-0" (click)="openModalCreateNewCompany()">
                 <i class="icon-plus font-12"></i>
@@ -144,7 +144,7 @@
                                                 </button>
                                             </p>
                                             <span class="cursor-pointer pl-0 pt-0 ml-auto" [tooltip]="localeData?.refresh_manually" placement="left"
-                                                (click)="getCompanyBranches(2, company, true)"><i class="icon-reload font-22"></i></span>
+                                                (click)="getCompanyBranches(2, company, true)"><i class="icon-reload refresh-manually font-22"></i></span>
                                         </div>
                                     </div>
                                 </li>
