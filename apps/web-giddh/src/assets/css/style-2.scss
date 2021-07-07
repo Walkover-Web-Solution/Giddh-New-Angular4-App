@@ -7641,7 +7641,7 @@ span#HW_badge_cont:nth-child(3) {
                     i {
                         color: $gray;
                         margin-right: 10px;
-                        font-size: 20px;
+                        font-size: 22px;
                     }
                 }
             }
@@ -8421,12 +8421,12 @@ body.update-scroll-hidden {
                         }
                     }
                     a{
-                        padding: 0 10px !important;
                         min-width: 110px;
                         font-family: 'opensans-regular';
                         color: $grey-chateau !important;
                         padding-top: 5px !important;
-                        padding-left: 40px !important;
+                        padding-left: 20px !important;
+                        height: 30px;
                     }
                 }
             }
@@ -10080,7 +10080,7 @@ body.prevent-body-scroll {
     overflow-y: hidden !important;
 }
 
-.hide-payment-tab ul li:nth-child(5) {
+.hide-payment-tab ul li:nth-child(4) {
     display: none;
 }
 

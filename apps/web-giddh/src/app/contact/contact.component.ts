@@ -438,12 +438,12 @@ export class ContactComponent implements OnInit, OnDestroy {
                     this.goToRoute(`proforma-invoice/invoice/${isCashInvoice ? 'cash' : 'sales'}`, '', account.uniqueName);
                 }
                 break;
-            case 3: // send sms
-                if (event) {
-                    event.stopPropagation();
-                }
-                this.openSmsDialog();
-                break;
+            // case 3: // send sms
+            //     if (event) {
+            //         event.stopPropagation();
+            //     }
+            //     this.openSmsDialog();
+            //     break;
             case 4: // send email
                 if (event) {
                     event.stopPropagation();
@@ -733,13 +733,13 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     // Open Modal for SMS
-    public openSmsDialog() {
-        this.messageBody.msg = '';
-        this.messageBody.type = 'sms';
-        this.messageBody.btn.set = this.messageBody.btn.sms;
-        this.messageBody.header.set = this.messageBody.header.sms;
-        this.mailModal.show();
-    }
+    // public openSmsDialog() {
+    //     this.messageBody.msg = '';
+    //     this.messageBody.type = 'sms';
+    //     this.messageBody.btn.set = this.messageBody.btn.sms;
+    //     this.messageBody.header.set = this.messageBody.header.sms;
+    //     this.mailModal.show();
+    // }
 
     // Send Email/Sms for Accounts
     public async send(groupsUniqueName: string) {
