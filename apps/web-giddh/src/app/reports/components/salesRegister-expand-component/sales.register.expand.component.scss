@@ -150,7 +150,7 @@ ul.list-unstyled li a {
 
 ul#dropdown-nested {
     min-width: 254px;
-    z-index: 1;
+    z-index: 9;
 }
 
 ul#dropdown-nested li .caret {
@@ -243,10 +243,15 @@ table th {
         border: 1px solid $gainsboro;
         border-radius: 5px;
         background-color: $white;
-        color: $gray;
+        color: $midnight-blue;
         font-size: 20px;
         position: relative;
         padding: 7px;
+        &:hover{
+            background: $chetwode-blue;
+            color: $white;
+            border-color: $chetwode-blue;
+        }
     }
     .btn-group.d-flex.open.show {
         display: flex !important;

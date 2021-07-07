@@ -397,6 +397,7 @@ button.btn.btn-default.ladda-button {
         justify-content: space-between;
         align-items: center;
         padding: 4px 10px;
+        height: 36px;
     }
     button.btn.btn-filter span.icon-cross {
         margin-right: 5px;
@@ -714,9 +715,9 @@ span.icon-export-icon {
     .total-due-sale {
         padding-bottom: 5px;
     }
-    // .invoice-table {
-    //  margin-bottom: 22px;
-    //}
+    .advance-icon{
+        margin-right:0 !important;
+    }
 }
 
 @media (max-width: 575px) {
@@ -864,7 +865,6 @@ span.icon-export-icon {
     }
 
     .date-advance-search{
-        width: 80%;
         .input-grp-date-range-picker{
             width: 90%;
             .flex-fill{
@@ -884,11 +884,17 @@ span.icon-export-icon {
             padding: 2px 0px;
         }
     }
+
+    .custom-datepicker input {
+        width: 200px !important;
+        max-width: 200px !important;
+    }
+
 }
 
-@media (min-width:767px){
+@media (min-width:769px){
     .table-responsive{
-        max-height: calc(100vh - 302px);
+        max-height: calc(100vh - 295px);
         overflow-y: auto;
     }
 }
@@ -900,6 +906,25 @@ span.icon-export-icon {
     .cancel-filter-export{
         .d-flex{
             display: none !important;
+        }
+    }
+}
+
+@media (min-width: 768px) and (max-width:865px){
+    .visible-center{
+        display: flex !important;
+    }
+
+    .visible-on-desktop{
+        display: none !important;
+    }
+
+    .more-btn-dropdown.desktop-view-btn{
+        display: none !important;
+    }
+    .add-invoice{
+        .justify-content-end{
+            margin-left: -165px;
         }
     }
 }

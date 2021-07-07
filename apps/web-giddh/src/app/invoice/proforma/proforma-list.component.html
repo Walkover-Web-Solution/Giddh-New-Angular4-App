@@ -404,7 +404,7 @@
 
                         <tfoot *ngIf="voucherData && voucherData?.totalItems > 20" [hidden]="(isGetAllInProcess$ | async)">
                             <tr>
-                                <td colspan="100%">
+                                <td colspan="100%" class="border-none">
                                     <div class="text-center">
 
                                         <pagination [totalItems]="voucherData.totalItems" [(ngModel)]="voucherData.page"
