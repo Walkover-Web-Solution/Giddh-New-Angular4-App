@@ -201,10 +201,6 @@ tr:last-child
     }
 }
 
-.customer-right-wrap {
-    padding-right: 0;
-}
-
 tr.aging-table-top td {
     width: 320px;
     padding: 1px 0;
@@ -261,17 +257,12 @@ tr.aging-table-top td {
     box-shadow: none !important;
 }
 
-.customer-right table {
-    float: right;
-    width: auto;
-}
-
 i.icon-options {
     width: 36px;
     height: 36px;
     border: 1px solid $gainsboro;
     background-color: $white;
-    color: $gray;
+    color: $midnight-blue;
     font-size: 20px;
     padding: 0;
     display: flex;
@@ -281,7 +272,9 @@ i.icon-options {
 }
 
 i.icon-options:hover {
-    background-color: $whisper-color;
+    background: $chetwode-blue;
+    color: $white;
+    border-color: $chetwode-blue;
 }
 
 .search-field {
@@ -459,9 +452,6 @@ button.btn.btn-filter span.icon-cross {
     .aging-table > tbody > tr input[type="checkbox"] {
         top: 2px;
     }
-    .customer-right-wrap h4.mr-b1.pd-r2 {
-        margin-bottom: 0;
-    }
     tr:last-child td.position-relative.word-wrap.customer-name.cursor-pointer,
     tr:last-child
         td.position-relative.word-wrap.customer-name.vendor-customer-name.cursor-pointer {
@@ -479,16 +469,6 @@ button.btn.btn-filter span.icon-cross {
     }
     .position-relative.word-wrap .icon-dots-three-vertical {
         transform: rotate(0deg);
-    }
-    .customer-right-wrap {
-        padding-right: 0;
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        background: $white;
-        padding: 10px 5px;
-        z-index: 1;
-        box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
     }
     td.position-relative.word-wrap.customer-name.cursor-pointer,
     td.position-relative.word-wrap.customer-name.vendor-customer-name.cursor-pointer {
@@ -540,12 +520,6 @@ button.btn.btn-filter span.icon-cross {
     }
     .btn-group.plus-btn button {
         width: 100%;
-    }
-    .customer-right-wrap {
-        position: relative;
-    }
-    .pagination-main .mt-5 {
-        margin-top: 0px;
     }
     .pagination-wrapper {
         margin-bottom: 0px !important;
@@ -631,40 +605,7 @@ button.btn.btn-filter span.icon-cross {
         padding-top: 0;
         float: none !important;
     }
-    .customer-right-wrap h4.mr-b1.pd-r2 {
-        margin-bottom: 10px;
-    }
-    .customer-right {
-        background: $white;
-        padding: 0 15px;
-        float: left;
-        width: 100%;
-    }
-    .customer-right table {
-        width: 100%;
-    }
-    .customer-right table tr td {
-        padding: 15px;
-        color: $dark-gray;
-        width: 100%;
-        display: table;
-        text-align: left;
-        margin-bottom: 5px;
-    }
-    .customer-right table tr td p {
-        font-size: 14px;
-        margin-bottom: 2px;
-        float: left;
-        width: 110px;
-    }
-    .customer-right table tr td h3 {
-        font-size: 14px;
-        padding-bottom: 7px;
-    }
-    .customer-right-wrap h4 {
-        text-align: left !important;
-        padding-left: 15px;
-    }
+  
     .position-relative.word-wrap .icon-dots-three-vertical {
         display: block;
     }
@@ -713,8 +654,6 @@ button.btn.btn-filter span.icon-cross {
 }
 
 .td-search-box div i {
-    margin-top: 3px;
-    color: $olive;
     padding-right: 8px;
     cursor: pointer;
 }
@@ -744,6 +683,6 @@ button.btn.btn-filter span.icon-cross {
 
 @media (min-width: 769px){
     .mobile-card-wrapper{
-        max-height: calc(100vh - 310px);
+        max-height: calc(100vh - 295px);
     }
 }

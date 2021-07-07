@@ -44,13 +44,10 @@
                 </a>
             </div>
             <div class="dis middle">
-                <div class="advance-icon cursor-pointer align-items-center btn btn-primary btn-group mr-0"
+                <div class="advance-icon cursor-pointer align-items-center btn-group mr-0"
                     #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="hideListItems()"
                     [placement]="'right'">
-                    <div dropdownToggle class="d-flex align-items-center">
-                        <span class="pd-r05 d-sm-flex d-none">{{commonLocaleData?.app_filter}}</span>
-                        <span class="icon-advance-filter"></span>
-                    </div>
+                    <i dropdownToggle class="icon-options"></i>
                     <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" [style.width.px]="'200'">
                         <li role="menuitem">
                             <a class="dropdown-item">

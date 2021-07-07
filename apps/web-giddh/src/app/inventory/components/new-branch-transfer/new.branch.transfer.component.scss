@@ -270,20 +270,11 @@ tfoot td .table-sec.form-group {
 }
 
 .advance-icon {
-    width: 36px;
-    height: 36px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    font-size: 18px;
-    margin-left: 10px;
-    border: 1px solid $gainsboro;
+    font-size: 14px;
     border-radius: 5px;
-    color: $midnight-express;
-    background: $white;
-}
-.advance-icon:hover {
-    background: $whisper-color;
 }
 #table-receipt {
     width: 100%;
@@ -413,7 +404,6 @@ tfoot td .table-sec.form-group {
 .input-group {
     sh-select.branch-dropdown {
         width: 100%;
-        margin-right: 8px;
     }
 }
 .position-relative {
@@ -515,5 +505,8 @@ tfoot td .table-sec.form-group {
                 margin-right: 0;
             }
         }
+    }
+    .custom-datepicker{
+        margin-top: 10px;
     }
 }
