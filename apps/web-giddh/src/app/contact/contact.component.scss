@@ -261,7 +261,7 @@ i.icon-options {
     height: 36px;
     border: 1px solid $gainsboro;
     background-color: $white;
-    color: $gray;
+    color: $midnight-blue;
     font-size: 20px;
     padding: 0;
     display: flex;
@@ -271,7 +271,9 @@ i.icon-options {
 }
 
 i.icon-options:hover {
-    background-color: $whisper-color;
+    background: $chetwode-blue;
+    color: $white;
+    border-color: $chetwode-blue;
 }
 
 .search-field {
@@ -651,8 +653,6 @@ button.btn.btn-filter span.icon-cross {
 }
 
 .td-search-box div i {
-    margin-top: 3px;
-    color: $olive;
     padding-right: 8px;
     cursor: pointer;
 }
