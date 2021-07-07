@@ -1,54 +1,63 @@
 <div class="branch-transfer-report">
     <div class="container-fluid">
-        <div class="d-flex date-advance-search">
-            <div class="d-flex flex-sm-row flex-column branch-transfer-flex">
-                <div *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
-                    class="input-group form-group linked-entities mb-0">
-                    <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName"
-                        class="branch-dropdown" [showClear]="false" [ItemHeight]="33" width="100%"
-                        (selected)="handleBranchChange($event)" [isFilterEnabled]="true" placeholder="Select Entity"
-                        [fixedValue]="currentBranch?.alias">
-                        <ng-template #optionTemplate let-option="option">
-                            <ng-container>
-                                <a href="javascript:void(0)" class="list-item d-flex">
-                                    <span class="entity-icon">
-                                        <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany"
-                                            tooltip="Branch"></i>
-                                        <i class="icon-company-profile pull-right" *ngIf="option.isCompany"
-                                            tooltip="Company"></i>
-                                    </span>
-                                    <span class="entity-details">
-                                        <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
-                                        <div class="item-unique giddh-limit single-line-clamp">
-                                            {{ option.name || '-' }}
-                                        </div>
-                                    </span>
-                                </a>
-                            </ng-container>
-                        </ng-template>
-                    </sh-select>
+        <div class="d-flex flex-column">
+            <div class="d-flex date-advance-search justify-content-between">
+                <div class="clearfix d-flex">
+                    <button *ngIf="!(currentOrganizationType !== 'BRANCH' && currentCompanyBranches?.length > 2)"
+                    class="btn btn-sky-blue mr-r1 pull-right mobile-none" data-toggle="tooltip" tooltip="Alt+N"
+                    (click)="toggleTransferAsidePane()">+ New Transfer</button>
+                    <div class="d-flex flex-sm-row flex-column branch-transfer-flex">
+                        <div *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                        class="input-group form-group linked-entities mb-0 mr-r1">
+                            <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName"
+                            class="branch-dropdown" [showClear]="false" [ItemHeight]="33" width="100%"
+                            (selected)="handleBranchChange($event)" [isFilterEnabled]="true" placeholder="Select Entity"
+                            [fixedValue]="currentBranch?.alias">
+                                <ng-template #optionTemplate let-option="option">
+                                    <ng-container>
+                                        <a href="javascript:void(0)" class="list-item d-flex">
+                                            <span class="entity-icon">
+                                                <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany"
+                                                tooltip="Branch"></i>
+                                                <i class="icon-company-profile pull-right" *ngIf="option.isCompany"
+                                                tooltip="Company"></i>
+                                            </span>
+                                            <span class="entity-details">
+                                                <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
+                                                <div class="item-unique giddh-limit single-line-clamp">
+                                                    {{ option.name || '-' }}
+                                                </div>
+                                            </span>
+                                        </a>
+                                    </ng-container>
+                                </ng-template>
+                            </sh-select>
+                        </div>
+                        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                            <i><img src="assets/images/custom-calender.svg"></i>
+                            <input type="text" name="selectedDateRange"
+                            [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker" />
+                        </div>
+                    </div>
                 </div>
-                <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                    <i class="icon-calender calendar-addon"></i>
-                    <input type="text" name="selectedDateRange"
-                        [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
-                        class="giddh-datepicker date-range-picker" />
+                <div class="text-center d-lg-flex d-none">
+                    <div class="clear-filter" *ngIf="checkIfFiltersApplied()">
+                        <button class="btn btn-filter mr-0" (click)="clearFilters();"><span class="icon-cross"></span> Clear
+                        Filter </button>
+                    </div>
                 </div>
-                <div class="advance-icon pointer mobile-none" tooltip="Advance Search"
-                    (click)="openSearchModal(template)">
+                <div class="advance-icon pointer mobile-none btn btn-primary mr-0" tooltip="Advance Search"
+                (click)="openSearchModal(template)">
+                    <span class="pd-r05 d-sm-flex d-none">{{commonLocaleData?.app_filter}}</span>
                     <span class="icon-advance-filter"></span>
-                </div>
+                </div> 
             </div>
-            <div class="text-center">
+            <div class="d-lg-none mr-b1">
                 <div class="clear-filter" *ngIf="checkIfFiltersApplied()">
                     <button class="btn btn-filter mr-0" (click)="clearFilters();"><span class="icon-cross"></span> Clear
                         Filter </button>
                 </div>
-            </div>
-            <div class="clearfix">
-                <button *ngIf="!(currentOrganizationType !== 'BRANCH' && currentCompanyBranches?.length > 2)"
-                    class="btn btn-sky-blue pull-right mr-0 mobile-none" data-toggle="tooltip" tooltip="Alt+N"
-                    (click)="toggleTransferAsidePane()">+ New Transfer</button>
             </div>
         </div>
         <div class="report-table table-responsive">

@@ -5,7 +5,8 @@ import {
     OnInit,
     ViewChild,
     ElementRef,
-    HostListener
+    HostListener,
+    Input
 } from "@angular/core";
 import { BsModalService, BsModalRef, ModalDirective } from "ngx-bootstrap/modal";
 import { InventoryService } from '../../../services/inventory.service';
@@ -48,6 +49,9 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 })
 
 export class NewBranchTransferListComponent implements OnInit, OnDestroy {
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
+
     @ViewChild('branchtransfertemplate', { static: true }) public branchtransfertemplate: ElementRef;
     @ViewChild('deleteBranchTransferModal', { static: true }) public deleteBranchTransferModal: ModalDirective;
     @ViewChild('senderReceiverField', { static: true }) public senderReceiverField;
