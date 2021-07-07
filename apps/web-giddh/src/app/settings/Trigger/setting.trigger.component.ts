@@ -25,6 +25,7 @@ import { NgForm } from '@angular/forms';
 export class SettingTriggerComponent implements OnInit, OnDestroy {
 
     @ViewChild('triggerConfirmationModel', { static: true }) public triggerConfirmationModel: ModalDirective;
+    /** Stores the form instance */
     @ViewChild('createTriggerForm', {static: true}) public createTriggerForm: NgForm;
 
     public availableTriggers: any[] = [];
