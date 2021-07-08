@@ -292,7 +292,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
             let branchFilterRequest: BranchFilterRequest = { from: '', to: '', companyUniqueName: company.uniqueName };
             this.settingsBranchService.GetAllBranches(branchFilterRequest).subscribe(response => {
                 if (response?.status === "success") {
-                    this.branchList = response.body.sort(this.generalService.sortBranches)
+                    this.branchList = response.body.sort(this.generalService.sortBranches);
                     company.branches = this.branchList;
                     this.companyBranches = company;
                     this.branchRefreshInProcess = false;
