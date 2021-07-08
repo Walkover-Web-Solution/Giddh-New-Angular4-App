@@ -713,9 +713,9 @@ span.icon-export-icon {
     .total-due-sale {
         padding-bottom: 5px;
     }
-    // .invoice-table {
-    //  margin-bottom: 22px;
-    //}
+    .advance-icon{
+        margin-right:0 !important;
+    }
 }
 
 @media (max-width: 575px) {
@@ -908,20 +908,19 @@ span.icon-export-icon {
     }
 }
 
-@media (min-width: 768px) and (max-width:769px){
-    .custom-datepicker input {
-        width: 208px !important;
+@media (min-width: 768px) and (max-width:865px){
+    .visible-center{
+        display: flex !important;
     }
-
-    .input-grp-date-range-picker{
-        .form-group{
-            margin-right: 0 !important;
+    .visible-on-desktop{
+        display: none !important;
+    }
+    .more-btn-dropdown.desktop-view-btn{
+        display: none !important;
+    }
+    .add-invoice{
+        .justify-content-end{
+            margin-left: -165px;
         }
-    }
-
-    .clear-filter.visible-on-desktop button.btn.btn-filter{
-        font-size: 13px !important;
-        padding: 8px !important;
-
     }
 }
