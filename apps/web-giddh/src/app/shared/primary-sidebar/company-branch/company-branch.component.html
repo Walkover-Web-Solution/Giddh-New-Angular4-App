@@ -58,7 +58,7 @@
                         </span>
                     </p>
                     <button class="btn btn-sky-blue mr-0" (click)="createBranch()"
-                        *ngIf="activeCompany?.uniqueName === companyBranches?.uniqueName"><i class="icon-plus font-12"></i>
+                        *ngIf="activeCompany?.uniqueName === companyBranches?.uniqueName && !currentBranchUniqueName"><i class="icon-plus font-12"></i>
                         <span>{{localeData?.create_branch}}</span>
                     </button>
                 </div>
@@ -138,7 +138,7 @@
                                                     <span class="d-flex align-items-center digit-blue"> <i class="icon-link-arrow font-14"></i> <span class="digit-blue font-12">{{ localeData?.goto_company }}</span> </span>
                                                 </span>
                                                 <button class="btn btn-sky-blue mr-0 pr-r2"
-                                                *ngIf="activeCompany?.uniqueName === company.uniqueName"
+                                                *ngIf="activeCompany?.uniqueName === company.uniqueName && !currentBranchUniqueName"
                                                 (click)="createBranch()"> <i class="icon-plus font-12"></i>
                                                     <span>{{localeData?.create_branch}}</span>
                                                 </button>
