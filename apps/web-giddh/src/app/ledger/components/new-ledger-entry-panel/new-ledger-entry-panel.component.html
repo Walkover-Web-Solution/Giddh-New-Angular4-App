@@ -533,9 +533,10 @@
 
                         <li>
                             <input [disabled]="isReadOnly" id="ledger-price-input" class="price-input"
-                                [(ngModel)]="blankLedger.exchangeRateForDisplay" type="text"
-                                (blur)="exchangeRateChanged()"> {{ blankLedger.selectedCurrencyToDisplay === 0 ?
-                            blankLedger.foreignCurrencyToDisplay?.code : blankLedger.baseCurrencyToDisplay?.code }}
+                                [(ngModel)]="blankLedger.exchangeRate" type="text"
+                                (blur)="exchangeRateChanged()">
+                            {{ blankLedger.selectedCurrencyToDisplay === 0 ? blankLedger.foreignCurrencyToDisplay?.code
+                            : blankLedger.baseCurrencyToDisplay?.code }}
                         </li>
 
                     </ul>
