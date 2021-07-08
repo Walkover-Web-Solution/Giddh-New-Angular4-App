@@ -63,7 +63,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
             title: {
                 verticalAlign: 'middle',
                 align: 'center',
-                text: '<span class="pie-text_center">' + this.ratioObj.currentRatio + '</span>',
+                text: '<span class="pie-text_center">' + this.ratioObj?.currentRatio + '</span>',
                 style: { color: '#005b77', fontSize: '26px' },
                 useHTML: true,
                 y: 8
@@ -116,7 +116,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
             series: [{
                 name: this.localeData?.current_ratio,
                 type: undefined,
-                data: [[this.localeData?.current_assets, this.ratioObj.currentRatio * 100], [this.localeData?.current_liabilities, 100]],
+                data: [[this.localeData?.current_assets, this.ratioObj?.currentRatio * 100], [this.localeData?.current_liabilities, 100]],
             }],
         };
 
@@ -131,7 +131,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
             title: {
                 verticalAlign: 'middle',
                 align: 'center',
-                text: '<span class="pie-text_center">' + this.ratioObj.debtEquityRatio + '</span>',
+                text: '<span class="pie-text_center">' + this.ratioObj?.debtEquityRatio + '</span>',
                 style: { color: '#005b77', fontSize: '26px' },
                 useHTML: true,
                 y: 8
@@ -183,7 +183,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
             },
             series: [{
                 type: 'pie',
-                data: [[this.localeData?.current_liability + ' + ' + this.localeData?.noncurrent_liability, this.ratioObj.debtEquityRatio * 100], [this.localeData?.shareholders_fund, 100]],
+                data: [[this.localeData?.current_liability + ' + ' + this.localeData?.noncurrent_liability, this.ratioObj?.debtEquityRatio * 100], [this.localeData?.shareholders_fund, 100]],
 
             }]
         };
@@ -199,7 +199,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
             title: {
                 verticalAlign: 'middle',
                 align: 'center',
-                text: '<span class="pie-text_center">' + this.ratioObj.proprietaryRatio + '</span>',
+                text: '<span class="pie-text_center">' + this.ratioObj?.proprietaryRatio + '</span>',
                 style: { color: '#005b77', fontSize: '26px' },
                 useHTML: true,
                 y: 8
@@ -252,7 +252,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
             series: [{
                 name: this.localeData?.proprietary_ratio,
                 type: 'pie',
-                data: [[this.localeData?.shareholders_fund, this.ratioObj.proprietaryRatio * 100], [this.localeData?.total_assets, 100]],
+                data: [[this.localeData?.shareholders_fund, this.ratioObj?.proprietaryRatio * 100], [this.localeData?.total_assets, 100]],
 
             }]
         };
@@ -268,7 +268,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
             title: {
                 verticalAlign: 'middle',
                 align: 'center',
-                text: '<span class="pie-text_center">' + this.ratioObj.fixedAssetRatio + '</span>',
+                text: '<span class="pie-text_center">' + this.ratioObj?.fixedAssetRatio + '</span>',
                 style: { color: '#005b77', fontSize: '26px' },
                 useHTML: true,
                 y: 8
@@ -321,7 +321,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
             series: [{
                 name: this.localeData?.fixed_assets_ratio,
                 type: 'pie',
-                data: [[this.localeData?.fixed_assets + ' / ' + this.localeData?.noncurrent_liability, this.ratioObj.fixedAssetRatio * 100], [this.localeData?.shareholders_fund, 100]],
+                data: [[this.localeData?.fixed_assets + ' / ' + this.localeData?.noncurrent_liability, this.ratioObj?.fixedAssetRatio * 100], [this.localeData?.shareholders_fund, 100]],
             }]
         };
     }
