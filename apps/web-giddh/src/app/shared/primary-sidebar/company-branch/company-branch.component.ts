@@ -123,9 +123,9 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
 
                 this.currentCompanyBranches$.subscribe(response => {
                     if (response && response.length) {
-                        this.currentCompanyBranches = response;
-                        this.companyBranches.branches = response;
-                        this.branchList = response;
+                        this.branchList = response.sort(this.generalService.sortBranches);
+                        this.currentCompanyBranches = this.branchList;
+                        this.companyBranches.branches = this.branchList;
                         this.changeDetectorRef.detectChanges();
                     }
                 });

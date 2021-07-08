@@ -880,19 +880,29 @@ export class GeneralService {
      * @returns {*}
      * @memberof CompanyBranchComponent
      */
-     public sortBranches(branchA: any, branchB: any): any {
-        let regexA = /[^a-zA-Z]/g;
-        let regexN = /[^0-9]/g;
+    public sortBranches(branchA: any, branchB: any): any {
+        var regexA = /[^a-zA-Z]/g;
+        var regexN = /[^0-9]/g;
 
-        let outputA1 = branchA?.alias?.replace(regexA, "");
-        let outputA2 = branchB?.alias?.replace(regexA, "");
+        var branchAInt = parseInt(branchA?.alias, 10);
+        var branchBInt = parseInt(branchB?.alias, 10);
 
-        if (outputA1 === outputA2) {
-            let outputN1 = parseInt(branchA?.alias?.replace(regexN, ""), 10);
-            let outputN2 = parseInt(branchB?.alias?.replace(regexN, ""), 10);
-            return outputN1 === outputN2 ? 0 : outputN1 > outputN2 ? 1 : -1;
+        if (isNaN(branchAInt) && isNaN(branchBInt)) {
+            var branchAOutput = branchA?.alias?.toLowerCase()?.replace(regexA, "");
+            var branchBOutput = branchB?.alias?.toLowerCase()?.replace(regexA, "");
+            if (branchAOutput === branchBOutput) {
+                var branchANumeric = parseInt(branchA?.alias?.toLowerCase()?.replace(regexN, ""), 10);
+                var branchBNumeric = parseInt(branchB?.alias?.toLowerCase()?.replace(regexN, ""), 10);
+                return branchANumeric === branchBNumeric ? 0 : branchANumeric > branchBNumeric ? 1 : -1;
+            } else {
+                return branchAOutput > branchBOutput ? 1 : -1;
+            }
+        } else if (isNaN(branchAInt)) { //A is not an Int
+            return 1; //to make alphanumeric sort first return -1 here
+        } else if (isNaN(branchBInt)) { //B is not an Int
+            return -1; //to make alphanumeric sort first return 1 here
         } else {
-            return outputA1 > outputA2 ? 1 : -1;
+            return branchAInt > branchBInt ? 1 : -1;
         }
     }
 }
