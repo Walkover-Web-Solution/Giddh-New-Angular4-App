@@ -121,10 +121,9 @@
                     flex-direction: column;
                     margin-bottom: 0 !important;
                     padding: 0;
-                    &:hover{
-                        span{
-                            background-color: $solitude-light !important;
-                        }
+                    &.active{
+                        color: $trout !important;
+                        background-color: $light-alice-blue !important;
                     }
                     span{
                         white-space: normal;
@@ -406,7 +405,7 @@
                                     transform: rotate(180deg)
                                 }
                             }
-                            background-color: transparent;
+                            background-color: transparent !important;
                             ul{
                                 padding: 0 20px;
                                 li{
