@@ -79,7 +79,13 @@ export class GiddhErrorHandler {
             }
         }
 
-        data.statusCode = r.status;
+        if(typeof data === "string") {
+            data = {
+                statusCode: r.status
+            };
+        } else {
+            data.statusCode = r.status;
+        }
 
         return new Observable<BaseResponse<TResponce, TRequest>>((o) => {
             o.next(data);
