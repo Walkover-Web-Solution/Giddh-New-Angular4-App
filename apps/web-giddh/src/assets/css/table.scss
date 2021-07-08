@@ -36,11 +36,14 @@
     }
     thead > .register-table-th > th {
         color: $black !important;
-        position: relative !important;
         border-bottom: none !important;
         background: $light-orange;
         font-size: 16px;
     }
+    thead > .register-sales-purchase > th {
+        top: 54px !important;
+    }
+
     thead > tr > th.td-search-box {
         min-width: 190px !important;
     }

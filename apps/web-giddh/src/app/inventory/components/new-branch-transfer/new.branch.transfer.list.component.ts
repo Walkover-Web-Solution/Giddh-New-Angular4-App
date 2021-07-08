@@ -48,6 +48,7 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 })
 
 export class NewBranchTransferListComponent implements OnInit, OnDestroy {
+
     @ViewChild('branchtransfertemplate', { static: true }) public branchtransfertemplate: ElementRef;
     @ViewChild('deleteBranchTransferModal', { static: true }) public deleteBranchTransferModal: ModalDirective;
     @ViewChild('senderReceiverField', { static: true }) public senderReceiverField;

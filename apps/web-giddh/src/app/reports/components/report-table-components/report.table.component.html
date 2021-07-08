@@ -19,9 +19,11 @@
                 <th *ngIf="salesRegisterTotal.cumulative" class="text-right">{{salesRegisterTotal.cumulative |
                     giddhCurrency}}</th>
             </tr>
-            <tr>
-                <th class="d-flex align-items-center">
-                    {{commonLocaleData?.app_particular}}
+            <tr class="register-sales-purchase">
+                <th>
+                    <div class="d-flex align-items-center">
+                        {{commonLocaleData?.app_particular}}
+                    </div>
                 </th>
                 <th class="width-200px">
                     <div class="d-flex">
