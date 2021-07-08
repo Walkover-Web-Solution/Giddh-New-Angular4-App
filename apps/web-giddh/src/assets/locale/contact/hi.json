@@ -60,5 +60,9 @@
     "payment_status": "भुगतान की स्थिति",
     "payment_status_note": "शीघ्र ही सभी भुगतानों की स्थिति मेल कर दी जाएगी।",
     "aging_error_message": "4 वां कॉलम 5 वीं से कम और 5 वां 6 वीं से कम होना चाहिए",
-    "search_name": "नाम खोजें"
+    "search_name": "नाम खोजें",
+    "customers": "ग्राहक",
+    "customers_selected": "ग्राहक चुने गए",
+    "vendors": "विक्रेता",
+    "vendors_selected": "विक्रेता चयनित"
 }

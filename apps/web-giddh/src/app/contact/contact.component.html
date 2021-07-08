@@ -196,7 +196,8 @@
                         <div class="d-flex w-100 justify-content-between overflow-x-auto">
                             <div class="total-details-box mr-r05 d-flex justify-content-between count-box align-items-end">
                                 <h5>
-                                    {{localeData?.contacts}}
+                                    <ng-container *ngIf="!selectedCheckedContacts.length">{{activeTab === 'customer' ? localeData?.customers : localeData?.vendors}}</ng-container>
+                                    <ng-container *ngIf="selectedCheckedContacts.length">{{activeTab === 'customer' ? localeData?.customers_selected : localeData?.vendors_selected }}</ng-container>
                                     <div>
                                         <span *ngIf="!selectedCheckedContacts.length"
                                         class="number-total">{{activeTab === 'customer' ? totalCustomers :
@@ -207,7 +208,7 @@
                                     </div>
                                 </h5>
                                 <div class="btn-group more-button align-items-center" dropdown container="body">
-                                    <button id="button-basic" dropdownToggle type="button"
+                                    <button *ngIf="selectedCheckedContacts.length" id="button-basic" dropdownToggle type="button"
                                     class="btn btn-default dropdown-toggle mr-0" aria-controls="dropdown-basic">
                                         <span class="icon-arrow-down font-12"></span>
                                     </button>
