@@ -180,7 +180,6 @@ body {
 [class*=" icon-"] {
     /* use !important to prevent issues with browser extensions that change fonts */
     font-family: "icomoon" !important;
-    speak: none;
     font-style: normal;
     font-weight: normal;
     font-variant: normal;
@@ -300,6 +299,7 @@ input {
 .toggle {
     position: relative;
     width: 40px;
+    user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -1176,6 +1176,7 @@ modal-container.modal {
 .list-icon-group li {
     display: flex;
     align-items: center;
+    transition: 1ms all;
     -moz-transition: 1ms all;
     cursor: pointer;
 }
@@ -1878,7 +1879,6 @@ input[type="checkbox"]:checked:after {
 .tab-pane input[type="search"]:after {
     font-family: icomoon !important;
     content: "\e906";
-    speak: none;
     font-style: normal;
     font-weight: 400;
     font-variant: normal;
@@ -2754,6 +2754,7 @@ a.btn.btn-xs.btn-link.pull-right {
 #share-modal select {
     -webkit-appearance: none;
     -webkit-border-radius: 0px;
+    border-radius: 0px;
     margin-left: 10px;
 }
 
@@ -10108,7 +10109,7 @@ body.prevent-body-scroll {
     overflow-y: hidden !important;
 }
 
-.hide-payment-tab ul li:nth-child(5) {
+.hide-payment-tab ul li:nth-child(4) {
     display: none;
 }
 
@@ -10160,7 +10161,4 @@ body.prevent-body-scroll {
 }
 .giddh-no-permissions {
     display: none !important;
-}
-.giddh-no-permissions-error-message {
-    color: $red;
 }

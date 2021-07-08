@@ -1,5 +1,8 @@
 @font-face {
     font-family: "ledgerfont";
+    font-display: swap;
+    font-weight: normal;
+    font-style: normal;
     src: url("../../fonts/ledgerfont/ledgerfont.eot?61305536");
     src: url("../../fonts/ledgerfont/ledgerfont.eot?61305536#iefix")
             format("embedded-opentype"),
