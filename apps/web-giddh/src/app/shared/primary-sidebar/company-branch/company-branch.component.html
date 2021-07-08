@@ -57,7 +57,7 @@
                             <i class="icon-reload refresh-manually font-22"></i>
                         </span>
                     </p>
-                    <button class="btn btn-sky-blue mr-0" [routerLink]="['/pages/settings/create-branch']"
+                    <button class="btn btn-sky-blue mr-0" (click)="createBranch()"
                         *ngIf="activeCompany?.uniqueName === companyBranches?.uniqueName"><i class="icon-plus font-12"></i>
                         <span>{{localeData?.create_branch}}</span>
                     </button>
@@ -139,7 +139,7 @@
                                                 </span>
                                                 <button class="btn btn-sky-blue mr-0 pr-r2"
                                                 *ngIf="activeCompany?.uniqueName === company.uniqueName"
-                                                [routerLink]="['/pages/settings/create-branch']"> <i class="icon-plus font-12"></i>
+                                                (click)="createBranch()"> <i class="icon-plus font-12"></i>
                                                     <span>{{localeData?.create_branch}}</span>
                                                 </button>
                                             </p>
