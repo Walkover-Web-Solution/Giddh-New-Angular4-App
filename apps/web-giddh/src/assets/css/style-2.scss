@@ -2117,10 +2117,6 @@ input[type="checkbox"]:checked:after {
     cursor: pointer;
 }
 
-.pd-t05 {
-    padding-top: 5px;
-}
-
 .pd-t07 {
     padding-top: 7px;
 }
@@ -6491,7 +6487,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 }
 
 .pagination-wrapper {
-    padding: 20px 0;
+    padding: 20px 0 0 0;
     text-align: center;
     display: flex;
     justify-content: center;
@@ -8399,7 +8395,7 @@ body.update-scroll-hidden {
                 position: inherit !important;
                 background-color: transparent;
                 padding-left: 0 !important;
-                margin: 0 -20px;
+                margin: 0;
                 flex-wrap: nowrap;
                 width: initial;
                 display: flex;

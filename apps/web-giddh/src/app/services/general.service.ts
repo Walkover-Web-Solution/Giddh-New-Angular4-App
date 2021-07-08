@@ -871,4 +871,28 @@ export class GeneralService {
         }
         return !!child;
     }
+
+    /**
+     * This will sort branches by alias
+     *
+     * @param {*} branchA
+     * @param {*} branchB
+     * @returns {*}
+     * @memberof CompanyBranchComponent
+     */
+     public sortBranches(branchA: any, branchB: any): any {
+        let regexA = /[^a-zA-Z]/g;
+        let regexN = /[^0-9]/g;
+
+        let outputA1 = branchA?.alias?.replace(regexA, "");
+        let outputA2 = branchB?.alias?.replace(regexA, "");
+
+        if (outputA1 === outputA2) {
+            let outputN1 = parseInt(branchA?.alias?.replace(regexN, ""), 10);
+            let outputN2 = parseInt(branchB?.alias?.replace(regexN, ""), 10);
+            return outputN1 === outputN2 ? 0 : outputN1 > outputN2 ? 1 : -1;
+        } else {
+            return outputA1 > outputA2 ? 1 : -1;
+        }
+    }
 }
