@@ -262,7 +262,7 @@
 @media (max-width: 575px) {
     .purchase-order-header {
         width: 100%;
-        flex-direction: column;
+        align-items: flex-start;
         form {
             width: 100%;
             .form-group {
@@ -272,6 +272,14 @@
         }
         .date-advance-search {
             width: 100%;
+            flex-direction: column-reverse;
+            .btn-wrapper{
+                margin-right: auto;
+            }
+        }
+        .add-invoice{
+            flex-direction: column-reverse;
+            align-items: flex-start;
         }
         .clear-filter {
             button.btn.btn-default {
@@ -287,6 +295,17 @@
 
     .check-uncheck {
         display: flex;
+    }
+
+    .advance-icon{
+        height: 36px;
+        margin-left: auto;
+    }
+    .more-toggle{
+        margin-top:15px;
+        .btn-primary{
+            margin-right: 0 !important;
+        }
     }
 }
 .ontime-delivery {
