@@ -75,8 +75,8 @@
                                     <span class="icon-cross"></span> {{commonLocaleData?.app_clear_filter}}
                                 </button>
                             </div>
-                            <!-- Cancel e-invoice button *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'sales') && selectedInvoicesList?.length === 1 && selectedInvoicesList[0].irnNumber"-->
-                            <button type="button" class="btn btn-primary desktop-view-btn" (click)="openModal(cancelEInvoiceTemplate)">{{localeData?.cancel_e_invoice}}</button>
+                            <!-- Cancel e-invoice button -->
+                            <button type="button" class="btn btn-primary desktop-view-btn" *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'sales') && selectedInvoicesList?.length === 1 && selectedInvoicesList[0].irnNumber" (click)="openModal(cancelEInvoiceTemplate)">{{localeData?.cancel_e_invoice}}</button>
                             <div *ngIf="!isCompany" class="btn-group visible-center d-none" dropdown #dp="bs-dropdown">
                                 <button dropdownToggle type="button"
                                 class="btn btn-primary more-btn-dropdown dropdown-toggle "
@@ -107,13 +107,11 @@
                                     </li>
                                 </ul>
                             </div>
-                            <!--*ngIf="selectedVoucher === 'sales' && selectedInvoicesList.length && isExported"-->
-                            <button class="btn btn-default desktop-view-btn"  [tooltip]="commonLocaleData?.app_export"
+                            <button class="btn btn-default desktop-view-btn" *ngIf="selectedVoucher === 'sales' && selectedInvoicesList.length && isExported" [tooltip]="commonLocaleData?.app_export"
                             (click)="exportCsvDownload()" [ladda]="exportInvoiceRequestInProcess$ | async"
                             data-spinner-size="20px">
                                 <span class="icon-export-icon"></span>
                             </button>
-                        <!--  E-way bill generation and export to excel for a single selected item in invoice ends sizes -->
                         </div>
                         <div class="d-flex ml-auto">
                         <!-- E-way bill generation and export to excel for a single selected item in invoice sizes -->
