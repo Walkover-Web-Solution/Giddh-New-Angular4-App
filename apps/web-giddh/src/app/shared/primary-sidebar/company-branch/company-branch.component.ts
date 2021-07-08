@@ -408,4 +408,13 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
             this.changeDetectorRef.detectChanges();
         }, 50);
     }
+
+    /**
+     * This will route to create branch page
+     *
+     * @memberof CompanyBranchComponent
+     */
+    public createBranch(): void {
+        this.router.navigate(['/pages/settings/create-branch']);
+    }
 }
