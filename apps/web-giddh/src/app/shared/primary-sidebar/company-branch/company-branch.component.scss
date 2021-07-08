@@ -1,8 +1,8 @@
 @import '../../../../assets/css/color.scss';
 .company-branch-dropdown{
     font-family: 'opensans-regular';
-    padding: 0 20px;
     .search-box {
+        padding: 0 20px;
         .input-group-text {
             background-color: $gray-95;
             padding: 8px !important;
@@ -60,6 +60,7 @@
     }
     .company-branch-opt-1{
         .wrap-company-refresh{
+            padding: 0 20px;
             p{
                 span{
                     small{
@@ -96,10 +97,10 @@
         }
     }
     .company-list{
-        height: calc(100vh  - 325px) !important;
+        height: calc(100vh - 345px) !important;
         overflow: auto;
         margin: 0;
-        padding: 0 0 20px;
+        padding: 0 0 10px;
 
         ul{
             li{
@@ -120,7 +121,7 @@
                     display: flex;
                     flex-direction: column;
                     margin-bottom: 0 !important;
-                    padding: 0;
+                    padding: 0 20px;
                     &.active{
                         color: $trout !important;
                         background-color: $light-alice-blue !important;
@@ -236,14 +237,14 @@
         }
         &.branch-list{
             ul{
-                margin: 0 -20px;
+                margin: 0;
                 li{
-                    padding: 0 20px;
+                    padding: 0;
                     cursor: pointer;
                     margin-bottom: 0;
                     a{
                         background-color: transparent;
-                        padding:8px 0px;
+                        padding:8px 20px;
                         color: $trout;
                         white-space: normal;
                         word-break: break-all;
@@ -331,7 +332,6 @@
         }
     }
     .company-branch-opt-2{
-        margin: 0 -20px;
         .wrap-company-refresh{
             padding: 0 20px;
             p{
@@ -353,13 +353,17 @@
             }
         }
         .company-list{
-            height: calc(90vh - 120px) !important;
+            height: calc(100vh - 225px) !important;
             overflow-x: hidden;
+            padding: 0 !important;
             ul{
                 position: relative;
                 li{
-                    padding: 0 20px;
-                    margin: 0 -20px;
+                    padding: 0;
+                    margin: 0;
+                    &:last-child{
+                        margin-bottom: 10px !important;
+                    }
                     span{
                         padding: 5px 20px;
                         margin: 0;
@@ -407,7 +411,7 @@
                             }
                             background-color: transparent !important;
                             ul{
-                                padding: 0 20px;
+                                padding: 0;
                                 li{
                                     span{
                                         padding: 0;
@@ -456,11 +460,6 @@
         .company-branch-dropdown{
             .company-list {
                 height: calc(65vh - 60px) !important;
-            }
-        }
-        .company-branch-opt-2{
-            .company-list{
-                height: calc(80vh - 120px) !important;
             }
         }
     }
