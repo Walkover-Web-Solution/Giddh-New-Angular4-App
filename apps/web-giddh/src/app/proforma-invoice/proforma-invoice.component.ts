@@ -6242,15 +6242,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         if (res.body && res.body && res.body.length > 0) {
                             res.body.forEach(item => {
                                 let pending = [];
+                                let totalPending = 0;
 
                                 if (item.pendingDetails.stocks) {
                                     pending.push(item.pendingDetails.stocks + ((item.pendingDetails.stocks === 1) ? " " + this.commonLocaleData?.app_product : " " + this.commonLocaleData?.app_products));
+                                    totalPending += item.pendingDetails.stocks;
                                 }
                                 if (item.pendingDetails.services) {
                                     pending.push(item.pendingDetails.services + ((item.pendingDetails.services === 1) ? " " + this.commonLocaleData?.app_service : " " + this.commonLocaleData?.app_services));
+                                    totalPending += item.pendingDetails.services;
                                 }
 
-                                this.purchaseOrders.push({ label: item.number, value: item.uniqueName, additional: { grandTotal: item.pendingDetails.grandTotal, pending: pending.join(", ") } });
+                                this.purchaseOrders.push({ label: item.number, value: item.uniqueName, additional: { grandTotal: item.pendingDetails.grandTotal, pending: pending.join(", "), totalPending: totalPending } });
 
                                 this.linkedPoNumbers[item.uniqueName] = [];
                                 this.linkedPoNumbers[item.uniqueName]['voucherNumber'] = item.voucherNumber;
@@ -6285,7 +6288,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                     this.selectedPoItems.push(response.body.uniqueName);
                                     this.linkedPoNumbers[order.value]['items'] = response.body.entries;
                                     if (addRemove) {
-                                        this.addPoItems(response.body.uniqueName, response.body.entries);
+                                        this.addPoItems(response.body.uniqueName, response.body.entries, order.additional.totalPending);
                                     } else {
                                         this.startLoader(false);
                                     }
@@ -6320,7 +6323,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @param {*} entries
      * @memberof ProformaInvoiceComponent
      */
-    public addPoItems(poUniqueName: string, entries: any): void {
+    public addPoItems(poUniqueName: string, entries: any, totalPending: number): void {
         this.startLoader(true);
 
         let blankItemIndex = this.invFormData.entries.findIndex(entry => !entry.transactions[0].accountUniqueName);
@@ -6401,7 +6404,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         let buildBulkDataStarted = false;
         let interval = setInterval(() => {
-            if (this.linkedPoItemsAdded === entries.length) {
+            if (this.linkedPoItemsAdded === totalPending) {
                 if (!buildBulkDataStarted) {
                     this.linkedPoItemsAdded = 0;
                     buildBulkDataStarted = true;
