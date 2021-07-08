@@ -62,6 +62,7 @@
                                 (ngModelChange)="changePrice($event)" name="unitPrice"
                                 (keyup)="isInclusiveEntry = false" class="form-control text-right" />
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="currentTxn?.convertedRate"
                                         [currencySymbol]="false" [currencyCode]="false" [ratePrecision]="true">
@@ -91,6 +92,7 @@
                                 [(ngModel)]="currentTxn.advanceReceiptAmount" (focus)="hideDiscountTax()"
                                 (keyup)="amountChanged();calculateTotal()" />
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="currentTxn?.convertedAmount"
                                         [currencySymbol]="false" [currencyCode]="false">
@@ -116,6 +118,7 @@
                                 (hideOtherPopups)="hideTax()" (discountTotalUpdated)="calculateDiscount($event);">
                             </ledger-discount>
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="currentTxn?.convertedDiscount"
                                         [currencySymbol]="false" [currencyCode]="false">
@@ -159,6 +162,7 @@
                             </tax-control>
 
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="currentTxn?.convertedTax"
                                         [currencySymbol]="false" [currencyCode]="false">
@@ -183,6 +187,7 @@
                                 [(ngModel)]="currentTxn.total" (blur)="calculateAmount()"
                                 [disabled]="isAdvanceReceipt ? 'disabled' : null" />
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="currentTxn?.convertedTotal"
                                         [currencySymbol]="false" [currencyCode]="false">
@@ -605,6 +610,11 @@
     (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(true); emitOtherTaxes();">
 </app-aside-menu-sales-other-taxes>
 
+<ng-template #totalWithCurrencySymbol>
+    <span>
+        {{ selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol }}
+    </span>
+</ng-template>
 <ng-template #rcmEntryCheckbox>
     <div *ngIf="currentTxn?.shouldShowRcmEntry" class="rcm-entry pd-b1 mt-b1">
         <input [disabled]="isReadOnly" id="tourist-scheme-1" class="checkbox-custom" type="checkbox"
