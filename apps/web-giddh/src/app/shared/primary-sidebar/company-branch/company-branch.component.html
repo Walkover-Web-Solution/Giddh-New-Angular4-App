@@ -132,19 +132,20 @@
                             <ng-container *ngIf="!branchRefreshInProcess">
                                 <li role="menuitem">
                                     <div class="d-flex flex-column total-branches">
-                                        <p class="font-12 d-flex justify-content-between">
-                                            <span *ngIf="activeCompany?.uniqueName !== companyBranches?.uniqueName || currentBranchUniqueName" class="digit-blue" href="javascript:;" (keydown.enter)="changeCompany(company.uniqueName, '', false)" (click)="changeCompany(company.uniqueName, '', false)">
-                                                <span class="d-flex align-items-center digit-blue"> <i class="icon-link-arrow font-14"></i> <span class="digit-blue font-12">{{ localeData?.goto_company }}</span> </span>
-                                            </span>
+                                        <div class="font-12 d-flex justify-content-between">
+                                            <p class="d-flex flex-column">
+                                                <span *ngIf="activeCompany?.uniqueName !== companyBranches?.uniqueName || currentBranchUniqueName" class="digit-blue mr-b1" href="javascript:;" (keydown.enter)="changeCompany(company.uniqueName, '', false)" (click)="changeCompany(company.uniqueName, '', false)">
+                                                    <span class="d-flex align-items-center digit-blue"> <i class="icon-link-arrow font-14"></i> <span class="digit-blue font-12">{{ localeData?.goto_company }}</span> </span>
+                                                </span>
+                                                <button class="btn btn-sky-blue mr-0 pr-r2"
+                                                *ngIf="activeCompany?.uniqueName === company.uniqueName"
+                                                [routerLink]="['/pages/settings/create-branch']"> <i class="icon-plus font-12"></i>
+                                                    <span>{{localeData?.create_branch}}</span>
+                                                </button>
+                                            </p>
                                             <span class="cursor-pointer pl-0 pt-0 ml-auto" [tooltip]="localeData?.refresh_manually" placement="left"
                                                 (click)="getCompanyBranches(2, company, true)"><i class="icon-reload font-22"></i></span>
-                                        </p>
-                                        
-                                        <button class="btn btn-sky-blue mr-0 pr-r2"
-                                            *ngIf="activeCompany?.uniqueName === company.uniqueName"
-                                            [routerLink]="['/pages/settings/create-branch']"> <i class="icon-plus font-12"></i>
-                                            <span>{{localeData?.create_branch}}</span>
-                                        </button>
+                                        </div>
                                     </div>
                                 </li>
                                 <ng-container *ngIf="companyBranches?.branches?.length > 0">

@@ -2126,10 +2126,6 @@ input[type="checkbox"]:checked:after {
     cursor: pointer;
 }
 
-.pd-t05 {
-    padding-top: 5px;
-}
-
 .pd-t07 {
     padding-top: 7px;
 }
@@ -8435,7 +8431,7 @@ body.update-scroll-hidden {
                 position: inherit !important;
                 background-color: transparent;
                 padding-left: 0 !important;
-                margin: 0 -20px;
+                margin: 0;
                 flex-wrap: nowrap;
                 width: initial;
                 display: flex;
