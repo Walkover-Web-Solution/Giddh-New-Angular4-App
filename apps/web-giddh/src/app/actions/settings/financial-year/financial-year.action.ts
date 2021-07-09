@@ -68,27 +68,6 @@ export class SettingsFinancialYearActions {
                 return { type: 'EmptyAction' };
             })));
 
-    public SwitchFinancialYear$: Observable<Action> = createEffect(() => this.action$
-        .pipe(
-            ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.SWITCH_FINANCIAL_YEAR),
-            switchMap((action: CustomActions) => {
-                return this._settingsFinancialYearService.SwitchFinancialYear(action.payload).pipe(
-                    map(response => this.SwitchFinancialYearResponse(response)));
-            })));
-
-    public SwitchFinancialYearResponse$: Observable<Action> = createEffect(() => this.action$
-        .pipe(
-            ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.SWITCH_FINANCIAL_YEAR_RESPONSE),
-            map((response: CustomActions) => {
-                let data: BaseResponse<ActiveFinancialYear, string> = response.payload;
-                if (data.status === 'error') {
-                    this.toasty.errorToast(data.message, data.code);
-                } else {
-                    this.toasty.successToast(this.localeService.translate("app_messages.financial_year_switched"));
-                }
-                return { type: 'EmptyAction' };
-            })));
-
     public UpdateFinancialYearPeriod$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.UPDATE_FINANCIAL_YEAR_PERIOD),
@@ -189,20 +168,6 @@ export class SettingsFinancialYearActions {
         return {
             type: SETTINGS_FINANCIAL_YEAR_ACTIONS.UNLOCK_FINANCIAL_YEAR_RESPONSE,
             payload: response
-        };
-    }
-
-    public SwitchFinancialYearResponse(response: BaseResponse<ActiveFinancialYear, string>): CustomActions {
-        return {
-            type: SETTINGS_FINANCIAL_YEAR_ACTIONS.SWITCH_FINANCIAL_YEAR_RESPONSE,
-            payload: response
-        };
-    }
-
-    public SwitchFinancialYear(uniqueName: string): CustomActions {
-        return {
-            type: SETTINGS_FINANCIAL_YEAR_ACTIONS.SWITCH_FINANCIAL_YEAR,
-            payload: uniqueName
         };
     }
 
