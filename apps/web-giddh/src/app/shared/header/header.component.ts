@@ -746,7 +746,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.isDateRangeSelected = true;
                 }
 
-                this.store.pipe(select(state => state.settings.financialYears), takeUntil(this.destroyed$)).subscribe(response => {
+                this.store.pipe(select(state => state.settings?.financialYears), takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.financialYears?.length > 0) {
                         let activeFinancialYear = {
                             uniqueName: null,
