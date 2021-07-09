@@ -155,27 +155,6 @@
                                 </td>
                                 <td *ngIf="isEntryExpanded" colspan="7"> </td>
                             </tr>
-                            <ng-container *ngIf="entry !== undefined && entry.isExpanded">
-                                <tr *ngFor="let details of entry.otherTransactions">
-                                    <td class="hide-td"></td>
-                                    <td [attr.data-title]="commonLocaleData?.app_particular">{{ details.particular.name
-                                        }}</td>
-                                    <td class="text-right" [attr.data-title]="localeData?.debit_amount">
-                                        <span class="d-flex justify-content-end">
-                                            <amount-field [amount]="entry.debitAmount || 0" [currencySymbol]="false"
-                                                [currencyCode]="false">
-                                            </amount-field>
-                                        </span>
-                                    </td>
-                                    <td class="text-right" [attr.data-title]="localeData?.credit_amount">
-                                        <span class="d-flex justify-content-end">
-                                            <amount-field [amount]="entry.creditAmount || 0" [currencySymbol]="false"
-                                                [currencyCode]="false">
-                                            </amount-field>
-                                        </span>
-                                    </td>
-                                    <td *ngIf="isEntryExpanded" colspan="7"> </td>
-                                </tr>
                                 <ng-container *ngIf="entry !== undefined && entry.isExpanded">
                                     <tr *ngFor="let details of entry.otherTransactions">
                                         <td class="hide-td"></td>
@@ -232,7 +211,6 @@
                                             </td>
                                         </ng-container>
                                     </tr>
-                                </ng-container>
                             </ng-container>
                         </tbody>
                         </table>

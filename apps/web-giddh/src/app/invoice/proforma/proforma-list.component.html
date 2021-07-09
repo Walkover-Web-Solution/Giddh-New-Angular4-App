@@ -73,6 +73,13 @@
                             </div>
                     </div>
 
+                <!-- need to add functionality-->
+                <div class="clear-filter" *ngIf="showResetAdvanceSearchIcon" (click)="resetAdvanceSearch()">
+                    <button class="btn btn-filter mr-0">
+                        <span class="icon-cross"></span> {{commonLocaleData?.app_clear_filter}}
+                    </button>
+                </div>
+
                 <div class="d-md-flex d-sm-none">
                 <!-- region more items -->
                 <div  class="btn-wrapper-more" *ngIf="selectedItems.length === 1">
