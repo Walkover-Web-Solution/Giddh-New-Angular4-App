@@ -2117,10 +2117,6 @@ input[type="checkbox"]:checked:after {
     cursor: pointer;
 }
 
-.pd-t05 {
-    padding-top: 5px;
-}
-
 .pd-t07 {
     padding-top: 7px;
 }
@@ -7641,7 +7637,16 @@ span#HW_badge_cont:nth-child(3) {
                     i {
                         color: $gray;
                         margin-right: 10px;
-                        font-size: 17px;
+                        font-size: 22px;
+                    }
+                }
+            }
+            &:hover{
+                a {
+                    span {
+                        i {
+                            color: $white;
+                        }
                     }
                 }
             }
@@ -8390,7 +8395,75 @@ body.update-scroll-hidden {
         }
     }
 }
-
+.company-branch-dropdown{
+    .custom-tabs {
+        ul {
+            &.nav.nav-tabs{
+                position: inherit !important;
+                background-color: transparent;
+                padding-left: 0 !important;
+                margin: 0;
+                flex-wrap: nowrap;
+                width: initial;
+                display: flex;
+                justify-content: space-between;
+                padding-top: 0 !important;
+                li{
+                    position: relative;
+                    &.active{
+                        a{
+                            color: $midnight-blue !important;
+                            border-bottom: 2px solid $midnight-blue !important;
+                        }
+                    }
+                    padding-right: 0;
+                    &.icon-company{
+                        &:before{
+                            position: absolute;
+                            left: 20px;
+                        }
+                    }
+                    a{
+                        min-width: 110px;
+                        font-family: 'opensans-regular';
+                        color: $grey-chateau !important;
+                        padding-top: 5px !important;
+                        padding-left: 20px !important;
+                        height: 30px;
+                    }
+                }
+            }
+            .nav-item{
+                &.icon-company{
+                    &.active{
+                        &::before{
+                            color: $midnight-blue;
+                        }
+                    }
+                    &::before{
+                        position: absolute !important;
+                        left: 20px !important;
+                        top: 5px;
+                        color: $grey-chateau;
+                    }
+                }
+                &.icon-branch1{
+                    &.active{
+                        &::before{
+                            color: $midnight-blue;
+                        }
+                    }
+                    &::before{
+                        position: absolute !important;
+                        left: 20px !important;
+                        top: 5px;
+                        color: $grey-chateau;
+                    }
+                }
+            }
+        }
+    }
+}
 /* responsive  starts here*/
 
 @media (max-width: 1440px) {
@@ -8891,7 +8964,7 @@ body.update-scroll-hidden {
     .customer-aging .nav.nav-tabs{
         display: flex !important;
     }
-    
+
     .setting-sidebar-open {
         #content-wrapper{
             padding-left: 0 !important;
