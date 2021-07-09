@@ -6,7 +6,7 @@ import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GenericRequestForGenerateSCD } from '../models/api-models/Sales';
-import { SALES_API_V2, SALES_API_V4 } from './apiurls/sales.api';
+import { SALES_API_V2, SALES_API_V4, VOUCHER_API } from './apiurls/sales.api';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { AdvanceReceiptRequest, VoucherAdjustments } from '../models/api-models/AdvanceReceiptsAdjust';
@@ -36,25 +36,38 @@ export class SalesService {
     public generateGenericItem(model: any, isVoucherV4 = false): Observable<BaseResponse<any, any>> {
         let accountUniqueName = model.account.uniqueName;
         this.user = this._generalService.user;
-        let url;
-
-        if (isVoucherV4) {
-            url = this.config.apiUrl + SALES_API_V4.GENERATE_GENERIC_ITEMS;
-        } else {
-            url = this.config.apiUrl + SALES_API_V2.GENERATE_GENERIC_ITEMS;
-        }
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(url
-            .replace(':companyUniqueName', this.companyUniqueName)
-            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
-            , model)
-            .pipe(
-                map((res) => {
-                    let data: BaseResponse<any, GenericRequestForGenerateSCD> = res;
-                    data.request = model;
-                    return data;
-                }),
-                catchError((e) => this.errorHandler.HandleCatch<any, GenericRequestForGenerateSCD>(e, model)));
+        let url;
+        if (this._generalService.voucherApiVersion === 2) {
+            url = `${this.config.apiUrl}${VOUCHER_API.GENERATE_SALES}`;
+            return this._http.post(url
+                .replace(':companyUniqueName', this.companyUniqueName)
+                , model)
+                .pipe(
+                    map((res) => {
+                        let data: BaseResponse<any, GenericRequestForGenerateSCD> = res;
+                        data.request = model;
+                        return data;
+                    }),
+                    catchError((e) => this.errorHandler.HandleCatch<any, GenericRequestForGenerateSCD>(e, model)));
+        } else {
+            if (isVoucherV4) {
+                url = this.config.apiUrl + SALES_API_V4.GENERATE_GENERIC_ITEMS;
+            } else {
+                url = this.config.apiUrl + SALES_API_V2.GENERATE_GENERIC_ITEMS;
+            }
+            return this._http.post(url
+                .replace(':companyUniqueName', this.companyUniqueName)
+                .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
+                , model)
+                .pipe(
+                    map((res) => {
+                        let data: BaseResponse<any, GenericRequestForGenerateSCD> = res;
+                        data.request = model;
+                        return data;
+                    }),
+                    catchError((e) => this.errorHandler.HandleCatch<any, GenericRequestForGenerateSCD>(e, model)));
+        }
     }
 
     public updateVoucher(model: GenericRequestForGenerateSCD): Observable<BaseResponse<any, GenericRequestForGenerateSCD>> {
