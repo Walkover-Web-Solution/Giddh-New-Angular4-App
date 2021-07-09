@@ -16,7 +16,7 @@
                             [ngClass]="{'welcome-inventory-page':!activeView}">
                             <!-- uiView: inventory-detail -->
                             <section class="container-fluid  clearfix inventory-head">
-                                <div class="wrap-top-inventory">
+                                <div *ngIf="(shouldShowInventoryReport$ | async)" class="wrap-top-inventory">
                                     <div *ngIf="isMobileScreen && activeView === 'group'" class="mr-b15">
                                         <button class="btn btn-sky-blue" [routerLink]="['/pages/inventory/']"
                                             (click)="activeView = null">Back</button>
@@ -35,12 +35,12 @@
                                             [(ngModel)]="currentBranchAndWarehouseFilterValues.warehouse"></sh-select>
                                     </div>
                                 </div>
-                                <div *ngIf="activeView === 'stock'">
+                                <div *ngIf="(shouldShowInventoryReport$ | async) && activeView === 'stock'">
                                     <invetory-stock-report
                                         [currentBranchAndWarehouse]="currentBranchAndWarehouseFilterValues">
                                     </invetory-stock-report>
                                 </div>
-                                <div *ngIf="activeView === 'group'">
+                                <div *ngIf="(shouldShowInventoryReport$ | async) && activeView === 'group'">
                                     <invetory-group-stock-report
                                         [currentBranchAndWarehouse]="currentBranchAndWarehouseFilterValues">
                                     </invetory-group-stock-report>
