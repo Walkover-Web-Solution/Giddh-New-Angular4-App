@@ -13,7 +13,7 @@ import { CompanyActions } from '../actions/company.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SessionActions } from '../actions/session.action';
 import * as moment from 'moment';
-import { GIDDH_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT_DD_MM_YYYY, GIDDH_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { GeneralActions } from '../actions/general/general.actions';
@@ -95,7 +95,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
                 return s.session.user.countryCode;
             }
         }), takeUntil(this.destroyed$));
-        
+
         this.isAddNewMobileNoInProcess$ = this.store.pipe(select(s => s.login.isAddNewMobileNoInProcess), takeUntil(this.destroyed$));
         this.isAddNewMobileNoSuccess$ = this.store.pipe(select(s => s.login.isAddNewMobileNoSuccess), takeUntil(this.destroyed$));
         this.isVerifyAddNewMobileNoInProcess$ = this.store.pipe(select(s => s.login.isVerifyAddNewMobileNoInProcess), takeUntil(this.destroyed$));
@@ -192,7 +192,16 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.userSessionResponse$.subscribe(s => {
             if (s && s.length) {
-                this.userSessionList = s;
+                this.userSessionList = s.map(session => {
+                    // Calculate sign in date
+                    session.signInDate = moment(session.createdAt).format(GIDDH_DATE_FORMAT_DD_MM_YYYY);
+                    // Calculate sign in time
+                    session.signInTime = moment(session.createdAt).format('LTS');
+                    // Calculate duration
+                    const duration = moment.duration(moment().diff(session.createdAt));
+                    session.sessionDuration = `${duration.days()}/${duration.hours()}/${duration.minutes()}/${duration.seconds()}`;
+                    return session;
+                });
             } else {
                 this.store.dispatch(this._sessionAction.getAllSession());
             }
@@ -375,5 +384,17 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         }
         return pageHeading;
+    }
+
+    /**
+     * Tracks by sessionId
+     *
+     * @param {number} index Index of current session
+     * @param {*} item Session ID instance
+     * @return {*} {string} Session's ID for unique identification
+     * @memberof UserDetailsComponent
+     */
+    public trackBySessionId(index: number, item: any): string {
+        return item.sessionId;
     }
 }
