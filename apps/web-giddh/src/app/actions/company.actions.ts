@@ -62,8 +62,6 @@ export class CompanyActions {
     public static GET_OTP = 'GET_OTP';
     public static TOTAL_COMPANIES = 'TOTAL_COMPANIES';
 
-    public static SET_ACTIVE_FINANCIAL_YEAR = 'SET_ACTIVE_FINANCIAL_YEAR';
-
     public static USER_REMOVE_COMPANY_CREATE_SESSION = "USER_REMOVE_COMPANY_CREATE_SESSION";
     public static SET_IS_TCS_TDS_APPLICABLE = 'SET_IS_TCS_TDS_APPLICABLE';
     public static SET_USER_CHOSEN_FINANCIAL_YEAR = 'SET_USER_CHOSEN_FINANCIAL_YEAR';
@@ -552,16 +550,6 @@ export class CompanyActions {
 
     public ResetCompanyPopup(): CustomActions {
         return { type: CompanyActions.RESET_CREATE_COMPANY_FLAG };
-    }
-
-    /**
-     * setActiveFinancialYear
-     */
-    public setActiveFinancialYear(activeFinancialYear) {
-        return {
-            type: CompanyActions.SET_ACTIVE_FINANCIAL_YEAR,
-            payload: activeFinancialYear
-        };
     }
 
     public getAllRegistrations(): CustomActions {
