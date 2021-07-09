@@ -1,5 +1,6 @@
 import {
     AfterViewInit,
+    ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
     ElementRef,
@@ -91,8 +92,6 @@ import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { InvoiceReceiptFilter, ReciptResponse } from '../models/api-models/recipt';
 import { LedgerService } from '../services/ledger.service';
 import { TaxControlComponent } from '../theme/tax-control/tax-control.component';
-import { LoaderState } from "../loader/loader";
-import { LoaderService } from "../loader/loader.service";
 import { LedgerResponseDiscountClass } from "../models/api-models/Ledger";
 import { OnboardingFormRequest } from '../models/api-models/Common';
 import { WarehouseActions } from '../settings/warehouse/action/warehouse.action';
@@ -139,7 +138,8 @@ const SEARCH_TYPE = {
             transition('in => out', animate('400ms ease-in-out')),
             transition('out => in', animate('400ms ease-in-out'))
         ]),
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
@@ -228,8 +228,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public invoiceDateLabel: string = '';
     public invoiceDueDateLabel: string = '';
 
-    public isGenDtlCollapsed: boolean = true;
-    public isMlngAddrCollapsed: boolean = true;
     public isOthrDtlCollapsed: boolean = false;
     public typeaheadNoResultsOfCustomer: boolean = false;
     public invFormData: VoucherClass;
@@ -397,8 +395,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private useCustomInvoiceNumber: boolean;
     /** True, if the invoice generation request is received from previous page's modal */
     private isInvoiceRequestedFromPreviousPage: boolean;
-    // variable for checking do we really need to show loader, issue ref :- when we open aside pan loader is displayed unnecessary
-    private shouldShowLoader: boolean = true;
     /** Stores matching purchase record details */
     private matchingPurchaseRecord: any;
     /** Purchase Record customer unique name */
@@ -643,7 +639,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private _cdr: ChangeDetectorRef,
         private proformaActions: ProformaActions,
         private _ledgerService: LedgerService,
-        private loaderService: LoaderService,
         private proformaInvoiceUtilityService: ProformaInvoiceUtilityService,
         private purchaseRecordService: PurchaseRecordService,
         private settingsUtilityService: SettingsUtilityService,
@@ -701,7 +696,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.selectAccount.changes.pipe(distinctUntilChanged((firstItem, nextItem) => {
             return firstItem?.first?.filter === nextItem?.first?.filter;
         }), takeUntil(this.destroyed$)).subscribe((queryChanges: QueryList<ShSelectComponent>) => {
-            if (this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName) {
+            if ((this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName) && !queryChanges?.first?.isOpen) {
                 setTimeout(() => {
                     queryChanges?.first?.show();
                 });
@@ -762,12 +757,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.store.dispatch(this.settingsBranchAction.resetAllBranches());
         this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
 
-        this.loaderService.loaderState.pipe(delay(500), takeUntil(this.destroyed$)).subscribe((stateLoader: LoaderState) => {
-            // check if we really need to show a loader
-            if (!this.shouldShowLoader) {
-                return;
-            }
-        });
         this.generateUpdateButtonClicked.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((form: NgForm) => {
             this.startLoader(true);
             if (this.isUpdateMode) {
@@ -1936,10 +1925,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
-    public getAllFlattenAc() {
-        // call to get flatten account from store
-    }
-
     public assignAccountDetailsValuesInForm(data: AccountResponseV2) {
         this.accountAddressList = data.addresses;
         this.customerCountryName = data.country.countryName;
@@ -1958,8 +1943,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.invFormData.voucherDetails.customerName = data.name;
         }
         // toggle all collapse
-        this.isGenDtlCollapsed = false;
-        this.isMlngAddrCollapsed = false;
         this.isOthrDtlCollapsed = false;
         if (this.isMultiCurrencyModule()) {
             this.initializeWarehouse();
@@ -2111,8 +2094,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.invoiceNo = "";
         this.typeaheadNoResultsOfCustomer = false;
         // toggle all collapse
-        this.isGenDtlCollapsed = true;
-        this.isMlngAddrCollapsed = true;
         this.isOthrDtlCollapsed = false;
         this.forceClear$ = observableOf({ status: true });
         this.invoiceForceClearReactive$ = observableOf({ status: true });
@@ -2549,6 +2530,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 if (this.isCreditNote) {
                     updatedData['invoiceLinkingRequest'] = data.voucherDetails.invoiceLinkingRequest;
                 }
+                if (this.isSalesInvoice && this.generalService.voucherApiVersion === 2) {
+                    updatedData = this.proformaInvoiceUtilityService.getVoucherRequestObjectForInvoice(updatedData);
+                }
             }
             if (this.isPurchaseInvoice) {
                 if (this.invFormData.accountDetails.shippingDetails.state.code && this.invFormData.accountDetails.billingDetails.state.code) {
@@ -2596,10 +2580,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public toggleBodyClass() {
         if (this.asideMenuStateForProductService === 'in' || this.accountAsideMenuState === 'in'
             || this.asideMenuStateForRecurringEntry === 'in' || this.asideMenuStateForOtherTaxes === 'in') {
-
-            // don't show loader when aside menu is opened
-            this.shouldShowLoader = false;
-
             /* add fixed class only in crete mode not in update mode
                 - because fixed class is already added in update mode due to double scrolling issue
              */
@@ -2607,13 +2587,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 document.querySelector('body').classList.add('fixed');
             }
         } else {
-            // reset show loader variable because no aside pane is open
-            this.shouldShowLoader = true;
-
             /* remove fixed class only in crete mode not in update mode
                 - because fixed class is needed in update mode due to double scrolling issue
             */
-
             if (!this.isUpdateMode) {
                 document.querySelector('body').classList.remove('fixed');
             }
@@ -3437,14 +3413,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public addBlankRow(txn: SalesTransactionItemClass) {
         if (!txn) {
-            let entry: SalesEntryClass = new SalesEntryClass();
-            if (this.isUpdateMode) {
-                entry.entryDate = this.invFormData.entries[0] ? this.invFormData.entries[0].entryDate : this.universalDate || new Date();
-                entry.isNewEntryInUpdateMode = true;
-            } else {
-                entry.entryDate = this.invFormData.voucherDetails.voucherDate;
+            if (this.invFormData?.entries?.length === 0) {
+                let entry: SalesEntryClass = new SalesEntryClass();
+                if (this.isUpdateMode) {
+                    entry.entryDate = this.invFormData.entries[0] ? this.invFormData.entries[0].entryDate : this.universalDate || new Date();
+                    entry.isNewEntryInUpdateMode = true;
+                } else {
+                    entry.entryDate = this.invFormData.voucherDetails.voucherDate;
+                }
+                this.invFormData.entries.push(entry);
             }
-            this.invFormData.entries.push(entry);
         } else {
             // if transaction is valid then add new row else show toasty
             if (!txn.isValid()) {

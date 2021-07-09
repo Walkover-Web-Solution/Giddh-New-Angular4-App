@@ -142,7 +142,7 @@ export interface Transaction {
     category: string;
     taxableValue: number;
     date?: any;
-    isStockTxn?: string;
+    isStockTxn?: boolean;
     stockDetails?: string;
     rate?: number;
 }
