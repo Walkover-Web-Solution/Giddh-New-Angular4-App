@@ -242,7 +242,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 this.selectedCompanyDetails = selectedCmp;
                 this.companyInitials = this.generalService.getInitialsFromString(selectedCmp.name);
                 this.branchInitials = this.generalService.getInitialsFromString(this.currentBranch?.alias || this.currentBranch?.name);
-                this.store.dispatch(this.companyActions.setActiveFinancialYear(selectedCmp.activeFinancialYear));
 
                 this.activeCompanyForDb = new CompAidataModel();
                 if (this.generalService.currentOrganizationType === OrganizationType.Branch) {

@@ -380,7 +380,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (selectedCmp) {
                 this.selectedCompany = observableOf(selectedCmp);
                 this.selectedCompanyDetails = selectedCmp;
-                this.store.dispatch(this.companyActions.setActiveFinancialYear(selectedCmp.activeFinancialYear));
                 this.generalService.voucherApiVersion = selectedCmp.voucherVersion;
                 this.activeCompanyForDb = new CompAidataModel();
                 if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
