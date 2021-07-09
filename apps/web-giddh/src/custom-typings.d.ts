@@ -74,6 +74,7 @@ declare var isCordova: boolean;
 declare var errlyticsNeeded: boolean;
 declare var errlyticsKey: string;
 declare var _: any;
+declare var enableVoucherAdjustmentMultiCurrency: boolean;
 // declare var $: JQueryStatic;
 // declare var jQuery: JQueryStatic;
 

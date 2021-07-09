@@ -4,6 +4,7 @@ export class VoucherAdjustments {
     description: string;
     adjustments: Adjustment[] = [new Adjustment()];
     totalAdjustmentAmount?: number;
+    totalAdjustmentCompanyAmount?: number;
 }
 
 /** Due amount class used in voucher adjustment */
@@ -23,7 +24,9 @@ export class Adjustment {
     taxRate: number;
     uniqueName: string;
     taxUniqueName: string;
+    accountCurrency?: { symbol: string, code: string };
     calculatedTaxAmount?: number;
+    exchangeRate?: number;
     adjustmentAmount?: DueAmount;
     voucherType?: string;
     subVoucher?: string;
@@ -57,6 +60,7 @@ export class AdjustAdvancePaymentModal {
     subTotal: number;
     totalTaxableValue: number;
     totalAdjustedAmount: number;
+    convertedTotalAdjustedAmount: number;
     currencySymbol?: string;
     tcsTotal?: number = 0;
     tdsTotal?: number = 0;
