@@ -43,6 +43,7 @@ import { SettingsProfileActions } from '../../actions/settings/profile/settings.
 import { AccountsAction } from '../../actions/accounts.actions';
 import { LedgerActions } from '../../actions/ledger/ledger.actions';
 import { LocaleService } from '../../services/locale.service';
+import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
 
 @Component({
     selector: 'app-header',
@@ -259,7 +260,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private accountsAction: AccountsAction,
         private ledgerAction: LedgerActions,
         public location: Location,
-        private localeService: LocaleService
+        private localeService: LocaleService,
+        private settingsFinancialYearActions: SettingsFinancialYearActions
     ) {
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
@@ -437,6 +439,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngOnInit() {
+        this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
+
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if(this.activeLocale !== response?.value) {
@@ -753,6 +757,51 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                     this.isDateRangeSelected = true;
                 }
+
+                this.store.pipe(select(state => state.settings.financialYears), takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response?.financialYears?.length > 0) {
+                        let activeFinancialYear = {
+                            uniqueName: null,
+                            isLocked: null,
+                            financialYearStarts: null,
+                            financialYearEnds: null
+                        };
+
+                        if(this.isTodaysDateSelected) {
+                            activeFinancialYear = {
+                                uniqueName: response.financialYears[response.financialYears.length - 1]?.uniqueName,
+                                isLocked: response.financialYears[response.financialYears.length - 1]?.isLocked,
+                                financialYearStarts: moment(response.financialYears[response.financialYears.length - 1]?.financialYearStarts, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
+                                financialYearEnds: moment(response.financialYears[response.financialYears.length - 1]?.financialYearEnds, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)
+                            };
+                        } else {
+                            response.financialYears.forEach(key => {
+                                if(moment(key.financialYearEnds, GIDDH_DATE_FORMAT).format("YYYY") === this.selectedDateRange?.endDate?.format("YYYY")) {
+                                    activeFinancialYear = {
+                                        uniqueName: key.uniqueName,
+                                        isLocked: key.isLocked,
+                                        financialYearStarts: moment(key.financialYearStarts, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
+                                        financialYearEnds: moment(key.financialYearEnds, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)
+                                    };
+                                }
+                            });
+                        }
+
+                        if(!activeFinancialYear.uniqueName) {
+                            activeFinancialYear = {
+                                uniqueName: response.financialYears[response.financialYears.length - 1]?.uniqueName,
+                                isLocked: response.financialYears[response.financialYears.length - 1]?.isLocked,
+                                financialYearStarts: moment(response.financialYears[response.financialYears.length - 1]?.financialYearStarts, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
+                                financialYearEnds: moment(response.financialYears[response.financialYears.length - 1]?.financialYearEnds, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)
+                            };
+                        }
+
+                        if(this.selectedCompanyDetails) {
+                            this.selectedCompanyDetails.activeFinancialYear = activeFinancialYear;
+                            this.store.dispatch(this.commonActions.setActiveFinancialYear(this.selectedCompanyDetails));
+                        }
+                    }
+                });
             }
         })), takeUntil(this.destroyed$)).subscribe();
     }
