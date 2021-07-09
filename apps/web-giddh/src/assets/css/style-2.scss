@@ -7635,7 +7635,7 @@ span#HW_badge_cont:nth-child(3) {
             a {
                 span {
                     i {
-                        color: $gray;
+                        color: $gray !important;
                         margin-right: 10px;
                         font-size: 22px;
                     }
