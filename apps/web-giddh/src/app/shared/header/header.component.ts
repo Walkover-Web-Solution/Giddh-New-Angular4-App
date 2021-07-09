@@ -761,20 +761,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.store.pipe(select(state => state.settings?.financialYears), takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.financialYears?.length > 0) {
                         let activeFinancialYear = {
-                            uniqueName: null,
-                            isLocked: null,
-                            financialYearStarts: null,
-                            financialYearEnds: null
+                            uniqueName: response.financialYears[response.financialYears.length - 1]?.uniqueName,
+                            isLocked: response.financialYears[response.financialYears.length - 1]?.isLocked,
+                            financialYearStarts: moment(response.financialYears[response.financialYears.length - 1]?.financialYearStarts, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
+                            financialYearEnds: moment(response.financialYears[response.financialYears.length - 1]?.financialYearEnds, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)
                         };
 
-                        if(this.isTodaysDateSelected) {
-                            activeFinancialYear = {
-                                uniqueName: response.financialYears[response.financialYears.length - 1]?.uniqueName,
-                                isLocked: response.financialYears[response.financialYears.length - 1]?.isLocked,
-                                financialYearStarts: moment(response.financialYears[response.financialYears.length - 1]?.financialYearStarts, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
-                                financialYearEnds: moment(response.financialYears[response.financialYears.length - 1]?.financialYearEnds, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)
-                            };
-                        } else {
+                        if(!this.isTodaysDateSelected) {
                             response.financialYears.forEach(key => {
                                 if(moment(key.financialYearEnds, GIDDH_DATE_FORMAT).format("YYYY") === this.selectedDateRange?.endDate?.format("YYYY")) {
                                     activeFinancialYear = {
@@ -785,15 +778,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                                     };
                                 }
                             });
-                        }
-
-                        if(!activeFinancialYear.uniqueName) {
-                            activeFinancialYear = {
-                                uniqueName: response.financialYears[response.financialYears.length - 1]?.uniqueName,
-                                isLocked: response.financialYears[response.financialYears.length - 1]?.isLocked,
-                                financialYearStarts: moment(response.financialYears[response.financialYears.length - 1]?.financialYearStarts, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
-                                financialYearEnds: moment(response.financialYears[response.financialYears.length - 1]?.financialYearEnds, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)
-                            };
                         }
 
                         if(this.selectedCompanyDetails) {
