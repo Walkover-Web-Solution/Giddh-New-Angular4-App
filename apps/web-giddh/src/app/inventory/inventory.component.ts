@@ -205,7 +205,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.activeTabIndex = this.router.url.indexOf('jobwork') > -1 ? 1 : this.router.url.indexOf('manufacturing') > -1 ? 2 : this.router.url.indexOf('inventory/report') > -1 ? 3 : 0;
             }
         });
-        this.shouldShowInventoryReport$ = combineLatest([this.store.pipe(select(p => p.inventory.activeStockUniqueName)), this.store.pipe(select(p => p.inventory.activeGroupUniqueName))]).pipe(map(values => values[0] || values[1]));
+        this.shouldShowInventoryReport$ = combineLatest([this.store.pipe(select(appStore => appStore.inventory.activeStockUniqueName)), this.store.pipe(select(appStore => appStore.inventory.activeGroupUniqueName))]).pipe(map(values => values[0] || values[1]));
     }
 
     public ngOnDestroy() {
