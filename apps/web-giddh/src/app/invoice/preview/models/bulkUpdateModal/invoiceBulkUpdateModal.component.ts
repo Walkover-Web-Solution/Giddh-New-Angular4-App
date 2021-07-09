@@ -269,10 +269,9 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
                 if (this.voucherType === "credit note" || this.voucherType === "debit note") {
                     this.fieldOptions = this.fieldOptions.filter(item => item.value !== 'dueDate' && item.label !== this.localeData?.bulk_update_fields?.due_date);
                 }
-            } else if (simpleChanges.selectedInvoices && simpleChanges.selectedInvoices.currentValue) {
-
+            }
+            if (simpleChanges.selectedInvoices && simpleChanges.selectedInvoices.currentValue) {
                 this.selectedInvoicesLists = simpleChanges.selectedInvoices.currentValue;
-
             }
             this.selectedField = '';
             this.updateInProcess = false;

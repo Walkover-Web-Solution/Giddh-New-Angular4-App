@@ -96,6 +96,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('importStatementModal', { static: false }) public importStatementModal: ModalDirective;
     /** datepicker element reference  */
     @ViewChild('datepickerTemplate', { static: false }) public datepickerTemplate: ElementRef;
+    /** bulk delete bank transactions confirmation modal instance */
+    @ViewChild('bulkDeleteBankTransactionsConfirmationModal', { static: false }) public bulkDeleteBankTransactionsConfirmationModal: ModalDirective;
     public showUpdateLedgerForm: boolean = false;
     public isTransactionRequestInProcess$: Observable<boolean>;
     public ledgerBulkActionSuccess$: Observable<boolean>;
@@ -330,7 +332,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.trxRequest.to = moment(value.endDate).format(GIDDH_DATE_FORMAT);
         this.todaySelected = true;
         this.lc.blankLedger.entryDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
-        this.getTransactionData();
+
+        if(this.isAdvanceSearchImplemented) {
+            this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName, this.trxRequest.from, this.trxRequest.to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q, this.advanceSearchRequest.branchUniqueName));
+        } else {
+            this.getTransactionData();
+        }
         // Después del éxito de la entrada. llamar para transacciones bancarias
         this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe((data: AccountResponse) => {
             this.getBankTransactions();
@@ -470,6 +477,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public hideEledgerWrap() {
         this.lc.showEledger = false;
+        this.entryUniqueNamesForBulkAction = [];
     }
     /**
      * To change pagination page number
@@ -831,6 +839,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public getBankTransactions(): void {
+        this.entryUniqueNamesForBulkAction = [];
         if (this.trxRequest.accountUniqueName) {
             this.isBankTransactionLoading = true;
 
@@ -953,10 +962,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this._ledgerService.GetCurrencyRateNewApi(from, to, date).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 let rate = response.body;
                 if (rate) {
-                    this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: rate, exchangeRateForDisplay: giddhRoundOff(rate, this.giddhBalanceDecimalPlaces) };
+                    this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: rate };
                 }
             }, (error => {
-                this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: 1, exchangeRateForDisplay: 1 };
+                this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: 1 };
             }));
         }
     }
@@ -1047,7 +1056,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
             tdsTcsTaxesSum: 0,
             otherTaxType: 'tcs',
             exchangeRate: 1,
-            exchangeRateForDisplay: 1,
             valuesInAccountCurrency: (this.selectedCurrency === 0),
             selectedCurrencyToDisplay: this.selectedCurrency,
             baseCurrencyToDisplay: cloneDeep(this.baseCurrencyDetails),
@@ -1323,6 +1331,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.updateLedgerComponentInstance.defaultSuggestions = [...this.defaultSuggestions];
         this.updateLedgerComponentInstance.searchResultsPaginationData.page = this.defaultResultsPaginationData.page;
         this.updateLedgerComponentInstance.searchResultsPaginationData.totalPages = this.defaultResultsPaginationData.totalPages;
+        this.updateLedgerComponentInstance.activeCompany = this.activeCompany;
         componentInstance.toggleOtherTaxesAsideMenu.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.toggleOtherTaxesAsidePane(res);
         });
@@ -2139,6 +2148,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public hideUploadBankStatementModal(): void {
         if (this.importStatementModal) {
             this.importStatementModal.hide();
+            this.getBankTransactions();
         }
     }
 
@@ -2239,7 +2249,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.getCurrencyRate();
                     } else {
                         this.baseCurrencyDetails = this.foreignCurrencyDetails;
-                        this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: 1, exchangeRateForDisplay: 1 };
+                        this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: 1 };
                     }
                     this.selectedCurrency = 0;
                     this.assignPrefixAndSuffixForCurrency();
@@ -2263,5 +2273,44 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             });
         }
+    }
+
+    /**
+     * This will show bulk delete bank transactions modal
+     *
+     * @memberof LedgerComponent
+     */
+    public showBulkDeleteBankTransactionsConfirmationModal(): void {
+        this.bulkDeleteBankTransactionsConfirmationModal?.show();
+    }
+
+    /**
+     * This will hide bulk delete bank transactions modal
+     *
+     * @memberof LedgerComponent
+     */
+    public cancelDeleteBankTransactions(): void {
+        this.bulkDeleteBankTransactionsConfirmationModal?.hide();
+    }
+
+    /**
+     * This will call api to delete bank transactions
+     *
+     * @memberof LedgerComponent
+     */
+    public deleteBankTransactions(): void {
+        this.bulkDeleteBankTransactionsConfirmationModal?.hide();
+
+        let transactionIds = this.entryUniqueNamesForBulkAction.map((m: any) => { return m.transactionId; });
+        let params = {transactionIds: transactionIds};
+        this._ledgerService.deleteBankTransactions(this.trxRequest.accountUniqueName, params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this._toaster.clearAllToaster();
+            if(response?.status === "success") {
+                this.getBankTransactions();
+                this._toaster.successToast(response?.body);
+            } else {
+                this._toaster.errorToast(response?.message);
+            }
+        });
     }
 }
