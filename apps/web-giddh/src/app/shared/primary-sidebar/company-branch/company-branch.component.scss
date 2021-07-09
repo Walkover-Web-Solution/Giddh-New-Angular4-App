@@ -1,20 +1,20 @@
 @import '../../../../assets/css/color.scss';
 .company-branch-dropdown{
     font-family: 'opensans-regular';
-    padding: 0 20px;
     .search-box {
+        padding: 0 20px;
         .input-group-text {
-            background-color: $solitude-new;
+            background-color: $gray-95;
             padding: 8px !important;
         }
         input {
             border-left: none;
             padding-left: 0 !important;
-            background-color: $solitude-new !important;
+            background-color: $gray-95 !important;
             border-top-left-radius: 0px !important;
             border-bottom-left-radius: 0px !important;
-            border-top-right-radius: 0px !important;
-            border-bottom-right-radius: 0px !important;
+            border-top-right-radius: 5px !important;
+            border-bottom-right-radius: 5px !important;
             &:focus {
                 border-color: $gainsboro !important;
             }
@@ -29,7 +29,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: $solitude-new;
+            background-color: $gray-95;
             border: 1px solid $gainsboro;
             border-radius: 5px;
             border-left: none;
@@ -61,6 +61,23 @@
     .company-branch-opt-1{
         .wrap-company-refresh{
             padding: 0 20px;
+            p{
+                span{
+                    small{
+                        background: $dark-fog;
+                        color: $omiod;
+                        font-size: 10px;
+                        line-height: 12.4px;
+                        font-weight: 700;
+                        padding: 2px 5px;
+                        border-radius: 5px;
+                    }
+                }
+            }
+            .btn-sky-blue{
+                padding: 0px 10px;
+                height: 30px;
+            }
         }
         .company-list{
             ul{
@@ -70,20 +87,20 @@
                             display:  none;
                         }
                     }
-                     &:hover{
-                         span{
-                             background-color: transparent;
-                         }
-                     }
+                    &:hover{
+                        span{
+                            background-color: transparent;
+                        }
+                    }
                 }
             }
         }
     }
     .company-list{
-        height: calc(100vh  - 325px) !important;
+        height: calc(100vh - 345px) !important;
         overflow: auto;
         margin: 0;
-        padding: 0 0 20px;
+        padding: 0px;
 
         ul{
             li{
@@ -92,7 +109,7 @@
                 color: $trout;
                 &:hover{
                     span{
-                        background-color: #F0F5FF;
+                        background-color: $light-alice-blue;
                     }
                     .dropdown-menu{
                         span{
@@ -104,11 +121,10 @@
                     display: flex;
                     flex-direction: column;
                     margin-bottom: 0 !important;
-                    padding: 0  20px;
-                    &:hover{
-                        span{
-                            background-color: $solitude-light !important;
-                        }
+                    padding: 0 20px;
+                    &.active{
+                        color: $trout !important;
+                        background-color: $light-alice-blue !important;
                     }
                     span{
                         white-space: normal;
@@ -211,19 +227,19 @@
             }
         }
         &.company-branches-list{
-           .branch-alias , .branch-company-name{
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            overflow: hidden;
-            max-width: 150px;
-            padding: 3px 0;
-           }
+            .branch-alias , .branch-company-name{
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+                max-width: 150px;
+                padding: 3px 0;
+            }
         }
         &.branch-list{
             ul{
-                margin: 0 -20px;
+                margin: 0;
                 li{
-                    padding: 0 20px;
+                    padding: 0;
                     cursor: pointer;
                     margin-bottom: 0;
                     a{
@@ -259,7 +275,7 @@
                         overflow: hidden;
                         max-width: 150px;
                         padding: 3px 0;
-                       }
+                    }
                 }
             }
         }
@@ -269,14 +285,11 @@
         bottom: 0;
         width: 240px;
         left: 0;
-        padding: 5px 0 0;
         border-top: 1px solid $gainsboro;
         background-color: $white;
         z-index: 991;
         .profile-name{
-            padding: 14px 15px;
             cursor: pointer;
-            min-width: 120px;
             .profile-alice {
                 display: inline-flex;
                 width: 24px;
@@ -293,15 +306,21 @@
         .profile-logout{
             display: flex;
             align-items: center;
-            padding: 14px 15px;
-            min-width: 120px;
             button{
                 background-color: $white;
-                border: 1px solid $white;
-                color: $trout;
+                border: 1px solid $midnight-blue;
+                color: $midnight-blue;
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                font-size: 12px;
+                padding: 5px 10px;
+                border-radius: 5px !important;
+                font-size: 12px;
+                &:hover{
+                    background-color: $midnight-blue;
+                    color: $white;
+                }
             }
         }
     }
@@ -313,44 +332,63 @@
         }
     }
     .company-branch-opt-2{
-        margin: 0 -20px;
         .wrap-company-refresh{
             padding: 0 20px;
+            p{
+                span{
+                    small{
+                        background: $dark-fog;
+                        color: $omiod;
+                        font-size: 10px;
+                        line-height: 12.4px;
+                        font-weight: 700;
+                        padding: 2px 5px;
+                        border-radius: 5px;
+                    }
+                }
+            }
+            .btn-sky-blue{
+                padding: 0px 10px;
+                height: 30px;
+            }
         }
         .company-list{
-            height: calc(90vh - 120px) !important;
+            height: calc(100vh - 292px) !important;
             overflow-x: hidden;
+            padding: 0 !important;
             ul{
                 position: relative;
                 li{
-                    padding: 0 20px;
-                    margin: 0 -20px;
+                    padding: 0;
+                    margin: 0;
+                    &:last-child{
+                        margin-bottom: 10px !important;
+                    }
                     span{
                         padding: 5px 20px;
-                        color: $slate;
                         margin: 0;
                         &.company-name {
                             display: flex !important;
                             align-items: center !important;
                             justify-content: space-between !important;
-                             span{
-                                 i{
-                                    float: left;
-                                    width: 14px;
-                                 }
-                                 span.select-company-name{
-                                    float: left;
-                                    width: 87%;
-                                    padding: 0;
-                                    text-overflow: ellipsis;
-                                    white-space: nowrap;
-                                    overflow: hidden;
-                                    max-width: 150px;
-                                    padding: 3px 0;
-                                 }
-                             }
+                                span{
+                                    i{
+                                        float: left;
+                                        width: 14px;
+                                    }
+                                    span.select-company-name{
+                                        float: left;
+                                        width: 87%;
+                                        padding: 0;
+                                        text-overflow: ellipsis;
+                                        white-space: nowrap;
+                                        overflow: hidden;
+                                        max-width: 150px;
+                                        padding: 3px 0;
+                                    }
+                                }
+                            }
                         }
-                    }
                     &.btn-group{
                         &.open{
                             span{
@@ -371,9 +409,9 @@
                                     transform: rotate(180deg)
                                 }
                             }
-                            background-color: transparent;
+                            background-color: transparent !important;
                             ul{
-                                padding: 0 20px;
+                                padding: 0;
                                 li{
                                     span{
                                         padding: 0;
@@ -382,6 +420,11 @@
                             }
                             .total-branches{
                                 padding: 10px 20px;
+                                .btn-sky-blue{
+                                    width: 145px;
+                                    padding: 0px 10px;
+                                    height: 30px;
+                                }
                             }
                         }
                     }
@@ -405,7 +448,6 @@
 }
 .icon-plus, .icon-link-arrow{
     width: 20px;
-    height: 20px;
     display: inline-flex;
     margin-right: 2px;
 }
@@ -418,11 +460,6 @@
         .company-branch-dropdown{
             .company-list {
                 height: calc(65vh - 60px) !important;
-            }
-        }
-        .company-branch-opt-2{
-            .company-list{
-                height: calc(80vh - 120px) !important;
             }
         }
     }

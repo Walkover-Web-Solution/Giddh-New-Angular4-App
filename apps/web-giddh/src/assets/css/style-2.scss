@@ -2126,10 +2126,6 @@ input[type="checkbox"]:checked:after {
     cursor: pointer;
 }
 
-.pd-t05 {
-    padding-top: 5px;
-}
-
 .pd-t07 {
     padding-top: 7px;
 }
@@ -7665,7 +7661,16 @@ span#HW_badge_cont:nth-child(3) {
                     i {
                         color: $gray;
                         margin-right: 10px;
-                        font-size: 17px;
+                        font-size: 22px;
+                    }
+                }
+            }
+            &:hover{
+                a {
+                    span {
+                        i {
+                            color: $white;
+                        }
                     }
                 }
             }
@@ -8424,7 +8429,7 @@ body.update-scroll-hidden {
                 position: inherit !important;
                 background-color: transparent;
                 padding-left: 0 !important;
-                margin: 0 -20px;
+                margin: 0;
                 flex-wrap: nowrap;
                 width: initial;
                 display: flex;
@@ -8446,12 +8451,12 @@ body.update-scroll-hidden {
                         }
                     }
                     a{
-                        padding: 0 10px !important;
                         min-width: 110px;
                         font-family: 'opensans-regular';
                         color: $grey-chateau !important;
                         padding-top: 5px !important;
-                        padding-left: 40px !important;
+                        padding-left: 20px !important;
+                        height: 30px;
                     }
                 }
             }
