@@ -37,7 +37,6 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
     public FYPeriodOptions: IOption[] = [];
     public selectedFYPeriod: string;
     public selectedFinancialYearOption: string;
-    public selectedFinancialYearUN: string;
     public selectedYear: number;
     public options: Select2Options = {
         multiple: false,
@@ -117,10 +116,6 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
         }
     }
 
-    public selectFinancialYearOption(data) {
-        this.selectedFinancialYearUN = data.value;
-    }
-
     public selectYear(data) {
         this.selectedYear = data.value;
     }
@@ -132,13 +127,6 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
     public updateFYPeriod() {
         if (this.selectedFYPeriod) {
             this.store.dispatch(this.settingsFinancialYearActions.UpdateFinancialYearPeriod(this.selectedFYPeriod));
-        }
-    }
-
-    public switchFY() {
-        if (this.selectedFinancialYearUN) {
-            this.store.dispatch(this.settingsFinancialYearActions.SwitchFinancialYear(this.selectedFinancialYearUN));
-            this.store.dispatch(this._companyActions.RefreshCompanies());
         }
     }
 

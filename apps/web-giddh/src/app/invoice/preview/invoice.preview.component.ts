@@ -30,7 +30,7 @@ import { ElementViewContainerRef } from 'apps/web-giddh/src/app/shared/helpers/d
 import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceReceiptFilter, ReceiptItem, ReciptResponse } from 'apps/web-giddh/src/app/models/api-models/recipt';
 import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
-import { ActiveFinancialYear, CompanyResponse, ValidateInvoice } from 'apps/web-giddh/src/app/models/api-models/Company';
+import { CompanyResponse, ValidateInvoice } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdvanceSearch.component';
 import { BulkExportModal } from './models/bulk-export-modal/bulk-export.component';
@@ -105,7 +105,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public modalUniqueName: string;
     public startDate: Date;
     public endDate: Date;
-    public activeFinancialYear: ActiveFinancialYear;
     public selectedInvoiceForDetails: InvoicePreviewDetailsVm;
     public itemsListForDetails: InvoicePreviewDetailsVm[] = [];
     public innerWidth: any;
@@ -526,13 +525,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             if (a) {
                 this.selectedInvoiceForDetails = null;
                 this.getVoucher(this.isUniversalDateApplicable);
-            }
-        });
-
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
-                this.activeFinancialYear = activeCompany.activeFinancialYear;
-                this.store.dispatch(this.companyActions.setActiveFinancialYear(this.activeFinancialYear));
             }
         });
 
