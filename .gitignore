@@ -177,3 +177,4 @@ package-lock.json
 /apps/giddh-cordova/giddh/package-lock.json
 
 #
+.env

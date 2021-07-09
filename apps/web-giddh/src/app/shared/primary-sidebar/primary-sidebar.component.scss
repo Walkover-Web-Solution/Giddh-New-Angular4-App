@@ -59,6 +59,7 @@
             .icon-cross{
                 display: flex;
                 font-size: 12px;
+                color: $omiod;
             }
             .head-nav {
                 background: $white-smoke;
@@ -68,12 +69,12 @@
         }
         h3 {
             font-family: "opensans-semibold";
-            color: $black-pearl;
+            color: $omiod;
             .company-alice {
                 width: 26px;
                 height: 26px;
                 min-width: 26px;
-                border: 1px solid $black-pearl;
+                border: 1px solid $omiod;
                 padding: 5px;
                 border-radius: 50px;
                 display: inline-flex;

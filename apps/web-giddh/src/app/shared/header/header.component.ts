@@ -293,7 +293,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.checkAndRenewUserSession();
                 }
 
-                if(this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details")) {
+                if(this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details") || this.router.url.includes("/pages/invoice/preview/settings/sales")) {
                     this.toggleSidebarPane(true, false);
                 } else {
                     this.toggleSidebarPane(false, false);
@@ -480,6 +480,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.collapseSidebar(true);
             }
         });
+
         this.generalService.isMobileSite.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             this.isMobileSite = s;
             if (this.generalService.companyUniqueName) {
@@ -1004,13 +1005,23 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public closeSidebarMobile(e) {
-        if (e.target.className.toString() !== 'icon-bar' && this.isMobileSite) {
+        let excludeElements = ['icon-bar', 'hamburger-menu', 'refresh-manually', 'icon-down-new'];
+        let elementClass = e?.target?.className?.toString();
+        let validElement = true;
+
+        excludeElements.forEach(className => {
+            if(elementClass.indexOf(className) > -1) {
+                validElement = false;
+            }
+        });
+
+        if (validElement && this.isMobileSite) {
             this.sideMenu.isopen = false;
             this.menuStateChange.emit(false);
         }
 
-        if (e.target.className.toString() !== 'icon-bar' && (this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details"))) {
-            this.store.dispatch(this._generalActions.openSideMenu(false));
+        if (validElement && !this.isMobileSite && (this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details"))) {
+            this.collapseSidebar(true);
         }
     }
 

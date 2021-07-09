@@ -12,7 +12,5 @@
     "voucher_unavailable": "समायोजनासाठी कोणतेही व्हाउचर नाही.",
     "post_adj": "(समायोजन नंतर):",
     "voucher_label": "[VOUCHER_TYPE]",
-    "exchange_gain_loss_label": "विनिमय [PROFIT_TYPE]: ",
-    "exchange_gain": "लाभ",
-    "exchange_loss": "तोटा"
+    "exchange_gain_loss_label": "विनिमय [PROFIT_TYPE]: "
 }

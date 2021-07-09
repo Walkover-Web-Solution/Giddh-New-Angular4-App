@@ -51,6 +51,17 @@ jobs:
       - name: Creating Test bundle
         if: ${{ env.BUILD_ENV == 'Test' }}
         run: npm run build-test
+        env:
+          GOOGLE_CLIENT_ID_TEST: ${{ secrets.GOOGLE_CLIENT_ID_TEST }}
+          GOOGLE_CLIENT_SECRET_TEST: ${{ secrets.GOOGLE_CLIENT_SECRET_TEST }}
+          RAZORPAY_KEY_TEST: ${{ secrets.RAZORPAY_KEY_TEST }}
+          GOOGLE_CLIENT_ID_PROD: ${{ secrets.GOOGLE_CLIENT_ID_PROD }}
+          GOOGLE_CLIENT_SECRET_PROD: ${{ secrets.GOOGLE_CLIENT_SECRET_PROD }}
+          TWITTER_CLIENT_ID_PROD: ${{ secrets.TWITTER_CLIENT_ID_PROD }}
+          TWITTER_SECRET_KEY_PROD: ${{ secrets.TWITTER_SECRET_KEY_PROD }}
+          LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
+          LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
+          RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
       - name: Copy Test folder
         if: ${{ env.BUILD_ENV == 'Test' }}
         run: |
@@ -59,6 +70,17 @@ jobs:
       - name: Creating Stage bundle
         if: ${{ env.BUILD_ENV == 'Stage' }}
         run: npm run build-stage
+        env:
+          GOOGLE_CLIENT_ID_TEST: ${{ secrets.GOOGLE_CLIENT_ID_TEST }}
+          GOOGLE_CLIENT_SECRET_TEST: ${{ secrets.GOOGLE_CLIENT_SECRET_TEST }}
+          RAZORPAY_KEY_TEST: ${{ secrets.RAZORPAY_KEY_TEST }}
+          GOOGLE_CLIENT_ID_PROD: ${{ secrets.GOOGLE_CLIENT_ID_PROD }}
+          GOOGLE_CLIENT_SECRET_PROD: ${{ secrets.GOOGLE_CLIENT_SECRET_PROD }}
+          TWITTER_CLIENT_ID_PROD: ${{ secrets.TWITTER_CLIENT_ID_PROD }}
+          TWITTER_SECRET_KEY_PROD: ${{ secrets.TWITTER_SECRET_KEY_PROD }}
+          LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
+          LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
+          RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
       - name: Copy Stage folder
         if: ${{ env.BUILD_ENV == 'Stage' }}
         run: |
@@ -67,6 +89,17 @@ jobs:
       - name: Creating Beta bundle
         if: ${{ env.BUILD_ENV == 'Beta' }}
         run: npm run build-prod
+        env:
+          GOOGLE_CLIENT_ID_TEST: ${{ secrets.GOOGLE_CLIENT_ID_TEST }}
+          GOOGLE_CLIENT_SECRET_TEST: ${{ secrets.GOOGLE_CLIENT_SECRET_TEST }}
+          RAZORPAY_KEY_TEST: ${{ secrets.RAZORPAY_KEY_TEST }}
+          GOOGLE_CLIENT_ID_PROD: ${{ secrets.GOOGLE_CLIENT_ID_PROD }}
+          GOOGLE_CLIENT_SECRET_PROD: ${{ secrets.GOOGLE_CLIENT_SECRET_PROD }}
+          TWITTER_CLIENT_ID_PROD: ${{ secrets.TWITTER_CLIENT_ID_PROD }}
+          TWITTER_SECRET_KEY_PROD: ${{ secrets.TWITTER_SECRET_KEY_PROD }}
+          LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
+          LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
+          RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
       - name: Copy Beta folder
         if: ${{ env.BUILD_ENV == 'Beta' }}
         run: |
@@ -75,6 +108,17 @@ jobs:
       - name: Creating Prod bundle
         if: ${{ env.BUILD_ENV == 'Prod' }}
         run: npm run build-prod
+        env:
+          GOOGLE_CLIENT_ID_TEST: ${{ secrets.GOOGLE_CLIENT_ID_TEST }}
+          GOOGLE_CLIENT_SECRET_TEST: ${{ secrets.GOOGLE_CLIENT_SECRET_TEST }}
+          RAZORPAY_KEY_TEST: ${{ secrets.RAZORPAY_KEY_TEST }}
+          GOOGLE_CLIENT_ID_PROD: ${{ secrets.GOOGLE_CLIENT_ID_PROD }}
+          GOOGLE_CLIENT_SECRET_PROD: ${{ secrets.GOOGLE_CLIENT_SECRET_PROD }}
+          TWITTER_CLIENT_ID_PROD: ${{ secrets.TWITTER_CLIENT_ID_PROD }}
+          TWITTER_SECRET_KEY_PROD: ${{ secrets.TWITTER_SECRET_KEY_PROD }}
+          LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
+          LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
+          RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
       - name: Copy Prod folder
         if: ${{ env.BUILD_ENV == 'Prod' }}
         run: |

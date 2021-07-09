@@ -101,14 +101,11 @@
                                 </button>
 
                             </div>
-                            <div class="advance-icon cursor-pointer align-items-center btn btn-primary btn-group mr-0" *ngIf="activeTab !== 'aging'"
+                            <div class="advance-icon cursor-pointer align-items-center btn-group mr-0" *ngIf="activeTab !== 'aging'"
                             #filterDropDownList="bs-dropdown" dropdown [autoClose]="false"
                             (clickOutside)="hideListItems()" [tooltip]="localeData?.filter_toggle"
                             [placement]="'right'">
-                                <div dropdownToggle class="d-flex align-items-center">
-                                        <span class="pd-r05 d-sm-flex d-none">{{commonLocaleData?.app_filter}}</span>
-                                        <span class="icon-advance-filter"></span>
-                                </div>
+                                <i dropdownToggle class="icon-options"></i>
                                 <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
                                 [style.width.px]="'200'">
                                 <li role="menuitem">
@@ -199,7 +196,8 @@
                         <div class="d-flex w-100 justify-content-between overflow-x-auto">
                             <div class="total-details-box mr-r05 d-flex justify-content-between count-box align-items-end">
                                 <h5>
-                                    {{localeData?.contacts}}
+                                    <ng-container *ngIf="!selectedCheckedContacts?.length">{{activeTab === 'customer' ? localeData?.customers : localeData?.vendors}}</ng-container>
+                                    <ng-container *ngIf="selectedCheckedContacts?.length">{{activeTab === 'customer' ? localeData?.customers_selected : localeData?.vendors_selected }}</ng-container>
                                     <div>
                                         <span *ngIf="!selectedCheckedContacts.length"
                                         class="number-total">{{activeTab === 'customer' ? totalCustomers :
@@ -210,7 +208,7 @@
                                     </div>
                                 </h5>
                                 <div class="btn-group more-button align-items-center" dropdown container="body">
-                                    <button id="button-basic" dropdownToggle type="button"
+                                    <button *ngIf="selectedCheckedContacts?.length" id="button-basic" dropdownToggle type="button"
                                     class="btn btn-default dropdown-toggle mr-0" aria-controls="dropdown-basic">
                                         <span class="icon-arrow-down font-12"></span>
                                     </button>
@@ -218,8 +216,8 @@
                                     aria-labelledby="button-basic">
                                         <li role="menuitem" (click)="openEmailDialog();">
                                         {{commonLocaleData?.app_email}}</li>
-                                        <li role="menuitem" (click)="openSmsDialog();">
-                                        {{commonLocaleData?.app_sms}}</li>
+                                        <!-- <li role="menuitem" (click)="openSmsDialog();">
+                                        {{commonLocaleData?.app_sms}}</li> -->
                                         <li role="menuitem" (click)="downloadCSV();">
                                         {{commonLocaleData?.app_download_csv}}</li>
                                         <li role="menuitem"
@@ -305,77 +303,6 @@
 
                                 <div *ngIf="isMobileScreen">
                                     <ng-container *ngTemplateOutlet='mainTable'></ng-container>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="clearfix pagination-main d-none">
-                    <div class="mt-5 mb-100px">
-                        <div>
-                            <div class="customer-right-wrap clearfix">
-                                <div class="text-right">
-                                    <h4 class="mr-b1 pd-r2">{{commonLocaleData?.app_result_total}}</h4>
-                                </div>
-
-                                <div class="bg-white clearfix">
-                                    <div class="customer-right clearfix w-100">
-                                        <table class="text-right">
-                                            <tr>
-                                                <td *ngIf="showFieldFilter.openingBalance">
-                                                    <p>{{localeData?.opening}}</p>
-                                                    <h3><span
-                                                            *ngIf="activeTab === 'customer' && openingBalance?.type === 'CREDIT' && formatAmountInCurrency(openingBalance?.amount) > 0">-</span><span
-                                                            *ngIf="activeTab === 'vendor' && openingBalance?.type === 'DEBIT' && formatAmountInCurrency(openingBalance?.amount) > 0">-</span>
-                                                        <span class="d-inline-flex">
-                                                            <amount-field [amount]="openingBalance?.amount"
-                                                                [currencySymbol]="false" [currencyCode]="false">
-                                                            </amount-field>
-                                                        </span>/-
-                                                    </h3>
-                                                </td>
-                                                <td>
-                                                    <p *ngIf="activeTab === 'vendor'">{{commonLocaleData?.app_purchase}}
-                                                    </p>
-                                                    <p *ngIf="activeTab === 'customer'">{{commonLocaleData?.app_sales}}
-                                                    </p>
-                                                    <h3>
-
-                                                        <span class="d-inline-flex">
-                                                            <amount-field [amount]="totalSales" [currencySymbol]="false"
-                                                                [currencyCode]="false">
-                                                            </amount-field>
-                                                        </span>/-
-                                                    </h3>
-                                                </td>
-                                                <td>
-                                                    <p *ngIf="activeTab === 'vendor'">{{commonLocaleData?.app_payment}}
-                                                    </p>
-                                                    <p *ngIf="activeTab === 'customer'">
-                                                        {{commonLocaleData?.app_receipt}}</p>
-                                                    <h3>
-
-                                                        <span class="d-inline-flex">
-                                                            <amount-field [amount]="totalReceipts"
-                                                                [currencySymbol]="false" [currencyCode]="false">
-                                                            </amount-field>
-                                                        </span>/-
-
-                                                    </h3>
-                                                </td>
-                                                <td>
-                                                    <p>{{localeData?.closing}}</p>
-                                                    <h3>
-                                                        <span class="d-inline-flex">
-                                                            <amount-field [amount]="closingBalance"
-                                                                [currencySymbol]="false" [currencyCode]="false">
-                                                            </amount-field>
-                                                        </span>/-
-                                                    </h3>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -668,11 +595,11 @@
                                                                     </a>
                                                                 </li>
 
-                                                                <li class="li-link">
+                                                                <!-- <li class="li-link">
                                                                     <a href="javascript: void 0"
                                                                         (click)="performActions(3, account, $event )">{{commonLocaleData?.app_send_sms}}
                                                                     </a>
-                                                                </li>
+                                                                </li> -->
 
                                                                 <li class="li-link">
                                                                     <a href="javascript: void 0"
@@ -796,7 +723,7 @@
                                     {{account.email || '-' }}
                                 </div>
                                 <div>
-                                {{account.mobileNo || '-'}}
+                                    {{account.mobileNo || '-'}}
                                 </div>
                             </td>
                             <td class="word-wrap" *ngIf="showFieldFilter.gstin && shouldShowTaxFilter"
@@ -908,11 +835,11 @@
                                                                     </a>
                                                                 </li>
 
-                                                                <li class="li-link">
+                                                                <!-- <li class="li-link">
                                                                     <a href="javascript: void 0"
                                                                         (click)="performActions(3, account, $event )">{{commonLocaleData?.app_send_sms}}
                                                                     </a>
-                                                                </li>
+                                                                </li> -->
 
                                                                 <li class="li-link">
                                                                     <a href="javascript: void 0"
@@ -1030,13 +957,14 @@
                                     </amount-field>
                                 </span>
                             </td>
-                            <td class="word-wrap text-lowercase" *ngIf="showFieldFilter.contact"
+                            <td class="text-lowercase word-wrap font-12" *ngIf="showFieldFilter.contact"
                                 [attr.data-title]="commonLocaleData?.app_email">
-                                <div class="table-email ">{{account.email || '-' }}</div>
-                            </td>
-                            <td class="word-wrap" *ngIf="showFieldFilter.contact"
-                                [attr.data-title]="commonLocaleData?.app_mobile_no">
-                                {{account.mobileNo || '-' }}
+                                <div>
+                                    {{account.email || '-' }}
+                                </div>
+                                <div>
+                                    {{account.mobileNo || '-'}}
+                                </div>
                             </td>
                             <td class="word-wrap" *ngIf="showFieldFilter.gstin  && shouldShowTaxFilter"
                                 [attr.data-title]="commonLocaleData?.app_gstin">
@@ -1045,7 +973,7 @@
                                 [attr.data-title]="commonLocaleData?.app_state">{{account?.state?.name || '-' }}
                             </td>
                             <td *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx'
-                                [attr.data-title]="localeData?.comment">
+                                [attr.data-title]="localeData?.comment" class="comment-field text-break">
                                 <ng-container *ngIf='updateCommentIdx != idx'>
                                     {{account.comment || '-'}}
                                 </ng-container>

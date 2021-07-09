@@ -35,8 +35,8 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public isLoading: boolean = false;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public forceClearMonths$: Observable<IForceClear> = observableOf({ status: false });
-    public fromMonth: any = '';
-    public toMonth: any = '';
+    public fromMonth: any = null;
+    public toMonth: any = null;
     public financialYearSelected: any;
     public activeFinancialYearLabel: string = '';
     /** API response object of columnar report */
@@ -94,7 +94,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                 this.selectActiveFinancialYear();
             }
         });
-        
+
         this.getColumnarRequestModel = new ReportsDetailedRequestFilter();
         this.getColumnarRequestModel.page = 1;
         this.getColumnarRequestModel.count = this.paginationCount;
@@ -334,6 +334,8 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public clearFilter(): void {
         this.exportRequest = {};
         this.groupUniqueName = '';
+        this.fromMonth = null;
+        this.toMonth = null;
         this.forceClear$ = observableOf({ status: true });
         this.forceClearMonths$ = observableOf({ status: true });
         this.fromMonthNames = [];

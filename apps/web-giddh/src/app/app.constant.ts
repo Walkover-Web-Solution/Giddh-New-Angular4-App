@@ -5,7 +5,6 @@ export const Configuration = {
     ApiUrl,
     isCordova,
     isElectron,
-    OtpToken: '73k6G_GDzvhy4XE33EQCaKUnC0PHwEZBvf0qsZ3Q9S3ZBcXH-f_6JT_4fH-Qx1Y5LxIIwzqy7cFQVMoyUSXBfLL5WBX6oQWifweWIQlJQ8YkRZ1lAmu3oqwvNJXP1Y5ZTXDHO1IV5-Q63zwNbzxTFw==',
     APP_FOLDER
 };
 
@@ -304,11 +303,11 @@ export const EMAIL_VALIDATION_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,
 
 /** Settings integration tabs */
 export const SETTING_INTEGRATION_TABS = {
-    SMS: { LABEL: 'sms', VALUE: 0 },
-    EMAIL: { LABEL: 'email', VALUE: 1 },
-    COLLECTION: { LABEL: 'collection', VALUE: 2 },
-    E_COMMERCE: { LABEL: 'ecommerce', VALUE: 3 },
-    PAYMENT: { LABEL: 'payment', VALUE: 4 }
+    // SMS: { LABEL: 'sms', VALUE: 0 },
+    EMAIL: { LABEL: 'email', VALUE: 0 },
+    COLLECTION: { LABEL: 'collection', VALUE: 1 },
+    E_COMMERCE: { LABEL: 'ecommerce', VALUE: 2 },
+    PAYMENT: { LABEL: 'payment', VALUE: 3 }
 };
 
 /** E-invoice statuses */

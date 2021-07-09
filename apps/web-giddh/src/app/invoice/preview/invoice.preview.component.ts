@@ -1347,11 +1347,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             let text = this.localeData?.currency_conversion;
             let grandTotalTooltipText = text?.replace("[BASE_CURRENCY]", this.baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
             let balanceDueTooltipText;
-            if (item.gainLoss) {
+            if (enableVoucherAdjustmentMultiCurrency && item.gainLoss) {
                 const gainLossText = this.localeData?.exchange_gain_loss_label?.
                     replace("[BASE_CURRENCY]", this.baseCurrency)?.
                     replace("[AMOUNT]", balanceDueAmountForCompany)?.
-                    replace('[PROFIT_TYPE]', item.gainLoss > 0 ? this.localeData?.exchange_gain : this.localeData?.exchange_loss);
+                    replace('[PROFIT_TYPE]', item.gainLoss > 0 ? this.commonLocaleData?.app_exchange_gain : this.commonLocaleData?.app_exchange_loss);
                 balanceDueTooltipText = `${gainLossText}: ${Math.abs(item.gainLoss)}`;
             } else {
                 balanceDueTooltipText = text?.replace("[BASE_CURRENCY]", this.baseCurrency)?.replace("[AMOUNT]", balanceDueAmountForCompany)?.replace("[CONVERSION_RATE]", balanceDueAmountConversionRate);
@@ -1681,21 +1681,21 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     private getEInvoiceTooltipText(item: ReceiptItem): string {
         switch (item.status?.toLowerCase()) {
             case EInvoiceStatus.YetToBePushed:
-                return this.localeData.e_invoice_statuses.yet_to_be_pushed;
+                return this.localeData?.e_invoice_statuses.yet_to_be_pushed;
             case EInvoiceStatus.Pushed:
-                return this.localeData.e_invoice_statuses.pushed;
+                return this.localeData?.e_invoice_statuses.pushed;
             case EInvoiceStatus.PushInitiated:
-                return this.localeData.e_invoice_statuses.push_initiated;
+                return this.localeData?.e_invoice_statuses.push_initiated;
             case EInvoiceStatus.Cancelled:
                 // E-invoice got cancelled but invoice didn't cancel
-                return item.balanceStatus !== 'cancel' ? this.localeData.e_invoice_statuses.giddh_invoice_not_cancelled : this.localeData.e_invoice_statuses.cancelled;
+                return item.balanceStatus !== 'cancel' ? this.localeData?.e_invoice_statuses.giddh_invoice_not_cancelled : this.localeData?.e_invoice_statuses.cancelled;
             case EInvoiceStatus.MarkedAsCancelled:
-                return this.localeData.e_invoice_statuses.mark_as_cancelled;
+                return this.localeData?.e_invoice_statuses.mark_as_cancelled;
             case EInvoiceStatus.Failed:
-                return item.errorMessage ?? this.localeData.e_invoice_statuses.failed;
+                return item.errorMessage ?? this.localeData?.e_invoice_statuses.failed;
             case EInvoiceStatus.NA:
                 // When invoice is B2C or B2B cancelled invoice
-                return item.errorMessage ?? this.localeData.e_invoice_statuses.na;
+                return item.errorMessage ?? this.localeData?.e_invoice_statuses.na;
             default: return '';
         }
     }

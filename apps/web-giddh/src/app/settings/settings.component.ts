@@ -43,7 +43,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     public isUpdateCompanyInProgress$: Observable<boolean>;
     public isCompanyProfileUpdated: boolean = false;
     //variable to hold sub tab value inside any tab e.g. integration -> payment
-    public selectedChildTab: number = SETTING_INTEGRATION_TABS.SMS.VALUE;
+    public selectedChildTab: number = SETTING_INTEGRATION_TABS.EMAIL.VALUE;
     public activeTab: string = 'taxes';
     public integrationtab: string;
     public isMobileScreen: boolean = true;
@@ -98,7 +98,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 this.integrationtab = params['referrer'];
                 this.activeTab = params['type'];
             } else if (params['type'] && this.activeTab !== params['type']) {
-                this.selectedChildTab = SETTING_INTEGRATION_TABS.SMS.VALUE;
+                this.selectedChildTab = SETTING_INTEGRATION_TABS.EMAIL.VALUE;
                 this.integrationtab = '';
                 this.activeTab = params['type'];
             } else {
@@ -206,15 +206,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 return SETTING_INTEGRATION_TABS.COLLECTION.VALUE;
             case SETTING_INTEGRATION_TABS.EMAIL.LABEL:
                 return SETTING_INTEGRATION_TABS.EMAIL.VALUE;
-            case SETTING_INTEGRATION_TABS.SMS.LABEL:
-                return SETTING_INTEGRATION_TABS.SMS.VALUE;
+            // case SETTING_INTEGRATION_TABS.SMS.LABEL:
+            //     return SETTING_INTEGRATION_TABS.SMS.VALUE;
             default:
-                return SETTING_INTEGRATION_TABS.SMS.VALUE;
+                return SETTING_INTEGRATION_TABS.EMAIL.VALUE;
         }
-    }
-
-    public disableEnable() {
-        this.staticTabs.tabs[2].disabled = !this.staticTabs.tabs[2].disabled;
     }
 
     public profileSelected(e) {
@@ -260,8 +256,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
     private saveGmailAuthCode(authCode: string) {
         const getAccessTokenData = {
             code: authCode,
-            client_secret: this.getGoogleCredentials().GOOGLE_CLIENT_SECRET,
-            client_id: this.getGoogleCredentials().GOOGLE_CLIENT_ID,
+            client_secret: GOOGLE_CLIENT_SECRET,
+            client_id: GOOGLE_CLIENT_ID,
             grant_type: 'authorization_code',
             redirect_uri: this.getRedirectUrl(AppUrl)
         };
@@ -292,20 +288,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     private getRedirectUrl(baseHref: string) {
         return `${baseHref}pages/settings?tab=integration`;
-    }
-
-    private getGoogleCredentials() {
-        if (PRODUCTION_ENV || isElectron || isCordova) {
-            return {
-                GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com',
-                GOOGLE_CLIENT_SECRET: 'eWzLFEb_T9VrzFjgE40Bz6_l'
-            };
-        } else {
-            return {
-                GOOGLE_CLIENT_ID: '641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com',
-                GOOGLE_CLIENT_SECRET: '8htr7iQVXfZp_n87c99-jm7a'
-            };
-        }
     }
 
     private setStateDetails(type, referer?: string) {

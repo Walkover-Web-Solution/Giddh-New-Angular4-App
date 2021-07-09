@@ -113,7 +113,6 @@ export class LedgerResponse {
     public tdsTaxes?: string[];
     public otherTaxType?: 'tcs' | 'tds';
     public exchangeRate?: number = 1;
-    public exchangeRateForDisplay?: number = 1;
     public valuesInAccountCurrency?: boolean = false;
     public discountResources?: any[];
     public subVoucher?: string = '';
