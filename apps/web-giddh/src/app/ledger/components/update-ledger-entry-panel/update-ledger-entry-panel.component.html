@@ -1099,7 +1099,7 @@
 
                                         <li>
                                             <input type="text" id="update-ledger-price-input" class="price-input"
-                                                [(ngModel)]="vm.selectedLedger.exchangeRateForDisplay"
+                                                [(ngModel)]="vm.selectedLedger.exchangeRate"
                                                 [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                                                 (blur)="exchangeRateChanged()"> {{ vm.selectedCurrencyForDisplay === 0 ?
                                             vm.foreignCurrencyDetails?.code : vm.baseCurrencyDetails?.code
