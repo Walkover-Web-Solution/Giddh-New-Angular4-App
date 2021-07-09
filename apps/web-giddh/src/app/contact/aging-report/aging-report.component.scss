@@ -113,6 +113,10 @@ tr.aging-table-top td {
     background: none !important;
 }
 
+.empty-table {
+    height: 120px;
+}
+
 // responsive
 @media (min-width: 769px) {
     .on-mobile-view > .top-aging-table-top {

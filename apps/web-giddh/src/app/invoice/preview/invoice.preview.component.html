@@ -181,7 +181,7 @@
                             <div class="d-flex cancel-filter-export">
                                 <div class="d-flex">
                             <!-- Cancel e-invoice button-->
-                                    <button type="button" class="btn btn-primary" *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'sales') && selectedInvoicesList?.length === 1" (click)="openModal(cancelEInvoiceTemplate)">{{localeData?.cancel_e_invoice}}</button>
+                                    <button type="button" class="btn btn-primary" *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'sales') && selectedInvoicesList?.length === 1 && selectedInvoicesList[0]?.irnNumber" (click)="openModal(cancelEInvoiceTemplate)">{{localeData?.cancel_e_invoice}}</button>
                                     <div *ngIf="selectedItems.length === 1">
                                         <div *ngIf="!isCompany" class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown"
                                         (mouseleave)="dp.hide()">
@@ -217,7 +217,7 @@
                         <div class="col-12 w-100 d-none mr-b1 cancel-more">
                             <div class="d-flex justify-content-between w-100">
                                         <!-- Cancel e-invoice button-->
-                                <button type="button" class="btn btn-primary" *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'sales') && selectedInvoicesList?.length === 1" (click)="openModal(cancelEInvoiceTemplate)">{{localeData?.cancel_e_invoice}}</button>
+                                <button type="button" class="btn btn-primary" *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'sales') && selectedInvoicesList?.length === 1 && selectedInvoicesList[0]?.irnNumber" (click)="openModal(cancelEInvoiceTemplate)">{{localeData?.cancel_e_invoice}}</button>
                                 <div *ngIf="selectedItems.length === 1">
                                     <div *ngIf="!isCompany" class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown"
                                     (mouseleave)="dp.hide()">
