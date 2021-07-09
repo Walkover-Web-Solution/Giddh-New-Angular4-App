@@ -112,8 +112,8 @@
                         <input type="text"
                             [placeholder]="voucherType === 'proformas' ? localeData?.search_proforma : localeData?.search_estimate"
                             class=" form-control" #searchBox [formControl]="voucherNumberInput" />
-                        </div>
                     </div>
+                </div>
                     <div class="col-sm-6 full-width-on-mobile">
                         <div class="input-container">
                             <input type="text" [placeholder]="localeData?.search_customer_name" class=" form-control"
@@ -530,6 +530,5 @@
                     </div>
                 </div>
             </ng-template>
-        </div>
     </div>
 </ng-container>
