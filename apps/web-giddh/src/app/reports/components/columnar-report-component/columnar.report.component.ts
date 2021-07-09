@@ -38,6 +38,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public fromMonth: any = null;
     public toMonth: any = null;
     public financialYearSelected: any;
+    public activeFinancialYear: string = '';
     public activeFinancialYearLabel: string = '';
     /** API response object of columnar report */
     public columnarReportResponse: any;
@@ -89,9 +90,12 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
+            if (activeCompany && !this.activeFinancialYear) {
                 this.companyUniqueName = activeCompany.uniqueName;
-                this.selectActiveFinancialYear();
+                if(activeCompany.activeFinancialYear) {
+                    this.activeFinancialYear = activeCompany.activeFinancialYear.uniqueName;
+                    this.selectActiveFinancialYear();
+                }
             }
         });
 
@@ -295,26 +299,26 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     public selectActiveFinancialYear(): void {
-        // if (this.selectYear && this.selectYear.length > 0 && this.activeFinancialYear) {
-        //     this.selectYear.forEach(key => {
-        //         if (key.value.uniqueName === this.activeFinancialYear) {
-        //             this.selectFinancialYear(key);
+        if (this.selectYear && this.selectYear.length > 0 && this.activeFinancialYear) {
+            this.selectYear.forEach(key => {
+                if (key.value.uniqueName === this.activeFinancialYear) {
+                    this.selectFinancialYear(key);
 
-        //             let financialYearStarts = moment(key.value.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
-        //             let financialYearEnds = moment(key.value.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
-        //             this.activeFinancialYearLabel = financialYearStarts + " - " + financialYearEnds;
-        //         }
-        //     });
-        // }
+                    let financialYearStarts = moment(key.value.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
+                    let financialYearEnds = moment(key.value.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
+                    this.activeFinancialYearLabel = financialYearStarts + " - " + financialYearEnds;
+                }
+            });
+        }
     }
 
     /**
-   * To call API according to pagination
-   *
-   * @param {*} event Pagination page change event
-   * @returns {void}
-   * @memberof ColumnarReportComponent
-   */
+     * To call API according to pagination
+     *
+     * @param {*} event Pagination page change event
+     * @returns {void}
+     * @memberof ColumnarReportComponent
+     */
     public pageChanged(event: any): void {
         if (event && this.getColumnarRequestModel) {
             if (event && event.page === this.getColumnarRequestModel.page) {

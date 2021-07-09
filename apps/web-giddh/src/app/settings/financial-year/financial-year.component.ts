@@ -8,7 +8,6 @@ import * as moment from 'moment/moment';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
 import { IFinancialYearResponse } from '../../services/settings.financial-year.service';
 import { ActiveFinancialYear } from '../../models/api-models/Company';
-import { CompanyActions } from '../../actions/company.actions';
 import { createSelector } from 'reselect';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { IForceClear } from '../../models/api-models/Sales';
@@ -53,8 +52,7 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
 
     constructor(
         private store: Store<AppState>,
-        private settingsFinancialYearActions: SettingsFinancialYearActions,
-        private _companyActions: CompanyActions
+        private settingsFinancialYearActions: SettingsFinancialYearActions
     ) {
     }
 
@@ -62,7 +60,7 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.currentCompanyName = activeCompany.name;
-                this.currentCompanyFinancialYearUN = activeCompany.activeFinancialYear.uniqueName;
+                this.currentCompanyFinancialYearUN = activeCompany.activeFinancialYear?.uniqueName;
                 this.financialOptions = activeCompany.financialYears.map(element => {
                     return { label: element.uniqueName, value: element.uniqueName };
                 });
