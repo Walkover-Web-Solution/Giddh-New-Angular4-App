@@ -512,6 +512,11 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         if (activeGroup && activeGroup.parentGroups) {
             isTaxableGroup = activeGroup.parentGroups.some(groupName => groupName.uniqueName === 'sundrydebtors' || groupName.uniqueName === 'sundrycreditors');
         }
+
+        if(!isTaxableGroup) {
+            isTaxableGroup = activeGroup.uniqueName === 'sundrydebtors' || activeGroup.uniqueName === 'sundrycreditors';
+        }
+
         return isTaxableGroup;
     }
 
