@@ -5,7 +5,7 @@ import {
 } from '../../common/confirmation-modal/confirmation-modal.interface';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'any'
 })
 export class ProformaInvoiceUtilityService {
 
@@ -37,5 +37,32 @@ export class ProformaInvoiceUtilityService {
             footerCssClass,
             buttons
         };
+    }
+
+    /**
+     * Returns the transformed request object required for new voucher APIs
+     *
+     * @param {*} data Old request object
+     * @return {*} {*} New request object
+     * @memberof ProformaInvoiceUtilityService
+     */
+    public getVoucherRequestObjectForInvoice(data: any): any {
+        if (data.account) {
+            data.account.customerName = data.account.name;
+            delete data.account.name;
+            if (data.account.billingDetails) {
+                data.account.billingDetails.taxNumber = data.account.billingDetails.gstNumber;
+                delete data.account.billingDetails.gstNumber;
+                delete data.account.billingDetails.stateCode;
+                delete data.account.billingDetails.stateName;
+            }
+            if (data.account.shippingDetails) {
+                data.account.shippingDetails.taxNumber = data.account.shippingDetails.gstNumber;
+                delete data.account.shippingDetails.gstNumber;
+                delete data.account.shippingDetails.stateCode;
+                delete data.account.shippingDetails.stateName;
+            }
+        }
+        return data;
     }
 }
