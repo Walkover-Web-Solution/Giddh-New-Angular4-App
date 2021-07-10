@@ -80,10 +80,8 @@
                             <div class="jumper-results" [ngClass]="{'text-center': showChannelCreateBtn}">
                                 <p class="block text-center mr-b2">{{localeData?.no_records_found}}</p>
                                 <ng-container *ngIf="showChannelCreateBtn">
-                                    <button class="btn btn-primary mr-r2"
-                                        (click)="triggerAddManage()">{{commonLocaleData?.app_create_group}}</button>
-                                    <button class="btn btn-primary"
-                                        (click)="triggerAddManage()">{{commonLocaleData?.app_create_ac}}</button>
+                                    <button class="btn btn-primary mr-r2" (click)="triggerAddManage('group')">{{commonLocaleData?.app_create_group}}</button>
+                                    <button class="btn btn-primary" (click)="triggerAddManage('account')">{{commonLocaleData?.app_create_ac}}</button>
                                 </ng-container>
                             </div>
                         </span>

@@ -11,9 +11,6 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { InvoiceRoutingModule } from '../invoice/invoice.routing.module';
 import { ProformaInvoiceModule } from '../proforma-invoice/proforma-invoice.module';
-import {
-    GenericAsideMenuAccountModule,
-} from '../shared/generic-aside-menu-account/generic-aside-menu-account.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
@@ -64,7 +61,6 @@ import { PurchaseRoutingModule } from './purchase.routing.module';
         ShSelectModule,
         SharedModule,
         SalesShSelectModule,
-        GenericAsideMenuAccountModule,
         CurrencyModule,
         NgxMaskModule.forRoot(),
         TaxControlModule,
