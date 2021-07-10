@@ -501,7 +501,7 @@ export class AccountsAction {
     public DeleteAccount$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(AccountsAction.DELETE_ACCOUNT),
-            switchMap((action: CustomActions) => this._accountService.DeleteAccount(action.payload.accountUniqueName, action.payload.groupUniqueName)),
+            switchMap((action: CustomActions) => this._accountService.DeleteAccount(action.payload.accountUniqueName, action.payload?.groupUniqueName)),
             map(response => {
                 return this.deleteAccountResponse(response);
             })));
@@ -513,8 +513,8 @@ export class AccountsAction {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
-                    this._generalServices.invokeEvent.next(["accountdeleted", action.payload.request.groupUniqueName]);
-                    this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(action.payload.request.groupUniqueName));
+                    this._generalServices.invokeEvent.next(["accountdeleted", action.payload.request?.groupUniqueName]);
+                    this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(action.payload.request?.groupUniqueName));
                     this._generalServices.eventHandler.next({ name: eventsConst.accountDeleted, payload: action.payload });
                     const request: IUpdateDbRequest = {
                         uniqueName: this._generalServices.companyUniqueName,
