@@ -26,7 +26,6 @@
                                             <td [attr.data-title]="commonLocaleData?.app_to">
                                                 {{financialYear?.financialYearEnds}}</td>
                                             <td [attr.data-title]="localeData?.lock_status"
-                                                *ngIf="currentCompanyFinancialYearUN != financialYear?.uniqueName"
                                                 class="status">
                                                 <span *ngIf="financialYear?.isLocked"><span
                                                         (click)="lockUnlockFinancialYear(financialYear);"><i
@@ -38,10 +37,6 @@
                                                             class="fa fa-toggle-on fa-2x cp"
                                                             aria-hidden="true"></i></span>
                                                     <label>{{localeData?.unlocked}}</label></span>
-                                            </td>
-                                            <td [attr.data-title]="localeData?.lock_status"
-                                                *ngIf="currentCompanyFinancialYearUN == financialYear?.uniqueName">
-                                                {{localeData?.current_financial_year}}
                                             </td>
                                         </tr>
                                     </tbody>
