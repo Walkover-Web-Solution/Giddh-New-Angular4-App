@@ -29,7 +29,6 @@ export interface IGstObj {
 
 export class FinancialYearComponent implements OnInit, OnDestroy {
     public financialYearObj: IFinancialYearResponse;
-    public currentCompanyFinancialYearUN: string;
     public currentCompanyName: string;
     public financialOptions = [];
     public yearOptions = [];
@@ -60,7 +59,6 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.currentCompanyName = activeCompany.name;
-                this.currentCompanyFinancialYearUN = activeCompany.activeFinancialYear?.uniqueName;
                 this.financialOptions = activeCompany.financialYears.map(element => {
                     return { label: element.uniqueName, value: element.uniqueName };
                 });
