@@ -4,8 +4,6 @@
     "lock_status": "Lock Status",
     "locked": "Locked",
     "unlocked": "Unlocked",
-    "current_financial_year": "Current Financial Year (can not be locked)",
-    "switch_financial_year": "Switch Financial Year",
     "select_financial_year": "Select Financial Year",
     "add_financial_year": "Add Financial Year",
     "financial_year_period": "Financial Year Period",
