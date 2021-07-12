@@ -16,7 +16,7 @@ import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-selec
 import { digitsOnly } from '../../../helpers';
 import { BlankLedgerVM, TransactionVM } from '../../../../ledger/ledger.vm';
 import { cloneDeep, difference, differenceBy, flatten, flattenDeep, map, omit, union, uniq } from '../../../../lodash-optimized';
-import { LedgerDiscountComponent } from '../../../../ledger/components/ledgerDiscount/ledgerDiscount.component';
+import { LedgerDiscountComponent } from '../../../../ledger/components/ledger-discount/ledger-discount.component';
 import { TaxControlComponent } from '../../../../theme/tax-control/tax-control.component';
 import { SettingsDiscountActions } from 'apps/web-giddh/src/app/actions/settings/discount/settings.discount.action';
 import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/SettingsDiscount';
@@ -510,8 +510,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public isDebtorCreditorGroup(activeGroup: GroupResponse): boolean {
         let isTaxableGroup: boolean = false;
         if (activeGroup && activeGroup.parentGroups) {
-            isTaxableGroup = activeGroup.parentGroups.some(groupName => groupName.uniqueName === 'sundrydebtors' || groupName.uniqueName === 'sundrycreditors');
+            isTaxableGroup = (activeGroup.uniqueName === 'sundrydebtors' || activeGroup.uniqueName === 'sundrycreditors') || activeGroup.parentGroups.some(groupName => groupName.uniqueName === 'sundrydebtors' || groupName.uniqueName === 'sundrycreditors');
         }
+
         return isTaxableGroup;
     }
 

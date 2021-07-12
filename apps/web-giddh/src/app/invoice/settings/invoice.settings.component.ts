@@ -71,6 +71,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public activeCompany$: Observable<any> = null;
     /** Stores the form fields of onboard form API, required for GST validation in E-Invoice */
     public formFields: any[] = [];
+    /** True if user has invoice setting permissions */
+    public hasInvoiceSettingPermissions: boolean = true;
 
     constructor(
         private commonActions: CommonActions,
@@ -83,7 +85,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         private router: Router,
         private generalService: GeneralService
     ) {
-        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', this.getGoogleCredentials().GOOGLE_CLIENT_ID);
+        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
     }
 
@@ -126,6 +128,10 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                     this.store.dispatch(this.commonActions.GetOnboardingForm(requestObject));
                 }
             }
+        });
+
+        this.store.pipe(select(state => state.invoice.hasInvoiceSettingPermissions), takeUntil(this.destroyed$)).subscribe(response => {
+            this.hasInvoiceSettingPermissions = response;
         });
     }
 
@@ -200,11 +206,11 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         });
     }
 
-    public onChangeSendInvoiceViaSms(isChecked) {
-        if (!isChecked) {
-            this.invoiceSetting.smsContent = '';
-        }
-    }
+    // public onChangeSendInvoiceViaSms(isChecked) {
+    //     if (!isChecked) {
+    //         this.invoiceSetting.smsContent = '';
+    //     }
+    // }
 
     /**
      * Add New Webhook
@@ -475,8 +481,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     private saveGmailAuthCode(authCode: string) {
         const dataToSave = {
             code: authCode,
-            client_secret: this.getGoogleCredentials().GOOGLE_CLIENT_SECRET,
-            client_id: this.getGoogleCredentials().GOOGLE_CLIENT_ID,
+            client_secret: GOOGLE_CLIENT_SECRET,
+            client_id: GOOGLE_CLIENT_ID,
             grant_type: 'authorization_code',
             redirect_uri: this.getRedirectUrl(AppUrl)
         };
@@ -490,23 +496,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             this.router.navigateByUrl('/pages/invoice/preview/settings/email');
         });
     }
-    
+
     private getRedirectUrl(baseHref: string) {
         return `${baseHref}pages/invoice/preview/settings`;
-    }
-
-    private getGoogleCredentials() {
-        if (PRODUCTION_ENV || isElectron || isCordova) {
-            return {
-                GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com',
-                GOOGLE_CLIENT_SECRET: 'eWzLFEb_T9VrzFjgE40Bz6_l'
-            };
-        } else {
-            return {
-                GOOGLE_CLIENT_ID: '641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com',
-                GOOGLE_CLIENT_SECRET: '8htr7iQVXfZp_n87c99-jm7a'
-            };
-        }
     }
 
     /**

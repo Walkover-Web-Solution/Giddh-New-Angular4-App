@@ -139,7 +139,7 @@
         [ngClass]="{'active-text-color': pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'}">
     </div>
 
-    <div class="icon-sort-dsc" *ngIf="pettycashRequest.sortBy === col && pettycashRequest.sort === 'desc'"
+    <div class="icon-sort-asc" *ngIf="pettycashRequest.sortBy === col && pettycashRequest.sort === 'desc'"
         (click)="sort('asc', col)"
         [ngClass]="{'active-text-color': pettycashRequest.sortBy === col && pettycashRequest.sort === 'desc'}">
     </div>

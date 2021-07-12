@@ -139,6 +139,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public activeLocale: string = "";
     /** This will holds true if we added ledger item in local db once */
     public isItemAdded: boolean = false;
+    /** This will open company branch switch dropdown */
+    public showCompanyBranchSwitch:boolean = false;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -240,7 +242,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 this.selectedCompanyDetails = selectedCmp;
                 this.companyInitials = this.generalService.getInitialsFromString(selectedCmp.name);
                 this.branchInitials = this.generalService.getInitialsFromString(this.currentBranch?.alias || this.currentBranch?.name);
-                this.store.dispatch(this.companyActions.setActiveFinancialYear(selectedCmp.activeFinancialYear));
 
                 this.activeCompanyForDb = new CompAidataModel();
                 if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
@@ -293,8 +294,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.companyList = orderedCompanies;
             this.companyListForFilter = orderedCompanies;
             this.companies$ = observableOf(orderedCompanies);
-            this.store.dispatch(this.companyActions.setTotalNumberofCompanies(orderedCompanies.length));
         });
+
         this.user$ = this.store.pipe(select(createSelector([(state: AppState) => state.session.user], (user) => {
             if (user && user.user && user.user.name && user.user.name.length > 1) {
                 let name = user.user.name;
@@ -377,7 +378,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(account => {
                 if(account && !this.isItemAdded) {
                     this.isItemAdded = true;
-                    
+
                     // save data to db
                     let item: any = {};
                     item.time = +new Date();
@@ -1002,5 +1003,15 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 });
             }
         }
+    }
+
+    /**
+     * It will show/hide company branch switch dropdown
+     *
+     *
+     * @memberof PrimarySidebarComponent
+     */
+    public openCompanyBranchDropdown():void{
+        this.showCompanyBranchSwitch = !this.showCompanyBranchSwitch;
     }
 }

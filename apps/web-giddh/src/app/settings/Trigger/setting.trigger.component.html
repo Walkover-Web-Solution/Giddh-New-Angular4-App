@@ -3,7 +3,7 @@
     <div class="box clearfix">
         <h1 class="section-head pt-0">{{localeData?.tab_heading}}</h1>
         <div class="row">
-            <form (ngSubmit)="onSubmit(newTriggerObj)" class="col-lg-10 col-md-12 col-xs-12 ">
+            <form #createTriggerForm="ngForm" (ngSubmit)="onSubmit(newTriggerObj)" class="col-lg-10 col-md-12 col-xs-12 ">
                 <div class="row">
                     <div class="form-group col-lg-4 col-md-6 col-xs-12">
                         <label>{{commonLocaleData?.app_name}}</label><br>

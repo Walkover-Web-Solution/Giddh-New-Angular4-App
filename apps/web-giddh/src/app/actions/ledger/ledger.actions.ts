@@ -279,7 +279,7 @@ export class LedgerActions {
         .pipe(
             ofType(LEDGER.GROUP_EXPORT_LEDGER),
             switchMap((action: CustomActions) => {
-                return this._ledgerService.GroupExportLedger(action.payload.groupUniqueName, action.payload.queryRequest).pipe(
+                return this._ledgerService.GroupExportLedger(action.payload?.groupUniqueName, action.payload.queryRequest).pipe(
                     map((res) => {
                         if (res.status === 'success') {
                             this._toasty.clearAllToaster();

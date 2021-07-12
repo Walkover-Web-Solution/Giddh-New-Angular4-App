@@ -76,7 +76,6 @@
                             "file-saver",
                             "angular2-text-mask",
                             "ngrx-store-localstorage",
-                            "util",
                             "css-element-queries",
                             "jspdf",
                             "jspdf-autotable",
@@ -89,6 +88,8 @@
                         "main": "apps/web-giddh/src/main.ts",
                         "polyfills": "apps/web-giddh/src/polyfills.ts",
                         "tsConfig": "apps/web-giddh/tsconfig.app.json",
+                        "aot": true,
+                        "baseHref": "/",
                         "assets": [
                             {
                                 "glob": "**/*",
@@ -109,11 +110,6 @@
                                 "glob": "apple-developer-domain-association.txt",
                                 "input": "apps/web-giddh/src/.well-known/",
                                 "output": "/.well-known/"
-                            },
-                            {
-                                "glob": "**/*",
-                                "input": "cypress/",
-                                "output": "/cypress/"
                             }
                         ],
                         "styles": [
@@ -128,33 +124,33 @@
                             "apps/web-giddh/src/assets/css/toastr.css"
                         ],
                         "scripts": [
-                            "apps/web-giddh/src/assets/js/jquery-1.11.3.min.js",
-                            "apps/web-giddh/src/assets/js/lodash.min.js",
-                            "node_modules/bootstrap-daterangepicker/moment.min.js",
                             "node_modules/bootstrap-daterangepicker/daterangepicker.js"
                         ],
                         "customWebpackConfig": {
                             "path": "apps/web-giddh/webpack.partial.js",
-                            "mergeStrategies": {
+                            "mergeRules": {
                                 "externals": "replace"
                             }
-                        }
+                        },
+                        "optimization": false,
+                        "outputHashing": "none",
+                        "sourceMap": true,
+                        "namedChunks": true,
+                        "extractLicenses": false,
+                        "vendorChunk": true,
+                        "buildOptimizer": false
                     },
                     "configurations": {
                         "local": {
                             "outputPath": "dist/apps/web-giddh-local",
                             "customWebpackConfig": {
                                 "path": "apps/web-giddh/webpack.local.partial.js",
-                                "mergeStrategies": {
+                                "mergeRules": {
                                     "externals": "replace"
                                 }
                             },
                             "baseHref": "http://localhost:3000",
                             "fileReplacements": [
-                                {
-                                    "replace": "apps/web-giddh/src/index.html",
-                                    "with": "apps/web-giddh/src/index.local.html"
-                                },
                                 {
                                     "replace": "apps/web-giddh/src/environments/environment.ts",
                                     "with": "apps/web-giddh/src/environments/environment.local.ts"
@@ -162,12 +158,11 @@
                             ],
                             "index": {
                                 "input": "apps/web-giddh/src/index.local.html",
-                                "output": "index.html"
+                                "output": "/index.html"
                             },
                             "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
-                            "extractCss": true,
                             "namedChunks": false,
                             "aot": true,
                             "extractLicenses": true,
@@ -185,16 +180,12 @@
                             "outputPath": "dist/apps/web-giddh-stage",
                             "customWebpackConfig": {
                                 "path": "apps/web-giddh/webpack.stage.partial.js",
-                                "mergeStrategies": {
+                                "mergeRules": {
                                     "externals": "replace"
                                 }
                             },
                             "baseHref": "https://stage.giddh.com/",
                             "fileReplacements": [
-                                {
-                                    "replace": "apps/web-giddh/src/index.html",
-                                    "with": "apps/web-giddh/src/index.stage.html"
-                                },
                                 {
                                     "replace": "apps/web-giddh/src/environments/environment.ts",
                                     "with": "apps/web-giddh/src/environments/environment.stage.ts"
@@ -202,12 +193,11 @@
                             ],
                             "index": {
                                 "input": "apps/web-giddh/src/index.stage.html",
-                                "output": "index.html"
+                                "output": "/index.html"
                             },
                             "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
-                            "extractCss": true,
                             "namedChunks": false,
                             "aot": true,
                             "extractLicenses": true,
@@ -218,16 +208,12 @@
                             "outputPath": "dist/apps/web-giddh-prod",
                             "customWebpackConfig": {
                                 "path": "apps/web-giddh/webpack.prod.partial.js",
-                                "mergeStrategies": {
+                                "mergeRules": {
                                     "externals": "replace"
                                 }
                             },
                             "baseHref": "https://app.giddh.com/",
                             "fileReplacements": [
-                                {
-                                    "replace": "apps/web-giddh/src/index.html",
-                                    "with": "apps/web-giddh/src/index.prod.html"
-                                },
                                 {
                                     "replace": "apps/web-giddh/src/environments/environment.ts",
                                     "with": "apps/web-giddh/src/environments/environment.prod.ts"
@@ -235,12 +221,11 @@
                             ],
                             "index": {
                                 "input": "apps/web-giddh/src/index.prod.html",
-                                "output": "index.html"
+                                "output": "/index.html"
                             },
                             "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
-                            "extractCss": true,
                             "namedChunks": false,
                             "aot": true,
                             "extractLicenses": true,
@@ -258,16 +243,12 @@
                             "outputPath": "dist/apps/web-giddh-test",
                             "customWebpackConfig": {
                                 "path": "apps/web-giddh/webpack.test.partial.js",
-                                "mergeStrategies": {
+                                "mergeRules": {
                                     "externals": "replace"
                                 }
                             },
                             "baseHref": "https://test.giddh.com/",
                             "fileReplacements": [
-                                {
-                                    "replace": "apps/web-giddh/src/index.html",
-                                    "with": "apps/web-giddh/src/index.test.html"
-                                },
                                 {
                                     "replace": "apps/web-giddh/src/environments/environment.ts",
                                     "with": "apps/web-giddh/src/environments/environment.test.ts"
@@ -275,12 +256,11 @@
                             ],
                             "index": {
                                 "input": "apps/web-giddh/src/index.test.html",
-                                "output": "index.html"
+                                "output": "/index.html"
                             },
                             "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
-                            "extractCss": true,
                             "namedChunks": false,
                             "aot": true,
                             "extractLicenses": true,
@@ -294,25 +274,22 @@
                                 }
                             ]
                         }
-                    }
+                    },
+                    "defaultConfiguration": ""
                 },
                 "serve": {
                     "builder": "@angular-builders/custom-webpack:dev-server",
                     "options": {
                         "host": "localhost",
-                        "baseHref": "http://localhost:3000",
                         "port": 3000,
-                        "browserTarget": "web-giddh:build",
-                        "customWebpackConfig": {
-                            "path": "apps/web-giddh/webpack.partial.js",
-                            "mergeStrategies": {
-                                "externals": "replace"
-                            }
-                        }
+                        "browserTarget": "web-giddh:build"
                     },
                     "configurations": {
                         "prod": {
                             "browserTarget": "web-giddh:build:prod"
+                        },
+                        "development": {
+                            "browserTarget": "web-giddh:build:development"
                         }
                     }
                 },
@@ -419,9 +396,6 @@
                             "apps/web-giddh/src/assets/css/toastr.css"
                         ],
                         "scripts": [
-                            "apps/web-giddh/src/assets/js/jquery-1.11.3.min.js",
-                            "node_modules/bootstrap-daterangepicker/moment.min.js",
-                            "apps/web-giddh/src/assets/js/lodash.min.js",
                             "node_modules/bootstrap-daterangepicker/daterangepicker.js"
                         ]
                     },
@@ -430,15 +404,11 @@
                             "outputPath": "dist/apps/web-giddh-local",
                             "customWebpackConfig": {
                                 "path": "apps/web-giddh/webpack.electron.partial.js",
-                                "mergeStrategies": {
+                                "mergeRules": {
                                     "externals": "replace"
                                 }
                             },
                             "fileReplacements": [
-                                {
-                                    "replace": "apps/web-giddh/src/index.html",
-                                    "with": "apps/web-giddh/src/index.local.html"
-                                },
                                 {
                                     "replace": "apps/web-giddh/src/environments/environment.ts",
                                     "with": "apps/web-giddh/src/environments/environment.local.electron.ts"
@@ -446,7 +416,7 @@
                             ],
                             "index": {
                                 "input": "apps/web-giddh/src/index.local.html",
-                                "output": "index.html"
+                                "output": "/index.html"
                             },
                             "optimization": false,
                             "outputHashing": "all",
@@ -469,16 +439,12 @@
                             "outputPath": "dist/apps/web-giddh-stage",
                             "customWebpackConfig": {
                                 "path": "apps/web-giddh/webpack.stage.partial.js",
-                                "mergeStrategies": {
+                                "mergeRules": {
                                     "externals": "replace"
                                 }
                             },
                             "baseUrl": "stage.giddh.com",
                             "fileReplacements": [
-                                {
-                                    "replace": "apps/web-giddh/src/index.html",
-                                    "with": "apps/web-giddh/src/index.stage.html"
-                                },
                                 {
                                     "replace": "apps/web-giddh/src/environments/environment.ts",
                                     "with": "apps/web-giddh/src/environments/environment.stage.ts"
@@ -486,12 +452,11 @@
                             ],
                             "index": {
                                 "input": "apps/web-giddh/src/index.stage.html",
-                                "output": "index.html"
+                                "output": "/index.html"
                             },
                             "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
-                            "extractCss": true,
                             "namedChunks": false,
                             "aot": true,
                             "extractLicenses": true,
@@ -502,34 +467,29 @@
                             "outputPath": "dist/apps/web-giddh-prod",
                             "customWebpackConfig": {
                                 "path": "apps/web-giddh/webpack.electron.prod.partial.js",
-                                "mergeStrategies": {
+                                "mergeRules": {
                                     "externals": "replace"
                                 }
                             },
                             "index": {
                                 "input": "apps/web-giddh/src/index.electron.prod.html",
-                                "output": "index.html"
+                                "output": "/index.html"
                             },
                             "baseUrl": "app.giddh.com",
                             "fileReplacements": [
-                                {
-                                    "replace": "apps/web-giddh/src/index.html",
-                                    "with": "apps/web-giddh/src/index.electron.prod.html"
-                                },
                                 {
                                     "replace": "apps/web-giddh/src/environments/environment.ts",
                                     "with": "apps/web-giddh/src/environments/environment.prod.electron.ts"
                                 }
                             ],
-                            "optimization": false,
+                            "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
-                            "extractCss": false,
-                            "namedChunks": false,
+                            "namedChunks": true,
                             "aot": true,
                             "extractLicenses": false,
                             "vendorChunk": true,
-                            "buildOptimizer": false,
+                            "buildOptimizer": true,
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -542,16 +502,12 @@
                             "outputPath": "dist/apps/web-giddh-test",
                             "customWebpackConfig": {
                                 "path": "apps/web-giddh/webpack.test.partial.js",
-                                "mergeStrategies": {
+                                "mergeRules": {
                                     "externals": "replace"
                                 }
                             },
                             "baseUrl": "test.giddh.com",
                             "fileReplacements": [
-                                {
-                                    "replace": "apps/web-giddh/src/index.html",
-                                    "with": "apps/web-giddh/src/index.test.html"
-                                },
                                 {
                                     "replace": "apps/web-giddh/src/environments/environment.ts",
                                     "with": "apps/web-giddh/src/environments/environment.test.ts"
@@ -559,12 +515,11 @@
                             ],
                             "index": {
                                 "input": "apps/web-giddh/src/index.test.html",
-                                "output": "index.html"
+                                "output": "/index.html"
                             },
                             "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
-                            "extractCss": true,
                             "namedChunks": false,
                             "aot": true,
                             "extractLicenses": true,
@@ -588,7 +543,7 @@
                         "browserTarget": "electron-giddh:build:local",
                         "customWebpackConfig": {
                             "path": "apps/web-giddh/webpack.electron.partial.js",
-                            "mergeStrategies": {
+                            "mergeRules": {
                                 "externals": "replace"
                             }
                         }
@@ -648,9 +603,6 @@
                             "apps/web-giddh/src/assets/css/toastr.css"
                         ],
                         "scripts": [
-                            "apps/web-giddh/src/assets/js/jquery-1.11.3.min.js",
-                            "node_modules/bootstrap-daterangepicker/moment.min.js",
-                            "apps/web-giddh/src/assets/js/lodash.min.js",
                             "node_modules/bootstrap-daterangepicker/daterangepicker.js"
                         ]
                     },
@@ -659,15 +611,11 @@
                             "outputPath": "apps/giddh-cordova/giddh/www",
                             "customWebpackConfig": {
                                 "path": "apps/web-giddh/webpack.cordova.local.partial.js",
-                                "mergeStrategies": {
+                                "mergeRules": {
                                     "externals": "replace"
                                 }
                             },
                             "fileReplacements": [
-                                {
-                                    "replace": "apps/web-giddh/src/index.html",
-                                    "with": "apps/web-giddh/src/index.cordova.local.html"
-                                },
                                 {
                                     "replace": "apps/web-giddh/src/environments/environment.ts",
                                     "with": "apps/web-giddh/src/environments/environment.local.cordova.ts"
@@ -675,7 +623,7 @@
                             ],
                             "index": {
                                 "input": "apps/web-giddh/src/index.cordova.local.html",
-                                "output": "index.html"
+                                "output": "/index.html"
                             },
                             "optimization": false,
                             "outputHashing": "all",
@@ -691,15 +639,11 @@
                             "outputPath": "apps/giddh-cordova/giddh/www",
                             "customWebpackConfig": {
                                 "path": "apps/web-giddh/webpack.cordova.stage.partial.js",
-                                "mergeStrategies": {
+                                "mergeRules": {
                                     "externals": "replace"
                                 }
                             },
                             "fileReplacements": [
-                                {
-                                    "replace": "apps/web-giddh/src/index.html",
-                                    "with": "apps/web-giddh/src/index.cordova.stage.html"
-                                },
                                 {
                                     "replace": "apps/web-giddh/src/environments/environment.ts",
                                     "with": "apps/web-giddh/src/environments/environment.stage.cordova.ts"
@@ -707,12 +651,11 @@
                             ],
                             "index": {
                                 "input": "apps/web-giddh/src/index.cordova.stage.html",
-                                "output": "index.html"
+                                "output": "/index.html"
                             },
                             "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
-                            "extractCss": true,
                             "namedChunks": true,
                             "aot": true,
                             "extractLicenses": false,
@@ -723,15 +666,11 @@
                             "outputPath": "apps/giddh-cordova/giddh/www",
                             "customWebpackConfig": {
                                 "path": "apps/web-giddh/webpack.cordova.prod.partial.js",
-                                "mergeStrategies": {
+                                "mergeRules": {
                                     "externals": "replace"
                                 }
                             },
                             "fileReplacements": [
-                                {
-                                    "replace": "apps/web-giddh/src/index.html",
-                                    "with": "apps/web-giddh/src/index.cordova.prod.html"
-                                },
                                 {
                                     "replace": "apps/web-giddh/src/environments/environment.ts",
                                     "with": "apps/web-giddh/src/environments/environment.prod.cordova.ts"
@@ -739,12 +678,11 @@
                             ],
                             "index": {
                                 "input": "apps/web-giddh/src/index.cordova.prod.html",
-                                "output": "index.html"
+                                "output": "/index.html"
                             },
                             "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
-                            "extractCss": true,
                             "namedChunks": true,
                             "aot": true,
                             "extractLicenses": false,
@@ -768,7 +706,7 @@
                         "browserTarget": "giddh-cordova:build:local",
                         "customWebpackConfig": {
                             "path": "apps/web-giddh/webpack.cordova.local.partial.js",
-                            "mergeStrategies": {
+                            "mergeRules": {
                                 "externals": "replace"
                             }
                         }

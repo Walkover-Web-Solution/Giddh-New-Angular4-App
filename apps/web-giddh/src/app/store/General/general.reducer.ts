@@ -111,7 +111,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
                 Object.assign({}, activeGrpData.body, { isOpen: true, isActive: true });
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 if (groupArray) {
-                    updateActiveGroupFunc(groupArray, activeGrpData.queryString.groupUniqueName, activeGrpData.body, false);
+                    updateActiveGroupFunc(groupArray, activeGrpData.queryString?.groupUniqueName, activeGrpData.body, false);
                     return {
                         ...state,
                         groupswithaccounts: groupArray
@@ -138,7 +138,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             if (m.status === 'success') {
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 if (groupArray) {
-                    let deletedItem = removeGroupFunc(groupArray, m.queryString.groupUniqueName, null);
+                    let deletedItem = removeGroupFunc(groupArray, m.queryString?.groupUniqueName, null);
                     addNewGroupFunc(groupArray, deletedItem, m.request.parentGroupUniqueName, false);
                     return {
                         ...state,
@@ -153,7 +153,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             let accountData: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
             let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
             if (accountData.status === 'success' && groupArray) {
-                addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString.groupUniqueName, false);
+                addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString?.groupUniqueName, false);
                 return {
                     ...state,
                     groupswithaccounts: groupArray
@@ -166,7 +166,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             if (updatedAccount.status === 'success') {
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 if (groupArray) {
-                    UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString.groupUniqueName, updatedAccount.queryString.accountUniqueName, false);
+                    UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString?.groupUniqueName, updatedAccount.queryString.accountUniqueName, false);
                     return {
                         ...state,
                         groupswithaccounts: groupArray
@@ -181,7 +181,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             let accountData: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
             let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
             if (accountData.status === 'success' && groupArray) {
-                addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString.groupUniqueName, false);
+                addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString?.groupUniqueName, false);
 
                 let flattenItem = cloneDeep(accountData.body);
                 flattenItem.uNameStr = flattenItem.parentGroups.map(mp => mp.uniqueName).join(', ');
@@ -209,7 +209,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             if (updatedAccount.status === 'success') {
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 if (groupArray) {
-                    UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString.groupUniqueName, updatedAccount.queryString.accountUniqueName, false);
+                    UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString?.groupUniqueName, updatedAccount.queryString.accountUniqueName, false);
                     return {
                         ...state,
                         groupswithaccounts: groupArray

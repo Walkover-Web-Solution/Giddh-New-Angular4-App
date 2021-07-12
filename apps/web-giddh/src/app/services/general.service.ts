@@ -9,6 +9,7 @@ import { cloneDeep, find } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { Router } from '@angular/router';
+import { AdjustedVoucherType } from '../app.constant';
 
 @Injectable()
 export class GeneralService {
@@ -261,20 +262,6 @@ export class GeneralService {
             }
         }
         return false;
-    }
-
-    public getGoogleCredentials() {
-        if (PRODUCTION_ENV) {
-            return {
-                GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com',
-                GOOGLE_CLIENT_SECRET: 'eWzLFEb_T9VrzFjgE40Bz6_l'
-            };
-        } else {
-            return {
-                GOOGLE_CLIENT_ID: '641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com',
-                GOOGLE_CLIENT_SECRET: '8htr7iQVXfZp_n87c99-jm7a'
-            };
-        }
     }
 
     /**
@@ -848,5 +835,72 @@ export class GeneralService {
                 }, 200);
             }
         }
+    }
+
+    /**
+     * This will give multi-lingual current voucher label
+     *
+    * @param {string} voucherCode Voucher code
+    * @param {*} commonLocaleData Global context of multi-lingual keys
+    * @return {*} {string} Multi-lingual current voucher label
+    * @memberof GeneralService
+    */
+    public getCurrentVoucherLabel(voucherCode: string, commonLocaleData: any): string {
+        switch(voucherCode) {
+            case AdjustedVoucherType.Sales: case AdjustedVoucherType.SalesInvoice: return commonLocaleData?.app_voucher_types.sales;
+            case AdjustedVoucherType.Purchase: return commonLocaleData?.app_voucher_types.purchase;
+            case AdjustedVoucherType.CreditNote: return commonLocaleData?.app_voucher_types.credit_note;
+            case AdjustedVoucherType.DebitNote: return commonLocaleData?.app_voucher_types.debit_note;
+            case AdjustedVoucherType.Payment: return commonLocaleData?.app_voucher_types.payment;
+            default: return '';
+        }
+    }
+    
+    /**
+     * This will sort branches by alias
+     *
+     * @param {*} branchA
+     * @param {*} branchB
+     * @returns {*}
+     * @memberof CompanyBranchComponent
+     */
+    public sortBranches(branchA: any, branchB: any): any {
+        var regexA = /[^a-zA-Z]/g;
+        var regexN = /[^0-9]/g;
+
+        var branchAInt = parseInt(branchA?.alias, 10);
+        var branchBInt = parseInt(branchB?.alias, 10);
+
+        if (isNaN(branchAInt) && isNaN(branchBInt)) {
+            var branchAOutput = branchA?.alias?.toLowerCase()?.replace(regexA, "");
+            var branchBOutput = branchB?.alias?.toLowerCase()?.replace(regexA, "");
+            if (branchAOutput === branchBOutput) {
+                var branchANumeric = parseInt(branchA?.alias?.toLowerCase()?.replace(regexN, ""), 10);
+                var branchBNumeric = parseInt(branchB?.alias?.toLowerCase()?.replace(regexN, ""), 10);
+                return branchANumeric === branchBNumeric ? 0 : branchANumeric > branchBNumeric ? 1 : -1;
+            } else {
+                return branchAOutput > branchBOutput ? 1 : -1;
+            }
+        } else if (isNaN(branchAInt)) { //A is not an Int
+            return 1; //to make alphanumeric sort first return -1 here
+        } else if (isNaN(branchBInt)) { //B is not an Int
+            return -1; //to make alphanumeric sort first return 1 here
+        } else {
+            return branchAInt > branchBInt ? 1 : -1;
+        }
+    }
+
+    /**
+     * Determines if an element is child element to another element
+     *
+     * @param {*} child Element received as child
+     * @param {*} parent Element received as parent
+     * @return {boolean} True, if element is child of another element
+     * @memberof GeneralService
+     */
+    public childOf(child: any, parent: any): boolean {
+        while ((child = child.parentNode) && child !== parent) {
+        }
+        return !!child;
     }
 }

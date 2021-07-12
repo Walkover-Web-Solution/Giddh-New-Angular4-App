@@ -227,7 +227,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                     // User is navigating back from details page hence show the selected filter as pre-filled
                     uniqueNameToSearch = financialYearChosenInReportUniqueName;
                 } else {
-                    uniqueNameToSearch = activeCompany.activeFinancialYear.uniqueName;
+                    uniqueNameToSearch = activeCompany.activeFinancialYear?.uniqueName;
                 }
                 selectedFinancialYear = this.financialOptions.find(p => p.value === uniqueNameToSearch);
                 activeFinancialYear = this.selectedCompany.financialYears.find(p => p.uniqueName === uniqueNameToSearch);

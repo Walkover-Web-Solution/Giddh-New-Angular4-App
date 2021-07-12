@@ -764,6 +764,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
             return state;
         }
         case CompanyActions.SET_ACTIVE_COMPANY_DATA: {
+            delete action.payload.activeFinancialYear;
             return Object.assign({}, state, {
                 activeCompany: action.payload
             });
@@ -776,6 +777,11 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
         case CommonActions.SET_ACTIVE_LOCALE: {
             return Object.assign({}, state, {
                 currentLocale: action.payload
+            });
+        }
+        case CommonActions.SET_ACTIVE_FINANCIAL_YEAR: {
+            return Object.assign({}, state, {
+                activeCompany: action.payload
             });
         }
 

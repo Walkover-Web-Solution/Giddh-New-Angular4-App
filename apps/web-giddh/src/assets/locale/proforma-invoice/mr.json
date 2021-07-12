@@ -103,5 +103,6 @@
     "purchase_record_footer_note": "नाही तर खरेदी चलन क्रमांक किंवा विक्रेत्याचा तपशील बदलू.",
     "date_change_confirmation_heading": "तारीख बदल पुष्टीकरण",
     "change_single_entry_date": "तुम्हाला एन्ट्रीची तारीखही बदलायची आहे का?",
-    "change_all_entry_dates": "आपण या तारखेसह सर्व नोंदी तारीख बदलू इच्छिता??"
+    "change_all_entry_dates": "आपण या तारखेसह सर्व नोंदी तारीख बदलू इच्छिता??",
+    "exchange_label": "विनिमय"
 }

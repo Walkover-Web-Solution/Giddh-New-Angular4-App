@@ -276,12 +276,6 @@
                     "link": "/pages/import/trial-balance",
                     "icon": "icon-trial-balance-new",
                     "description": "सर्व क्रेडिट आणि डेबिट शिल्लक आयात करा"
-                },
-                {
-                    "label": "टॅली आयात करा",
-                    "link": "/pages/tallysync",
-                    "icon": "icon-tally-import1",
-                    "description": "आपला संकालित केलेला टॅली डेटा ऑनलाइन तपासा"
                 }
             ]
         },
@@ -370,7 +364,7 @@
     ],
     "switch_branch": "स्विच शाखा",
     "sb": "SB",
-    "search_branch": "येथे शोध शाखा",
+    "search_branch": "शोध शाखा",
     "goto_company": "कंपनीकडे जा",
     "create_branch": "शाखा तयार करा",
     "accounts": "खाती",
@@ -378,7 +372,7 @@
     "menu": "मेनू",
     "import_export_backup": "आयात / निर्यात डेटा (बॅकअप)",
     "switch_company": "कंपनी स्विच करा",
-    "search_company": "येथे शोध कंपनी",
+    "search_company": "शोध कंपनी",
     "create_company": "कंपनी तयार करा",
     "profile": "प्रोफाइल",
     "user_profile": "वापरकर्ता प्रोफाइल",
@@ -386,8 +380,12 @@
     "to_navigate": "नॅव्हिगेट करण्यासाठी",
     "to_select": "निवडण्यासाठी",
     "to_dismiss": "डिसमिस करणे",
-    "settings_permission": "सेटिंग्ज> परवानगी",
+    "settings_permission": "सेटिंग्ज > परवानगी",
     "user_details": "वापरकर्त्याचा तपशील",
     "inventory_inout": "यादी इन / आउट",
-    "import_data": "डेटा आयात करा"
+    "import_data": "डेटा आयात करा",
+    "companies": "कंपन्या",
+    "refresh_manually": "रीफ्रेश",
+    "branches": "शाखा",
+    "company_consolidated_data": "एकत्रित डेटा"
 }
