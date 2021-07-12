@@ -5,8 +5,7 @@ import { SETTINGS_TAXES_ACTIONS } from '../../actions/settings/taxes/settings.ta
 import { CustomActions } from '../customActions';
 import * as moment from 'moment/moment';
 import { IntegratedBankList, IRegistration } from "../../models/interfaces/registration.interface";
-import { DEFAULT_DATE_RANGE_PICKER_RANGES, DatePickerDefaultRangeEnum, UNAUTHORISED } from '../../app.constant';
-import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { DEFAULT_DATE_RANGE_PICKER_RANGES, UNAUTHORISED } from '../../app.constant';
 
 /**
  * Keeping Track of the CompanyState
@@ -16,7 +15,6 @@ export interface CurrentCompanyState {
     account: IRegistration;
     isTaxesLoading: boolean;
     isGetTaxesSuccess: boolean;
-    activeFinancialYear: object;
     dateRangePickerConfig: any;
     isTaxCreationInProcess: boolean;
     isTaxCreatedSuccessfully: boolean;
@@ -37,7 +35,6 @@ const initialState: CurrentCompanyState = {
     integratedBankList: null,
     isTaxesLoading: false,
     isGetTaxesSuccess: false,
-    activeFinancialYear: null,
     dateRangePickerConfig: {
         opens: 'left',
         locale: {
@@ -161,30 +158,6 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
                 return Object.assign({}, state, newState);
             }
             return state;
-        }
-        case CompanyActions.SET_ACTIVE_FINANCIAL_YEAR: {
-            let res = action.payload;
-            if (res) {
-
-                return {
-                    ...state,
-                    dateRangePickerConfig: {
-                        ...state.dateRangePickerConfig,
-                        ranges: state.dateRangePickerConfig.ranges.map(range => {
-                            if (range.name === DatePickerDefaultRangeEnum.ThisFinancialYearToDate) {
-                                range.value = [moment(res.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day'), moment()];
-                            } else if (range.name === DatePickerDefaultRangeEnum.LastFinancialYear) {
-                                range.value = [
-                                    moment(res.financialYearStarts, GIDDH_DATE_FORMAT).subtract(1, 'year'),
-                                    moment(res.financialYearStarts, GIDDH_DATE_FORMAT).subtract(1, 'year')
-                                ];
-                            }
-                            return range;
-                        })
-                    }
-                };
-            }
-            break;
         }
         case CompanyActions.GET_REGISTRATION_ACCOUNT:
             return Object.assign({}, state, {

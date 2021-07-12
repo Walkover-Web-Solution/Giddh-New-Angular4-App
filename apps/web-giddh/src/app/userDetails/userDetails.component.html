@@ -155,13 +155,12 @@
                                     </tr>
                                 </thead>
                                 <tbody *ngIf="userSessionList.length">
-                                    <tr *ngFor="let session of userSessionList; index as sessionIndex">
+                                    <tr *ngFor="let session of userSessionList; index as sessionIndex; trackBy: trackBySessionId">
                                         <td [attr.data-title]="localeData?.session?.ip_address">{{ session.ipAddress }}</td>
-                                        <td [attr.data-title]="localeData?.session?.signin_date">{{ moment(session.createdAt).format('DD/MM/YYYY') }}
+                                        <td [attr.data-title]="localeData?.session?.signin_date">{{ session.signInDate }}
                                         </td>
-                                        <td [attr.data-title]="localeData?.session?.signin_time">{{ moment(session.createdAt).format('LTS') }}</td>
-                                        <td [attr.data-title]="localeData?.session?.duration">{{moment().diff(session.createdAt,
-                                            'days')}}/{{moment(session.createdAt).subtract(moment()).format('HH/mm/ss')}}
+                                        <td [attr.data-title]="localeData?.session?.signin_time">{{ session.signInTime }}</td>
+                                        <td [attr.data-title]="localeData?.session?.duration">{{session.sessionDuration}}
                                         </td>
                                         <td [attr.data-title]="localeData?.session?.browser_agent"> {{ session.userAgent }}</td>
                                         <td [attr.data-title]="commonLocaleData?.app_action" class="ico-btn text-center">

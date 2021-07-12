@@ -4,7 +4,7 @@ import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, EventEmitte
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
 import { AppState } from '../../../../store/roots';
 import { Store, select } from '@ngrx/store';
-import { Observable, of, ReplaySubject, Subject } from 'rxjs';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
@@ -49,7 +49,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold if keyup for focus in search field is initialized */
     public keyupInitialized: boolean = false;
-
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
     /** Add custom field form reference */
@@ -72,6 +71,8 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True if initial component load */
+    public initialLoad: boolean = true;
 
     // tslint:disable-next-line:no-empty
     constructor(
@@ -137,7 +138,16 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.groupSearchTerms.pipe(
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe(term => {
-                this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
+                if(!this.initialLoad) {
+                    this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
+                } else {
+                    this.searchLoad.subscribe(response => {
+                        if(!response && this.initialLoad) {
+                            this.initialLoad = false;
+                            this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
+                        }
+                    });
+                }
             });
 
         this.groupAndAccountSearchString$.subscribe(s => {

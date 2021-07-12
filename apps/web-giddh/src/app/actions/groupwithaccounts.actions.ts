@@ -103,7 +103,7 @@ export class GroupWithAccountsAction {
                 this._groupService.GetGroupsWithAccounts(action.payload)
             ),
             map((response) => {
-                if (response.request.length > 0) {
+                if (response.request?.length > 0) {
                     this.store.dispatch(this.resetAddAndMangePopup());
                 } else {
                     this.store.dispatch(this._generalActions.getGroupWithAccountsResponse(response));
@@ -295,9 +295,9 @@ export class GroupWithAccountsAction {
             map(response => {
                 let activeGrp: IGroupsWithAccounts;
                 this.store.pipe(select(s => s.groupwithaccounts.groupswithaccounts), take(1)).subscribe(a => {
-                    activeGrp = this.findMyParent(a, response.queryString.groupUniqueName, null);
+                    activeGrp = this.findMyParent(a, response.queryString?.groupUniqueName, null);
                 });
-                response.queryString = { groupUniqueName: response.queryString.groupUniqueName, parentUniqueName: activeGrp.uniqueName };
+                response.queryString = { groupUniqueName: response.queryString?.groupUniqueName, parentUniqueName: activeGrp.uniqueName };
                 return this.deleteGroupResponse(response);
             })));
 

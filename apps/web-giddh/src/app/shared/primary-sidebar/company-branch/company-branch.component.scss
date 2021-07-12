@@ -82,6 +82,15 @@
         .company-list{
             ul{
                 li{
+                    &.btn-group{
+                        span{
+                            padding: 8px 0px;
+                            margin: 0px;
+                            .company-name-right{
+                                max-width: 100%;
+                            }
+                        }
+                    }
                     span, a{
                         i{
                             display:  none;
@@ -94,13 +103,16 @@
                     }
                 }
             }
+            .branch-alias, .branch-company-name{
+                max-width: 190px !important;
+            }
         }
     }
     .company-list{
         height: calc(100vh - 345px) !important;
         overflow: auto;
         margin: 0;
-        padding: 0 0 10px;
+        padding: 0;
 
         ul{
             li{
@@ -137,7 +149,7 @@
                         }
                         .company-name-right{
                             float: left;
-                            width: 86%;
+                            width: 100%;
                             white-space: nowrap;
                             overflow: hidden;
                             text-overflow: ellipsis;
@@ -353,7 +365,7 @@
             }
         }
         .company-list{
-            height: calc(100vh - 225px) !important;
+            height: calc(100vh - 292px) !important;
             overflow-x: hidden;
             padding: 0 !important;
             ul{

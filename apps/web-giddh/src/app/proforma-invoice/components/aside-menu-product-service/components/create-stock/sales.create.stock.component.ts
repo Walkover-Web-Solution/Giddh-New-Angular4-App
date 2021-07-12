@@ -156,9 +156,9 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
 
         // subscribe getActiveView parameters
         this.invViewService.getActiveView().pipe(takeUntil(this.destroyed$)).subscribe(v => {
-            this.groupUniqueName = v.groupUniqueName;
-            this.groupName = v.stockName;
-            this.stockUniqueName = v.stockUniqueName;
+            this.groupUniqueName = v?.groupUniqueName;
+            this.groupName = v?.stockName;
+            this.stockUniqueName = v?.stockUniqueName;
             this.activeGroup = v;
             if (this.groupUniqueName && this.stockUniqueName) {
                 this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName, this.groupUniqueName));

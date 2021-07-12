@@ -340,14 +340,14 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
     public getVoucherVersions() {
         let request = new ProformaGetAllVersionRequest();
-        request.accountUniqueName = this.selectedItem.account.uniqueName;
+        request.accountUniqueName = this.selectedItem?.account.uniqueName;
         request.page = 1;
         request.count = 15;
 
         if (this.voucherType === VoucherTypeEnum.generateProforma) {
-            request.proformaNumber = this.selectedItem.voucherNumber;
+            request.proformaNumber = this.selectedItem?.voucherNumber;
         } else {
-            request.estimateNumber = this.selectedItem.voucherNumber;
+            request.estimateNumber = this.selectedItem?.voucherNumber;
         }
         this.store.dispatch(this._proformaActions.getEstimateVersion(request, this.voucherType));
     }
@@ -824,7 +824,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      */
     public getEditVoucherText(voucherType: string): string {
         let editVoucher = this.localeData?.edit_voucher;
-        editVoucher = editVoucher.replace("[VOUCHER]", voucherType);
+        editVoucher = editVoucher?.replace("[VOUCHER]", voucherType);
         return editVoucher;
     }
 

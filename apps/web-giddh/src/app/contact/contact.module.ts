@@ -24,7 +24,6 @@ import { ContactAdvanceSearchComponent } from './advanceSearch/contactAdvanceSea
 import { AgingReportComponent } from './aging-report/aging-report.component';
 import { AgingDropdownComponent } from './aging-dropdown/aging.dropdown.component'; // importing the module for table column sort
 import { PaymentAsideComponent } from './payment-aside/payment-aside.component';
-import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-account/generic-aside-menu-account.module';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 import { TextMaskModule } from 'angular2-text-mask';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
@@ -69,7 +68,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         Daterangepicker,
         Ng2OrderModule,
         PerfectScrollbarModule,
-        GenericAsideMenuAccountModule,
         NgxDaterangepickerMd.forRoot(),
         TextMaskModule,
         NgxMaskModule.forRoot(),
