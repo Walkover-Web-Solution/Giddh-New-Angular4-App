@@ -306,7 +306,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.checkAndRenewUserSession();
                 }
 
-                if(this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details")) {
+                if(!this.router.url.includes("/pages/settings/taxes") && (this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details") || this.router.url.includes("/pages/invoice/preview/settings/sales"))) {
                     this.toggleSidebarPane(true, false);
                 } else {
                     this.toggleSidebarPane(false, false);
@@ -849,12 +849,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.asideSettingMenuState = (show) ? 'in' : 'out';
             this.toggleBodyClass();
 
-            if (this.asideSettingMenuState === "in") {
-                document.querySelector('body').classList.add('mobile-setting-sidebar');
+            if(this.asideSettingMenuState === "in") {
                 document.querySelector('body').classList.add('aside-setting');
             } else {
-                document.querySelector('body').classList.remove('mobile-setting-sidebar');
                 document.querySelector('body').classList.remove('aside-setting');
+            }
+
+            if (this.asideSettingMenuState === "in") {
+                document.querySelector('body').classList.add('mobile-setting-sidebar');
+            } else {
+                document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
 
         }, ((this.asideSettingMenuState === 'out') ? 100 : 0));
