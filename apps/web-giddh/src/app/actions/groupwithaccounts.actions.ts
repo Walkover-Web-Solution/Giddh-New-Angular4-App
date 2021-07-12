@@ -103,7 +103,7 @@ export class GroupWithAccountsAction {
                 this._groupService.GetGroupsWithAccounts(action.payload)
             ),
             map((response) => {
-                if (response.request.length > 0) {
+                if (response.request?.length > 0) {
                     this.store.dispatch(this.resetAddAndMangePopup());
                 } else {
                     this.store.dispatch(this._generalActions.getGroupWithAccountsResponse(response));

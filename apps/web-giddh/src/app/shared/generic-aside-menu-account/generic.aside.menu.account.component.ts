@@ -18,6 +18,8 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     /** This will hold group unique name */
     @Input() public selectedGroupUniqueName: string;
     @Input() public selectedAccountUniqueName: string;
+    /** True if creating account from cmd+k */
+    @Input() public createAccountFromCommandK: boolean;
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public addEvent: EventEmitter<AddAccountRequest> = new EventEmitter();
     @Output() public updateEvent: EventEmitter<UpdateAccountRequest> = new EventEmitter();

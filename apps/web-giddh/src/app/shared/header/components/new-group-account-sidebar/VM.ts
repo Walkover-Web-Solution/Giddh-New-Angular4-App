@@ -166,16 +166,18 @@ export class GroupAccountSidebarVM {
     }
 
     public activeGroupFromGroupListBackup(groups: GroupsWithAccountsResponse[], uniqueName: string, result: GroupsWithAccountsResponse) {
-        for (let grp of groups) {
-            if (grp?.uniqueName === uniqueName) {
-                result = grp;
-                return result;
-            }
-
-            if (grp?.groups) {
-                result = this.activeGroupFromGroupListBackup(grp?.groups, uniqueName, result);
-                if (result) {
+        if(groups?.length > 0) {
+            for (let grp of groups) {
+                if (grp?.uniqueName === uniqueName) {
+                    result = grp;
                     return result;
+                }
+
+                if (grp?.groups) {
+                    result = this.activeGroupFromGroupListBackup(grp?.groups, uniqueName, result);
+                    if (result) {
+                        return result;
+                    }
                 }
             }
         }

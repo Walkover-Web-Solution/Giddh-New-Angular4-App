@@ -193,10 +193,15 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     /**
      * This function will get called if we want to create a/c or group
      *
+     * @param {string} entity
      * @memberof CommandKComponent
      */
-    public triggerAddManage(): void {
-        this.newTeamCreationEmitter.emit(true);
+    public triggerAddManage(entity: string): void {
+        if(this.listOfSelectedGroups?.length > 0) {
+            this.newTeamCreationEmitter.emit([entity, this.listOfSelectedGroups[this.listOfSelectedGroups.length - 1]]);
+        } else {
+            this.newTeamCreationEmitter.emit([entity, ""]);
+        }
     }
 
     /**
