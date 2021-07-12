@@ -29,11 +29,9 @@
 
 .icon-reload:before {
     content: "\e900";
-    color: #6a6c85;
   }
   .icon-link-arrow:before {
     content: "\e901";
-    color: #668cff;
   }
   .icon-log:before {
     content: "\e001";

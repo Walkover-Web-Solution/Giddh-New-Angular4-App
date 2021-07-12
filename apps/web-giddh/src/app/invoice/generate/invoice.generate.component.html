@@ -72,8 +72,10 @@
                         </div>
                     </div>
                 </form>
-
-                <table class="table basic table-bordered pending-table on-mobile-view">
+            
+            
+            <div class="table-responsive">
+            <table class="table basic giddh-table pending-table on-mobile-view">
 
                     <thead class="thead-background1">
                         <tr>
@@ -254,6 +256,7 @@
                     </tbody>
                 </table>
             </div>
+        </div>
 
             <div *ngIf="ledgersData?.totalItems > 20"
                 [hidden]="(isGetAllRequestInProcess$ | async) || (getLedgerDataInProcess$ | async)"

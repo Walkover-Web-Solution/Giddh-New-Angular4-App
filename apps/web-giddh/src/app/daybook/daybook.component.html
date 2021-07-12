@@ -7,76 +7,96 @@
 
             <!-- ledger header -->
             <div class="col-md-12">
-                <div>
-                    <div class="form-group mr-r15 pull-left linked-entities"
-                        *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
-                        <div class="form-group">
-                            <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName"
-                                [showClear]="false" [ItemHeight]="33" width="100%"
-                                (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
-                                [placeholder]="localeData?.select_entity" [fixedValue]="currentBranch?.alias">
-                                <ng-template #optionTemplate let-option="option">
-                                    <ng-container>
-                                        <a href="javascript:void(0)" class="list-item d-flex">
-                                            <span class="entity-icon">
-                                                <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany"
-                                                    tooltip="{{commonLocaleData?.app_branch}}"></i>
-                                                <i class="icon-company-profile pull-right" *ngIf="option.isCompany"
-                                                    tooltip="{{commonLocaleData?.app_company}}"></i>
-                                            </span>
-                                            <span class="entity-details">
-                                                <div class="item giddh-limit single-line-clamp">{{ option.label || '-'
-                                                    }}</div>
-                                                <div class="item-unique giddh-limit single-line-clamp">
-                                                    {{ option.name || '-' }}
-                                                </div>
-                                            </span>
-                                        </a>
-                                    </ng-container>
-                                </ng-template>
-                            </sh-select>
+                <div class="d-flex justify-content-between">
+                    <div class="d-flex">
+                        <div class="d-flex company-date-picker">
+                            <div class="form-group mb-0 mr-r15 linked-entities"
+                            *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
+                                <div class="form-group mb-0">
+                                    <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName"
+                                    [showClear]="false" [ItemHeight]="33" width="100%"
+                                    (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
+                                    placeholder="localeData?.select_entity" [fixedValue]="currentBranch?.alias">
+                                        <ng-template #optionTemplate let-option="option">
+                                            <ng-container>
+                                                <a href="javascript:void(0)" class="list-item d-flex">
+                                                    <span class="entity-icon">
+                                                        <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany"
+                                                        tooltip="{{commonLocaleData?.app_branch}}"></i>
+                                                        <i class="icon-company-profile pull-right" *ngIf="option.isCompany"
+                                                        tooltip="{{commonLocaleData?.app_company}}"></i>
+                                                    </span>
+                                                    <span class="entity-details">
+                                                        <div class="item giddh-limit single-line-clamp">{{ option.label || '-'
+                                                        }}</div>
+                                                        <div class="item-unique giddh-limit single-line-clamp">
+                                                        {{ option.name || '-' }}
+                                                        </div>
+                                                    </span>
+                                                </a>
+                                            </ng-container>
+                                        </ng-template>
+                                    </sh-select>
+                                </div>
+                            </div>
+                            <div class="form-inline align-items-start d-flex flex-nowrap daybook-filter">
+                                <div class="form-group custom-datepicker mr-r15" (click)="showGiddhDatepicker($event)">
+                                    <i class="icon-calender calendar-addon"></i>
+                                        <input type="text" name="selectedDateRange"
+                                        [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
+                                        class="giddh-datepicker date-range-picker border-radius-2" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-0 expand-collapse-btn">
+                            <a class="cp" (click)="toggleExpand()" data-toggle="tooltip" data-placement="top"
+                                title="{{commonLocaleData?.app_expand_all}}" *ngIf="!isAllExpanded">
+                                <span class="icon-expandIcon"></span>
+                            </a>
+                            <a class="cp" (click)="toggleExpand()" data-toggle="tooltip" data-placement="top"
+                                title="{{commonLocaleData?.app_collapse_all}}" *ngIf="isAllExpanded">
+                                <span class="icon-collapse"></span>
+                            </a>
                         </div>
                     </div>
-                    <div class="form-inline d-block flex-row flex-nowrap daybook-filter">
-                        <div class="form-group custom-datepicker" (click)="showGiddhDatepicker($event)">
-                            <i class="icon-calender calendar-addon"></i>
-                            <input type="text" name="selectedDateRange"
-                                [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
-                                class="giddh-datepicker date-range-picker border-radius-2" />
-                        </div>
-                        <div class="form-group cursor-pointer">
-
-
-                            <div class="advance-icon align-items-center" tooltip="Advance Search"
-                                (click)="onOpenAdvanceSearch()">
-                                <span class="icon-advance-filter"></span>
-                            </div>
-
-
-                        </div>
-                        <div class="form-group expand-collapse-btn">
-
-                            <button type="button" class="btn btn-default" (click)="toggleExpand()">{{ isAllExpanded ?
-                                commonLocaleData?.app_collapse_all : commonLocaleData?.app_expand_all }}
-                            </button>
-
-                        </div>
-                        <div class="clear-filter form-group" *ngIf="showAdvanceSearchIcon">
+                        <div *ngIf="showAdvanceSearchIcon" class="clear-filter form-group mb-0" >
                             <button class="btn btn-filter" (click)="initialRequest();">
                                 <span class="icon-cross"></span> {{commonLocaleData?.app_clear_filter}}
                             </button>
                         </div>
-                        <div class="expand-export">
-                            <button type="button" class="btn btn-default expand-btn-hide-desktop"
-                                (click)="toggleExpand()">{{ isAllExpanded ? commonLocaleData?.app_collapse_all :
-                                commonLocaleData?.app_expand_all }}
-                            </button>
-                            <button type="button" class="btn btn-default export-btn pull-right mr-0"
-                                (click)="exportDaybook()"
-                                [disabled]="!((daybookData$ | async)?.entries?.length > 0)">{{commonLocaleData?.app_export}}</button>
+                        <div class="filter-export d-flex">
+                            <div class="form-group mb-0 cursor-pointer">
+                                <div class="advance-icon align-items-center btn btn-primary"
+                                    [tooltip]="commonLocaleData?.app_advance_search" (click)="onOpenAdvanceSearch()">
+                                        <span class="pd-r05 d-sm-flex d-none">{{commonLocaleData?.app_filter}}</span>
+                                        <span class="icon-advance-filter"></span>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-default export-btn mr-0"
+                            (click)="exportDaybook()"
+                            [disabled]="!((daybookData$ | async)?.entries?.length > 0)">{{commonLocaleData?.app_export}}</button>
                         </div>
-
-                    </div>
+                    
+                </div>
+                <div class="d-md-none d-flex justify-content-between mr-t1">
+                    <button type="button" class="btn btn-default mr-0"
+                    (click)="exportDaybook()"
+                    [disabled]="!((daybookData$ | async)?.entries?.length > 0)">{{commonLocaleData?.app_export}}</button>
+                        <div class="expand-collapse-btn">
+                            <a class="cp" (click)="toggleExpand()" data-toggle="tooltip" data-placement="top"
+                            title="{{commonLocaleData?.app_expand_all}}" *ngIf="!isAllExpanded">
+                                <span class="icon-expandIcon"></span>
+                            </a>
+                            <a class="cp" (click)="toggleExpand()" data-toggle="tooltip" data-placement="top"
+                                title="{{commonLocaleData?.app_collapse_all}}" *ngIf="isAllExpanded">
+                                <span class="icon-collapse"></span>
+                            </a>
+                        </div>
+                </div>
+                <div class="d-none clear-filter-responsive mr-t1 clear-filter" *ngIf="showAdvanceSearchIcon">
+                    <button class="btn btn-filter" (click)="initialRequest();">
+                        <span class="icon-cross"></span> {{commonLocaleData?.app_clear_filter}}
+                    </button>
                 </div>
             </div>
             <div class="container-fluid">
@@ -87,7 +107,7 @@
                     </div>
 
                     <div class="clearfix trial-balance table-responsive">
-                        <table class="tb-head table-bordered table basic on-mobile-view">
+                        <table class="tb-head table-bordered  giddh-table table basic on-mobile-view">
                             <thead>
                                 <tr>
                                     <th>{{commonLocaleData?.app_date}}</th>
@@ -109,32 +129,32 @@
                                 </tr>
                             </thead>
 
-                            <tbody *ngFor="let entry of (daybookData$ | async)?.entries" (click)="expandEntry(entry);"
-                                class="daybook-table-tbody">
-                                <tr (dblclick)="showUpdateLedgerModal(entry)"
-                                    (keydown.enter)="showUpdateLedgerModal(entry)">
-                                    <td [attr.data-title]="commonLocaleData?.app_date">{{ entry.entryDate }}</td>
-                                    <td [attr.data-title]="commonLocaleData?.app_particular">{{ entry.particular.name }}
-                                    </td>
-                                    <td [attr.data-title]="localeData?.voucher_name">{{ entry.voucherName }}</td>
-                                    <td class="text-right" [attr.data-title]="localeData?.voucher_no">{{ entry.voucherNo
-                                        }}</td>
-                                    <td class="text-right" [attr.data-title]="localeData?.debit_amount">
-                                        <span class="d-flex justify-content-end">
-                                            <amount-field [amount]="entry.debitAmount || 0" [currencySymbol]="false"
-                                                [currencyCode]="false">
-                                            </amount-field>
-                                        </span>
-                                    </td>
-                                    <td class="text-right" [attr.data-title]="localeData?.credit_amount">
-                                        <span class="d-flex justify-content-end">
-                                            <amount-field [amount]="entry.creditAmount || 0" [currencySymbol]="false"
-                                                [currencyCode]="false">
-                                            </amount-field>
-                                        </span>
-                                    </td>
-                                    <td *ngIf="isEntryExpanded" colspan="7"> </td>
-                                </tr>
+                        <tbody *ngFor="let entry of (daybookData$ | async)?.entries" (click)="expandEntry(entry);"
+                            class="daybook-table-tbody">
+                            <tr (dblclick)="showUpdateLedgerModal(entry)"
+                                (keydown.enter)="showUpdateLedgerModal(entry)">
+                                <td [attr.data-title]="commonLocaleData?.app_date" class="no-wrap">{{ entry.entryDate }}</td>
+                                <td [attr.data-title]="commonLocaleData?.app_particular">{{ entry.particular.name }}
+                                </td>
+                                <td [attr.data-title]="localeData?.voucher_name">{{ entry.voucherName }}</td>
+                                <td class="text-right" [attr.data-title]="localeData?.voucher_no">{{ entry.voucherNo }}
+                                </td>
+                                <td class="text-right" [attr.data-title]="localeData?.debit_amount">
+                                    <span class="d-flex justify-content-end">
+                                        <amount-field [amount]="entry.debitAmount || 0" [currencySymbol]="false"
+                                            [currencyCode]="false">
+                                        </amount-field>
+                                    </span>
+                                </td>
+                                <td class="text-right" [attr.data-title]="localeData?.credit_amount">
+                                    <span class="d-flex justify-content-end">
+                                        <amount-field [amount]="entry.creditAmount || 0" [currencySymbol]="false"
+                                            [currencyCode]="false">
+                                        </amount-field>
+                                    </span>
+                                </td>
+                                <td *ngIf="isEntryExpanded" colspan="7"> </td>
+                            </tr>
                                 <ng-container *ngIf="entry !== undefined && entry.isExpanded">
                                     <tr *ngFor="let details of entry.otherTransactions">
                                         <td class="hide-td"></td>
@@ -191,8 +211,8 @@
                                             </td>
                                         </ng-container>
                                     </tr>
-                                </ng-container>
-                            </tbody>
+                            </ng-container>
+                        </tbody>
                         </table>
                     </div>
                     <div class="mr-t2 text-center">

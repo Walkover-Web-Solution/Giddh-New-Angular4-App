@@ -840,12 +840,12 @@ export class GeneralService {
     /**
      * This will give multi-lingual current voucher label
      *
-     * @param {string} voucherCode Voucher code
-     * @param {*} commonLocaleData Global context of multi-lingual keys
-     * @return {*} {string} Multi-lingual current voucher label
-     * @memberof GeneralService
-     */
-     public getCurrentVoucherLabel(voucherCode: string, commonLocaleData: any): string {
+    * @param {string} voucherCode Voucher code
+    * @param {*} commonLocaleData Global context of multi-lingual keys
+    * @return {*} {string} Multi-lingual current voucher label
+    * @memberof GeneralService
+    */
+    public getCurrentVoucherLabel(voucherCode: string, commonLocaleData: any): string {
         switch(voucherCode) {
             case AdjustedVoucherType.Sales: case AdjustedVoucherType.SalesInvoice: return commonLocaleData?.app_voucher_types.sales;
             case AdjustedVoucherType.Purchase: return commonLocaleData?.app_voucher_types.purchase;
@@ -855,7 +855,7 @@ export class GeneralService {
             default: return '';
         }
     }
-
+    
     /**
      * This will sort branches by alias
      *
@@ -888,5 +888,19 @@ export class GeneralService {
         } else {
             return branchAInt > branchBInt ? 1 : -1;
         }
+    }
+
+    /**
+     * Determines if an element is child element to another element
+     *
+     * @param {*} child Element received as child
+     * @param {*} parent Element received as parent
+     * @return {boolean} True, if element is child of another element
+     * @memberof GeneralService
+     */
+    public childOf(child: any, parent: any): boolean {
+        while ((child = child.parentNode) && child !== parent) {
+        }
+        return !!child;
     }
 }

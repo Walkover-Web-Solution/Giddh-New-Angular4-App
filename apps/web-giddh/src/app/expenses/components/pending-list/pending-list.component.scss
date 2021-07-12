@@ -27,8 +27,7 @@
     }
 }
 
-.icon-sort-asc,
-.icon-sort-dsc {
+.icon-sort-asc {
     display: inline-block;
     cursor: pointer;
     float: left;
@@ -55,14 +54,21 @@
 }
 
 .td-search-box .input-container input {
-    height: 50px;
+    height: 36px;
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
     color: $nero;
     border: none;
-    background-color: $white-smoke;
+    background-color: $gray-95;
 }
 .td-search-box {
     position: relative;
+}
+
+@media (min-width: 769px){
+    .table-responsive{
+        max-height: calc(100vh - 245px);
+        overflow-y: auto;
+    }
 }
