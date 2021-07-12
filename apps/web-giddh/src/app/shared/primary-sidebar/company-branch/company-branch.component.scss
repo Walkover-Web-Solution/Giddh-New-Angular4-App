@@ -82,6 +82,15 @@
         .company-list{
             ul{
                 li{
+                    &.btn-group{
+                        span{
+                            padding: 8px 0px;
+                            margin: 0px;
+                            .company-name-right{
+                                max-width: 100%;
+                            }
+                        }
+                    }
                     span, a{
                         i{
                             display:  none;
@@ -93,6 +102,9 @@
                         }
                     }
                 }
+            }
+            .branch-alias, .branch-company-name{
+                max-width: 190px !important;
             }
         }
     }
@@ -137,7 +149,7 @@
                         }
                         .company-name-right{
                             float: left;
-                            width: 86%;
+                            width: 100%;
                             white-space: nowrap;
                             overflow: hidden;
                             text-overflow: ellipsis;
