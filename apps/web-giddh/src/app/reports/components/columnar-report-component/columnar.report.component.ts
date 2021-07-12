@@ -92,8 +92,10 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany && !this.activeFinancialYear) {
                 this.companyUniqueName = activeCompany.uniqueName;
-                this.activeFinancialYear = activeCompany.activeFinancialYear.uniqueName;
-                this.selectActiveFinancialYear();
+                if(activeCompany.activeFinancialYear) {
+                    this.activeFinancialYear = activeCompany.activeFinancialYear.uniqueName;
+                    this.selectActiveFinancialYear();
+                }
             }
         });
         
@@ -311,12 +313,12 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     }
 
     /**
-   * To call API according to pagination
-   *
-   * @param {*} event Pagination page change event
-   * @returns {void}
-   * @memberof ColumnarReportComponent
-   */
+     * To call API according to pagination
+     *
+     * @param {*} event Pagination page change event
+     * @returns {void}
+     * @memberof ColumnarReportComponent
+     */
     public pageChanged(event: any): void {
         if (event && this.getColumnarRequestModel) {
             if (event && event.page === this.getColumnarRequestModel.page) {
