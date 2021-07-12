@@ -100,7 +100,6 @@ export class LedgerVM {
             otherTaxesSum: 0,
             otherTaxType: 'tcs',
             exchangeRate: 1,
-            exchangeRateForDisplay: 1,
             valuesInAccountCurrency: true
         };
     }
@@ -380,7 +379,6 @@ export class BlankLedgerVM {
     public tdsTcsTaxesSum: number;
     public otherTaxType: 'tcs' | 'tds';
     public exchangeRate: number = 1;
-    public exchangeRateForDisplay: number = 1;
     public valuesInAccountCurrency: boolean = true;
     public baseCurrencyToDisplay?: ICurrencyResponse;
     public foreignCurrencyToDisplay?: ICurrencyResponse;
