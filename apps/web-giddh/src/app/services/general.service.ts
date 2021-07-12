@@ -898,7 +898,7 @@ export class GeneralService {
      * @return {boolean} True, if element is child of another element
      * @memberof GeneralService
      */
-    public childOf(child, parent): boolean {
+    public childOf(child: any, parent: any): boolean {
         while ((child = child.parentNode) && child !== parent) {
         }
         return !!child;
