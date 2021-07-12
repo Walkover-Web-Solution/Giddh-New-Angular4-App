@@ -4614,6 +4614,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.store.dispatch(this.proformaActions.resetActiveVoucher());
         }
 
+        document.querySelector('body').classList.remove('update-scroll-hidden');
+
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
