@@ -107,7 +107,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            <button class="btn btn-default desktop-view-btn" *ngIf="selectedVoucher === 'sales' && selectedInvoicesList.length && isExported" [tooltip]="commonLocaleData?.app_export"
+                            <button class="btn btn-default desktop-view-btn" *ngIf="selectedVoucher === 'sales' && selectedInvoicesList?.length && isExported" [tooltip]="commonLocaleData?.app_export"
                             (click)="exportCsvDownload()" [ladda]="exportInvoiceRequestInProcess$ | async"
                             data-spinner-size="20px">
                                 <span class="icon-export-icon"></span>
@@ -243,7 +243,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button class="btn btn-default mr-r15" *ngIf="selectedVoucher === 'sales' && selectedInvoicesList.length && isExported" [tooltip]="commonLocaleData?.app_export"
+                                <button class="btn btn-default mr-r15" *ngIf="selectedVoucher === 'sales' && selectedInvoicesList?.length && isExported" [tooltip]="commonLocaleData?.app_export"
                                 (click)="exportCsvDownload()" [ladda]="exportInvoiceRequestInProcess$ | async"
                                 data-spinner-size="20px">
                                     <span class="icon-export-icon"></span>
