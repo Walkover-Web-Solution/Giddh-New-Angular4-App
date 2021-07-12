@@ -757,7 +757,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
                         if(!this.isTodaysDateSelected) {
                             response.financialYears.forEach(key => {
-                                if(moment(key.financialYearEnds, GIDDH_DATE_FORMAT).format("YYYY") === this.selectedDateRange?.endDate?.format("YYYY")) {
+                                if(this.selectedDateRange?.endDate >= moment(key.financialYearStarts, GIDDH_DATE_FORMAT) && this.selectedDateRange?.endDate <= moment(key.financialYearEnds, GIDDH_DATE_FORMAT)) {
                                     activeFinancialYear = {
                                         uniqueName: key.uniqueName,
                                         isLocked: key.isLocked,
