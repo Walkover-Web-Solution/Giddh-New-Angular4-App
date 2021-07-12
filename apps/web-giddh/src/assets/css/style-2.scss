@@ -10140,3 +10140,42 @@ body.prevent-body-scroll {
 .giddh-no-permissions {
     display: none !important;
 }
+
+/** Angular material datepicker **/
+.mat-calendar-header {
+    padding: 2px 8px 2px 8px !important;
+    background-color: $chetwode-blue;
+    color: $white;
+}
+.mat-calendar-controls {
+    margin: 0% calc(33% / 7 - 16px) !important;
+}
+.mat-calendar-arrow {
+    border-top-color: $white !important;
+}
+.mat-datepicker-toggle, .mat-datepicker-content .mat-calendar-next-button, .mat-datepicker-content .mat-calendar-previous-button {
+    color: $white !important;
+}
+.mat-calendar-content {
+    padding: 0px 8px 0px 8px !important;
+}
+.mat-calendar-body-label {
+    visibility: hidden !important;
+}
+.mat-calendar-body-label[colspan="7"] {
+    display: none !important;
+}
+.mat-calendar-table-header th {
+    color: $black;
+    padding: 10px 0 10px 0 !important;
+}
+.mat-calendar-table-header th.mat-calendar-table-header-divider {
+    padding: 0px !important;
+}
+.mat-datepicker-content .mat-calendar {
+    height: 320px !important;
+}
+mat-year-view table tr td.mat-calendar-body-label {
+    display: none !important;
+}
+/** Angular material datepicker **/
