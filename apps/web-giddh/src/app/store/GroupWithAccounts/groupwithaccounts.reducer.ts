@@ -362,7 +362,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                 let newObj = Object.assign({}, activeGrpData.body, { isOpen: true, isActive: true });
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 let result = false;
-                updateActiveGroupFunc(groupArray, activeGrpData.queryString.groupUniqueName, activeGrpData.body, result);
+                updateActiveGroupFunc(groupArray, activeGrpData.queryString?.groupUniqueName, activeGrpData.body, result);
                 return Object.assign({}, state, {
                     activeGroup: newObj,
                     activeGroupUniqueName: newObj.uniqueName,
@@ -394,7 +394,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
             let updatedAccount: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
             if (updatedAccount.status === 'success') {
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString.groupUniqueName, updatedAccount.queryString.accountUniqueName, false);
+                UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString?.groupUniqueName, updatedAccount.queryString?.accountUniqueName, false);
                 return Object.assign({}, state, {
                     activeAccount: action.payload.body,
                     updateAccountInProcess: false,
@@ -466,7 +466,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
             let m: BaseResponse<MoveGroupResponse, MoveGroupRequest> = action.payload;
             if (m.status === 'success') {
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                let deletedItem = removeGroupFunc(groupArray, m.queryString.groupUniqueName, null);
+                let deletedItem = removeGroupFunc(groupArray, m.queryString?.groupUniqueName, null);
                 addNewGroupFunc(groupArray, deletedItem, m.request.parentGroupUniqueName, false);
                 return Object.assign({}, state, {
                     groupswithaccounts: groupArray,
@@ -540,7 +540,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                 };
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 if (groupArray) {
-                    addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString.groupUniqueName, false);
+                    addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString?.groupUniqueName, false);
                 }
                 return Object.assign({}, state, {
                     createAccountInProcess: false,
@@ -562,7 +562,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                 };
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 if (groupArray) {
-                    addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString.groupUniqueName, false);
+                    addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString?.groupUniqueName, false);
                 }
                 return Object.assign({}, state, {
                     createAccountInProcess: false,

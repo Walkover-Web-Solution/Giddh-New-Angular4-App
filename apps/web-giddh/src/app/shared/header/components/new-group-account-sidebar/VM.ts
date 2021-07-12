@@ -68,7 +68,7 @@ export class GroupAccountSidebarVM {
                 let resp: BaseResponse<GroupResponse, GroupUpateRequest> = payload;
                 let Items = cloneDeep(this.columns[columnLength - 2].Items);
                 this.columns[columnLength - 2].Items = Items.map(p => {
-                    if (p.uniqueName === resp.queryString.groupUniqueName) {
+                    if (p.uniqueName === resp.queryString?.groupUniqueName) {
                         p = {
                             ...p,
                             name: resp.body.name,
