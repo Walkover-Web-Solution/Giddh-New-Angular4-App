@@ -8020,9 +8020,6 @@ button#more-btn-inventory,
 .menu_open .inventory-sidebar {
     left: 0 !important;
 }
-.mobile-setting-sidebar {
-    overflow-y: hidden;
-}
 .select-linked-accounts sh-select-menu .menu {
     max-height: 250px;
 }
@@ -8447,6 +8444,9 @@ body.update-scroll-hidden {
     #content-wrapper{
         padding-right: 0;
     }
+}
+.manage-account-popup.full-screen-modal{
+    z-index: 999991;
 }
 /* responsive  starts here*/
 
@@ -8929,6 +8929,9 @@ body.update-scroll-hidden {
     }
 }
 @media (max-width: 767px) {
+    .mobile-setting-sidebar {
+        overflow-y: hidden;
+    }
     .customer-aging .nav.nav-tabs{
         display: flex !important;
     }
@@ -10071,4 +10074,7 @@ body.prevent-body-scroll {
 }
 .sky-blue-bg {
     background-color: $light-sky-blue;
+}
+.giddh-no-permissions {
+    display: none !important;
 }
