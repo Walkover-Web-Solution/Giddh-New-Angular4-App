@@ -8,7 +8,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { createSelector } from 'reselect';
 import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, publishReplay, refCount, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { StockReportActions } from '../../../actions/inventory/stocks-report.actions';
 import { CompanyResponse } from '../../../models/api-models/Company';
@@ -297,7 +297,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         }
 
         this.invViewService.getActiveView().pipe(takeUntil(this.destroyed$)).subscribe(v => {
-            if (!v.isOpen) {
+            if (v && !v.isOpen) {
                 this.activeGroupName = v.name;
                 this.groupUniqueName = v.groupUniqueName;
                 if (this.groupUniqueName) {
@@ -431,6 +431,11 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.GroupStockReportRequest.from = this.fromDate || null;
         this.GroupStockReportRequest.to = this.toDate || null;
         this.invViewService.setActiveDate(this.GroupStockReportRequest.from, this.GroupStockReportRequest.to);
+        this.activeGroup$.pipe(take(1)).subscribe(activeGroup => {
+            if (activeGroup) {
+                this.GroupStockReportRequest.stockGroupUniqueName = activeGroup.uniqueName;
+            }
+        });
         if (resetPage) {
             this.GroupStockReportRequest.page = 1;
         }
