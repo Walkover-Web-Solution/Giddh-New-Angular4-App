@@ -95,6 +95,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     public universalDate$: Observable<any>;
     /** Emits some value if either group or stock is active, used to show the detailed report */
     public shouldShowInventoryReport$: Observable<any>;
+    /** Emits when group delete operation is successful */
+    public removeGroupSuccess$: Observable<any>;
 
     constructor(
         private store: Store<AppState>,
@@ -207,6 +209,15 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         });
         this.shouldShowInventoryReport$ = combineLatest([this.store.pipe(select(appStore => appStore.inventory.activeStockUniqueName)), this.store.pipe(select(appStore => appStore.inventory.activeGroupUniqueName))]).pipe(map(values => values[0] || values[1]));
+        this.removeGroupSuccess$ = this.store.pipe(select(appStore => appStore.inventory.deleteGroupSuccess), takeUntil(this.destroyed$));
+        this.removeGroupSuccess$.subscribe(response => {
+            if (response) {
+                // A group or sub-group is deleted
+                let groupWithStocks = [];
+                this.groupsWithStocks$.subscribe(groupsWithStocks => groupWithStocks = groupsWithStocks ?? []);
+                this.loadDefaultGroup(groupWithStocks);
+            }
+        });
     }
 
     public ngOnDestroy() {
@@ -227,32 +238,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.groupsWithStocks$.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a && !this.activeView) {
-                this.GroupStockReportRequest = new GroupStockReportRequest();
-                let firstElement = a[0];
-                if (firstElement) {
-                    this.universalDate$.pipe(take(1)).subscribe(dateObj => {
-                        if (dateObj) {
-                            this.GroupStockReportRequest.from = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                            this.GroupStockReportRequest.to = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
-                        } else {
-                            this.GroupStockReportRequest.from = moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
-                            this.GroupStockReportRequest.to = moment().format(GIDDH_DATE_FORMAT);
-                        }
-                    });
-
-                    this.GroupStockReportRequest.stockGroupUniqueName = firstElement.uniqueName;
-                    this.activeView = 'group';
-                    this.firstDefaultActiveGroup = firstElement.uniqueName;
-                    this.firstDefaultActiveGroupName = firstElement.name;
-                    if (this.activeTabIndex === 0) {
-                        // Selected tab is Inventory
-                        this.loadBranchAndWarehouseDetails();
-                        this.store.dispatch(this.sideBarAction.GetInventoryGroup(firstElement.uniqueName)); // open first default group
-                    } else {
-                        this.store.dispatch(this.sideBarAction.GetInventoryGroup(firstElement.uniqueName)); // open first default group
-                        this.store.dispatch(this.stockReportActions.GetGroupStocksReport(cloneDeep(this.GroupStockReportRequest))); // open first default group
-                    }
-                }
+                this.loadDefaultGroup(a);
             } else if (a?.length === 0 && this.activeView) {
                 this.invViewService.clearMessage('stock_group');
             }
@@ -533,6 +519,42 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
             }
             else if(this.activeTabIndex === 3) {
                 return "Report";
+            }
+        }
+    }
+
+    /**
+     * Loads default group data
+     *
+     * @private
+     * @param {Array<any>} response
+     * @memberof InventoryComponent
+     */
+    private loadDefaultGroup(response: Array<any>): void {
+        this.GroupStockReportRequest = new GroupStockReportRequest();
+        let firstElement = response[0];
+        if (firstElement) {
+            this.universalDate$.pipe(take(1)).subscribe(dateObj => {
+                if (dateObj) {
+                    this.GroupStockReportRequest.from = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                    this.GroupStockReportRequest.to = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                } else {
+                    this.GroupStockReportRequest.from = moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
+                    this.GroupStockReportRequest.to = moment().format(GIDDH_DATE_FORMAT);
+                }
+            });
+
+            this.GroupStockReportRequest.stockGroupUniqueName = firstElement.uniqueName;
+            this.activeView = 'group';
+            this.firstDefaultActiveGroup = firstElement.uniqueName;
+            this.firstDefaultActiveGroupName = firstElement.name;
+            if (this.activeTabIndex === 0) {
+                // Selected tab is Inventory
+                this.loadBranchAndWarehouseDetails();
+                this.store.dispatch(this.sideBarAction.GetInventoryGroup(firstElement.uniqueName)); // open first default group
+            } else {
+                this.store.dispatch(this.sideBarAction.GetInventoryGroup(firstElement.uniqueName)); // open first default group
+                this.store.dispatch(this.stockReportActions.GetGroupStocksReport(cloneDeep(this.GroupStockReportRequest))); // open first default group
             }
         }
     }
