@@ -3667,7 +3667,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     private handleUpdateInvoiceForm(invoiceForm: NgForm): void {
         let requestObject: any = this.prepareDataForApi();
-        document.querySelector('body').classList.add('update-scroll-hidden');
         if (!requestObject) {
             this.startLoader(false);
             return;
@@ -4138,9 +4137,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (modal && modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
             let tax = this.companyTaxesList.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
             if ((!modal.appliedOtherTax || !modal.appliedOtherTax?.name) && entry.otherTaxModal && entry.otherTaxModal.appliedOtherTax) {
-                entry.otherTaxModal.appliedOtherTax.name = tax.name;
+                entry.otherTaxModal.appliedOtherTax.name = tax?.name;
             }
-            if (['tcsrc', 'tcspay'].includes(tax.taxType)) {
+            if (['tcsrc', 'tcspay'].includes(tax?.taxType)) {
 
                 if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
                     taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
@@ -4154,7 +4153,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 entry.otherTaxType = 'tds';
             }
 
-            totalTaxes += tax.taxDetail[0].taxValue;
+            totalTaxes += tax?.taxDetail[0]?.taxValue;
 
             entry.otherTaxSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
             entry.otherTaxModal = modal;
