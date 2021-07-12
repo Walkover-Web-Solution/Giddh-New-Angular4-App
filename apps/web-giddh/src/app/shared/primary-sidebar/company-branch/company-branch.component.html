@@ -27,7 +27,7 @@
                     <p class="font-12 d-flex justify-content-between mr-t1">
                         <span><small>{{companyList?.length}} {{localeData?.companies}}</small></span>
                         <span class="cursor-pointer" [tooltip]="localeData?.refresh_manually"
-                            (click)="refreshCompanies($event)"><i class="icon-reload font-22"></i></span>
+                            (click)="refreshCompanies($event)"><i class="icon-reload refresh-manually font-22"></i></span>
                     </p>
                     <button class="btn btn-sky-blue mr-0" (click)="openModalCreateNewCompany()">
                         <i class="icon-plus font-12"></i>
@@ -54,11 +54,11 @@
                         <span><small>{{branchList?.length}} {{localeData?.branches}}</small></span>
                         <span class="cursor-pointer" [tooltip]="localeData?.refresh_manually"
                             (click)="getCompanyBranches(1, companyBranches, true)">
-                            <i class="icon-reload font-22"></i>
+                            <i class="icon-reload refresh-manually font-22"></i>
                         </span>
                     </p>
-                    <button class="btn btn-sky-blue mr-0" [routerLink]="['/pages/settings/create-branch']"
-                        *ngIf="activeCompany?.uniqueName === companyBranches?.uniqueName"><i class="icon-plus font-12"></i>
+                    <button class="btn btn-sky-blue mr-0" (click)="createBranch()"
+                        *ngIf="activeCompany?.uniqueName === companyBranches?.uniqueName && !currentBranchUniqueName"><i class="icon-plus font-12"></i>
                         <span>{{localeData?.create_branch}}</span>
                     </button>
                 </div>
@@ -108,7 +108,7 @@
             <p class="font-12 d-flex justify-content-between mr-t1">
                 <span><small>{{companyList?.length}} {{localeData?.companies}}</small></span>
                 <span class="cursor-pointer" [tooltip]="localeData?.refresh_manually"
-                    (click)="refreshCompanies($event)"><i class="icon-reload font-22"></i></span>
+                    (click)="refreshCompanies($event)"><i class="icon-reload refresh-manually font-22"></i></span>
             </p>
             <button class="btn btn-sky-blue mr-0" (click)="openModalCreateNewCompany()">
                 <i class="icon-plus font-12"></i>
@@ -138,13 +138,13 @@
                                                     <span class="d-flex align-items-center digit-blue"> <i class="icon-link-arrow font-14"></i> <span class="digit-blue font-12">{{ localeData?.goto_company }}</span> </span>
                                                 </span>
                                                 <button class="btn btn-sky-blue mr-0 pr-r2"
-                                                *ngIf="activeCompany?.uniqueName === company.uniqueName"
-                                                [routerLink]="['/pages/settings/create-branch']"> <i class="icon-plus font-12"></i>
+                                                *ngIf="activeCompany?.uniqueName === company.uniqueName && !currentBranchUniqueName"
+                                                (click)="createBranch()"> <i class="icon-plus font-12"></i>
                                                     <span>{{localeData?.create_branch}}</span>
                                                 </button>
                                             </p>
                                             <span class="cursor-pointer pl-0 pt-0 ml-auto" [tooltip]="localeData?.refresh_manually" placement="left"
-                                                (click)="getCompanyBranches(2, company, true)"><i class="icon-reload font-22"></i></span>
+                                                (click)="getCompanyBranches(2, company, true)"><i class="icon-reload refresh-manually font-22"></i></span>
                                         </div>
                                     </div>
                                 </li>

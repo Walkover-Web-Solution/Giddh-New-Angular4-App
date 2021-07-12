@@ -6,6 +6,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../../actions/company.actions';
 import { LoginActions } from '../../../actions/login.action';
+import { orderBy } from '../../../lodash-optimized';
 import { BranchFilterRequest, CompanyResponse, Organization, OrganizationDetails } from '../../../models/api-models/Company';
 import { OrganizationType } from '../../../models/user-login-state';
 import { CompanyService } from '../../../services/companyService.service';
@@ -99,7 +100,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
                 return;
             }
 
-            let orderedCompanies = _.orderBy(companies, 'name');
+            let orderedCompanies = orderBy(companies, 'name');
             this.companyList = orderedCompanies;
             this.companyListForFilter = orderedCompanies;
             this.companies$ = observableOf(orderedCompanies);
@@ -122,9 +123,9 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
 
                 this.currentCompanyBranches$.subscribe(response => {
                     if (response && response.length) {
-                        this.currentCompanyBranches = response;
-                        this.companyBranches.branches = response;
-                        this.branchList = response;
+                        this.branchList = response.sort(this.generalService.sortBranches);
+                        this.currentCompanyBranches = this.branchList;
+                        this.companyBranches.branches = this.branchList;
                         this.changeDetectorRef.detectChanges();
                     }
                 });
@@ -291,7 +292,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
             let branchFilterRequest: BranchFilterRequest = { from: '', to: '', companyUniqueName: company.uniqueName };
             this.settingsBranchService.GetAllBranches(branchFilterRequest).subscribe(response => {
                 if (response?.status === "success") {
-                    this.branchList = response.body;
+                    this.branchList = response.body.sort(this.generalService.sortBranches);
                     company.branches = this.branchList;
                     this.companyBranches = company;
                     this.branchRefreshInProcess = false;
@@ -406,5 +407,14 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
             this.viewingCompany = false;
             this.changeDetectorRef.detectChanges();
         }, 50);
+    }
+
+    /**
+     * This will route to create branch page
+     *
+     * @memberof CompanyBranchComponent
+     */
+    public createBranch(): void {
+        this.router.navigate(['/pages/settings/create-branch']);
     }
 }
