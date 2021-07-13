@@ -196,6 +196,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     ngOnInit() {
+        document.querySelector('body').classList.add('update-scroll-hidden');
         if (this.selectedItem) {
             if (!this.isVoucherDownloading) {
                 this.downloadVoucher('base64');
@@ -309,7 +310,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.performActionAfterClose();
         this.invoiceSearchEvent.emit("");
         this.closeEvent.emit(true);
-        document.querySelector('body').classList.remove('update-scroll-hidden');
     }
 
     public toggleBodyClass() {
@@ -569,6 +569,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('fixed');
+        document.querySelector('body').classList.remove('update-scroll-hidden');
     }
 
     /**

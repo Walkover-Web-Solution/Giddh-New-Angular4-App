@@ -68,7 +68,7 @@ export class GroupAccountSidebarVM {
                 let resp: BaseResponse<GroupResponse, GroupUpateRequest> = payload;
                 let Items = cloneDeep(this.columns[columnLength - 2].Items);
                 this.columns[columnLength - 2].Items = Items.map(p => {
-                    if (p.uniqueName === resp.queryString.groupUniqueName) {
+                    if (p.uniqueName === resp.queryString?.groupUniqueName) {
                         p = {
                             ...p,
                             name: resp.body.name,
@@ -166,16 +166,18 @@ export class GroupAccountSidebarVM {
     }
 
     public activeGroupFromGroupListBackup(groups: GroupsWithAccountsResponse[], uniqueName: string, result: GroupsWithAccountsResponse) {
-        for (let grp of groups) {
-            if (grp?.uniqueName === uniqueName) {
-                result = grp;
-                return result;
-            }
-
-            if (grp?.groups) {
-                result = this.activeGroupFromGroupListBackup(grp?.groups, uniqueName, result);
-                if (result) {
+        if(groups?.length > 0) {
+            for (let grp of groups) {
+                if (grp?.uniqueName === uniqueName) {
+                    result = grp;
                     return result;
+                }
+
+                if (grp?.groups) {
+                    result = this.activeGroupFromGroupListBackup(grp?.groups, uniqueName, result);
+                    if (result) {
+                        return result;
+                    }
                 }
             }
         }

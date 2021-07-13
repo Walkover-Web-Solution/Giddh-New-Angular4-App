@@ -26,7 +26,7 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div class="form-group mr-r15 pull-left linked-entities mb-0"
+                                <div class="form-group mr-r15 pull-left linked-entities mb-0" name="currentBranch"
                                     *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
                                     <div>
                                         <sh-select [options]="currentCompanyBranches"
@@ -82,7 +82,7 @@
                             <div class="pull-left header-left d-none"
                             [ngClass]="{'on-company': currentCompanyBranches?.length >= 2 }">
                             <div class="form-group max-width-250 search-field mb-0" *ngIf="activeTab !== 'aging'">
-                                <input type="text" [placeholder]="localeData?.name_email_mobile"
+                                <input type="text" name="searchStr" [placeholder]="localeData?.name_email_mobile"
                                     class="form-control" [(ngModel)]="searchStr"
                                     (ngModelChange)="searchStr$.next($event)" />
                                 <span class="input-addon">
@@ -93,7 +93,7 @@
                             </div>
                             <div class="customer-footer-box pull-right ">
                                 <button class="btn btn-group btn-filter mobile-button-filter"
-                                    *ngIf="selectedAccountsList.length>0" (click)="clearSelectedContacts();">
+                                    *ngIf="selectedAccountsList?.length>0" (click)="clearSelectedContacts();">
                                     <span class="icon-cross"></span>
 
                                     <span>{{commonLocaleData?.app_clear}}</span>
@@ -203,7 +203,7 @@
                                         class="number-total">{{activeTab === 'customer' ? totalCustomers :
                                         totalVendors}}</span>
                                             <span *ngIf="selectedCheckedContacts.length>0"
-                                            class="number-total total-customer-vendor-count"><strong>{{selectedCheckedContacts.length}}</strong>/{{activeTab === 'customer' ? totalCustomers :
+                                            class="number-total total-customer-vendor-count"><strong>{{selectedCheckedContacts?.length}}</strong>/{{activeTab === 'customer' ? totalCustomers :
                                             totalVendors}}</span>
                                     </div>
                                 </h5>

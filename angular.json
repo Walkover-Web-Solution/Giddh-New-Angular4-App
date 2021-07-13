@@ -88,6 +88,7 @@
                         "polyfills": "apps/web-giddh/src/polyfills.ts",
                         "tsConfig": "apps/web-giddh/tsconfig.app.json",
                         "aot": true,
+                        "baseHref": "/",
                         "assets": [
                             {
                                 "glob": "**/*",
@@ -124,7 +125,14 @@
                             "mergeRules": {
                                 "externals": "replace"
                             }
-                        }
+                        },
+                        "optimization": false,
+                        "outputHashing": "none",
+                        "sourceMap": true,
+                        "namedChunks": true,
+                        "extractLicenses": false,
+                        "vendorChunk": true,
+                        "buildOptimizer": false
                     },
                     "configurations": {
                         "local": {
@@ -259,26 +267,9 @@
                                     "maximumError": "10mb"
                                 }
                             ]
-                        },
-                        "development": {
-                            "outputPath": "dist/apps/web-giddh",
-                            "customWebpackConfig": {
-                                "path": "apps/web-giddh/webpack.partial.js",
-                                "mergeRules": {
-                                    "externals": "replace"
-                                }
-                            },
-                            "baseHref": "/",
-                            "optimization": false,
-                            "outputHashing": "none",
-                            "sourceMap": true,
-                            "namedChunks": false,
-                            "aot": true,
-                            "extractLicenses": false,
-                            "vendorChunk": false,
-                            "buildOptimizer": false
                         }
-                    }
+                    },
+                    "defaultConfiguration": ""
                 },
                 "serve": {
                     "builder": "@angular-builders/custom-webpack:dev-server",
@@ -294,8 +285,7 @@
                         "development": {
                             "browserTarget": "web-giddh:build:development"
                         }
-                    },
-                    "defaultConfiguration": "development"
+                    }
                 },
                 "lint": {
                     "builder": "@angular-builders/custom-webpack:tslint",
