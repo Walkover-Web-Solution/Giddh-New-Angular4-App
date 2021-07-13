@@ -34,7 +34,8 @@
                                     <p>{{subItem?.description}}</p>
                                 </div>
                                 <div *ngIf="!subItem.link" class="single-menu-item mr-b1"
-                                    (click)="handleItemClick(subItem)" [class.active]="">
+                                    [class.active]="menuIndex === filteredMenuIndex && itemIndex === subItemIndex"
+                                    (click)="handleItemClick(subItem)">
                                     <h4> <i class="{{subItem?.icon}} mr-r1"></i> {{subItem?.label}} </h4>
                                     <p>{{subItem?.description}}</p>
                                 </div>
