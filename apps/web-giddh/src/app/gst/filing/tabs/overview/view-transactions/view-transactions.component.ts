@@ -17,6 +17,7 @@ import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service'
 import { saveAs } from 'file-saver';
 import { GstReport } from '../../../../constants/gst.constant';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 export const filterTransaction = {
     entityType: '',
@@ -72,6 +73,9 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     /** selected Invoice object */
     public selectedInvoice: GstTransactionSummary;
     /** Returns the enum to be used in template */
+    /** It will store mobile size */
+    public isMobileScreen: boolean = false;
+
     public get GstReport() {
         return GstReport;
     }
@@ -81,10 +85,17 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceService: InvoiceService,
         private toaster: ToasterService,
-        private generalService: GeneralService) {
+        private generalService: GeneralService,
+        private breakpointObserver: BreakpointObserver) {
         this.viewTransaction$ = this.store.pipe(select(p => p.gstR.viewTransactionData), takeUntil(this.destroyed$));
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
         this.viewTransactionInProgress$ = this.store.pipe(select(p => p.gstR.viewTransactionInProgress), takeUntil(this.destroyed$));
+        this.breakpointObserver
+        .observe(['(max-width: 768px)'])
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((state: BreakpointState) => {
+            this.isMobileScreen = state.matches;
+        });
     }
 
     public ngOnInit() {
