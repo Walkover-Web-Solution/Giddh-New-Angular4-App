@@ -526,7 +526,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
      * @param {TemplateRef<any>} template
      * @memberof InventoryAddGroupComponent
      */
-    openModal(template: TemplateRef<any>): void {
+    public openModal(template: TemplateRef<any>): void {
         this.modalRef = this.modalService.show(template);
     }
 
@@ -535,7 +535,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
      *
      * @memberof InventoryAddGroupComponent
      */
-    hideModal(): void {
+    public hideModal(): void {
         this.modalRef.hide();
     }
 }
