@@ -115,7 +115,7 @@ import { SettingsBranchActions } from '../actions/settings/branch/settings.branc
 import { OrganizationType } from '../models/user-login-state';
 import { AccountsAction } from '../actions/accounts.actions';
 import { VoucherTypeToNamePipe } from '../shared/header/pipe/voucherTypeToNamePipe/voucherTypeToNamePipe.pipe';
-import { TitleCasePipe } from '@angular/common';
+import { Location, TitleCasePipe } from '@angular/common';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
@@ -148,6 +148,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @Input() public invoiceNo = '';
     @Input() public invoiceType: VoucherTypeEnum = VoucherTypeEnum.sales;
     @Input() public selectedItem: InvoicePreviewDetailsVm;
+    /** True if this component is called directly */
+    @Input() public callFromOutside: boolean = true;
 
     @ViewChild(ElementViewContainerRef, { static: true }) public elementViewContainerRef: ElementViewContainerRef;
     @ViewChild('bulkItemsModal', { static: true }) public bulkItemsModal: ModalDirective;
@@ -651,7 +653,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private ngZone: NgZone,
         private accountActions: AccountsAction,
         private voucherTypeToNamePipe: VoucherTypeToNamePipe,
-        private titleCasePipe: TitleCasePipe
+        private titleCasePipe: TitleCasePipe,
+        private location: Location
     ) {
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
         this.advanceReceiptAdjustmentData.adjustments = [];
@@ -3898,6 +3901,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.depositAccountUniqueName = '';
             this.depositAmount = 0;
             this.isUpdateMode = false;
+
+            if(this.callFromOutside) {
+                this.location?.back();
+            }
         } else {
             this.startLoader(false);
             this._toasty.errorToast(response.message, response.code);
