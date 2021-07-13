@@ -126,6 +126,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
                         this.branchList = response.sort(this.generalService.sortBranches);
                         this.currentCompanyBranches = this.branchList;
                         this.companyBranches.branches = this.branchList;
+                        this.companyBranches.branchCount = this.branchList?.length
                         this.changeDetectorRef.detectChanges();
                     }
                 });
@@ -295,6 +296,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
                     this.branchList = response.body.sort(this.generalService.sortBranches);
                     company.branches = this.branchList;
                     this.companyBranches = company;
+                    this.companyBranches.branchCount = this.branchList?.length;
                     this.branchRefreshInProcess = false;
 
                     if (this.searchBranch) {
@@ -306,6 +308,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
                     this.branchList = [];
                     company.branches = this.branchList;
                     this.companyBranches = company;
+                    this.companyBranches.branchCount = this.branchList?.length;
                     this.branchRefreshInProcess = false;
 
                     this.changeDetectorRef.detectChanges();
@@ -322,12 +325,18 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
      *
      * @memberof CompanyBranchComponent
      */
-    public showAllBranches(): void {
-        setTimeout(() => {
-            if (this.staticTabs && this.staticTabs.tabs[1]) {
-                this.staticTabs.tabs[1].active = true;
+    public showAllBranches(company: any): void {
+        if(company?.branchCount > 1) {
+            setTimeout(() => {
+                if (this.staticTabs && this.staticTabs.tabs[1]) {
+                    this.staticTabs.tabs[1].active = true;
+                }
+            }, 20);
+        } else {
+            if(company?.uniqueName !== this.activeCompany?.uniqueName) {
+                this.changeCompany(company?.uniqueName, '', false);
             }
-        }, 20);
+        }
     }
 
     /**
