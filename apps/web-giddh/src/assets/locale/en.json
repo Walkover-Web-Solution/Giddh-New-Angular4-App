@@ -612,7 +612,6 @@
         "discount_deleted": "Discount deleted successfully.",
         "financial_year_locked": "Financial year locked successfully.",
         "financial_year_unlocked": "Financial year unlocked successfully.",
-        "financial_year_switched": "Financial year switched successfully.",
         "financial_year_period_updated": "Financial year period updated.",
         "tag_created": "Tag created successfully.",
         "tag_updated": "Tag updated successfully.",
