@@ -10,11 +10,8 @@ import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.a
 import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
 import { ReceiptVoucherDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/recipt';
 import { Router } from '@angular/router';
-<<<<<<< HEAD
 import { findIndex, isEmpty } from 'apps/web-giddh/src/app/lodash-optimized';
-=======
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
->>>>>>> 53da19b6e4 (shalinee | TEST | showing download invoice modal on responsive view)
 
 @Component({
     selector: 'download-or-send-mail-invoice',
@@ -132,7 +129,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                 this.showEditButton = false;
             }
         });
-        
+
         this.store.pipe(select(p => p.invoice.settings), takeUntil(this.destroyed$)).subscribe((o: any) => {
             if (o && o.invoiceSettings) {
                 this.isSendSmsEnabled = o.invoiceSettings.sendInvLinkOnSms;
