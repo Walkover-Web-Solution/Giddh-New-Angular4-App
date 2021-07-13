@@ -44,8 +44,6 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
     public isLoggedInWithSocialAccount$: Observable<boolean>;
     /** Company name initials (upto 2 characters) */
     public companyInitials: any = '';
-    /** store current selected company */
-    public selectedCompany: Observable<CompanyResponse>;
     /** This will hold all company data and branches of the company */
     public companyBranches: any = {};
     /** Search company name */
@@ -112,7 +110,6 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
             if (selectedCmp && selectedCmp?.uniqueName === this.generalService.companyUniqueName) {
-                this.selectedCompany = observableOf(selectedCmp);
                 this.activeCompany = selectedCmp;
                 this.companyInitials = this.generalService.getInitialsFromString(selectedCmp.name);
                 this.activeDesign = (this.activeCompany?.name.charCodeAt(0) <= 77) ? 1 : 2;
