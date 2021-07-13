@@ -824,7 +824,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public toggleSidebarPane(show: boolean, isMobileSidebar: boolean): void {
         setTimeout(() => {
             this.isMobileSidebar = isMobileSidebar;
-            this.asideHelpSupportMenuState = 'out';
+            if(show) {
+                this.asideHelpSupportMenuState = 'out';
+            }
             this.asideSettingMenuState = (show) ? 'in' : 'out';
             this.asideInventorySidebarMenuState = (show && this.asideInventorySidebarMenuState === 'out') ? 'in' : 'out';
             this.toggleBodyClass();
