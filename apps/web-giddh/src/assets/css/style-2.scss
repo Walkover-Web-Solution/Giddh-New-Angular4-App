@@ -6349,7 +6349,7 @@ footer#footer.absolute-footer {
 }
 
 .fixed.modal-open .modal-backdrop {
-    z-index: -1040;
+    z-index: 99999;
 }
 
 section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
@@ -8442,6 +8442,14 @@ body.update-scroll-hidden {
 .on-setting-page.aside-setting, .on-user-page.aside-setting{
     #content-wrapper{
         padding-right: 240px;
+    }
+}
+.aside-setting{
+    #content-wrapper{
+        padding-left: 60px !important;
+       &.menu_open{
+            padding-left: 60px !important;
+        }
     }
 }
 .gst-sidebar-open.on-setting-page.aside-setting{
