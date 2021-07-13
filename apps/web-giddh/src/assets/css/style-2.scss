@@ -6337,7 +6337,7 @@ footer#footer.absolute-footer {
 }
 
 .fixed.modal-open .modal-backdrop {
-    z-index: -1040;
+    z-index: 99999;
 }
 
 section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
@@ -8409,6 +8409,14 @@ body.update-scroll-hidden {
     }
 
 }
+.aside-setting{
+    #content-wrapper{
+        padding-left: 60px !important;
+       &.menu_open{
+            padding-left: 60px !important;
+        }
+    }
+}
 .on-setting-page.aside-setting, .on-user-page.aside-setting{
     #content-wrapper{
         padding-right: 240px;
@@ -8983,17 +8991,14 @@ body.update-scroll-hidden {
     }
 }
 @media (max-width: 767px) {
-<<<<<<< HEAD
+    .mobile-setting-sidebar {
+        overflow-y: hidden;
+    }
     .gst-sidebar-open {
         #content-wrapper{
            padding-left: 0 !important;
        }
    }
-=======
-    .mobile-setting-sidebar {
-        overflow-y: hidden;
-    }
->>>>>>> dccfd02a11 (shalinee | test | UI issue fixed on setting sidebar)
     .customer-aging .nav.nav-tabs{
         display: flex !important;
     }
