@@ -1289,7 +1289,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
      * @param {TemplateRef<any>} template
      * @memberof InventoryAddStockComponent
      */
-    openModal(template: TemplateRef<any>): void {
+    public openModal(template: TemplateRef<any>): void {
         this.modalRef = this.modalService.show(template);
     }
 
@@ -1298,7 +1298,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
      *
      * @memberof InventoryAddGroupComponent
      */
-    hideModal(): void {
+    public hideModal(): void {
         this.modalRef.hide();
     }
 }
