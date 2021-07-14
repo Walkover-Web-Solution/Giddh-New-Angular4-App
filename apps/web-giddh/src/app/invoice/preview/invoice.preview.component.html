@@ -184,7 +184,7 @@
                                 <div>
                                     <div class="btn-group" dropdown *ngIf="!isCompany && selectedVoucher === 'sales'"
                                         [autoClose]="true">
-                                        <button id="ddl-newinv" dropdownToggle type="button"
+                                        <button *ngIf="!isCompany" id="ddl-newinv" dropdownToggle type="button"
                                             class="btn btn-sky-blue dropdown-toggle dropdown-btn-new"
                                             aria-controls="dropdown-ddl-newinv">
                                             {{localeData?.new_invoice}}
