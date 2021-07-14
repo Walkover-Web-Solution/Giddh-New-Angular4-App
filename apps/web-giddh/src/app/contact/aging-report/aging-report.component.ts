@@ -434,7 +434,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      * @param {*} el Element reference for focusing
      * @memberof AgingReportComponent
      */
-    public toggleSearch(fieldName: string, el: any) {
+    public toggleSearch(fieldName: string, el: any): void {
         if (fieldName === 'name') {
             this.showNameSearch = true;
         }
