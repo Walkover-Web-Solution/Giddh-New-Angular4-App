@@ -1467,8 +1467,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.sidebarForcelyExpanded = true;
         }
         this.isSidebarExpanded = true;
-        document.querySelector('.primary-sidebar')?.classList?.remove('sidebar-collapse');
-        document.querySelector('.nav-left-bar')?.classList?.remove('width-60');
+        this.generalService.expandSidebar();
     }
 
     /**
@@ -1498,8 +1497,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if(!this.sideMenu.isExpanded || forceCollapse) {
             this.sidebarForcelyExpanded = false;
             this.isSidebarExpanded = false;
-            document.querySelector('.primary-sidebar')?.classList?.add('sidebar-collapse');
-            document.querySelector('.nav-left-bar')?.classList?.add('width-60');
+            this.generalService.collapseSidebar();
         }
     }
 

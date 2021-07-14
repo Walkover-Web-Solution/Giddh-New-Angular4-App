@@ -151,6 +151,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public pdfFileURL: any = '';
     /** This will hold the attached file in Purchase Bill */
     private attachedAttachmentBlob: Blob;
+    /** True if left sidebar is expanded */
+    private isSidebarExpanded: boolean = false;
 
     constructor(
         private _cdr: ChangeDetectorRef,
@@ -194,6 +196,13 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     ngOnInit() {
+        if(document.getElementsByClassName("sidebar-collapse")?.length > 0) {
+            this.isSidebarExpanded = false;
+        } else {
+            this.isSidebarExpanded = true;
+            this._generalService.collapseSidebar();
+        }
+
         document.querySelector('body').classList.add('update-scroll-hidden');
         if (this.selectedItem) {
             if (!this.isVoucherDownloading) {
@@ -561,6 +570,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     public ngOnDestroy(): void {
+        if(this.isSidebarExpanded) {
+            this.isSidebarExpanded = false;
+            this._generalService.expandSidebar();
+        }
         this.performActionAfterClose();
         this.destroyed$.next(true);
         this.destroyed$.complete();
