@@ -392,7 +392,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
      * @memberof TbPlBsFilterComponent
      */
     public handleBranchChange(selectedEntity: any): void {
-        this.currentBranch.name = selectedEntity.label;
+        this.currentBranch.name = selectedEntity?.label;
         this.expand = false;
         setTimeout(() => {
             this.expandAll.emit(this.expand);
