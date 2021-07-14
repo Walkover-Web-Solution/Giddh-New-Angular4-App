@@ -1,8 +1,30 @@
 <div class="responsive table-responsive">
     <table class="table basic giddh-table on-mobile-view">
         <thead>
-            <tr>
-                <th class="d-flex align-items-center">{{commonLocaleData?.app_particular}}</th>
+            <tr class="register-table-th">
+                <th>{{salesRegisterTotal.particular }}</th>
+                <th class="text-right">{{salesRegisterTotal.sales | giddhCurrency}}</th>
+                <th *ngIf="salesRegisterTotal.returns" class="text-right">{{salesRegisterTotal.returns | giddhCurrency}}
+                </th>
+                <th *ngIf="salesRegisterTotal.taxTotal" class="text-right">{{salesRegisterTotal.taxTotal |
+                    giddhCurrency}}</th>
+                <th *ngIf="salesRegisterTotal.discountTotal" class="text-right">{{salesRegisterTotal.discountTotal |
+                    giddhCurrency}}</th>
+                <th *ngIf="isTcsTdsApplicable && salesRegisterTotal.tcsTotal" class="text-right">
+                    {{salesRegisterTotal.tcsTotal | giddhCurrency}}</th>
+                <th *ngIf="isTcsTdsApplicable && salesRegisterTotal.tdsTotal" class="text-right">
+                    {{salesRegisterTotal.tdsTotal | giddhCurrency}}</th>
+                <th *ngIf="salesRegisterTotal.netSales" class="text-right">{{salesRegisterTotal.netSales |
+                    giddhCurrency}}</th>
+                <th *ngIf="salesRegisterTotal.cumulative" class="text-right">{{salesRegisterTotal.cumulative |
+                    giddhCurrency}}</th>
+            </tr>
+            <tr class="register-sales-purchase">
+                <th>
+                    <div class="d-flex align-items-center">
+                        {{commonLocaleData?.app_particular}}
+                    </div>
+                </th>
                 <th class="width-200px">
                     <div class="d-flex">
                         <div class="flex-fill text-right ">
@@ -86,26 +108,5 @@
                     class="text-right">{{item.cumulative | giddhCurrency}}</td>
             </tr>
         </tbody>
-
-        <tfoot class="sales-register-footer bold">
-            <tr>
-                <th><a class="particular" href="javascript:void(0)">{{salesRegisterTotal.particular }}</a></th>
-                <th class="text-right">{{salesRegisterTotal.sales | giddhCurrency}}</th>
-                <th *ngIf="salesRegisterTotal.returns" class="text-right">{{salesRegisterTotal.returns | giddhCurrency}}
-                </th>
-                <th *ngIf="salesRegisterTotal.taxTotal" class="text-right">{{salesRegisterTotal.taxTotal |
-                    giddhCurrency}}</th>
-                <th *ngIf="salesRegisterTotal.discountTotal" class="text-right">{{salesRegisterTotal.discountTotal |
-                    giddhCurrency}}</th>
-                <th *ngIf="isTcsTdsApplicable && salesRegisterTotal.tcsTotal" class="text-right">
-                    {{salesRegisterTotal.tcsTotal | giddhCurrency}}</th>
-                <th *ngIf="isTcsTdsApplicable && salesRegisterTotal.tdsTotal" class="text-right">
-                    {{salesRegisterTotal.tdsTotal | giddhCurrency}}</th>
-                <th *ngIf="salesRegisterTotal.netSales" class="text-right">{{salesRegisterTotal.netSales |
-                    giddhCurrency}}</th>
-                <th *ngIf="salesRegisterTotal.cumulative" class="text-right">{{salesRegisterTotal.cumulative |
-                    giddhCurrency}}</th>
-            </tr>
-        </tfoot>
     </table>
 </div>

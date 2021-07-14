@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild, ChangeDetectorRef, OnDestroy, Input } from '@angular/core';
+import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild, ChangeDetectorRef, Input, OnDestroy, ElementRef } from '@angular/core';
 import { AgingAdvanceSearchModal, AgingDropDownoptions, ContactAdvanceSearchCommonModal, DueAmountReportQueryRequest, DueAmountReportResponse } from '../../models/api-models/Contact';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
@@ -7,7 +7,7 @@ import { cloneDeep, map as lodashMap } from '../../lodash-optimized';
 import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { PaginationComponent } from 'ngx-bootstrap/pagination';
-import { ModalOptions } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
@@ -16,10 +16,12 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import * as moment from 'moment/moment';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { ContactAdvanceSearchComponent } from '../advanceSearch/contactAdvanceSearch.component';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { GeneralService } from '../../services/general.service';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../models/user-login-state';
-import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { FormControl } from '@angular/forms';
 
 @Component({
     selector: 'aging-report',
@@ -70,8 +72,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     @ViewChild('filterDropDownList', { static: true }) public filterDropDownList: BsDropdownDirective;
     /** Advance search component instance */
     @ViewChild('agingReportAdvanceSearch', { read: ContactAdvanceSearchComponent, static: true }) public agingReportAdvanceSearch: ContactAdvanceSearchComponent;
-    @Output() public creteNewCustomerEvent: EventEmitter<boolean> = new EventEmitter();
-
+    @Output() public creteNewCustomerEvent: EventEmitter<boolean> = new EventEmitter()
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** Stores the branch list of a company */
@@ -82,6 +83,24 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public activeCompany: any;
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
+    /** Stores the datepicker modal reference */
+    public modalRef: BsModalRef;
+    /** Stores the date field position in datepicker */
+    public dateFieldPosition: any = { x: 0, y: 0 };
+    /** Datepicker reference */
+    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: ElementRef;
+    /* Selected range label */
+    public selectedRangeLabel: any = "";
+    /* This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /** Stores the current range of date picker */
+    public selectedDateRange: any;
+    /* This will store available date ranges */
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /** Stores the searched name value for the Name filter */
+    public searchedName: FormControl = new FormControl();
+    /** True, if name search field is to be shown in the filters */
+    public showNameSearch: boolean;
 
     /** Observable if loading in process */
     public getAgingReportRequestInProcess$: Observable<boolean>;
@@ -94,7 +113,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         private _breakpointObserver: BreakpointObserver,
         private componentFactoryResolver: ComponentFactoryResolver,
         private settingsBranchAction: SettingsBranchActions,
-        private generalService: GeneralService) {
+        private generalService: GeneralService,
+        private modalService: BsModalService) {
         this.agingDropDownoptions$ = this.store.pipe(select(s => s.agingreport.agingDropDownoptions), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.setDueRangeOpen$ = this.store.pipe(select(s => s.agingreport.setDueRangeOpen), takeUntil(this.destroyed$));
@@ -137,10 +157,12 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.getDueAmountreportData();
         this.currentOrganizationType = this.generalService.currentOrganizationType;
-        this.universalDate$.subscribe(a => {
-            if (a) {
-                this.fromDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
+        this.universalDate$.subscribe(universalDate => {
+            if (universalDate) {
+                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
+                this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
             }
         });
         let companyUniqueName = null;
@@ -218,6 +240,13 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                     this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
                 }
             }
+        });
+        this.searchedName.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$)
+        ).subscribe(searchedText => {
+            this.searchStr$.next(searchedText);
         });
     }
 
@@ -332,6 +361,111 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity?.label;
         this.getDueReport();
+    }
+
+    /**
+     * This will show datepicker
+     *
+     * @param {*} element
+     * @memberof AgingReportComponent
+     */
+     public showGiddhDatepicker(element): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-xl giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
+        );
+    }
+
+    /**
+     * This will hide datepicker
+     *
+     * @memberof AgingReportComponent
+     */
+     public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+     * Date change handler for Aging report datepicker
+     *
+     * @param {*} [value] Selected date
+     * @return {*}  {void}
+     * @memberof AgingReportComponent
+     */
+    public selectedDate(value?: any): void {
+        if (value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.selectedRangeLabel = "";
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
+            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.dueAmountReportRequest.from = this.fromDate;
+            this.dueAmountReportRequest.to = this.toDate;
+            this.getDueReport();
+        }
+    }
+
+    /**
+     * Click outside handler for Name field search
+     *
+     * @param {*} event Click outside event
+     * @param {*} element Focused element
+     * @param {string} searchedFieldName Name of the field through which search is to be performed
+     * @return {*}  {void}
+     * @memberof AgingReportComponent
+     */
+    public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
+        if (searchedFieldName === 'name') {
+            if (this.searchedName.value) {
+                return;
+            }
+            if (this.generalService.childOf(event.target, element)) {
+                return;
+            } else {
+                this.showNameSearch = false;
+            }
+        }
+    }
+
+    /**
+     * Toogles the search field
+     *
+     * @param {string} fieldName Field name to toggle
+     * @param {*} el Element reference for focusing
+     * @memberof AgingReportComponent
+     */
+    public toggleSearch(fieldName: string, el: any): void {
+        if (fieldName === 'name') {
+            this.showNameSearch = true;
+        }
+        setTimeout(() => {
+            el.focus();
+        });
+    }
+
+    /**
+     * Returns the placeholder for the current searched field
+     *
+     * @param {string} fieldName Field name for which placeholder is required
+     * @returns {string} Placeholder text
+     * @memberof AgingReportComponent
+     */
+    public getSearchFieldText(fieldName: string): string {
+        if (fieldName === 'name') {
+            return this.localeData?.search_name;
+        }
+        return '';
     }
 
     /**
