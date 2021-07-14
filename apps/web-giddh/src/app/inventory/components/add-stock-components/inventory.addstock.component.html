@@ -437,7 +437,7 @@
 <!-- popup for the delete group -->
 <ng-template #deleteGroupStockTemplate>
     <confirm-modal [title]="'Confirmation'"
-        [body]="'Deleing this stock will un-link & delete it forever. Are you sure you want to delete the stock?'"
+        [body]="'Deleting this stock will un-link & delete it forever. Are you sure you want to delete the stock?'"
         [permanentlyDeleteMessage]="'It will be deleted permanently and will no longer be accessible from any other module.'" [ok]="'Yes'" [cancel]="'No'"
         (cancelCallBack)="hideModal()" (successCallBack)="deleteStock();hideModal()">
     </confirm-modal>
