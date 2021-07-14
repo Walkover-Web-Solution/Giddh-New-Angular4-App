@@ -30,7 +30,7 @@ import { GeneralService } from '../../services/general.service';
 import { ShareRequestForm } from '../../models/api-models/Permission';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
 import { SettingsIntegrationService } from '../../services/settings.integraion.service';
-import { SettingsIntegrationTab } from '../constants/settings.constant';
+import { SettingsAmountLimitDuration, SettingsIntegrationTab } from '../constants/settings.constant';
 import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
 import { cloneDeep, find, isEmpty } from '../../lodash-optimized';
@@ -90,6 +90,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     @ViewChild('paymentForm', { static: true }) paymentForm: NgForm;
     @ViewChild('paymentFormAccountName', { static: true }) paymentFormAccountName: ShSelectComponent;
     @ViewChild('createNewAccountModal', {static: false}) public createNewAccountModal: ModalDirective;
+    @ViewChild('createNewAccountUserModal', {static: false}) public createNewAccountUserModal: ModalDirective;
 
     //variable holding account Info
     public registeredAccount;
@@ -107,8 +108,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isCreateInvalid: boolean = false;
     /** update bank form validation for amount */
     public isUpdateInvalid: boolean = false;
-
-
     /** Maximum amount length limit */
     public maxLimit: number = 8;
     /** Maximum amount limit */
@@ -153,6 +152,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public forceClearPaymentUpdates$: Observable<IForceClear> = observableOf({ status: false });
     /** This will hold users list */
     public paymentAlersUsersList: any[] = [];
+    /** Form Group for create new account form */
+    public createNewAccountUserForm: FormGroup;
+    public amountLimitDurations: IOption[] = [];
 
     constructor(
         private router: Router,
@@ -1572,6 +1574,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 { label: this.localeData?.payment?.amount_limit_types?.bank_limit, value: "max" },
                 { label: this.localeData?.payment?.amount_limit_types?.custom, value: "custom" },
             ];
+
+            this.amountLimitDurations = [
+                { label: 'Day', value: SettingsAmountLimitDuration.Day},
+                { label: 'Week', value: SettingsAmountLimitDuration.Week},
+                { label: 'Month', value: SettingsAmountLimitDuration.Month}
+            ];
         }
     }
 
@@ -1600,5 +1608,19 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     public closeCreateNewAccountModal(): void {
         this.createNewAccountModal?.hide();
+    }
+
+    public openCreateNewAccountUserModal(): void {
+        this.createNewAccountUserForm = this._fb.group({
+            loginId: ['', Validators.required],
+            maxAmountLimit: [''],
+            duration: ['UNLIMITED']
+        });
+
+        this.createNewAccountUserModal?.show();
+    }
+
+    public closeCreateNewAccountUserModal(): void {
+        this.createNewAccountUserModal?.hide();
     }
 }
