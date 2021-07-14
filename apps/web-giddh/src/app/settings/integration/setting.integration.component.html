@@ -508,4 +508,41 @@
             </div>
         </div>
     </div>
+    <div bsModal #createNewAccountUserModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
+        <div class="modal-dialog modal-sm" *ngIf="createNewAccountUserModal?.isShown">
+            <div class="modal-content">
+                <form autocomplete="off" novalidate name="createNewAccountUserForm" [formGroup]="createNewAccountUserForm"
+                class="new-account-form" (ngSubmit)="saveNewAccountUser()">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Add User</h3>
+                        <span data-dismiss="modal" aria-label="Close" class="close hover-orange" (click)="closeCreateNewAccountUserModal()">×</span>
+                    </div>
+                    <div class="modal-body">
+                        <div class="clearfix mr-t1">
+                            <label>Account Number</label>
+                            2343432423432
+                        </div>
+                        <div class="mr-t1">
+                            <label>Linked Account</label>
+                            Account Name
+                        </div>
+                        <div class="clearfix mr-t1">
+                            <label>Login ID<span class="red-text">*</span></label>
+                            <input class="form-control" required formControlName="loginId"
+                                name="loginId" type="text" placeholder="Enter Login ID">
+                        </div>
+                        <div class="clearfix mr-t1">
+                            <label>Limit Up To<span class="red-text">*</span></label>
+                            <input class="form-control" formControlName="maxAmountLimit"
+                                name="maxAmountLimit" type="text" placeholder="Enter Amount">
+                            <sh-select formControlName="duration" name="duration" placeholder="Duration" [options]="amountLimitDurations" required></sh-select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success" [disabled]="createNewAccountUserForm?.invalid">Connect</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </ng-container>

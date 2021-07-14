@@ -54,3 +54,10 @@ export interface SettingsAsideConfiguration {
     };
     linkedEntities?: Array<any>;
 }
+
+/** Amount Limit Duration options for integration of bank account */
+export enum SettingsAmountLimitDuration {
+    Day = 'day',
+    Week = 'week',
+    Month = 'month'
+}
