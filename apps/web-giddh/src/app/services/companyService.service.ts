@@ -205,7 +205,7 @@ export class CompanyService {
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.post(this.config.apiUrl + COMPANY_API.SEND_EMAIL
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':groupUniqueName', encodeURIComponent(request.params.groupUniqueName))
+            .replace(':groupUniqueName', encodeURIComponent(request.params?.groupUniqueName))
             .replace(':from', encodeURIComponent(request.params.from))
             .replace(':to', encodeURIComponent(request.params.to))
             .replace(':sortBy', encodeURIComponent(request.params.sortBy))
@@ -220,7 +220,7 @@ export class CompanyService {
         this.companyUniqueName = this._generalService.companyUniqueName;
         let url = this.config.apiUrl + COMPANY_API.DOWNLOAD_CSV
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':groupUniqueName', encodeURIComponent(request.params.groupUniqueName))
+            .replace(':groupUniqueName', encodeURIComponent(request.params?.groupUniqueName))
             .replace(':from', encodeURIComponent(request.params.from))
             .replace(':to', encodeURIComponent(request.params.to))
             .replace(':sortBy', encodeURIComponent(request.params.sortBy))
@@ -240,7 +240,7 @@ export class CompanyService {
         return this._http.post(this.config.apiUrl + COMPANY_API.SEND_SMS
 
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':groupUniqueName', encodeURIComponent(request.params.groupUniqueName))
+            .replace(':groupUniqueName', encodeURIComponent(request.params?.groupUniqueName))
             .replace(':from', encodeURIComponent(request.params.from))
             .replace(':to', encodeURIComponent(request.params.to))
             .replace(':sortBy', encodeURIComponent(request.params.sortBy))

@@ -417,11 +417,11 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
             let d: BaseResponse<string, any> = action.payload;
             if (d.status === 'success') {
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                removeAccountFunc(groupArray, d.request.accountUniqueName, d.request.groupUniqueName, null);
+                removeAccountFunc(groupArray, d.request.accountUniqueName, d.request?.groupUniqueName, null);
                 return Object.assign({}, state, {
                     groupswithaccounts: groupArray,
                     activeAccount: null,
-                    activeGroup: { uniqueName: d.request.groupUniqueName },
+                    activeGroup: { uniqueName: d.request?.groupUniqueName },
                     isDeleteAccSuccess: true,
                     isDeleteAccInProcess: false
                 });
