@@ -117,8 +117,10 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
                     if (response && response.length) {
                         this.branchList = response.sort(this.generalService.sortBranches);
                         this.currentCompanyBranches = this.branchList;
-                        this.companyBranches.branches = this.branchList;
-                        this.companyBranches.branchCount = this.branchList?.length
+                        if(this.companyBranches) {
+                            this.companyBranches.branches = this.branchList;
+                            this.companyBranches.branchCount = this.branchList?.length
+                        }
                         this.changeDetectorRef.detectChanges();
                     }
                 });
@@ -308,7 +310,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
                 }
             });
         } else {
-            this.branchList = company.branches;
+            this.branchList = company?.branches;
             this.companyBranches = company;
         }
     }
@@ -360,14 +362,16 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
      * @memberof CompanyBranchComponent
      */
     public filterBranchList(event: any): void {
-        this.companyBranches.branches = this.branchList?.filter((branch) => {
-            if (!branch.alias) {
-                return branch.name.toLowerCase().includes(event.toLowerCase());
-            } else {
-                return branch.name.toLowerCase().includes(event.toLowerCase()) || branch.alias.toLowerCase().includes(event.toLowerCase());
-            }
-        });
-        this.changeDetectorRef.detectChanges();
+        if(this.companyBranches) {
+            this.companyBranches.branches = this.branchList?.filter((branch) => {
+                if (!branch.alias) {
+                    return branch.name.toLowerCase().includes(event.toLowerCase());
+                } else {
+                    return branch.name.toLowerCase().includes(event.toLowerCase()) || branch.alias.toLowerCase().includes(event.toLowerCase());
+                }
+            });
+            this.changeDetectorRef.detectChanges();
+        }
     }
 
     /**

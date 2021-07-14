@@ -81,7 +81,9 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         this.getInvoiceSettings();
         // subscribe to url
         this.sub = this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            this.groupUniqueName = params['groupUniqueName'];
+            if(params) {
+                this.groupUniqueName = params['groupUniqueName'];
+            }
         });
 
         // add group form
