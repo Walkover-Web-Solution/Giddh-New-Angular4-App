@@ -63,7 +63,7 @@ import { GiddhPageLoaderComponent } from './giddh-page-loader/giddh-page-loader.
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { CompanyBranchComponent } from './primary-sidebar/company-branch/company-branch.component';
-
+import {MatIconModule} from '@angular/material/icon';
 import localeEn from '@angular/common/locales/en-GB';
 import localeHi from '@angular/common/locales/hi';
 import localeMr from '@angular/common/locales/mr';
@@ -189,7 +189,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         ConfirmationModalModule,
         DatepickerWrapperModule,
         HamburgerMenuModule,
-        ValidateSectionPermissionDirectiveModule
+        ValidateSectionPermissionDirectiveModule,
+        MatIconModule
     ],
     exports: [
         CommonModule,

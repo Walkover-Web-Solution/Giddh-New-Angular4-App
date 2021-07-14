@@ -1,13 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter, forwardRef, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, forwardRef, OnChanges, SimpleChanges, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, Inject } from '@angular/core';
 import * as _moment from 'moment';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatCalendar, MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
-import { DateAdapter } from '@angular/material/core';
+import { DateAdapter, MatDateFormats, MAT_DATE_FORMATS } from '@angular/material/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { takeUntil } from 'rxjs/operators';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Subject } from 'rxjs';
 
 const noop = () => { };
 const moment = _moment;
@@ -45,6 +45,7 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     //Placeholders for the callbacks which are later provided by the Control Value Accessor
     private onTouchedCallback: () => void = noop;
     private onChangeCallback: (_: any) => void = noop;
+    public exampleHeader = ExampleHeader;
 
     constructor(private adapter: DateAdapter<any>, private store: Store<AppState>) {
 
@@ -166,3 +167,78 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
         this.onTouchedCallback = fn;
     }
 }
+
+/** Custom header component for datepicker. */
+@Component({
+    selector: 'example-header',
+    styles: [`
+      .example-header {
+        display: flex;
+        align-items: center;
+        padding: 0.5em;
+      }
+  
+      .example-header-label {
+        flex: 1;
+        height: 1em;
+        font-weight: 500;
+        text-align: center;
+      }
+  
+      .example-double-arrow .mat-icon {
+        margin: -22%;
+      }
+    `],
+    template: `
+      <div class="example-header">
+        <button mat-icon-button class="example-double-arrow" (click)="previousClicked('year')">
+          <<
+        </button>
+        <button mat-icon-button (click)="previousClicked('month')">
+          <
+        </button>
+        <span class="example-header-label">{{periodLabel}}</span>
+        <button mat-icon-button (click)="nextClicked('month')">
+          >
+        </button>
+        <button mat-icon-button class="example-double-arrow" (click)="nextClicked('year')">
+          >>
+        </button>
+      </div>
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+  })
+  export class ExampleHeader<D> implements OnDestroy {
+    private _destroyed = new Subject<void>();
+  
+    constructor(
+        private _calendar: MatCalendar<D>, private _dateAdapter: DateAdapter<D>,
+        @Inject(MAT_DATE_FORMATS) private _dateFormats: MatDateFormats, cdr: ChangeDetectorRef) {
+      _calendar.stateChanges
+          .pipe(takeUntil(this._destroyed))
+          .subscribe(() => cdr.markForCheck());
+    }
+  
+    ngOnDestroy() {
+      this._destroyed.next();
+      this._destroyed.complete();
+    }
+  
+    get periodLabel() {
+      return this._dateAdapter
+          .format(this._calendar.activeDate, this._dateFormats.display.monthYearLabel)
+          .toLocaleUpperCase();
+    }
+  
+    previousClicked(mode: 'month' | 'year') {
+      this._calendar.activeDate = mode === 'month' ?
+          this._dateAdapter.addCalendarMonths(this._calendar.activeDate, -1) :
+          this._dateAdapter.addCalendarYears(this._calendar.activeDate, -1);
+    }
+  
+    nextClicked(mode: 'month' | 'year') {
+      this._calendar.activeDate = mode === 'month' ?
+          this._dateAdapter.addCalendarMonths(this._calendar.activeDate, 1) :
+          this._dateAdapter.addCalendarYears(this._calendar.activeDate, 1);
+    }
+  }
