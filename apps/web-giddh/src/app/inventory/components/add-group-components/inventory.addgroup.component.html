@@ -102,8 +102,8 @@
                                         (click)="updateGroup()">Update
                                     </button>
                                     <button type="submit" class="btn btn-danger"
-                                        [ladda]="isDeleteGroupInProcess$ | async" (click)="removeGroup()"
-                                        *ngIf="canDeleteGroup" [disabled]="defaultGrpActive">Delete
+                                        [ladda]="isDeleteGroupInProcess$ | async" (click)="openModal(deleteGroupModalTemplate)"
+                                        >Delete
                                     </button>
                                 </div>
                             </div>
@@ -114,3 +114,12 @@
         </section>
     </div>
 </section>
+<!-- popup for the delete group -->
+<ng-template #deleteGroupModalTemplate>
+    <confirm-modal [title]="'Confirmation'"
+        [body]="'Stock of this group linked with finished stock will be deleted. Still want to delete it?'"
+        [permanentlyDeleteMessage]="'It will be deleted permanently and will no longer be accessible from any other module.'" [ok]="'Yes'" [cancel]="'No'"
+        (cancelCallBack)="hideModal()" (successCallBack)="removeGroup();hideModal()">
+    </confirm-modal>
+</ng-template>
+<!-- popup end -->

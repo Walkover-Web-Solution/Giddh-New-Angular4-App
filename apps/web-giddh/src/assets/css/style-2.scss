@@ -2117,10 +2117,6 @@ input[type="checkbox"]:checked:after {
     cursor: pointer;
 }
 
-.pd-t05 {
-    padding-top: 5px;
-}
-
 .pd-t07 {
     padding-top: 7px;
 }
@@ -6341,7 +6337,7 @@ footer#footer.absolute-footer {
 }
 
 .fixed.modal-open .modal-backdrop {
-    z-index: -1040;
+    z-index: 99999;
 }
 
 section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
@@ -6491,7 +6487,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 }
 
 .pagination-wrapper {
-    padding: 20px 0;
+    padding: 20px 0 0 0;
     text-align: center;
     display: flex;
     justify-content: center;
@@ -8000,9 +7996,6 @@ button#more-btn-inventory,
 .menu_open .inventory-sidebar {
     left: 0 !important;
 }
-.mobile-setting-sidebar {
-    overflow-y: hidden;
-}
 .select-linked-accounts sh-select-menu .menu {
     max-height: 250px;
 }
@@ -8399,7 +8392,7 @@ body.update-scroll-hidden {
                 position: inherit !important;
                 background-color: transparent;
                 padding-left: 0 !important;
-                margin: 0 -20px;
+                margin: 0;
                 flex-wrap: nowrap;
                 width: initial;
                 display: flex;
@@ -8487,6 +8480,9 @@ body.update-scroll-hidden {
     #content-wrapper{
         padding-right: 0;
     }
+}
+.manage-account-popup.full-screen-modal{
+    z-index: 999991;
 }
 /* responsive  starts here*/
 
@@ -8956,6 +8952,9 @@ body.update-scroll-hidden {
     }
 }
 @media (max-width: 767px) {
+    .mobile-setting-sidebar {
+        overflow-y: hidden;
+    }
     .customer-aging .nav.nav-tabs{
         display: flex !important;
     }
@@ -10133,3 +10132,42 @@ body.prevent-body-scroll {
 .giddh-no-permissions {
     display: none !important;
 }
+
+/** Angular material datepicker **/
+.mat-calendar-header {
+    padding: 2px 8px 2px 8px !important;
+    background-color: $chetwode-blue;
+    color: $white;
+}
+.mat-calendar-controls {
+    margin: 0% calc(33% / 7 - 16px) !important;
+}
+.mat-calendar-arrow {
+    border-top-color: $white !important;
+}
+.mat-datepicker-toggle, .mat-datepicker-content .mat-calendar-next-button, .mat-datepicker-content .mat-calendar-previous-button {
+    color: $white !important;
+}
+.mat-calendar-content {
+    padding: 0px 8px 0px 8px !important;
+}
+.mat-calendar-body-label {
+    visibility: hidden !important;
+}
+.mat-calendar-body-label[colspan="7"] {
+    display: none !important;
+}
+.mat-calendar-table-header th {
+    color: $black;
+    padding: 10px 0 10px 0 !important;
+}
+.mat-calendar-table-header th.mat-calendar-table-header-divider {
+    padding: 0px !important;
+}
+.mat-datepicker-content .mat-calendar {
+    height: 320px !important;
+}
+mat-year-view table tr td.mat-calendar-body-label {
+    display: none !important;
+}
+/** Angular material datepicker **/

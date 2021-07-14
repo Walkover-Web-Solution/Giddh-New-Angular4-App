@@ -6,6 +6,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../../actions/company.actions';
 import { LoginActions } from '../../../actions/login.action';
+import { orderBy } from '../../../lodash-optimized';
 import { BranchFilterRequest, CompanyResponse, Organization, OrganizationDetails } from '../../../models/api-models/Company';
 import { OrganizationType } from '../../../models/user-login-state';
 import { CompanyService } from '../../../services/companyService.service';
@@ -43,8 +44,6 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
     public isLoggedInWithSocialAccount$: Observable<boolean>;
     /** Company name initials (upto 2 characters) */
     public companyInitials: any = '';
-    /** store current selected company */
-    public selectedCompany: Observable<CompanyResponse>;
     /** This will hold all company data and branches of the company */
     public companyBranches: any = {};
     /** Search company name */
@@ -99,7 +98,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
                 return;
             }
 
-            let orderedCompanies = _.orderBy(companies, 'name');
+            let orderedCompanies = orderBy(companies, 'name');
             this.companyList = orderedCompanies;
             this.companyListForFilter = orderedCompanies;
             this.companies$ = observableOf(orderedCompanies);
@@ -111,7 +110,6 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
             if (selectedCmp && selectedCmp?.uniqueName === this.generalService.companyUniqueName) {
-                this.selectedCompany = observableOf(selectedCmp);
                 this.activeCompany = selectedCmp;
                 this.companyInitials = this.generalService.getInitialsFromString(selectedCmp.name);
                 this.activeDesign = (this.activeCompany?.name.charCodeAt(0) <= 77) ? 1 : 2;
@@ -122,9 +120,12 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
 
                 this.currentCompanyBranches$.subscribe(response => {
                     if (response && response.length) {
-                        this.currentCompanyBranches = response;
-                        this.companyBranches.branches = response;
-                        this.branchList = response;
+                        this.branchList = response.sort(this.generalService.sortBranches);
+                        this.currentCompanyBranches = this.branchList;
+                        if(this.companyBranches) {
+                            this.companyBranches.branches = this.branchList;
+                            this.companyBranches.branchCount = this.branchList?.length
+                        }
                         this.changeDetectorRef.detectChanges();
                     }
                 });
@@ -291,9 +292,10 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
             let branchFilterRequest: BranchFilterRequest = { from: '', to: '', companyUniqueName: company.uniqueName };
             this.settingsBranchService.GetAllBranches(branchFilterRequest).subscribe(response => {
                 if (response?.status === "success") {
-                    this.branchList = response.body;
+                    this.branchList = response.body.sort(this.generalService.sortBranches);
                     company.branches = this.branchList;
                     this.companyBranches = company;
+                    this.companyBranches.branchCount = this.branchList?.length;
                     this.branchRefreshInProcess = false;
 
                     if (this.searchBranch) {
@@ -305,13 +307,14 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
                     this.branchList = [];
                     company.branches = this.branchList;
                     this.companyBranches = company;
+                    this.companyBranches.branchCount = this.branchList?.length;
                     this.branchRefreshInProcess = false;
 
                     this.changeDetectorRef.detectChanges();
                 }
             });
         } else {
-            this.branchList = company.branches;
+            this.branchList = company?.branches;
             this.companyBranches = company;
         }
     }
@@ -321,12 +324,18 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
      *
      * @memberof CompanyBranchComponent
      */
-    public showAllBranches(): void {
-        setTimeout(() => {
-            if (this.staticTabs && this.staticTabs.tabs[1]) {
-                this.staticTabs.tabs[1].active = true;
+    public showAllBranches(company: any): void {
+        if(company?.branchCount > 1) {
+            setTimeout(() => {
+                if (this.staticTabs && this.staticTabs.tabs[1]) {
+                    this.staticTabs.tabs[1].active = true;
+                }
+            }, 20);
+        } else {
+            if(company?.uniqueName !== this.activeCompany?.uniqueName) {
+                this.changeCompany(company?.uniqueName, '', false);
             }
-        }, 20);
+        }
     }
 
     /**
@@ -355,14 +364,16 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
      * @memberof CompanyBranchComponent
      */
     public filterBranchList(event: any): void {
-        this.companyBranches.branches = this.branchList?.filter((branch) => {
-            if (!branch.alias) {
-                return branch.name.toLowerCase().includes(event.toLowerCase());
-            } else {
-                return branch.name.toLowerCase().includes(event.toLowerCase()) || branch.alias.toLowerCase().includes(event.toLowerCase());
-            }
-        });
-        this.changeDetectorRef.detectChanges();
+        if(this.companyBranches) {
+            this.companyBranches.branches = this.branchList?.filter((branch) => {
+                if (!branch.alias) {
+                    return branch.name.toLowerCase().includes(event.toLowerCase());
+                } else {
+                    return branch.name.toLowerCase().includes(event.toLowerCase()) || branch.alias.toLowerCase().includes(event.toLowerCase());
+                }
+            });
+            this.changeDetectorRef.detectChanges();
+        }
     }
 
     /**
@@ -406,5 +417,14 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
             this.viewingCompany = false;
             this.changeDetectorRef.detectChanges();
         }, 50);
+    }
+
+    /**
+     * This will route to create branch page
+     *
+     * @memberof CompanyBranchComponent
+     */
+    public createBranch(): void {
+        this.router.navigate(['/pages/settings/create-branch']);
     }
 }

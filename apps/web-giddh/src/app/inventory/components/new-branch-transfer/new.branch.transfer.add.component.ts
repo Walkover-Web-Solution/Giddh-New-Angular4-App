@@ -323,6 +323,14 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         this.branchTransfer.sources[index].warehouse.uniqueName = "";
                         this.branchTransfer.sources[index].warehouse.taxNumber = "";
                         this.branchTransfer.sources[index].warehouse.address = "";
+                        if(!this.branchTransfer.sources[index].warehouse.stockDetails) {
+                            this.branchTransfer.sources[index].warehouse.stockDetails = {
+                                stockUnit : null,
+                                amount: null,
+                                rate: null,
+                                quantity: null
+                            };
+                        }
                         this.branchTransfer.sources[index].warehouse.stockDetails.quantity = (event.value) ? 1 : null;
                     }
                     this.senderWarehouseClear$ = observableOf({ status: true });
@@ -336,6 +344,16 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         this.branchTransfer.destinations[index].warehouse.uniqueName = "";
                         this.branchTransfer.destinations[index].warehouse.taxNumber = "";
                         this.branchTransfer.destinations[index].warehouse.address = "";
+
+                        if(!this.branchTransfer.destinations[index].warehouse.stockDetails) {
+                            this.branchTransfer.destinations[index].warehouse.stockDetails = {
+                                stockUnit : null,
+                                amount: null,
+                                rate: null,
+                                quantity: null
+                            };
+                        }
+                        
                         this.branchTransfer.destinations[index].warehouse.stockDetails.quantity = (event.value) ? 1 : null;
                     }
                     this.destinationWarehouseClear$ = observableOf({ status: true });

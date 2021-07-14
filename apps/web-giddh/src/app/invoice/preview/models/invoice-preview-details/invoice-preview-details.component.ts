@@ -196,6 +196,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     ngOnInit() {
+        document.querySelector('body').classList.add('update-scroll-hidden');
         if (this.selectedItem) {
             if (!this.isVoucherDownloading) {
                 this.downloadVoucher('base64');
@@ -309,7 +310,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.performActionAfterClose();
         this.invoiceSearchEvent.emit("");
         this.closeEvent.emit(true);
-        document.querySelector('body').classList.remove('update-scroll-hidden');
     }
 
     public toggleBodyClass() {
@@ -340,14 +340,14 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
     public getVoucherVersions() {
         let request = new ProformaGetAllVersionRequest();
-        request.accountUniqueName = this.selectedItem.account.uniqueName;
+        request.accountUniqueName = this.selectedItem?.account.uniqueName;
         request.page = 1;
         request.count = 15;
 
         if (this.voucherType === VoucherTypeEnum.generateProforma) {
-            request.proformaNumber = this.selectedItem.voucherNumber;
+            request.proformaNumber = this.selectedItem?.voucherNumber;
         } else {
-            request.estimateNumber = this.selectedItem.voucherNumber;
+            request.estimateNumber = this.selectedItem?.voucherNumber;
         }
         this.store.dispatch(this._proformaActions.getEstimateVersion(request, this.voucherType));
     }
@@ -367,7 +367,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     voucherType: this.selectedItem.voucherType === VoucherTypeEnum.cash ? VoucherTypeEnum.sales : this.selectedItem.voucherType,
                     voucherNumber: [this.selectedItem.voucherNumber]
                 };
-                let accountUniqueName: string = this.selectedItem.account.uniqueName;
+                let accountUniqueName: string = this.selectedItem.account?.uniqueName;
                 this.sanitizedPdfFileUrl = null;
                 this._receiptService.DownloadVoucher(model, accountUniqueName, false).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                     if (result) {
@@ -390,8 +390,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             }
         } else if (this.voucherType === VoucherTypeEnum.purchase) {
             const requestObject: any = {
-                accountUniqueName: this.selectedItem?.account.uniqueName,
-                purchaseRecordUniqueName: this.selectedItem.uniqueName
+                accountUniqueName: this.selectedItem?.account?.uniqueName,
+                purchaseRecordUniqueName: this.selectedItem?.uniqueName
             };
             this.purchaseRecordService.downloadAttachedFile(requestObject).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
                 if (data && data.body) {
@@ -443,7 +443,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
             this.companyName$.pipe(take(1)).subscribe(companyUniqueName => this.companyUniqueName = companyUniqueName);
 
-            let getRequest = { companyUniqueName: this.companyUniqueName, accountUniqueName: this.selectedItem.account.uniqueName, uniqueName: this.selectedItem.uniqueName };
+            let getRequest = { companyUniqueName: this.companyUniqueName, accountUniqueName: this.selectedItem?.account?.uniqueName, uniqueName: this.selectedItem?.uniqueName };
 
             this.sanitizedPdfFileUrl = null;
             this.purchaseRecordService.getPdf(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -465,7 +465,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             if (this.selectedItem) {
                 let request: ProformaDownloadRequest = new ProformaDownloadRequest();
                 request.fileType = fileType;
-                request.accountUniqueName = this.selectedItem.account.uniqueName;
+                request.accountUniqueName = this.selectedItem.account?.uniqueName;
 
                 if (this.selectedItem.voucherType === VoucherTypeEnum.generateProforma) {
                     request.proformaNumber = this.selectedItem.voucherNumber;
@@ -569,6 +569,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('fixed');
+        document.querySelector('body').classList.remove('update-scroll-hidden');
     }
 
     /**
@@ -601,9 +602,9 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 this.isFileUploading = false;
                 const requestObject = {
                     account: {
-                        uniqueName: this.selectedItem.account.uniqueName
+                        uniqueName: this.selectedItem?.account?.uniqueName
                     },
-                    uniqueName: this.selectedItem.uniqueName,
+                    uniqueName: this.selectedItem?.uniqueName,
                     attachedFiles: [response.uniqueName]
                 };
                 this.purchaseRecordService.generatePurchaseRecord(requestObject, 'PATCH', true).pipe(takeUntil(this.destroyed$)).subscribe(() => {
@@ -776,7 +777,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public getLinkedPurchaseOrders(): void {
         this.purchaseOrderNumbers = [];
         if (this.selectedItem.voucherType === VoucherTypeEnum.purchase) {
-            this._receiptService.GetPurchaseRecordDetails(this.selectedItem.account.uniqueName, this.selectedItem.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
+            this._receiptService.GetPurchaseRecordDetails(this.selectedItem.account?.uniqueName, this.selectedItem.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
                 if (res && res.body) {
                     this.purchaseOrderNumbers = res.body.purchaseOrderDetails;
                 }
@@ -824,7 +825,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      */
     public getEditVoucherText(voucherType: string): string {
         let editVoucher = this.localeData?.edit_voucher;
-        editVoucher = editVoucher.replace("[VOUCHER]", voucherType);
+        editVoucher = editVoucher?.replace("[VOUCHER]", voucherType);
         return editVoucher;
     }
 

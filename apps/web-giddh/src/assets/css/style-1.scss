@@ -421,7 +421,7 @@ aside-menu-account .container-fluid {
 }
 
 .mr-r1 {
-    margin-right: 10px;
+    margin-right: 10px !important;
 }
 
 .mr-t2 {
@@ -2667,7 +2667,6 @@ form#groupDetailForm {
     z-index: 5;
     height: 100vh;
     color: #000000;
-    overflow: auto;
 }
 .aside-pane {
     max-width: 760px;

@@ -366,14 +366,14 @@
     "sb": "SB",
     "search_branch": "शाखा खोजें",
     "goto_company": "कंपनी में जाएं",
-    "create_branch": "+ शाखा खाते बनाएं",
+    "create_branch": "शाखा खाते बनाएं",
     "accounts": "खाते",
     "show_more": "और दिखाएं",
     "menu": "मेनू",
     "import_export_backup": "आयात/निर्यात डेटा (बैकअप)",
     "switch_company": "कंपनी स्विच करें",
     "search_company": "कंपनी खोजें",
-    "create_company": "+ कंपनी बनाएं",
+    "create_company": "कंपनी बनाएं",
     "profile": "प्रोफ़ाइल",
     "user_profile": "उपयोगकर्ता प्रोफ़ाइल",
     "api": "एपीआई",
@@ -388,5 +388,6 @@
     "companies": "कंपनिया",
     "refresh_manually": "रिफ्रेश करें",
     "branches": "शाखाएं",
-    "company_consolidated_data": "कंपनी समेकित डेटा"
+    "company_consolidated_data": "समेकित डेटा",
+    "no_branches_found": "कोई शाखा उपलब्ध नहीं"
 }

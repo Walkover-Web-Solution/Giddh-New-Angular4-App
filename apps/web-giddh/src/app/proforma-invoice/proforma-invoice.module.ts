@@ -7,7 +7,6 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { NgxUploaderModule } from 'ngx-uploader';
 import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
-import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-account/generic-aside-menu-account.module';
 import { VoucherTypeToNamePipeModule } from '../shared/header/pipe/voucherTypeToNamePipe/voucherTypeToNamePipe.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
@@ -51,7 +50,6 @@ import { HasFocusDirectiveModule } from '../shared/helpers/directives/has-focus/
         ModalModule,
         TaxControlModule,
         DiscountControlModule,
-        GenericAsideMenuAccountModule,
         LaddaModule,
         SelectModule.forRoot(),
         SendEmailInvoiceModule,

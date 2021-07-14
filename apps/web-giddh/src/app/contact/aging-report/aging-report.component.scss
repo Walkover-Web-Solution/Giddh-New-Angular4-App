@@ -111,6 +111,9 @@ tr.aging-table-top td {
 .top-aging-table-top {
     background: none !important;
 }
+.empty-table {
+    height: 120px;
+}
 
 // responsive
 @media (min-width: 769px) {
@@ -238,7 +241,7 @@ tr.aging-table-top td {
 @media (min-width: 769px){
     .mobile-card-wrapper{
         .table-responsive{
-            max-height: calc(100vh - 250px);
+            max-height: calc(100vh - 295px);
             overflow-y: auto;
         }
     }

@@ -156,9 +156,9 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
 
         // subscribe getActiveView parameters
         this.invViewService.getActiveView().pipe(takeUntil(this.destroyed$)).subscribe(v => {
-            this.groupUniqueName = v.groupUniqueName;
-            this.groupName = v.stockName;
-            this.stockUniqueName = v.stockUniqueName;
+            this.groupUniqueName = v?.groupUniqueName;
+            this.groupName = v?.stockName;
+            this.stockUniqueName = v?.stockUniqueName;
             this.activeGroup = v;
             if (this.groupUniqueName && this.stockUniqueName) {
                 this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName, this.groupUniqueName));
@@ -519,9 +519,6 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     }
 
     public ngAfterViewInit() {
-        if (this.groupUniqueName) {
-            // this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
-        }
         const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
         manufacturingDetailsContorl.disable();
 

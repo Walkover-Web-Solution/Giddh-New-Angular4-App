@@ -866,9 +866,43 @@ export class GeneralService {
      * @return {boolean} True, if element is child of another element
      * @memberof GeneralService
      */
-    public childOf(child, parent): boolean {
+    public childOf(child: any, parent: any): boolean {
         while ((child = child.parentNode) && child !== parent) {
         }
         return !!child;
+    }
+
+    /**
+     * This will sort branches by alias
+     *
+     * @param {*} branchA
+     * @param {*} branchB
+     * @returns {*}
+     * @memberof CompanyBranchComponent
+     */
+    public sortBranches(branchA: any, branchB: any): any {
+        var regexA = /[^a-zA-Z]/g;
+        var regexN = /[^0-9]/g;
+
+        var branchAInt = parseInt(branchA?.alias, 10);
+        var branchBInt = parseInt(branchB?.alias, 10);
+
+        if (isNaN(branchAInt) && isNaN(branchBInt)) {
+            var branchAOutput = branchA?.alias?.toLowerCase()?.replace(regexA, "");
+            var branchBOutput = branchB?.alias?.toLowerCase()?.replace(regexA, "");
+            if (branchAOutput === branchBOutput) {
+                var branchANumeric = parseInt(branchA?.alias?.toLowerCase()?.replace(regexN, ""), 10);
+                var branchBNumeric = parseInt(branchB?.alias?.toLowerCase()?.replace(regexN, ""), 10);
+                return branchANumeric === branchBNumeric ? 0 : branchANumeric > branchBNumeric ? 1 : -1;
+            } else {
+                return branchAOutput > branchBOutput ? 1 : -1;
+            }
+        } else if (isNaN(branchAInt)) { //A is not an Int
+            return 1; //to make alphanumeric sort first return -1 here
+        } else if (isNaN(branchBInt)) { //B is not an Int
+            return -1; //to make alphanumeric sort first return 1 here
+        } else {
+            return branchAInt > branchBInt ? 1 : -1;
+        }
     }
 }

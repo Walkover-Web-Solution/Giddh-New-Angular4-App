@@ -142,7 +142,8 @@
                                                             (keyup)="resetCustomerName($event)"
                                                             (onClear)="resetCustomerName(null)"
                                                             [isOpen]="allowFocus && !isUpdateMode && !invFormData.voucherDetails.customerUniquename"
-                                                            [disabled]="isUpdateMode && invoiceType !== 'sales' && invoiceType !== 'cash' && invoiceType !== 'purchase'">
+                                                            [disabled]="isUpdateMode && invoiceType !== 'sales' && invoiceType !== 'cash' && invoiceType !== 'purchase'"
+                                                            [fixedValue]="(isUpdateMode && invoiceType !== 'sales' && invoiceType !== 'cash' && invoiceType !== 'purchase') ? invFormData.voucherDetails.customerName : ''">
 
                                                             <ng-template #optionTemplate let-option="option">
                                                                 <a href="javascript:void(0)"

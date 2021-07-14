@@ -1038,7 +1038,7 @@
                             <div class="col-12 col-sm-12 clearfix mr-t1">
 
                                 <div class="mr-r1 form-group pull-left cp">
-                                    <label class="pull-left cp font-16">
+                                    <label class="pull-left cp font-16 d-flex align-items-center">
                                         <input id="update-ledger-generate-voucher" class="pull-left" type="checkbox"
                                             name="generateInvoice" [(ngModel)]="vm.selectedLedger.generateInvoice"
                                             [disabled]="(vm.isInvoiceGeneratedAlready || (!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1) || (isAdvanceReceipt && vm.selectedLedger.generateInvoice)) ? 'disabled': null">
@@ -1091,7 +1091,7 @@
 
                                         <li>
                                             <input type="text" id="update-ledger-price-input" class="price-input"
-                                                [(ngModel)]="vm.selectedLedger.exchangeRateForDisplay"
+                                                [(ngModel)]="vm.selectedLedger.exchangeRate"
                                                 [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                                                 (blur)="exchangeRateChanged()"> {{ vm.selectedCurrencyForDisplay === 0 ?
                                             vm.foreignCurrencyDetails?.code : vm.baseCurrencyDetails?.code

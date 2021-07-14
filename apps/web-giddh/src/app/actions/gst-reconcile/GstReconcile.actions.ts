@@ -318,7 +318,7 @@ export class GstReconcileActions {
     }
 
     public GetOverViewResponse(res: BaseResponse<GstOverViewResult, GstOverViewRequest>) {
-        let type = res.queryString.type;
+        let type = res.queryString?.type;
         return {
             type: type === GstReport.Gstr1 ? GSTR_ACTIONS.GET_GSTR1_OVERVIEW_RESPONSE : GSTR_ACTIONS.GET_GSTR2_OVERVIEW_RESPONSE,
             payload: res

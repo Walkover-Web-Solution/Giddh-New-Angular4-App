@@ -74,6 +74,7 @@ import { ConfirmationModalModule } from '../common/confirmation-modal/confirmati
 import { DatepickerWrapperModule } from './datepicker-wrapper/datepicker.wrapper.module';
 import { ValidateSectionPermissionDirectiveModule } from './validate-section-permission/validate-section-permission.module';
 import { HamburgerMenuModule } from './header/components/hamburger-menu/hamburger-menu.module';
+import { GenericAsideMenuAccountComponent } from './generic-aside-menu-account/generic.aside.menu.account.component';
 registerLocaleData(localeEn);
 registerLocaleData(localeHi);
 registerLocaleData(localeMr);
@@ -141,7 +142,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         GiddhDaterangepickerComponent,
         GiddhPageLoaderComponent,
         PrimarySidebarComponent,
-        CompanyBranchComponent
+        CompanyBranchComponent,
+        GenericAsideMenuAccountComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -242,7 +244,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         DatepickerWrapperModule,
         CompanyBranchComponent,
         HamburgerMenuModule,
-        ValidateSectionPermissionDirectiveModule
+        ValidateSectionPermissionDirectiveModule,
+        GenericAsideMenuAccountComponent
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,
