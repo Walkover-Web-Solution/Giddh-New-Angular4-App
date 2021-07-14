@@ -519,9 +519,6 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     }
 
     public ngAfterViewInit() {
-        if (this.groupUniqueName) {
-            // this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
-        }
         const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
         manufacturingDetailsContorl.disable();
 

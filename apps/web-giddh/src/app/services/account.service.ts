@@ -263,8 +263,8 @@ export class AccountService {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.put(this.config.apiUrl + ACCOUNTS_API_V2.UPDATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':groupUniqueName', encodeURIComponent(reqObj.groupUniqueName))
-            .replace(':accountUniqueName', encodeURIComponent(reqObj.accountUniqueName)), model).pipe(
+            .replace(':groupUniqueName', encodeURIComponent(reqObj?.groupUniqueName))
+            .replace(':accountUniqueName', encodeURIComponent(reqObj?.accountUniqueName)), model).pipe(
                 map((res) => {
                     let data: BaseResponse<AccountResponseV2, AccountRequestV2> = res;
                     data.request = model;

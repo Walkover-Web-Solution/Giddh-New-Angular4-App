@@ -682,7 +682,7 @@
                             </td>
                             <td class="word-wrap" [attr.data-title]="commonLocaleData?.app_parent_group"
                                 *ngIf="showFieldFilter.parentGroup">
-                                {{account.groupUniqueName}}</td>
+                                {{account?.groupUniqueName}}</td>
                             <td [ngClass]="{'word-wrap text-right': true, 'negative-balance': account.openingBalance?.type === 'CREDIT' && formatAmountInCurrency(account.openingBalance?.amount) > 0}"
                                 [attr.data-title]="localeData?.opening" *ngIf="showFieldFilter.openingBalance">
                                 <span
@@ -921,7 +921,7 @@
                             </td>
                             <td class="word-wrap" [attr.data-title]="commonLocaleData?.app_parent_group"
                                 *ngIf="showFieldFilter.parentGroup">
-                                <div class="table-email">{{account.groupUniqueName}}</div>
+                                <div class="table-email">{{account?.groupUniqueName}}</div>
                             </td>
                             <td [ngClass]="{'word-wrap text-right': true, 'negative-balance': account.openingBalance?.type === 'DEBIT' && formatAmountInCurrency(account.openingBalance?.amount) > 0}"
                                 [attr.data-title]="localeData?.opening" *ngIf="showFieldFilter.openingBalance">
