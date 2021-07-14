@@ -288,8 +288,7 @@
                     <proforma-invoice-component [accountUniqueName]="selectedAccountUniqueName"
                         [selectedItem]="selectedItem"
                         [invoiceNo]="(selectedVoucher !=='purchase' ) ? selectedItem?.voucherNumber : selectedItem?.uniqueName "
-                        [invoiceType]="selectedVoucher
-            " (cancelVoucherUpdate)="closeModel() ">
+                        [invoiceType]="selectedVoucher" [callFromOutside]="false" (cancelVoucherUpdate)="closeModel() ">
                     </proforma-invoice-component>
                 </div>
 
