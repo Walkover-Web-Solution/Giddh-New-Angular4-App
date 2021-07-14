@@ -307,7 +307,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
             }
         }
-        this.razorpay.open();
+        this.razorpay?.open();
     }
 
     public patchProfile(obj) {

@@ -152,6 +152,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public pdfFileURL: any = '';
     /** This will hold the attached file in Purchase Bill */
     private attachedAttachmentBlob: Blob;
+    /** True if left sidebar is expanded */
+    private isSidebarExpanded: boolean = false;
 
     constructor(
         private _cdr: ChangeDetectorRef,
@@ -196,6 +198,13 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     ngOnInit() {
+        if(document.getElementsByClassName("sidebar-collapse")?.length > 0) {
+            this.isSidebarExpanded = false;
+        } else {
+            this.isSidebarExpanded = true;
+            this._generalService.collapseSidebar();
+        }
+
         document.querySelector('body').classList.add('update-scroll-hidden');
         if (this.selectedItem) {
             if (!this.isVoucherDownloading) {
@@ -367,7 +376,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     voucherType: this.selectedItem.voucherType === VoucherTypeEnum.cash ? VoucherTypeEnum.sales : this.selectedItem.voucherType,
                     voucherNumber: [this.selectedItem.voucherNumber]
                 };
-                let accountUniqueName: string = this.selectedItem.account.uniqueName;
+                let accountUniqueName: string = this.selectedItem.account?.uniqueName;
                 this.sanitizedPdfFileUrl = null;
                 this._receiptService.DownloadVoucher(model, accountUniqueName, false).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                     if (result) {
@@ -390,8 +399,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             }
         } else if (this.voucherType === VoucherTypeEnum.purchase) {
             const requestObject: any = {
-                accountUniqueName: this.selectedItem?.account.uniqueName,
-                purchaseRecordUniqueName: this.selectedItem.uniqueName
+                accountUniqueName: this.selectedItem?.account?.uniqueName,
+                purchaseRecordUniqueName: this.selectedItem?.uniqueName
             };
             this.purchaseRecordService.downloadAttachedFile(requestObject).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
                 if (data && data.body) {
@@ -443,7 +452,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
             this.companyName$.pipe(take(1)).subscribe(companyUniqueName => this.companyUniqueName = companyUniqueName);
 
-            let getRequest = { companyUniqueName: this.companyUniqueName, accountUniqueName: this.selectedItem.account.uniqueName, uniqueName: this.selectedItem.uniqueName };
+            let getRequest = { companyUniqueName: this.companyUniqueName, accountUniqueName: this.selectedItem?.account?.uniqueName, uniqueName: this.selectedItem?.uniqueName };
 
             this.sanitizedPdfFileUrl = null;
             this.purchaseRecordService.getPdf(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -465,7 +474,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             if (this.selectedItem) {
                 let request: ProformaDownloadRequest = new ProformaDownloadRequest();
                 request.fileType = fileType;
-                request.accountUniqueName = this.selectedItem.account.uniqueName;
+                request.accountUniqueName = this.selectedItem.account?.uniqueName;
 
                 if (this.selectedItem.voucherType === VoucherTypeEnum.generateProforma) {
                     request.proformaNumber = this.selectedItem.voucherNumber;
@@ -565,6 +574,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     public ngOnDestroy(): void {
+        if(this.isSidebarExpanded) {
+            this.isSidebarExpanded = false;
+            this._generalService.expandSidebar();
+        }
         this.performActionAfterClose();
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -602,9 +615,9 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 this.isFileUploading = false;
                 const requestObject = {
                     account: {
-                        uniqueName: this.selectedItem.account.uniqueName
+                        uniqueName: this.selectedItem?.account?.uniqueName
                     },
-                    uniqueName: this.selectedItem.uniqueName,
+                    uniqueName: this.selectedItem?.uniqueName,
                     attachedFiles: [response.uniqueName]
                 };
                 this.purchaseRecordService.generatePurchaseRecord(requestObject, 'PATCH', true).pipe(takeUntil(this.destroyed$)).subscribe(() => {
@@ -777,7 +790,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public getLinkedPurchaseOrders(): void {
         this.purchaseOrderNumbers = [];
         if (this.selectedItem.voucherType === VoucherTypeEnum.purchase) {
-            this._receiptService.GetPurchaseRecordDetails(this.selectedItem.account.uniqueName, this.selectedItem.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
+            this._receiptService.GetPurchaseRecordDetails(this.selectedItem.account?.uniqueName, this.selectedItem.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
                 if (res && res.body) {
                     this.purchaseOrderNumbers = res.body.purchaseOrderDetails;
                 }
