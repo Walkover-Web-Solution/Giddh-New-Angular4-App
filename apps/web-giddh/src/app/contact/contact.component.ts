@@ -52,6 +52,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../shared/helpers
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../models/user-login-state';
 import { GiddhCurrencyPipe } from '../shared/helpers/pipes/currencyPipe/currencyType.pipe';
+import { FormControl } from '@angular/forms';
 
 export interface PayNowRequest {
     accountUniqueName: string;
@@ -227,6 +228,10 @@ export class ContactComponent implements OnInit, OnDestroy {
     public isAddAndManageOpenedFromOutside$: Observable<boolean>;
     /** This will store screen size */
     public isMobileView: boolean = false;
+    /** Stores the searched name value for the Name filter */
+    public searchedName: FormControl = new FormControl();
+    /** True, if name search field is to be shown in the filters */
+    public showNameSearch: boolean;
 
     constructor(
         private store: Store<AppState>,
@@ -473,6 +478,13 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.isAddAndManageOpenedFromOutside$.pipe(filter(event => !event)).subscribe(() => {
             this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
         });
+        this.searchedName.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$)
+        ).subscribe(searchedText => {
+            this.searchStr$.next(searchedText);
+        });
     }
 
     public performActions(type: number, account: any, event?: any) {
@@ -564,7 +576,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
 
-            if (this.fromDate && this.toDate) {
+            if (this.fromDate && this.toDate && this.activeTab !== 'aging-report') {
                 this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, '', null, null, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
 
@@ -1447,5 +1459,57 @@ export class ContactComponent implements OnInit, OnDestroy {
                 }
             ];
         }
+    }
+
+    /**
+     * Click outside handler for Name field search
+     *
+     * @param {*} event Click outside event
+     * @param {*} element Focused element
+     * @param {string} searchedFieldName Name of the field through which search is to be performed
+     * @return {*}  {void}
+     * @memberof ContactComponent
+     */
+    public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
+        if (searchedFieldName === 'name') {
+            if (this.searchedName.value) {
+                return;
+            }
+            if (this._generalService.childOf(event.target, element)) {
+                return;
+            } else {
+                this.showNameSearch = false;
+            }
+        }
+    }
+
+    /**
+     * Toogles the search field
+     *
+     * @param {string} fieldName Field name to toggle
+     * @param {*} el Element reference for focusing
+     * @memberof ContactComponent
+     */
+    public toggleSearch(fieldName: string, el: any): void {
+        if (fieldName === 'name') {
+            this.showNameSearch = true;
+        }
+        setTimeout(() => {
+            el.focus();
+        });
+    }
+
+    /**
+     * Returns the placeholder for the current searched field
+     *
+     * @param {string} fieldName Field name for which placeholder is required
+     * @returns {string} Placeholder text
+     * @memberof ContactComponent
+     */
+    public getSearchFieldText(fieldName: string): string {
+        if (fieldName === 'name') {
+            return this.localeData?.search_name;
+        }
+        return "";
     }
 }

@@ -95,7 +95,7 @@
                     </div>
                     <div class="form-group col-xl-2 col-lg-3 col-md-6 col-12">
                         <label class="d-block">Warehouse</label>
-                        <sh-select placeholder="--Select Warehouse--" [options]="warehouses"
+                        <sh-select placeholder="--Select Warehouse--" name="warehouse" [options]="warehouses"
                             [(ngModel)]="mfStockSearchRequest.warehouseUniqueName" (onClear)="clearWarehouse()"
                             [forceClearReactive]="forceClearWarehouse$ | async"></sh-select>
                     </div>

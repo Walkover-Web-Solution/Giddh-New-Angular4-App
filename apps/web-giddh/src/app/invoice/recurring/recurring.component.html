@@ -230,11 +230,11 @@
                             <th width="20%" class="td-search-box" #searchInvoiceContainer
                                 (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
 
-                                <div [hidden]="showInvoiceNumberSearch">
-                                    <span> {{commonLocaleData?.app_invoice_number}}</span>
-                                    <i class="icon-search"
-                                        (click)="showInvoiceNumberSearch = true;showCustomerNameSearch = false;"></i>
-                                </div>
+                            <div [hidden]="showInvoiceNumberSearch">
+                                <i class="icon-search"
+                                    (click)="showInvoiceNumberSearch = true;showCustomerNameSearch = false;"></i>
+                                <span> {{commonLocaleData?.app_invoice_number}}</span>
+                            </div>
 
                                 <div class="input-container" [hidden]="!showInvoiceNumberSearch">
                                     <input type="text" [placeholder]="localeData?.search_invoice_no" class="w100"
@@ -376,10 +376,10 @@
         <!-- region search template -->
         <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
 
-            <div [hidden]="show">
-                <span> {{ title }}</span>
-                <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
-            </div>
+        <div [hidden]="show">
+            <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
+            <span> {{ title }}</span>
+        </div>
 
             <div class="input-container" [hidden]="!show">
                 <input type="text" [placeholder]="getSearchFieldText(title)" class="w100" #searchBox
@@ -399,7 +399,7 @@
                 (click)="sortButtonClicked('desc', column)"
                 [ngClass]="{'active-text-color': filter.sortBy === column && filter.sort === 'asc'}"></div>
 
-            <div class="icon-sort-dsc " *ngIf="filter.sortBy === column && filter.sort === 'desc'"
+            <div class="icon-sort-asc " *ngIf="filter.sortBy === column && filter.sort === 'desc'"
                 (click)="sortButtonClicked('asc', column)"
                 [ngClass]="{'active-text-color': filter.sortBy === column && filter.sort === 'desc'}"></div>
 
