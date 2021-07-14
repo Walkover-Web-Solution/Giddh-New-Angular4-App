@@ -1449,6 +1449,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         if (fieldName === 'name') {
             return this.localeData?.search_name;
         }
+        return "";
     }
 
     /**
