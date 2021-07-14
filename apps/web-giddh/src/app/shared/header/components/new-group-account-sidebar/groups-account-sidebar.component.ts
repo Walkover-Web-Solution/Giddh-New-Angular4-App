@@ -382,9 +382,6 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
     }
 
     public onAccountClick(item: any, currentIndex: number) {
-        let grpsBck: GroupsWithAccountsResponse[];
-        this.groupsListBackupStream$.pipe(take(1)).subscribe(s => grpsBck = s);
-
         this.breadcrumbPath = [];
         this.breadcrumbUniqueNamePath = [];
         let activeGroup;
