@@ -89,6 +89,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     public sanitizedPdfFileUrl: any = '';
     /** PDF src */
     public pdfFileURL: any = '';
+    /** True if left sidebar is expanded */
+    private isSidebarExpanded: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -111,6 +113,13 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      * @memberof PurchaseOrderPreviewComponent
      */
     public ngOnInit(): void {
+        if(document.getElementsByClassName("sidebar-collapse")?.length > 0) {
+            this.isSidebarExpanded = false;
+        } else {
+            this.isSidebarExpanded = true;
+            this.generalService.collapseSidebar();
+        }
+        document.querySelector('body').classList.add('setting-sidebar-open');
         this.getInventorySettings();
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         
@@ -392,6 +401,11 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      * @memberof PurchaseOrderPreviewComponent
      */
     public ngOnDestroy() {
+        if(this.isSidebarExpanded) {
+            this.isSidebarExpanded = false;
+            this.generalService.expandSidebar();
+        }
+        document.querySelector('body').classList.remove('setting-sidebar-open');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
