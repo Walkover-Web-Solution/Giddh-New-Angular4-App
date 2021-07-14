@@ -5,7 +5,7 @@ import { AppState } from '../../../store';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, map, switchMap, takeUntil } from 'rxjs/operators';
+import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { IEwayBillAllList, IEwayBillCancel, Result, UpdateEwayVehicle, IEwayBillfilter } from '../../../models/api-models/Invoice';
 import { ToasterService } from '../../../services/toaster.service';
 import { saveAs } from 'file-saver';
@@ -36,12 +36,10 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public asideMenuState: string = 'out';
     /* this will check mobile screen size */
     public isMobileScreen: boolean = false;
-
     public isGetAllEwaybillRequestInProcess$: Observable<boolean>;
     public isGetAllEwaybillRequestSuccess$: Observable<boolean>;
     public cancelEwayInProcess$: Observable<boolean>;
     public cancelEwaySuccess$: Observable<boolean>;
-
     public updateEwayvehicleProcess$: Observable<boolean>;
     public updateEwayvehicleSuccess$: Observable<boolean>;
     public EwaybillLists: IEwayBillAllList;
@@ -54,11 +52,9 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public statesSource$: Observable<IOption[]> = observableOf([]);
     public dataSource: any;
     public dataSourceBackup: any;
-
     public showAdvanceSearchIcon: boolean = false;
     /** Search results for from place */
     public searchResults: Array<any> = [];
-
     // searching
     @ViewChild('invoiceSearch', { static: true }) public invoiceSearch: ElementRef;
     @ViewChild('customerSearch', { static: true }) public customerSearch: ElementRef;
@@ -67,52 +63,12 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public showSearchInvoiceNo: boolean = false;
     public showSearchCustomer: boolean = false;
     public EwayBillfilterRequest: IEwayBillfilter = new IEwayBillfilter();
-
-
     public cancelEwayRequest: IEwayBillCancel = {
         ewbNo: null,
         cancelRsnCode: null,
         cancelRmrk: null,
     };
     public ewayUpdateVehicleReasonList: IOption[] = [];
-
-    public datePickerOptions: any = {
-        hideOnEsc: true,
-        locale: {
-            applyClass: 'btn-green',
-            applyLabel: 'Go',
-            fromLabel: 'From',
-            format: 'D-MMM-YY',
-            toLabel: 'To',
-            cancelLabel: 'Cancel',
-            customRangeLabel: 'Custom range'
-        },
-        ranges: {
-            'Last 1 Day': [
-                moment().subtract(1, 'days'),
-                moment()
-            ],
-            'Last 7 Days': [
-                moment().subtract(6, 'days'),
-                moment()
-            ],
-            'Last 30 Days': [
-                moment().subtract(29, 'days'),
-                moment()
-            ],
-            'Last 6 Months': [
-                moment().subtract(6, 'months'),
-                moment()
-            ],
-            'Last 1 Year': [
-                moment().subtract(12, 'months'),
-                moment()
-            ]
-        },
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment()
-    };
-
     public ewayCancelReason: IOption[] = [];
     public updateEwayVehicleform: UpdateEwayVehicle = {
         ewbNo: null,
@@ -126,7 +82,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         transMode: null,
         vehicleType: null,
     };
-
     @ViewChild(BsDatepickerDirective, { static: true }) public datepickers: BsDatepickerDirective;
     public selectedEway: Result;
     public states: any[] = [];
@@ -150,12 +105,13 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
-
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True if today selected */
+    public todaySelected: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -171,8 +127,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     ) {
         this.EwayBillfilterRequest.count = 20;
         this.EwayBillfilterRequest.page = 1;
-        this.EwayBillfilterRequest.fromDate = moment(this.datePickerOptions.startDate).format(GIDDH_DATE_FORMAT);
-        this.EwayBillfilterRequest.toDate = moment(this.datePickerOptions.endDate).format(GIDDH_DATE_FORMAT);
 
         this.isGetAllEwaybillRequestInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isGetAllEwaybillRequestInProcess), takeUntil(this.destroyed$));
         this.isGetAllEwaybillRequestSuccess$ = this.store.pipe(select(p => p.ewaybillstate.isGetAllEwaybillRequestSuccess), takeUntil(this.destroyed$));
@@ -240,6 +194,15 @@ export class EWayBillComponent implements OnInit, OnDestroy {
             if (o) {
                 this.EwaybillLists = _.cloneDeep(o);
                 this.EwaybillLists.results = o.results;
+
+                if(this.todaySelected) {
+                    this.selectedDateRange = { startDate: moment(o.fromDate, GIDDH_DATE_FORMAT), endDate: moment(o.toDate, GIDDH_DATE_FORMAT) };
+                    this.selectedDateRangeUi = moment(o.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(o.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.fromDate = moment(o.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.toDate = moment(o.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.EwayBillfilterRequest.fromDate = moment(o.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.EwayBillfilterRequest.toDate = moment(o.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                }
                 this.detectChange();
             }
         });
@@ -272,18 +235,28 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
-                this.datePickerOptions = {
-                    ...this.datePickerOptions, startDate: moment(universalDate[0], GIDDH_DATE_FORMAT).toDate(),
-                    endDate: moment(universalDate[1], GIDDH_DATE_FORMAT).toDate(),
-                    chosenLabel: universalDate[2]
-                };
-                this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
-                this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-                this.EwayBillfilterRequest.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.EwayBillfilterRequest.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-                this.getAllFilteredInvoice();
+
+                setTimeout(() => {
+                    this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
+                        this.todaySelected = response;
+            
+                        if (universalDate && !this.todaySelected) {
+                            this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
+                            this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                            this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                            this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                            this.EwayBillfilterRequest.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                            this.EwayBillfilterRequest.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                        } else {
+                            this.fromDate = "";
+                            this.toDate = "";
+                            this.EwayBillfilterRequest.fromDate = "";
+                            this.EwayBillfilterRequest.toDate = "";
+                        }
+
+                        this.getAllFilteredInvoice();
+                    });
+                }, 100);
             }
         });
 
@@ -531,6 +504,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
+            this.todaySelected = false;
             this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
