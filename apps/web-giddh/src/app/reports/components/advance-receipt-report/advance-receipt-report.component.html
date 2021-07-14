@@ -49,59 +49,61 @@
                     <button class="btn btn-filter mr-0" (click)="resetAdvanceSearch()"><span class="icon-cross"></span>
                         {{commonLocaleData?.app_clear_filter}}</button>
                 </div>
-                <div class="advance-icon cursor-pointer btn btn-primary mr-0" [tooltip]="commonLocaleData?.app_advance_search"
-                            (click)="openModal()">
-                            <span class="pd-r05 d-sm-flex d-none">{{commonLocaleData?.app_filter}}</span>
-                            <span class="icon-advance-filter"></span>
-                        </div>
+                <div class="advance-icon cursor-pointer btn btn-primary mr-0"
+                    [tooltip]="commonLocaleData?.app_advance_search" (click)="openModal()">
+                    <span class="pd-r05 d-sm-flex d-none">{{commonLocaleData?.app_filter}}</span>
+                    <span class="icon-advance-filter"></span>
+                </div>
                 <!-- Invoice filter section ends -->
             </div>
 
             <div class="top-content">
-                    <div class="d-flex w-100 justify-content-between overflow-x-auto">
-                            <div class="total-details-box mr-r05 border-none opening-box">
-                                    <h5>
-                                        {{localeData?.advanced_receipts}}
-                                        <div>
-                                        <span class="number-total">{{receiptsSummaryData?.advance?.symbol}}{{receiptsSummaryData?.advance?.amount |
-                                                giddhCurrency}}/-</span>
-                                        </div>
-                                    </h5>
-                                </div>
-                            <div class="total-details-box mr-r05 border-none sales-purchase">
-                                    <h5>
-                                        {{localeData?.normal_receipts}}
-                                        <div>
-                                            <span class="d-inline-flex number-total">
-                                                {{receiptsSummaryData?.normal?.symbol}}{{receiptsSummaryData?.normal?.amount |
-                                                    giddhCurrency}}/-
-                                            </span>
-                                        </div>
-                                    </h5>
-                                </div>
-                                <div class="total-details-box mr-r05 border-none payment-receipt">
-                                    <h5>
-                                        {{localeData?.total_receipts}}
-                                        <div>
-                                            <span class="d-inline-flex number-total">
-                                                {{receiptsSummaryData?.total?.symbol}}{{receiptsSummaryData?.total?.amount |
-                                                    giddhCurrency}}/-
-                                            </span>
-                                        </div>
-                                    </h5>
-                                </div>
-                                <div class="total-details-box mr-r05 border-none closing-box">
-                                    <h5>
-                                        {{localeData?.unused_receipts}}
-                                        <div>
-                                            <span class="d-inline-flex number-total">
-                                                {{receiptsSummaryData?.unUsed?.symbol}}{{receiptsSummaryData?.unUsed?.amount |
-                                                    giddhCurrency}}/-
-                                            </span>
-                                        </div>
-                                    </h5>
-                                </div>
+                <div class="d-flex w-100 justify-content-between overflow-x-auto">
+                    <div class="total-details-box mr-r05 border-none opening-box">
+                        <h5>
+                            {{localeData?.advanced_receipts}}
+                            <div>
+                                <span
+                                    class="number-total">{{receiptsSummaryData?.advance?.symbol}}{{receiptsSummaryData?.advance?.amount
+                                    |
+                                    giddhCurrency}}/-</span>
+                            </div>
+                        </h5>
                     </div>
+                    <div class="total-details-box mr-r05 border-none sales-purchase">
+                        <h5>
+                            {{localeData?.normal_receipts}}
+                            <div>
+                                <span class="d-inline-flex number-total">
+                                    {{receiptsSummaryData?.normal?.symbol}}{{receiptsSummaryData?.normal?.amount |
+                                    giddhCurrency}}/-
+                                </span>
+                            </div>
+                        </h5>
+                    </div>
+                    <div class="total-details-box mr-r05 border-none payment-receipt">
+                        <h5>
+                            {{localeData?.total_receipts}}
+                            <div>
+                                <span class="d-inline-flex number-total">
+                                    {{receiptsSummaryData?.total?.symbol}}{{receiptsSummaryData?.total?.amount |
+                                    giddhCurrency}}/-
+                                </span>
+                            </div>
+                        </h5>
+                    </div>
+                    <div class="total-details-box mr-r05 border-none closing-box">
+                        <h5>
+                            {{localeData?.unused_receipts}}
+                            <div>
+                                <span class="d-inline-flex number-total">
+                                    {{receiptsSummaryData?.unUsed?.symbol}}{{receiptsSummaryData?.unUsed?.amount |
+                                    giddhCurrency}}/-
+                                </span>
+                            </div>
+                        </h5>
+                    </div>
+                </div>
             </div>
 
             <div class="invoice-preview  table-responsive">
@@ -221,10 +223,12 @@
                     <tbody *ngIf="!isLoading">
                         <tr *ngFor="let receipt of allReceipts; let i = index">
                             <td data-title="#">{{ i + 1 }}</td>
-                            <td width="13%" class="text-break" data-title="{{localeData?.receipt_no_label}}">{{ receipt?.receiptNumber }}</td>
+                            <td width="13%" class="text-break" data-title="{{localeData?.receipt_no_label}}">{{
+                                receipt?.receiptNumber }}</td>
                             <td class="entry-date" data-title="{{localeData?.entry_date}}">{{ receipt?.date }}</td>
                             <td data-title="{{localeData?.suppliers_name}}">{{ receipt?.type }}</td>
-                            <td width="13%" class="text-break" data-title="{{commonLocaleData?.app_voucher_type}}">{{ receipt?.baseAccountName
+                            <td width="13%" class="text-break" data-title="{{commonLocaleData?.app_voucher_type}}">{{
+                                receipt?.baseAccountName
                                 }}</td>
                             <td data-title="{{localeData?.payment_mode_label}}">
                                 <div *ngFor="let paymentMode of receipt?.particularNames?.split(',')">
@@ -234,12 +238,14 @@
                             <td *ngIf="receipt?.invoices" data-title="{{localeData?.invoice_no_label}}">
                                 <div *ngFor="let invoice of receipt?.invoices?.split(',')">{{ invoice }}</div>
                             </td>
-                            <td width="13%" class="text-break" data-title="{{localeData?.invoice_no_label}}" *ngIf="!receipt?.invoices">-</td>
+                            <td width="13%" class="text-break" data-title="{{localeData?.invoice_no_label}}"
+                                *ngIf="!receipt?.invoices">-</td>
                             <td data-title="{{commonLocaleData?.app_total_amount}}">
                                 {{ receipt?.totalAmount?.symbol }}{{ receipt?.totalAmount.amount | giddhCurrency}}
                             </td>
                             <td data-title="{{localeData?.unused_amount}}">
-                                {{ receipt?.unusedAmount?.symbol }}{{ receipt?.unusedAmount.amount | giddhCurrency}}</td>
+                                {{ receipt?.unusedAmount?.symbol }}{{ receipt?.unusedAmount.amount | giddhCurrency}}
+                            </td>
                         </tr>
                         <tr *ngIf="!allReceipts?.length">
                             <td colspan="10" align="center" class="no-entries">
