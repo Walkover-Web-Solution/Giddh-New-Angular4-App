@@ -8484,6 +8484,9 @@ body.update-scroll-hidden {
 .manage-account-popup.full-screen-modal{
     z-index: 999991;
 }
+.trial-balance-viewport {
+    height: 500px;
+}
 /* responsive  starts here*/
 
 @media (max-width: 1440px) {

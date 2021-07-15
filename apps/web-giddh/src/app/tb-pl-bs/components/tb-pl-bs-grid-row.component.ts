@@ -1,14 +1,16 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Account, ChildGroup } from '../../models/api-models/Search';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { SearchService } from '../../services/search.service';
+import { TRIAL_BALANCE_VIEWPORT_LIMIT } from '../constants/trial-balance-profit.constant';
 
 @Component({
     selector: '[tb-pl-bs-grid-row]',
     styleUrls: ['./tb-pl-bs-grid-row.component.scss'],
     templateUrl: './tb-pl-bs-grid-row.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TlPlGridRowComponent implements OnChanges, OnDestroy {
     @Input() public groupDetail: ChildGroup;
@@ -16,8 +18,12 @@ export class TlPlGridRowComponent implements OnChanges, OnDestroy {
     @Input() public from: string;
     @Input() public to: string;
     @Input() public padding: string;
+    /** True, if all items are expanded  */
+    @Input() public expandAll: boolean;
     public modalUniqueName: string = null;
     public accountDetails: IFlattenAccountsResultItem;
+    /** Minimum limit on which Trial balance viewport enables */
+    public minimumViewportLimit = TRIAL_BALANCE_VIEWPORT_LIMIT;
 
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -73,7 +79,7 @@ export class TlPlGridRowComponent implements OnChanges, OnDestroy {
     }
 
     public trackByFn(index, item: Account) {
-        return item;
+        return item.uniqueName;
     }
 
     /**

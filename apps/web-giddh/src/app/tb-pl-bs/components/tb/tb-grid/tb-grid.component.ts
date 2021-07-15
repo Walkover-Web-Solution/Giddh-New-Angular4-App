@@ -5,6 +5,7 @@ import { FormControl } from '@angular/forms';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { each } from 'apps/web-giddh/src/app/lodash-optimized';
+import { TRIAL_BALANCE_VIEWPORT_LIMIT } from '../../../constants/trial-balance-profit.constant';
 
 @Component({
     selector: 'tb-grid',
@@ -62,9 +63,12 @@ export class TbGridComponent implements OnInit, OnChanges, OnDestroy {
                         each(this.data$.groupDetails, (grp: ChildGroup) => {
                             if (grp.isIncludedInSearch) {
                                 grp.isVisible = true;
+                                grp.isCreated = true;
+                                grp.isOpen = false;
                                 each(grp.accounts, (acc: Account) => {
                                     if (acc.isIncludedInSearch) {
                                         acc.isVisible = false;
+                                        acc.isCreated = false;
                                     }
                                 });
                             }
@@ -89,12 +93,8 @@ export class TbGridComponent implements OnInit, OnChanges, OnDestroy {
         this.cd.markForCheck();
     }
 
-    public detectChanges() {
-        this.cd.detectChanges();
-    }
-
     public trackByFn(index, item: ChildGroup) {
-        return item;
+        return item.uniqueName;
     }
 
     public toggleSearch() {
@@ -134,21 +134,21 @@ export class TbGridComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof TbGridComponent
      */
     public toggleGroupVisibility(group: Array<ChildGroup>, isVisible: boolean): void {
-        const stack = [...group];
-        while (stack.length) {
-            const currentGroup = stack.pop();
+        for (let groupIndex = 0; groupIndex < group.length; groupIndex++) {
+            const currentGroup: ChildGroup = group[groupIndex];
             if (currentGroup.isIncludedInSearch) {
-                currentGroup.isCreated = true;
+                currentGroup.isCreated = isVisible;
                 currentGroup.isVisible = isVisible;
+                currentGroup.isOpen = isVisible;
                 for (let accountIndex = 0; accountIndex < currentGroup.accounts.length; accountIndex++) {
-                    const account = currentGroup.accounts[accountIndex];
-                    if (account.isIncludedInSearch) {
-                        account.isCreated = true;
-                        account.isVisible = isVisible;
+                    const currentAccount: Account = currentGroup.accounts[accountIndex];
+                    if (currentAccount.isIncludedInSearch) {
+                        currentAccount.isCreated = isVisible;
+                        currentAccount.isVisible = isVisible;
                     }
                 }
-                if (currentGroup.childGroups && currentGroup.childGroups.length > 0) {
-                    stack.push(...currentGroup.childGroups);
+                if (currentGroup.childGroups?.length) {
+                    this.toggleGroupVisibility(currentGroup.childGroups, isVisible);
                 }
             }
         }
