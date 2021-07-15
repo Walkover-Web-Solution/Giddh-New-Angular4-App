@@ -72,6 +72,7 @@ import localeEn from '@angular/common/locales/en-GB';
 import localeHi from '@angular/common/locales/hi';
 import localeMr from '@angular/common/locales/mr';
 import { ValidateSectionPermissionDirectiveModule } from './validate-section-permission/validate-section-permission.module';
+import { GenericAsideMenuAccountComponent } from './generic-aside-menu-account/generic.aside.menu.account.component';
 registerLocaleData(localeEn);
 registerLocaleData(localeHi);
 registerLocaleData(localeMr);
@@ -156,7 +157,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         GiddhDaterangepickerComponent,
         GiddhPageLoaderComponent,
         AmountFieldComponent,
-        PrimarySidebarComponent
+        PrimarySidebarComponent,
+        GenericAsideMenuAccountComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -250,7 +252,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         CurrencyModule,
         PrimarySidebarComponent,
         TranslateDirectiveModule,
-        ValidateSectionPermissionDirectiveModule
+        ValidateSectionPermissionDirectiveModule,
+        GenericAsideMenuAccountComponent
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,
