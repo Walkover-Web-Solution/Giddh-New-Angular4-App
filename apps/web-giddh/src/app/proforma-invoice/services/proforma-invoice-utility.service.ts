@@ -52,15 +52,27 @@ export class ProformaInvoiceUtilityService {
             delete data.account.name;
             if (data.account.billingDetails) {
                 data.account.billingDetails.taxNumber = data.account.billingDetails.gstNumber;
+                data.account.billingDetails.country = {
+                    code: data.account.billingDetails.countryCode,
+                    name: data.account.billingDetails.countryName
+                };
                 delete data.account.billingDetails.gstNumber;
                 delete data.account.billingDetails.stateCode;
                 delete data.account.billingDetails.stateName;
+                delete data.account.billingDetails.countryName;
+                delete data.account.billingDetails.countryCode;
             }
             if (data.account.shippingDetails) {
                 data.account.shippingDetails.taxNumber = data.account.shippingDetails.gstNumber;
+                data.account.shippingDetails.country = {
+                    code: data.account.shippingDetails.countryCode,
+                    name: data.account.shippingDetails.countryName
+                };
                 delete data.account.shippingDetails.gstNumber;
                 delete data.account.shippingDetails.stateCode;
                 delete data.account.shippingDetails.stateName;
+                delete data.account.shippingDetails.countryName;
+                delete data.account.shippingDetails.countryCode;
             }
         }
         return data;

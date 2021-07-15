@@ -218,6 +218,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public isLastInvoiceCopied: boolean = false;
 
     public customerCountryName: string = '';
+    /** Stores the customer country code */
+    public customerCountryCode: string = '';
     public showGSTINNo: boolean;
     public showTRNNo: boolean;
 
@@ -1419,6 +1421,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.isMulticurrencyAccount = tempSelectedAcc.currencySymbol !== this.baseCurrencySymbol;
                         this.customerCountryName = tempSelectedAcc.country.countryName;
                         this.checkIfNeedToExcludeTax(tempSelectedAcc);
+                        this.countryCode = tempSelectedAcc?.country?.countryCode || 'IN';
+
                         this.getUpdatedStateCodes(tempSelectedAcc.country.countryCode).then(() => {
                             this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
                         });
@@ -1679,6 +1683,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private async prepareCompanyCountryAndCurrencyFromProfile(profile) {
         if (profile) {
             this.customerCountryName = profile.country;
+            this.customerCountryCode = profile?.countryV2?.alpha2CountryCode || 'IN';
             this.showGstAndTrnUsingCountryName(profile.country);
 
             this.companyCurrency = profile.baseCurrency || 'INR';
@@ -1928,6 +1933,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public assignAccountDetailsValuesInForm(data: AccountResponseV2) {
         this.accountAddressList = data.addresses;
         this.customerCountryName = data.country.countryName;
+        this.countryCode = data?.country?.countryCode || 'IN';
         this.initializeAccountCurrencyDetails(data);
         this.showGstAndTrnUsingCountryName(this.customerCountryName);
         this.prepareSearchLists([{
@@ -2084,6 +2090,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (this.container) {
             this.container.clear();
         }
+        this.customerCountryName = '';
+        this.customerCountryCode = '';
         this.showSwitchedCurr = false;
         this.autoSaveIcon = false;
         this.autoFillShipping = true;
@@ -2413,10 +2421,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             requestObject.voucher.voucherDetails.voucherType = this.parseVoucherType(this.invoiceType);
             // set state details as new request
             requestObject.account.billingDetails.countryName = this.customerCountryName;
+            requestObject.account.billingDetails.countryCode = this.customerCountryCode;
             requestObject.account.billingDetails.stateCode = requestObject.account.billingDetails.state.code;
             requestObject.account.billingDetails.stateName = requestObject.account.billingDetails.state.name;
             // set state details as new request
             requestObject.account.shippingDetails.countryName = this.customerCountryName;
+            requestObject.account.shippingDetails.countryCode = this.customerCountryCode;
             requestObject.account.shippingDetails.stateCode = requestObject.account.shippingDetails.state.code;
             requestObject.account.shippingDetails.stateName = requestObject.account.shippingDetails.state.name;
 
@@ -4689,10 +4699,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         obj.entries = salesEntryClassArray;
 
         obj.account.billingDetails.countryName = this.customerCountryName;
+        obj.account.billingDetails.countryCode = this.customerCountryCode;
         obj.account.billingDetails.stateCode = obj.account.billingDetails.state.code;
         obj.account.billingDetails.stateName = obj.account.billingDetails.state.name;
 
         obj.account.shippingDetails.countryName = this.customerCountryName;
+        obj.account.shippingDetails.countryCode = this.customerCountryCode;
         obj.account.shippingDetails.stateCode = obj.account.shippingDetails.state.code;
         obj.account.shippingDetails.stateName = obj.account.shippingDetails.state.name;
 
@@ -4915,6 +4927,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.isMulticurrencyAccount = result.multiCurrency;
             }
             this.customerCountryName = result.account.billingDetails.countryName;
+            this.customerCountryCode = result?.account?.billingDetails?.countryCode  || 'IN';
         }
 
         this.showGstAndTrnUsingCountryName(this.customerCountryName);
