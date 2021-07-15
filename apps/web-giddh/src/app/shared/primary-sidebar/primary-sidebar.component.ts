@@ -12,7 +12,7 @@ import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions
 import { slice } from '../../lodash-optimized';
 import { CompanyResponse, Organization } from '../../models/api-models/Company';
 import { SalesActions } from '../../actions/sales/sales.action';
-import { AccountResponse } from '../../models/api-models/Account';
+import { AccountResponse, AddAccountRequest } from '../../models/api-models/Account';
 import { CompAidataModel } from '../../models/db';
 import { DEFAULT_AC } from '../../models/defaultMenus';
 import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
