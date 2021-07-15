@@ -19,4 +19,6 @@ export const SETTINGS_INTEGRATION_API = {
     BENEFICIARY_VALIDATION: 'company/:companyUniqueName/bank/bene-validation?urn=:urn&bnfAccNo=:bnfAccNo',
     GET_BENEFICIARIES: 'company/:companyUniqueName/bank/get-beneficiaries?urn=:urn',
     GET_REGISTRATION_STATUS: 'company/:companyUniqueName/bank/get-registration-status?urn=:urn',
+    BANK_ACCOUNT_REGISTRATION: 'v2/company/:companyUniqueName/bank',
+    BANK_ACCOUNT_MULTI_REGISTRATION: 'v2/company/:companyUniqueName/bank/multi-registration'
 };

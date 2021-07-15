@@ -80,7 +80,7 @@
 		"select_otp": "ओटीपी निवडा",
 		"approver_name": "स्वीकृत नाव",
 		"select_otp_tooltip": "स्वीकृती नावात निवडलेल्या व्यक्तीपर्यंत ओटीपी पोहोचेल",
-		"open_new_current_account": "नवीन चालू खाते उघडा",
+		"open_new_current_account": "नवीन आयसीआयसीआय चालू खाते उघडा",
 		"otp_types": {
 			"bank_otp": "बँक ओटीपी",
 			"giddh_otp": "गिद्ध ओटीपी"
@@ -98,6 +98,7 @@
 		"beneficiary_nick_name": "लाभार्थी निक नाव",
 		"beneficiary_account_no": "लाभार्थी खाते क्रमांक",
 		"ifsc": "आयएफएससी",
-		"add_beneficiary": "लाभार्थी जोडा"
+		"add_beneficiary": "लाभार्थी जोडा",
+        "connect_new_account": "+ Connect New Account"
 	}
 }
