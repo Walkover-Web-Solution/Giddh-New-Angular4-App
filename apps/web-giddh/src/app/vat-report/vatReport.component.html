@@ -2,7 +2,7 @@
     (commonLocaleData)="commonLocaleData = $event">
     <nav class="navbar">
         <div class="relative w-100">
-            <hamburger-menu [allowSidebarToggle]="false"></hamburger-menu>
+            <hamburger-menu></hamburger-menu>
             <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState === 'in'">
                 <tax-sidebar (navigateEvent)="handleNavigation()" (clickOutside)="isMobileScreen ? asideGstSidebarMenuState = 'out' : ''" [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
             </div>

@@ -3,7 +3,7 @@
     <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState === 'in'">
         <tax-sidebar (navigateEvent)="handleNavigation()" (clickOutside)="isMobileScreen ? asideGstSidebarMenuState = 'out' : ''" [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
     </div>
-    <hamburger-menu [allowSidebarToggle]="false" [pageHeading]="localeData?.page_heading"></hamburger-menu>
+    <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="clearfix pd-t15 pd-b15">
         <div class="col-xs-12 col-sm-12">
             <div class="d-inline-block pull-left mr-2 middle eway-bill-date">
