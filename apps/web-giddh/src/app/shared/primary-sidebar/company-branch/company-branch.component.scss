@@ -193,9 +193,10 @@
                             a{
                                 background-color: transparent;
                                 padding:5px 20px;
+                                color: $omiod !important;
                                 &:hover{
                                     background-color: initial !important;
-                                    color: initial !important;
+                                    color: $omiod !important;
 
                                 }
                                 &.head-branch{
@@ -210,10 +211,10 @@
                                 }
                                 &.company-branches-list{
                                     &.active{
-                                        color: $trout !important;
+                                        color: $omiod !important;
                                         background-color: $sunshine !important;
                                         span{
-                                            color: $trout !important;
+                                            color: $omiod !important;
                                         }
                                     }
                                     .branch-alias, .branch-company-name{
@@ -264,16 +265,16 @@
                     a{
                         background-color: transparent;
                         padding:8px 20px;
-                        color: $trout;
+                        color: $omiod;
                         white-space: normal;
                         word-break: break-all;
                         &.active{
-                            color: $trout !important;
+                            color: $omiod !important;
                             background-color: $sunshine !important;
                         }
                         &:hover{
                             background-color: initial !important;
-                            color: initial !important;
+                            color: $omiod !important;
 
                         }
                         .main-company{
@@ -414,7 +415,7 @@
                                 &.dropdown-toggle{
                                     padding: 8px 20px;
                                     span{
-                                        color: $black-pearl;
+                                        color: $omiod;
                                     }
                                 }
                                 &.active{
