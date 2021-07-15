@@ -1,9 +1,14 @@
 <div class="container-fluid">
-    <div class="top-bar aging-top-bar clearfix">
+    <div class="top-bar aging-top-bar d-flex justify-content-between">
         <div class="aging-form-inline">
-            <div class="form-group mr-r15 pull-left linked-entities"
+            <div class="btn-group  pull-left on-desktop-view">
+                <button class="btn btn-sky-blue" (click)="creteNewCustomerEvent.emit(true)">
+                    {{localeData?.new_customer}}
+                </button>
+            </div>
+            <div class="form-group mr-r15 pull-left linked-entities mb-0"
                 *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
-                <div class="form-group">
+                <div class="form-group mb-0">
                     <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName"
                         [showClear]="false" [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)"
                         [isFilterEnabled]="true" [placeholder]="commonLocaleData?.app_select_entity"
@@ -29,6 +34,18 @@
                     </sh-select>
                 </div>
             </div>
+            <form #invoiceForm="ngForm" novalidate class="form-inline input-grp-date-range-picker position-relative">
+                <div class="form-group mr-r15 d-flex flex-fill">
+                    <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
+                        <i class="icon-calender calendar-addon"></i>
+                        <input type="text" name="selectedDateRange"
+                            [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker border-radius-2" />
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="d-flex justify-content-between">
             <div class="pull-left d-flex wrap-searching-aging">
                 <div class="form-group search-field max-width-250" [ngClass]="{'default-width':isAdvanceSearchApplied}">
                     <input type="text" [placeholder]="localeData?.name_amount" class="form-control name-width"
@@ -37,28 +54,55 @@
                         <i class="icon-search"></i>
                     </span>
                 </div>
-                <div class="cp advance-clear-filter-icons d-flex">
-                    <div class="advance-icon" (click)="toggleAdvanceSearchPopup()"
-                        tooltip="{{commonLocaleData?.app_advance_search}}">
-                        <span class="icon-advance-filter"></span>
-                    </div>
-                    <span class="refresh-btn" *ngIf="isAdvanceSearchApplied">
-                        <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()">
-                            <i aria-hidden="true" class="icon-refresh"
-                                tooltip="{{commonLocaleData?.app_reset_filter}}"></i>
-                        </a>
-                    </span>
-                </div>
             </div>
-            <div class="btn-group  pull-right">
-                <button class="btn btn-sky-blue mr-0" (click)="creteNewCustomerEvent.emit(true)">
-                    {{localeData?.new_customer}}
-                </button>
+            <div class="cp advance-clear-filter-icons d-flex float-right">
+                <div class="advance-icon btn btn-primary" (click)="toggleAdvanceSearchPopup()"
+                    tooltip="{{commonLocaleData?.app_advance_search}}">
+                    <span class="pd-r05 d-sm-flex d-none">{{commonLocaleData?.app_filter}}</span>
+                    <span class="icon-advance-filter"></span>
+                </div>
+                <span class="refresh-btn" *ngIf="isAdvanceSearchApplied">
+                    <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()">
+                        <i aria-hidden="true" class="icon-refresh" tooltip="{{commonLocaleData?.app_reset_filter}}"></i>
+                    </a>
+                </span>
+            </div>
+        </div>
+        <div class="btn-group mr-t15 pull-left mobile-view">
+            <button class="btn btn-sky-blue w-100" (click)="creteNewCustomerEvent.emit(true)">
+                {{localeData?.new_customer}}
+            </button>
+        </div>
+    </div>
+    <div class="top-content">
+        <div class="d-flex w-100 justify-content-between overflow-x-auto">
+            <div class="total-due-sale total-details-box opening-box border-none mr-r05">
+                <h5>
+                    {{commonLocaleData?.app_upcoming}}
+                    <div>
+                        <span class="d-inline-flex number-total">
+                            <amount-field [amount]="totalFutureDueAmounts" [currencySymbol]="false"
+                                [currencyCode]="false">
+                            </amount-field>/-
+                        </span>
+                    </div>
+                </h5>
+            </div>
+            <div class="total-due-sale total-details-box due-box border-none">
+                <h5>
+                    {{commonLocaleData?.app_due}}
+                    <div>
+                        <span class="d-inline-flex number-total">
+                            <amount-field [amount]="totalDueAmounts" [currencySymbol]="false" [currencyCode]="false">
+                            </amount-field>/-
+                        </span>
+                    </div>
+                </h5>
             </div>
         </div>
     </div>
     <div class="contact-main aging-page">
-        <div class="pd-b2 mr-b1 on-mobile-view mobile-card-wrapper">
+        <div class="pd-b2 mr-b1 mr-t1 on-mobile-view mobile-card-wrapper">
             <div *ngIf="!isMobileScreen" class="table-responsive">
                 <ng-container *ngTemplateOutlet='mainTable'></ng-container>
             </div>
@@ -69,43 +113,6 @@
                         [localeData]="localeData" [commonLocaleData]="commonLocaleData"></aging-dropdown>
                 </div>
                 <ng-container *ngTemplateOutlet='mainTable'></ng-container>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="result-total">
-    <div>
-        <div>
-            <div class="customer-right-wrap">
-                <div class="text-right total-result xs-left pl-2 pr-2">
-                    <h4 class="mr-b1 pr-1">{{commonLocaleData?.app_result_total}}</h4>
-                </div>
-                <div class="bg-white customer-right clearfix w-100">
-                    <table class="text-right float-right w-auto">
-                        <tr>
-                            <td>
-                                <p>{{commonLocaleData?.app_upcoming}}</p>
-                                <h3>
-                                    <span class="d-inline-flex">
-                                        <amount-field [amount]="totalFutureDueAmounts" [currencySymbol]="false"
-                                            [currencyCode]="false">
-                                        </amount-field>/-
-                                    </span>
-                                </h3>
-                            </td>
-                            <td>
-                                <p>{{commonLocaleData?.app_due}}</p>
-                                <h3>
-                                    <span class="d-inline-flex">
-                                        <amount-field [amount]="totalDueAmounts" [currencySymbol]="false"
-                                            [currencyCode]="false">
-                                        </amount-field>/-
-                                    </span>
-                                </h3>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
             </div>
         </div>
     </div>
@@ -131,7 +138,7 @@
         <div class="icon-sort-asc text-light-2 d-block font-xxs" (click)="sort(col, 'desc')"
             *ngIf="key === col && order === 'asc'" [ngClass]="{'active-text-color': key === col && order === 'asc'}">
         </div>
-        <div class="icon-sort-dsc text-light-2 d-block font-xxs" *ngIf="key === col && order === 'desc'"
+        <div class="icon-sort-asc text-light-2 d-block font-xxs" *ngIf="key === col && order === 'desc'"
             (click)="sort(col, 'asc')" [ngClass]="{'active-text-color': key === col && order === 'desc'}"></div>
     </div>
 </ng-template>
@@ -144,16 +151,20 @@
                 <td></td>
                 <td></td>
                 <td colspan="4" class="text-center top-aging-table-top">
-                    <p><strong>{{localeData?.due_in_last_days}}</strong></p>
-                    <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions"
-                        [localeData]="localeData" [commonLocaleData]="commonLocaleData"></aging-dropdown>
+                    <aging-dropdown [options]="agingDropDownoptions" [localeData]="localeData"  *ngIf="setDueRangeOpen$|async"
+                        [commonLocaleData]="commonLocaleData"></aging-dropdown>
                 </td>
                 <td></td>
             </tr>
             <tr>
-                <th>
-                    <div class="d-flex align-items-center">{{commonLocaleData?.app_customer_name}}
-                        <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'name'}"></ng-container>
+                <th #searchCustomerContainer
+                    (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')" class="td-search-box">
+                    <div class="d-flex align-items-center">
+                        <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showNameSearch, fieldName: 'name',formControl: searchedName,
+                                                    title: commonLocaleData?.app_customer_name}"></ng-container>
+                        <ng-container
+                            *ngTemplateOutlet="!showNameSearch ? sortingTemplate : '';context: { $implicit: 'name'}">
+                        </ng-container>
                     </div>
                 </th>
                 <th>
@@ -210,7 +221,7 @@
         <tbody *ngIf="!(getAgingReportRequestInProcess$ | async)">
             <ng-container *ngFor="let entry of (dueAmountReportData$ | async)?.results">
                 <tr *ngIf="(dueAmountReportData$ | async)?.results?.length">
-                    <td [attr.data-title]="commonLocaleData?.app_name">{{ entry.name }}</td>
+                    <td [attr.data-title]="commonLocaleData?.app_name" class="word-break">{{ entry.name }}</td>
                     <td [attr.data-title]="localeData?.group_name">{{ entry.groupName }}</td>
                     <td [attr.data-title]="commonLocaleData?.app_due_amount" class="text-right">
                         <span class="d-flex justify-content-end">
@@ -283,5 +294,29 @@
                 <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref></div>
             </div>
         </div>
+    </div>
+</ng-template>
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions"
+                [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
+                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
+                (rangeClicked)="selectedDate($event)" (datesUpdated)="selectedDate($event)"
+                [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>
+<ng-template #searchTemplate let-show let-title="title" let-placeholder="placeholder" let-fieldName="fieldName"
+    let-formControl="formControl">
+    <div [hidden]="show">
+        <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
+        <span> {{ title }}</span>
+    </div>
+    <div class="input-container" [hidden]="!show">
+        <input type="text" [placeholder]="getSearchFieldText(fieldName)" class="w-100" #searchBox
+            [formControl]="formControl" />
     </div>
 </ng-template>

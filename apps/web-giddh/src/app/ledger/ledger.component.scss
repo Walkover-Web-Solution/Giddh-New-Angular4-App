@@ -522,6 +522,10 @@ sh-select:focus {
     margin-right: 7px;
     border-radius: 5px;
     background-color: $white;
+    border: 1px solid $gainsboro;
+    padding: 5px;
+    width: 36px;
+    height: 36px;
     img {
         width: 18px;
     }
@@ -559,7 +563,7 @@ sh-select:focus {
     align-items: center;
 }
 .clear-filter-btn i {
-    font-size: 16px;
+    font-size: 18px;
 }
 .search-ledger-field {
     .btn-danger,
@@ -770,9 +774,11 @@ sh-select:focus {
     position: sticky;
     top: 55px;
     z-index: 1;
-    background-color: $alice-blue-light;
-    padding-left: 5px;
-    background-color: $alice-blue-light;
+    background-color: $white;
+    border-bottom: 1px solid $gainsboro;
+}
+.show-if-ledger-open {
+    height: 300px;
 }
 .linked-entities {
     width: 200px;

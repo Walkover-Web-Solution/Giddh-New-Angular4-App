@@ -1,20 +1,5 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    EventEmitter,
-    HostListener,
-    Input,
-    OnChanges,
-    OnDestroy,
-    OnInit,
-    Output,
-    QueryList,
-    SimpleChanges,
-    TemplateRef,
-    ViewChild,
-    ViewChildren,
-} from '@angular/core';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
@@ -25,8 +10,9 @@ import { CompanyActions } from '../../actions/company.actions';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { slice } from '../../lodash-optimized';
-import { AccountResponse } from '../../models/api-models/Account';
 import { CompanyResponse, Organization } from '../../models/api-models/Company';
+import { SalesActions } from '../../actions/sales/sales.action';
+import { AccountResponse } from '../../models/api-models/Account';
 import { CompAidataModel } from '../../models/db';
 import { DEFAULT_AC } from '../../models/defaultMenus';
 import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
@@ -41,7 +27,19 @@ import { AllItem, AllItems } from '../helpers/allItems';
     selector: 'primary-sidebar',
     templateUrl: './primary-sidebar.component.html',
     styleUrls: ['./primary-sidebar.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    animations: [
+        trigger('slideInOut', [
+            state('in', style({
+                transform: 'translate3d(0, 0, 0)'
+            })),
+            state('out', style({
+                transform: 'translate3d(100%, 0, 0)'
+            })),
+            transition('in => out', animate('400ms ease-in-out')),
+            transition('out => in', animate('400ms ease-in-out'))
+        ]),
+    ]
 })
 
 export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
@@ -103,6 +101,12 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public isItemAdded: boolean = false;
     /** This will open company branch switch dropdown */
     public showCompanyBranchSwitch:boolean = false;
+    /** This will show/hide account sidepan */
+    public accountAsideMenuState: string = 'out';
+    /** This will hold group unique name from CMD+k for creating account */
+    public selectedGroupForCreateAccount: any = '';
+    /* Observable for create account success */
+    private createAccountIsSuccess$: Observable<boolean>;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -115,7 +119,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         private generalActions: GeneralActions,
         private dbService: DbService,
         private groupWithAction: GroupWithAccountsAction,
-        private localeService: LocaleService
+        private localeService: LocaleService,
+        private salesAction: SalesActions
     ) {
         this.activeAccount$ = this.store.pipe(select(appStore => appStore.ledger.account), takeUntil(this.destroyed$));
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
@@ -141,6 +146,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 this.currentOrganizationType = OrganizationType.Company;
             }
         });
+        this.createAccountIsSuccess$ = this.store.pipe(select(state => state.sales.createAccountSuccess), takeUntil(this.destroyed$));
     }
 
     /**
@@ -226,7 +232,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 this.currentCompanyBranches = response;
                 if (this.generalService.currentBranchUniqueName) {
                     this.currentBranch = response.find(branch => (this.generalService.currentBranchUniqueName === branch.uniqueName)) || {};
-                    
+
                     if (!this.activeCompanyForDb) {
                         this.activeCompanyForDb = new CompAidataModel();
                     }
@@ -246,7 +252,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             let orderedCompanies = _.orderBy(companies, 'name');
             this.companyList = orderedCompanies;
         });
-        
+
         this.updateIndexDbSuccess$.subscribe(res => {
             if (res) {
                 if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
@@ -312,6 +318,12 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 }
             });
         }
+
+        this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((accountDetails) => {
+            if (accountDetails && this.accountAsideMenuState === 'in') {
+                this.toggleAccountAsidePane();
+            }
+        });
     }
 
     /**
@@ -358,7 +370,12 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      */
     public handleNewTeamCreationEmitter(e: any): void {
         this.modelRef.hide();
-        this.showManageGroupsModal();
+        if(e[0] === "group") {
+            this.showManageGroupsModal(e[1]?.name);
+        } else if(e[0] === "account") {
+            this.selectedGroupForCreateAccount = e[1]?.uniqueName;
+            this.toggleAccountAsidePane();
+        }
     }
 
     /**
@@ -404,8 +421,11 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      *
      * @memberof PrimarySidebarComponent
      */
-    public showManageGroupsModal(): void {
-        this.store.dispatch(this.groupWithAction.OpenAddAndManageFromOutside(''));
+    public showManageGroupsModal(search: any = ""): void {
+        if(search) {
+            this.store.dispatch(this.groupWithAction.getGroupWithAccounts());
+        }
+        this.store.dispatch(this.groupWithAction.OpenAddAndManageFromOutside(search));
     }
 
     /**
@@ -605,5 +625,43 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      */
     public openCompanyBranchDropdown(): void {
         this.showCompanyBranchSwitch = !this.showCompanyBranchSwitch;
+    }
+
+    /**
+     * This will toggle create account sidepan
+     *
+     * @param {*} [event]
+     * @memberof PrimarySidebarComponent
+     */
+     public toggleAccountAsidePane(event?: any): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
+
+        this.toggleBodyClass();
+    }
+
+    /**
+     * This will toggle fixed class on body
+     *
+     * @memberof PrimarySidebarComponent
+     */
+    public toggleBodyClass() {
+        if (this.accountAsideMenuState === 'in') {
+            document.querySelector('body').classList.add('fixed');
+        } else {
+            document.querySelector('body').classList.remove('fixed');
+        }
+    }
+
+    /**
+     * This will save new account
+     *
+     * @param {AddAccountRequest} item
+     * @memberof PrimarySidebarComponent
+     */
+     public addNewAccount(item: AddAccountRequest) {
+        this.store.dispatch(this.salesAction.addAccountDetailsForSales(item));
     }
 }
