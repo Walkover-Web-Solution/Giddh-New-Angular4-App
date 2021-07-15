@@ -172,6 +172,7 @@
     <generic-aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
         (closeAsideEvent)="toggleAccountAsidePane($event)"
         [selectedGrpUniqueName]="selectedGroupForCreateAccount" [createAccountFromCommandK]="true"
-        [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}" *ngIf="accountAsideMenuState === 'in'">
+        [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}"
+        (addEvent)="addNewAccount($event)" *ngIf="accountAsideMenuState === 'in'">
     </generic-aside-menu-account>
 </div>
