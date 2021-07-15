@@ -129,8 +129,11 @@
                             aria-controls="dropdown-basic" (click)="company?.branchCount > 1 ? getCompanyBranches(2, company) : changeCompany(company.uniqueName, '', false)">
                             <span class="p-0 d-flex align-items-center">
                                 <i class="icon-company mr-2"></i>
-                                <span class="select-company-name"> {{ company.name }} </span>
-                                <span class="font-11 branch-count" *ngIf="viewingCompany && company?.branchCount > 1">{{ company?.branchCount }}</span>
+                                <div class="d-flex flex-column">
+                                    <span class="select-company-name p-0"> {{ company.name }} </span>
+                                    <span class="font-11 p-0" *ngIf="viewingCompany && company?.branchCount > 1">{{ company?.branchCount
+                                        }}</span>
+                                </div>
                             </span>
                             <i class="icon-down-new" *ngIf="company?.branchCount > 1"></i>
                         </span>
