@@ -1,8 +1,13 @@
 <ng-container appTranslate [file]="'purchase-order'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <div class="container-fluid" *ngIf="!purchaseOrderUniqueName">
-        <div class="d-flex justify-content-between purchase-order-header">
+        <div class="d-flex purchase-order-header justify-content-between">
             <div class="d-flex date-advance-search">
+                <div class="btn-wrapper">
+                    <button *ngIf="!isCompany" class="btn btn-sky-blue desktop-view-btn"
+                        [routerLink]="['/pages/purchase-management/purchase-order/new']">{{localeData?.new_order}}
+                    </button>
+                </div>
                 <form #invoiceForm="ngForm" novalidate class="form-inline">
                     <div class="form-group mr-r1 d-flex">
                         <div class="input-group custom-datepicker">
@@ -10,10 +15,6 @@
                             <input type="text" name="dateRange" (click)="showGiddhDatepicker($event)"
                                 [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
                                 class="giddh-datepicker form-control date-range-picker" />
-                        </div>
-                        <div class="advance-icon" [tooltip]="commonLocaleData?.app_advance_search"
-                            (click)="openAdvanceSearchModal(purchaseAdvanceSearch)">
-                            <span class="icon-advance-filter"></span>
                         </div>
                     </div>
                 </form>
@@ -24,7 +25,7 @@
                 </button>
             </div>
             <div class="d-flex add-invoice">
-                <div *ngIf="purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0">
+                <div *ngIf="purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0" class="more-toggle">
                     <div *ngIf="!isCompany" class="btn-group" dropdown #dp="bs-dropdown">
                         <button dropdownToggle type="button" class="btn btn-primary desktop-view-btn dropdown-toggle"
                             aria-controls="dropdown-basic">
@@ -53,10 +54,10 @@
                         </ul>
                     </div>
                 </div>
-                <div class="btn-wrapper">
-                    <button *ngIf="!isCompany" class="btn btn-sky-blue desktop-view-btn mr-0"
-                        [routerLink]="['/pages/purchase-management/purchase-order/new']">{{localeData?.new_order}}
-                    </button>
+                <div class="d-flex align-items-center advance-icon btn btn-primary mr-0" [tooltip]="commonLocaleData?.app_advance_search"
+                    (click)="openAdvanceSearchModal(purchaseAdvanceSearch)">
+                    <span class="pd-r05 d-sm-flex d-none">{{commonLocaleData?.app_filter}}</span>
+                    <span class="icon-advance-filter"></span>
                 </div>
             </div>
         </div>
@@ -101,8 +102,8 @@
                 </button>
             </div>
         </div>
-        <div class="table-responsive">
-            <table class="table basic mr-t15 table-bordered giddh-table on-mobile-view">
+        <div class="table-responsive mr-t15">
+            <table class="table basic table-bordered giddh-table on-mobile-view">
                 <thead class="thead-background1" (mouseleave)="showSelectAllItemCheckbox = false">
                     <tr (mouseenter)="showSelectAllItemCheckbox = true">
                         <th class="min-wid-check" width="3%">
@@ -129,10 +130,10 @@
 
                         <th width="15%" class="td-search-box" (clickOutside)="showPurchaseOrderNumberSearch = false">
                             <div>
-                                <span
-                                    [hidden]="showPurchaseOrderNumberSearch || purchaseOrderPostRequest.purchaseOrderNumber">{{localeData?.po_number}}</span>
                                 <i class="icon-search" (click)="showInlineSearch('purchaseOrderNumber', searchBox);"
                                     [hidden]="showPurchaseOrderNumberSearch || purchaseOrderPostRequest.purchaseOrderNumber"></i>
+                                    <span
+                                    [hidden]="showPurchaseOrderNumberSearch || purchaseOrderPostRequest.purchaseOrderNumber">{{localeData?.po_number}}</span>
                             </div>
                             <div class="input-container"
                                 [hidden]="!showPurchaseOrderNumberSearch && !purchaseOrderPostRequest.purchaseOrderNumber">
@@ -144,10 +145,10 @@
 
                         <th width="15%" class="td-search-box" (clickOutside)="showVendorNameSearch = false">
                             <div>
+                                    <i class="icon-search" (click)="showInlineSearch('vendorName', searchBox);"
+                                    [hidden]="showVendorNameSearch || purchaseOrderPostRequest.vendorName"></i>
                                 <span
                                     [hidden]="showVendorNameSearch || purchaseOrderPostRequest.vendorName">{{localeData?.vendor_name}}</span>
-                                <i class="icon-search" (click)="showInlineSearch('vendorName', searchBox);"
-                                    [hidden]="showVendorNameSearch || purchaseOrderPostRequest.vendorName"></i>
                             </div>
                             <div class="input-container"
                                 [hidden]="!showVendorNameSearch && !purchaseOrderPostRequest.vendorName">
@@ -358,7 +359,7 @@
             (click)="sortPurchaseOrders('desc', column)"
             [ngClass]="{'active-text-color': purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'asc'}">
         </div>
-        <div class="icon-sort-dsc"
+        <div class="icon-sort-asc"
             *ngIf="purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'desc'"
             (click)="sortPurchaseOrders('asc', column)"
             [ngClass]="{'active-text-color': purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'desc'}">

@@ -684,7 +684,7 @@
                     <table class="col-sm-12 ledger-head mr-t1 width-100"
                         *ngIf="!isMobileScreen || (isMobileScreen && visibleTransactionTypeMobile !== 'all')">
                         <thead>
-                            <tr class="row">
+                            <tr class="row ml-0 mr-0">
                                 <th [ngClass]="(Shown && !isMobileScreen) || (isMobileScreen && visibleTransactionTypeMobile === 'debit') ? 'active' : ''"
                                     class="col-sm-6 hidden-xs sticky-header pr-0">
                                     <b> {{lc.ledgerUnderStandingObj.text.dr}}</b>

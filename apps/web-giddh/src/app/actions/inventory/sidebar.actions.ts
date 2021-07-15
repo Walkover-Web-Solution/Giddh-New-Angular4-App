@@ -20,7 +20,7 @@ export class SidebarAction {
             ofType(InventoryActionsConst.GetInventoryGroup),
             tap(a => console.log('called')),
             switchMap((action: CustomActions) => {
-                return this._inventoryService.GetGroupsStock(action.payload.groupUniqueName).pipe(shareReplay(), map(response => {
+                return this._inventoryService.GetGroupsStock(action.payload?.groupUniqueName).pipe(shareReplay(), map(response => {
                     if (response.status === 'error') {
                         this._toasty.errorToast(response.message, response.code);
                     } else {

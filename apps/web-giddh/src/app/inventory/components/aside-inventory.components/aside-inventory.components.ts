@@ -15,7 +15,7 @@ export class AsideInventoryComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public autoFocus: boolean = false;
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public animatePaneAside: EventEmitter<any> = new EventEmitter();
-    
+
     public isAddStockOpen: boolean = false;
     public isAddGroupOpen: boolean = false;
     public hideFirstStep: boolean = false;
