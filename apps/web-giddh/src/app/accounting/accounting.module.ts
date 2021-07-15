@@ -67,7 +67,7 @@ import { VoucherGridComponent } from './voucher-grid/voucher-grid.component';
         TextMaskModule,
         VirtualScrollModule,
         ElementViewChildModule,
-        QuickAccountModule.forRoot(),
+        QuickAccountModule,
         InventoryModule,
         NgxMaskModule.forRoot(),
     ],

@@ -6,7 +6,6 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { NgxUploaderModule } from 'ngx-uploader';
-import { SettingsServiceModule } from '../settings/settings-service.module';
 import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
 import { VoucherTypeToNamePipeModule } from '../shared/header/pipe/voucherTypeToNamePipe/voucherTypeToNamePipe.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
@@ -57,7 +56,6 @@ import { HasFocusDirectiveModule } from '../shared/helpers/directives/has-focus/
         VoucherTypeToNamePipeModule,
         CurrencyModule,
         NgxMaskModule.forRoot(),
-        SettingsServiceModule,
         AdvanceReceiptAdjustmentModule,
         HasFocusDirectiveModule
     ],

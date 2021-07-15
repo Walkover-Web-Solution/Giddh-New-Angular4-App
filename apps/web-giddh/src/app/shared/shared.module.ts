@@ -16,8 +16,6 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/lib/perfect-scrollbar.interfaces';
-import { LedgerDiscountComponent } from '../../app/ledger/components/ledgerDiscount/ledgerDiscount.component';
-import { ConfirmationModalComponent } from '../common/confirmation-modal/confirmation-modal.component';
 import { MfReportComponent } from '../manufacturing/report/mf.report.component';
 import { CommandKModule } from '../theme/command-k/command.k.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
@@ -32,7 +30,6 @@ import { AsideMenuOtherTaxes } from './aside-menu-other-taxes/aside-menu-other-t
 import { HeaderComponent } from './header';
 import { PrimarySidebarComponent } from './primary-sidebar/primary-sidebar.component';
 import { AccountOperationsComponent, CompanyAddNewUiComponent, GroupsAccountSidebarComponent, ManageGroupsAccountsComponent } from './header/components';
-import { AccountAddNewDetailsComponent } from './header/components/account-add-new-details/account-add-new-details.component';
 import { AccountUpdateNewDetailsComponent } from './header/components/account-update-new-details/account-update-new-details.component';
 import { GroupAddComponent } from './header/components/group-add/group-add.component';
 import { ExportGroupLedgerComponent } from './header/components/group-export-ledger-modal/export-group-ledger.component';
@@ -51,7 +48,6 @@ import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 import { AsideHelpSupportComponent } from './header/components/aside-help-support/aside-help-support.component';
 import { AsideSettingComponent } from './header/components/aside-setting/aside-setting.component';
 import { DeleteTemplateConfirmationModelComponent } from '../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.component';
-import { DatepickerWrapperComponent } from './datepicker-wrapper/datepicker.wrapper.component';
 import { LoaderComponent } from '../loader/loader.component';
 import { ProformaAddBulkItemsComponent } from '../proforma-invoice/components/proforma-add-bulk-items/proforma-add-bulk-items.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -64,7 +60,6 @@ import { PurchaseOrderPreviewModalComponent } from './purchase-order-preview/pur
 import { PurchaseSendEmailModalComponent } from './purchase-send-email/purchase-send-email.component';
 import { GiddhDaterangepickerComponent } from '../theme/giddh-daterangepicker/giddh-daterangepicker.component';
 import { HamburgerMenuComponent } from './header/components/hamburger-menu/hamburger-menu.component';
-import { AmountFieldComponent } from './amount-field/amount-field.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { GiddhPageLoaderComponent } from './giddh-page-loader/giddh-page-loader.component';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
@@ -72,22 +67,16 @@ import localeEn from '@angular/common/locales/en-GB';
 import localeHi from '@angular/common/locales/hi';
 import localeMr from '@angular/common/locales/mr';
 import { ValidateSectionPermissionDirectiveModule } from './validate-section-permission/validate-section-permission.module';
+import { AmountFieldComponentModule } from './amount-field/amount-field.module';
+import { AccountAddNewDetailsModule } from './header/components/account-add-new-details/account-add-new-details.module';
+import { LedgerDiscountModule } from '../ledger/components/ledger-discount/ledger-discount.module';
+import { ConfirmationModalModule } from '../common/confirmation-modal/confirmation-modal.module';
+import { DatepickerWrapperModule } from './datepicker-wrapper/datepicker.wrapper.module';
+import { HamburgerMenuModule } from './header/components/hamburger-menu/hamburger-menu.module';
 import { GenericAsideMenuAccountComponent } from './generic-aside-menu-account/generic.aside.menu.account.component';
 registerLocaleData(localeEn);
 registerLocaleData(localeHi);
 registerLocaleData(localeMr);
-
-const getGoogleCredentials = () => {
-    if (PRODUCTION_ENV || isElectron || isCordova) {
-        return {
-            GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com'
-        };
-    } else {
-        return {
-            GOOGLE_CLIENT_ID: '641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com'
-        };
-    }
-};
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -95,7 +84,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 const SOCIAL_CONFIG = (isElectron || isCordova) ? null : new AuthServiceConfig([
     {
         id: GoogleLoginProvider.PROVIDER_ID,
-        provider: new GoogleLoginProvider(getGoogleCredentials().GOOGLE_CLIENT_ID)
+        provider: new GoogleLoginProvider(GOOGLE_CLIENT_ID)
     }
 ], false);
 
@@ -124,7 +113,6 @@ export class PickDateAdapter extends NativeDateAdapter {
     declarations: [
         MfReportComponent,
         LayoutComponent,
-        LedgerDiscountComponent,
         HeaderComponent,
         AsideHelpSupportComponent,
         AsideSettingComponent,
@@ -141,22 +129,17 @@ export class PickDateAdapter extends NativeDateAdapter {
         CheckPermissionDirective,
         ExportGroupLedgerComponent,
         AsideMenuOtherTaxes,
-        AccountAddNewDetailsComponent,
         AccountUpdateNewDetailsComponent,
         WelcomeComponent,
-        ConfirmationModalComponent,
         DeleteTemplateConfirmationModelComponent,
-        DatepickerWrapperComponent,
         LoaderComponent,
         ProformaAddBulkItemsComponent,
         GiddhDatepickerComponent,
         RevisionHistoryComponent,
         PurchaseOrderPreviewModalComponent,
         PurchaseSendEmailModalComponent,
-        HamburgerMenuComponent,
         GiddhDaterangepickerComponent,
         GiddhPageLoaderComponent,
-        AmountFieldComponent,
         PrimarySidebarComponent,
         GenericAsideMenuAccountComponent
     ],
@@ -198,6 +181,13 @@ export class PickDateAdapter extends NativeDateAdapter {
         MatInputModule,
         CurrencyModule,
         TranslateDirectiveModule,
+        ValidateSectionPermissionDirectiveModule,
+        AmountFieldComponentModule,
+        AccountAddNewDetailsModule,
+        LedgerDiscountModule,
+        ConfirmationModalModule,
+        DatepickerWrapperModule,
+        HamburgerMenuModule,
         ValidateSectionPermissionDirectiveModule
     ],
     exports: [
@@ -210,11 +200,9 @@ export class PickDateAdapter extends NativeDateAdapter {
         LaddaModule,
         LayoutComponent,
         ShSelectModule,
-        LedgerDiscountComponent,
         ModalModule,
         HeaderComponent,
         ManageGroupsAccountsComponent,
-        ConfirmationModalComponent,
         AccountFilterPipe,
         SelectModule,
         PaginationModule,
@@ -229,7 +217,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         CompanyAddNewUiComponent,
         AsideMenuOtherTaxes,
         MfReportComponent,
-        AccountAddNewDetailsComponent,
         AccountUpdateNewDetailsComponent,
         WelcomeComponent,
         TabsModule,
@@ -239,19 +226,23 @@ export class PickDateAdapter extends NativeDateAdapter {
         BsDatepickerModule,
         NgxDaterangepickerMd,
         DeleteTemplateConfirmationModelComponent,
-        DatepickerWrapperComponent,
         LoaderComponent,
         ProformaAddBulkItemsComponent,
         GiddhDatepickerComponent,
         RevisionHistoryComponent,
         PurchaseOrderPreviewModalComponent,
         PurchaseSendEmailModalComponent,
-        HamburgerMenuComponent,
         GiddhPageLoaderComponent,
-        AmountFieldComponent,
         CurrencyModule,
         PrimarySidebarComponent,
         TranslateDirectiveModule,
+        ValidateSectionPermissionDirectiveModule,
+        AmountFieldComponentModule,
+        AccountAddNewDetailsModule,
+        LedgerDiscountModule,
+        ConfirmationModalModule,
+        DatepickerWrapperModule,
+        HamburgerMenuModule,
         ValidateSectionPermissionDirectiveModule,
         GenericAsideMenuAccountComponent
     ],
@@ -260,7 +251,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         CompanyAddNewUiComponent,
         AccountOperationsComponent,
         GroupsAccountSidebarComponent,
-        AccountAddNewDetailsComponent,
         OnBoardingComponent,
         AccountUpdateNewDetailsComponent
     ],

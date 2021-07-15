@@ -19,14 +19,13 @@ import { SelectModule } from '../theme/ng-select/ng-select';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
-import { AsideMenuSalesOtherTaxes } from './aside-menu-sales-other-taxes/aside-menu-sales-other-taxes';
+import { AsideMenuSalesOtherTaxesModule } from './aside-menu-sales-other-taxes/aside-menu-sales-other-taxes.module';
 import { DiscountListComponent } from './discount-list/discountList.component';
 export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost', 'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
 
 @NgModule({
     declarations: [
-        DiscountListComponent,
-        AsideMenuSalesOtherTaxes
+        DiscountListComponent
     ],
     imports: [
         FormsModule,
@@ -34,7 +33,7 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
         ReactiveFormsModule,
         SelectModule.forRoot(),
         ElementViewChildModule,
-        TaxControlModule.forRoot(),
+        TaxControlModule,
         ModalModule,
         TooltipModule,
         TypeaheadModule.forRoot(),
@@ -45,15 +44,15 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
         DecimalDigitsModule,
         ShSelectModule,
         SalesShSelectModule,
-        QuickAccountModule.forRoot(),
+        QuickAccountModule,
         BsDropdownModule,
         AsideMenuRecurringEntryModule,
         ClickOutsideModule,
-        NgxUploaderModule
+        NgxUploaderModule,
+        AsideMenuSalesOtherTaxesModule
     ],
     exports: [
-        DiscountListComponent,
-        AsideMenuSalesOtherTaxes
+        DiscountListComponent
     ],
     entryComponents: [],
     providers: []

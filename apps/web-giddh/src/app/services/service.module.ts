@@ -17,7 +17,6 @@ import { PermissionService } from "./permission.service";
 import { ManufacturingService } from "./manufacturing.service";
 import { SearchService } from './search.service';
 import { TlPlService } from './tl-pl.service';
-import { LedgerService } from './ledger.service';
 import { DaybookService } from './daybook.service';
 import { DashboardService } from './dashboard.service';
 import { SettingsIntegrationService } from './settings.integraion.service';
@@ -98,7 +97,6 @@ export class ServiceModule {
                 InvoiceTemplatesService,
                 LogsService,
                 TlPlService,
-                LedgerService,
                 SettingsIntegrationService,
                 SettingsProfileService,
                 SettingsTaxesService,
