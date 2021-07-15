@@ -12,7 +12,7 @@ import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import { TallySyncService } from "../../services/tally-sync.service";
 import { TallySyncData, DownloadTallyErrorLogRequest } from "../../models/api-models/tally-sync";
 import { saveAs } from 'file-saver';
-import { ActiveFinancialYear, CompanyResponse } from '../../models/api-models/Company';
+import { CompanyResponse } from '../../models/api-models/Company';
 import { GeneralService } from '../../services/general.service';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
 import { PAGINATION_LIMIT } from '../../app.constant';
@@ -36,7 +36,6 @@ export class CompletedComponent implements OnInit, OnDestroy {
     public startDate: string;
     public endDate: string;
     public filter: any = {};
-    public activeFinancialYear: ActiveFinancialYear;
     public filterForm: FormGroup;
     public completedData: TallySyncData[] = [];
     public MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];

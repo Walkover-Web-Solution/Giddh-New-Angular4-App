@@ -36,21 +36,17 @@
     padding-bottom: 5px;
 }
 .advance-icon {
-    width: 36px;
-    height: 36px;
     display: -webkit-inline-box;
     display: inline-flex;
     -webkit-box-pack: center;
     justify-content: center;
     -webkit-box-align: center;
     align-items: center;
-    font-size: 18px;
+    font-size: 14px;
     margin-left: 15px;
     border: 1px solid $gainsboro;
     border-radius: 5px;
-    color: $midnight-blue;
     margin-right: 15px;
-    background: $white;
     cursor: pointer;
 }
 .table > tbody + tbody {
@@ -58,9 +54,6 @@
 }
 .expand-btn-hide-desktop {
     display: none;
-}
-.expand-export {
-    float: right;
 }
 .warehouse-name {
     white-space: normal;
@@ -80,6 +73,42 @@
     border-right: 1px solid $gainsboro !important;
     cursor: pointer;
 }
+.linked-entities {
+    width: 200px;
+}
+.mobile-view{
+    display:none !important;
+}
+
+.expand-collapse-btn a {
+    width: 36px;
+    height: 36px;
+    background-color: $white;
+    border: 1px solid $gainsboro;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    color: $midnight-blue;
+    &:hover{
+        background: $chetwode-blue;
+        color: $white;
+    }
+}
+
+.export-btn{
+    height: 36px;
+}
+
+button.btn.btn-filter {
+    background: $whisper;
+    border: 1px solid $whisper;
+    font-size: 14px;
+    color: $midnight-blue;
+    align-items: center;
+}
+
 /*responsive */
 @media (max-width: 768px) {
     .on-mobile-view th {
@@ -99,18 +128,23 @@
     .expand-collapse-btn.form-group {
         display: none !important;
     }
+    .export-btn{
+        display: none !important;
+    }
     .expand-btn-hide-desktop {
         display: inline-block;
     }
-    .expand-export {
-        float: none;
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-        margin-top: 15px;
-    }
     .linked-entities {
         margin-bottom: 0 !important;
+    }
+    .desktop-view{
+        display:none !important;
+    }
+    .mobile-view{
+        display:inline-block !important;
+    }
+    .advance-icon{
+        margin-right: 0 !important;
     }
 }
 @media (max-width: 575px) {
@@ -132,6 +166,12 @@
         vertical-align: middle;
     }
 }
+@media (min-width: 769px){
+    .table-responsive{
+        max-height: calc(100vh - 340px);
+        overflow-y: auto;
+    }
+}
 .daybook-table-tbody > tr {
     cursor: pointer;
 }
@@ -141,4 +181,27 @@
 
 .trial-balance.table-container > div > section {
     border-left: 0;
+}
+
+@media (max-width: 1100px){
+    .company-date-picker{
+        flex-direction: column;
+    }
+    .linked-entities{
+        padding-bottom: 10px;
+    }
+}
+
+@media (max-width: 475px){
+    .clear-filter-responsive{
+        display: block !important;
+        width:100%;
+        .btn{
+            width:100%;
+        }
+    }
+
+    .clear-filter.form-group{
+        display: none;
+    }
 }
