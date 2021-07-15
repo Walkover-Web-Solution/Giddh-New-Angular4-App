@@ -11,7 +11,6 @@ import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { StateDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import * as moment from 'moment/moment';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
@@ -47,8 +46,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public totalDueAmounts: number = 0;
     public totalFutureDueAmounts: number = 0;
     public universalDate$: Observable<any>;
-    public toDate: string;
-    public fromDate: string;
     public moment = moment;
     public key: string = 'name';
     public order: string = 'asc';
@@ -137,7 +134,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                     obj.dueAmount1 = obj.currentAndPastDueAmount[1].dueAmount;
                     obj.dueAmount2 = obj.currentAndPastDueAmount[2].dueAmount;
                     obj.dueAmount3 = obj.currentAndPastDueAmount[3].dueAmount;
-
                 });
             }
             setTimeout(() => {
@@ -157,25 +153,18 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.getDueAmountreportData();
         this.currentOrganizationType = this.generalService.currentOrganizationType;
-        this.universalDate$.subscribe(universalDate => {
-            if (universalDate) {
-                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+        this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
+            if (dateObj) {
+                let universalDate = cloneDeep(dateObj);
+
+                this.dueAmountReportRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.dueAmountReportRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
                 this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-
+                
                 this.getDueReport();
             }
         });
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = 'aging-report';
-        this.dueAmountReportRequest.from = this.fromDate;
-        this.dueAmountReportRequest.to = this.toDate;
-
-        this.getDueReport();
 
         this.store.dispatch(this.agingReportActions.GetDueRange());
         this.agingDropDownoptions$.subscribe(p => {
@@ -410,10 +399,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
-            this.dueAmountReportRequest.from = this.fromDate;
-            this.dueAmountReportRequest.to = this.toDate;
+            this.dueAmountReportRequest.from = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.dueAmountReportRequest.to = moment(value.endDate).format(GIDDH_DATE_FORMAT);
             this.getDueReport();
         }
     }
@@ -447,7 +434,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      * @param {*} el Element reference for focusing
      * @memberof AgingReportComponent
      */
-    public toggleSearch(fieldName: string, el: any) {
+    public toggleSearch(fieldName: string, el: any): void {
         if (fieldName === 'name') {
             this.showNameSearch = true;
         }
