@@ -66,7 +66,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public activeTab: string = '';
     public isUpdateCompanyInProgress$: Observable<boolean>;
     public isCreateAndSwitchCompanyInProcess: boolean;
-    public asideSettingMenuState: string = 'in';
     public isMobileScreen: boolean = true;
     public apiPostmanDocUrl: String = API_POSTMAN_DOC_URL;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -115,12 +114,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
             '(max-width:767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
-            if (!this.isMobileScreen) {
-                this.asideSettingMenuState = "in";
-                this.toggleBodyClass();
-            } else {
-                this.asideSettingMenuState = "out";
-            }
         });
 
         if (!this.isCreateAndSwitchCompanyInProcess) {
@@ -267,38 +260,10 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-    /**
-  * This will toggle the settings popup
-  *
-  * @param {*} [event]
-  * @memberof SettingsComponent
-  */
-    public toggleSettingPane(event?): void {
-        this.toggleBodyClass();
-
-        if (this.isMobileScreen && event && this.asideSettingMenuState === 'in') {
-            this.asideSettingMenuState = "out";
-        }
-    }
-
-    /**
-     * This will toggle the fixed class on body
-     *
-     * @memberof SettingsComponent
-     */
-    public toggleBodyClass(): void {
-        if (this.asideSettingMenuState === 'in') {
-            document.querySelector('body').classList.add('setting-sidebar-open');
-        } else {
-            document.querySelector('body').classList.remove('setting-sidebar-open');
-        }
-    }
-
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('setting-sidebar-open');
-        this.asideSettingMenuState = "out";
     }
 
     /**

@@ -1,11 +1,7 @@
 <ng-container appTranslate [file]="'user-details'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
-    <div class="help-support-aside setting-sidebar-wrapper" *ngIf="asideSettingMenuState === 'in'">
-        <aside-setting class="setting-sidebar" (closeAsideEvent)="toggleSettingPane($event)"></aside-setting>
-    </div>
-
     <div class="setting-page user-detail-page relative" id="setting-tab" *ngIf="!isCreateAndSwitchCompanyInProcess">
-        <hamburger-menu *ngIf="localeData?.auth_key" [allowSidebarToggle]="false" [pageHeading]="getPageHeading()"></hamburger-menu>
+        <hamburger-menu *ngIf="localeData?.auth_key" [pageHeading]="getPageHeading()"></hamburger-menu>
         <!-- start of tab set -->
         <tabset #staticTabs>
 
