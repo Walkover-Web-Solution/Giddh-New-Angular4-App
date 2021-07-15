@@ -10,3 +10,7 @@ export const SALES_API_V4 = {
     GENERATE_GENERIC_ITEMS: `v4/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/generate`,
     UPDATE_VOUCHER: `v4/${URL}vouchers`
 };
+/** New voucher APIs */
+export const VOUCHER_API  = {
+    GENERATE_SALES: 'company/:companyUniqueName/vouchers'
+}
