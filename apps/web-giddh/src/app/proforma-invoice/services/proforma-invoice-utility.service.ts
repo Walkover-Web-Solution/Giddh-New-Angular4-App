@@ -3,6 +3,7 @@ import {
     ConfirmationModalButton,
     ConfirmationModalConfiguration,
 } from '../../common/confirmation-modal/confirmation-modal.interface';
+import { VoucherTypeEnum } from '../../models/api-models/Sales';
 
 @Injectable({
     providedIn: 'any'
@@ -47,9 +48,11 @@ export class ProformaInvoiceUtilityService {
      * @memberof ProformaInvoiceUtilityService
      */
     public getVoucherRequestObjectForInvoice(data: any): any {
+        data.type = this.parseVoucherType(data.type);
         if (data.account) {
             data.account.customerName = data.account.name;
             delete data.account.name;
+            delete data.account.country;
             if (data.account.billingDetails) {
                 data.account.billingDetails.taxNumber = data.account.billingDetails.gstNumber;
                 data.account.billingDetails.country = {
@@ -75,6 +78,27 @@ export class ProformaInvoiceUtilityService {
                 delete data.account.shippingDetails.countryCode;
             }
         }
+        if (data?.entries?.length) {
+            // TODO: Remove this once the API issue is resolved
+            data.entries.forEach(element => {
+                element.description = '';
+                element.discounts = element.discounts.filter(discount => (discount.name && discount.particular) || discount.discountValue);
+            });
+        }
         return data;
+    }
+
+    /**
+     * Returns 'sales' because we don't have 'cash' as voucher type in api so we have to handle it manually
+     *
+     * @param {VoucherTypeEnum} voucher Voucher type
+     * @return {string} Parsed voucher type
+     * @memberof ProformaInvoiceUtilityService
+     */
+    public parseVoucherType(voucher: VoucherTypeEnum): string {
+        if (voucher === VoucherTypeEnum.cash) {
+            return VoucherTypeEnum.sales;
+        }
+        return voucher;
     }
 }

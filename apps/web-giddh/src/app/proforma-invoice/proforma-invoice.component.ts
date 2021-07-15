@@ -876,7 +876,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         if (this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote) {
                             this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.accountUniqueName, {
                                 invoiceNumber: this.invoiceNo,
-                                voucherType: this.parseVoucherType(this.invoiceType)
+                                voucherType: this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType)
                             }));
                         }
                         // TODO: Add purchase record get API call once advance receipt is complete
@@ -2382,7 +2382,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         // set voucher type
         data.entries = data.entries.map((entry) => {
-            entry.voucherType = this.parseVoucherType(this.invoiceType);
+            entry.voucherType = this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType);
             entry.taxList = entry.taxes.map(m => m.uniqueName);
             entry.tcsCalculationMethod = entry.otherTaxModal.tcsCalculationMethod;
 
@@ -2418,7 +2418,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 deposit
             } as GenericRequestForGenerateSCD;
             // set voucher type
-            requestObject.voucher.voucherDetails.voucherType = this.parseVoucherType(this.invoiceType);
+            requestObject.voucher.voucherDetails.voucherType = this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType);
             // set state details as new request
             requestObject.account.billingDetails.countryName = this.customerCountryName;
             requestObject.account.billingDetails.countryCode = this.customerCountryCode;
@@ -2521,7 +2521,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 updatedData.accountDetails = {};
             }
             updatedData.voucherDetails.voucherNumber = data.voucherDetails.voucherNumber;
-            updatedData.voucherDetails.voucherType = this.parseVoucherType(this.invoiceType);
+            updatedData.voucherDetails.voucherType = this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType);
             updatedData.accountDetails.uniqueName = data.accountDetails.uniqueName;
             this.store.dispatch(this.proformaActions.generateProforma(updatedData));
         } else {
@@ -2540,7 +2540,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 if (this.isCreditNote) {
                     updatedData['invoiceLinkingRequest'] = data.voucherDetails.invoiceLinkingRequest;
                 }
-                if (this.isSalesInvoice && this.generalService.voucherApiVersion === 2) {
+                if (this.generalService.voucherApiVersion === 2) {
                     updatedData = this.proformaInvoiceUtilityService.getVoucherRequestObjectForInvoice(updatedData);
                 }
             }
@@ -3898,7 +3898,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (!requestObject.accountDetails) {
                 requestObject.accountDetails = {};
             }
-            requestObject.voucherDetails.voucherType = this.parseVoucherType(this.invoiceType);
+            requestObject.voucherDetails.voucherType = this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType);
             requestObject.accountDetails.uniqueName = requestObject.account.uniqueName;
             this.store.dispatch(this.proformaActions.updateProforma(requestObject));
         } else {
@@ -3917,7 +3917,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     voucher: data,
                     entries: [],
                     date: data.voucherDetails.voucherDate,
-                    type: this.parseVoucherType(this.invoiceType),
+                    type: this.invoiceType,
                     exchangeRate: exRate,
                     dueDate: data.voucherDetails.dueDate,
                     number: this.invoiceNo,
@@ -4219,7 +4219,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         // set voucher type
         data.entries = data.entries.map((entry) => {
-            entry.voucherType = this.parseVoucherType(this.invoiceType);
+            entry.voucherType = this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType);
             entry.taxList = entry.taxes.map(m => m.uniqueName);
             entry.tcsCalculationMethod = entry.otherTaxModal.tcsCalculationMethod;
 
@@ -4256,7 +4256,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
 
         // set voucher type
-        obj.voucher.voucherDetails.voucherType = this.parseVoucherType(this.invoiceType);
+        obj.voucher.voucherDetails.voucherType = this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType);
         return obj;
     }
 
@@ -4274,7 +4274,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             request.sort = 'desc';
             request.count = 5;
             request.isLastInvoicesRequest = true;
-            this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.parseVoucherType(this.invoiceType)));
+            this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType)));
         }
     }
 
@@ -4403,7 +4403,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote) {
                 this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.accountUniqueName, {
                     invoiceNumber: this.invoiceNo,
-                    voucherType: this.parseVoucherType(this.invoiceType)
+                    voucherType: this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType)
                 }));
             } else if (this.isPurchaseInvoice) {
                 const accountUniqueName = (this.selectedItem) ? this.selectedItem.account.uniqueName : this.accountUniqueName;
@@ -4412,7 +4412,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             } else {
                 this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
                     invoiceNumber: this.invoiceNo,
-                    voucherType: this.parseVoucherType(this.invoiceType)
+                    voucherType: this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType)
                 }));
             }
         } else {
@@ -4586,13 +4586,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         return discountArray;
     }
 
-    private parseVoucherType(voucher: VoucherTypeEnum) {
-        // return sales because we don't have cash as voucher type in api so we have to handle it manually
-        if (voucher === VoucherTypeEnum.cash) {
-            return VoucherTypeEnum.sales;
-        }
-        return voucher;
-    }
+
 
     private updateVoucherSuccess() {
         this.startLoader(false);
