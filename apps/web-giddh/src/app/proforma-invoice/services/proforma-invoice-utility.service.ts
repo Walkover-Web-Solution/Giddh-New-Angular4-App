@@ -3,9 +3,10 @@ import {
     ConfirmationModalButton,
     ConfirmationModalConfiguration,
 } from '../../common/confirmation-modal/confirmation-modal.interface';
+import { VoucherTypeEnum } from '../../models/api-models/Sales';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'any'
 })
 export class ProformaInvoiceUtilityService {
 
@@ -37,5 +38,67 @@ export class ProformaInvoiceUtilityService {
             footerCssClass,
             buttons
         };
+    }
+
+    /**
+     * Returns the transformed request object required for new voucher APIs
+     *
+     * @param {*} data Old request object
+     * @return {*} {*} New request object
+     * @memberof ProformaInvoiceUtilityService
+     */
+    public getVoucherRequestObjectForInvoice(data: any): any {
+        data.type = this.parseVoucherType(data.type);
+        if (data.account) {
+            data.account.customerName = data.account.name;
+            delete data.account.name;
+            delete data.account.country;
+            if (data.account.billingDetails) {
+                data.account.billingDetails.taxNumber = data.account.billingDetails.gstNumber;
+                data.account.billingDetails.country = {
+                    code: data.account.billingDetails.countryCode,
+                    name: data.account.billingDetails.countryName
+                };
+                delete data.account.billingDetails.gstNumber;
+                delete data.account.billingDetails.stateCode;
+                delete data.account.billingDetails.stateName;
+                delete data.account.billingDetails.countryName;
+                delete data.account.billingDetails.countryCode;
+            }
+            if (data.account.shippingDetails) {
+                data.account.shippingDetails.taxNumber = data.account.shippingDetails.gstNumber;
+                data.account.shippingDetails.country = {
+                    code: data.account.shippingDetails.countryCode,
+                    name: data.account.shippingDetails.countryName
+                };
+                delete data.account.shippingDetails.gstNumber;
+                delete data.account.shippingDetails.stateCode;
+                delete data.account.shippingDetails.stateName;
+                delete data.account.shippingDetails.countryName;
+                delete data.account.shippingDetails.countryCode;
+            }
+        }
+        if (data?.entries?.length) {
+            // TODO: Remove this once the API issue is resolved
+            data.entries.forEach(element => {
+                element.description = '';
+                element.discounts = element.discounts.filter(discount => (discount.name && discount.particular) || discount.discountValue);
+            });
+        }
+        return data;
+    }
+
+    /**
+     * Returns 'sales' because we don't have 'cash' as voucher type in api so we have to handle it manually
+     *
+     * @param {VoucherTypeEnum} voucher Voucher type
+     * @return {string} Parsed voucher type
+     * @memberof ProformaInvoiceUtilityService
+     */
+    public parseVoucherType(voucher: VoucherTypeEnum): string {
+        if (voucher === VoucherTypeEnum.cash) {
+            return VoucherTypeEnum.sales;
+        }
+        return voucher;
     }
 }
