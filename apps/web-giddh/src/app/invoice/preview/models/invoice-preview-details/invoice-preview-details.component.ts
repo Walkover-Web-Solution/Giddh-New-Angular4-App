@@ -204,7 +204,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             this.isSidebarExpanded = true;
             this._generalService.collapseSidebar();
         }
-
+        document.querySelector('body').classList.add('setting-sidebar-open');
         document.querySelector('body').classList.add('update-scroll-hidden');
         if (this.selectedItem) {
             if (!this.isVoucherDownloading) {
@@ -577,7 +577,9 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         if(this.isSidebarExpanded) {
             this.isSidebarExpanded = false;
             this._generalService.expandSidebar();
+            document.querySelector('.nav-left-bar').classList.add('open');
         }
+        document.querySelector('body').classList.remove('setting-sidebar-open');
         this.performActionAfterClose();
         this.destroyed$.next(true);
         this.destroyed$.complete();
