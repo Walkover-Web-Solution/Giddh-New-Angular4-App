@@ -42,7 +42,7 @@
                                 aria-controls="dropdown-basic" (click)="getCompanyBranches(1, company); showAllBranches(company);"> 
                                 <i class="icon-company mr-2"></i>
                                 <span class="company-name-right">{{ company.name }}</span>
-                                <span class="font-11 text-right branch-count pt-0 pb-0">45</span>
+                                <span class="font-11 text-right branch-count pt-0 pb-0">{{ company?.branchCount }}</span>
                             </span>
                         </li>
                     </ul>
