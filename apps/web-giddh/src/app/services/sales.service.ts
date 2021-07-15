@@ -39,7 +39,7 @@ export class SalesService {
         this.companyUniqueName = this._generalService.companyUniqueName;
         let url;
         if (this._generalService.voucherApiVersion === 2) {
-            url = `${this.config.apiUrl}${VOUCHER_API.GENERATE_SALES}`;
+            url = `http://giddh-accounting-ms-test.ap-south-1.elasticbeanstalk.com/${VOUCHER_API.GENERATE_SALES}`;
             return this._http.post(url
                 .replace(':companyUniqueName', this.companyUniqueName)
                 , model)
