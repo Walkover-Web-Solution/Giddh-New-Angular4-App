@@ -425,7 +425,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             transaction.amount = transaction.amount ? transaction.amount : null;
 
             if (acc) {
-                this.groupUniqueName = accModel.groupUniqueName;
+                this.groupUniqueName = accModel?.groupUniqueName;
                 this.selectAccUnqName = acc.uniqueName;
 
                 let len = this.requestObj.transactions[idx].inventory ? this.requestObj.transactions[idx].inventory.length : 0;
