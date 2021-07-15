@@ -415,7 +415,7 @@
                                     [disabled]="addStockForm.invalid || disableStockButton">Update
                                 </button>
                                 <button *ngIf="isUpdatingStockForm" [ladda]="isStockDeleteInProcess$ | async"
-                                    class="btn btn-danger" (click)="deleteStock()">Delete Stock
+                                    class="btn btn-danger" (click)="openModal(deleteGroupStockTemplate)">Delete Stock
                                 </button>
                                 <button type="button" *ngIf="!isUpdatingStockForm" (click)="resetStockForm()"
                                     class="btn btn-default">Reset
@@ -432,9 +432,14 @@
 
     <div class="clearfix"></div>
     <!--manufactre details  -->
-
-
     <div class="clearfix"></div>
-
-
 </form>
+<!-- popup for the delete group -->
+<ng-template #deleteGroupStockTemplate>
+    <confirm-modal [title]="'Confirmation'"
+        [body]="'Deleting this stock will un-link & delete it forever. Are you sure you want to delete the stock?'"
+        [permanentlyDeleteMessage]="'It will be deleted permanently and will no longer be accessible from any other module.'" [ok]="'Yes'" [cancel]="'No'"
+        (cancelCallBack)="hideModal()" (successCallBack)="deleteStock();hideModal()">
+    </confirm-modal>
+</ng-template>
+<!-- popup end -->
