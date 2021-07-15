@@ -340,8 +340,8 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         // get view from sidebar while clicking on group/stock
         this.invViewService.getActiveView().pipe(takeUntil(this.destroyed$)).subscribe(viewActiveStock => {
             this.initVoucherType();
-            this.groupUniqueName = viewActiveStock.groupUniqueName;
-            this.stockUniqueName = viewActiveStock.stockUniqueName;
+            this.groupUniqueName = viewActiveStock?.groupUniqueName;
+            this.stockUniqueName = viewActiveStock?.stockUniqueName;
             this.selectedEntity = 'allEntity';
             this.selectedTransactionType = 'all';
             if (this.groupUniqueName) {

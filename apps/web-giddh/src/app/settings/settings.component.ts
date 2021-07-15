@@ -43,7 +43,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     public isUpdateCompanyInProgress$: Observable<boolean>;
     public isCompanyProfileUpdated: boolean = false;
     //variable to hold sub tab value inside any tab e.g. integration -> payment
-    public selectedChildTab: number = SETTING_INTEGRATION_TABS.SMS.VALUE;
+    public selectedChildTab: number = SETTING_INTEGRATION_TABS.EMAIL.VALUE;
     public activeTab: string = 'taxes';
     public integrationtab: string;
     public isMobileScreen: boolean = true;
@@ -98,7 +98,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 this.integrationtab = params['referrer'];
                 this.activeTab = params['type'];
             } else if (params['type'] && this.activeTab !== params['type']) {
-                this.selectedChildTab = SETTING_INTEGRATION_TABS.SMS.VALUE;
+                this.selectedChildTab = SETTING_INTEGRATION_TABS.EMAIL.VALUE;
                 this.integrationtab = '';
                 this.activeTab = params['type'];
             } else {
@@ -206,15 +206,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 return SETTING_INTEGRATION_TABS.COLLECTION.VALUE;
             case SETTING_INTEGRATION_TABS.EMAIL.LABEL:
                 return SETTING_INTEGRATION_TABS.EMAIL.VALUE;
-            case SETTING_INTEGRATION_TABS.SMS.LABEL:
-                return SETTING_INTEGRATION_TABS.SMS.VALUE;
+            // case SETTING_INTEGRATION_TABS.SMS.LABEL:
+            //     return SETTING_INTEGRATION_TABS.SMS.VALUE;
             default:
-                return SETTING_INTEGRATION_TABS.SMS.VALUE;
+                return SETTING_INTEGRATION_TABS.EMAIL.VALUE;
         }
-    }
-
-    public disableEnable() {
-        this.staticTabs.tabs[2].disabled = !this.staticTabs.tabs[2].disabled;
     }
 
     public profileSelected(e) {

@@ -263,7 +263,13 @@ if (PRODUCTION_ENV || isElectron || isCordova) {
 export enum AdjustedVoucherType {
     Receipt = 'rcpt',
     AdvanceReceipt = 'advance-receipt',
-    Sales = 'sal'
+    Sales = 'sal', // used in ledger
+    SalesInvoice = 'sales', // used in invoice preview module
+    Purchase = 'pur',
+    CreditNote = 'credit note',
+    DebitNote = 'debit note',
+    Payment = 'pay',
+    Journal = 'jr'
 }
 
 /** Collection of search field default text for empty results */
@@ -295,11 +301,11 @@ export const SUPPORT_TEAM_NUMBERS = [
 
 /** Settings integration tabs */
 export const SETTING_INTEGRATION_TABS = {
-    SMS: { LABEL: 'sms', VALUE: 0 },
-    EMAIL: { LABEL: 'email', VALUE: 1 },
-    COLLECTION: { LABEL: 'collection', VALUE: 2 },
-    E_COMMERCE: { LABEL: 'ecommerce', VALUE: 3 },
-    PAYMENT: { LABEL: 'payment', VALUE: 4 }
+    // SMS: { LABEL: 'sms', VALUE: 0 },
+    EMAIL: { LABEL: 'email', VALUE: 0 },
+    COLLECTION: { LABEL: 'collection', VALUE: 1 },
+    E_COMMERCE: { LABEL: 'ecommerce', VALUE: 2 },
+    PAYMENT: { LABEL: 'payment', VALUE: 3 }
 };
 /** Email Validation Regex */
 export const EMAIL_VALIDATION_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -316,6 +322,8 @@ export enum EInvoiceStatus {
 }
 
 /** Length of entry description on vouchers */
-export const ENTRY_DESCRIPTION_LENGTH = 100;
+export const ENTRY_DESCRIPTION_LENGTH = 300;
 
 export const EMAIL_REGEX_PATTERN = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+/** This will hold error status code for permission error from API */
+export const UNAUTHORISED = 401;

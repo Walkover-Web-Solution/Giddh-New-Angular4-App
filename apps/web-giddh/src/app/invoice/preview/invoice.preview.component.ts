@@ -30,7 +30,7 @@ import { ElementViewContainerRef } from 'apps/web-giddh/src/app/shared/helpers/d
 import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceReceiptFilter, ReceiptItem, ReciptResponse } from 'apps/web-giddh/src/app/models/api-models/recipt';
 import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
-import { ActiveFinancialYear, CompanyResponse, ValidateInvoice } from 'apps/web-giddh/src/app/models/api-models/Company';
+import { CompanyResponse, ValidateInvoice } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdvanceSearch.component';
 import { BulkExportModal } from './models/bulk-export-modal/bulk-export.component';
@@ -105,64 +105,14 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public modalUniqueName: string;
     public startDate: Date;
     public endDate: Date;
-    public activeFinancialYear: ActiveFinancialYear;
     public selectedInvoiceForDetails: InvoicePreviewDetailsVm;
     public itemsListForDetails: InvoicePreviewDetailsVm[] = [];
     public innerWidth: any;
     public isMobileView = false;
     public isExported: boolean = false;
-
     public showCustomerSearch = false;
     public showProformaSearch = false;
     public selectedDateRange: any;
-    public datePickerOptions: any = {
-        hideOnEsc: true,
-        locale: {
-            applyClass: 'btn-green',
-            applyLabel: 'Go',
-            fromLabel: 'From',
-            format: 'D-MMM-YY',
-            toLabel: 'To',
-            cancelLabel: 'Cancel',
-            customRangeLabel: 'Custom range'
-        },
-        ranges: {
-            'This Month to Date': [
-                moment().startOf('month'),
-                moment()
-            ],
-            'This Quarter to Date': [
-                moment().quarter(moment().quarter()).startOf('quarter'),
-                moment()
-            ],
-            'This Financial Year to Date': [
-                moment().startOf('year').subtract(9, 'year'),
-                moment()
-            ],
-            'This Year to Date': [
-                moment().startOf('year'),
-                moment()
-            ],
-            'Last Month': [
-                moment().subtract(1, 'month').startOf('month'),
-                moment().subtract(1, 'month').endOf('month')
-            ],
-            'Last Quater': [
-                moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
-                moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
-            ],
-            'Last Financial Year': [
-                moment().startOf('year').subtract(10, 'year'),
-                moment().endOf('year').subtract(10, 'year')
-            ],
-            'Last Year': [
-                moment().startOf('year').subtract(1, 'year'),
-                moment().endOf('year').subtract(1, 'year')
-            ]
-        },
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment()
-    };
     public universalDate: Date[];
     public universalDate$: Observable<any>;
     public actionOnInvoiceSuccess$: Observable<boolean>;
@@ -192,7 +142,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public exportInvoiceType: string = '';
     public sortRequestForUi: { sortBy: string, sort: string } = { sortBy: '', sort: '' };
     public appSideMenubarIsOpen: boolean;
-
     public invoiceSelectedDate: any = {
         fromDates: '',
         toDates: '',
@@ -265,10 +214,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public selectedDateRangeUi: any;
     /** This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /** Selected from date */
-    public fromDate: string;
-    /** Selected to date */
-    public toDate: string;
     /** Selected range label */
     public selectedRangeLabel: any = "";
     /** This will store the x/y position of the field to show datepicker under it */
@@ -286,6 +231,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     };
     /** Stores the E-invoice cancellation options */
     public eInvoiceCancellationReasonOptions = [];
+    /** True if user has voucher list permission */
+    public hasVoucherListPermissions: boolean = true;
 
     constructor(
         private store: Store<AppState>,
@@ -312,8 +259,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.invoiceSearchRequest.page = 1;
         this.invoiceSearchRequest.count = PAGINATION_LIMIT;
         this.invoiceSearchRequest.entryTotalBy = '';
-        this.invoiceSearchRequest.from = moment(this.datePickerOptions.startDate).format(GIDDH_DATE_FORMAT);
-        this.invoiceSearchRequest.to = moment(this.datePickerOptions.endDate).format(GIDDH_DATE_FORMAT);
         this.invoiceSearchRequest.accountUniqueName = '';
         this.invoiceSearchRequest.invoiceNumber = '';
         this.actionOnInvoiceSuccess$ = this.store.pipe(select(p => p.receipt.actionOnInvoiceSuccess), takeUntil(this.destroyed$));
@@ -446,37 +391,19 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     if ((moment(universalStorageData[0]).format(GIDDH_DATE_FORMAT) === moment(dateObj[0]).format(GIDDH_DATE_FORMAT)) && (moment(universalStorageData[1]).format(GIDDH_DATE_FORMAT) === moment(dateObj[1]).format(GIDDH_DATE_FORMAT))) {
                         if (window.localStorage && localStorage.getItem('invoiceSelectedDate')) {
                             let storedSelectedDate = JSON.parse(localStorage.getItem('invoiceSelectedDate'));
-                            this.datePickerOptions = {
-                                ...this.datePickerOptions,
-                                startDate: moment(storedSelectedDate.fromDates, GIDDH_DATE_FORMAT).toDate(),
-                                endDate: moment(storedSelectedDate.toDates, GIDDH_DATE_FORMAT).toDate(),
-                                chosenLabel: undefined  // Let the library handle the highlighted filter label for range picker
-                            };
                             let dateRange = { fromDate: '', toDate: '' };
                             dateRange = this.generalService.dateConversionToSetComponentDatePicker(storedSelectedDate.fromDates, storedSelectedDate.toDates);
                             this.selectedDateRange = { startDate: moment(dateRange.fromDate), endDate: moment(dateRange.toDate) };
                             this.selectedDateRangeUi = moment(dateRange.fromDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateRange.toDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-                            this.fromDate = moment(dateRange.fromDate).format(GIDDH_DATE_FORMAT);
-                            this.toDate = moment(dateRange.toDate).format(GIDDH_DATE_FORMAT);
                             // assign dates
                             if (storedSelectedDate.fromDates && storedSelectedDate.toDates) {
                                 this.invoiceSearchRequest.from = storedSelectedDate.fromDates;
                                 this.invoiceSearchRequest.to = storedSelectedDate.toDates;
                                 this.isUniversalDateApplicable = false;
                             }
-
                         } else {
-                            this.datePickerOptions = {
-                                ...this.datePickerOptions, startDate: moment(dateObj[0], GIDDH_DATE_FORMAT).toDate(),
-                                endDate: moment(dateObj[1], GIDDH_DATE_FORMAT).toDate(),
-                                chosenLabel: dateObj[2]
-                            };
-                            this.fromDate = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                            this.toDate = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
                             this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                             this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                            this.fromDate = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                            this.toDate = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
                             // assign dates
 
                             this.invoiceSearchRequest.from = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
@@ -484,14 +411,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                             this.isUniversalDateApplicable = true;
                         }
                     } else {
-                        this.datePickerOptions = {
-                            ...this.datePickerOptions, startDate: moment(dateObj[0], GIDDH_DATE_FORMAT).toDate(),
-                            endDate: moment(dateObj[1], GIDDH_DATE_FORMAT).toDate(),
-                            chosenLabel: dateObj[2]
-                        };
                         this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                        this.fromDate = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                        this.toDate = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
                         this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                         // assign dates
 
@@ -500,16 +420,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         this.isUniversalDateApplicable = true;
                     }
                 } else {
-                    this.datePickerOptions = {
-                        ...this.datePickerOptions, startDate: moment(dateObj[0], GIDDH_DATE_FORMAT).toDate(),
-                        endDate: moment(dateObj[1], GIDDH_DATE_FORMAT).toDate(),
-                        chosenLabel: dateObj[2]
-                    };
-                    let universalDate = cloneDeep(dateObj);
                     this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                     this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                    this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                    this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
                     // assign dates
 
                     this.invoiceSearchRequest.from = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
@@ -524,13 +436,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             if (a) {
                 this.selectedInvoiceForDetails = null;
                 this.getVoucher(this.isUniversalDateApplicable);
-            }
-        });
-
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
-                this.activeFinancialYear = activeCompany.activeFinancialYear;
-                this.store.dispatch(this.companyActions.setActiveFinancialYear(this.activeFinancialYear));
             }
         });
 
@@ -637,6 +542,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 this.getVoucher(this.isUniversalDateApplicable);
                 this.store.dispatch(this.invoiceActions.resetBulkEInvoice());
             }
+        });
+
+        this.store.pipe(select(state => state.receipt.hasVoucherListPermissions), takeUntil(this.destroyed$)).subscribe(response => {
+            this.hasVoucherListPermissions = response;
         });
     }
 
@@ -1280,12 +1189,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         if (universalDate.length > 1) {
             this.invoiceSearchRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
             this.invoiceSearchRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-            this.datePickerOptions = {
-                ...this.datePickerOptions,
-                startDate: moment(new Date(universalDate[0]), GIDDH_DATE_FORMAT).toDate(),
-                endDate: moment(new Date(universalDate[1]), GIDDH_DATE_FORMAT).toDate(),
-                chosenLabel: universalDate[2]
-            };
         }
         this.getVoucher(this.isUniversalDateApplicable);
     }
@@ -1439,11 +1342,20 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             }
             if (balanceDueAmountForCompany && balanceDueAmountForAccount) {
                 balanceDueAmountConversionRate = +((balanceDueAmountForCompany / balanceDueAmountForAccount) || 0).toFixed(2);
+                item.exchangeRate = balanceDueAmountConversionRate;
             }
-
             let text = this.localeData?.currency_conversion;
             let grandTotalTooltipText = text?.replace("[BASE_CURRENCY]", this.baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
-            let balanceDueTooltipText = text?.replace("[BASE_CURRENCY]", this.baseCurrency)?.replace("[AMOUNT]", balanceDueAmountForCompany)?.replace("[CONVERSION_RATE]", balanceDueAmountConversionRate);
+            let balanceDueTooltipText;
+            if (enableVoucherAdjustmentMultiCurrency && item.gainLoss) {
+                const gainLossText = this.localeData?.exchange_gain_loss_label?.
+                    replace("[BASE_CURRENCY]", this.baseCurrency)?.
+                    replace("[AMOUNT]", balanceDueAmountForCompany)?.
+                    replace('[PROFIT_TYPE]', item.gainLoss > 0 ? this.commonLocaleData?.app_exchange_gain : this.commonLocaleData?.app_exchange_loss);
+                balanceDueTooltipText = `${gainLossText}: ${Math.abs(item.gainLoss)}`;
+            } else {
+                balanceDueTooltipText = text?.replace("[BASE_CURRENCY]", this.baseCurrency)?.replace("[AMOUNT]", balanceDueAmountForCompany)?.replace("[CONVERSION_RATE]", balanceDueAmountConversionRate);
+            }
 
             item['grandTotalTooltipText'] = grandTotalTooltipText;
             item['balanceDueTooltipText'] = balanceDueTooltipText;
@@ -1470,8 +1382,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.invFormData.voucherDetails.grandTotal = item.grandTotal.amountForAccount;
         this.invFormData.voucherDetails.customerName = item.account.name;
         this.invFormData.voucherDetails.customerUniquename = customerUniqueName;
-        this.invFormData.voucherDetails.voucherDate = item.voucherDate
-        this.invFormData.accountDetails.currencySymbol = item.accountCurrencySymbol;
+        this.invFormData.voucherDetails.voucherDate = item.voucherDate;
+        this.invFormData.voucherDetails.exchangeRate = item.exchangeRate ?? 1;
+        this.invFormData.accountDetails.currencyCode = item.account?.currency?.code ?? this.baseCurrency ?? '';
+        this.invFormData.accountDetails.currencySymbol = item.accountCurrencySymbol ?? this.baseCurrencySymbol ?? '';
         this.changeStatusInvoiceUniqueName = item.uniqueName;
         this.selectedPerformAdjustPaymentAction = true;
         // To clear receipts voucher store
@@ -1690,11 +1604,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.invoiceSearchRequest.from = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.invoiceSearchRequest.to = moment(value.endDate).format(GIDDH_DATE_FORMAT);
             this.showAdvanceSearchIcon = true;
-            this.invoiceSearchRequest.from = this.fromDate;
-            this.invoiceSearchRequest.to = this.toDate;
             this.invoiceSelectedDate.fromDates = this.invoiceSearchRequest.from;
             this.invoiceSelectedDate.toDates = this.invoiceSearchRequest.to;
 
@@ -1768,21 +1680,21 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     private getEInvoiceTooltipText(item: ReceiptItem): string {
         switch (item.status?.toLowerCase()) {
             case EInvoiceStatus.YetToBePushed:
-                return this.localeData.e_invoice_statuses.yet_to_be_pushed;
+                return this.localeData?.e_invoice_statuses.yet_to_be_pushed;
             case EInvoiceStatus.Pushed:
-                return this.localeData.e_invoice_statuses.pushed;
+                return this.localeData?.e_invoice_statuses.pushed;
             case EInvoiceStatus.PushInitiated:
-                return this.localeData.e_invoice_statuses.push_initiated;
+                return this.localeData?.e_invoice_statuses.push_initiated;
             case EInvoiceStatus.Cancelled:
                 // E-invoice got cancelled but invoice didn't cancel
-                return item.balanceStatus !== 'cancel' ? this.localeData.e_invoice_statuses.giddh_invoice_not_cancelled : this.localeData.e_invoice_statuses.cancelled;
+                return item.balanceStatus !== 'cancel' ? this.localeData?.e_invoice_statuses.giddh_invoice_not_cancelled : this.localeData?.e_invoice_statuses.cancelled;
             case EInvoiceStatus.MarkedAsCancelled:
-                return this.localeData.e_invoice_statuses.mark_as_cancelled;
+                return this.localeData?.e_invoice_statuses.mark_as_cancelled;
             case EInvoiceStatus.Failed:
-                return item.errorMessage ?? this.localeData.e_invoice_statuses.failed;
+                return item.errorMessage ?? this.localeData?.e_invoice_statuses.failed;
             case EInvoiceStatus.NA:
                 // When invoice is B2C or B2B cancelled invoice
-                return item.errorMessage ?? this.localeData.e_invoice_statuses.na;
+                return item.errorMessage ?? this.localeData?.e_invoice_statuses.na;
             default: return '';
         }
     }
@@ -1821,7 +1733,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         let existingInvoices = [];
                         res[0].items = res[0].items?.map((item: ReceiptItem) => {
                             let dueDate = item.dueDate ? moment(item.dueDate, GIDDH_DATE_FORMAT) : null;
-    
+
                             if (dueDate) {
                                 if (dueDate.isAfter(moment()) || ['paid', 'cancel'].includes(item.balanceStatus)) {
                                     item.dueDays = null;
@@ -1836,16 +1748,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                                 // For CR/DR note and Cash/Sales invoice
                                 item = this.addToolTiptext(item);
                             }
-    
+
                             item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, item.uniqueName);
                             if (item.isSelected) {
                                 existingInvoices.push(item.uniqueName);
                             }
-    
+
                             this.itemsListForDetails.push(this.parseItemForVm(item));
                             return item;
                         });
-    
+
                         let selectedInvoices = [];
                         if (this.selectedInvoices && this.selectedInvoices.length > 0) {
                             this.selectedInvoices.forEach(invoice => {
@@ -1853,7 +1765,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                                     selectedInvoices.push(invoice);
                                 }
                             });
-    
+
                             this.selectedInvoices = selectedInvoices;
                         }
 
@@ -1874,7 +1786,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                             }
                             this.showExportButton = false;
                         }
-    
+
                         if (this.selectedInvoices && this.selectedInvoices.length > 0) {
                             voucherData.items.forEach((v) => {
                                 v.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, v.uniqueName);
@@ -1884,7 +1796,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         this.selectedItems = (this.updateSelectedItems) ? this.selectedInvoices : [];
                         this.updateSelectedItems = false;
                     }
-    
+
                     // get voucherDetailsNo so we can open that voucher in details mode
                     if (res[0] && res[1] && res[2]) {
                         this.selectedInvoiceForDetails = null;
@@ -1907,7 +1819,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                             this.cdr.detectChanges();
                         }
                     }, 100);
-    
+
                     if (this.purchaseRecord && this.purchaseRecord.uniqueName) {
                         this.onSelectInvoice(this.purchaseRecord);
                     }
