@@ -191,8 +191,7 @@ export class PickDateAdapter extends NativeDateAdapter {
         LedgerDiscountModule,
         ConfirmationModalModule,
         DatepickerWrapperModule,
-        HamburgerMenuModule,
-        ValidateSectionPermissionDirectiveModule
+        HamburgerMenuModule
     ],
     exports: [
         CommonModule,
@@ -248,7 +247,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         ConfirmationModalModule,
         DatepickerWrapperModule,
         HamburgerMenuModule,
-        ValidateSectionPermissionDirectiveModule,
         GenericAsideMenuAccountComponent
     ],
     entryComponents: [
