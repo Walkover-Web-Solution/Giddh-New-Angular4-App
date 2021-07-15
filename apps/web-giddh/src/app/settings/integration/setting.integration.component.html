@@ -810,9 +810,59 @@
                     </div> -->
                     <button type="button"
                         class="btn btn-sky-blue mr-r1"
-                        (click)="openCreateNewAccountModal()">{{localeData?.payment?.connect_new_account}}</button>
+                        (click)="openCreateNewAccountModal()">{{localeData?.payment?.connect_new_account}}</button><br>
+                        <a href="javascript:;">Learn, how to connect</a>
                     <p class="mt-2 mb-4 font-14"><a href="https://cadigital.icicibank.com/SmartFormWeb/apps/services/www/SmartFormWeb/desktopbrowser/default/index.html?source=BC-application-Giddh#/" target="_blank">{{localeData?.payment?.open_new_current_account}}</a></p>
-                    
+
+                    <div>
+                        <b>Connected Accounts</b><br>
+                        <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoading"></giddh-page-loader>
+                        <ng-container *ngIf="!isLoading && connectedBankAccounts?.length > 0">
+                            <div class="row" *ngFor="let bankAccount of connectedBankAccounts; trackBy: trackByAccountUniqueName;">
+                                <div class="form-group col-md-4">
+                                    <span>Account Number</span><br>
+                                    <span><b>{{bankAccount?.iciciDetailsResource?.accountNumber}}</b></span>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <span>Linked Account</span><br>
+                                    <span>{{bankAccount?.account?.name}}</span>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <span>Payment Updates</span><br>
+                                    <span *ngIf="bankAccount?.iciciDetailsResource?.paymentAlerts?.length > 0">
+                                        <span *ngFor="let alert of bankAccount?.iciciDetailsResource?.paymentAlerts; let i = index; trackBy: trackByAlertUniqueName;">{{alert?.name}}{{ (i < bankAccount?.iciciDetailsResource?.paymentAlerts?.length - 1) ? ", " : "" }}</span>
+                                    </span>
+                                    <span>
+                                        <a href="javascript:;" class="icon-edit-pencil"></a>
+                                    </span>
+                                </div>
+                                <div class="row width-100">
+                                    <ng-container *ngIf="bankAccount?.iciciDetailsResource?.payor?.length > 0">
+                                        <ng-container *ngFor="let payor of bankAccount?.iciciDetailsResource?.payor;">
+                                            <div class="form-group col-md-4">
+                                                <span>Login ID</span><br>
+                                                <span><b>{{payor?.loginId}}</b></span>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <span>Limit Up To</span><br>
+                                                <span><b>{{(payor?.duration === "UNLIMITED") ? "UNLIMITED" : payor?.maxAmount}}</b></span>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <span>Pending for self approval</span>
+                                                <span>
+                                                    <a href="javascript:;" class="icon-edit-pencil"></a>
+                                                    <a href="javascript:;" class="fa fa-trash"></a>
+                                                </span>
+                                            </div>
+                                            <p>A request has been sent to your account, login to <a href="javascript:;">ICICI Bank Portal</a> and accept it.</p>
+                                            <p>Once accepted, you can link your ICICI bank account/s and make payments directly through GIDDH</p>
+                                        </ng-container>
+                                    </ng-container><br>
+                                    <button type="button" class="btn btn-sky-blue mr-r1" (click)="openCreateNewAccountUserModal(bankAccount)">+ Add More Users</button>
+                                </div>
+                            </div>
+                        </ng-container>    
+                    </div>
                 </div>
             </tab>
         </tabset>
@@ -834,8 +884,8 @@
                         </div>
                         <div class="clearfix mr-t1">
                             <label>Account Number<span class="red-text">*</span>:</label>
-                            <input class="form-control" required formControlName="accountNo"
-                                name="accountNo" type="text" decimalDigitsDirective placeholder="Enter Account Number" maxlength="11">
+                            <input class="form-control" required formControlName="accountNumber"
+                                name="accountNumber" type="text" decimalDigitsDirective placeholder="Enter Account Number" maxlength="11">
                         </div>
                         <div class="clearfix mr-t1">
                             <label>Link Account<span class="red-text">*</span>:</label>
@@ -880,11 +930,15 @@
                     <div class="modal-body">
                         <div class="clearfix mr-t1">
                             <label>Account Number</label>
-                            2343432423432
+                            {{activeBankAccount?.iciciDetailsResource?.accountNumber}}
                         </div>
                         <div class="mr-t1">
                             <label>Linked Account</label>
-                            Account Name
+                            {{activeBankAccount?.account?.name}}
+                        </div>
+                        <div class="clearfix mr-t1">
+                            <label>User<span class="red-text">*</span>:</label>
+                            <sh-select formControlName="userUniqueName" name="userUniqueName" placeholder="Select User" [options]="usersList" required></sh-select>
                         </div>
                         <div class="clearfix mr-t1">
                             <label>Login ID<span class="red-text">*</span></label>
@@ -892,10 +946,10 @@
                                 name="loginId" type="text" placeholder="Enter Login ID">
                         </div>
                         <div class="clearfix mr-t1">
-                            <label>Limit Up To<span class="red-text">*</span></label>
-                            <input class="form-control" formControlName="maxAmountLimit"
-                                name="maxAmountLimit" type="text" placeholder="Enter Amount">
-                            <sh-select formControlName="duration" name="duration" placeholder="Duration" [options]="amountLimitDurations" required></sh-select>
+                            <label>Limit Up To</label>
+                            <input class="form-control" formControlName="maxAmount"
+                                name="maxAmount" type="text" placeholder="Enter Amount">
+                            <sh-select formControlName="duration" name="duration" placeholder="Duration" [options]="amountLimitDurations"></sh-select>
                         </div>
                     </div>
                     <div class="modal-footer">
