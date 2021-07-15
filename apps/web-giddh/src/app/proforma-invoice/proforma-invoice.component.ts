@@ -1919,8 +1919,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (this.container) {
             this.container.clear();
         }
-        this.customerCountryName = '';
-        this.customerCountryCode = '';
         this.showSwitchedCurr = false;
         this.autoSaveIcon = false;
         this.autoFillShipping = true;
