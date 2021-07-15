@@ -42,7 +42,7 @@
                                 aria-controls="dropdown-basic" (click)="getCompanyBranches(1, company); showAllBranches(company);"> 
                                 <i class="icon-company mr-2"></i>
                                 <span class="company-name-right">{{ company.name }}</span>
-                                <span class="font-11 text-right branch-count pt-0 pb-0">{{ company?.branchCount }}</span>
+                                <span class="font-11 text-right branch-count pt-0 pb-0" *ngIf="company?.branchCount > 1">{{ company?.branchCount }}</span>
                             </span>
                         </li>
                     </ul>
@@ -130,6 +130,7 @@
                             <span class="p-0 d-flex align-items-center">
                                 <i class="icon-company mr-2"></i>
                                 <span class="select-company-name"> {{ company.name }} </span>
+                                <span class="font-11 branch-count" *ngIf="viewingCompany && company?.branchCount > 1">{{ company?.branchCount }}</span>
                             </span>
                             <i class="icon-down-new" *ngIf="company?.branchCount > 1"></i>
                         </span>
