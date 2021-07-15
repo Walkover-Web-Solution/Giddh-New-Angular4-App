@@ -389,7 +389,7 @@
                         margin-bottom: 10px !important;
                     }
                     span{
-                        padding: 5px 20px;
+                        padding: 8px 20px;
                         margin: 0;
                         &.company-name {
                             display: flex !important;
@@ -402,7 +402,7 @@
                                     }
                                     span.select-company-name{
                                         float: left;
-                                        width: 87%;
+                                        width: 100%;
                                         padding: 0;
                                         text-overflow: ellipsis;
                                         white-space: nowrap;
@@ -420,7 +420,6 @@
                                     padding: 8px 20px;
                                     span{
                                         color: $black-pearl;
-                                        font-family: 'opensans-semibold';
                                     }
                                 }
                                 &.active{
