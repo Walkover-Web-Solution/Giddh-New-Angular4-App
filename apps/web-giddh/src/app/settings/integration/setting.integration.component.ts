@@ -154,7 +154,14 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public paymentAlersUsersList: any[] = [];
     /** Form Group for create new account form */
     public createNewAccountUserForm: FormGroup;
+    /** Holds the amount limit duration options */
     public amountLimitDurations: IOption[] = [];
+    /** List of connected bank accounts */
+    public connectedBankAccounts: any[] = [];
+    /** True if api call in progress */
+    public isLoading: boolean = false;
+    /** This will have bank account details */
+    public activeBankAccount: any;
 
     constructor(
         private router: Router,
@@ -1276,6 +1283,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public loadPaymentData(event?: any): void {
         if (event && event instanceof TabDirective || !event) {
             this.loadDefaultBankAccountsSuggestions();
+            this.getAllBankAccounts();
             this.store.dispatch(this._companyActions.getAllRegistrations());
             this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
             this.store.pipe(take(1)).subscribe(s => {
@@ -1583,44 +1591,147 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         }
     }
 
+    /**
+     * This will open create new account modal
+     *
+     * @memberof SettingIntegrationComponent
+     */
     public openCreateNewAccountModal(): void {
         this.createNewAccountForm = this._fb.group({
             bank: ['ICICI'],
             loginId: ['', Validators.required],
-            accountNo: ['', Validators.compose([Validators.required, Validators.minLength(9), Validators.maxLength(11)])],
+            accountNumber: ['', Validators.compose([Validators.required, Validators.minLength(9), Validators.maxLength(11)])],
             accountUniqueName: ['', Validators.required],
             paymentAlerts: [''],
             userUniqueName: ['', Validators.required],
             duration: ['UNLIMITED'],
-            maxAmountLimit: ['']
+            maxAmount: ['']
         });
 
         this.createNewAccountModal?.show();
     }
 
+    /**
+     * This will save the new account
+     *
+     * @memberof SettingIntegrationComponent
+     */
     public saveNewAccount(): void {
         if(!this.createNewAccountForm?.invalid) {
             this.createNewAccountForm.get('paymentAlerts')?.patchValue(this.paymentAlerts.map(user => user));
 
-               
+            this.settingsIntegrationService.bankAccountRegistration(this.createNewAccountForm.value).pipe(take(1)).subscribe(response => {
+                if(response?.status === "success") {
+                    if(response?.body?.message) {
+                        this.toasty.clearAllToaster();
+                        this.toasty.successToast(response?.body?.message);
+                    }
+                    this.getAllBankAccounts();
+                } else {
+                    this.toasty.clearAllToaster();
+                    this.toasty.errorToast(response?.message);
+                }
+            });
         }
     }
 
+    /**
+     * This will close the create new account modal
+     *
+     * @memberof SettingIntegrationComponent
+     */
     public closeCreateNewAccountModal(): void {
         this.createNewAccountModal?.hide();
     }
 
-    public openCreateNewAccountUserModal(): void {
+    /**
+     * This will open the create new account user modal
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public openCreateNewAccountUserModal(bankAccount: any): void {
+        this.activeBankAccount = bankAccount;
+
         this.createNewAccountUserForm = this._fb.group({
+            accountUniqueName: [bankAccount?.account?.uniqueName, Validators.required],
+            userUniqueName: ['', Validators.required],
+            uniqueName: [bankAccount?.iciciDetailsResource?.uniqueName, Validators.required],
             loginId: ['', Validators.required],
-            maxAmountLimit: [''],
-            duration: ['UNLIMITED']
+            maxAmount: [''],
+            duration: ['']
         });
 
         this.createNewAccountUserModal?.show();
     }
 
+    /**
+     * This will close the create new account user modal
+     *
+     * @memberof SettingIntegrationComponent
+     */
     public closeCreateNewAccountUserModal(): void {
         this.createNewAccountUserModal?.hide();
+    }
+
+    /**
+     * This will get all connected bank accounts
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public getAllBankAccounts(): void {
+        this.isLoading = true;
+        this.connectedBankAccounts = [];
+
+        this.settingsIntegrationService.getAllBankAccounts().pipe(take(1)).subscribe(response => {
+            this.isLoading = false;
+            if(response?.body) {
+                this.connectedBankAccounts = response.body;
+            }
+        });
+    }
+
+    /**
+     * This returns the account unique name of account
+     *
+     * @param {number} index
+     * @param {*} item
+     * @returns {*}
+     * @memberof SettingIntegrationComponent
+     */
+    public trackByAccountUniqueName(index: number, item: any): any {
+        return item?.iciciDetailsResource?.uniqueName;
+    }
+
+    /**
+     * This returns the payment alert unique name of account
+     *
+     * @param {number} index
+     * @param {*} item
+     * @returns {*}
+     * @memberof SettingIntegrationComponent
+     */
+    public trackByAlertUniqueName(index: number, item: any): any {
+        return item?.uniqueName;
+    }
+
+    public saveNewAccountUser(): void {
+        if(!this.createNewAccountUserForm?.invalid) {
+            if(!this.createNewAccountUserForm.get('maxAmount')) {
+                this.createNewAccountForm.get('duration')?.patchValue('UNLIMITED');
+            }
+
+            this.settingsIntegrationService.bankAccountMultiRegistration(this.createNewAccountUserForm.value).pipe(take(1)).subscribe(response => {
+                if(response?.status === "success") {
+                    if(response?.body?.message) {
+                        this.toasty.clearAllToaster();
+                        this.toasty.successToast(response?.body?.message);
+                    }
+                    this.getAllBankAccounts();
+                } else {
+                    this.toasty.clearAllToaster();
+                    this.toasty.errorToast(response?.message);
+                }
+            });
+        }
     }
 }

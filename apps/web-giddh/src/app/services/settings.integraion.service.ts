@@ -348,4 +348,122 @@ export class SettingsIntegrationService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e)));
     }
 
+    /**
+     * Register the beneficiary
+     *
+     * @param {*} model
+     * @param {*} urn
+     * @returns {Observable<BaseResponse<string, any>>}
+     * @memberof SettingsIntegrationService
+     */
+    public beneficiaryRegistration(model: any, urn: any): Observable<BaseResponse<any, any>> {
+        this.user = this._generalService.user;
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        return this._http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.BENEFICIARY_REGISTRATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':urn', urn), model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    /**
+     * Validate the beneficiary
+     *
+     * @param {*} model
+     * @returns {Observable<BaseResponse<any, string>>}
+     * @memberof SettingsIntegrationService
+     */
+    public beneficiaryValidation(model: any): Observable<BaseResponse<any, string>> {
+        this.user = this._generalService.user;
+        this.companyUniqueName = this._generalService.companyUniqueName;
+
+        const urn = model.urn;
+        const bnfAccNo = model.bnfAccNo;
+
+        return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.BENEFICIARY_VALIDATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':urn', urn).replace(':bnfAccNo', bnfAccNo)).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            data.queryString = { urn, bnfAccNo };
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
+
+    /**
+     * Get list of added beneficiaries
+     *
+     * @param {*} urn
+     * @returns {Observable<BaseResponse<any, string>>}
+     * @memberof SettingsIntegrationService
+     */
+    public getBeneficiaries(urn: any): Observable<BaseResponse<any, string>> {
+        this.user = this._generalService.user;
+        this.companyUniqueName = this._generalService.companyUniqueName;
+
+        return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GET_BENEFICIARIES.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':urn', urn)).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            data.queryString = { urn };
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
+
+    /**
+     * Get account registration status
+     *
+     * @param {*} urn
+     * @returns {Observable<BaseResponse<any, string>>}
+     * @memberof SettingsIntegrationService
+     */
+    public getRegistrationStatus(urn: any): Observable<BaseResponse<any, string>> {
+        this.user = this._generalService.user;
+        this.companyUniqueName = this._generalService.companyUniqueName;
+
+        return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GET_REGISTRATION_STATUS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':urn', urn)).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            data.queryString = { urn };
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
+
+    public bankAccountRegistration(model: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        return this._http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.BANK_ACCOUNT_REGISTRATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    public getAllBankAccounts(): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this._generalService.companyUniqueName;
+
+        return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.BANK_ACCOUNT_REGISTRATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
+
+    public deleteBankAccountLogin(model: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        return this._http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.BANK_ACCOUNT_REGISTRATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    public bankAccountMultiRegistration(model: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        return this._http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.BANK_ACCOUNT_MULTI_REGISTRATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
 }
