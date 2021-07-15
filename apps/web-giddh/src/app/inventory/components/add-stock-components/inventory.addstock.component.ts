@@ -2,7 +2,7 @@ import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, EventEmitter, Output } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, EventEmitter, Output, TemplateRef } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { decimalDigits, digitsOnly, stockManufacturingDetailsValidator } from '../../../shared/helpers';
@@ -22,6 +22,7 @@ import { InvViewService } from '../../inv.view.service';
 import { INVALID_STOCK_ERROR_MESSAGE } from '../../../app.constant';
 import { SalesService } from '../../../services/sales.service';
 import { InvoiceService } from '../../../services/invoice.service';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
     selector: 'inventory-add-stock',
@@ -94,6 +95,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public allowReset: boolean = false;
     /** This will hold inventory settings */
     public inventorySettings: any;
+    /** This will hold modal reference */
+    public modalRef: BsModalRef;
 
     constructor(
         private store: Store<AppState>,
@@ -106,7 +109,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         private _inventoryService: InventoryService,
         private invViewService: InvViewService,
         private cdr: ChangeDetectorRef,
-        private invoiceService: InvoiceService
+        private invoiceService: InvoiceService,
+        private modalService: BsModalService
     ) {
         this.fetchingStockUniqueName$ = this.store.pipe(select(state => state.inventory.fetchingStockUniqueName), takeUntil(this.destroyed$));
         this.isStockNameAvailable$ = this.store.pipe(select(state => state.inventory.isStockNameAvailable), takeUntil(this.destroyed$));
@@ -150,12 +154,14 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
 
         // subscribe getActiveView parameters
         this.invViewService.getActiveView().pipe(takeUntil(this.destroyed$)).subscribe(v => {
-            this.groupUniqueName = v.groupUniqueName;
-            this.groupName = v.stockName;
-            this.stockUniqueName = v.stockUniqueName;
-            this.activeGroup = v;
-            if (this.groupUniqueName && this.stockUniqueName) {
-                this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName, this.groupUniqueName));
+            if (v) {
+                this.groupUniqueName = v.groupUniqueName;
+                this.groupName = v.stockName;
+                this.stockUniqueName = v.stockUniqueName;
+                this.activeGroup = v;
+                if (this.groupUniqueName && this.stockUniqueName) {
+                    this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName, this.groupUniqueName));
+                }
             }
         });
 
@@ -1269,5 +1275,24 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                 this.addStockForm.get("showCodeType")?.patchValue("sac");
             }
         }
+    }
+
+    /**
+     * Opens the modal with the provided template
+     *
+     * @param {TemplateRef<any>} template
+     * @memberof InventoryAddStockComponent
+     */
+    public openModal(template: TemplateRef<any>): void {
+        this.modalRef = this.modalService.show(template);
+    }
+
+    /**
+     * Hides the current opened modal
+     *
+     * @memberof InventoryAddGroupComponent
+     */
+    public hideModal(): void {
+        this.modalRef.hide();
     }
 }
