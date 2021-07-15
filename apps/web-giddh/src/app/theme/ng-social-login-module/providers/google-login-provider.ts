@@ -58,7 +58,7 @@ export class GoogleLoginProvider extends BaseLoginProvider {
         });
     }
 
-    public signOut(): Promise<any> {
+    public signOut(): Promise<void> {
         return new Promise((resolve, reject) => {
             this.auth2.signOut().then((err: any) => {
                 if (err) {
