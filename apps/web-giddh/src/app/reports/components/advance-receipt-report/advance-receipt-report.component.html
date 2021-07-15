@@ -3,7 +3,7 @@
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="reverse-table-report">
         <div class="container-fluid">
-            <div class="mr-t15 mr-b15 input-grp-date-range-picker d-flex"
+            <div class="mr-t15 mr-b15 input-grp-date-range-picker d-flex justify-content-between"
                 [ngClass]="{'clear-filter-applicable': showClearFilter}">
                 <!-- Invoice filter section -->
                 <div class="mr-r1 d-flex flex-sm-row flex-column">
@@ -41,31 +41,80 @@
                                 [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
                                 class="giddh-datepicker date-range-picker" />
                         </div>
-                        <div class="advance-icon cursor-pointer" tooltip="{{commonLocaleData?.app_advance_search}}"
-                            (click)="openModal()">
-                            <span class="icon-advance-filter"></span>
-                        </div>
                     </div>
 
                 </div>
-                <div class="clear-filter mr-b15 align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
+                <div class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
                     *ngIf="showClearFilter">
                     <button class="btn btn-filter mr-0" (click)="resetAdvanceSearch()"><span class="icon-cross"></span>
                         {{commonLocaleData?.app_clear_filter}}</button>
                 </div>
+                <div class="advance-icon cursor-pointer btn btn-primary mr-0"
+                    [tooltip]="commonLocaleData?.app_advance_search" (click)="openModal()">
+                    <span class="pd-r05 d-sm-flex d-none">{{commonLocaleData?.app_filter}}</span>
+                    <span class="icon-advance-filter"></span>
+                </div>
                 <!-- Invoice filter section ends -->
             </div>
 
+            <div class="top-content">
+                <div class="d-flex w-100 justify-content-between overflow-x-auto">
+                    <div class="total-details-box mr-r05 border-none opening-box">
+                        <h5>
+                            {{localeData?.advanced_receipts}}
+                            <div>
+                                <span
+                                    class="number-total">{{receiptsSummaryData?.advance?.symbol}}{{receiptsSummaryData?.advance?.amount
+                                    |
+                                    giddhCurrency}}/-</span>
+                            </div>
+                        </h5>
+                    </div>
+                    <div class="total-details-box mr-r05 border-none sales-purchase">
+                        <h5>
+                            {{localeData?.normal_receipts}}
+                            <div>
+                                <span class="d-inline-flex number-total">
+                                    {{receiptsSummaryData?.normal?.symbol}}{{receiptsSummaryData?.normal?.amount |
+                                    giddhCurrency}}/-
+                                </span>
+                            </div>
+                        </h5>
+                    </div>
+                    <div class="total-details-box mr-r05 border-none payment-receipt">
+                        <h5>
+                            {{localeData?.total_receipts}}
+                            <div>
+                                <span class="d-inline-flex number-total">
+                                    {{receiptsSummaryData?.total?.symbol}}{{receiptsSummaryData?.total?.amount |
+                                    giddhCurrency}}/-
+                                </span>
+                            </div>
+                        </h5>
+                    </div>
+                    <div class="total-details-box mr-r05 border-none closing-box">
+                        <h5>
+                            {{localeData?.unused_receipts}}
+                            <div>
+                                <span class="d-inline-flex number-total">
+                                    {{receiptsSummaryData?.unUsed?.symbol}}{{receiptsSummaryData?.unUsed?.amount |
+                                    giddhCurrency}}/-
+                                </span>
+                            </div>
+                        </h5>
+                    </div>
+                </div>
+            </div>
 
-            <div class="invoice-preview table-responsive">
+            <div class="invoice-preview  table-responsive">
                 <table class="table basic giddh-table on-mobile-view">
                     <thead class="thead-background1">
                         <tr>
                             <th>#</th>
                             <th #receiptNumberParent width="13%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="showReceiptSearchBar">
-                                    <span>{{localeData?.receipt_no_label}}</span>
                                     <i class="icon-search" (click)="searchBy(null, 'receipt', true)"></i>
+                                    <span>{{localeData?.receipt_no_label}}</span>
                                 </div>
                                 <div class="input-container" [hidden]="!showReceiptSearchBar">
                                     <input #receiptNumber
@@ -108,8 +157,8 @@
 
                             <th #customerNameParent width="13%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="showCustomerSearchBar">
-                                    <span>{{localeData?.customer_name_label}}</span>
                                     <i class="icon-search" (click)="searchBy(null, 'customerName', true);"></i>
+                                    <span>{{localeData?.customer_name_label}}</span>
                                 </div>
                                 <div class="input-container" [hidden]="!showCustomerSearchBar">
                                     <input #customerName
@@ -122,8 +171,8 @@
 
                             <th #paymentModeParent width="13%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="showPaymentSearchBar">
-                                    <span>{{localeData?.payment_mode_label}}</span>
                                     <i class="icon-search" (click)="searchBy(null, 'paymentMode', true)"></i>
+                                    <span>{{localeData?.payment_mode_label}}</span>
                                 </div>
                                 <div class="input-container" [hidden]="!showPaymentSearchBar">
                                     <input #paymentMode
@@ -136,8 +185,8 @@
 
                             <th #invoiceNumberParent width="13%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="showInvoiceSearchBar">
-                                    <span>{{localeData?.invoice_no_label}}</span>
                                     <i class="icon-search" (click)="searchBy(null, 'invoiceNumber', true)"></i>
+                                    <span>{{localeData?.invoice_no_label}}</span>
                                 </div>
                                 <div class="input-container" [hidden]="!showInvoiceSearchBar">
                                     <input #invoiceNumber
@@ -221,38 +270,6 @@
                 </pagination>
             </div>
         </div>
-
-        <div class="mt-5 invoice-footer invoice-footer row">
-            <div class="col-lg-10 col-md-8 col-sm-12 col-12 total-due-sale-wrap">
-                <div class="row">
-                    <div class="col-xl-3 col-md-6 col-sm-12 total-due-sale">
-                        <h3>{{localeData?.advanced_receipts}}</h3>
-                        <h1>{{receiptsSummaryData?.advance?.symbol}}{{receiptsSummaryData?.advance?.amount |
-                            giddhCurrency}}/-
-                        </h1>
-                    </div>
-                    <div class="col-xl-3 col-md-6 col-sm-12 total-due-sale">
-                        <h3>{{localeData?.normal_receipts}}</h3>
-                        <h1>{{receiptsSummaryData?.normal?.symbol}}{{receiptsSummaryData?.normal?.amount |
-                            giddhCurrency}}/-
-                        </h1>
-                    </div>
-
-                    <div class="col-xl-3 col-md-6 col-sm-12 total-due-sale">
-                        <h3>{{localeData?.total_receipts}}</h3>
-                        <h1>{{receiptsSummaryData?.total?.symbol}}{{receiptsSummaryData?.total?.amount |
-                            giddhCurrency}}/-</h1>
-                    </div>
-
-                    <div class="col-xl-3 col-md-6 col-sm-12 total-due-sale">
-                        <h3>{{localeData?.unused_receipts}}</h3>
-                        <h1>{{receiptsSummaryData?.unUsed?.symbol}}{{receiptsSummaryData?.unUsed?.amount |
-                            giddhCurrency}}/-
-                        </h1>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- Adjust Payment modal start -->
@@ -277,7 +294,7 @@
             (click)="handleSorting('desc', column)"
             [ngClass]="{'active-text-color': searchQueryParams.sortBy === column && searchQueryParams.sort === 'asc'}">
         </div>
-        <div class="icon-sort-dsc" *ngIf="searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc'"
+        <div class="icon-sort-asc" *ngIf="searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc'"
             (click)="handleSorting('asc', column)"
             [ngClass]="{'active-text-color': searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc'}">
         </div>
@@ -296,4 +313,3 @@
         </div>
     </ng-template>
 </ng-container>
-

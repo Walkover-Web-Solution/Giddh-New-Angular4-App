@@ -31,7 +31,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest]
+        os: [windows-latest, macos-latest]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -71,12 +71,23 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      - name: Creating Electron bundle for Windows (PROD)
-        if: ${{ matrix.os == 'windows-latest' && github.event.inputs.environment == 'prod' }}
-        run: npm run release:windows:ci
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          GOOGLE_CLIENT_ID_TEST: ${{ secrets.GOOGLE_CLIENT_ID_TEST }}
+          GOOGLE_CLIENT_SECRET_TEST: ${{ secrets.GOOGLE_CLIENT_SECRET_TEST }}
+          RAZORPAY_KEY_TEST: ${{ secrets.RAZORPAY_KEY_TEST }}
+          GOOGLE_CLIENT_ID_PROD: ${{ secrets.GOOGLE_CLIENT_ID_PROD }}
+          GOOGLE_CLIENT_SECRET_PROD: ${{ secrets.GOOGLE_CLIENT_SECRET_PROD }}
+          TWITTER_CLIENT_ID_PROD: ${{ secrets.TWITTER_CLIENT_ID_PROD }}
+          TWITTER_SECRET_KEY_PROD: ${{ secrets.TWITTER_SECRET_KEY_PROD }}
+          LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
+          LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
+          RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
+    #   Commented for PROD builds as signing can't be done through pipeline for Windows
+    #   - name: Creating Electron bundle for Windows (PROD)
+    #     if: ${{ matrix.os == 'windows-latest' && github.event.inputs.environment == 'prod' }}
+    #     run: npm run release:windows:ci
+    #     env:
+    #       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: Install wget
         if: ${{ matrix.os == 'macos-latest' }}
         run: brew install wget
@@ -93,6 +104,16 @@ jobs:
           CSC_KEY_PASSWORD: ${{ secrets.CSC_LINK_MAC_PASS }}
           NOTARIZE_EMAIL: ${{ secrets.NOTARIZE_EMAIL }}
           NOTARIZE_PASS: ${{ secrets.NOTARIZE_PASS }}
+          GOOGLE_CLIENT_ID_TEST: ${{ secrets.GOOGLE_CLIENT_ID_TEST }}
+          GOOGLE_CLIENT_SECRET_TEST: ${{ secrets.GOOGLE_CLIENT_SECRET_TEST }}
+          RAZORPAY_KEY_TEST: ${{ secrets.RAZORPAY_KEY_TEST }}
+          GOOGLE_CLIENT_ID_PROD: ${{ secrets.GOOGLE_CLIENT_ID_PROD }}
+          GOOGLE_CLIENT_SECRET_PROD: ${{ secrets.GOOGLE_CLIENT_SECRET_PROD }}
+          TWITTER_CLIENT_ID_PROD: ${{ secrets.TWITTER_CLIENT_ID_PROD }}
+          TWITTER_SECRET_KEY_PROD: ${{ secrets.TWITTER_SECRET_KEY_PROD }}
+          LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
+          LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
+          RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
       - name: Creating Electron bundle for Mac (PROD)
         if: ${{ matrix.os == 'macos-latest' && github.event.inputs.environment == 'prod' }}
         run: npm run release:mac:ci
@@ -103,6 +124,16 @@ jobs:
           CSC_KEY_PASSWORD: ${{ secrets.CSC_LINK_MAC_PASS }}
           NOTARIZE_EMAIL: ${{ secrets.NOTARIZE_EMAIL }}
           NOTARIZE_PASS: ${{ secrets.NOTARIZE_PASS }}
+          GOOGLE_CLIENT_ID_TEST: ${{ secrets.GOOGLE_CLIENT_ID_TEST }}
+          GOOGLE_CLIENT_SECRET_TEST: ${{ secrets.GOOGLE_CLIENT_SECRET_TEST }}
+          RAZORPAY_KEY_TEST: ${{ secrets.RAZORPAY_KEY_TEST }}
+          GOOGLE_CLIENT_ID_PROD: ${{ secrets.GOOGLE_CLIENT_ID_PROD }}
+          GOOGLE_CLIENT_SECRET_PROD: ${{ secrets.GOOGLE_CLIENT_SECRET_PROD }}
+          TWITTER_CLIENT_ID_PROD: ${{ secrets.TWITTER_CLIENT_ID_PROD }}
+          TWITTER_SECRET_KEY_PROD: ${{ secrets.TWITTER_SECRET_KEY_PROD }}
+          LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
+          LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
+          RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
   notify-success:
     if: ${{ success() }}
     needs: release
@@ -116,7 +147,7 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: ${{ secrets.SLACK_UI_BUILDS_CHANNEL_ID }}
           SLACK_COLOR: "#4CAF50" # or a specific color like 'green' or '#ff00ff'
-          SLACK_MESSAGE: "${{ github.event.inputs.note }}. Build download URL: Mac - https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh-${{ github.event.inputs.version }}.dmg"
+          SLACK_MESSAGE: "${{ github.event.inputs.note }}. Build download URL: Windows - https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh+Setup+${{ github.event.inputs.version }}.exe | Mac - https://s3-ap-south-1.amazonaws.com/giddh-app-builds-test/giddh-${{ github.event.inputs.version }}.dmg"
           SLACK_FOOTER: ''
           SLACK_TITLE: Giddh Desktop build for testing
           SLACK_USERNAME: Giddh Desktop build
@@ -128,7 +159,7 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: ${{ secrets.SLACK_ELECTRON_BUILDS_CHANNEL_ID }}
           SLACK_COLOR: "#4CAF50" # or a specific color like 'green' or '#ff00ff'
-          SLACK_MESSAGE: "${{ github.event.inputs.note }}. Build download URL: Mac - https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh-${{ github.event.inputs.version }}.dmg"
+          SLACK_MESSAGE: "${{ github.event.inputs.note }}. Build download URL: Mac - https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-${{ github.event.inputs.version }}.dmg"
           SLACK_FOOTER: ''
           SLACK_TITLE: Giddh Desktop build deployment to PROD
           SLACK_USERNAME: Giddh Desktop build

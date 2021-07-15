@@ -329,7 +329,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             (window as any).plugins.googleplus.login(
                 {
                     'scopes': 'email', // optional, space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
-                    'webClientId': this._generalService.getGoogleCredentials().GOOGLE_CLIENT_ID,
+                    'webClientId': GOOGLE_CLIENT_ID,
                     'offline': true // optional, but requires the webClientId - if set to true the plugin will also return a serverAuthCode, which can be used to grant offline access to a non-Google server
                 },
                 (obj) => {
