@@ -73,6 +73,7 @@ import { LedgerDiscountModule } from '../ledger/components/ledger-discount/ledge
 import { ConfirmationModalModule } from '../common/confirmation-modal/confirmation-modal.module';
 import { DatepickerWrapperModule } from './datepicker-wrapper/datepicker.wrapper.module';
 import { HamburgerMenuModule } from './header/components/hamburger-menu/hamburger-menu.module';
+import { GenericAsideMenuAccountComponent } from './generic-aside-menu-account/generic.aside.menu.account.component';
 registerLocaleData(localeEn);
 registerLocaleData(localeHi);
 registerLocaleData(localeMr);
@@ -139,7 +140,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         PurchaseSendEmailModalComponent,
         GiddhDaterangepickerComponent,
         GiddhPageLoaderComponent,
-        PrimarySidebarComponent
+        PrimarySidebarComponent,
+        GenericAsideMenuAccountComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -241,7 +243,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         ConfirmationModalModule,
         DatepickerWrapperModule,
         HamburgerMenuModule,
-        ValidateSectionPermissionDirectiveModule
+        ValidateSectionPermissionDirectiveModule,
+        GenericAsideMenuAccountComponent
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,
