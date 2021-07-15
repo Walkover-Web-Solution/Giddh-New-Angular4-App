@@ -8422,6 +8422,9 @@ body.update-scroll-hidden {
 body.update-scroll-hidden{
     overflow-y: hidden;
 }
+.trial-balance-viewport {
+    height: 500px;
+}
 /* responsive  starts here*/
 
 @media (max-width: 1440px) {

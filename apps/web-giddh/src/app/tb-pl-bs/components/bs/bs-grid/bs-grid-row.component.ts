@@ -1,10 +1,12 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { ChildGroup } from '../../../../models/api-models/Search';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Account, ChildGroup } from '../../../../models/api-models/Search';
+import { TRIAL_BALANCE_VIEWPORT_LIMIT } from '../../../constants/trial-balance-profit.constant';
 
 @Component({
     selector: '[bs-grid-row]',
     templateUrl: './bs-grid-row.component.html',
     styleUrls: [`./bs-grid-row.component.scss`],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BsGridRowComponent implements OnChanges {
     @Input() public groupDetail: ChildGroup;
@@ -12,9 +14,13 @@ export class BsGridRowComponent implements OnChanges {
     @Input() public padding: string;
     @Input() public from: string = '';
     @Input() public to: string = '';
+    /** True, if all items are expanded  */
+    @Input() public expandAll: boolean;
+    /** Minimum limit on which Trial balance viewport enables */
+    public minimumViewportLimit = TRIAL_BALANCE_VIEWPORT_LIMIT;
 
     constructor(private cd: ChangeDetectorRef) {
-        
+
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -38,5 +44,17 @@ export class BsGridRowComponent implements OnChanges {
             (window as any).open(url);
         }
 
+    }
+
+    /**
+     * Track by function for balance sheet item
+     *
+     * @param {*} index Index of the item
+     * @param {Account} item Current item
+     * @return {string} Item uniquename
+     * @memberof BsGridRowComponent
+     */
+    public trackByFn(index, item: Account): string {
+        return item.uniqueName;
     }
 }

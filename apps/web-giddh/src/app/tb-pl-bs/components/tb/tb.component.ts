@@ -74,7 +74,7 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
             }
             return d;
         })), takeUntil(this.destroyed$));
-        this.data$.subscribe(p => {
+        this.data$.pipe(takeUntil(this.destroyed$)).subscribe(() => {
             this.cd.markForCheck();
         });
     }
