@@ -8971,6 +8971,11 @@ body.update-scroll-hidden {
     }
 }
 @media (max-width: 767px) {
+    .gst-sidebar-open {
+        #content-wrapper{
+            padding-left: 0 !important;
+        }
+    }
     .customer-aging .nav.nav-tabs{
         display: flex !important;
     }
