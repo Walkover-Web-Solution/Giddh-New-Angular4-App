@@ -1079,13 +1079,23 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public closeSidebarMobile(e) {
-        if (e.target.className.toString() !== 'icon-bar' && this.isMobileSite) {
+        let excludeElements = ['icon-bar', 'hamburger-menu', 'refresh-manually', 'icon-down-new'];
+        let elementClass = e?.target?.className?.toString();
+        let validElement = true;
+
+        excludeElements.forEach(className => {
+            if(elementClass.indexOf(className) > -1) {
+                validElement = false;
+            }
+        });
+
+        if (validElement && this.isMobileSite) {
             this.sideMenu.isopen = false;
             this.menuStateChange.emit(false);
         }
 
-        if (e.target.className.toString() !== 'icon-bar' && (this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details"))) {
-            this.store.dispatch(this._generalActions.openSideMenu(false));
+        if (validElement && !this.isMobileSite && (this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details") || document.getElementsByClassName("voucher-preview-edit")?.length > 0)) {
+            this.collapseSidebar(true);
         }
     }
 
