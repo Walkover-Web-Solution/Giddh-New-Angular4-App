@@ -301,6 +301,10 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
                     }
 
                     this.changeDetectorRef.detectChanges();
+
+                    if(design === 1 && !reloadBranches && this.companyBranches.branchCount > 1) {
+                        this.showAllBranches(company);
+                    }
                 } else {
                     this.branchList = [];
                     company.branches = this.branchList;
@@ -323,6 +327,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
      * @memberof CompanyBranchComponent
      */
     public showAllBranches(company: any): void {
+        this.companyBranches.branchCount = company?.branchCount;
         if(company?.branchCount > 1) {
             setTimeout(() => {
                 if (this.staticTabs && this.staticTabs.tabs[1]) {
@@ -349,6 +354,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
 
         if(tabName === "company") {
             this.companyBranches = this.activeCompany;
+            this.companyBranches.branchCount = this.currentCompanyBranches?.length;
             this.companyBranches.branches = this.currentCompanyBranches;
             this.branchList = this.currentCompanyBranches;
             this.changeDetectorRef.detectChanges();
