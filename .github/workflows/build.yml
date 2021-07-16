@@ -189,10 +189,11 @@ jobs:
           server_port: 465
           username: ${{secrets.GIDDH_BUILDS_USERNAME}}
           password: ${{secrets.GIDDH_BUILDS_PASSWORD}}
-          subject: ${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}
+          subject: ${{ github.actor }} - ${{ github.workflow }} job ${{ job.status }}
           to: ${{ secrets.GIDDH_BUILDS_RECIPIENTS }}
           bcc: $ {{ secrets.GIDDH_BUILDS_BCC_RECIPIENTS }}
           from: Giddh Builds
+          body: Job in worflow ${{ github.workflow }} of ${{ github.repository }} has ${{ job.status }}
       - name: Slack Notification Failure
         if: ${{ failure() }}
         uses: rtCamp/action-slack-notify@v2
