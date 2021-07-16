@@ -20,7 +20,7 @@
     </div>
     <!-- branch design option 1 -->
     <div class="company-branch-opt-1" *ngIf="activeDesign === 1">
-        <tabset class="custom-tabs position-relative" #staticTabs><!-- add class="branch-hide-tab" in case of no branch available-->
+        <tabset class="custom-tabs position-relative" [ngClass]="{'branch-hide-tab': companyBranches?.branchCount <= 1}" #staticTabs>
             <tab [heading]="commonLocaleData?.app_company"
                 (selectTab)="tabChanged('company')">
                 <div class="wrap-company-refresh">
@@ -73,7 +73,7 @@
                                     <i class="icon-head-branch mr-2"></i>
                                     <span class="d-flex flex-column">
                                         <span class="branch-alias">{{ companyBranches.name }}</span>
-                                        <span class="font-12 branch-company-name">{{localeData?.company_consolidated_data}}</span>
+                                        <span class="font-11 branch-company-name">{{localeData?.company_consolidated_data}}</span>
                                     </span>
                                 </a>
                             </li>
@@ -86,7 +86,7 @@
                                             {{branch?.alias}}
                                         </span>
                                         <!-- Company name will show once we release the concept of headquarters -->
-                                        <!-- <span class="font-12 branch-company-name">{{companyBranches?.name}}</span> -->
+                                        <!-- <span class="font-11 branch-company-name">{{companyBranches?.name}}</span> -->
                                     </span>
                                 </a>
                             </li>
@@ -166,7 +166,7 @@
                                             <i class="icon-branch-connect mr-2"></i>
                                             <span class="d-flex flex-column">
                                                 <span class="branch-alias">{{ branch.alias }}</span>
-                                                <span class="font-12 branch-company-name pt-0 pb-0">{{ company.name }}</span>
+                                                <span class="font-11 branch-company-name pt-0 pb-0">{{ company.name }}</span>
                                             </span>
                                         </a>
                                     </li>
