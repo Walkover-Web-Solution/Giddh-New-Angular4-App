@@ -105,12 +105,6 @@
                     <h5>
                         {{commonLocaleData?.app_purchase}}
                         <div>
-                            <!-- <span class="d-inline-flex number-total">
-                                {{
-                                (purchaseRegisteDetailedResponse$ | async).debitTotal
-                                | giddhCurrency
-                                }}
-                            </span> -->
                             <span class="d-inline-flex number-total">
                                 <amount-field [amount]="(purchaseRegisteDetailedResponse$ | async).debitTotal" [currencySymbol]="false"
                                     [currencyCode]="false">
@@ -123,12 +117,6 @@
                     <h5>
                         {{commonLocaleData?.app_return}}
                         <div>
-                            <!-- <span class="d-inline-flex number-total">
-                                {{
-                                (purchaseRegisteDetailedResponse$ | async).creditTotal
-                                | giddhCurrency
-                                }}
-                            </span> -->
                             <span class="d-inline-flex number-total">
                                 <amount-field [amount]="(purchaseRegisteDetailedResponse$ | async).creditTotal" [currencySymbol]="false"
                                         [currencyCode]="false">
@@ -141,12 +129,6 @@
                     <h5>
                         {{commonLocaleData?.app_discount}}
                         <div>
-                            <!-- <span class="d-inline-flex number-total">
-                                {{
-                                (purchaseRegisteDetailedResponse$ | async)
-                                .discountTotal | giddhCurrency
-                                }}
-                            </span> -->
                             <span class="d-inline-flex number-total">
                                 <amount-field [amount]="(purchaseRegisteDetailedResponse$ | async).discountTotal" [currencySymbol]="false"
                                         [currencyCode]="false">
@@ -159,12 +141,6 @@
                     <h5>
                         {{commonLocaleData?.app_tcs}}
                         <div>
-                            <!-- <span class="d-inline-flex number-total">
-                                {{
-                                (purchaseRegisteDetailedResponse$ | async).tcsTotal
-                                | giddhCurrency
-                                }}
-                            </span> -->
                             <span class="d-inline-flex number-total">
                                 <amount-field [amount]="(purchaseRegisteDetailedResponse$ | async).tcsTotal" [currencySymbol]="false"
                                         [currencyCode]="false">
@@ -177,12 +153,6 @@
                     <h5>
                         {{commonLocaleData?.app_tds}}
                         <div>
-                            <!-- <span class="d-inline-flex number-total">
-                                {{
-                                (purchaseRegisteDetailedResponse$ | async).tdsTotal
-                                | giddhCurrency
-                                }}
-                            </span> -->
                             <span class="d-inline-flex number-total">
                                 <amount-field [amount]="(purchaseRegisteDetailedResponse$ | async).tdsTotal" [currencySymbol]="false"
                                         [currencyCode]="false">
@@ -195,12 +165,6 @@
                     <h5>
                         {{commonLocaleData?.app_tax}}
                         <div>
-                            <!-- <span class="d-inline-flex number-total">
-                                {{
-                                (purchaseRegisteDetailedResponse$ | async).taxTotal
-                                | giddhCurrency
-                                }}
-                            </span> -->
                             <span class="d-inline-flex number-total">
                                 <amount-field [amount]="(purchaseRegisteDetailedResponse$ | async).taxTotal" [currencySymbol]="false"
                                         [currencyCode]="false">
@@ -213,12 +177,6 @@
                     <h5>
                         {{commonLocaleData?.app_net_purchase}}
                         <div>
-                            <!-- <span class="d-inline-flex number-total">
-                                {{
-                                (purchaseRegisteDetailedResponse$ | async).netTotal
-                                .amount | giddhCurrency
-                                }}
-                            </span> -->
                             <span class="d-inline-flex number-total">
                                 <amount-field [amount]="(purchaseRegisteDetailedResponse$ | async).netTotal
                                 .amount" [currencySymbol]="false"
@@ -400,7 +358,6 @@
                             </td>
                             <td [attr.data-title]="commonLocaleData?.app_purchase"
                                 *ngIf="(purchaseRegisteDetailedResponse$ | async).debitTotal" class="text-right">
-                                <!-- {{ item.debitTotal | giddhCurrency }} -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="item.debitTotal" [currencySymbol]="false"
                                             [currencyCode]="false">
@@ -408,7 +365,6 @@
                                 </span>
                                 <ng-container *ngIf="expand">
                                     <ng-container *ngFor="let stock of item.stocks">
-                                        <!-- <p>{{ stock.amount | giddhCurrency }}</p> -->
                                         <p>
                                             <span class="d-inline-flex">
                                                 <amount-field [amount]="stock.amount" [currencySymbol]="false"
@@ -421,7 +377,6 @@
                             </td>
                             <td [attr.data-title]="commonLocaleData?.app_return"
                                 *ngIf="(purchaseRegisteDetailedResponse$ | async).creditTotal" class="text-right">
-                                <!-- {{ item.creditTotal | giddhCurrency }}  -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="item.creditTotal" [currencySymbol]="false"
                                             [currencyCode]="false">
@@ -452,7 +407,6 @@
                             <td [attr.data-title]="commonLocaleData?.app_discount"
                                 *ngIf="showFieldFilter.discount && (purchaseRegisteDetailedResponse$ | async)?.discountTotal"
                                 class="text-right">
-                                <!-- {{ item.discountTotal | giddhCurrency }} -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="item.discountTotal" [currencySymbol]="false"
                                             [currencyCode]="false">
@@ -462,7 +416,6 @@
                             <td [attr.data-title]="commonLocaleData?.app_tax"
                                 *ngIf="showFieldFilter.tax && (purchaseRegisteDetailedResponse$ | async).taxTotal"
                                 class="text-right">
-                                <!-- {{ item.taxTotal | giddhCurrency }} -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="item.taxTotal" [currencySymbol]="false"
                                             [currencyCode]="false">
@@ -470,7 +423,6 @@
                                 </span>
                             </td>
                             <td [attr.data-title]="commonLocaleData?.app_net_purchase" class="text-right">
-                                <!-- {{ item.netTotal | giddhCurrency }} -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="item.netTotal" [currencySymbol]="false"
                                             [currencyCode]="false">

@@ -58,7 +58,6 @@
                             <p>{{commonLocaleData?.app_total}} {{activeGraphType['displayName']}}
                                 ({{commonLocaleData?.app_this_week}})</p>
                             <h3>
-                                <!-- {{activeCompany.baseCurrencySymbol}} {{summaryData.totalCurrent | giddhCurrency}} -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="summaryData.totalCurrent" [currencySymbol]="activeCompany.baseCurrencySymbol"
                                         [currencyCode]="activeCompany.baseCurrency">
@@ -71,7 +70,6 @@
                             <p>{{commonLocaleData?.app_total}} {{activeGraphType['displayName']}}
                                 ({{commonLocaleData?.app_last_week}})</p>
                             <h3>
-                                <!-- {{activeCompany.baseCurrencySymbol}} {{summaryData.totalLast | giddhCurrency}} -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="summaryData.totalLast" [currencySymbol]="activeCompany.baseCurrencySymbol"
                                         [currencyCode]="activeCompany.baseCurrency">
@@ -82,7 +80,6 @@
                         <div class="single-sale-detail">
                             <p>{{localeData?.highest}} {{activeGraphType['displayName']}}</p>
                             <h3>
-                                <!-- {{activeCompany.baseCurrencySymbol}} {{summaryData.highest | giddhCurrency}} -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="summaryData.highest" [currencySymbol]="activeCompany.baseCurrencySymbol"
                                         [currencyCode]="activeCompany.baseCurrency">
@@ -94,7 +91,6 @@
                         <div class="single-sale-detail">
                             <p>{{localeData?.lowest}} {{activeGraphType['displayName']}}</p>
                             <h3>
-                                <!-- {{activeCompany.baseCurrencySymbol}} {{summaryData.lowest | giddhCurrency}} -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="summaryData.lowest" [currencySymbol]="activeCompany.baseCurrencySymbol"
                                         [currencyCode]="activeCompany.baseCurrency">
@@ -185,7 +181,6 @@
                                 <p>{{commonLocaleData?.app_total}} {{activeGraphType['displayName']}}
                                     ({{getCurrentWeekStartEndDate[1] | date}})</p>
                                 <h3>
-                                    <!-- {{activeCompany.baseCurrencySymbol}} {{summaryData.totalCurrent | giddhCurrency}} -->
                                     <span class="d-inline-flex">
                                         <amount-field [amount]="summaryData.totalCurrent" [currencySymbol]="activeCompany.baseCurrencySymbol"
                                             [currencyCode]="activeCompany.baseCurrency">
@@ -199,7 +194,6 @@
                                 <p>{{commonLocaleData?.app_total}} {{activeGraphType['displayName']}}
                                     ({{getPreviousWeekStartEndDate[1] | date}})</p>
                                 <h3>
-                                    <!-- {{activeCompany.baseCurrencySymbol}} {{summaryData.totalLast | giddhCurrency}} -->
                                     <span class="d-inline-flex">
                                         <amount-field [amount]="summaryData.totalLast" [currencySymbol]="activeCompany.baseCurrencySymbol"
                                             [currencyCode]="activeCompany.baseCurrency">
@@ -212,7 +206,6 @@
                             <div>
                                 <p>{{localeData?.highest}} {{activeGraphType['displayName']}}</p>
                                 <h3>
-                                    <!-- {{activeCompany.baseCurrencySymbol}} {{summaryData.highest | giddhCurrency}} -->
                                     <span class="d-inline-flex">
                                         <amount-field [amount]="summaryData.highest" [currencySymbol]="activeCompany.baseCurrencySymbol"
                                             [currencyCode]="activeCompany.baseCurrency">
@@ -226,7 +219,6 @@
                             <div>
                                 <p>{{localeData?.lowest}} {{activeGraphType['displayName']}}</p>
                                 <h3>
-                                    <!-- {{activeCompany.baseCurrencySymbol}} {{summaryData.lowest | giddhCurrency}} -->
                                     <span class="d-inline-flex">
                                         <amount-field [amount]="summaryData.lowest" [currencySymbol]="activeCompany.baseCurrencySymbol"
                                             [currencyCode]="activeCompany.baseCurrency">
