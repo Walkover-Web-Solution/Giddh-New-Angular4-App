@@ -833,7 +833,7 @@
                                         <span *ngFor="let alert of bankAccount?.iciciDetailsResource?.paymentAlerts; let i = index; trackBy: trackByAlertUniqueName;">{{alert?.name}}{{ (i < bankAccount?.iciciDetailsResource?.paymentAlerts?.length - 1) ? ", " : "" }}</span>
                                     </span>
                                     <span>
-                                        <a href="javascript:;" class="icon-edit-pencil"></a>
+                                        <a href="javascript:;" class="icon-edit-pencil" (click)="openEditAccountModal(bankAccount)"></a>
                                     </span>
                                 </div>
                                 <div class="row width-100">
@@ -845,13 +845,13 @@
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <span>Limit Up To</span><br>
-                                                <span><b>{{(payor?.duration === "UNLIMITED") ? "UNLIMITED" : payor?.maxAmount}}</b></span>
+                                                <span><b>{{(payor?.duration === "UNLIMITED") ? "UNLIMITED" : payor?.maxAmount + "/" + payor?.duration}}</b></span>
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <span>Pending for self approval</span>
                                                 <span>
-                                                    <a href="javascript:;" class="icon-edit-pencil"></a>
-                                                    <a href="javascript:;" class="fa fa-trash"></a>
+                                                    <a href="javascript:;" class="icon-edit-pencil" (click)="openEditAccountUserModal(bankAccount, payor)"></a>
+                                                    <a href="javascript:;" class="fa fa-trash" (click)="showDeleteBankAccountLoginConfirmationModal(bankAccount, payor)"></a>
                                                 </span>
                                             </div>
                                             <p>A request has been sent to your account, login to <a href="javascript:;">ICICI Bank Portal</a> and accept it.</p>
@@ -918,6 +918,47 @@
             </div>
         </div>
     </div>
+    <div bsModal #editAccountModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
+        <div class="modal-dialog modal-sm" *ngIf="editAccountModal?.isShown">
+            <div class="modal-content">
+                <form autocomplete="off" novalidate name="editAccountForm" [formGroup]="editAccountForm"
+                class="new-account-form" (ngSubmit)="updateAccount()">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Edit Account</h3>
+                        <span data-dismiss="modal" aria-label="Close" class="close hover-orange" (click)="closeEditAccountModal()">×</span>
+                    </div>
+                    <div class="modal-body">
+                        <div class="clearfix mr-t1">
+                            <label>Account Number</label>
+                            {{activeBankAccount?.iciciDetailsResource?.accountNumber}}
+                        </div>
+                        <div class="mr-t1">
+                            <label>Linked Account</label>
+                            {{activeBankAccount?.account?.name}}
+                        </div>
+                        <div class="clearfix mr-t1">
+                            <label>Payment Updates:</label>
+                            <sh-select formControlName="paymentAlerts" name="paymentAlerts" placeholder="Select Receipients" [options]="paymentAlersUsersList" [multiple]="true" (selected)="selectPaymentAlertUsers($event)" [forceClearReactive]="forceClearPaymentUpdates$ | async" [hasSelectAllOption]="true">
+                                <ng-template #optionTemplate let-option="option">
+                                    <ng-container>
+                                        <a href="javascript:void(0)" class="list-item d-flex">
+                                            <span><input type="checkbox" [checked]="((selectAllRecords !== option.value && paymentAlerts?.includes(option.value)) || selectAllRecords === option.value && paymentAlerts?.length === paymentAlersUsersList?.length)" [value]="option.value"></span>&nbsp;
+                                            <span>
+                                                <div class="item">{{ option.label }}</div>
+                                            </span>
+                                        </a>
+                                    </ng-container>
+                                </ng-template>
+                            </sh-select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success" [disabled]="editAccountForm?.invalid">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <div bsModal #createNewAccountUserModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
         <div class="modal-dialog modal-sm" *ngIf="createNewAccountUserModal?.isShown">
             <div class="modal-content">
@@ -956,6 +997,63 @@
                         <button type="submit" class="btn btn-success" [disabled]="createNewAccountUserForm?.invalid">Connect</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+    <div bsModal #editAccountUserModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
+        <div class="modal-dialog modal-sm" *ngIf="editAccountUserModal?.isShown">
+            <div class="modal-content">
+                <form autocomplete="off" novalidate name="editAccountUserForm" [formGroup]="editAccountUserForm"
+                class="new-account-form" (ngSubmit)="updateAccountUser()">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Edit User</h3>
+                        <span data-dismiss="modal" aria-label="Close" class="close hover-orange" (click)="closeEditAccountUserModal()">×</span>
+                    </div>
+                    <div class="modal-body">
+                        <div class="clearfix mr-t1">
+                            <label>Account Number</label>
+                            {{activeBankAccount?.iciciDetailsResource?.accountNumber}}
+                        </div>
+                        <div class="mr-t1">
+                            <label>Linked Account</label>
+                            {{activeBankAccount?.account?.name}}
+                        </div>
+                        <div class="clearfix mr-t1">
+                            <label>User<span class="red-text">*</span>:</label>
+                            {{activePayorAccount?.user?.name}}
+                        </div>
+                        <div class="clearfix mr-t1">
+                            <label>Limit Up To</label>
+                            <input class="form-control" formControlName="maxAmount"
+                                name="maxAmount" type="text" placeholder="Enter Amount">
+                            <sh-select formControlName="duration" name="duration" placeholder="Duration" [options]="amountLimitDurations"></sh-select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success" [disabled]="editAccountUserForm?.invalid">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div bsModal #confirmationModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade"
+        role="dialog">
+        <div class="modal-dialog modal-md" *ngIf="confirmationModal?.isShown">
+            <div class="modal-content">
+                <div class="modal-header clearfix">
+                    <h3>{{commonLocaleData?.app_confirmation}}</h3>
+                    <span aria-hidden="true" class="close" (click)="confirmationModal?.hide()"
+                        data-dismiss="modal">×</span>
+                </div>
+                <div class="modal-body">
+                    Do you really want to delete the login id {{activeBankAccount?.loginId}} ?
+                </div>
+                <div class="modal-footer clearfix">
+                    <button (click)="deleteBankAccountLogin(true)"
+                        class="btn btn-sm btn-success">{{commonLocaleData?.app_yes}}</button>
+                    <button (click)="confirmationModal?.hide()"
+                        class="btn btn-sm btn-danger">{{commonLocaleData?.app_no}}</button>
+                </div>
             </div>
         </div>
     </div>
