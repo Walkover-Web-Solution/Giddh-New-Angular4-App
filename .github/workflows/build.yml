@@ -190,8 +190,8 @@ jobs:
           username: ${{secrets.GIDDH_BUILDS_USERNAME}}
           password: ${{secrets.GIDDH_BUILDS_PASSWORD}}
           subject: ${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}
-          to: ${{ secrets.RECIPIENTS }}
-          bcc: $ {{ secrets.BCC_RECIPIENTS }}
+          to: ${{ secrets.GIDDH_BUILDS_RECIPIENTS }}
+          bcc: $ {{ secrets.GIDDH_BUILDS_BCC_RECIPIENTS }}
           from: Giddh Builds
       - name: Slack Notification Failure
         if: ${{ failure() }}
