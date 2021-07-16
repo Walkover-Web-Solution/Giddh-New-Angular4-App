@@ -125,8 +125,9 @@
                                                         (dynamicSearchedQuery)="onSearchQueryChanged($event)"
                                                         [enableDynamicSearch]="true" [notFoundMsg]="noResultsFoundLabel"
                                                         (onHide)="handleSuggestionHide()"
-                                                        (keydown)="keydownPressed($event)" [options]="searchResults"
-                                                        #dbtSelect (click)="addBlankTrx('DEBIT', txn, $event)"
+                                                        (keydown)="keydownPressed($event)"
+                                                        [options]="searchResults" #dbtSelect
+                                                        (click)="addBlankTrx('DEBIT', txn, $event)"
                                                         (selected)="selectAccount($event, txn, dbtSelect)"
                                                         (onClear)="selectAccount($event, txn, dbtSelect, true)"
                                                         [showClear]="false" [(ngModel)]="txn.particular.uniqueName"
@@ -338,7 +339,6 @@
                                                         [fixedValue]="txn.particular.name" (onShow)="cbs.hide()"
                                                         [showClear]="false" [(ngModel)]="txn.particular.uniqueName"
                                                         [ItemHeight]="67" [defaultValue]="txn.particular.name"
-                                                        [fixedValue]="txn.particular.name"
                                                         [placeholder]="localeData?.by_select_accounts">
 
                                                         <ng-template #optionTemplate let-option="option">
@@ -454,11 +454,11 @@
                                                 [currencyCode]="vm.baseCurrencyDetails?.code">
                                             </amount-field>
                                         </span>
-
-                                        <p class="mb-0 amount-total" *ngIf="vm.isMultiCurrencyAvailable">
+                                        <p class="mb-0 pr-1 amount-total" *ngIf="vm.isMultiCurrencyAvailable">
                                             <ng-container *ngTemplateOutlet="totalWithCurrencySymbol;context: {
-                        $implicit: (vm.convertedEntryTotal.crTotal > vm.convertedEntryTotal.drTotal ? vm.convertedEntryTotal.crTotal : vm.convertedEntryTotal.drTotal)
-                        }"></ng-container>
+                                                $implicit: (vm.convertedEntryTotal.crTotal > vm.convertedEntryTotal.drTotal ? vm.convertedEntryTotal.crTotal : vm.convertedEntryTotal.drTotal)
+                                                }">
+                                            </ng-container>
                                         </p>
                                     </td>
                                 </tr>

@@ -559,7 +559,7 @@ input {
     font-size: 13px;
     color: $chetwode-blue !important;
     display: block;
-    padding: 7px 10px;
+    padding: 7px 10px !important;
     display: block;
     width: 100%;
     text-align: left;
@@ -2115,6 +2115,10 @@ input[type="checkbox"]:checked:after {
 /* my css start */
 .pointer {
     cursor: pointer;
+}
+
+.pd-t05 {
+    padding-top: 5px;
 }
 
 .pd-t07 {
@@ -6919,7 +6923,6 @@ ul.dropdown-menu p.lead.pd {
     height: 36px !important;
     border-right: none !important;
     color: $nobel !important;
-    cursor: pointer;
 }
 
 .date-advance-search .input-group input.form-control {
@@ -8467,6 +8470,21 @@ body.update-scroll-hidden {
 body.update-scroll-hidden{
     overflow-y: hidden;
 }
+.e-waybill-tabs.custom-tabs .nav-tabs{
+    position: static !important;
+    padding-left: 15px !important;
+}
+.sales-register{
+    width: calc(100% - 60px) !important;
+}
+.menu_open .sales-register{
+    width: calc(100% - 240px) !important;
+}
+.wrap-billing-address.clearfix {
+    .bottom-border-only{
+        padding-left: 0 !important;
+    }
+}
 /* responsive  starts here*/
 
 @media (max-width: 1440px) {
@@ -9040,7 +9058,7 @@ body.update-scroll-hidden{
     #setting-tab-wrapper .purchase-setting-tab.tab-integration .nav-tabs {
         display: inline-block;
     }
-    .e-waybill-tabs.custom-tabs .nav-tabs{
+    .e-waybill-tabs.custom-tabs .nav-tabs {
         position: fixed !important;
     }
     .invoice-modal-content {
@@ -9356,7 +9374,7 @@ body.update-scroll-hidden{
         margin-top: 0px;
     }
     .custom-tabs.hide-header .top-bar {
-        margin-top: 28x;
+        margin-top: 28px;
     }
     .invoice-control .nav.nav-tabs {
         padding: 0 0 0 15px !important;

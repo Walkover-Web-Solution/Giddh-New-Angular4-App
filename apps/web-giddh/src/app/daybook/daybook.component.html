@@ -76,7 +76,7 @@
                             (click)="exportDaybook()"
                             [disabled]="!((daybookData$ | async)?.entries?.length > 0)">{{commonLocaleData?.app_export}}</button>
                         </div>
-                    
+
                 </div>
                 <div class="d-md-none d-flex justify-content-between mr-t1">
                     <button type="button" class="btn btn-default mr-0"
@@ -201,13 +201,13 @@
                                             </td>
                                             <td *ngIf="!details.inventory" class=" text-right">{{'-'}}
                                             </td>
-                                            <td>{{details.inventory?details.inventory.hsnNumber?
+                                            <td>{{details.inventory? details.inventory.hsnNumber ?
                                                 details.inventory.hsnNumber: details.inventory.sacNumber:''}}
                                             </td>
-                                            <td>{{details.inventory?details.inventory.skuCode:''}}
+                                            <td>{{details.inventory ? details.inventory.skuCode : ''}}
                                             </td>
                                             <td class="warehouse-name">
-                                                {{details.inventory?details.inventory.warehouse.name:''}}
+                                                {{details.inventory ? details.inventory.warehouse.name : ''}}
                                             </td>
                                         </ng-container>
                                     </tr>

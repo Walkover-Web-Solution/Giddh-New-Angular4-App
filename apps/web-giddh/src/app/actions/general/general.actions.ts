@@ -237,7 +237,6 @@ export class GeneralActions {
             payload: items
         }
     }
-
     /**
      * Returns the action to open the GST side menu
      *

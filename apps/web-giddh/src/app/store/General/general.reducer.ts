@@ -55,7 +55,7 @@ const initialState: GeneralState = {
     updateIndexDbInProcess: false,
     openSideMenu: true,
     menuItems: [],
-    openGstSideMenu: false,
+    openGstSideMenu: false
 };
 
 export function GeneRalReducer(state: GeneralState = initialState, action: CustomActions): GeneralState {

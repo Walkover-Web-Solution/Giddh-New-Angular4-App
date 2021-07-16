@@ -160,7 +160,7 @@
                 <td></td>
             </tr>
             <tr>
-                <th #searchCustomerContainer (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')" class="td-search-box"> 
+                <th #searchCustomerContainer (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')" class="td-search-box">
                     <div class="d-flex align-items-center">
                         <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showNameSearch, fieldName: 'name',formControl: searchedName,
                                                     title: commonLocaleData?.app_customer_name}"></ng-container>

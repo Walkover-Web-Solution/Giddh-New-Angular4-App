@@ -59,7 +59,6 @@ import { RevisionHistoryComponent } from './revision-history/revision-history.co
 import { PurchaseOrderPreviewModalComponent } from './purchase-order-preview/purchase-order-preview.component';
 import { PurchaseSendEmailModalComponent } from './purchase-send-email/purchase-send-email.component';
 import { GiddhDaterangepickerComponent } from '../theme/giddh-daterangepicker/giddh-daterangepicker.component';
-import { HamburgerMenuComponent } from './header/components/hamburger-menu/hamburger-menu.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { GiddhPageLoaderComponent } from './giddh-page-loader/giddh-page-loader.component';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
