@@ -167,39 +167,52 @@ jobs:
             --acl private \
             --region ap-south-1 \
             /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public.zip s3://${{ secrets.UI_PROD_BUILD_S3_FOLDER }}
-      - name: Slack Notification Success
-        if: ${{ success() }}
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: ${{ secrets.SLACK_UI_BUILDS_CHANNEL_ID }}
-          SLACK_COLOR: ${{ job.status }} # or a specific color like 'red' or '#ff00ff'
-          SLACK_TITLE: Giddh UI ${{ env.BUILD_ENV }} build
-          SLACK_USERNAME: Giddh UI ${{ env.BUILD_ENV }} build
-          SLACK_MESSAGE: Build succeeded
-          SLACK_FOOTER: ''
-          SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
-      - name: Slack Notification Failure
-        if: ${{ failure() }}
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: ${{ secrets.SLACK_UI_BUILDS_CHANNEL_ID }}
-          SLACK_COLOR: ${{ job.status }} # or a specific color like 'red' or '#ff00ff'
-          SLACK_TITLE: Giddh UI ${{ env.BUILD_ENV }} build
-          SLACK_USERNAME: Giddh UI ${{ env.BUILD_ENV }} build
-          SLACK_MESSAGE: Build failed
-          SLACK_FOOTER: ''
-          SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
-      - name: Slack Notification Cancelled
-        if: ${{ cancelled() }}
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: ${{ secrets.SLACK_UI_BUILDS_CHANNEL_ID }}
-          SLACK_COLOR: ${{ job.status }} # or a specific color like 'red' or '#ff00ff'
-          SLACK_TITLE: Giddh UI ${{ env.BUILD_ENV }} build
-          SLACK_USERNAME: Giddh UI ${{ env.BUILD_ENV }} build
-          SLACK_MESSAGE: Build cancelled
-          SLACK_FOOTER: ''
-          SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+#       - name: Slack Notification Success
+#         if: ${{ success() }}
+#         uses: rtCamp/action-slack-notify@v2
+#         env:
+#           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+#           SLACK_CHANNEL: ${{ secrets.SLACK_UI_BUILDS_CHANNEL_ID }}
+#           SLACK_COLOR: ${{ job.status }} # or a specific color like 'red' or '#ff00ff'
+#           SLACK_TITLE: Giddh UI ${{ env.BUILD_ENV }} build
+#           SLACK_USERNAME: Giddh UI ${{ env.BUILD_ENV }} build
+#           SLACK_MESSAGE: Build succeeded
+#           SLACK_FOOTER: ''
+#           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+#       - name: Slack Notification Failure
+#         if: ${{ failure() }}
+#         uses: rtCamp/action-slack-notify@v2
+#         env:
+#           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+#           SLACK_CHANNEL: ${{ secrets.SLACK_UI_BUILDS_CHANNEL_ID }}
+#           SLACK_COLOR: ${{ job.status }} # or a specific color like 'red' or '#ff00ff'
+#           SLACK_TITLE: Giddh UI ${{ env.BUILD_ENV }} build
+#           SLACK_USERNAME: Giddh UI ${{ env.BUILD_ENV }} build
+#           SLACK_MESSAGE: Build failed
+#           SLACK_FOOTER: ''
+#           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+#       - name: Slack Notification Cancelled
+#         if: ${{ cancelled() }}
+#         uses: rtCamp/action-slack-notify@v2
+#         env:
+#           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+#           SLACK_CHANNEL: ${{ secrets.SLACK_UI_BUILDS_CHANNEL_ID }}
+#           SLACK_COLOR: ${{ job.status }} # or a specific color like 'red' or '#ff00ff'
+#           SLACK_TITLE: Giddh UI ${{ env.BUILD_ENV }} build
+#           SLACK_USERNAME: Giddh UI ${{ env.BUILD_ENV }} build
+#           SLACK_MESSAGE: Build cancelled
+#           SLACK_FOOTER: ''
+#           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+      - name: Email Notification
+        if: ${{ always() }}
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{secrets.GIDDH_BUILDS_USERNAME}}
+          password: ${{secrets.GIDDH_BUILDS_PASSWORD}}
+          subject: ${{ github.actor }} - ${{ github.workflow }} job ${{ job.status }}
+          to: ${{ secrets.GIDDH_BUILDS_RECIPIENTS }}
+          bcc: $ {{ secrets.GIDDH_BUILDS_BCC_RECIPIENTS }}
+          from: Giddh Builds
+          body: Job in worflow ${{ github.workflow }} ${{ env.BUILD_ENV }} of ${{ github.repository }} has ${{ job.status }}. https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App/commit/${{ github.sha }}
