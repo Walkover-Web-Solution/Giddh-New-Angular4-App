@@ -27,24 +27,45 @@
                     <div>
                         <span class="mr-b1 due-amount">{{localeData?.net_profit_loss}}</span>
                         <span class="total-amount pull-right">
-                            {{netProfitLossType}}<span>{{amountSettings.baseCurrencySymbol}}</span> {{ netProfitLoss |
-                            giddhCurrency }}</span>
+                            {{netProfitLossType}}
+                            <!-- <span>{{amountSettings.baseCurrencySymbol}}</span>
+                            {{ netProfitLoss |giddhCurrency }} -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="netProfitLoss" [currencySymbol]="amountSettings.baseCurrencySymbol"
+                                    [currencyCode]="activeCompany.baseCurrency">
+                                </amount-field>
+                            </span>
+                        </span>
                     </div>
                 </div>
                 <div class="clearfix mb-2 total-income">
                     <div>
                         <span class="mr-b1 due-amount">{{localeData?.total_income}}</span>
                         <span
-                            class="total-amount pull-right total-expenses-text"><span>{{amountSettings.baseCurrencySymbol}}</span>
-                            {{ totalIncome | giddhCurrency }} {{totalIncomeType}}</span>
+                            class="total-amount pull-right total-expenses-text">
+                            <!-- <span>{{amountSettings.baseCurrencySymbol}}</span>
+                            {{ totalIncome | giddhCurrency }} {{totalIncomeType}} -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="totalIncome" [currencySymbol]="amountSettings.baseCurrencySymbol"
+                                    [currencyCode]="activeCompany.baseCurrency">
+                                </amount-field>
+                            </span> {{totalIncomeType}}
+                        </span>
                     </div>
                 </div>
                 <div class="clearfix mb-2 total-income">
                     <div>
                         <span class="mr-b1 due-amount">{{localeData?.total_expense}}</span>
                         <span
-                            class="total-amount pull-right total-income-text"><span>{{amountSettings.baseCurrencySymbol}}</span>
-                            {{ totalExpense | giddhCurrency }} {{totalExpenseType}}</span>
+                            class="total-amount pull-right total-income-text">
+                            <!-- <span>{{amountSettings.baseCurrencySymbol}}</span>
+                            {{ totalExpense | giddhCurrency }} {{totalExpenseType}} -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="totalExpense" [currencySymbol]="amountSettings.baseCurrencySymbol"
+                                    [currencyCode]="activeCompany.baseCurrency">
+                                </amount-field>
+                            </span>{{totalExpenseType}}
+                        </span>
                     </div>
                 </div>
             </div>
