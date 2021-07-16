@@ -447,7 +447,7 @@ export class SettingsIntegrationService {
 
     public deleteBankAccountLogin(model: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.BANK_ACCOUNT_REGISTRATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+        return this._http.deleteWithBody(this.config.apiUrl + SETTINGS_INTEGRATION_API.BANK_ACCOUNT_REGISTRATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = model;
@@ -465,5 +465,15 @@ export class SettingsIntegrationService {
                 return data;
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    public updatePayorAccount(model: any, request: any): Observable<BaseResponse<any, any>> {
+        this.user = this._generalService.user;
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        return this._http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.UPDATE_PAYOR_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':bankAccountUniqueName', encodeURIComponent(request.bankAccountUniqueName)).replace(':urn', encodeURIComponent(request.urn)), model).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            data.request = model;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
     }
 }
