@@ -4,7 +4,6 @@
             <tr class="register-table-th">
                 <th>{{salesRegisterTotal.particular }}</th>
                 <th class="text-right">
-                    <!-- {{salesRegisterTotal.sales | giddhCurrency}} -->
                     <span class="d-inline-flex">
                         <amount-field [amount]="salesRegisterTotal.sales" [currencySymbol]="false"
                                 [currencyCode]="false">
@@ -12,7 +11,6 @@
                     </span>
                 </th>
                 <th *ngIf="salesRegisterTotal.returns" class="text-right">
-                    <!-- {{salesRegisterTotal.returns | giddhCurrency}} -->
                     <span class="d-inline-flex">
                         <amount-field [amount]="salesRegisterTotal.returns" [currencySymbol]="false"
                                 [currencyCode]="false">
@@ -20,8 +18,6 @@
                     </span>
                 </th>
                 <th *ngIf="salesRegisterTotal.taxTotal" class="text-right">
-                    <!-- {{salesRegisterTotal.taxTotal |
-                    giddhCurrency}} -->
                     <span class="d-inline-flex">
                         <amount-field [amount]="salesRegisterTotal.taxTotal" [currencySymbol]="false"
                                 [currencyCode]="false">
@@ -29,8 +25,6 @@
                     </span>
                 </th>
                 <th *ngIf="salesRegisterTotal.discountTotal" class="text-right">
-                    <!-- {{salesRegisterTotal.discountTotal |
-                    giddhCurrency}} -->
                     <span class="d-inline-flex">
                         <amount-field [amount]="salesRegisterTotal.discountTotal" [currencySymbol]="false"
                                 [currencyCode]="false">
@@ -38,7 +32,6 @@
                     </span>
                 </th>
                 <th *ngIf="isTcsTdsApplicable && salesRegisterTotal.tcsTotal" class="text-right">
-                    <!-- {{salesRegisterTotal.tcsTotal | giddhCurrency}} -->
                     <span class="d-inline-flex">
                         <amount-field [amount]="salesRegisterTotal.tcsTotal" [currencySymbol]="false"
                                 [currencyCode]="false">
@@ -46,7 +39,6 @@
                     </span>
                 </th>
                 <th *ngIf="isTcsTdsApplicable && salesRegisterTotal.tdsTotal" class="text-right">
-                    <!-- {{salesRegisterTotal.tdsTotal | giddhCurrency}} -->
                     <span class="d-inline-flex">
                         <amount-field [amount]="salesRegisterTotal.tdsTotal" [currencySymbol]="false"
                                 [currencyCode]="false">
@@ -54,8 +46,6 @@
                     </span>
                 </th>
                 <th *ngIf="salesRegisterTotal.netSales" class="text-right">
-                    <!-- {{salesRegisterTotal.netSales |
-                    giddhCurrency}} -->
                     <span class="d-inline-flex">
                         <amount-field [amount]="salesRegisterTotal.netSales" [currencySymbol]="false"
                                 [currencyCode]="false">
@@ -63,8 +53,6 @@
                     </span>
                 </th>
                 <th *ngIf="salesRegisterTotal.cumulative" class="text-right">
-                    <!-- {{salesRegisterTotal.cumulative |
-                    giddhCurrency}} -->
                     <span class="d-inline-flex">
                         <amount-field [amount]="salesRegisterTotal.cumulative" [currencySymbol]="false"
                                 [currencyCode]="false">
@@ -142,7 +130,6 @@
                         [class.cursor-pointer]="item.reportType !== 'combined'"
                         (click)="GotoDetailedSales(item)">{{item.particular}}</a></td>
                 <td [attr.data-title]="commonLocaleData?.app_sales" class="text-right">
-                    <!-- {{item.sales | giddhCurrency}} -->
                     <span class="d-inline-flex">
                         <amount-field [amount]="item.sales" [currencySymbol]="false"
                                 [currencyCode]="false">
@@ -151,7 +138,6 @@
                 </td>
                 <td [attr.data-title]="commonLocaleData?.app_return" *ngIf="salesRegisterTotal.returns"
                     class="text-right">
-                    <!-- {{item.returns | giddhCurrency}} -->
                     <span class="d-inline-flex">
                         <amount-field [amount]="item.returns" [currencySymbol]="false"
                                 [currencyCode]="false">
@@ -160,7 +146,6 @@
                 </td>
                 <td [attr.data-title]="commonLocaleData?.app_tax" *ngIf="salesRegisterTotal.taxTotal"
                     class="text-right">
-                    <!-- {{item.taxTotal | giddhCurrency}} -->
                     <span class="d-inline-flex">
                         <amount-field [amount]="item.taxTotal" [currencySymbol]="false"
                                 [currencyCode]="false">
@@ -169,7 +154,6 @@
                 </td>
                 <td [attr.data-title]="commonLocaleData?.app_discount" *ngIf="salesRegisterTotal.discountTotal"
                     class="text-right">
-                    <!-- {{item.discountTotal | giddhCurrency}} -->
                     <span class="d-inline-flex">
                         <amount-field [amount]="item.discountTotal" [currencySymbol]="false"
                                 [currencyCode]="false">
@@ -178,8 +162,6 @@
                 </td>
                 <td [attr.data-title]="commonLocaleData?.app_tcs"
                     *ngIf="isTcsTdsApplicable && salesRegisterTotal.tcsTotal" class="text-right">
-                    <!-- {{item.tcsTotal |
-                    giddhCurrency}} -->
                     <span class="d-inline-flex">
                         <amount-field [amount]="item.tcsTotal" [currencySymbol]="false"
                                 [currencyCode]="false">
@@ -188,8 +170,6 @@
                 </td>
                 <td [attr.data-title]="commonLocaleData?.app_tds"
                     *ngIf="isTcsTdsApplicable && salesRegisterTotal.tdsTotal" class="text-right">
-                    <!-- {{item.tdsTotal |
-                    giddhCurrency}} -->
                     <span class="d-inline-flex">
                         <amount-field [amount]="item.tdsTotal" [currencySymbol]="false"
                                 [currencyCode]="false">
@@ -198,7 +178,6 @@
                 </td>
                 <td [attr.data-title]="commonLocaleData?.app_net_sales" *ngIf="salesRegisterTotal.netSales"
                     class="text-right">
-                    <!-- {{item.netSales | giddhCurrency}} -->
                     <span class="d-inline-flex">
                         <amount-field [amount]="item.netSales" [currencySymbol]="false"
                                 [currencyCode]="false">
@@ -207,7 +186,6 @@
                 </td>
                 <td [attr.data-title]="commonLocaleData?.app_cumulative" *ngIf="salesRegisterTotal.cumulative"
                     class="text-right">
-                    <!-- {{item.cumulative | giddhCurrency}} -->
                     <span class="d-inline-flex">
                         <amount-field [amount]="item.cumulative" [currencySymbol]="false"
                                 [currencyCode]="false">

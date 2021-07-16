@@ -57,7 +57,6 @@
                             <p>{{commonLocaleData?.app_total}} {{activeGraphType['uniqueName']}}
                                 ({{commonLocaleData?.app_this_week}})</p>
                             <h3>
-                                <!-- {{activeCompany.baseCurrencySymbol}} {{summaryData.totalCurrent | giddhCurrency}} -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="summaryData.totalCurrent" [currencySymbol]="activeCompany.baseCurrencySymbol"
                                         [currencyCode]="activeCompany.baseCurrency">
@@ -70,7 +69,6 @@
                             <p>{{commonLocaleData?.app_total}} {{activeGraphType['uniqueName']}}
                                 ({{commonLocaleData?.app_last_week}})</p>
                             <h3>
-                                <!-- {{activeCompany.baseCurrencySymbol}} {{summaryData.totalLast | giddhCurrency}} -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="summaryData.totalLast" [currencySymbol]="activeCompany.baseCurrencySymbol"
                                         [currencyCode]="activeCompany.baseCurrency">

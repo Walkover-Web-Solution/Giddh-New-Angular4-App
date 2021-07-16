@@ -55,7 +55,6 @@
                             <td [attr.data-title]="commonLocaleData?.app_unit" class="text-center">{{ item.stockUnitCode
                                 }} </td>
                             <td [attr.data-title]="commonLocaleData?.app_rate" class="text-center">
-                                <!-- {{ item.rate }}  -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="item.rate" [currencySymbol]="false"
                                             [currencyCode]="false">
@@ -63,7 +62,6 @@
                                 </span>
                             </td>
                             <td [attr.data-title]="commonLocaleData?.app_value" class="text-center">
-                                <!-- {{ item.value }} -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="item.value" [currencySymbol]="false"
                                             [currencyCode]="false">
@@ -71,7 +69,6 @@
                                 </span>
                             </td>
                             <td [attr.data-title]="localeData?.gross_total" class="text-center">
-                                <!-- {{ item.grossTotal }} -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="item.grossTotal" [currencySymbol]="false"
                                             [currencyCode]="false">
