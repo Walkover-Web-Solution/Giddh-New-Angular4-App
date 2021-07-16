@@ -49,7 +49,7 @@
                     <giddh-page-loader *ngIf="(isCompanyRefreshInProcess$ | async)"></giddh-page-loader>
                 </div>
             </tab>
-            <tab [heading]="commonLocaleData?.app_branch" (selectTab)="tabChanged('branch')">
+            <tab [heading]="commonLocaleData?.app_branch" (selectTab)="tabChanged('branch')" *ngIf="companyBranches?.branchCount > 1">
                 <div class="wrap-company-refresh">
                     <p class="font-12 d-flex justify-content-between mr-t1">
                         <span><small>{{ companyBranches?.branchCount > 1 ? branchList?.length : commonLocaleData?.app_numbers?.zero }} {{localeData?.branches}}</small></span>
