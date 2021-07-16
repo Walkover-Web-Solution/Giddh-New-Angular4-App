@@ -105,13 +105,12 @@
             <ng-container>
                 <div class="total-details-box mr-r05 border-none opening-box" *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal">
                     <h5>
-                        {{commonLocaleData?.app_sales}} 
+                        {{commonLocaleData?.app_sales}}
                         <div>
                             <span class="d-inline-flex number-total">
-                                {{
-                                (salesRegisteDetailedResponse$ | async).creditTotal
-                                | giddhCurrency
-                                }}
+                                <amount-field [amount]="(salesRegisteDetailedResponse$ | async).creditTotal" [currencySymbol]="false"
+                                        [currencyCode]="false">
+                                </amount-field>
                             </span>
                         </div>
                     </h5>
@@ -121,11 +120,11 @@
                         {{commonLocaleData?.app_return}}
                         <div>
                             <span class="d-inline-flex number-total">
-                                {{
-                                (salesRegisteDetailedResponse$ | async).debitTotal
-                                | giddhCurrency
-                                }}
+                                <amount-field [amount]="(salesRegisteDetailedResponse$ | async).debitTotal" [currencySymbol]="false"
+                                        [currencyCode]="false">
+                                </amount-field>
                             </span>
+
                         </div>
                     </h5>
                 </div>
@@ -134,10 +133,10 @@
                         {{commonLocaleData?.app_discount}}
                         <div>
                             <span class="d-inline-flex number-total">
-                                {{
-                                (salesRegisteDetailedResponse$ | async)
-                                .discountTotal | giddhCurrency
-                                }}
+                                <amount-field [amount]="(salesRegisteDetailedResponse$ | async)
+                                .discountTotal" [currencySymbol]="false"
+                                        [currencyCode]="false">
+                                </amount-field>
                             </span>
                         </div>
                     </h5>
@@ -147,10 +146,9 @@
                         {{commonLocaleData?.app_tcs}}
                         <div>
                             <span class="d-inline-flex number-total">
-                                {{
-                                (salesRegisteDetailedResponse$ | async).tcsTotal
-                                | giddhCurrency
-                                }}
+                                <amount-field [amount]="(salesRegisteDetailedResponse$ | async).tcsTotal" [currencySymbol]="false"
+                                        [currencyCode]="false">
+                                </amount-field>
                             </span>
                         </div>
                     </h5>
@@ -160,10 +158,9 @@
                         {{commonLocaleData?.app_tds}}
                         <div>
                             <span class="d-inline-flex number-total">
-                                {{
-                                (salesRegisteDetailedResponse$ | async).tdsTotal
-                                | giddhCurrency
-                                }}
+                                <amount-field [amount]="(salesRegisteDetailedResponse$ | async).tdsTotal" [currencySymbol]="false"
+                                        [currencyCode]="false">
+                                </amount-field>
                             </span>
                         </div>
                     </h5>
@@ -173,10 +170,9 @@
                         {{commonLocaleData?.app_tax}}
                         <div>
                             <span class="d-inline-flex number-total">
-                                {{
-                                (salesRegisteDetailedResponse$ | async).taxTotal
-                                | giddhCurrency
-                                }}
+                                <amount-field [amount]="(salesRegisteDetailedResponse$ | async).taxTotal" [currencySymbol]="false"
+                                        [currencyCode]="false">
+                                </amount-field>
                             </span>
                         </div>
                     </h5>
@@ -186,10 +182,10 @@
                         {{commonLocaleData?.app_net_sales}}
                         <div>
                             <span class="d-inline-flex number-total">
-                                {{
-                                (salesRegisteDetailedResponse$ | async).netTotal
-                                .amount | giddhCurrency
-                                }}
+                                <amount-field [amount]="(salesRegisteDetailedResponse$ | async).netTotal
+                                .amount" [currencySymbol]="false"
+                                        [currencyCode]="false">
+                                </amount-field>
                             </span>
                         </div>
                     </h5>
@@ -197,7 +193,7 @@
             </ng-container>
         </div>
     </div>
-    
+
 
     <ng-container *ngIf="(isGetSalesDetailsSuccess$ | async)">
         <div class="sales-register-table mb-5">
@@ -344,7 +340,7 @@
                             <td [attr.data-title]="commonLocaleData?.app_date">{{ item.date }}</td>
 
                             <td [attr.data-title]="commonLocaleData?.app_account"
-                                (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select "
+                                (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
                                 (clickOutside)="modalUniqueName = ''">
                                 {{ item.account.name }}
                                 <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
@@ -367,8 +363,12 @@
                                 {{ item.voucherNumber }}
                             </td>
                             <td [attr.data-title]="commonLocaleData?.app_sales"
-                                *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal" class="text-right ">
-                                {{ item.creditTotal | giddhCurrency }}
+                                *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal" class="text-right">
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="item.creditTotal" [currencySymbol]="false"
+                                            [currencyCode]="false">
+                                    </amount-field>
+                                </span>
                                 <ng-container *ngIf="expand">
                                     <ng-container *ngFor="let stock of item.stocks">
                                         <p>{{ stock.amount | giddhCurrency }}</p>
@@ -376,10 +376,14 @@
                                 </ng-container>
                             </td>
                             <td [attr.data-title]="commonLocaleData?.app_return"
-                                *ngIf="(salesRegisteDetailedResponse$ | async)?.debitTotal" class="text-right ">
-                                {{ item.debitTotal | giddhCurrency }}
+                                *ngIf="(salesRegisteDetailedResponse$ | async)?.debitTotal" class="text-right">
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="item.debitTotal" [currencySymbol]="false"
+                                            [currencyCode]="false">
+                                    </amount-field>
+                                </span>
                             </td>
-                            <td [attr.data-title]="commonLocaleData?.app_quantity_unit" class="text-right "
+                            <td [attr.data-title]="commonLocaleData?.app_quantity_unit" class="text-right"
                                 *ngIf="showFieldFilter.qtyRate && (salesRegisteDetailedResponse$ | async)?.quantityTotal">
                                 -
                                 <ng-container *ngIf="expand">
@@ -391,27 +395,45 @@
                                     </ng-container>
                                 </ng-container>
                             </td>
-                            <td [attr.data-title]="commonLocaleData?.app_rate" class="text-right "
+                            <td [attr.data-title]="commonLocaleData?.app_rate" class="text-right"
                                 *ngIf="showFieldFilter.qtyRate && (salesRegisteDetailedResponse$ | async)?.rateTotal">
                                 -
                                 <ng-container *ngIf="expand">
                                     <ng-container *ngFor="let stock of item.stocks">
-                                        <p>{{ stock.rate | giddhCurrency }}</p>
+                                        <p>
+                                            <span class="d-inline-flex">
+                                                <amount-field [amount]="stock.rate" [currencySymbol]="false"
+                                                        [currencyCode]="false">
+                                                </amount-field>
+                                            </span>
+                                        </p>
                                     </ng-container>
                                 </ng-container>
                             </td>
                             <td [attr.data-title]="commonLocaleData?.app_discount"
                                 *ngIf="showFieldFilter.discount && (salesRegisteDetailedResponse$ | async)?.discountTotal"
-                                class="text-right ">
-                                {{ item.discountTotal | giddhCurrency }}
+                                class="text-right">
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="item.discountTotal" [currencySymbol]="false"
+                                            [currencyCode]="false">
+                                    </amount-field>
+                                </span>
                             </td>
                             <td [attr.data-title]="commonLocaleData?.app_tax"
                                 *ngIf="showFieldFilter.tax && (salesRegisteDetailedResponse$ | async)?.taxTotal"
-                                class="text-right ">
-                                {{ item.taxTotal | giddhCurrency }}
+                                class="text-right">
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="item.taxTotal" [currencySymbol]="false"
+                                            [currencyCode]="false">
+                                    </amount-field>
+                                </span>
                             </td>
-                            <td [attr.data-title]="commonLocaleData?.app_net_sales" class="text-right ">
-                                {{ item.netTotal | giddhCurrency }}
+                            <td [attr.data-title]="commonLocaleData?.app_net_sales" class="text-right">
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="item.netTotal" [currencySymbol]="false"
+                                            [currencyCode]="false">
+                                    </amount-field>
+                                </span>
                             </td>
                         </tr>
                     </tbody>
