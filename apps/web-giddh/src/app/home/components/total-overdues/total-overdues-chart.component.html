@@ -27,8 +27,6 @@
                     <div class="due">
                         <span class="mr-b1 due-amount">{{localeData?.customer_due}}</span>
                         <span class="total-amount pull-right vendor-due-text">
-                            <!-- <span>{{amountSettings.baseCurrencySymbol}}</span>
-                            {{ totalRecievable | giddhCurrency }} -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="totalRecievable" [currencySymbol]="amountSettings.baseCurrencySymbol"
                                     [currencyCode]="activeCompany.baseCurrency">
@@ -38,10 +36,9 @@
                     </div>
                     <div class="clearfix">
                         <small>{{localeData?.pending_invoices}}</small>
-                        <!-- <small class="pull-right">{{ ReceivableDurationAmt | giddhCurrency }}</small> -->
                         <small class="d-inline-flex pull-right">
                             <amount-field [amount]="ReceivableDurationAmt" [currencySymbol]="false"
-                                [currencyCode]="activeCompany.baseCurrency">
+                                [currencyCode]="false">
                             </amount-field>
                         </small>
                     </div>
@@ -51,11 +48,8 @@
                         <span class="mr-b1 due-amount">{{localeData?.vendor_due}}</span>
                         <span
                             class="total-amount pull-right customer-due-text">
-
-                            <!-- <span>{{amountSettings.baseCurrencySymbol}}</span>
-                            {{ totalPayable | giddhCurrency }} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="totalRecievable" [currencySymbol]="amountSettings.baseCurrencySymbol"
+                                <amount-field [amount]="totalPayable" [currencySymbol]="amountSettings.baseCurrencySymbol"
                                     [currencyCode]="activeCompany.baseCurrency">
                                 </amount-field>
                             </span>
@@ -63,10 +57,9 @@
                     </div>
                     <div class="clearfix">
                         <small>{{localeData?.pending_invoices}}</small>
-                        <!-- <small class="pull-right">{{ PaybaleDurationAmt | giddhCurrency }}</small> -->
                         <small class="d-inline-flex pull-right">
                             <amount-field [amount]="PaybaleDurationAmt" [currencySymbol]="false"
-                                [currencyCode]="activeCompany.baseCurrency">
+                                [currencyCode]="false">
                             </amount-field>
                         </small>
                     </div>
