@@ -57,7 +57,7 @@ export interface SettingsAsideConfiguration {
 
 /** Amount Limit Duration options for integration of bank account */
 export enum SettingsAmountLimitDuration {
-    Day = 'day',
-    Week = 'week',
-    Month = 'month'
+    Daily = 'DAILY',
+    Weekly = 'WEEKLY',
+    Monthly = 'MONTHLY'
 }

@@ -100,8 +100,16 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     @ViewChild('removegmailintegration', { static: true }) public removegmailintegration: ModalDirective;
     @ViewChild('paymentForm', { static: true }) paymentForm: NgForm;
     @ViewChild('paymentFormAccountName', { static: true }) paymentFormAccountName: ShSelectComponent;
+    /** Instance of create new account modal */
     @ViewChild('createNewAccountModal', {static: false}) public createNewAccountModal: ModalDirective;
+    /** Instance of create new account modal */
+    @ViewChild('editAccountModal', {static: false}) public editAccountModal: ModalDirective;
+    /** Instance of create new account user modal */
     @ViewChild('createNewAccountUserModal', {static: false}) public createNewAccountUserModal: ModalDirective;
+    /** Instance of edit account user modal */
+    @ViewChild('editAccountUserModal', {static: false}) public editAccountUserModal: ModalDirective;
+    /** Instance of delete account user modal */
+    @ViewChild('confirmationModal', {static: false}) public confirmationModal: ModalDirective;
 
     //variable holding account Info
     public registeredAccount;
@@ -167,7 +175,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public forceClearPaymentUpdates$: Observable<IForceClear> = observableOf({ status: false });
     /** This will hold users list */
     public paymentAlersUsersList: any[] = [];
-    /** Form Group for create new account form */
+    /** Form Group for create new account user form */
     public createNewAccountUserForm: FormGroup;
     /** Holds the amount limit duration options */
     public amountLimitDurations: IOption[] = [];
@@ -177,6 +185,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isLoading: boolean = false;
     /** This will have bank account details */
     public activeBankAccount: any;
+    /** This will have payor account details */
+    public activePayorAccount: any;
+    /** Form Group for edit account user form */
+    public editAccountUserForm: FormGroup;
+    /** Form Group for edit account form */
+    public editAccountForm: FormGroup;
 
     constructor(
         private router: Router,
@@ -1637,9 +1651,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             ];
 
             this.amountLimitDurations = [
-                { label: 'Day', value: SettingsAmountLimitDuration.Day},
-                { label: 'Week', value: SettingsAmountLimitDuration.Week},
-                { label: 'Month', value: SettingsAmountLimitDuration.Month}
+                { label: 'Daily', value: SettingsAmountLimitDuration.Daily},
+                { label: 'Weekly', value: SettingsAmountLimitDuration.Weekly},
+                { label: 'Monthly', value: SettingsAmountLimitDuration.Monthly}
             ];
         }
     }
@@ -1675,6 +1689,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
             this.settingsIntegrationService.bankAccountRegistration(this.createNewAccountForm.value).pipe(take(1)).subscribe(response => {
                 if(response?.status === "success") {
+                    this.closeCreateNewAccountModal();
                     if(response?.body?.message) {
                         this.toasty.clearAllToaster();
                         this.toasty.successToast(response?.body?.message);
@@ -1700,6 +1715,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     /**
      * This will open the create new account user modal
      *
+     * @param {*} bankAccount
      * @memberof SettingIntegrationComponent
      */
     public openCreateNewAccountUserModal(bankAccount: any): void {
@@ -1707,6 +1723,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
         this.createNewAccountUserForm = this._fb.group({
             accountUniqueName: [bankAccount?.account?.uniqueName, Validators.required],
+            accountNumber: [bankAccount?.iciciDetailsResource?.accountNumber, Validators.required],
             userUniqueName: ['', Validators.required],
             uniqueName: [bankAccount?.iciciDetailsResource?.uniqueName, Validators.required],
             loginId: ['', Validators.required],
@@ -1767,14 +1784,20 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         return item?.uniqueName;
     }
 
+    /**
+     * This will save new account user
+     *
+     * @memberof SettingIntegrationComponent
+     */
     public saveNewAccountUser(): void {
         if(!this.createNewAccountUserForm?.invalid) {
-            if(!this.createNewAccountUserForm.get('maxAmount')) {
+            if(!this.createNewAccountUserForm.get('maxAmount')?.value) {
                 this.createNewAccountForm.get('duration')?.patchValue('UNLIMITED');
             }
 
             this.settingsIntegrationService.bankAccountMultiRegistration(this.createNewAccountUserForm.value).pipe(take(1)).subscribe(response => {
                 if(response?.status === "success") {
+                    this.closeCreateNewAccountUserModal();
                     if(response?.body?.message) {
                         this.toasty.clearAllToaster();
                         this.toasty.successToast(response?.body?.message);
@@ -1786,5 +1809,135 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 }
             });
         }
+    }
+
+    /**
+     * This will delete/deregister the bank account login
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public deleteBankAccountLogin(): void {
+        let model = {uniqueName: this.activeBankAccount?.uniqueName, urn: this.activeBankAccount?.urn}
+        this.settingsIntegrationService.deleteBankAccountLogin(model).pipe(take(1)).subscribe(response => {
+            if(response?.status === "success") {
+                this.getAllBankAccounts();
+                this.confirmationModal?.hide();
+            } else {
+                this.toasty.clearAllToaster();
+                this.toasty.errorToast(response?.message);
+            }
+        });
+    }
+
+    /**
+     * This will show the delete bank account login confirmation modal
+     *
+     * @param {*} bankAccount
+     * @param {*} payor
+     * @memberof SettingIntegrationComponent
+     */
+    public showDeleteBankAccountLoginConfirmationModal(bankAccount: any, payor: any): void {
+        this.activeBankAccount = { uniqueName: bankAccount?.iciciDetailsResource?.uniqueName, urn: payor?.urn, loginId: payor?.loginId };
+        this.confirmationModal?.show();
+    }
+
+    /**
+     * This will close the delete bank account login confirmation modal
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public closeDeleteBankAccountLoginConfirmationModal(): void {
+        this.confirmationModal?.hide();
+    }
+
+    /**
+     * This will open the edit account user modal
+     *
+     * @param {*} bankAccount
+     * @param {*} payor
+     * @memberof SettingIntegrationComponent
+     */
+    public openEditAccountUserModal(bankAccount: any, payor: any): void {
+        this.activeBankAccount = bankAccount;
+        this.activePayorAccount = payor;
+
+        this.editAccountUserForm = this._fb.group({
+            accountUniqueName: [bankAccount?.account?.uniqueName, Validators.required],
+            userUniqueName: [payor?.user?.uniqueName, Validators.required],
+            maxAmount: [payor?.maxAmount],
+            duration: [payor?.duration]
+        });
+
+        this.editAccountUserModal?.show();
+    }
+
+    /**
+     * This will update the bank account user
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public updateAccountUser(): void {
+        if(!this.editAccountUserForm?.invalid) {
+            if(!this.editAccountUserForm.get('maxAmount')?.value) {
+                this.editAccountUserForm.get('duration')?.patchValue('UNLIMITED');
+            }
+
+            let request = {bankAccountUniqueName: this.activeBankAccount?.iciciDetailsResource?.uniqueName, urn: this.activePayorAccount?.urn};
+
+            this.settingsIntegrationService.updatePayorAccount(this.editAccountUserForm.value, request).pipe(take(1)).subscribe(response => {
+                if(response?.status === "success") {
+                    this.closeEditAccountUserModal();
+                    if(response?.body?.message) {
+                        this.toasty.clearAllToaster();
+                        this.toasty.successToast(response?.body?.message);
+                    }
+                    this.getAllBankAccounts();
+                } else {
+                    this.toasty.clearAllToaster();
+                    this.toasty.errorToast(response?.message);
+                }
+            });
+        }
+    }
+
+    /**
+     * This will close the edit account user modal
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public closeEditAccountUserModal(): void {
+        this.editAccountUserModal?.hide();
+    }
+
+    /**
+     * This will open edit account modal
+     *
+     * @param {*} bankAccount
+     * @memberof SettingIntegrationComponent
+     */
+    public openEditAccountModal(bankAccount: any): void {
+        this.activeBankAccount = bankAccount;
+
+        this.editAccountForm = this._fb.group({
+            loginId: [''], // remove to remove this field
+            accountNumber: [bankAccount?.iciciDetailsResource?.accountNumber],
+            accountUniqueName: [bankAccount?.account?.uniqueName],
+            paymentAlerts: [bankAccount?.iciciDetailsResource?.paymentAlerts?.map(user => user.uniqueName)]
+        });
+
+        this.editAccountModal?.show();
+    }
+
+    /**
+     * This will close the edit account modal
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public closeEditAccountModal(): void {
+        this.editAccountModal?.hide();
+    }
+
+    public updateAccount(): void {
+
     }
 }
