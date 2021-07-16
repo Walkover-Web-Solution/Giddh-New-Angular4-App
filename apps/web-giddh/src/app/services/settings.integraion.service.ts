@@ -425,6 +425,13 @@ export class SettingsIntegrationService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }
 
+    /**
+     * New Bank Account Registration
+     *
+     * @param {*} model
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsIntegrationService
+     */
     public bankAccountRegistration(model: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.BANK_ACCOUNT_REGISTRATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
@@ -436,6 +443,12 @@ export class SettingsIntegrationService {
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
+    /**
+     * Get all connected bank accounts
+     *
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsIntegrationService
+     */
     public getAllBankAccounts(): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
 
@@ -445,6 +458,13 @@ export class SettingsIntegrationService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }
 
+    /**
+     * Delete the bank account payor
+     *
+     * @param {*} model
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsIntegrationService
+     */
     public deleteBankAccountLogin(model: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.deleteWithBody(this.config.apiUrl + SETTINGS_INTEGRATION_API.BANK_ACCOUNT_REGISTRATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
@@ -456,6 +476,13 @@ export class SettingsIntegrationService {
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
+    /**
+     * Add new bank account payor
+     *
+     * @param {*} model
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsIntegrationService
+     */
     public bankAccountMultiRegistration(model: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.BANK_ACCOUNT_MULTI_REGISTRATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
@@ -467,10 +494,36 @@ export class SettingsIntegrationService {
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
+    /**
+     * Update payor account
+     *
+     * @param {*} model
+     * @param {*} request
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsIntegrationService
+     */
     public updatePayorAccount(model: any, request: any): Observable<BaseResponse<any, any>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.UPDATE_PAYOR_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':bankAccountUniqueName', encodeURIComponent(request.bankAccountUniqueName)).replace(':urn', encodeURIComponent(request.urn)), model).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            data.request = model;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
+
+    /**
+     * Update bank account
+     *
+     * @param {*} model
+     * @param {*} request
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsIntegrationService
+     */
+    public updateAccount(model: any, request: any): Observable<BaseResponse<any, any>> {
+        this.user = this._generalService.user;
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        return this._http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.UPDATE_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':bankAccountUniqueName', encodeURIComponent(request.bankAccountUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = model;
             return data;
