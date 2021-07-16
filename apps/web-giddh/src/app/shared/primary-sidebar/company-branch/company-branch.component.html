@@ -20,7 +20,7 @@
     </div>
     <!-- branch design option 1 -->
     <div class="company-branch-opt-1" *ngIf="activeDesign === 1">
-        <tabset class="custom-tabs position-relative" #staticTabs><!-- add class="branch-hide-tab" in case of no branch available-->
+        <tabset class="custom-tabs position-relative" [ngClass]="{'branch-hide-tab': companyBranches?.branchCount <= 1}" #staticTabs>
             <tab [heading]="commonLocaleData?.app_company"
                 (selectTab)="tabChanged('company')">
                 <div class="wrap-company-refresh">
