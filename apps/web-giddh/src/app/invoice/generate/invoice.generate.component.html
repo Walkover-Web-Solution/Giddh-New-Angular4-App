@@ -198,7 +198,6 @@
                                 <table class="table nested-table amount-nested-table">
                                     <tr *ngFor="let transaction of item.transactions">
                                         <td class="text-right p-0 border-none">
-                                            <!-- {{item.accountCurrencySymbol}} {{transaction.amount | giddhCurrency }} -->
                                             <span class="d-inline-flex">
                                                 <amount-field [amount]="transaction.amount" [currencySymbol]="item.accountCurrencySymbol" [currencyCode]="activeCompany.baseCurrency">
                                                 </amount-field>
@@ -223,7 +222,6 @@
                                             </span>
                                         </td>
                                         <td class="text-right">
-                                            <!-- {{item.accountCurrencySymbol}} {{transaction.amount | giddhCurrency }} -->
                                             <span class="d-inline-flex">
                                                 <amount-field [amount]="transaction.amount" [currencySymbol]="item.accountCurrencySymbol" [currencyCode]="activeCompany.baseCurrency">
                                                 </amount-field>
@@ -247,7 +245,6 @@
 
                             <td class="text-right" [attr.data-title]="commonLocaleData?.app_total"
                                 [tooltip]="totalPopupTemplate">
-                                <!-- {{item.accountCurrencySymbol}}{{item.total.amount | giddhCurrency}} -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="item.total.amount" [currencySymbol]="item.accountCurrencySymbol" [currencyCode]="activeCompany.baseCurrency">
                                     </amount-field>

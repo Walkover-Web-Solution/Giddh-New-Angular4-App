@@ -65,11 +65,7 @@
                             <div>
                                 <span
                                     class="number-total d-inline-flex">
-                                    <!-- {{receiptsSummaryData?.advance?.symbol}}{{receiptsSummaryData?.advance?.amount
-                                    |
-                                    giddhCurrency}}/- -->
-
-                                    <amount-field [amount]="receiptsSummaryData?.advance?.amount" [currencySymbol]="receiptsSummaryData?.advance?.symbol" [currencyCode]="false">
+                                    <amount-field [amount]="receiptsSummaryData?.advance?.amount" [currencySymbol]="receiptsSummaryData?.advance?.symbol" [currencyCode]="activeCompany.baseCurrency">
                                     </amount-field>
                                 </span>
                             </div>
@@ -80,9 +76,7 @@
                             {{localeData?.normal_receipts}}
                             <div>
                                 <span class="d-inline-flex number-total">
-                                    <!-- {{receiptsSummaryData?.normal?.symbol}}{{receiptsSummaryData?.normal?.amount |
-                                    giddhCurrency}}/- -->
-                                    <amount-field [amount]="receiptsSummaryData?.normal?.amount" [currencySymbol]="receiptsSummaryData?.normal?.symbol" [currencyCode]="false">
+                                    <amount-field [amount]="receiptsSummaryData?.normal?.amount" [currencySymbol]="receiptsSummaryData?.normal?.symbol" [currencyCode]="activeCompany.baseCurrency">
                                     </amount-field>
                                 </span>
                             </div>
@@ -93,12 +87,8 @@
                             {{localeData?.total_receipts}}
                             <div>
                                 <span class="d-inline-flex number-total">
-                                    <!-- {{receiptsSummaryData?.total?.symbol}}{{receiptsSummaryData?.total?.amount |
-                                    giddhCurrency}}/- -->
-
-                                    <amount-field [amount]="receiptsSummaryData?.total?.amount" [currencySymbol]="receiptsSummaryData?.total?.symbol" [currencyCode]="false">
+                                    <amount-field [amount]="receiptsSummaryData?.total?.amount" [currencySymbol]="receiptsSummaryData?.total?.symbol" [currencyCode]="activeCompany.baseCurrency">
                                     </amount-field>
-
                                 </span>
                             </div>
                         </h5>
@@ -108,9 +98,7 @@
                             {{localeData?.unused_receipts}}
                             <div>
                                 <span class="d-inline-flex number-total">
-                                    <!-- {{receiptsSummaryData?.unUsed?.symbol}}{{receiptsSummaryData?.unUsed?.amount |
-                                    giddhCurrency}}/- -->
-                                    <amount-field [amount]="receiptsSummaryData?.unUsed?.amount" [currencySymbol]="receiptsSummaryData?.unUsed?.symbol" [currencyCode]="false">
+                                    <amount-field [amount]="receiptsSummaryData?.unUsed?.amount" [currencySymbol]="receiptsSummaryData?.unUsed?.symbol" [currencyCode]="activeCompany.baseCurrency">
                                     </amount-field>
                                 </span>
                             </div>
@@ -253,14 +241,12 @@
                             </td>
                             <td width="13%" class="text-break" [attr.data-title]="localeData?.invoice_no_label" *ngIf="!receipt?.invoices">-</td>
                             <td [attr.data-title]="commonLocaleData?.app_total_amount">
-                                <!-- {{ receipt?.totalAmount?.symbol }}{{ receipt?.totalAmount.amount | giddhCurrency}} -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="receipt?.totalAmount.amount" [currencySymbol]="receipt?.totalAmount?.symbol" [currencyCode]="activeCompany.baseCurrency">
                                     </amount-field>
                                 </span>
                             </td>
                             <td [attr.data-title]="localeData?.unused_amount">
-                                <!-- {{ receipt?.unusedAmount?.symbol }}{{ receipt?.unusedAmount.amount | giddhCurrency}} -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="receipt?.unusedAmount.amount" [currencySymbol]="receipt?.unusedAmount?.symbol" [currencyCode]="activeCompany.baseCurrency">
                                     </amount-field>
