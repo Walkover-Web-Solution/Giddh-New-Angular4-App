@@ -451,24 +451,24 @@
                     <button type="button"
                         class="btn btn-sky-blue mr-r1"
                         (click)="openCreateNewAccountModal()">{{localeData?.payment?.connect_new_account}}</button><br>
-                        <a href="javascript:;">Learn, how to connect</a>
+                        <a href="javascript:;">{{localeData?.payment?.learn_connect}}</a>
                     <p class="mt-2 mb-4 font-14"><a href="https://cadigital.icicibank.com/SmartFormWeb/apps/services/www/SmartFormWeb/desktopbrowser/default/index.html?source=BC-application-Giddh#/" target="_blank">{{localeData?.payment?.open_new_current_account}}</a></p>
 
                     <div>
-                        <b>Connected Accounts</b><br>
+                        <b>{{localeData?.payment?.connected_accounts}}</b><br>
                         <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoading"></giddh-page-loader>
                         <ng-container *ngIf="!isLoading && connectedBankAccounts?.length > 0">
                             <div class="row" *ngFor="let bankAccount of connectedBankAccounts; trackBy: trackByAccountUniqueName;">
                                 <div class="form-group col-md-4">
-                                    <span>Account Number</span><br>
+                                    <span>{{localeData?.payment?.account_number_label}}</span><br>
                                     <span><b>{{bankAccount?.iciciDetailsResource?.accountNumber}}</b></span>
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <span>Linked Account</span><br>
+                                    <span>{{localeData?.payment?.linked_account}}</span><br>
                                     <span>{{bankAccount?.account?.name}}</span>
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <span>Payment Updates</span><br>
+                                    <span>{{localeData?.payment?.payment_updates}}</span><br>
                                     <span *ngIf="bankAccount?.iciciDetailsResource?.paymentAlerts?.length > 0">
                                         <span *ngFor="let alert of bankAccount?.iciciDetailsResource?.paymentAlerts; let i = index; trackBy: trackByAlertUniqueName;">{{alert?.name}}{{ (i < bankAccount?.iciciDetailsResource?.paymentAlerts?.length - 1) ? ", " : "" }}</span>
                                     </span>
@@ -480,25 +480,25 @@
                                     <ng-container *ngIf="bankAccount?.iciciDetailsResource?.payor?.length > 0">
                                         <ng-container *ngFor="let payor of bankAccount?.iciciDetailsResource?.payor;">
                                             <div class="form-group col-md-4">
-                                                <span>Login ID</span><br>
+                                                <span>{{localeData?.payment?.login_id_label}}</span><br>
                                                 <span><b>{{payor?.loginId}}</b></span>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <span>Limit Up To</span><br>
-                                                <span><b>{{(payor?.duration === "UNLIMITED") ? "UNLIMITED" : payor?.maxAmount + "/" + payor?.duration}}</b></span>
+                                                <span>{{localeData?.payment?.limit_upto}}</span><br>
+                                                <span><b>{{(payor?.duration === unlimitedLimit) ? localeData?.payment?.amount_limit?.unlimited : payor?.maxAmount + "/" + payor?.duration}}</b></span>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <span>Pending for self approval</span>
+                                                <span>{{localeData?.payment?.pending_self_approval}}</span>
                                                 <span>
                                                     <a href="javascript:;" class="icon-edit-pencil" (click)="openEditAccountUserModal(bankAccount, payor)"></a>
                                                     <a href="javascript:;" class="fa fa-trash" (click)="showDeleteBankAccountLoginConfirmationModal(bankAccount, payor)"></a>
                                                 </span>
                                             </div>
-                                            <p>A request has been sent to your account, login to <a href="javascript:;">ICICI Bank Portal</a> and accept it.</p>
-                                            <p>Once accepted, you can link your ICICI bank account/s and make payments directly through GIDDH</p>
+                                            <p [innerHTML]="localeData?.payment?.approval_request_sent"></p>
+                                            <p>{{localeData?.payment?.approval_request_accepted}}</p>
                                         </ng-container>
                                     </ng-container><br>
-                                    <button type="button" class="btn btn-sky-blue mr-r1" (click)="openCreateNewAccountUserModal(bankAccount)">+ Add More Users</button>
+                                    <button type="button" class="btn btn-sky-blue mr-r1" (click)="openCreateNewAccountUserModal(bankAccount)">{{localeData?.payment?.add_more_users}}</button>
                                 </div>
                             </div>
                         </ng-container>    
@@ -513,31 +513,31 @@
                 <form autocomplete="off" novalidate name="createNewAccountForm" [formGroup]="createNewAccountForm"
                 class="new-account-form" (ngSubmit)="saveNewAccount()">
                     <div class="modal-header">
-                        <h3 class="modal-title">Connect ICICI Account</h3>
+                        <h3 class="modal-title">{{localeData?.payment?.connect_icici_account}}</h3>
                         <span data-dismiss="modal" aria-label="Close" class="close hover-orange" (click)="closeCreateNewAccountModal()">×</span>
                     </div>
                     <div class="modal-body">
                         <div class="clearfix mr-t1">
-                            <label>ICICI Login ID<span class="red-text">*</span>:</label>
+                            <label>{{localeData?.payment?.icici_login_id}}<span class="red-text">*</span>:</label>
                             <input class="form-control" required formControlName="loginId"
-                                name="loginId" type="text" placeholder="Enter Login ID">
+                                name="loginId" type="text" [placeholder]="localeData?.payment?.login_id_placeholder">
                         </div>
                         <div class="clearfix mr-t1">
-                            <label>Account Number<span class="red-text">*</span>:</label>
+                            <label>{{localeData?.payment?.account_number_label}}<span class="red-text">*</span>:</label>
                             <input class="form-control" required formControlName="accountNumber"
-                                name="accountNumber" type="text" decimalDigitsDirective placeholder="Enter Account Number" maxlength="11">
+                                name="accountNumber" type="text" decimalDigitsDirective [placeholder]="localeData?.payment?.account_number_placeholder" maxlength="11">
                         </div>
                         <div class="clearfix mr-t1">
-                            <label>Link Account<span class="red-text">*</span>:</label>
-                            <sh-select formControlName="accountUniqueName" name="accountUniqueName" placeholder="Select Account" [options]="bankAccounts$ | async" required></sh-select>
+                            <label>{{localeData?.payment?.link_account_label}}<span class="red-text">*</span>:</label>
+                            <sh-select formControlName="accountUniqueName" name="accountUniqueName" [placeholder]="localeData?.payment?.link_account_placeholder" [options]="bankAccounts$ | async" required></sh-select>
                         </div>
                         <div class="clearfix mr-t1">
-                            <label>User<span class="red-text">*</span>:</label>
-                            <sh-select formControlName="userUniqueName" name="userUniqueName" placeholder="Select User" [options]="usersList" required></sh-select>
+                            <label>{{localeData?.payment?.user}}<span class="red-text">*</span>:</label>
+                            <sh-select formControlName="userUniqueName" name="userUniqueName" [placeholder]="localeData?.payment?.select_user" [options]="usersList" required></sh-select>
                         </div>
                         <div class="clearfix mr-t1">
-                            <label>Payment Updates:</label>
-                            <sh-select formControlName="paymentAlerts" name="paymentAlerts" placeholder="Select Receipients" [options]="paymentAlersUsersList" [multiple]="true" (selected)="selectPaymentAlertUsers($event)" [forceClearReactive]="forceClearPaymentUpdates$ | async" [hasSelectAllOption]="true">
+                            <label>{{localeData?.payment?.payment_updates}}:</label>
+                            <sh-select formControlName="paymentAlerts" name="paymentAlerts" [placeholder]="localeData?.payment?.select_receipients" [options]="paymentAlersUsersList" [multiple]="true" (selected)="selectPaymentAlertUsers($event)" [forceClearReactive]="forceClearPaymentUpdates$ | async" [hasSelectAllOption]="true">
                                 <ng-template #optionTemplate let-option="option">
                                     <ng-container>
                                         <a href="javascript:void(0)" class="list-item d-flex">
@@ -552,7 +552,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-success" [disabled]="createNewAccountForm?.invalid">Connect</button>
+                        <button type="submit" class="btn btn-success" [disabled]="createNewAccountForm?.invalid">{{localeData?.payment?.connect}}</button>
                     </div>
                 </form>
             </div>
@@ -564,21 +564,21 @@
                 <form autocomplete="off" novalidate name="editAccountForm" [formGroup]="editAccountForm"
                 class="new-account-form" (ngSubmit)="updateAccount()">
                     <div class="modal-header">
-                        <h3 class="modal-title">Edit Account</h3>
+                        <h3 class="modal-title">{{localeData?.payment?.edit_account}}</h3>
                         <span data-dismiss="modal" aria-label="Close" class="close hover-orange" (click)="closeEditAccountModal()">×</span>
                     </div>
                     <div class="modal-body">
                         <div class="clearfix mr-t1">
-                            <label>Account Number</label>
+                            <label>{{localeData?.payment?.account_number_label}}</label>
                             {{activeBankAccount?.iciciDetailsResource?.accountNumber}}
                         </div>
                         <div class="mr-t1">
-                            <label>Linked Account</label>
+                            <label>{{localeData?.payment?.linked_account}}</label>
                             {{activeBankAccount?.account?.name}}
                         </div>
                         <div class="clearfix mr-t1">
-                            <label>Payment Updates:</label>
-                            <sh-select formControlName="paymentAlerts" name="paymentAlerts" placeholder="Select Receipients" [options]="paymentAlersUsersList" [multiple]="true" (selected)="selectPaymentAlertUsers($event)" [forceClearReactive]="forceClearPaymentUpdates$ | async" [hasSelectAllOption]="true">
+                            <label>{{localeData?.payment?.payment_updates}}</label>
+                            <sh-select formControlName="paymentAlerts" name="paymentAlerts" [placeholder]="localeData?.payment?.select_receipients" [options]="paymentAlersUsersList" [multiple]="true" (selected)="selectPaymentAlertUsers($event)" [forceClearReactive]="forceClearPaymentUpdates$ | async" [hasSelectAllOption]="true">
                                 <ng-template #optionTemplate let-option="option">
                                     <ng-container>
                                         <a href="javascript:void(0)" class="list-item d-flex">
@@ -593,7 +593,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-success" [disabled]="editAccountForm?.invalid">Update</button>
+                        <button type="submit" class="btn btn-success" [disabled]="editAccountForm?.invalid">{{commonLocaleData?.app_update}}</button>
                     </div>
                 </form>
             </div>
@@ -605,36 +605,36 @@
                 <form autocomplete="off" novalidate name="createNewAccountUserForm" [formGroup]="createNewAccountUserForm"
                 class="new-account-form" (ngSubmit)="saveNewAccountUser()">
                     <div class="modal-header">
-                        <h3 class="modal-title">Add User</h3>
+                        <h3 class="modal-title">{{localeData?.payment?.add_user}}</h3>
                         <span data-dismiss="modal" aria-label="Close" class="close hover-orange" (click)="closeCreateNewAccountUserModal()">×</span>
                     </div>
                     <div class="modal-body">
                         <div class="clearfix mr-t1">
-                            <label>Account Number</label>
+                            <label>{{localeData?.payment?.account_number_label}}</label>
                             {{activeBankAccount?.iciciDetailsResource?.accountNumber}}
                         </div>
                         <div class="mr-t1">
-                            <label>Linked Account</label>
+                            <label>{{localeData?.payment?.linked_account}}</label>
                             {{activeBankAccount?.account?.name}}
                         </div>
                         <div class="clearfix mr-t1">
-                            <label>User<span class="red-text">*</span>:</label>
-                            <sh-select formControlName="userUniqueName" name="userUniqueName" placeholder="Select User" [options]="usersList" required></sh-select>
+                            <label>{{localeData?.payment?.user}}<span class="red-text">*</span>:</label>
+                            <sh-select formControlName="userUniqueName" name="userUniqueName" [placeholder]="localeData?.payment?.select_user" [options]="usersList" required></sh-select>
                         </div>
                         <div class="clearfix mr-t1">
-                            <label>Login ID<span class="red-text">*</span></label>
+                            <label>{{localeData?.payment?.login_id_label}}<span class="red-text">*</span></label>
                             <input class="form-control" required formControlName="loginId"
-                                name="loginId" type="text" placeholder="Enter Login ID">
+                                name="loginId" type="text" [placeholder]="localeData?.payment?.login_id_placeholder">
                         </div>
                         <div class="clearfix mr-t1">
-                            <label>Limit Up To</label>
+                            <label>{{localeData?.payment?.limit_upto}}</label>
                             <input class="form-control" formControlName="maxAmount"
-                                name="maxAmount" type="text" placeholder="Enter Amount">
-                            <sh-select formControlName="duration" name="duration" placeholder="Duration" [options]="amountLimitDurations"></sh-select>
+                                name="maxAmount" type="text" [placeholder]="localeData?.payment?.enter_amount">
+                            <sh-select formControlName="duration" name="duration" [placeholder]="localeData?.payment?.duration" [options]="amountLimitDurations"></sh-select>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-success" [disabled]="createNewAccountUserForm?.invalid">Connect</button>
+                        <button type="submit" class="btn btn-success" [disabled]="createNewAccountUserForm?.invalid">{{commonLocaleData?.app_save}}</button>
                     </div>
                 </form>
             </div>
@@ -646,31 +646,31 @@
                 <form autocomplete="off" novalidate name="editAccountUserForm" [formGroup]="editAccountUserForm"
                 class="new-account-form" (ngSubmit)="updateAccountUser()">
                     <div class="modal-header">
-                        <h3 class="modal-title">Edit User</h3>
+                        <h3 class="modal-title">{{localeData?.payment?.edit_user}}</h3>
                         <span data-dismiss="modal" aria-label="Close" class="close hover-orange" (click)="closeEditAccountUserModal()">×</span>
                     </div>
                     <div class="modal-body">
                         <div class="clearfix mr-t1">
-                            <label>Account Number</label>
+                            <label>{{localeData?.payment?.account_number_label}}</label>
                             {{activeBankAccount?.iciciDetailsResource?.accountNumber}}
                         </div>
                         <div class="mr-t1">
-                            <label>Linked Account</label>
+                            <label>{{localeData?.payment?.linked_account}}</label>
                             {{activeBankAccount?.account?.name}}
                         </div>
                         <div class="clearfix mr-t1">
-                            <label>User<span class="red-text">*</span>:</label>
+                            <label>{{localeData?.payment?.user}}<span class="red-text">*</span>:</label>
                             {{activePayorAccount?.user?.name}}
                         </div>
                         <div class="clearfix mr-t1">
-                            <label>Limit Up To</label>
+                            <label>{{localeData?.payment?.limit_upto}}</label>
                             <input class="form-control" formControlName="maxAmount"
-                                name="maxAmount" type="text" placeholder="Enter Amount">
-                            <sh-select formControlName="duration" name="duration" placeholder="Duration" [options]="amountLimitDurations"></sh-select>
+                                name="maxAmount" type="text" [placeholder]="localeData?.payment?.enter_amount">
+                            <sh-select formControlName="duration" name="duration" [placeholder]="localeData?.payment?.duration" [options]="amountLimitDurations"></sh-select>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-success" [disabled]="editAccountUserForm?.invalid">Update</button>
+                        <button type="submit" class="btn btn-success" [disabled]="editAccountUserForm?.invalid">{{commonLocaleData?.app_update}}</button>
                     </div>
                 </form>
             </div>
@@ -686,7 +686,7 @@
                         data-dismiss="modal">×</span>
                 </div>
                 <div class="modal-body">
-                    Do you really want to delete the login id {{activeBankAccount?.loginId}} ?
+                    {{localeData?.payment?.delete_login | replace: '[LOGIN_ID]': activeBankAccount?.loginId}}
                 </div>
                 <div class="modal-footer clearfix">
                     <button (click)="deleteBankAccountLogin(true)"

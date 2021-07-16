@@ -61,3 +61,6 @@ export enum SettingsAmountLimitDuration {
     Weekly = 'WEEKLY',
     Monthly = 'MONTHLY'
 }
+
+/** Unlimited amount limit text */
+export const UNLIMITED_LIMIT = "UNLIMITED";

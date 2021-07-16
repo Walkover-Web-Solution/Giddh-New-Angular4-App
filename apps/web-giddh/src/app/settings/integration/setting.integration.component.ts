@@ -29,7 +29,7 @@ import { GeneralService } from '../../services/general.service';
 import { ShareRequestForm } from '../../models/api-models/Permission';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
 import { SettingsIntegrationService } from '../../services/settings.integraion.service';
-import { SettingsAmountLimitDuration, SettingsIntegrationTab } from '../constants/settings.constant';
+import { SettingsAmountLimitDuration, SettingsIntegrationTab, UNLIMITED_LIMIT } from '../constants/settings.constant';
 import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -101,15 +101,15 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     @ViewChild('paymentForm', { static: true }) paymentForm: NgForm;
     @ViewChild('paymentFormAccountName', { static: true }) paymentFormAccountName: ShSelectComponent;
     /** Instance of create new account modal */
-    @ViewChild('createNewAccountModal', {static: false}) public createNewAccountModal: ModalDirective;
+    @ViewChild('createNewAccountModal', { static: false }) public createNewAccountModal: ModalDirective;
     /** Instance of create new account modal */
-    @ViewChild('editAccountModal', {static: false}) public editAccountModal: ModalDirective;
+    @ViewChild('editAccountModal', { static: false }) public editAccountModal: ModalDirective;
     /** Instance of create new account user modal */
-    @ViewChild('createNewAccountUserModal', {static: false}) public createNewAccountUserModal: ModalDirective;
+    @ViewChild('createNewAccountUserModal', { static: false }) public createNewAccountUserModal: ModalDirective;
     /** Instance of edit account user modal */
-    @ViewChild('editAccountUserModal', {static: false}) public editAccountUserModal: ModalDirective;
+    @ViewChild('editAccountUserModal', { static: false }) public editAccountUserModal: ModalDirective;
     /** Instance of delete account user modal */
-    @ViewChild('confirmationModal', {static: false}) public confirmationModal: ModalDirective;
+    @ViewChild('confirmationModal', { static: false }) public confirmationModal: ModalDirective;
 
     //variable holding account Info
     public registeredAccount;
@@ -191,6 +191,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public editAccountUserForm: FormGroup;
     /** Form Group for edit account form */
     public editAccountForm: FormGroup;
+    /** Holds unlimited text for amount limit */
+    public unlimitedLimit: string = UNLIMITED_LIMIT;
 
     constructor(
         private router: Router,
@@ -1605,16 +1607,16 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         let isSelectAllChecked = event.filter(ev => ev.value === this.selectAllRecords);
         let isSelectAllAlreadyChecked = this.paymentAlerts.filter(ev => ev === this.selectAllRecords);
 
-        if(isSelectAllChecked?.length > 0 && isSelectAllAlreadyChecked?.length === 0) {
+        if (isSelectAllChecked?.length > 0 && isSelectAllAlreadyChecked?.length === 0) {
             this.paymentAlerts = this.paymentAlersUsersList.map(user => user.value);
-        } else if(isSelectAllAlreadyChecked?.length > 0 && isSelectAllChecked?.length === 0) {
+        } else if (isSelectAllAlreadyChecked?.length > 0 && isSelectAllChecked?.length === 0) {
             this.paymentAlerts = [];
             this.forceClearPaymentUpdates$ = observableOf({ status: true });
         } else {
             this.paymentAlerts = event.map(user => user.value);
         }
 
-        if(this.paymentAlerts?.length === 1 && isSelectAllChecked?.length > 0) {
+        if (this.paymentAlerts?.length === 1 && isSelectAllChecked?.length > 0) {
             this.paymentAlerts = [];
             this.forceClearPaymentUpdates$ = observableOf({ status: true });
         }
@@ -1639,7 +1641,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public translationComplete(event: any): void {
-        if(event) {
+        if (event) {
             this.typeOTPList = [
                 { label: this.localeData?.otp_types?.bank_otp, value: "BANK" },
                 { label: this.localeData?.otp_types?.giddh_otp, value: "GIDDH" },
@@ -1651,9 +1653,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             ];
 
             this.amountLimitDurations = [
-                { label: 'Daily', value: SettingsAmountLimitDuration.Daily},
-                { label: 'Weekly', value: SettingsAmountLimitDuration.Weekly},
-                { label: 'Monthly', value: SettingsAmountLimitDuration.Monthly}
+                { label: this.localeData?.payment?.amount_limit?.daily, value: SettingsAmountLimitDuration.Daily },
+                { label: this.localeData?.payment?.amount_limit?.weekly, value: SettingsAmountLimitDuration.Weekly },
+                { label: this.localeData?.payment?.amount_limit?.monthly, value: SettingsAmountLimitDuration.Monthly }
             ];
         }
     }
@@ -1671,7 +1673,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             accountUniqueName: ['', Validators.required],
             paymentAlerts: [''],
             userUniqueName: ['', Validators.required],
-            duration: ['UNLIMITED'],
+            duration: [UNLIMITED_LIMIT],
             maxAmount: ['']
         });
 
@@ -1684,13 +1686,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public saveNewAccount(): void {
-        if(!this.createNewAccountForm?.invalid) {
-            this.createNewAccountForm.get('paymentAlerts')?.patchValue(this.paymentAlerts.map(user => user));
+        if (!this.createNewAccountForm?.invalid) {
+            this.createNewAccountForm.get('paymentAlerts')?.patchValue(this.paymentAlerts.filter(user => user !== this.selectAllRecords).map(user => user));
 
             this.settingsIntegrationService.bankAccountRegistration(this.createNewAccountForm.value).pipe(take(1)).subscribe(response => {
-                if(response?.status === "success") {
+                if (response?.status === "success") {
                     this.closeCreateNewAccountModal();
-                    if(response?.body?.message) {
+                    if (response?.body?.message) {
                         this.toasty.clearAllToaster();
                         this.toasty.successToast(response?.body?.message);
                     }
@@ -1754,7 +1756,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
         this.settingsIntegrationService.getAllBankAccounts().pipe(take(1)).subscribe(response => {
             this.isLoading = false;
-            if(response?.body) {
+            if (response?.body) {
                 this.connectedBankAccounts = response.body;
             }
         });
@@ -1790,15 +1792,15 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public saveNewAccountUser(): void {
-        if(!this.createNewAccountUserForm?.invalid) {
-            if(!this.createNewAccountUserForm.get('maxAmount')?.value) {
-                this.createNewAccountForm.get('duration')?.patchValue('UNLIMITED');
+        if (!this.createNewAccountUserForm?.invalid) {
+            if (!this.createNewAccountUserForm.get('maxAmount')?.value) {
+                this.createNewAccountForm.get('duration')?.patchValue(UNLIMITED_LIMIT);
             }
 
             this.settingsIntegrationService.bankAccountMultiRegistration(this.createNewAccountUserForm.value).pipe(take(1)).subscribe(response => {
-                if(response?.status === "success") {
+                if (response?.status === "success") {
                     this.closeCreateNewAccountUserModal();
-                    if(response?.body?.message) {
+                    if (response?.body?.message) {
                         this.toasty.clearAllToaster();
                         this.toasty.successToast(response?.body?.message);
                     }
@@ -1817,9 +1819,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public deleteBankAccountLogin(): void {
-        let model = {uniqueName: this.activeBankAccount?.uniqueName, urn: this.activeBankAccount?.urn}
+        let model = { uniqueName: this.activeBankAccount?.uniqueName, urn: this.activeBankAccount?.urn }
         this.settingsIntegrationService.deleteBankAccountLogin(model).pipe(take(1)).subscribe(response => {
-            if(response?.status === "success") {
+            if (response?.status === "success") {
                 this.getAllBankAccounts();
                 this.confirmationModal?.hide();
             } else {
@@ -1877,17 +1879,17 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public updateAccountUser(): void {
-        if(!this.editAccountUserForm?.invalid) {
-            if(!this.editAccountUserForm.get('maxAmount')?.value) {
-                this.editAccountUserForm.get('duration')?.patchValue('UNLIMITED');
+        if (!this.editAccountUserForm?.invalid) {
+            if (!this.editAccountUserForm.get('maxAmount')?.value) {
+                this.editAccountUserForm.get('duration')?.patchValue(UNLIMITED_LIMIT);
             }
 
-            let request = {bankAccountUniqueName: this.activeBankAccount?.iciciDetailsResource?.uniqueName, urn: this.activePayorAccount?.urn};
+            let request = { bankAccountUniqueName: this.activeBankAccount?.iciciDetailsResource?.uniqueName, urn: this.activePayorAccount?.urn };
 
             this.settingsIntegrationService.updatePayorAccount(this.editAccountUserForm.value, request).pipe(take(1)).subscribe(response => {
-                if(response?.status === "success") {
+                if (response?.status === "success") {
                     this.closeEditAccountUserModal();
-                    if(response?.body?.message) {
+                    if (response?.body?.message) {
                         this.toasty.clearAllToaster();
                         this.toasty.successToast(response?.body?.message);
                     }
@@ -1917,12 +1919,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public openEditAccountModal(bankAccount: any): void {
         this.activeBankAccount = bankAccount;
+        this.paymentAlerts = bankAccount?.iciciDetailsResource?.paymentAlerts?.map(user => user.uniqueName);
 
         this.editAccountForm = this._fb.group({
-            loginId: [''], // remove to remove this field
+            loginId: ['123456'], // need to remove this field
             accountNumber: [bankAccount?.iciciDetailsResource?.accountNumber],
             accountUniqueName: [bankAccount?.account?.uniqueName],
-            paymentAlerts: [bankAccount?.iciciDetailsResource?.paymentAlerts?.map(user => user.uniqueName)]
+            paymentAlerts: [this.paymentAlerts]
         });
 
         this.editAccountModal?.show();
@@ -1937,7 +1940,34 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.editAccountModal?.hide();
     }
 
+    /**
+     * This will update the account details
+     *
+     * @memberof SettingIntegrationComponent
+     */
     public updateAccount(): void {
+        if (!this.editAccountForm?.invalid) {
+            this.editAccountForm.get('paymentAlerts')?.patchValue(this.paymentAlerts.filter(user => user !== this.selectAllRecords).map(user => user));
 
+            if (!this.editAccountForm.get('maxAmount')?.value) {
+                this.editAccountForm.get('duration')?.patchValue(UNLIMITED_LIMIT);
+            }
+
+            let request = { bankAccountUniqueName: this.activeBankAccount?.iciciDetailsResource?.uniqueName };
+
+            this.settingsIntegrationService.updateAccount(this.editAccountForm.value, request).pipe(take(1)).subscribe(response => {
+                if (response?.status === "success") {
+                    this.closeEditAccountModal();
+                    if (response?.body?.message) {
+                        this.toasty.clearAllToaster();
+                        this.toasty.successToast(response?.body?.message);
+                    }
+                    this.getAllBankAccounts();
+                } else {
+                    this.toasty.clearAllToaster();
+                    this.toasty.errorToast(response?.message);
+                }
+            });
+        }
     }
 }
