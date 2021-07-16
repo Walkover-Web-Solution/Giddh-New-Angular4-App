@@ -172,7 +172,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: ${{ secrets.SLACK_GIDDH_CHANNEL_ID }}
+          SLACK_CHANNEL: ${{ secrets.SLACK_UI_BUILDS_CHANNEL_ID }}
           SLACK_COLOR: ${{ job.status }} # or a specific color like 'red' or '#ff00ff'
           SLACK_TITLE: Giddh UI ${{ env.BUILD_ENV }} build
           SLACK_USERNAME: Giddh UI ${{ env.BUILD_ENV }} build
@@ -184,7 +184,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: ${{ secrets.SLACK_GIDDH_CHANNEL_ID }}
+          SLACK_CHANNEL: ${{ secrets.SLACK_UI_BUILDS_CHANNEL_ID }}
           SLACK_COLOR: ${{ job.status }} # or a specific color like 'red' or '#ff00ff'
           SLACK_TITLE: Giddh UI ${{ env.BUILD_ENV }} build
           SLACK_USERNAME: Giddh UI ${{ env.BUILD_ENV }} build
@@ -196,7 +196,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: ${{ secrets.SLACK_GIDDH_CHANNEL_ID }}
+          SLACK_CHANNEL: ${{ secrets.SLACK_UI_BUILDS_CHANNEL_ID }}
           SLACK_COLOR: ${{ job.status }} # or a specific color like 'red' or '#ff00ff'
           SLACK_TITLE: Giddh UI ${{ env.BUILD_ENV }} build
           SLACK_USERNAME: Giddh UI ${{ env.BUILD_ENV }} build
