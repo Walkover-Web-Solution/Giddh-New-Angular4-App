@@ -215,4 +215,4 @@ jobs:
           to: ${{ secrets.GIDDH_BUILDS_RECIPIENTS }}
           bcc: $ {{ secrets.GIDDH_BUILDS_BCC_RECIPIENTS }}
           from: Giddh Builds
-          body: Job in worflow ${{ github.workflow }} ${{ env.BUILD_ENV }} of ${{ github.repository }} has ${{ job.status }}. https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App/commit/${{ github.sha }}
+          body: Job in workflow ${{ github.workflow }} ${{ env.BUILD_ENV }} of ${{ github.repository }} has ${{ job.status }}. https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App/commit/${{ github.sha }}
