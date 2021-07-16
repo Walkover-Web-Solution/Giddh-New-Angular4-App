@@ -21,5 +21,6 @@ export const SETTINGS_INTEGRATION_API = {
     GET_REGISTRATION_STATUS: 'company/:companyUniqueName/bank/get-registration-status?urn=:urn',
     BANK_ACCOUNT_REGISTRATION: 'v2/company/:companyUniqueName/bank',
     BANK_ACCOUNT_MULTI_REGISTRATION: 'v2/company/:companyUniqueName/bank/multi-registration',
-    UPDATE_PAYOR_ACCOUNT: 'v2/company/:companyUniqueName/bank/:bankAccountUniqueName/payor/:urn'
+    UPDATE_PAYOR_ACCOUNT: 'v2/company/:companyUniqueName/bank/:bankAccountUniqueName/payor/:urn',
+    UPDATE_ACCOUNT: 'v2/company/:companyUniqueName/bank/:bankAccountUniqueName'
 };
