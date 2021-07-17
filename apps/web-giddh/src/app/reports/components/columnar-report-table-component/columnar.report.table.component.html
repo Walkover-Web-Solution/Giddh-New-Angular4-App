@@ -87,8 +87,9 @@
                     *ngIf="columnarReportResponse && columnarReportResponse.accounts && columnarReportResponse.accounts.length === 0">
                     <tr>
                         <td [attr.colspan]="columnsName.length" align="center">
-                            <!-- TODO: Replace with new label app_no_data_available -->
-                            {{commonLocaleData?.app_no_records_found}}</td>
+                            <h1>{{commonLocaleData?.app_no_entries_found}}</h1>
+                            <h1 class="p-0">{{commonLocaleData?.app_search_suggestion}}</h1>
+                        </td>
                     </tr>
                 </tbody>
             </table>
