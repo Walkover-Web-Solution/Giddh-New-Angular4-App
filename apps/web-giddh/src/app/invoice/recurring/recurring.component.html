@@ -213,7 +213,7 @@
             </form>
 
 
-            <div class="table-responsive">
+            <div class="table-responsive" [hidden]="!(recurringData$ | async)?.totalItems">
                 <table class="table basic giddh-table table-bordered on-mobile-view">
 
                     <thead class="thead-background1">
@@ -361,6 +361,7 @@
             </div>
 
             <div class="no-data mr-t2" *ngIf="(recurringData$ | async)?.totalItems === 0">
+                <!-- TODO: Replace with new label app_no_data_available -->
                 <h1>{{localeData?.no_vouchers_found}}</h1>
             </div>
         </div>
@@ -403,5 +404,5 @@
 
         </ng-template>
         <!-- endregion -->
-    </div>    
+    </div>
 </ng-container>

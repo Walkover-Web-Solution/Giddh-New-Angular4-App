@@ -88,7 +88,7 @@
         </div>
     </div>
 
-    <div class="top-content pd-l15 pd-r15">
+    <div class="top-content pd-l15 pd-r15" [hidden]="!(purchaseRegisteDetailedResponse$ | async)?.items?.length">
         <div class="d-flex justify-content-between w-100 overflow-x-auto" *ngIf="PurchaseRegisteDetailedItems">
             <div class="total-details-box mr-r05 count-box">
                 <h5>
@@ -194,7 +194,7 @@
         <div class="clearfix sales-register-table mb-5">
             <div class="responsive table-responsive">
                 <table class="table basic giddh-table on-mobile-view">
-                    <thead>
+                    <thead [hidden]="!(purchaseRegisteDetailedResponse$ | async)?.items?.length">
                         <tr>
                             <th>
                                 <div class="d-flex">
@@ -445,6 +445,7 @@
         </div>
         <div class="no-data"
             *ngIf="(purchaseRegisteDetailedResponse$ | async).items.length === 0 &&!(isGetPurchaseDetailsInProcess$ | async)">
+            <!-- TODO: Replace with new label app_no_data_available -->
             <h1>{{commonLocaleData?.app_no_entries_found}}</h1>
             <h1>{{commonLocaleData?.app_search_suggestion}}</h1>
         </div>

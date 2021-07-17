@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="invoice-preview  table-responsive" *ngIf="columnarReportResponse">
             <table class="table basic giddh-table on-mobile-view">
-                <thead class="thead-background1">
+                <thead class="thead-background1" [hidden]="!columnarReportResponse?.accounts?.length">
                     <tr>
                         <ng-container *ngFor="let item of columnsName">
                             <th>{{item}}</th>
@@ -87,6 +87,7 @@
                     *ngIf="columnarReportResponse && columnarReportResponse.accounts && columnarReportResponse.accounts.length === 0">
                     <tr>
                         <td [attr.colspan]="columnsName.length" align="center">
+                            <!-- TODO: Replace with new label app_no_data_available -->
                             {{commonLocaleData?.app_no_records_found}}</td>
                     </tr>
                 </tbody>
