@@ -20,7 +20,7 @@
     </div>
     <!-- branch design option 1 -->
     <div class="company-branch-opt-1" *ngIf="activeDesign === 1">
-        <tabset class="custom-tabs position-relative" #staticTabs>
+        <tabset class="custom-tabs position-relative" [ngClass]="{'branch-hide-tab': companyBranches?.branchCount <= 1}" #staticTabs>
             <tab [heading]="commonLocaleData?.app_company"
                 (selectTab)="tabChanged('company')">
                 <div class="wrap-company-refresh">
@@ -49,7 +49,7 @@
                     <giddh-page-loader *ngIf="(isCompanyRefreshInProcess$ | async)"></giddh-page-loader>
                 </div>
             </tab>
-            <tab [heading]="commonLocaleData?.app_branch" (selectTab)="tabChanged('branch')">
+            <tab [heading]="commonLocaleData?.app_branch" (selectTab)="tabChanged('branch')" *ngIf="companyBranches?.branchCount > 1">
                 <div class="wrap-company-refresh">
                     <p class="font-12 d-flex justify-content-between mr-t1">
                         <span><small>{{ companyBranches?.branchCount > 1 ? branchList?.length : commonLocaleData?.app_numbers?.zero }} {{localeData?.branches}}</small></span>
@@ -73,7 +73,7 @@
                                     <i class="icon-head-branch mr-2"></i>
                                     <span class="d-flex flex-column">
                                         <span class="branch-alias">{{ companyBranches.name }}</span>
-                                        <span class="font-12 branch-company-name">{{localeData?.company_consolidated_data}}</span>
+                                        <span class="font-11 branch-company-name">{{localeData?.company_consolidated_data}}</span>
                                     </span>
                                 </a>
                             </li>
@@ -85,7 +85,8 @@
                                         <span class="branch-alias">
                                             {{branch?.alias}}
                                         </span>
-                                        <span class="font-12 branch-company-name">{{companyBranches?.name}}</span>
+                                        <!-- Company name will show once we release the concept of headquarters -->
+                                        <!-- <span class="font-11 branch-company-name">{{companyBranches?.name}}</span> -->
                                     </span>
                                 </a>
                             </li>
@@ -165,7 +166,7 @@
                                             <i class="icon-branch-connect mr-2"></i>
                                             <span class="d-flex flex-column">
                                                 <span class="branch-alias">{{ branch.alias }}</span>
-                                                <span class="font-12 branch-company-name pt-0 pb-0">{{ company.name }}</span>
+                                                <span class="font-11 branch-company-name pt-0 pb-0">{{ company.name }}</span>
                                             </span>
                                         </a>
                                     </li>

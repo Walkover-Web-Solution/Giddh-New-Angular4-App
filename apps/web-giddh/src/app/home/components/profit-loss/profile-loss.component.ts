@@ -68,6 +68,8 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /* this will store active company data */
+    public activeCompany: any = {};
 
     constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService, private tlPlService: TlPlService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
@@ -80,6 +82,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.amountSettings.baseCurrencySymbol = activeCompany.baseCurrencySymbol;
+                this.activeCompany = activeCompany;
             }
         });
 

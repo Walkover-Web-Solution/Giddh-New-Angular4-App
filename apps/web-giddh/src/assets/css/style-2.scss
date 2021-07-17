@@ -8453,6 +8453,13 @@ body.update-scroll-hidden {
             }
         }
     }
+    .company-branch-opt-1{
+        .branch-hide-tab{
+            ul.nav.nav-tabs{
+                display: none;
+            }
+        } 
+    }
 }
 .on-setting-page, .on-user-page{
     aside-setting{

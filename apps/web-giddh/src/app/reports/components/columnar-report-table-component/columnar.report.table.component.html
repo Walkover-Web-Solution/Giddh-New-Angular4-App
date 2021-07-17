@@ -23,11 +23,17 @@
                             <span
                                 *ngIf="isCrDrChecked">{{(columnarReportResponse?.openingBalance[item.accountUniqueName]?.type
                                 ==='DEBIT' && columnarReportResponse?.openingBalance[item.accountUniqueName]?.amount
-                                >0)? '-': ''}} </span> {{
-                            columnarReportResponse?.openingBalance[item.accountUniqueName]?.amount}}
+                                >0)? '-': ''}} </span>
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="columnarReportResponse?.openingBalance[item.accountUniqueName]?.amount" [currencySymbol]="false" [currencyCode]="false">
+                                    </amount-field>
+                                </span>
                             <span
-                                *ngIf="!isCrDrChecked && columnarReportResponse?.openingBalance[item.accountUniqueName]?.amount >0">{{columnarReportResponse?.openingBalance[item.accountUniqueName]?.type
-                                ==='DEBIT'? localeData?.dr: localeData?.cr}}</span>
+                                *ngIf="!isCrDrChecked && columnarReportResponse?.openingBalance[item.accountUniqueName]?.amount >0">
+                                {{columnarReportResponse?.openingBalance[item.accountUniqueName]?.type
+                                ==='DEBIT'? localeData?.dr: localeData?.cr}}
+
+                            </span>
                         </td>
                         <!--Closing balance  -->
                         <td [attr.data-title]="localeData?.closing_balance" class="text-center"
@@ -36,7 +42,11 @@
                                 *ngIf="isCrDrChecked && columnarReportResponse?.closingBalance[item.accountUniqueName]?.amount>0">
                                 {{(columnarReportResponse?.closingBalance[item.accountUniqueName]?.type
                                 ==='DEBIT')?'-':''}}
-                            </span>{{columnarReportResponse?.closingBalance[item.accountUniqueName]?.amount}}
+                            </span>
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="columnarReportResponse?.closingBalance[item.accountUniqueName]?.amount" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
                             <span
                                 *ngIf="!isCrDrChecked && columnarReportResponse?.closingBalance[item.accountUniqueName]?.amount>0">
                                 {{columnarReportResponse?.closingBalance[item.accountUniqueName]?.type
@@ -48,7 +58,10 @@
                                 *ngIf="isCrDrChecked && columnarReportResponse?.grandTotal[item.accountUniqueName]?.amount > 0">
                                 {{(columnarReportResponse?.grandTotal[item.accountUniqueName]?.type
                                 ==='DEBIT')?'-':''}}</span>
-                            {{columnarReportResponse?.grandTotal[item.accountUniqueName]?.amount}}
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="columnarReportResponse?.grandTotal[item.accountUniqueName]?.amount" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
                             <span
                                 *ngIf="!isCrDrChecked && columnarReportResponse?.grandTotal[item.accountUniqueName]?.amount > 0">
                                 {{columnarReportResponse?.grandTotal[item.accountUniqueName]?.type
@@ -59,7 +72,10 @@
                             <td class="text-center" [attr.data-title]="monthName[inx2]">
                                 <span *ngIf="isCrDrChecked && months?.accountsData[inx]?.monthlyBalance?.amount>0">
                                     {{months?.accountsData[inx]?.monthlyBalance?.type ==='DEBIT'?'-':'' }}</span>
-                                {{months.accountsData[inx]?.monthlyBalance?.amount}}
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="months.accountsData[inx]?.monthlyBalance?.amount" [currencySymbol]="false" [currencyCode]="false">
+                                    </amount-field>
+                                </span>
                                 <span
                                     *ngIf="!isCrDrChecked && months?.accountsData[inx]?.monthlyBalance?.amount>0">{{months?.accountsData[inx]?.monthlyBalance?.type
                                     ==='DEBIT'? localeData?.dr: localeData?.cr }}</span>
