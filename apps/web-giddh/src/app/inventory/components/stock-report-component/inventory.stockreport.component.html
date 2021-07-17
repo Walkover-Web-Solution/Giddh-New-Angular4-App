@@ -78,10 +78,10 @@
                                 </div>
                             </div>
                         </th>
-                        <th colspan="4" width="40%" class="text-center bd-rr bd-rb">Transactions</th>
-                        <th colspan="1" width="10%" class="bd-rl text-center">Closing Stock</th>
+                        <th [hidden]="!stockReport?.transactions?.length" colspan="4" width="40%" class="text-center bd-rr bd-rb">Transactions</th>
+                        <th [hidden]="!stockReport?.transactions?.length" colspan="1" width="10%" class="bd-rl text-center">Closing Stock</th>
                     </tr>
-                    <tr class="bd-rt">
+                    <tr class="bd-rt" [hidden]="!stockReport?.transactions?.length">
                         <th width="100">
                             <div class="d-flex">
                                 <div class="">Date</div>
