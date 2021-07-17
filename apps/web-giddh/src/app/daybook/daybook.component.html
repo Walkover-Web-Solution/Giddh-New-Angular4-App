@@ -81,7 +81,7 @@
                 <div class="d-md-none d-flex justify-content-between mr-t1">
                     <button type="button" class="btn btn-default mr-0"
                     (click)="exportDaybook()"
-                    *ngIf="!((daybookData$ | async)?.entries?.length > 0)">{{commonLocaleData?.app_export}}</button>
+                    *ngIf="((daybookData$ | async)?.entries?.length > 0)">{{commonLocaleData?.app_export}}</button>
                         <div class="expand-collapse-btn">
                             <a class="cp" (click)="toggleExpand()" data-toggle="tooltip" data-placement="top"
                             title="{{commonLocaleData?.app_expand_all}}" *ngIf="!isAllExpanded">

@@ -178,7 +178,7 @@
                             <div class="d-flex">
                                 <div class="export-button-wrap">
                                     <button class="btn btn-primary"
-                                        [disabled]="((selectedInvoices && selectedInvoices.length > 0) ? selectedInvoices.length : voucherData && voucherData.totalItems) === 0"
+                                        *ngIf="(selectedInvoices?.length || voucherData?.totalItems)"
                                         (click)="openModal(bulkExport)">{{commonLocaleData?.app_export}}</button>
                                 </div>
                                 <div>
