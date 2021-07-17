@@ -530,7 +530,9 @@
                             <!-- in case of all entity with group -->
                             <img src="assets/images/search-data-not-found.svg" />
                             <h1 [class.group-not-found]="groupNotFoundMessage">
-                                {{ (groupNotFoundMessage) ? groupNotFoundMessage : 'No Report Found !!' }}</h1>
+                                {{ (groupNotFoundMessage) ? groupNotFoundMessage : 'No entries found within given criteria.' }}</h1>
+                            <h1 class="p-0" [class.group-not-found]="groupNotFoundMessage">
+                                {{ (groupNotFoundMessage) ? groupNotFoundMessage : 'Do search with some other dates' }}</h1>
                         </td>
                     </tr>
                 </tbody>

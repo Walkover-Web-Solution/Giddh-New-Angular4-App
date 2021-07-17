@@ -763,8 +763,8 @@
                         <tr>
                             <td [attr.colspan]="colspanLength" *ngIf="!(sundryDebtorsAccounts).length "
                                 class="text-center empty-table ">
-                                <!-- TODO: Replace with new label app_no_data_available -->
-                                <h1>{{commonLocaleData?.app_no_record_found}}</h1>
+                                <h1>{{commonLocaleData?.app_no_entries_found}}</h1>
+                                <h1>{{commonLocaleData?.app_search_suggestion}}</h1>
                             </td>
                         </tr>
 
@@ -1008,8 +1008,8 @@
                         </tr>
                         <tr *ngIf="!(sundryCreditorsAccounts).length ">
                             <td [attr.colspan]="colspanLength" class="text-center empty-table">
-                                <!-- TODO: Replace with new label app_no_data_available -->
-                                <h1>{{commonLocaleData?.app_no_record_found}}</h1>
+                                <h1>{{commonLocaleData?.app_no_entries_found}}</h1>
+                                <h1 class="p-0">{{commonLocaleData?.app_search_suggestion}}</h1>
                             </td>
                         </tr>
 

@@ -451,9 +451,8 @@
         </div>
         <div class="no-data"
             *ngIf="(purchaseRegisteDetailedResponse$ | async).items.length === 0 &&!(isGetPurchaseDetailsInProcess$ | async)">
-            <!-- TODO: Replace with new label app_no_data_available -->
             <h1>{{commonLocaleData?.app_no_entries_found}}</h1>
-            <h1>{{commonLocaleData?.app_search_suggestion}}</h1>
+            <h1 class="p-0">{{commonLocaleData?.app_search_suggestion}}</h1>
         </div>
 
     </ng-container>
