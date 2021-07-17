@@ -24,7 +24,7 @@
                     <div class="col-md-12">
                         <div class="table-responsive">
                             <table class="table basic table-bordered giddh-table on-mobile-view">
-                                <thead class="thead-background1" (clickOutside)="clickedOutside();">
+                                <thead class="thead-background1" (clickOutside)="clickedOutside();" [hidden]="!EwaybillLists?.results?.length">
                                     <tr>
                                         <th width="50px">#</th>
                                         <th class="nowrap">
@@ -186,6 +186,7 @@
                             </table>
                             <div class="no-data"
                                 *ngIf="!isLoading && EwaybillLists?.results?.length === 0 && !(isGetAllEwaybillRequestInProcess$ | async)">
+                                <!-- TODO: Replace with new label app_no_data_available -->
                                 <h1>{{commonLocaleData?.app_no_entries_found}}</h1>
                                 <h1>{{commonLocaleData?.app_search_suggestion}}</h1>
                             </div>

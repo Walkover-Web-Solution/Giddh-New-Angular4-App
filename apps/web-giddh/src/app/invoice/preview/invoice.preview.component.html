@@ -159,7 +159,7 @@
                                 <span class="pd-r05 d-sm-flex d-none">{{commonLocaleData?.app_filter}}</span> <span
                                     class="icon-advance-filter"></span>
                             </div>
-                            <div class="export-button-wrap" *ngIf="selectedVoucher === 'sales'">
+                            <div class="export-button-wrap" *ngIf="selectedVoucher === 'sales' && voucherData?.items?.length">
                                 <button class="btn btn-primary mr-0"
                                     [disabled]="((selectedInvoices && selectedInvoices.length > 0) ? selectedInvoices.length : voucherData && voucherData.totalItems) === 0"
                                     (click)="openModal(bulkExport)">{{commonLocaleData?.app_export}}</button>
@@ -328,7 +328,7 @@
                     </div>
                 </ng-template>
 
-                <div class="top-content">
+                <div class="top-content" [hidden]="!voucherData?.items?.length">
                     <div class="d-flex w-100 justify-content-between overflow-x-auto">
                         <div class="total-due-sale total-details-box opening-box border-none mr-r05">
                             <h5>
@@ -361,8 +361,7 @@
                     </div>
                 </div>
                 <!-- For mobile screen sizes ends -->
-
-                <div class="invoice-preview table-responsive">
+                <div class="invoice-preview table-responsive" [attr.style]="!voucherData?.items?.length ? 'display: none !important' : ''">
                     <table
                         class="table basic table-bordered mr-t15 pd-t15 invoice-table desktop-table giddh-table on-mobile-view">
                         <!--sales-->
@@ -1017,17 +1016,10 @@
                         [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last"
                         (pageChanged)="pageChanged($event)"></pagination>
                 </div>
-
-
-                <!--No Entry-->
-                <div class="no-data mr-t2" *ngIf="!voucherData && !(isGetAllRequestInProcess$ | async)">
-                    <h1>{{localeData?.no_entry_found_sales}}</h1>
-                    <h1>{{localeData?.no_entry_found_note}}</h1>
-                </div>
-
                 <!--no data-->
                 <div class="no-data"
-                    *ngIf="voucherData && voucherData.items.length === 0 && !(isGetAllRequestInProcess$ | async)">
+                    *ngIf="!voucherData?.items?.length && !(isGetAllRequestInProcess$ | async)">
+                    <!-- TODO: Replace with new label app_no_data_available -->
                     <h1>{{commonLocaleData?.app_no_entries_found}}</h1>
                     <h1>{{commonLocaleData?.app_search_suggestion}}</h1>
                 </div>
