@@ -74,7 +74,7 @@
             </button>
         </div>
     </div>
-    <div class="top-content">
+    <div class="top-content" [hidden]="!(dueAmountReportData$ | async)?.results?.length">
         <div class="d-flex w-100 justify-content-between overflow-x-auto">
             <div class="total-due-sale total-details-box opening-box border-none mr-r05">
                 <h5>
@@ -145,7 +145,7 @@
 <!-- endregion -->
 <ng-template #mainTable>
     <table class="table  giddh-table aging-table table-aging-report">
-        <thead>
+        <thead [hidden]="!(dueAmountReportData$ | async)?.results?.length">
             <tr class="aging-table-top">
                 <td></td>
                 <td></td>
@@ -275,6 +275,7 @@
             <ng-container *ngIf="!(dueAmountReportData$ | async)?.results?.length">
                 <tr>
                     <td colspan="8" class="text-center empty-table">
+                        <!-- TODO: Replace with new label app_no_data_available -->
                         <h1>{{commonLocaleData?.app_no_record_found}}</h1>
                     </td>
                 </tr>

@@ -1,7 +1,7 @@
 <div class="container-fluid" *ngIf="!(getPettycashReportInprocess$ | async) && !isRowExpand ">
     <div class="table-responsive">
         <table class="table basic table-bordered giddh-table on-mobile-view">
-            <thead>
+            <thead [hidden]="!expensesItems?.length">
                 <tr class="icon-pointer">
                     <th width="2%" data-title="#">#</th>
 
@@ -120,6 +120,7 @@
 
 <div class="no-data"
     *ngIf="(pettyCashReportsResponse$ | async)?.results?.length === 0 && !(getPettycashReportInprocess$ | async)">
+    <!-- TODO: Replace with new label app_no_data_available -->
     <h1>{{commonLocaleData?.app_no_entries_found}}</h1>
     <h1>{{commonLocaleData?.app_search_suggestion}}</h1>
 </div>
