@@ -184,9 +184,11 @@
                 <tbody class="on-mobile-view no-records"
                     *ngIf="!branchTransferResponse.items || branchTransferResponse.items.length === 0">
                     <tr>
-                        <!-- TODO: Replace with new label app_no_data_available -->
                         <td *ngIf="!isLoading" [attr.colspan]="currentOrganizationType === 'BRANCH' ? 9 : 11"
-                            align="center">No records found.</td>
+                            align="center">
+                            <h1>No entries found within given criteria.</h1>
+                            <h1 class="p-0">Do search with some other dates.</h1>
+                            </td>
                         <td *ngIf="isLoading" [attr.colspan]="currentOrganizationType === 'BRANCH' ? 9 : 11">
                             <giddh-page-loader></giddh-page-loader>
                         </td>

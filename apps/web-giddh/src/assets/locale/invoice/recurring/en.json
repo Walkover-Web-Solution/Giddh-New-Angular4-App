@@ -29,7 +29,6 @@
     "generate_eway_bill": "Generate E-way Bill",
     "next_invoice_date": "Next Invoice Date",
     "invoice_amount": "Invoice Amt",
-    "no_vouchers_found": "No Recurring Vouchers Found!",
     "search_field": "Search [FIELD]",
     "active": "Active",
     "inactive": "InActive"
