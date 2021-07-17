@@ -51,7 +51,7 @@
                 (click)="openSearchModal(template)">
                     <span class="pd-r05 d-sm-flex d-none">Filter</span>
                     <span class="icon-advance-filter"></span>
-                </div> 
+                </div>
             </div>
             <div class="d-lg-none mr-b1">
                 <div class="clear-filter" *ngIf="checkIfFiltersApplied()">
@@ -62,7 +62,7 @@
         </div>
         <div class="report-table table-responsive">
             <table class="table basic giddh-table on-mobile-view">
-                <thead>
+                <thead [hidden]="!branchTransferResponse?.items?.length">
                     <tr (clickOutside)="inlineSearch = null">
                         <th width="3%">#</th>
                         <th width="10%" (click)="sortBranchTransferList('dateOfSupply')">Date <span
@@ -184,6 +184,7 @@
                 <tbody class="on-mobile-view no-records"
                     *ngIf="!branchTransferResponse.items || branchTransferResponse.items.length === 0">
                     <tr>
+                        <!-- TODO: Replace with new label app_no_data_available -->
                         <td *ngIf="!isLoading" [attr.colspan]="currentOrganizationType === 'BRANCH' ? 9 : 11"
                             align="center">No records found.</td>
                         <td *ngIf="isLoading" [attr.colspan]="currentOrganizationType === 'BRANCH' ? 9 : 11">
