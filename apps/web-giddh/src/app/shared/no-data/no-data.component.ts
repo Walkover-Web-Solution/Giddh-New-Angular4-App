@@ -10,11 +10,11 @@ import { LocaleService } from "../../services/locale.service";
 export class NoDataComponent implements OnInit {
     /** Primary message for no data */
     @Input() primaryMessage: string;
-    /** Primary message for no data */
+    /** Primary message class for no data */
     @Input() primaryMessageClass: string;
     /** Secondary message for no data */
     @Input() secondaryMessage: string;
-    /** Secondary message for no data */
+    /** Secondary message class for no data */
     @Input() secondaryMessageClass: string;
 
     /** @ignore */
