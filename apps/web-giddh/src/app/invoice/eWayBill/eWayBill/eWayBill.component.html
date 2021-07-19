@@ -186,8 +186,7 @@
                             </table>
                             <div class="no-data"
                                 *ngIf="!isLoading && EwaybillLists?.results?.length === 0 && !(isGetAllEwaybillRequestInProcess$ | async)">
-                                <h1>{{commonLocaleData?.app_no_entries_found}}</h1>
-                                <h1>{{commonLocaleData?.app_search_suggestion}}</h1>
+                                <no-data></no-data>
                             </div>
                         </div>
                     </div>

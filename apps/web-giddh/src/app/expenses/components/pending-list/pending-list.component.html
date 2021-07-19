@@ -121,8 +121,7 @@
 
 <div class="no-data"
     *ngIf="(pettyCashReportsResponse$ | async)?.results?.length === 0 && !(getPettycashReportInprocess$ | async)">
-    <h1>{{commonLocaleData?.app_no_entries_found}}</h1>
-    <h1>{{commonLocaleData?.app_search_suggestion}}</h1>
+    <no-data></no-data>
 </div>
 
 <!--loading-->

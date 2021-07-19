@@ -1019,8 +1019,7 @@
                 <!--no data-->
                 <div class="no-data"
                     *ngIf="!voucherData?.items?.length && !(isGetAllRequestInProcess$ | async)">
-                    <h1>{{commonLocaleData?.app_no_entries_found}}</h1>
-                    <h1>{{commonLocaleData?.app_search_suggestion}}</h1>
+                    <no-data></no-data>
                 </div>
 
                 <!-- Delete invoice confirmation model -->
