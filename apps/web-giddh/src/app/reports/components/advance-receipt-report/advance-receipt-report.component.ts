@@ -164,7 +164,6 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public advanceReceiptAdvanceSearchAmountFilters: any;
     /** List of receipt types for filters */
     public receiptTypes: any;
-
     /** @ignore */
     constructor(
         private changeDetectorRef: ChangeDetectorRef,

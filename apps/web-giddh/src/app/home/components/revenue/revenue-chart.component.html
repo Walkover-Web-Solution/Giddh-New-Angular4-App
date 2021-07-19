@@ -56,21 +56,46 @@
                         <div class="single-sale-detail">
                             <p>{{commonLocaleData?.app_total}} {{activeGraphType['uniqueName']}}
                                 ({{commonLocaleData?.app_this_week}})</p>
-                            <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.totalCurrent | giddhCurrency}}</h3>
+                            <h3>
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="summaryData.totalCurrent" [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                        [currencyCode]="activeCompany.baseCurrency">
+                                    </amount-field>
+                                </span>
+                            </h3>
+
                         </div>
                         <div class="single-sale-detail">
                             <p>{{commonLocaleData?.app_total}} {{activeGraphType['uniqueName']}}
                                 ({{commonLocaleData?.app_last_week}})</p>
-                            <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.totalLast | giddhCurrency}}</h3>
+                            <h3>
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="summaryData.totalLast" [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                        [currencyCode]="activeCompany.baseCurrency">
+                                    </amount-field>
+                                </span>
+                            </h3>
                         </div>
                         <div class="single-sale-detail">
-                            <p>{{localeData?.highest}} {{activeGraphType['uniqueName']}}</p>
-                            <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.highest | giddhCurrency}}</h3>
+                            <p>{{localeData?.highest}} {{activeGraphType['displayName']}}</p>
+                            <h3>
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="summaryData.highest" [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                        [currencyCode]="activeCompany.baseCurrency">
+                                    </amount-field>
+                                </span>
+                            </h3>
                             <span>{{summaryData.highestLabel}}</span>
                         </div>
                         <div class="single-sale-detail">
-                            <p>{{localeData?.lowest}} {{activeGraphType['uniqueName']}}</p>
-                            <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.lowest | giddhCurrency}}</h3>
+                            <p>{{localeData?.lowest}} {{activeGraphType['displayName']}}</p>
+                            <h3>
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="summaryData.lowest" [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                        [currencyCode]="activeCompany.baseCurrency">
+                                    </amount-field>
+                                </span>
+                            </h3>
                             <span>{{summaryData.lowestLabel}}</span>
                         </div>
                     </div>
@@ -143,42 +168,64 @@
                             </div>
                         </div>
                     </div>
-                    <div id="incomeChart">
-                        <highcharts-chart *ngIf="chartOptions" [Highcharts]="revenueChart" [options]="chartOptions">
-                        </highcharts-chart>
-                    </div>
-                    <div class="total-sale-data clearfix">
-                        <div class="row">
-                            <div class="col-sm-3 single-sale-data">
-                                <div>
-                                    <p>{{commonLocaleData?.app_total}} {{activeGraphType['uniqueName']}}
-                                        ({{this.getCurrentWeekStartEndDate[1] | date}})</p>
-                                    <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.totalCurrent |
-                                        giddhCurrency}}</h3>
-                                </div>
+                </div>
+                <div id="incomeChart">
+                    <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="requestInFlight"></giddh-page-loader>
+                    <highcharts-chart *ngIf="!requestInFlight && chartOptions" [Highcharts]="revenueChart"
+                        [options]="chartOptions"></highcharts-chart>
+                </div>
+                <div class="total-sale-data clearfix">
+                    <div class="row">
+                        <div class="col-sm-3 single-sale-data">
+                            <div>
+                                <p>{{commonLocaleData?.app_total}} {{activeGraphType['displayName']}}
+                                    ({{getCurrentWeekStartEndDate[1] | date}})</p>
+                                <h3>
+                                    <span class="d-inline-flex">
+                                        <amount-field [amount]="summaryData.totalCurrent" [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                            [currencyCode]="activeCompany.baseCurrency">
+                                        </amount-field>
+                                    </span>
+                                </h3>
                             </div>
-                            <div class="col-sm-3 single-sale-data">
-                                <div>
-                                    <p>{{commonLocaleData?.app_total}} {{activeGraphType['uniqueName']}}
-                                        ({{this.getPreviousWeekStartEndDate[1] | date}})</p>
-                                    <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.totalLast | giddhCurrency}}
-                                    </h3>
-                                </div>
+                        </div>
+                        <div class="col-sm-3 single-sale-data">
+                            <div>
+                                <p>{{commonLocaleData?.app_total}} {{activeGraphType['displayName']}}
+                                    ({{getPreviousWeekStartEndDate[1] | date}})</p>
+                                <h3>
+                                    <span class="d-inline-flex">
+                                        <amount-field [amount]="summaryData.totalLast" [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                            [currencyCode]="activeCompany.baseCurrency">
+                                        </amount-field>
+                                    </span>
+                                </h3>
                             </div>
-                            <div class="col-sm-3 single-sale-data">
-                                <div>
-                                    <p>{{localeData?.highest}} {{activeGraphType['uniqueName']}}</p>
-                                    <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.highest | giddhCurrency}}
-                                    </h3>
-                                    <span class="date-wise-sale">{{summaryData.highestLabel}}</span>
-                                </div>
+                        </div>
+                        <div class="col-sm-3 single-sale-data">
+                            <div>
+                                <p>{{localeData?.highest}} {{activeGraphType['displayName']}}</p>
+                                <h3>
+                                    <span class="d-inline-flex">
+                                        <amount-field [amount]="summaryData.highest" [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                            [currencyCode]="activeCompany.baseCurrency">
+                                        </amount-field>
+                                    </span>
+                                </h3>
+                                <span class="date-wise-sale">{{summaryData.highestLabel}}</span>
                             </div>
-                            <div class="col-sm-3 single-sale-data">
-                                <div>
-                                    <p>{{localeData?.lowest}} {{activeGraphType['uniqueName']}}</p>
-                                    <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.lowest | giddhCurrency}}</h3>
-                                    <span class="date-wise-sale">{{summaryData.lowestLabel}}</span>
-                                </div>
+                        </div>
+                        <div class="col-sm-3 single-sale-data">
+                            <div>
+                                <p>{{localeData?.lowest}} {{activeGraphType['displayName']}}</p>
+                                <h3>
+                                    <span class="d-inline-flex">
+                                        <amount-field [amount]="summaryData.lowest" [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                            [currencyCode]="activeCompany.baseCurrency">
+                                        </amount-field>
+                                    </span>
+                                </h3>
+                                <span class="date-wise-sale">{{summaryData.lowestLabel}}</span>
                             </div>
                         </div>
                     </div>
