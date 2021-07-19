@@ -5,7 +5,6 @@ export const Configuration = {
     ApiUrl,
     isCordova,
     isElectron,
-    OtpToken: '73k6G_GDzvhy4XE33EQCaKUnC0PHwEZBvf0qsZ3Q9S3ZBcXH-f_6JT_4fH-Qx1Y5LxIIwzqy7cFQVMoyUSXBfLL5WBX6oQWifweWIQlJQ8YkRZ1lAmu3oqwvNJXP1Y5ZTXDHO1IV5-Q63zwNbzxTFw==',
     APP_FOLDER
 };
 
@@ -322,7 +321,7 @@ export enum EInvoiceStatus {
 }
 
 /** Length of entry description on vouchers */
-export const ENTRY_DESCRIPTION_LENGTH = 100;
+export const ENTRY_DESCRIPTION_LENGTH = 300;
 
 export const EMAIL_REGEX_PATTERN = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 /** This will hold error status code for permission error from API */

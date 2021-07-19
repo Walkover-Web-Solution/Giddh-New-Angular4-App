@@ -86,7 +86,7 @@
                                                     [ngClass]="{'active-text-color': filter.sortBy === 'entry_date' && filter.sort === 'asc'}">
                                                 </div>
                                                 <!-- after sort click -->
-                                                <div class="icon-sort-dsc text-right"
+                                                <div class="icon-sort-asc text-right"
                                                     *ngIf="filter.sortBy === 'entry_date' && filter.sort === 'desc'"
                                                     (click)="sortButtonClicked('asc', 'entry_date')"
                                                     [ngClass]="{'active-text-color': filter.sortBy === 'entry_date' && filter.sort === 'desc'}">
@@ -158,7 +158,7 @@
                                                     [ngClass]="{'active-text-color': filter.sortBy === 'QUANTITY' && filter.sort === 'asc'}">
                                                 </div>
                                                 <!-- after sort click -->
-                                                <div class="icon-sort-dsc text-right"
+                                                <div class="icon-sort-asc text-right"
                                                     *ngIf="filter.sortBy === 'QUANTITY' && filter.sort === 'desc'"
                                                     (click)="sortButtonClicked('asc', 'QUANTITY')"
                                                     [ngClass]="{'active-text-color': filter.sortBy === 'QUANTITY' && filter.sort === 'desc'}">

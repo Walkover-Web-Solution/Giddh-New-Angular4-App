@@ -139,6 +139,7 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof OtherSettingsComponent
      */
     public profileUpdated(keyName: string): void {
+        delete this.updatedData['manageInventory'];
         this.updatedData[keyName] = this.profileData[keyName];
         this.saveProfileSubject.next();
     }

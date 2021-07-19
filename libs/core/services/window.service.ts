@@ -28,7 +28,7 @@ export class WindowService {
         return this._platformWindow.require;
     }
 
-    public alert(msg: any): Promise<any> {
+    public alert(msg: any): Promise<void> {
         return new Promise((resolve, reject) => {
             const result: any = this._platformWindow.alert(msg);
             if (isObject(result) && result.then) {
@@ -43,7 +43,7 @@ export class WindowService {
     public confirm(
         msg: any,
         action?: Function /* used for fancyalerts on mobile*/
-    ): Promise<any> {
+    ): Promise<void> {
         return new Promise((resolve, reject) => {
             const result: any = (<any>this._platformWindow).confirm(
                 msg,
