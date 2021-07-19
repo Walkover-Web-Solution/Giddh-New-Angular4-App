@@ -1705,6 +1705,14 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.isLoading = false;
             if (response?.body) {
                 this.connectedBankAccounts = response.body;
+
+                this.connectedBankAccounts.forEach(bankAccount => {
+                    if(bankAccount?.iciciDetailsResource?.payor?.length > 0) {
+                        bankAccount?.iciciDetailsResource?.payor.forEach(payor => {
+                            this.getPayorRegistrationStatus(bankAccount, payor);
+                        });
+                    }
+                });
             }
         });
     }
@@ -1869,7 +1877,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.paymentAlerts = bankAccount?.iciciDetailsResource?.paymentAlerts?.map(user => user.uniqueName);
 
         this.editAccountForm = this._fb.group({
-            loginId: ['123456'], // need to remove this field
             accountNumber: [bankAccount?.iciciDetailsResource?.accountNumber],
             accountUniqueName: [bankAccount?.account?.uniqueName],
             paymentAlerts: [this.paymentAlerts]
@@ -1916,5 +1923,24 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 }
             });
         }
+    }
+
+    /**
+     * This will get the payor account registration status
+     *
+     * @param {*} bankAccount
+     * @param {*} payor
+     * @memberof SettingIntegrationComponent
+     */
+    public getPayorRegistrationStatus(bankAccount: any, payor: any): void {
+        let request = { bankAccountUniqueName: bankAccount?.iciciDetailsResource?.uniqueName, urn: payor?.urn };
+
+        this.settingsIntegrationService.getPayorRegistrationStatus(request).pipe(take(1)).subscribe(response => {
+            payor.registrationStatus = response?.body?.response;
+
+            if(response?.body?.response !== "SUCCESS") {
+                this.toasty.errorToast(response?.body?.message);
+            }
+        });
     }
 }
