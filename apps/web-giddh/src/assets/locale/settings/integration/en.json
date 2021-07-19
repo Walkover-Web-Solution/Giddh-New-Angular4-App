@@ -126,6 +126,8 @@
         "enter_amount": "Enter Amount",
         "edit_user": "Edit User",
         "duration": "Duration",
-        "delete_login": "Do you really want to delete the login id [LOGIN_ID] ?"
+        "delete_login": "Do you really want to delete the login id [LOGIN_ID] ?",
+        "connected": "Connected",
+        "used": "Used"
     }
 }
