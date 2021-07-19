@@ -206,6 +206,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         }
         document.querySelector('body').classList.add('setting-sidebar-open');
         document.querySelector('body').classList.add('update-scroll-hidden');
+        document.querySelector('body').classList.add('voucher-preview-edit');
         if (this.selectedItem) {
             if (!this.isVoucherDownloading) {
                 this.downloadVoucher('base64');
@@ -585,6 +586,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('fixed');
         document.querySelector('body').classList.remove('update-scroll-hidden');
+        document.querySelector('body').classList.remove('voucher-preview-edit');
     }
 
     /**

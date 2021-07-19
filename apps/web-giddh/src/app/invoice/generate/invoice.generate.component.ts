@@ -132,6 +132,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public todaySelected: boolean = false;
     /** True if custom date selected */
     public customDateSelected: boolean = false;
+    /* this will store active company data */
+    public activeCompany: any = {};
 
     constructor(
         private store: Store<AppState>,
@@ -159,6 +161,13 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
+
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.activeCompany = activeCompany;
+            }
+        });
+
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response || [];
