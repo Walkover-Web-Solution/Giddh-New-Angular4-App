@@ -209,8 +209,7 @@
                         *ngIf="!isLoading && (!reverseChargeReportResults || !reverseChargeReportResults.items || reverseChargeReportResults.items.length === 0)">
                         <tr>
                             <td *ngIf="!isLoading" colspan="10" class="text-center empty-table" align="center">
-                                <h1>{{commonLocaleData?.app_no_entries_found}}</h1>
-                                <h1 class="p-0">{{commonLocaleData?.app_search_suggestion}}</h1>
+                                <no-data [secondaryMessageClass]="'p-0'"></no-data>
                             </td>
                             <td *ngIf="isLoading" colspan="10">&nbsp;</td>
                         </tr>

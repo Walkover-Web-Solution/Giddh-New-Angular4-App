@@ -275,8 +275,7 @@
             <ng-container *ngIf="!(dueAmountReportData$ | async)?.results?.length">
                 <tr>
                     <td colspan="8" class="text-center empty-table">
-                        <h1>{{commonLocaleData?.app_no_entries_found}}</h1>
-                        <h1 class="p-0">{{commonLocaleData?.app_search_suggestion}}</h1>
+                        <no-data [secondaryMessageClass]="'p-0'"></no-data>
                     </td>
                 </tr>
             </ng-container>

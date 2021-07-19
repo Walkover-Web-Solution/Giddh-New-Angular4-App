@@ -18,6 +18,7 @@ import { ElementViewChildModule } from '../shared/helpers/directives/elementView
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
+import { NoDataModule } from '../shared/no-data/no-data.module';
 import { SharedModule } from '../shared/shared.module';
 import { DiscountControlModule } from '../theme/discount-control/discount-control.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
@@ -70,10 +71,11 @@ import { PurchaseRoutingModule } from './purchase.routing.module';
         TaxControlModule,
         DiscountControlModule,
         ProformaInvoiceModule,
+        NoDataModule
     ],
     entryComponents: [],
     exports: [
-        
+
     ]
 })
 export class PurchaseModule {

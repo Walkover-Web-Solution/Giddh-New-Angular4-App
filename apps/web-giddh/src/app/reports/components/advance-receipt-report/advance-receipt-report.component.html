@@ -255,8 +255,7 @@
                         </tr>
                         <tr *ngIf="!allReceipts?.length">
                             <td colspan="10" align="center" class="no-entries">
-                                <h1>{{commonLocaleData?.app_no_entries_found}}</h1>
-                                <h1 class="p-0">{{commonLocaleData?.app_search_suggestion}}</h1>
+                                <no-data [secondaryMessageClass]="'p-0'"></no-data>
                             </td>
                         </tr>
                     </tbody>
