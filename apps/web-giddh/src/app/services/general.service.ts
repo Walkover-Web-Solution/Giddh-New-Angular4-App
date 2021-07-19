@@ -903,4 +903,23 @@ export class GeneralService {
         }
         return !!child;
     }
+
+    /* This will expand left sidebar
+     *
+     * @memberof GeneralService
+     */
+    public expandSidebar(): void {
+        document.querySelector('.primary-sidebar')?.classList?.remove('sidebar-collapse');
+        document.querySelector('.nav-left-bar')?.classList?.remove('width-60');
+    }
+
+    /**
+     * This will collapse left sidebar
+     *
+     * @memberof GeneralService
+     */
+    public collapseSidebar(): void {
+        document.querySelector('.primary-sidebar')?.classList?.add('sidebar-collapse');
+        document.querySelector('.nav-left-bar')?.classList?.add('width-60');
+    }
 }

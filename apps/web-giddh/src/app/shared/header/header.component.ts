@@ -306,7 +306,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.checkAndRenewUserSession();
                 }
 
-                if(this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details")) {
+                if(!this.router.url.includes("/pages/settings/taxes") && (this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details") || this.router.url.includes("/pages/invoice/preview/settings/sales"))) {
                     this.toggleSidebarPane(true, false);
                 } else {
                     this.toggleSidebarPane(false, false);
@@ -501,6 +501,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.collapseSidebar(true);
             }
         });
+
         this.generalService.isMobileSite.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             this.isMobileSite = s;
             if (this.generalService.companyUniqueName) {
@@ -844,16 +845,22 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public toggleSidebarPane(show: boolean, isMobileSidebar: boolean): void {
         setTimeout(() => {
             this.isMobileSidebar = isMobileSidebar;
-            this.asideHelpSupportMenuState = 'out';
+            if(show) {
+                this.asideHelpSupportMenuState = 'out';
+            }
             this.asideSettingMenuState = (show) ? 'in' : 'out';
             this.toggleBodyClass();
 
-            if (this.asideSettingMenuState === "in") {
-                document.querySelector('body').classList.add('mobile-setting-sidebar');
+            if(this.asideSettingMenuState === "in") {
                 document.querySelector('body').classList.add('aside-setting');
             } else {
+                document.querySelector('body').classList.remove('aside-setting');
+            }
+
+            if (this.asideSettingMenuState === "in") {
+                document.querySelector('body').classList.add('mobile-setting-sidebar');
+            } else {
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
-                document.querySelector('body').classList.add('aside-setting');
             }
         }, ((this.asideSettingMenuState === 'out') ? 100 : 0));
     }
@@ -1072,7 +1079,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.menuStateChange.emit(false);
         }
 
-        if (validElement && !this.isMobileSite && (this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details"))) {
+        if (validElement && !this.isMobileSite && (this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details") || document.getElementsByClassName("voucher-preview-edit")?.length > 0)) {
             this.collapseSidebar(true);
         }
     }
@@ -1461,8 +1468,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.sidebarForcelyExpanded = true;
         }
         this.isSidebarExpanded = true;
-        document.querySelector('.primary-sidebar')?.classList?.remove('sidebar-collapse');
-        document.querySelector('.nav-left-bar')?.classList?.remove('width-60');
+        this.generalService.expandSidebar();
     }
 
     /**
@@ -1492,8 +1498,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if(!this.sideMenu.isExpanded || forceCollapse) {
             this.sidebarForcelyExpanded = false;
             this.isSidebarExpanded = false;
-            document.querySelector('.primary-sidebar')?.classList?.add('sidebar-collapse');
-            document.querySelector('.nav-left-bar')?.classList?.add('width-60');
+            this.generalService.collapseSidebar();
         }
     }
 
