@@ -115,7 +115,7 @@ import { SettingsBranchActions } from '../actions/settings/branch/settings.branc
 import { OrganizationType } from '../models/user-login-state';
 import { AccountsAction } from '../actions/accounts.actions';
 import { VoucherTypeToNamePipe } from '../shared/header/pipe/voucherTypeToNamePipe/voucherTypeToNamePipe.pipe';
-import { TitleCasePipe } from '@angular/common';
+import { Location, TitleCasePipe } from '@angular/common';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
@@ -148,6 +148,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @Input() public invoiceNo = '';
     @Input() public invoiceType: VoucherTypeEnum = VoucherTypeEnum.sales;
     @Input() public selectedItem: InvoicePreviewDetailsVm;
+    /** True if this component is called directly */
+    @Input() public callFromOutside: boolean = true;
 
     @ViewChild(ElementViewContainerRef, { static: true }) public elementViewContainerRef: ElementViewContainerRef;
     @ViewChild('bulkItemsModal', { static: true }) public bulkItemsModal: ModalDirective;
@@ -593,6 +595,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public enableVoucherAdjustmentMultiCurrency: boolean;
     /** Force clear for billing-shipping dropdown */
     public billingShippingForceClearReactive$: Observable<IForceClear> = observableOf({ status: false });
+    /** True if left sidebar is expanded */
+    private isSidebarExpanded: boolean = false;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -652,7 +656,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private ngZone: NgZone,
         private accountActions: AccountsAction,
         private voucherTypeToNamePipe: VoucherTypeToNamePipe,
-        private titleCasePipe: TitleCasePipe
+        private titleCasePipe: TitleCasePipe,
+        private location: Location
     ) {
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
         this.advanceReceiptAdjustmentData.adjustments = [];
@@ -736,6 +741,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public ngOnInit() {
+        if(this.callFromOutside) {
+            if(document.getElementsByClassName("sidebar-collapse")?.length > 0) {
+                this.isSidebarExpanded = false;
+            } else {
+                this.isSidebarExpanded = true;
+                this.generalService.collapseSidebar();
+            }
+            document.querySelector('body').classList.add('setting-sidebar-open');
+            document.querySelector('body').classList.add('voucher-preview-edit');
+        }
+
         this.getInventorySettings();
         this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.companyActions.getTax());
@@ -1413,7 +1429,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.isCustomerSelected = true;
                         this.isMulticurrencyAccount = tempSelectedAcc.currencySymbol !== this.baseCurrencySymbol;
                         this.customerCountryName = tempSelectedAcc.country.countryName;
-
+                        this.checkIfNeedToExcludeTax(tempSelectedAcc);
                         this.getUpdatedStateCodes(tempSelectedAcc.country.countryCode).then(() => {
                             this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
                         });
@@ -3713,11 +3729,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public cancelUpdate(): void {
-        if (this.invoiceForm) {
-            this.resetInvoiceForm(this.invoiceForm);
-            this.isUpdateMode = false;
+        if(this.callFromOutside) {
+            this.location?.back();
+        } else {
+            if (this.invoiceForm) {
+                this.resetInvoiceForm(this.invoiceForm);
+                this.isUpdateMode = false;
+            }
+            this.cancelVoucherUpdate.emit(true);
         }
-        this.cancelVoucherUpdate.emit(true);
     }
 
     public onFileChange(event: any) {
@@ -4049,6 +4069,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.depositAccountUniqueName = '';
             this.depositAmount = 0;
             this.isUpdateMode = false;
+
+            if(this.callFromOutside) {
+                this.location?.back();
+            }
         } else {
             this.startLoader(false);
             this._toasty.errorToast(response.message, response.code);
@@ -4288,9 +4312,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (modal && modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
             let tax = this.companyTaxesList.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
             if ((!modal.appliedOtherTax || !modal.appliedOtherTax?.name) && entry.otherTaxModal && entry.otherTaxModal.appliedOtherTax) {
-                entry.otherTaxModal.appliedOtherTax.name = tax.name;
+                entry.otherTaxModal.appliedOtherTax.name = tax?.name;
             }
-            if (['tcsrc', 'tcspay'].includes(tax.taxType)) {
+            if (['tcsrc', 'tcspay'].includes(tax?.taxType)) {
 
                 if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
                     taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
@@ -4304,7 +4328,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 entry.otherTaxType = 'tds';
             }
 
-            totalTaxes += tax.taxDetail[0].taxValue;
+            totalTaxes += tax?.taxDetail[0]?.taxValue;
 
             entry.otherTaxSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
             entry.otherTaxModal = modal;
@@ -4607,6 +4631,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public ngOnDestroy() {
+        if(this.callFromOutside && this.isSidebarExpanded) {
+            this.isSidebarExpanded = false;
+            this.generalService.expandSidebar();
+            document.querySelector('.nav-left-bar').classList.add('open');
+            document.querySelector('body').classList.remove('setting-sidebar-open');
+            document.querySelector('body').classList.remove('voucher-preview-edit');
+        }
+
         if (!this.isProformaInvoice && !this.isEstimateInvoice && this.isPendingVoucherType) {
             this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
         } else {

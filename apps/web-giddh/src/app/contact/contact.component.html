@@ -216,8 +216,6 @@
                                     aria-labelledby="button-basic">
                                         <li role="menuitem" (click)="openEmailDialog();">
                                         {{commonLocaleData?.app_email}}</li>
-                                        <li role="menuitem" (click)="openSmsDialog();">
-                                        {{commonLocaleData?.app_sms}}</li>
                                         <li role="menuitem" (click)="downloadCSV();">
                                         {{commonLocaleData?.app_download_csv}}</li>
                                         <li role="menuitem"
@@ -678,7 +676,7 @@
                             </td>
                             <td class="word-wrap" [attr.data-title]="commonLocaleData?.app_parent_group"
                                 *ngIf="showFieldFilter.parentGroup">
-                                {{account.groupUniqueName}}</td>
+                                {{account?.groupUniqueName}}</td>
                             <td [ngClass]="{'word-wrap text-right': true, 'negative-balance': account.openingBalance?.type === 'CREDIT' && formatAmountInCurrency(account.openingBalance?.amount) > 0}"
                                 [attr.data-title]="localeData?.opening" *ngIf="showFieldFilter.openingBalance">
                                 <span
@@ -917,7 +915,7 @@
                             </td>
                             <td class="word-wrap" [attr.data-title]="commonLocaleData?.app_parent_group"
                                 *ngIf="showFieldFilter.parentGroup">
-                                <div class="table-email">{{account.groupUniqueName}}</div>
+                                <div class="table-email">{{account?.groupUniqueName}}</div>
                             </td>
                             <td [ngClass]="{'word-wrap text-right': true, 'negative-balance': account.openingBalance?.type === 'DEBIT' && formatAmountInCurrency(account.openingBalance?.amount) > 0}"
                                 [attr.data-title]="localeData?.opening" *ngIf="showFieldFilter.openingBalance">

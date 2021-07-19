@@ -172,7 +172,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
         const fixedArr = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost',
             'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
         return data.filter(da => {
-            return !(fixedArr.indexOf(da.groupUniqueName) > -1);
+            return !(fixedArr.indexOf(da?.groupUniqueName) > -1);
         });
     }
 
@@ -181,7 +181,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
         if (!this.showGstBox) {
             delete createAccountRequest.addresses;
         }
-        this.store.dispatch(this.ledgerAction.createQuickAccountV2(this.newAccountForm.value.groupUniqueName, createAccountRequest));
+        this.store.dispatch(this.ledgerAction.createQuickAccountV2(this.newAccountForm.value?.groupUniqueName, createAccountRequest));
     }
 
     /**

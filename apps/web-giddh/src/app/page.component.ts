@@ -1,7 +1,6 @@
 import { AppState } from './store/roots';
 import { Store } from '@ngrx/store';
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
+import { AfterViewInit, Component } from '@angular/core';
 import { GeneralService } from './services/general.service';
 import { GeneralActions } from './actions/general/general.actions';
 

@@ -31,7 +31,7 @@
                 <div class="col-6 form-group" *ngIf="mode === 'sender'">
                     <label>Product Name <sup>*</sup></label>
                     <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'"
-                        [disabled]="stock.disabled" formControlName="stock" (selected)="stockChanged($event)"
+                        [disabled]="stock?.disabled" formControlName="stock" (selected)="stockChanged($event)"
                         [isRequired]="true">
                     </sh-select>
                 </div>
