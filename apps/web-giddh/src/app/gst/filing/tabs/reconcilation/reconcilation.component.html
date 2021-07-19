@@ -147,7 +147,7 @@
 
     <ng-container *ngIf="list?.count">
 
-        <table class="table zi-table table-fixed reconciliations-table table-hover " *ngIf="list?.count">
+        <table class="table zi-table table-fixed reconciliations-table table-hover table-responsive" *ngIf="list?.count">
 
             <thead>
 
@@ -218,7 +218,7 @@
 
         <th class="text-right width-amount">
             <div class="position-relative">
-                <div [attr.data-test-title]="localeData?.filing?.taxable_amount" [attr.title]="localeData?.filing?.taxable_amount" class="over-flow"> 
+                <div [attr.data-test-title]="localeData?.filing?.taxable_amount" [attr.title]="localeData?.filing?.taxable_amount" class="over-flow">
                     {{localeData?.filing?.taxable_amount}}
                 </div>
             </div>
