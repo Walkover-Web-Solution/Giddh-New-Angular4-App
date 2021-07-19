@@ -529,4 +529,20 @@ export class SettingsIntegrationService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
     }
+
+    /**
+     * This will return payor account registration status
+     *
+     * @param {*} request
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsIntegrationService
+     */
+    public getPayorRegistrationStatus(request: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this._generalService.companyUniqueName;
+
+        return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GET_PAYOR_REGISTRATION_STATUS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':bankAccountUniqueName', encodeURIComponent(request.bankAccountUniqueName)).replace(':urn', encodeURIComponent(request.urn))).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
 }
