@@ -160,7 +160,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private searchService: SearchService,
         private salesService: SalesService
     ) {
-        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', this.getGoogleCredentials().GOOGLE_CLIENT_ID);
+        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
         this.isSellerAdded = this.store.pipe(select(s => s.settings.amazonState.isSellerSuccess), takeUntil(this.destroyed$));
         this.isSellerUpdate = this.store.pipe(select(s => s.settings.amazonState.isSellerUpdated), takeUntil(this.destroyed$));
@@ -610,20 +610,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     private getRedirectUrl(baseHref: string) {
         return `${baseHref}pages/settings?tab=integration`;
-    }
-
-    private getGoogleCredentials() {
-        if (PRODUCTION_ENV || isCordova) {
-            return {
-                GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com',
-                GOOGLE_CLIENT_SECRET: 'eWzLFEb_T9VrzFjgE40Bz6_l'
-            };
-        } else {
-            return {
-                GOOGLE_CLIENT_ID: '641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com',
-                GOOGLE_CLIENT_SECRET: '8htr7iQVXfZp_n87c99-jm7a'
-            };
-        }
     }
 
     public selectTab(id: number) {

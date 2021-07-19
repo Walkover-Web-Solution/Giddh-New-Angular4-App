@@ -115,7 +115,7 @@ import { SettingsBranchActions } from '../actions/settings/branch/settings.branc
 import { OrganizationType } from '../models/user-login-state';
 import { AccountsAction } from '../actions/accounts.actions';
 import { VoucherTypeToNamePipe } from '../shared/header/pipe/voucherTypeToNamePipe/voucherTypeToNamePipe.pipe';
-import { TitleCasePipe } from '@angular/common';
+import { Location, TitleCasePipe } from '@angular/common';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
@@ -148,6 +148,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @Input() public invoiceNo = '';
     @Input() public invoiceType: VoucherTypeEnum = VoucherTypeEnum.sales;
     @Input() public selectedItem: InvoicePreviewDetailsVm;
+    /** True if this component is called directly */
+    @Input() public callFromOutside: boolean = true;
 
     @ViewChild(ElementViewContainerRef, { static: true }) public elementViewContainerRef: ElementViewContainerRef;
     @ViewChild('bulkItemsModal', { static: true }) public bulkItemsModal: ModalDirective;
@@ -652,7 +654,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private ngZone: NgZone,
         private accountActions: AccountsAction,
         private voucherTypeToNamePipe: VoucherTypeToNamePipe,
-        private titleCasePipe: TitleCasePipe
+        private titleCasePipe: TitleCasePipe,
+        private location: Location
     ) {
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
         this.advanceReceiptAdjustmentData.adjustments = [];
@@ -1413,7 +1416,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.isCustomerSelected = true;
                         this.isMulticurrencyAccount = tempSelectedAcc.currencySymbol !== this.baseCurrencySymbol;
                         this.customerCountryName = tempSelectedAcc.country.countryName;
-
+                        this.checkIfNeedToExcludeTax(tempSelectedAcc);
                         this.getUpdatedStateCodes(tempSelectedAcc.country.countryCode).then(() => {
                             this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
                         });
@@ -4049,6 +4052,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.depositAccountUniqueName = '';
             this.depositAmount = 0;
             this.isUpdateMode = false;
+
+            if(this.callFromOutside) {
+                this.location?.back();
+            }
         } else {
             this.startLoader(false);
             this._toasty.errorToast(response.message, response.code);
@@ -4288,9 +4295,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (modal && modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
             let tax = this.companyTaxesList.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
             if ((!modal.appliedOtherTax || !modal.appliedOtherTax?.name) && entry.otherTaxModal && entry.otherTaxModal.appliedOtherTax) {
-                entry.otherTaxModal.appliedOtherTax.name = tax.name;
+                entry.otherTaxModal.appliedOtherTax.name = tax?.name;
             }
-            if (['tcsrc', 'tcspay'].includes(tax.taxType)) {
+            if (['tcsrc', 'tcspay'].includes(tax?.taxType)) {
 
                 if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
                     taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
@@ -4304,7 +4311,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 entry.otherTaxType = 'tds';
             }
 
-            totalTaxes += tax.taxDetail[0].taxValue;
+            totalTaxes += tax?.taxDetail[0]?.taxValue;
 
             entry.otherTaxSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
             entry.otherTaxModal = modal;

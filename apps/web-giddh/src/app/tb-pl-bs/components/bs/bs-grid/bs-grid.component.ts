@@ -130,6 +130,7 @@ export class BsGridComponent implements OnInit, OnChanges, OnDestroy {
             if (grp.isIncludedInSearch) {
                 grp.isCreated = true;
                 grp.isVisible = isVisible;
+                grp.isOpen = isVisible;
                 each(grp.accounts, (acc: Account) => {
                     if (acc.isIncludedInSearch) {
                         acc.isCreated = true;
