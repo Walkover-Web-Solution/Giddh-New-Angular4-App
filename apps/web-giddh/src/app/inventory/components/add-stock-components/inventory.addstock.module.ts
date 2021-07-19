@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { ConfirmModalModule } from '../../../theme';
 
 import { ShSelectModule } from '../../../theme/ng-virtual-select/sh-select.module';
 import { InventoryAddStockComponent } from './inventory.addstock.component';
@@ -13,7 +14,8 @@ import { InventoryAddStockComponent } from './inventory.addstock.component';
         FormsModule,
         ReactiveFormsModule,
         ShSelectModule,
-        BsDropdownModule
+        BsDropdownModule,
+        ConfirmModalModule
     ],
     exports: [InventoryAddStockComponent]
 })

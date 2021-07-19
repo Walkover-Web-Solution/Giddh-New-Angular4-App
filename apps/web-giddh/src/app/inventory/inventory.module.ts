@@ -18,6 +18,7 @@ import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { TextCaseChangeModule } from '../shared/helpers/directives/textCaseChange/textCaseChange.module';
 import { GiddhRoundOffPipeModule } from '../shared/helpers/pipes/round-off/round-off.module';
 import { SharedModule } from '../shared/shared.module';
+import { ConfirmModalModule } from '../theme';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { CurrencyModule } from './../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { InventoryAddGroupComponent } from './components/add-group-components/inventory.addgroup.component';
@@ -118,7 +119,8 @@ import { ManufacturingComponent } from './manufacturing/manufacturing.component'
         NgxMaskModule.forRoot(),
         ProformaInvoiceModule,
         GiddhRoundOffPipeModule,
-        InventoryAddStockModule
+        InventoryAddStockModule,
+        ConfirmModalModule
     ],
     entryComponents: [PaginationComponent]
 })
