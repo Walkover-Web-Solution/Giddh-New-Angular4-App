@@ -8458,7 +8458,7 @@ body.update-scroll-hidden {
             ul.nav.nav-tabs{
                 display: none;
             }
-        } 
+        }
     }
 }
 .on-setting-page, .on-user-page{
@@ -8490,6 +8490,11 @@ body.update-scroll-hidden {
 }
 .manage-account-popup.full-screen-modal{
     z-index: 999991;
+}
+.gst-sidebar-open{
+    .daterangepicker.show-calendar{
+        z-index: 99 !important;
+    }
 }
 /* responsive  starts here*/
 
@@ -8758,6 +8763,11 @@ body.update-scroll-hidden {
 }
 
 @media (max-width: 768px) {
+    .gst-sidebar-open{
+        .daterangepicker.show-calendar{
+            z-index: 998 !important;
+        }
+    }
     .setting-sidebar{
         display: none;
     }
