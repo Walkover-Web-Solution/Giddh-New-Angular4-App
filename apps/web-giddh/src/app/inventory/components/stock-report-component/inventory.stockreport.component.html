@@ -78,10 +78,10 @@
                                 </div>
                             </div>
                         </th>
-                        <th colspan="4" width="40%" class="text-center bd-rr bd-rb">Transactions</th>
-                        <th colspan="1" width="10%" class="bd-rl text-center">Closing Stock</th>
+                        <th [hidden]="!stockReport?.transactions?.length" colspan="4" width="40%" class="text-center bd-rr bd-rb">Transactions</th>
+                        <th [hidden]="!stockReport?.transactions?.length" colspan="1" width="10%" class="bd-rl text-center">Closing Stock</th>
                     </tr>
-                    <tr class="bd-rt">
+                    <tr class="bd-rt" [hidden]="!stockReport?.transactions?.length">
                         <th width="100">
                             <div class="d-flex">
                                 <div class="">Date</div>
@@ -320,9 +320,10 @@
                     class="table-border">
                     <tr>
                         <td colspan="10" class="text-center empty-table">
-                            <img src="assets/images/search-data-not-found.svg" />
                             <h1 [class.stock-not-found]="stockNotFoundMessage">{{ (stockNotFoundMessage) ?
-                                stockNotFoundMessage : 'No Report Found !!' }}</h1>
+                                stockNotFoundMessage : 'No entries found within given criteria.' }}</h1>
+                            <h1 class="p-0" [class.stock-not-found]="stockNotFoundMessage">{{ (stockNotFoundMessage) ?
+                                stockNotFoundMessage : 'Do search with some other dates' }}</h1>
                         </td>
                     </tr>
                 </tbody>

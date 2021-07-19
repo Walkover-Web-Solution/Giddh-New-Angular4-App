@@ -56,7 +56,7 @@
                 <!-- Invoice filter section ends -->
             </div>
 
-            <div class="top-content">
+            <div class="top-content" [hidden]="!allReceipts?.length">
                 <div class="d-flex w-100 justify-content-between overflow-x-auto">
                     <div class="total-details-box mr-r05 border-none opening-box">
                         <h5>
@@ -108,7 +108,7 @@
 
             <div class="invoice-preview  table-responsive">
                 <table class="table basic giddh-table on-mobile-view">
-                    <thead class="thead-background1">
+                    <thead class="thead-background1" [hidden]="!allReceipts?.length">
                         <tr>
                             <th>#</th>
                             <th #receiptNumberParent width="13%" class="bd-rr bd-rb td-search-box">
@@ -254,7 +254,8 @@
                         </tr>
                         <tr *ngIf="!allReceipts?.length">
                             <td colspan="10" align="center" class="no-entries">
-                                {{commonLocaleData?.app_no_records_found}}</td>
+                                <no-data [secondaryMessageClass]="'p-0'"></no-data>
+                            </td>
                         </tr>
                     </tbody>
                     <tbody *ngIf="isLoading">

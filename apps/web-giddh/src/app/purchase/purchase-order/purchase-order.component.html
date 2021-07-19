@@ -104,7 +104,7 @@
         </div>
         <div class="table-responsive mr-t15">
             <table class="table basic table-bordered giddh-table on-mobile-view">
-                <thead class="thead-background1" (mouseleave)="showSelectAllItemCheckbox = false">
+                <thead class="thead-background1" (mouseleave)="showSelectAllItemCheckbox = false" [hidden]="!purchaseOrders.totalItems">
                     <tr (mouseenter)="showSelectAllItemCheckbox = true">
                         <th class="min-wid-check" width="3%">
                             <div class="check-img">
@@ -260,7 +260,7 @@
                 <tbody *ngIf="!isLoading && !purchaseOrders.totalItems">
                     <tr>
                         <td colspan="7" class="text-center empty-table">
-                            <h1>{{commonLocaleData?.app_no_record_found}}</h1>
+                            <no-data [secondaryMessageClass]="'p-0'"></no-data>
                         </td>
                     </tr>
                 </tbody>
