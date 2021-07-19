@@ -151,6 +151,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public pdfFileURL: any = '';
     /** This will hold the attached file in Purchase Bill */
     private attachedAttachmentBlob: Blob;
+    /** True if left sidebar is expanded */
+    private isSidebarExpanded: boolean = false;
 
     constructor(
         private _cdr: ChangeDetectorRef,
@@ -194,7 +196,15 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     ngOnInit() {
+        if(document.getElementsByClassName("sidebar-collapse")?.length > 0) {
+            this.isSidebarExpanded = false;
+        } else {
+            this.isSidebarExpanded = true;
+            this._generalService.collapseSidebar();
+        }
+        document.querySelector('body').classList.add('setting-sidebar-open');
         document.querySelector('body').classList.add('update-scroll-hidden');
+        document.querySelector('body').classList.add('voucher-preview-edit');
         if (this.selectedItem) {
             if (!this.isVoucherDownloading) {
                 this.downloadVoucher('base64');
@@ -561,11 +571,18 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     public ngOnDestroy(): void {
+        if(this.isSidebarExpanded) {
+            this.isSidebarExpanded = false;
+            this._generalService.expandSidebar();
+            document.querySelector('.nav-left-bar').classList.add('open');
+        }
+        document.querySelector('body').classList.remove('setting-sidebar-open');
         this.performActionAfterClose();
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('fixed');
         document.querySelector('body').classList.remove('update-scroll-hidden');
+        document.querySelector('body').classList.remove('voucher-preview-edit');
     }
 
     /**
