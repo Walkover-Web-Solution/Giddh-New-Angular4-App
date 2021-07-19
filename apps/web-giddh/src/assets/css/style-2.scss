@@ -8464,6 +8464,11 @@ body.update-scroll-hidden {
         }
     }
 }
+.gst-sidebar-open{
+    .daterangepicker.show-calendar{
+        z-index: 99 !important;
+    }
+}
 /* responsive  starts here*/
 
 @media (max-width: 1440px) {
@@ -8754,6 +8759,11 @@ body.update-scroll-hidden {
 }
 
 @media (max-width: 768px) {
+    .gst-sidebar-open{
+        .daterangepicker.show-calendar{
+            z-index: 998 !important;
+        }
+    }
     .setting-sidebar{
         display: none;
     }
