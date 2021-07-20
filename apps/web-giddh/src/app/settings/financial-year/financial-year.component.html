@@ -17,7 +17,7 @@
                                             <th>{{localeData?.lock_status}}</th>
                                         </tr>
                                     </thead>
-                                    <tbody *ngIf="false">
+                                    <tbody *ngIf="financialYearObj && financialYearObj.financialYears">
                                         <tr
                                             *ngFor="let financialYear of financialYearObj.financialYears; let i = index">
                                             <td data-title="#">{{i+1}}</td>
@@ -40,7 +40,7 @@
                                             </td>
                                         </tr>
                                     </tbody>
-                                    <tbody *ngIf="true"
+                                    <tbody *ngIf="!financialYearObj || !financialYearObj.financialYears.length"
                                         class="on-mobile-view no-records">
                                         <tr>
                                             <td colspan="4" class="text-center empty-table">
