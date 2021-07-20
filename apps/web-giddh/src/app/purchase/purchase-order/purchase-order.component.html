@@ -104,7 +104,7 @@
         </div>
         <div class="table-responsive mr-t15">
             <table class="table basic table-bordered giddh-table on-mobile-view">
-                <thead class="thead-background1" (mouseleave)="showSelectAllItemCheckbox = false" [hidden]="!purchaseOrders.totalItems">
+                <thead class="thead-background1" (mouseleave)="showSelectAllItemCheckbox = false" [hidden]="!purchaseOrders.totalItems && !purchaseOrderPostRequest?.purchaseOrderNumber && !purchaseOrderPostRequest?.vendorName">
                     <tr (mouseenter)="showSelectAllItemCheckbox = true">
                         <th class="min-wid-check" width="3%">
                             <div class="check-img">

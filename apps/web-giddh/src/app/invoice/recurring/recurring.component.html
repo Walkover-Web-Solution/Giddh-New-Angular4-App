@@ -213,7 +213,7 @@
             </form>
 
 
-            <div class="table-responsive" [hidden]="!(recurringData$ | async)?.totalItems">
+            <div class="table-responsive" [hidden]="!(recurringData$ | async)?.totalItems && !filter?.voucherNumber && !filter?.customerName">
                 <table class="table basic giddh-table table-bordered on-mobile-view">
 
                     <thead class="thead-background1">

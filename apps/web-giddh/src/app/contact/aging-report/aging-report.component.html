@@ -148,7 +148,7 @@
 <!-- endregion -->
 <ng-template #mainTable>
     <table class="table  giddh-table aging-table table-aging-report">
-        <thead [hidden]="!(dueAmountReportData$ | async)?.results?.length">
+        <thead [hidden]="!(dueAmountReportData$ | async)?.results?.length && !dueAmountReportRequest?.q">
             <tr class="aging-table-top">
                 <td></td>
                 <td></td>
