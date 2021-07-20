@@ -8263,10 +8263,15 @@ input.mat-input-element {
     padding-left: 60px !important;
 
 }
-.setting-sidebar-open .plan-wrapper,
-.setting-sidebar-open.on-user-page .plan-wrapper{
+.setting-sidebar-open.aside-setting.on-setting-page .plan-wrapper,
+.setting-sidebar-open.aside-setting.on-user-page .plan-wrapper{
     padding-right: 240px !important;
 }
+.setting-sidebar-open .plan-wrapper,
+.setting-sidebar-open.on-user-page .plan-wrapper{
+    padding-right: 0 !important;
+}
+
 .plan-wrapper.menu_open {
     padding-left: 240px !important;
 }
@@ -8458,7 +8463,7 @@ body.update-scroll-hidden {
             ul.nav.nav-tabs{
                 display: none;
             }
-        } 
+        }
     }
 }
 .on-setting-page, .on-user-page{
@@ -8493,6 +8498,11 @@ body.update-scroll-hidden {
 }
 .v-align-top {
     vertical-align: top;
+}
+.gst-sidebar-open{
+    .daterangepicker.show-calendar{
+        z-index: 99 !important;
+    }
 }
 /* responsive  starts here*/
 
@@ -8761,6 +8771,11 @@ body.update-scroll-hidden {
 }
 
 @media (max-width: 768px) {
+    .gst-sidebar-open{
+        .daterangepicker.show-calendar{
+            z-index: 998 !important;
+        }
+    }
     .setting-sidebar{
         display: none;
     }

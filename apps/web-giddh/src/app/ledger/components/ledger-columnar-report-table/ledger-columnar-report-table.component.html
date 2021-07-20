@@ -4,7 +4,7 @@
         <div class="container-fluid">
             <div class="invoice-preview table-responsive">
                 <table class="table basic giddh-table on-mobile-view">
-                    <thead class="thead-background1">
+                    <thead [hidden]="!reportResponseResult?.length" class="thead-background1">
                         <tr>
                             <th class="text-center">#</th>
                             <th>{{commonLocaleData?.app_date}}</th>
@@ -84,8 +84,9 @@
                     </tbody>
                     <tbody *ngIf="reportResponse && reportResponse?.totalItems === 0">
                         <tr>
-                            <td [attr.colspan]="getTotalNoOfColumn()" align="center">
-                                {{commonLocaleData?.app_no_records_found}}</td>
+                            <td [attr.colspan]="colspanValue" align="center">
+                                <no-data [secondaryMessageClass]="'p-0'"></no-data>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

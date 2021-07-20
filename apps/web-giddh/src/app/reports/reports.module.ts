@@ -29,6 +29,7 @@ import { SalesRegisterExpandComponent } from './components/salesRegister-expand-
 import { ReportsComponent } from './reports.component';
 import { ReportsRoutingModule } from './reports.routing.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
+import { NoDataModule } from '../shared/no-data/no-data.module';
 
 @NgModule({
     declarations: [
@@ -75,7 +76,8 @@ import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
         ElementViewChildModule,
         ModalModule.forRoot(),
         SharedModule,
-        TaxSidebarModule
+        TaxSidebarModule,
+        NoDataModule
     ]
 })
 

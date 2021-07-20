@@ -37,6 +37,7 @@ import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.
 import { BeneficiaryComponent } from './integration/beneficiary/beneficiary.component';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.module';
+import { NoDataModule } from '../shared/no-data/no-data.module';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -83,7 +84,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ShSelectModule,
         SalesShSelectModule,
         TaxSidebarModule,
-        ReplacePipeModule
+        ReplacePipeModule,
+        NoDataModule
     ],
     providers: [
         {

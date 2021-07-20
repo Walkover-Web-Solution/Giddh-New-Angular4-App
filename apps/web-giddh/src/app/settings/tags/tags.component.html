@@ -36,7 +36,7 @@
                     </div>
                     <div class="tags-table">
                         <table class="tags-table basic giddh-table table  on-mobile-view">
-                            <thead>
+                            <thead [hidden]="!(tags$ | async)?.length">
                                 <tr>
                                     <th>{{localeData?.s_no}}</th>
                                     <th>{{localeData?.tags_name}}</th>
@@ -74,7 +74,7 @@
                             <tbody *ngIf="!isLoading && !(tags$ | async)?.length" class="on-mobile-view no-records">
                                 <tr>
                                     <td colspan="4" class="text-center empty-table">
-                                        <h1>{{commonLocaleData?.app_no_record_found}}</h1>
+                                        <no-data [secondaryMessage]="' '" [secondaryMessageClass]="'p-0'"></no-data>
                                     </td>
                                 </tr>
                             </tbody>

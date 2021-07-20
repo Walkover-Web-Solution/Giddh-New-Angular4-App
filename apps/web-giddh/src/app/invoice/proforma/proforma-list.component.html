@@ -10,12 +10,12 @@
                                 <button *ngIf="!isCompany" class="btn btn-sky-blue m-0"
                                     (click)="goToInvoice('proformas')">{{localeData?.new_proforma}}</button>
                             </div>
-            
+
                             <div *ngIf="voucherType === 'estimates'" class="btn-wrapper mr-r15">
                                 <button *ngIf="!isCompany" class="btn btn-sky-blue m-0"
                                     (click)="goToInvoice('estimates')">{{localeData?.new_estimate}}</button>
                             </div>
-            
+
                         </div>
                         <form #invoiceForm="ngForm" novalidate class="form-inline input-grp-date-range-picker position-relative">
                                 <div class="d-flex">
@@ -30,31 +30,31 @@
                                             <i class="icon-search"></i>
                                         </div>
                                     </div>
-                
-                
+
+
                                 </div>
                         </form>
                         <div class="d-flex d-md-none ml-auto flex-column">
-                            <div class="d-flex"> 
+                            <div class="d-flex">
                             <!-- region more items-->
                             <div  class="btn-wrapper-more" *ngIf="selectedItems.length === 1">
                                 <div *ngIf="!isCompany" class="btn-group d-inline-block" dropdown #dp="bs-dropdown">
-            
+
                                     <button dropdownToggle type="button" class="btn btn-primary more-btn-dropdown dropdown-toggle"
                                         aria-controls="dropdown-basic">
                                         {{commonLocaleData?.app_more}}
                                         <span class="caret"></span>
                                     </button>
-            
+
                                     <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-            
+
                                         <li role="menuitem">
                                             <a class="dropdown-item cp" href="javascript:void(0)"
                                                 (click)="toggleConfirmationModel(true)">{{commonLocaleData?.app_delete}}</a>
                                         </li>
-            
+
                                     </ul>
-            
+
                                 </div>
                             </div>
                             <!-- endregion -->
@@ -84,7 +84,7 @@
                 <div class="d-md-flex d-sm-none">
                 <!-- region more items -->
                 <div  class="btn-wrapper-more" *ngIf="selectedItems.length === 1">
-            
+
                     <div *ngIf="!isCompany" class="btn-group d-inline-block" dropdown #dp="bs-dropdown">
 
                         <button dropdownToggle type="button" class="btn btn-primary more-btn-dropdown dropdown-toggle"
@@ -191,7 +191,7 @@
             </ng-template>
             <!-- select app proforma -->
             <div class="clearfix">
-                <div class="table-responsive remove-responsive invoice-preview mr-t15">
+                <div class="table-responsive remove-responsive invoice-preview mr-t15" [attr.style]="!voucherData?.results?.length ? 'display: none !important' : ''">
                     <table class="table basic giddh-table table-bordered invoice-table on-mobile-view">
                         <thead class="thead-background1">
                             <tr>
@@ -432,18 +432,10 @@
                     </table>
                 </div>
 
-
-                <!--No Entry-->
-                <div class="no-data mr-t2" *ngIf="!voucherData && !(isGetAllInProcess$ | async)">
-                    <h1>{{localeData?.no_entry_found_sales}}</h1>
-                    <h1>{{localeData?.no_entry_found_note}}</h1>
-                </div>
-
                 <!--no data-->
                 <div class="no-data"
-                    *ngIf="voucherData && voucherData.results.length === 0 && !(isGetAllInProcess$ | async)">
-                    <h1>{{commonLocaleData?.app_no_entries_found}}</h1>
-                    <h1>{{commonLocaleData?.app_search_suggestion}}</h1>
+                    *ngIf="!voucherData?.results?.length && !(isGetAllInProcess$ | async)">
+                    <no-data></no-data>
                 </div>
 
                 <!--loading-->

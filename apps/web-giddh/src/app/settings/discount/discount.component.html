@@ -57,7 +57,7 @@
 
                     <table class="table table-bordered basic mr-b05  on-mobile-view">
 
-                        <thead>
+                        <thead [hidden]="!(discountList$ | async)?.length">
                             <tr>
                                 <th [style.width.px]="'50'">#</th>
                                 <th>{{commonLocaleData?.app_name}}</th>
@@ -84,7 +84,7 @@
                             class="on-mobile-view no-records">
                             <tr>
                                 <td colspan="3" class="text-center empty-table">
-                                    <h1>{{localeData?.no_record_found}}</h1>
+                                    <no-data [secondaryMessage]="' '" [secondaryMessageClass]="'p-0'"></no-data>
                                 </td>
                             </tr>
                         </tbody>
