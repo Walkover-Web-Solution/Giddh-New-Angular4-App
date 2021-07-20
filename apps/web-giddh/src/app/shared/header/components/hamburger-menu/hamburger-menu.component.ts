@@ -15,8 +15,6 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 export class HamburgerMenuComponent implements OnInit, OnDestroy {
     /* This inputs the heading which is needed to show */
     @Input() public pageHeading: string = '';
-    /** This will hold sidebar toggle state */
-    @Input() public allowSidebarToggle: boolean = true;
 
     /* This will show sidebar is open */
     public sideMenu: { isopen: boolean } = { isopen: true };
@@ -67,11 +65,23 @@ export class HamburgerMenuComponent implements OnInit, OnDestroy {
      * @memberof HamburgerMenuComponent
      */
     public sideBarStateChange(openSideMenu: boolean): void {
-        if(this.allowSidebarToggle) {
+        if (this.sideMenu) {
+            this.sideMenu.isopen = openSideMenu;
+        }
+
+        let openMenu = false;
+
+        if(!openSideMenu && document.getElementsByClassName("sidebar-collapse")?.length > 0) {
+            openMenu = true;
+        }
+
+        this.store.dispatch(this.generalActions.openSideMenu(openSideMenu));
+
+        if(openMenu) {
             if (this.sideMenu) {
-                this.sideMenu.isopen = openSideMenu;
+                this.sideMenu.isopen = true;
             }
-            this.store.dispatch(this.generalActions.openSideMenu(openSideMenu));
+            this.store.dispatch(this.generalActions.openSideMenu(true));
         }
     }
 }
