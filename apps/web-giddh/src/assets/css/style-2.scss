@@ -8263,10 +8263,15 @@ input.mat-input-element {
     padding-left: 60px !important;
 
 }
-.setting-sidebar-open .plan-wrapper,
-.setting-sidebar-open.on-user-page .plan-wrapper{
+.setting-sidebar-open.aside-setting.on-setting-page .plan-wrapper,
+.setting-sidebar-open.aside-setting.on-user-page .plan-wrapper{
     padding-right: 240px !important;
 }
+.setting-sidebar-open .plan-wrapper,
+.setting-sidebar-open.on-user-page .plan-wrapper{
+    padding-right: 0 !important;
+}
+
 .plan-wrapper.menu_open {
     padding-left: 240px !important;
 }
