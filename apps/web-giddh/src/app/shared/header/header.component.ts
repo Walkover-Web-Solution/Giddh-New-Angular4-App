@@ -450,17 +450,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public ngOnInit() {
         this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
 
-        this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                if(this.activeLocale !== response?.value) {
-                    this.store.dispatch(this.commonActions.getCommonLocaleData(response.value));
-                }
-            } else {
-                let supportedLocales = this.generalService.getSupportedLocales();
-                this.store.dispatch(this.commonActions.setActiveLocale(supportedLocales[0]));
-            }
-        });
-
         this.store.pipe(select(appStore => appStore.general.menuItems), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 let branches = [];
