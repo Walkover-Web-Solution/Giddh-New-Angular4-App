@@ -62,7 +62,7 @@
         </div>
         <div class="report-table table-responsive">
             <table class="table basic giddh-table on-mobile-view">
-                <thead [hidden]="!branchTransferResponse?.items?.length">
+                <thead [hidden]="!branchTransferResponse?.items?.length && !branchTransferPostRequestParams?.sender && !branchTransferPostRequestParams?.receiver && !branchTransferPostRequestParams?.senderReceiver && !branchTransferPostRequestParams?.fromWarehouse && !branchTransferPostRequestParams?.toWarehouse">
                     <tr (clickOutside)="inlineSearch = null">
                         <th width="3%">#</th>
                         <th width="10%" (click)="sortBranchTransferList('dateOfSupply')">Date <span

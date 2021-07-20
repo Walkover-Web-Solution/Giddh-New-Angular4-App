@@ -109,7 +109,7 @@
 
             <div class="invoice-preview  table-responsive">
                 <table class="table basic giddh-table on-mobile-view">
-                    <thead class="thead-background1" [hidden]="!allReceipts?.length">
+                    <thead class="thead-background1" [hidden]="!allReceipts?.length && !searchQueryParams?.receiptNumber && !searchQueryParams?.baseAccountName && !searchQueryParams?.particularName && !searchQueryParams?.invoiceNumber && !searchQueryParams?.receiptTypes?.length">
                         <tr>
                             <th>#</th>
                             <th #receiptNumberParent width="13%" class="bd-rr bd-rb td-search-box">

@@ -361,12 +361,12 @@
                     </div>
                 </div>
                 <!-- For mobile screen sizes ends -->
-                <div class="invoice-preview table-responsive" [attr.style]="!voucherData?.items?.length ? 'display: none !important' : ''">
+                <div class="invoice-preview table-responsive">
                     <table
                         class="table basic table-bordered mr-t15 pd-t15 invoice-table desktop-table giddh-table on-mobile-view">
                         <!--sales-->
                         <thead class="thead-background1"
-                            *ngIf="selectedVoucher === 'sales' || selectedVoucher === 'purchase'">
+                            *ngIf="(selectedVoucher === 'sales' || selectedVoucher === 'purchase') && (voucherData?.items?.length || invoiceSearchRequest?.q || advanceSearchFilter?.purchaseOrderNumber)">
                             <tr>
                                 <th width="4%" *ngIf="selectedItems.length > 0" class="min-wid-check">
                                     <div class="check-image d-flex justify-content-start">
@@ -458,7 +458,7 @@
                         </thead>
                         <!--non sales-->
                         <thead class="thead-background1 input-h"
-                            *ngIf="selectedVoucher !== 'sales' && selectedVoucher !== 'purchase'">
+                            *ngIf="(selectedVoucher !== 'sales' && selectedVoucher !== 'purchase') && (voucherData?.items?.length || invoiceSearchRequest?.q || advanceSearchFilter?.purchaseOrderNumber)">
                             <tr>
                                 <th width="4%" *ngIf="selectedItems.length > 0" class="min-wid-check">
                                     <div class="check-image d-flex justify-content-start">
