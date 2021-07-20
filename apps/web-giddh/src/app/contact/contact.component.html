@@ -193,7 +193,7 @@
                     </div>
 
                     <div class="top-content">
-                        <div class="d-flex w-100 justify-content-between overflow-x-auto" [hidden]="!(sundryDebtorsAccounts).length && !(sundryCreditorsAccounts).length">
+                        <div class="d-flex w-100 justify-content-between overflow-x-auto" [hidden]="(activeTab === 'customer' && !sundryDebtorsAccounts?.length) || (activeTab === 'vendor' && !sundryCreditorsAccounts?.length)">
                             <div class="total-details-box mr-r05 d-flex justify-content-between count-box align-items-end">
                                 <h5>
                                     <ng-container *ngIf="!selectedCheckedContacts?.length">{{activeTab === 'customer' ? localeData?.customers : localeData?.vendors}}</ng-container>
