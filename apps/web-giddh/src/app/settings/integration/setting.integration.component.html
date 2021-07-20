@@ -811,12 +811,12 @@
                     <div class="row">
                         <div class="form-group mr-l2">
                             <button type="button"
-                                class="btn btn-sky-blue mr-r1"
+                                class="btn btn-sky-blue mr-r2"
                                 (click)="openCreateNewAccountModal()">{{localeData?.payment?.connect_new_account}}</button> <span class="button-separator">|</span> <br>
                                 <a href="javascript:;" class="font-12">{{localeData?.payment?.learn_connect}}</a>
                         </div>
                         <div class="form-group mr-l1">
-                            <p class="mb-4 font-14"><a class="btn icici-button" href="https://cadigital.icicibank.com/SmartFormWeb/apps/services/www/SmartFormWeb/desktopbrowser/default/index.html?source=BC-application-Giddh#/" target="_blank">{{localeData?.payment?.open_new_current_account}}</a></p>
+                            <p class="mb-4 mr-l05 font-12"><a class="btn icici-button" href="https://cadigital.icicibank.com/SmartFormWeb/apps/services/www/SmartFormWeb/desktopbrowser/default/index.html?source=BC-application-Giddh#/" target="_blank"><span class="icon-icici-logo"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span> {{localeData?.payment?.open_new_current_account}}</a></p>
                         </div>    
                     </div>
 
@@ -825,7 +825,7 @@
                         <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoading"></giddh-page-loader>
                         <ng-container *ngIf="!isLoading && connectedBankAccounts?.length > 0">
                             <div class="account-wrapper" *ngFor="let bankAccount of connectedBankAccounts; trackBy: trackByAccountUniqueName;">
-                                <div class="account-info-background font-14 row">
+                                <div class="account-info-background width-100 font-14 row">
                                     <div class="col-md-4">
                                         <span class="field-label">{{localeData?.payment?.account_number_label}}</span><br>
                                         <span class="account-number mt-2 font-16 inline"><b>{{bankAccount?.iciciDetailsResource?.accountNumber}}</b></span>
@@ -854,14 +854,14 @@
                                                 </div>
                                                 <div class="col-md-4 v-align-top inline">
                                                     <span class="limit-upto field-label">{{localeData?.payment?.limit_upto}}</span><br>
-                                                    <span class="width-100 disabled-field inline limit-upto">{{(payor?.duration === unlimitedLimit) ? localeData?.payment?.amount_limit?.unlimited : payor?.maxAmount + "/" + payor?.duration}}</span><br>
+                                                    <span class="width-100 disabled-field inline limit-upto">{{(payor?.duration === unlimitedLimit) ? localeData?.payment?.amount_limit?.unlimited : activeCompany?.baseCurrencySymbol + " " + payor?.maxAmount | giddhCurrency }} <span class="pull-right payor-duration" *ngIf="payor?.duration !== unlimitedLimit">/ {{payor?.duration}}</span></span><br>
                                                     <span class="limit-upto font-12 field-label">{{localeData?.payment?.used}} {{payor?.usedAmount | giddhCurrency}}</span>
                                                 </div>
                                                 <div class="col-md-4 v-align-top inline mt-2">
                                                     <br>
-                                                    <span class="account-approval-status pending-approval" *ngIf="payor?.registrationStatus !== 'SUCCESS'">{{localeData?.payment?.pending_self_approval}}</span>
-                                                    <span class="account-approval-status approved" *ngIf="payor?.registrationStatus === 'SUCCESS'">{{localeData?.payment?.connected}}</span>
-                                                    <span class="mr-l15">
+                                                    <span class="account-approval-status pending-approval" *ngIf="payor?.registrationStatus !== 'SUCCESS'"><i class="icon-alert-2"></i> {{localeData?.payment?.pending_self_approval}}</span>
+                                                    <span class="account-approval-status approved" *ngIf="payor?.registrationStatus === 'SUCCESS'"><i class="icon-success"></i> {{localeData?.payment?.connected}}</span>
+                                                    <span class="mr-l15 user-action-div">
                                                         <a href="javascript:;" class="icon-edit-pencil" (click)="openEditAccountUserModal(bankAccount, payor)"></a>
                                                         <a href="javascript:;" class="fa fa-trash mr-l2" (click)="showDeleteBankAccountLoginConfirmationModal(bankAccount, payor)"></a>
                                                     </span>
@@ -875,7 +875,8 @@
                                             </div>
                                         </div>
                                     </ng-container>
-                                    <button type="button" class="btn btn-sky-blue mt-2 mr-l15" (click)="openCreateNewAccountUserModal(bankAccount)">{{localeData?.payment?.add_more_users}}</button>
+                                    <button type="button" class="btn btn-light-blue bold font-14 mt-2 mr-l15" (click)="openCreateNewAccountUserModal(bankAccount)">{{localeData?.payment?.add_more_users}}</button>
+                                    <a class="btn icici-button font-12 mt-2 pull-right mr-0" href="javascript:;"><span class="icon-icici-logo"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span> {{localeData?.payment?.get_instant_overdraft}}</a>
                                 </div>
                             </div>
                         </ng-container>    
@@ -885,16 +886,16 @@
         </tabset>
     </div>
     <div bsModal #createNewAccountModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
-        <div class="modal-dialog modal-sm" *ngIf="createNewAccountModal?.isShown">
+        <div class="modal-dialog account-modal" *ngIf="createNewAccountModal?.isShown">
             <div class="modal-content">
                 <form autocomplete="off" novalidate name="createNewAccountForm" [formGroup]="createNewAccountForm"
                 class="new-account-form" (ngSubmit)="saveNewAccount()">
                     <div class="modal-header">
                         <h3 class="modal-title">{{localeData?.payment?.connect_icici_account}}</h3>
-                        <span data-dismiss="modal" aria-label="Close" class="close hover-orange" (click)="closeCreateNewAccountModal()">×</span>
+                        <span data-dismiss="modal" [attr.aria-label]="commonLocaleData?.app_close" class="close hover-orange" (click)="closeCreateNewAccountModal()">×</span>
                     </div>
                     <div class="modal-body">
-                        <div class="clearfix mr-t1">
+                        <div class="clearfix">
                             <label>{{localeData?.payment?.icici_login_id}}<span class="red-text">*</span>:</label>
                             <input class="form-control" required formControlName="loginId"
                                 name="loginId" type="text" [placeholder]="localeData?.payment?.login_id_placeholder">
@@ -929,24 +930,24 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-success" [disabled]="createNewAccountForm?.invalid">{{localeData?.payment?.connect}}</button>
+                        <button type="submit" class="btn btn-success mr-1" [disabled]="createNewAccountForm?.invalid">{{localeData?.payment?.connect}}</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
     <div bsModal #editAccountModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
-        <div class="modal-dialog modal-sm" *ngIf="editAccountModal?.isShown">
+        <div class="modal-dialog account-modal" *ngIf="editAccountModal?.isShown">
             <div class="modal-content">
                 <form autocomplete="off" novalidate name="editAccountForm" [formGroup]="editAccountForm"
                 class="new-account-form" (ngSubmit)="updateAccount()">
                     <div class="modal-header">
                         <h3 class="modal-title">{{localeData?.payment?.edit_account}}</h3>
-                        <span data-dismiss="modal" aria-label="Close" class="close hover-orange" (click)="closeEditAccountModal()">×</span>
+                        <span data-dismiss="modal" [attr.aria-label]="commonLocaleData?.app_close" class="close hover-orange" (click)="closeEditAccountModal()">×</span>
                     </div>
                     <div class="modal-body">
-                        <div class="clearfix mr-t1">
-                            <label>{{localeData?.payment?.account_number_label}}</label>
+                        <div class="clearfix">
+                            <label>{{localeData?.payment?.account_number_label}}</label><br>
                             {{activeBankAccount?.iciciDetailsResource?.accountNumber}}
                         </div>
                         <div class="clearfix mr-t1">
@@ -970,33 +971,31 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-success" [disabled]="editAccountForm?.invalid">{{commonLocaleData?.app_update}}</button>
+                        <button type="submit" class="btn btn-success mr-1" [disabled]="editAccountForm?.invalid">{{commonLocaleData?.app_update}}</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
     <div bsModal #createNewAccountUserModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
-        <div class="modal-dialog modal-sm" *ngIf="createNewAccountUserModal?.isShown">
+        <div class="modal-dialog user-modal" *ngIf="createNewAccountUserModal?.isShown">
             <div class="modal-content">
                 <form autocomplete="off" novalidate name="createNewAccountUserForm" [formGroup]="createNewAccountUserForm"
                 class="new-account-form" (ngSubmit)="saveNewAccountUser()">
                     <div class="modal-header">
                         <h3 class="modal-title">{{localeData?.payment?.add_user}}</h3>
-                        <span data-dismiss="modal" aria-label="Close" class="close hover-orange" (click)="closeCreateNewAccountUserModal()">×</span>
+                        <span data-dismiss="modal" [attr.aria-label]="commonLocaleData?.app_close" class="close hover-orange" (click)="closeCreateNewAccountUserModal()">×</span>
                     </div>
                     <div class="modal-body">
-                        <div class="clearfix mr-t1">
-                            <label>{{localeData?.payment?.account_number_label}}</label>
-                            {{activeBankAccount?.iciciDetailsResource?.accountNumber}}
-                        </div>
-                        <div class="mr-t1">
-                            <label>{{localeData?.payment?.linked_account}}</label>
-                            {{activeBankAccount?.account?.name}}
-                        </div>
-                        <div class="clearfix mr-t1">
-                            <label>{{localeData?.payment?.user}}<span class="red-text">*</span>:</label>
-                            <sh-select formControlName="userUniqueName" name="userUniqueName" [placeholder]="localeData?.payment?.select_user" [options]="usersList" required></sh-select>
+                        <div class="clearfix">
+                            <div class="inline col-md-6 pl-0">
+                                <label>{{localeData?.payment?.account_number_label}}</label><br>
+                                <span class="bold">{{activeBankAccount?.iciciDetailsResource?.accountNumber}}</span>
+                            </div>
+                            <div class="inline col-md-6 pl-0 pr-0">
+                                <label>{{localeData?.payment?.linked_account}}</label><br>
+                                <span class="bold">{{activeBankAccount?.account?.name}}</span>
+                            </div>
                         </div>
                         <div class="clearfix mr-t1">
                             <label>{{localeData?.payment?.login_id_label}}<span class="red-text">*</span></label>
@@ -1004,50 +1003,66 @@
                                 name="loginId" type="text" [placeholder]="localeData?.payment?.login_id_placeholder">
                         </div>
                         <div class="clearfix mr-t1">
+                            <label>{{localeData?.payment?.user}}<span class="red-text">*</span></label>
+                            <sh-select formControlName="userUniqueName" name="userUniqueName" [placeholder]="localeData?.payment?.select_user" [options]="usersList" required></sh-select>
+                        </div>
+                        <div class="clearfix mr-t1">
                             <label>{{localeData?.payment?.limit_upto}}</label>
-                            <input class="form-control" formControlName="maxAmount"
-                                name="maxAmount" type="text" [placeholder]="localeData?.payment?.enter_amount">
-                            <sh-select formControlName="duration" name="duration" [placeholder]="localeData?.payment?.duration" [options]="amountLimitDurations"></sh-select>
+                            <div class="clearfix">
+                                <div class="inline col-md-6 pl-0 pr-0">
+                                    <input class="form-control" formControlName="maxAmount" name="maxAmount" type="text" [placeholder]="localeData?.payment?.enter_amount">
+                                </div>
+                                <div class="inline col-md-6 pr-0">
+                                    <sh-select formControlName="duration" name="duration" [placeholder]="localeData?.payment?.duration" [options]="amountLimitDurations"></sh-select>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-success" [disabled]="createNewAccountUserForm?.invalid">{{commonLocaleData?.app_save}}</button>
+                        <button type="submit" class="btn btn-success mr-1" [disabled]="createNewAccountUserForm?.invalid">{{commonLocaleData?.app_save}}</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
     <div bsModal #editAccountUserModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
-        <div class="modal-dialog modal-sm" *ngIf="editAccountUserModal?.isShown">
+        <div class="modal-dialog user-modal" *ngIf="editAccountUserModal?.isShown">
             <div class="modal-content">
                 <form autocomplete="off" novalidate name="editAccountUserForm" [formGroup]="editAccountUserForm"
                 class="new-account-form" (ngSubmit)="updateAccountUser()">
                     <div class="modal-header">
                         <h3 class="modal-title">{{localeData?.payment?.edit_user}}</h3>
-                        <span data-dismiss="modal" aria-label="Close" class="close hover-orange" (click)="closeEditAccountUserModal()">×</span>
+                        <span data-dismiss="modal" [attr.aria-label]="commonLocaleData?.app_close" class="close hover-orange" (click)="closeEditAccountUserModal()">×</span>
                     </div>
                     <div class="modal-body">
-                        <div class="clearfix mr-t1">
-                            <label>{{localeData?.payment?.account_number_label}}</label>
-                            {{activeBankAccount?.iciciDetailsResource?.accountNumber}}
+                        <div class="clearfix">
+                            <div class="inline col-md-6 pl-0">
+                                <label>{{localeData?.payment?.account_number_label}}</label><br>
+                                <span class="bold">{{activeBankAccount?.iciciDetailsResource?.accountNumber}}</span>
+                            </div>
+                            <div class="inline col-md-6 pl-0 pr-0">
+                                <label>{{localeData?.payment?.linked_account}}</label><br>
+                                <span class="bold">{{activeBankAccount?.account?.name}}</span>
+                            </div>
                         </div>
-                        <div class="mr-t1">
-                            <label>{{localeData?.payment?.linked_account}}</label>
-                            {{activeBankAccount?.account?.name}}
-                        </div>
                         <div class="clearfix mr-t1">
-                            <label>{{localeData?.payment?.user}}<span class="red-text">*</span>:</label>
+                            <label>{{localeData?.payment?.user}}</label><br>
                             {{activePayorAccount?.user?.name}}
                         </div>
                         <div class="clearfix mr-t1">
                             <label>{{localeData?.payment?.limit_upto}}</label>
-                            <input class="form-control" formControlName="maxAmount"
-                                name="maxAmount" type="text" [placeholder]="localeData?.payment?.enter_amount">
-                            <sh-select formControlName="duration" name="duration" [placeholder]="localeData?.payment?.duration" [options]="amountLimitDurations"></sh-select>
+                            <div class="clearfix">
+                                <div class="inline col-md-6 pl-0 pr-0">
+                                    <input class="form-control" formControlName="maxAmount" name="maxAmount" type="text" [placeholder]="localeData?.payment?.enter_amount">
+                                </div>
+                                <div class="inline col-md-6 pr-0">
+                                    <sh-select formControlName="duration" name="duration" [placeholder]="localeData?.payment?.duration" [options]="amountLimitDurations"></sh-select>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-success" [disabled]="editAccountUserForm?.invalid">{{commonLocaleData?.app_update}}</button>
+                        <button type="submit" class="btn btn-success mr-1" [disabled]="editAccountUserForm?.invalid">{{commonLocaleData?.app_update}}</button>
                     </div>
                 </form>
             </div>
