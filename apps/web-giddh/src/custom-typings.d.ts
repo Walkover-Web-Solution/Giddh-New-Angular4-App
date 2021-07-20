@@ -74,6 +74,10 @@ declare var isCordova: boolean;
 declare var errlyticsNeeded: boolean;
 declare var errlyticsKey: string;
 declare var _: any;
+declare var enableVoucherAdjustmentMultiCurrency: boolean;
+declare var GOOGLE_CLIENT_ID: string;
+declare var GOOGLE_CLIENT_SECRET: string;
+declare var RAZORPAY_KEY: string;
 // declare var $: JQueryStatic;
 // declare var jQuery: JQueryStatic;
 

@@ -194,6 +194,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     ngOnInit() {
+        document.querySelector('body').classList.add('update-scroll-hidden');
         if (this.selectedItem) {
             if (!this.isVoucherDownloading) {
                 this.downloadVoucher('base64');
@@ -337,14 +338,14 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
     public getVoucherVersions() {
         let request = new ProformaGetAllVersionRequest();
-        request.accountUniqueName = this.selectedItem.account.uniqueName;
+        request.accountUniqueName = this.selectedItem?.account.uniqueName;
         request.page = 1;
         request.count = 15;
 
         if (this.voucherType === VoucherTypeEnum.generateProforma) {
-            request.proformaNumber = this.selectedItem.voucherNumber;
+            request.proformaNumber = this.selectedItem?.voucherNumber;
         } else {
-            request.estimateNumber = this.selectedItem.voucherNumber;
+            request.estimateNumber = this.selectedItem?.voucherNumber;
         }
         this.store.dispatch(this._proformaActions.getEstimateVersion(request, this.voucherType));
     }
@@ -564,6 +565,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('fixed');
+        document.querySelector('body').classList.remove('update-scroll-hidden');
     }
 
     /**
@@ -820,7 +822,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      */
     public getEditVoucherText(voucherType: string): string {
         let editVoucher = this.localeData?.edit_voucher;
-        editVoucher = editVoucher.replace("[VOUCHER]", voucherType);
+        editVoucher = editVoucher?.replace("[VOUCHER]", voucherType);
         return editVoucher;
     }
 }

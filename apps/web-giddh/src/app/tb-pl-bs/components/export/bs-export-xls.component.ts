@@ -23,7 +23,7 @@ export class BsExportXlsComponent implements OnInit {
     }
 
     public downloadBsXls() {
-        let request = { from: this.filters.from, to: this.filters.to, branchUniqueName: this.filters.branchUniqueName, filename: this.localeData?.xls.profit_loss.download_filename };
+        let request = { from: this.filters.from, to: this.filters.to, branchUniqueName: this.filters.branchUniqueName, filename: this.localeData?.xls.balance_sheet.download_filename };
         this.store.dispatch(this._tbPlActions.DownloadBalanceSheetExcel(request));
     }
 

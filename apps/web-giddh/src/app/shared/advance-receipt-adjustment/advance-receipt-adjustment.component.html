@@ -1,5 +1,5 @@
 <ng-container appTranslate [file]="'advance-receipt-adjustment'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete()">
     <!-- Adjust Payment modal start -->
     <div class="modal-header">
         <h4 class="modal-title bg pull-left">{{localeData?.page_heading}}</h4>
@@ -24,16 +24,39 @@
                     <div class="col-md-4 text-right font-14 pt-2 xs-left">
                         <p>{{adjustedVoucherType === 'rcpt' ? commonLocaleData?.app_voucher_types?.receipt :
                             (adjustedVoucherType === 'advance-receipt') ?
-                            commonLocaleData?.app_voucher_types?.advance_receipt : commonLocaleData?.app_invoice }}
-                            Total: <i
-                                class="font-10"></i>{{invoiceFormDetails.accountDetails.currencySymbol}}{{adjustPayment?.grandTotal
-                            | giddhCurrency}}
+                            commonLocaleData?.app_voucher_types?.advance_receipt : localeData?.voucher_label | replace:'[VOUCHER_TYPE]':currentVoucherLabel}}
+                            Total: <i class="font-10"></i>
+                            <span class="d-inline-flex justify-content-end">
+                                <amount-field [amount]="adjustPayment?.grandTotal"
+                                    [currencySymbol]="invoiceFormDetails.accountDetails.currencySymbol"
+                                    [currencyCode]="invoiceFormDetails.accountDetails.currency?.code">
+                                </amount-field>
+                            </span>
+                            <span *ngIf="enableVoucherAdjustmentMultiCurrency && isMultiCurrencyAccount" class="d-flex justify-content-end company-currency">
+                                <amount-field [amount]="getConvertedCompanyAmount(adjustPayment?.grandTotal, invoiceFormDetails?.voucherDetails?.exchangeRate)" [currencySymbol]="baseCurrencySymbol"
+                                    [currencyCode]="companyCurrency">
+                                </amount-field>
+                            </span>
                         </p>
                         <p>{{(adjustedVoucherType === 'rcpt' || adjustedVoucherType === 'advance-receipt') ?
                             commonLocaleData?.app_balance : commonLocaleData?.app_due }} <span
                                 class="text-light">{{localeData?.post_adj}}</span> <span class="nowrap"><i
-                                    class="font-10"></i> {{invoiceFormDetails.accountDetails.currencySymbol}} {{
-                                getBalanceDue() | giddhCurrency}}</span>
+                                    class="font-10"></i>
+                            </span>
+                            <span class="d-inline-flex justify-content-end">
+                                <amount-field [amount]="getBalanceDue()"
+                                    [currencySymbol]="invoiceFormDetails.accountDetails.currencySymbol"
+                                    [currencyCode]="invoiceFormDetails.accountDetails.currency?.code">
+                                </amount-field>
+                            </span>
+                            <span *ngIf="enableVoucherAdjustmentMultiCurrency && isMultiCurrencyAccount" class="d-flex justify-content-end company-currency">
+                                <amount-field *ngIf="!(getBalanceDue() === 0 && (adjustedVoucherType === 'rcpt' || adjustedVoucherType === 'advance-receipt' || adjustedVoucherType === 'jr' || adjustedVoucherType === 'pay'))" [amount]="getConvertedBalanceDue()" [currencySymbol]="baseCurrencySymbol"
+                                    [currencyCode]="companyCurrency">
+                                </amount-field>
+                            </span>
+                        </p>
+                        <p *ngIf="enableVoucherAdjustmentMultiCurrency && getBalanceDue() === 0 && getConvertedBalanceDue() !== 0 && adjustedVoucherType !== 'rcpt' && adjustedVoucherType !== 'advance-receipt' && adjustedVoucherType !== 'jr' && adjustedVoucherType !== 'pay'">
+                            {{ getExchangeGainLossText() }}
                         </p>
                     </div>
                 </div>
@@ -97,8 +120,13 @@
                                         required decimalDigitsDirective type="text" class="form-control"
                                         [placeholder]="localeData?.enter_amount" name="amount{{entry.uniqueName}}"
                                         [(ngModel)]="entry.adjustmentAmount.amountForAccount"
-                                        (ngModelChange)="calculateTax(entry, entryIdx);" [prefix]="currencySymbol"
+                                        (ngModelChange)="calculateTax(entry, entryIdx);" [prefix]="enableVoucherAdjustmentMultiCurrency ? entry.accountCurrency?.symbol : currencySymbol"
                                         [mask]="inputMaskFormat">
+                                    <span *ngIf="enableVoucherAdjustmentMultiCurrency && isMultiCurrencyAccount && entry.adjustmentAmount.amountForAccount" class="company-currency">
+                                        <amount-field [amount]="entry.adjustmentAmount.amountForCompany" [currencySymbol]="baseCurrencySymbol"
+                                            [currencyCode]="companyCurrency">
+                                        </amount-field>
+                                    </span>
                                     <span
                                         *ngIf="entry.voucherType === 'receipt' && entry.subVoucher === 'ADVANCE_RECEIPT'"
                                         class="text-light inclusive-tax">({{localeData?.inclusive_tax}})</span>
@@ -106,13 +134,19 @@
                             </div>
                             <div class="col-sm-2">
                                 <div class="form-group">
-                                    <input
-                                        *ngIf="entry.voucherType === 'receipt' && entry.subVoucher === 'ADVANCE_RECEIPT'"
-                                        id="name_{{entry.uniqueName}}" type="text" class="form-control"
-                                        name="calculatedTaxAmount_{{entry.uniqueName}}" decimalDigitsDirective
-                                        [(ngModel)]="entry.calculatedTaxAmount"
-                                        [placeholder]="commonLocaleData?.app_numbers?.zero+''+commonLocaleData?.app_numbers?.zero+'.'+commonLocaleData?.app_numbers?.zero+''+commonLocaleData?.app_numbers?.zero"
-                                        disabled>
+                                    <ng-container *ngIf="entry.voucherType === 'receipt' && entry.subVoucher === 'ADVANCE_RECEIPT'">
+                                        <input
+                                            id="name_{{entry.uniqueName}}" type="text" class="form-control"
+                                            name="calculatedTaxAmount_{{entry.uniqueName}}" decimalDigitsDirective
+                                            [(ngModel)]="entry.calculatedTaxAmount"  [prefix]="enableVoucherAdjustmentMultiCurrency ? entry.accountCurrency?.symbol : ''"
+                                            [placeholder]="commonLocaleData?.app_numbers?.zero+''+commonLocaleData?.app_numbers?.zero+'.'+commonLocaleData?.app_numbers?.zero+''+commonLocaleData?.app_numbers?.zero"
+                                            disabled [mask]="enableVoucherAdjustmentMultiCurrency ? inputMaskFormat : ''">
+                                            <span *ngIf="enableVoucherAdjustmentMultiCurrency && isMultiCurrencyAccount && entry.voucherType === 'receipt' && entry.subVoucher === 'ADVANCE_RECEIPT'" class="company-currency">
+                                                <amount-field [amount]="getConvertedCompanyAmount(entry.calculatedTaxAmount, entry.exchangeRate)" [currencySymbol]="baseCurrencySymbol"
+                                                    [currencyCode]="companyCurrency">
+                                                </amount-field>
+                                            </span>
+                                    </ng-container>
                                 </div>
                             </div>
                             <div *ngIf="!entry.linkingAdjustment && !shouldDisableEdit(entry)" class="col-sm-3">
@@ -177,6 +211,11 @@
                                                 (ngModelChange)="changeTdsAmount($event)"
                                                 [(ngModel)]="adjustVoucherForm.tdsAmount.amountForAccount"
                                                 [placeholder]="commonLocaleData?.app_amount">
+                                            <span *ngIf="enableVoucherAdjustmentMultiCurrency && isMultiCurrencyAccount" class="company-currency">
+                                                <amount-field [amount]="getConvertedCompanyAmount(adjustVoucherForm.tdsAmount.amountForAccount, invoiceFormDetails?.voucherDetails?.exchangeRate)" [currencySymbol]="baseCurrencySymbol"
+                                                    [currencyCode]="companyCurrency">
+                                                </amount-field>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>

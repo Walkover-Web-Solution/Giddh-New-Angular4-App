@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxj
 import { distinctUntilChanged, filter, take, takeUntil, map } from 'rxjs/operators';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
-import { AfterViewInit, Component, Input, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit, Output, EventEmitter, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -16,7 +16,7 @@ import { IForceClear } from '../../../models/api-models/Sales';
 import { isObject, cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { InvoiceService } from '../../../services/invoice.service';
-
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 @Component({
     selector: 'inventory-add-group',
     templateUrl: './inventory.addgroup.component.html',
@@ -43,7 +43,6 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public defaultGrpActive: boolean = false;
     public manageInProcess$: Observable<any>;
-    public canDeleteGroup: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will hold temporary tax list */
     public taxTempArray: any[] = [];
@@ -51,13 +50,15 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     public companyTaxesList$: Observable<TaxResponse[]>;
     /** This will hold inventory settings */
     public inventorySettings: any;
+    /** This will hold modal reference */
+    public modalRef: BsModalRef;
 
     /**
      * TypeScript public modifiers
      */
     constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
         private _fb: FormBuilder, private _inventoryService: InventoryService, private inventoryActions: InventoryAction,
-        private router: Router, private invoiceService: InvoiceService) {
+        private router: Router, private invoiceService: InvoiceService, private modalService: BsModalService) {
         this.fetchingGrpUniqueName$ = this.store.pipe(select(state => state.inventory.fetchingGrpUniqueName), takeUntil(this.destroyed$));
         this.isGroupNameAvailable$ = this.store.pipe(select(state => state.inventory.isGroupNameAvailable), takeUntil(this.destroyed$));
         this.activeGroup$ = this.store.pipe(select(state => state.inventory.activeGroup), takeUntil(this.destroyed$));
@@ -161,11 +162,6 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                     this.addGroupForm?.patchValue({ name: '', uniqueName: '', hsnNumber: '', sacNumber: '', isSubGroup: false });
                 }
                 this.parentStockSearchString = '';
-            }
-            if (account && account.stocks.length > 0) {
-                this.canDeleteGroup = false;
-            } else {
-                this.canDeleteGroup = true;
             }
 
             this.companyTaxesList$.subscribe((tax) => {
@@ -358,7 +354,6 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         if (activeGroup) {
             this.store.dispatch(this.inventoryActions.removeGroup(activeGroup.uniqueName));
         }
-        this.addGroupForm.reset();
         this.router.navigateByUrl('/pages/inventory');
     }
 
@@ -523,5 +518,24 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                 }
             }
         });
+    }
+
+    /**
+     * Opens the modal with the provided template
+     *
+     * @param {TemplateRef<any>} template
+     * @memberof InventoryAddGroupComponent
+     */
+    public openModal(template: TemplateRef<any>): void {
+        this.modalRef = this.modalService.show(template);
+    }
+
+    /**
+     * Hides the current opened modal
+     *
+     * @memberof InventoryAddGroupComponent
+     */
+    public hideModal(): void {
+        this.modalRef.hide();
     }
 }

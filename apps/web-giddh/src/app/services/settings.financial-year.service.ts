@@ -77,21 +77,6 @@ export class SettingsFinancialYearService {
     }
 
     /*
-    * Switch Financial Year
-    * API: 'company/:companyUniqueName/financial-year-unlock'
-    * Method: PATCH
-    */
-    public SwitchFinancialYear(uniqueName: string): Observable<BaseResponse<ActiveFinancialYear, string>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.patch(this.config.apiUrl + SETTINGS_FINANCIAL_YEAR_API.SWITCH_FINANCIAL_YEAR.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), { uniqueName }).pipe(map((res) => {
-            let data: BaseResponse<ActiveFinancialYear, string> = res;
-            data.queryString = {};
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<ActiveFinancialYear, string>(e)));
-    }
-
-    /*
     * Add Financial Year
     * API: 'company/:companyUniqueName/financial-year'
     * Method: POST

@@ -6,6 +6,7 @@ import { BlankLedgerVM } from '../../ledger/ledger.vm';
 import { CustomActions } from '../customActions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 import { cloneDeep } from '../../lodash-optimized';
+import { UNAUTHORISED } from '../../app.constant';
 
 export interface LedgerState {
     account?: AccountResponse;
@@ -30,6 +31,7 @@ export interface LedgerState {
     ledgerBulkActionFailedEntries: string[];
     ledgerTransactionsBalance: any;
     refreshLedger: boolean;
+    hasLedgerPermission: boolean;
 }
 
 export const initialState: LedgerState = {
@@ -48,7 +50,8 @@ export const initialState: LedgerState = {
     ledgerBulkActionSuccess: false,
     ledgerBulkActionFailedEntries: [],
     ledgerTransactionsBalance: null,
-    refreshLedger: false
+    refreshLedger: false,
+    hasLedgerPermission: true
 };
 
 export function ledgerReducer(state = initialState, action: CustomActions): LedgerState {
@@ -84,11 +87,13 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
                     transactionInprogress: false,
                     isAdvanceSearchApplied: false,
                     transcationRequest: transaction.request,
-                    transactionsResponse: prepareTransactions(transaction.body)
+                    transactionsResponse: prepareTransactions(transaction.body),
+                    hasLedgerPermission: true
                 });
             }
             return Object.assign({}, state, {
-                transactionInprogress: false
+                transactionInprogress: false,
+                hasLedgerPermission: (transaction.statusCode !== UNAUTHORISED)
             });
         case LEDGER.ADVANCE_SEARCH:
             return Object.assign({}, state, { transactionInprogress: true });
@@ -246,26 +251,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
                 isQuickAccountCreatedSuccessfully: false
             };
         case LEDGER.RESET_LEDGER:
-            return {
-                ...state,
-                account: null,
-                transcationRequest: null,
-                transactionsResponse: null,
-                transactionInprogress: false,
-                accountInprogress: false,
-                downloadInvoiceInProcess: false,
-                ledgerCreateSuccess: false,
-                isDeleteTrxEntrySuccessfull: false,
-                ledgerCreateInProcess: false,
-                selectedTxnForEditUniqueName: '',
-                selectedAccForEditUniqueName: '',
-                activeAccountSharedWith: null,
-                isTxnUpdateInProcess: false,
-                isTxnUpdateSuccess: false,
-                isQuickAccountInProcess: false,
-                isQuickAccountCreatedSuccessfully: false,
-                transactionDetails: null
-            };
+            return cloneDeep(initialState);
         case LEDGER.GET_RECONCILIATION_RESPONSE: {
             let res = action.payload;
             if (res.status === 'success') {
@@ -298,9 +284,8 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
         }
         case LEDGER.SELECT_GIVEN_ENTRIES: {
             let res = action.payload as string[];
-            let newState = cloneDeep(state);
-            let debitTrx = newState.transactionsResponse.debitTransactions;
-            debitTrx = debitTrx.map(f => {
+            let debitTrx = state.transactionsResponse.debitTransactions;
+            debitTrx.forEach(f => {
                 res.forEach(c => {
                     if (c === f.entryUniqueName) {
                         f.isChecked = true;
@@ -308,8 +293,8 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
                 });
                 return f;
             });
-            let creditTrx = newState.transactionsResponse.creditTransactions;
-            creditTrx = creditTrx.map(f => {
+            let creditTrx = state.transactionsResponse.creditTransactions;
+            creditTrx.forEach(f => {
                 res.forEach(c => {
                     if (c === f.entryUniqueName) {
                         f.isChecked = true;
@@ -320,11 +305,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
 
             return {
                 ...state,
-                transactionsResponse: {
-                    ...state.transactionsResponse,
-                    debitTransactions: debitTrx,
-                    creditTransactions: creditTrx
-                },
+                transactionsResponse: state.transactionsResponse,
                 ledgerBulkActionFailedEntries: []
             };
         }

@@ -15,8 +15,11 @@ import { DaybookQueryRequest, DayBookRequestModel } from '../models/api-models/D
 import { HttpClient } from '@angular/common/http';
 import { ToasterService } from './toaster.service';
 import { ReportsDetailedRequestFilter } from '../models/api-models/Reports';
+import { cloneDeep } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'any'
+})
 export class LedgerService {
     private companyUniqueName: string;
     private user: UserDetails;
@@ -104,11 +107,22 @@ export class LedgerService {
     public CreateLedger(model: BlankLedgerVM, accountUniqueName: string): Observable<BaseResponse<LedgerResponse[], BlankLedgerVM>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
+        const clonedRequest = cloneDeep(model);
+        // Delete keys which are not required by API
+        model?.transactions?.forEach(transaction => {
+            delete transaction.selectedAccount;
+            delete transaction.tax;
+            delete transaction.convertedTax;
+            delete transaction.taxesVm;
+        });
+        delete model.baseCurrencyToDisplay;
+        delete model.foreignCurrencyToDisplay;
+        delete model.otherTaxModal;
 
         return this._http.post(this.config.apiUrl + LEDGER_API.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
             map((res) => {
                 let data: BaseResponse<LedgerResponse[], BlankLedgerVM> = res;
-                data.request = model;
+                data.request = clonedRequest;
                 data.queryString = { accountUniqueName };
                 return data;
             }),
@@ -121,10 +135,14 @@ export class LedgerService {
     public UpdateLedgerTransactions(model: LedgerUpdateRequest, accountUniqueName: string, entryUniqueName: string): Observable<BaseResponse<LedgerResponse, LedgerUpdateRequest>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
+        const clonedRequest = cloneDeep(model);
+        // Delete keys not required by API
+        const keysToDelete = ['discountResources', 'warning', 'otherTaxModal', 'otherTaxesSum', 'refreshLedger', 'actualAmount', 'actualRate', 'unitRates', 'entryVoucherTotals', 'isOtherTaxesApplicable', 'tdsTcsTaxesSum'];
+        keysToDelete.forEach(key => delete model[key]);
         return this._http.put(this.config.apiUrl + LEDGER_API.UNIVERSAL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':entryUniqueName', entryUniqueName), model).pipe(
             map((res) => {
                 let data: BaseResponse<LedgerResponse, LedgerUpdateRequest> = res;
-                data.request = model;
+                data.request = clonedRequest;
                 data.queryString = { accountUniqueName, entryUniqueName };
                 return data;
             }),
@@ -566,5 +584,19 @@ export class LedgerService {
         this.companyUniqueName = this._generalService.companyUniqueName;
         const url = `${this.config.apiUrl}${LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))}/${attachmentUniqueName}`;
         return this._http.delete(url).pipe(catchError((error) => this.errorHandler.HandleCatch<any, string>(error)));
+    }
+
+    /**
+     * Deletes the bank transactions
+     *
+     * @param {string} accountUniqueName
+     * @param {*} params
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof LedgerService
+     */
+    public deleteBankTransactions(accountUniqueName: string, params: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        const url = `${this.config.apiUrl}${LEDGER_API.DELETE_BANK_TRANSACTIONS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))}`;
+        return this._http.deleteWithBody(url, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, string>(error)));
     }
 }

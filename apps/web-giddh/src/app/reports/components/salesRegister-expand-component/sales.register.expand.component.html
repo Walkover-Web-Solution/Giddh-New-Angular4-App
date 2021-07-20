@@ -31,13 +31,24 @@
             </div>
         </div>
     </div>
-    <div class="top-bar clearfix">
-        <div class="form-inline">
-            <div class="dis  mr-r1 d-inline-block middle">
-                <div (clickOutside)="hideListItems()" class="btn-group d-flex" #filterDropDownList="bs-dropdown"
-                    dropdown [autoClose]="false" [placement]="'right'">
-                    <i dropdownToggle class="icon-options pd cp font-20"></i>
-                    <ul *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu" [style.width.px]="'200'">
+    <div class="top-bar">
+        <div class="form-inline d-flex justify-content-between">
+            <div class="form-group expand-collapse-btn mr-1 mb-0">
+                <a class="cp" (click)="emitExpand()" data-toggle="tooltip" data-placement="top"
+                    title="{{commonLocaleData?.app_expand_all}}" *ngIf="!expand">
+                    <span class="icon-expandIcon"></span>
+                </a>
+                <a class="cp" (click)="emitExpand()" data-toggle="tooltip" data-placement="top"
+                    title="{{commonLocaleData?.app_collapse_all}}" *ngIf="expand">
+                    <span class="icon-collapse"></span>
+                </a>
+            </div>
+            <div class="dis middle">
+                <div class="advance-icon cursor-pointer align-items-center btn-group mr-0"
+                    #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="hideListItems()"
+                    [placement]="'right'">
+                    <i dropdownToggle class="icon-options"></i>
+                    <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" [style.width.px]="'200'">
                         <li role="menuitem">
                             <a class="dropdown-item">
                                 <input type="checkbox" name="voucherType"
@@ -76,21 +87,122 @@
                     </ul>
                 </div>
             </div>
-            <div class="form-group expand-collapse-btn mr-1 mb-0 d-inline-block">
-                <a class="cp" (click)="emitExpand()" data-toggle="tooltip" data-placement="top"
-                    title="{{commonLocaleData?.app_expand_all}}" *ngIf="!expand">
-                    <span class="icon-expandIcon"></span>
-                </a>
-                <a class="cp" (click)="emitExpand()" data-toggle="tooltip" data-placement="top"
-                    title="{{commonLocaleData?.app_collapse_all}}" *ngIf="expand">
-                    <span class="icon-collapse"></span>
-                </a>
-            </div>
         </div>
     </div>
 
+    <div class="top-content pd-l15 pd-r15">
+        <div class="d-flex justify-content-between w-100 overflow-x-auto" *ngIf="SalesRegisteDetailedItems">
+            <div class="total-details-box mr-r05 count-box">
+                <h5>
+                    {{localeData?.transaction_count}}
+                    <div>
+                        <span class="number-total">
+                            {{ (salesRegisteDetailedResponse$ | async).totalItems }}
+                        </span>
+                    </div>
+                </h5>
+            </div>
+            <ng-container>
+                <div class="total-details-box mr-r05 border-none opening-box"
+                    *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal">
+                    <h5>
+                        {{commonLocaleData?.app_sales}}
+                        <div>
+                            <span class="d-inline-flex number-total">
+                                <amount-field [amount]="(salesRegisteDetailedResponse$ | async).creditTotal" [currencySymbol]="false"
+                                        [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </div>
+                    </h5>
+                </div>
+                <div class="total-details-box mr-r05 border-none sales-purchase"
+                    *ngIf="(salesRegisteDetailedResponse$ | async)?.debitTotal">
+                    <h5>
+                        {{commonLocaleData?.app_return}}
+                        <div>
+                            <span class="d-inline-flex number-total">
+                                <amount-field [amount]="(salesRegisteDetailedResponse$ | async).debitTotal" [currencySymbol]="false"
+                                        [currencyCode]="false">
+                                </amount-field>
+                            </span>
+
+                        </div>
+                    </h5>
+                </div>
+                <div class="total-details-box mr-r05 border-none payment-receipt"
+                    *ngIf="showFieldFilter.discount && (salesRegisteDetailedResponse$ | async)?.discountTotal">
+                    <h5>
+                        {{commonLocaleData?.app_discount}}
+                        <div>
+                            <span class="d-inline-flex number-total">
+                                <amount-field [amount]="(salesRegisteDetailedResponse$ | async)
+                                .discountTotal" [currencySymbol]="false"
+                                        [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </div>
+                    </h5>
+                </div>
+                <div class="total-details-box mr-r05 border-none due-box"
+                    *ngIf="isTcsTdsApplicable && (salesRegisteDetailedResponse$ | async).tcsTotal">
+                    <h5>
+                        {{commonLocaleData?.app_tcs}}
+                        <div>
+                            <span class="d-inline-flex number-total">
+                                <amount-field [amount]="(salesRegisteDetailedResponse$ | async).tcsTotal" [currencySymbol]="false"
+                                        [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </div>
+                    </h5>
+                </div>
+                <div class="total-details-box mr-r05 border-none due-box"
+                    *ngIf="isTcsTdsApplicable && (salesRegisteDetailedResponse$ | async).tdsTotal">
+                    <h5>
+                        {{commonLocaleData?.app_tds}}
+                        <div>
+                            <span class="d-inline-flex number-total">
+                                <amount-field [amount]="(salesRegisteDetailedResponse$ | async).tdsTotal" [currencySymbol]="false"
+                                        [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </div>
+                    </h5>
+                </div>
+                <div class="total-details-box mr-r05 border-none due-box"
+                    *ngIf="showFieldFilter.tax && (salesRegisteDetailedResponse$ | async).taxTotal">
+                    <h5>
+                        {{commonLocaleData?.app_tax}}
+                        <div>
+                            <span class="d-inline-flex number-total">
+                                <amount-field [amount]="(salesRegisteDetailedResponse$ | async).taxTotal" [currencySymbol]="false"
+                                        [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </div>
+                    </h5>
+                </div>
+                <div class="total-details-box border-none closing-box">
+                    <h5>
+                        {{commonLocaleData?.app_net_sales}}
+                        <div>
+                            <span class="d-inline-flex number-total">
+                                <amount-field [amount]="(salesRegisteDetailedResponse$ | async).netTotal
+                                .amount" [currencySymbol]="false"
+                                        [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </div>
+                    </h5>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+
+
     <ng-container *ngIf="(isGetSalesDetailsSuccess$ | async)">
-        <div class="clearfix sales-register-table mb-5">
+        <div class="sales-register-table mb-5">
             <div class="responsive table-responsive">
                 <table class="table basic giddh-table on-mobile-view">
                     <thead>
@@ -127,8 +239,8 @@
                             <th *ngIf="showFieldFilter.voucherNo" class="td-search-box nowrap" width="20%"
                                 #searchInvoiceContainer (clickOutside)="clickedOutsideEvent()">
                                 <div [hidden]="showSearchInvoiceNo">
-                                    <span>{{commonLocaleData?.app_voucher_no}}</span>
                                     <i class="icon-search" (click)="toggleSearch('invoiceNumber')"></i>
+                                    <span>{{commonLocaleData?.app_voucher_no}}</span>
                                 </div>
 
                                 <div class="input-container" [hidden]="!showSearchInvoiceNo">
@@ -234,7 +346,7 @@
                             <td [attr.data-title]="commonLocaleData?.app_date">{{ item.date }}</td>
 
                             <td [attr.data-title]="commonLocaleData?.app_account"
-                                (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select "
+                                (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
                                 (clickOutside)="modalUniqueName = ''">
                                 {{ item.account.name }}
                                 <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
@@ -257,8 +369,12 @@
                                 {{ item.voucherNumber }}
                             </td>
                             <td [attr.data-title]="commonLocaleData?.app_sales"
-                                *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal" class="text-right ">
-                                {{ item.creditTotal | giddhCurrency }}
+                                *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal" class="text-right">
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="item.creditTotal" [currencySymbol]="false"
+                                            [currencyCode]="false">
+                                    </amount-field>
+                                </span>
                                 <ng-container *ngIf="expand">
                                     <ng-container *ngFor="let stock of item.stocks">
                                         <p>{{ stock.amount | giddhCurrency }}</p>
@@ -266,10 +382,14 @@
                                 </ng-container>
                             </td>
                             <td [attr.data-title]="commonLocaleData?.app_return"
-                                *ngIf="(salesRegisteDetailedResponse$ | async)?.debitTotal" class="text-right ">
-                                {{ item.debitTotal | giddhCurrency }}
+                                *ngIf="(salesRegisteDetailedResponse$ | async)?.debitTotal" class="text-right">
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="item.debitTotal" [currencySymbol]="false"
+                                            [currencyCode]="false">
+                                    </amount-field>
+                                </span>
                             </td>
-                            <td [attr.data-title]="commonLocaleData?.app_quantity_unit" class="text-right "
+                            <td [attr.data-title]="commonLocaleData?.app_quantity_unit" class="text-right"
                                 *ngIf="showFieldFilter.qtyRate && (salesRegisteDetailedResponse$ | async)?.quantityTotal">
                                 -
                                 <ng-container *ngIf="expand">
@@ -281,27 +401,45 @@
                                     </ng-container>
                                 </ng-container>
                             </td>
-                            <td [attr.data-title]="commonLocaleData?.app_rate" class="text-right "
+                            <td [attr.data-title]="commonLocaleData?.app_rate" class="text-right"
                                 *ngIf="showFieldFilter.qtyRate && (salesRegisteDetailedResponse$ | async)?.rateTotal">
                                 -
                                 <ng-container *ngIf="expand">
                                     <ng-container *ngFor="let stock of item.stocks">
-                                        <p>{{ stock.rate | giddhCurrency }}</p>
+                                        <p>
+                                            <span class="d-inline-flex">
+                                                <amount-field [amount]="stock.rate" [currencySymbol]="false"
+                                                        [currencyCode]="false">
+                                                </amount-field>
+                                            </span>
+                                        </p>
                                     </ng-container>
                                 </ng-container>
                             </td>
                             <td [attr.data-title]="commonLocaleData?.app_discount"
                                 *ngIf="showFieldFilter.discount && (salesRegisteDetailedResponse$ | async)?.discountTotal"
-                                class="text-right ">
-                                {{ item.discountTotal | giddhCurrency }}
+                                class="text-right">
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="item.discountTotal" [currencySymbol]="false"
+                                            [currencyCode]="false">
+                                    </amount-field>
+                                </span>
                             </td>
                             <td [attr.data-title]="commonLocaleData?.app_tax"
                                 *ngIf="showFieldFilter.tax && (salesRegisteDetailedResponse$ | async)?.taxTotal"
-                                class="text-right ">
-                                {{ item.taxTotal | giddhCurrency }}
+                                class="text-right">
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="item.taxTotal" [currencySymbol]="false"
+                                            [currencyCode]="false">
+                                    </amount-field>
+                                </span>
                             </td>
-                            <td [attr.data-title]="commonLocaleData?.app_net_sales" class="text-right ">
-                                {{ item.netTotal | giddhCurrency }}
+                            <td [attr.data-title]="commonLocaleData?.app_net_sales" class="text-right">
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="item.netTotal" [currencySymbol]="false"
+                                            [currencyCode]="false">
+                                    </amount-field>
+                                </span>
                             </td>
                         </tr>
                     </tbody>
@@ -324,91 +462,6 @@
             <h1>{{commonLocaleData?.app_no_entries_found}}</h1>
             <h1>{{commonLocaleData?.app_search_suggestion}}</h1>
         </div>
-
-        <div class="clearfix sales-register">
-            <div
-                class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12 pl-0 d-flex flex-lg-column flex-md-row transaction-count-data">
-                <p class="mr-r15">{{localeData?.transaction_count}}</p>
-                <p>
-                    {{ (salesRegisteDetailedResponse$ | async).totalItems }}
-                </p>
-            </div>
-            <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12 pl-0">
-                <div *ngIf="SalesRegisteDetailedItems" class="clearfix main-sale-register-box">
-                    <div *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal"
-                        class="sale-register-box text-right">
-                        <p>{{commonLocaleData?.app_sales}}</p>
-                        <h4>
-                            {{
-                            (salesRegisteDetailedResponse$ | async).creditTotal
-                            | giddhCurrency
-                            }}
-                        </h4>
-                    </div>
-                    <div *ngIf="(salesRegisteDetailedResponse$ | async)?.debitTotal"
-                        class="sale-register-box text-right">
-                        <p>{{commonLocaleData?.app_return}}</p>
-                        <h4>
-                            {{
-                            (salesRegisteDetailedResponse$ | async).debitTotal
-                            | giddhCurrency
-                            }}
-                        </h4>
-                    </div>
-                    <div class="sale-register-box text-right"
-                        *ngIf="showFieldFilter.discount && (salesRegisteDetailedResponse$ | async)?.discountTotal">
-                        <p>{{commonLocaleData?.app_discount}}</p>
-                        <h4>
-                            {{
-                            (salesRegisteDetailedResponse$ | async)
-                            .discountTotal | giddhCurrency
-                            }}
-                        </h4>
-                    </div>
-                    <div class="sale-register-box text-right"
-                        *ngIf="isTcsTdsApplicable && (salesRegisteDetailedResponse$ | async).tcsTotal">
-                        <p>{{commonLocaleData?.app_tcs}}</p>
-                        <h4>
-                            {{
-                            (salesRegisteDetailedResponse$ | async).tcsTotal
-                            | giddhCurrency
-                            }}
-                        </h4>
-                    </div>
-                    <div class="sale-register-box text-right"
-                        *ngIf="isTcsTdsApplicable && (salesRegisteDetailedResponse$ | async).tdsTotal">
-                        <p>{{commonLocaleData?.app_tds}}</p>
-                        <h4>
-                            {{
-                            (salesRegisteDetailedResponse$ | async).tdsTotal
-                            | giddhCurrency
-                            }}
-                        </h4>
-                    </div>
-                    <div class="sale-register-box text-right"
-                        *ngIf="showFieldFilter.tax && (salesRegisteDetailedResponse$ | async).taxTotal">
-                        <p>{{commonLocaleData?.app_tax}}</p>
-                        <h4>
-                            {{
-                            (salesRegisteDetailedResponse$ | async).taxTotal
-                            | giddhCurrency
-                            }}
-                        </h4>
-                    </div>
-
-                    <div class="sale-register-box text-right">
-                        <p>{{commonLocaleData?.app_net_sales}}</p>
-                        <h4>
-                            {{
-                            (salesRegisteDetailedResponse$ | async).netTotal
-                            .amount | giddhCurrency
-                            }}
-                        </h4>
-                    </div>
-
-                </div>
-            </div>
-        </div>
     </ng-container>
 
     <div *ngIf="(isGetSalesDetailsInProcess$ | async)">
@@ -430,7 +483,7 @@
                     getDetailedsalesRequestFilter.sort === 'asc'
             }"></div>
 
-        <div class="icon-sort-dsc" *ngIf="
+        <div class="icon-sort-asc" *ngIf="
                 getDetailedsalesRequestFilter.sortBy === col &&
                 getDetailedsalesRequestFilter.sort === 'desc'
             " (click)="sortbyApi('asc', col)" [ngClass]="{

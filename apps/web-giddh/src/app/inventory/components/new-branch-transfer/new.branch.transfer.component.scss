@@ -223,12 +223,6 @@ tfoot td .table-sec.form-group {
 .branch-transfer-report .btn-group a {
     color: $night-rider;
 }
-.branch-transfer-report .basic > thead > tr > th {
-    border-top: 1px solid $gainsboro !important;
-}
-.branch-transfer-report tbody {
-    border-bottom: 1px solid $gainsboro !important;
-}
 .branch-transfer-report ul#dropdown-basic {
     right: 0 !important;
     left: auto !important;
@@ -243,9 +237,6 @@ tfoot td .table-sec.form-group {
 }
 
 .td-search-box div i {
-    margin-top: 3px;
-    color: $olive;
-    padding-right: 8px;
     cursor: pointer;
 }
 
@@ -269,30 +260,21 @@ tfoot td .table-sec.form-group {
     top: 9px;
 }
 .td-search-box .input-container input {
-    height: 50px;
+    height: 36px;
     min-width: 100%;
     padding: 11px;
     padding-right: 0;
     color: $nero;
     border: none;
-    background-color: $white-smoke;
+    background-color: $gray-95;
 }
 
 .advance-icon {
-    width: 32px;
-    height: 32px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    font-size: 18px;
-    margin-left: 10px;
-    border: 1px solid $gainsboro;
+    font-size: 14px;
     border-radius: 5px;
-    color: $midnight-express;
-    background: $white;
-}
-.advance-icon:hover {
-    background: $whisper-color;
 }
 #table-receipt {
     width: 100%;
@@ -422,7 +404,6 @@ tfoot td .table-sec.form-group {
 .input-group {
     sh-select.branch-dropdown {
         width: 100%;
-        margin-right: 8px;
     }
 }
 .position-relative {
@@ -524,5 +505,8 @@ tfoot td .table-sec.form-group {
                 margin-right: 0;
             }
         }
+    }
+    .custom-datepicker{
+        margin-top: 10px;
     }
 }

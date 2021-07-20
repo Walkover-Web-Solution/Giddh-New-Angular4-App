@@ -612,7 +612,6 @@
 		"discount_deleted": "सवलत यशस्वीरित्या हटविली.",
 		"financial_year_locked": "आर्थिक वर्ष यशस्वीरित्या लॉक केले.",
 		"financial_year_unlocked": "आर्थिक वर्ष यशस्वीरित्या अनलॉक केले.",
-		"financial_year_switched": "आर्थिक वर्ष यशस्वीरित्या स्विच केले.",
 		"financial_year_period_updated": "आर्थिक वर्षाचा कालावधी अद्यतनित केला.",
 		"tag_created": "टॅग यशस्वीरित्या तयार केला.",
 		"tag_updated": "टॅग यशस्वीरित्या अद्यतनित केला.",
@@ -647,5 +646,8 @@
 	},
 	"app_download_here": "येथून डाउनलोड करा",
     "app_irn": "आयआरएन",
-    "app_dashboard": "डॅशबोर्ड"
+    "app_dashboard": "डॅशबोर्ड",
+    "app_giddh_no_permissions": "आपल्याला हे पाहण्याची परवानगी नाही",
+    "app_exchange_gain": "लाभ",
+    "app_exchange_loss": "तोटा"
 }
