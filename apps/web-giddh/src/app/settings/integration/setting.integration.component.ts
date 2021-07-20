@@ -178,6 +178,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public editAccountForm: FormGroup;
     /** Holds unlimited text for amount limit */
     public unlimitedLimit: string = UNLIMITED_LIMIT;
+    /** This will hold active company data */
+    public activeCompany: any;
 
     constructor(
         private router: Router,
@@ -391,6 +393,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     this.usersList.push({ index: index, label: user.userName, value: user.userUniqueName });
                     index++;
                 });
+            }
+        });
+
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.activeCompany = activeCompany;
             }
         });
     }
@@ -1749,7 +1757,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public saveNewAccountUser(): void {
         if (!this.createNewAccountUserForm?.invalid) {
             if (!this.createNewAccountUserForm.get('maxAmount')?.value) {
-                this.createNewAccountForm.get('duration')?.patchValue(UNLIMITED_LIMIT);
+                this.createNewAccountUserForm.get('duration')?.patchValue(UNLIMITED_LIMIT);
             }
 
             this.settingsIntegrationService.bankAccountMultiRegistration(this.createNewAccountUserForm.value).pipe(take(1)).subscribe(response => {
