@@ -9,7 +9,7 @@
                         <div class="col-xl-7 col-md-12 col-xs-12">
                             <div class="table-responsive">
                                 <table class="table-bordered basic table financial-year on-mobile-view">
-                                    <thead [hidden]="true">
+                                    <thead [hidden]="!financialYearObj?.financialYears?.length">
                                         <tr>
                                             <th>{{localeData?.sr_no}}</th>
                                             <th>{{commonLocaleData?.app_from}}</th>
