@@ -9,7 +9,7 @@
                         <div class="col-xl-7 col-md-12 col-xs-12">
                             <div class="table-responsive">
                                 <table class="table-bordered basic table financial-year on-mobile-view">
-                                    <thead>
+                                    <thead [hidden]="true">
                                         <tr>
                                             <th>{{localeData?.sr_no}}</th>
                                             <th>{{commonLocaleData?.app_from}}</th>
@@ -17,7 +17,7 @@
                                             <th>{{localeData?.lock_status}}</th>
                                         </tr>
                                     </thead>
-                                    <tbody *ngIf="financialYearObj && financialYearObj.financialYears">
+                                    <tbody *ngIf="false">
                                         <tr
                                             *ngFor="let financialYear of financialYearObj.financialYears; let i = index">
                                             <td data-title="#">{{i+1}}</td>
@@ -40,11 +40,11 @@
                                             </td>
                                         </tr>
                                     </tbody>
-                                    <tbody *ngIf="!financialYearObj || !financialYearObj.financialYears.length"
+                                    <tbody *ngIf="true"
                                         class="on-mobile-view no-records">
                                         <tr>
                                             <td colspan="4" class="text-center empty-table">
-                                                <h1>{{commonLocaleData?.app_no_record_found}}</h1>
+                                                <no-data [primaryMessage]="commonLocaleData?.app_no_entries_found" [secondaryMessage]="commonLocaleData?.app_search_suggestion" [secondaryMessageClass]="'p-0'"></no-data>
                                             </td>
                                         </tr>
                                     </tbody>
