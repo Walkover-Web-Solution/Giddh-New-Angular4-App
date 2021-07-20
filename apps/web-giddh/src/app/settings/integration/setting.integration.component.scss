@@ -189,6 +189,12 @@
 }
 .account-wrapper {
     width: 65%;
+    border-bottom: 1px solid $cornflower-blue-light;
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+}
+.account-wrapper:last-child {
+    border: none !important;
 }
 .account-info-background {
     background-color: $light-alice-blue;
@@ -226,19 +232,40 @@
     margin-top: 9px;
     vertical-align: top;
     display: inline-block;
+    a {
+        color: $grey-chateau;
+    }
+}
+.user-action-div {
+    a {
+        color: $grey-chateau;
+    }
 }
 .account-approval-status {
     margin-left: 13px;
 }
-.field-label {
+.field-label,.account-modal label,.user-modal label {
     color: $omiod;
 }
 .account-approval-status.approved {
     color: $tree-green;
+    i::before {
+        color: $tree-green;
+    }
 }
 .account-approval-status.pending-approval {
     color: $orange-new;
 }
 .connected-accounts {
     margin-left: 10px;
+}
+.btn-light-blue {
+    background-color: $light-alice-blue;
+    color: $midnight-blue;
+}
+.modal-dialog.account-modal {
+    width: 500px !important;
+}
+.modal-dialog.user-modal {
+    width: 400px !important;
 }
