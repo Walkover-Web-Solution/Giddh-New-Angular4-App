@@ -191,9 +191,9 @@
             </ng-template>
             <!-- select app proforma -->
             <div class="clearfix">
-                <div class="table-responsive remove-responsive invoice-preview mr-t15" [attr.style]="!voucherData?.results?.length ? 'display: none !important' : ''">
+                <div class="table-responsive remove-responsive invoice-preview mr-t15">
                     <table class="table basic giddh-table table-bordered invoice-table on-mobile-view">
-                        <thead class="thead-background1">
+                        <thead class="thead-background1" [attr.style]="(!voucherData?.results?.length && !advanceSearchFilter?.proformaNumber && !advanceSearchFilter?.estimateNumber && !advanceSearchFilter?.q) ? 'display: none !important' : ''">
                             <tr>
 
                                 <th *ngIf="selectedItems.length > 0" width="4%" class="min-width-check">
