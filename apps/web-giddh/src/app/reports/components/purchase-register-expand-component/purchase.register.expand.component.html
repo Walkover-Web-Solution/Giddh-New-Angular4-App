@@ -200,7 +200,7 @@
         <div class="clearfix sales-register-table mb-5">
             <div class="responsive table-responsive">
                 <table class="table basic giddh-table on-mobile-view">
-                    <thead [hidden]="!(purchaseRegisteDetailedResponse$ | async)?.items?.length">
+                    <thead [hidden]="!(purchaseRegisteDetailedResponse$ | async)?.items?.length && !showFieldFilter?.voucherNo">
                         <tr>
                             <th>
                                 <div class="d-flex">

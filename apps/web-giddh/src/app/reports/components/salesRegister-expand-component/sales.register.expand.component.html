@@ -205,7 +205,7 @@
         <div class="sales-register-table mb-5">
             <div class="responsive table-responsive">
                 <table class="table basic giddh-table on-mobile-view">
-                    <thead [hidden]="!(salesRegisteDetailedResponse$ | async)?.items?.length">
+                    <thead [hidden]="!(salesRegisteDetailedResponse$ | async)?.items?.length && !showFieldFilter?.voucherNo">
                         <tr>
                             <th>
                                 <div class="d-flex">

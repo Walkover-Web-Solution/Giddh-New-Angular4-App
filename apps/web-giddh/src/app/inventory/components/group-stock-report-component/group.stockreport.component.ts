@@ -347,14 +347,12 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
             distinctUntilChanged(),
             takeUntil(this.destroyed$)
         ).subscribe(s => {
-            if (s) {
-                this.isFilterCorrect = true;
-                this.GroupStockReportRequest.stockName = s;
-                this.getGroupReport(true);
-                if (s === '') {
-                    this.showProductSearch = false;
-                }
+            this.isFilterCorrect = true;
+            this.GroupStockReportRequest.stockName = s;
+            if (s === '') {
+                this.showProductSearch = false;
             }
+            this.getGroupReport(true);
         });
         this.sourceUniqueNameInput.valueChanges.pipe(
             debounceTime(700),

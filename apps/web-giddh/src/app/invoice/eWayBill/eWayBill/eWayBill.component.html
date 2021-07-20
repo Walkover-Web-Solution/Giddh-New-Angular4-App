@@ -24,7 +24,7 @@
                     <div class="col-md-12">
                         <div class="table-responsive">
                             <table class="table basic table-bordered giddh-table on-mobile-view">
-                                <thead class="thead-background1" (clickOutside)="clickedOutside();" [hidden]="!EwaybillLists?.results?.length">
+                                <thead class="thead-background1" (clickOutside)="clickedOutside();" [hidden]="!EwaybillLists?.results?.length && !EwayBillfilterRequest?.searchTerm">
                                     <tr>
                                         <th width="50px">#</th>
                                         <th class="nowrap">

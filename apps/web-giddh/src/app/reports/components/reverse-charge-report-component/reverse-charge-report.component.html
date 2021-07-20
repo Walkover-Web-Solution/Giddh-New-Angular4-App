@@ -87,7 +87,7 @@
             </div>
             <div class="invoice-preview  table-responsive">
                 <table class="table basic giddh-table on-mobile-view">
-                    <thead class="thead-background1" [hidden]="!reverseChargeReportResults?.items?.length">
+                    <thead class="thead-background1" [hidden]="!reverseChargeReportResults?.items?.length && !reverseChargeReportPostRequest?.supplierName && !reverseChargeReportPostRequest?.invoiceNumber && !reverseChargeReportPostRequest?.supplierCountry && !reverseChargeReportPostRequest?.voucherType">
                         <tr (clickOutside)="inlineSearch = null">
                             <th class="text-center" width="4%">#</th>
                             <th (click)="sortReverseChargeList('entryDate')">{{localeData?.entry_date}} <span
