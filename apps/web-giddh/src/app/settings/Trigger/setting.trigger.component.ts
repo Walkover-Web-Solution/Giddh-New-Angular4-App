@@ -5,7 +5,6 @@ import { Store, select } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppState } from '../../store';
 import * as moment from 'moment/moment';
-import { TaxResponse } from '../../models/api-models/Company';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { ToasterService } from '../../services/toaster.service';
@@ -15,6 +14,7 @@ import { SearchService } from '../../services/search.service';
 import { GroupService } from '../../services/group.service';
 import { API_COUNT_LIMIT } from '../../app.constant';
 import { cloneDeep, each } from '../../lodash-optimized';
+import { NgForm } from '@angular/forms';
 
 @Component({
     selector: 'setting-trigger',
@@ -25,9 +25,20 @@ import { cloneDeep, each } from '../../lodash-optimized';
 export class SettingTriggerComponent implements OnInit, OnDestroy {
 
     @ViewChild('triggerConfirmationModel', { static: true }) public triggerConfirmationModel: ModalDirective;
+    /** Stores the form instance */
+    @ViewChild('createTriggerForm', {static: true}) public createTriggerForm: NgForm;
 
     public availableTriggers: any[] = [];
-    public newTriggerObj: any = {};
+    public newTriggerObj: any = {
+        name: null,
+        action: null,
+        entity: null,
+        entityUniqueName: null,
+        filter: null,
+        scope: null,
+        url: null,
+        description: null
+    };
     public moment = moment;
     public days: IOption[] = [];
     public records = []; // This array is just for generating dynamic ngModel
@@ -98,7 +109,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         private searchService: SearchService,
         private _toaster: ToasterService
     ) {
-        
+
     }
 
     public ngOnInit() {
@@ -107,14 +118,17 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
             this.days.push({ label: day, value: day });
         }
         this.store.dispatch(this._settingsTriggersActions.GetTriggers());
-        
+
         // default value assinged bcz currently there is only single option
         this.newTriggerObj.action = 'webhook';
         this.newTriggerObj.scope = 'closing balance';
         this.store.pipe(select(p => p.settings.triggers), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o) {
-                this.forceClear$ = observableOf({ status: true });
                 this.availableTriggers = cloneDeep(o);
+                if (this.newTriggerObj.entity) {
+                    this.resetNewFormModel();
+                    this.resetNewFormFields();
+                }
             }
         });
 
@@ -197,7 +211,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
     }
 
     public onCancel() {
-        this.newTriggerObj = new TaxResponse();
+        this.resetNewFormModel();
     }
 
     public userConfirmation(userResponse: boolean) {
@@ -214,37 +228,17 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         }
     }
 
-    public addMoreDateAndPercentage(taxIndex: number) {
-        let taxes = cloneDeep(this.availableTriggers);
-        taxes[taxIndex].taxDetail.push({ date: null, taxValue: null });
-        this.availableTriggers = taxes;
-    }
-
-    public removeDateAndPercentage(parentIndex: number, childIndex: number) {
-        let taxes = cloneDeep(this.availableTriggers);
-        taxes[parentIndex].taxDetail.splice(childIndex, 1);
-        this.availableTriggers = taxes;
-    }
-
-    public customAccountFilter(term: string, item: IOption) {
-        return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1);
-    }
-
-    public customDateSorting(a: IOption, b: IOption) {
-        return (parseInt(a.label) - parseInt(b.label));
-    }
-
     public onEntityTypeSelected(ev) {
-        this.forceClearEntityList$ = observableOf({ status: true });
         if (ev.value === 'account') {
             this.entityOptions$ = observableOf(this.accounts);
         } else if (ev.value === 'group') {
             this.entityOptions$ = observableOf(this.groups);
         }
+        this.onResetEntityType();
     }
 
     public onResetEntityType() {
-        this.newTriggerObj.entityType = '';
+        this.newTriggerObj.entityUniqueName = null;
         this.forceClearEntityList$ = observableOf({ status: true });
     }
 
@@ -252,11 +246,15 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
      * onSelectScope
      */
     public onSelectScope(event) {
+        if (!event.value) {
+            return;
+        }
         if (event.value === 'closing balance') {
             this.onSelectClosingBalance();
             if ((this.newTriggerObj.filter === 'amountGreaterThan') || (this.newTriggerObj.filter === 'amountSmallerThan')) {
                 return;
             } else {
+                this.newTriggerObj.filter = null;
                 this.forceClearFilterList$ = observableOf({ status: true });
             }
         } else {
@@ -528,5 +526,37 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
                 { label: this.localeData?.scope_list?.closing_balance, value: 'closing balance' }
             ];
         }
+    }
+
+    /**
+     * Reset new trigger form model
+     *
+     * @private
+     * @memberof SettingTriggerComponent
+     */
+    private resetNewFormModel(): void {
+        this.newTriggerObj = {
+            name: '',
+            action: '',
+            entity: '',
+            entityUniqueName: '',
+            filter: '',
+            scope: '',
+            url: '',
+            description: ''
+        };
+    }
+
+    /**
+     * Resets new trigger form fields
+     *
+     * @private
+     * @memberof SettingTriggerComponent
+     */
+    private resetNewFormFields(): void {
+        this.forceClearFilterList$ = observableOf({ status: true });
+        this.forceClear$ = observableOf({ status: true });
+        this.createTriggerForm?.reset();
+        this.onResetEntityType();
     }
 }

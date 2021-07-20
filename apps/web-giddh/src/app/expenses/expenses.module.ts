@@ -6,6 +6,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { NgxUploaderModule } from 'ngx-uploader';
+import { UpdateLedgerEntryPanelModule } from '../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.module';
 import { LedgerModule } from '../ledger/ledger.module';
 import { SalesModule } from '../sales/sales.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
@@ -38,7 +39,9 @@ import { ExpensesRoutingModule } from './expenses.routing.module';
         SharedModule,
         ShSelectModule,
         ModalModule,
-        ElementViewChildModule, SalesModule
+        ElementViewChildModule,
+        SalesModule,
+        UpdateLedgerEntryPanelModule
     ],
     exports: [
         ExpensesComponent,

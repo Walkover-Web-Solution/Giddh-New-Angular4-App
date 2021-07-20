@@ -40,7 +40,7 @@ jobs:
         with:
           node-version: "14"
 
-      # Runs npm i
+#       Runs npm i
       - uses: bahmutov/npm-install@v1
         env:
           CYPRESS_INSTALL_BINARY: 0
@@ -51,6 +51,17 @@ jobs:
       - name: Creating Test bundle
         if: ${{ env.BUILD_ENV == 'Test' }}
         run: npm run build-test
+        env:
+          GOOGLE_CLIENT_ID_TEST: ${{ secrets.GOOGLE_CLIENT_ID_TEST }}
+          GOOGLE_CLIENT_SECRET_TEST: ${{ secrets.GOOGLE_CLIENT_SECRET_TEST }}
+          RAZORPAY_KEY_TEST: ${{ secrets.RAZORPAY_KEY_TEST }}
+          GOOGLE_CLIENT_ID_PROD: ${{ secrets.GOOGLE_CLIENT_ID_PROD }}
+          GOOGLE_CLIENT_SECRET_PROD: ${{ secrets.GOOGLE_CLIENT_SECRET_PROD }}
+          TWITTER_CLIENT_ID_PROD: ${{ secrets.TWITTER_CLIENT_ID_PROD }}
+          TWITTER_SECRET_KEY_PROD: ${{ secrets.TWITTER_SECRET_KEY_PROD }}
+          LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
+          LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
+          RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
       - name: Copy Test folder
         if: ${{ env.BUILD_ENV == 'Test' }}
         run: |
@@ -59,6 +70,17 @@ jobs:
       - name: Creating Stage bundle
         if: ${{ env.BUILD_ENV == 'Stage' }}
         run: npm run build-stage
+        env:
+          GOOGLE_CLIENT_ID_TEST: ${{ secrets.GOOGLE_CLIENT_ID_TEST }}
+          GOOGLE_CLIENT_SECRET_TEST: ${{ secrets.GOOGLE_CLIENT_SECRET_TEST }}
+          RAZORPAY_KEY_TEST: ${{ secrets.RAZORPAY_KEY_TEST }}
+          GOOGLE_CLIENT_ID_PROD: ${{ secrets.GOOGLE_CLIENT_ID_PROD }}
+          GOOGLE_CLIENT_SECRET_PROD: ${{ secrets.GOOGLE_CLIENT_SECRET_PROD }}
+          TWITTER_CLIENT_ID_PROD: ${{ secrets.TWITTER_CLIENT_ID_PROD }}
+          TWITTER_SECRET_KEY_PROD: ${{ secrets.TWITTER_SECRET_KEY_PROD }}
+          LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
+          LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
+          RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
       - name: Copy Stage folder
         if: ${{ env.BUILD_ENV == 'Stage' }}
         run: |
@@ -67,6 +89,17 @@ jobs:
       - name: Creating Beta bundle
         if: ${{ env.BUILD_ENV == 'Beta' }}
         run: npm run build-prod
+        env:
+          GOOGLE_CLIENT_ID_TEST: ${{ secrets.GOOGLE_CLIENT_ID_TEST }}
+          GOOGLE_CLIENT_SECRET_TEST: ${{ secrets.GOOGLE_CLIENT_SECRET_TEST }}
+          RAZORPAY_KEY_TEST: ${{ secrets.RAZORPAY_KEY_TEST }}
+          GOOGLE_CLIENT_ID_PROD: ${{ secrets.GOOGLE_CLIENT_ID_PROD }}
+          GOOGLE_CLIENT_SECRET_PROD: ${{ secrets.GOOGLE_CLIENT_SECRET_PROD }}
+          TWITTER_CLIENT_ID_PROD: ${{ secrets.TWITTER_CLIENT_ID_PROD }}
+          TWITTER_SECRET_KEY_PROD: ${{ secrets.TWITTER_SECRET_KEY_PROD }}
+          LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
+          LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
+          RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
       - name: Copy Beta folder
         if: ${{ env.BUILD_ENV == 'Beta' }}
         run: |
@@ -75,6 +108,17 @@ jobs:
       - name: Creating Prod bundle
         if: ${{ env.BUILD_ENV == 'Prod' }}
         run: npm run build-prod
+        env:
+          GOOGLE_CLIENT_ID_TEST: ${{ secrets.GOOGLE_CLIENT_ID_TEST }}
+          GOOGLE_CLIENT_SECRET_TEST: ${{ secrets.GOOGLE_CLIENT_SECRET_TEST }}
+          RAZORPAY_KEY_TEST: ${{ secrets.RAZORPAY_KEY_TEST }}
+          GOOGLE_CLIENT_ID_PROD: ${{ secrets.GOOGLE_CLIENT_ID_PROD }}
+          GOOGLE_CLIENT_SECRET_PROD: ${{ secrets.GOOGLE_CLIENT_SECRET_PROD }}
+          TWITTER_CLIENT_ID_PROD: ${{ secrets.TWITTER_CLIENT_ID_PROD }}
+          TWITTER_SECRET_KEY_PROD: ${{ secrets.TWITTER_SECRET_KEY_PROD }}
+          LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
+          LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
+          RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
       - name: Copy Prod folder
         if: ${{ env.BUILD_ENV == 'Prod' }}
         run: |
@@ -123,39 +167,52 @@ jobs:
             --acl private \
             --region ap-south-1 \
             /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public.zip s3://${{ secrets.UI_PROD_BUILD_S3_FOLDER }}
-      - name: Slack Notification Success
-        if: ${{ success() }}
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: ${{ secrets.SLACK_GIDDH_CHANNEL_ID }}
-          SLACK_COLOR: ${{ job.status }} # or a specific color like 'red' or '#ff00ff'
-          SLACK_TITLE: Giddh UI ${{ env.BUILD_ENV }} build
-          SLACK_USERNAME: Giddh UI ${{ env.BUILD_ENV }} build
-          SLACK_MESSAGE: Build succeeded
-          SLACK_FOOTER: ''
-          SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
-      - name: Slack Notification Failure
-        if: ${{ failure() }}
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: ${{ secrets.SLACK_GIDDH_CHANNEL_ID }}
-          SLACK_COLOR: ${{ job.status }} # or a specific color like 'red' or '#ff00ff'
-          SLACK_TITLE: Giddh UI ${{ env.BUILD_ENV }} build
-          SLACK_USERNAME: Giddh UI ${{ env.BUILD_ENV }} build
-          SLACK_MESSAGE: Build failed
-          SLACK_FOOTER: ''
-          SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
-      - name: Slack Notification Cancelled
-        if: ${{ cancelled() }}
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: ${{ secrets.SLACK_GIDDH_CHANNEL_ID }}
-          SLACK_COLOR: ${{ job.status }} # or a specific color like 'red' or '#ff00ff'
-          SLACK_TITLE: Giddh UI ${{ env.BUILD_ENV }} build
-          SLACK_USERNAME: Giddh UI ${{ env.BUILD_ENV }} build
-          SLACK_MESSAGE: Build cancelled
-          SLACK_FOOTER: ''
-          SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+#       - name: Slack Notification Success
+#         if: ${{ success() }}
+#         uses: rtCamp/action-slack-notify@v2
+#         env:
+#           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+#           SLACK_CHANNEL: ${{ secrets.SLACK_UI_BUILDS_CHANNEL_ID }}
+#           SLACK_COLOR: ${{ job.status }} # or a specific color like 'red' or '#ff00ff'
+#           SLACK_TITLE: Giddh UI ${{ env.BUILD_ENV }} build
+#           SLACK_USERNAME: Giddh UI ${{ env.BUILD_ENV }} build
+#           SLACK_MESSAGE: Build succeeded
+#           SLACK_FOOTER: ''
+#           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+#       - name: Slack Notification Failure
+#         if: ${{ failure() }}
+#         uses: rtCamp/action-slack-notify@v2
+#         env:
+#           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+#           SLACK_CHANNEL: ${{ secrets.SLACK_UI_BUILDS_CHANNEL_ID }}
+#           SLACK_COLOR: ${{ job.status }} # or a specific color like 'red' or '#ff00ff'
+#           SLACK_TITLE: Giddh UI ${{ env.BUILD_ENV }} build
+#           SLACK_USERNAME: Giddh UI ${{ env.BUILD_ENV }} build
+#           SLACK_MESSAGE: Build failed
+#           SLACK_FOOTER: ''
+#           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+#       - name: Slack Notification Cancelled
+#         if: ${{ cancelled() }}
+#         uses: rtCamp/action-slack-notify@v2
+#         env:
+#           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+#           SLACK_CHANNEL: ${{ secrets.SLACK_UI_BUILDS_CHANNEL_ID }}
+#           SLACK_COLOR: ${{ job.status }} # or a specific color like 'red' or '#ff00ff'
+#           SLACK_TITLE: Giddh UI ${{ env.BUILD_ENV }} build
+#           SLACK_USERNAME: Giddh UI ${{ env.BUILD_ENV }} build
+#           SLACK_MESSAGE: Build cancelled
+#           SLACK_FOOTER: ''
+#           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+      - name: Email Notification
+        if: ${{ always() }}
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{secrets.GIDDH_BUILDS_USERNAME}}
+          password: ${{secrets.GIDDH_BUILDS_PASSWORD}}
+          subject: ${{ github.actor }} - ${{ github.workflow }} job ${{ job.status }}
+          to: ${{ secrets.GIDDH_BUILDS_RECIPIENTS }}
+          bcc: $ {{ secrets.GIDDH_BUILDS_BCC_RECIPIENTS }}
+          from: Giddh Builds
+          body: Job in workflow ${{ github.workflow }} ${{ env.BUILD_ENV }} of ${{ github.repository }} has ${{ job.status }}. https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App/commit/${{ github.sha }}
