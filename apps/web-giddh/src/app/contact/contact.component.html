@@ -439,7 +439,7 @@
                             <div class="d-flex align-items-center">
                                 <div>
                                     <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showNameSearch, fieldName: 'name',formControl: searchedName,
-                                                    title: commonLocaleData?.app_name}"></ng-container>
+                                                    title: activeTab === 'customer' ? commonLocaleData?.app_customer_name : commonLocaleData?.app_vendor_name}"></ng-container>
                                 </div>
                                 <ng-container *ngTemplateOutlet="!showNameSearch ? sortingTemplate : '';context: { $implicit: 'name'}">
                                 </ng-container>
