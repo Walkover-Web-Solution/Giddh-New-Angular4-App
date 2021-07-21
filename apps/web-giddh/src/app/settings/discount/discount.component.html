@@ -79,16 +79,6 @@
                                 </td>
                             </tr>
                         </tbody>
-
-                        <tbody *ngIf="!(isDiscountListInProcess$ | async) && !(discountList$ | async).length"
-                            class="on-mobile-view no-records">
-                            <tr>
-                                <td colspan="3" class="text-center empty-table">
-                                    <no-data [secondaryMessage]="' '" [secondaryMessageClass]="'p-0'"></no-data>
-                                </td>
-                            </tr>
-                        </tbody>
-
                         <tbody *ngIf="(isDiscountListInProcess$ | async)">
                             <tr>
                                 <td colspan="3" class="text-center empty-table">
@@ -98,9 +88,10 @@
                         </tbody>
 
                     </table>
-
+                    <div class="no-data" *ngIf="!(isDiscountListInProcess$ | async) && !(discountList$ | async).length">
+                        <no-data [secondaryMessage]="' '" [secondaryMessageClass]="'p-0'"></no-data>
+                    </div>
                 </div>
-
             </div>
         </div>
 

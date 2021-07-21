@@ -258,13 +258,6 @@
                         </td>
                     </tr>
                 </tbody>
-                <tbody *ngIf="!isLoading && !purchaseOrders.totalItems">
-                    <tr>
-                        <td colspan="7" class="text-center empty-table">
-                            <no-data [secondaryMessageClass]="'p-0'"></no-data>
-                        </td>
-                    </tr>
-                </tbody>
                 <tbody *ngIf="isLoading">
                     <tr>
                         <td colspan="8">
@@ -280,6 +273,9 @@
             (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first"
             [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next"
             [lastText]="commonLocaleData?.app_last"></pagination>
+        <div class="no-data" *ngIf="!isLoading && !purchaseOrders.totalItems">
+            <no-data [secondaryMessageClass]="'p-0'"></no-data>
+        </div>
     </div>
     <ng-template #template>
         <div class="purchase-order-bulk-update">

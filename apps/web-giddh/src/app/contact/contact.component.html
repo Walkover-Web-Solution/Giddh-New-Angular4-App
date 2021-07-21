@@ -745,12 +745,6 @@
                                     {{item.value || '-' }}</td>
                             </ng-container>
                         </tr>
-                        <tr>
-                            <td [attr.colspan]="colspanLength" *ngIf="!(sundryDebtorsAccounts).length "
-                                class="text-center empty-table ">
-                                <no-data [secondaryMessageClass]="'p-0'"></no-data>
-                            </td>
-                        </tr>
 
                     </ng-container>
 
@@ -990,11 +984,6 @@
                                 </button>
                             </td>
                         </tr>
-                        <tr *ngIf="!(sundryCreditorsAccounts).length ">
-                            <td [attr.colspan]="colspanLength" class="text-center empty-table">
-                                <no-data [secondaryMessageClass]="'p-0'"></no-data>
-                            </td>
-                        </tr>
 
                     </ng-container>
                 </tbody>
@@ -1028,7 +1017,10 @@
                 </div>
             </div>
         </div>
-
+        <div class="no-data"
+                *ngIf="(activeTab === 'customer' && !sundryDebtorsAccounts?.length) || (activeTab === 'vendor' && !sundryCreditorsAccounts?.length)">
+                <no-data [secondaryMessageClass]="'p-0'"></no-data>
+        </div>
     </ng-template>
 
     <!-- region sorting template -->
