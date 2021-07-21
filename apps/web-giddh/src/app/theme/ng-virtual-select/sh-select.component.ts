@@ -6,6 +6,7 @@ import { concat, includes, startsWith } from 'apps/web-giddh/src/app/lodash-opti
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
 import { ReplaySubject, fromEvent } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { SELECT_ALL_RECORDS } from '../../app.constant';
 
 const FLATTEN_SEARCH_TERM = 'flatten';
 
@@ -49,7 +50,6 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Input() public doNotReset: boolean = false;
     @Input() public defaultValue: string = "";
     @Input() public readonlyInput: boolean;
-    @Input() public showCheckbox: boolean = false;
     /* This is used to set the value */
     @Input() public fixedValue: string = "";
 
@@ -96,6 +96,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     public _selectedValues: IOption[] = [];
     public _options: IOption[] = [];
     public defaultValueUpdated: boolean = false;
+    /** Holds string for select all records */
+    public selectAllRecords: string = SELECT_ALL_RECORDS;
     /** Keys. **/
 
     private KEYS: any = {

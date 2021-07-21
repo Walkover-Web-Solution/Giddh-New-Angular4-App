@@ -80,15 +80,7 @@
 		"select_otp": "ओटीपी चुनें",
 		"approver_name": "अनुमोदनकर्ता का नाम",
 		"select_otp_tooltip": "ओटीपी अनुमोदनकर्ता के नाम में चयनित व्यक्ति के पास पहुंचेगा",
-		"open_new_current_account": "एक नया चालू खाता खोलें",
-		"otp_types": {
-			"bank_otp": "बैंक ओटीपी",
-			"giddh_otp": "गिद्ध ओटीपी"
-		},
-		"amount_limit_types": {
-			"bank_limit": "बैंक के अनुसार अधिकतम सीमा",
-			"custom": "अनुकूलन"
-		},
+		"open_new_current_account": "ICICI का एक नया चालू खाता खोलें",
 		"row_delete_error": "कम से कम 1 पंक्ति आवश्यक है",
 		"beneficiary_validation_successful": "लाभार्थी को सफलतापूर्वक सत्यापित किया गया है।",
 		"beneficiary_validation_error": "लाभार्थी सत्यापन में कुछ समस्या है। कृपया पुन: प्रयास करें।",
@@ -98,6 +90,31 @@
 		"beneficiary_nick_name": "लाभार्थी निक नाम",
 		"beneficiary_account_no": "हिताधिकारी खाता नंबर।",
 		"ifsc": "आईएफएससी",
-		"add_beneficiary": "लाभार्थी जोड़ें"
+		"add_beneficiary": "लाभार्थी जोड़ें",
+        "connect_new_account": "+ Connect New Account",
+        "learn_connect": "Learn, how to connect",
+        "connected_accounts": "Connected Accounts",
+        "linked_account": "Linked Account",
+        "payment_updates": "Payment Updates",
+        "limit_upto": "Limit Up To",
+        "pending_self_approval": "Pending for self approval",
+        "approval_request_sent": "A request has been sent to your account, login to <a href='javascript:;'>ICICI Bank Portal</a> and accept it.",
+        "approval_request_accepted": "Once accepted, you can link your ICICI bank account/s and make payments directly through GIDDH",
+        "add_more_users": "+ Add More Users",
+        "connect_icici_account": "Connect ICICI Account",
+        "icici_login_id": "ICICI Login ID",
+        "link_account_label": "Link Account",
+        "link_account_placeholder": "Select Account",
+        "select_receipients": "Select Receipients",
+        "connect": "Connect",
+        "edit_account": "Edit Account",
+        "add_user": "Add User",
+        "enter_amount": "Enter Amount",
+        "edit_user": "Edit User",
+        "duration": "Duration",
+        "delete_login": "Do you really want to delete the login id [LOGIN_ID] ?",
+        "connected": "Connected",
+        "used": "Used",
+        "get_instant_overdraft": "Get Instant Overdraft"
 	}
 }
