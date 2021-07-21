@@ -1,5 +1,5 @@
 <ng-container appTranslate [file]="'settings/integration'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+    (commonLocaleData)="commonLocaleData = $event">
     <div class="clearfix">
         <tabset [ngClass]="{'tab-integration': true, 'hide-payment-tab' : !isIndianCompany}" #integrationTab
             id="tab-integration">
@@ -260,11 +260,12 @@
                                             <div class="width-100">
                                                 <div class="col-md-4 v-align-top inline">
                                                     <span class="field-label">{{localeData?.payment?.login_id_label}}</span><br>
-                                                    <span class="width-100 disabled-field inline">{{payor?.loginId}}</span>
+                                                    <span class="width-100 disabled-field inline">{{payor?.loginId}}</span><br>
+                                                    <span class="font-12 field-label">{{payor?.user?.name}}</span>
                                                 </div>
                                                 <div class="col-md-4 v-align-top inline">
                                                     <span class="limit-upto field-label">{{localeData?.payment?.limit_upto}}</span><br>
-                                                    <span class="width-100 disabled-field inline limit-upto">{{(payor?.duration === unlimitedLimit) ? localeData?.payment?.amount_limit?.unlimited : activeCompany?.baseCurrencySymbol + " " + payor?.maxAmount | giddhCurrency }} <span class="pull-right payor-duration" *ngIf="payor?.duration !== unlimitedLimit">/ {{payor?.duration}}</span></span><br>
+                                                    <span class="width-100 disabled-field inline limit-upto">{{(payor?.duration === unlimitedLimit) ? commonLocaleData?.app_amount_limit?.unlimited : activeCompany?.baseCurrencySymbol + " " + payor?.maxAmount | giddhCurrency }} <span class="pull-right payor-duration font-12" *ngIf="payor?.duration !== unlimitedLimit">/ {{payor?.duration | titlecase}}</span></span><br>
                                                     <span class="limit-upto font-12 field-label">{{localeData?.payment?.used}} {{payor?.usedAmount | giddhCurrency}}</span>
                                                 </div>
                                                 <div class="col-md-4 v-align-top inline mt-2">
@@ -312,91 +313,14 @@
     <div bsModal #createNewAccountUserModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
         <div class="modal-dialog user-modal" *ngIf="createNewAccountUserModal?.isShown">
             <div class="modal-content">
-                <form autocomplete="off" novalidate name="createNewAccountUserForm" [formGroup]="createNewAccountUserForm"
-                class="new-account-form" (ngSubmit)="saveNewAccountUser()">
-                    <div class="modal-header">
-                        <h3 class="modal-title">{{localeData?.payment?.add_user}}</h3>
-                        <span data-dismiss="modal" [attr.aria-label]="commonLocaleData?.app_close" class="close hover-orange" (click)="closeCreateNewAccountUserModal()">×</span>
-                    </div>
-                    <div class="modal-body">
-                        <div class="clearfix">
-                            <div class="inline col-md-6 pl-0">
-                                <label>{{localeData?.payment?.account_number_label}}</label><br>
-                                <span class="bold">{{activeBankAccount?.iciciDetailsResource?.accountNumber}}</span>
-                            </div>
-                            <div class="inline col-md-6 pl-0 pr-0">
-                                <label>{{localeData?.payment?.linked_account}}</label><br>
-                                <span class="bold">{{activeBankAccount?.account?.name}}</span>
-                            </div>
-                        </div>
-                        <div class="clearfix mr-t1">
-                            <label>{{localeData?.payment?.login_id_label}}<span class="red-text">*</span></label>
-                            <input class="form-control" required formControlName="loginId"
-                                name="loginId" type="text" [placeholder]="localeData?.payment?.login_id_placeholder">
-                        </div>
-                        <div class="clearfix mr-t1">
-                            <label>{{localeData?.payment?.user}}<span class="red-text">*</span></label>
-                            <sh-select formControlName="userUniqueName" name="userUniqueName" [placeholder]="localeData?.payment?.select_user" [options]="usersList" required></sh-select>
-                        </div>
-                        <div class="clearfix mr-t1">
-                            <label>{{localeData?.payment?.limit_upto}}</label>
-                            <div class="clearfix">
-                                <div class="inline col-md-6 pl-0 pr-0">
-                                    <input class="form-control" formControlName="maxAmount" name="maxAmount" type="text" [placeholder]="localeData?.payment?.enter_amount">
-                                </div>
-                                <div class="inline col-md-6 pr-0">
-                                    <sh-select formControlName="duration" name="duration" [placeholder]="localeData?.payment?.duration" [options]="amountLimitDurations"></sh-select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-success mr-1" [disabled]="createNewAccountUserForm?.invalid">{{commonLocaleData?.app_save}}</button>
-                    </div>
-                </form>
+                <icici-payor-account-create-edit [commonLocaleData]="commonLocaleData" [activeBankAccount]="activeBankAccount" (getAllBankAccounts)="getAllBankAccounts()" (closeModalEvent)="closeCreateNewAccountUserModal()"></icici-payor-account-create-edit>
             </div>
         </div>
     </div>
     <div bsModal #editAccountUserModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
         <div class="modal-dialog user-modal" *ngIf="editAccountUserModal?.isShown">
             <div class="modal-content">
-                <form autocomplete="off" novalidate name="editAccountUserForm" [formGroup]="editAccountUserForm"
-                class="new-account-form" (ngSubmit)="updateAccountUser()">
-                    <div class="modal-header">
-                        <h3 class="modal-title">{{localeData?.payment?.edit_user}}</h3>
-                        <span data-dismiss="modal" [attr.aria-label]="commonLocaleData?.app_close" class="close hover-orange" (click)="closeEditAccountUserModal()">×</span>
-                    </div>
-                    <div class="modal-body">
-                        <div class="clearfix">
-                            <div class="inline col-md-6 pl-0">
-                                <label>{{localeData?.payment?.account_number_label}}</label><br>
-                                <span class="bold">{{activeBankAccount?.iciciDetailsResource?.accountNumber}}</span>
-                            </div>
-                            <div class="inline col-md-6 pl-0 pr-0">
-                                <label>{{localeData?.payment?.linked_account}}</label><br>
-                                <span class="bold">{{activeBankAccount?.account?.name}}</span>
-                            </div>
-                        </div>
-                        <div class="clearfix mr-t1">
-                            <label>{{localeData?.payment?.user}}</label><br>
-                            {{activePayorAccount?.user?.name}}
-                        </div>
-                        <div class="clearfix mr-t1">
-                            <label>{{localeData?.payment?.limit_upto}}</label>
-                            <div class="clearfix">
-                                <div class="inline col-md-6 pl-0 pr-0">
-                                    <input class="form-control" formControlName="maxAmount" name="maxAmount" type="text" [placeholder]="localeData?.payment?.enter_amount">
-                                </div>
-                                <div class="inline col-md-6 pr-0">
-                                    <sh-select formControlName="duration" name="duration" [placeholder]="localeData?.payment?.duration" [options]="amountLimitDurations"></sh-select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-success mr-1" [disabled]="editAccountUserForm?.invalid">{{commonLocaleData?.app_update}}</button>
-                    </div>
-                </form>
+                <icici-payor-account-create-edit [commonLocaleData]="commonLocaleData" [activeBankAccount]="activeBankAccount" [activePayorAccount]="activePayorAccount" (getAllBankAccounts)="getAllBankAccounts()" (closeModalEvent)="closeEditAccountUserModal()"></icici-payor-account-create-edit>
             </div>
         </div>
     </div>

@@ -81,14 +81,6 @@
 		"approver_name": "अनुमोदनकर्ता का नाम",
 		"select_otp_tooltip": "ओटीपी अनुमोदनकर्ता के नाम में चयनित व्यक्ति के पास पहुंचेगा",
 		"open_new_current_account": "ICICI का एक नया चालू खाता खोलें",
-		"otp_types": {
-			"bank_otp": "बैंक ओटीपी",
-			"giddh_otp": "गिद्ध ओटीपी"
-		},
-		"amount_limit_types": {
-			"bank_limit": "बैंक के अनुसार अधिकतम सीमा",
-			"custom": "अनुकूलन"
-		},
 		"row_delete_error": "कम से कम 1 पंक्ति आवश्यक है",
 		"beneficiary_validation_successful": "लाभार्थी को सफलतापूर्वक सत्यापित किया गया है।",
 		"beneficiary_validation_error": "लाभार्थी सत्यापन में कुछ समस्या है। कृपया पुन: प्रयास करें।",
@@ -105,12 +97,6 @@
         "linked_account": "Linked Account",
         "payment_updates": "Payment Updates",
         "limit_upto": "Limit Up To",
-        "amount_limit": {
-            "daily": "Daily",
-            "weekly": "Weekly",
-            "monthly": "Monthly",
-            "unlimited": "Unlimited"
-        },
         "pending_self_approval": "Pending for self approval",
         "approval_request_sent": "A request has been sent to your account, login to <a href='javascript:;'>ICICI Bank Portal</a> and accept it.",
         "approval_request_accepted": "Once accepted, you can link your ICICI bank account/s and make payments directly through GIDDH",
