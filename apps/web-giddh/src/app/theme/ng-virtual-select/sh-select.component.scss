@@ -119,10 +119,14 @@ i.close.icon.clear:hover::after {
     }
 }
 
-.selected-val {
+.selected-val-div{
     border: 1px solid $gainsboro !important;
-    padding-right: 22px !important;
-    background: $white !important;
+    border-radius: 5px !important;
+    .selected-val {
+        border: none !important;
+        padding-right: 14px !important;
+        background: $white !important;
+    }
 }
 
 .header.open > input[type="text"] {
