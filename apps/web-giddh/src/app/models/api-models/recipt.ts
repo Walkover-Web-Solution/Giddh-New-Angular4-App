@@ -183,3 +183,13 @@ export interface DownloadVoucherRequest {
 class CurrencyClass {
     public code: string;
 }
+
+/** Voucher request modal */
+export class VoucherRequest {
+    public number: string;
+    public type: string;
+    constructor(voucherNumber: string, type: string) {
+        this.number = voucherNumber ?? '';
+        this.type = type ?? '';
+    }
+}

@@ -80,9 +80,13 @@ export class ProformaInvoiceUtilityService {
         }
         if (data?.entries?.length) {
             // TODO: Remove this once the API issue is resolved
-            data.entries.forEach(element => {
-                element.description = '';
-                element.discounts = element.discounts.filter(discount => (discount.name && discount.particular) || discount.discountValue);
+            data.entries.forEach(entry => {
+                entry.discounts = entry.discounts.filter(discount => (discount.name && discount.particular) || discount.discountValue);
+                entry.transactions?.forEach(transaction => {
+                    if (transaction?.stock) {
+                        transaction.stock.rate = transaction.stock.rate?.amountForAccount;
+                    }
+                });
             });
         }
         return data;
