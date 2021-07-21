@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { select, Store } from "@ngrx/store";
 import { SettingsIntegrationService } from "apps/web-giddh/src/app/services/settings.integraion.service";
@@ -12,7 +12,8 @@ import { SettingsAmountLimitDuration, UNLIMITED_LIMIT } from "../../../../consta
 @Component({
     selector: 'icici-payor-account-create-edit',
     templateUrl: './payor-create-edit.component.html',
-    styleUrls: ['./payor-create-edit.component.scss']
+    styleUrls: ['./payor-create-edit.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class PayorCreateEditComponent implements OnInit, OnDestroy {
