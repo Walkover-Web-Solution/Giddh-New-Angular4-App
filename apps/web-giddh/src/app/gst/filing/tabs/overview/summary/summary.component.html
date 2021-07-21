@@ -10,9 +10,9 @@
     <div class="gstr-transactions-summary">
         <div class="text-uppercase title" *ngIf="!isTransactionSummary">{{localeData?.filing?.overall_summary}}</div>
 
-        <div *ngIf="gstrOverviewData.count">
+        <div *ngIf="gstrOverviewData.count" class="table-responsive">
 
-            <table class="table table-striped transactions-table transactions-summary-table on-mobile-view table-responsive">
+            <table class="table table-striped transactions-table transactions-summary-table on-mobile-view">
 
                 <thead>
                     <tr class="text-uppercase">
