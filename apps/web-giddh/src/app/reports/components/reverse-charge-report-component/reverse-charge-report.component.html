@@ -205,15 +205,6 @@
                             </td>
                         </tr>
                     </tbody>
-                    <tbody
-                        *ngIf="!isLoading && (!reverseChargeReportResults || !reverseChargeReportResults.items || reverseChargeReportResults.items.length === 0)">
-                        <tr>
-                            <td *ngIf="!isLoading" colspan="10" class="text-center empty-table" align="center">
-                                <no-data [secondaryMessageClass]="'p-0'"></no-data>
-                            </td>
-                            <td *ngIf="isLoading" colspan="10">&nbsp;</td>
-                        </tr>
-                    </tbody>
                     <tbody *ngIf="isLoading">
                         <tr>
                             <td colspan="10">
@@ -230,6 +221,9 @@
                     (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first"
                     [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next"
                     [lastText]="commonLocaleData?.app_last"></pagination>
+            </div>
+            <div class="no-data" *ngIf="!isLoading && (!reverseChargeReportResults || !reverseChargeReportResults.items || reverseChargeReportResults.items.length === 0)">
+                <no-data [secondaryMessageClass]="'p-0'"></no-data>
             </div>
         </div>
     </div>

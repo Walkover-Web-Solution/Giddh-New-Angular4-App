@@ -187,14 +187,10 @@
                                         </td>
                                     </tr>
                                 </tbody>
-                                <tbody *ngIf="!userSessionList.length">
-                                    <tr>
-                                        <td colspan="6" class="text-center empty-table">
-                                            <no-data [primaryMessage]="commonLocaleData?.app_no_entries_found" [secondaryMessage]="commonLocaleData?.app_search_suggestion" [secondaryMessageClass]="'p-0'"></no-data>
-                                        </td>
-                                    </tr>
-                                </tbody>
                             </table>
+                        </div>
+                        <div class="no-data" *ngIf="!userSessionList.length">
+                            <no-data [primaryMessage]="commonLocaleData?.app_no_entries_found" [secondaryMessage]="commonLocaleData?.app_search_suggestion" [secondaryMessageClass]="'p-0'"></no-data>
                         </div>
                     </div>
                 </div>

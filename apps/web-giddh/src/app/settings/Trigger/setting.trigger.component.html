@@ -143,13 +143,6 @@
                                 </td>
                             </tr>
                         </tbody>
-                        <tbody *ngIf="!isLoading && !availableTriggers.length" class="on-mobile-view no-records">
-                            <tr>
-                                <td colspan="11" class="text-center empty-table">
-                                    <no-data [secondaryMessage]="' '" [secondaryMessageClass]="'p-0'"></no-data>
-                                </td>
-                            </tr>
-                        </tbody>
                         <tbody *ngIf="isLoading">
                             <tr>
                                 <td colspan="11" class="text-center empty-table">
@@ -159,6 +152,9 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+            <div class="no-data" *ngIf="!isLoading && !availableTriggers.length">
+                <no-data [secondaryMessage]="' '" [secondaryMessage]="' '" [secondaryMessageClass]="'p-0'"></no-data>
             </div>
         </div>
 
