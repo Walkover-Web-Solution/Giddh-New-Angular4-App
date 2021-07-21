@@ -5,9 +5,9 @@
     top: 57px;
     right: 0;
     bottom: 0;
-    max-width: 330px;
+    max-width: 240px;
     width: 100%;
-    z-index: 99999;
+    z-index: 990;
     box-shadow: -3px 0 6px rgba(0, 0, 0, 0.1);
     &:after {
         position: absolute;
@@ -33,9 +33,6 @@
     z-index: 999;
     .aside-help-header {
         display: none;
-        .search-field {
-            display: none;
-        }
     }
 }
 :host.in #close {
@@ -55,7 +52,7 @@
 }
 
 :host .aside-pane {
-    max-width: 760px;
+    max-width: 240px;
     width: 100%;
 }
 .aside-header {
@@ -65,39 +62,17 @@
 .aside-pane {
     padding: 0;
     background-color: $white;
-    .back-to-main-slider {
-        display: none;
-    }
     .aside-help-header {
         display: flex;
         justify-content: space-between;
-        padding: 15px 15px;
-        position: sticky;
-        top: 0;
-        background-color: $alice-blue;
-        z-index: 1;
+        padding: 5px 20px;
         flex-direction: column;
-        h2 {
-            font-family: "opensans-semibold";
-            font-size: 18px;
-            color: $midnight-blue;
-        }
         #close {
             position: absolute;
             right: 15px;
         }
-        .search-field {
-            padding: 20px 0 10px;
-            background-color: $alice-blue;
-            input {
-                border-radius: 20px !important;
-                padding-left: 40px !important;
-            }
-            i {
-                top: 30px;
-                left: 15px;
-                color: gray;
-            }
+        h4{
+            padding-top: 5px;
         }
     }
 }
@@ -112,14 +87,14 @@
     margin-top: 15px;
 }
 .setting-items {
-    padding: 15px 0 0;
+    padding: 5px 0 0;
     ul {
         padding: 0;
         list-style: none;
         font-size: 14px;
         font-family: "opensans-semibold";
         li {
-            padding: 6px 20px;
+            padding: 10px 20px;
             margin-bottom: 0px;
             a {
                 cursor: pointer;
@@ -127,7 +102,7 @@
                     margin-right: 12px;
                 }
                 span {
-                    color: $nero;
+                    color: $slate;
                     &:first-child {
                         line-height: 1.6;
                         height: 20px;
@@ -144,7 +119,18 @@
                 }
             }
             &:hover {
-                background-color: $lavender;
+                background-color: $cornflower;
+                a{
+                    span{
+                        color: $white !important;
+                        i{
+                            color: $white !important;
+                        }
+                    }
+                    span{
+                        color: $white !important;
+                    }
+                }
             }
         }
     }
@@ -173,9 +159,6 @@
         z-index: unset;
         .aside-help-header {
             display: none;
-            .search-field {
-                display: none;
-            }
         }
         .back-to-main-slider {
             display: block;
@@ -285,10 +268,10 @@
 }
 @media (max-width: 768px) {
     :host {
-        max-width: 600px;
+        max-width: 240px;
     }
     :host .aside-pane {
-        max-width: 600px;
+        max-width: 240px;
     }
 }
 @media (max-width: 575px) {
