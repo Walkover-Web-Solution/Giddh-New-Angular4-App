@@ -40,15 +40,10 @@
                                             </td>
                                         </tr>
                                     </tbody>
-                                    <tbody *ngIf="!financialYearObj || !financialYearObj.financialYears.length"
-                                        class="on-mobile-view no-records">
-                                        <tr>
-                                            <td colspan="4" class="text-center empty-table">
-                                                <no-data [primaryMessage]="commonLocaleData?.app_no_entries_found" [secondaryMessage]="commonLocaleData?.app_search_suggestion" [secondaryMessageClass]="'p-0'"></no-data>
-                                            </td>
-                                        </tr>
-                                    </tbody>
                                 </table>
+                            </div>
+                            <div class="no-data" *ngIf="!financialYearObj || !financialYearObj.financialYears.length">
+                                <no-data [primaryMessage]="commonLocaleData?.app_no_entries_found" [secondaryMessage]="commonLocaleData?.app_search_suggestion" [secondaryMessageClass]="'p-0'"></no-data>
                             </div>
                         </div>
                     </div>

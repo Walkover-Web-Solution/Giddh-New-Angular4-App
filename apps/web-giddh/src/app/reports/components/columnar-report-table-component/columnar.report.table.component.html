@@ -67,15 +67,10 @@
                         </ng-container>
                     </tr>
                 </tbody>
-                <tbody class="no-record-found"
-                    *ngIf="columnarReportResponse && columnarReportResponse.accounts && columnarReportResponse.accounts.length === 0">
-                    <tr>
-                        <td [attr.colspan]="columnsName.length" align="center">
-                            <no-data [secondaryMessageClass]="'p-0'"></no-data>
-                        </td>
-                    </tr>
-                </tbody>
             </table>
+        </div>
+        <div class="no-data" *ngIf="columnarReportResponse && columnarReportResponse.accounts && columnarReportResponse.accounts.length === 0">
+            <no-data [secondaryMessageClass]="'p-0'"></no-data>
         </div>
     </div>
 </div>
