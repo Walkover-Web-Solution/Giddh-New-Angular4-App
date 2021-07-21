@@ -437,7 +437,7 @@
                                     (ngModelChange)="toggleAllSelection(allSelectionModel)" />
                             </span>
                             <div class="d-flex align-items-center">
-                                <div class="mr-r05">
+                                <div>
                                     <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showNameSearch, fieldName: 'name',formControl: searchedName,
                                                     title: commonLocaleData?.app_name}"></ng-container>
                                 </div>
@@ -1077,7 +1077,7 @@
 
     <ng-template #searchTemplate let-show let-title="title" let-placeholder="placeholder" let-fieldName="fieldName" let-formControl="formControl">
         <div [hidden]="show">
-            <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
+            <i class="icon-search pl-0" (click)="toggleSearch(fieldName, searchBox);"></i>
             <span> {{ title }}</span>
         </div>
         <div class="input-container" [hidden]="!show">
