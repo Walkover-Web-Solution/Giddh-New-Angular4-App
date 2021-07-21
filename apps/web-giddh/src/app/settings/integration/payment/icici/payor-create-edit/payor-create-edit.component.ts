@@ -26,7 +26,6 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
     @Output() public getAllBankAccounts: EventEmitter<boolean> = new EventEmitter();
     /** This emits true if create account modal needs to be closed */
     @Output() public closeModalEvent: EventEmitter<boolean> = new EventEmitter();
-
     /* This will hold local JSON data */
     public localeData: any = {};
     /** Form Group for account user form */
@@ -81,6 +80,11 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Releases all the observables to avoid memory leaks
+     *
+     * @memberof PayorCreateEditComponent
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();

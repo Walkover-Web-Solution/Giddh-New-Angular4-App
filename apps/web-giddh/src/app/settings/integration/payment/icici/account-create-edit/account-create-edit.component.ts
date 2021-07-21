@@ -27,7 +27,6 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
     @Output() public getAllBankAccounts: EventEmitter<boolean> = new EventEmitter();
     /** This emits true if create account modal needs to be closed */
     @Output() public closeModalEvent: EventEmitter<boolean> = new EventEmitter();
-
     /* This will hold local JSON data */
     public localeData: any = {};
     /** Form Group for account form */
@@ -67,9 +66,6 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      * @memberof AccountCreateEditComponent
      */
     public ngOnInit(): void {
-        this.loadUsersWithCompanyPermissions();
-        this.loadDefaultBankAccountsSuggestions();
-
         if (this.activeBankAccount) {
             this.paymentAlerts = this.activeBankAccount?.iciciDetailsResource?.paymentAlerts?.map(user => user.uniqueName);
 
@@ -90,6 +86,9 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
                 maxAmount: ['']
             });
         }
+
+        this.loadUsersWithCompanyPermissions();
+        this.loadDefaultBankAccountsSuggestions();
     }
 
     /**
