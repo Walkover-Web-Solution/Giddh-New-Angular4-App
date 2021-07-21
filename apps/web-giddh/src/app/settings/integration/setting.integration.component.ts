@@ -1,7 +1,7 @@
-import { Observable, of as observableOf, ReplaySubject, of } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { Component, Input, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef, HostListener } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
@@ -12,8 +12,7 @@ import {
     EmailKeyClass,
     PaymentClass,
     RazorPayClass,
-    SmsKeyClass,
-    IntegratedBankList
+    SmsKeyClass
 } from '../../models/api-models/SettingsIntegraion';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
@@ -33,7 +32,6 @@ import { SettingsAmountLimitDuration, SettingsIntegrationTab, UNLIMITED_LIMIT } 
 import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ESCAPE } from '@angular/cdk/keycodes';
 import { cloneDeep, find, isEmpty, isEqual } from '../../lodash-optimized';
 
 export declare const gapi: any;
@@ -64,11 +62,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public razorPayObj: RazorPayClass = new RazorPayClass();
     public payoutObj: CashfreeClass = new CashfreeClass();
     public autoCollectObj: CashfreeClass = new CashfreeClass();
-    public paymentGateway: CashfreeClass = new CashfreeClass();
     public amazonSeller: AmazonSellerClass = new AmazonSellerClass();
     public accounts$: Observable<IOption[]>;
     public updateRazor: boolean = false;
-    public paymentGatewayAdded: boolean = false;
     public autoCollectAdded: boolean = false;
     public payoutAdded: boolean = false;
     public bankAccounts$: Observable<IOption[]>;
@@ -77,23 +73,15 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public amazonEditItemIdx: number;
     public amazonSellerRes: AmazonSellerClass[];
     public isGmailIntegrated$: Observable<boolean>;
-    public isPaymentAdditionSuccess$: Observable<boolean>;
-    public isPaymentUpdationSuccess$: Observable<boolean>;
     public isElectron: boolean = Configuration.isElectron;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=:client_id&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
     private isSellerAdded: Observable<boolean> = observableOf(false);
     private isSellerUpdate: Observable<boolean> = observableOf(false);
-    /** List of integrated bank */
-    public integratedBankList: IntegratedBankList;
-    /** Add bank form reference */
-    public addBankForm: FormGroup;
     /** Input mast for number format */
     public inputMaskFormat: string = '';
     /** To check company country */
     public isIndianCompany: boolean = true;
-    /** To check update bank form validations */
-    public isUpdateBankFormValid$: Observable<boolean> = of(false);
 
     @Input() private selectedTabParent: number;
     @ViewChild('integrationTab', { static: true }) public integrationTab: TabsetComponent;
@@ -113,28 +101,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     //variable holding account Info
     public registeredAccount;
-    /** To check is registration form open*/
-    public openNewRegistration: boolean;
-    /**Selected bank integration form index for update  */
-    public selecetdUpdateIndex: number;
     public isEcommerceShopifyUserVerified: boolean = false;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
-    /** List OTP type  */
-    public typeOTPList: IOption[] = [];
-    public amountUpToList: IOption[] = [];
-    // public approvalNameList: IOption[] = [];
     public selectedCompanyUniqueName: string;
-    public isCreateInvalid: boolean = false;
-    /** update bank form validation for amount */
-    public isUpdateInvalid: boolean = false;
-    /** Maximum amount length limit */
-    public maxLimit: number = 8;
-    /** Maximum amount limit */
-    public maxAmountLimit: number;
-    /** To check bank update form in edit mode */
-    public isBankUpdateInEdit: number = null;
-    /** Update bank urn number */
-    public updateBankUrnNumber: any;
     /* This will clear the selected linked account */
     public forceClearLinkAccount$: Observable<IForceClear> = observableOf({ status: false });
     /** Stores the search results pagination details */
@@ -173,8 +142,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public selectAllRecords: string = SELECT_ALL_RECORDS;
     /* This will clear the selected payment updates values */
     public forceClearPaymentUpdates$: Observable<IForceClear> = observableOf({ status: false });
-    /** This will hold users list */
-    public paymentAlersUsersList: any[] = [];
     /** Form Group for create new account user form */
     public createNewAccountUserForm: FormGroup;
     /** Holds the amount limit duration options */
@@ -206,7 +173,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private _authenticationService: AuthenticationService,
         private _fb: FormBuilder,
         private settingsPermissionActions: SettingsPermissionActions,
-        private changeDetectionRef: ChangeDetectorRef,
         private generalService: GeneralService,
         private settingsIntegrationService: SettingsIntegrationService,
         private searchService: SearchService,
@@ -217,8 +183,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.isSellerAdded = this.store.pipe(select(s => s.settings.amazonState.isSellerSuccess), takeUntil(this.destroyed$));
         this.isSellerUpdate = this.store.pipe(select(s => s.settings.amazonState.isSellerUpdated), takeUntil(this.destroyed$));
         this.isGmailIntegrated$ = this.store.pipe(select(s => s.settings.isGmailIntegrated), takeUntil(this.destroyed$));
-        this.isPaymentAdditionSuccess$ = this.store.pipe(select(s => s.settings.isPaymentAdditionSuccess), takeUntil(this.destroyed$));
-        this.isPaymentUpdationSuccess$ = this.store.pipe(select(s => s.settings.isPaymentUpdationSuccess), takeUntil(this.destroyed$));
 
         this.store.pipe(select(s => s.session.user), take(1)).subscribe(result => {
             if (result && result.user) {
@@ -233,7 +197,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
             this.selectTab(this.selectedTabParent);
         }
-        this.addBankForm = this.createBankIntegrationForm();
+
         // getting all page data of integration page
         this.store.pipe(select(p => p.settings.integration), takeUntil(this.destroyed$)).subscribe((o) => {
             // set sms form data
@@ -274,13 +238,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.autoCollectObj = new CashfreeClass();
                 this.autoCollectAdded = false;
             }
-            if (o.paymentGateway && o.paymentGateway.userName) {
-                this.paymentGateway = cloneDeep(o.paymentGateway);
-                this.paymentGatewayAdded = true;
-            } else {
-                this.paymentGateway = new CashfreeClass();
-                this.paymentGatewayAdded = false;
-            }
             if (o.amazonSeller && o.amazonSeller.length) {
                 this.amazonSellerRes = cloneDeep(o.amazonSeller);
                 this.amazonSellerForm.controls['sellers']?.patchValue(this.amazonSellerRes);
@@ -304,46 +261,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             if (a) {
                 this.amazonEditItemIdx = null;
                 this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
-            }
-        });
-
-        this.store.pipe(select(p => p.company), takeUntil(this.destroyed$)).subscribe((o) => {
-            if (o && o.account) {
-                if (!isEqual(this.registeredAccount, o.account)) {
-                    this.registeredAccount = o.account;
-                    if (this.registeredAccount && this.registeredAccount.length === 0) {
-                        this.openNewRegistration = true;
-                    }
-                    if (this.registeredAccount && this.registeredAccount.length) {
-                        this.registeredAccount.map(item => {
-                            if (item && !item.userAmountRanges) {
-                                item.userAmountRanges = [this.getBlankAmountRangeRow()]
-                            }
-                            if (!item.loginId) {
-                                /* Login ID is not present, create it:
-                                   Login ID = (Corporate ID).(User ID) or
-                                   Login ID = Alias ID
-                                */
-                                if (item.aliasId) {
-                                    item.loginId = item.aliasId
-                                } else if (item.corpId && item.userId) {
-                                    item.loginId = `${item.corpId}.${item.userId}`;
-                                }
-                            }
-                            item.selectedUsers = this.usersList.filter(user => item.emailIds?.find(emailId => user.value === emailId)) ?? [];
-                            item.userAmountRanges.map(element => {
-                                if (typeof element.maxBankLimit === "boolean") {
-                                    element.maxBankLimit = element.maxBankLimit ? 'max' : 'custom';
-                                }
-                            });
-                        });
-                    }
-                }
-                if (this.addBankForm) {
-                    this.addBankForm.reset();
-                    this.addBankForm = this.createBankIntegrationForm();
-                }
-                this.isBankUpdateInEdit = null;
             }
         });
 
@@ -372,30 +289,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         if (this.selectedCompanyUniqueName) {
             this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
         }
-
-        this.isPaymentUpdationSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res) {
-                this.isBankUpdateInEdit = null;
-                this.updateBankUrnNumber = null;
-            }
-        });
-
-        this.store.pipe(select(state => state.settings.usersWithCompanyPermissions), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.usersList = [];
-                this.paymentAlersUsersList = [];
-                let index = 0;
-
-                this.paymentAlersUsersList.push({ index: index, label: "Select All", value: this.selectAllRecords });
-                index++;
-
-                response.forEach(user => {
-                    this.paymentAlersUsersList.push({ index: index, label: user.userName, value: user.userUniqueName });
-                    this.usersList.push({ index: index, label: user.userName, value: user.userUniqueName });
-                    index++;
-                });
-            }
-        });
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -428,28 +321,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public onSubmitEmailform(f: NgForm) {
         if (f.valid) {
             this.store.dispatch(this.settingsIntegrationActions.SaveEmailKey(f.value));
-        }
-    }
-
-    /**
-     *To submit form and send data to API Call
-     *
-     * @param {*} fomValue
-     * @memberof SettingIntegrationComponent
-     */
-    public onSubmitPaymentform(fomValue: any): void {
-
-        if (fomValue) {
-            this.selecetdUpdateIndex = null;
-            let requestObject = cloneDeep(fomValue);
-            if (requestObject.userAmountRanges) {
-                requestObject.userAmountRanges.map(element => {
-                    element.maxBankLimit = (element.maxBankLimit === 'max') ? 'true' : 'false';
-                });
-            }
-            this.isBankUpdateInEdit = null;
-            this.updateBankUrnNumber = null;
-            this.store.dispatch(this.settingsIntegrationActions.SavePaymentInfo(requestObject));
         }
     }
 
@@ -539,31 +410,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     public deleteAutoCollect() {
         this.store.dispatch(this.settingsIntegrationActions.DeleteAutoCollectUser());
-    }
-
-    /**
-     * submitPaymentGateway
-     */
-    public submitPaymentGateway(f) {
-        if (f.userName && f.password) {
-            this.store.dispatch(this.settingsIntegrationActions.AddPaymentGateway(f));
-        }
-    }
-
-    /**
-     * UpdatePaymentGateway
-     */
-    public updatePaymentGateway(f) {
-        if (f.userName && f.password) {
-            this.store.dispatch(this.settingsIntegrationActions.UpdatePaymentGateway(f));
-        }
-    }
-
-    /**
-     * DeletePaymentGateway
-     */
-    public deletePaymentGateway() {
-        this.store.dispatch(this.settingsIntegrationActions.DeletePaymentGateway());
     }
 
     /**
@@ -678,54 +524,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         }
     }
 
-    public openNewRegistartionForm() {
-        this.isBankUpdateInEdit = null;
-        this.addBankForm = this.createBankIntegrationForm();
-        if (this.openNewRegistration) {
-            //logic to get all registered account for integration tab
-            this.store.dispatch(this._companyActions.getAllRegistrations());
-            this.store.dispatch(this.settingsIntegrationActions.ResetICICIFlags());
-        } else {
-            this.openNewRegistration = true;
-        }
-        this.paymentFormObj = new PaymentClass();
-
-        if (this.paymentForm) {
-            this.paymentForm.resetForm();
-            this.paymentFormAccountName.filter = '';
-        }
-    }
-
-    public deRegisterForm(regAcc: IntegratedBankList) {
-        this.store.dispatch(this.settingsIntegrationActions.ResetICICIFlags());
-        this.store.dispatch(this.settingsIntegrationActions.RemovePaymentInfo(regAcc.URN));
-    }
-
-    /**
-     * To update integrated bank details
-     *
-     * @param {IntegratedBankList} regAcc
-     * @param {number} index
-     * @memberof SettingIntegrationComponent
-     */
-    public updateIciciDetails(regAcc: IntegratedBankList, index: number) {
-        this.selecetdUpdateIndex = index;
-        this.store.dispatch(this.settingsIntegrationActions.ResetICICIFlags());
-        let registeredAccountObj = cloneDeep(regAcc);
-        registeredAccountObj.userAmountRanges.map(item => {
-            item.maxBankLimit = item.maxBankLimit === "max" ? 'true' : 'false';
-        });
-        let requestData = {
-            URN: this.updateBankUrnNumber,
-            accountUniqueName: registeredAccountObj.accountUniqueName,
-            userAmountRanges: registeredAccountObj.userAmountRanges,
-            userNames: registeredAccountObj.userNames,
-            emailIds: registeredAccountObj.emailIds
-        }
-        this.store.dispatch(this.settingsIntegrationActions.UpdatePaymentInfo(requestData));
-        this.paymentFormObj = new PaymentClass();
-    }
-
     /**
      * API call to get know about ecommerce platform shopify connected or not
      *
@@ -800,514 +598,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     /**
-     * To select Max limit (Max bank or custom)
-     *
-     * @param {*} event  reference event
-     * @param {number} index index number
-     * @memberof SettingIntegrationComponent
-     */
-    public selectedMaxOrCustom(index: number, isUpdate: boolean, parentIndex?: number,): void {
-        if (!isUpdate && this.paymentFormObj.userAmountRanges) {
-            this.paymentFormObj.userAmountRanges[index].amount = null;
-        }
-        if (isUpdate && this.registeredAccount && this.registeredAccount[parentIndex].userAmountRanges) {
-            this.registeredAccount[parentIndex].userAmountRanges[index].amount = null;
-        }
-    }
-
-    /**
-     * To select Max limit (Max bank or custom)
-     *
-     * @param {*} event  reference event
-     * @param {number} index index number
-     * @memberof SettingIntegrationComponent
-     */
-    public selectedMaxOrCustomField(index: number, isUpdate: boolean, parentIndex?: number, event?: any): void {
-
-        if (!isUpdate) {
-            let userAmountRanges = this.addBankForm.get('userAmountRanges') as FormArray;
-            userAmountRanges.controls[index].get('amount')?.patchValue(null);
-            if (event.value === 'max') {
-                userAmountRanges.controls[index].get('maxBankLimit')?.patchValue('max');
-                userAmountRanges.controls[index].get('amount')?.patchValue(null);
-                userAmountRanges.controls[index].get('amount').clearValidators();
-                userAmountRanges.controls[index].get('amount').reset();
-
-                if (this.checkIsMaxBankLimitSelectedField(userAmountRanges, index)) {
-                    userAmountRanges.controls[index].get('maxBankLimit')?.patchValue('custom');
-                    userAmountRanges.controls[index].get('amount')?.patchValue(null);
-                    userAmountRanges.controls[index].get('amount').setErrors({ 'incorrect': true });
-                    userAmountRanges.controls[index].get('amount').setValidators(Validators.compose([Validators.required]));
-                    this.toasty.infoToast(this.localeData?.payment?.max_limit_alert);
-                }
-            } else {
-                userAmountRanges.controls[index].get('maxBankLimit')?.patchValue('custom');
-                userAmountRanges.controls[index].get('amount').setValidators(Validators.compose([Validators.required]));
-                userAmountRanges.controls[index].get('amount')?.patchValue(null);
-            }
-        }
-        if (isUpdate && this.registeredAccount && this.registeredAccount[parentIndex].userAmountRanges) {
-            this.registeredAccount[parentIndex].userAmountRanges[index].amount = null;
-        }
-    }
-
-
-    /**
-     * To call when max and custom limit options change
-     *
-     * @param {*} event
-     * @param {number} index
-     * @param {boolean} isUpdate
-     * @param {number} [parentIndex]
-     * @memberof SettingIntegrationComponent
-     */
-    public maxLimitOrCustomChanged(event: any, index: number, isUpdate: boolean, parentIndex?: number): void {
-
-        if (!isUpdate) {
-            if (event === 'max' && this.checkIsMaxBankLimitSelected(this.paymentFormObj.userAmountRanges, index)) {
-                this.paymentFormObj.userAmountRanges[index].maxBankLimit = "custom";
-                this.paymentFormObj.userAmountRanges[index].amount = null;
-                this.toasty.infoToast(this.localeData?.payment?.max_limit_alert);
-            } else {
-                this.paymentFormObj.userAmountRanges[index].amount = null;
-            }
-        } else {
-            if (event === 'max' && this.checkIsMaxBankLimitSelected(this.registeredAccount[parentIndex].userAmountRanges, index)) {
-                this.registeredAccount[parentIndex].userAmountRanges[index].maxBankLimit = "custom";
-                this.registeredAccount[parentIndex].userAmountRanges[index].amount = null;
-                this.toasty.infoToast(this.localeData?.payment?.max_limit_alert);
-            } else {
-                this.registeredAccount[parentIndex].userAmountRanges[index].amount = null;
-            }
-        }
-
-        this.changeDetectionRef.detectChanges();
-    }
-
-    /**
-     * To check mac and custom is selected
-     *
-     * @param {any[]} itemList
-     * @param {number} index
-     * @returns {boolean}
-     * @memberof SettingIntegrationComponent
-     */
-    public checkIsMaxBankLimitSelectedField(itemList: FormArray, index: number): boolean {
-
-
-        let selected: boolean = false;
-        if (itemList) {
-            selected = itemList.controls.some((item, indx) => {
-                if (index !== indx && item.get('maxBankLimit').value) {
-                    return item.get('maxBankLimit').value === 'max';
-                }
-            }
-            );
-        }
-        return selected;
-    }
-
-    public checkIsMaxBankLimitSelected(itemList: any[], index: number): boolean {
-
-        let selected: boolean = false;
-        if (itemList) {
-            selected = itemList.some((item, indx) => {
-                if (index !== indx && item.maxBankLimit) {
-                    return item.maxBankLimit === 'max';
-                }
-            }
-            );
-        }
-        return selected;
-    }
-    /**
-     *To check if duplicate amount entered
-     *
-     * @param {*} item Selected element
-     * @param {number} index Index of selected item
-     * @param {HTMLInputElement} elementRef Input reference
-     * @param {boolean} isUpdate True if is in update mode element
-     * @param {number} [parentIndex] Index of parent object array
-     * @memberof SettingIntegrationComponent
-     */
-    public changeAmount(item: any, index: number, elementRef: HTMLInputElement, isUpdate: boolean, parentIndex?: number) {
-        if (!isUpdate && item && elementRef && this.paymentFormObj) {
-            if (this.checkIsAmountRepeat(this.paymentFormObj.userAmountRanges, this.paymentFormObj.userAmountRanges[index].amount, index)) {
-                elementRef.classList.add('error-box');
-                this.isUpdateBankFormValid$ = of(false);
-            } else {
-                elementRef.classList.remove('error-box');
-                this.checkFormValidations(this.addBankForm.value);
-            }
-        } else if (isUpdate && item && elementRef && this.registeredAccount[parentIndex]) {
-            if (this.checkIsAmountRepeat(this.registeredAccount[parentIndex].userAmountRanges, this.registeredAccount[parentIndex].userAmountRanges[index].amount, index)) {
-                elementRef.classList.add('error-box');
-            } else {
-                elementRef.classList.remove('error-box');
-            }
-        }
-    }
-
-    /**
-     * To check is entered amount repeated
-     *
-     * @param {any[]} itemList List of item
-     * @param {*} value Selected value
-     * @param {number} index Index number
-     * @returns {boolean}
-     * @memberof SettingIntegrationComponent
-     */
-    public checkIsAmountRepeat(itemList: any[], value: any, index: number, isUpdateMode?: boolean): boolean {
-
-        let selected: boolean = false;
-        if (itemList) {
-            selected = itemList.some((item, indx) => {
-                if (index !== indx && item.amount && value) {
-                    return Number(item.amount) === Number(value);
-                }
-            }
-            );
-        }
-        if (!selected) {
-            this.isCreateInvalid = this.isUpdateInvalid = this.toCheckBankAmountCustomFieldValidation(itemList);
-
-        } else {
-            this.isCreateInvalid = this.isUpdateInvalid = selected;
-        }
-        this.isUpdateBankFormValid$ = of(selected);
-        return selected;
-    }
-
-    /**
-     * To check duplicate amount in bank amount range field
-     *
-     * @param {any[]} itemList Amount rangeof bank integration array object
-     * @returns {boolean}
-     * @memberof SettingIntegrationComponent
-     */
-    public toCheckBankAmountCustomFieldValidation(itemList: any[]): boolean {
-        let isInValid = false;
-        if (itemList) {
-            isInValid = itemList.some((item) => {
-                return (item.maxBankLimit === 'custom' && !item.amount);
-            });
-        }
-        return isInValid;
-    }
-
-    /**
-     *Add new blank amount range row
-     *
-     * @param {number} [indexUpdateObj] selected item
-     * @memberof SettingIntegrationComponent
-     */
-    public addNewAmountRangeRow(indexUpdateObj?: number): void {
-        if (this.paymentFormObj && !indexUpdateObj && this.paymentFormObj.userAmountRanges) {
-            this.paymentFormObj.userAmountRanges.push(this.getBlankAmountRangeRow());
-        }
-        if (indexUpdateObj && this.registeredAccount) {
-            if (this.registeredAccount[indexUpdateObj - 1] && this.registeredAccount[indexUpdateObj - 1].userAmountRanges) {
-                this.registeredAccount[indexUpdateObj - 1].userAmountRanges.push(this.getBlankAmountRangeRow());
-            }
-        }
-    }
-
-    /**
-     * Get new blank amount range row
-     *
-     * @returns {UserAmountRangeRequests}
-     * @memberof SettingIntegrationComponent
-     */
-    public getBlankAmountRangeRow(): any {
-        let userAmountRanges = {
-            amount: null,
-            otpType: '',
-            approvalUniqueName: '',
-            maxBankLimit: 'custom',
-        }
-        // return new UserAmountRangeRequests();
-        return userAmountRanges;
-    }
-
-    /**
-     * Delete amount range row
-     *
-     * @param {*} item item object which need to remove
-     * @memberof SettingIntegrationComponent
-     */
-    public deleteAmountRangeRow(item: any, indexUpdateList?: number): void {
-        if (item && !indexUpdateList) {
-            if (this.paymentFormObj.userAmountRanges.length > 1) {
-                let itemIndx = this.paymentFormObj.userAmountRanges.findIndex((element) => element === item);
-                if (itemIndx > -1) {
-                    this.paymentFormObj.userAmountRanges.splice(itemIndx, 1);
-                }
-            } else {
-                this.toasty.infoToast(this.localeData?.payment?.row_delete_error);
-            }
-
-        }
-        if (item && indexUpdateList) {
-            if (this.registeredAccount[indexUpdateList - 1].userAmountRanges.length > 1) {
-                let itemIndxOfUpdate = this.registeredAccount[indexUpdateList - 1].userAmountRanges.findIndex((element) => element === item);
-                if (itemIndxOfUpdate > -1) {
-                    this.registeredAccount[indexUpdateList - 1].userAmountRanges.splice(itemIndxOfUpdate, 1);
-                }
-            } else {
-                this.toasty.infoToast(this.localeData?.payment?.row_delete_error);
-            }
-
-        }
-    }
-
-    /**
-     * To reset aaproval name if OTP type selected
-     *
-     * @param {IOption} event OTP type option event
-     * @param {number} index index number
-     * @param {boolean} isUpdate True if update mode
-     * @memberof SettingIntegrationComponent
-     */
-    public selectedOtpType(event: IOption, index: number, isUpdate: boolean, parentIndex?: number): void {
-        if (event && !isUpdate) {
-            let validators = null;
-            const transactions = this.addBankForm.get('userAmountRanges') as FormArray;
-            if (transactions.controls[index].get('otpType').value === 'GIDDH') {
-                validators = Validators.compose([Validators.required]);
-                transactions.controls[index].get('approvalUniqueName').setValidators(validators);
-            } else {
-                transactions.controls[index].get('approvalUniqueName').clearValidators();
-            }
-            transactions.controls[index].get('approvalUniqueName')?.patchValue(null)
-        } else if (event && this.registeredAccount && this.registeredAccount[parentIndex].userAmountRanges && isUpdate) {
-            this.registeredAccount[parentIndex].userAmountRanges[index].approvalUniqueName = null;
-            this.registeredAccount[parentIndex].userAmountRanges[index].approvalDetails = null;
-        }
-        if (this.addBankForm && this.addBankForm.value) {
-            this.checkFormValidations(this.addBankForm.value);
-        }
-    }
-
-    /**
-     * To clear/reset form
-     *
-     * @memberof SettingIntegrationComponent
-     */
-    public clearForm(): void {
-        this.paymentFormObj = new PaymentClass();
-        this.paymentFormObj.corpId = "";
-        this.paymentFormObj.loginId = "";
-        this.paymentFormObj.userId = "";
-        this.paymentFormObj.accountNo = "";
-        this.paymentFormObj.aliasId = "";
-        this.paymentFormObj.accountUniqueName = "";
-        this.paymentFormObj.userAmountRanges = [this.getBlankAmountRangeRow()];
-        this.forceClear$ = observableOf({ status: true });
-    }
-
-    /**
-     * To get validation of amount bank
-     *
-     * @param {string} bankType
-     * @memberof SettingIntegrationComponent
-     */
-    public getValidationForm(bankType: string): void {
-        if (this.selectedCompanyUniqueName && bankType) {
-            this.settingsIntegrationService.getValidationFormForBank(this.selectedCompanyUniqueName, bankType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response && response.status === 'success') {
-                    if (response.body) {
-                        this.maxLimit = String(response.body.maxAmount).length;
-                        this.maxAmountLimit = String(response.body.maxAmount).length;
-
-                    }
-                }
-            });
-        }
-    }
-
-
-    /**
-     * To create and initialize bank integration form
-     *
-     * @returns {FormGroup}
-     * @memberof SettingIntegrationComponent
-     */
-    public createBankIntegrationForm(): FormGroup {
-        return this._fb.group({
-            loginId: [null, Validators.compose([Validators.required])],
-            accountNo: [null, Validators.compose([Validators.required])],
-            accountUniqueName: [null, Validators.compose([Validators.required])],
-            userAmountRanges: this._fb.array([
-                this._fb.group({
-                    maxBankLimit: ['max', Validators.compose([Validators.required])],
-                    otpType: ['BANK', Validators.compose([Validators.required])],
-                    amount: [''],
-                    approvalUniqueName: [''],
-                })
-            ]),
-            userNames: [[]],
-            emailIds: [[]]
-        });
-    }
-
-    /**
-     * To initialize user amout range of bank integration form
-     *
-     * @returns {FormGroup}
-     * @memberof SettingIntegrationComponent
-     */
-    public initialUserAmountRangesForm(value?: any): FormGroup {
-        let transactionsFields = this._fb.group({
-            maxBankLimit: ['custom', Validators.compose([Validators.required])],
-            otpType: ['', Validators.compose([Validators.required])],
-            amount: [''],
-            approvalUniqueName: [''],
-        });
-        if (value) {
-            transactionsFields?.patchValue(value);
-        }
-        return transactionsFields;
-    }
-
-
-    /**
-     * To add user amount range form
-     *
-     * @returns {*}
-     * @memberof SettingIntegrationComponent
-     */
-    public addUserAmountRangesForm(): any {    // commented code because we no need GSTIN No. to add new address
-        const transactions = this.addBankForm.get('userAmountRanges') as FormArray;
-        transactions.push(this.initialUserAmountRangesForm());
-        return;
-    }
-
-    /**
-     * Prepare amount range array of bank integration
-     *
-     * @param {*} [addressObj=null]
-     * @memberof SettingIntegrationComponent
-     */
-    public filledAmountRangesForm(addressObj: any = null) {
-        const transactions = this.addBankForm.get('userAmountRanges') as FormArray;
-        transactions.push(this.initialUserAmountRangesForm(addressObj));
-    }
-
-    /**
-     * To remove user amount range field
-     *
-     * @param {number} index
-     * @memberof SettingIntegrationComponent
-     */
-    public removeUserAmountRangesForm(index: number): void {
-        const transactions = this.addBankForm.get('userAmountRanges') as FormArray;
-        if (transactions.controls.length > 1) {
-            transactions.removeAt(index);
-        } else {
-            this.toasty.infoToast(this.localeData?.payment?.row_delete_error);
-        }
-        this.isCreateInvalid = this.isUpdateInvalid = this.toCheckBankAmountCustomFieldValidation(transactions.value);
-    }
-
-
-    /**
-     * Prevent zero amount form amount field
-     *
-     * @param {number} amount
-     * @param {number} index
-     * @param {number} [parentIndex]
-     * @param {boolean} [isUpdate]
-     * @memberof SettingIntegrationComponent
-     */
-    public preventZero(amount: number, index: number, parentIndex?: number, isUpdate?: boolean): any {
-
-        if (!isUpdate) {
-            const transactions = this.addBankForm.get('userAmountRanges') as FormArray;
-            if (Number(amount) <= 0) {
-                transactions.controls[index].get('amount')?.patchValue(null);
-            } else {
-                transactions.controls[index].get('amount').setErrors(null);
-            }
-            this.checkFormValidations(this.addBankForm.value);
-        }
-        if (isUpdate) {
-            if (Number(amount) <= 0) {
-                this.registeredAccount[parentIndex].userAmountRanges[index].amount = null;
-            }
-        }
-    }
-
-    /**
-     *Edit bank integration form
-     *
-     * @param {*} index
-     * @memberof SettingIntegrationComponent
-     */
-    public editRegisterForm(index: any, updateFormValue?: IntegratedBankList): void {
-        this.isBankUpdateInEdit = index;
-        if (index === null) {
-            this.resetUserSelection();
-        } else {
-            this.setUserSelection();
-        }
-        this.updateBankUrnNumber = null;
-        this.addBankForm = this.createBankIntegrationForm();
-        if (updateFormValue) {
-            this.updateBankUrnNumber = updateFormValue.URN;
-            if (updateFormValue.account && updateFormValue.account.uniqueName) {
-                updateFormValue.accountUniqueName = updateFormValue.account.uniqueName;
-            }
-            this.openNewRegistration = false;
-            this.addBankForm?.patchValue(updateFormValue);
-            updateFormValue.userAmountRanges.forEach((item, indexAmount) => {
-                if (indexAmount) {
-                    this.filledAmountRangesForm(item);
-                }
-            });
-            this.checkFormValidations(this.addBankForm.value);
-            if (this.addBankForm.value) {
-                this.isUpdateInvalid = this.toCheckBankAmountCustomFieldValidation(this.addBankForm.value.userAmountRanges);
-            }
-        } else {
-            this.addBankForm = this.createBankIntegrationForm();
-        }
-    }
-
-    /**
-     *To check update form validation of bank integration
-     *
-     * @param {IntegratedBankList} item Form data
-     * @returns {boolean}
-     * @memberof SettingIntegrationComponent
-     */
-    public checkFormValidations(item: IntegratedBankList): boolean {
-        let valid = false;
-        if (item) {
-            valid = (item.loginId && item.accountUniqueName && item.accountNo && item.userAmountRanges &&
-                item.userAmountRanges.length) ? true : false;
-            if (valid) {
-                valid = item.userAmountRanges.every((rangeData: any) => {
-                    return ((rangeData.maxBankLimit === 'max' && !rangeData.amount) || (rangeData.maxBankLimit === 'custom' && rangeData.amount)) && ((rangeData.otpType === 'GIDDH' && rangeData.approvalUniqueName) || (rangeData.otpType === 'BANK' && !rangeData.approvalUniqueName));
-                });
-            }
-        }
-        this.isUpdateBankFormValid$ = of(valid);
-        return valid;
-    }
-
-    /** Note We have to use param 'postItem' as this need mapping on sh-select custome filter params
-     * To apply custom sorting on approver list
-     *
-     * @param {IOption} preItem Params to sort selected item
-     * @param {IOption} postItem Params to sort selected item
-     * @returns
-     * @memberof SettingIntegrationComponent
-     */
-    public customApproverNameListSorting(preItem: IOption, postItem: IOption): any {
-        return (parseInt(preItem.label));
-    }
-
-    /**
      * Loads payment tab data
      *
      * @param {any} event Tab select event
@@ -1322,7 +612,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.store.pipe(take(1)).subscribe(s => {
                 this.selectedCompanyUniqueName = s.session.companyUniqueName;
                 this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
-                this.getValidationForm('ICICI')
             });
         }
     }
@@ -1550,99 +839,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     /**
-     * This will show beneficiary modal
-     *
-     * @param {*} urn
-     * @memberof SettingIntegrationComponent
-     */
-    public showBeneficiaryModal(urn: any): void {
-        this.activeUrn = urn;
-        this.beneficiaryAsideState = "in";
-    }
-
-    /**
-     * This will hide beneficiary modal
-     *
-     * @memberof SettingIntegrationComponent
-     */
-    public hideBeneficiaryModal(event?: any): void {
-        this.activeUrn = '';
-        this.beneficiaryAsideState = 'out'
-    }
-
-    @HostListener('document:keyup', ['$event'])
-    public handleKeyboardEvent(event: KeyboardEvent) {
-        if (event.keyCode === ESCAPE) {
-            this.hideBeneficiaryModal();
-        }
-    }
-
-    /**
-     * This will get the account registration status
-     *
-     * @param {*} account
-     * @memberof SettingIntegrationComponent
-     */
-    public getRegistrationStatus(account: any): void {
-        this.settingsIntegrationService.getRegistrationStatus(account.URN).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.body) {
-                account.registrationStatus = response?.body?.Status;
-            } else {
-                account.registrationStatus = "";
-            }
-        });
-    }
-
-    /**
-     * Callback for user selected
-     *
-     * @param {*} event
-     * @memberof SettingIntegrationComponent
-     */
-    public selectUser(event: any): void {
-        if (event) {
-            this.addBankForm.get('userNames')?.patchValue(event.map(ev => ev.label));
-        }
-    }
-
-    /**
-     * Selects the users
-     *
-     * @param {*} event Select event
-     * @memberof SettingIntegrationComponent
-     */
-    public selectPaymentAlertUsers(event: any): void {
-        let isSelectAllChecked = event.filter(ev => ev.value === this.selectAllRecords);
-        let isSelectAllAlreadyChecked = this.paymentAlerts.filter(ev => ev === this.selectAllRecords);
-
-        if (isSelectAllChecked?.length > 0 && isSelectAllAlreadyChecked?.length === 0) {
-            this.paymentAlerts = this.paymentAlersUsersList.map(user => user.value);
-        } else if (isSelectAllAlreadyChecked?.length > 0 && isSelectAllChecked?.length === 0) {
-            this.paymentAlerts = [];
-            this.forceClearPaymentUpdates$ = observableOf({ status: true });
-        } else {
-            this.paymentAlerts = event.map(user => user.value);
-        }
-
-        if (this.paymentAlerts?.length === 1 && isSelectAllChecked?.length > 0) {
-            this.paymentAlerts = [];
-            this.forceClearPaymentUpdates$ = observableOf({ status: true });
-        }
-    }
-
-    public resetUserSelection(): void {
-        this.usersList.forEach(user => user.isSelected = false);
-    }
-
-    public setUserSelection(): void {
-        this.usersList.forEach(user => user.isSelected = this.registeredAccount[this.isBankUpdateInEdit].selectedUsers.some(selectedUser => selectedUser.value === user.value));
-    }
-
-    public getSelectedItemCount(items: Array<any>): number {
-        return items?.filter(user => user.isSelected).length;
-    }
-
-    /**
      * Callback for translation response complete
      *
      * @param {*} event
@@ -1650,16 +846,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public translationComplete(event: any): void {
         if (event) {
-            this.typeOTPList = [
-                { label: this.localeData?.otp_types?.bank_otp, value: "BANK" },
-                { label: this.localeData?.otp_types?.giddh_otp, value: "GIDDH" },
-            ];
-
-            this.amountUpToList = [
-                { label: this.localeData?.amount_limit_types?.bank_limit, value: "max" },
-                { label: this.localeData?.amount_limit_types?.custom, value: "custom" },
-            ];
-
             this.amountLimitDurations = [
                 { label: this.localeData?.payment?.amount_limit?.daily, value: SettingsAmountLimitDuration.Daily },
                 { label: this.localeData?.payment?.amount_limit?.weekly, value: SettingsAmountLimitDuration.Weekly },
@@ -1674,43 +860,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public openCreateNewAccountModal(): void {
-        this.createNewAccountForm = this._fb.group({
-            bank: ['ICICI'],
-            loginId: ['', Validators.required],
-            accountNumber: ['', Validators.compose([Validators.required, Validators.minLength(9), Validators.maxLength(11)])],
-            accountUniqueName: ['', Validators.required],
-            paymentAlerts: [''],
-            userUniqueName: ['', Validators.required],
-            duration: [UNLIMITED_LIMIT],
-            maxAmount: ['']
-        });
-
         this.createNewAccountModal?.show();
-    }
-
-    /**
-     * This will save the new account
-     *
-     * @memberof SettingIntegrationComponent
-     */
-    public saveNewAccount(): void {
-        if (!this.createNewAccountForm?.invalid) {
-            this.createNewAccountForm.get('paymentAlerts')?.patchValue(this.paymentAlerts.filter(user => user !== this.selectAllRecords).map(user => user));
-
-            this.settingsIntegrationService.bankAccountRegistration(this.createNewAccountForm.value).pipe(take(1)).subscribe(response => {
-                if (response?.status === "success") {
-                    this.closeCreateNewAccountModal();
-                    if (response?.body?.message) {
-                        this.toasty.clearAllToaster();
-                        this.toasty.successToast(response?.body?.message);
-                    }
-                    this.getAllBankAccounts();
-                } else {
-                    this.toasty.clearAllToaster();
-                    this.toasty.errorToast(response?.message);
-                }
-            });
-        }
     }
 
     /**
@@ -1800,6 +950,18 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public trackByAlertUniqueName(index: number, item: any): any {
         return item?.uniqueName;
+    }
+
+    /**
+     * This returns the payor unique name of payor
+     *
+     * @param {number} index
+     * @param {*} item
+     * @returns {*}
+     * @memberof SettingIntegrationComponent
+     */
+    public trackByPayorUniqueName(index: number, item: any): any {
+        return item?.urn;
     }
 
     /**
@@ -1935,14 +1097,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public openEditAccountModal(bankAccount: any): void {
         this.activeBankAccount = bankAccount;
-        this.paymentAlerts = bankAccount?.iciciDetailsResource?.paymentAlerts?.map(user => user.uniqueName);
-
-        this.editAccountForm = this._fb.group({
-            accountNumber: [bankAccount?.iciciDetailsResource?.accountNumber],
-            accountUniqueName: [bankAccount?.account?.uniqueName],
-            paymentAlerts: [this.paymentAlerts]
-        });
-
         this.editAccountModal?.show();
     }
 
@@ -1953,37 +1107,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public closeEditAccountModal(): void {
         this.editAccountModal?.hide();
-    }
-
-    /**
-     * This will update the account details
-     *
-     * @memberof SettingIntegrationComponent
-     */
-    public updateAccount(): void {
-        if (!this.editAccountForm?.invalid) {
-            this.editAccountForm.get('paymentAlerts')?.patchValue(this.paymentAlerts.filter(user => user !== this.selectAllRecords).map(user => user));
-
-            if (!this.editAccountForm.get('maxAmount')?.value) {
-                this.editAccountForm.get('duration')?.patchValue(UNLIMITED_LIMIT);
-            }
-
-            let request = { bankAccountUniqueName: this.activeBankAccount?.iciciDetailsResource?.uniqueName };
-
-            this.settingsIntegrationService.updateAccount(this.editAccountForm.value, request).pipe(take(1)).subscribe(response => {
-                if (response?.status === "success") {
-                    this.closeEditAccountModal();
-                    if (response?.body?.message) {
-                        this.toasty.clearAllToaster();
-                        this.toasty.successToast(response?.body?.message);
-                    }
-                    this.getAllBankAccounts();
-                } else {
-                    this.toasty.clearAllToaster();
-                    this.toasty.errorToast(response?.message);
-                }
-            });
-        }
     }
 
     /**
@@ -1999,7 +1122,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.settingsIntegrationService.getPayorRegistrationStatus(request).pipe(take(1)).subscribe(response => {
             payor.registrationStatus = response?.body?.response;
 
-            if(response?.body?.response !== "SUCCESS") {
+            if(response?.body?.response !== "SUCCESS" && response?.body?.message) {
                 this.toasty.errorToast(response?.body?.message);
             }
         });

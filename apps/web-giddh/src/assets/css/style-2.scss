@@ -4241,7 +4241,7 @@ input[type="checkbox"][disabled] {
     outline: 0;
 }
 
-.align-top > tbody > tr > td {
+.align-top > tbody > tr > td, .v-align-top {
     vertical-align: top;
 }
 
@@ -8496,9 +8496,6 @@ body.update-scroll-hidden {
 .manage-account-popup.full-screen-modal{
     z-index: 999991;
 }
-.v-align-top {
-    vertical-align: top;
-}
 .gst-sidebar-open{
     .daterangepicker.show-calendar{
         z-index: 99 !important;
@@ -9761,6 +9758,9 @@ body.update-scroll-hidden {
     }
     body.unresponsive {
         padding-top: 0;
+    }
+    .account-wrapper {
+        width: 100% !important;
     }
 }
 
