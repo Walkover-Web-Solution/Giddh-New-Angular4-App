@@ -92,8 +92,6 @@ export interface SettingsState {
     amazonState: AmazonState;
     isGmailIntegrated: boolean;
     profileRequest: boolean;
-    isPaymentAdditionSuccess: boolean;
-    isPaymentUpdationSuccess: boolean;
     taxes: Taxes;
     branchRemoved: boolean;
     financialYearLimits: any;
@@ -121,8 +119,6 @@ export const initialState: SettingsState = {
     refreshCompany: false,
     amazonState: AmazonInititalState,
     isGmailIntegrated: false,
-    isPaymentAdditionSuccess: false,
-    isPaymentUpdationSuccess: false,
     taxes: null,
     branchRemoved: false,
     // Get profile API call in process
@@ -177,14 +173,12 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             let crtpytres: BaseResponse<string, PaymentClass> = action.payload;
             if (crtpytres.status === 'success') {
                 newState.integration.paymentForm = crtpytres.request;
-                newState.isPaymentAdditionSuccess = true;
                 return Object.assign({}, state, newState);
             }
             return state;
         case SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_KEY_RESPONSE:
             let crtpytUpres: BaseResponse<string, PaymentClass> = action.payload;
             if (crtpytUpres.status === 'success') {
-                newState.isPaymentUpdationSuccess = true;
                 return Object.assign({}, state, newState);
             }
             return state;

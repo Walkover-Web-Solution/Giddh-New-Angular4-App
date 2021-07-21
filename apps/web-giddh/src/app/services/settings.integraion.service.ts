@@ -349,17 +349,15 @@ export class SettingsIntegrationService {
     }
 
     /**
-     * Register the beneficiary
+     * New Bank Account Registration
      *
      * @param {*} model
-     * @param {*} urn
-     * @returns {Observable<BaseResponse<string, any>>}
+     * @returns {Observable<BaseResponse<any, any>>}
      * @memberof SettingsIntegrationService
      */
-    public beneficiaryRegistration(model: any, urn: any): Observable<BaseResponse<any, any>> {
-        this.user = this._generalService.user;
+    public bankAccountRegistration(model: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.BENEFICIARY_REGISTRATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':urn', urn), model).pipe(
+        return this._http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.BANK_ACCOUNT_REGISTRATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = model;
@@ -369,58 +367,104 @@ export class SettingsIntegrationService {
     }
 
     /**
-     * Validate the beneficiary
+     * Get all connected bank accounts
+     *
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsIntegrationService
+     */
+    public getAllBankAccounts(): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this._generalService.companyUniqueName;
+
+        return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.BANK_ACCOUNT_REGISTRATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
+
+    /**
+     * Delete the bank account payor
      *
      * @param {*} model
-     * @returns {Observable<BaseResponse<any, string>>}
+     * @returns {Observable<BaseResponse<any, any>>}
      * @memberof SettingsIntegrationService
      */
-    public beneficiaryValidation(model: any): Observable<BaseResponse<any, string>> {
-        this.user = this._generalService.user;
+    public deleteBankAccountLogin(model: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
-
-        const urn = model.urn;
-        const bnfAccNo = model.bnfAccNo;
-
-        return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.BENEFICIARY_VALIDATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':urn', urn).replace(':bnfAccNo', bnfAccNo)).pipe(map((res) => {
-            let data: BaseResponse<any, string> = res;
-            data.queryString = { urn, bnfAccNo };
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+        return this._http.deleteWithBody(this.config.apiUrl + SETTINGS_INTEGRATION_API.BANK_ACCOUNT_REGISTRATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
     /**
-     * Get list of added beneficiaries
+     * Add new bank account payor
      *
-     * @param {*} urn
-     * @returns {Observable<BaseResponse<any, string>>}
+     * @param {*} model
+     * @returns {Observable<BaseResponse<any, any>>}
      * @memberof SettingsIntegrationService
      */
-    public getBeneficiaries(urn: any): Observable<BaseResponse<any, string>> {
-        this.user = this._generalService.user;
+    public bankAccountMultiRegistration(model: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
-
-        return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GET_BENEFICIARIES.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':urn', urn)).pipe(map((res) => {
-            let data: BaseResponse<any, string> = res;
-            data.queryString = { urn };
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+        return this._http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.BANK_ACCOUNT_MULTI_REGISTRATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
     /**
-     * Get account registration status
+     * Update payor account
      *
-     * @param {*} urn
-     * @returns {Observable<BaseResponse<any, string>>}
+     * @param {*} model
+     * @param {*} request
+     * @returns {Observable<BaseResponse<any, any>>}
      * @memberof SettingsIntegrationService
      */
-    public getRegistrationStatus(urn: any): Observable<BaseResponse<any, string>> {
+    public updatePayorAccount(model: any, request: any): Observable<BaseResponse<any, any>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
+        return this._http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.UPDATE_PAYOR_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':bankAccountUniqueName', encodeURIComponent(request.bankAccountUniqueName)).replace(':urn', encodeURIComponent(request.urn)), model).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            data.request = model;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
 
-        return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GET_REGISTRATION_STATUS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':urn', urn)).pipe(map((res) => {
+    /**
+     * Update bank account
+     *
+     * @param {*} model
+     * @param {*} request
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsIntegrationService
+     */
+    public updateAccount(model: any, request: any): Observable<BaseResponse<any, any>> {
+        this.user = this._generalService.user;
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        return this._http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.UPDATE_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':bankAccountUniqueName', encodeURIComponent(request.bankAccountUniqueName)), model).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            data.request = model;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
+
+    /**
+     * This will return payor account registration status
+     *
+     * @param {*} request
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsIntegrationService
+     */
+    public getPayorRegistrationStatus(request: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this._generalService.companyUniqueName;
+
+        return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GET_PAYOR_REGISTRATION_STATUS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':bankAccountUniqueName', encodeURIComponent(request.bankAccountUniqueName)).replace(':urn', encodeURIComponent(request.urn))).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
-            data.queryString = { urn };
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }

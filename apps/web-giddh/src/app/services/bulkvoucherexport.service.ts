@@ -34,7 +34,9 @@ export class BulkVoucherExportService {
         url = url.replace(':type', getRequest.type);
         url = url.replace(':mail', getRequest.mail);
         url = url.replace(':q', getRequest.q);
-
+        if (this.generalService.voucherApiVersion === 2) {
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        }
         return this.http.post(url, postRequest).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;

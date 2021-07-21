@@ -4241,7 +4241,7 @@ input[type="checkbox"][disabled] {
     outline: 0;
 }
 
-.align-top > tbody > tr > td {
+.align-top > tbody > tr > td, .v-align-top {
     vertical-align: top;
 }
 
@@ -6992,8 +6992,9 @@ button.btn.btn-filter {
     min-width: 190px !important;
 }
 
-.td-search-box div i.icon-search:hover {
-    color: $deep-sky-blue !important;
+.td-search-box div i.icon-search {
+    color: $midnight-blue;
+    font-size: 16px;
 }
 
 .mobileCode .menu {
@@ -8501,6 +8502,9 @@ body.update-scroll-hidden {
         z-index: 99 !important;
     }
 }
+.transactions-table.table-striped {
+    white-space: nowrap;
+}
 /* responsive  starts here*/
 
 @media (max-width: 1440px) {
@@ -8617,6 +8621,21 @@ body.update-scroll-hidden {
 }
 
 @media (max-width: 991px) {
+    .tax-engine {
+        .transactions-list {
+            .filter-band{
+                height: auto;
+                padding: 10px 20px;
+            }
+            .filter-row{
+                margin-left: 0 !important;
+                margin-bottom: 5px;
+                &.back-button{
+                    display: flex;
+                }
+            }
+         }
+    }
     .transactions-overview{
         hr{
             display: none;
@@ -9758,6 +9777,9 @@ body.update-scroll-hidden {
     }
     body.unresponsive {
         padding-top: 0;
+    }
+    .account-wrapper {
+        width: 100% !important;
     }
 }
 
