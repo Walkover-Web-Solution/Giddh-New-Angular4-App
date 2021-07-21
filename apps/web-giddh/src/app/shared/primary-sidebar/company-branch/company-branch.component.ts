@@ -58,10 +58,6 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
     public activeTab: string = 'company';
     /** This will hold branches list */
     public branchList: any[] = [];
-    /** This holds active sidebar design for testing (1,2) */
-    public activeDesign: number = 1;
-    /** This holds company which we are viewing currently */
-    public viewingCompany: any;
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** Stores the branch list of a company */
@@ -112,7 +108,6 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
             if (selectedCmp && selectedCmp?.uniqueName === this.generalService.companyUniqueName) {
                 this.activeCompany = selectedCmp;
                 this.companyInitials = this.generalService.getInitialsFromString(selectedCmp.name);
-                this.activeDesign = (this.activeCompany?.name.charCodeAt(0) <= 77) ? 1 : 2;
 
                 if(!this.companyBranches?.branches) {
                     this.companyBranches = selectedCmp;
@@ -282,10 +277,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
      * @param {*} company
      * @memberof CompanyBranchComponent
      */
-    public getCompanyBranches(design: number, company: any, reloadBranches?: boolean): void {
-        if(design === 2) {
-            this.viewingCompany = company;
-        }
+    public getCompanyBranches(company: any, reloadBranches?: boolean): void {
         if (!company.branches || reloadBranches) {
             company.branches = [];
             this.branchRefreshInProcess = true;
@@ -304,7 +296,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
 
                     this.changeDetectorRef.detectChanges();
 
-                    if(design === 1 && !reloadBranches && this.companyBranches.branchCount > 1) {
+                    if(!reloadBranches && this.companyBranches.branchCount > 1) {
                         this.showAllBranches(company);
                     }
                 } else {
@@ -420,7 +412,6 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
     public unsetViewingCompany(): void {
         setTimeout(() => {
             this.searchBranch = "";
-            this.viewingCompany = false;
             this.changeDetectorRef.detectChanges();
         }, 50);
     }
