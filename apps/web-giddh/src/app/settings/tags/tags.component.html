@@ -71,13 +71,6 @@
                                     </td>
                                 </tr>
                             </tbody>
-                            <tbody *ngIf="!isLoading && !(tags$ | async)?.length" class="on-mobile-view no-records">
-                                <tr>
-                                    <td colspan="4" class="text-center empty-table">
-                                        <no-data [secondaryMessage]="' '" [secondaryMessageClass]="'p-0'"></no-data>
-                                    </td>
-                                </tr>
-                            </tbody>
                             <tbody *ngIf="isLoading">
                                 <tr>
                                     <td colspan="4" class="text-center empty-table">
@@ -88,6 +81,9 @@
                         </table>
                     </div>
                 </div>
+            </div>
+            <div class="no-data" *ngIf="!isLoading && !(tags$ | async)?.length">
+                <no-data [secondaryMessage]="' '" [secondaryMessageClass]="'p-0'"></no-data>
             </div>
         </form>
     </div>

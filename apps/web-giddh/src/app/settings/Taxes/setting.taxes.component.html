@@ -153,13 +153,6 @@
                                 </td>
                             </tr>
                         </tbody>
-                        <tbody *ngIf="!isLoading && !availableTaxes.length" class="on-mobile-view no-records">
-                            <tr>
-                                <td colspan="10" class="text-center empty-table">
-                                    <no-data [primaryMessage]="commonLocaleData?.app_no_entries_found" [secondaryMessage]="' '" [secondaryMessageClass]="'p-0'"></no-data>
-                                </td>
-                            </tr>
-                        </tbody>
                         <tbody *ngIf="isLoading">
                             <tr>
                                 <td colspan="10" class="text-center empty-table">
@@ -169,6 +162,9 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+            <div class="no-data" *ngIf="!isLoading && !availableTaxes.length">
+                <no-data [primaryMessage]="commonLocaleData?.app_no_entries_found" [secondaryMessage]="' '" [secondaryMessage]="' '" [secondaryMessageClass]="'p-0'"></no-data>
             </div>
         </div>
     </div>
