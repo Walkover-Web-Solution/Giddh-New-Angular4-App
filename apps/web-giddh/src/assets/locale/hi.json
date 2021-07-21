@@ -649,5 +649,10 @@
     "app_giddh_no_permissions": "आपको इसे देखने की अनुमति नहीं है",
     "app_exchange_gain": "लाभ",
     "app_exchange_loss": "हानि",
-    "vendor_name": "विक्रेता का नाम"
+    "app_amount_limit": {
+        "daily": "Daily",
+        "weekly": "Weekly",
+        "monthly": "Monthly",
+        "unlimited": "Unlimited"
+    }
 }
