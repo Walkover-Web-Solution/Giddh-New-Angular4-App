@@ -6,9 +6,9 @@
             <h3 class="modal-title">{{ activeBankAccount ? localeData?.payment?.edit_account :
                 localeData?.payment?.connect_icici_account}}</h3>
             <span data-dismiss="modal" [attr.aria-label]="commonLocaleData?.app_close" class="close hover-orange"
-                (click)="closeCreateNewAccountModal()">×</span>
+                (click)="closeAccountModal()">×</span>
         </div>
-        <div class="modal-body">
+        <div class="modal-body icici-account-create-edit">
             <ng-container *ngIf="!isLoading">
                 <div class="clearfix" *ngIf="!activeBankAccount">
                     <label>{{localeData?.payment?.icici_login_id}}<span class="red-text">*</span></label>
