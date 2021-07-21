@@ -49,12 +49,7 @@
                 </div>
             </ng-container>
             <ng-container *ngIf="!localeData?.payment">
-                <div class="no-data mr-t2 loader-main mt-0 mb-0">
-                    <div class="spinner2">
-                        <div class="cube1"></div>
-                        <div class="cube2"></div>
-                    </div>
-                </div>
+                <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </ng-container>    
         </div>
         <div class="modal-footer" *ngIf="localeData?.payment">
