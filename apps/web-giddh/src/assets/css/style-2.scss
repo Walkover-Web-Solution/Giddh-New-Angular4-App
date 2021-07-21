@@ -6992,8 +6992,9 @@ button.btn.btn-filter {
     min-width: 190px !important;
 }
 
-.td-search-box div i.icon-search:hover {
-    color: $deep-sky-blue !important;
+.td-search-box div i.icon-search {
+    color: $midnight-blue;
+    font-size: 16px;
 }
 
 .mobileCode .menu {
