@@ -8394,6 +8394,9 @@ body.update-scroll-hidden{
         z-index: 99 !important;
     }
 }
+.transactions-table.table-striped {
+    white-space: nowrap;
+}
 /* responsive  starts here*/
 
 @media (max-width: 1440px) {
@@ -8533,6 +8536,21 @@ body.update-scroll-hidden{
 }
 
 @media (max-width: 991px) {
+    .tax-engine {
+        .transactions-list {
+            .filter-band{
+                height: auto;
+                padding: 10px 20px;
+            }
+            .filter-row{
+                margin-left: 0 !important;
+                margin-bottom: 5px;
+                &.back-button{
+                    display: flex;
+                }
+            }
+         }
+    }
     .transactions-overview{
         hr{
             display: none;
