@@ -19,7 +19,7 @@ import { SettingsAmountLimitDuration, UNLIMITED_LIMIT } from "../../../../consta
 })
 
 export class AccountCreateEditComponent implements OnInit, OnDestroy {
-    /** If this is passed, it means we are in edit mode */
+    /** This holds bank account details, If this is passed, it means we are in edit mode */
     @Input() public activeBankAccount: any;
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
@@ -157,12 +157,12 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
 
             this.settingsIntegrationService.bankAccountRegistration(this.accountForm.value).pipe(take(1)).subscribe(response => {
                 if (response?.status === "success") {
-                    this.closeCreateNewAccountModal();
                     if (response?.body?.message) {
                         this.toaster.clearAllToaster();
                         this.toaster.successToast(response?.body?.message);
                     }
                     this.getAllBankAccounts.emit(true);
+                    this.closeAccountModal();
                 } else {
                     this.toaster.clearAllToaster();
                     this.toaster.errorToast(response?.message);
@@ -172,11 +172,11 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will close the create new account modal
+     * This will close the account modal
      *
      * @memberof AccountCreateEditComponent
      */
-    public closeCreateNewAccountModal(): void {
+    public closeAccountModal(): void {
         this.closeModalEvent.emit(true);
     }
 
@@ -243,7 +243,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
                         this.toaster.successToast(response?.body?.message);
                     }
                     this.getAllBankAccounts.emit(true);
-                    this.closeModalEvent.emit(true);
+                    this.closeAccountModal();
                 } else {
                     this.toaster.clearAllToaster();
                     this.toaster.errorToast(response?.message);

@@ -38,6 +38,7 @@ import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.module';
 import { AccountCreateEditComponent } from './integration/payment/icici/account-create-edit/account-create-edit.component';
+import { PayorCreateEditComponent } from './integration/payment/icici/payor-create-edit/payor-create-edit.component';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -68,7 +69,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         AddressSettingsComponent,
         OtherSettingsComponent,
         CreateBranchComponent,
-        AccountCreateEditComponent
+        AccountCreateEditComponent,
+        PayorCreateEditComponent
     ],
     imports: [
         SharedModule,
