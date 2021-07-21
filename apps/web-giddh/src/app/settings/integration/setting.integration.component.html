@@ -229,7 +229,7 @@
                     </div>
 
                     <div class="connected-accounts">
-                        <b class="font-14">{{localeData?.payment?.connected_accounts}}</b><br>
+                        <b class="font-14" *ngIf="!isLoading && connectedBankAccounts?.length > 0">{{localeData?.payment?.connected_accounts}}</b><br>
                         <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoading"></giddh-page-loader>
                         <ng-container *ngIf="!isLoading && connectedBankAccounts?.length > 0">
                             <div class="account-wrapper" *ngFor="let bankAccount of connectedBankAccounts; trackBy: trackByAccountUniqueName;">
