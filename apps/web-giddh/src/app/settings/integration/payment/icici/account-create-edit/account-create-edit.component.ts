@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { select, Store } from "@ngrx/store";
 import { SELECT_ALL_RECORDS } from "apps/web-giddh/src/app/app.constant";
@@ -15,7 +15,8 @@ import { SettingsAmountLimitDuration, UNLIMITED_LIMIT } from "../../../../consta
 @Component({
     selector: 'icici-account-create-edit',
     templateUrl: './account-create-edit.component.html',
-    styleUrls: ['./account-create-edit.component.scss']
+    styleUrls: ['./account-create-edit.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class AccountCreateEditComponent implements OnInit, OnDestroy {
@@ -55,7 +56,8 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
         private settingsIntegrationService: SettingsIntegrationService,
         private salesService: SalesService,
         private store: Store<AppState>,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private changeDetection: ChangeDetectorRef
     ) {
 
     }
@@ -117,6 +119,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
                 this.bankAccounts$ = observableOf(bankAccounts);
             }
             this.isLoading = false;
+            this.changeDetection.detectChanges();
         });
     }
 
@@ -152,7 +155,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      */
     public saveNewAccount(): void {
         if (!this.accountForm?.invalid) {
-            this.accountForm.get('paymentAlerts')?.patchValue(this.paymentAlerts.filter(user => user !== this.selectAllRecords).map(user => user));
+            this.accountForm.get('paymentAlerts')?.patchValue(this.paymentAlerts.filter(user => user !== this.selectAllRecords));
 
             this.settingsIntegrationService.bankAccountRegistration(this.accountForm.value).pipe(take(1)).subscribe(response => {
                 if (response?.status === "success") {
@@ -227,7 +230,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      */
     public updateAccount(): void {
         if (!this.accountForm?.invalid) {
-            this.accountForm.get('paymentAlerts')?.patchValue(this.paymentAlerts.filter(user => user !== this.selectAllRecords).map(user => user));
+            this.accountForm.get('paymentAlerts')?.patchValue(this.paymentAlerts.filter(user => user !== this.selectAllRecords));
 
             if (!this.accountForm.get('maxAmount')?.value) {
                 this.accountForm.get('duration')?.patchValue(UNLIMITED_LIMIT);
