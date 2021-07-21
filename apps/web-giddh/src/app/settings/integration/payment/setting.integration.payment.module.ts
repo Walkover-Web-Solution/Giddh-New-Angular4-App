@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
+import { GiddhPageLoaderModule } from "../../../shared/giddh-page-loader/giddh-page-loader.module";
 import { DecimalDigitsModule } from "../../../shared/helpers/directives/decimalDigits/decimalDigits.module";
 import { DigitsOnlyModule } from "../../../shared/helpers/directives/digitsOnly/digitsOnly.module";
 import { ShSelectModule } from "../../../theme/ng-virtual-select/sh-select.module";
@@ -19,7 +20,8 @@ import { PayorCreateEditComponent } from "./icici/payor-create-edit/payor-create
         DigitsOnlyModule,
         CommonModule,
         TranslateDirectiveModule,
-        DecimalDigitsModule
+        DecimalDigitsModule,
+        GiddhPageLoaderModule
     ],
     exports: [
         AccountCreateEditComponent,
