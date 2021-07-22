@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { select, Store } from '@ngrx/store';
 import { take, takeUntil } from 'rxjs/operators';
@@ -19,7 +19,6 @@ import { LocaleService } from 'apps/web-giddh/src/app/services/locale.service';
 export class AsideSettingComponent implements OnInit, OnDestroy {
     /* Event emitter for close sidebar popup event */
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-    @ViewChild('searchField', { static: true }) public searchField: ElementRef;
 
     public imgPath: string = '';
     public settingsPageTabs: any[] = [];
@@ -34,6 +33,8 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** This holds the active locale */
     public activeLocale: string = "";
+    /** True if we should show heading */
+    public showSettingHeading: boolean = false;
 
     constructor(private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>, private localeService: LocaleService) {
 
@@ -52,7 +53,6 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
         });
 
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-        this.searchField?.nativeElement.focus();
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if (this.activeLocale && this.activeLocale !== response?.value) {
@@ -62,6 +62,14 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
                 });
             }
             this.activeLocale = response?.value;
+        });
+
+        this.showHideSettingsHeading(this.router.url);
+
+        this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
+            if (event instanceof NavigationEnd) {
+                this.showHideSettingsHeading(event.url);
+            }
         });
     }
 
@@ -73,34 +81,6 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      */
     public closeAsidePane(event?): void {
         this.closeAsideEvent.emit(event);
-    }
-
-    /**
-     * This will search from the available menu items
-     *
-     * @param {*} search
-     * @memberof AsideSettingComponent
-     */
-    public searchMenu(search: any): void {
-        this.filteredSettingsPageTabs = [];
-
-        if (search && search.trim()) {
-            let loop = 0;
-            this.settingsPageTabs.forEach((section) => {
-                section.forEach(tab => {
-                    if (tab.label.toLowerCase().includes(search.trim().toLowerCase())) {
-                        if (this.filteredSettingsPageTabs[loop] === undefined) {
-                            this.filteredSettingsPageTabs[loop] = [];
-                        }
-
-                        this.filteredSettingsPageTabs[loop].push(tab);
-                    }
-                });
-                loop++;
-            });
-        } else {
-            this.filteredSettingsPageTabs = this.settingsPageTabs;
-        }
     }
 
     /**
@@ -122,10 +102,10 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      * @param {*} [event]
      * @memberof AsideSettingComponent
      */
-    public closeAsidePaneIfMobile(event?): void {
+    public closeAsidePaneIfMobile(event?: any): void {
         if (this.isMobileScreen && event && event.target.className !== "icon-bar") {
             this.closeAsideEvent.emit(event);
-        } else if (!this.isMobileScreen) {
+        } else if (!this.isMobileScreen && event && event.target.className !== "icon-settings-cog" && !this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/user-details") && !this.router.url.includes("/pages/invoice/preview/settings/sales")) {
             this.closeAsideEvent.emit(event);
         }
     }
@@ -169,6 +149,20 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
                 });
                 this.filteredSettingsPageTabs = this.settingsPageTabs;
             }
+        }
+    }
+
+    /**
+     * This will show/hide settings heading
+     *
+     * @param {string} url
+     * @memberof AsideSettingComponent
+     */
+    public showHideSettingsHeading(url: string): void {
+        if(!url.includes("/pages/settings") && !url.includes("/pages/user-details")) {
+            this.showSettingHeading = true;
+        } else {
+            this.showSettingHeading = false;
         }
     }
 }

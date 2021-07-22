@@ -54,10 +54,26 @@
                                 }} </td>
                             <td [attr.data-title]="commonLocaleData?.app_unit" class="text-center">{{ item.stockUnitCode
                                 }} </td>
-                            <td [attr.data-title]="commonLocaleData?.app_rate" class="text-center">{{ item.rate }} </td>
-                            <td [attr.data-title]="commonLocaleData?.app_value" class="text-center">{{ item.value }}
+                            <td [attr.data-title]="commonLocaleData?.app_rate" class="text-center">
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="item.rate" [currencySymbol]="false"
+                                            [currencyCode]="false">
+                                    </amount-field>
+                                </span>
                             </td>
-                            <td [attr.data-title]="localeData?.gross_total" class="text-center">{{ item.grossTotal }}
+                            <td [attr.data-title]="commonLocaleData?.app_value" class="text-center">
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="item.value" [currencySymbol]="false"
+                                            [currencyCode]="false">
+                                    </amount-field>
+                                </span>
+                            </td>
+                            <td [attr.data-title]="localeData?.gross_total" class="text-center">
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="item.grossTotal" [currencySymbol]="false"
+                                            [currencyCode]="false">
+                                    </amount-field>
+                                </span>
                             </td>
                             <ng-container *ngFor="let key of columnarTableColumn;">
                                 <td>
