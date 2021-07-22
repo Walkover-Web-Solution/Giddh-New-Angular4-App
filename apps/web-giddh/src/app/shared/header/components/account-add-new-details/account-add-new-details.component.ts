@@ -83,6 +83,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     @Input() public isCustomerCreation: boolean;
     /** True if bank category account is selected */
     @Input() public isBankAccount: boolean = true;
+    /** True if account creation is from command k */
+    @Input() public fromCommandK: boolean = false;
     @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
     @Output() public isGroupSelected: EventEmitter<IOption> = new EventEmitter();
     @ViewChild('autoFocus', { static: true }) public autoFocus: ElementRef;
@@ -191,6 +193,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.showBankDetail = true;
         }
 
+        let initialCall = false;
+
         this.initializeNewForm();
         this.activeGroup$.subscribe(response => {
             if (response) {
@@ -204,6 +208,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         this.isHsnSacEnabledAcc = (response.parentGroups) ? HSN_SAC_PARENT_GROUPS.includes(response.parentGroups[0]?.uniqueName) : false;
                         this.isParentDebtorCreditor(response.uniqueName);
                     }
+                }
+            } else {
+                if(this.fromCommandK && !initialCall && this.activeGroupUniqueName) {
+                    initialCall = true;
+                    this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
                 }
             }
         });
@@ -675,6 +684,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 this.staticTabs.tabs[0].active = false;
             }
         }
+        this.changeDetectorRef.detectChanges();
     }
 
     public getCountry() {
