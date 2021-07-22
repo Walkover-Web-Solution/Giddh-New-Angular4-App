@@ -16,6 +16,7 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
 import { GstReport } from '../constants/gst.constant';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { SHOW_GST_FILING } from '../../app.constant';
 
 @Component({
     selector: 'file-gstr3',
@@ -60,6 +61,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public getCurrentPeriod$: Observable<any> = of(null);
     /** True, if month filter is selected */
     public isMonthSelected: boolean = true;
+    /** True, if GST filing needs to be shown */
+    public showGstFiling: boolean = SHOW_GST_FILING;
 
     constructor(
         private store: Store<AppState>,

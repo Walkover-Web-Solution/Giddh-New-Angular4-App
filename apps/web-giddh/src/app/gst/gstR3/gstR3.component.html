@@ -69,7 +69,7 @@
 
                             <div *ngIf="showTaxPro">
 
-                                <button *ngIf="isCompany" class="btn-2 pull-right btn authenticate-btn"
+                                <button *ngIf="isCompany && showGstFiling" class="btn-2 pull-right btn authenticate-btn"
                                     [ngClass]="{'btn-success': gstAuthenticated }"
                                     (click)="returnGstr3B = { via: 'VAYANA' }">{{ gstAuthenticated ? localeData?.filing?.authenticated :
                                         localeData?.filing?.authenticate}}
@@ -87,7 +87,7 @@
             </div>
             <div class="scroll-y noscroll-x fill body scrollbox">
                 <div class="gstr3b-header hidden-print">
-                    <ul class="sel-tab" [class.no-border]="!isCompany">
+                    <ul class="sel-tab" [class.no-border]="!isCompany || !showGstFiling">
                         <li class="text-center col-md-6" [ngClass]="{active: selectedGstr3BTab==='pushGSTN'}">
                             <div class="gstr3b-nav" (click)="selectedTab('pushGSTN')" data-ember-action=""
                                 data-ember-action-1212="1212"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
@@ -115,7 +115,7 @@
                                     </path>
                                 </svg> <a class="text-middle">{{localeData?.gstr3b?.push_gstn}}</a></div>
                         </li>
-                        <li *ngIf="isCompany" class="text-center col-md-6 "
+                        <li *ngIf="isCompany && showGstFiling" class="text-center col-md-6 "
                             [ngClass]="{active: selectedGstr3BTab==='filing'}">
                             <div class="gstr3b-nav" (click)="selectedTab('filing')" data-ember-action=""
                                 data-ember-action-1215="1215"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
