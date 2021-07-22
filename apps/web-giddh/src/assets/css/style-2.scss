@@ -8938,28 +8938,14 @@ body.update-scroll-hidden{
     }
 }
 @media (max-width: 767px) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-    .gst-sidebar-open {
-        #content-wrapper{
-            padding-left: 0 !important;
-        }
-    }
-=======
-    .mobile-setting-sidebar {
-        overflow-y: hidden;
-    }
     .gst-sidebar-open {
         #content-wrapper{
            padding-left: 0 !important;
        }
    }
->>>>>>> b322485a291625e4265e7d163aefe9c182613b28
-=======
     .mobile-setting-sidebar {
         overflow-y: hidden;
     }
->>>>>>> 57c8ac269fe5ac2586a7c05c9ab4e1bb65aac031
     .customer-aging .nav.nav-tabs{
         display: flex !important;
     }
