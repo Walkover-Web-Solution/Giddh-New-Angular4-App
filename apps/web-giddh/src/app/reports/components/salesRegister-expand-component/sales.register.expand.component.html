@@ -90,7 +90,7 @@
         </div>
     </div>
 
-    <div class="top-content pd-l15 pd-r15">
+    <div class="top-content pd-l15 pd-r15" [hidden]="!(salesRegisteDetailedResponse$ | async)?.items?.length">
         <div class="d-flex justify-content-between w-100 overflow-x-auto" *ngIf="SalesRegisteDetailedItems">
             <div class="total-details-box mr-r05 count-box">
                 <h5>
@@ -199,7 +199,7 @@
         <div class="sales-register-table mb-5">
             <div class="responsive table-responsive">
                 <table class="table basic giddh-table on-mobile-view">
-                    <thead>
+                    <thead [hidden]="!(salesRegisteDetailedResponse$ | async)?.items?.length && !voucherNumberInput?.value">
                         <tr>
                             <th>
                                 <div class="d-flex">
@@ -453,8 +453,7 @@
                 (salesRegisteDetailedResponse$ | async).items.length === 0 &&
                 !(isGetSalesDetailsInProcess$ | async)
             ">
-            <h1>{{commonLocaleData?.app_no_entries_found}}</h1>
-            <h1>{{commonLocaleData?.app_search_suggestion}}</h1>
+            <no-data></no-data>
         </div>
     </ng-container>
 

@@ -4,7 +4,7 @@
         <div class="container-fluid">
             <div class="invoice-preview table-responsive">
                 <table class="table basic giddh-table on-mobile-view">
-                    <thead class="thead-background1">
+                    <thead [hidden]="!reportResponseResult?.length" class="thead-background1">
                         <tr>
                             <th class="text-center">#</th>
                             <th>{{commonLocaleData?.app_date}}</th>
@@ -82,12 +82,6 @@
                             </ng-container>
                         </tr>
                     </tbody>
-                    <tbody *ngIf="reportResponse && reportResponse?.totalItems === 0">
-                        <tr>
-                            <td [attr.colspan]="getTotalNoOfColumn()" align="center">
-                                {{commonLocaleData?.app_no_records_found}}</td>
-                        </tr>
-                    </tbody>
                 </table>
             </div>
             <div class="pagination-wrapper" *ngIf="reportResponse && reportResponse?.totalPages > 1">
@@ -96,6 +90,9 @@
                     (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first"
                     [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next"
                     [lastText]="commonLocaleData?.app_last"></pagination>
+            </div>
+            <div class="no-data" *ngIf="reportResponse && reportResponse?.totalItems === 0">
+                <no-data [secondaryMessageClass]="'p-0'"></no-data>
             </div>
         </div>
     </div>

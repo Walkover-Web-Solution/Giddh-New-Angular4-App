@@ -150,7 +150,7 @@
                         <p class="grey-color max900">{{localeData?.session?.section_description}}</p>
                         <div class="max900 mr-t15 table-responsive">
                             <table class="table table-bordered session-table basic on-mobile-view">
-                                <thead>
+                                <thead [hidden]="!userSessionList?.length">
                                     <tr>
                                         <th>{{localeData?.session?.ip_address}}</th>
                                         <th>{{localeData?.session?.signin_date}}</th>
@@ -183,14 +183,10 @@
                                         </td>
                                     </tr>
                                 </tbody>
-                                <tbody *ngIf="!userSessionList.length">
-                                    <tr>
-                                        <td colspan="6" class="text-center empty-table">
-                                            <h1>{{commonLocaleData?.app_no_record_found}}</h1>
-                                        </td>
-                                    </tr>
-                                </tbody>
                             </table>
+                        </div>
+                        <div class="no-data" *ngIf="!userSessionList.length">
+                            <no-data [primaryMessage]="commonLocaleData?.app_no_entries_found" [secondaryMessage]="commonLocaleData?.app_search_suggestion" [secondaryMessageClass]="'p-0'"></no-data>
                         </div>
                     </div>
                 </div>
