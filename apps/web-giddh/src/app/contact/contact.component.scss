@@ -217,6 +217,9 @@ tr.aging-table-top td {
     }
     .text-lowercase.word-wrap{
         color: $grey-chateau !important;
+        div{
+            line-height: 14px;
+        }
     }
 }
 
