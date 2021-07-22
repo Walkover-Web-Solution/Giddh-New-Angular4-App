@@ -55,7 +55,7 @@
                             </div>
                         </tab>
 
-                        <tab *ngIf="isCompany && selectedGst !== GstReport.Gstr2"
+                        <tab *ngIf="isCompany && selectedGst !== GstReport.Gstr2 && showGstFiling"
                             (selectTab)="selectTab($event, true, localeData?.filing?.tabs?.file_return)">
                             <ng-template tabHeading>
                                 {{localeData?.filing?.tabs?.file_return}}
