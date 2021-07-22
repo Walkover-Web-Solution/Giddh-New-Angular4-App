@@ -62,19 +62,32 @@
                 </section>
                 <!--Start Grid-->
                 <div *ngIf="data$.groupDetails">
-                    <ng-template #groupDetails let-list let-padding="padding">
-                        <ng-container *ngFor="let grp of list">
-                            <section class="row-1" *ngIf="grp.isVisible || grp.isCreated" [hidden]="!grp.isVisible"
-                                [ngClass]="grp.category" tb-pl-bs-grid-row [groupDetail]="grp" [padding]="padding"
-                                [search]="search" [from]="from" [to]="to">
-                                <ng-container
-                                    *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 20  }">
-                                </ng-container>
-                            </section>
+                    <ng-template #groupDetails let-list let-padding="padding" let-isSubGroup="isSubGroup">
+                        <ng-container *ngIf="!expandAll || isSubGroup">
+                            <ng-container *ngFor="let grp of list; trackBy: trackByFn">
+                                <section class="row-1" *ngIf="grp.isVisible || grp.isCreated"
+                                    [ngClass]="!isSubGroup ? grp.category : ''" tb-pl-bs-grid-row [groupDetail]="grp" [padding]="padding"
+                                    [search]="search" [from]="from" [to]="to" [expandAll]="expandAll">
+                                    <ng-container
+                                        *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 20, isSubGroup: true  }">
+                                    </ng-container>
+                                </section>
+                            </ng-container>
                         </ng-container>
+                        <cdk-virtual-scroll-viewport *ngIf="expandAll && !isSubGroup" [itemSize]="35" class="trial-balance-viewport">
+                            <ng-container *cdkVirtualFor="let grp of list; trackBy: trackByFn">
+                                <section class="row-1" *ngIf="grp.isVisible || grp.isCreated"
+                                    [ngClass]="!isSubGroup ? grp.category : ''" tb-pl-bs-grid-row [groupDetail]="grp" [padding]="padding"
+                                    [search]="search" [from]="from" [to]="to" [expandAll]="expandAll">
+                                    <ng-container
+                                        *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 20, isSubGroup: true  }">
+                                    </ng-container>
+                                </section>
+                            </ng-container>
+                        </cdk-virtual-scroll-viewport>
                     </ng-template>
                     <ng-container
-                        *ngTemplateOutlet="groupDetails; context:{ $implicit: data$.groupDetails | tbsearch: search, padding: 0, tbfrom: from, tbto: to }">
+                        *ngTemplateOutlet="groupDetails; context:{ $implicit: data$.groupDetails | tbsearch: search, padding: 8, tbfrom: from, tbto: to }">
                     </ng-container>
                 </div>
                 <div>

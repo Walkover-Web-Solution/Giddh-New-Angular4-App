@@ -1,11 +1,8 @@
 <ng-container appTranslate [file]="'reports/reverse-charge'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
-    <hamburger-menu [allowSidebarToggle]="false" [pageHeading]="localeData?.page_heading"></hamburger-menu>
-    <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-        *ngIf="asideGstSidebarMenuState === 'in'">
-        <tax-sidebar (navigateEvent)="handleNavigation()"
-            (clickOutside)="isMobileScreen ? asideGstSidebarMenuState = 'out' : ''" [exclude]="'#primary-new-header'"
-            class="gst-sidebar"></tax-sidebar>
+    <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
+    <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState === 'in'">
+        <tax-sidebar (navigateEvent)="handleNavigation()" (clickOutside)="isMobileScreen ? asideGstSidebarMenuState = 'out' : ''" [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
     </div>
     <div class="reverse-table-report">
         <div class="container-fluid">
@@ -65,8 +62,9 @@
                             {{localeData?.total_taxable_value}}
                             <div>
                                 <span class="d-inline-flex number-total">
-                                    {{activeCompany?.baseCurrencySymbol}}
-                                    {{reverseChargeReportResults?.totalTaxableValue | giddhCurrency }}/-
+                                    <amount-field [amount]="reverseChargeReportResults?.totalTaxableValue" [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                            [currencyCode]="activeCompany?.baseCurrency">
+                                    </amount-field>
                                 </span>
                             </div>
                         </h5>
@@ -76,8 +74,8 @@
                             {{localeData?.total_tax_amount}}
                             <div>
                                 <span class="d-inline-flex number-total">
-                                    {{activeCompany?.baseCurrencySymbol}} {{reverseChargeReportResults?.totalTaxAmount |
-                                    giddhCurrency}}/-
+                                    <amount-field [amount]="reverseChargeReportResults?.totalTaxAmount" [currencySymbol]="activeCompany?.baseCurrencySymbol" [currencyCode]="activeCompany?.baseCurrency">
+                                    </amount-field>
                                 </span>
                             </div>
                         </h5>
@@ -182,12 +180,26 @@
                             <td [attr.data-title]="localeData?.suppliers_country">{{ reverseCharge.suppliersCountry }}
                             </td>
                             <td [attr.data-title]="commonLocaleData?.app_taxable_value">
-                                {{activeCompany.baseCurrencySymbol}}
-                                {{ reverseCharge.taxableValue | giddhCurrency }}</td>
-                            <td [attr.data-title]="commonLocaleData?.app_tax_rate">{{ reverseCharge.taxRate }}%</td>
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="reverseCharge.taxableValue" [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                            [currencyCode]="activeCompany.baseCurrency">
+                                    </amount-field>
+                                </span>
+                            </td>
+                            <td [attr.data-title]="commonLocaleData?.app_tax_rate">
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="reverseCharge.taxRate" [currencySymbol]="false"
+                                            [currencyCode]="false">
+                                    </amount-field>
+                                </span>%
+                            </td>
                             <td [attr.data-title]="commonLocaleData?.app_tax_amount">
-                                {{activeCompany.baseCurrencySymbol}}
-                                {{ reverseCharge.taxAmount | giddhCurrency }}</td>
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="reverseCharge.taxAmount" [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                            [currencyCode]="activeCompany.baseCurrency">
+                                    </amount-field>
+                                </span>
+                            </td>
                         </tr>
                     </tbody>
                     <tbody
