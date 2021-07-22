@@ -337,6 +337,7 @@
                         }
                         li {
                             padding: 0;
+                            margin-bottom: 0 !important;
                             a {
                                 color: $trout;
                                 align-items: center;
@@ -347,7 +348,7 @@
                                 padding: 10px 0 10px 50px;
 
                                 i {
-                                    font-size: 20px;
+                                    font-size: 22px;
                                     margin-right: 10px;
                                 }
                                 &.active {
