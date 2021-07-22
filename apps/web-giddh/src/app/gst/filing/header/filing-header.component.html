@@ -49,7 +49,7 @@
 
                 <li>
 
-                    <div *ngIf="showTaxPro && isCompany">
+                    <div *ngIf="showTaxPro && isCompany && showGstFiling">
 
                         <button class="btn btn-primary authenticate-btn pull-right"
                             [ngClass]="{'btn-success': gstAuthenticated }"
@@ -108,12 +108,12 @@
 
 
             <button class="btn btn-primary pull-right" [ngClass]="{'btn-success': gstAuthenticated }"
-                (click)="toggleSettingAsidePane($event, 'VAYANA')" *ngIf="showTaxPro && isCompany">
+                (click)="toggleSettingAsidePane($event, 'VAYANA')" *ngIf="showTaxPro && isCompany && showGstFiling">
                 {{ gstAuthenticated ? localeData?.filing?.authenticated :
                     localeData?.filing?.authenticate}}
             </button>
             <button class="btn btn-primary pull-right" [disabled]="!gstAuthenticated" (click)="pullFromGstIn($event)"
-                *ngIf="showTaxPro">{{localeData?.filing?.pull_from_gstn}}
+                *ngIf="showTaxPro && showGstFiling">{{localeData?.filing?.pull_from_gstn}}
             </button>
         </div>
 
