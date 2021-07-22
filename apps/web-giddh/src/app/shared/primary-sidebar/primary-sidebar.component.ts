@@ -232,7 +232,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 this.currentCompanyBranches = response;
                 if (this.generalService.currentBranchUniqueName) {
                     this.currentBranch = response.find(branch => (this.generalService.currentBranchUniqueName === branch.uniqueName)) || {};
-                    
                     if (!this.activeCompanyForDb) {
                         this.activeCompanyForDb = new CompAidataModel();
                     }
@@ -252,7 +251,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             let orderedCompanies = _.orderBy(companies, 'name');
             this.companyList = orderedCompanies;
         });
-        
         this.updateIndexDbSuccess$.subscribe(res => {
             if (res) {
                 if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
@@ -279,8 +277,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 this.changeDetectorRef.detectChanges();
             }
 
-            if(event instanceof NavigationStart) {
-                if(this.companyDetailsDropDownWeb.isOpen) {
+            if (event instanceof NavigationStart) {
+                if (this.companyDetailsDropDownWeb.isOpen) {
                     this.companyDetailsDropDownWeb.hide();
                 }
             }
@@ -306,7 +304,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(account => {
                 if(account && !this.isItemAdded) {
                     this.isItemAdded = true;
-
                     // save data to db
                     let item: any = {};
                     item.time = +new Date();

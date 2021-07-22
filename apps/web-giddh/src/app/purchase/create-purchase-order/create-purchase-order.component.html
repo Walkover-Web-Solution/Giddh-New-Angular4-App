@@ -8,7 +8,7 @@
         [ngClass]="{'create-purchase-order-form': true, 'customer-purchase-order' : !purchaseOrder.voucherDetails.customerName, 'for-multi-currency' : isMulticurrencyAccount  } "
         [ngStyle]="{'display': !showLoader ? 'block' : 'none'}">
         <div class="clearfix" [keyboardShortcut]="'alt+c'" (onShortcutPress)="addAccountFromShortcut()">
-            <div class="clearfix wrapper-customer-table  pd-t2">
+            <div class="clearfix wrapper-customer-table pd-t2">
                 <div class="customer-purchase-table">
                     <div class="inner-container">
                         <div class="inner-container">
@@ -953,7 +953,6 @@
                                                         </button>
                                                     </div>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
@@ -1189,7 +1188,7 @@
                                                 <giddh-datepicker #shippingDate="ngModel"
                                                     [placeholder]="localeData?.ship_date" name="shippingDate"
                                                     [(ngModel)]="purchaseOrder.templateDetails.other.shippingDate"
-                                                    [class.invalid-inp]="shippingDate.errors &&(shippingDate.dirty || shippingDate.touched)">
+                                                    [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
                                                 </giddh-datepicker>
                                                 <p class="text-danger"
                                                     *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
@@ -1341,31 +1340,6 @@
                                             (blur)="updateExchangeRate(grandTotalInr.value)">
                                     </div>
                                 </div>
-
-                                <div class="table-row" *ngIf="purchaseOrder.voucherDetails.tcsTotal > 0">
-                                    <div class="table-cell">{{commonLocaleData?.app_tcs}}</div>
-                                    <div class="table-cell figure-cell">
-                                        <span class="d-flex justify-content-end">
-                                            <amount-field [amount]="purchaseOrder.voucherDetails.tcsTotal"
-                                                [currencySymbol]="(isMulticurrencyAccount) ? purchaseOrder.accountDetails.currencySymbol :false"
-                                                [currencyCode]="(isMulticurrencyAccount) ? purchaseOrder.accountDetails?.currency?.code:false">
-                                            </amount-field>
-                                        </span>
-
-                                    </div>
-                                </div>
-
-                                <div class="table-row" *ngIf="purchaseOrder.voucherDetails.tdsTotal > 0">
-                                    <div class="table-cell">{{commonLocaleData?.app_tds}}</div>
-                                    <div class="table-cell figure-cell">
-                                        <span class="d-flex justify-content-end">
-                                            <amount-field [amount]="purchaseOrder.voucherDetails.tdsTotal "
-                                                [currencySymbol]="(isMulticurrencyAccount) ? purchaseOrder.accountDetails.currencySymbol : false"
-                                                [currencyCode]="(isMulticurrencyAccount) ? purchaseOrder.accountDetails?.currency?.code : false">
-                                            </amount-field>
-                                        </span>
-                                    </div>
-                                </div>
                             </section>
                         </td>
                         <!-- endregion -->
@@ -1394,7 +1368,7 @@
                                     <p class="description">
                                         {{transaction.description}}
                                     </p>
-                                    <p class="small text-muted sku-and-custom-fields"
+                                    <p class="small text-muted sku-custom-fields"
                                         *ngIf="transaction.sku_and_customfields">
                                         {{transaction.sku_and_customfields}}</p>
 

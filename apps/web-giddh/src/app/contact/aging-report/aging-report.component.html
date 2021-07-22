@@ -160,7 +160,7 @@
                 <td></td>
             </tr>
             <tr>
-                <th #searchCustomerContainer (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')" class="td-search-box"> 
+                <th #searchCustomerContainer (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')" class="td-search-box">
                     <div class="d-flex align-items-center">
                         <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showNameSearch, fieldName: 'name',formControl: searchedName,
                                                     title: commonLocaleData?.app_customer_name}"></ng-container>
@@ -237,7 +237,6 @@
                                 [currencyCode]="false">
                             </amount-field>
                         </span>
-
                     </td>
                     <td [attr.data-title]="(agingDropDownoptions$| async)?.fourth + 1 + ' - ' + ((agingDropDownoptions$| async)?.fifth) + ' ' + commonLocaleData?.app_days"
                         class="text-right"> <span (click)="openAgingDropDown()">
@@ -263,7 +262,6 @@
                                 [currencyCode]="false">
                             </amount-field>
                         </span>
-
                     </td>
                     <td [attr.data-title]="commonLocaleData?.app_total_amount" class="text-right">
                         <span class="d-flex justify-content-end">

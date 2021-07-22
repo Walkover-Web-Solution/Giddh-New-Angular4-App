@@ -158,7 +158,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.store.dispatch(this._settingsTagActions.GetALLTags());
-        
+
         this.breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {

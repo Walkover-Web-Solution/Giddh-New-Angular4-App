@@ -11,12 +11,11 @@ import { BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
-import { GeneralService } from '../../../services/general.service';
 import { OrganizationType } from '../../../models/user-login-state';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { GeneralService } from '../../../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
-
 @Component({
     selector: 'reverse-charge-report',
     templateUrl: './reverse-charge-report.component.html',
@@ -86,6 +85,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
+    /* True, if mobile screen size is detected **/
     public isMobileScreen: boolean = true;
     /** True if today selected */
     public todaySelected: boolean = false;
@@ -101,7 +101,6 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         private breakPointObservar: BreakpointObserver,
         private router: Router
     ) {
-        
     }
 
     /**
@@ -142,7 +141,6 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
                 setTimeout(() => {
                     this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
                         this.todaySelected = response;
-            
                         if (this.universalDate && !this.todaySelected) {
                             this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
                             this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);

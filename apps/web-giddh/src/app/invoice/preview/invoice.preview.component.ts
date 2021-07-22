@@ -33,6 +33,7 @@ import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/re
 import { CompanyResponse, ValidateInvoice } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdvanceSearch.component';
+import { BulkExportModal } from './models/bulk-export-modal/bulk-export.component';
 import { ToasterService } from '../../services/toaster.service';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { VoucherTypeEnum, VoucherClass } from '../../models/api-models/Sales';
@@ -221,6 +222,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public gstEInvoiceEnable: boolean;
     /** True if selected items needs to be updated */
     public updateSelectedItems: boolean = false;
+    /** This will hold comparision filters */
     public comparisionFilters: any[] = [];
     /** Stores the E-invoice cancellation reason */
     public eInvoiceCancel: { cancellationReason: string, cancellationRemarks?: string } = {
@@ -238,7 +240,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         private _invoiceService: InvoiceService,
         private _toaster: ToasterService,
         private _activatedRoute: ActivatedRoute,
-        private companyActions: CompanyActions,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private cdr: ChangeDetectorRef,
         private _breakPointObservar: BreakpointObserver,
@@ -1134,7 +1135,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             request.to = this.invoiceSearchRequest.to;
         }
         this.lastListingFilters = request;
-
         if (this.invoiceSearchRequest && this.invoiceSearchRequest.q) {
             request.q = this.invoiceSearchRequest.q;
         }
@@ -1343,7 +1343,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 balanceDueAmountConversionRate = +((balanceDueAmountForCompany / balanceDueAmountForAccount) || 0).toFixed(2);
                 item.exchangeRate = balanceDueAmountConversionRate;
             }
-
             let text = this.localeData?.currency_conversion;
             let grandTotalTooltipText = text?.replace("[BASE_CURRENCY]", this.baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
             let balanceDueTooltipText;
@@ -1501,7 +1500,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             });
         }
     }
-
     /**
      * This will give the updated account uniquename
      *
@@ -1707,7 +1705,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof InvoicePreviewComponent
      */
     public translationComplete(event: any): void {
-        if(event) {
+        if (event) {
             this.comparisionFilters = [
                 { label: this.commonLocaleData?.app_comparision_filters?.greater_than, value: 'greaterThan' },
                 { label: this.commonLocaleData?.app_comparision_filters?.less_than, value: 'lessThan' },

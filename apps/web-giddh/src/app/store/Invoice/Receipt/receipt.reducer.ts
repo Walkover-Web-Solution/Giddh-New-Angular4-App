@@ -148,7 +148,6 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
                             } else if (result && result.body && result.body.type === VoucherTypeEnum.purchase && result.body.uniqueName == m.uniqueName) {
                                 m.account = result.body.account;
                             }
-
                             return m;
                         })
                     }

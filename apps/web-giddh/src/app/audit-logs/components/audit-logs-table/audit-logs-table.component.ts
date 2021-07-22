@@ -1,4 +1,4 @@
-import { Component, OnDestroy, Input } from '@angular/core';
+import { Component, OnDestroy, Input, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
@@ -13,7 +13,7 @@ import { AppState } from '../../../store/roots';
     styleUrls: ['audit-logs-table.component.scss']
 })
 
-export class AuditLogsTableComponent implements OnDestroy {
+export class AuditLogsTableComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */

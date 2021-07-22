@@ -55,7 +55,7 @@
             </ng-container>
         </div>
 
-        <div id="noresult" *ngIf="viewPortItems?.length === 0" class="item"
+        <div id="noresult-show-checkbox" *ngIf="viewPortItems?.length === 0" class="item"
             [style.height.px]="noResultLinkEnabled ? NoFoundMsgHeight : (NoFoundMsgHeight - 20)">
             <a href="javascript:void(0);">{{notFoundMsg}}</a>
         </div>

@@ -24,7 +24,7 @@ import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/Sett
           right: -110px;
           left: auto;
           top: 8px;
-      }
+	}
 
       td {
           vertical-align: middle !important;
@@ -62,7 +62,6 @@ import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/Sett
           -ms-user-select: none;
           user-select: none;
 	  }
-
 	  .fa-percent{
 		top: 9px;
 		right: 6px;

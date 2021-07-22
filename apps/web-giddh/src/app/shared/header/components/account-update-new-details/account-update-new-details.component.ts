@@ -335,6 +335,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         this.addBlankGstForm();
                     }
                 }
+                // render custom field data
+                if (accountDetails.customFields && accountDetails.customFields.length > 0) {
+                    accountDetails.customFields.map(item => {
+                        this.renderCustomFieldDetails(item, accountDetails.customFields.length);
+                    });
+                }
 
                 // render custom field data
                 if (accountDetails.customFields && accountDetails.customFields.length > 0) {
@@ -915,7 +921,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             if (!accountAddress.length) {
                 this.addBlankGstForm();
             }
-
         } else if (activeParentgroup === 'bankaccounts') {
             this.isBankAccount = true;
             this.isDebtorCreditor = false;
@@ -1385,7 +1390,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             customField.push(this.initialCustomFieldDetailsForm(obj));
         }
     }
-
 
     /**
      * To initialize custom field form

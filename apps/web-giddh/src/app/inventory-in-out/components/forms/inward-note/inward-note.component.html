@@ -1,6 +1,6 @@
 <div class="form-header">
     <div>
-        <h3 class="">
+        <h3>
             <span>Inward Note</span>
             <span class="pull-right font-14">Multiple
                 <a href="javascript:void(0)" [ngClass]="{'text-link': mode === 'sender' }"
@@ -13,8 +13,8 @@
 
     </div>
 </div>
-<div class="form-body white-bg  clearfix margin-child-label">
-    <div class="form-bg clearfix">
+<div class="form-body white-bg clearfix margin-child-label">
+    <div class="clearfix">
         <form [formGroup]="form" class="form-group">
             <div class="row">
                 <div class="col-6 form-group">
@@ -68,13 +68,11 @@
                 <div [formGroupName]="i">
 
                     <div class="col-4 form-group" *ngIf="mode === 'sender'">
-                        <!-- <label class="mr-b1">Sender</label> -->
                         <sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Sender'"
                             (selected)="userChanged($event,i)" formControlName="inventoryUser" [ItemHeight]="'33'">
                         </sh-select>
                     </div>
                     <div class="col-4 form-group" *ngIf="mode === 'product'">
-                        <!-- <label class="mr-b1">Product Name</label> -->
                         <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'"
                             (selected)="stockChanged($event,i)" [ItemHeight]="'33'" formControlName="stock"
                             [isRequired]="true"></sh-select>
@@ -87,7 +85,6 @@
                     </div>
 
                     <div class="col-4 form-group">
-                        <!-- <label class="mr-b1">Quantity</label> -->
                         <div class="row">
                             <div class="col-10">
                                 <input name="" type="text" formControlName="quantity" class="form-control">

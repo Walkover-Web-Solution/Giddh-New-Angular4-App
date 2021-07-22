@@ -198,7 +198,6 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
             this.selectedField = option.value;
             this.bulkUpdateForm.reset();
         }
-
     }
 
     /**
@@ -294,9 +293,11 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
                 case 'pdfTemplate':
                     this.bulkUpdateRequest(this.updateTemplatesRequest, 'templates');
                     break;
+
                 case 'notes':
                     this.bulkUpdateRequest(this.updateNotesRequest, 'notes');
                     break;
+
                 case 'signature':
                     if (this.signatureOptions === 'image') {
                         if (!this.isDefaultTemplateSignatureImage) {
@@ -312,6 +313,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
                         }
                     }
                     break;
+
                 case 'dueDate':
                     if (this.updateDueDatesRequest.dueDate) {
                         this.updateDueDatesRequest.dueDate = moment(this.updateDueDatesRequest.dueDate, this.giddhDateFormat).format(this.giddhDateFormat);
@@ -321,6 +323,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
                     break;
                 case 'shippingDetails':
                     break;
+
                 case 'customFields':
                     this.bulkUpdateRequest(this.updateCustomfieldsRequest, 'customfields');
                     break;
@@ -328,6 +331,8 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
                     break;
 
             }
+        } else if (this.signatureOptions === 'slogan') {
+            this.bulkUpdateRequest(this.updateSloganRequest, 'slogan');
         }
     }
 

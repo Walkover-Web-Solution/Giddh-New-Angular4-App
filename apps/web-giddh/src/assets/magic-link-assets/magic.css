@@ -402,7 +402,7 @@ body {
     margin-left: 30px;
 }
 
-.mr-3 {
+.mr-r3 {
     margin-right: 30px;
 }
 
@@ -566,6 +566,14 @@ body {
     position: relative;
 }
 
+.w-100 {
+    width: 100% !important;
+}
+
+.position-relative {
+    position: relative !important;
+}
+
 .oyHid {
     overflow-y: hidden;
 }
@@ -631,7 +639,7 @@ body {
     font-weight: regular;
 }
 
-.account_name {
+.account-name {
     font-weight: 300;
     font-size: 14px;
 }
@@ -654,7 +662,7 @@ body {
 }
 
 .gray-bg {
-    background: #ccc;
+    background: #d9d9d9;
 }
 
 .white-bg {
@@ -714,7 +722,7 @@ body {
     width: 150px !important;
 }
 
-.ledger-footer-1.float-left {
+.ledger-footer-1 {
     width: 50%;
     bottom: 0;
     left: 0;
@@ -725,14 +733,8 @@ body {
     height: auto !important;
 }
 
-.ledger-footer-1.float-right {
-    width: 50%;
-    bottom: 0;
+.ledger-footer-1:nth-child(2) {
     right: 0 !important;
-}
-
-.ledger-footer-1.float-right tbody td {
-    border-right: 1px solid #d9d9d9;
 }
 
 .download-invoice-ledger {
@@ -791,6 +793,22 @@ table th[class*="col-"] {
 
 .cmnPd80 {
     padding: 80px 0;
+}
+
+.ledger-footer-1.float-left {
+    width: 50%;
+    left: 0;
+    bottom: 0;
+}
+
+.ledger-footer-1.float-right {
+    width: 50%;
+    bottom: 0;
+    right: 0 !important;
+}
+
+.ledger-footer-1.float-right tbody td {
+    border-right: 1px solid #d9d9d9;
 }
 
 .ylwBg {
@@ -1417,4 +1435,8 @@ div#transaction_table {
 }
 #debit td {
     border-right: 0;
+}
+#debit td, #credit td{
+    white-space: normal;
+    word-break: break-all;
 }

@@ -13,7 +13,6 @@ export class TbsearchPipe implements PipeTransform {
 
     constructor(private zone: NgZone
     ) {
-
     }
 
     public transform(input: any, search: string): any {

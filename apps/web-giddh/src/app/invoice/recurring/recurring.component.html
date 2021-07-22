@@ -212,7 +212,6 @@
                 </div>
             </form>
 
-
             <div class="table-responsive">
                 <table class="table basic giddh-table table-bordered on-mobile-view">
 
@@ -276,6 +275,34 @@
                                         <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'nextcrondate'}">
                                         </ng-container>
 
+                                    </div>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="d-flex">
+                                    <div class=""> {{localeData?.last_invoice_date}}</div>
+                                    <div class="icon-pointer">
+                                        <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'lastinvoicedate'}">
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="d-flex">
+                                    <div class=""> {{localeData?.next_invoice_date}}</div>
+                                    <div class="icon-pointer">
+                                        <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'nextcrondate'}">
+                                        </ng-container>
+
+                                    </div>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="d-flex">
+                                    <div class="">{{commonLocaleData?.app_status}}</div>
+                                    <div class="icon-pointer">
+                                        <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'status'}">
+                                        </ng-container>
 
                                     </div>
                                 </div>
@@ -288,7 +315,6 @@
                                         </ng-container>
 
 
-
                                     </div>
                                 </div>
                             </th>
@@ -299,6 +325,15 @@
                                         <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'vouchertotal'}">
                                         </ng-container>
 
+                                    </div>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="d-flex text-right">
+                                    <div class="flex-fill">{{localeData?.invoice_amount}}</div>
+                                    <div class="icon-pointer">
+                                        <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'vouchertotal'}">
+                                        </ng-container>
 
                                     </div>
                                 </div>
@@ -403,5 +438,5 @@
 
         </ng-template>
         <!-- endregion -->
-    </div>    
+    </div>
 </ng-container>

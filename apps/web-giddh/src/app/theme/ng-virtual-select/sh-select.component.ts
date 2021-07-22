@@ -9,7 +9,6 @@ import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 const FLATTEN_SEARCH_TERM = 'flatten';
 
-// noinspection TsLint
 @Component({
     selector: 'sh-select',
     templateUrl: './sh-select.component.html',

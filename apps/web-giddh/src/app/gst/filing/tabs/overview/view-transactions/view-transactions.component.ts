@@ -31,7 +31,7 @@ export const filterTransaction = {
     // tslint:disable-next-line:component-selector
     selector: 'view-transactions',
     templateUrl: './view-transactions.component.html',
-    styleUrls: ['view-transactions.component.scss'],
+    styleUrls: ['./view-transactions.component.scss'],
 })
 
 export class ViewTransactionsComponent implements OnInit, OnDestroy {

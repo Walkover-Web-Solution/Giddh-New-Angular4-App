@@ -72,7 +72,7 @@
                             </div>
                             <!-- Invoice filter section ends -->
                             <button class="btn btn-group btn-filter desktop-button-filter "
-                            *ngIf="selectedAccountsList.length>0" (click)="clearSelectedContacts();">
+                                *ngIf="selectedAccountsList.length>0" (click)="clearSelectedContacts();">
                                 <span class="icon-cross"></span> {{commonLocaleData?.app_clear_selected}}
                             </button>
                             <div class="pd-t1-md d-flex justify-content-between">
@@ -246,7 +246,7 @@
                                     <div>
                                         <span class="d-inline-flex number-total">
                                             <amount-field [amount]="totalSales" [currencySymbol]="false"
-                                            [currencyCode]="false">
+                                                [currencyCode]="false">
                                             </amount-field>/-
                                         </span>
                                     </div>
@@ -258,8 +258,8 @@
                                     <span *ngIf="activeTab === 'customer'">{{commonLocaleData?.app_receipt}}</span>
                                     <div>
                                         <span class="d-inline-flex number-total">
-                                            <amount-field [amount]="totalReceipts"
-                                            [currencySymbol]="false" [currencyCode]="false">
+                                            <amount-field [amount]="totalReceipts" [currencySymbol]="false"
+                                                [currencyCode]="false">
                                             </amount-field>/-
                                         </span>
                                     </div>
@@ -270,8 +270,8 @@
                                     {{localeData?.closing}}
                                     <div>
                                         <span class="d-inline-flex number-total">
-                                            <amount-field [amount]="closingBalance"
-                                            [currencySymbol]="false" [currencyCode]="false">
+                                            <amount-field [amount]="closingBalance" [currencySymbol]="false"
+                                                [currencyCode]="false">
                                             </amount-field>/-
                                         </span>
                                     </div>
@@ -360,13 +360,9 @@
     <!--region Modal for Mail/SMS for customer-->
     <div *ngIf="activeTab === 'customer'" class="modal fade border-radius-0" tabindex="-1" bsModal #mailModal="bs-modal"
         role="dialog" aria-hidden="true">
-
         <div class="modal-dialog modal-md">
-
             <div class="modal-content">
-
                 <div class="border-radius-0">
-
                     <div class="modal-header theme-bg pd-l2 pd-r2 clearfix">
                         <h3 class="modal-title bg" id="modal-title-mail-customer">{{messageBody.header.set}}</h3>
                         <span aria-hidden="true" class="close" data-dismiss="modal"
@@ -527,13 +523,14 @@
 
                         <tr *ngFor="let account of sundryDebtorsAccounts;let idx = index">
                             <td class="position-relative word-wrap customer-name cursor-pointer"
-                                (clickOutside)="dropdown.hide()" (dblclick)="dropdown.show()" data-title="Customer">
+                                (clickOutside)="dropdown.hide()" (dblclick)="dropdown.show()"
+                                data-title="{{localeData?.customer}}">
                                 <div class="customer-name-filed">
                                     <span class="inline table-checkbox">
                                         <label></label>
                                         <input type="checkbox" (click)="selectAccount($event, account)"
                                             [(ngModel)]="account.isSelected"
-                                            [ngClass]="{'checkbox-visible': (selectedCheckedContacts.length || isMobileScreen), 'position-absolute': !selectedCheckedContacts.length}" />
+                                            [ngClass]="{'checkbox-visible': (selectedCheckedContacts.length || isMobileScreen), 'pos-abs': !selectedCheckedContacts.length}" />
                                     </span>
                                     <span class="account-name-customer"> {{account.name}} </span>
                                     <div dropdown #dropdown="bs-dropdown" container="body" [autoClose]="false"
@@ -986,7 +983,7 @@
                                     [attr.data-title]="item.key">
                                     {{item.value || '-' }}</td>
                             </ng-container>
-                            <td data-title="Action" *ngIf="isICICIIntegrated">
+                            <td [attr.data-title]="commonLocaleData?.app_action" *ngIf="isICICIIntegrated">
                                 <button *ngIf="account?.bankPaymentDetails && account?.country?.code==='IN'"
                                     class="btn btn-small btn-success" (click)="openBulkPaymentModal(template, account)">
                                     {{commonLocaleData?.app_pay_now}} </button>

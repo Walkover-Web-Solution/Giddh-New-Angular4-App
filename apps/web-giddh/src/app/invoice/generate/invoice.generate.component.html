@@ -27,7 +27,8 @@
                     </div>
                 </div>
 
-                <form #invoiceForm="ngForm" novalidate class="form-inline mr-b15">
+                <form #invoiceForm="ngForm" (ngSubmit)="getLedgersByFilters(invoiceForm)" novalidate
+                    class="form-inline mr-b15">
                     <div class="d-flex w-100 flex-none">
                         <div class="d-flex form-group mobile-width-100 flex-none">
                             <div class="form-group date-advance-search pending-advance-search flex-fill">
@@ -173,7 +174,7 @@
 
                             <td *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedInvoices.length === 0"
                                 data-title="#">
-                                <div class=" d-flex justify-content-center">
+                                <div class="d-flex justify-content-center">
                                     {{ i + 1}}
                                 </div>
                             </td>
@@ -264,7 +265,7 @@
                     </tbody>
                 </table>
             </div>
-            </div>
+        </div>
 
             <div *ngIf="ledgersData?.totalItems > 20"
                 [hidden]="(isGetAllRequestInProcess$ | async) || (getLedgerDataInProcess$ | async)"

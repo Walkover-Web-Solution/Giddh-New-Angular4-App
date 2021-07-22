@@ -976,7 +976,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             approvalUniqueName: '',
             maxBankLimit: 'custom',
         }
-        // return new UserAmountRangeRequests();
         return userAmountRanges;
     }
 

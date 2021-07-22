@@ -37,7 +37,7 @@
                     </div>
                     <div class="input-grp-date-range-picker d-flex">
                         <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                            <i><img src="assets/images/custom-calender.svg"></i>
+                            <i class="icon-calender calendar-addon"></i>
                             <input type="text" name="selectedDateRange"
                                 [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
                                 class="giddh-datepicker date-range-picker" />
@@ -219,7 +219,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="pagination-wrapper" *ngIf="reverseChargeReportResults.totalPages > 1">
+            <div class="pagination-wrapper" [hidden]="isLoading" *ngIf="reverseChargeReportResults.totalPages > 1">
                 <pagination [totalItems]="reverseChargeReportResults.totalItems"
                     [(ngModel)]="reverseChargeReportResults.page" [maxSize]="6" class="pagination-sm"
                     [boundaryLinks]="true" [itemsPerPage]="paginationLimit" [rotate]="false"

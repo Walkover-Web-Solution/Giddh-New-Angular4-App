@@ -161,7 +161,6 @@
         flex: 1 1 auto;
     }
 }
-
 /* my css */
 
 .card {
@@ -234,7 +233,7 @@ td.card-header.clearfix {
     text-align: right;
 }
 
-.card .more-button .moreBtnWrapper {
+.card .more-button .more-btn-wrapper {
     margin-right: 0;
     border-top: 1px solid $gainsboro;
     padding-top: 8px;
@@ -793,7 +792,6 @@ span.icon-export-icon {
 }
 
 @media (max-width: 360px) {
-  
 }
 
 @media (max-width: 320px) {
@@ -887,7 +885,6 @@ span.icon-export-icon {
         width: 200px !important;
         max-width: 200px !important;
     }
-
 }
 
 @media (min-width:769px){

@@ -435,6 +435,10 @@
                             <td class="border-none" [attr.colspan]="columnsVisibled - 1">Dummy Product Description 1
                             </td>
                         </tr>
+                        <tr *ngIf="fieldsAndVisibility.table.item?.display && fieldsAndVisibility.table.showDescriptionInRows?.display">
+                            <td class="border-none">&nbsp;</td>
+                            <td class="border-none" [attr.colspan]="columnsVisibled - 1">Dummy Product Description 1</td>
+                        </tr>
                         <tr>
                             <td *ngIf="fieldsAndVisibility.table.sNo?.display " class="text-left">2</td>
                             <td class="text-left "
@@ -481,6 +485,10 @@
                             <td class="border-none">&nbsp;</td>
                             <td class="border-none" [attr.colspan]="columnsVisibled - 1">Dummy Product Description 2
                             </td>
+                        </tr>
+                        <tr *ngIf="fieldsAndVisibility.table.item?.display && fieldsAndVisibility.table.showDescriptionInRows?.display">
+                            <td class="border-none">&nbsp;</td>
+                            <td class="border-none" [attr.colspan]="columnsVisibled - 1">Dummy Product Description 2</td>
                         </tr>
                         <!-- <tr>
                             <td *ngIf="fieldsAndVisibility.table.sNo?.display " class="text-right ">3</td>

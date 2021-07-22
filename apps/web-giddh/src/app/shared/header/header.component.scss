@@ -62,7 +62,7 @@
 }
 
 a[vr-item]:focus {
-    background-color: $primary;
+    background-color: $vivid-blue;
     color: $white;
     cursor: pointer;
 }
@@ -740,7 +740,6 @@ ul.sub-list {
         word-break: break-word;
     }
 }
-
 .name-year {
     font-size: 12px !important;
     color: $deep-sky-blue !important;
@@ -1303,7 +1302,6 @@ aside-setting {
         font-size: 12px !important;
     }
 }
-
 @media (min-width: 412px) and (max-width: 840px) {
     ul.sub-list {
         min-height: 30px;

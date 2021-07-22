@@ -31,6 +31,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DEFAULT_AC, NAVIGATION_ITEM_LIST, reassignNavigationalArray } from '../../models/defaultMenus';
 import { userLoginStateEnum, OrganizationType } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
+import { environment } from 'apps/web-giddh/src/environments/environment';
 import { CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { CommonService } from '../../services/common.service';
@@ -63,10 +64,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public asideHelpSupportMenuState: string = 'out';
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideSettingMenuState: string = 'out';
-
-    public asideInventorySidebarMenuState: string = 'out';
     /*This will check if page has not tabs*/
     public pageHasTabs: boolean = false;
+
+    public asideInventorySidebarMenuState: string = 'out';
 
     @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
 
@@ -215,6 +216,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /** True if sidebar is forcely expanded */
     public sidebarForcelyExpanded: boolean = false;
 
+    /**
+     * Returns whether the account section needs to be displayed or not
+     *
+     * @readonly
+     * @type {boolean} True, if either branch is switched or company is switched and only HO is there (single branch)
+     * @memberof HeaderComponent
+     */
+    public get shouldShowAccounts(): boolean {
+        return this.currentOrganizationType === OrganizationType.Branch ||
+            (this.currentOrganizationType === OrganizationType.Company && this.currentCompanyBranches && this.currentCompanyBranches.length === 1);
+    }
     /**
      * Returns whether the back button in header should be displayed or not
      *
@@ -390,6 +402,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 } else {
                     this.activeCompanyForDb.name = selectedCmp.name;
                     this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
+                    this.selectedCompanyCountry = selectedCmp.country;
                 }
             }
         });
@@ -484,7 +497,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.collapseSidebar(true);
             }
         });
-
         this.generalService.isMobileSite.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             this.isMobileSite = s;
             if (this.generalService.companyUniqueName) {
@@ -497,7 +509,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.getElectronMacAppVersion();
 
         this.store.dispatch(this.companyActions.GetApplicationDate());
-
         this.user$.pipe(take(1)).subscribe((u) => {
             if (u) {
                 let userEmail = u.email;
@@ -689,6 +700,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
     }
 
+
     public ngAfterViewInit() {
         if (window['Headway'] === undefined) {
             /* TO SHOW NOTIFICATIONS */
@@ -720,7 +732,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         this.session$.subscribe((s) => {
             if (s === userLoginStateEnum.notLoggedIn) {
-                this.router.navigate(['/login']);
+                if (isElectron) {
+                    this.router.navigate(['/login']);
+                } else {
+                    window.location.href = (environment.production) ? `https://giddh.com/login/?action=logout` : `https://test.giddh.com/login/?action=logout`;
+                }
             } else if (s === userLoginStateEnum.newUserLoggedIn) {
                 this.zone.run(() => {
                     this.router.navigate(['/new-user']);
@@ -822,6 +838,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleSidebarPane(show: boolean, isMobileSidebar: boolean): void {
+        if(!this.isIpadScreen) {
+            this.isSettingsIconDisabled = (this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/settings/taxes")) || this.router.url.includes("/pages/user-details")
+            if (this.isSettingsIconDisabled) {
+                return;
+            }
+        }
+
         setTimeout(() => {
             this.isMobileSidebar = isMobileSidebar;
             if(show) {
@@ -1785,7 +1808,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     *
     * @memberof HeaderComponent
     */
-     public openGstSideMenu(): void {
+    public openGstSideMenu(): void {
         this.isGstSideMenuOpened = !this.isGstSideMenuOpened;
         this.store.dispatch(this._generalActions.openGstSideMenu(this.isGstSideMenuOpened));
     }

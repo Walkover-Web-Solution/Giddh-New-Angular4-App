@@ -3,7 +3,8 @@
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="reverse-table-report">
         <div class="container-fluid">
-            <div class="mr-t15 mr-b15 input-grp-date-range-picker d-flex justify-content-between">
+            <div class="mr-t15 mr-b15 input-grp-date-range-picker d-flex justify-content-between"
+                [ngClass]="{'clear-filter-applicable': showClearFilter}">
                 <!-- Invoice filter section -->
                 <div class="mr-r1 d-flex flex-sm-row flex-column">
                     <div class="input-group linked-entities mr-r15"
@@ -35,7 +36,7 @@
                     </div>
                     <div class="d-flex">
                         <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                            <i><img src="assets/images/custom-calender.svg"></i>
+                            <i class="icon-calender calendar-addon"></i>
                             <input type="text" name="selectedDateRange"
                                 [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
                                 class="giddh-datepicker date-range-picker" />
@@ -267,7 +268,7 @@
                 </table>
             </div>
 
-            <div *ngIf="pageConfiguration.totalItems > paginationLimit" class="pagination-wrapper">
+            <div [hidden]="isLoading" *ngIf="pageConfiguration.totalItems > paginationLimit" class="pagination-wrapper">
                 <pagination [totalItems]="pageConfiguration.totalItems" [(ngModel)]="pageConfiguration.currentPage"
                     [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit"
                     [rotate]="false" (pageChanged)="onPageChanged($event)" [firstText]="commonLocaleData?.app_first"

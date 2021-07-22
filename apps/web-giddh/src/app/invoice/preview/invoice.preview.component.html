@@ -774,12 +774,10 @@
                                             [currencyCode]="item.account?.currency?.code">
                                         </amount-field>
                                     </span>
-
                                 </td>
                                 <ng-template #grandTotalPopupTemplate><span
                                         [innerHTML]="item.grandTotalTooltipText"></span>
                                 </ng-template>
-
                                 <!-- Total Amount without multicurrency -->
                                 <td [attr.data-title]="commonLocaleData?.app_amount"
                                     *ngIf="!(selectedVoucher === 'credit note' || selectedVoucher === 'debit note')"

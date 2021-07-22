@@ -188,15 +188,12 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** True if user has voucher list permission */
     public hasVoucherListPermissions: boolean = true;
 
     constructor(private store: Store<AppState>, private proformaActions: ProformaActions, private router: Router, private _cdr: ChangeDetectorRef, private _breakPointObservar: BreakpointObserver, private generalService: GeneralService, private modalService: BsModalService, private commonActions: CommonActions) {
         this.advanceSearchFilter.page = 1;
         this.advanceSearchFilter.count = 20;
         this.advanceSearchFilter.from = moment(this.datePickerOptions.startDate).format(GIDDH_DATE_FORMAT);
-        this.advanceSearchFilter.to = moment(this.datePickerOptions.endDate).format(GIDDH_DATE_FORMAT);
-
         this.isGetAllInProcess$ = this.store.pipe(select(s => s.proforma.getAllInProcess), takeUntil(this.destroyed$));
         this.isDeleteVoucherSuccess$ = this.store.pipe(select(s => s.proforma.isDeleteProformaSuccess), takeUntil(this.destroyed$));
         this.isUpdateVoucherActionSuccess$ = this.store.pipe(select(s => s.proforma.isUpdateProformaActionSuccess), takeUntil(this.destroyed$));
