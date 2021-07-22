@@ -912,8 +912,11 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public expandSidebar(): void {
-        document.querySelector('.primary-sidebar')?.classList?.remove('sidebar-collapse');
-        document.querySelector('.nav-left-bar')?.classList?.remove('width-60');
+        const isAccountModalOpened = document.querySelector('.create-acc-form');
+        if (!isAccountModalOpened) {
+            document.querySelector('.primary-sidebar')?.classList?.remove('sidebar-collapse');
+            document.querySelector('.nav-left-bar')?.classList?.remove('width-60');
+        }
     }
 
     /**
@@ -924,5 +927,17 @@ export class GeneralService {
     public collapseSidebar(): void {
         document.querySelector('.primary-sidebar')?.classList?.add('sidebar-collapse');
         document.querySelector('.nav-left-bar')?.classList?.add('width-60');
+    }
+
+    /**
+     * Adds voucher version to request's URL
+     *
+     * @param {string} url API URL
+     * @param {number} voucherVersion Company voucher version
+     * @memberof GeneralService
+     */
+    public addVoucherVersion(url: string, voucherVersion: number): string {
+        const delimiter = url.includes('?') ? '&' : '?';
+        return url.concat(`${delimiter}voucherVersion=${voucherVersion}`);
     }
 }

@@ -15,6 +15,10 @@ export class SearchFilterComponent implements OnInit {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /** True, if send button needs to be displayed */
+    @Input() public showSendButton: boolean = true;
+    /** True, if download CSV button needs to be displayed */
+    @Input() public showDownloadCsv: boolean = true;
 
     @Output() public searchQuery = new EventEmitter<SearchDataSet[]>();
     @Output() public isFiltered = new EventEmitter<boolean>();

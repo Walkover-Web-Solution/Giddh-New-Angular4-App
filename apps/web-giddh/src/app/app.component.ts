@@ -19,6 +19,7 @@ import { take, takeUntil } from 'rxjs/operators';
 import { LoaderService } from './loader/loader.service';
 import { CompanyActions } from './actions/company.actions';
 import { OrganizationType } from './models/user-login-state';
+import { CommonActions } from './actions/common.actions';
 
 /**
  * App Component
@@ -42,6 +43,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public IAmLoaded: boolean = false;
     private newVersionAvailableForWebApp: boolean = false;
+    /** This holds the active locale */
+    public activeLocale: string = "";
 
     constructor(private store: Store<AppState>,
         private router: Router,
@@ -51,7 +54,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private breakpointObserver: BreakpointObserver,
         private dbServices: DbService,
         private loadingService: LoaderService,
-        private companyActions: CompanyActions
+        private companyActions: CompanyActions,
+        private commonActions: CommonActions
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
@@ -150,6 +154,18 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         if (this._generalService.companyUniqueName && !window.location.href.includes('login') && !window.location.href.includes('token-verify')) {
             this.store.dispatch(this.companyActions.RefreshCompanies());
         }
+
+        this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                if(this.activeLocale !== response?.value) {
+                    this.activeLocale = response?.value;
+                    this.store.dispatch(this.commonActions.getCommonLocaleData(response.value));
+                }
+            } else {
+                let supportedLocales = this._generalService.getSupportedLocales();
+                this.store.dispatch(this.commonActions.setActiveLocale(supportedLocales[0]));
+            }
+        });
     }
 
     public ngAfterViewInit() {

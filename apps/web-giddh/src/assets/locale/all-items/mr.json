@@ -356,7 +356,7 @@
                 {
                     "label": "शोधा",
                     "link": "/pages/search",
-                    "icon": "icon-search-new",
+                    "icon": "icon-search",
                     "description": "गट निवडा आणि कालावधीसाठी शोधा"
                 }
             ]

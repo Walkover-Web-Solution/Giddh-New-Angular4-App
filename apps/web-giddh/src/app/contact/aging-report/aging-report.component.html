@@ -76,7 +76,7 @@
             </button>
         </div>
     </div>
-    <div class="top-content">
+    <div class="top-content" [hidden]="!(dueAmountReportData$ | async)?.results?.length">
         <div class="d-flex w-100 justify-content-between overflow-x-auto">
             <div class="total-due-sale total-details-box opening-box border-none mr-r05">
                 <h5>
@@ -117,6 +117,9 @@
                 </div>
                 <ng-container *ngTemplateOutlet='mainTable'></ng-container>
             </div>
+            <div class="no-data" *ngIf="!(dueAmountReportData$ | async)?.results?.length && !(getAgingReportRequestInProcess$ | async)">
+                <no-data [secondaryMessageClass]="'p-0'"></no-data>
+            </div>
         </div>
     </div>
 </div>
@@ -148,7 +151,7 @@
 <!-- endregion -->
 <ng-template #mainTable>
     <table class="table  giddh-table aging-table table-aging-report">
-        <thead>
+        <thead [hidden]="!(dueAmountReportData$ | async)?.results?.length && !dueAmountReportRequest?.q">
             <tr class="aging-table-top">
                 <td></td>
                 <td></td>
@@ -269,13 +272,6 @@
                                 [currencyCode]="false">
                             </amount-field>
                         </span>
-                    </td>
-                </tr>
-            </ng-container>
-            <ng-container *ngIf="!(dueAmountReportData$ | async)?.results?.length">
-                <tr>
-                    <td colspan="8" class="text-center empty-table">
-                        <h1>{{commonLocaleData?.app_no_record_found}}</h1>
                     </td>
                 </tr>
             </ng-container>

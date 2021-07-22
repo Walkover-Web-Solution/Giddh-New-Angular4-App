@@ -62,7 +62,7 @@
         </div>
         <div class="report-table table-responsive">
             <table class="table basic giddh-table on-mobile-view">
-                <thead>
+                <thead [hidden]="!branchTransferResponse?.items?.length && !branchTransferPostRequestParams?.sender && !branchTransferPostRequestParams?.receiver && !branchTransferPostRequestParams?.senderReceiver && !branchTransferPostRequestParams?.fromWarehouse && !branchTransferPostRequestParams?.toWarehouse">
                     <tr (clickOutside)="inlineSearch = null">
                         <th width="3%">#</th>
                         <th width="10%" (click)="sortBranchTransferList('dateOfSupply')">Date <span
@@ -184,8 +184,6 @@
                 <tbody class="on-mobile-view no-records"
                     *ngIf="!branchTransferResponse.items || branchTransferResponse.items.length === 0">
                     <tr>
-                        <td *ngIf="!isLoading" [attr.colspan]="currentOrganizationType === 'BRANCH' ? 9 : 11"
-                            align="center">No records found.</td>
                         <td *ngIf="isLoading" [attr.colspan]="currentOrganizationType === 'BRANCH' ? 9 : 11">
                             <giddh-page-loader></giddh-page-loader>
                         </td>
@@ -195,8 +193,12 @@
         </div>
         <div class="pagination-wrapper" *ngIf="branchTransferResponse.totalPages > 1">
             <pagination [totalItems]="branchTransferResponse.totalPages" [(ngModel)]="branchTransferResponse.page"
-                [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
-                (pageChanged)="pageChanged($event)"></pagination>
+            [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
+            (pageChanged)="pageChanged($event)"></pagination>
+        </div>
+        <div class="no-data" *ngIf="!isLoading && (!branchTransferResponse.items || branchTransferResponse.items.length === 0)">
+            <h1>No entries found within given criteria.</h1>
+            <h1 class="p-0">Do search with some other dates.</h1>
         </div>
     </div>
 </div>

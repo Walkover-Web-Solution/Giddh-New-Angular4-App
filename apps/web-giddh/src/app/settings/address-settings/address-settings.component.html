@@ -24,7 +24,7 @@
         <div *ngIf="organizationType === 'COMPANY'" class="w-100">
             <div class="table-responsive">
                 <table class="table basic table-bordered giddh-table on-mobile-view">
-                    <thead>
+                    <thead [hidden]="!addresses?.length && !addressSearchRequest?.name && !addressSearchRequest?.address && !addressSearchRequest?.state">
                         <tr>
                             <th class="min-wid-check" width="2%">
                                 <div>#</div>

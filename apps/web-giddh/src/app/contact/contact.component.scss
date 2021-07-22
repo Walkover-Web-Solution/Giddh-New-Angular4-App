@@ -154,7 +154,7 @@ td.comment-field {
 }
 
 .date-range-picker {
-    width: 250px !important;
+    width: 225px !important;
 }
 //  my css
 .aging-table tbody tr:first-child td {
@@ -213,6 +213,12 @@ tr.aging-table-top td {
     td {
         &:first-child {
             min-width: 250px;
+        }
+    }
+    .text-lowercase.word-wrap{
+        color: $grey-chateau !important;
+        div{
+            line-height: 14px;
         }
     }
 }
