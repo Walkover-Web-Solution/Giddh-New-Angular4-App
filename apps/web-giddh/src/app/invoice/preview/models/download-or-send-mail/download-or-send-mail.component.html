@@ -83,30 +83,15 @@
         </div>
     </div>
 
-
     <!--  -->
     <div class="modal-header clearfix" *ngIf="isMobileScreen">
         <span>
-            Download PDF
+            {{ commonLocaleData?.app_download_pdf }}
         </span>
         <i class="icon-cross text-right close-modal" aria-hidden="true" (click)="onCancel('closed')"></i>
-        <!-- drop down for email area -->
-        <!-- <div class="dropdown-menu" [ngClass]="{open: showEmailTextarea}">
-            <div class="form-group">
-                <textarea class="form-control" #emailList placeholder="Enter email addresses"></textarea>
-            </div>
-            <div class="pd-l2 pd-r2">
-                <button type="button" class="btn btn-md btn-success mr-b2" (click)="onSendInvoiceOnMail(emailList.value)">Send</button>
-            </div>
-        </div> -->
-
-
     </div>
     <div class="modal-body p-0 clearfix" id="export-body" *ngIf="isMobileScreen">
-
         <!-- drop down for invoice copies -->
-
-
             <ul class="nav nav-tabs">
                 <li class="nav-item" [ngClass]="{'active': emailTabActive}">
                     <a class="nav-link cp" [ngClass]="{'active': emailTabActive}"
