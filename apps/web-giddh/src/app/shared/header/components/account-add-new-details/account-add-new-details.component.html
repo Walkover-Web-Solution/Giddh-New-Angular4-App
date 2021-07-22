@@ -131,8 +131,8 @@
 
         <tabset #staticTabs class="custom-tabs " id="asidePaneFormTabs">
             <ng-container>
-                <tab [heading]="localeData?.tabs?.address" [active]="isDebtorCreditor || isBankAccount"
-                    [disabled]="!isDebtorCreditor && !isBankAccount" [ngClass]="{'active': isDebtorCreditor}"
+                <tab [heading]="localeData?.tabs?.address" [active]="isDebtorCreditor"
+                    [disabled]="!isDebtorCreditor" [ngClass]="{'active': isDebtorCreditor}"
                     class="gstin-address">
                     <ng-container>
                         <div class="gstin-form" formArrayName="addresses">
