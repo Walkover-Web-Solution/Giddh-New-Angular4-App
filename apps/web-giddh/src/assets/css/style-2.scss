@@ -6337,7 +6337,7 @@ footer#footer.absolute-footer {
 }
 
 .fixed.modal-open .modal-backdrop {
-    z-index: -1040;
+    z-index: 99999;
 }
 
 section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
@@ -7684,7 +7684,7 @@ span#HW_badge_cont:nth-child(3) {
 }
 
 .setting-sidebar-open #content-wrapper{
-    padding-right: 240px;
+    padding-right: 0;
     padding-left: 60px !important;
 }
 .setting-sidebar-open .desktop-header {
@@ -7994,9 +7994,6 @@ button#more-btn-inventory,
 .menu_open .inventory-sidebar {
     left: 0 !important;
 }
-.mobile-setting-sidebar {
-    overflow-y: hidden;
-}
 .select-linked-accounts sh-select-menu .menu {
     max-height: 250px;
 }
@@ -8263,10 +8260,15 @@ input.mat-input-element {
 .setting-sidebar-open.on-user-page .plan-wrapper {
     padding-left: 60px !important;
 }
-.setting-sidebar-open .plan-wrapper,
-.setting-sidebar-open.on-user-page .plan-wrapper{
+.setting-sidebar-open.aside-setting.on-setting-page .plan-wrapper,
+.setting-sidebar-open.aside-setting.on-user-page .plan-wrapper{
     padding-right: 240px !important;
 }
+.setting-sidebar-open .plan-wrapper,
+.setting-sidebar-open.on-user-page .plan-wrapper{
+    padding-right: 0 !important;
+}
+
 .plan-wrapper.menu_open {
     padding-left: 240px !important;
 }
@@ -8292,9 +8294,9 @@ input.mat-input-element {
     }
 }
 .invoice-modal-content {
-    left: 0 !important;
-    width: 100% !important;
-    z-index: 991 !important;
+    left: 60px !important;
+    width: calc(100% - 60px) !important;
+    z-index: 99 !important;
 }
 .primary-sidebar {
     .giddh-primary-items {
@@ -8384,12 +8386,19 @@ body.update-scroll-hidden {
         }
     }
 }
-.nav-left-bar{
-    &.width-60  {
-        .sidebar-collapse {
-            .sub-menu{
-                display: none !important;
+.on-setting-page, .on-user-page{
+    aside-setting{
+        .aside-pane{
+            .back-to-main-slider{
+                display: block !important;
+                padding: 0 12px;
             }
+            h4{
+                display: none;
+            }
+        }
+        &::after{
+            display: none;
         }
     }
 }
@@ -8468,6 +8477,21 @@ body.update-scroll-hidden {
             }
         } 
     }
+.on-setting-page.aside-setting, .on-user-page.aside-setting{
+    #content-wrapper{
+        padding-right: 240px;
+    }
+}
+.gst-sidebar-open.on-setting-page.aside-setting{
+    #content-wrapper{
+        padding-right: 0;
+    }
+}
+.manage-account-popup.full-screen-modal{
+    z-index: 999991;
+}
+body.update-scroll-hidden{
+    overflow-y: hidden;
 }
 /* responsive  starts here*/
 
@@ -8978,15 +9002,25 @@ body.update-scroll-hidden {
     }
 }
 @media (max-width: 767px) {
+<<<<<<< HEAD
     .gst-sidebar-open {
         #content-wrapper{
             padding-left: 0 !important;
         }
     }
+=======
+    .mobile-setting-sidebar {
+        overflow-y: hidden;
+    }
+    .gst-sidebar-open {
+        #content-wrapper{
+           padding-left: 0 !important;
+       }
+   }
+>>>>>>> b322485a291625e4265e7d163aefe9c182613b28
     .customer-aging .nav.nav-tabs{
         display: flex !important;
     }
-
     .setting-sidebar-open {
         #content-wrapper{
             padding-left: 0 !important;
@@ -10153,42 +10187,3 @@ body.prevent-body-scroll {
 .giddh-no-permissions {
     display: none !important;
 }
-
-/** Angular material datepicker **/
-.mat-calendar-header {
-    padding: 2px 8px 2px 8px !important;
-    background-color: $chetwode-blue;
-    color: $white;
-}
-.mat-calendar-controls {
-    margin: 0% calc(33% / 7 - 16px) !important;
-}
-.mat-calendar-arrow {
-    border-top-color: $white !important;
-}
-.mat-datepicker-toggle, .mat-datepicker-content .mat-calendar-next-button, .mat-datepicker-content .mat-calendar-previous-button {
-    color: $white !important;
-}
-.mat-calendar-content {
-    padding: 0px 8px 0px 8px !important;
-}
-.mat-calendar-body-label {
-    visibility: hidden !important;
-}
-.mat-calendar-body-label[colspan="7"] {
-    display: none !important;
-}
-.mat-calendar-table-header th {
-    color: $black;
-    padding: 10px 0 10px 0 !important;
-}
-.mat-calendar-table-header th.mat-calendar-table-header-divider {
-    padding: 0px !important;
-}
-.mat-datepicker-content .mat-calendar {
-    height: 320px !important;
-}
-mat-year-view table tr td.mat-calendar-body-label {
-    display: none !important;
-}
-/** Angular material datepicker **/
