@@ -675,18 +675,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 this.addBlankGstForm();
             }
 
-        } else if (activeParentgroup === 'bankaccounts') {
-            this.isBankAccount = true;
-            this.isDebtorCreditor = false;
-            this.showBankDetail = false;
-            this.addAccountForm.get('addresses').reset();
-
-            setTimeout(() => {
-                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
-                    this.staticTabs.tabs[0].active = true;
-                    this.changeDetectorRef.detectChanges();
-                }
-            }, 50);
         } else {
             this.isBankAccount = false;
             this.isDebtorCreditor = false;
