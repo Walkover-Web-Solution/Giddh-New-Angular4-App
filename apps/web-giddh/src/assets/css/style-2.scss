@@ -8413,6 +8413,7 @@ body.update-scroll-hidden {
             }
         } 
     }
+}
 .on-setting-page.aside-setting, .on-user-page.aside-setting{
     #content-wrapper{
         padding-right: 240px;
@@ -8521,13 +8522,7 @@ body.update-scroll-hidden{
             padding-left: 0 !important;
         }
     }
-    /* responsive  starts here*/
 
-    @media (max-width: 1440px) {
-        .font-xxlarge {
-            font-size: 20px;
-        }
-    }
     #setting-tab-wrapper .tab-integration .nav-tabs {
         display: inline-block;
         width: 100%;
@@ -8938,14 +8933,14 @@ body.update-scroll-hidden{
     }
 }
 @media (max-width: 767px) {
+    .mobile-setting-sidebar {
+        overflow-y: hidden;
+    }
     .gst-sidebar-open {
         #content-wrapper{
            padding-left: 0 !important;
        }
    }
-    .mobile-setting-sidebar {
-        overflow-y: hidden;
-    }
     .customer-aging .nav.nav-tabs{
         display: flex !important;
     }
@@ -10114,5 +10109,4 @@ body.prevent-body-scroll {
 }
 .giddh-no-permissions {
     display: none !important;
-}
 }
