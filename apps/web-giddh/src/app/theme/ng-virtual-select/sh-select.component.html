@@ -1,5 +1,5 @@
 <div #dd [style.width]="width" class="position-relative">
-    <div [attr.style]="borderConfiguration?.style" class="header" #mainContainer [class.sh-select-disabled]="disabled"
+    <div [attr.style]="borderConfiguration?.style" class="header white-bg" #mainContainer [class.sh-select-disabled]="disabled"
         [class.inline]="mode==='inline'" (click)="showSearchSuggestion ? show($event) : ''" [class.open]="isOpen"
         tabindex="0" (focus)="showSearchSuggestion ? show($event) : ''" (blur)="hide($event)"
         (keydown)="keydownUp($event)">
@@ -39,7 +39,7 @@
                 <div *ngIf="!multiple" class="position-relative d-flex align-items-center selected-val-div">
                     <input autocomplete="disabled" type="text" readonly value="{{selectedValues[0].label}}"
                     class="form-control selected-val cp" [attr.style]="borderConfiguration?.style" />
-                    <i class="icon-arrow-down pd-r1"></i>
+                    <i autocomplete="disabled" class="icon-arrow-down pd-r1"></i>
                 </div>
             </ng-container>
             <ng-container *ngIf="!selectedValues?.length">

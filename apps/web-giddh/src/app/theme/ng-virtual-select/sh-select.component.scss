@@ -102,7 +102,9 @@ i.close.icon.clear:hover::after {
 
 .sh-select-disabled .selected-val,
 .sh-select-disabled .form-control,
-.sh-select-disabled .form-control[readonly] {
+.sh-select-disabled .form-control[readonly],
+.sh-select-disabled i,
+.sh-select-disabled i[readonly] {
     background: $whisper-light !important;
     pointer-events: none;
     cursor: not-allowed;
@@ -126,6 +128,11 @@ i.close.icon.clear:hover::after {
         border: none !important;
         padding-right: 14px !important;
         background: $white !important;
+        border-radius: none !important;
+    }
+    .icon-arrow-down{
+        height: 36px;
+        line-height: 36px;
     }
 }
 
