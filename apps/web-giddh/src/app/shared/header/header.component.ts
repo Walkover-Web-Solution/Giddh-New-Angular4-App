@@ -1770,19 +1770,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.currentPageUrl?.indexOf('pages/invoice/ewaybill') > -1);
     }
 
-    /**
-     * This toggle's settings sidebar
-     *
-     * @param {boolean} isMobileSidebar
-     * @memberof HeaderComponent
-     */
-    public toggleSidebar(isMobileSidebar: boolean): void {
-        if(this.asideSettingMenuState === "in") {
-            this.toggleSidebarPane(false, isMobileSidebar);
-        } else {
-            this.toggleSidebarPane(true, isMobileSidebar);
-        }
-    }
     /*
     * Opens the GST side menu in responsive mode
     *
