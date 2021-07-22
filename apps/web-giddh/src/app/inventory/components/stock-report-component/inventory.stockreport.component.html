@@ -315,18 +315,6 @@
                         </td>
                     </tr>
                 </tbody>
-
-                <!-- <tbody *ngIf="(stockReport && stockReport.count < 1 && !stockReportInProcess) || stockNotFoundMessage"
-                    class="table-border">
-                    <tr>
-                        <td colspan="10" class="text-center empty-table">
-                            <h1 [class.stock-not-found]="stockNotFoundMessage">{{ (stockNotFoundMessage) ?
-                                stockNotFoundMessage : 'No entries found within given criteria.' }}</h1>
-                            <h1 class="p-0" [class.stock-not-found]="stockNotFoundMessage">{{ (stockNotFoundMessage) ?
-                                stockNotFoundMessage : 'Do search with some other dates' }}</h1>
-                        </td>
-                    </tr>
-                </tbody> -->
                 <tfoot *ngIf="stockReport && stockReport.totalPages > 1">
                     <tr>
                         <td colspan="10" class="text-center">
