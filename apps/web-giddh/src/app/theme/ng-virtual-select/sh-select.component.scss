@@ -102,9 +102,7 @@ i.close.icon.clear:hover::after {
 
 .sh-select-disabled .selected-val,
 .sh-select-disabled .form-control,
-.sh-select-disabled .form-control[readonly],
-.sh-select-disabled i,
-.sh-select-disabled i[readonly] {
+.sh-select-disabled .form-control[readonly] {
     background: $whisper-light !important;
     pointer-events: none;
     cursor: not-allowed;
@@ -121,19 +119,10 @@ i.close.icon.clear:hover::after {
     }
 }
 
-.selected-val-div{
+.selected-val {
     border: 1px solid $gainsboro !important;
-    border-radius: 5px !important;
-    .selected-val {
-        border: none !important;
-        padding-right: 14px !important;
-        background: $white !important;
-        border-radius: 0 !important;
-    }
-    .icon-arrow-down{
-        height: 36px;
-        line-height: 36px;
-    }
+    padding-right: 22px !important;
+    background: $white !important;
 }
 
 .header.open > input[type="text"] {
