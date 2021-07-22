@@ -68,11 +68,6 @@ export class StockListComponent implements OnInit, OnDestroy {
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
-        this.breakPointObserver.observe([
-            '(max-width:1024px)'
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result.matches;
-        });
     }
 
     public ngOnDestroy() {
