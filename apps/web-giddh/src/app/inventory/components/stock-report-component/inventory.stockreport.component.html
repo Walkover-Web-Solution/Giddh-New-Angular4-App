@@ -81,7 +81,7 @@
                         <th [hidden]="!stockReport?.transactions?.length && !stockReportRequest?.accountName && stockReportRequest?.voucherTypes?.length !== VOUCHER_TYPES.length" colspan="4" width="40%" class="text-center bd-rr bd-rb">Transactions</th>
                         <th [hidden]="!stockReport?.transactions?.length && !stockReportRequest?.accountName && stockReportRequest?.voucherTypes?.length !== VOUCHER_TYPES.length" colspan="1" width="10%" class="bd-rl text-center">Closing Stock</th>
                     </tr>
-                    <tr class="bd-rt" [hidden]="!stockReport?.transactions?.length && !stockReportRequest?.accountName && stockReportRequest?.voucherTypes?.length !== VOUCHER_TYPES.length">
+                    <tr class="bd-rt" [hidden]="!stockReport?.transactions?.length && !stockReportRequest?.accountName && !stockReportRequest?.voucherTypes?.length">
                         <th width="100">
                             <div class="d-flex">
                                 <div class="">Date</div>
@@ -315,18 +315,6 @@
                         </td>
                     </tr>
                 </tbody>
-
-                <tbody *ngIf="(stockReport && stockReport.count < 1 && !stockReportInProcess) || stockNotFoundMessage"
-                    class="table-border">
-                    <tr>
-                        <td colspan="10" class="text-center empty-table">
-                            <h1 [class.stock-not-found]="stockNotFoundMessage">{{ (stockNotFoundMessage) ?
-                                stockNotFoundMessage : 'No entries found within given criteria.' }}</h1>
-                            <h1 class="p-0" [class.stock-not-found]="stockNotFoundMessage">{{ (stockNotFoundMessage) ?
-                                stockNotFoundMessage : 'Do search with some other dates' }}</h1>
-                        </td>
-                    </tr>
-                </tbody>
                 <tfoot *ngIf="stockReport && stockReport.totalPages > 1">
                     <tr>
                         <td colspan="10" class="text-center">
@@ -337,6 +325,12 @@
                     </tr>
                 </tfoot>
             </table>
+            <div class="no-data" *ngIf="(stockReport && stockReport.count < 1 && !stockReportInProcess) || stockNotFoundMessage">
+                <h1 [class.stock-not-found]="stockNotFoundMessage">{{ (stockNotFoundMessage) ?
+                    stockNotFoundMessage : 'No entries found within given criteria.' }}</h1>
+                <h1 class="p-0" [class.stock-not-found]="stockNotFoundMessage">{{ (stockNotFoundMessage) ?
+                    stockNotFoundMessage : 'Do search with some other dates' }}</h1>
+            </div>
         </div>
     </section>
 
