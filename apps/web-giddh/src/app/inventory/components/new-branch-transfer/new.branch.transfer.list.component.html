@@ -190,15 +190,15 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="no-data" *ngIf="!isLoading && (!branchTransferResponse.items || branchTransferResponse.items.length === 0)">
-                <h1>No entries found within given criteria.</h1>
-                <h1 class="p-0">Do search with some other dates.</h1>
-            </div>
         </div>
         <div class="pagination-wrapper" *ngIf="branchTransferResponse.totalPages > 1">
             <pagination [totalItems]="branchTransferResponse.totalPages" [(ngModel)]="branchTransferResponse.page"
-                [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
-                (pageChanged)="pageChanged($event)"></pagination>
+            [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
+            (pageChanged)="pageChanged($event)"></pagination>
+        </div>
+        <div class="no-data" *ngIf="!isLoading && (!branchTransferResponse.items || branchTransferResponse.items.length === 0)">
+            <h1>No entries found within given criteria.</h1>
+            <h1 class="p-0">Do search with some other dates.</h1>
         </div>
     </div>
 </div>
