@@ -101,6 +101,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
      * @memberof CreateWarehouseComponent
      */
     public ngOnInit(): void {
+        document.querySelector('body').classList.add('setting-sidebar-open');
         this.store.pipe(select(appState => appState.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.name) {
                 this.companyDetails = {
@@ -120,7 +121,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                 }
             }
         });
-        
+
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
         this.loadLinkedEntities();
         this.loadAddresses('GET', { count: 0 });
@@ -463,6 +464,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
      */
     public ngOnDestroy(): void {
         document.querySelector('body').classList.remove('fixed');
+        document.querySelector('body').classList.remove('setting-sidebar-open');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

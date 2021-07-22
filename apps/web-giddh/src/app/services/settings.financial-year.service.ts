@@ -1,5 +1,5 @@
 import { catchError, map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
@@ -39,11 +39,15 @@ export class SettingsFinancialYearService {
     public GetAllFinancialYears(): Observable<BaseResponse<IFinancialYearResponse, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + SETTINGS_FINANCIAL_YEAR_API.GET_ALL_FINANCIAL_YEARS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
-            let data: BaseResponse<IFinancialYearResponse, string> = res;
-            data.queryString = {};
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<IFinancialYearResponse, string>(e)));
+        if (this.companyUniqueName) {
+            return this._http.get(this.config.apiUrl + SETTINGS_FINANCIAL_YEAR_API.GET_ALL_FINANCIAL_YEARS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+                let data: BaseResponse<IFinancialYearResponse, string> = res;
+                data.queryString = {};
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<IFinancialYearResponse, string>(e)));
+        } else {
+            return of({});
+        }
     }
 
     /*

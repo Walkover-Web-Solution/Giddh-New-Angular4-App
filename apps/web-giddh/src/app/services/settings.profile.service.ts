@@ -1,5 +1,5 @@
 import { catchError, map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
@@ -26,11 +26,15 @@ export class SettingsProfileService {
     public GetProfileInfo(): Observable<BaseResponse<SmsKeyClass, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + SETTINGS_PROFILE_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
-            let data: BaseResponse<SmsKeyClass, string> = res;
-            data.queryString = {};
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<SmsKeyClass, string>(e)));
+        if (this.companyUniqueName) {
+            return this._http.get(this.config.apiUrl + SETTINGS_PROFILE_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+                let data: BaseResponse<SmsKeyClass, string> = res;
+                data.queryString = {};
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<SmsKeyClass, string>(e)));
+        } else {
+            return of({});
+        }
     }
 
     /**
