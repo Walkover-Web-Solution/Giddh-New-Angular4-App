@@ -182,8 +182,10 @@
                 <tbody>
                     <tr class="cursor-pointer" *ngFor="let item of (viewTransaction$ | async).results">
                         <td>{{item.voucherDate ? item.voucherDate : '-'}}</td>
-                        <td class="btn-link" *ngIf="item.voucherType !== 'purchase'" (click)="onSelectInvoice(item)">
+                        <td class="btn-link" *ngIf="(item.voucherType !== 'purchase')" (click)="onSelectInvoice(item)">
                             {{item.voucherNumber ? item.voucherNumber : '-'}}
+
+                            <span *ngIf="isMobileScreen" class="d-inline-flex text-decoration-none btn-link"><i class="icon-download-circle font-16 ml-2"></i></span>
                         </td>
                         <td *ngIf="item.voucherType === 'purchase'">
                             {{item.voucherNumber ? item.voucherNumber : '-'}}</td>
