@@ -909,8 +909,11 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public expandSidebar(): void {
-        document.querySelector('.primary-sidebar')?.classList?.remove('sidebar-collapse');
-        document.querySelector('.nav-left-bar')?.classList?.remove('width-60');
+        const isAccountModalOpened = document.querySelector('.create-acc-form');
+        if (!isAccountModalOpened) {
+            document.querySelector('.primary-sidebar')?.classList?.remove('sidebar-collapse');
+            document.querySelector('.nav-left-bar')?.classList?.remove('width-60');
+        }
     }
 
     /**
