@@ -239,7 +239,7 @@
                                 data-title="{{localeData?.invoice_no_label}}">
                                 <div *ngFor="let invoice of receipt?.invoices?.split(',')">{{ invoice }}</div>
                             </td>
-                            <td width="13%" class="text-break" [attr.data-title]="localeData?.invoice_no_label" *ngIf="!receipt?.invoices">-</td>
+                            <td [attr.data-title]="localeData?.invoice_no_label" *ngIf="!receipt?.invoices">-</td>
                             <td [attr.data-title]="commonLocaleData?.app_total_amount">
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="receipt?.totalAmount.amount" [currencySymbol]="receipt?.totalAmount?.symbol" [currencyCode]="activeCompany.baseCurrency">

@@ -816,9 +816,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         setTimeout(() => {
             if(show) {
                 this.asideSettingMenuState = 'out';
-                document.querySelector('body').classList.remove('mobile-setting-sidebar');
                 document.querySelector('body').classList.remove('aside-setting');
             }
+            document.querySelector('body').classList.remove('mobile-setting-sidebar');
             this.asideHelpSupportMenuState = (show && this.asideHelpSupportMenuState === 'out') ? 'in' : 'out';
             this.toggleBodyClass();
         }, (this.asideHelpSupportMenuState === 'out') ? 100 : 0);
@@ -851,22 +851,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             } else {
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
-
         }, ((this.asideSettingMenuState === 'out') ? 100 : 0));
-    }
-
-    /**
-     * This will close the settings popup if click outside of popup
-     *
-     * @memberof HeaderComponent
-     */
-    public closeSettingPaneOnOutsideClick(): void {
-        setTimeout(() => {
-            if (this.asideSettingMenuState === "in") {
-                this.asideSettingMenuState = 'out';
-                document.querySelector('body').classList.remove('mobile-setting-sidebar');
-            }
-        }, 50);
     }
 
     /**
@@ -1806,5 +1791,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public openGstSideMenu(): void {
         this.isGstSideMenuOpened = !this.isGstSideMenuOpened;
         this.store.dispatch(this._generalActions.openGstSideMenu(this.isGstSideMenuOpened));
+    }
+
+     /**
+     * This toggle's settings sidebar
+     *
+     * @param {boolean} isMobileSidebar
+     * @memberof HeaderComponent
+     */
+      public toggleSidebar(isMobileSidebar: boolean): void {
+        if(this.asideSettingMenuState === "in") {
+            this.toggleSidebarPane(false, isMobileSidebar);
+        } else {
+            this.toggleSidebarPane(true, isMobileSidebar);
+        }
     }
 }
