@@ -8505,6 +8505,14 @@ body.update-scroll-hidden{
 .trial-balance-viewport {
     height: 500px;
 }
+.gst-sidebar-open{
+    .daterangepicker.show-calendar{
+        z-index: 99 !important;
+    }
+}
+.transactions-table.table-striped {
+    white-space: nowrap;
+}
 /* responsive  starts here*/
 
 @media (max-width: 1440px) {
@@ -8644,6 +8652,21 @@ body.update-scroll-hidden{
 }
 
 @media (max-width: 991px) {
+    .tax-engine {
+        .transactions-list {
+            .filter-band{
+                height: auto;
+                padding: 10px 20px;
+            }
+            .filter-row{
+                margin-left: 0 !important;
+                margin-bottom: 5px;
+                &.back-button{
+                    display: flex;
+                }
+            }
+         }
+    }
     .transactions-overview{
         hr{
             display: none;
@@ -8795,6 +8818,11 @@ body.update-scroll-hidden{
 }
 
 @media (max-width: 768px) {
+    .gst-sidebar-open{
+        .daterangepicker.show-calendar{
+            z-index: 998 !important;
+        }
+    }
     .setting-sidebar{
         display: none;
     }
@@ -9629,8 +9657,8 @@ body.update-scroll-hidden{
 
 @media (max-width: 575px) {
     .gst-sidebar-open .daterangepicker {
-        left: auto !important;
-        right: 90px !important;
+        left: 15px !important;
+        right: 0 !important;
     }
     .filter-band ul{
         left: auto !important;
@@ -9653,7 +9681,6 @@ body.update-scroll-hidden{
     }
     .daterangepicker.ltr .ranges {
         float: left;
-
         ul {
             li {
                 font-size: 11px;
@@ -9696,6 +9723,10 @@ body.update-scroll-hidden{
 }
 
 @media (max-width: 375px) {
+    .gst-sidebar-open .daterangepicker {
+        left: 15px !important;
+        right: auto !important;
+    }
     .setting-page.tb-pl-bs-tabs ul.nav.nav-tabs {
         overflow-x: auto;
         white-space: nowrap;
@@ -10166,7 +10197,6 @@ body.prevent-body-scroll {
 .giddh-no-permissions {
     display: none !important;
 }
-
 /** Angular material datepicker **/
 .mat-calendar-header {
     padding: 2px 8px 2px 8px !important;
