@@ -327,3 +327,5 @@ export const EMAIL_REGEX_PATTERN = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a
 /** This will hold error status code for permission error from API */
 export const UNAUTHORISED = 401;
 export const SELECT_ALL_RECORDS = "selectallrecords";
+/** This will hide the filing feature of GST module  */
+export const SHOW_GST_FILING = false;
