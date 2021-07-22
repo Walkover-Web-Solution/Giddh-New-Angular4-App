@@ -73,9 +73,8 @@
                     </div>
                 </form>
 
-
-            <div class="table-responsive">
-            <table class="table basic giddh-table pending-table on-mobile-view">
+                <div class="table-responsive" [hidden]="!ledgersData?.results?.length">
+                <table class="table basic giddh-table pending-table on-mobile-view">
 
                     <thead class="thead-background1">
                         <tr>
@@ -280,14 +279,8 @@
                 </div>
             </div>
 
-            <div class="no-data" *ngIf="!ledgersData">
-                <h1>{{localeData?.no_entry_found_sales}}</h1>
-                <h1>{{localeData?.no_entry_found_note}}</h1>
-            </div>
-
-            <div class="no-data" *ngIf="(ledgersData && ledgersData?.results.length === 0)">
-                <h1>{{commonLocaleData?.app_no_entries_found}}</h1>
-                <h1>{{commonLocaleData?.app_search_suggestion}}</h1>
+            <div class="no-data" *ngIf="!ledgersData?.results?.length">
+                <no-data></no-data>
             </div>
         </ng-container>
         <!-- region edit invoice -->

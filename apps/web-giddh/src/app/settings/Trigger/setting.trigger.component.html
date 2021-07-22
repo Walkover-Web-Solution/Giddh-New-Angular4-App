@@ -69,7 +69,7 @@
                 <h1 class="section-head pd-t1">{{localeData?.added_triggers}}</h1>
                 <div class="table-responsive">
                     <table class="table table-bordered trigger-table basic mr-b05 on-mobile-view">
-                        <thead>
+                        <thead [hidden]="!availableTriggers?.length">
                             <tr>
                                 <th>#</th>
                                 <th>{{commonLocaleData?.app_name}}</th>
@@ -143,13 +143,6 @@
                                 </td>
                             </tr>
                         </tbody>
-                        <tbody *ngIf="!isLoading && !availableTriggers.length" class="on-mobile-view no-records">
-                            <tr>
-                                <td colspan="11" class="text-center empty-table">
-                                    <h1>{{commonLocaleData?.app_no_record_found}}</h1>
-                                </td>
-                            </tr>
-                        </tbody>
                         <tbody *ngIf="isLoading">
                             <tr>
                                 <td colspan="11" class="text-center empty-table">
@@ -159,6 +152,9 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+            <div class="no-data" *ngIf="!isLoading && !availableTriggers.length">
+                <no-data [secondaryMessage]="' '" [secondaryMessage]="' '" [secondaryMessageClass]="'p-0'"></no-data>
             </div>
         </div>
 

@@ -181,7 +181,7 @@
         <div class="clearfix">
             <div class="table-responsive remove-responsive invoice-preview mr-t15">
                 <table class="table basic giddh-table table-bordered invoice-table on-mobile-view">
-                    <thead class="thead-background1">
+                    <thead class="thead-background1" [attr.style]="(!voucherData?.results?.length && !advanceSearchFilter?.proformaNumber && !advanceSearchFilter?.estimateNumber && !advanceSearchFilter?.q) ? 'display: none !important' : ''">
                         <tr>
 
                             <th *ngIf="selectedItems.length > 0" width="4%" class="min-width-check">
@@ -420,18 +420,10 @@
                     </table>
                 </div>
 
-
-                <!--No Entry-->
-                <div class="no-data mr-t2" *ngIf="!voucherData && !(isGetAllInProcess$ | async)">
-                    <h1>{{localeData?.no_entry_found_sales}}</h1>
-                    <h1>{{localeData?.no_entry_found_note}}</h1>
-                </div>
-
                 <!--no data-->
                 <div class="no-data"
-                    *ngIf="voucherData && voucherData.results.length === 0 && !(isGetAllInProcess$ | async)">
-                    <h1>{{commonLocaleData?.app_no_entries_found}}</h1>
-                    <h1>{{commonLocaleData?.app_search_suggestion}}</h1>
+                    *ngIf="!voucherData?.results?.length && !(isGetAllInProcess$ | async)">
+                    <no-data></no-data>
                 </div>
 
                 <!--loading-->

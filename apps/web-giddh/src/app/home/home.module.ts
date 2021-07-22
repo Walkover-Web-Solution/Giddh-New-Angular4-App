@@ -10,6 +10,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { GiddhCurrencyPipe } from '../shared/helpers/pipes/currencyPipe/currencyType.pipe';
+import { NoDataModule } from '../shared/no-data/no-data.module';
 import { SharedModule } from '../shared/shared.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { BankAccountsComponent } from './components/bank-accounts/bank-accounts.component';
@@ -58,7 +59,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         TooltipModule.forRoot(),
         Daterangepicker,
         CurrencyModule,
-        SharedModule
+        SharedModule,
+        NoDataModule
     ],
 })
 export class HomeModule {

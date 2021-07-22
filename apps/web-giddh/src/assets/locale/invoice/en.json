@@ -16,8 +16,6 @@
     "convert_proforma": "Convert to Proforma",
     "convert_invoice": "Convert to Invoice",
     "expired": "Expired",
-    "no_entry_found_sales": "No Entry found in sales!",
-    "no_entry_found_note": "Have to do some sales before creating invoice",
     "search_here": "Search here...",
     "search_invoice_no": "Search Invoice No.",
     "search_field": "Search [FIELD]",

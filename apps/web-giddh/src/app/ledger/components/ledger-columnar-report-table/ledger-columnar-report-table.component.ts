@@ -44,6 +44,8 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Stores the dynamic colspan value */
+    public colspanValue: number = 0;
 
     constructor(
         public settingsFinancialYearService: SettingsFinancialYearService,
@@ -120,6 +122,8 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
                     if (response.body.results.length) {
                         this.prepareColumnForTable();
                     }
+                    this.colspanValue = this.getTotalNoOfColumn();
+                    this.changeDetectorRef.detectChanges();
                 }
             } else {
                 this.backClick.emit(true);
@@ -150,7 +154,6 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
                 }
             });
         }
-        this.changeDetectorRef.detectChanges();
     }
 
     /**

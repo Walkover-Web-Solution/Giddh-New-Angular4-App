@@ -18,6 +18,7 @@ import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { SharedModule } from '../shared/shared.module';
 import { LedgerModule } from '../ledger/ledger.module';
 import { SalesModule } from '../sales/sales.module';
+import { NoDataModule } from '../shared/no-data/no-data.module';
 @NgModule({
     declarations: [DaybookComponent, ExportDaybookComponent, DaybookAdvanceSearchModelComponent],
     providers: [],
@@ -36,7 +37,8 @@ import { SalesModule } from '../sales/sales.module';
         SharedModule,
         NgxMaskModule.forRoot(),
         LedgerModule,
-        SalesModule
+        SalesModule,
+        NoDataModule
     ],
     entryComponents: [
         PaginationComponent

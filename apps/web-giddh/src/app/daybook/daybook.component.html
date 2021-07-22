@@ -74,14 +74,14 @@
                             </div>
                             <button type="button" class="btn btn-default export-btn mr-0"
                             (click)="exportDaybook()"
-                            [disabled]="!((daybookData$ | async)?.entries?.length > 0)">{{commonLocaleData?.app_export}}</button>
+                            *ngIf="((daybookData$ | async)?.entries?.length > 0)">{{commonLocaleData?.app_export}}</button>
                         </div>
 
                 </div>
                 <div class="d-md-none d-flex justify-content-between mr-t1">
                     <button type="button" class="btn btn-default mr-0"
                     (click)="exportDaybook()"
-                    [disabled]="!((daybookData$ | async)?.entries?.length > 0)">{{commonLocaleData?.app_export}}</button>
+                    *ngIf="((daybookData$ | async)?.entries?.length > 0)">{{commonLocaleData?.app_export}}</button>
                         <div class="expand-collapse-btn">
                             <a class="cp" (click)="toggleExpand()" data-toggle="tooltip" data-placement="top"
                             title="{{commonLocaleData?.app_expand_all}}" *ngIf="!isAllExpanded">
@@ -101,14 +101,14 @@
             </div>
             <div class="container-fluid">
                 <div class="box clearfix mr-t15">
-                    <div class="text-center mr-b2 transaction-report">
+                    <div [hidden]="!(daybookData$ | async)?.entries?.length" class="text-center mr-b2 transaction-report">
                         <p>{{localeData?.transaction_report}}</p>
                         <p>{{daybookQueryRequest.from }} - {{ daybookQueryRequest.to}}</p>
                     </div>
 
                     <div class="clearfix trial-balance table-responsive">
                         <table class="tb-head table-bordered  giddh-table table basic on-mobile-view">
-                            <thead>
+                            <thead [hidden]="!(daybookData$ | async)?.entries?.length">
                                 <tr>
                                     <th>{{commonLocaleData?.app_date}}</th>
                                     <th>{{commonLocaleData?.app_particular}}</th>
@@ -215,7 +215,7 @@
                         </tbody>
                         </table>
                     </div>
-                    <div class="mr-t2 text-center">
+                    <div class="mr-t2 text-center" [hidden]="!(daybookData$ | async)?.entries?.length">
                         <small class="grey" *ngIf="(daybookData$ | async)?.totalItems">{{(daybookData$ |
                             async)?.totalItems}}
                             {{commonLocaleData?.app_transactions}}
@@ -225,7 +225,7 @@
                             {{commonLocaleData?.app_transactions}} | 0 {{commonLocaleData?.app_pages}}</small>
                     </div>
                     <!-- pagination -->
-                    <div class="mt-1">
+                    <div class="mt-1" [hidden]="!(daybookData$ | async)?.entries?.length">
                         <pagination [totalItems]="daybookData?.totalItems" [(ngModel)]="daybookData.page" [maxSize]="5"
                             class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="daybookData?.count"
                             [rotate]="false" (pageChanged)="pageChanged($event)"
@@ -235,6 +235,10 @@
                     </div>
                     <!-- pagination -->
                 </div>
+            </div>
+            <div class="no-data"
+                *ngIf="!(daybookData$ | async)?.entries?.length">
+                <no-data></no-data>
             </div>
         </div>
     </ng-container>
