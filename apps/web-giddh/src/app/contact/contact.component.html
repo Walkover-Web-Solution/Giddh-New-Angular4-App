@@ -936,13 +936,14 @@
                             </td>
                             <td [ngClass]="{'word-wrap text-right': true, 'negative-balance': account.openingBalance?.type === 'DEBIT' && formatAmountInCurrency(account.openingBalance?.amount) > 0}"
                                 [attr.data-title]="localeData?.opening" *ngIf="showFieldFilter.openingBalance">
-                                <span
-                                    *ngIf="account.openingBalance?.type === 'DEBIT' && formatAmountInCurrency(account.openingBalance?.amount) > 0">-</span>
-                                <span class="d-flex justify-content-end">
-                                    <amount-field [amount]="account.openingBalance?.amount" [currencySymbol]="false"
-                                        [currencyCode]="false">
-                                    </amount-field>
-                                </span>
+                                <div class="d-flex justify-content-end">
+                                    <span
+                                        *ngIf="account.openingBalance?.type === 'DEBIT' && formatAmountInCurrency(account.openingBalance?.amount) > 0">-</span>
+                                    <span>
+                                        <amount-field [amount]="account.openingBalance?.amount" [currencySymbol]="false" [currencyCode]="false">
+                                        </amount-field>
+                                    </span>
+                                </div>
                             </td>
                             <td class="word-wrap text-right" [attr.data-title]="commonLocaleData?.app_purchase">
                                 <span class="d-flex justify-content-end">
@@ -960,14 +961,14 @@
                             </td>
                             <td [ngClass]="{'word-wrap text-right': true, 'negative-balance': account.closingBalance?.type === 'DEBIT' && formatAmountInCurrency(account.closingBalance?.amount) > 0}"
                                 [attr.data-title]="localeData?.closing">
-                                <span
-                                    *ngIf="account.closingBalance?.type === 'DEBIT' && formatAmountInCurrency(account.closingBalance?.amount) > 0">-</span>
-                                <span class="d-flex justify-content-end">
-                                    <amount-field [amount]="account.closingBalance?.amount" [currencySymbol]="false"
-                                        [currencyCode]="false">
-                                    </amount-field>
-                                </span>
-
+                                <div class="d-flex justify-content-end">
+                                    <span
+                                        *ngIf="account.closingBalance?.type === 'DEBIT' && formatAmountInCurrency(account.closingBalance?.amount) > 0">-</span>
+                                    <span>
+                                        <amount-field [amount]="account.closingBalance?.amount" [currencySymbol]="false" [currencyCode]="false">
+                                        </amount-field>
+                                    </span>
+                                </div>
                             </td>
                             <td class="text-lowercase word-wrap font-12" *ngIf="showFieldFilter.contact"
                                 [attr.data-title]="commonLocaleData?.app_email">
