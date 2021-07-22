@@ -201,59 +201,7 @@ body {
 .border-none {
     border: none !important;
 }
-.pd-1 {
-    padding: 10px !important;
-}
 
-.pd-2 {
-    padding: 20px !important;
-}
-
-.pd-3 {
-    padding: 30px !important;
-}
-
-.pd-4 {
-    padding: 40px !important;
-}
-
-.pd-r15 {
-    padding-right: 15px;
-}
-
-.pd-l15 {
-    padding-left: 15px;
-}
-
-.pd-t15 {
-    padding-top: 15px;
-}
-.pd-b15 {
-    padding-bottom: 15px;
-}
-
-.bt-1 {
-    border-top: 1px solid $gainsboro;
-}
-
-.br-1 {
-    border-right: 1px solid $gainsboro;
-}
-
-.bb-1 {
-    border-bottom: 1px solid $gainsboro;
-}
-
-.bl-1 {
-    border-left: 1px solid $gainsboro;
-}
-
-.border-none {
-    border: none !important;
-}
-.border-bottom {
-    border-bottom-color: $gainsboro;
-}
 /* end MDB tweaks */
 
 .relative {
@@ -537,22 +485,6 @@ input {
     .btn {
         padding: 6px 10px !important;
     }
-}
-
-.mr-t15 {
-    margin-top: 15px;
-}
-
-.mr-b15 {
-    margin-bottom: 15px;
-}
-
-.mr-l15 {
-    margin-left: 15px;
-}
-
-.mr-r15 {
-    margin-right: 15px !important;
 }
 
 .company-list button.btn-link {
@@ -6993,7 +6925,7 @@ button.btn.btn-filter {
 }
 
 .td-search-box div i.icon-search {
-    color: $midnight-blue;
+    color: $midnight-blue !important;
     font-size: 16px;
 }
 

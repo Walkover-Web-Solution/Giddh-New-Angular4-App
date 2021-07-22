@@ -216,6 +216,12 @@ tr.aging-table-top td {
             min-width: 250px;
         }
     }
+    .text-lowercase.word-wrap{
+        color: $grey-chateau !important;
+        div{
+            line-height: 14px;
+        }
+    }
 }
 
 .table-aging-report {
