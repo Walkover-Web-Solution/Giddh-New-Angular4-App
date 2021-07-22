@@ -94,7 +94,7 @@ export class FilingComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.breakpointObserver
-        .observe(['(max-width: 768px)'])
+        .observe(['(max-width: 767px)'])
         .pipe(takeUntil(this.destroyed$))
         .subscribe((state: BreakpointState) => {
             this.isMobileScreen = state.matches;
