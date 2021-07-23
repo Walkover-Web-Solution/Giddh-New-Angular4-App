@@ -341,7 +341,6 @@ export class SettingsIntegrationService {
      * @memberof SettingsIntegrationService
      */
     public getValidationFormForBank(companyUniqueName: string, bankName: string): Observable<BaseResponse<any, any>> {
-
         return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.BANK_INTERATION_VALIDATION_FORM.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)).replace(':bankName', bankName)).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             return data;
@@ -467,5 +466,22 @@ export class SettingsIntegrationService {
             let data: BaseResponse<any, string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
+
+    /**
+     * This will get the payors list for bank account based on amount limit
+     *
+     * @param {string} bankAccountUniqueName
+     * @param {*} amount
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsIntegrationService
+     */
+    public getBankAccountPayorsList(bankAccountUniqueName: string, amount: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this._generalService.companyUniqueName;
+
+        return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GET_BANK_ACCOUNT_PAYORS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':bankAccountUniqueName', bankAccountUniqueName).replace(':amount', amount)).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e)));
     }
 }

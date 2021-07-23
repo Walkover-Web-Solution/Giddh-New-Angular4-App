@@ -651,9 +651,9 @@
     "app_exchange_loss": "हानि",
     "app_vendor_name": "विक्रेता का नाम",
     "app_amount_limit": {
-        "daily": "Daily",
-        "weekly": "Weekly",
-        "monthly": "Monthly",
-        "unlimited": "Unlimited"
+        "daily": "दैनिक",
+        "weekly": "साप्ताहिक",
+        "monthly": "महीने के",
+        "unlimited": "असीमित"
     }
 }
