@@ -2485,7 +2485,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 type: this.invoiceType,
                 attachedFiles: (this.invFormData.entries[0] && this.invFormData.entries[0].attachedFile) ? [this.invFormData.entries[0].attachedFile] : [],
                 templateDetails: data.templateDetails,
-                subVoucher: (this.isRcmEntry) ? SubVoucher.ReverseCharge : '',
+                subVoucher: (this.isRcmEntry) ? SubVoucher.ReverseCharge : undefined,
                 purchaseOrders: purchaseOrders,
                 company: this.purchaseBillCompany
             } as PurchaseRecordRequest;
@@ -2558,6 +2558,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             } else {
                 if (this.isPendingVoucherType) {
+                    if (this.generalService.voucherApiVersion === 2) {
+                        updatedData = this.proformaInvoiceUtilityService.getVoucherRequestObjectForInvoice(updatedData);
+                    }
                     this.salesService.generatePendingVoucherGenericItem(updatedData).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
                         this.handleGenerateResponse(response, form);
                     }, () => {
@@ -3998,7 +4001,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     attachedFiles: (this.invFormData.entries[0] && this.invFormData.entries[0].attachedFile) ? [this.invFormData.entries[0].attachedFile] : [],
                     templateDetails: data.templateDetails,
                     uniqueName: (this.selectedItem) ? this.selectedItem.uniqueName : (this.matchingPurchaseRecord) ? this.matchingPurchaseRecord.uniqueName : '',
-                    subVoucher: (this.isRcmEntry) ? SubVoucher.ReverseCharge : '',
+                    subVoucher: (this.isRcmEntry) ? SubVoucher.ReverseCharge : undefined,
                     purchaseOrders: purchaseOrders,
                     company: this.purchaseBillCompany
                 } as PurchaseRecordRequest;
@@ -5534,13 +5537,24 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     private createPurchaseRecord(request: PurchaseRecordRequest): void {
-        // Create a new purchase record
-        this.purchaseRecordService.generatePurchaseRecord(request).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, PurchaseRecordRequest>) => {
-            this.handleGenerateResponse(response, this.invoiceForm);
-        }, () => {
-            this.startLoader(false);
-            this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong)
-        });
+        if (this.generalService.voucherApiVersion === 2) {
+            // Create a new puchase record with voucher API
+            request = this.proformaInvoiceUtilityService.getVoucherRequestObjectForInvoice(request);
+            this.salesService.generateGenericItem(request, true).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
+                this.handleGenerateResponse(response, this.invoiceForm);
+            }, () => {
+                this.startLoader(false);
+                this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
+            });
+        } else {
+            // Create a new purchase record with its own API
+            this.purchaseRecordService.generatePurchaseRecord(request).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, PurchaseRecordRequest>) => {
+                this.handleGenerateResponse(response, this.invoiceForm);
+            }, () => {
+                this.startLoader(false);
+                this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong)
+            });
+        }
     }
 
     /**
