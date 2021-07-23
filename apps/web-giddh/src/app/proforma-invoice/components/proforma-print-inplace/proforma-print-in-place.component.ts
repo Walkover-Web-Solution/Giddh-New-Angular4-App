@@ -60,7 +60,7 @@ export class ProformaPrintInPlaceComponent implements OnInit, OnDestroy {
                 voucherType: this.voucherType,
                 voucherNumber: [this.selectedItem.voucherNumber]
             };
-            let accountUniqueName: string = this.selectedItem.uniqueName;
+            let accountUniqueName: string = this.selectedItem?.uniqueName;
 
             this._receiptService.DownloadVoucher(model, accountUniqueName, false).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                 if (result) {
@@ -86,12 +86,12 @@ export class ProformaPrintInPlaceComponent implements OnInit, OnDestroy {
         } else {
             let request: ProformaDownloadRequest = new ProformaDownloadRequest();
             request.fileType = fileType;
-            request.accountUniqueName = this.selectedItem.uniqueName;
+            request.accountUniqueName = this.selectedItem?.uniqueName;
 
             if (this.voucherType === VoucherTypeEnum.generateProforma) {
-                request.proformaNumber = this.selectedItem.voucherNumber;
+                request.proformaNumber = this.selectedItem?.voucherNumber;
             } else {
-                request.estimateNumber = this.selectedItem.voucherNumber;
+                request.estimateNumber = this.selectedItem?.voucherNumber;
             }
 
             this._proformaService.download(request, this.voucherType).pipe(takeUntil(this.destroyed$)).subscribe(result => {

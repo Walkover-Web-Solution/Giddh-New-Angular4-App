@@ -9,7 +9,6 @@
         "estimate": "अंदाज"
     },
     "customer_name": "ग्राहकाचे नाव",
-    "vendor_name": "विक्रेता नाव",
     "balance_due": "शिल्लक बाकी",
     "copy_previous_invoices": "मागील [INVOICE_TYPE] पावत्या कॉपी करा",
     "customer_details": "ग्राहक तपशील",
