@@ -8317,13 +8317,47 @@ body.update-scroll-hidden {
 .menu_open .sales-register {
     width: calc(100% - 240px) !important;
 }
-.nav-left-bar{
-    &.width-60  {
-        .sidebar-collapse {
-            .sub-menu{
-                display: none !important;
+.on-setting-page, .on-user-page{
+    aside-setting{
+        .aside-pane{
+            .back-to-main-slider{
+                display: block !important;
+                padding: 0 12px;
+            }
+            h4{
+                display: none;
             }
         }
+        &::after{
+            display: none;
+        }
+    }
+}
+.on-setting-page, .on-user-page{
+    aside-setting{
+        .aside-pane{
+            .back-to-main-slider{
+                display: block !important;
+                padding: 0 12px;
+            }
+            h4{
+                display: none;
+            }
+        }
+        &::after{
+            display: none;
+        }
+    }
+
+}
+.on-setting-page.aside-setting, .on-user-page.aside-setting{
+    #content-wrapper{
+        padding-right: 240px;
+    }
+}
+.gst-sidebar-open.on-setting-page.aside-setting{
+    #content-wrapper{
+        padding-right: 0;
     }
 }
 .company-branch-dropdown{
@@ -8934,7 +8968,6 @@ body.update-scroll-hidden {
     .customer-aging .nav.nav-tabs{
         display: flex !important;
     }
-
     .setting-sidebar-open {
         #content-wrapper{
             padding-left: 0 !important;
@@ -10111,7 +10144,6 @@ body.prevent-body-scroll {
 .giddh-no-permissions {
     display: none !important;
 }
-
 /** Angular material datepicker **/
 .mat-calendar-header {
     padding: 2px 8px 2px 8px !important;

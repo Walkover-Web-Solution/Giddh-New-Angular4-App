@@ -217,17 +217,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public sidebarForcelyExpanded: boolean = false;
 
     /**
-     * Returns whether the account section needs to be displayed or not
-     *
-     * @readonly
-     * @type {boolean} True, if either branch is switched or company is switched and only HO is there (single branch)
-     * @memberof HeaderComponent
-     */
-    public get shouldShowAccounts(): boolean {
-        return this.currentOrganizationType === OrganizationType.Branch ||
-            (this.currentOrganizationType === OrganizationType.Company && this.currentCompanyBranches && this.currentCompanyBranches.length === 1);
-    }
-    /**
      * Returns whether the back button in header should be displayed or not
      *
      * @readonly
@@ -486,6 +475,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.collapseSidebar(true);
             }
         });
+
         this.generalService.isMobileSite.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             this.isMobileSite = s;
             if (this.generalService.companyUniqueName) {
@@ -724,7 +714,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (isElectron) {
                     this.router.navigate(['/login']);
                 } else {
-                    window.location.href = (environment.production) ? `https://giddh.com/login/?action=logout` : `https://test.giddh.com/login/?action=logout`;
+                    window.location.href = (environment.production) ? `https://stage.giddh.com/login/?action=logout` : `https://test.giddh.com/login/?action=logout`;
                 }
             } else if (s === userLoginStateEnum.newUserLoggedIn) {
                 this.zone.run(() => {
@@ -827,13 +817,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleSidebarPane(show: boolean, isMobileSidebar: boolean): void {
-        if(!this.isIpadScreen) {
-            this.isSettingsIconDisabled = (this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/settings/taxes")) || this.router.url.includes("/pages/user-details")
-            if (this.isSettingsIconDisabled) {
-                return;
-            }
-        }
-
         setTimeout(() => {
             this.isMobileSidebar = isMobileSidebar;
             if(show) {
@@ -1778,27 +1761,27 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.currentPageUrl?.indexOf('pages/invoice/ewaybill') > -1);
     }
 
-    /**
+   /**
+    * Opens the GST side menu in responsive mode
+    *
+    * @memberof HeaderComponent
+    */
+   public openGstSideMenu(): void {
+        this.isGstSideMenuOpened = !this.isGstSideMenuOpened;
+        this.store.dispatch(this._generalActions.openGstSideMenu(this.isGstSideMenuOpened));
+    }
+
+     /**
      * This toggle's settings sidebar
      *
      * @param {boolean} isMobileSidebar
      * @memberof HeaderComponent
      */
-    public toggleSidebar(isMobileSidebar: boolean): void {
+      public toggleSidebar(isMobileSidebar: boolean): void {
         if(this.asideSettingMenuState === "in") {
             this.toggleSidebarPane(false, isMobileSidebar);
         } else {
             this.toggleSidebarPane(true, isMobileSidebar);
         }
-    }
-
-    /**
-    * Opens the GST side menu in responsive mode
-    *
-    * @memberof HeaderComponent
-    */
-    public openGstSideMenu(): void {
-        this.isGstSideMenuOpened = !this.isGstSideMenuOpened;
-        this.store.dispatch(this._generalActions.openGstSideMenu(this.isGstSideMenuOpened));
     }
 }

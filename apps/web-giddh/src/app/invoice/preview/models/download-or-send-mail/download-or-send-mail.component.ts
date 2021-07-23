@@ -73,6 +73,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     ) {
         this.breakpointObserver
         .observe(['(max-width: 768px)'])
+        .pipe(takeUntil(this.destroyed$))
         .subscribe((state: BreakpointState) => {
             this.isMobileScreen = state.matches;
         });
