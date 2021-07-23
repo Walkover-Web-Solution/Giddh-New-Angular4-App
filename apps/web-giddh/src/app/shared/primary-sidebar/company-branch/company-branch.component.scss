@@ -1,0 +1,489 @@
+@import '../../../../assets/css/color.scss';
+.company-branch-dropdown{
+    font-family: 'opensans-regular';
+    .search-box {
+        padding: 0 20px;
+        .input-group-text {
+            background-color: $gray-95;
+            padding: 8px !important;
+        }
+        input {
+            border-left: none;
+            padding-left: 0 !important;
+            background-color: $gray-95 !important;
+            border-top-left-radius: 0px !important;
+            border-bottom-left-radius: 0px !important;
+            border-top-right-radius: 5px !important;
+            border-bottom-right-radius: 5px !important;
+            &:focus {
+                border-color: $gainsboro !important;
+            }
+        }
+        .input-group-append {
+            font-size: 12px;
+            color: $grey-chateau;
+            right: 10px;
+            top: 0;
+            padding: 0 5px;
+            height: 36px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: $gray-95;
+            border: 1px solid $gainsboro;
+            border-radius: 5px;
+            border-left: none;
+            border-top-left-radius: 0px !important;
+            border-bottom-left-radius: 0px !important;
+        }
+    }
+    .total-company{
+        .company-count{
+            color: $comet;
+        }
+    }
+    tab{
+        position: relative;
+        font-family: 'opensans-regular' !important;
+    }
+    tab.icon-company{
+        margin: 0 -20px;
+        &::before{
+            display: none;
+        }
+    }
+    tab.icon-branch1{
+        margin: 0 -20px;
+        &::before{
+            display: none;
+        }
+    }
+    .total-company{
+        .company-count{
+            color: $comet;
+        }
+    }
+    .company-branch-opt-1{
+        .wrap-company-refresh{
+            padding: 0 20px !important;
+            p{
+                span{
+                    small{
+                        background: $dark-fog;
+                        color: $omiod;
+                        font-size: 10px;
+                        line-height: 12.4px;
+                        font-weight: 700;
+                        padding: 2px 5px;
+                        border-radius: 5px;
+                    }
+                }
+            }
+            .btn-sky-blue{
+                padding: 5px 7px;
+            }
+        }
+        .company-list{
+            ul{
+                li{
+                    &.btn-group{
+                        span{
+                            padding: 8px 0px;
+                            margin: 0px;
+                            .company-name-right{
+                                max-width: 100%;
+                            }
+                            .branch-count{
+                                width: 50px;
+                                color: $grey-chateau;
+                                padding-left: 10px;
+                                white-space: nowrap;
+                            }
+                        }
+                    }
+                    span, a{
+                        i{
+                            display:  none;
+                        }
+                    }
+                    &:hover{
+                        span{
+                            background-color: transparent;
+                        }
+                    }
+                }
+            }
+            .branch-alias, .branch-company-name{
+                max-width: 190px !important;
+            }
+        }
+    }
+    .company-list{
+        height: calc(100vh - 345px) !important;
+        overflow: auto;
+        margin: 0;
+        padding: 0px;
+
+        ul{
+            li{
+                padding: 8px 0;
+                cursor: pointer;
+                color: $omiod;
+                &:hover{
+                    span{
+                        background-color: $light-alice-blue;
+                    }
+                    .dropdown-menu{
+                        span{
+                            background-color: transparent !important;
+                        }
+                    }
+                }
+                &.btn-group{
+                    display: flex;
+                    flex-direction: column;
+                    margin-bottom: 0 !important;
+                    padding: 0 20px;
+                    &.active{
+                        background-color: $light-alice-blue !important;
+                    }
+                    &:hover{
+                        background-color: $light-alice-blue !important;
+                    }
+                    span{
+                        white-space: normal;
+                        word-break: break-all;
+                        padding: 8px 40px;
+                        margin: 0 -20px;
+                        i.icon-company{
+                            float: left;
+                            width: 14px;
+                        }
+                        .company-name-right{
+                            float: left;
+                            width: 100%;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            max-width: 150px;
+                            padding: 0;
+                        }
+                    }
+                    &.open{
+                        background-color: $dark-alice-blue;
+                        margin: 0 -20px;
+                        p.show-more-branches {
+                            padding: 6px 15px;
+                        }
+                        li.create-branch{
+                            padding: 10px 15px;
+                        }
+                        .dropdown-toggle{
+                            padding: 0 20px;
+                        }
+                    }
+                    .dropdown-menu{
+                        position: static !important;
+                        box-shadow: none;
+                        border: none;
+                        margin: 0 ;
+                        background-color: transparent;
+                        padding: 0;
+                        li{
+                            padding:  0;
+                            margin-bottom: 0;
+                            &.show-more-branches, &.create-branch{
+                                padding: 0 20px;
+                            }
+                            a{
+                                background-color: transparent;
+                                padding:5px 20px;
+                                color: $omiod !important;
+                                &:hover{
+                                    background-color: initial !important;
+                                    color: $omiod !important;
+
+                                }
+                                &.head-branch{
+                                    color: $cornflower;
+                                    .branch-company-name{
+                                        max-width: 150px;
+                                        text-overflow: ellipsis;
+                                        overflow: hidden;
+                                        white-space: nowrap;
+                                        padding: 3px 0;
+                                    }
+                                }
+                                &.company-branches-list{
+                                    &.active{
+                                        color: $omiod !important;
+                                        background-color: $sunshine !important;
+                                        span{
+                                            color: $omiod !important;
+                                        }
+                                    }
+                                    .branch-alias, .branch-company-name{
+                                        max-width: 150px;
+                                        text-overflow: ellipsis;
+                                        overflow: hidden;
+                                        white-space: nowrap;
+                                        padding: 0;
+                                    }
+                                }
+                            }
+
+                            &:hover{
+                                a{
+                                    background-color: $sunshine !important;
+                                }
+                            }
+                        }
+                    }
+                    p.show-more-branches {
+                        color: $midnight-blue;
+                        padding: 10px 0;
+                        text-decoration: underline;
+                    }
+                    li.create-branch{
+                        color: $orange;
+                        padding: 6px 0;
+                    }
+                }
+            }
+        }
+        &.company-branches-list{
+            .branch-alias , .branch-company-name{
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+                max-width: 150px;
+                padding: 3px 0;
+            }
+        }
+        &.branch-list{
+            ul{
+                margin: 0;
+                li{
+                    padding: 0;
+                    cursor: pointer;
+                    margin-bottom: 0;
+                    a{
+                        background-color: transparent;
+                        padding:8px 20px;
+                        color: $omiod;
+                        white-space: normal;
+                        word-break: break-all;
+                        &.active{
+                            color: $omiod !important;
+                            background-color: $sunshine !important;
+                        }
+                        &:hover{
+                            background-color: initial !important;
+                            color: $omiod !important;
+
+                        }
+                        .main-company{
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            max-width: 200px;
+                        }
+                    }
+                    &:hover{
+                        a{
+                            background-color: $sunshine !important;
+                        }
+                    }
+                    .branch-alias , .branch-company-name{
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        max-width: 150px;
+                        padding: 0;
+                    }
+                }
+            }
+        }
+    }
+    .profile-user {
+        position: fixed;
+        bottom: 0;
+        width: 240px;
+        left: 0;
+        border-top: 1px solid $gainsboro;
+        background-color: $white;
+        z-index: 991;
+        .profile-name{
+            cursor: pointer;
+            .profile-alice {
+                display: inline-flex;
+                width: 24px;
+                height: 24px;
+                background-color: $cornflower;
+                border-radius: 30px;
+                font-size: 12px;
+                justify-content: center;
+                align-items: center;
+                color: $white;
+                letter-spacing: -1px;
+            }
+        }
+        .profile-logout{
+            display: flex;
+            align-items: center;
+            button{
+                background-color: $white;
+                border: 1px solid $midnight-blue;
+                color: $midnight-blue;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 12px;
+                padding: 5px 10px;
+                border-radius: 5px !important;
+                font-size: 12px;
+                &:hover{
+                    background-color: $midnight-blue;
+                    color: $white;
+                }
+            }
+        }
+    }
+    .custom-tabs {
+        .icon-company-branch-connect{
+            position: absolute;
+            top: 5px;
+            left: 100px;
+        }
+    }
+    .company-branch-opt-2{
+        .wrap-company-refresh{
+            padding: 0 20px;
+            p{
+                span{
+                    small{
+                        background: $dark-fog;
+                        color: $omiod;
+                        font-size: 10px;
+                        line-height: 12.4px;
+                        font-weight: 700;
+                        padding: 2px 5px;
+                        border-radius: 5px;
+                    }
+                }
+            }
+            .btn-sky-blue{
+                padding: 0px 10px;
+                height: 30px;
+            }
+        }
+        .company-list{
+            height: calc(100vh - 292px) !important;
+            overflow-x: hidden;
+            padding: 0 !important;
+            ul{
+                position: relative;
+                li{
+                    padding: 0;
+                    margin: 0;
+                    &:last-child{
+                        margin-bottom: 10px !important;
+                    }
+                    span{
+                        padding: 8px 20px;
+                        margin: 0;
+                        &.company-name {
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: space-between !important;
+                                span{
+                                    i{
+                                        float: left;
+                                        width: 14px;
+                                    }
+                                    span.select-company-name{
+                                        float: left;
+                                        width: 100%;
+                                        padding: 0;
+                                        text-overflow: ellipsis;
+                                        white-space: nowrap;
+                                        overflow: hidden;
+                                        max-width: 150px;
+                                        padding: 3px 0;
+                                    }
+                                }
+                            }
+                        }
+                    &.btn-group{
+                        &.open{
+                            span{
+                                &.dropdown-toggle{
+                                    padding: 8px 20px;
+                                    span{
+                                        color: $omiod;
+                                    }
+                                }
+                                &.active{
+                                    background-color: $dark-alice-blue;
+                                    position: sticky;
+                                    top: 0;
+                                    z-index: 991;
+                                }
+                                .icon-down-new{
+                                    transform: rotate(180deg)
+                                }
+                            }
+                            background-color: transparent !important;
+                            ul{
+                                padding: 0;
+                                li{
+                                    span{
+                                        padding: 0;
+                                    }
+                                }
+                            }
+                            .total-branches{
+                                padding: 10px 20px;
+                                .btn-sky-blue{
+                                    width: 145px;
+                                    padding: 0px 10px;
+                                    height: 30px;
+                                }
+                            }
+                        }
+                    }
+                    a{
+                        padding: 10px 20px !important;
+                    }
+                }
+            }
+        }
+    }
+}
+.digit-blue{
+    color: $cornflower !important;
+}
+.digit-orange{
+    color: $orange-new !important;
+}
+.icon-reload{
+    color: $omiod;
+}
+.icon-plus, .icon-link-arrow{
+    width: 20px;
+    display: inline-flex;
+    margin-right: 2px;
+}
+.font-semibold{
+    font-family: 'opensans-semibold';
+}
+
+@media screen and (max-height: 800px) {
+    .company-branch-dropdown {
+        .company-branch-dropdown{
+            .company-list {
+                height: calc(65vh - 60px) !important;
+            }
+        }
+    }
+}
