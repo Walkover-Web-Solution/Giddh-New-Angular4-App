@@ -142,7 +142,13 @@ export class InvoiceService {
     public PreviewInvoice(accountUniqueName: string, model: PreviewInvoiceRequest): Observable<BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + INVOICE_API_2.PREVIEW_VOUCHERS.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
+        let url = this.config.apiUrl + INVOICE_API_2.PREVIEW_VOUCHERS
+            .replace(':companyUniqueName', this.companyUniqueName)
+            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+        if (this._generalService.voucherApiVersion === 2) {
+            url = this._generalService.addVoucherVersion(url, this._generalService.voucherApiVersion);
+        }
+        return this._http.post(url, model).pipe(
             map((res) => {
                 let data: BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest> = res;
                 data.request = model;
