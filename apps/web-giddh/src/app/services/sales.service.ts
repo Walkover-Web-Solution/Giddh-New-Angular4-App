@@ -153,12 +153,14 @@ export class SalesService {
     */
     public generatePendingVoucherGenericItem(model: any): Observable<BaseResponse<any, any>> {
         let accountUniqueName = model.account.uniqueName;
-        let url;
-        url = this.config.apiUrl + SALES_API_V4.GENERATE_GENERIC_ITEMS + '-pending-vouchers';
+        let url = `${this.config.apiUrl}${SALES_API_V4.GENERATE_GENERIC_ITEMS}-pending-vouchers`;
+        url = url.replace(':companyUniqueName', this.companyUniqueName)
+            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
         this.companyUniqueName = this._generalService.companyUniqueName;
+        if (this._generalService.voucherApiVersion === 2) {
+            url = this._generalService.addVoucherVersion(url, this._generalService.voucherApiVersion);
+        }
         return this._http.post(url
-            .replace(':companyUniqueName', this.companyUniqueName)
-            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
             , model)
             .pipe(
                 map((res) => {
