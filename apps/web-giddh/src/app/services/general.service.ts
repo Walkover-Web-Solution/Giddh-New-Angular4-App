@@ -838,6 +838,40 @@ export class GeneralService {
     }
 
     /**
+     * This will sort branches by alias
+     *
+     * @param {*} branchA
+     * @param {*} branchB
+     * @returns {*}
+     * @memberof CompanyBranchComponent
+     */
+    public sortBranches(branchA: any, branchB: any): any {
+        var regexA = /[^a-zA-Z]/g;
+        var regexN = /[^0-9]/g;
+
+        var branchAInt = parseInt(branchA?.alias, 10);
+        var branchBInt = parseInt(branchB?.alias, 10);
+
+        if (isNaN(branchAInt) && isNaN(branchBInt)) {
+            var branchAOutput = branchA?.alias?.toLowerCase()?.replace(regexA, "");
+            var branchBOutput = branchB?.alias?.toLowerCase()?.replace(regexA, "");
+            if (branchAOutput === branchBOutput) {
+                var branchANumeric = parseInt(branchA?.alias?.toLowerCase()?.replace(regexN, ""), 10);
+                var branchBNumeric = parseInt(branchB?.alias?.toLowerCase()?.replace(regexN, ""), 10);
+                return branchANumeric === branchBNumeric ? 0 : branchANumeric > branchBNumeric ? 1 : -1;
+            } else {
+                return branchAOutput > branchBOutput ? 1 : -1;
+            }
+        } else if (isNaN(branchAInt)) { //A is not an Int
+            return 1; //to make alphanumeric sort first return -1 here
+        } else if (isNaN(branchBInt)) { //B is not an Int
+            return -1; //to make alphanumeric sort first return 1 here
+        } else {
+            return branchAInt > branchBInt ? 1 : -1;
+        }
+    }
+
+    /**
      * This will give multi-lingual current voucher label
      *
      * @param {string} voucherCode Voucher code
@@ -868,5 +902,27 @@ export class GeneralService {
         while ((child = child.parentNode) && child !== parent) {
         }
         return !!child;
+    }
+
+    /* This will expand left sidebar
+     *
+     * @memberof GeneralService
+     */
+    public expandSidebar(): void {
+        const isAccountModalOpened = document.querySelector('.create-acc-form');
+        if (!isAccountModalOpened) {
+            document.querySelector('.primary-sidebar')?.classList?.remove('sidebar-collapse');
+            document.querySelector('.nav-left-bar')?.classList?.remove('width-60');
+        }
+    }
+
+    /**
+     * This will collapse left sidebar
+     *
+     * @memberof GeneralService
+     */
+    public collapseSidebar(): void {
+        document.querySelector('.primary-sidebar')?.classList?.add('sidebar-collapse');
+        document.querySelector('.nav-left-bar')?.classList?.add('width-60');
     }
 }

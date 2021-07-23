@@ -83,6 +83,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     @Input() public isCustomerCreation: boolean;
     /** True if bank category account is selected */
     @Input() public isBankAccount: boolean = true;
+    /** True if account creation is from command k */
+    @Input() public fromCommandK: boolean = false;
     @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
     @Output() public isGroupSelected: EventEmitter<IOption> = new EventEmitter();
     @ViewChild('autoFocus', { static: true }) public autoFocus: ElementRef;
@@ -268,6 +270,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
         this.getCurrency();
         this.isStateRequired = this.checkActiveGroupCountry();
+
+        if(this.fromCommandK && this.activeGroupUniqueName) {
+            this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
+        }
     }
 
     public ngAfterViewInit() {
@@ -655,9 +661,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.isShowBankDetails(activeParentgroup);
             this.isDebtorCreditor = true;
 
-            if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
-                this.staticTabs.tabs[0].active = true;
-            }
+            setTimeout(() => {
+                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
+                    this.staticTabs.tabs[0].active = true;
+                    this.changeDetectorRef.detectChanges();
+                }
+            }, 50);
 
             if (accountAddress.controls.length === 0) {
                 this.addBlankGstForm();
@@ -671,10 +680,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.showBankDetail = false;
             this.addAccountForm.get('addresses').reset();
 
-            if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
-                this.staticTabs.tabs[0].active = false;
-            }
+            setTimeout(() => {
+                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
+                    this.staticTabs.tabs[1].active = true;
+                    this.changeDetectorRef.detectChanges();
+                }
+            }, 50);
         }
+        this.changeDetectorRef.detectChanges();
     }
 
     public getCountry() {

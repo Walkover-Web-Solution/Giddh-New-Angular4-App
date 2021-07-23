@@ -360,7 +360,7 @@
                 {
                     "label": "Search",
                     "link": "/pages/search",
-                    "icon": "icon-search-new",
+                    "icon": "icon-search",
                     "description": "Select group and search for a time span"
                 }
             ]
@@ -368,7 +368,7 @@
     ],
     "switch_branch": "Switch Branch",
     "sb": "SB",
-    "search_branch": "Search Branch here",
+    "search_branch": "Search Branches",
     "goto_company": "Go to company",
     "create_branch": "Create Branch",
     "accounts": "Accounts",
@@ -376,7 +376,7 @@
     "menu": "Menu",
     "import_export_backup": "Import/Export Data (Backup)",
     "switch_company": "Switch company",
-    "search_company": "Search Company here",
+    "search_company": "Search Companies",
     "create_company": "Create Company",
     "profile": "Profile",
     "user_profile": "User Profile",
@@ -388,5 +388,10 @@
     "settings_permission": "Settings > Permission",
     "user_details": "User Details",
     "inventory_inout": "Inventory In/Out",
-    "import_data": "Import Data"
+    "import_data": "Import Data",
+    "companies": "Companies",
+    "refresh_manually": "Refresh Manually",
+    "branches": "Branches",
+    "company_consolidated_data": "Consolidated",
+    "no_branches_found": "No branches available."
 }

@@ -201,59 +201,7 @@ body {
 .border-none {
     border: none !important;
 }
-.pd-1 {
-    padding: 10px !important;
-}
 
-.pd-2 {
-    padding: 20px !important;
-}
-
-.pd-3 {
-    padding: 30px !important;
-}
-
-.pd-4 {
-    padding: 40px !important;
-}
-
-.pd-r15 {
-    padding-right: 15px;
-}
-
-.pd-l15 {
-    padding-left: 15px;
-}
-
-.pd-t15 {
-    padding-top: 15px;
-}
-.pd-b15 {
-    padding-bottom: 15px;
-}
-
-.bt-1 {
-    border-top: 1px solid $gainsboro;
-}
-
-.br-1 {
-    border-right: 1px solid $gainsboro;
-}
-
-.bb-1 {
-    border-bottom: 1px solid $gainsboro;
-}
-
-.bl-1 {
-    border-left: 1px solid $gainsboro;
-}
-
-.border-none {
-    border: none !important;
-}
-.border-bottom {
-    border-bottom-color: $gainsboro;
-}
 /* end MDB tweaks */
 
 .relative {
@@ -537,22 +485,6 @@ input {
     .btn {
         padding: 6px 10px !important;
     }
-}
-
-.mr-t15 {
-    margin-top: 15px;
-}
-
-.mr-b15 {
-    margin-bottom: 15px;
-}
-
-.mr-l15 {
-    margin-left: 15px;
-}
-
-.mr-r15 {
-    margin-right: 15px !important;
 }
 
 .company-list button.btn-link {
@@ -2115,10 +2047,6 @@ input[type="checkbox"]:checked:after {
 /* my css start */
 .pointer {
     cursor: pointer;
-}
-
-.pd-t05 {
-    padding-top: 5px;
 }
 
 .pd-t07 {
@@ -6341,7 +6269,7 @@ footer#footer.absolute-footer {
 }
 
 .fixed.modal-open .modal-backdrop {
-    z-index: -1040;
+    z-index: 99999;
 }
 
 section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
@@ -6995,8 +6923,9 @@ button.btn.btn-filter {
     min-width: 190px !important;
 }
 
-.td-search-box div i.icon-search:hover {
-    color: $deep-sky-blue !important;
+.td-search-box div i.icon-search {
+    color: $midnight-blue !important;
+    font-size: 16px;
 }
 
 .mobileCode .menu {
@@ -7640,7 +7569,16 @@ span#HW_badge_cont:nth-child(3) {
                     i {
                         color: $gray;
                         margin-right: 10px;
-                        font-size: 17px;
+                        font-size: 22px;
+                    }
+                }
+            }
+            &:hover{
+                a {
+                    span {
+                        i {
+                            color: $white;
+                        }
                     }
                 }
             }
@@ -7679,7 +7617,7 @@ span#HW_badge_cont:nth-child(3) {
 }
 
 .setting-sidebar-open #content-wrapper{
-    padding-right: 240px;
+    padding-right: 0;
     padding-left: 60px !important;
 }
 .setting-sidebar-open .desktop-header {
@@ -7989,9 +7927,6 @@ button#more-btn-inventory,
 .menu_open .inventory-sidebar {
     left: 0 !important;
 }
-.mobile-setting-sidebar {
-    overflow-y: hidden;
-}
 .select-linked-accounts sh-select-menu .menu {
     max-height: 250px;
 }
@@ -8258,10 +8193,15 @@ input.mat-input-element {
 .setting-sidebar-open.on-user-page .plan-wrapper {
     padding-left: 60px !important;
 }
-.setting-sidebar-open .plan-wrapper,
-.setting-sidebar-open.on-user-page .plan-wrapper{
+.setting-sidebar-open.aside-setting.on-setting-page .plan-wrapper,
+.setting-sidebar-open.aside-setting.on-user-page .plan-wrapper{
     padding-right: 240px !important;
 }
+.setting-sidebar-open .plan-wrapper,
+.setting-sidebar-open.on-user-page .plan-wrapper{
+    padding-right: 0 !important;
+}
+
 .plan-wrapper.menu_open {
     padding-left: 240px !important;
 }
@@ -8287,9 +8227,9 @@ input.mat-input-element {
     }
 }
 .invoice-modal-content {
-    left: 0 !important;
-    width: 100% !important;
-    z-index: 991 !important;
+    left: 60px !important;
+    width: calc(100% - 60px) !important;
+    z-index: 99 !important;
 }
 .primary-sidebar {
     .giddh-primary-items {
@@ -8321,6 +8261,9 @@ input.mat-input-element {
         -ms-transform: translate(-100px, 0px);
         transform: translate3d(-100px, 0px, 0px);
         box-shadow: 0 0 3px rgba(0, 0, 0, 0.2) !important;
+        &.create-account{
+            transform: none;
+        }
     }
 }
 .gst-sidebar-open {
@@ -8379,17 +8322,121 @@ body.update-scroll-hidden {
         }
     }
 }
-.nav-left-bar{
-    &.width-60  {
-        .sidebar-collapse {
-            .sub-menu{
-                display: none !important;
+.on-setting-page, .on-user-page{
+    aside-setting{
+        .aside-pane{
+            .back-to-main-slider{
+                display: block !important;
+                padding: 0 12px;
             }
+            h4{
+                display: none;
+            }
+        }
+        &::after{
+            display: none;
         }
     }
 }
+.company-branch-dropdown{
+    .custom-tabs {
+        ul {
+            &.nav.nav-tabs{
+                position: inherit !important;
+                background-color: transparent;
+                padding-left: 0 !important;
+                margin: 0;
+                flex-wrap: nowrap;
+                width: initial;
+                display: flex;
+                justify-content: space-between;
+                padding-top: 0 !important;
+                li{
+                    position: relative;
+                    &.active{
+                        a{
+                            color: $midnight-blue !important;
+                            border-bottom: 2px solid $midnight-blue !important;
+                        }
+                    }
+                    padding-right: 0;
+                    &.icon-company{
+                        &:before{
+                            position: absolute;
+                            left: 20px;
+                        }
+                    }
+                    a{
+                        min-width: 110px;
+                        font-family: 'opensans-regular';
+                        color: $grey-chateau !important;
+                        padding-top: 5px !important;
+                        padding-left: 20px !important;
+                        height: 30px;
+                    }
+                }
+            }
+            .nav-item{
+                &.icon-company{
+                    &.active{
+                        &::before{
+                            color: $midnight-blue;
+                        }
+                    }
+                    &::before{
+                        position: absolute !important;
+                        left: 20px !important;
+                        top: 5px;
+                        color: $grey-chateau;
+                    }
+                }
+                &.icon-branch1{
+                    &.active{
+                        &::before{
+                            color: $midnight-blue;
+                        }
+                    }
+                    &::before{
+                        position: absolute !important;
+                        left: 20px !important;
+                        top: 5px;
+                        color: $grey-chateau;
+                    }
+                }
+            }
+        }
+    }
+    .company-branch-opt-1{
+        .branch-hide-tab{
+            ul.nav.nav-tabs{
+                display: none;
+            }
+        } 
+    }
+}
+.on-setting-page.aside-setting, .on-user-page.aside-setting{
+    #content-wrapper{
+        padding-right: 240px;
+    }
+}
+.gst-sidebar-open.on-setting-page.aside-setting{
+    #content-wrapper{
+        padding-right: 0;
+    }
+}
+.manage-account-popup.full-screen-modal{
+    z-index: 999991;
+}
 body.update-scroll-hidden{
     overflow-y: hidden;
+}
+.gst-sidebar-open{
+    .daterangepicker.show-calendar{
+        z-index: 99 !important;
+    }
+}
+.transactions-table.table-striped {
+    white-space: nowrap;
 }
 /* responsive  starts here*/
 
@@ -8483,13 +8530,7 @@ body.update-scroll-hidden{
             padding-left: 0 !important;
         }
     }
-    /* responsive  starts here*/
 
-    @media (max-width: 1440px) {
-        .font-xxlarge {
-            font-size: 20px;
-        }
-    }
     #setting-tab-wrapper .tab-integration .nav-tabs {
         display: inline-block;
         width: 100%;
@@ -8548,6 +8589,21 @@ body.update-scroll-hidden{
 }
 
 @media (max-width: 991px) {
+    .tax-engine {
+        .transactions-list {
+            .filter-band{
+                height: auto;
+                padding: 10px 20px;
+            }
+            .filter-row{
+                margin-left: 0 !important;
+                margin-bottom: 5px;
+                &.back-button{
+                    display: flex;
+                }
+            }
+         }
+    }
     .transactions-overview{
         hr{
             display: none;
@@ -8699,6 +8755,11 @@ body.update-scroll-hidden{
 }
 
 @media (max-width: 768px) {
+    .gst-sidebar-open{
+        .daterangepicker.show-calendar{
+            z-index: 998 !important;
+        }
+    }
     .setting-sidebar{
         display: none;
     }
@@ -8900,10 +8961,17 @@ body.update-scroll-hidden{
     }
 }
 @media (max-width: 767px) {
+    .mobile-setting-sidebar {
+        overflow-y: hidden;
+    }
+    .gst-sidebar-open {
+        #content-wrapper{
+           padding-left: 0 !important;
+       }
+   }
     .customer-aging .nav.nav-tabs{
         display: flex !important;
     }
-
     .setting-sidebar-open {
         #content-wrapper{
             padding-left: 0 !important;
@@ -9533,8 +9601,8 @@ body.update-scroll-hidden{
 
 @media (max-width: 575px) {
     .gst-sidebar-open .daterangepicker {
-        left: auto !important;
-        right: 90px !important;
+        left: 15px !important;
+        right: 0 !important;
     }
     .filter-band ul{
         left: auto !important;
@@ -9557,7 +9625,6 @@ body.update-scroll-hidden{
     }
     .daterangepicker.ltr .ranges {
         float: left;
-
         ul {
             li {
                 font-size: 11px;
@@ -9600,6 +9667,10 @@ body.update-scroll-hidden{
 }
 
 @media (max-width: 375px) {
+    .gst-sidebar-open .daterangepicker {
+        left: 15px !important;
+        right: auto !important;
+    }
     .setting-page.tb-pl-bs-tabs ul.nav.nav-tabs {
         overflow-x: auto;
         white-space: nowrap;
@@ -10070,42 +10141,3 @@ body.prevent-body-scroll {
 .giddh-no-permissions {
     display: none !important;
 }
-
-/** Angular material datepicker **/
-.mat-calendar-header {
-    padding: 2px 8px 2px 8px !important;
-    background-color: $chetwode-blue;
-    color: $white;
-}
-.mat-calendar-controls {
-    margin: 0% calc(33% / 7 - 16px) !important;
-}
-.mat-calendar-arrow {
-    border-top-color: $white !important;
-}
-.mat-datepicker-toggle, .mat-datepicker-content .mat-calendar-next-button, .mat-datepicker-content .mat-calendar-previous-button {
-    color: $white !important;
-}
-.mat-calendar-content {
-    padding: 0px 8px 0px 8px !important;
-}
-.mat-calendar-body-label {
-    visibility: hidden !important;
-}
-.mat-calendar-body-label[colspan="7"] {
-    display: none !important;
-}
-.mat-calendar-table-header th {
-    color: $black;
-    padding: 10px 0 10px 0 !important;
-}
-.mat-calendar-table-header th.mat-calendar-table-header-divider {
-    padding: 0px !important;
-}
-.mat-datepicker-content .mat-calendar {
-    height: 320px !important;
-}
-mat-year-view table tr td.mat-calendar-body-label {
-    display: none !important;
-}
-/** Angular material datepicker **/

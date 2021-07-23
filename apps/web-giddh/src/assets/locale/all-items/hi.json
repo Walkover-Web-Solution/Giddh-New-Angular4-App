@@ -356,7 +356,7 @@
                 {
                     "label": "खोज",
                     "link": "/pages/search",
-                    "icon": "icon-search-new",
+                    "icon": "icon-search",
                     "description": "समूह का चयन करें और समय अवधि खोजें"
                 }
             ]
@@ -364,7 +364,7 @@
     ],
     "switch_branch": "स्विच शाखा",
     "sb": "SB",
-    "search_branch": "यहां शाखा खोजें",
+    "search_branch": "शाखा खोजें",
     "goto_company": "कंपनी में जाएं",
     "create_branch": "शाखा खाते बनाएं",
     "accounts": "खाते",
@@ -372,7 +372,7 @@
     "menu": "मेनू",
     "import_export_backup": "आयात/निर्यात डेटा (बैकअप)",
     "switch_company": "कंपनी स्विच करें",
-    "search_company": "यहां कंपनी खोजें",
+    "search_company": "कंपनी खोजें",
     "create_company": "कंपनी बनाएं",
     "profile": "प्रोफ़ाइल",
     "user_profile": "उपयोगकर्ता प्रोफ़ाइल",
@@ -381,8 +381,13 @@
     "to_navigate": "नेविगेट करने के लिए",
     "to_select": "चयन करना",
     "to_dismiss": "खारिज करना",
-    "settings_permission": "सेटिंग्स> अनुमति",
+    "settings_permission": "सेटिंग्स > अनुमति",
     "user_details": "उपयोगकर्ता विवरण",
     "inventory_inout": "इन्वेंटरी इन / आउट",
-    "import_data": "आयात आंकड़ा"
+    "import_data": "आयात आंकड़ा",
+    "companies": "कंपनिया",
+    "refresh_manually": "रिफ्रेश करें",
+    "branches": "शाखाएं",
+    "company_consolidated_data": "समेकित",
+    "no_branches_found": "कोई शाखा उपलब्ध नहीं"
 }
