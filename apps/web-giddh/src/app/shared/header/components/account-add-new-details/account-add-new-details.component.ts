@@ -1190,6 +1190,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     } else {
                         this.GSTIN_OR_TRN = '';
                     }
+
+                    this.changeDetectorRef.detectChanges();
                 }
             });
         }
