@@ -11,7 +11,7 @@
             <div class="row d-flex align-items-center payment-top-form">
                 <div class="col-sm-12">
                     <div class="d-flex mr-b1">
-                        <div class="form-group mr-r15 select-bank" *ngIf="!selectIntegratedBankList?.length || selectIntegratedBankList?.length > 1">
+                        <div class="form-group mr-r15 select-bank" *ngIf="selectIntegratedBankList?.length !== 1">
                             <label>{{localeData?.select_bank}}<span class="red-text">*</span></label>
                             <div class="relative">
                                 <img *ngIf="(isGetAllIntegratedBankInProgress$ | async)" class="dropdown-loader"
