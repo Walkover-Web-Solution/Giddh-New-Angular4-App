@@ -263,7 +263,7 @@
                                                 </div>
                                                 <div class="col-md-4 v-align-top inline">
                                                     <span class="limit-upto field-label">{{localeData?.payment?.limit_upto}}</span><br>
-                                                    <span class="width-100 disabled-field inline limit-upto">{{(payor?.duration === unlimitedLimit) ? commonLocaleData?.app_amount_limit?.unlimited : activeCompany?.baseCurrencySymbol + " " + payor?.maxAmount | giddhCurrency }} <span class="pull-right payor-duration font-12" *ngIf="payor?.duration !== unlimitedLimit">/ {{payor?.duration | titlecase}}</span></span><br>
+                                                    <span class="width-100 disabled-field inline limit-upto">{{(payor?.duration === unlimitedLimit) ? commonLocaleData?.app_amount_limit?.unlimited : activeCompany?.baseCurrencySymbol + " " + (payor?.maxAmount | giddhCurrency) }} <span class="pull-right payor-duration font-12" *ngIf="payor?.duration !== unlimitedLimit">/ {{payor?.duration | titlecase}}</span></span><br>
                                                     <span class="limit-upto font-12 field-label">{{localeData?.payment?.used}} {{payor?.usedAmount | giddhCurrency}}</span>
                                                 </div>
                                                 <div class="col-md-4 v-align-top inline mt-2">
