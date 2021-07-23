@@ -142,6 +142,7 @@ export class PickDateAdapter extends NativeDateAdapter {
         PurchaseSendEmailModalComponent,
         GiddhDaterangepickerComponent,
         GiddhPageLoaderComponent,
+        CompanyBranchComponent,
         PrimarySidebarComponent,
         CompanyBranchComponent,
         GenericAsideMenuAccountComponent
@@ -190,8 +191,7 @@ export class PickDateAdapter extends NativeDateAdapter {
         LedgerDiscountModule,
         ConfirmationModalModule,
         DatepickerWrapperModule,
-        HamburgerMenuModule,
-        ValidateSectionPermissionDirectiveModule
+        HamburgerMenuModule
     ],
     exports: [
         CommonModule,
