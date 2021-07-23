@@ -652,9 +652,9 @@
     "app_exchange_loss": "तोटा",
     "vendor_name": "विक्रेता नाव",
     "app_amount_limit": {
-        "daily": "Daily",
-        "weekly": "Weekly",
-        "monthly": "Monthly",
-        "unlimited": "Unlimited"
+        "daily": "दररोज",
+        "weekly": "साप्ताहिक",
+        "monthly": "मासिक",
+        "unlimited": "अमर्यादित"
     }
 }

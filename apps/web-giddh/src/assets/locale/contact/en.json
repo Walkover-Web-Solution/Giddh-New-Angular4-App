@@ -64,5 +64,6 @@
     "customers": "Customers",
     "customers_selected": "Customers Selected",
     "vendors": "Vendors",
-    "vendors_selected": "Vendors Selected"
+    "vendors_selected": "Vendors Selected",
+    "select_payor": "Select Payor"
 }
