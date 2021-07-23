@@ -21,7 +21,7 @@
             <div class="setting-items">
                 <ul class="mb-3" *ngFor="let section of filteredSettingsPageTabs;">
                     <li *ngFor="let tab of section;" routerLinkActive>
-                        <a class="d-block clearfix" [routerLink]="[tab.link]" (click)="closeAsidePane($event)">
+                        <a class="d-block clearfix" [routerLink]="[tab.link]">
                             <span [innerHTML]="tab.icon"></span>
                             <span>{{tab.label}}</span>
                         </a>
