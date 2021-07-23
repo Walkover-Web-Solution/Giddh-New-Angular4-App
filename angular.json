@@ -443,7 +443,6 @@
                                     "externals": "replace"
                                 }
                             },
-                            "baseUrl": "stage.giddh.com",
                             "fileReplacements": [
                                 {
                                     "replace": "apps/web-giddh/src/environments/environment.ts",
@@ -475,7 +474,6 @@
                                 "input": "apps/web-giddh/src/index.electron.prod.html",
                                 "output": "/index.html"
                             },
-                            "baseUrl": "app.giddh.com",
                             "fileReplacements": [
                                 {
                                     "replace": "apps/web-giddh/src/environments/environment.ts",
@@ -506,7 +504,6 @@
                                     "externals": "replace"
                                 }
                             },
-                            "baseUrl": "test.giddh.com",
                             "fileReplacements": [
                                 {
                                     "replace": "apps/web-giddh/src/environments/environment.ts",

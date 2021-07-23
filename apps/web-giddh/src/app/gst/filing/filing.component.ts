@@ -116,7 +116,6 @@ export class FilingComponent implements OnInit, OnDestroy {
                 this.selectedGst = params['return_type'];
                 this.loadGstReport(this.activeCompanyGstNumber);
             }
-
             let tab = Number(params['tab']);
             if (tab > -1) {
                 this.selectTabFromUrl(tab);

@@ -491,7 +491,7 @@ input {
     font-size: 13px;
     color: $chetwode-blue !important;
     display: block;
-    padding: 7px 10px;
+    padding: 7px 10px !important;
     display: block;
     width: 100%;
     text-align: left;
@@ -6851,7 +6851,6 @@ ul.dropdown-menu p.lead.pd {
     height: 36px !important;
     border-right: none !important;
     color: $nobel !important;
-    cursor: pointer;
 }
 
 .date-advance-search .input-group input.form-control {
@@ -8324,12 +8323,19 @@ body.update-scroll-hidden {
         }
     }
 }
-.nav-left-bar{
-    &.width-60  {
-        .sidebar-collapse {
-            .sub-menu{
-                display: none !important;
+.on-setting-page, .on-user-page{
+    aside-setting{
+        .aside-pane{
+            .back-to-main-slider{
+                display: block !important;
+                padding: 0 12px;
             }
+            h4{
+                display: none;
+            }
+        }
+        &::after{
+            display: none;
         }
     }
 }
@@ -8433,7 +8439,20 @@ body.update-scroll-hidden {
             ul.nav.nav-tabs{
                 display: none;
             }
-        } 
+        }
+    }
+}
+.manage-account-popup.full-screen-modal{
+    z-index: 999991;
+}
+.on-setting-page.aside-setting, .on-user-page.aside-setting{
+    #content-wrapper{
+        padding-right: 240px;
+    }
+}
+.gst-sidebar-open.on-setting-page.aside-setting{
+    #content-wrapper{
+        padding-right: 0;
     }
 }
 .manage-account-popup.full-screen-modal{
@@ -8441,6 +8460,21 @@ body.update-scroll-hidden {
 }
 body.update-scroll-hidden{
     overflow-y: hidden;
+}
+.e-waybill-tabs.custom-tabs .nav-tabs{
+    position: static !important;
+    padding-left: 15px !important;
+}
+.sales-register{
+    width: calc(100% - 60px) !important;
+}
+.menu_open .sales-register{
+    width: calc(100% - 240px) !important;
+}
+.wrap-billing-address.clearfix {
+    .bottom-border-only{
+        padding-left: 0 !important;
+    }
 }
 .gst-sidebar-open{
     .daterangepicker.show-calendar{
@@ -9045,7 +9079,7 @@ body.update-scroll-hidden{
     #setting-tab-wrapper .purchase-setting-tab.tab-integration .nav-tabs {
         display: inline-block;
     }
-    .e-waybill-tabs.custom-tabs .nav-tabs{
+    .e-waybill-tabs.custom-tabs .nav-tabs {
         position: fixed !important;
     }
     .invoice-modal-content {
@@ -9361,7 +9395,7 @@ body.update-scroll-hidden{
         margin-top: 0px;
     }
     .custom-tabs.hide-header .top-bar {
-        margin-top: 28x;
+        margin-top: 28px;
     }
     .invoice-control .nav.nav-tabs {
         padding: 0 0 0 15px !important;
@@ -10148,7 +10182,6 @@ body.prevent-body-scroll {
 .giddh-no-permissions {
     display: none !important;
 }
-
 /** Angular material datepicker **/
 .mat-calendar-header {
     padding: 2px 8px 2px 8px !important;

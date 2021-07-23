@@ -118,12 +118,12 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public asideMenuStateForOtherTaxes: string = 'out';
     // aside menu properties
     public asideMenuState: string = 'out';
+    /** True if initial api got called */
+    public initialApiCalled: boolean = false;
     /** Ledger object */
     public lc: LedgerVM;
     /** Company taxes list */
     public companyTaxesList: TaxResponse[] = [];
-    /** True if initial api got called */
-    public initialApiCalled: boolean = false;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,

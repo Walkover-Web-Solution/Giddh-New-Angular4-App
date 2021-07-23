@@ -30,7 +30,7 @@
     </div>
 </div>
 <ng-container *ngFor="let account of groupDetail.accounts;trackBy: trackByFn">
-    <section class="row-2 account " style="overflow: visible;" *ngIf="account.isVisible || account.isCreated"
+    <section class="row-2 account overflow-visible" *ngIf="account.isVisible || account.isCreated"
         [hidden]="!account.isVisible" (dblclick)="accountInfo(account,$event)" (clickOutside)="hideModal()"
         [exclude]="'.row-item'">
         <div class="row row-item"

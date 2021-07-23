@@ -631,7 +631,8 @@ ul.sub-list {
 }
 
 .company-name .text-ellipsis {
-    font-size: 14px;
+    font-size: 13px;
+    font-family: 'opensans-regular';
 }
 
 .overlay-cal {
@@ -1062,6 +1063,12 @@ aside-setting {
         position: absolute;
         top: 0;
     }
+    .gst-menu-icon, .setting-menu-icon {
+        padding: 4px 8px;
+        display: none;
+        width: 32px;
+        text-align: center;
+    }
     .fixed-padding {
         padding-top: 90px;
         #primary-new-header.primary-main-header {
@@ -1290,12 +1297,6 @@ aside-setting {
         .white-row {
             margin: 0 15px;
         }
-    }
-    .gst-menu-icon, .setting-menu-icon {
-        padding: 4px 8px 4px 8px;
-        display: none;
-        width: 32px;
-        text-align: center;
     }
     .mobile-back-btn {
         display: none;

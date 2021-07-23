@@ -34,7 +34,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CreateAddressComponent } from './create-address/create-address.component';
 import { CreateBranchComponent } from './branch/create-branch/create-branch.component';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
-import { BeneficiaryComponent } from './integration/beneficiary/beneficiary.component';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 

@@ -591,10 +591,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public originalVoucherAdjustments: VoucherAdjustments;
     /** Length of entry description */
     public entryDescriptionLength: number = ENTRY_DESCRIPTION_LENGTH;
-    /** True, if multi-currency support to voucher adjustment is enabled */
-    public enableVoucherAdjustmentMultiCurrency: boolean;
     /** Force clear for billing-shipping dropdown */
     public billingShippingForceClearReactive$: Observable<IForceClear> = observableOf({ status: false });
+    /** True, if multi-currency support to voucher adjustment is enabled */
+    public enableVoucherAdjustmentMultiCurrency: boolean;
     /** True if left sidebar is expanded */
     private isSidebarExpanded: boolean = false;
 

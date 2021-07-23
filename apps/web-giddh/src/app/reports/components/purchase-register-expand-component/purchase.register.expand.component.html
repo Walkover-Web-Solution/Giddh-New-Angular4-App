@@ -43,8 +43,9 @@
                 </a>
             </div>
             <div class="dis middle">
-                <div (clickOutside)="hideListItems()" class="advance-icon cursor-pointer align-items-center btn-group mr-0" #filterDropDownList="bs-dropdown"
-                    dropdown [autoClose]="false" [placement]="'right'">
+                <div (clickOutside)="hideListItems()"
+                    class="advance-icon cursor-pointer align-items-center btn-group mr-0"
+                    #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" [placement]="'right'">
                     <i dropdownToggle class="icon-options"></i>
                     <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" [style.width.px]="'200'">
                         <li role="menuitem">
@@ -95,7 +96,7 @@
                     {{localeData?.transaction_count}}
                     <div>
                         <span class="number-total">
-                        {{ (purchaseRegisteDetailedResponse$ | async).totalItems }}
+                            {{ (purchaseRegisteDetailedResponse$ | async).totalItems }}
                         </span>
                     </div>
                 </h5>
@@ -113,7 +114,8 @@
                         </div>
                     </h5>
                 </div>
-                <div class="total-details-box mr-r05 border-none sales-purchase" *ngIf="(purchaseRegisteDetailedResponse$ | async)?.creditTotal">
+                <div class="total-details-box mr-r05 border-none sales-purchase"
+                    *ngIf="(purchaseRegisteDetailedResponse$ | async)?.creditTotal">
                     <h5>
                         {{commonLocaleData?.app_return}}
                         <div>
@@ -125,7 +127,8 @@
                         </div>
                     </h5>
                 </div>
-                <div class="total-details-box mr-r05 border-none payment-receipt" *ngIf="showFieldFilter.discount && (purchaseRegisteDetailedResponse$ | async)?.discountTotal">
+                <div class="total-details-box mr-r05 border-none payment-receipt"
+                    *ngIf="showFieldFilter.discount && (purchaseRegisteDetailedResponse$ | async)?.discountTotal">
                     <h5>
                         {{commonLocaleData?.app_discount}}
                         <div>
@@ -137,7 +140,8 @@
                         </div>
                     </h5>
                 </div>
-                <div class="total-details-box mr-r05 border-none due-box" *ngIf="isTcsTdsApplicable && (purchaseRegisteDetailedResponse$ | async)?.tcsTotal">
+                <div class="total-details-box mr-r05 border-none due-box"
+                    *ngIf="isTcsTdsApplicable && (purchaseRegisteDetailedResponse$ | async)?.tcsTotal">
                     <h5>
                         {{commonLocaleData?.app_tcs}}
                         <div>
@@ -149,7 +153,8 @@
                         </div>
                     </h5>
                 </div>
-                <div class="total-details-box mr-r05 border-none due-box" *ngIf="isTcsTdsApplicable && (purchaseRegisteDetailedResponse$ | async)?.tdsTotal">
+                <div class="total-details-box mr-r05 border-none due-box"
+                    *ngIf="isTcsTdsApplicable && (purchaseRegisteDetailedResponse$ | async)?.tdsTotal">
                     <h5>
                         {{commonLocaleData?.app_tds}}
                         <div>
@@ -161,7 +166,8 @@
                         </div>
                     </h5>
                 </div>
-                <div class="total-details-box mr-r05 border-none due-box" *ngIf="showFieldFilter.tax && (purchaseRegisteDetailedResponse$ | async).taxTotal">
+                <div class="total-details-box mr-r05 border-none due-box"
+                    *ngIf="showFieldFilter.tax && (purchaseRegisteDetailedResponse$ | async).taxTotal">
                     <h5>
                         {{commonLocaleData?.app_tax}}
                         <div>
@@ -226,7 +232,7 @@
                                 </div>
                             </th>
 
-                            <th *ngIf="showFieldFilter.voucherNo" class="td-search-box nowrap" style="width: 210px;"
+                            <th *ngIf="showFieldFilter.voucherNo" class="td-search-box nowrap voucher-width"
                                 #searchInvoiceContainer (clickOutside)="clickedOutsideEvent()">
                                 <div [hidden]="showSearchInvoiceNo">
                                     <i class="icon-search" (click)="toggleSearch('invoiceNumber')"></i>
@@ -447,7 +453,6 @@
             *ngIf="(purchaseRegisteDetailedResponse$ | async).items.length === 0 &&!(isGetPurchaseDetailsInProcess$ | async)">
             <no-data [secondaryMessageClass]="'p-0'"></no-data>
         </div>
-
     </ng-container>
 
     <div *ngIf="(isGetPurchaseDetailsInProcess$ | async)">
