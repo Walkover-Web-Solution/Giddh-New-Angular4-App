@@ -31,7 +31,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [windows-latest, macos-latest]
+        os: [macos-latest]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -147,7 +147,7 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: ${{ secrets.SLACK_UI_BUILDS_CHANNEL_ID }}
           SLACK_COLOR: "#4CAF50" # or a specific color like 'green' or '#ff00ff'
-          SLACK_MESSAGE: "${{ github.event.inputs.note }}. Build download URL: Windows - https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh+Setup+${{ github.event.inputs.version }}.exe | Mac - https://s3-ap-south-1.amazonaws.com/giddh-app-builds-test/giddh-${{ github.event.inputs.version }}.dmg"
+          SLACK_MESSAGE: "${{ github.event.inputs.note }}. Build download URL: Mac - https://s3-ap-south-1.amazonaws.com/giddh-app-builds-test/giddh-${{ github.event.inputs.version }}.dmg"
           SLACK_FOOTER: ''
           SLACK_TITLE: Giddh Desktop build for testing
           SLACK_USERNAME: Giddh Desktop build
