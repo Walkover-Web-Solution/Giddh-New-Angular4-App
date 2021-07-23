@@ -23,7 +23,7 @@
                             <ng-template tabHeading>
                                 {{localeData?.filing?.tabs?.overview}}
                             </ng-template>
-                            <div class="transactions-overview" *ngIf="selectedTab === localeData?.filing?.tabs?.overview || !selectedTabId">
+                            <div class="transactions-overview mr-b4" *ngIf="selectedTab === localeData?.filing?.tabs?.overview || !selectedTabId">
                                 <filing-overview [activeCompanyGstNumber]="activeCompanyGstNumber"
                                     [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"
                                     (hsnSacSelected)="openHsnSacSection()" [isTransactionSummary]="isTransactionSummary" [localeData]="localeData" [commonLocaleData]="commonLocaleData">
