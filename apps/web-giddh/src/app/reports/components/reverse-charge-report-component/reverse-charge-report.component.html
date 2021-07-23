@@ -58,7 +58,7 @@
                             class="icon-cross"></span>{{commonLocaleData?.app_clear_filter}}</button>
                 </div>
             </div>
-            <div class="top-content">
+            <div class="top-content" [hidden]="!reverseChargeReportResults?.items?.length">
                 <div class="d-flex w-100 justify-content-between overflow-x-auto">
                     <div class="total-due-sale total-details-box opening-box border-none mr-r05">
                         <h5>
@@ -87,7 +87,7 @@
             </div>
             <div class="invoice-preview  table-responsive">
                 <table class="table basic giddh-table on-mobile-view">
-                    <thead class="thead-background1">
+                    <thead class="thead-background1" [hidden]="!reverseChargeReportResults?.items?.length && !reverseChargeReportPostRequest?.supplierName && !reverseChargeReportPostRequest?.invoiceNumber && !reverseChargeReportPostRequest?.supplierCountry && !reverseChargeReportPostRequest?.voucherType">
                         <tr (clickOutside)="inlineSearch = null">
                             <th class="text-center" width="4%">#</th>
                             <th (click)="sortReverseChargeList('entryDate')">{{localeData?.entry_date}} <span
@@ -205,13 +205,6 @@
                             </td>
                         </tr>
                     </tbody>
-                    <tbody
-                        *ngIf="!isLoading && (!reverseChargeReportResults || !reverseChargeReportResults.items || reverseChargeReportResults.items.length === 0)">
-                        <tr>
-                            <td colspan="10" class="text-center empty-table" align="center">
-                                {{commonLocaleData?.app_no_records_found}}</td>
-                        </tr>
-                    </tbody>
                     <tbody *ngIf="isLoading">
                         <tr>
                             <td colspan="10">
@@ -228,6 +221,9 @@
                     (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first"
                     [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next"
                     [lastText]="commonLocaleData?.app_last"></pagination>
+            </div>
+            <div class="no-data" *ngIf="!isLoading && (!reverseChargeReportResults || !reverseChargeReportResults.items || reverseChargeReportResults.items.length === 0)">
+                <no-data [secondaryMessageClass]="'p-0'"></no-data>
             </div>
         </div>
     </div>

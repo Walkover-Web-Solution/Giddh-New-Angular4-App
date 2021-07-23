@@ -11,6 +11,7 @@ import { LedgerModule } from '../ledger/ledger.module';
 import { SalesModule } from '../sales/sales.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { NoDataModule } from '../shared/no-data/no-data.module';
 import { SharedModule } from '../shared/shared.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
@@ -41,7 +42,8 @@ import { ExpensesRoutingModule } from './expenses.routing.module';
         ModalModule,
         ElementViewChildModule,
         SalesModule,
-        UpdateLedgerEntryPanelModule
+        UpdateLedgerEntryPanelModule,
+        NoDataModule
     ],
     exports: [
         ExpensesComponent,
