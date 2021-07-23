@@ -15,6 +15,7 @@ import { GstReconcileActions } from '../../../actions/gst-reconcile/GstReconcile
 import { ActivatedRoute } from '@angular/router';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { GstReport } from '../../constants/gst.constant';
+import { SHOW_GST_FILING } from '../../../app.constant';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -75,6 +76,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** True, if GST filing needs to be shown */
+    public showGstFiling: boolean = SHOW_GST_FILING;
 
     constructor(
         private store: Store<AppState>,
