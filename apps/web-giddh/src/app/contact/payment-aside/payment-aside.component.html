@@ -11,7 +11,7 @@
             <div class="row d-flex align-items-center payment-top-form">
                 <div class="col-sm-12">
                     <div class="d-flex mr-b1">
-                        <div class="form-group mr-r15 select-bank">
+                        <div class="form-group mr-r15 select-bank" *ngIf="!selectIntegratedBankList?.length || selectIntegratedBankList?.length > 1">
                             <label>{{localeData?.select_bank}}<span class="red-text">*</span></label>
                             <div class="relative">
                                 <img *ngIf="(isGetAllIntegratedBankInProgress$ | async)" class="dropdown-loader"
@@ -42,6 +42,14 @@
                             </div>
                             <p *ngIf="totalAvailableBalance"><small class="text-gray">{{localeData?.bal}}
                                     {{totalAvailableBalance | giddhCurrency}} {{commonLocaleData?.app_dr}}</small></p>
+                        </div>
+                        <div class="form-group mr-r15">
+                            <label>{{localeData?.select_payor}}<span class="red-text">*</span></label>
+                            <div class="relative">
+                                <img *ngIf="isPayorListInProgress" class="dropdown-loader"
+                                    src="assets/images/loader.gif" alt="">
+                                <sh-select required [isRequired]="true" [placeholder]="localeData?.select_payor" [options]="payorsList" (selected)="selectPayor($event)" name="urn" [forceClearReactive]="forceClear$ | async"></sh-select>
+                            </div>    
                         </div>
                         <div class="form-group mr-r15">
                             <label>{{commonLocaleData?.app_total_amount}}<span class="red-text">*</span></label>
