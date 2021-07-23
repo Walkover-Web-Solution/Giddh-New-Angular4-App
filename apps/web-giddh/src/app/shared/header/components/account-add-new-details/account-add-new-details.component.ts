@@ -668,13 +668,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
             }, 50);
 
-            if (accountAddress.controls.length === 0) {
+            if (accountAddress.controls.length === 0 || !accountAddress.length) {
                 this.addBlankGstForm();
             }
-            if (!accountAddress.length) {
-                this.addBlankGstForm();
-            }
-
         } else {
             this.isDebtorCreditor = false;
             this.showBankDetail = false;
