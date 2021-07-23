@@ -57,6 +57,7 @@ import { LedgerRoutingModule } from './ledger.routing.module';
 import { ParticularPipeModule } from './pipes/particular/particular.module';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { ConfirmationModalModule } from '../common/confirmation-modal/confirmation-modal.module';
+import { NoDataModule } from '../shared/no-data/no-data.module';
 
 @NgModule({
     declarations: [
@@ -119,7 +120,8 @@ import { ConfirmationModalModule } from '../common/confirmation-modal/confirmati
         AsideMenuSalesOtherTaxesModule,
         PopoverModule,
         ConfirmationModalModule,
-        ValidateSectionPermissionDirectiveModule
+        ValidateSectionPermissionDirectiveModule,
+        NoDataModule
     ],
 })
 export class LedgerModule {

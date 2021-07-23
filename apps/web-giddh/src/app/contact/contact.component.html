@@ -195,9 +195,8 @@
                     </div>
 
                     <div class="top-content">
-                        <div class="d-flex w-100 justify-content-between overflow-x-auto">
-                            <div
-                                class="total-details-box mr-r05 d-flex justify-content-between count-box align-items-end">
+                        <div class="d-flex w-100 justify-content-between overflow-x-auto" [hidden]="(activeTab === 'customer' && !sundryDebtorsAccounts?.length) || (activeTab === 'vendor' && !sundryCreditorsAccounts?.length)">
+                            <div class="total-details-box mr-r05 d-flex justify-content-between count-box align-items-end">
                                 <h5>
                                     <ng-container *ngIf="!selectedCheckedContacts?.length">{{activeTab === 'customer' ? localeData?.customers : localeData?.vendors}}</ng-container>
                                     <ng-container *ngIf="selectedCheckedContacts?.length">{{activeTab === 'customer' ? localeData?.customers_selected : localeData?.vendors_selected }}</ng-container>
@@ -433,7 +432,7 @@
     <ng-template #mainTable>
         <div class="mobile-card-wrapper table-responsive vendor-page">
             <table class="table on-mobile-view aging-table mr-b260 giddh-table" *ngIf="activeTab !== 'aging'">
-                <thead>
+                <thead [hidden]="!searchStr && ((activeTab === 'customer' && !sundryDebtorsAccounts?.length) || (activeTab === 'vendor' && !sundryCreditorsAccounts?.length))">
                     <tr>
                         <th #searchCustomerContainer
                             (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')" class="td-search-box">
@@ -764,12 +763,6 @@
                                     {{item.value || '-' }}</td>
                             </ng-container>
                         </tr>
-                        <tr>
-                            <td [attr.colspan]="colspanLength" *ngIf="!(sundryDebtorsAccounts).length "
-                                class="text-center empty-table ">
-                                <h1>{{commonLocaleData?.app_no_record_found}}</h1>
-                            </td>
-                        </tr>
 
                     </ng-container>
 
@@ -1010,11 +1003,6 @@
                                 </button>
                             </td>
                         </tr>
-                        <tr *ngIf="!(sundryCreditorsAccounts).length ">
-                            <td [attr.colspan]="colspanLength" class="text-center empty-table">
-                                <h1>{{commonLocaleData?.app_no_record_found}}</h1>
-                            </td>
-                        </tr>
 
                     </ng-container>
                 </tbody>
@@ -1048,7 +1036,10 @@
                 </div>
             </div>
         </div>
-
+        <div class="no-data"
+                *ngIf="(activeTab === 'customer' && !sundryDebtorsAccounts?.length) || (activeTab === 'vendor' && !sundryCreditorsAccounts?.length)">
+                <no-data [secondaryMessageClass]="'p-0'"></no-data>
+        </div>
     </ng-template>
 
     <!-- region sorting template -->

@@ -3,7 +3,7 @@
     <div class="table-responsive">
 
         <table class="table basic giddh-table table-bordered on-mobile-view">
-            <thead>
+            <thead [hidden]="!RejectedItems?.length">
                 <tr>
                     <th>#</th>
                     <th>{{commonLocaleData?.app_date}}
@@ -89,8 +89,7 @@
 </div>
 
 <div class="no-data" *ngIf="!(RejectedItems.length) &&  !(getPettycashRejectedReportInprocess$ | async)">
-    <h1>{{commonLocaleData?.app_no_entries_found}}</h1>
-    <h1>{{commonLocaleData?.app_search_suggestion}}</h1>
+    <no-data></no-data>
 </div>
 
 <!-- region sorting template -->
