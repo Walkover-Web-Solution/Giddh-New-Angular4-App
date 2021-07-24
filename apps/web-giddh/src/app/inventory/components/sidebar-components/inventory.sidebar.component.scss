@@ -33,9 +33,9 @@ span.caret {
 }
 #inventory-sidebar {
     background: $white;
-    min-height: 100vh;
     width: 260px !important;
-    padding-bottom: 220px;
+    height: calc(100vh - 100px);
+    overflow: auto;
 }
 ul#dropdown-nested li .dropdown-menu {
     display: block !important;
