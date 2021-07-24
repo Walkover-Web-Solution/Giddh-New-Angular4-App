@@ -68,6 +68,8 @@ stock-list ::ng-deep.in-list a div {
     line-height: 14px;
 }
 .stock-grp-list {
+    height: calc(100vh - 300px);
+    overflow: auto;
     li {
         .item-group {
             &:hover {
