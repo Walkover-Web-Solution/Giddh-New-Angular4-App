@@ -16,9 +16,11 @@ import { ExportDaybookComponent } from './export-daybook/export-daybook.componen
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { SharedModule } from '../shared/shared.module';
-import { LedgerModule } from '../ledger/ledger.module';
 import { SalesModule } from '../sales/sales.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
+import { UpdateLedgerEntryPanelModule } from '../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.module';
+import { AsideMenuSalesOtherTaxesModule } from '../sales/aside-menu-sales-other-taxes/aside-menu-sales-other-taxes.module';
+
 @NgModule({
     declarations: [DaybookComponent, ExportDaybookComponent, DaybookAdvanceSearchModelComponent],
     providers: [],
@@ -36,9 +38,10 @@ import { NoDataModule } from '../shared/no-data/no-data.module';
         CurrencyModule,
         SharedModule,
         NgxMaskModule.forRoot(),
-        LedgerModule,
+        AsideMenuSalesOtherTaxesModule,
         SalesModule,
-        NoDataModule
+        NoDataModule,
+        UpdateLedgerEntryPanelModule
     ],
     entryComponents: [
         PaginationComponent
