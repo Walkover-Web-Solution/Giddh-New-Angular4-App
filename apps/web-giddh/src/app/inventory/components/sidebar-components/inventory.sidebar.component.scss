@@ -67,12 +67,6 @@ ul#dropdown-nested li:hover .dropdown-menu {
         left: 25px;
     }
 }
-stockgrp-list{
-    &.parent-group > ul{
-        height: calc(100vh - 300px);
-        overflow: auto;
-    }
-}
 @media (max-width: 1024px) {
     #inventory-sidebar {
         min-height: 100%;
