@@ -19,6 +19,7 @@ import { SharedModule } from '../shared/shared.module';
 import { LedgerModule } from '../ledger/ledger.module';
 import { SalesModule } from '../sales/sales.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
+import { UpdateLedgerEntryPanelModule } from '../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.module';
 @NgModule({
     declarations: [DaybookComponent, ExportDaybookComponent, DaybookAdvanceSearchModelComponent],
     providers: [],
@@ -38,7 +39,8 @@ import { NoDataModule } from '../shared/no-data/no-data.module';
         NgxMaskModule.forRoot(),
         LedgerModule,
         SalesModule,
-        NoDataModule
+        NoDataModule,
+        UpdateLedgerEntryPanelModule
     ],
     entryComponents: [
         PaginationComponent
