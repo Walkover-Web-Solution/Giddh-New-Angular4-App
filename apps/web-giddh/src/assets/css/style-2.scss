@@ -8441,6 +8441,10 @@ body.update-scroll-hidden{
 .transactions-table.table-striped {
     white-space: nowrap;
 }
+.stock-group-parent > ul{
+    height: calc(100vh - 320px);
+    overflow: auto;
+}
 /* responsive  starts here*/
 
 @media (max-width: 1440px) {
