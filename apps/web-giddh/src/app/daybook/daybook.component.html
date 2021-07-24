@@ -75,7 +75,7 @@
                             </div>
                         </div>
                         <button type="button" class="btn btn-default export-btn mr-0" (click)="exportDaybook()"
-                            *ngIf="!((daybookData$ | async)?.entries?.length > 0)">{{commonLocaleData?.app_export}}</button>
+                            *ngIf="((daybookData$ | async)?.entries?.length > 0)">{{commonLocaleData?.app_export}}</button>
                     </div>
 
                 </div>
