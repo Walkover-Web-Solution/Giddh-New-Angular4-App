@@ -2752,3 +2752,15 @@ form#groupDetailForm {
         max-width: 280px;
     }
 }
+.mat-dialog-container {
+    padding: 0px !important;
+}
+.mat-dialog-title {
+    margin-bottom: 0px !important;
+}
+mat-dialog-container .modal-header {
+    padding: 11px !important;
+}
+.mat-radio-button {
+    margin-right: 16px;
+}
