@@ -361,7 +361,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /** to check is tourist scheme applicable(Note true if voucher type will be sales invoice)  */
     public isTouristScheme: boolean = false;
 
-    public countryCode: string = '';
     public isValidGstinNumber: boolean = false;
     /** Allowed taxes list contains the unique name of all
      * tax types within a company and count upto which they are allowed
@@ -1267,7 +1266,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.isCustomerSelected = true;
                         this.isMulticurrencyAccount = tempSelectedAcc.currencySymbol !== this.baseCurrencySymbol;
                         this.customerCountryName = tempSelectedAcc.country.countryName;
-                        this.countryCode = tempSelectedAcc?.country?.countryCode || 'IN';
+                        this.customerCountryCode = tempSelectedAcc?.country?.countryCode || 'IN';
                         this.checkIfNeedToExcludeTax(tempSelectedAcc);
                         this.getUpdatedStateCodes(tempSelectedAcc.country.countryCode).then(() => {
                             this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
@@ -1528,7 +1527,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private async prepareCompanyCountryAndCurrencyFromProfile(profile) {
         if (profile) {
             this.customerCountryName = profile.country;
-            this.customerCountryCode = profile?.countryV2?.alpha2CountryCode || 'IN';
             this.showGstAndTrnUsingCountryName(profile.country);
 
             this.companyCurrency = profile.baseCurrency || 'INR';
@@ -1778,7 +1776,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public assignAccountDetailsValuesInForm(data: AccountResponseV2) {
         this.accountAddressList = data.addresses;
         this.customerCountryName = data.country.countryName;
-        this.countryCode = data?.country?.countryCode || 'IN';
+        this.customerCountryCode = data?.country?.countryCode || 'IN';
         this.initializeAccountCurrencyDetails(data);
         this.showGstAndTrnUsingCountryName(this.customerCountryName);
         this.prepareSearchLists([{
