@@ -1,0 +1,14 @@
+<div>
+    <div class="modal-header">
+        <h3 class="modal-title">{{inputData?.title}}</h3>
+        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</span>
+    </div>
+    <div class="modal-body">
+        {{inputData?.body}}
+        <p class="text-gray font-14 mr-t05" *ngIf="inputData?.permanentlyDeleteMessage">{{inputData?.permanentlyDeleteMessage}}</p>
+    </div>
+    <div class="modal-footer">
+        <button mat-button class="btn btn-success" (click)="onSuccess()">{{inputData?.ok}}</button>
+        <button mat-button class="btn btn-danger" (click)="onCancel()">{{inputData?.cancel}}</button>
+    </div>
+</div>
