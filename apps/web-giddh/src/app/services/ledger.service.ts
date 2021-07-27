@@ -229,7 +229,13 @@ export class LedgerService {
         let dataToSend = { voucherNumber: model.invoiceNumber, voucherType: model.voucherType };
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + LEDGER_API.DOWNLOAD_INVOICE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), dataToSend).pipe(
+        let url = `${this.config.apiUrl}${LEDGER_API.DOWNLOAD_INVOICE}`
+            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+        if (this._generalService.voucherApiVersion === 2) {
+            url = this._generalService.addVoucherVersion(url, this._generalService.voucherApiVersion);
+        }
+        return this._http.post(url, dataToSend).pipe(
             map((res) => {
                 let data: BaseResponse<string, DownloadLedgerRequest> = res;
                 data.request = model;
