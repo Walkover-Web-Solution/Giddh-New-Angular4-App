@@ -1878,7 +1878,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         if (!this.isCashInvoice) {
             this.customerPlaceHolder = !this.isPurchaseInvoice ? this.localeData?.select_customer : this.localeData?.select_vendor;
-            this.customerNotFoundText = !this.isPurchaseInvoice ? this.localeData?.add_customer : this.localeData?.add_vendor;
+            this.customerNotFoundText = !this.isPurchaseInvoice && !this.isDebitNote ? this.localeData?.add_customer : this.localeData?.add_vendor;
         }
 
         if (this.isProformaInvoice || this.isEstimateInvoice) {
