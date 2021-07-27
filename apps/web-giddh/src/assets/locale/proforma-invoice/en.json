@@ -9,7 +9,6 @@
         "estimate": "Estimate"
     },
     "customer_name": "Customer Name",
-    "vendor_name": "Vendor Name",
     "balance_due": "Balance Due",
     "copy_previous_invoices": "Copy Previous [INVOICE_TYPE] Invoices",
     "customer_details": "Customer Details",

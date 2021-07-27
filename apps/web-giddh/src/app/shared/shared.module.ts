@@ -63,6 +63,9 @@ import { HamburgerMenuComponent } from './header/components/hamburger-menu/hambu
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { GiddhPageLoaderComponent } from './giddh-page-loader/giddh-page-loader.component';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
+
+import { CompanyBranchComponent } from './primary-sidebar/company-branch/company-branch.component';
+
 import localeEn from '@angular/common/locales/en-GB';
 import localeHi from '@angular/common/locales/hi';
 import localeMr from '@angular/common/locales/mr';
@@ -140,6 +143,7 @@ export class PickDateAdapter extends NativeDateAdapter {
         PurchaseSendEmailModalComponent,
         GiddhDaterangepickerComponent,
         GiddhPageLoaderComponent,
+        CompanyBranchComponent,
         PrimarySidebarComponent,
         GenericAsideMenuAccountComponent
     ],
@@ -187,8 +191,7 @@ export class PickDateAdapter extends NativeDateAdapter {
         LedgerDiscountModule,
         ConfirmationModalModule,
         DatepickerWrapperModule,
-        HamburgerMenuModule,
-        ValidateSectionPermissionDirectiveModule
+        HamburgerMenuModule
     ],
     exports: [
         CommonModule,
@@ -237,13 +240,13 @@ export class PickDateAdapter extends NativeDateAdapter {
         PrimarySidebarComponent,
         TranslateDirectiveModule,
         ValidateSectionPermissionDirectiveModule,
+        CompanyBranchComponent,
         AmountFieldComponentModule,
         AccountAddNewDetailsModule,
         LedgerDiscountModule,
         ConfirmationModalModule,
         DatepickerWrapperModule,
         HamburgerMenuModule,
-        ValidateSectionPermissionDirectiveModule,
         GenericAsideMenuAccountComponent
     ],
     entryComponents: [

@@ -13,6 +13,7 @@ import { GstReport } from '../constants/gst.constant';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { SHOW_GST_FILING } from '../../app.constant';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -65,6 +66,8 @@ export class FilingComponent implements OnInit, OnDestroy {
     public getCurrentPeriod$: Observable<any> = of(null);
     /** True, if month filter is selected */
     public isMonthSelected: boolean = true;
+    /** True, if GST filing needs to be shown */
+    public showGstFiling: boolean = SHOW_GST_FILING;
 
     constructor(
         private _route: Router,
@@ -91,7 +94,7 @@ export class FilingComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.breakpointObserver
-        .observe(['(max-width: 768px)'])
+        .observe(['(max-width: 767px)'])
         .pipe(takeUntil(this.destroyed$))
         .subscribe((state: BreakpointState) => {
             this.isMobileScreen = state.matches;

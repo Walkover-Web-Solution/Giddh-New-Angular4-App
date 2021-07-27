@@ -80,7 +80,7 @@
             {{commonLocaleData?.app_reset}}
         </button>
         <div class="pull-right">
-            <div class="btn-group" dropdown>
+            <div class="btn-group" dropdown *ngIf="showSendButton">
                 <button type="button" class="btn btn-default" dropdownToggle>{{localeData?.send_as}}
                     <span class="caret"></span>
                 </button>
@@ -94,7 +94,7 @@
                     </li> -->
                 </ul>
             </div>
-            <button type="button" class="btn btn-success"
+            <button type="button" class="btn btn-success" *ngIf="showDownloadCsv"
                 (click)="createCSV();">{{commonLocaleData?.app_download_csv}}</button>
         </div>
     </div>

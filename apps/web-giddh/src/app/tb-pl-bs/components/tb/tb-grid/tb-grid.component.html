@@ -39,7 +39,7 @@
                             (clickOutside)="clickedOutside($event, searchContainer)">
                             <span [ngStyle]="{'display': showClearSearch ? 'none' : 'flex'}" class="align-items-center">
                                 <span class="pd-r1"><strong>{{localeData?.particular}}</strong></span>
-                                <i class="icon-search2" id="showSearch" (click)="toggleSearch()"></i>
+                                <i class="icon-search" id="showSearch" (click)="toggleSearch()"></i>
                             </span>
                             <span [hidden]="!showClearSearch" class="show-clear-search">
                                 <input type="search" #searchInputEl class="form-control"

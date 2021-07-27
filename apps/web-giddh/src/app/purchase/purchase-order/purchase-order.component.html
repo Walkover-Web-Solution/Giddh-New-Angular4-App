@@ -104,7 +104,7 @@
         </div>
         <div class="table-responsive mr-t15">
             <table class="table basic table-bordered giddh-table on-mobile-view">
-                <thead class="thead-background1" (mouseleave)="showSelectAllItemCheckbox = false">
+                <thead class="thead-background1" (mouseleave)="showSelectAllItemCheckbox = false" [hidden]="!purchaseOrders.totalItems && !purchaseOrderPostRequest?.purchaseOrderNumber && !purchaseOrderPostRequest?.vendorName">
                     <tr (mouseenter)="showSelectAllItemCheckbox = true">
                         <th class="min-wid-check" width="3%">
                             <div class="check-image">
@@ -148,7 +148,7 @@
                                     <i class="icon-search" (click)="showInlineSearch('vendorName', searchBox);"
                                     [hidden]="showVendorNameSearch || purchaseOrderPostRequest.vendorName"></i>
                                 <span
-                                    [hidden]="showVendorNameSearch || purchaseOrderPostRequest.vendorName">{{localeData?.vendor_name}}</span>
+                                    [hidden]="showVendorNameSearch || purchaseOrderPostRequest.vendorName">{{commonLocaleData?.app_vendor_name}}</span>
                             </div>
                             <div class="input-container"
                                 [hidden]="!showVendorNameSearch && !purchaseOrderPostRequest.vendorName">
@@ -211,7 +211,7 @@
                             <a
                                 routerLink="/pages/purchase-management/purchase-orders/preview/{{item.uniqueName}}">{{item.voucherNumber}}</a>
                         </td>
-                        <td [attr.data-title]="localeData?.vendor_name">
+                        <td [attr.data-title]="commonLocaleData?.app_vendor_name">
                             {{item.vendor?.name}}
                         </td>
                         <td [attr.data-title]="localeData?.total_amount" [tooltip]="grandTotalPopupTemplate"
@@ -258,13 +258,6 @@
                         </td>
                     </tr>
                 </tbody>
-                <tbody *ngIf="!isLoading && !purchaseOrders.totalItems">
-                    <tr>
-                        <td colspan="7" class="text-center empty-table">
-                            <h1>{{commonLocaleData?.app_no_record_found}}</h1>
-                        </td>
-                    </tr>
-                </tbody>
                 <tbody *ngIf="isLoading">
                     <tr>
                         <td colspan="8">
@@ -280,6 +273,9 @@
             (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first"
             [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next"
             [lastText]="commonLocaleData?.app_last"></pagination>
+        <div class="no-data" *ngIf="!isLoading && !purchaseOrders.totalItems">
+            <no-data [secondaryMessageClass]="'p-0'"></no-data>
+        </div>
     </div>
     <ng-template #template>
         <div class="purchase-order-bulk-update">
