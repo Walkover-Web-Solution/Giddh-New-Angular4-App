@@ -249,7 +249,7 @@
                                         <span class="payment-updates view-only-field inline" *ngIf="bankAccount?.iciciDetailsResource?.paymentAlerts?.length > 0">
                                             <ng-container *ngFor="let alert of bankAccount?.iciciDetailsResource?.paymentAlerts; let i = index; trackBy: trackByAlertUniqueName;">{{alert?.name}}{{ (i < bankAccount?.iciciDetailsResource?.paymentAlerts?.length - 1) ? ", " : "" }}</ng-container>
                                         </span>
-                                        <span class="mr-l15 action-div">
+                                        <span class="mr-l1 action-div">
                                             <a href="javascript:;" class="icon-edit-pencil" (click)="openEditAccountModal(bankAccount)"></a>
                                         </span>
                                     </div>
