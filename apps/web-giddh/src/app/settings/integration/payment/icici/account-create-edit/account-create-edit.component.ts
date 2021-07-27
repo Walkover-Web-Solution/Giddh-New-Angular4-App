@@ -192,7 +192,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
         let isSelectAllChecked = event.filter(ev => ev.value === this.selectAllRecords);
         let isSelectAllAlreadyChecked = this.paymentAlerts.filter(ev => ev === this.selectAllRecords);
 
-        if (isSelectAllChecked?.length > 0 && isSelectAllAlreadyChecked?.length === 0) {
+        if (isSelectAllChecked?.length > 0 && isSelectAllAlreadyChecked?.length === 0 && !this.isSelectAllChecked(this.selectAllRecords)) {
             this.paymentAlerts = this.paymentAlertsUsersList.map(user => user.value);
         } else if (isSelectAllAlreadyChecked?.length > 0 && isSelectAllChecked?.length === 0) {
             this.paymentAlerts = [];
@@ -265,5 +265,16 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
         } else {
             this.saveNewAccount();
         }
+    }
+
+    /**
+     * True if select all will be show checked
+     *
+     * @param {*} value
+     * @returns {boolean}
+     * @memberof AccountCreateEditComponent
+     */
+    public isSelectAllChecked(value: any): boolean {
+        return ((this.selectAllRecords === value && this.paymentAlerts?.includes(value) && this.paymentAlerts?.length === this.paymentAlertsUsersList?.length) || (this.selectAllRecords === value && !this.paymentAlerts?.includes(value) && this.paymentAlerts?.length === this.paymentAlertsUsersList?.length - 1));
     }
 }
