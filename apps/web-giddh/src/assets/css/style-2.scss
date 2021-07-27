@@ -5067,11 +5067,6 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     display: block;
 }
 
-.parent-group > .stock-grp-list:first-child {
-    max-height: 100vh;
-    min-height: 100vh;
-    overflow: auto;
-}
 
 .dropdown-menu {
     .divider {
@@ -8483,6 +8478,10 @@ body.update-scroll-hidden{
 }
 .transactions-table.table-striped {
     white-space: nowrap;
+}
+.stock-group-parent > ul{
+    height: calc(100vh - 320px);
+    overflow: auto;
 }
 /* responsive  starts here*/
 

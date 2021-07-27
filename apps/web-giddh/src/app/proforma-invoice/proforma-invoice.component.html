@@ -108,7 +108,7 @@
                                     <div class="row">
                                         <!-- region customer name -->
                                         <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
-                                            <label>{{!isPurchaseInvoice ? localeData?.customer_name :
+                                            <label>{{!isPurchaseInvoice && !isDebitNote ? localeData?.customer_name :
                                                 commonLocaleData?.app_vendor_name }}<span class="red-text">*</span></label>
                                         </div>
                                         <!-- endregion -->
@@ -3274,9 +3274,9 @@
                 <!-- endregion -->
 
                 <!-- region submit actions-->
-                <section class="clearfix">
+                <section class="clearfix mr-b5">
 
-                    <section id="actionPane" class="text-center"
+                    <section id="actionPane" class="text-center mr-b2"
                         [ngClass]="{'giddh-overlap-block': invFormData.voucherDetails.customerName }">
 
                         <div class="col-12">
