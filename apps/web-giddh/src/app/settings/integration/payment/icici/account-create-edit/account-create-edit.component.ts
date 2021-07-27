@@ -50,6 +50,8 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
     public amountLimitDurations: IOption[] = [];
     /** True if api call is pending */
     public isLoading: boolean = true;
+    /** True if we should show select all option selected */
+    public shouldShowSelectAllChecked: boolean = false;
 
     constructor(
         private toaster: ToasterService,
@@ -192,7 +194,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
         let isSelectAllChecked = event.filter(ev => ev.value === this.selectAllRecords);
         let isSelectAllAlreadyChecked = this.paymentAlerts.filter(ev => ev === this.selectAllRecords);
 
-        if (isSelectAllChecked?.length > 0 && isSelectAllAlreadyChecked?.length === 0 && !this.isSelectAllChecked(this.selectAllRecords)) {
+        if (isSelectAllChecked?.length > 0 && isSelectAllAlreadyChecked?.length === 0 && !this.shouldShowSelectAllChecked) {
             this.paymentAlerts = this.paymentAlertsUsersList.map(user => user.value);
         } else if (isSelectAllAlreadyChecked?.length > 0 && isSelectAllChecked?.length === 0) {
             this.paymentAlerts = [];
@@ -205,6 +207,8 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
             this.paymentAlerts = [];
             this.forceClearPaymentUpdates$ = observableOf({ status: true });
         }
+
+        this.shouldShowSelectAllChecked = this.isSelectAllChecked(this.selectAllRecords);
     }
 
     /**
