@@ -3529,7 +3529,8 @@
                 <advance-receipt-adjustment-component *ngIf="showAdvanceReceiptAdjust" #advanceReceiptComponent [adjustedVoucherType]="selectedVoucherType"
                     [isUpdateMode]="isUpdateMode" [depositAmount]="depositAmount" [invoiceFormDetails]="invFormData"
                     [isVoucherModule]="true" [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
-                    (closeModelEvent)="closeAdvanceReceiptModal()" (submitClicked)="getAdvanceReceiptAdjustData($event)"
+                    (closeModelEvent)="closeAdvanceReceiptModal()"
+                    (submitClicked)="getAdvanceReceiptAdjustData($event)"
                     [voucherForAdjustment]="voucherForAdjustment">
                 </advance-receipt-adjustment-component>
             </div>

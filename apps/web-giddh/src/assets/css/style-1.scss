@@ -286,7 +286,6 @@ aside-menu-account .container-fluid {
 .pd-r05 {
     padding-right: 5px;
 }
-
 .pd-t1 {
     padding-top: 10px;
 }
@@ -601,7 +600,6 @@ aside-menu-account .container-fluid {
 .text-capitalize {
     text-transform: capitalize;
 }
-
 
 .text-ellipsis {
     text-overflow: ellipsis;
@@ -2624,7 +2622,7 @@ form#groupDetailForm {
                 width: 30% !important;
                 max-width: 30% !important;
                 min-width: 150px;
-                border-style: none !important;
+                border-right: none !important;
             }
         }
         .row {

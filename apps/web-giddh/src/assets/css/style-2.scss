@@ -7621,9 +7621,6 @@ span#HW_badge_cont:nth-child(3) {
 .setting-sidebar-open .desktop-header.menu_open {
     padding-right: 240px !important;
 }
-.gst-sidebar-open .menu_open {
-    padding-left: 300px !important;
-}
 .desktop-header.menu_open {
     padding-left: 60px !important;
 }
@@ -8299,6 +8296,10 @@ body.update-scroll-hidden {
     position: static !important;
     padding-left: 15px !important;
 }
+.e-waybill-tabs.custom-tabs .nav-tabs {
+    position: static !important;
+    padding-left: 15px !important;
+}
 
 body.update-scroll-hidden {
     overflow-y: hidden;
@@ -8331,6 +8332,33 @@ body.update-scroll-hidden {
         &::after{
             display: none;
         }
+    }
+}
+.on-setting-page, .on-user-page{
+    aside-setting{
+        .aside-pane{
+            .back-to-main-slider{
+                display: block !important;
+                padding: 0 12px;
+            }
+            h4{
+                display: none;
+            }
+        }
+        &::after{
+            display: none;
+        }
+    }
+
+}
+.on-setting-page.aside-setting, .on-user-page.aside-setting{
+    #content-wrapper{
+        padding-right: 240px;
+    }
+}
+.gst-sidebar-open.on-setting-page.aside-setting{
+    #content-wrapper{
+        padding-right: 0;
     }
 }
 .company-branch-dropdown{
@@ -8409,6 +8437,9 @@ body.update-scroll-hidden {
         }
     }
 }
+.manage-account-popup.full-screen-modal{
+    z-index: 999991;
+}
 .on-setting-page.aside-setting, .on-user-page.aside-setting{
     #content-wrapper{
         padding-right: 240px;
@@ -8424,6 +8455,21 @@ body.update-scroll-hidden {
 }
 body.update-scroll-hidden{
     overflow-y: hidden;
+}
+.e-waybill-tabs.custom-tabs .nav-tabs{
+    position: static !important;
+    padding-left: 15px !important;
+}
+.sales-register{
+    width: calc(100% - 60px) !important;
+}
+.menu_open .sales-register{
+    width: calc(100% - 240px) !important;
+}
+.wrap-billing-address.clearfix {
+    .bottom-border-only{
+        padding-left: 0 !important;
+    }
 }
 .gst-sidebar-open{
     .daterangepicker.show-calendar{
@@ -8504,32 +8550,20 @@ body.update-scroll-hidden{
         }
         .menu_open{
             #content-wrapper {
-                padding-left: 240px;
+                padding-left: 300px;
             }
             .plan-wrapper{
                 padding-left: 60px;
             }
         }
-     }
-     body.update-scroll-hidden{
-         overflow-y: hidden;
-     }
-     .e-waybill-tabs.custom-tabs .nav-tabs{
+    }
+    .e-waybill-tabs.custom-tabs .nav-tabs{
         position: static !important;
         padding-left: 15px !important;
     }
-    .sales-register{
-        width: calc(100% - 60px) !important;
+    .groups-buttons {
+        height: auto;
     }
-    .menu_open .sales-register{
-        width: calc(100% - 240px) !important;
-    }
-    .wrap-billing-address.clearfix {
-        .bottom-border-only{
-            padding-left: 0 !important;
-        }
-    }
-
     #setting-tab-wrapper .tab-integration .nav-tabs {
         display: inline-block;
         width: 100%;
@@ -8783,6 +8817,7 @@ body.update-scroll-hidden{
         width: 100% !important;
         padding-right: 0 !important;
     }
+
     .bulk-create-table sh-select input,
     .bulk-create-table .mat-form-field-wrapper input,
     .bulk-create-table .mat-form-field-appearance-fill .mat-form-field-flex {
@@ -8984,9 +9019,6 @@ body.update-scroll-hidden{
             .gst-menu-icon{
                 display: none !important;
             }
-        }
-        #content-wrapper{
-            padding-left: 0;
         }
     }
     .gst-sidebar-open .gst-menu-icon{
@@ -9695,6 +9727,15 @@ body.update-scroll-hidden{
 }
 
 @media (max-width: 360px) {
+    .on-setting-page{
+        .hamburger-menu-icon.page-has-heading{
+            li{
+                h4{
+                  min-width: 150px !important;
+                }
+            }
+        }
+    }
     .pagination-sm > li > a,
     .pagination-sm > li > span {
         padding: 5px 8px;
@@ -9899,8 +9940,8 @@ body.update-scroll-hidden{
         display: none;
     }
     .modal-dialog {
-        max-width: 600px !important;
-        margin: 56px auto;
+        max-width: 650px !important;
+        margin: 30px auto;
         padding: 0 10px;
     }
     .modal-dialog.modal-xl {
@@ -10140,3 +10181,41 @@ body.prevent-body-scroll {
 .giddh-no-permissions {
     display: none !important;
 }
+/** Angular material datepicker **/
+.mat-calendar-header {
+    padding: 2px 8px 2px 8px !important;
+    background-color: $chetwode-blue;
+    color: $white;
+}
+.mat-calendar-controls {
+    margin: 0% calc(33% / 7 - 16px) !important;
+}
+.mat-calendar-arrow {
+    border-top-color: $white !important;
+}
+.mat-datepicker-toggle, .mat-datepicker-content .mat-calendar-next-button, .mat-datepicker-content .mat-calendar-previous-button {
+    color: $white !important;
+}
+.mat-calendar-content {
+    padding: 0px 8px 0px 8px !important;
+}
+.mat-calendar-body-label {
+    visibility: hidden !important;
+}
+.mat-calendar-body-label[colspan="7"] {
+    display: none !important;
+}
+.mat-calendar-table-header th {
+    color: $black;
+    padding: 10px 0 10px 0 !important;
+}
+.mat-calendar-table-header th.mat-calendar-table-header-divider {
+    padding: 0px !important;
+}
+.mat-datepicker-content .mat-calendar {
+    height: 320px !important;
+}
+mat-year-view table tr td.mat-calendar-body-label {
+    display: none !important;
+}
+/** Angular material datepicker **/

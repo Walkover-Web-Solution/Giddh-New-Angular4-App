@@ -306,7 +306,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(account => {
                 if(account && !this.isItemAdded) {
                     this.isItemAdded = true;
-
                     // save data to db
                     let item: any = {};
                     item.time = +new Date();
@@ -633,7 +632,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @param {*} [event]
      * @memberof PrimarySidebarComponent
      */
-     public toggleAccountAsidePane(event?: any): void {
+    public toggleAccountAsidePane(event?: any): void {
         if (event) {
             event.preventDefault();
         }

@@ -3,8 +3,6 @@
         [class.inline]="mode==='inline'" (click)="showSearchSuggestion ? show($event) : ''" [class.open]="isOpen"
         tabindex="0" (focus)="showSearchSuggestion ? show($event) : ''" (blur)="hide($event)"
         (keydown)="keydownUp($event)">
-
-
         <!--region multiple-->
         <div *ngIf="multiple" [ngClass]="{'has-item':selectedValues?.length}" class="bdr bg-white">
             <ng-container *ngIf="selectedValues?.length && !showCheckbox">

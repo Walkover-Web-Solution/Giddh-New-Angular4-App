@@ -83,7 +83,7 @@ export class ShSelectMenuComponent implements OnChanges {
                 this.noToggleClick.emit(row);
             }
         } else {
-            if (!row.disabled) {
+            if (!row?.disabled) {
                 this.noToggleClick.emit(row);
             }
         }

@@ -19,9 +19,9 @@
                                             <a href="javascript:void(0)" class="list-item d-flex">
                                                 <span class="entity-icon">
                                                     <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany"
-                                                        tooltip="{{commonLocaleData?.app_branch}}"></i>
+                                                        [tooltip]="commonLocaleData?.app_branch"></i>
                                                     <i class="icon-company-profile pull-right" *ngIf="option.isCompany"
-                                                        tooltip="{{commonLocaleData?.app_company}}"></i>
+                                                        [tooltip]="commonLocaleData?.app_company"></i>
                                                 </span>
                                                 <span class="entity-details">
                                                     <div class="item giddh-limit single-line-clamp">{{ option.label ||
@@ -40,12 +40,13 @@
                         <div class="form-group mr-r15" *ngIf="showLabels">
                             <div class="form-group">
                                 <sh-select [options]="dateOptions" (selected)="dateOptionIsSelected($event)"
-                                    class="company-branch-dropdown" formControlName="selectedDateOption" [isFilterEnabled]="true"
-                                    [placeholder]="commonLocaleData?.app_select_option" [showClear]="false" [ItemHeight]="33"
-                                    width="100%">
+                                    class="company-branch-dropdown" formControlName="selectedDateOption"
+                                    [isFilterEnabled]="true" [placeholder]="commonLocaleData?.app_select_option"
+                                    [showClear]="false" [ItemHeight]="33" width="100%">
                                 </sh-select>
                             </div>
                         </div>
+
                         <div class="form-group mr-r15" *ngIf="filterForm.get('selectedDateOption').value == '0'">
                             <div class="form-group">
                                 <sh-select [options]="financialOptions" formControlName="selectedFinancialYearOption"
@@ -70,8 +71,9 @@
                             <i class="glyphicon glyphicon-triangle-bottom"></i>
                             <sh-select [options]="tags$ | async" name="selectedTag" formControlName="tagName"
                                 [isFilterEnabled]="true" (selected)="onTagSelected($event)"
-                                [placeholder]="commonLocaleData?.app_select_tag" [ItemHeight]="35" [notFoundLink]="false"
-                                (noResultsClicked)="toggleTagsModal()" [showNotFoundLinkAsDefault]="false" [width]="'170px'">
+                                [placeholder]="commonLocaleData?.app_select_tag" [ItemHeight]="35"
+                                [notFoundLink]="false" (noResultsClicked)="toggleTagsModal()"
+                                [showNotFoundLinkAsDefault]="false" [width]="'170px'">
                             </sh-select>
                         </div>
                         <!-- Filter by Tag -->
@@ -85,6 +87,7 @@
                                 <span class="icon-collapse"></span>
                             </a>
                         </div>
+
                     </div>
                 </form>
             </div>
@@ -111,7 +114,6 @@
             </div>
         </div>
     </div>
-
     <!-- for mobile view only -->
     <div class="tb-mobile-header" *ngIf="isMobileScreen">
         <form [formGroup]="filterForm" (submit)="filterData()" class="flex-column financial-select-year"

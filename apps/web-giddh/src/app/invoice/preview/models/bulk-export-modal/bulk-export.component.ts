@@ -66,10 +66,10 @@ export class BulkExportModal implements OnInit, OnDestroy {
         ];
         this.getRecipientEmail();
     }
-    
+
     /**
      * Get company email
-     * 
+     *
      * @memberof BulkExportModal
      */
     public getRecipientEmail(): void {

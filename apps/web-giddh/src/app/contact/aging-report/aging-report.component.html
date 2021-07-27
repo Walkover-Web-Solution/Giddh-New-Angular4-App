@@ -34,15 +34,16 @@
                     </sh-select>
                 </div>
             </div>
-            <form #invoiceForm="ngForm" novalidate class="form-inline input-grp-date-range-picker position-relative">
-                <div class="form-group mr-r15 d-flex flex-fill">
-                    <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
-                        <i class="icon-calender calendar-addon"></i>
-                        <input type="text" name="selectedDateRange"
-                            [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
-                            class="giddh-datepicker date-range-picker border-radius-2" />
-                    </div>
+            <form #invoiceForm="ngForm" novalidate
+            class="form-inline input-grp-date-range-picker position-relative">
+            <div class="form-group mr-r15 d-flex flex-fill">
+                <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
+                    <i class="icon-calender calendar-addon"></i>
+                    <input type="text" name="selectedDateRange"
+                        [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
+                        class="giddh-datepicker date-range-picker border-radius-2" />
                 </div>
+            </div>
             </form>
         </div>
         <div class="d-flex justify-content-between">
@@ -63,7 +64,8 @@
                 </div>
                 <span class="refresh-btn" *ngIf="isAdvanceSearchApplied">
                     <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()">
-                        <i aria-hidden="true" class="icon-refresh" tooltip="{{commonLocaleData?.app_reset_filter}}"></i>
+                        <i aria-hidden="true" class="icon-refresh"
+                            tooltip="{{commonLocaleData?.app_reset_filter}}"></i>
                     </a>
                 </span>
             </div>
@@ -82,7 +84,7 @@
                     <div>
                         <span class="d-inline-flex number-total">
                             <amount-field [amount]="totalFutureDueAmounts" [currencySymbol]="false"
-                                [currencyCode]="false">
+                            [currencyCode]="false">
                             </amount-field>/-
                         </span>
                     </div>
@@ -93,7 +95,8 @@
                     {{commonLocaleData?.app_due}}
                     <div>
                         <span class="d-inline-flex number-total">
-                            <amount-field [amount]="totalDueAmounts" [currencySymbol]="false" [currencyCode]="false">
+                            <amount-field [amount]="totalDueAmounts" [currencySymbol]="false"
+                            [currencyCode]="false">
                             </amount-field>/-
                         </span>
                     </div>
@@ -154,20 +157,17 @@
                 <td></td>
                 <td></td>
                 <td colspan="4" class="text-center top-aging-table-top">
-                    <aging-dropdown [options]="agingDropDownoptions" [localeData]="localeData"  *ngIf="setDueRangeOpen$|async"
-                        [commonLocaleData]="commonLocaleData"></aging-dropdown>
+                    <aging-dropdown [options]="agingDropDownoptions" *ngIf="setDueRangeOpen$|async"
+                        [localeData]="localeData" [commonLocaleData]="commonLocaleData"></aging-dropdown>
                 </td>
                 <td></td>
             </tr>
             <tr>
-                <th #searchCustomerContainer
-                    (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')" class="td-search-box">
+                <th #searchCustomerContainer (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')" class="td-search-box">
                     <div class="d-flex align-items-center">
                         <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showNameSearch, fieldName: 'name',formControl: searchedName,
                                                     title: commonLocaleData?.app_customer_name}"></ng-container>
-                        <ng-container
-                            *ngTemplateOutlet="!showNameSearch ? sortingTemplate : '';context: { $implicit: 'name'}">
-                        </ng-container>
+                        <ng-container *ngTemplateOutlet="!showNameSearch ? sortingTemplate : '';context: { $implicit: 'name'}"></ng-container>
                     </div>
                 </th>
                 <th>
@@ -296,17 +296,16 @@
     <div class="datepicker-modal">
         <div class="modal-body">
             <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions"
-                [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
-                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
-                (rangeClicked)="selectedDate($event)" (datesUpdated)="selectedDate($event)"
-                [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true"
+                [ranges]="datePickerOptions" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
+                [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
+                (rangeClicked)="selectedDate($event)"
+                (datesUpdated)="selectedDate($event)" [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
         </div>
     </div>
 </ng-template>
-<ng-template #searchTemplate let-show let-title="title" let-placeholder="placeholder" let-fieldName="fieldName"
-    let-formControl="formControl">
+<ng-template #searchTemplate let-show let-title="title" let-placeholder="placeholder" let-fieldName="fieldName" let-formControl="formControl">
     <div [hidden]="show">
         <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
         <span> {{ title }}</span>

@@ -57,7 +57,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
         for (let i = 1; i <= 31; i++) {
             this.days.push({ label: i.toString(), value: i.toString() });
         }
-        
+
         this.duration = [
             { label: this.commonLocaleData?.app_duration?.monthly, value: 'MONTHLY' },
             { label: this.commonLocaleData?.app_duration?.quarterly, value: 'QUARTERLY' },
@@ -240,7 +240,6 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             }
         });
     }
-
 
     /**
      * Unsubscribe from all listeners

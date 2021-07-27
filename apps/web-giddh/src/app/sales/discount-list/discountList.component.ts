@@ -24,7 +24,7 @@ import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/Sett
           right: -110px;
           left: auto;
           top: 8px;
-      }
+	}
 
       td {
           vertical-align: middle !important;

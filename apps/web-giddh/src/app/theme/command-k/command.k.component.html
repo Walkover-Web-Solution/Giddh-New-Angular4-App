@@ -107,11 +107,11 @@
                         </div>
                     </div>
                 </span>
-                <input class="search-element" #searchEle type="text" [placeholder]="commonLocaleData?.app_search"
-                    (focus)="handleFocus()" (keydown)="handleKeydown($event)"
-                    (keyup)="initSearch($event, $event.target.value)" (paste)="onPasteInSearch()" />
+                <input class="search-element" #searchEle type="text" [placeholder]="commonLocaleData?.app_search" (focus)="handleFocus()"
+                    (keydown)="handleKeydown($event)" (keyup)="initSearch($event, $event.target.value)"
+                    (paste)="onPasteInSearch()" />
             </div>
             <i class="icon-cross close-navigation" (click)="close()"></i>
-        </div>    
+        </div>
     </ng-template>
 </ng-container>
