@@ -3,12 +3,12 @@
     <div class="clearfix">
         <tabset [ngClass]="{'tab-integration': true, 'hide-payment-tab' : !isIndianCompany}" #integrationTab
             id="tab-integration">
-            <!-- <tab (selectTab)="loadSmsData($event); tabChanged('sms');">
+            <tab (selectTab)="loadSmsData($event); tabChanged('sms');">
                 <ng-template tabHeading>
                     <span class="icon-chat2"></span> {{localeData?.sms?.tab_heading}}
                 </ng-template>
 
-                <div class="box clearfix">
+                <!--<div class="box clearfix">
                     <h3 class="font-20 bold mb-2">{{localeData?.sms?.form_heading}}</h3>
                     <form #msgform="ngForm" (ngSubmit)="onSubmitMsgform(msgform)" class="smsForm">
                         <section ngModelGroup="smsFormObj" #smsFormObjCtrl="ngModelGroup">
@@ -38,77 +38,145 @@
                             </div>
                         </section>
                     </form>
+                </div>-->
+                <div class="row">
+                    <div class="col-md-6">
+                        <form #msgform="ngForm" (ngSubmit)="onSubmitMsgform(msgform)" class="smsForm">
+                            <mat-stepper orientation="vertical" #stepper ngModelGroup="smsFormObj" #smsFormObjCtrl="ngModelGroup">
+                                <mat-step [stepControl]="firstFormGroup">
+                                    <form [formGroup]="firstFormGroup">
+                                        <ng-template matStepLabel>{{localeData?.sms?.auth_key_label}}</ng-template>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>{{localeData?.sms?.auth_key_label}}</mat-label>
+                                            <input matInput [placeholder]="localeData?.sms?.auth_key_placeholder"
+                                                formControlName="firstCtrl" [ngModel]="smsFormObj.authKey" name="authKey" required>
+                                        </mat-form-field>
+                                        <div>
+                                            <button mat-button matStepperNext class="btn btn-success">Next</button>
+                                        </div>
+                                    </form>
+                                </mat-step>
+                                <mat-step [stepControl]="secondFormGroup">
+                                    <form [formGroup]="secondFormGroup">
+                                        <ng-template matStepLabel>{{localeData?.sms?.sender_id_label}}</ng-template>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>{{localeData?.sms?.sender_id_label}}</mat-label>
+                                            <input matInput [placeholder]="localeData?.sms?.sender_id_placeholder"
+                                                formControlName="secondCtrl" [ngModel]="smsFormObj.senderId" name="senderId" required>
+                                        </mat-form-field>
+                                        <div>
+                                            <button mat-button matStepperPrevious class="btn btn-default">Back</button>
+                                            <button mat-button matStepperNext class="btn btn-success"
+                                                [disabled]="smsFormObjCtrl.invalid">{{commonLocaleData?.app_save}}</button>
+                                        </div>
+                                    </form>
+                                </mat-step>
+                                <mat-step>
+                                    <ng-template matStepLabel>Verification Successful</ng-template>
+                                    <div class="mr-t1">
+                                        <button mat-button matStepperPrevious class="btn btn-default">Back</button>
+                                        <button mat-button (click)="stepper.reset()" class="btn btn-danger">Reset</button>
+                                    </div>
+                                </mat-step>
+                            </mat-stepper>
+                        </form>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="no-account">
+                            <a href="" class="cursor-pointer">Not having any account?</a>
+                        </div>
+
+                    </div>
                 </div>
-            </tab> -->
+
+            </tab>
 
             <tab (selectTab)="loadEmailData($event); tabChanged('email');">
                 <ng-template tabHeading>
                     <span class="icon-mail"></span> {{localeData?.email?.tab_heading}}
                 </ng-template>
 
-                <div class="box clearfix mb-2">
-                    <h3 class="section-head">{{localeData?.email?.gmail_integration}}</h3>
-                    <div class="d-flex gmail-integration-message">
-
-                        <ng-container *ngIf="!(isGmailIntegrated$ | async)">
-                            <a *ngIf="!isElectron " class="btn btn-primary"
-                                [href]="gmailAuthCodeUrl$ | async">{{localeData?.email?.connect_gmail}}</a>
-
-                            <a *ngIf="isElectron " class="btn btn-primary" href="javascript:void(0);"
-                                (click)="gmailIntegration('google')">{{localeData?.email?.connect_gmail}}</a>
-                        </ng-container>
-
-                        <h4 *ngIf="(isGmailIntegrated$ | async)" class="text-success align-self-center">
-                            {{localeData?.email?.gmail_connected}}</h4>
-                        <button *ngIf="(isGmailIntegrated$ | async)" class="btn btn-danger mr-l2"
-                            (click)="removegmailintegration.toggle()">{{localeData?.email?.remove_account}}
-                        </button>
+                <div class="row">
+                    <div class="col-md-6">
+                
+                        <form #emailform="ngForm" (ngSubmit)="onSubmitEmailform(emailform)">
+                            <mat-stepper orientation="vertical" #stepper>
+                                <mat-step [stepControl]="firstFormGroup">
+                                    <form [formGroup]="firstFormGroup">
+                                        <ng-template matStepLabel>{{localeData?.email?.gmail_integration}}</ng-template>
+                                        <div class="mr-t1">
+                                            <ng-container *ngIf="!(isGmailIntegrated$ | async)">
+                                                <button mat-button matStepperNext *ngIf="!isElectron " class="btn btn-primary"
+                                                    [href]="gmailAuthCodeUrl$ | async">{{localeData?.email?.connect_gmail}}</button>
+                
+                                                <button mat-button matStepperNext *ngIf="isElectron " class="btn btn-primary"
+                                                    href="javascript:void(0);"
+                                                    (click)="gmailIntegration('google')">{{localeData?.email?.connect_gmail}}</button>
+                                            </ng-container>
+                                            <ng-container *ngIf="(isGmailIntegrated$ | async)">
+                                                <h4 class="text-success align-self-center">
+                                                    {{localeData?.email?.gmail_connected}}</h4>
+                                                <button mat-button matStepperNext class="btn btn-danger mr-l2"
+                                                    (click)="removegmailintegration.toggle()">{{localeData?.email?.remove_account}}
+                                                </button>
+                                            </ng-container>
+                                        </div>
+                                        <!--remove account integration confirmation modal-->
+                                        <div bsModal #removegmailintegration="bs-modal" class="modal fade" role="dialog">
+                                            <div class="modal-dialog modal-xl">
+                                                <div class="modal-content">
+                                                    <confirm-modal [title]="localeData?.email?.remove_account_title"
+                                                        [body]="localeData?.email?.remove_account_message"
+                                                        (cancelCallBack)="removegmailintegration.toggle()"
+                                                        (successCallBack)="removeGmailAccount();removegmailintegration.toggle()">
+                                                    </confirm-modal>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </mat-step>
+                                <mat-step [stepControl]="secondFormGroup">
+                                    <form [formGroup]="secondFormGroup">
+                                        <ng-template matStepLabel>{{localeData?.email?.auth_key_label}}</ng-template>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>{{localeData?.email?.auth_key_label}}</mat-label>
+                                            <input matInput formControlName="secondCtrl"
+                                                [placeholder]="localeData?.email?.auth_key_placeholder" [ngModel]="emailFormObj.authKey"
+                                                name="authKey" required>
+                                        </mat-form-field>
+                                        <div>
+                                            <button mat-button matStepperPrevious class="btn btn-default">Back</button>
+                                            <button mat-button matStepperNext class="btn btn-success">Next</button>
+                                        </div>
+                                    </form>
+                                </mat-step>
+                                <mat-step [stepControl]="thirdFormGroup">
+                                    <form [formGroup]="thirdFormGroup">
+                                        <ng-template matStepLabel>{{localeData?.email?.email_subject_label}}</ng-template>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>{{localeData?.email?.email_subject_label}}</mat-label>
+                                            <input matInput formControlName="thirdCtrl"
+                                                [placeholder]="localeData?.email?.email_subject_placeholder"
+                                                [ngModel]="emailFormObj.subject" name="subject" required>
+                                        </mat-form-field>
+                                        <div>
+                                            <button mat-button matStepperPrevious class="btn btn-default">Back</button>
+                                            <button mat-button matStepperNext class="btn btn-success"
+                                                [disabled]="emailform.invalid">{{commonLocaleData?.app_save}}</button>
+                                        </div>
+                                    </form>
+                                </mat-step>
+                                <mat-step>
+                                    <ng-template matStepLabel>Verification Successful</ng-template>
+                                    <div class="mr-t1">
+                                        <button mat-button matStepperPrevious class="btn btn-default">Back</button>
+                                        <button mat-button class="btn btn-danger" (click)="stepper.reset()">Reset</button>
+                                    </div>
+                                </mat-step>
+                            </mat-stepper>
+                        </form>
+                
                     </div>
-                </div>
-
-                <!--remove account integration confirmation modal-->
-                <div bsModal #removegmailintegration="bs-modal" class="modal fade" role="dialog">
-                    <div class="modal-dialog modal-xl">
-                        <div class="modal-content">
-                            <confirm-modal [title]="localeData?.email?.remove_account_title"
-                                [body]="localeData?.email?.remove_account_message"
-                                (cancelCallBack)="removegmailintegration.toggle()"
-                                (successCallBack)="removeGmailAccount();removegmailintegration.toggle()">
-                            </confirm-modal>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="box clearfix">
-                    <h3 class="font-20 bold mb-2">{{localeData?.email?.form_heading}}</h3>
-                    <form #emailform="ngForm" (ngSubmit)="onSubmitEmailform(emailform)">
-                        <div class="row">
-                            <div class="form-group col-md-5 col-lg-3">
-
-                                <label>{{localeData?.email?.auth_key_label}}</label>
-                                <br>
-                                <input type="text" [placeholder]="localeData?.email?.auth_key_placeholder"
-                                    class="form-control" [ngModel]="emailFormObj.authKey" name="authKey" required />
-
-                            </div>
-                            <div class="form-group col-md-5 col-lg-3">
-                                <label>{{localeData?.email?.email_subject_label}}</label>
-                                <br>
-                                <input type="text" [placeholder]="localeData?.email?.email_subject_placeholder"
-                                    class="form-control" [ngModel]="emailFormObj.subject" name="subject" required />
-                            </div>
-                            <div class="form-group col-md-2 col-lg-3 empty-label">
-
-                                <label>&nbsp;</label>
-                                <br>
-                                <button type="submit" class="btn btn-success mr-r1"
-                                    [disabled]="emailform.invalid">{{commonLocaleData?.app_save}}</button>
-
-                            </div>
-                        </div>
-
-                    </form>
                 </div>
 
             </tab>
@@ -335,4 +403,6 @@
             </div>
         </div>
     </div>
+
+
 </ng-container>

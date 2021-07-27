@@ -38,6 +38,8 @@ import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { SettingIntegrationPaymentModule } from './integration/payment/setting.integration.payment.module';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatInputModule } from '@angular/material/input';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -85,13 +87,16 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         TaxSidebarModule,
         ReplacePipeModule,
         NoDataModule,
-        SettingIntegrationPaymentModule
+        SettingIntegrationPaymentModule,
+        MatStepperModule,
+        MatInputModule
     ],
     providers: [
         {
             provide: PERFECT_SCROLLBAR_CONFIG,
             useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-        }
+        },
+        MatStepperModule
     ]
 })
 
