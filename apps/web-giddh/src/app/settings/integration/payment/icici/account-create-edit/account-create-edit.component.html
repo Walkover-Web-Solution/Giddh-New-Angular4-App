@@ -46,7 +46,7 @@
                             <ng-container>
                                 <a href="javascript:void(0)" class="list-item d-flex">
                                     <span><input type="checkbox"
-                                            [checked]="((selectAllRecords !== option.value && paymentAlerts?.includes(option.value)) || selectAllRecords === option.value && (paymentAlerts?.length === paymentAlertsUsersList?.length || paymentAlerts?.length === paymentAlertsUsersList?.length - 1))"
+                                            [checked]="(selectAllRecords !== option.value && paymentAlerts?.includes(option.value)) || (option.value === selectAllRecords && shouldShowSelectAllChecked)"
                                             [value]="option.value"></span>&nbsp;
                                     <span>
                                         <div class="item">{{ option.label }}</div>
