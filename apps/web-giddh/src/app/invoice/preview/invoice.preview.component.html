@@ -171,7 +171,7 @@
                 <!-- For desktop screen sizes ends -->
                 <div class="mobile-search">
                     <!-- Invoice E-way bill, export to excel for a single selected item along with
-                    New Sales Invoice, Cash Invoice, Credit Note and Debit Note -->
+                        New Sales Invoice, Cash Invoice, Credit Note and Debit Note -->
                     <div class="row">
                         <div
                             class="col-12 d-flex w-100 align-items-center pb-2 justify-content-between export-new-invoice">
@@ -363,7 +363,7 @@
                 <!-- For mobile screen sizes ends -->
                 <div class="invoice-preview table-responsive">
                     <table
-                        class="table basic table-bordered mr-t15 pd-t15 invoice-table desktop-table giddh-table on-mobile-view">
+                        class="table basic table-bordered pd-t15 invoice-table desktop-table giddh-table on-mobile-view">
                         <!--sales-->
                         <thead class="thead-background1"
                             *ngIf="(selectedVoucher === 'sales' || selectedVoucher === 'purchase') && (voucherData?.items?.length || invoiceSearchRequest?.q || advanceSearchFilter?.purchaseOrderNumber)">
@@ -781,16 +781,26 @@
                                 <td [attr.data-title]="commonLocaleData?.app_amount"
                                     *ngIf="(selectedVoucher === 'credit note' || selectedVoucher === 'debit note')"
                                     class="text-right" [tooltip]="grandTotalPopupTemplate">
-                                    {{item.accountCurrencySymbol}}
-                                    {{item.grandTotal?.amountForAccount | giddhCurrency}}</td>
+                                    <span class="d-flex justify-content-md-end justify-content-start">
+                                        <amount-field [amount]="item.grandTotal?.amountForAccount"
+                                            [currencySymbol]="item.accountCurrencySymbol"
+                                            [currencyCode]="item.account?.currency?.code">
+                                        </amount-field>
+                                    </span>
+                                </td>
                                 <ng-template #grandTotalPopupTemplate><span
                                         [innerHTML]="item.grandTotalTooltipText"></span>
                                 </ng-template>
-
                                 <!-- Total Amount without multicurrency -->
                                 <td [attr.data-title]="commonLocaleData?.app_amount"
                                     *ngIf="!(selectedVoucher === 'credit note' || selectedVoucher === 'debit note')"
-                                    class="text-right">{{item.grandTotal?.amountForAccount | giddhCurrency}}</td>
+                                    class="text-right">
+                                    <span class="d-flex justify-content-md-end justify-content-start">
+                                        <amount-field [amount]="item.grandTotal?.amountForAccount"
+                                            [currencySymbol]="false" [currencyCode]="false">
+                                        </amount-field>
+                                    </span>
+                                </td>
                                 <!-- E-invoice status -->
                                 <td *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'sales')"
                                     [attr.data-title]="localeData?.e_invoice_status" width="10%">

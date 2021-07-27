@@ -838,25 +838,6 @@ export class GeneralService {
     }
 
     /**
-     * This will give multi-lingual current voucher label
-     *
-    * @param {string} voucherCode Voucher code
-    * @param {*} commonLocaleData Global context of multi-lingual keys
-    * @return {*} {string} Multi-lingual current voucher label
-    * @memberof GeneralService
-    */
-    public getCurrentVoucherLabel(voucherCode: string, commonLocaleData: any): string {
-        switch(voucherCode) {
-            case AdjustedVoucherType.Sales: case AdjustedVoucherType.SalesInvoice: return commonLocaleData?.app_voucher_types.sales;
-            case AdjustedVoucherType.Purchase: return commonLocaleData?.app_voucher_types.purchase;
-            case AdjustedVoucherType.CreditNote: return commonLocaleData?.app_voucher_types.credit_note;
-            case AdjustedVoucherType.DebitNote: return commonLocaleData?.app_voucher_types.debit_note;
-            case AdjustedVoucherType.Payment: return commonLocaleData?.app_voucher_types.payment;
-            default: return '';
-        }
-    }
-    
-    /**
      * This will sort branches by alias
      *
      * @param {*} branchA
@@ -887,6 +868,25 @@ export class GeneralService {
             return -1; //to make alphanumeric sort first return 1 here
         } else {
             return branchAInt > branchBInt ? 1 : -1;
+        }
+    }
+
+    /**
+     * This will give multi-lingual current voucher label
+     *
+     * @param {string} voucherCode Voucher code
+     * @param {*} commonLocaleData Global context of multi-lingual keys
+     * @return {string} Multi-lingual current voucher label
+     * @memberof GeneralService
+     */
+     public getCurrentVoucherLabel(voucherCode: string, commonLocaleData: any): string {
+        switch(voucherCode) {
+            case AdjustedVoucherType.Sales: case AdjustedVoucherType.SalesInvoice: return commonLocaleData?.app_voucher_types.sales;
+            case AdjustedVoucherType.Purchase: return commonLocaleData?.app_voucher_types.purchase;
+            case AdjustedVoucherType.CreditNote: return commonLocaleData?.app_voucher_types.credit_note;
+            case AdjustedVoucherType.DebitNote: return commonLocaleData?.app_voucher_types.debit_note;
+            case AdjustedVoucherType.Payment: return commonLocaleData?.app_voucher_types.payment;
+            default: return '';
         }
     }
 

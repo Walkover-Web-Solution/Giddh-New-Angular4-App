@@ -30,6 +30,7 @@ import HeaderPage from "./pageObjects/HeaderPage";
 import DashboardPage from "./pageObjects/DashboardPage";
 import GlobalSearchPage from "./pageObjects/GlobalSearchPage";
 import TrialBalancePage from "./pageObjects/TrialBalancePage";
+import PLAndBSPage from "./pageObjects/PLAndBSPage";
 import LedgerPage from "./pageObjects/LedgerPage";
 import SignUpPage from "./pageObjects/SignUpPage";
 import CreateNewCompanyPage from "./pageObjects/CreateNewCompanyPage";
@@ -39,6 +40,7 @@ const headerPage = new HeaderPage()
 const ledgerPage = new LedgerPage()
 const globalSearchPage = new GlobalSearchPage()
 const trialBalancePage = new TrialBalancePage()
+const plAndBSPage = new PLAndBSPage();
 const createNewCompanyPage = new CreateNewCompanyPage();
 
 
@@ -72,12 +74,11 @@ Cypress.Commands.add("loginWithEmail", (email, password) => {
 Cypress.Commands.add("globalSearch", (elementPath, searchValue, expectedText) => {
     cy.get('body').type('{ctrl}g', { force: true })
     if (globalSearchPage.getGlobalSearch(90000).should('be.visible')) {
-        // dashboardPage.getTotalOverDues(60000).should('be.visible')
-        // cy.visit(Cypress.env('dashBoardUrl'))
         headerPage.clickGiddhLogoIcon().then(($ele1) => {
             // headerPage.clickGiddhLogoIcon().type('{ctrl}g')
             globalSearchPage.typeGlobalSearch(searchValue)
             globalSearchPage.selectFirstValueAfterSearch().then(($btn) => {
+                cy.wait(2000)
                 $btn.click();
                 cy.wait(5000)
                 cy.get(elementPath, { timeout: 50000 }).should('be.visible')
@@ -125,6 +126,7 @@ Cypress.Commands.add("createLedgerWithTaxes", (accountName, accountElementPath, 
     //cy.contains(accountElementPath).click();
     //ledgerPage.selectSalesAccount().click({force : true})
     cy.get('body').type('{pageup}')
+    cy.scrollTo(10, 10);
     cy.get(accountElementPath).scrollIntoView({ easing: 'linear' }).should('be.visible')
     cy.get(accountElementPath).click({ force: true })
     ledgerPage.selectTax()

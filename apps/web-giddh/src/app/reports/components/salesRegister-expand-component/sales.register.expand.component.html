@@ -45,8 +45,8 @@
             </div>
             <div class="dis middle">
                 <div class="advance-icon cursor-pointer align-items-center btn-group mr-0"
-                #filterDropDownList="bs-dropdown" dropdown [autoClose]="false"
-                (clickOutside)="hideListItems()" [placement]="'right'">
+                    #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="hideListItems()"
+                    [placement]="'right'">
                     <i dropdownToggle class="icon-options"></i>
                     <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" [style.width.px]="'200'">
                         <li role="menuitem">
@@ -94,16 +94,17 @@
         <div class="d-flex justify-content-between w-100 overflow-x-auto" *ngIf="SalesRegisteDetailedItems">
             <div class="total-details-box mr-r05 count-box">
                 <h5>
-                {{localeData?.transaction_count}}
+                    {{localeData?.transaction_count}}
                     <div>
                         <span class="number-total">
-                        {{ (salesRegisteDetailedResponse$ | async).totalItems }}
+                            {{ (salesRegisteDetailedResponse$ | async).totalItems }}
                         </span>
                     </div>
                 </h5>
             </div>
             <ng-container>
-                <div class="total-details-box mr-r05 border-none opening-box" *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal">
+                <div class="total-details-box mr-r05 border-none opening-box"
+                    *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal">
                     <h5>
                         {{commonLocaleData?.app_sales}}
                         <div>
@@ -115,7 +116,8 @@
                         </div>
                     </h5>
                 </div>
-                <div class="total-details-box mr-r05 border-none sales-purchase" *ngIf="(salesRegisteDetailedResponse$ | async)?.debitTotal">
+                <div class="total-details-box mr-r05 border-none sales-purchase"
+                    *ngIf="(salesRegisteDetailedResponse$ | async)?.debitTotal">
                     <h5>
                         {{commonLocaleData?.app_return}}
                         <div>
@@ -128,7 +130,8 @@
                         </div>
                     </h5>
                 </div>
-                <div class="total-details-box mr-r05 border-none payment-receipt" *ngIf="showFieldFilter.discount && (salesRegisteDetailedResponse$ | async)?.discountTotal">
+                <div class="total-details-box mr-r05 border-none payment-receipt"
+                    *ngIf="showFieldFilter.discount && (salesRegisteDetailedResponse$ | async)?.discountTotal">
                     <h5>
                         {{commonLocaleData?.app_discount}}
                         <div>
@@ -141,7 +144,8 @@
                         </div>
                     </h5>
                 </div>
-                <div class="total-details-box mr-r05 border-none due-box" *ngIf="isTcsTdsApplicable && (salesRegisteDetailedResponse$ | async).tcsTotal">
+                <div class="total-details-box mr-r05 border-none due-box"
+                    *ngIf="isTcsTdsApplicable && (salesRegisteDetailedResponse$ | async).tcsTotal">
                     <h5>
                         {{commonLocaleData?.app_tcs}}
                         <div>
@@ -153,7 +157,8 @@
                         </div>
                     </h5>
                 </div>
-                <div class="total-details-box mr-r05 border-none due-box" *ngIf="isTcsTdsApplicable && (salesRegisteDetailedResponse$ | async).tdsTotal">
+                <div class="total-details-box mr-r05 border-none due-box"
+                    *ngIf="isTcsTdsApplicable && (salesRegisteDetailedResponse$ | async).tdsTotal">
                     <h5>
                         {{commonLocaleData?.app_tds}}
                         <div>
@@ -165,7 +170,8 @@
                         </div>
                     </h5>
                 </div>
-                <div class="total-details-box mr-r05 border-none due-box" *ngIf="showFieldFilter.tax && (salesRegisteDetailedResponse$ | async).taxTotal">
+                <div class="total-details-box mr-r05 border-none due-box"
+                    *ngIf="showFieldFilter.tax && (salesRegisteDetailedResponse$ | async).taxTotal">
                     <h5>
                         {{commonLocaleData?.app_tax}}
                         <div>

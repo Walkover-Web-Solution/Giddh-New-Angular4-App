@@ -148,7 +148,7 @@
                                     <i class="icon-search" (click)="showInlineSearch('vendorName', searchBox);"
                                     [hidden]="showVendorNameSearch || purchaseOrderPostRequest.vendorName"></i>
                                 <span
-                                    [hidden]="showVendorNameSearch || purchaseOrderPostRequest.vendorName">{{localeData?.vendor_name}}</span>
+                                    [hidden]="showVendorNameSearch || purchaseOrderPostRequest.vendorName">{{commonLocaleData?.app_vendor_name}}</span>
                             </div>
                             <div class="input-container"
                                 [hidden]="!showVendorNameSearch && !purchaseOrderPostRequest.vendorName">
@@ -211,7 +211,7 @@
                             <a
                                 routerLink="/pages/purchase-management/purchase-orders/preview/{{item.uniqueName}}">{{item.voucherNumber}}</a>
                         </td>
-                        <td [attr.data-title]="localeData?.vendor_name">
+                        <td [attr.data-title]="commonLocaleData?.app_vendor_name">
                             {{item.vendor?.name}}
                         </td>
                         <td [attr.data-title]="localeData?.total_amount" [tooltip]="grandTotalPopupTemplate"

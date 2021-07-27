@@ -193,8 +193,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.showBankDetail = true;
         }
 
-        let initialCall = false;
-
         this.initializeNewForm();
         this.activeGroup$.subscribe(response => {
             if (response) {
@@ -208,11 +206,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         this.isHsnSacEnabledAcc = (response.parentGroups) ? HSN_SAC_PARENT_GROUPS.includes(response.parentGroups[0]?.uniqueName) : false;
                         this.isParentDebtorCreditor(response.uniqueName);
                     }
-                }
-            } else {
-                if(this.fromCommandK && !initialCall && this.activeGroupUniqueName) {
-                    initialCall = true;
-                    this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
                 }
             }
         });
@@ -277,6 +270,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
         this.getCurrency();
         this.isStateRequired = this.checkActiveGroupCountry();
+
+        if(this.fromCommandK && this.activeGroupUniqueName) {
+            this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
+        }
     }
 
     public ngAfterViewInit() {
@@ -664,25 +661,27 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.isShowBankDetails(activeParentgroup);
             this.isDebtorCreditor = true;
 
-            if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
-                this.staticTabs.tabs[0].active = true;
-            }
+            setTimeout(() => {
+                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
+                    this.staticTabs.tabs[0].active = true;
+                    this.changeDetectorRef.detectChanges();
+                }
+            }, 50);
 
-            if (accountAddress.controls.length === 0) {
+            if (accountAddress.controls.length === 0 || !accountAddress.length) {
                 this.addBlankGstForm();
             }
-            if (!accountAddress.length) {
-                this.addBlankGstForm();
-            }
-
         } else {
             this.isDebtorCreditor = false;
             this.showBankDetail = false;
             this.addAccountForm.get('addresses').reset();
 
-            if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
-                this.staticTabs.tabs[0].active = false;
-            }
+            setTimeout(() => {
+                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
+                    this.staticTabs.tabs[1].active = true;
+                    this.changeDetectorRef.detectChanges();
+                }
+            }, 50);
         }
         this.changeDetectorRef.detectChanges();
     }
@@ -1191,6 +1190,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     } else {
                         this.GSTIN_OR_TRN = '';
                     }
+
+                    this.changeDetectorRef.detectChanges();
                 }
             });
         }

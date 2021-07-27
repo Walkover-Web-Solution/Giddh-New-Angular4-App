@@ -73,7 +73,7 @@
                                         <input type="search" id="ledger-search" [(ngModel)]="searchText" name="searchText"
                                             class="form-control" (keyup)="search(searchText)"
                                             [placeholder]="localeData?.search_ledger" #ledgerSearchTerms>
-                                        <i class="icon-search1 pos-abs"></i>
+                                        <i class="icon-search pos-abs"></i>
                                     </span>
                                     <a class="cp mr-l1 clear-filter-btn"
                                         *ngIf="(searchText || isAdvanceSearchImplemented) && isMobileScreen"
@@ -1911,6 +1911,7 @@
                     </div>
                 </div>
             </div>
+            <!-- Bulk action confirmation popup -->
         </ng-container>
     </div>
 </ng-container>

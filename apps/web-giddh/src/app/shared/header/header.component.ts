@@ -1770,12 +1770,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.currentPageUrl?.indexOf('pages/invoice/ewaybill') > -1);
     }
 
-    /**
+   /**
     * Opens the GST side menu in responsive mode
     *
     * @memberof HeaderComponent
     */
-    public openGstSideMenu(): void {
+   public openGstSideMenu(): void {
         this.isGstSideMenuOpened = !this.isGstSideMenuOpened;
         this.store.dispatch(this._generalActions.openGstSideMenu(this.isGstSideMenuOpened));
     }

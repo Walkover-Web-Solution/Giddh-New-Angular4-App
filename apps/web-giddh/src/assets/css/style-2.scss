@@ -201,59 +201,7 @@ body {
 .border-none {
     border: none !important;
 }
-.pd-1 {
-    padding: 10px !important;
-}
 
-.pd-2 {
-    padding: 20px !important;
-}
-
-.pd-3 {
-    padding: 30px !important;
-}
-
-.pd-4 {
-    padding: 40px !important;
-}
-
-.pd-r15 {
-    padding-right: 15px;
-}
-
-.pd-l15 {
-    padding-left: 15px;
-}
-
-.pd-t15 {
-    padding-top: 15px;
-}
-.pd-b15 {
-    padding-bottom: 15px;
-}
-
-.bt-1 {
-    border-top: 1px solid $gainsboro;
-}
-
-.br-1 {
-    border-right: 1px solid $gainsboro;
-}
-
-.bb-1 {
-    border-bottom: 1px solid $gainsboro;
-}
-
-.bl-1 {
-    border-left: 1px solid $gainsboro;
-}
-
-.border-none {
-    border: none !important;
-}
-.border-bottom {
-    border-bottom-color: $gainsboro;
-}
 /* end MDB tweaks */
 
 .relative {
@@ -539,27 +487,11 @@ input {
     }
 }
 
-.mr-t15 {
-    margin-top: 15px;
-}
-
-.mr-b15 {
-    margin-bottom: 15px;
-}
-
-.mr-l15 {
-    margin-left: 15px;
-}
-
-.mr-r15 {
-    margin-right: 15px !important;
-}
-
 .company-list button.btn-link {
     font-size: 13px;
     color: $chetwode-blue !important;
     display: block;
-    padding: 7px 10px;
+    padding: 7px 10px !important;
     display: block;
     width: 100%;
     text-align: left;
@@ -5135,11 +5067,6 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     display: block;
 }
 
-.parent-group > .stock-grp-list:first-child {
-    max-height: 100vh;
-    min-height: 100vh;
-    overflow: auto;
-}
 
 .dropdown-menu {
     .divider {
@@ -6919,7 +6846,6 @@ ul.dropdown-menu p.lead.pd {
     height: 36px !important;
     border-right: none !important;
     color: $nobel !important;
-    cursor: pointer;
 }
 
 .date-advance-search .input-group input.form-control {
@@ -6992,8 +6918,9 @@ button.btn.btn-filter {
     min-width: 190px !important;
 }
 
-.td-search-box div i.icon-search:hover {
-    color: $deep-sky-blue !important;
+.td-search-box div i.icon-search {
+    color: $midnight-blue !important;
+    font-size: 16px;
 }
 
 .mobileCode .menu {
@@ -8391,12 +8318,19 @@ body.update-scroll-hidden {
         }
     }
 }
-.nav-left-bar{
-    &.width-60  {
-        .sidebar-collapse {
-            .sub-menu{
-                display: none !important;
+.on-setting-page, .on-user-page{
+    aside-setting{
+        .aside-pane{
+            .back-to-main-slider{
+                display: block !important;
+                padding: 0 12px;
             }
+            h4{
+                display: none;
+            }
+        }
+        &::after{
+            display: none;
         }
     }
 }
@@ -8500,7 +8434,20 @@ body.update-scroll-hidden {
             ul.nav.nav-tabs{
                 display: none;
             }
-        } 
+        }
+    }
+}
+.manage-account-popup.full-screen-modal{
+    z-index: 999991;
+}
+.on-setting-page.aside-setting, .on-user-page.aside-setting{
+    #content-wrapper{
+        padding-right: 240px;
+    }
+}
+.gst-sidebar-open.on-setting-page.aside-setting{
+    #content-wrapper{
+        padding-right: 0;
     }
 }
 .manage-account-popup.full-screen-modal{
@@ -8508,6 +8455,21 @@ body.update-scroll-hidden {
 }
 body.update-scroll-hidden{
     overflow-y: hidden;
+}
+.e-waybill-tabs.custom-tabs .nav-tabs{
+    position: static !important;
+    padding-left: 15px !important;
+}
+.sales-register{
+    width: calc(100% - 60px) !important;
+}
+.menu_open .sales-register{
+    width: calc(100% - 240px) !important;
+}
+.wrap-billing-address.clearfix {
+    .bottom-border-only{
+        padding-left: 0 !important;
+    }
 }
 .gst-sidebar-open{
     .daterangepicker.show-calendar{
@@ -8519,6 +8481,10 @@ body.update-scroll-hidden{
 }
 .trial-balance-viewport {
     height: 500px;
+}
+.stock-group-parent > ul{
+    height: calc(100vh - 320px);
+    overflow: auto;
 }
 /* responsive  starts here*/
 
@@ -9115,7 +9081,7 @@ body.update-scroll-hidden{
     #setting-tab-wrapper .purchase-setting-tab.tab-integration .nav-tabs {
         display: inline-block;
     }
-    .e-waybill-tabs.custom-tabs .nav-tabs{
+    .e-waybill-tabs.custom-tabs .nav-tabs {
         position: fixed !important;
     }
     .invoice-modal-content {
@@ -9431,7 +9397,7 @@ body.update-scroll-hidden{
         margin-top: 0px;
     }
     .custom-tabs.hide-header .top-bar {
-        margin-top: 28x;
+        margin-top: 28px;
     }
     .invoice-control .nav.nav-tabs {
         padding: 0 0 0 15px !important;
@@ -10218,7 +10184,6 @@ body.prevent-body-scroll {
 .giddh-no-permissions {
     display: none !important;
 }
-
 /** Angular material datepicker **/
 .mat-calendar-header {
     padding: 2px 8px 2px 8px !important;

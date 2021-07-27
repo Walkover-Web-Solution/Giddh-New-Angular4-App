@@ -45,7 +45,7 @@
     }
     .user-name-email {
         width: 40%;
-        color: $night-rider;
+        color: $night-rider !important;
         display: flex;
         white-space: normal;
         word-break: break-all;

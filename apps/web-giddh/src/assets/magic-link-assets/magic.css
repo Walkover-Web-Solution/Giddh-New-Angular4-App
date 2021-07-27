@@ -1428,3 +1428,7 @@ div#transaction_table {
 #debit td {
     border-right: 0;
 }
+#debit td, #credit td{
+    white-space: normal;
+    word-break: break-all;
+}
