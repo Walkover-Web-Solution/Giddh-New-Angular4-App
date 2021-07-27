@@ -356,7 +356,7 @@
                 {
                     "label": "खोज",
                     "link": "/pages/search",
-                    "icon": "icon-search-new",
+                    "icon": "icon-search",
                     "description": "समूह का चयन करें और समय अवधि खोजें"
                 }
             ]
@@ -388,6 +388,6 @@
     "companies": "कंपनिया",
     "refresh_manually": "रिफ्रेश करें",
     "branches": "शाखाएं",
-    "company_consolidated_data": "समेकित डेटा",
+    "company_consolidated_data": "समेकित",
     "no_branches_found": "कोई शाखा उपलब्ध नहीं"
 }

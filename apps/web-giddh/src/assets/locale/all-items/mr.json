@@ -356,7 +356,7 @@
                 {
                     "label": "शोधा",
                     "link": "/pages/search",
-                    "icon": "icon-search-new",
+                    "icon": "icon-search",
                     "description": "गट निवडा आणि कालावधीसाठी शोधा"
                 }
             ]
@@ -387,6 +387,6 @@
     "companies": "कंपन्या",
     "refresh_manually": "रीफ्रेश",
     "branches": "शाखा",
-    "company_consolidated_data": "एकत्रित डेटा",
+    "company_consolidated_data": "एकत्रित",
     "no_branches_found": "शाखा उपलब्ध नाहीत"
 }

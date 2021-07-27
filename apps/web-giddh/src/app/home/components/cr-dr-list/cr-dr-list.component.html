@@ -24,7 +24,7 @@
             <div class="top-five-cr-dr-table">
                 <div class="table-responsive debtors-table">
                     <table class="table basic giddh-table on-mobile-view">
-                        <thead>
+                        <thead [hidden]="!drAccounts?.length">
                             <th width="30%">{{localeData?.debtors}}</th>
                             <th width="10%">{{localeData?.invoiced_on}}</th>
                             <th width="20%" class="text-right">{{localeData?.bill_amount}}</th>
@@ -39,17 +39,24 @@
                                         *ngIf="!account.latestInvoiceDate">-</span></td>
                                 <td [attr.data-title]="localeData?.bill_amount" class="text-right"
                                     *ngIf="account.latestBillAmount">
-                                    {{account.latestBillAmount.symbol}} {{account.latestBillAmount.amount |
-                                    giddhCurrency}}</td>
+                                    <span class="d-inline-flex">
+                                        <amount-field [amount]="account.latestBillAmount.amount" [currencySymbol]="account.latestBillAmount.symbol"
+                                            [currencyCode]="activeCompany.baseCurrency">
+                                        </amount-field>
+                                    </span>
+                                </td>
                                 <td [attr.data-title]="commonLocaleData?.app_due_as_on" class="text-right"
                                     *ngIf="!account.latestBillAmount">-</td>
                                 <td [attr.data-title]="commonLocaleData?.app_due_as_on" class="text-right">
-                                    {{activeCompany.baseCurrencySymbol}} {{ account.closingBalance.amount |
-                                    giddhCurrency }}</td>
+                                    <span class="d-inline-flex">
+                                        <amount-field [amount]="account.closingBalance.amount" [currencySymbol]="activeCompany.baseCurrencySymbol" [currencyCode]="activeCompany.baseCurrency">
+                                        </amount-field>
+                                    </span>
+                                </td>
                             </tr>
                             <tr *ngIf="drAccounts.length === 0">
                                 <td colspan="4" class="no-entries">
-                                    <h1>{{commonLocaleData?.app_no_record_found}}</h1>
+                                    <no-data [secondaryMessageClass]="'p-0'"></no-data>
                                 </td>
                             </tr>
                         </tbody>
@@ -64,7 +71,7 @@
                 </div>
                 <div class="table-responsive creditors-table">
                     <table class="table basic giddh-table on-mobile-view">
-                        <thead>
+                        <thead [hidden]="!crAccounts?.length">
                             <th width="30%">{{localeData?.creditors}}</th>
                             <th width="10%">{{localeData?.invoiced_on}}</th>
                             <th width="20%" class="text-right">{{localeData?.bill_amount}}</th>
@@ -79,13 +86,25 @@
                                         *ngIf="!account.latestInvoiceDate">-</span></td>
                                 <td [attr.data-title]="localeData?.bill_amount" class="text-right"
                                     *ngIf="account.latestBillAmount">
-                                    {{account.latestBillAmount.symbol}} {{account.latestBillAmount.amount |
-                                    giddhCurrency}}</td>
+                                    <span class="d-inline-flex">
+                                        <amount-field [amount]="account.latestBillAmount.amount" [currencySymbol]="account.latestBillAmount.symbol" [currencyCode]="activeCompany.baseCurrency">
+                                        </amount-field>
+                                    </span>
+                                </td>
                                 <td [attr.data-title]="commonLocaleData?.app_due_as_on" class="text-right"
                                     *ngIf="!account.latestBillAmount">-</td>
                                 <td [attr.data-title]="commonLocaleData?.app_due_as_on" class="text-right">
-                                    {{activeCompany.baseCurrencySymbol}} {{ account.closingBalance.amount |
-                                    giddhCurrency }}</td>
+                                    <span class="d-inline-flex">
+                                        <amount-field [amount]="account.closingBalance.amount"
+                                        [currencySymbol]="activeCompany.baseCurrencySymbol"  [currencyCode]="activeCompany.baseCurrency">
+                                        </amount-field>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr *ngIf="crAccounts?.length === 0">
+                                <td colspan="4" class="no-entries">
+                                    <no-data [secondaryMessageClass]="'p-0'"></no-data>
+                                </td>
                             </tr>
                         </tbody>
                         <tbody *ngIf="isLoading">

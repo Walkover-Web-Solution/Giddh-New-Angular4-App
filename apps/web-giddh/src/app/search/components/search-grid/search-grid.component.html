@@ -9,11 +9,11 @@
     <section [hidden]="!(!(searchLoader$ | async) && (search$ | async))">
         <search-filter [localeData]="localeData" [commonLocaleData]="commonLocaleData"
             (isFiltered)="resetFilters($event)" (createCsv)="createCSV($event)" (searchQuery)="filterData($event)"
-            (openEmailDialog)="openEmailDialog()" (openSmsDialog)="openSmsDialog()">
+            (openEmailDialog)="openEmailDialog()" (openSmsDialog)="openSmsDialog()" [showSendButton]="!!selectedItems?.length" [showDownloadCsv]="!!(searchResponseFiltered$ | async)?.length">
         </search-filter>
         <div class="table-responsive">
             <table class="table table-bordered basic giddh-table on-mobile-view">
-                <thead>
+                <thead [hidden]="!(searchResponseFiltered$ | async)?.length">
                     <tr>
                         <th [style.width.px]="25">
                             <div>
@@ -135,19 +135,17 @@
                             </span>
                         </td>
                     </tr>
-                    <tr *ngIf="!(searchResponseFiltered$ | async)?.length">
-                        <td colspan="9" class="text-center empty-table">
-                            <h1>{{commonLocaleData?.app_no_record_found}}</h1>
-                        </td>
-                    </tr>
                 </tbody>
             </table>
         </div>
-        <div class="d-flex align-items-center justify-content-center">
+        <div class="d-flex align-items-center justify-content-center" [hidden]="!(searchResponseFiltered$ | async)?.length">
             <pagination [totalItems]="totalPages" [(ngModel)]="page" [maxSize]="5" class="pagination-sm"
                 [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"
                 [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous"
                 [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last"></pagination>
+        </div>
+        <div class="no-data" *ngIf="!(searchResponseFiltered$ | async)?.length">
+            <no-data [secondaryMessageClass]="'p-0'"></no-data>
         </div>
     </section>
     <!-- end pd div -->

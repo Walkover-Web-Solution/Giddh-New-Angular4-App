@@ -18,16 +18,16 @@
         &.full-width-input-group {
             border: none;
             width: 228px;
-            .icon-search1 {
+            .icon-search {
                 border: none;
             }
-            .icon-search1 {
+            .icon-search {
                 border-right: 1px solid $gainsboro;
             }
         }
         &.full-width-search-group {
             width: 228px;
-            .icon-search1.pos-abs {
+            .icon-search.pos-abs {
                 z-index: 4;
             }
         }

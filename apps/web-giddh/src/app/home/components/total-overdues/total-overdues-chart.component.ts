@@ -61,6 +61,8 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /* this will store active company data */
+    public activeCompany: any = {};
 
     constructor(private store: Store<AppState>, private _dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
@@ -74,6 +76,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
             if (activeCompany) {
                 this.amountSettings.baseCurrencySymbol = activeCompany.baseCurrencySymbol;
                 this.amountSettings.balanceDecimalPlaces = activeCompany.balanceDecimalPlaces;
+                this.activeCompany = activeCompany;
             }
         });
 

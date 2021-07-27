@@ -193,7 +193,7 @@
                     </div>
 
                     <div class="top-content">
-                        <div class="d-flex w-100 justify-content-between overflow-x-auto">
+                        <div class="d-flex w-100 justify-content-between overflow-x-auto" [hidden]="(activeTab === 'customer' && !sundryDebtorsAccounts?.length) || (activeTab === 'vendor' && !sundryCreditorsAccounts?.length)">
                             <div class="total-details-box mr-r05 d-flex justify-content-between count-box align-items-end">
                                 <h5>
                                     <ng-container *ngIf="!selectedCheckedContacts?.length">{{activeTab === 'customer' ? localeData?.customers : localeData?.vendors}}</ng-container>
@@ -279,7 +279,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="text-center top-aging-table-top separate-top-aging pd-1 mr-t1" *ngIf="isMobileScreen">
                         <p (click)="showGiddhDatepicker($event)">
                             <strong>{{commonLocaleData?.app_due_as_on}} </strong>
@@ -428,7 +427,7 @@
     <ng-template #mainTable>
         <div class="mobile-card-wrapper table-responsive vendor-page">
             <table class="table on-mobile-view aging-table mr-b260 giddh-table" *ngIf="activeTab !== 'aging'">
-                <thead>
+                <thead [hidden]="!searchStr && ((activeTab === 'customer' && !sundryDebtorsAccounts?.length) || (activeTab === 'vendor' && !sundryCreditorsAccounts?.length))">
                     <tr>
                         <th #searchCustomerContainer (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')" class="td-search-box">
                             <span class="inline table-checkbox">
@@ -438,9 +437,9 @@
                                     (ngModelChange)="toggleAllSelection(allSelectionModel)" />
                             </span>
                             <div class="d-flex align-items-center">
-                                <div class="mr-r05">
+                                <div>
                                     <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showNameSearch, fieldName: 'name',formControl: searchedName,
-                                                    title: commonLocaleData?.app_name}"></ng-container>
+                                                    title: activeTab === 'customer' ? commonLocaleData?.app_customer_name : commonLocaleData?.app_vendor_name}"></ng-container>
                                 </div>
                                 <ng-container *ngTemplateOutlet="!showNameSearch ? sortingTemplate : '';context: { $implicit: 'name'}">
                                 </ng-container>
@@ -685,13 +684,14 @@
                                 {{account?.groupUniqueName}}</td>
                             <td [ngClass]="{'word-wrap text-right': true, 'negative-balance': account.openingBalance?.type === 'CREDIT' && formatAmountInCurrency(account.openingBalance?.amount) > 0}"
                                 [attr.data-title]="localeData?.opening" *ngIf="showFieldFilter.openingBalance">
-                                <span
-                                    *ngIf="account.openingBalance?.type === 'CREDIT' && formatAmountInCurrency(account.openingBalance?.amount) > 0">-</span>
-                                <span class="d-flex justify-content-end">
-                                    <amount-field [amount]="account.openingBalance?.amount" [currencySymbol]="false"
-                                        [currencyCode]="false">
-                                    </amount-field>
-                                </span>
+                                <div class="d-flex justify-content-end">
+                                    <span
+                                        *ngIf="account.openingBalance?.type === 'CREDIT' && formatAmountInCurrency(account.openingBalance?.amount) > 0">-</span>
+                                    <span>
+                                        <amount-field [amount]="account.openingBalance?.amount" [currencySymbol]="false" [currencyCode]="false">
+                                        </amount-field>
+                                    </span>
+                                </div>
                             </td>
                             <td class="word-wrap text-right" [attr.data-title]="commonLocaleData?.app_receipts">
                                 <span class="d-flex justify-content-end">
@@ -709,13 +709,14 @@
                             </td>
                             <td [ngClass]="{'word-wrap text-right': true, 'negative-balance': account.closingBalance?.type === 'CREDIT' && formatAmountInCurrency(account.closingBalance?.amount) > 0}"
                                 [attr.data-title]="localeData?.closing">
-                                <span
-                                    *ngIf="account.closingBalance?.type === 'CREDIT' && formatAmountInCurrency(account.closingBalance?.amount) > 0">-</span>
-                                <span class="d-flex justify-content-end">
-                                    <amount-field [amount]="account.closingBalance?.amount" [currencySymbol]="false"
-                                        [currencyCode]="false">
-                                    </amount-field>
-                                </span>
+                                <div class="d-flex justify-content-end">
+                                    <span
+                                        *ngIf="account.closingBalance?.type === 'CREDIT' && formatAmountInCurrency(account.closingBalance?.amount) > 0">-</span>
+                                    <span>
+                                        <amount-field [amount]="account.closingBalance?.amount" [currencySymbol]="false" [currencyCode]="false">
+                                        </amount-field>
+                                    </span>
+                                </div>
                             </td>
                             <td class="text-lowercase word-wrap font-12" *ngIf="showFieldFilter.contact"
                                 [attr.data-title]="commonLocaleData?.app_email">
@@ -751,12 +752,6 @@
                                     [attr.data-title]="item.key">
                                     {{item.value || '-' }}</td>
                             </ng-container>
-                        </tr>
-                        <tr>
-                            <td [attr.colspan]="colspanLength" *ngIf="!(sundryDebtorsAccounts).length "
-                                class="text-center empty-table ">
-                                <h1>{{commonLocaleData?.app_no_record_found}}</h1>
-                            </td>
                         </tr>
 
                     </ng-container>
@@ -925,13 +920,14 @@
                             </td>
                             <td [ngClass]="{'word-wrap text-right': true, 'negative-balance': account.openingBalance?.type === 'DEBIT' && formatAmountInCurrency(account.openingBalance?.amount) > 0}"
                                 [attr.data-title]="localeData?.opening" *ngIf="showFieldFilter.openingBalance">
-                                <span
-                                    *ngIf="account.openingBalance?.type === 'DEBIT' && formatAmountInCurrency(account.openingBalance?.amount) > 0">-</span>
-                                <span class="d-flex justify-content-end">
-                                    <amount-field [amount]="account.openingBalance?.amount" [currencySymbol]="false"
-                                        [currencyCode]="false">
-                                    </amount-field>
-                                </span>
+                                <div class="d-flex justify-content-end">
+                                    <span
+                                        *ngIf="account.openingBalance?.type === 'DEBIT' && formatAmountInCurrency(account.openingBalance?.amount) > 0">-</span>
+                                    <span>
+                                        <amount-field [amount]="account.openingBalance?.amount" [currencySymbol]="false" [currencyCode]="false">
+                                        </amount-field>
+                                    </span>
+                                </div>
                             </td>
                             <td class="word-wrap text-right" [attr.data-title]="commonLocaleData?.app_purchase">
                                 <span class="d-flex justify-content-end">
@@ -949,13 +945,14 @@
                             </td>
                             <td [ngClass]="{'word-wrap text-right': true, 'negative-balance': account.closingBalance?.type === 'DEBIT' && formatAmountInCurrency(account.closingBalance?.amount) > 0}"
                                 [attr.data-title]="localeData?.closing">
-                                <span
-                                    *ngIf="account.closingBalance?.type === 'DEBIT' && formatAmountInCurrency(account.closingBalance?.amount) > 0">-</span>
-                                <span class="d-flex justify-content-end">
-                                    <amount-field [amount]="account.closingBalance?.amount" [currencySymbol]="false"
-                                        [currencyCode]="false">
-                                    </amount-field>
-                                </span>
+                                <div class="d-flex justify-content-end">
+                                    <span
+                                        *ngIf="account.closingBalance?.type === 'DEBIT' && formatAmountInCurrency(account.closingBalance?.amount) > 0">-</span>
+                                    <span>
+                                        <amount-field [amount]="account.closingBalance?.amount" [currencySymbol]="false" [currencyCode]="false">
+                                        </amount-field>
+                                    </span>
+                                </div>
                             </td>
                             <td class="text-lowercase word-wrap font-12" *ngIf="showFieldFilter.contact"
                                 [attr.data-title]="commonLocaleData?.app_email">
@@ -996,11 +993,6 @@
                                 </button>
                             </td>
                         </tr>
-                        <tr *ngIf="!(sundryCreditorsAccounts).length ">
-                            <td [attr.colspan]="colspanLength" class="text-center empty-table">
-                                <h1>{{commonLocaleData?.app_no_record_found}}</h1>
-                            </td>
-                        </tr>
 
                     </ng-container>
                 </tbody>
@@ -1034,7 +1026,10 @@
                 </div>
             </div>
         </div>
-
+        <div class="no-data"
+                *ngIf="(activeTab === 'customer' && !sundryDebtorsAccounts?.length) || (activeTab === 'vendor' && !sundryCreditorsAccounts?.length)">
+                <no-data [secondaryMessageClass]="'p-0'"></no-data>
+        </div>
     </ng-template>
 
     <!-- region sorting template -->
@@ -1078,7 +1073,7 @@
 
     <ng-template #searchTemplate let-show let-title="title" let-placeholder="placeholder" let-fieldName="fieldName" let-formControl="formControl">
         <div [hidden]="show">
-            <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
+            <i class="icon-search pl-0" (click)="toggleSearch(fieldName, searchBox);"></i>
             <span> {{ title }}</span>
         </div>
         <div class="input-container" [hidden]="!show">

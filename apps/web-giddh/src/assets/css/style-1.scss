@@ -253,7 +253,7 @@ aside-menu-account .container-fluid {
 }
 
 .pd-1 {
-    padding: 10px;
+    padding: 10px !important;
 }
 
 .pd-15 {
@@ -366,6 +366,21 @@ aside-menu-account .container-fluid {
 
 .pd-l5 {
     padding-left: 50px;
+}
+
+.pd-r15 {
+    padding-right: 15px;
+}
+
+.pd-l15 {
+    padding-left: 15px;
+}
+
+.pd-t15 {
+    padding-top: 15px;
+}
+.pd-b15 {
+    padding-bottom: 15px;
 }
 
 .mr {
@@ -484,6 +499,26 @@ aside-menu-account .container-fluid {
 
 .mr-r5 {
     margin-right: 50px;
+}
+
+.mr-t15 {
+    margin-top: 15px;
+}
+
+.mr-b15 {
+    margin-bottom: 15px;
+}
+
+.mr-l15 {
+    margin-left: 15px;
+}
+
+.mr-r15 {
+    margin-right: 15px !important;
+}
+
+.border-bottom {
+    border-bottom-color: $gainsboro;
 }
 
 .bdr {

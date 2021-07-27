@@ -30,7 +30,7 @@
             align-items: center;
         }
         .icon-pointer {
-            margin-left: 6px;
+            margin-left: 0px;
             cursor: pointer;
         }
     }
@@ -114,7 +114,7 @@
         }
         div i {
             margin-top: 1px;
-            color: #757bb9;
+            color: $midnight-blue;
             padding-right: 8px;
             cursor: pointer;
             display: flex;

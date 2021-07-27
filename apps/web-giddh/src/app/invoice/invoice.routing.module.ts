@@ -65,6 +65,7 @@ import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjust
 import { HasFocusDirectiveModule } from '../shared/helpers/directives/has-focus/has-focus.module';
 import { TrimPipeModule } from '../shared/helpers/pipes/trim/trim.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
+import { NoDataModule } from '../shared/no-data/no-data.module';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
     // Change this to your Google API key
@@ -156,7 +157,8 @@ const INVOICE_ROUTES: Routes = [
         AdvanceReceiptAdjustmentModule,
         HasFocusDirectiveModule,
         TrimPipeModule,
-        TaxSidebarModule
+        TaxSidebarModule,
+        NoDataModule
     ],
     exports: [
         RouterModule,
