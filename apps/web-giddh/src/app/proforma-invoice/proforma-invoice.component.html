@@ -240,7 +240,7 @@
                                 <!-- endregion -->
 
                                 <!-- region customer address section -->
-                                <div class="row">
+                                <div class="row" *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.addressAllowed">
 
                                     <div
                                         class="col-sm-12 col-xl-9 offset-lg-3 col-lg-8 col-md-9 offset-xl-2 offset-md-3">
@@ -622,8 +622,8 @@
                                 </div>
                                 <!-- end warehouse field -->
 
-                                <div class="row mt-1 delivery-from-field" *ngIf="isPurchaseInvoice">
-                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
+                                <div class="row mt-1 delivery-from-field" *ngIf="isPurchaseInvoice || currentVoucherFormDetails?.addressAllowed">
+                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{localeData?.deliver_to}}<span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12 select-customer-name">
@@ -927,7 +927,7 @@
                                                 </div>
 
                                                 <div class="form-group mr-l1"
-                                                    *ngIf="isSalesInvoice || isPurchaseInvoice || isProformaInvoice || isEstimateInvoice">
+                                                    *ngIf="currentVoucherFormDetails?.dueDate || isSalesInvoice || isPurchaseInvoice || isProformaInvoice || isEstimateInvoice">
                                                     <label>{{ invoiceDueDateLabel }}</label>
 
                                                     <input type="text" [placeholder]="giddhDateFormat"
@@ -972,8 +972,8 @@
                                 </div>
 
                                 <div class="row mt-1"
-                                    *ngIf="isMobileScreen && (isSalesInvoice || isPurchaseInvoice || isProformaInvoice || isEstimateInvoice)">
-                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
+                                    *ngIf="isMobileScreen && (currentVoucherFormDetails?.dueDate || isSalesInvoice || isPurchaseInvoice || isProformaInvoice || isEstimateInvoice)">
+                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ invoiceDueDateLabel }}</label>
                                     </div>
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
@@ -993,8 +993,8 @@
 
                                 <!-- reverse charge transction start -->
                                 <!-- for purchase record start -->
-                                <div class="row mt-1" *ngIf="isPurchaseInvoice">
-                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12" *ngIf="!isMobileView">
+                                <div class="row mt-1" *ngIf="isPurchaseInvoice || currentVoucherFormDetails?.rcmAllowed">
+                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3" *ngIf="!isMobileView">
                                         <label></label>
                                     </div>
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
@@ -1209,12 +1209,12 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="text-right stock-unit">
+                                    <td class="text-right stock-unit" *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.quantityAllowed">
                                         <div class="wrap-td-data">
                                             {{transaction.quantity | giddhCurrency}} {{transaction.stockUnit}}
                                         </div>
                                     </td>
-                                    <td class="text-right trans-rate item-rate height-rate">
+                                    <td class="text-right trans-rate item-rate height-rate" *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.rateAllowed">
                                         <div *ngIf="transaction.rate > 0 || transaction.isStockTxn">
                                             <div class="td-wrapper flex-grow-1">
                                                 <div class="flex-grow-1">
@@ -1277,7 +1277,7 @@
 
                                         </div>
                                     </td>
-                                    <td class="item-discount">
+                                    <td class="item-discount" *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.discountAllowed">
                                         <div class="text-right td-wrapper">
 
                                             <div class="flex-grow-1">
@@ -1304,7 +1304,7 @@
 
                                     </td>
                                     <td [class.error-box]="transaction.requiredTax" class="text-right item-tax"
-                                        (focus)="transaction.requiredTax = false;">
+                                        (focus)="transaction.requiredTax = false;" *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.taxesAllowed">
                                         <div class="td-wrapper">
                                             <div class="flex-grow-1">
                                                 <div class="wrap-td-data">
@@ -1538,7 +1538,7 @@
                                         </div>
                                     </td>
 
-                                    <td (click)="closeDiscountPopup(); closeTaxControlPopup();"
+                                    <td (click)="closeDiscountPopup(); closeTaxControlPopup();" *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.quantityAllowed"
                                         class="text-right stock-unit">
                                         <input type="text" [disabled]="!transaction.isStockTxn"
                                             (blur)="handleQuantityBlur(entry, transaction);"
@@ -1557,7 +1557,7 @@
                                     </td>
 
                                     <td (click)="closeDiscountPopup(); closeTaxControlPopup();"
-                                        class="text-right item-rate">
+                                        class="text-right item-rate" *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.rateAllowed">
                                         <div class="td-wrapper">
 
                                             <div class="flex-fill">
@@ -1619,7 +1619,7 @@
                                         </div>
                                     </td>
 
-                                    <td (click)="closeTaxControlPopup();" class="item-discount">
+                                    <td (click)="closeTaxControlPopup();" class="item-discount" *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.discountAllowed">
                                         <div class="td-wrapper">
                                             <div class="text-right flex-fill">
                                                 <discount-control-component #discountComponent [discountMenu]="false"
@@ -1645,7 +1645,7 @@
                                         </div>
                                     </td>
 
-                                    <td (click)="closeDiscountPopup();"
+                                    <td (click)="closeDiscountPopup();" *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.taxesAllowed"
                                         class="position-relative dropdown-container item-tax">
                                         <div class="td-wrapper">
                                             <div class="text-right flex-fill">
@@ -1779,7 +1779,7 @@
                                 <tr>
                                     <td colspan="4">
                                         <!-- region other details-->
-                                        <div>
+                                        <div *ngIf="!this.currentVoucherFormDetails || this.currentVoucherFormDetails?.otherDetails">
                                             <div class="collapse-pane clearfix">
 
                                                 <div class="collapse-pane-heading"
@@ -1878,7 +1878,7 @@
                                         <!-- endregion -->
 
                                         <div class="pd-t1 pl-0 max-width-600 position-relative"
-                                            *ngIf="isPurchaseInvoice">
+                                            *ngIf="currentVoucherFormDetails?.attachmentAllowed || isPurchaseInvoice">
 
                                             <label class="mr-b1"><i class="icon-file-path"></i>
                                                 {{localeData?.attachment}}</label>
@@ -2064,7 +2064,7 @@
 
                                             <!--region balance due for non-purchase-->
                                             <div class="table-row"
-                                                *ngIf="((isSalesInvoice || isCashInvoice)) && !(isPendingVoucherType && isCashInvoice) && !(!(isAccountHaveAdvanceReceipts || isInvoiceAdjustedWithAdvanceReceipts) && isUpdateMode)">
+                                                *ngIf="(isSalesInvoice || isCashInvoice || currentVoucherFormDetails?.depositAllowed) && !(isPendingVoucherType && isCashInvoice) && !(!(isAccountHaveAdvanceReceipts || isInvoiceAdjustedWithAdvanceReceipts) && isUpdateMode)">
 
                                                 <div class="table-cell deposit-section">
 
@@ -2174,7 +2174,7 @@
                                                                     </li>
 
                                                                     <li class="clearfix mr-t1 d-flex align-items-center payment-mode-amount"
-                                                                        *ngIf="isSalesInvoice">
+                                                                        *ngIf="isSalesInvoice || currentVoucherFormDetails?.depositAllowed">
                                                                         <input type="text"
                                                                             (blur)="calculateBalanceDue()"
                                                                             [placeholder]="commonLocaleData?.app_amount"
@@ -2652,7 +2652,7 @@
                                     </div>
 
                                     <div class="row quantity-unit-w100">
-                                        <div class="col-xs-6 col-sm-6">
+                                        <div class="col-xs-6 col-sm-6" *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.quantityAllowed">
 
                                             <div class="single-card-row">
                                                 <div class="qty-unit">
@@ -2692,7 +2692,7 @@
 
                                         </div>
 
-                                        <div class="col-xs-6 col-sm-6">
+                                        <div class="col-xs-6 col-sm-6" *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.rateAllowed">
 
                                             <div class="single-card-row">
 
@@ -2765,7 +2765,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-xs-6 col-sm-6">
+                                        <div class="col-xs-6 col-sm-6" *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.discountAllowed">
 
                                             <div class="single-card-row">
 
@@ -2802,7 +2802,7 @@
 
                                     <div class="row">
 
-                                        <div class="col-xs-6 col-sm-6">
+                                        <div class="col-xs-6 col-sm-6" *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.taxesAllowed">
 
                                             <div class="single-card-row">
                                                 <div class="card-tax">
@@ -2936,7 +2936,7 @@
                         </div>
 
                         <div class="other-detail-card">
-                            <div>
+                            <div *ngIf="!this.currentVoucherFormDetails || this.currentVoucherFormDetails?.otherDetails">
                                 <div class="collapse-pane clearfix">
                                     <div class="collapse-pane-heading"
                                         (click)="isOthrDtlCollapsed = !isOthrDtlCollapsed">
@@ -3004,14 +3004,12 @@
                                     </div>
 
                                 </div>
-
-                                <div class="pd-t1 pl-0 max-width-600" *ngIf="!isPurchaseInvoice">
-                                    <label class="mr-b1">{{commonLocaleData?.app_note}}</label>
-                                    <textarea rows="3" class="form-control" name="message2"
-                                        [maxlength]="shouldApplyMaxLengthOnNotes && !showNotesAtLastPage ? 200 : null"
-                                        [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
-                                </div>
-
+                            </div>
+                            <div class="pd-t1 pl-0 max-width-600" *ngIf="!isPurchaseInvoice">
+                                <label class="mr-b1">{{commonLocaleData?.app_note}}</label>
+                                <textarea rows="3" class="form-control" name="message2"
+                                    [maxlength]="shouldApplyMaxLengthOnNotes && !showNotesAtLastPage ? 200 : null"
+                                    [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
                             </div>
                         </div>
 
@@ -3156,7 +3154,7 @@
                                     </div>
                                 </div>
                                 <!--region balance due for non-purchase-->
-                                <div class="table-row" *ngIf="((isSalesInvoice || isCashInvoice) && !isUpdateMode )">
+                                <div class="table-row" *ngIf="((isSalesInvoice || isCashInvoice || currentVoucherFormDetails?.depositAllowed) && !isUpdateMode )">
 
                                     <div class="table-cell deposit-section">
 
@@ -3197,7 +3195,7 @@
                                                     </li>
 
                                                     <li class="clearfix mr-t1  d-flex align-items-center payment-mode-amount"
-                                                        *ngIf="isSalesInvoice">
+                                                        *ngIf="isSalesInvoice || currentVoucherFormDetails?.depositAllowed">
                                                         <input type="text" (blur)="calculateBalanceDue()"
                                                             [placeholder]="commonLocaleData?.app_amount"
                                                             name="dueAmount"
