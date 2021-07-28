@@ -115,6 +115,7 @@ import { OrganizationType } from '../models/user-login-state';
 import { AccountsAction } from '../actions/accounts.actions';
 import { VoucherTypeToNamePipe } from '../shared/header/pipe/voucherTypeToNamePipe/voucherTypeToNamePipe.pipe';
 import { Location, TitleCasePipe } from '@angular/common';
+import { VoucherForm } from '../models/api-models/Voucher';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
@@ -593,6 +594,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public billingShippingForceClearReactive$: Observable<IForceClear> = observableOf({ status: false });
     /** True if left sidebar is expanded */
     private isSidebarExpanded: boolean = false;
+    /** Stores the current voucher form detail */
+    public currentVoucherFormDetails: VoucherForm;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -775,6 +778,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (activeCompany) {
                 this.selectedCompany = activeCompany;
                 this.companyAddressList = activeCompany.addresses;
+                this.initializeCurrentVoucherForm();
             }
         });
 
@@ -831,7 +835,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.getDefaultTemplateData();
                 this.prepareInvoiceTypeFlags();
                 this.saveStateDetails();
-                if (this.isCashInvoice) {
+                this.initializeCurrentVoucherForm();
+                if (this.isCashInvoice || this.currentVoucherFormDetails?.depositAllowed) {
                     this.loadBankCashAccounts('');
                 }
             }
@@ -1221,7 +1226,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         if (!obj.accountDetails.currencySymbol) {
                             obj.accountDetails.currencySymbol = '';
                         }
-                        if (this.isPendingVoucherType) {
+                        if (this.currentVoucherFormDetails?.depositAllowed || this.isPendingVoucherType) {
                             obj.accountDetails.name = results[0].account.name;
                             obj.voucherDetails.customerName = results[0].account.name;
                             this.loadBankCashAccounts(obj?.accountDetails?.currency?.code);
@@ -1236,7 +1241,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.invoiceDataFound = false;
                     }
                     this.isUpdateDataInProcess = false;
-                    if (this.isPurchaseInvoice) {
+                    if (this.isPurchaseInvoice || this.currentVoucherFormDetails?.attachmentAllowed) {
                         this.selectedFileName = results[0].attachedFileName;
                         if (this.invFormData && this.invFormData.entries && this.invFormData.entries[0]) {
                             this.invFormData.entries[0].attachedFile = (results[0].attachedFiles) ? results[0].attachedFiles[0] : '';
@@ -1287,7 +1292,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     if (this.isMultiCurrencyModule() || this.isPurchaseInvoice) {
                         this.initializeWarehouse();
                     }
-                    if (this.isSalesInvoice || this.isPendingVoucherType) {
+                    if (this.currentVoucherFormDetails?.depositAllowed || this.isSalesInvoice || this.isPendingVoucherType) {
                         this.loadBankCashAccounts(tempSelectedAcc.currency);
                     }
                     this.store.dispatch(this.accountActions.resetActiveAccount());
@@ -1784,7 +1789,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             uniqueName: data.uniqueName
         }], 1, SEARCH_TYPE.CUSTOMER);
         this.makeCustomerList();
-        if (this.isSalesInvoice) {
+        if (this.isSalesInvoice || this.currentVoucherFormDetails?.depositAllowed) {
             this.loadBankCashAccounts(data.currency);
         }
         if (this.isInvoiceRequestedFromPreviousPage) {
@@ -2240,13 +2245,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let exRate = this.originalExchangeRate;
         let requestObject: any;
         let voucherDate: any;
+        const deposit = new AmountClassMulticurrency();
+        deposit.accountUniqueName = this.depositAccountUniqueName;
+        deposit.amountForAccount = this.depositAmount;
         if (!this.isPurchaseInvoice) {
-            const deposit = new AmountClassMulticurrency();
-            deposit.accountUniqueName = this.depositAccountUniqueName;
-            deposit.amountForAccount = this.depositAmount;
-
             voucherDate = data.voucherDetails.voucherDate;
-
             requestObject = {
                 account: data.accountDetails,
                 updateAccountDetails: this.updateAccount,
@@ -2256,7 +2259,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 type: this.invoiceType,
                 exchangeRate: exRate,
                 dueDate: data.voucherDetails.dueDate,
-                deposit
+                deposit: (!this.currentVoucherFormDetails || this.currentVoucherFormDetails?.depositAllowed) ? deposit : undefined,
+                subVoucher: (this.isRcmEntry) ? SubVoucher.ReverseCharge : undefined,
+                attachedFiles: (this.invFormData.entries[0] && this.invFormData.entries[0].attachedFile) ? [this.invFormData.entries[0].attachedFile] : [],
             } as GenericRequestForGenerateSCD;
             // set voucher type
             requestObject.voucher.voucherDetails.voucherType = this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType);
@@ -2311,13 +2316,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
         } else {
             let purchaseOrders = [];
-
             if (this.selectedPoItems && this.selectedPoItems.length > 0) {
                 this.selectedPoItems.forEach(order => {
                     purchaseOrders.push({ name: this.linkedPoNumbers[order].voucherNumber, uniqueName: order });
                 });
             }
-
             requestObject = {
                 account: data.accountDetails,
                 number: this.invFormData.voucherDetails.voucherNumber || '',
@@ -2328,6 +2331,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 type: this.invoiceType,
                 attachedFiles: (this.invFormData.entries[0] && this.invFormData.entries[0].attachedFile) ? [this.invFormData.entries[0].attachedFile] : [],
                 templateDetails: data.templateDetails,
+                deposit: (this.currentVoucherFormDetails?.depositAllowed) ? deposit : undefined,
                 subVoucher: (this.isRcmEntry) ? SubVoucher.ReverseCharge : undefined,
                 purchaseOrders: purchaseOrders,
                 company: this.purchaseBillCompany
@@ -5385,7 +5389,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private createPurchaseRecord(request: PurchaseRecordRequest): void {
         if (this.generalService.voucherApiVersion === 2) {
             // Create a new puchase record with voucher API
-            request = this.proformaInvoiceUtilityService.getVoucherRequestObjectForInvoice(request);
             this.salesService.generateGenericItem(request, true).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
                 this.handleGenerateResponse(response, this.invoiceForm);
             }, () => {
@@ -7057,11 +7060,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 label: this.localeData?.product_service_description
             },
             {
-                display: true,
+                display: !this.currentVoucherFormDetails || this.currentVoucherFormDetails?.quantityAllowed,
                 label: this.commonLocaleData?.app_quantity_unit
             },
             {
-                display: true,
+                display: !this.currentVoucherFormDetails || this.currentVoucherFormDetails?.rateAllowed,
                 label: this.commonLocaleData?.app_rate
             },
             {
@@ -7069,11 +7072,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 label: this.commonLocaleData?.app_amount
             },
             {
-                display: true,
+                display: !this.currentVoucherFormDetails || this.currentVoucherFormDetails?.discountAllowed,
                 label: this.commonLocaleData?.app_discount
             },
             {
-                display: true,
+                display: !this.currentVoucherFormDetails || this.currentVoucherFormDetails?.taxesAllowed,
                 label: this.commonLocaleData?.app_tax
             },
             {
@@ -7162,5 +7165,21 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
 
         return invoiceType;
+    }
+
+    /**
+     * Initializes current voucher form
+     *
+     * @private
+     * @memberof ProformaInvoiceComponent
+     */
+    private initializeCurrentVoucherForm(): void {
+        if (this.generalService.voucherApiVersion === 2) {
+            // Load the voucher form only for company that supports new voucher APIs
+            this.currentVoucherFormDetails = this.proformaInvoiceUtilityService.prepareVoucherForm(this.invoiceType);
+            this.getItemColumns();
+        } else {
+            this.currentVoucherFormDetails = undefined;
+        }
     }
 }

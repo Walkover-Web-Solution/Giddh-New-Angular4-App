@@ -385,14 +385,7 @@ export class OtherSalesItemClass {
     public message2?: string;
     public slogan?: any;
 
-    constructor() {
-        this.shippingDate = null;
-        this.shippedVia = null;
-        this.trackingNumber = null;
-        this.customField1 = null;
-        this.customField2 = null;
-        this.customField3 = null;
-    }
+    constructor() { }
 }
 
 /**
