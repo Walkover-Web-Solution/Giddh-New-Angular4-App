@@ -1,66 +1,12 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { ChildGroup } from '../../../../models/api-models/Search';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Account, ChildGroup } from '../../../../models/api-models/Search';
+import { TRIAL_BALANCE_VIEWPORT_LIMIT } from '../../../constants/trial-balance-profit.constant';
 
 @Component({
     selector: '[pl-grid-row]',
-    template: `
-<div class="pl-grid-row row" [trial-accordion]="groupDetail"
-    *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)"
-    [ngClass]="{'isHidden': !groupDetail.isVisible }">
-    <div class="col-8  group" [innerHTML]="groupDetail.groupName | highlight:search"
-        [ngStyle]="{'padding-left': padding+'px'}"></div>
-    <div class="col-4  bd-rl group pull-right" *ngIf="!groupDetail.level1">
-        <div class="row">
-            <span class="col-sm-6 col-12 text-right"
-                [ngClass]="{'invisible': groupDetail.isOpen && (groupDetail.accounts.length || groupDetail.childGroups.length)}">
-                <span
-                    *ngIf="groupDetail.category === 'income' && groupDetail.closingBalance.type === 'DEBIT' && groupDetail.closingBalance.amount !== 0">-</span>
-                <span
-                    *ngIf="groupDetail.category === 'expenses' && groupDetail.closingBalance.type === 'CREDIT' && groupDetail.closingBalance.amount !== 0">-</span>
-                <span class="d-inline-flex">
-                    <amount-field [amount]="groupDetail.closingBalance.amount" [currencySymbol]="false" [currencyCode]="false">
-                    </amount-field>
-                </span>
-            </span>
-            <span class="col-sm-6 col-12 invisible">
-                <span class="d-inline-flex">
-                    <amount-field [amount]="groupDetail.closingBalance.amount" [currencySymbol]="false" [currencyCode]="false">
-                    </amount-field>
-                </span>
-            </span>
-        </div>
-    </div>
-    <div class="col-4  bd-rl group text-right pull-right pd-1" *ngIf="groupDetail.level1">&nbsp;</div>
-            
-    </div>
-<ng-container *ngFor="let account of groupDetail.accounts">
-    <section class=" row-2  pl-grid-row account" [ngClass]="{'isHidden': !account.isVisible }"
-        *ngIf="account.isVisible || account.isCreated" (dblclick)="entryClicked(account)">
-        <div class="row"
-            *ngIf="account.name && (account.closingBalance.amount !== 0 || account.openingBalance.amount !== 0)">
-            <div class="col-8" [ngStyle]="{'padding-left': (padding+20)+'px'}"
-                [innerHTML]="account.name | lowercase  | highlight:search"></div>
-            <div class="col-4 bd-rl text-left pull-right">
-                <div class="row d-flex">
-                    <span class="col-sm-6 col-12 text-right">
-                        <span class="d-inline-flex">
-                            <amount-field [amount]="account.closingBalance.amount" [currencySymbol]="false" [currencyCode]="false">
-                            </amount-field>
-                        </span>
-                    </span>
-                    <span class="col-sm-6 col-12 invisible">
-                        <span class="d-inline-flex">
-                            <amount-field [amount]="account.closingBalance.amount" [currencySymbol]="false" [currencyCode]="false">
-                            </amount-field>
-                        </span>
-                    </span>
-                </div>
-            </div>
-        </div>
-    </section>
-</ng-container>
-<ng-content></ng-content>
-  `,
+    templateUrl: './pl-grid-row.component.html',
+    styleUrls: ['./pl-grid-row.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PlGridRowComponent implements OnChanges {
     @Input() public groupDetail: ChildGroup;
@@ -69,9 +15,12 @@ export class PlGridRowComponent implements OnChanges {
     @Input() public incomeStatement: any;
     @Input() public from: string = '';
     @Input() public to: string = '';
+    /** True, if all items are expanded  */
+    @Input() public expandAll: boolean;
+    /** Minimum limit on which Trial balance viewport enables */
+    public minimumViewportLimit = TRIAL_BALANCE_VIEWPORT_LIMIT;
 
     constructor(private cd: ChangeDetectorRef) {
-        
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -95,5 +44,17 @@ export class PlGridRowComponent implements OnChanges {
             (window as any).open(url);
         }
 
+    }
+
+    /**
+     * Track by function for profit loss item
+     *
+     * @param {*} index Index of the item
+     * @param {Account} item Current item
+     * @return {string} Item uniquename
+     * @memberof PlGridRowComponent
+     */
+    public trackByFn(index, item: Account): string {
+        return item.uniqueName;
     }
 }

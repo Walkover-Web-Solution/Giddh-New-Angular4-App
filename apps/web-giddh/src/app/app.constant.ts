@@ -298,9 +298,6 @@ export const SUPPORT_TEAM_NUMBERS = [
     "+918889500350", "+918889378604"
 ];
 
-/** Email Validation Regex */
-export const EMAIL_VALIDATION_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
 /** Settings integration tabs */
 export const SETTING_INTEGRATION_TABS = {
     // SMS: { LABEL: 'sms', VALUE: 0 },
@@ -309,6 +306,8 @@ export const SETTING_INTEGRATION_TABS = {
     E_COMMERCE: { LABEL: 'ecommerce', VALUE: 2 },
     PAYMENT: { LABEL: 'payment', VALUE: 3 }
 };
+/** Email Validation Regex */
+export const EMAIL_VALIDATION_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 /** E-invoice statuses */
 export enum EInvoiceStatus {

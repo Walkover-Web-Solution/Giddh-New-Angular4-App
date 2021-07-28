@@ -3,7 +3,7 @@
     <form name="addAccountForm" class="create-acc-form" [formGroup]="addAccountForm">
         <div>
             <div class="upper-form">
-                <div class="row ">
+                <div class="row">
                     <div class="col-sm-4">
                         <div class="ng-select-wrap select-list select-group disable-select-group">
                             <label>{{localeData?.select_group_label}}<span class="red-text">*</span> </label>
@@ -350,12 +350,12 @@
                 </div>
             </tab>
 
-            <tab [heading]="localeData?.tabs?.others" class="other-form-wrap " (selectTab)="tabChanged('others')">
+            <tab [heading]="localeData?.tabs?.others" class="other-form-wrap" (selectTab)="tabChanged('others')">
 
-                <div class="other-form ">
-                    <div class="row ">
-                        <div class="col-sm-6 ">
-                            <div class="form-group ">
+                <div class="other-form">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
                                 <label>{{localeData?.account_uniquename}}</label>
                                 <input type="text" class="form-control" [control]="addAccountForm.get('uniqueName')"
                                     textCaseChangeDirective UniqueNameDirective formControlName="uniqueName"
@@ -442,7 +442,6 @@
                     </ng-container>
                 </ng-container>
             </tab>
-
         </tabset>
         <div class="row" *ngIf="!isOtherSelectedTab">
             <div class="col-sm-12 mr-t3">
@@ -462,11 +461,11 @@
     <div class="form" *ngIf="isOtherSelectedTab">
         <div>
             <div *ngIf="(activeAccount$ | async)" class="form-group">
-                <form name="moveAccountForm" class="clearfix move-to-group " novalidate (submit)="moveAccount()"
+                <form name="moveAccountForm" class="clearfix move-to-group" novalidate (submit)="moveAccount()"
                     [formGroup]="moveAccountForm">
                     <div class="row">
-                        <div class=" col-sm-12 ">
-                            <div class="form-group ">
+                        <div class="col-sm-12">
+                            <div class="form-group">
                                 <label>{{localeData?.move_to_group}}</label>
                                 <div>
                                     <span>
@@ -530,7 +529,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
         <div class="form" *ngIf="isDebtorCreditor && isOtherSelectedTab">
             <div class="mr-b2 select-box">

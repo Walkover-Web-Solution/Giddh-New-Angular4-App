@@ -99,11 +99,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     };
     public approveEntryRequestInProcess: boolean = false;
     public selectedEntryForApprove: ExpenseResults;
+    /** unique name of any attached image   */
     public imgAttachedFileName = '';
 
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** This will hold creator name */
-    public byCreator: string = '';
     /** Stores the search results pagination details for debtor dropdown */
     public debtorAccountsSearchResultsPaginationData = {
         page: 0,
@@ -152,6 +150,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         totalPages: 0,
         query: ''
     };
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** This will hold creator name */
+    public byCreator: string = '';
     /** True if account belongs to cash/bank account */
     private cashOrBankEntry: any;
     /** Stores the petty cash entry type */
@@ -310,7 +311,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             ledgerRequest.attachedFile = (this.DownloadAttachedImgResponse && this.DownloadAttachedImgResponse.length > 0) ? this.DownloadAttachedImgResponse[0].uniqueName : '';
         }
-        if (this.accountEntryPettyCash.attachedFile) {
+        if (this.accountEntryPettyCash && this.accountEntryPettyCash.attachedFile) {
             ledgerRequest.attachedFileName = this.accountEntryPettyCash.attachedFile;
         } else {
             ledgerRequest.attachedFileName = this.imgAttachedFileName;

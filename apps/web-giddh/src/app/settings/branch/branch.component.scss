@@ -94,7 +94,8 @@
     margin-bottom: 0;
 }
 .card-basic-details {
-    padding: 15px;
+    padding: 20px;
+    border-bottom: 1px solid $gainsboro;
 }
 .branch-sales-details {
     border-top: 1px solid $gainsboro;
@@ -355,6 +356,11 @@
     .btn-sky-blue.pull-right {
         float: none;
         margin-bottom: 15px;
+    }
+    .branch-vector {
+        img {
+            width: 150px;
+        }
     }
 }
 @media (max-width: 370px) {

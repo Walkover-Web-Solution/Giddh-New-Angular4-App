@@ -22,7 +22,6 @@ import { BreakpointObserver } from '@angular/cdk/layout';
     templateUrl: './report.details.component.html',
     styleUrls: ['./report.details.component.scss']
 })
-
 export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public reportRespone: ReportsModel[];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

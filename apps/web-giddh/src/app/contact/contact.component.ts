@@ -29,11 +29,11 @@ import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccounts
 import { CompanyService } from '../services/companyService.service';
 import { ContactService } from '../services/contact.service';
 import { GeneralService } from '../services/general.service';
+import { GroupService } from '../services/group.service';
 import { ToasterService } from '../services/toaster.service';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { AppState } from '../store';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../shared/helpers/defaultDateFormat';
-import { GroupService } from '../services/group.service';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../models/user-login-state';
 import { GiddhCurrencyPipe } from '../shared/helpers/pipes/currencyPipe/currencyType.pipe';
@@ -926,7 +926,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.advanceSearchRequestModal.creditTotal = request.amount;
             this.setAmountType(category, request.amountType);
         }
-
         switch (request.amountType) {
             case 'GreaterThan':
                 this.advanceSearchRequestModal[category + 'GreaterThan'] = true;
@@ -1192,7 +1191,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         if (event) {
             this.clearSelectedContacts(false);
         }
-
         this.isBulkPaymentShow = false;
         this.selectedAccForPayment = null;
 
@@ -1222,7 +1220,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         * @memberof ContactComponent
         */
     public selectAllColumns(event: boolean): void {
-
         Object.keys(this.showFieldFilter).forEach(key => this.showFieldFilter[key] = event);
         this.setTableColspan();
         if (window.localStorage) {
@@ -1297,7 +1294,6 @@ export class ContactComponent implements OnInit, OnDestroy {
 
         this.getAccounts(this.fromDate, this.toDate, this.checkboxInfo.selectedPage, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
     }
-
 
     /**
     * API call to get custom field data

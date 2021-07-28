@@ -52,10 +52,8 @@ export default class AppUpdaterV1 {
             dialog.showMessageBox(dialogOpts).then((returnValue) => {
                 if (returnValue.response === 0) {
                     autoUpdater.quitAndInstall();
-                }
-            })
+            }});
         });
-
         // autoUpdater.on('error', (error) => {
         //     dialog.showErrorBox('Error: ', error == null ? "unknown" : (error.stack || error).toString())
         // })

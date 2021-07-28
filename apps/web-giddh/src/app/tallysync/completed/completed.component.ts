@@ -156,7 +156,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.filterForm.get('filterDate')?.patchValue(moment(this.maxDate).format('D-MMM-YYYY'));
         this.filterForm.get('filterTimeInterval')?.patchValue(this.timeInterval[5].value);
         this.filter.timeRange = this.timeInterval[5].value;
-        this.filter.startDate = moment(this.maxDate).format('DD-MM-YYYY');
+        this.filter.startDate = moment(this.maxDate).format(GIDDH_DATE_FORMAT);
         this.getReport();
     }
 

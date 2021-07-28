@@ -1,7 +1,7 @@
 class TrialBalancePage {
 
-    searchIcon(timeOut) {
-        return cy.get('#showSearch')
+    getTrailBalanceText(timeOut) {
+        cy.get('.nav-item.active > .nav-link > span', { timeout: timeOut })
     }
 
     typeSearchValue(searchValue) {
@@ -19,7 +19,7 @@ class TrialBalancePage {
     }
 
     searchAccountAmount() {
-        return cy.xpath('//span[@class=\'ui-select-highlight\']/parent::div/following::div[1]')
+        return cy.get('tr > :nth-child(3)')
     }
 
 

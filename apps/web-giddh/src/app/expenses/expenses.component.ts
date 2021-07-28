@@ -285,7 +285,6 @@ export class ExpensesComponent implements OnInit, OnDestroy {
             this.pendingTabSortOptions.sort = this.pendingListComponent.pettycashRequest.sort;
             this.pendingTabSortOptions.sortBy = this.pendingListComponent.pettycashRequest.sortBy;
         }
-
         this.currentSelectedTab = tab;
 
         setTimeout(() => {

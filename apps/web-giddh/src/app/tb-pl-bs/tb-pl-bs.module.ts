@@ -33,6 +33,8 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { SharedModule } from '../shared/shared.module';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
 
 @NgModule({
     declarations: [
@@ -53,7 +55,8 @@ import { SharedModule } from '../shared/shared.module';
         BsGridComponent,
         BsGridRowComponent,
         TrialAccordionDirective,
-        TbsearchPipe
+        TbsearchPipe,
+        AccountsFilterPipe
     ],
     exports: [
         TbPlBsComponent, CurrencyModule
@@ -76,7 +79,8 @@ import { SharedModule } from '../shared/shared.module';
         CurrencyModule,
         TooltipModule,
         AccountDetailModalModule,
-        SharedModule
+        SharedModule,
+        ScrollingModule
     ],
 })
 export class TBPlBsModule {

@@ -13,14 +13,12 @@ export class TbsearchPipe implements PipeTransform {
 
     constructor(private zone: NgZone
     ) {
-        
     }
 
     public transform(input: any, search: string): any {
         if (!isUndefined(search)) {
             this.srch = search.toLowerCase();
         }
-
         if (!isUndefined(this.srch) && this.srch.length > 2) {
             this.zone.run(() => {
                 this.performSearch(input);

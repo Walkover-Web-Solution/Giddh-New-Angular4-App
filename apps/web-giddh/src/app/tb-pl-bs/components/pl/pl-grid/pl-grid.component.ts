@@ -31,6 +31,7 @@ export class PlGridComponent implements OnInit, OnChanges, OnDestroy {
     public plSearchControl: FormControl = new FormControl();
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
     public localeData: any = {};

@@ -46,7 +46,7 @@
                                 <!--Grid-->
                                 <ng-template #groupDetails let-list let-padding="padding">
                                     <section class="row-1" *ngFor="let grp of list" [hidden]="!grp.isVisible"
-                                        pl-grid-row [groupDetail]="grp" [padding]="padding" [search]="search"
+                                        pl-grid-row [expandAll]="expandAll" [groupDetail]="grp" [padding]="padding" [search]="search"
                                         [from]="from" [to]="to" [incomeStatement]="plData?.incomeStatment">
                                         <ng-container
                                             *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 10  }">

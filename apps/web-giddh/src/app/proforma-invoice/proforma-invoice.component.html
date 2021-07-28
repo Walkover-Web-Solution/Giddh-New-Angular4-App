@@ -2349,7 +2349,7 @@
                                                             <amount-field
                                                                 [amount]="((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0)"
                                                                 [currencySymbol]="baseCurrencySymbol"
-                                                                 [currencyCode]="companyCurrency"
+                                                                 [currencyCode]="companyCurrency"
                                                                 [ratePrecision]="true">
                                                             </amount-field>
 
@@ -2369,7 +2369,7 @@
                                                         <amount-field
                                                             [amount]="(transaction.amount ? transaction.amount : '0')"
                                                             [currencySymbol]="(isMulticurrencyAccount) ? invFormData.accountDetails.currencySymbol: false"
-                                                             [currencyCode]="(isMulticurrencyAccount) ? invFormData.accountDetails?.currency?.code: false">
+                                                             [currencyCode]="(isMulticurrencyAccount) ? invFormData.accountDetails?.currency?.code: false">
                                                         </amount-field>
 
                                                     </p>
@@ -2735,10 +2735,10 @@
                                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                                         <amount-field
                                                             [amount]="((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0)"
-                                                                                          [currencySymbol]="baseCurrencySymbol"
-                                                                                          [currencyCode]="companyCurrency"
+                                                                                          [currencySymbol]="baseCurrencySymbol"
+                                                                                          [currencyCode]="companyCurrency"
                                                             [ratePrecision]="true">
-                                                                                     </amount-field>
+                                                                                     </amount-field>
                                                     </div>
                                                 </div>
 
@@ -2773,14 +2773,14 @@
 
                                                         <amount-field *ngIf="!transaction.isStockTxn"
                                                             [amount]="(transaction.amount * exchangeRate || 0)"
-                                                                                          [currencySymbol]="baseCurrencySymbol"
-                                                                                          [currencyCode]="companyCurrency">
-                                                                                        </amount-field>
+                                                                                          [currencySymbol]="baseCurrencySymbol"
+                                                                                          [currencyCode]="companyCurrency">
+                                                                                        </amount-field>
                                                         <amount-field *ngIf="transaction.isStockTxn"
                                                             [amount]="(transaction.quantity * ((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0))"
-                                                                                          [currencySymbol]="baseCurrencySymbol"
-                                                                                          [currencyCode]="companyCurrency">
-                                                                                    </amount-field>
+                                                                                          [currencySymbol]="baseCurrencySymbol"
+                                                                                          [currencyCode]="companyCurrency">
+                                                                                    </amount-field>
                                                     </div>
                                                 </div>
 
@@ -2811,9 +2811,9 @@
                                                     </div>
                                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                                         <amount-field [amount]="entry.discountSum * exchangeRate"
-                                                                                          [currencySymbol]="baseCurrencySymbol"
-                                                                                          [currencyCode]="companyCurrency">
-                                                                                     </amount-field>
+                                                                                          [currencySymbol]="baseCurrencySymbol"
+                                                                                          [currencyCode]="companyCurrency">
+                                                                                     </amount-field>
                                                     </div>
                                                 </div>
 
@@ -2849,9 +2849,9 @@
                                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                                         <amount-field
                                                             [amount]="(entry.taxSum + entry.cessSum) *  exchangeRate"
-                                                                                          [currencySymbol]="baseCurrencySymbol"
-                                                                                          [currencyCode]="companyCurrency">
-                                                                                     </amount-field>
+                                                                                          [currencySymbol]="baseCurrencySymbol"
+                                                                                          [currencyCode]="companyCurrency">
+                                                                                     </amount-field>
                                                     </div>
 
                                                 </div>
@@ -2919,15 +2919,15 @@
                                                         {{ entry.otherTaxModal?.appliedOtherTax?.name }}
                                                         <span class="mr-l05">
                                                             <amount-field [amount]="entry.otherTaxSum * exchangeRate "
-                                                                                              [currencySymbol]="baseCurrencySymbol"
-                                                                                              [currencyCode]="companyCurrency">
-                                                                                        </amount-field>
+                                                                                              [currencySymbol]="baseCurrencySymbol"
+                                                                                              [currencyCode]="companyCurrency">
+                                                                                        </amount-field>
                                                         </span>
                                                     </div>
                                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                                         <amount-field [amount]="transaction.convertedTotal"
                                                             [currencySymbol]="baseCurrencySymbol"
-                                                             [currencyCode]="companyCurrency"> </amount-field>
+                                                             [currencyCode]="companyCurrency"> </amount-field>
                                                     </div>
 
                                                     <ng-container

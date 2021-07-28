@@ -62,6 +62,11 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This will process the login
+     *
+     * @memberof TokenVerifyComponent
+     */
     public processLogin(): void {
         this.generalService.storeUtmParameters(this.route.snapshot.queryParams);
         if (this.route.snapshot.queryParams['token']) {

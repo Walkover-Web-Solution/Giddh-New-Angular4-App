@@ -26,7 +26,6 @@
                             (adjustedVoucherType === 'advance-receipt') ?
                             commonLocaleData?.app_voucher_types?.advance_receipt : localeData?.voucher_label | replace:'[VOUCHER_TYPE]':currentVoucherLabel}}
                             Total: <i class="font-10"></i>
-
                             <span class="d-inline-flex justify-content-end">
                                 <amount-field [amount]="adjustPayment?.grandTotal"
                                     [currencySymbol]="invoiceFormDetails.accountDetails.currencySymbol"

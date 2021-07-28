@@ -87,6 +87,7 @@
 .warehouse-card .d-flex {
     justify-content: space-between;
     align-items: center;
+    padding-bottom: 10px;
 }
 
 .warehouse-card h3 {
@@ -223,6 +224,13 @@ span.set-as-default {
         .col-lg-4 {
             flex: 0 0 50% !important;
             max-width: 50% !important;
+        }
+    }
+}
+@media (max-width: 767px) {
+    .branch-vector {
+        img {
+            width: 150px;
         }
     }
 }
