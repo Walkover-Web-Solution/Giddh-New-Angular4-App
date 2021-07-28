@@ -21,7 +21,7 @@ export class EditFiltersContainersComponent implements OnChanges {
      * @memberof EditFiltersContainersComponent
      */
     public get errorCount(): number {
-        return this.invoiceUiDataService.contentFormErrors;
+        return this.invoiceUiDataService.contentFormErrors ?? 0;
     }
 
     constructor(
