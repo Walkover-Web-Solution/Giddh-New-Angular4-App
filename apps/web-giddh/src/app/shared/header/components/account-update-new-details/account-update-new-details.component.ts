@@ -53,6 +53,7 @@ import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 import { INameUniqueName } from 'apps/web-giddh/src/app/models/api-models/Inventory';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { clone, cloneDeep, differenceBy, flattenDeep, uniq } from 'apps/web-giddh/src/app/lodash-optimized';
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
 
 @Component({
     selector: 'account-update-new-details',
@@ -84,6 +85,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public taxGroupForm: FormGroup;
     @ViewChild('deleteMergedAccountModal', { static: true }) public deleteMergedAccountModal: ModalDirective;
     @ViewChild('moveMergedAccountModal', { static: true }) public moveMergedAccountModal: ModalDirective;
+    /** Tabs instance */
+    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
 
     public activeCompany: CompanyResponse;
     @Output() public submitClicked: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }>
@@ -270,6 +273,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     }] : this.flatGroupsOptions;
                     this.activeGroupUniqueName = acc.parentGroups.length > 0 ? acc.parentGroups[acc.parentGroups.length - 1].uniqueName : '';
                     this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(this.activeGroupUniqueName));
+
+                    this.store.pipe(select(appStore => appStore.groupwithaccounts.activeGroupUniqueName), take(1)).subscribe(response => {
+                        if(response !== this.activeGroupUniqueName) {
+                            this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
+                        }
+                    });
+                    
                 }
 
                 let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
@@ -432,17 +442,17 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.taxHierarchy();
         let selectedGroupDetails;
 
-        this.store.pipe(select(appStore => appStore.groupwithaccounts.activeGroup), take(1)).subscribe(response => {
+        this.store.pipe(select(appStore => appStore.groupwithaccounts.activeGroup), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 selectedGroupDetails = response;
+                if (selectedGroupDetails?.parentGroups) {
+                    let parentGroup = selectedGroupDetails.parentGroups.length > 1 ? selectedGroupDetails.parentGroups[1] : { uniqueName: selectedGroupDetails.uniqueName };
+                    if (parentGroup) {
+                        this.isParentDebtorCreditor(parentGroup.uniqueName);
+                    }
+                }
             }
-        })
-        if (selectedGroupDetails?.parentGroups) {
-            let parentGroup = selectedGroupDetails.parentGroups.length > 1 ? selectedGroupDetails.parentGroups[1] : { uniqueName: selectedGroupDetails.uniqueName };
-            if (parentGroup) {
-                this.isParentDebtorCreditor(parentGroup.uniqueName);
-            }
-        }
+        });
         this.prepareTaxDropdown();
     }
 
@@ -915,22 +925,42 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.isShowBankDetails(activeParentgroup);
             this.isDebtorCreditor = true;
 
-            if (accountAddress.controls.length === 0) {
-                this.addBlankGstForm();
-            }
-            if (!accountAddress.length) {
+            setTimeout(() => {
+                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
+                    this.staticTabs.tabs[0].active = true;
+                    this.changeDetectorRef.detectChanges();
+                }
+            }, 50);
+
+            if (accountAddress.controls.length === 0 || !accountAddress.length) {
                 this.addBlankGstForm();
             }
         } else if (activeParentgroup === 'bankaccounts') {
             this.isBankAccount = true;
             this.isDebtorCreditor = false;
             this.showBankDetail = false;
+
+            setTimeout(() => {
+                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
+                    this.staticTabs.tabs[0].active = true;
+                    this.changeDetectorRef.detectChanges();
+                }
+            }, 50);
         } else {
             this.isBankAccount = false;
             this.isDebtorCreditor = false;
             this.showBankDetail = false;
+
+            setTimeout(() => {
+                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
+                    this.staticTabs.tabs[1].active = true;
+                    this.changeDetectorRef.detectChanges();
+                }
+            }, 50);
         }
+        this.changeDetectorRef.detectChanges();
     }
+
     public isShowBankDetails(accountType: string) {
         if (accountType === 'sundrycreditors') {
             this.showBankDetail = true;

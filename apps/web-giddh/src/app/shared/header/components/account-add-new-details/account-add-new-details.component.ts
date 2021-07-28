@@ -674,18 +674,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
             }, 50);
 
-            if (accountAddress.controls.length === 0) {
+            if (accountAddress.controls.length === 0 || !accountAddress.length) {
                 this.addBlankGstForm();
             }
-            if (!accountAddress.length) {
-                this.addBlankGstForm();
-            }
-
-        } else if (activeParentgroup === 'bankaccounts') {
-            this.isBankAccount = true;
-            this.isDebtorCreditor = false;
-            this.showBankDetail = false;
-            this.addAccountForm.get('addresses').reset();
         } else {
             this.isBankAccount = false;
             this.isDebtorCreditor = false;
@@ -1186,6 +1177,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     } else {
                         this.GSTIN_OR_TRN = '';
                     }
+
+                    this.changeDetectorRef.detectChanges();
                 }
             });
         }
