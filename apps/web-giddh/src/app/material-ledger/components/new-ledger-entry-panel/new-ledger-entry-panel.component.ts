@@ -69,6 +69,8 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 import { AVAILABLE_ITC_LIST, BlankLedgerVM, TransactionVM } from '../../ledger.vm';
 import { LedgerDiscountComponent } from '../ledger-discount/ledger-discount.component';
+import { NewConfirmationModalComponent } from '../../../theme/confirmation-modal/confirmation-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -149,9 +151,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @ViewChild('deleteAttachedFileModal', { static: true }) public deleteAttachedFileModal: ModalDirective;
     @ViewChild('discount', { static: false }) public discountControl: LedgerDiscountComponent;
     @ViewChild('tax', { static: false }) public taxControll: TaxControlComponent;
-
-    /** RCM popup instance */
-    @ViewChild('rcmPopup', { static: false }) public rcmPopup: PopoverDirective;
 
     public sourceWarehouse: true;
     public uploadInput: EventEmitter<UploadInput>;
@@ -247,7 +246,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         private _ledgerService: LedgerService,
         private _loaderService: LoaderService,
         private settingsUtilityService: SettingsUtilityService,
-        private _toasty: ToasterService
+        private _toasty: ToasterService,
+        public dialog: MatDialog
     ) {
         this.discountAccountsList$ = this.store.pipe(select(p => p.settings.discount.discountList), takeUntil(this.destroyed$));
         this.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
@@ -977,7 +977,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 if (!className) {
                     return;
                 }
-                return className.contains('chkclrbsdp') || className.contains('currencyToggler') || className.contains('bs-datepicker');
+                return className.contains('currencyToggler') || className.contains('mat-datepicker-input');
             });
 
             if (shouldNotClose) {
@@ -1225,8 +1225,18 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public toggleRcmCheckbox(event: any): void {
-        event.preventDefault();
-        this.rcmConfiguration = this.generalService.getRcmConfiguration(event.target.checked, this.commonLocaleData);
+        this.rcmConfiguration = this.generalService.getRcmConfiguration(event?.checked, this.commonLocaleData);
+
+        let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            width: '630px',
+            data: {
+                configuration: this.rcmConfiguration
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            this.handleRcmChange(response);
+        });
     }
 
     /**
@@ -1243,9 +1253,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.calculateTotal();
         }
         this.currentTxn['subVoucher'] = this.isRcmEntry ? SubVoucher.ReverseCharge : '';
-        if (this.rcmPopup) {
-            this.rcmPopup.hide();
-        }
     }
 
     /**

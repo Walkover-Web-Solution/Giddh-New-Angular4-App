@@ -53,6 +53,8 @@ import { ConfirmationModalModule } from '../common/confirmation-modal/confirmati
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
+import { NewConfirmModalModule } from '../theme/new-confirm-modal';
+import { GenerateVoucherConfirmationModalComponent } from './components/generate-voucher-confirm-modal/generate-voucher-confirm-modal.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -63,7 +65,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatMenuModule } from '@angular/material/menu';
-import { NewConfirmModalModule } from '../theme/new-confirm-modal';
+import { MatSelectModule } from '@angular/material/select';
+import { NewConfirmationModalModule } from '../theme/confirmation-modal/confirmation-modal.module';
 
 
 @NgModule({
@@ -76,7 +79,8 @@ import { NewConfirmModalModule } from '../theme/new-confirm-modal';
         LedgerAsidePaneComponent,
         LedgerAsidePaneAccountComponent,
         LedgerColumnarReportTableComponent,
-        ImportStatementComponent
+        ImportStatementComponent,
+        GenerateVoucherConfirmationModalComponent
     ],
     exports: [
         LedgerComponent
@@ -141,7 +145,9 @@ import { NewConfirmModalModule } from '../theme/new-confirm-modal';
         MatDialogModule,
         MatRadioModule,
         MatMenuModule,
-        NewConfirmModalModule
+        NewConfirmModalModule,
+        MatSelectModule,
+        NewConfirmationModalModule
     ],
 })
 export class LedgerModule {
