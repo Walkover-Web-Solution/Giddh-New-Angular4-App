@@ -101,6 +101,12 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
             if (!this.accountUserForm.get('maxAmount')?.value) {
                 this.accountUserForm.get('duration')?.patchValue(UNLIMITED_LIMIT);
             }
+            
+            if(!this.accountUserForm.get('duration')?.value && this.accountUserForm.get('maxAmount')?.value) {
+                this.toaster.clearAllToaster();
+                this.toaster.errorToast(this.localeData?.payment?.duration_error);
+                return;
+            }
 
             this.settingsIntegrationService.bankAccountMultiRegistration(this.accountUserForm.value).pipe(take(1)).subscribe(response => {
                 if (response?.status === "success") {
