@@ -46,6 +46,8 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     public commonLocaleData: any = {};
     /** Stores the dynamic colspan value */
     public colspanValue: number = 0;
+    /** Columns to display in table */
+    public tableHeadingColumns: string[] = ['sno', 'date', 'particular', 'address', 'voucher_type', 'voucher_number', 'voucher_refno', 'voucher_refdate', 'tax_number', 'narration', 'stock_name', 'quantity', 'unit', 'rate', 'value', 'gross_total'];
 
     constructor(
         public settingsFinancialYearService: SettingsFinancialYearService,
@@ -148,6 +150,7 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
                         columns.forEach((element) => {
                             if (this.columnarTableColumn.indexOf(element) === -1) {
                                 this.columnarTableColumn.push(element);
+                                this.tableHeadingColumns.push(element);
                             }
                         });
                     }
