@@ -43,7 +43,6 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     public isElectron = isElectron;
     public isCordova = isCordova;
     public voucherRequest = null;
-    public voucherDetailsInProcess$: Observable<boolean> = of(true);
     public accountUniqueName: string = '';
     public selectedInvoiceNo: string = '';
     public selectedVoucherType: string = null;
@@ -79,6 +78,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
         });
 
         this.isErrOccured$ = this.store.pipe(select(p => p.invoice.invoiceDataHasError), distinctUntilChanged(), takeUntil(this.destroyed$));
+        this.voucherPreview$ = this.store.pipe(select(p => p.receipt.base64Data), distinctUntilChanged(), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {

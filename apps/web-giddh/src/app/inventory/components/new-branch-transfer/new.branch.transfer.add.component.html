@@ -467,7 +467,7 @@
                                                 [options]="stockList" [(ngModel)]="product.uniqueName"
                                                 (selected)="selectProduct($event, product);"></sh-select>
                                             <div class="position-relative wrap-hsn-box">
-                                                <div class="skuCode" (click)="focusSkuNumber();"
+                                                <div class="sku-code" (click)="focusSkuNumber();"
                                                     *ngIf="activeRow == i && product.uniqueName">
                                                     <label class="">SKU Code: </label>
                                                     <span>{{product.skuCode}}

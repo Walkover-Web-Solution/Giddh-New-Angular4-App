@@ -1340,6 +1340,31 @@
                                             (blur)="updateExchangeRate(grandTotalInr.value)">
                                     </div>
                                 </div>
+
+                                <div class="table-row" *ngIf="purchaseOrder.voucherDetails.tcsTotal > 0">
+                                    <div class="table-cell">{{commonLocaleData?.app_tcs}}</div>
+                                    <div class="table-cell figure-cell">
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="purchaseOrder.voucherDetails.tcsTotal"
+                                                [currencySymbol]="(isMulticurrencyAccount) ? purchaseOrder.accountDetails.currencySymbol :false"
+                                                [currencyCode]="(isMulticurrencyAccount) ? purchaseOrder.accountDetails?.currency?.code:false">
+                                            </amount-field>
+                                        </span>
+
+                                    </div>
+                                </div>
+
+                                <div class="table-row" *ngIf="purchaseOrder.voucherDetails.tdsTotal > 0">
+                                    <div class="table-cell">{{commonLocaleData?.app_tds}}</div>
+                                    <div class="table-cell figure-cell">
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="purchaseOrder.voucherDetails.tdsTotal "
+                                                [currencySymbol]="(isMulticurrencyAccount) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                                [currencyCode]="(isMulticurrencyAccount) ? purchaseOrder.accountDetails?.currency?.code : false">
+                                            </amount-field>
+                                        </span>
+                                    </div>
+                                </div>
                             </section>
                         </td>
                         <!-- endregion -->
