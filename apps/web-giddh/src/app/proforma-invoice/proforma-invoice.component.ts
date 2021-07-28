@@ -2400,13 +2400,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let exRate = this.originalExchangeRate;
         let requestObject: any;
         let voucherDate: any;
+        const deposit = new AmountClassMulticurrency();
+        deposit.accountUniqueName = this.depositAccountUniqueName;
+        deposit.amountForAccount = this.depositAmount;
         if (!this.isPurchaseInvoice) {
-            const deposit = new AmountClassMulticurrency();
-            deposit.accountUniqueName = this.depositAccountUniqueName;
-            deposit.amountForAccount = this.depositAmount;
-
             voucherDate = data.voucherDetails.voucherDate;
-
             requestObject = {
                 account: data.accountDetails,
                 updateAccountDetails: this.updateAccount,
@@ -2473,13 +2471,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
         } else {
             let purchaseOrders = [];
-
             if (this.selectedPoItems && this.selectedPoItems.length > 0) {
                 this.selectedPoItems.forEach(order => {
                     purchaseOrders.push({ name: this.linkedPoNumbers[order].voucherNumber, uniqueName: order });
                 });
             }
-
             requestObject = {
                 account: data.accountDetails,
                 number: this.invFormData.voucherDetails.voucherNumber || '',
@@ -2490,6 +2486,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 type: this.invoiceType,
                 attachedFiles: (this.invFormData.entries[0] && this.invFormData.entries[0].attachedFile) ? [this.invFormData.entries[0].attachedFile] : [],
                 templateDetails: data.templateDetails,
+                deposit: (this.currentVoucherFormDetails?.depositAllowed) ? deposit : undefined,
                 subVoucher: (this.isRcmEntry) ? SubVoucher.ReverseCharge : undefined,
                 purchaseOrders: purchaseOrders,
                 company: this.purchaseBillCompany
@@ -5544,7 +5541,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private createPurchaseRecord(request: PurchaseRecordRequest): void {
         if (this.generalService.voucherApiVersion === 2) {
             // Create a new puchase record with voucher API
-            request = this.proformaInvoiceUtilityService.getVoucherRequestObjectForInvoice(request);
             this.salesService.generateGenericItem(request, true).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
                 this.handleGenerateResponse(response, this.invoiceForm);
             }, () => {
