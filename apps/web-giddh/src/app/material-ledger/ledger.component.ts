@@ -50,6 +50,7 @@ import { ImportStatementComponent } from './components/import-statement/import-s
 import { ExportLedgerComponent } from './components/export-ledger/export-ledger.component';
 import { ShareLedgerComponent } from './components/share-ledger/share-ledger.component';
 import { ConfirmModalComponent } from '../theme/new-confirm-modal/confirm-modal.component';
+import { GenerateVoucherConfirmationModalComponent } from './components/generate-voucher-confirm-modal/generate-voucher-confirm-modal.component';
 
 @Component({
     selector: 'ledger',
@@ -86,7 +87,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public needToReCalculate: BehaviorSubject<boolean> = new BehaviorSubject(false);
     @ViewChild('newLedPanel', { static: false }) public newLedgerComponent: NewLedgerEntryPanelComponent;
     @ViewChild('updateLedgerModal', { static: false }) public updateLedgerModal: ModalDirective;
-    @ViewChild('bulkActionGenerateVoucherModal', { static: false }) public bulkActionGenerateVoucherModal: ModalDirective;
     /** datepicker element reference  */
     @ViewChild('datepickerTemplate', { static: false }) public datepickerTemplate: ElementRef;
     public showUpdateLedgerForm: boolean = false;
@@ -1593,7 +1593,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.showBulkActionConfirmationModal();
                 break;
             case 'generate':
-                this.bulkActionGenerateVoucherModal?.show();
+                this.showBulkActionGenerateVoucherModal();
                 break;
             case 'upload':
                 fileInput.click();
@@ -1683,7 +1683,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
     }
 
-    public showBulkActionConfirmationModal() {
+    public showBulkActionConfirmationModal(): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
             data: {
                 title: this.commonLocaleData?.app_confirmation,
@@ -1706,6 +1706,24 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public onConfirmationBulkActionConfirmation() {
         this.store.dispatch(this._ledgerActions.DeleteMultipleLedgerEntries(this.lc.accountUnq, _.cloneDeep(this.entryUniqueNamesForBulkAction)));
         this.entryUniqueNamesForBulkAction = [];
+    }
+
+    public showBulkActionGenerateVoucherModal(): void {
+        let dialogRef = this.dialog.open(GenerateVoucherConfirmationModalComponent, {
+            width: '630px',
+            data: {
+                title: this.commonLocaleData?.app_confirmation,
+                body: this.localeData?.select_voucher_generate,
+                button1Text: this.commonLocaleData?.app_generate_compound,
+                button2Text: this.commonLocaleData?.app_generate_multiple
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if(typeof response == "boolean") {
+                this.onSelectInvoiceGenerateOption(response);
+            }
+        });
     }
 
     public onUploadOutput(output: UploadOutput): void {
@@ -1741,13 +1759,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public onSelectInvoiceGenerateOption(isCombined: boolean) {
-        this.bulkActionGenerateVoucherModal.hide();
         this.entryUniqueNamesForBulkAction = _.uniq(this.entryUniqueNamesForBulkAction);
         this.store.dispatch(this._ledgerActions.GenerateBulkLedgerInvoice({ combined: isCombined }, [{ accountUniqueName: this.lc.accountUnq, entries: _.cloneDeep(this.entryUniqueNamesForBulkAction) }], 'ledger'));
-    }
-
-    public onCancelSelectInvoiceModal() {
-        this.bulkActionGenerateVoucherModal.hide();
     }
 
     public openSelectFilePopup(fileInput: any) {
@@ -1802,7 +1815,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     // endregion
 
     public toggleCurrency(event) {
-        console.log(event);
         let isThereBlankEntry = this.lc.blankLedger.transactions.some(s => s.selectedAccount);
         if (isThereBlankEntry) {
             this._toaster.errorToast(this.localeData?.save_unfinished_entry);
