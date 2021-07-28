@@ -47,7 +47,7 @@
     background-color: $white;
     z-index: 1000;
     width: 257px;
-    border: 1px solid $gainsboro;
+    border: 1px solid $pink-swan;
     border-radius: 4px;
     box-shadow: 0 7px 24px $black-russian;
 }
@@ -212,6 +212,9 @@ table th {
 }
 .table-middle th .d-flex {
     align-items: center;
+}
+.expand-collapse-btn {
+    margin-bottom: 0 !important;
 }
 .expand-collapse-btn a {
     display: flex;

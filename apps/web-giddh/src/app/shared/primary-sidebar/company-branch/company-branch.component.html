@@ -39,7 +39,7 @@
                         *ngIf="companyListForFilter && companyListForFilter.length && !(isCompanyRefreshInProcess$ | async)">
                         <li class="btn-group" *ngFor="let company of companyListForFilter;" [ngClass]="{'active': company.uniqueName === activeCompany?.uniqueName}">
                             <span id="button-basic" class="dropdown-toggle d-flex align-items-center"
-                                aria-controls="dropdown-basic" (click)="getCompanyBranches(company); showAllBranches(company);"> 
+                                aria-controls="dropdown-basic" (click)="getCompanyBranches(company); showAllBranches(company);">
                                 <i class="icon-company mr-2"></i>
                                 <span class="company-name-right">{{ company.name }}</span>
                                 <span class="font-11 text-right branch-count pt-0 pb-0" *ngIf="company?.branchCount > 1">{{ company?.branchCount }}</span>

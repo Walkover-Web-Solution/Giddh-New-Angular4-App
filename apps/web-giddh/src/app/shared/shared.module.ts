@@ -66,7 +66,7 @@ import { HamburgerMenuModule } from './header/components/hamburger-menu/hamburge
 import { GenericAsideMenuAccountComponent } from './generic-aside-menu-account/generic.aside.menu.account.component';
 import { GiddhPageLoaderModule } from './giddh-page-loader/giddh-page-loader.module';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
-import { GiddhDateRangepickerModule } from '../theme/giddh-daterangepicker/giddh-datepicker.module';
+import { GiddhDateRangepickerModule } from '../theme/giddh-daterangepicker/giddh-daterangepicker.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -112,6 +112,7 @@ export function provideConfig() {
         PurchaseSendEmailModalComponent,
         PrimarySidebarComponent,
         CompanyBranchComponent,
+        PrimarySidebarComponent,
         GenericAsideMenuAccountComponent
     ],
     imports: [

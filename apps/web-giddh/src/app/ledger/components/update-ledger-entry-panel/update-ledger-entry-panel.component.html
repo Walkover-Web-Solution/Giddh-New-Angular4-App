@@ -211,7 +211,7 @@
                                                 (click)="addBlankTrx('DEBIT', txn, $event)"
                                                 (blur)="onTxnAmountChange(txn)">
 
-                                            <p class="mb-0 amount-total pr-1" *ngIf="vm.isMultiCurrencyAvailable">
+                                            <p class="mb-0 amount-total" *ngIf="vm.isMultiCurrencyAvailable">
                                                 <ng-container
                                                     *ngTemplateOutlet="totalWithCurrencySymbol;context:{ $implicit: txn.convertedAmount }">
                                                 </ng-container>
@@ -230,10 +230,10 @@
                         <table class="ledger-footer-1">
 
                             <tbody>
-                                <tr class="total-col">
+                                <tr class="total-col row">
 
-                                    <td colspan="12" class="text-right h32">
-                                        <span *ngIf="vm.entryTotal.crTotal > vm.entryTotal.drTotal" class="pd-1"
+                                    <td colspan="12" class="col-12 col-sm-12 text-right min-h-32">
+                                        <span *ngIf="vm.entryTotal.crTotal > vm.entryTotal.drTotal" class="pd-2"
                                             [tooltip]="vm.ledgerUnderStandingObj.balanceText.cr" [placement]="'top'">
                                             {{localeData?.c_f}}: {{localeData?.cr | uppercase}}
                                             <span class="d-inline-flex">
@@ -242,15 +242,14 @@
                                                     [currencyCode]="vm.baseCurrencyDetails?.code">
                                                 </amount-field>
                                             </span>
-
                                         </span>
                                     </td>
 
                                 </tr>
 
-                                <tr class="total-col">
+                                <tr class="total-col row">
                                     <!-- reckoning -->
-                                    <td colspan="12" class="text-right h32">
+                                    <td colspan="12" class="col-12 col-sm-12 text-right min-h-32">
 
                                         <span class="bd-rt pr-1 pl-1 width-200">
                                             <amount-field
@@ -258,10 +257,9 @@
                                                 [currencySymbol]="vm.baseCurrencyDetails?.symbol"
                                                 [currencyCode]="vm.baseCurrencyDetails?.code">
                                             </amount-field>
-
                                         </span>
 
-                                        <p class="mb-0 amount-total pr-1 pb-1" *ngIf="vm.isMultiCurrencyAvailable">
+                                        <p class="mb-0 amount-total pr-1" *ngIf="vm.isMultiCurrencyAvailable">
                                             <ng-container *ngTemplateOutlet="totalWithCurrencySymbol;context: {
                         $implicit: (vm.convertedEntryTotal.drTotal > vm.convertedEntryTotal.crTotal ? vm.convertedEntryTotal.drTotal : vm.convertedEntryTotal.crTotal)
                         }"></ng-container>
@@ -428,41 +426,36 @@
                         <!-- region credit transaction footer -->
                         <table class="ledger-footer-1">
                             <tbody>
-                                <tr class="total-col">
-                                    <td colspan="12" class="text-right h32">
+                                <tr class="total-col row">
+                                    <td colspan="12" class="col-12  col-sm-12 text-right min-h-32">
                                         <span *ngIf="vm.entryTotal.drTotal > vm.entryTotal.crTotal">{{localeData?.c_f}}:
                                             {{localeData?.dr}}
-                                            <span class="primary-color pr-1 pl-1 d-inline-flex"
+                                            <span class="primary-color pd-2"
                                                 [tooltip]="vm.ledgerUnderStandingObj.balanceText.dr"
                                                 [placement]="'top'">
-
                                                 <amount-field [amount]="vm.compoundTotal"
                                                     [currencySymbol]="vm?.baseCurrencyDetails?.symbol"
                                                     [currencyCode]="vm?.baseCurrencyDetails?.code">
                                                 </amount-field>
-
-
                                             </span>
                                         </span>
                                     </td>
                                 </tr>
-                                <tr class="total-col">
+                                <tr class="total-col row">
                                     <!-- reckoning -->
-                                    <td colspan="12" class="text-right h32">
-                                        <span class="bd-rt pr-1">
-
+                                    <td colspan="12" class="col-12 col-sm-12 text-right pd-r1 min-h-32">
+                                        <span class="bd-rt">
                                             <amount-field
                                                 [amount]="(vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal)"
                                                 [currencySymbol]="vm?.baseCurrencyDetails?.symbol"
                                                 [currencyCode]="vm.baseCurrencyDetails?.code">
                                             </amount-field>
-
                                         </span>
-
-                                        <p class="mb-0 amount-total pr-1 pb-1" *ngIf="vm.isMultiCurrencyAvailable">
+                                        <p class="mb-0 pr-1 amount-total" *ngIf="vm.isMultiCurrencyAvailable">
                                             <ng-container *ngTemplateOutlet="totalWithCurrencySymbol;context: {
-                        $implicit: (vm.convertedEntryTotal.crTotal > vm.convertedEntryTotal.drTotal ? vm.convertedEntryTotal.crTotal : vm.convertedEntryTotal.drTotal)
-                        }"></ng-container>
+                                                $implicit: (vm.convertedEntryTotal.crTotal > vm.convertedEntryTotal.drTotal ? vm.convertedEntryTotal.crTotal : vm.convertedEntryTotal.drTotal)
+                                                }">
+                                            </ng-container>
                                         </p>
                                     </td>
                                 </tr>
@@ -478,7 +471,7 @@
             <!-- region new entry -->
             <div class="entrypanel width-100 pt-2">
                 <!-- reverse charge transction start -->
-                <div *ngIf="shouldShowRcmEntry" class="pd-b1 mt-b1 tourist-scheme-wrapper">
+                <div *ngIf="shouldShowRcmEntry" class="pd-b1 mt-1 tourist-scheme-wrapper">
                     <input id="tourist-scheme-1" class="checkbox-custom" type="checkbox" [ngModel]="isRcmEntry"
                         (click)="toggleRcmCheckbox($event)"
                         [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1">
@@ -544,15 +537,13 @@
                                         [prefix]="vm.selectedPrefixForCurrency" [suffix]="vm.selectedSuffixForCurrency"
                                         [rawInputValue]="vm.stockTrxEntry.inventory.rate"
                                         [(ngModel)]="vm.stockTrxEntry.inventory.rate" class="form-control text-right" />
-                                    <p class="mb-0 amount-total pr-1" *ngIf="vm.isMultiCurrencyAvailable">
-                                        <span>
-                                            <span class="d-inline-flex">
-                                                <amount-field [amount]="vm.convertedRate"
-                                                    [currencySymbol]="vm.selectedCurrency === 0 ? vm.foreignCurrencyDetails?.symbol : vm.baseCurrencyDetails?.symbol"
-                                                    [currencyCode]="vm.selectedCurrency === 0 ? vm.foreignCurrencyDetails?.code : vm.baseCurrencyDetails?.code"
-                                                    [ratePrecision]="true">
-                                                </amount-field>
-                                            </span>
+                                    <p class="mb-0 amount-total" *ngIf="vm.isMultiCurrencyAvailable">
+                                        <span class="d-inline-flex">
+                                            <amount-field [amount]="vm.convertedRate"
+                                                [currencySymbol]="vm.selectedCurrency === 0 ? vm.foreignCurrencyDetails?.symbol : vm.baseCurrencyDetails?.symbol"
+                                                [currencyCode]="vm.selectedCurrency === 0 ? vm.foreignCurrencyDetails?.code : vm.baseCurrencyDetails?.code"
+                                                [ratePrecision]="true">
+                                            </amount-field>
                                         </span>
                                     </p>
                                 </div>
@@ -579,7 +570,7 @@
                                     [rawInputValue]="vm.totalAmount" [prefix]="vm.selectedPrefixForCurrency"
                                     [suffix]="vm.selectedSuffixForCurrency" (focus)="hideDiscountTax()"
                                     (blur)="vm.inventoryAmountChanged()" [(ngModel)]="vm.totalAmount" />
-                                <p class="mb-0 amount-total pr-1" *ngIf="vm.isMultiCurrencyAvailable">
+                                <p class="mb-0 amount-total" *ngIf="vm.isMultiCurrencyAvailable">
                                     <ng-container
                                         *ngTemplateOutlet="totalWithCurrencySymbol;context: { $implicit: vm.convertedTotalAmount }">
                                     </ng-container>
@@ -606,7 +597,7 @@
                                     </update-ledger-discount>
                                 </span>
 
-                                <p class="mb-0 amount-total pr-1" *ngIf="vm.isMultiCurrencyAvailable">
+                                <p class="mb-0 amount-total" *ngIf="vm.isMultiCurrencyAvailable">
                                     <ng-container
                                         *ngTemplateOutlet="totalWithCurrencySymbol;context: { $implicit: vm.convertedDiscountTrxTotal }">
                                     </ng-container>
@@ -643,7 +634,7 @@
                                     </update-ledger-tax-control>
                                 </span>
 
-                                <p class="mb-0 amount-total pr-1" *ngIf="vm.isMultiCurrencyAvailable">
+                                <p class="mb-0 amount-total" *ngIf="vm.isMultiCurrencyAvailable">
                                     <ng-container
                                         *ngTemplateOutlet="totalWithCurrencySymbol;context: { $implicit: vm.convertedTaxTrxTotal }">
                                     </ng-container>
@@ -664,7 +655,7 @@
                                     [(ngModel)]="vm.grandTotal" [mask]="vm.inputMaskFormat"
                                     [prefix]="vm.selectedPrefixForCurrency" [rawInputValue]="vm.grandTotal"
                                     [suffix]="vm.selectedSuffixForCurrency" (blur)="vm.inventoryTotalChanged()" />
-                                <p class="mb-0 amount-total pr-1 pb-1" *ngIf="vm.isMultiCurrencyAvailable">
+                                <p class="mb-0 amount-total" *ngIf="vm.isMultiCurrencyAvailable">
                                     <ng-container
                                         *ngTemplateOutlet="totalWithCurrencySymbol;context: { $implicit: vm.convertedGrandTotal }">
                                     </ng-container>
@@ -716,7 +707,7 @@
                 <!-- region more details and total section -->
 
                 <div class="row ledger-bottom">
-                    <div class="col-md-6 pd-t1">
+                    <div class="col-md-6 pt-1">
                         <!-- make it functional (Developer end) -->
                         <div *ngIf="shouldShowWarehouse && warehouses?.length > 1" class="row mr-b1">
                             <div class="col-sm-6 pd-r1">
@@ -1051,7 +1042,6 @@
 
                                     <span class="primary-color" *ngIf="!vm.isMultiCurrencyAvailable">
                                         {{localeData?.compound_total}}:
-
                                         <span class="d-inline-flex">
                                             <amount-field [amount]="vm.compoundTotal"
                                                 [currencySymbol]="vm.baseCurrencyDetails?.symbol"
@@ -1080,7 +1070,6 @@
                                             {{commonLocaleData?.app_numbers?.one}}
                                             {{ vm.selectedCurrencyForDisplay === 0 ? vm.baseCurrencyDetails?.code :
                                             vm.foreignCurrencyDetails?.code }}
-
                                         </li>
 
                                         <li>
@@ -1181,7 +1170,6 @@
                 [currencySymbol]="vm.selectedCurrency === 0 ? vm.foreignCurrencyDetails?.symbol : vm.baseCurrencyDetails?.symbol"
                 [currencyCode]="vm.selectedCurrency === 0 ? vm.foreignCurrencyDetails?.code : vm.baseCurrencyDetails?.code">
             </amount-field>
-
         </span>
 
     </ng-template>

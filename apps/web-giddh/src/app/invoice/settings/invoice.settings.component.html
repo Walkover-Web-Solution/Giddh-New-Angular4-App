@@ -170,17 +170,12 @@
                     </ng-template>
 
                     <div class="estimate-tab single-tab-block">
-
                         <div class="box clearfix mb-2">
-
                             <h4 class="clearfix bd-rb">{{localeData?.estimate_quotation}} <span></span></h4>
-
                             <div class="clearfix">
-
                                 <div class="row heading-name">
                                     <div class="col-sm-12 col-md-12 col-lg-3  lh-34">
                                         <label>{{localeData?.heading_name}}<span class="red-text">*</span></label></div>
-
                                     <div class="col-sm-12 col-md-12 col-lg-9">
                                         <div class="">
                                             <div class="">
@@ -193,19 +188,13 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
-
                                 </div>
-
                                 <div class="row">
-
                                     <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
                                         <label>{{localeData?.default_expiry_days}}</label></div>
-
                                     <div class="col-sm-12 col-md-12 col-lg-3">
-
                                         <div class="default-expiry">
                                             <div class="">
                                                 <div class=" form-group">
@@ -215,26 +204,18 @@
                                                             placeholder="00" decimalDigitsDirective
                                                             name="estimate-default-expiry" />
                                                         <span> {{commonLocaleData?.app_days}} </span>
-
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
-
                                 <div class="row next-step-estimate">
-
                                     <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
                                         <label>{{localeData?.estimate_next_step}}<span class="red-text">*</span></label>
                                     </div>
-
                                     <div class="col-sm-12 col-md-12 col-lg-12">
-
                                         <div class="select-estimate mr-r3">
-
                                             <div class="col-md-12 p-0">
                                                 <span class="p-0 mr-3">
                                                     <input id="radio-5" class="radio-custom cp ml-0" name="signatureType"
@@ -243,7 +224,6 @@
                                                     <label for="radio-5"
                                                         class="radio-custom-label">{{localeData?.proforma}}</label>
                                                 </span>
-
                                                 <span class="p-0 mr-3">
                                                     <input id="radio-6" class="radio-custom cp ml-0" name="signatureType"
                                                         type="radio" [(ngModel)]="estimateSetting.nextStepToEstimate"
@@ -251,31 +231,23 @@
                                                     <label for="radio-6"
                                                         class="radio-custom-label">{{commonLocaleData?.app_invoice}}</label>
                                                 </span>
-
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="clearfix  pd-t1">
-
                                     <div class="row">
-
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <input type="checkbox" [(ngModel)]="estimateSetting.autoChangeStatusOnExp"
                                                 name="estimateAutoChange" class="show-on-mobile" />
                                             <label>{{localeData?.auto_change_status_expiry}}</label>
                                         </div>
-
                                         <div class="col-sm-12 col-md-12 col-lg-9 form-group">
                                             <input type="checkbox" [(ngModel)]="estimateSetting.autoChangeStatusOnExp"
                                                 name="estimateAutoChange" class="hide-on-mobile" />
                                         </div>
                                     </div>
-
                                 </div>
-
                                 <div class="clearfix  pd-t1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
@@ -289,9 +261,7 @@
                                         </div>
                                     </div>
                                 </div>
-
-
-                                <!-- <div class="clearfix pd-t1">
+                                <div class="clearfix pd-t1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-md-12 col-lg-3">
                                             <input type="checkbox" [(ngModel)]="estimateSetting.sendSms" class="pull-left"
@@ -303,15 +273,12 @@
                                                 <input type="checkbox" [(ngModel)]="estimateSetting.sendSms"
                                                     class="pull-left" name="invoiceCreatePaymentEntry"
                                                     class="hide-on-mobile" />
-
                                             </div>
                                         </div>
                                     </div>
-                                </div> -->
-
+                                </div>
                                 <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                             </div>
-
                         </div>
                     </div>
                 </tab>
@@ -370,6 +337,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
 

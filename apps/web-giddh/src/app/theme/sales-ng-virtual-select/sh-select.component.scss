@@ -104,29 +104,29 @@ i.close.icon.clear:hover::after {
 }
 
 .selected-val {
-    border: 1px solid $light-gray !important;
+    border: 1px solid $gainsboro !important;
     padding-right: 5px !important;
     background: $white !important;
 }
 
 .header.open > input[type="text"] {
-    border-color: $light-gray;
+    border-color: $gainsboro;
 }
 
 .header .bdr > input[type="text"] {
     border: 0;
 }
 .header .bdr > input[type="text"]::-webkit-input-placeholder {
-    color: $nobel !important;
+    color: $silver !important;
 }
 .header .bdr > input[type="text"]::-moz-placeholder {
-    color: $nobel !important;
+    color: $silver !important;
 }
 .header .bdr > input[type="text"]:-ms-input-placeholder {
-    color: $nobel !important;
+    color: $silver !important;
 }
 .header .bdr > input[type="text"]:-moz-placeholder {
-    color: $nobel !important;
+    color: $silver !important;
 }
 
 .toggle {
@@ -142,7 +142,7 @@ i.close.icon.clear:hover::after {
     bottom: 0;
     cursor: pointer;
     background: $solitude;
-    color: $dim-gray;
+    color: $dark-gray;
     font-size: 16px;
 }
 
@@ -171,7 +171,7 @@ button.form-control:focus {
 
 .bottom-border-only {
     border: none !important;
-    border-bottom: 1px solid $light-gray !important;
+    border-bottom: 1px solid $gainsboro !important;
     border-radius: 0 !important;
 }
 .advance-search .header {

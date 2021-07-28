@@ -14,7 +14,6 @@ import { LaddaModule } from 'angular2-ladda';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { SharedModule } from '../shared/shared.module';
-
 const PERMISSION_ROUTES: Routes = [
     { path: '', redirectTo: 'pages/permissions/list', pathMatch: 'full' },
     {

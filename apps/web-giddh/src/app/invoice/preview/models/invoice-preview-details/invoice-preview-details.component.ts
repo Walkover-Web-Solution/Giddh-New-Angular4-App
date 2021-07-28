@@ -238,7 +238,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if ('items' in changes && changes.items.currentValue !== changes.items.previousValue) {
+        if ('items' in changes && changes.items.currentValue.filter(newItem => (!changes?.items?.previousValue || changes?.items?.previousValue?.every(oldItem => oldItem.uniqueName !== newItem?.uniqueName)))?.length) {
             this.filteredData = changes.items.currentValue;
             if (this.selectedItem && this.selectedItem.uniqueName) {
                 this.selectedItem = this.filteredData.filter(item => {
@@ -703,6 +703,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     this.detectChanges();
                 } else {
                     this.isAccountHaveAdvanceReceipts = false;
+                    this.detectChanges();
                 }
             });
         }

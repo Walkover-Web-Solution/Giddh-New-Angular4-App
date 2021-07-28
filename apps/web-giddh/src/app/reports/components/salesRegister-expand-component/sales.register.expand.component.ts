@@ -17,7 +17,6 @@ import { BreakpointObserver } from '@angular/cdk/layout';
     templateUrl: './sales.register.expand.component.html',
     styleUrls: ['./sales.register.expand.component.scss']
 })
-
 export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public SalesRegisteDetailedItems: SalesRegisteDetailedResponse;
     public from: string;

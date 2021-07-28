@@ -29,7 +29,6 @@
     width: 100%;
     background: $chablis;
 }
-
 .tb-pl-custom-title {
     font-family: "opensans-semibold" !important;
     font-size: 16px !important;
@@ -63,6 +62,17 @@ ul.list-unstyled li a {
     -ms-user-select: none;
     user-select: none;
 }
+.account {
+    div {
+        -webkit-line-clamp: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
 .row.row-item {
     height: 35px !important;
+}
+.trial-balance-viewport {
+    background-color: $solitude;
 }
