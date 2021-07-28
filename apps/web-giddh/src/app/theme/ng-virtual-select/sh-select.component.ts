@@ -52,7 +52,6 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Input() public readonlyInput: boolean;
     /* This is used to set the value */
     @Input() public fixedValue: string = "";
-
     /** True when pagination should be enabled */
     @Input() public isPaginationEnabled: boolean;
     /** True if the compoonent should be used as dynamic search component instead of static search */
@@ -65,6 +64,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Input() public isRequired: boolean = false;
     /** True, if selected values should not be reset when options change */
     @Input() public doNotResetSelectedValues: boolean = false;
+    /** True if select all option is checked */
+    @Input() public isSelectAllChecked: boolean = false;
 
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();

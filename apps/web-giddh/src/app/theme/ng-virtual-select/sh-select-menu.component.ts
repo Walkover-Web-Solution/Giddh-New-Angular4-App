@@ -28,9 +28,10 @@ export class ShSelectMenuComponent implements OnChanges {
     @Input() public isRequired: boolean = false;
     /** This will hold searched text */
     @Input() public filter: string = '';
-
     /** True when pagination should be enabled */
     @Input() isPaginationEnabled: boolean;
+    /** True if select all option is checked */
+    @Input() isSelectAllChecked: boolean = false;
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
 
@@ -63,19 +64,21 @@ export class ShSelectMenuComponent implements OnChanges {
         if (changes['isRequired'] && changes['isRequired'].currentValue !== changes['isRequired'].previousValue) {
             this.autoSelectIfSingleValueAvailable();
         }
+
+        if(changes['isSelectAllChecked']) {
+            this.isSelectAllChecked = changes['isSelectAllChecked'].previousValue;
+        }
     }
 
     public toggleSelected(row) {
         if (row.value === this.selectAllRecords) {
-            let isSelectAllChecked = this.selectedValues.indexOf(row);
-
             this._rows.forEach(key => {
-                if (isSelectAllChecked === -1) {
-                    if (this.selectedValues.indexOf(key) === -1) {
+                if (this.isSelectAllChecked) {
+                    if (this.selectedValues.indexOf(key) !== -1) {
                         this.noToggleClick.emit(key);
                     }
                 } else {
-                    if (this.selectedValues.indexOf(key) !== -1) {
+                    if (this.selectedValues.indexOf(key) === -1) {
                         this.noToggleClick.emit(key);
                     }
                 }

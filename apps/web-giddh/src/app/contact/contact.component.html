@@ -984,7 +984,7 @@
                                     [attr.data-title]="item.key">
                                     {{item.value || '-' }}</td>
                             </ng-container>
-                            <td data-title="Action" *ngIf="isICICIIntegrated">
+                            <td [attr.data-title]="commonLocaleData?.app_action" *ngIf="isICICIIntegrated">
                                 <button *ngIf="account?.bankPaymentDetails && account?.country?.code==='IN'"
                                     class="btn btn-small btn-success" (click)="openBulkPaymentModal(template, account)">
                                     {{commonLocaleData?.app_pay_now}} </button>
