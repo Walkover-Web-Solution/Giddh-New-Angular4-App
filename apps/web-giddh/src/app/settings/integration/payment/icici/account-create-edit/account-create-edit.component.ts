@@ -82,7 +82,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
             this.accountForm = this.formBuilder.group({
                 bank: ['ICICI'],
                 loginId: ['', Validators.required],
-                accountNumber: ['', Validators.compose([Validators.required, Validators.minLength(9), Validators.maxLength(11)])],
+                accountNumber: ['', Validators.compose([Validators.required, Validators.minLength(9), Validators.maxLength(18)])],
                 accountUniqueName: ['', Validators.required],
                 paymentAlerts: [''],
                 userUniqueName: ['', Validators.required],
@@ -191,24 +191,45 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      * @memberof AccountCreateEditComponent
      */
     public selectPaymentAlertUsers(event: any): void {
-        let isSelectAllChecked = event.filter(ev => ev.value === this.selectAllRecords);
-        let isSelectAllAlreadyChecked = this.paymentAlerts.filter(ev => ev === this.selectAllRecords);
+        if(event) {
+            let isSelectedValueAlreadyChecked = this.paymentAlerts.filter(paymentAlertUser => paymentAlertUser === event?.value);
+            if(event?.value === this.selectAllRecords) {
+                if(isSelectedValueAlreadyChecked?.length > 0) {
+                    this.paymentAlerts = [];
+                    this.forceClearPaymentUpdates$ = observableOf({ status: true });
+                } else {
+                    this.paymentAlerts = this.paymentAlertsUsersList.map(user => user.value);
+                }
+            } else {
+                if(isSelectedValueAlreadyChecked?.length > 0) {
+                    this.paymentAlerts = this.paymentAlerts.filter(paymentAlertUser => paymentAlertUser !== event?.value);
+                } else {
+                    this.paymentAlerts.push(event?.value);
+                }
 
-        if (isSelectAllChecked?.length > 0 && isSelectAllAlreadyChecked?.length === 0 && !this.shouldShowSelectAllChecked) {
-            this.paymentAlerts = this.paymentAlertsUsersList.map(user => user.value);
-        } else if (isSelectAllAlreadyChecked?.length > 0 && isSelectAllChecked?.length === 0) {
-            this.paymentAlerts = [];
-            this.forceClearPaymentUpdates$ = observableOf({ status: true });
-        } else {
-            this.paymentAlerts = event.map(user => user.value);
+                let isAllOptionsChecked = this.paymentAlerts.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords); 
+                let isSelectAllChecked = this.paymentAlerts.filter(paymentAlertUser => paymentAlertUser === this.selectAllRecords);
+                if((isAllOptionsChecked?.length === this.paymentAlertsUsersList?.length - 1) && !isSelectAllChecked?.length) {
+                    // if all options checked and select all is unchecked, we need to show select all as selected
+                    this.paymentAlerts.push(this.selectAllRecords);
+                } else if((isAllOptionsChecked?.length < this.paymentAlertsUsersList?.length - 1) && isSelectAllChecked) {
+                    // if all options are not checked and select all is checked, we need to show select all as unchecked
+                    this.paymentAlerts = this.paymentAlerts.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords);
+                }
+            }
         }
+    }
 
-        if (this.paymentAlerts?.length === 1 && isSelectAllChecked?.length > 0) {
-            this.paymentAlerts = [];
-            this.forceClearPaymentUpdates$ = observableOf({ status: true });
+    /**
+     * This will update the payment alert users list if user removed by cross from sh-select
+     *
+     * @param {*} event
+     * @memberof AccountCreateEditComponent
+     */
+    public clearSingleItem(event: any): void {
+        if(event) {
+            this.paymentAlerts = event?.map(user => user.value);
         }
-
-        this.shouldShowSelectAllChecked = this.isSelectAllChecked(this.selectAllRecords);
     }
 
     /**

@@ -115,6 +115,7 @@
         "delete_login": "आपण खरोखर लॉगिन आयडी [LOGIN_ID] हटवू इच्छिता?",
         "connected": "जोडलेले",
         "used": "वापरलेले",
-        "get_instant_overdraft": "इन्स्टंट ओव्हरड्राफ्ट मिळवा"
+        "get_instant_overdraft": "इन्स्टंट ओव्हरड्राफ्ट मिळवा",
+        "duration_error": "कृपया कालावधी निवडा"
 	}
 }

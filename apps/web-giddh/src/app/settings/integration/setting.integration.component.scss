@@ -255,3 +255,15 @@
 .payor-duration {
     margin-top: 2px;
 }
+
+@media (max-width: 1400px) and (min-width: 1200px) {
+    .account-wrapper {
+        width: 80% !important;
+    }
+}
+
+@media (max-width: 1199px) {
+    .account-wrapper {
+        width: 100% !important;
+    }
+}
