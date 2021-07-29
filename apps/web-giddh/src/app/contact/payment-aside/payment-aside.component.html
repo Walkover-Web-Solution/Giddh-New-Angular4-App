@@ -134,7 +134,7 @@
                                                 class="text-danger">*</span></label>
                                         <input class="form-control" name="closingBalanceAmount{{entryIdx}}"
                                             maxLength="12" decimalDigitsDirective
-                                            (blur)="getTotalAmount();preventZero(item.closingBalanceAmount, entryIdx);"
+                                            (blur)="getTotalAmount(); getBankAccountPayorsList(); preventZero(item.closingBalanceAmount, entryIdx);"
                                             [mask]="inputMaskFormat" [(ngModel)]="item.closingBalanceAmount" type="text"
                                             [required]="!isPayClicked" [disabled]="isPayClicked">
                                     </div>
