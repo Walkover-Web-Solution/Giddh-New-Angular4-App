@@ -227,7 +227,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
             });
         }
     }
-
     public addNumber(no: string) {
         this.oneTimePassword = '';
         const mobileRegex = /^[0-9]{1,10}$/;
@@ -329,14 +328,13 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         stateDetailsRequest.lastState = `pages/user-details/${tabName}`;
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
-
-    /**
+     /**
      * This will return page heading based on active tab
      *
      * @param {boolean} event
      * @memberof UserDetailsComponent
      */
-     public getPageHeading(): string {
+      public getPageHeading(): string {
         let pageHeading = "";
 
         if (this.isMobileScreen) {

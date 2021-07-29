@@ -140,8 +140,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         PurchaseOrderPreviewModalComponent,
         PurchaseSendEmailModalComponent,
         GiddhDaterangepickerComponent,
-        PrimarySidebarComponent,
         CompanyBranchComponent,
+        PrimarySidebarComponent,
         GenericAsideMenuAccountComponent
     ],
     imports: [

@@ -129,6 +129,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public forceClear$: Observable<IForceClear> = of({ status: false });
     /** True if payor list api call in progress */
     public isPayorListInProgress: boolean = false;
+    /** True if payor is required */
+    public isPayorRequired: boolean = true;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -416,7 +418,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             this.requestObjectToGetOTP.bankName = event.label;
             this.selectedBankUrn = '';
             this.requestObjectToGetOTP.urn = '';
-            this.forceClear$ = of({ status: true });
             this.totalAvailableBalance = event.additional.effectiveBal;
         }
         this.getTotalAmount();
@@ -681,7 +682,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         if(!this.selectedBankUniqueName || !this.totalSelectedAccountAmount) {
             return;
         }
-
+        this.isPayorRequired = false;
+        this.forceClear$ = of({ status: true });
         this.isPayorListInProgress = true;
         this.settingsIntegrationService.getBankAccountPayorsList(this.selectedBankUniqueName, this.totalSelectedAccountAmount).pipe(take(1)).subscribe(response => {
             if(response?.status === "success") {
@@ -690,6 +692,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 response?.body?.forEach(payor => {
                     this.payorsList.push({label: payor?.user?.name, value: payor?.urn});
                 });
+                this.isPayorRequired = true;
             } else {
                 if(response?.body?.message) {
                     this._toaster.clearAllToaster();

@@ -22,7 +22,6 @@ export class BalanceSheetGridRowComponent implements OnChanges {
     public minimumViewportLimit = TRIAL_BALANCE_VIEWPORT_LIMIT;
 
     constructor(private cd: ChangeDetectorRef) {
-
     }
 
     public ngOnChanges(changes: SimpleChanges) {

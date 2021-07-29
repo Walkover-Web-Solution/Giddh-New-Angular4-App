@@ -1,9 +1,8 @@
 @import "../../../../../assets/css/color.scss";
-
 .list-item:focus,
 .list-item:focus .list-item {
     color: $white !important;
-    background: $primary;
+    background: $vivid-blue;
 }
 
 .virtual-group-list {

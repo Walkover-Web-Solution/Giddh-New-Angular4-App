@@ -14,7 +14,7 @@
     </div>
 </div>
 <div class="form-body white-bg clearfix margin-child-label">
-    <div class="form-bg clearfix">
+    <div class="clearfix">
         <form [formGroup]="form" class="form-group">
             <div class="row">
                 <div class="col-6 form-group">
@@ -113,7 +113,7 @@
                     <div class="mr-t1 pd-l05 pd-r05">
                         <div class="col-12">
                             <div class="checkbox">
-                                <label class="" for="isManufactured">
+                                <label for="isManufactured">
                                     <input type="checkbox" formControlName="isManufactured" id="isManufactured"
                                         name="isManufactured"> Is
                                     it
@@ -125,7 +125,7 @@
 
 
                     <section class="col-12" *ngIf="form.value.isManufactured">
-                        <div class="">
+                        <div>
                             <h1 class="section-head bd-rb"><strong>{{form.controls['stock'].value}} (Made with)</strong>
                             </h1>
 

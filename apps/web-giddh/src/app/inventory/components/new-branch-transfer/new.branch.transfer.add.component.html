@@ -431,421 +431,434 @@
                     </div>
                 </div>
                 <div class="col-sm-12">
-                    <table class="table basic" id="table-receipt">
-                        <thead *ngIf="transferType === 'products'">
-                            <tr>
-                                <th width="2%">#</th>
-                                <th data-title="Product Description" width="30%">Product Description</th>
-                                <th width="20%" class="text-right">Qty/Unit</th>
-                                <th width="20%" class="text-right">Rate</th>
-                                <th width="20%" class="text-right">Amount</th>
-                            </tr>
-                        </thead>
-                        <thead *ngIf="transferType !== 'products'">
-                            <tr>
-                                <th width="2%">#</th>
-                                <th width="30%" *ngIf="branchTransferMode === 'deliverynote'">Receiver’s Details</th>
-                                <th width="30%" *ngIf="branchTransferMode === 'receiptnote'">Sender’s Details</th>
-                                <th width="20%" class="text-right">Qty/Unit</th>
-                                <th width="20%" class="text-right">Rate</th>
-                                <th width="20%" class="text-right">Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody *ngIf="transferType === 'products'">
-                            <tr *ngFor="let product of branchTransfer.products; let i = index;"
-                                (click)="setActiveRow(i); $event.stopPropagation()" (clickOutside)="hideActiveRow()">
-                                <td>{{i+1}}.</td>
-                                <td>
-                                    <div *ngIf="activeRow === i">
-                                        <sh-select name="productName{{i}}" #selectDropdown [notFoundLink]="true"
-                                            (noResultsClicked)="onProductNoResultsClicked(i)" [isFilterEnabled]="true"
-                                            [forceClearReactive]="forceClear$ | async" [options]="stockList"
-                                            [(ngModel)]="product.uniqueName"
-                                            (selected)="selectProduct($event, product);"></sh-select>
+                    <div class="table-delivery">
+                        <table class="table basic mb-0" id="table-receipt">
+                            <thead *ngIf="transferType === 'products'">
+                                <tr>
+                                    <th width="2%">#</th>
+                                    <th data-title="Product Description" width="30%" class="min-wid-product">Product
+                                        Description</th>
+                                    <th width="20%" class="text-right min-wid-qty">Qty/Unit</th>
+                                    <th width="20%" class="text-right min-wid-rate">Rate</th>
+                                    <th width="20%" class="text-right min-wid-amt">Amount</th>
+                                </tr>
+                            </thead>
+                            <thead *ngIf="transferType !== 'products'">
+                                <tr>
+                                    <th width="2%">#</th>
+                                    <th width="30%" *ngIf="branchTransferMode === 'deliverynote'">Receiver’s Details
+                                    </th>
+                                    <th width="30%" *ngIf="branchTransferMode === 'receiptnote'">Sender’s Details</th>
+                                    <th width="20%" class="text-right">Qty/Unit</th>
+                                    <th width="20%" class="text-right">Rate</th>
+                                    <th width="20%" class="text-right">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody *ngIf="transferType === 'products'">
+                                <tr *ngFor="let product of branchTransfer.products; let i = index;"
+                                    (click)="setActiveRow(i); $event.stopPropagation()"
+                                    (clickOutside)="hideActiveRow()">
+                                    <td>{{i+1}}.</td>
+                                    <td class="min-wid-product">
+                                        <div *ngIf="activeRow === i">
+                                            <sh-select name="productName{{i}}" #selectDropdown [notFoundLink]="true"
+                                                (noResultsClicked)="onProductNoResultsClicked(i)"
+                                                [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async"
+                                                [options]="stockList" [(ngModel)]="product.uniqueName"
+                                                (selected)="selectProduct($event, product);"></sh-select>
+                                            <div class="position-relative wrap-hsn-box">
+                                                <div class="sku-code" (click)="focusSkuNumber();"
+                                                    *ngIf="activeRow == i && product.uniqueName">
+                                                    <label class="">SKU Code: </label>
+                                                    <span>{{product.skuCode}}
+                                                        <span class="edit-icon cp">
+                                                            <img src="assets/images/edit-pencilicon.svg">
+                                                        </span>
+                                                    </span>
+                                                </div>
+                                                <div class="hsn-code-dropdown sku-number-dropdown"
+                                                    *ngIf="skuNumberPopupShow && activeRow == i">
+                                                    <label>SKU Code:</label>
+                                                    <input type="text" maxlength="50" placeholder="SKU Code"
+                                                        name="productSkuCode{{i}}" #productSkuCode
+                                                        [(ngModel)]="skuNumber" />
+                                                    <div class="btn-group mt-2 pt-1 d-flex">
+                                                        <button class="btn btn-sm btn-success" type="button"
+                                                            (click)="saveSkuNumberPopup(product)">Save</button>
+                                                        <button class="btn btn-sm btn-primary mr-0" type="button"
+                                                            (click)="hideSkuNumberPopup()">Cancel</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <textarea #productDescription rows="3" cols="5" maxlength="100"
+                                                class="form-control" name="productDescription{{i}}"
+                                                *ngIf="product.uniqueName" [(ngModel)]="product.description"></textarea>
+                                        </div>
+                                        <div *ngIf="activeRow !== i">
+                                            <div *ngIf="product.name">{{product.name}}</div>
+                                            <div *ngIf="product.skuCode">SKU Code: {{product.skuCode}}</div>
+                                            <div *ngIf="product.showCodeType === 'hsn'">HSN Code: {{product.hsnNumber}}
+                                            </div>
+                                            <div *ngIf="product.showCodeType === 'sac'">SAC Code: {{product.sacNumber}}
+                                            </div>
+                                            <div *ngIf="product.description">{{product.description}}</div>
+                                            <div *ngIf="(!product?.name && !product?.description && !(product?.hsnNumber || product?.sacNumber) && !product?.skuCode)"
+                                                class="placeholder-for-table">Enter product details</div>
+                                        </div>
                                         <div class="position-relative wrap-hsn-box">
-                                            <div class="sku-code" (click)="focusSkuNumber();"
-                                                *ngIf="activeRow == i && product.uniqueName">
-                                                <label class="">SKU Code: </label>
-                                                <span>{{product.skuCode}}
+                                            <div class="hsn-code text-right" (click)="focusHsnNumber();"
+                                                *ngIf="activeRow == i">
+                                                <label>{{product.showCodeType === 'hsn' ? "HSN" : "SAC"}} Code: </label>
+                                                <span>{{product.showCodeType === 'hsn' ? product.hsnNumber :
+                                                    product.sacNumber}}
                                                     <span class="edit-icon cp">
                                                         <img src="assets/images/edit-pencilicon.svg">
                                                     </span>
                                                 </span>
                                             </div>
-                                            <div class="hsn-code-dropdown sku-number-dropdown"
-                                                *ngIf="skuNumberPopupShow && activeRow == i">
-                                                <label>SKU Code:</label>
-                                                <input type="text" maxlength="50" placeholder="SKU Code"
-                                                    name="productSkuCode{{i}}" #productSkuCode
-                                                    [(ngModel)]="skuNumber" />
+                                            <div class="hsn-code-dropdown" *ngIf="hsnPopupShow && activeRow == i">
+                                                <label>
+                                                    <div class="d-flex wrap-hsn-sac mb-2 align-items-center">
+                                                        <span class="mr-r15 d-flex align-items-center">
+                                                            <input type="radio" class="radio-custom radio-theme"
+                                                                name="showCodeType" id="hsnCodeType"
+                                                                [(ngModel)]="product.showCodeType" value="hsn"
+                                                                (ngModelChange)="focusHsnNumber()">
+                                                            <label for="hsnCodeType" class="radio-custom-label">HSN
+                                                                Code</label>
+                                                        </span>
+                                                        <span class="d-flex align-items-center">
+                                                            <input type="radio" class="radio-custom radio-theme"
+                                                                name="showCodeType" id="sacCodeType"
+                                                                [(ngModel)]="product.showCodeType" value="sac"
+                                                                (ngModelChange)="focusHsnNumber()">
+                                                            <label for="sacCodeType" class="ml-1 radio-custom-label">SAC
+                                                                Code</label>
+                                                        </span>
+                                                    </div>
+                                                </label>
+                                                <input type="text" maxlength="10" decimalDigitsDirective
+                                                    placeholder="{{product.showCodeType === 'hsn' ? 'HSN' : 'SAC'}} Code"
+                                                    name="productHsnNumber{{i}}" #productHsnNumber
+                                                    [(ngModel)]="hsnNumber" />
                                                 <div class="btn-group mt-2 pt-1 d-flex">
                                                     <button class="btn btn-sm btn-success" type="button"
-                                                        (click)="saveSkuNumberPopup(product)">Save</button>
+                                                        (click)="saveHsnNumberPopup(product)">Save</button>
                                                     <button class="btn btn-sm btn-primary mr-0" type="button"
-                                                        (click)="hideSkuNumberPopup()">Cancel</button>
+                                                        (click)="hideHsnNumberPopup()">Cancel</button>
                                                 </div>
                                             </div>
                                         </div>
-                                        <textarea #productDescription rows="3" cols="5" maxlength="100"
-                                            class="form-control" name="productDescription{{i}}"
-                                            *ngIf="product.uniqueName" [(ngModel)]="product.description"></textarea>
-                                    </div>
-                                    <div *ngIf="activeRow !== i">
-                                        <div *ngIf="product.name">{{product.name}}</div>
-                                        <div *ngIf="product.skuCode">SKU Code: {{product.skuCode}}</div>
-                                        <div *ngIf="product.showCodeType === 'hsn'">HSN Code: {{product.hsnNumber}}
-                                        </div>
-                                        <div *ngIf="product.showCodeType === 'sac'">SAC Code: {{product.sacNumber}}
-                                        </div>
-                                        <div *ngIf="product.description">{{product.description}}</div>
-                                        <div *ngIf="(!product?.name && !product?.description && !(product?.hsnNumber || product?.sacNumber) && !product?.skuCode)"
-                                            class="placeholder-for-table">Enter product details</div>
-                                    </div>
-                                    <div class="position-relative wrap-hsn-box">
-                                        <div class="hsn-code text-right" (click)="focusHsnNumber();"
-                                            *ngIf="activeRow == i">
-                                            <label>{{product.showCodeType === 'hsn' ? "HSN" : "SAC"}} Code: </label>
-                                            <span>{{product.showCodeType === 'hsn' ? product.hsnNumber :
-                                                product.sacNumber}}
-                                                <span class="edit-icon cp">
-                                                    <img src="assets/images/edit-pencilicon.svg">
-                                                </span>
-                                            </span>
-                                        </div>
-                                        <div class="hsn-code-dropdown" *ngIf="hsnPopupShow && activeRow == i">
-                                            <label>
-                                                <div class="d-flex wrap-hsn-sac mb-2 align-items-center">
-                                                    <span class="mr-r15 d-flex align-items-center">
-                                                        <input type="radio" class="radio-custom radio-theme"
-                                                            name="showCodeType" id="hsnCodeType"
-                                                            [(ngModel)]="product.showCodeType" value="hsn"
-                                                            (ngModelChange)="focusHsnNumber()">
-                                                        <label for="hsnCodeType" class="radio-custom-label">HSN
-                                                            Code</label>
-                                                    </span>
-                                                    <span class="d-flex align-items-center">
-                                                        <input type="radio" class="radio-custom radio-theme"
-                                                            name="showCodeType" id="sacCodeType"
-                                                            [(ngModel)]="product.showCodeType" value="sac"
-                                                            (ngModelChange)="focusHsnNumber()">
-                                                        <label for="sacCodeType" class="ml-1 radio-custom-label">SAC
-                                                            Code</label>
-                                                    </span>
-                                                </div>
-                                            </label>
-                                            <input type="text" maxlength="10" decimalDigitsDirective
-                                                placeholder="{{product.showCodeType === 'hsn' ? 'HSN' : 'SAC'}} Code"
-                                                name="productHsnNumber{{i}}" #productHsnNumber
-                                                [(ngModel)]="hsnNumber" />
-                                            <div class="btn-group mt-2 pt-1 d-flex">
-                                                <button class="btn btn-sm btn-success" type="button"
-                                                    (click)="saveHsnNumberPopup(product)">Save</button>
-                                                <button class="btn btn-sm btn-primary mr-0" type="button"
-                                                    (click)="hideHsnNumberPopup()">Cancel</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div *ngIf="activeRow === i">
-                                        <input type="text" class="form-control text-right" name="productQty{{i}}"
-                                            (change)="calculateRowTotal(product)" decimalDigitsDirective
-                                            [(ngModel)]="product.stockDetails.quantity">
-                                        {{product.stockDetails.stockUnit}}
-                                    </div>
-                                    <div *ngIf="activeRow !== i">
-                                        <div class="text-right">{{product.stockDetails.quantity}}
+                                    </td>
+                                    <td class="min-wid-qty">
+                                        <div *ngIf="activeRow === i">
+                                            <input type="text" class="form-control text-right" name="productQty{{i}}"
+                                                (change)="calculateRowTotal(product)" decimalDigitsDirective
+                                                [(ngModel)]="product.stockDetails.quantity">
                                             {{product.stockDetails.stockUnit}}
                                         </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div *ngIf="activeRow === i">
-                                        <input type="text" class="form-control text-right" name="productRate{{i}}"
-                                            (change)="calculateRowTotal(product)" decimalDigitsDirective
-                                            [(ngModel)]="product.stockDetails.rate"
-                                            [prefix]="activeCompany?.baseCurrencySymbol" [validation]="false"
-                                            [mask]="inputMaskFormat">
-                                    </div>
-                                    <div *ngIf="activeRow !== i">
-                                        <div class="text-right">{{activeCompany?.baseCurrencySymbol}}
-                                            {{product.stockDetails.rate | giddhCurrency}}</div>
-                                    </div>
-                                </td>
-                                <td class="position-relative">
-                                    <div *ngIf="activeRow === i">
-                                        <input type="text" class="form-control text-right" name="productAmount{{i}}"
-                                            decimalDigitsDirective readonly [(ngModel)]="product.stockDetails.amount"
-                                            [prefix]="activeCompany?.baseCurrencySymbol" [validation]="false"
-                                            [mask]="inputMaskFormat" (blur)="dispatchDate.show(); hideActiveRow();">
-                                    </div>
-                                    <div *ngIf="activeRow !== i">
-                                        <div class="text-right">{{activeCompany?.baseCurrencySymbol}}
-                                            {{product.stockDetails.amount | giddhCurrency}}</div>
-                                    </div>
-                                    <div class="trash-icon-delete">
-                                        <a (click)="removeProduct(i)" *ngIf="branchTransfer.products.length > 1"><i
-                                                class="fa fa-trash"></i></a>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tbody *ngIf="transferType !== 'products' && branchTransferMode === 'deliverynote'">
-                            <tr *ngFor="let destination of branchTransfer.destinations; let i = index;"
-                                (click)="setActiveRow(i); $event.stopPropagation()" (clickOutside)="hideActiveRow()">
-                                <td>{{i+1}}.</td>
-                                <td>
-                                    <div *ngIf="activeRow === i">
-                                        <sh-select name="destinationName{{i}}" #selectDropdown [isFilterEnabled]="true"
-                                            [forceClearReactive]="branchClear$ | async"
-                                            [(ngModel)]="destination.uniqueName" [options]="branches$ | async"
-                                            (selected)="selectCompany($event, 'destinations', i); focusDestinationWarehouses();">
-                                        </sh-select>
-                                        <sh-select #destinationWarehouseList [isFilterEnabled]="true"
-                                            [forceClearReactive]="warehouseClear$ | async"
-                                            *ngIf="destination.uniqueName"
-                                            [options]="destinationWarehouses[destination.uniqueName]"
-                                            [(ngModel)]="destination.warehouse.uniqueName"
-                                            name="destinationWarehouse{{i}}"
-                                            (selected)="getWarehouseDetails('destinations', i); focusDestinationQuantity();">
-                                        </sh-select>
-                                        <input [disabled]="destination?.warehouse?.uniqueName" type="text"
-                                            class="form-control" placeholder="Enter {{formFields['taxName'].label}}"
-                                            *ngIf="formFields && formFields['taxName'] && destination.warehouse.uniqueName && destination.warehouse.taxNumber"
-                                            name="destinationWarehouseTaxnumber{{i}}" #destinationGstNumberField
-                                            (change)="checkTaxNumberValidation(destinationGstNumberField);"
-                                            [(ngModel)]="destination.warehouse.taxNumber">
-                                        <textarea [disabled]="destination?.warehouse?.uniqueName" class="form-control"
-                                            *ngIf="destination.warehouse.uniqueName"
-                                            name="destinationWarehouseAddress{{i}}"
-                                            [(ngModel)]="destination.warehouse.address"></textarea>
-                                    </div>
-                                    <div *ngIf="activeRow !== i">
-                                        <div *ngIf="destination.name">{{destination.name}}</div>
-                                        <div *ngIf="destination.warehouse.name">{{destination.warehouse.name}}</div>
-                                        <div *ngIf="destination.warehouse.taxNumber">{{destination.warehouse.taxNumber}}
+                                        <div *ngIf="activeRow !== i">
+                                            <div class="text-right">{{product.stockDetails.quantity}}
+                                                {{product.stockDetails.stockUnit}}
+                                            </div>
                                         </div>
-                                        <div *ngIf="destination.warehouse.address">{{destination.warehouse.address}}
+                                    </td>
+                                    <td class="min-wid-rate">
+                                        <div *ngIf="activeRow === i">
+                                            <input type="text" class="form-control text-right" name="productRate{{i}}"
+                                                (change)="calculateRowTotal(product)" decimalDigitsDirective
+                                                [(ngModel)]="product.stockDetails.rate"
+                                                [prefix]="activeCompany?.baseCurrencySymbol" [validation]="false"
+                                                [mask]="inputMaskFormat">
                                         </div>
-                                        <div *ngIf="(!destination?.name && !destination?.warehouse?.name && !destination?.warehouse?.taxNumber && !destination?.warehouse?.address)"
-                                            class="placeholder-for-table">Enter receiver's details</div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div *ngIf="activeRow === i">
-                                        <input #destinationQuantity type="text" class="form-control text-right"
-                                            name="destinationQty{{i}}"
-                                            (change)="calculateRowTotal(destination.warehouse)" decimalDigitsDirective
-                                            [(ngModel)]="destination.warehouse.stockDetails.quantity">
-                                    </div>
-                                    <div *ngIf="activeRow !== i">
-                                        <div class="text-right">{{destination.warehouse.stockDetails.quantity}}</div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div *ngIf="activeRow === i">
-                                        <input type="text" class="form-control text-right" name="destinationRate{{i}}"
-                                            (change)="calculateRowTotal(destination.warehouse)" decimalDigitsDirective
-                                            [(ngModel)]="destination.warehouse.stockDetails.rate"
-                                            [prefix]="activeCompany?.baseCurrencySymbol" [validation]="false"
-                                            [mask]="inputMaskFormat">
-                                    </div>
-                                    <div *ngIf="activeRow !== i">
-                                        <div class="text-right">{{activeCompany?.baseCurrencySymbol}}
-                                            {{destination.warehouse.stockDetails.rate | giddhCurrency}}</div>
-                                    </div>
-                                </td>
-                                <td class="position-relative">
-                                    <div *ngIf="activeRow === i">
-                                        <input type="text" class="form-control text-right" name="destinationAmount{{i}}"
-                                            decimalDigitsDirective readonly
-                                            [(ngModel)]="destination.warehouse.stockDetails.amount"
-                                            [prefix]="activeCompany?.baseCurrencySymbol" [validation]="false"
-                                            [mask]="inputMaskFormat" (blur)="dispatchDate.show(); hideActiveRow();">
-                                    </div>
-                                    <div *ngIf="activeRow !== i">
-                                        <div class="text-right">{{activeCompany?.baseCurrencySymbol}}
-                                            {{destination.warehouse.stockDetails.amount | giddhCurrency}}</div>
-                                    </div>
-                                    <div class="trash-icon-delete">
-                                        <a (click)="removeReceiver(i)" *ngIf="branchTransfer.destinations.length > 1">
-                                            <i class="fa fa-trash"></i></a>
-                                    </div>
-                                    <div class="icon-info-on-table">
-                                        <i class="icon-info"
-                                            [ngClass]="{'change-position': branchTransfer.destinations.length > 1}"
-                                            *ngIf="destinationWarehouses[destination.uniqueName]?.length !== allWarehouses[destination.uniqueName]?.length"
-                                            [tooltip]="branchTransferInfoText"></i>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tbody *ngIf="transferType !== 'products' && branchTransferMode === 'receiptnote'">
-                            <tr *ngFor="let source of branchTransfer.sources; let i = index;"
-                                (click)="setActiveRow(i); $event.stopPropagation()" (clickOutside)="hideActiveRow()">
-                                <td>{{i+1}}.</td>
-                                <td>
-                                    <div *ngIf="activeRow === i">
-                                        <sh-select name="sourceName{{i}}" #selectDropdown [isFilterEnabled]="true"
-                                            [forceClearReactive]="branchClear$ | async" [(ngModel)]="source.uniqueName"
-                                            [options]="branches$ | async"
-                                            (selected)="selectCompany($event, 'sources', i); focusSourceWarehouses();">
-                                        </sh-select>
-                                        <sh-select #sourceWarehouses [isFilterEnabled]="true"
-                                            [forceClearReactive]="warehouseClear$ | async" *ngIf="source.uniqueName"
-                                            [options]="senderWarehouses[source.uniqueName]"
-                                            [(ngModel)]="source.warehouse.uniqueName" name="sourceWarehouse{{i}}"
-                                            (selected)="getWarehouseDetails('sources', i); focusSourceQuantity();">
-                                        </sh-select>
-                                        <input [disabled]="source?.warehouse?.uniqueName" type="text"
-                                            class="form-control" placeholder="Enter {{formFields['taxName'].label}}"
-                                            *ngIf="formFields && formFields['taxName'] && source.warehouse.uniqueName && source.warehouse.taxNumber"
-                                            name="sourceWarehouseTaxnumber{{i}}" #sourceGstNumberField
-                                            (change)="checkTaxNumberValidation(sourceGstNumberField);"
-                                            [(ngModel)]="source.warehouse.taxNumber">
-                                        <textarea [disabled]="source?.warehouse?.uniqueName" class="form-control"
-                                            *ngIf="source.warehouse.uniqueName" name="sourceWarehouseAddress{{i}}"
-                                            [(ngModel)]="source.warehouse.address"></textarea>
-                                    </div>
-                                    <div *ngIf="activeRow !== i">
-                                        <div *ngIf="source.name">{{source.name}}</div>
-                                        <div *ngIf="source.warehouse.name">{{source.warehouse.name}}</div>
-                                        <div *ngIf="source.warehouse.taxNumber">{{source.warehouse.taxNumber}}</div>
-                                        <div *ngIf="source.warehouse.address">{{source.warehouse.address}}</div>
-                                        <div *ngIf="(!source?.name && !source?.warehouse?.name && !source?.warehouse?.taxNumber && !source?.warehouse?.address)"
-                                            class="placeholder-for-table">Enter sender's details</div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div *ngIf="activeRow === i">
-                                        <input #sourceQuantity type="text" class="form-control text-right"
-                                            name="sourceQty{{i}}" decimalDigitsDirective
-                                            (change)="calculateRowTotal(source.warehouse)"
-                                            [(ngModel)]="source.warehouse.stockDetails.quantity">
-                                    </div>
-                                    <div *ngIf="activeRow !== i">
-                                        <div class="text-right">{{source.warehouse.stockDetails.quantity}}</div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div *ngIf="activeRow === i">
-                                        <input type="text" class="form-control text-right" name="sourceRate{{i}}"
-                                            decimalDigitsDirective (change)="calculateRowTotal(source.warehouse)"
-                                            [(ngModel)]="source.warehouse.stockDetails.rate"
-                                            [prefix]="activeCompany?.baseCurrencySymbol" [validation]="false"
-                                            [mask]="inputMaskFormat">
-                                    </div>
-                                    <div *ngIf="activeRow !== i">
-                                        <div class="text-right">{{activeCompany?.baseCurrencySymbol}}
-                                            {{source.warehouse.stockDetails.rate | giddhCurrency}}</div>
-                                    </div>
-                                </td>
-                                <td class="position-relative">
-                                    <div *ngIf="activeRow === i">
-                                        <input type="text" class="form-control text-right" name="sourceAmount{{i}}"
-                                            decimalDigitsDirective readonly
-                                            [(ngModel)]="source.warehouse.stockDetails.amount"
-                                            [prefix]="activeCompany?.baseCurrencySymbol" [validation]="false"
-                                            [mask]="inputMaskFormat" (blur)="dispatchDate.show(); hideActiveRow();">
-                                    </div>
-                                    <div *ngIf="activeRow !== i">
-                                        <div class="text-right">{{activeCompany?.baseCurrencySymbol}}
-                                            {{source.warehouse.stockDetails.amount | giddhCurrency}}</div>
-                                    </div>
-                                    <div class="trash-icon-delete">
-                                        <a (click)="removeSender(i)" *ngIf="branchTransfer.sources.length > 1"> <i
-                                                class="fa fa-trash"></i></a>
-                                    </div>
-                                    <div class="icon-info-on-table">
-                                        <i class="icon-info"
-                                            [ngClass]="{'change-position': branchTransfer.sources.length > 1}"
-                                            *ngIf="senderWarehouses[source.uniqueName]?.length !== allWarehouses[source.uniqueName]?.length"
-                                            [tooltip]="branchTransferInfoText"></i>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <div class="add-new-line mr-t1">
-                            <a class="multiple-receivers" (click)="addReceiver()"
-                                *ngIf="transferType !== 'products' && branchTransferMode === 'deliverynote'"> + Add
-                                Multiple Receivers</a>
-                            <a class="multiple-receivers" (click)="addSender()"
-                                *ngIf="transferType !== 'products' && branchTransferMode === 'receiptnote'"> + Add
-                                Multiple Senders</a>
-                            <a class="multiple-receivers" (click)="addProduct()" *ngIf="transferType === 'products'"> <i
-                                    class="icon-plus font-10"></i> Add Multiple Products</a>
+                                        <div *ngIf="activeRow !== i">
+                                            <div class="text-right">{{activeCompany?.baseCurrencySymbol}}
+                                                {{product.stockDetails.rate | giddhCurrency}}</div>
+                                        </div>
+                                    </td>
+                                    <td class="position-relative min-wid-amt">
+                                        <div *ngIf="activeRow === i">
+                                            <input type="text" class="form-control text-right" name="productAmount{{i}}"
+                                                decimalDigitsDirective readonly
+                                                [(ngModel)]="product.stockDetails.amount"
+                                                [prefix]="activeCompany?.baseCurrencySymbol" [validation]="false"
+                                                [mask]="inputMaskFormat" (blur)="dispatchDate.show(); hideActiveRow();">
+                                        </div>
+                                        <div *ngIf="activeRow !== i">
+                                            <div class="text-right">{{activeCompany?.baseCurrencySymbol}}
+                                                {{product.stockDetails.amount | giddhCurrency}}</div>
+                                        </div>
+                                        <div class="trash-icon-delete">
+                                            <a (click)="removeProduct(i)" *ngIf="branchTransfer.products.length > 1"><i
+                                                    class="fa fa-trash"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody *ngIf="transferType !== 'products' && branchTransferMode === 'deliverynote'">
+                                <tr *ngFor="let destination of branchTransfer.destinations; let i = index;"
+                                    (click)="setActiveRow(i); $event.stopPropagation()"
+                                    (clickOutside)="hideActiveRow()">
+                                    <td>{{i+1}}.</td>
+                                    <td>
+                                        <div *ngIf="activeRow === i">
+                                            <sh-select name="destinationName{{i}}" #selectDropdown
+                                                [isFilterEnabled]="true" [forceClearReactive]="branchClear$ | async"
+                                                [(ngModel)]="destination.uniqueName" [options]="branches$ | async"
+                                                (selected)="selectCompany($event, 'destinations', i); focusDestinationWarehouses();">
+                                            </sh-select>
+                                            <sh-select #destinationWarehouseList [isFilterEnabled]="true"
+                                                [forceClearReactive]="warehouseClear$ | async"
+                                                *ngIf="destination.uniqueName"
+                                                [options]="destinationWarehouses[destination.uniqueName]"
+                                                [(ngModel)]="destination.warehouse.uniqueName"
+                                                name="destinationWarehouse{{i}}"
+                                                (selected)="getWarehouseDetails('destinations', i); focusDestinationQuantity();">
+                                            </sh-select>
+                                            <input [disabled]="destination?.warehouse?.uniqueName" type="text"
+                                                class="form-control" placeholder="Enter {{formFields['taxName'].label}}"
+                                                *ngIf="formFields && formFields['taxName'] && destination.warehouse.uniqueName && destination.warehouse.taxNumber"
+                                                name="destinationWarehouseTaxnumber{{i}}" #destinationGstNumberField
+                                                (change)="checkTaxNumberValidation(destinationGstNumberField);"
+                                                [(ngModel)]="destination.warehouse.taxNumber">
+                                            <textarea [disabled]="destination?.warehouse?.uniqueName"
+                                                class="form-control" *ngIf="destination.warehouse.uniqueName"
+                                                name="destinationWarehouseAddress{{i}}"
+                                                [(ngModel)]="destination.warehouse.address"></textarea>
+                                        </div>
+                                        <div *ngIf="activeRow !== i">
+                                            <div *ngIf="destination.name">{{destination.name}}</div>
+                                            <div *ngIf="destination.warehouse.name">{{destination.warehouse.name}}</div>
+                                            <div *ngIf="destination.warehouse.taxNumber">
+                                                {{destination.warehouse.taxNumber}}
+                                            </div>
+                                            <div *ngIf="destination.warehouse.address">{{destination.warehouse.address}}
+                                            </div>
+                                            <div *ngIf="(!destination?.name && !destination?.warehouse?.name && !destination?.warehouse?.taxNumber && !destination?.warehouse?.address)"
+                                                class="placeholder-for-table">Enter receiver's details</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div *ngIf="activeRow === i">
+                                            <input #destinationQuantity type="text" class="form-control text-right"
+                                                name="destinationQty{{i}}"
+                                                (change)="calculateRowTotal(destination.warehouse)"
+                                                decimalDigitsDirective
+                                                [(ngModel)]="destination.warehouse.stockDetails.quantity">
+                                        </div>
+                                        <div *ngIf="activeRow !== i">
+                                            <div class="text-right">{{destination.warehouse.stockDetails.quantity}}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div *ngIf="activeRow === i">
+                                            <input type="text" class="form-control text-right"
+                                                name="destinationRate{{i}}"
+                                                (change)="calculateRowTotal(destination.warehouse)"
+                                                decimalDigitsDirective
+                                                [(ngModel)]="destination.warehouse.stockDetails.rate"
+                                                [prefix]="activeCompany?.baseCurrencySymbol" [validation]="false"
+                                                [mask]="inputMaskFormat">
+                                        </div>
+                                        <div *ngIf="activeRow !== i">
+                                            <div class="text-right">{{activeCompany?.baseCurrencySymbol}}
+                                                {{destination.warehouse.stockDetails.rate | giddhCurrency}}</div>
+                                        </div>
+                                    </td>
+                                    <td class="position-relative">
+                                        <div *ngIf="activeRow === i">
+                                            <input type="text" class="form-control text-right"
+                                                name="destinationAmount{{i}}" decimalDigitsDirective readonly
+                                                [(ngModel)]="destination.warehouse.stockDetails.amount"
+                                                [prefix]="activeCompany?.baseCurrencySymbol" [validation]="false"
+                                                [mask]="inputMaskFormat" (blur)="dispatchDate.show(); hideActiveRow();">
+                                        </div>
+                                        <div *ngIf="activeRow !== i">
+                                            <div class="text-right">{{activeCompany?.baseCurrencySymbol}}
+                                                {{destination.warehouse.stockDetails.amount | giddhCurrency}}</div>
+                                        </div>
+                                        <div class="trash-icon-delete">
+                                            <a (click)="removeReceiver(i)"
+                                                *ngIf="branchTransfer.destinations.length > 1">
+                                                <i class="fa fa-trash"></i></a>
+                                        </div>
+                                        <div class="icon-info-on-table">
+                                            <i class="icon-info"
+                                                [ngClass]="{'change-position': branchTransfer.destinations.length > 1}"
+                                                *ngIf="destinationWarehouses[destination.uniqueName]?.length !== allWarehouses[destination.uniqueName]?.length"
+                                                [tooltip]="branchTransferInfoText"></i>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody *ngIf="transferType !== 'products' && branchTransferMode === 'receiptnote'">
+                                <tr *ngFor="let source of branchTransfer.sources; let i = index;"
+                                    (click)="setActiveRow(i); $event.stopPropagation()"
+                                    (clickOutside)="hideActiveRow()">
+                                    <td>{{i+1}}.</td>
+                                    <td>
+                                        <div *ngIf="activeRow === i">
+                                            <sh-select name="sourceName{{i}}" #selectDropdown [isFilterEnabled]="true"
+                                                [forceClearReactive]="branchClear$ | async"
+                                                [(ngModel)]="source.uniqueName" [options]="branches$ | async"
+                                                (selected)="selectCompany($event, 'sources', i); focusSourceWarehouses();">
+                                            </sh-select>
+                                            <sh-select #sourceWarehouses [isFilterEnabled]="true"
+                                                [forceClearReactive]="warehouseClear$ | async" *ngIf="source.uniqueName"
+                                                [options]="senderWarehouses[source.uniqueName]"
+                                                [(ngModel)]="source.warehouse.uniqueName" name="sourceWarehouse{{i}}"
+                                                (selected)="getWarehouseDetails('sources', i); focusSourceQuantity();">
+                                            </sh-select>
+                                            <input [disabled]="source?.warehouse?.uniqueName" type="text"
+                                                class="form-control" placeholder="Enter {{formFields['taxName'].label}}"
+                                                *ngIf="formFields && formFields['taxName'] && source.warehouse.uniqueName && source.warehouse.taxNumber"
+                                                name="sourceWarehouseTaxnumber{{i}}" #sourceGstNumberField
+                                                (change)="checkTaxNumberValidation(sourceGstNumberField);"
+                                                [(ngModel)]="source.warehouse.taxNumber">
+                                            <textarea [disabled]="source?.warehouse?.uniqueName" class="form-control"
+                                                *ngIf="source.warehouse.uniqueName" name="sourceWarehouseAddress{{i}}"
+                                                [(ngModel)]="source.warehouse.address"></textarea>
+                                        </div>
+                                        <div *ngIf="activeRow !== i">
+                                            <div *ngIf="source.name">{{source.name}}</div>
+                                            <div *ngIf="source.warehouse.name">{{source.warehouse.name}}</div>
+                                            <div *ngIf="source.warehouse.taxNumber">{{source.warehouse.taxNumber}}</div>
+                                            <div *ngIf="source.warehouse.address">{{source.warehouse.address}}</div>
+                                            <div *ngIf="(!source?.name && !source?.warehouse?.name && !source?.warehouse?.taxNumber && !source?.warehouse?.address)"
+                                                class="placeholder-for-table">Enter sender's details</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div *ngIf="activeRow === i">
+                                            <input #sourceQuantity type="text" class="form-control text-right"
+                                                name="sourceQty{{i}}" decimalDigitsDirective
+                                                (change)="calculateRowTotal(source.warehouse)"
+                                                [(ngModel)]="source.warehouse.stockDetails.quantity">
+                                        </div>
+                                        <div *ngIf="activeRow !== i">
+                                            <div class="text-right">{{source.warehouse.stockDetails.quantity}}</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div *ngIf="activeRow === i">
+                                            <input type="text" class="form-control text-right" name="sourceRate{{i}}"
+                                                decimalDigitsDirective (change)="calculateRowTotal(source.warehouse)"
+                                                [(ngModel)]="source.warehouse.stockDetails.rate"
+                                                [prefix]="activeCompany?.baseCurrencySymbol" [validation]="false"
+                                                [mask]="inputMaskFormat">
+                                        </div>
+                                        <div *ngIf="activeRow !== i">
+                                            <div class="text-right">{{activeCompany?.baseCurrencySymbol}}
+                                                {{source.warehouse.stockDetails.rate | giddhCurrency}}</div>
+                                        </div>
+                                    </td>
+                                    <td class="position-relative">
+                                        <div *ngIf="activeRow === i">
+                                            <input type="text" class="form-control text-right" name="sourceAmount{{i}}"
+                                                decimalDigitsDirective readonly
+                                                [(ngModel)]="source.warehouse.stockDetails.amount"
+                                                [prefix]="activeCompany?.baseCurrencySymbol" [validation]="false"
+                                                [mask]="inputMaskFormat" (blur)="dispatchDate.show(); hideActiveRow();">
+                                        </div>
+                                        <div *ngIf="activeRow !== i">
+                                            <div class="text-right">{{activeCompany?.baseCurrencySymbol}}
+                                                {{source.warehouse.stockDetails.amount | giddhCurrency}}</div>
+                                        </div>
+                                        <div class="trash-icon-delete">
+                                            <a (click)="removeSender(i)" *ngIf="branchTransfer.sources.length > 1"> <i
+                                                    class="fa fa-trash"></i></a>
+                                        </div>
+                                        <div class="icon-info-on-table">
+                                            <i class="icon-info"
+                                                [ngClass]="{'change-position': branchTransfer.sources.length > 1}"
+                                                *ngIf="senderWarehouses[source.uniqueName]?.length !== allWarehouses[source.uniqueName]?.length"
+                                                [tooltip]="branchTransferInfoText"></i>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot id="tfoot">
+                                <tr>
+                                    <td colspan="4" class="p-0">
+                                        <div class="add-new-line mr-t1">
+                                            <a class="multiple-receivers" (click)="addReceiver()"
+                                                *ngIf="transferType !== 'products' && branchTransferMode === 'deliverynote'">
+                                                + Add
+                                                Multiple Receivers</a>
+                                            <a class="multiple-receivers" (click)="addSender()"
+                                                *ngIf="transferType !== 'products' && branchTransferMode === 'receiptnote'">
+                                                + Add
+                                                Multiple Senders</a>
+                                            <a class="multiple-receivers" (click)="addProduct()"
+                                                *ngIf="transferType === 'products'"> <i class="icon-plus font-10"></i>
+                                                Add Multiple Products</a>
+                                        </div>
+                                    </td>
+                                    <td colspan="4">
+                                        <section class="table-sec form-group">
+                                            <div class="table-row">
+                                                <div class="table-cell bigger-dollar">
+                                                    <strong>Total</strong>
+                                                </div>
+                                                <div class="table-cell figure-cell">
+                                                    {{activeCompany?.baseCurrencySymbol}} {{overallTotal |
+                                                    giddhCurrency}}
+                                                </div>
+                                            </div>
+                                        </section>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="transportation-details mb-2">
+                        <h3 class="mr-b1">Transportation Details</h3>
+                        <div class="row">
+                            <div class="col-sm-6 mr-b2">
+                                <input type="text" #dispatchDate="bsDatepicker" placeholder="Dispatched Date"
+                                    class="form-control" name="dispatchedDate"
+                                    [(ngModel)]="tempDateParams.dispatchedDate" [minDate]="tempDateParams.dateOfSupply"
+                                    readonly bsDatepicker [bsConfig]="bsConfig"
+                                    (bsValueChange)="focusTransportCompany()">
+                            </div>
+                            <div class="col-sm-6 mr-b2">
+                                <sh-select #transCompany placeholder="Transport Company" name="transporterId"
+                                    [isFilterEnabled]="true" (keydown)="keydownPressed($event)"
+                                    [forceClearReactive]="forceClear$ | async" [options]="transporterDropdown$ | async"
+                                    [(ngModel)]="branchTransfer.transporterDetails.transporterId" [notFoundLink]="true"
+                                    [multiple]="false" [ItemHeight]="33" (selected)="focusTransporterMode()">
+                                    <ng-template #notFoundLinkTemplate>
+                                        <a [ngClass]="{'active': keydownClassAdded}" class="notfound-option"
+                                            [keyboardShortcut]="'alt+c'" (onShortcutPress)="keydownPressed()">
+                                            <span (click)="toggleTransporterModel()"
+                                                [ngClass]="{'active': keydownClassAdded}">Create
+                                                New</span>
+                                        </a>
+                                    </ng-template>
+                                </sh-select>
+                            </div>
+                            <div class="col-sm-6 mr-b2">
+                                <sh-select #transMode placeholder="Transport Mode" name="transportMode"
+                                    [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async"
+                                    [options]="transporterMode"
+                                    [(ngModel)]="branchTransfer.transporterDetails.transportMode"
+                                    (selected)="focusVehicleNumber();"></sh-select>
+                            </div>
+                            <div class="col-sm-6 mr-b2">
+                                <input #vehicleNumber type="text" placeholder="Vehicle Number" class="form-control"
+                                    name="vehicleNumber" [(ngModel)]="branchTransfer.transporterDetails.vehicleNumber"
+                                    maxlength="20">
+                            </div>
                         </div>
-                        <tfoot id="tfoot">
-                            <tr>
-                                <td colspan="4" class="p-0">
-                                    <div class="transportation-details pt-5">
-                                        <h3 class="mr-b1">Transportation Details</h3>
-                                        <div class="row">
-                                            <div class="col-sm-6 mr-b2">
-                                                <input type="text" #dispatchDate="bsDatepicker"
-                                                    placeholder="Dispatched Date" class="form-control"
-                                                    name="dispatchedDate" [(ngModel)]="tempDateParams.dispatchedDate"
-                                                    [minDate]="tempDateParams.dateOfSupply" readonly bsDatepicker
-                                                    [bsConfig]="bsConfig" (bsValueChange)="focusTransportCompany()">
-                                            </div>
-                                            <div class="col-sm-6 mr-b2">
-                                                <sh-select #transCompany placeholder="Transport Company"
-                                                    name="transporterId" [isFilterEnabled]="true"
-                                                    (keydown)="keydownPressed($event)"
-                                                    [forceClearReactive]="forceClear$ | async"
-                                                    [options]="transporterDropdown$ | async"
-                                                    [(ngModel)]="branchTransfer.transporterDetails.transporterId"
-                                                    [notFoundLink]="true" [multiple]="false" [ItemHeight]="33"
-                                                    (selected)="focusTransporterMode()">
-                                                    <ng-template #notFoundLinkTemplate>
-                                                        <a [ngClass]="{'active': keydownClassAdded}"
-                                                            class="notfound-option" [keyboardShortcut]="'alt+c'"
-                                                            (onShortcutPress)="keydownPressed()">
-                                                            <span (click)="toggleTransporterModel()"
-                                                                [ngClass]="{'active': keydownClassAdded}">Create
-                                                                New</span>
-                                                        </a>
-                                                    </ng-template>
-                                                </sh-select>
-                                            </div>
-                                            <div class="col-sm-6 mr-b2">
-                                                <sh-select #transMode placeholder="Transport Mode" name="transportMode"
-                                                    [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async"
-                                                    [options]="transporterMode"
-                                                    [(ngModel)]="branchTransfer.transporterDetails.transportMode"
-                                                    (selected)="focusVehicleNumber();"></sh-select>
-                                            </div>
-                                            <div class="col-sm-6 mr-b2">
-                                                <input #vehicleNumber type="text" placeholder="Vehicle Number"
-                                                    class="form-control" name="vehicleNumber"
-                                                    [(ngModel)]="branchTransfer.transporterDetails.vehicleNumber"
-                                                    maxlength="20">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <h3 class="mr-b1">Note</h3>
-                                                <textarea class="form-control" maxlength="100" rows="5" cols="5"
-                                                    name="note" [(ngModel)]="branchTransfer.note"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td colspan="4">
-                                    <section class="table-sec form-group">
-                                        <div class="table-row ">
-                                            <div class="table-cell bigger-dollar">
-                                                <strong>Total</strong>
-                                            </div>
-                                            <div class="table-cell figure-cell">
-                                                {{activeCompany?.baseCurrencySymbol}} {{overallTotal | giddhCurrency}}
-                                            </div>
-                                        </div>
-                                    </section>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h3 class="mr-b1">Note</h3>
+                                <textarea class="form-control" maxlength="100" rows="5" cols="5" name="note"
+                                    [(ngModel)]="branchTransfer.note"></textarea>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <section id="actionPane" class="text-center clearfix">
                     <div class="col-xs-12">
@@ -948,7 +961,7 @@
                     <td>{{item?.transporterId}}</td>
                     <td class="nowrap">
                         <button (click)="editTransporter(item);"><i class="icon-edit"></i></button>
-                        <button (click)="deleteTransporter(item);"><i class="fa fa-trash"></i></button>
+                        <button (click)="deleteTransporter(item);"><i class="icon-trash"></i></button>
                     </td>
                 </tr>
             </table>

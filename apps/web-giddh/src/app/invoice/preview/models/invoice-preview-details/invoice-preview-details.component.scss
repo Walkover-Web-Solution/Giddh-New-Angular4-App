@@ -240,7 +240,6 @@
     .image-collapsed {
         max-height: 130px;
         overflow: hidden;
-
         img {
             height: auto;
         }
@@ -707,7 +706,6 @@ p {
     background: $nobel;
     border-radius: 20px;
 }
-
 #default body {
     box-sizing: border-box;
     font-size: 12px;
@@ -1104,7 +1102,6 @@ strong {
 }
 
 /*responsive*/
-
 @media (max-width: 1199px) {
     .invoice-search-box input {
         max-width: 180px;
@@ -1211,7 +1208,6 @@ strong {
         }
     }
 }
-
 @media (max-width: 991px) {
     .invoice-preview-sidebar {
         display: none;

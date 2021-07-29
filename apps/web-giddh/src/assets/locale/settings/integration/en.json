@@ -115,6 +115,7 @@
         "delete_login": "Do you really want to delete the login id [LOGIN_ID] ?",
         "connected": "Connected",
         "used": "Used",
-        "get_instant_overdraft": "Get Instant Overdraft"
+        "get_instant_overdraft": "Get Instant Overdraft",
+        "duration_error": "Please select duration"
     }
 }

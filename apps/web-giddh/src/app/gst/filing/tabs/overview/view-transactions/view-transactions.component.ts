@@ -16,8 +16,8 @@ import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service'
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { saveAs } from 'file-saver';
 import { GstReport } from '../../../../constants/gst.constant';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 export const filterTransaction = {
     entityType: '',
@@ -31,7 +31,7 @@ export const filterTransaction = {
     // tslint:disable-next-line:component-selector
     selector: 'view-transactions',
     templateUrl: './view-transactions.component.html',
-    styleUrls: ['view-transactions.component.scss'],
+    styleUrls: ['./view-transactions.component.scss'],
 })
 
 export class ViewTransactionsComponent implements OnInit, OnDestroy {

@@ -42,7 +42,7 @@
                             <div class="col-sm-6 mr-b3 ">
                                 <span>
                                     <label for="country" class="d-block">Country<sup>*</sup></label>
-                                    <sh-select id="country"
+                                    <sh-select id="country" class="w-100"
                                         [disabled]="(onBoardingType === 'Warehouse') ? 'disabled' : null"
                                         [options]="countrySource$ | async" [isFilterEnabled]="true" name="country"
                                         [(ngModel)]="company.country" class="pull-left select-caret width-100"

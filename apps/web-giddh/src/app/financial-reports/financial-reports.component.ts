@@ -57,7 +57,6 @@ export class FinancialReportsComponent implements OnInit, OnDestroy {
         });
     }
 
-
     /**
      * This will return page heading based on active tab
      *

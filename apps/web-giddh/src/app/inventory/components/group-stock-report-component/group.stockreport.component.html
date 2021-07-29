@@ -200,7 +200,7 @@
                         <th colspan="2" class="bd-rr" width="17%"
                             *ngIf="GroupStockReportRequest.branchDetails!='allEntity'">
                             <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                                <i><img src="assets/images/custom-calender.svg"></i>
+                                <i class="icon-calender calendar-addon"></i>
                                 <input type="text" name="selectedDateRange"
                                     [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
                                     class="giddh-datepicker date-range-picker" />
@@ -687,7 +687,7 @@
                         <div class="col-sm-4">Date Range</div>
                         <div class="col-sm-8">
                             <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                                <i><img src="assets/images/custom-calender.svg"></i>
+                                <i class="icon-calender calendar-addon"></i>
                                 <input type="text" name="selectedDateRange"
                                     [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
                                     class="giddh-datepicker date-range-picker" />

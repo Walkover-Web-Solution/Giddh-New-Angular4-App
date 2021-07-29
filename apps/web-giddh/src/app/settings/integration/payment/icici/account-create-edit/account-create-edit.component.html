@@ -40,13 +40,12 @@
                     <label>{{localeData?.payment?.payment_updates}}</label>
                     <sh-select formControlName="paymentAlerts" name="paymentAlerts"
                         [placeholder]="localeData?.payment?.select_receipients" [options]="paymentAlertsUsersList"
-                        [multiple]="true" (selected)="selectPaymentAlertUsers($event)"
-                        [forceClearReactive]="forceClearPaymentUpdates$ | async">
+                        [multiple]="true" [forceClearReactive]="forceClearPaymentUpdates$ | async" [isSelectAllChecked]="paymentAlerts?.includes(selectAllRecords)" (clearSingleItem)="clearSingleItem($event)">
                         <ng-template #optionTemplate let-option="option">
                             <ng-container>
-                                <a href="javascript:void(0)" class="list-item d-flex">
-                                    <span><input type="checkbox"
-                                            [checked]="(selectAllRecords !== option.value && paymentAlerts?.includes(option.value)) || (option.value === selectAllRecords && shouldShowSelectAllChecked)"
+                                <a href="javascript:void(0)" class="list-item d-flex" (click)="selectPaymentAlertUsers(option)">
+                                    <span><input type="checkbox" class="field-checkbox"
+                                            [checked]="paymentAlerts?.includes(option.value)"
                                             [value]="option.value"></span>&nbsp;
                                     <span>
                                         <div class="item">{{ option.label }}</div>
