@@ -5,6 +5,7 @@ import {
     ChangeDetectorRef,
     Component, ElementRef,
     EventEmitter,
+    Inject,
     Input,
     OnChanges,
     OnDestroy,
@@ -58,6 +59,9 @@ import { SearchService } from '../../../services/search.service';
 import { WarehouseActions } from '../../../settings/warehouse/action/warehouse.action';
 import { OrganizationType } from '../../../models/user-login-state';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
+import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ConfirmModalComponent } from '../../../theme/new-confirm-modal/confirm-modal.component';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';
@@ -80,29 +84,21 @@ const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make ad
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
+
 export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
     public vm: UpdateLedgerVm;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    @Output() public closeUpdateLedgerModal: EventEmitter<boolean> = new EventEmitter();
-    @Output() public showQuickAccountModalFromUpdateLedger: EventEmitter<boolean> = new EventEmitter();
-    @Output() public toggleOtherTaxesAsideMenu: EventEmitter<UpdateLedgerVm> = new EventEmitter();
-    /** Emits when more detail is opened */
-    @Output() public moreDetailOpen: EventEmitter<any> = new EventEmitter();
-
-    @Input() isPettyCash: boolean = false;
-    @Input() pettyCashEntry: any;
-    @Input() pettyCashBaseAccountTypeString: string;
-    @Input() pettyCashBaseAccountUniqueName: string;
+    public isPettyCash: boolean = false;
+    public pettyCashEntry: any;
+    public pettyCashBaseAccountTypeString: string;
+    public pettyCashBaseAccountUniqueName: string;
     /** Stores the active company details */
-    @Input() activeCompany: any;
-
-    @ViewChild('deleteAttachedFileModal', { static: true }) public deleteAttachedFileModal: ModalDirective;
+    public activeCompany: any;
     /** fileinput element ref for clear value after remove attachment **/
     @ViewChild('fileInputUpdate', { static: false }) public fileInputElement: ElementRef;
-    @ViewChild('deleteEntryModal', { static: true }) public deleteEntryModal: ModalDirective;
     @ViewChild('discount', { static: false }) public discountComponent: UpdateLedgerDiscountComponent;
     @ViewChild('tax', { static: false }) public taxControll: TaxControlComponent;
     @ViewChild('updateBaseAccount', { static: true }) public updateBaseAccount: ModalDirective;
@@ -111,10 +107,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @ViewChild('advanceReceiptRemoveConfirmationModal', { static: true }) public advanceReceiptRemoveConfirmationModal: ModalDirective;
     /** Adjustment modal */
     @ViewChild('adjustPaymentModal', { static: true }) public adjustPaymentModal: ModalDirective;
-
-    /** RCM popup instance */
-    @ViewChild('rcmPopup', { static: false }) public rcmPopup: PopoverDirective;
-
     /** Warehouse data for warehouse drop down */
     public warehouses: Array<any>;
     /** Currently selected warehouse */
@@ -276,7 +268,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         private searchService: SearchService,
         private _toasty: ToasterService,
         private warehouseActions: WarehouseActions,
-        private changeDetectorRef: ChangeDetectorRef
+        private changeDetectorRef: ChangeDetectorRef,
+        public dialog: MatDialog,
+        @Inject(MAT_DIALOG_DATA) public inputData,
+        public dialogRef: MatDialogRef<any>
     ) {
 
         this.vm = new UpdateLedgerVm();
@@ -291,24 +286,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.isDeleteTrxEntrySuccess$ = this.store.pipe(select(p => p.ledger.isDeleteTrxEntrySuccessfull), takeUntil(this.destroyed$));
         this.isTxnUpdateInProcess$ = this.store.pipe(select(p => p.ledger.isTxnUpdateInProcess), takeUntil(this.destroyed$));
         this.isTxnUpdateSuccess$ = this.store.pipe(select(p => p.ledger.isTxnUpdateSuccess), takeUntil(this.destroyed$));
-        this.closeUpdateLedgerModal.pipe(takeUntil(this.destroyed$));
         this.vm.currencyList$ = this.store.pipe(select(s => s.session.currencies), takeUntil(this.destroyed$));
         this.selectedPettycashEntry$ = this.store.pipe(select(p => p.expense.pettycashEntry), takeUntil(this.destroyed$));
     }
 
-    toggleShow() {
-        this.condition = !this.condition;
-        this.condition2 = !this.condition;
-        this.Shown = !this.Shown;
-        this.isHide = !this.isHide;
-    }
-
-    /** Track by function for items */
-    public trackByFunction(index: number, item: ILedgerTransactionItem): any {
-        return item.particular.uniqueName;
-    }
-
     public ngOnInit() {
+        this.tcsOrTds = this.inputData?.tcsOrTds || this.tcsOrTds;
+        this.defaultSuggestions = this.inputData?.defaultSuggestions || this.defaultSuggestions;
+        this.searchResultsPaginationData.page = this.inputData?.page || this.searchResultsPaginationData.page;
+        this.searchResultsPaginationData.totalPages = this.inputData?.totalPages || this.searchResultsPaginationData.totalPages;
+        this.activeCompany = this.inputData?.activeCompany;
+
         this.store.dispatch(this._settingsTagActions.GetALLTags());
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
@@ -323,7 +311,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             if (response === true) {
                 this.store.dispatch(this._ledgerAction.refreshLedger(false));
                 this.entryAccountUniqueName = "";
-                this.closeUpdateLedgerModal.emit();
+                this.dialogRef.close();
             }
         });
 
@@ -407,7 +395,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.isDeleteTrxEntrySuccess$.subscribe(del => {
             if (del) {
                 this.store.dispatch(this._ledgerAction.resetDeleteTrxEntryModal());
-                this.closeUpdateLedgerModal.emit(true);
+                this.dialogRef.close();
                 this.baseAccountChanged = false;
             }
         });
@@ -428,6 +416,18 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }
                 });
         }
+    }
+
+    public toggleShow(): void {
+        this.condition = !this.condition;
+        this.condition2 = !this.condition;
+        this.Shown = !this.Shown;
+        this.isHide = !this.isHide;
+    }
+
+    /** Track by function for items */
+    public trackByFunction(index: number, item: ILedgerTransactionItem): any {
+        return item.particular.uniqueName;
     }
 
     private prepareMultiCurrencyObject(accountDetails: any) {
@@ -747,19 +747,41 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public showDeleteAttachedFileModal() {
-        this.deleteAttachedFileModal.show();
-    }
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '630px',
+            data: {
+                title: this.commonLocaleData?.app_delete,
+                body: this.localeData?.confirm_delete_file,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no,
+                permanentlyDeleteMessage: this.localeData?.delete_entries_content
+            }
+        });
 
-    public hideDeleteAttachedFileModal() {
-        this.deleteAttachedFileModal.hide();
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if(response) {
+                this.deleteAttachedFile();
+            }
+        });
     }
 
     public showDeleteEntryModal() {
-        this.deleteEntryModal.show();
-    }
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '630px',
+            data: {
+                title: this.commonLocaleData?.app_delete,
+                body: this.localeData?.confirm_delete_entry,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no,
+                permanentlyDeleteMessage: this.localeData?.delete_entries_content
+            }
+        });
 
-    public hideDeleteEntryModal() {
-        this.deleteEntryModal.hide();
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if(response) {
+                this.deleteTrxEntry();
+            }
+        });
     }
 
     public deleteTrxEntry() {
@@ -767,7 +789,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (uniqueName) {
             this.store.dispatch(this._ledgerAction.deleteTrxEntry(uniqueName, this.entryUniqueName));
         }
-        this.hideDeleteEntryModal();
     }
 
     public deleteAttachedFile() {
@@ -778,7 +799,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 if (this.fileInputElement && this.fileInputElement.nativeElement) {
                     this.fileInputElement.nativeElement.value = '';
                 }
-                this.hideDeleteAttachedFileModal();
                 this._toasty.successToast(this.localeData?.remove_file);
             } else {
                 this._toasty.errorToast(response?.message)
@@ -933,7 +953,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public showQuickAccountModal() {
-        this.showQuickAccountModalFromUpdateLedger.emit(true);
+        this.dialogRef.close(["showQuickAccountModalFromUpdateLedger", true]);
     }
 
     public changeBaseAccount(acc) {
@@ -1230,11 +1250,21 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public toggleRcmCheckbox(event: any): void {
-        event.preventDefault();
         if (!this.isPettyCash && this.currentOrganizationType === 'COMPANY' && (this.branches && this.branches.length > 1)) {
             return;
         }
-        this.rcmConfiguration = this.generalService.getRcmConfiguration(event.target.checked, this.commonLocaleData);
+        this.rcmConfiguration = this.generalService.getRcmConfiguration(event?.checked, this.commonLocaleData);
+
+        let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            width: '630px',
+            data: {
+                configuration: this.rcmConfiguration
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            this.handleRcmChange(response);
+        });
     }
 
     /**
@@ -1250,9 +1280,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.isRcmEntry = !this.isRcmEntry;
             this.vm.isRcmEntry = this.isRcmEntry;
             this.vm.generateGrandTotal();
-        }
-        if (this.rcmPopup) {
-            this.rcmPopup.hide();
         }
     }
 
@@ -1687,7 +1714,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public toggleMoreDetail(): void {
         this.showAdvanced = !this.showAdvanced;
-        this.moreDetailOpen.emit(this.showAdvanced);
+        this.dialogRef.close(["moreDetailOpen", this.showAdvanced]);
     }
 
     /**
@@ -2119,5 +2146,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.availableItcList[1].label = this.localeData?.import_services;
             this.availableItcList[2].label = this.localeData?.others;
         }
+    }
+
+    public toggleOtherTaxesAsideMenu(vm: any): void {
+        this.dialogRef.close(["toggleOtherTaxesAsideMenu", vm])
     }
 }

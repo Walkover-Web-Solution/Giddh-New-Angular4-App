@@ -537,28 +537,6 @@
     </div>
 </div>
 
-<!--deleteAttachedFile  -->
-<div bsModal #deleteAttachedFileModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <confirm-modal [title]="commonLocaleData?.app_delete" [body]="localeData?.confirm_delete_file"
-                (cancelCallBack)="hideDeleteAttachedFileModal()" (successCallBack)="deleteAttachedFile()">
-            </confirm-modal>
-        </div>
-    </div>
-</div>
-
-<!--confirm map transaction with bank transaction -->
-<div bsModal #confirmBankTxnMapModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <confirm-modal [title]="localeData?.map_bank_entry" [body]="mapBodyContent"
-                (cancelCallBack)="hideConfirmBankTxnMapModal()" (successCallBack)="mapBankTransaction()">
-            </confirm-modal>
-        </div>
-    </div>
-</div>
-
 <!-- aside menu section -->
 <div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
 <app-aside-menu-sales-other-taxes *ngIf="asideMenuStateForOtherTaxes === 'in'" [class]="asideMenuStateForOtherTaxes"
