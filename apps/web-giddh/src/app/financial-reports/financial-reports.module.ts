@@ -6,6 +6,7 @@ import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { PopoverModule } from 'ngx-bootstrap/popover';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
@@ -97,7 +98,8 @@ import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
         HamburgerMenuModule,
         GiddhPageLoaderModule,
         AmountFieldComponentModule,
-        DatepickerWrapperModule
+        DatepickerWrapperModule,
+        PopoverModule
     ],
 })
 export class FinancialReportsModule {
