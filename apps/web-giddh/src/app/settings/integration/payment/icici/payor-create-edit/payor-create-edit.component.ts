@@ -102,7 +102,7 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
                 this.accountUserForm.get('duration')?.patchValue(UNLIMITED_LIMIT);
             }
             
-            if(!this.accountUserForm.get('duration')?.value && this.accountUserForm.get('maxAmount')?.value) {
+            if((!this.accountUserForm.get('duration')?.value || this.accountUserForm.get('duration')?.value === UNLIMITED_LIMIT) && this.accountUserForm.get('maxAmount')?.value) {
                 this.toaster.clearAllToaster();
                 this.toaster.errorToast(this.localeData?.payment?.duration_error);
                 return;
@@ -161,6 +161,12 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
         if (!this.accountUserForm?.invalid) {
             if (!this.accountUserForm.get('maxAmount')?.value) {
                 this.accountUserForm.get('duration')?.patchValue(UNLIMITED_LIMIT);
+            }
+
+            if((!this.accountUserForm.get('duration')?.value || this.accountUserForm.get('duration')?.value === UNLIMITED_LIMIT) && this.accountUserForm.get('maxAmount')?.value) {
+                this.toaster.clearAllToaster();
+                this.toaster.errorToast(this.localeData?.payment?.duration_error);
+                return;
             }
 
             let request = { bankAccountUniqueName: this.activeBankAccount?.iciciDetailsResource?.uniqueName, urn: this.activePayorAccount?.urn };

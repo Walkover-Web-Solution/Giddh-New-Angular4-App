@@ -407,7 +407,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @memberof PaymentAsideComponent
      */
     public selectBank(event: IOption): void {
+        let loadPayorList = false;
         if (event) {
+            loadPayorList = (this.requestObjectToGetOTP.uniqueName !== event.value)
             this.selectedBankUniqueName = event.value;
             this.isBankSelectedForBulkPayment = true;
             this.selectedBankName = event.label;
@@ -421,6 +423,10 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             this.totalAvailableBalance = event.additional.effectiveBal;
         }
         this.getTotalAmount();
+
+        if(loadPayorList) {
+            this.getBankAccountPayorsList();
+        }
     }
 
     /**
@@ -490,7 +496,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             }, 0);
         }
         this.totalSelectedAccountAmount = Number(this.totalSelectedAccountAmount);
-        this.getBankAccountPayorsList();
         if (selectedAccount && selectedAccount.length) {
             this.isValidData = selectedAccount.every(item => {
                 return item.closingBalanceAmount && item.remarks ? true : false;
