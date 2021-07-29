@@ -146,6 +146,12 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
                     this.usersList.push({ index: index, label: user.userName, value: user.userUniqueName });
                     index++;
                 });
+
+                let isAllOptionsChecked = this.paymentAlerts.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords); 
+                if((isAllOptionsChecked?.length === this.paymentAlertsUsersList?.length - 1)) {
+                    // if all options checked and select all is unchecked, we need to show select all as selected
+                    this.paymentAlerts.push(this.selectAllRecords);
+                }
             }
         });
     }
@@ -229,6 +235,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
     public clearSingleItem(event: any): void {
         if(event) {
             this.paymentAlerts = event?.map(user => user.value);
+            this.paymentAlerts = this.paymentAlerts.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords);
         }
     }
 
