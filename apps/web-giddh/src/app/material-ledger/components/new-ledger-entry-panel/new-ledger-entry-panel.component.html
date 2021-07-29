@@ -201,7 +201,7 @@
                     <ng-container *ngIf="isTcsTdsApplicable">
                         <mat-checkbox [disabled]="isReadOnly" id="ledger-other-tax"
                             [(ngModel)]="blankLedger.isOtherTaxesApplicable" *ngIf="!blankLedger.isOtherTaxesApplicable"
-                            (ngModelChange)="toggleOtherTaxesAsidePane(blankLedger.isOtherTaxesApplicable)"></mat-checkbox>
+                            (change)="toggleOtherTaxesAsidePane(blankLedger.isOtherTaxesApplicable)"></mat-checkbox>
                         <span *ngIf="!blankLedger.isOtherTaxesApplicable">{{localeData?.other_tax}}</span>
 
                         <div class="clearfix">
@@ -564,7 +564,7 @@
                 <span class="pull-left">
                     <mat-checkbox [disabled]="isReadOnly" id="tourist-scheme" name="touristSchemeApplicable"
                         [(ngModel)]="blankLedger.touristSchemeApplicable"
-                        (ngModelChange)="touristSchemeApplicableToggle($event)"></mat-checkbox>
+                        (change)="touristSchemeApplicableToggle($event)"></mat-checkbox>
                 </span>
                 <span>{{localeData?.transaction_available_ts}}</span>
             </div>

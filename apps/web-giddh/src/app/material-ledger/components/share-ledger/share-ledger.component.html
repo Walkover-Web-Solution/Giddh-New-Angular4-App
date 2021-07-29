@@ -3,7 +3,7 @@
     <div id="share-modal">
         <div id="share-modal" ng-if="ledgerCtrl.toggleShare">
             <div class="modal-header">
-                <span aria-hidden="true" class="close" data-dismiss="modal" mat-button mat-dialog-close
+                <span aria-hidden="true" class="close" mat-button mat-dialog-close
                     [attr.aria-label]="commonLocaleData?.app_close">×</span>
                 <h3 class="unbold" mat-dialog-title>{{localeData?.page_heading}}</h3>
             </div>
@@ -54,7 +54,7 @@
                         <div class="modal-wrap clearfix">
                             <div class="clearfix">
                                 <span>{{commonLocaleData?.app_or | titlecase}}</span>
-                                <button class="btn-link btn"
+                                <button mat-button class="btn-link btn"
                                     (click)="getMagicLink()">{{localeData?.get_shareable_link}}</button>
                                 <span class="success" *ngIf="isCopied">{{localeData?.copied}}</span>
                             </div>
