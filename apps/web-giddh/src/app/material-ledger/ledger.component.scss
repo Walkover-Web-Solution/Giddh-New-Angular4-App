@@ -162,8 +162,8 @@ table.ledger-footer-1 td[class*="col-"] {
         position: relative;
         i {
             color: $gray;
-            left: 7px;
-            top: -7px;
+            left: 8px;
+            top: -8px;
         }
     }
 }
@@ -1204,4 +1204,5 @@ a#reload-bank-transaction i.icon-refresh {
 input#ledger-search {
     padding-left: 28px;
     width: 81%;
+    font-size: 14px;
 }
