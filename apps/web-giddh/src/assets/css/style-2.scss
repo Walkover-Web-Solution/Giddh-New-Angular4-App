@@ -8486,6 +8486,11 @@ body.update-scroll-hidden{
     height: calc(100vh - 320px);
     overflow: auto;
 }
+.financial-report-account-detail-container {
+    .popover-arrow {
+        display: none;
+    }
+}
 /* responsive  starts here*/
 
 @media (max-width: 1440px) {
