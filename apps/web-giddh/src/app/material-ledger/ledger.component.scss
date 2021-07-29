@@ -23,7 +23,7 @@
 }
 #ledger-transaction-left-list,
 #ledger-transaction-right-list {
-    td {
+    mat-grid-tile {
         padding: 0 !important;
         &:first-child {
             border-bottom: none !important;
@@ -38,22 +38,22 @@
             height: 49px;
             border: 0 !important;
         }
-        input[type="checkbox"] {
+        mat-checkbox {
             min-height: 20px;
             height: 20px;
         }
     }
 }
-#ledger-transaction-left-list td,
-#ledger-transaction-right-list td {
+#ledger-transaction-left-list mat-grid-tile,
+#ledger-transaction-right-list mat-grid-tile {
     border-bottom: 1px solid $gainsboro;
 }
-#ledger-transaction-right-list tr,
-#ledger-transaction-left-list tr {
+#ledger-transaction-right-list,
+#ledger-transaction-left-list{
     border-bottom: 1px solid $gainsboro;
 }
-#ledger-transaction-right-list tr td:last-child,
-#ledger-transaction-left-list tr td:last-child {
+#ledger-transaction-right-list mat-grid-tile:last-child,
+#ledger-transaction-left-list mat-grid-tile:last-child {
     border-right: none !important;
 }
 .transaction-mapped-table thead th {
@@ -68,8 +68,8 @@ input {
     display: flex;
     justify-content: space-between;
 }
-.ledg-head table td[class*="col-"],
-.ledg-head table td .select2-container {
+.ledg-head mat-grid-list mat-grid-tile,
+.ledg-head mat-grid-list mat-grid-tile .select2-container {
     padding: 8px 10px !important;
     border-bottom: 1px solid $gainsboro;
     border-right: 1px solid $gainsboro;
@@ -79,19 +79,16 @@ input {
     white-space: nowrap;
     display: flex;
     align-items: center;
+    min-height: 49px;
+    height: 49px;
+    max-height: initial;
 }
+
 table.ledger-footer-1 td[class*="col-"] {
     justify-content: flex-end;
 }
 .ledg-head table td.pd-r25 {
     padding-right: 25px !important;
-}
-
-.ledg-head table td[class*="col-"],
-.ledg-head table td .select2-container {
-    min-height: 49px;
-    height: 49px;
-    max-height: initial;
 }
 
 .ledg-head.entry-popup table td[class*="col-"] {
@@ -387,12 +384,12 @@ sh-select:focus {
     background: $white;
     padding: 0 15px 350px;
 }
-.left-col-new table.width-100.h-table tbody tr td:last-child,
-.left-col-new table.width-100.h-table thead tr th:last-child {
+.left-col-new mat-grid-list mat-grid-title:last-child,
+.left-col-new mat-grid-list mat-grid-title:last-child {
     border-right: 0px !important;
 }
-.left-col-new table.width-100.h-table tbody tr td:first-child,
-.left-col-new table.width-100.h-table thead tr th:first-child {
+.left-col-new mat-grid-list mat-grid-title:first-child,
+.left-col-new mat-grid-list mat-grid-title:first-child {
     border-left: 1px solid $gainsboro !important;
 }
 .custom-tabs {
@@ -434,7 +431,7 @@ sh-select:focus {
     padding: 6px 9px;
     color: $white;
 }
-.left-col-new table.width-100.h-table#blank-ledger-container .no-left-border {
+.left-col-new .width-100.h-table#blank-ledger-container .no-left-border {
     border-left: none !important;
 }
 
@@ -739,7 +736,7 @@ sh-select:focus {
     text-align: right;
     white-space: normal;
 }
-.ledg-head table .ledger-main .ledger-row:last-child td[class*="col-"] {
+.ledg-head .ledger-main .ledger-row:last-child mat-grid-tile[class*="col-"] {
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
@@ -894,8 +891,8 @@ sh-select:focus {
     .stat-block {
         padding-left: 20px;
     }
-    .ledg-head table td[class*="col-"],
-    .ledg-head table td .select2-container {
+    .ledg-head mat-grid-list mat-grid-title,
+    .ledg-head mat-grid-list mat-grid-title .select2-container {
         border-bottom: none;
         border-right: none;
     }
@@ -962,8 +959,8 @@ sh-select:focus {
         font-size: 12px !important;
         padding: 6px;
     }
-    .left-col-new table.width-100.h-table tbody tr td:first-child,
-    .left-col-new table.width-100.h-table thead tr th:first-child {
+    .left-col-new .width-100.h-table mat-grid-list mat-grid-title:first-child,
+    .left-col-new .width-100.h-table mat-grid-list mat-grid-title:first-child {
         border-left: 0px solid $gainsboro !important;
     }
     .ledg-head.some.transactions-page {
@@ -1205,4 +1202,7 @@ input#ledger-search {
     padding-left: 28px;
     width: 81%;
     font-size: 14px;
+}
+.mat-grid-tile.select2-ledger {
+    overflow: visible !important;
 }
