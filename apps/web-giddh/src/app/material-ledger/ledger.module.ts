@@ -61,13 +61,12 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
-import { NewConfirmationModalModule } from '../theme/confirmation-modal/confirmation-modal.module';
-
+import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/confirmation-modal.module';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 @NgModule({
     declarations: [
@@ -141,13 +140,13 @@ import { NewConfirmationModalModule } from '../theme/confirmation-modal/confirma
         MatButtonModule,
         MatTableModule,
         MatCheckboxModule,
-        MatPaginatorModule,
         MatDialogModule,
         MatRadioModule,
         MatMenuModule,
         NewConfirmModalModule,
         MatSelectModule,
-        NewConfirmationModalModule
+        NewConfirmationModalModule,
+        MatGridListModule
     ],
 })
 export class LedgerModule {

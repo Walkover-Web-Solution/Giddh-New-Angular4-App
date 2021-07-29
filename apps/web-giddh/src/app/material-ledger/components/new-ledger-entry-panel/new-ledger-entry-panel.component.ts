@@ -28,9 +28,7 @@ import {
     SubVoucher,
 } from 'apps/web-giddh/src/app/app.constant';
 import { AccountResponse, AccountResponseV2 } from 'apps/web-giddh/src/app/models/api-models/Account';
-import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { PopoverDirective } from 'ngx-bootstrap/popover';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
 import { BehaviorSubject, Observable, of as observableOf, ReplaySubject } from 'rxjs';
@@ -69,8 +67,9 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 import { AVAILABLE_ITC_LIST, BlankLedgerVM, TransactionVM } from '../../ledger.vm';
 import { LedgerDiscountComponent } from '../ledger-discount/ledger-discount.component';
-import { NewConfirmationModalComponent } from '../../../theme/confirmation-modal/confirmation-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ConfirmModalComponent } from '../../../theme/new-confirm-modal/confirm-modal.component';
+import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -146,9 +145,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Output() public saveOtherTax: EventEmitter<any> = new EventEmitter();
     @ViewChild('entryContent', { static: true }) public entryContent: ElementRef;
     @ViewChild('sh', { static: true }) public sh: ShSelectComponent;
-    @ViewChild(BsDatepickerDirective, { static: true }) public datepickers: BsDatepickerDirective;
-
-    @ViewChild('deleteAttachedFileModal', { static: true }) public deleteAttachedFileModal: ModalDirective;
     @ViewChild('discount', { static: false }) public discountControl: LedgerDiscountComponent;
     @ViewChild('tax', { static: false }) public taxControll: TaxControlComponent;
 
@@ -164,8 +160,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
     public isFileUploading: boolean = false;
     public isLedgerCreateInProcess$: Observable<boolean>;
-    // bank map eledger related
-    @ViewChild('confirmBankTxnMapModal', { static: true }) public confirmBankTxnMapModal: ModalDirective;
     public matchingEntriesData: ReconcileResponse[] = [];
     public showMatchingEntries: boolean = false;
     public mapBodyContent: string;
@@ -817,11 +811,22 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public showDeleteAttachedFileModal() {
-        this.deleteAttachedFileModal.show();
-    }
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '630px',
+            data: {
+                title: this.commonLocaleData?.app_delete,
+                body: this.localeData?.confirm_delete_file,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no,
+                permanentlyDeleteMessage: this.localeData?.delete_entries_content
+            }
+        });
 
-    public hideDeleteAttachedFileModal() {
-        this.deleteAttachedFileModal.hide();
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if(response) {
+                this.deleteAttachedFile();
+            }
+        });
     }
 
     public unitChanged(stockUnitCode: string) {
@@ -837,7 +842,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             if (response?.status === 'success') {
                 this.blankLedger.attachedFile = '';
                 this.blankLedger.attachedFileName = '';
-                this.hideDeleteAttachedFileModal();
                 if (this.webFileInput && this.webFileInput.nativeElement) {
                     this.webFileInput.nativeElement.value = '';
                 }
@@ -896,11 +900,22 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.selectedItemToMap = item;
         this.mapBodyContent = this.localeData?.map_cheque_bank_transaction;
         this.mapBodyContent = this.mapBodyContent.replace("[CHEQUE_NUMBER]", item.chequeNumber);
-        this.confirmBankTxnMapModal.show();
-    }
+        
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '630px',
+            data: {
+                title: this.commonLocaleData?.map_bank_entry,
+                body: this.mapBodyContent,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
+        });
 
-    public hideConfirmBankTxnMapModal() {
-        this.confirmBankTxnMapModal.hide();
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if(response) {
+                this.mapBankTransaction();
+            }
+        });
     }
 
     public mapBankTransaction() {
@@ -920,7 +935,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     } else {
                         this._toasty.successToast(this.localeData?.entry_mapped);
                     }
-                    this.hideConfirmBankTxnMapModal();
                     this.clickedOutsideEvent.emit(false);
                 } else {
                     this._toasty.errorToast(res.message, res.code);

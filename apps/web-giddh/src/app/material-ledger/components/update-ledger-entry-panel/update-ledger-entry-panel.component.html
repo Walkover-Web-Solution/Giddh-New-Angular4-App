@@ -3,8 +3,7 @@
     <div id="entryModal">
         <!-- region header -->
         <div class="modal-header" *ngIf="!isPettyCash">
-            <span aria-hidden="true" class="close hover-orange" data-dismiss="modal"
-                (click)="closeUpdateLedgerModal.emit()" aria-label="Close">×</span>
+            <span aria-hidden="true" class="close hover-orange" mat-button mat-dialog-close [attr.aria-label]="commonLocaleData?.app_close">×</span>
 
             <h3 *ngIf="!openDropDown" (dblclick)="openHeaderDropDown()" class="d-inline-block mr-1">
                 {{(baseAccount$ | async)?.name}} {{commonLocaleData?.app_ac}}</h3>
@@ -93,29 +92,20 @@
                                     <ng-container *ngIf="txn.type === 'DEBIT'">
 
                                         <td class="col-3" [attr.data-title]="commonLocaleData?.app_date">
-                                            <input
-                                                [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
-                                                id="{{'giddh-datepicker-left-' + i}}" type="text" autocomplete="off"
-                                                name="datess" #dbs='bsDatepicker'
-                                                [(ngModel)]="vm.selectedLedger.entryDate" class="form-control"
-                                                bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                                (click)="addBlankTrx('DEBIT', txn, $event)" placeholder="date"
-                                                (ngModelChange)="getInvoiceListsForCreditNote()">
+                                            <giddh-datepicker [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
+                                                [id]="'giddh-datepicker-left-' + i" name="datess" [(ngModel)]="vm.selectedLedger.entryDate" (click)="addBlankTrx('DEBIT', txn, $event)" (dateSelected)="getInvoiceListsForCreditNote()"></giddh-datepicker>
                                         </td>
-
                                         <td [attr.data-title]="commonLocaleData?.app_particular"
-                                            id="{{'debit-id-' + i}}"
+                                            [id]="'debit-id-' + i"
                                             [ngClass]="{ 'other-account-entry': txn.particular.uniqueName === 'others' }"
                                             class="col-5 position-relative select2-parent select2-ledger">
-
-
                                             <ng-template [ngIf]="!txn.isDiscount">
                                                 <div class="d-flex update-ledger-account">
                                                     <span
                                                         *ngIf="(
                                                             (!dbtSelect.isOpen && txn.particular.uniqueName) ||
                                                             (dbtSelect.isOpen && dbtSelect.filter))">{{localeData?.to}}</span>
-                                                    <sh-select id="{{'debit-select-' + i }}" [notFoundLink]="true"
+                                                    <sh-select [id]="'debit-select-' + i" [notFoundLink]="true"
                                                         (noResultsClicked)="showQuickAccountModal()"
                                                         [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                                                         [class.disabled-ledger]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
@@ -129,12 +119,10 @@
                                                         (selected)="selectAccount($event, txn, dbtSelect)"
                                                         (onClear)="selectAccount($event, txn, dbtSelect, true)"
                                                         [showClear]="false" [(ngModel)]="txn.particular.uniqueName"
-                                                        [ItemHeight]="67" (onShow)="dbs.hide()"
+                                                        [ItemHeight]="67"
                                                         [defaultValue]="txn.particular.name"
                                                         [placeholder]="localeData?.to_select_accounts">
-
                                                         <ng-template #optionTemplate let-option="option">
-
                                                             <ng-container *ngIf="!option.additional?.stock">
                                                                 <a href="javascript:void(0)" class="list-item bd-rb">
                                                                     <div class="item">{{ option.label }}</div>
@@ -143,7 +131,6 @@
                                                                     </div>
                                                                 </a>
                                                             </ng-container>
-
                                                             <ng-container *ngIf="option.additional?.stock">
                                                                 <a href="javascript:void(0)" class="list-item bd-rb">
                                                                     <div class="item">{{ option.label }}</div>
@@ -155,11 +142,8 @@
                                                                         option.additional?.stock.name }}</div>
                                                                 </a>
                                                             </ng-container>
-
                                                         </ng-template>
-
                                                         <ng-template #notFoundLinkTemplate>
-
                                                             <a id="createNewId"
                                                                 [ngClass]="{'active': keydownClassAdded}"
                                                                 class="notfound-option" [keyboardShortcut]="'alt+c'"
@@ -170,29 +154,28 @@
                                                                     class="pull-right">{{commonLocaleData?.app_alt_c}}</span>
                                                             </a>
                                                         </ng-template>
-
                                                     </sh-select>
                                                 </div>
                                             </ng-template>
 
                                             <ng-template [ngIf]="txn.isDiscount">
-                                                To
-                                                <input [disabled]="true" [(ngModel)]="txn.particular.name"
+                                                {{commonLocaleData?.app_to}}
+                                                <input matInput [disabled]="true" [(ngModel)]="txn.particular.name"
                                                     class="transaction-particular-name" />
                                             </ng-template>
 
                                             <span class="download-invoice-ledger"
                                                 *ngIf="vm.selectedLedger.attachedFile && vm.selectedLedger.attachedFile.length > 0 && (txn?.particular?.name || txn?.particular?.uniqueName)"
                                                 (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)"
-                                                [placement]="'left'" [containerClass]="'col-xs-3'"
-                                                [tooltip]="localeData?.download_file + ':' + vm.selectedLedger.attachedFileName">
+                                                [matTooltipPosition]="'left'" [containerClass]="'col-xs-3'"
+                                                [matTooltip]="localeData?.download_file + ':' + vm.selectedLedger.attachedFileName">
                                                 <i class="icon-download-circle pull-left"></i>
                                             </span>
 
                                             <span class="download-invoice-ledger"
                                                 *ngIf="vm.selectedLedger.voucherNumber && vm.selectedLedger.voucherNumber.length> 0 && (txn?.particular?.name || txn?.particular?.uniqueName)"
-                                                [placement]="'left'" [containerClass]="'col-xs-3'"
-                                                [tooltip]="commonLocaleData?.app_download + ' ' + (vm.selectedLedger.voucherGeneratedType === 'sales' ? commonLocaleData?.app_invoice : commonLocaleData?.app_voucher) + ' : ' + vm.selectedLedger.voucherNumber"
+                                                [matTooltipPosition]="'left'" [containerClass]="'col-xs-3'"
+                                                [matTooltip]="commonLocaleData?.app_download + ' ' + (vm.selectedLedger.voucherGeneratedType === 'sales' ? commonLocaleData?.app_invoice : commonLocaleData?.app_voucher) + ' : ' + vm.selectedLedger.voucherNumber"
                                                 (click)="downloadInvoice(vm.selectedLedger.voucherNumber, vm.selectedLedger.voucherGeneratedType ? vm.selectedLedger.voucherGeneratedType : vm.selectedLedger.voucher.name, $event)">
                                                 <i class="icon-download-circle pull-left"></i>
                                             </span>
@@ -201,9 +184,9 @@
 
                                         <td class="col-4 text-right" [attr.data-title]="commonLocaleData?.app_amount">
 
-                                            <input
+                                            <input matInput
                                                 [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
-                                                id="{{'update-ledger-amount-dr-' + i}}" type="text"
+                                                [id]="'update-ledger-amount-dr-' + i" type="text"
                                                 [(ngModel)]="txn.amount" class="form-control text-right"
                                                 name="{{txn[i]}}.amount" [mask]="vm.inputMaskFormat"
                                                 [rawInputValue]="txn.amount" [prefix]="vm.selectedPrefixForCurrency"
@@ -228,13 +211,11 @@
 
                         <!-- region debit transaction footer -->
                         <table class="ledger-footer-1">
-
                             <tbody>
                                 <tr class="total-col">
-
                                     <td colspan="12" class="text-right h32">
                                         <span *ngIf="vm.entryTotal.crTotal > vm.entryTotal.drTotal" class="pd-1"
-                                            [tooltip]="vm.ledgerUnderStandingObj.balanceText.cr" [placement]="'top'">
+                                            [matTooltip]="vm.ledgerUnderStandingObj.balanceText.cr" [matTooltipPosition]="'above'">
                                             {{localeData?.c_f}}: {{localeData?.cr | uppercase}}
                                             <span class="d-inline-flex">
                                                 <amount-field [amount]="vm.compoundTotal"
@@ -289,41 +270,30 @@
                                         <span class="cursor-pointer">
                                             {{commonLocaleData?.app_date}}
                                         </span>
-
                                     </th>
                                     <th class="col-5 border-top-none">{{commonLocaleData?.app_particular}}</th>
                                     <th class="col-4 text-right border-top-none">{{commonLocaleData?.app_amount}}</th>
                                 </tr>
                             </thead>
-
                             <tbody class="ledger-main">
-
                                 <tr *ngFor="let txn of vm.selectedLedger.transactions; let i = index"
                                     class="credit-blank-row row">
                                     <ng-container *ngIf="txn.type == 'CREDIT'">
-
                                         <td [attr.data-title]="commonLocaleData?.app_date" class="col-3">
-                                            <input
-                                                [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
-                                                id="{{'giddh-datepicker-right-' + i }}" class="form-control"
-                                                autocomplete="off" name="datepic" type="text"
-                                                [(ngModel)]="vm.selectedLedger.entryDate"
-                                                (click)="addBlankTrx('CREDIT', txn, $event)" #cbs='bsDatepicker'
-                                                bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }">
+                                            <giddh-datepicker [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
+                                                [id]="'giddh-datepicker-right-' + i" name="datepic" [(ngModel)]="vm.selectedLedger.entryDate" (click)="addBlankTrx('CREDIT', txn, $event)"></giddh-datepicker>
                                         </td>
-
                                         <td [attr.data-title]="commonLocaleData?.app_particular"
-                                            id="{{'credit-id-' + i}}"
+                                            [id]="'credit-id-' + i"
                                             class="position-relative col-5 select2-parent select2-ledger"
                                             [ngClass]="{ 'other-account-entry': txn.particular.uniqueName === 'others' }">
-
                                             <ng-template [ngIf]="!txn?.isDiscount">
                                                 <div class="d-flex update-ledger-account">
                                                     <span
                                                         *ngIf="(
                                                             (!crdSelect.isOpen && txn.particular.uniqueName) ||
                                                             (crdSelect.isOpen && crdSelect.filter))">{{localeData?.by}}</span>
-                                                    <sh-select id="{{'credit-select-' + i}}" [notFoundLink]="true"
+                                                    <sh-select [id]="'credit-select-' + i" [notFoundLink]="true"
                                                         (noResultsClicked)="showQuickAccountModal()"
                                                         [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                                                         [class.disabled-ledger]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
@@ -335,7 +305,7 @@
                                                         #crdSelect (click)="addBlankTrx('CREDIT', txn, $event)"
                                                         (selected)="selectAccount($event,txn, crdSelect)"
                                                         (onClear)="selectAccount($event,txn, crdSelect, true)"
-                                                        [fixedValue]="txn.particular.name" (onShow)="cbs.hide()"
+                                                        [fixedValue]="txn.particular.name"
                                                         [showClear]="false" [(ngModel)]="txn.particular.uniqueName"
                                                         [ItemHeight]="67" [defaultValue]="txn.particular.name"
                                                         [placeholder]="localeData?.by_select_accounts">
@@ -380,32 +350,32 @@
                                             </ng-template>
 
                                             <ng-template [ngIf]="txn?.isDiscount">
-                                                <input id="update-ledger-discount" [disabled]="true"
+                                                <input matInput id="update-ledger-discount" [disabled]="true"
                                                     [(ngModel)]="txn.particular.name"
                                                     class="transaction-particular-name" />
                                             </ng-template>
 
                                             <span class="download-invoice-ledger"
                                                 *ngIf="vm.selectedLedger.attachedFile?.length > 0 && (txn?.particular?.name || txn?.particular?.uniqueName)"
-                                                [placement]="'left'" [containerClass]="'col-xs-3'"
-                                                [tooltip]="localeData?.download_file + ' : ' + vm.selectedLedger.attachedFileName"
+                                                [matTooltipPosition]="'left'" [containerClass]="'col-xs-3'"
+                                                [matTooltip]="localeData?.download_file + ' : ' + vm.selectedLedger.attachedFileName"
                                                 (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)">
                                                 <i class="icon-download-circle pull-left"></i>
                                             </span>
 
                                             <span class="download-invoice-ledger"
                                                 *ngIf="vm.selectedLedger.voucherNumber && vm.selectedLedger.voucherNumber.length > 0 && (txn?.particular?.name || txn?.particular?.uniqueName)"
-                                                [placement]="'left'" [containerClass]="'col-xs-3'"
-                                                [tooltip]="commonLocaleData?.app_download + ' ' + (vm.selectedLedger.voucherGeneratedType === 'sales' ? commonLocaleData?.app_invoice : commonLocaleData?.app_voucher) + ' : ' + vm.selectedLedger.voucherNumber"
+                                                [matTooltipPosition]="'left'" [containerClass]="'col-xs-3'"
+                                                [matTooltip]="commonLocaleData?.app_download + ' ' + (vm.selectedLedger.voucherGeneratedType === 'sales' ? commonLocaleData?.app_invoice : commonLocaleData?.app_voucher) + ' : ' + vm.selectedLedger.voucherNumber"
                                                 (click)="downloadInvoice(vm.selectedLedger.voucherNumber, vm.selectedLedger.voucherGeneratedType ? vm.selectedLedger.voucherGeneratedType : vm.selectedLedger.voucher.name, $event)">
                                                 <i class="icon-download-circle pull-left"></i>
                                             </span>
                                         </td>
 
                                         <td [attr.data-title]="commonLocaleData?.app_amount" class="col-4 text-right">
-                                            <input
+                                            <input matInput
                                                 [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
-                                                id="{{'update-ledger-amount-cr-' + i}}" class="form-control text-right"
+                                                [id]="'update-ledger-amount-cr-' + i" class="form-control text-right"
                                                 type="text" [(ngModel)]="txn.amount" [mask]="vm.inputMaskFormat"
                                                 [prefix]="vm.selectedPrefixForCurrency"
                                                 [suffix]="vm.selectedSuffixForCurrency" [rawInputValue]="txn.amount"
@@ -433,15 +403,12 @@
                                         <span *ngIf="vm.entryTotal.drTotal > vm.entryTotal.crTotal">{{localeData?.c_f}}:
                                             {{localeData?.dr}}
                                             <span class="primary-color pr-1 pl-1 d-inline-flex"
-                                                [tooltip]="vm.ledgerUnderStandingObj.balanceText.dr"
-                                                [placement]="'top'">
-
+                                                [matTooltip]="vm.ledgerUnderStandingObj.balanceText.dr"
+                                                [matTooltipPosition]="'above'">
                                                 <amount-field [amount]="vm.compoundTotal"
                                                     [currencySymbol]="vm?.baseCurrencyDetails?.symbol"
                                                     [currencyCode]="vm?.baseCurrencyDetails?.code">
                                                 </amount-field>
-
-
                                             </span>
                                         </span>
                                     </td>
@@ -450,15 +417,12 @@
                                     <!-- reckoning -->
                                     <td colspan="12" class="text-right h32">
                                         <span class="bd-rt pr-1">
-
                                             <amount-field
                                                 [amount]="(vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal)"
                                                 [currencySymbol]="vm?.baseCurrencyDetails?.symbol"
                                                 [currencyCode]="vm.baseCurrencyDetails?.code">
                                             </amount-field>
-
                                         </span>
-
                                         <p class="mb-0 amount-total pr-1 pb-1" *ngIf="vm.isMultiCurrencyAvailable">
                                             <ng-container *ngTemplateOutlet="totalWithCurrencySymbol;context: {
                         $implicit: (vm.convertedEntryTotal.crTotal > vm.convertedEntryTotal.drTotal ? vm.convertedEntryTotal.crTotal : vm.convertedEntryTotal.drTotal)
@@ -479,20 +443,11 @@
             <div class="entrypanel width-100 pt-2">
                 <!-- reverse charge transction start -->
                 <div *ngIf="shouldShowRcmEntry" class="pd-b1 mt-b1 tourist-scheme-wrapper">
-                    <input id="tourist-scheme-1" class="checkbox-custom" type="checkbox" [ngModel]="isRcmEntry"
-                        (click)="toggleRcmCheckbox($event)"
-                        [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1">
-                    <label for="tourist-scheme-1" class="checkbox-custom-label" #rcmPopup="bs-popover"
-                        [popover]="!(!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1) ? rcmTemplate : ''"
-                        placement="right" containerClass="update-ledger-rcm"
-                        [innerHTML]="localeData?.transaction_available_rc">
-                    </label>
+                    <mat-checkbox id="tourist-scheme-1" [ngModel]="isRcmEntry"
+                        (change)="toggleRcmCheckbox($event)"
+                        [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"><span [innerHTML]="localeData?.transaction_available_rc"></span></mat-checkbox>
                     <span class="text-light font-12"> ({{localeData?.tax_compulsory}})</span>
                 </div>
-                <ng-template #rcmTemplate>
-                    <confirmation-modal [configuration]="rcmConfiguration" (buttonClicked)="handleRcmChange($event)">
-                    </confirmation-modal>
-                </ng-template>
                 <!-- reverse charge transction end  -->
                 <!--  tourist scheme template start      -->
                 <ng-container *ngTemplateOutlet="touristSchemeTemplate"></ng-container>
@@ -506,7 +461,7 @@
                                 <div [ngClass]="{width40: vm.stockTrxEntry}"
                                     class="table-amount text-right pr-1 width-80">
                                     <label class="font-12">{{commonLocaleData?.app_quantity}}</label>
-                                    <input
+                                    <input matInput
                                         [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                                         id="update-ledger-quantity" type="text" name="" class="form-control text-right"
                                         [(ngModel)]="vm.stockTrxEntry.inventory.quantity" decimalDigitsDirective
@@ -516,15 +471,15 @@
 
                                 <div class="text-right table-amount width-80">
                                     <label class="font-12">{{commonLocaleData?.app_unit}}</label>
-                                    <select id="update-ledger-unit"
+                                    <mat-select id="update-ledger-unit" name="inventory_unit_code"
                                         [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                                         class="form-control text-right p-0"
                                         [(ngModel)]="vm.stockTrxEntry.inventory.unit.code"
                                         (change)="vm.unitChanged($event.target.value)">
-                                        <option *ngFor="let item of vm.stockTrxEntry.unitRate" [value]="item.code">
+                                        <mat-option *ngFor="let item of vm.stockTrxEntry.unitRate" [value]="item.code">
                                             {{item.stockUnitCode}}
-                                        </option>
-                                    </select>
+                                        </mat-option>
+                                    </mat-select>
                                 </div>
                             </ng-template>
 
@@ -536,7 +491,7 @@
                             <ng-template [ngIf]="(vm.showNewEntryPanel && vm.stockTrxEntry)">
                                 <div class="text-right table-amount">
                                     <label class="font-12">{{localeData?.price}}</label>
-                                    <input
+                                    <input matInput
                                         [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                                         id="update-ledger-price" type="text" name="unitPrice"
                                         (blur)="vm.inventoryPriceChanged(vm.stockTrxEntry.inventory.rate)"
@@ -565,14 +520,14 @@
                             <div *ngIf="vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields"
                                 class="text-right table-amount">
                                 <label class="font-12">{{commonLocaleData?.app_amount}}</label>
-                                <input
+                                <input matInput
                                     [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                                     id="update-ledger-amount-receipt" *ngIf="isAdvanceReceipt" type="text"
                                     name="advanceAmount" class="form-control text-right" [mask]="vm.inputMaskFormat"
                                     [rawInputValue]="vm.advanceReceiptAmount" [prefix]="vm.selectedPrefixForCurrency"
                                     [suffix]="vm.selectedSuffixForCurrency" [(ngModel)]="vm.advanceReceiptAmount"
                                     disabled />
-                                <input
+                                <input matInput
                                     [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                                     id="update-ledger-amount" *ngIf="!isAdvanceReceipt" type="text" name="amount"
                                     class="form-control text-right" [mask]="vm.inputMaskFormat"
@@ -658,7 +613,7 @@
                             <div *ngIf="(vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields)"
                                 class="text-right table-amount" (resized)="onResized($event)">
                                 <label class="font-12">{{localeData?.total_amount}}</label>
-                                <input
+                                <input matInput
                                     [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                                     type="text" id="update-ledger-total-amount" name="" class="form-control text-right"
                                     [(ngModel)]="vm.grandTotal" [mask]="vm.inputMaskFormat"
@@ -676,24 +631,24 @@
                                 <div class="text-right">
 
                                     <div *ngIf="!vm.selectedLedger.isOtherTaxesApplicable" class="other-tax">
-                                        <input type="checkbox" id="update-ledger-other-tax"
+                                        <mat-checkbox id="update-ledger-other-tax"
                                             [(ngModel)]="vm.selectedLedger.isOtherTaxesApplicable"
                                             *ngIf="!vm.selectedLedger.isOtherTaxesApplicable"
                                             [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
-                                            (ngModelChange)="toggleOtherTaxesAsideMenu.emit(vm)" />
+                                            (change)="toggleOtherTaxesAsideMenu(vm);"></mat-checkbox>
                                         <p class="font-14 nowrap" *ngIf="!vm.selectedLedger.isOtherTaxesApplicable">
                                             {{localeData?.other_tax}}</p>
                                     </div>
 
                                     <div *ngIf="vm.selectedLedger.isOtherTaxesApplicable" class="pl-1">
-                                        <label>{{commonLocaleData?.app_other_tax}} <a href="javascript: void(0)"
+                                        <label>{{commonLocaleData?.app_other_tax}} <a href="javascript:void(0)"
                                                 class="text-gray"
-                                                (click)="(currentOrganizationType === 'COMPANY' && branches?.length === 1) || (currentOrganizationType === 'BRANCH') ? toggleOtherTaxesAsideMenu.emit(vm) : ''">
+                                                (click)="(currentOrganizationType === 'COMPANY' && branches?.length === 1) || (currentOrganizationType === 'BRANCH') ? toggleOtherTaxesAsideMenu(vm) : ''">
                                                 <i class="icon-edit11 font-12 mr-l05"></i>
                                             </a>
                                         </label>
 
-                                        <input id="update-ledger-other-tax-disabled" class="text-right form-control"
+                                        <input matInput id="update-ledger-other-tax-disabled" class="text-right form-control"
                                             disabled="disabled" [mask]="vm.inputMaskFormat"
                                             [prefix]="vm.selectedPrefixForCurrency"
                                             [suffix]="vm.selectedSuffixForCurrency"
@@ -734,7 +689,7 @@
                         <ng-container *ngIf="shouldShowRcmTaxableAmount">
                             <div class="taxable-amount-section">
                                 <label class="primary-color">{{localeData?.taxable_amount}}</label>
-                                <input
+                                <input matInput
                                     [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                                     id="update-ledger-taxable-amount" type="text" name="taxable-amount"
                                     class="form-control text-right" [prefix]="vm.selectedPrefixForCurrency"
@@ -755,7 +710,7 @@
 
                         <div class="row">
                             <div class="col-12 col-sm-12">
-                                <textarea id="update-ledger-description" rows="3" cols=""
+                                <textarea matInput id="update-ledger-description" rows="3" cols=""
                                     [(ngModel)]="vm.selectedLedger.description" class="form-control"
                                     [placeholder]="commonLocaleData?.app_description"
                                     [attr.disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1 ? 'disabled' : null"></textarea>
@@ -798,7 +753,7 @@
                                             <label>{{localeData?.adjustment_vouchers}}
                                                 <span class="text-danger">*</span>
                                             </label>
-                                            <input id="update-ledger-adjust-voucher" type="text"
+                                            <input matInput id="update-ledger-adjust-voucher" type="text"
                                                 class="form-control mr-b1" [(ngModel)]="item.voucherNumber" disabled>
                                         </div>
                                     </div>
@@ -807,13 +762,13 @@
                                             <label>{{commonLocaleData?.app_amount}}<span class="text-danger">*</span>
                                                 <span *ngIf="item.voucherType === 'receipt' && isAdvanceReceipt"
                                                     class="text-light font-12 mr-l05">({{commonLocaleData?.app_inclusive_tax}})</span></label>
-                                            <input id="update-ledger-inclusive-tax-edit-mode" type="text"
+                                            <input matInput id="update-ledger-inclusive-tax-edit-mode" type="text"
                                                 class="form-control mr-b1"
                                                 *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode"
                                                 [mask]="vm.inputMaskFormat" [prefix]="item.accountCurrency?.symbol"
                                                 decimalDigitsDirective
                                                 [(ngModel)]="item.adjustmentAmount.amountForAccount" disabled>
-                                            <input
+                                            <input matInput
                                                 [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                                                 id="update-ledger-inclusive-tax" type="text" class="form-control mr-b1"
                                                 decimalDigitsDirective [mask]="vm.inputMaskFormat"
@@ -827,7 +782,7 @@
                                         class="col-sm-2 pd-l05">
                                         <div class="form-group">
                                             <label>{{commonLocaleData?.app_tax}}</label>
-                                            <input type="text" id="update-ledger-voucher-tax" class="form-control mr-b1"
+                                            <input matInput type="text" id="update-ledger-voucher-tax" class="form-control mr-b1"
                                                 decimalDigitsDirective [mask]="vm.inputMaskFormat"
                                                 [prefix]="item.accountCurrency?.symbol"
                                                 [(ngModel)]="item.calculatedTaxAmount" disabled>
@@ -843,7 +798,7 @@
                                     </amount-field>
                                 </span>
                                 <i class="icon-info pointer"
-                                    [tooltip]="localeData?.adjustment_amount_error"></i></p>
+                                    [matTooltip]="localeData?.adjustment_amount_error"></i></p>
                         </div>
                     </div>
 
@@ -854,7 +809,7 @@
                                     <td class="primary-color" (click)="getInvoiveLists(); toggleMoreDetail()">
                                         <i class="cp collapse-icons"
                                             [ngClass]="{'icon-minus':showAdvanced, 'icon-plus': !showAdvanced}"></i>
-                                        <button class="no-btn pl-0">&nbsp; {{localeData?.more_details}}</button>
+                                        <button mat-button class="no-btn pl-0">&nbsp; {{localeData?.more_details}}</button>
                                     </td>
                                     <td class="text-right">
                                         <span class="primary-color" *ngIf="vm.isMultiCurrencyAvailable">
@@ -891,12 +846,12 @@
                                         *ngIf="(vm.selectedLedger.voucher.shortCode === 'sal' || vm.selectedLedger.voucher.shortCode === 'pur' || vm.selectedLedger.voucher.shortCode == 'pay')">
                                         <div class="form-group">
                                             <label class="default-color">{{commonLocaleData?.app_invoice_no}}</label>
-                                            <input *ngIf="(vm.selectedLedger.voucher.shortCode === 'sal')"
+                                            <input matInput *ngIf="(vm.selectedLedger.voucher.shortCode === 'sal')"
                                                 [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                                                 id="update-ledger-invoice-number" type="text"
                                                 [placeholder]="commonLocaleData?.app_invoice_no" class="form-control"
                                                 [(ngModel)]="vm.selectedLedger.voucherNumber" />
-                                            <input *ngIf="(vm.selectedLedger.voucher.shortCode !== 'sal')"
+                                            <input matInput *ngIf="(vm.selectedLedger.voucher.shortCode !== 'sal')"
                                                 [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                                                 id="update-ledger-invoice-number" type="text"
                                                 [placeholder]="commonLocaleData?.app_invoice_no" class="form-control"
@@ -906,10 +861,7 @@
                                     <td class="pd-r1"
                                         *ngIf="vm.selectedLedger.voucher.shortCode == 'credit note' || vm.selectedLedger.voucher.shortCode == 'debit note'">
                                         <div class="form-group">
-                                            <label class="default-color">{{vm.selectedLedger.voucher.shortCode == 'debit
-                                                note' ? localeData?.voucher_no : commonLocaleData?.app_invoice_no
-                                                }}</label>
-
+                                            <label class="default-color">{{vm.selectedLedger.voucher.shortCode == 'debit note' ? localeData?.voucher_no : commonLocaleData?.app_invoice_no }}</label>
                                             <sh-select id="update-ledger-invoice-voucher-number" [options]="invoiceList"
                                                 [placeholder]="commonLocaleData?.app_select_accounts"
                                                 [(ngModel)]="selectedInvoice" [notFoundLink]="false"
@@ -945,7 +897,7 @@
                                     <td class="pd-r1">
                                         <div class="form-group">
                                             <label class="default-color">{{localeData?.voucher_no}}</label>
-                                            <input id="update-ledger-voucher-type" type="text"
+                                            <input matInput id="update-ledger-voucher-type" type="text"
                                                 [placeholder]="localeData?.voucher_no" class="form-control"
                                                 [ngModel]="vm.selectedLedger.voucherNo" [disabled]="true"
                                                 [style.width.px]="80" />
@@ -959,31 +911,30 @@
                                 <tr>
                                     <td *ngIf="(vm.selectedLedger.voucher.shortCode !== 'jr' && vm.selectedLedger.voucher.shortCode !== 'cntr' && vm.selectedLedger.voucher.shortCode !== 'rcpt'
                                     && vm.selectedLedger.voucher.shortCode !== 'advance-receipt')" class="pd-r1 pb-1">
-                                        <input
+                                        <mat-checkbox
                                             [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
-                                            type="checkbox" id="update-ledger-sale" name="advanceReceipt"
+                                            id="update-ledger-sale" name="advanceReceipt"
                                             [(ngModel)]="isAdjustVoucherSelected"
                                             (click)="checkForGeneratedVoucher($event)"
-                                            (change)="handleVoucherAdjustment()">
-                                        {{ localeData?.adjust_voucher | replace:'[VOUCHER_TYPE]':currentVoucherLabel}}
+                                            (change)="handleVoucherAdjustment()">{{ localeData?.adjust_voucher | replace:'[VOUCHER_TYPE]':currentVoucherLabel}}</mat-checkbox>
                                     </td>
                                     <td *ngIf="vm.selectedLedger.voucher.shortCode == 'advance-receipt' && isAdvanceReceipt"
                                         class="pd-r1 pb-1">
-                                        <input
+                                        <mat-checkbox
                                             [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
-                                            type="checkbox" id="update-ledger-advance-receipt" name="advanceReceipt"
+                                            id="update-ledger-advance-receipt" name="advanceReceipt"
                                             [(ngModel)]="isAdjustAdvanceReceiptSelected"
                                             (click)="checkForGeneratedVoucher($event)"
-                                            (change)="handleVoucherAdjustment()">{{localeData?.adjust_advance_receipt}}
+                                            (change)="handleVoucherAdjustment()">{{localeData?.adjust_advance_receipt}}</mat-checkbox>
                                     </td>
                                     <td *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt' && !isAdvanceReceipt"
                                         class="pd-r1 pb-1">
-                                        <input
+                                        <mat-checkbox
                                             [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
-                                            type="checkbox" id="update-ledger-adjust-receipt" name="advanceReceipt"
+                                            id="update-ledger-adjust-receipt" name="advanceReceipt"
                                             [(ngModel)]="isAdjustReceiptSelected"
                                             (click)="checkForGeneratedVoucher($event)"
-                                            (change)="handleVoucherAdjustment()">{{localeData?.adjust_receipt}}
+                                            (change)="handleVoucherAdjustment()">{{localeData?.adjust_receipt}}</mat-checkbox>
                                     </td>
                                 </tr>
                             </table>
@@ -992,7 +943,7 @@
                                     <tr>
                                         <td class="pd-r1">
                                             <label class="default-color">{{commonLocaleData?.app_cheque_number}}</label>
-                                            <input
+                                            <input matInput
                                                 [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                                                 type="text" id="update-ledger-cheque-number"
                                                 [placeholder]="localeData?.cheque_number_placeholder"
@@ -1001,12 +952,8 @@
                                         <td>
                                             <label
                                                 class="default-color">{{commonLocaleData?.app_cheque_clearance_date}}</label>
-                                            <input
-                                                [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
-                                                id="update-ledger-cheque-clearance" type="text" autocomplete="off"
-                                                class="form-control" [(ngModel)]="vm.selectedLedger.chequeClearanceDate"
-                                                bsDatepicker #chbs='bsDatepicker'
-                                                [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
+                                            <giddh-datepicker [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
+                                                id="update-ledger-cheque-clearance" [(ngModel)]="vm.selectedLedger.chequeClearanceDate"></giddh-datepicker>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -1039,10 +986,9 @@
 
                                 <div class="mr-r1 form-group pull-left cp">
                                     <label class="pull-left cp font-16 d-flex align-items-center">
-                                        <input id="update-ledger-generate-voucher" class="pull-left" type="checkbox"
+                                        <mat-checkbox id="update-ledger-generate-voucher" class="pull-left"
                                             name="generateInvoice" [(ngModel)]="vm.selectedLedger.generateInvoice"
-                                            [disabled]="(vm.isInvoiceGeneratedAlready || (!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1) || (isAdvanceReceipt && vm.selectedLedger.generateInvoice)) ? 'disabled': null">
-                                        {{commonLocaleData?.app_generate_voucher}}
+                                            [disabled]="(vm.isInvoiceGeneratedAlready || (!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1) || (isAdvanceReceipt && vm.selectedLedger.generateInvoice)) ? 'disabled': null">{{commonLocaleData?.app_generate_voucher}}</mat-checkbox>
                                     </label>
                                 </div>
 
@@ -1090,7 +1036,7 @@
                                         </li>
 
                                         <li>
-                                            <input type="text" id="update-ledger-price-input" class="price-input"
+                                            <input matInput type="text" id="update-ledger-price-input" class="price-input"
                                                 [(ngModel)]="vm.selectedLedger.exchangeRate"
                                                 [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                                                 (blur)="exchangeRateChanged()"> {{ vm.selectedCurrencyForDisplay === 0 ?
@@ -1130,9 +1076,9 @@
 
                                 <div *ngIf="!(!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1)"
                                     class="d-flex">
-                                    <button class="btn btn-danger" id="update-ledger-delete-button"
+                                    <button mat-button class="btn btn-danger" id="update-ledger-delete-button"
                                         (click)="showDeleteEntryModal()">{{commonLocaleData?.app_delete}}</button>
-                                    <button class="btn btn-success" id="update-ledger-update-button"
+                                    <button mat-button class="btn btn-success" id="update-ledger-update-button"
                                         [disabled]="isFileUploading" [ladda]="(isTxnUpdateInProcess$ | async)"
                                         (click)="saveLedgerTransaction()">{{commonLocaleData?.app_update}}
                                     </button>
@@ -1149,41 +1095,15 @@
         </p>
     </div>
     <!-- endregion -->
-    <!-- region modals -->
-    <!--deleteAttachedFile  -->
-    <div bsModal #deleteAttachedFileModal="bs-modal" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <confirm-modal [title]="commonLocaleData?.app_delete" [body]="localeData?.confirm_delete_file"
-                    (cancelCallBack)="hideDeleteAttachedFileModal()" (successCallBack)="deleteAttachedFile()">
-                </confirm-modal>
-            </div>
-        </div>
-    </div>
 
-    <!--delete entry  -->
-    <div bsModal #deleteEntryModal="bs-modal" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <confirm-modal [title]="commonLocaleData?.app_delete" [body]="localeData?.confirm_delete_entry"
-                    (cancelCallBack)="hideDeleteEntryModal()" (successCallBack)="deleteTrxEntry()">
-                </confirm-modal>
-            </div>
-        </div>
-    </div>
-
-    <!-- endregion -->
     <!-- region totalWithCurrencySymbol template -->
     <ng-template #totalWithCurrencySymbol let-amountToDispaly>
-
         <span class="d-flex justify-content-end">
             <amount-field [amount]="amountToDispaly"
                 [currencySymbol]="vm.selectedCurrency === 0 ? vm.foreignCurrencyDetails?.symbol : vm.baseCurrencyDetails?.symbol"
                 [currencyCode]="vm.selectedCurrency === 0 ? vm.foreignCurrencyDetails?.code : vm.baseCurrencyDetails?.code">
             </amount-field>
-
         </span>
-
     </ng-template>
     <!-- endregion -->
     <!-- Tourist scheme template block-->
@@ -1192,12 +1112,11 @@
             <div class="mr-r3 xs-mr-0 mr-b1">
                 <div class="d-flex align-items-center">
                     <span class="pull-left">
-                        <input
+                        <mat-checkbox
                             [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
-                            id="tourist-scheme" type="checkbox" name="touristSchemeApplicable"
+                            id="tourist-scheme" name="touristSchemeApplicable"
                             [(ngModel)]="vm.selectedLedger.touristSchemeApplicable"
-                            (ngModelChange)="touristSchemeApplicableToggle($event)">
-
+                            (change)="touristSchemeApplicableToggle($event)"></mat-checkbox>
                     </span>
                     <span>{{localeData?.transaction_available_ts}}</span>
                 </div>
@@ -1206,7 +1125,7 @@
             <div *ngIf="vm.selectedLedger.touristSchemeApplicable">
                 <div class="d-flex align-items-center justify-content-end ml-1 xs-justify-content-start">
                     <span class="nowrap">{{localeData?.passport_number}} </span>
-                    <input [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
+                    <input matInput [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                         id="update-ledger-passport-number" type="text" name="selectedLedger.passportNumber"
                         [placeholder]="localeData?.passport_number" #passportNumber
                         (blur)="allowAlphanumericChar(passportNumber)"

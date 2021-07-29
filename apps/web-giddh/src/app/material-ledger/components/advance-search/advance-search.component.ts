@@ -171,10 +171,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy {
                 }
 
                 if (dataToSend.groupUniqueNames) {
-                    if (this.groups && this.groups.length > 0) {
-                        this.advanceSearchForm.get('groupUniqueNames')?.patchValue(dataToSend.groupUniqueNames);
-                    }
-
+                    this.advanceSearchForm.get('groupUniqueNames')?.patchValue(dataToSend.groupUniqueNames);
                     this.groupUniqueNames = dataToSend.groupUniqueNames;
                 }
 

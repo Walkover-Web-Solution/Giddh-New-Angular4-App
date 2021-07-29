@@ -44,7 +44,7 @@
                                     (onClear)="onDDClear('accountUniqueNames')" formControlName="accountUniqueNames"
                                     [isFilterEnabled]="true" [multiple]="true"
                                     [placeholder]="commonLocaleData?.app_select_accounts" [enableDynamicSearch]="true"
-                                    [isPaginationEnabled]="true" [doNotResetSelectedValues]="true"
+                                    [isPaginationEnabled]="true"
                                     (scrollEnd)="handleScrollEnd()"
                                     (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"></sh-select>
                             </div>
@@ -63,7 +63,7 @@
                                 <sh-select [options]="groups$ | async" name="groups"
                                     (onClear)="onDDClear( 'groupUniqueNames')" formControlName="groupUniqueNames"
                                     [isFilterEnabled]="true" [multiple]="true" [placeholder]="localeData?.select_groups" [enableDynamicSearch]="true" [isPaginationEnabled]="true"
-                                    [doNotResetSelectedValues]="true" (scrollEnd)="handleGroupScrollEnd()"
+                                    (scrollEnd)="handleGroupScrollEnd()"
                                     (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"></sh-select>
                             </div>
                         </div>
@@ -96,7 +96,7 @@
                                             (onClear)="onDDClear( 'particulars')" formControlName="particulars"
                                             [isFilterEnabled]="true" [multiple]="true" [placeholder]="commonLocaleData?.app_select_accounts"
                                             [enableDynamicSearch]="true" [isPaginationEnabled]="true"
-                                            [doNotResetSelectedValues]="true" (scrollEnd)="handleScrollEnd()"
+                                            (scrollEnd)="handleScrollEnd()"
                                             (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"></sh-select>
                                     </div>
                                 </div>
@@ -214,7 +214,6 @@
                                                     (onClear)="onDDClear( 'inventory')" formControlName="inventories"
                                                     [isFilterEnabled]="true" [multiple]="true" [placeholder]="commonLocaleData?.app_select_accounts"
                                                     [enableDynamicSearch]="true" [isPaginationEnabled]="true"
-                                                    [doNotResetSelectedValues]="true"
                                                     (scrollEnd)="handleStockScrollEnd()"
                                                     (dynamicSearchedQuery)="onStockSearchQueryChanged($event)">
                                                 </sh-select>
