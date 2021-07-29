@@ -19,7 +19,7 @@
                     <label>{{localeData?.payment?.account_number_label}}<span class="red-text">*</span></label>
                     <input class="form-control" required formControlName="accountNumber" name="accountNumber"
                         type="text" digitsOnlyDirective
-                        [placeholder]="localeData?.payment?.account_number_placeholder" maxlength="11">
+                        [placeholder]="localeData?.payment?.account_number_placeholder" maxlength="18">
                 </div>
                 <div class="clearfix" *ngIf="activeBankAccount">
                     <label>{{localeData?.payment?.account_number_label}}</label><br>
