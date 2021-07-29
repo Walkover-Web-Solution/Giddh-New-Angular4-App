@@ -144,7 +144,7 @@
                             <div class="row">
                                 <div class="col-6 col-md-6">
                                     <div class="form-group">
-                                        <sh-select [showClear]="false" [width]=" '100%'"
+                                        <sh-select [showClear]="false" [width]="'100%'" formControlName="amountOption"
                                             (selected)="onRangeSelect( 'amount', $event)"
                                             [options]="comparisonFilterDropDown$ | async" name="particulars"
                                             [placeholder]="commonLocaleData?.app_select_range"></sh-select>
@@ -223,7 +223,7 @@
                                     <div class="row">
                                         <div class="col-6 col-md-6">
                                             <div class="form-group">
-                                                <sh-select [showClear]="false" [width]="'100%'"
+                                                <sh-select [showClear]="false" [width]="'100%'" formControlName="inventoryQty"
                                                     (selected)="onRangeSelect( 'inventoryQty', $event)"
                                                     [options]="comparisonFilterDropDown$ | async" name="particulars"
                                                     [placeholder]="commonLocaleData?.app_select_range"></sh-select>
@@ -242,7 +242,7 @@
                                     <div class="row">
                                         <div class="col-6 col-md-6">
                                             <div class="form-group">
-                                                <sh-select [showClear]="false" [width]=" '100%'"
+                                                <sh-select [showClear]="false" [width]="'100%'" formControlName="inventoryVal"
                                                     (selected)="onRangeSelect( 'inventoryVal', $event)"
                                                     [options]="comparisonFilterDropDown$ | async" name="particulars"
                                                     [placeholder]="commonLocaleData?.app_select_range"></sh-select>
