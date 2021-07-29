@@ -69,6 +69,7 @@
                         </td>
 
                         <td [attr.data-title]="commonLocaleData?.app_amount" class="text-right pr-2">
+                            {{expenses.currencySymbol}}
                             {{ expenses.amount | giddhCurrency}}
                         </td>
 

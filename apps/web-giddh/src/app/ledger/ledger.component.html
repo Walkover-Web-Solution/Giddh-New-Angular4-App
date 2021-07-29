@@ -224,7 +224,6 @@
                                     </div>
                                     <span class="mr-l15 d-inline-block font-14">{{ foreignCurrencyDetails?.code }}</span>
                                 </div>
-
                                 <div class="d-flex">
                                     <a href="javascript:void(0)" id="upload" class="icomoon-ico d-flex align-items-center"
                                         [tooltip]="localeData?.import_statement" [placement]="'top'"
@@ -296,7 +295,7 @@
                             <div class="alert alert-danger ledger-book fade in position-relative pd-r15">
                                 <button type="button" class="close">
                                     <span class="font-12 font-weight-normal"
-                                        (click)="lc.showEledger = !lc.showEledger">{{commonLocaleData?.app_close}}</span>
+                                        (click)="hideEledgerWrap()">{{commonLocaleData?.app_close}}</span>
                                 </button>
 
                                 <div>
@@ -1535,12 +1534,15 @@
                                             </amount-field>
                                         </span>
                                     </h1>
-                                    <span class="mr-r2 grey-text-color">{{commonLocaleData?.app_debit}} <span
+                                    <span class="mr-r2 grey-text-color">{{commonLocaleData?.app_debit}}
+                                        <span
                                             class="digit-blue d-inline-flex">
                                             <amount-field [amount]="(lc.transactionData$ | async)?.debitTransactionsCount"
                                                 [currencySymbol]="false" [currencyCode]="false">
                                             </amount-field>
-                                        </span></span><br>
+                                        </span>
+                                    </span>
+                                    <br>
                                     <span class="mr-r2 grey-text-color">{{commonLocaleData?.app_credit}}
                                         <span class="digit-blue d-inline-flex">
                                             <amount-field [amount]="(lc.transactionData$ | async)?.creditTransactionsCount"

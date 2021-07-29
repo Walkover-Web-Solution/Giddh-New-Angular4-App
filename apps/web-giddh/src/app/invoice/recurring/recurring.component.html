@@ -230,11 +230,11 @@
                             <th width="20%" class="td-search-box" #searchInvoiceContainer
                                 (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
 
-                            <div [hidden]="showInvoiceNumberSearch">
-                                <i class="icon-search"
+                                <div [hidden]="showInvoiceNumberSearch">
+                                    <i class="icon-search"
                                     (click)="showInvoiceNumberSearch = true;showCustomerNameSearch = false;"></i>
-                                <span> {{commonLocaleData?.app_invoice_number}}</span>
-                            </div>
+                                    <span> {{commonLocaleData?.app_invoice_number}}</span>
+                                </div>
 
                                 <div class="input-container" [hidden]="!showInvoiceNumberSearch">
                                     <input type="text" [placeholder]="localeData?.search_invoice_no" class="w100"

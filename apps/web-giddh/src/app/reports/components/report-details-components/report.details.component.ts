@@ -52,7 +52,6 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /* This will hold if it's mobile screen or not */
     public isMobileScreen: boolean = false;
-
     constructor(
         private router: Router,
         private store: Store<AppState>,

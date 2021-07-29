@@ -74,7 +74,7 @@
                                     <span class="icon-cross"></span> {{commonLocaleData?.app_clear_filter}}
                                 </button>
                             </div>
-                            <!-- Cancel e-invoice button-->
+                            <!-- Cancel e-invoice button -->
                             <button type="button" class="btn btn-primary desktop-view-btn"
                                 *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'sales') && selectedInvoicesList?.length === 1 && selectedInvoicesList[0].irnNumber"
                                 (click)="openModal(cancelEInvoiceTemplate)">{{localeData?.cancel_e_invoice}}</button>
@@ -259,7 +259,6 @@
                                     <span class="icon-export-icon"></span>
                                 </button>
                             </div>
-
                         </div>
                         <div class="col-12 w-100 d-none mr-b1 cancel-more">
                             <div class="d-flex justify-content-between w-100">
@@ -296,7 +295,7 @@
                     </div>
                 </div>
                 <!-- Invoice E-way bill, export to excel for a single selected item along with
-                New Sales Invoice, Cash Invoice, Credit Note and Debit Note ends -->
+                    New Sales Invoice, Cash Invoice, Credit Note and Debit Note ends -->
                 <!-- For mobile screen sizes -->
                 <ng-template #template>
                     <div class="modal-header">
@@ -478,15 +477,16 @@
 
                                 <th width="25%" class="td-search-box" #searchInvoiceContainer
                                     (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
-                                    <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, fieldName: 'invoiceNumber',formControl: voucherNumberInput,
-                    title: selectedVoucher === 'credit note' ? localeData?.cr_note_no : localeData?.dr_note_no }">
+                                    <ng-container
+                                        *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, fieldName: 'invoiceNumber',formControl: voucherNumberInput,
+                                    title: selectedVoucher === 'credit note' ? localeData?.cr_note_no : localeData?.dr_note_no }">
                                     </ng-container>
                                 </th>
 
                                 <th width="25%" class="td-search-box" #searchCustomerContainer
                                     (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
                                     <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showCustomerSearch, fieldName: 'accountUniqueName',formControl: accountUniqueNameInput,
-                    title: commonLocaleData?.app_customer}"></ng-container>
+                                    title: commonLocaleData?.app_customer}"></ng-container>
                                 </th>
 
                                 <th width="10%">
@@ -1135,7 +1135,7 @@
                 <span> {{ title }}</span>
             </div>
             <div class="input-container" [hidden]="!show">
-                <input type="text" [placeholder]="getSearchFieldText(title)" class="w100" #searchBox
+                <input type="text" [placeholder]="getSearchFieldText(title)" class="w-100" #searchBox
                     [formControl]="formControl" />
             </div>
         </ng-template>

@@ -229,17 +229,17 @@
                             <td class="entry-date" data-title="{{localeData?.entry_date}}">{{ receipt?.date }}</td>
                             <td data-title="{{localeData?.suppliers_name}}">{{ receipt?.type }}</td>
                             <td width="13%" class="text-break" data-title="{{commonLocaleData?.app_voucher_type}}">{{
-                                receipt?.baseAccountName
-                                }}</td>
+                                receipt?.baseAccountName }}</td>
                             <td data-title="{{localeData?.payment_mode_label}}">
                                 <div *ngFor="let paymentMode of receipt?.particularNames?.split(',')">
                                     {{ paymentMode }}
                                 </div>
                             </td>
-                            <td *ngIf="receipt?.invoices" data-title="{{localeData?.invoice_no_label}}">
+                            <td width="13%" class="text-break" *ngIf="receipt?.invoices"
+                                data-title="{{localeData?.invoice_no_label}}">
                                 <div *ngFor="let invoice of receipt?.invoices?.split(',')">{{ invoice }}</div>
                             </td>
-                            <td width="13%" class="text-break" [attr.data-title]="localeData?.invoice_no_label" *ngIf="!receipt?.invoices">-</td>
+                            <td [attr.data-title]="localeData?.invoice_no_label" *ngIf="!receipt?.invoices">-</td>
                             <td [attr.data-title]="commonLocaleData?.app_total_amount">
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="receipt?.totalAmount.amount" [currencySymbol]="receipt?.totalAmount?.symbol" [currencyCode]="activeCompany.baseCurrency">

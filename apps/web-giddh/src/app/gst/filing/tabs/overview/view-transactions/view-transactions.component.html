@@ -16,7 +16,8 @@
                 <div class="filter-row">
                     <div class="name">{{localeData?.filing?.transaction_type}}:</div>
                     <div class="btn-group filter d-inline-block" dropdown *ngIf="selectedGst === GstReport.Gstr1">
-                        <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle" aria-controls="dropdown-basic">
+                        <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
+                            aria-controls="dropdown-basic">
                             {{selectedFilter?.entityType}} <span class="caret"></span>
                         </button>
                         <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
@@ -27,7 +28,8 @@
                         </ul>
                     </div>
                     <div class="btn-group filter d-inline-block" dropdown *ngIf="selectedGst === GstReport.Gstr2">
-                        <button id="button-basic2" dropdownToggle type="button" class="btn btn-primary dropdown-toggle" aria-controls="dropdown-basic">
+                        <button id="button-basic2" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
+                            aria-controls="dropdown-basic">
                             {{selectedFilter?.entityType}} <span class="caret"></span>
                         </button>
                         <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic2">

@@ -55,8 +55,8 @@ export class FilingComponent implements OnInit, OnDestroy {
         return GstReport;
     }
 
-	private gstr1OverviewDataFetchedSuccessfully$: Observable<boolean>;
-	private gstr2OverviewDataFetchedSuccessfully$: Observable<boolean>;
+    private gstr1OverviewDataFetchedSuccessfully$: Observable<boolean>;
+    private gstr2OverviewDataFetchedSuccessfully$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
     public localeData: any = {};

@@ -73,8 +73,8 @@
                     </div>
             </form>
 
-            <div class="table-responsive" [hidden]="!ledgersData?.results?.length">
-            <table class="table basic giddh-table pending-table on-mobile-view">
+                <div class="table-responsive" [hidden]="!ledgersData?.results?.length">
+                <table class="table basic giddh-table pending-table on-mobile-view">
 
                     <thead class="thead-background1">
                         <tr>
@@ -174,7 +174,7 @@
 
                             <td *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedInvoices.length === 0"
                                 data-title="#">
-                                <div class=" d-flex justify-content-center">
+                                <div class="d-flex justify-content-center">
                                     {{ i + 1}}
                                 </div>
                             </td>
@@ -265,7 +265,7 @@
                     </tbody>
                 </table>
             </div>
-            </div>
+        </div>
 
             <div *ngIf="ledgersData?.totalItems > 20"
                 [hidden]="(isGetAllRequestInProcess$ | async) || (getLedgerDataInProcess$ | async)"
