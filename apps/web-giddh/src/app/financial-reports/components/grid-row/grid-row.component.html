@@ -42,17 +42,21 @@
 <ng-content></ng-content>
 <ng-template #templateSection let-account>
     <section class="row-2 account overflow-visible" (dblclick)="accountInfo(account,$event)"
-        (clickOutside)="hideModal()" [exclude]="'.row-item'">
+        (clickOutside)="hideModal();accountDetailPopup?.hide()" [exclude]="'.row-item'">
         <div class="row row-item">
             <div class="col-4 account no-select" [ngStyle]="{'padding-left': (padding+20)+'px'}">
 
-                <div class="p-0 bd-r-right-none" [innerHTML]="account.name | lowercase | highlight:search">
+                <div class="p-0 bd-r-right-none" [innerHTML]="account.name | lowercase | highlight:search"
+                    [popover]="accountDetailModalTemplate" #accountDetailPopup="bs-popover" triggers="" container="body"
+                    containerClass="financial-report-account-detail-container" placement="bottom" [isOpen]="modalUniqueName && modalUniqueName === account.uniqueName">
                 </div>
-                <span account-detail-modal-component *ngIf="modalUniqueName && modalUniqueName === account.uniqueName"
-                    [shouldShowGenerateInvoice]="false" [accountUniqueName]="account.uniqueName"
-                    [isModalOpen]="account.uniqueName === modalUniqueName" [accInfo]="accountDetails" [from]="from"
-                    [to]="to">
-                </span>
+                <ng-template #accountDetailModalTemplate>
+                    <span account-detail-modal-component *ngIf="modalUniqueName && modalUniqueName === account.uniqueName"
+                        [shouldShowGenerateInvoice]="false" [accountUniqueName]="account.uniqueName"
+                        [isModalOpen]="account.uniqueName === modalUniqueName" [accInfo]="accountDetails" [from]="from"
+                        [to]="to">
+                    </span>
+                </ng-template>
             </div>
             <div class="col-2 account text-right">
                 <span class="d-inline-flex">
