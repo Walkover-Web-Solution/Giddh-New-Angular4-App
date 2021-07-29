@@ -147,21 +147,21 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy {
     }
 
     public setValuesInForm(): void {
-        this.advanceSearchForm?.patchValue(this.inputData?.advanceSearchRequest.dataToSend);
-
-        if (this.inputData?.advanceSearchRequest.dataToSend.bsRangeValue) {
-            this.fromDate = moment((this.inputData?.advanceSearchRequest as AdvanceSearchRequest).dataToSend.bsRangeValue[0], GIDDH_DATE_FORMAT).toDate();
-            this.toDate = moment((this.inputData?.advanceSearchRequest as AdvanceSearchRequest).dataToSend.bsRangeValue[1], GIDDH_DATE_FORMAT).toDate();
-            this.selectedDateRange = { startDate: this.inputData?.advanceSearchRequest.dataToSend.bsRangeValue[0], endDate: this.inputData?.advanceSearchRequest.dataToSend.bsRangeValue[1] };
-            this.selectedDateRangeUi = moment(this.inputData?.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.inputData?.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-            if (this.advanceSearchForm) {
-                let bsDaterangepicker = this.advanceSearchForm.get('bsRangeValue');
-                bsDaterangepicker?.patchValue(this.selectedDateRangeUi);
-            }
-        }
-
         if (this.inputData?.advanceSearchRequest.dataToSend) {
             let dataToSend = this.inputData?.advanceSearchRequest.dataToSend;
+
+            this.advanceSearchForm?.patchValue(dataToSend);
+
+            if (dataToSend.bsRangeValue) {
+                this.fromDate = moment((this.inputData?.advanceSearchRequest as AdvanceSearchRequest).dataToSend.bsRangeValue[0], GIDDH_DATE_FORMAT).toDate();
+                this.toDate = moment((this.inputData?.advanceSearchRequest as AdvanceSearchRequest).dataToSend.bsRangeValue[1], GIDDH_DATE_FORMAT).toDate();
+                this.selectedDateRange = { startDate: dataToSend.bsRangeValue[0], endDate: dataToSend.bsRangeValue[1] };
+                this.selectedDateRangeUi = moment(dataToSend.bsRangeValue[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dataToSend.bsRangeValue[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                if (this.advanceSearchForm) {
+                    let bsDaterangepicker = this.advanceSearchForm.get('bsRangeValue');
+                    bsDaterangepicker?.patchValue(this.selectedDateRangeUi);
+                }
+            }
 
             this.groupUniqueNames = [];
 
@@ -185,6 +185,10 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy {
 
                 if (dataToSend.inventory) {
                     this.advanceSearchForm.get('inventory')?.patchValue(dataToSend.inventory);
+                }
+
+                if (dataToSend.amountOption) {
+                    this.advanceSearchForm.get('amountOption')?.patchValue(dataToSend.amountOption);
                 }
 
                 this.changeDetectionRef.detectChanges();
@@ -224,6 +228,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy {
             amountEqualTo: [false],
             amountGreaterThan: [false],
             amount: ['', Validators.required],
+            amountOption: [false],
             includeDescription: [false, Validators.required],
             description: [null, Validators.required],
             includeTag: [false, Validators.required],
@@ -239,6 +244,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy {
                 includeInventory: true,
                 inventories: [[]],
                 quantity: null,
+                inventoryQty: false,
+                inventoryVal: false,
                 includeQuantity: false,
                 quantityLessThan: false,
                 quantityEqualTo: false,
