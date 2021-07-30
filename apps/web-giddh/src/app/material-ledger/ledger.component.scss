@@ -25,9 +25,6 @@
 #ledger-transaction-right-list {
     mat-grid-tile {
         padding: 0 !important;
-        &:first-child {
-            border-bottom: none !important;
-        }
         .d-flex.align-item-center {
             align-items: stretch !important;
         }
@@ -37,6 +34,7 @@
             min-height: 49px;
             height: 49px;
             border: 0 !important;
+            padding: 1px !important;
         }
         mat-checkbox {
             min-height: 20px;
@@ -51,14 +49,6 @@
 #ledger-transaction-right-list,
 #ledger-transaction-left-list{
     border-bottom: 1px solid $gainsboro;
-}
-#ledger-transaction-right-list mat-grid-tile:last-child,
-#ledger-transaction-left-list mat-grid-tile:last-child {
-    border-right: none !important;
-}
-.transaction-mapped-table thead th {
-    padding: 10px 15px !important;
-    border-bottom: 1px solid $gainsboro !important;
 }
 .form-control,
 input {
@@ -79,11 +69,18 @@ input {
     white-space: nowrap;
     display: flex;
     align-items: center;
-    min-height: 49px;
-    height: 49px;
+    min-height: 43px;
+    height: 43px;
     max-height: initial;
+    &:first-child {
+        padding-top: 5px !important;
+        padding-bottom: 5px !important;
+    }
 }
-
+.transaction-mapped-table mat-grid-tile {
+    padding: 10px 15px !important;
+    border-bottom: 1px solid $gainsboro !important;
+}
 table.ledger-footer-1 td[class*="col-"] {
     justify-content: flex-end;
 }
@@ -149,11 +146,6 @@ table.ledger-footer-1 td[class*="col-"] {
 .thead-background1 th {
     border-left: 0;
 }
-.ledg-head input[type="search"] {
-    min-width: auto;
-    padding-left: 27px !important;
-    border-radius: 5px !important;
-}
 .ledg-head {
     .single-search-box {
         position: relative;
@@ -161,6 +153,7 @@ table.ledger-footer-1 td[class*="col-"] {
             color: $gray;
             left: 8px;
             top: -8px;
+            z-index: 1;
         }
     }
 }
@@ -211,21 +204,21 @@ table.ledger-footer-1 td[class*="col-"] {
     right: 0;
 }
 
-.ledger-head th {
+.ledger-head mat-grid-list mat-grid-tile {
     color: $jacksons-purple;
-    padding-top: 5px;
-    padding-bottom: 10px;
-    &.first-child {
-        span {
-            position: relative;
-            right: 15px;
-        }
-    }
-}
-.ledger-head th:first-child {
+    padding-top: 5px !important;
+    padding-bottom: 10px !important;
+    border-right: none;
+    border-bottom: none !important;
     span {
         position: relative;
         right: 15px;
+    }
+}
+.ledger-head mat-grid-tile:first-child {
+    span {
+        position: relative;
+        right: 0px !important;
     }
 }
 .total-col td {
@@ -382,7 +375,7 @@ sh-select:focus {
 .ledger-book .left-col-new,
 .ledger-book .right-col-new {
     background: $white;
-    padding: 0 15px 350px;
+    padding: 0 0px 350px;
 }
 .left-col-new mat-grid-list mat-grid-title:last-child,
 .left-col-new mat-grid-list mat-grid-title:last-child {
@@ -398,6 +391,7 @@ sh-select:focus {
 .ledg-head .icomoon-ico {
     color: $gray;
     width: 36px;
+    min-width: 36px;
     height: 36px;
     border: 1px solid $gainsboro;
     padding: 3px;
@@ -444,8 +438,6 @@ sh-select:focus {
 
 .advance-search-by-date {
     display: inline-flex;
-    border: 1px solid $gainsboro;
-    border-radius: 20px;
     position: relative;
 }
 .advance-search-by-date:before {
@@ -454,7 +446,7 @@ sh-select:focus {
     height: 1px;
     width: 32%;
     background-color: $gainsboro;
-    left: -33%;
+    left: -32%;
     top: 17px;
 }
 .advance-search-by-date:after {
@@ -463,7 +455,7 @@ sh-select:focus {
     height: 1px;
     width: 32%;
     background-color: $gainsboro;
-    right: -33%;
+    right: -32%;
     top: 17px;
 }
 
@@ -583,22 +575,21 @@ sh-select:focus {
     background-color: transparent;
 }
 .date-range-picker {
-    background-color: $white !important;
     text-decoration-line: none;
     text-decoration-style: none;
     background-image: url(../../assets/images/calender-icon.svg) !important;
     background-size: 17px !important;
     background-position: 15px 9px !important;
     background-repeat: no-repeat !important;
-    padding-left: 35px !important;
+    padding-left: 40px !important;
     position: relative;
     z-index: 99;
     cursor: default;
     top: 0;
     font-size: 14px;
     padding-right: 10px !important;
-    height: 36px;
-    min-width: 225px !important;
+    height: 32px;
+    min-width: 165px !important;
     border-radius: 30px;
     &:focus {
         border-color: $chetwode-blue;
@@ -1076,19 +1067,19 @@ sh-select:focus {
             color: $gray;
         }
     }
-    .ledger-head thead tr th.active {
+    .ledger-head mat-grid-list mat-grid-tile.active {
         display: block !important;
         width: 100%;
     }
     .hidden-xs {
         display: none !important;
     }
-    .ledger-head th {
+    .ledger-head mat-grid-tile {
         padding-top: 0;
     }
 }
 
-.ledger-row td:nth-child(3) {
+.ledger-row mat-grid-tile:nth-child(3) {
     justify-content: flex-end !important;
 }
 @media (max-width: 767px) {
@@ -1096,7 +1087,7 @@ sh-select:focus {
         width: 100%;
     }
     .ledger-head {
-        th {
+        mat-grid-tile {
             padding: 0 0 10px !important;
         }
     }
@@ -1199,10 +1190,23 @@ a#reload-bank-transaction i.icon-refresh {
     font-size: 18px !important;
 }
 input#ledger-search {
-    padding-left: 28px;
     width: 81%;
-    font-size: 14px;
+    font-size: 14px !important;
+    padding: 7px !important;
+    height: 20px;
+    border: 1px solid $gainsboro;
+    padding-left: 27px !important;
+    border-radius: 5px !important;
 }
 .mat-grid-tile.select2-ledger {
     overflow: visible !important;
+}
+.no-right-border {
+    border-right: none !important;
+}
+.mat-checkbox {
+    margin-right: 8px;
+}
+.blue-heading {
+    color: $jacksons-purple;
 }
