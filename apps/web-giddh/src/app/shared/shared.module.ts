@@ -76,6 +76,7 @@ import { ConfirmationModalModule } from '../common/confirmation-modal/confirmati
 import { DatepickerWrapperModule } from './datepicker-wrapper/datepicker.wrapper.module';
 import { HamburgerMenuModule } from './header/components/hamburger-menu/hamburger-menu.module';
 import { GenericAsideMenuAccountComponent } from './generic-aside-menu-account/generic.aside.menu.account.component';
+import { GiddhPageLoaderModule } from './giddh-page-loader/giddh-page-loader.module';
 registerLocaleData(localeEn);
 registerLocaleData(localeHi);
 registerLocaleData(localeMr);
@@ -141,7 +142,7 @@ export class PickDateAdapter extends NativeDateAdapter {
         PurchaseOrderPreviewModalComponent,
         PurchaseSendEmailModalComponent,
         GiddhDaterangepickerComponent,
-        GiddhPageLoaderComponent,
+        PrimarySidebarComponent,
         CompanyBranchComponent,
         PrimarySidebarComponent,
         GenericAsideMenuAccountComponent
@@ -190,7 +191,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         LedgerDiscountModule,
         ConfirmationModalModule,
         DatepickerWrapperModule,
-        HamburgerMenuModule
+        HamburgerMenuModule,
+        GiddhPageLoaderModule
     ],
     exports: [
         CommonModule,
@@ -234,7 +236,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         RevisionHistoryComponent,
         PurchaseOrderPreviewModalComponent,
         PurchaseSendEmailModalComponent,
-        GiddhPageLoaderComponent,
         CurrencyModule,
         PrimarySidebarComponent,
         TranslateDirectiveModule,
@@ -246,7 +247,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         ConfirmationModalModule,
         DatepickerWrapperModule,
         HamburgerMenuModule,
-        GenericAsideMenuAccountComponent
+        GenericAsideMenuAccountComponent,
+        GiddhPageLoaderModule
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,

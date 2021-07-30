@@ -14,5 +14,11 @@ export const SETTINGS_INTEGRATION_API = {
     REMOVE_GMAIL_INTEGRATION: COMMON + 'gmail-token', //DELETE
     REMOVE_ICICI_REQUEST: COMMON + 'bank/deregistration?urn=:urn',
     UPDATE_PAYMENT: COMMON + 'bank/updateDetails',
-    BANK_INTERATION_VALIDATION_FORM: 'ui/bank/integration/form?bankName=:bankName'
+    BANK_INTERATION_VALIDATION_FORM: 'ui/bank/integration/form?bankName=:bankName',
+    BANK_ACCOUNT_REGISTRATION: 'v2/company/:companyUniqueName/bank',
+    BANK_ACCOUNT_MULTI_REGISTRATION: 'v2/company/:companyUniqueName/bank/multi-registration',
+    UPDATE_PAYOR_ACCOUNT: 'v2/company/:companyUniqueName/bank/:bankAccountUniqueName/payor/:urn',
+    UPDATE_ACCOUNT: 'v2/company/:companyUniqueName/bank/:bankAccountUniqueName',
+    GET_PAYOR_REGISTRATION_STATUS: 'v2/company/:companyUniqueName/bank/:bankAccountUniqueName/payor/:urn/status',
+    GET_BANK_ACCOUNT_PAYORS: 'v2/company/:companyUniqueName/bank/:bankAccountUniqueName/payor?amount=:amount',
 };

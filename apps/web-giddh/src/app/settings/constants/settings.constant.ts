@@ -54,3 +54,13 @@ export interface SettingsAsideConfiguration {
     };
     linkedEntities?: Array<any>;
 }
+
+/** Amount Limit Duration options for integration of bank account */
+export enum SettingsAmountLimitDuration {
+    Daily = 'DAILY',
+    Weekly = 'WEEKLY',
+    Monthly = 'MONTHLY'
+}
+
+/** Unlimited amount limit text */
+export const UNLIMITED_LIMIT = "UNLIMITED";
