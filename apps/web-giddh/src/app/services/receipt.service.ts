@@ -60,7 +60,7 @@ export class ReceiptService {
     public GetAllReceipt(body: InvoiceReceiptFilter, type: string): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
         const requestPayload = type === VoucherTypeEnum.purchase ? this.getPurchaseRecordPayload(body) : body;
-        const contextPath = type === VoucherTypeEnum.purchase ? RECEIPT_API.GET_ALL_PURCHASE_RECORDS : RECEIPT_API.GET_ALL;
+        const contextPath = (type === VoucherTypeEnum.purchase && this._generalService.voucherApiVersion !== 2) ? RECEIPT_API.GET_ALL_PURCHASE_RECORDS : RECEIPT_API.GET_ALL;
         const requestParameter = {
             page: body.page, count: body.count, from: body.from, to: body.to, q: (body.q) ? encodeURIComponent(body.q) : body.q, sort: body.sort, sortBy: body.sortBy
         };
@@ -191,7 +191,7 @@ export class ReceiptService {
             .replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
         let requestObj: VoucherRequest | ReceiptVoucherDetailsRequest = Object.assign({}, model);
         if (this._generalService.voucherApiVersion === 2) {
-            requestObj = new VoucherRequest(model.invoiceNumber, model.voucherType);
+            requestObj = new VoucherRequest(model.invoiceNumber, model.voucherType, model.uniqueName);
             url = this._generalService.addVoucherVersion(url, this._generalService.voucherApiVersion);
         }
         return this._http.post(url, requestObj
