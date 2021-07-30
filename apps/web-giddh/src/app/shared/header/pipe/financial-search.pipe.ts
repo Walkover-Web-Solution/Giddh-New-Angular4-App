@@ -4,11 +4,11 @@ import { ChildGroup } from '../../../models/api-models/Search';
 
 @Pipe({
     // tslint:disable-next-line:pipe-naming
-    name: 'tbsearch',
+    name: 'financialSearch',
     pure: true
 })
 
-export class TbsearchPipe implements PipeTransform {
+export class FinancialSearchPipe implements PipeTransform {
     public srch: string;
 
     constructor(private zone: NgZone

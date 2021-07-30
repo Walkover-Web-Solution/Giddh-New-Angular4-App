@@ -18,7 +18,7 @@ import { TrialBalanceGridComponent } from './components/trial-balance-grid/trial
     templateUrl: './trial-balance.component.html'
 })
 
-export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
+export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */

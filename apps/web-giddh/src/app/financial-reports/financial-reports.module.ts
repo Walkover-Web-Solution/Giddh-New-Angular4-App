@@ -13,7 +13,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
-import { TbsearchPipe } from '../shared/header/pipe/tbsearch.pipe';
+import { FinancialSearchPipe } from '../shared/header/pipe/financial-search.pipe';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
 import { RecTypeModule } from '../shared/helpers/pipes/recType/recType.module';
@@ -34,7 +34,7 @@ import { ProfitLossExportXlsComponent } from './components/export/profit-loss/ex
 import { TrialBalanceExportCsvComponent } from './components/export/trial-balance/export-csv/export-csv.component';
 import { TrialBalanceExportPdfComponent } from './components/export/trial-balance/export-pdf/export-pdf.component';
 import { TrialBalanceExportXlsComponent } from './components/export/trial-balance/export-xls/export-xls.component';
-import { TbPlBsFilterComponent } from './components/filter/filter.component';
+import { FinancialReportsFilterComponent } from './components/filter/filter.component';
 import { GridRowComponent } from './components/grid-row/grid-row.component';
 import {
     ProfitLossGridRowComponent,
@@ -44,8 +44,8 @@ import { ProfitLossComponent } from './components/profit-loss/profit-loss.compon
 import {
     TrialBalanceGridComponent,
 } from './components/trial-balance/components/trial-balance-grid/trial-balance-grid.component';
-import { TbComponent } from './components/trial-balance/trial-balance.component';
-import { TrialAccordionDirective } from './directives/trial-accordion.directive';
+import { TrialBalanceComponent } from './components/trial-balance/trial-balance.component';
+import { FinancialAccordionDirective } from './directives/financial-accordion.directive';
 import { FinancialReportsComponent } from './financial-reports.component';
 import { FinancialReportsRoutingModule } from './financial-reports.routing.module';
 import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
@@ -54,9 +54,9 @@ import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
     declarations: [
         FinancialReportsComponent,
         TrialBalanceGridComponent,
-        TbPlBsFilterComponent,
+        FinancialReportsFilterComponent,
         GridRowComponent,
-        TbComponent,
+        TrialBalanceComponent,
         ProfitLossComponent,
         ProfitLossGridComponent,
         ProfitLossGridRowComponent,
@@ -68,8 +68,8 @@ import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
         BalanceSheetComponent,
         BalanceSheetGridComponent,
         BalanceSheetGridRowComponent,
-        TrialAccordionDirective,
-        TbsearchPipe,
+        FinancialAccordionDirective,
+        FinancialSearchPipe,
         AccountsFilterPipe
     ],
     exports: [

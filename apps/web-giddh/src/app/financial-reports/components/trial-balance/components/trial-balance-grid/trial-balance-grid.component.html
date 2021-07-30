@@ -87,7 +87,7 @@
                         </cdk-virtual-scroll-viewport>
                     </ng-template>
                     <ng-container
-                        *ngTemplateOutlet="groupDetails; context:{ $implicit: data$.groupDetails | tbsearch: search, padding: 8, tbfrom: from, tbto: to }">
+                        *ngTemplateOutlet="groupDetails; context:{ $implicit: data$.groupDetails | financialSearch: search, padding: 8, tbfrom: from, tbto: to }">
                     </ng-container>
                 </div>
                 <div>
