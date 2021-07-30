@@ -1,4 +1,4 @@
-<div class="row pl-grid-row" [trial-accordion]="groupDetail"
+<div class="row pl-grid-row" [financial-accordion]="groupDetail"
     *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)"
     [ngClass]="{'isHidden': !groupDetail.isVisible }">
     <div class="col-4  group" [innerHTML]="groupDetail.groupName | uppercase | highlight:search"

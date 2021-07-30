@@ -27,7 +27,7 @@ import { cloneDeep, map, orderBy } from '../../../lodash-optimized';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class TbPlBsFilterComponent implements OnInit, OnDestroy {
+export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public today: Date = new Date();
     public selectedDateOption: string = '0';
     public filterForm: FormGroup;
@@ -389,7 +389,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
     /**
      * Branch change handler
      *
-     * @memberof TbPlBsFilterComponent
+     * @memberof FinancialReportsFilterComponent
      */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity?.label;
@@ -404,7 +404,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
      * To show the datepicker
      *
      * @param {*} element
-     * @memberof TbPlBsFilterComponent
+     * @memberof FinancialReportsFilterComponent
      */
     public showGiddhDatepicker(element: any): void {
         if (element) {
@@ -419,7 +419,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
     /**
      * This will hide the datepicker
      *
-     * @memberof TbPlBsFilterComponent
+     * @memberof FinancialReportsFilterComponent
      */
     public hideGiddhDatepicker(): void {
         this.modalRef.hide();
@@ -429,7 +429,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
      * Call back function for date/range selection in datepicker
      *
      * @param {*} value
-     * @memberof TbPlBsFilterComponent
+     * @memberof FinancialReportsFilterComponent
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
@@ -457,7 +457,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
      * Callback for translation response complete
      *
      * @param {boolean} event
-     * @memberof TbPlBsFilterComponent
+     * @memberof FinancialReportsFilterComponent
      */
     public translationComplete(event: boolean): void {
         if (event) {
