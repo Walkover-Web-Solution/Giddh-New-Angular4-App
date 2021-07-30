@@ -3,11 +3,11 @@ import { Directive, HostListener, Input } from '@angular/core';
 import { Account, ChildGroup } from '../../models/api-models/Search';
 
 @Directive({
-    selector: '[trial-accordion]'
+    selector: '[financial-accordion]'
 })
-export class TrialAccordionDirective {
+export class FinancialAccordionDirective {
     // tslint:disable-next-line:no-input-rename
-    @Input('trial-accordion') public data: ChildGroup;
+    @Input('financial-accordion') public data: ChildGroup;
 
     // tslint:disable-next-line:no-input-rename
     constructor() {}
