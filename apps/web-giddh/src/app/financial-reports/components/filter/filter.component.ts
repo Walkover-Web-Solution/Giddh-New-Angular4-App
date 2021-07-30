@@ -118,7 +118,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             to: [''],
             fy: [''],
             selectedDateOption: ['1'],
-            branchUniqueName: [],
+            branchUniqueName: [this.generalService.currentBranchUniqueName ?? ''],
             selectedFinancialYearOption: [''],
             refresh: [false],
             tagName: ['']
