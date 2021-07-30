@@ -7979,10 +7979,7 @@ ul.dropdown-menu.action-dropdown {
     border: 0;
 }
 .mat-form-field-appearance-fill .mat-form-field-flex {
-    border-radius: 2px !important;
     padding: 0 !important;
-    border: 1px solid $gainsboro !important;
-    border-radius: 5px !important;
     display: flex !important;
     align-items: center !important;
 }
@@ -10230,3 +10227,6 @@ mat-year-view table tr td.mat-calendar-body-label {
     display: none !important;
 }
 /** Angular material datepicker **/
+.pd-0 {
+    padding: 0px !important;
+}

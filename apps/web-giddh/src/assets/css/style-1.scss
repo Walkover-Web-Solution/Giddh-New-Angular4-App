@@ -141,7 +141,7 @@ a:active {
 }
 
 textarea {
-    resize: none;
+    resize: none !important;
 }
 
 /*top menus bar*/
@@ -430,7 +430,7 @@ aside-menu-account .container-fluid {
 }
 
 .mr-l1 {
-    margin-left: 10px;
+    margin-left: 10px !important;
 }
 
 .mr-r1 {
@@ -438,7 +438,7 @@ aside-menu-account .container-fluid {
 }
 
 .mr-t2 {
-    margin-top: 20px;
+    margin-top: 20px !important;
 }
 
 .mr-b2 {
@@ -2760,4 +2760,36 @@ mat-dialog-container .modal-header {
 }
 .mat-radio-button {
     margin-right: 16px;
+}
+.mat-grid-tile-content {
+    justify-content: left !important;
+    display: block !important;
+}
+.ledg-head mat-grid-list mat-grid-tile .mat-grid-tile-content {
+    padding: 10px 15px !important;
+}
+.ledger-head mat-grid-list mat-grid-tile .mat-grid-tile-content {
+    padding-top: 5px !important;
+    padding-bottom: 10px !important;
+    padding-left: 16px !important;
+    font-size: 14px;
+    font-family: "opensans-semibold";
+}
+#ledger-transaction-left-list mat-grid-tile .mat-grid-tile-content, #ledger-transaction-right-list mat-grid-tile .mat-grid-tile-content {
+    padding: 1px !important;
+    padding-right: 10px !important;
+}
+#eledgerwrap .alert .mat-close {
+    position: absolute;
+    top: 10px;
+    right: 0px;
+    opacity: 0.8;
+}
+.advance-search-by-date .input-wrapper .mat-form-field .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix {
+    border: 1px solid $gainsboro;
+    border-radius: 20px;
+    width: 100%;
+}
+.mat-field-border {
+    border: 1px solid $gainsboro !important;
 }
