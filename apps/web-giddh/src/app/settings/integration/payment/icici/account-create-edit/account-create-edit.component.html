@@ -18,7 +18,7 @@
                 <div class="clearfix mr-t1" *ngIf="!activeBankAccount">
                     <label>{{localeData?.payment?.account_number_label}}<span class="red-text">*</span></label>
                     <input class="form-control" required formControlName="accountNumber" name="accountNumber"
-                        type="text" digitsOnlyDirective [ngClass]="{'field-error': accountForm.get('accountNumber').dirty && accountForm.get('accountNumber').errors}"
+                        type="text" digitsOnlyDirective [ngClass]="{'error-box': accountForm?.get('accountNumber')?.dirty && accountForm?.get('accountNumber')?.errors}"
                         [placeholder]="localeData?.payment?.account_number_placeholder" maxlength="18">
                 </div>
                 <div class="clearfix" *ngIf="activeBankAccount">
