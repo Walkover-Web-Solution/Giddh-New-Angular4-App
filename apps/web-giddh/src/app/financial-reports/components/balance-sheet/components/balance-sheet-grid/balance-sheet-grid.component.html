@@ -66,7 +66,7 @@
                             </ng-template>
 
                             <ng-container
-                                *ngTemplateOutlet="groupDetails; context:{ $implicit:  bsData?.liabilities| tbsearch: search, padding: 10 }">
+                                *ngTemplateOutlet="groupDetails; context:{ $implicit:  bsData?.liabilities| financialSearch: search, padding: 10 }">
                             </ng-container>
                             <!--/Grid-->
                             <div class="top-bar row clearfix">
@@ -113,7 +113,7 @@
                                 </section>
                             </ng-template>
                             <ng-container
-                                *ngTemplateOutlet="groupDetails; context:{ $implicit:  bsData?.assets| tbsearch: search, padding: 10 }">
+                                *ngTemplateOutlet="groupDetails; context:{ $implicit:  bsData?.assets| financialSearch: search, padding: 10 }">
                             </ng-container>
                             <!--/Grid-->
                         </div>
