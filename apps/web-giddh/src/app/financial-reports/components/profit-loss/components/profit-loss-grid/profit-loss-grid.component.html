@@ -54,10 +54,10 @@
                                     </section>
                                 </ng-template>
                                 <ng-container
-                                    *ngTemplateOutlet="groupDetails; context:{ $implicit: plData.incArr | tbsearch: search, padding: 10 }">
+                                    *ngTemplateOutlet="groupDetails; context:{ $implicit: plData.incArr | financialSearch: search, padding: 10 }">
                                 </ng-container>
                                 <ng-container
-                                    *ngTemplateOutlet="groupDetails; context:{ $implicit: [cogsData] | tbsearch: search, padding: 10 }">
+                                    *ngTemplateOutlet="groupDetails; context:{ $implicit: [cogsData] | financialSearch: search, padding: 10 }">
                                 </ng-container>
                                 <section class="row-1">
                                     <div class="pl-grid-row row">
@@ -170,7 +170,7 @@
                                     </ng-container>
                                 </ng-template>
                                 <ng-container
-                                    *ngTemplateOutlet="groupDetails; context:{ $implicit: plData.expArr | tbsearch: search, padding: 10 }">
+                                    *ngTemplateOutlet="groupDetails; context:{ $implicit: plData.expArr | financialSearch: search, padding: 10 }">
                                 </ng-container>
                                 <!--/Grid-->
                             </div>
