@@ -6,12 +6,11 @@ import {
     Component, ElementRef,
     EventEmitter,
     Inject,
-    Input,
     OnChanges,
     OnDestroy,
     OnInit,
-    Output,
     SimpleChanges,
+    TemplateRef,
     ViewChild
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
@@ -22,7 +21,6 @@ import { saveAs } from 'file-saver';
 import * as moment from 'moment/moment';
 import { BsDatepickerDirective } from "ngx-bootstrap/datepicker";
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { PopoverDirective } from "ngx-bootstrap/popover";
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
@@ -52,7 +50,7 @@ import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
-import { AVAILABLE_ITC_LIST } from '../../ledger.vm';
+import { AVAILABLE_ITC_LIST, MaterialColorPalette } from '../../ledger.vm';
 import { UpdateLedgerDiscountComponent } from '../update-ledger-discount/update-ledger-discount.component';
 import { UpdateLedgerVm } from './update-ledger.vm';
 import { SearchService } from '../../../services/search.service';
@@ -104,9 +102,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @ViewChild('updateBaseAccount', { static: true }) public updateBaseAccount: ModalDirective;
     @ViewChild(BsDatepickerDirective, { static: true }) public datepickers: BsDatepickerDirective;
     /** Advance receipt remove confirmation modal reference */
-    @ViewChild('advanceReceiptRemoveConfirmationModal', { static: true }) public advanceReceiptRemoveConfirmationModal: ModalDirective;
+    @ViewChild('advanceReceiptRemoveConfirmationModal', { static: true }) public advanceReceiptRemoveConfirmationModal: TemplateRef<any>;
     /** Adjustment modal */
-    @ViewChild('adjustPaymentModal', { static: true }) public adjustPaymentModal: ModalDirective;
+    @ViewChild('adjustPaymentModal', { static: true }) public adjustPaymentModal: TemplateRef<any>;
     /** Warehouse data for warehouse drop down */
     public warehouses: Array<any>;
     /** Currently selected warehouse */
@@ -254,6 +252,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public condition2: boolean = false;
     /** Stores the multi-lingual label of current voucher */
     public currentVoucherLabel: string;
+    /** Color paletter for material */
+    public materialColorPalette: string = MaterialColorPalette;
+    public asideMenuStateForOtherTaxes: string = 'out';
+    public companyTaxesList: TaxResponse[] = [];
+    public otherTaxDialogRef: any;
+    public adjustmentDialogRef: any;
+    public advanceReceiptRemoveDialogRef: any;
 
     constructor(
         private _accountService: AccountService,
@@ -759,7 +764,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            if(response) {
+            if (response) {
                 this.deleteAttachedFile();
             }
         });
@@ -778,7 +783,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            if(response) {
+            if (response) {
                 this.deleteTrxEntry();
             }
         });
@@ -1297,7 +1302,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
         if (!this.isAdvanceReceipt) {
             if (this.isAdjustedInvoicesWithAdvanceReceipt && this.vm.selectedLedger && this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.receipt) {
-                this.advanceReceiptRemoveConfirmationModal.show();
+                this.advanceReceiptRemoveDialogRef = this.dialog.open(this.advanceReceiptRemoveConfirmationModal);
             }
         }
         this.vm.generateGrandTotal();
@@ -1649,7 +1654,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (userResponse) {
             this.isAdvanceReceipt = !userResponse.response;
             this.handleAdvanceReceiptChange();
-            this.advanceReceiptRemoveConfirmationModal.hide();
+            this.advanceReceiptRemoveDialogRef.close();
         }
     }
 
@@ -1684,7 +1689,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         }
         this.makeAdjustmentCalculation();
-        this.adjustPaymentModal.hide();
+        this.adjustmentDialogRef.close();
     }
 
     /**
@@ -1704,7 +1709,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.vm.selectedLedger.voucherGenerated = false;
             }
         }
-        this.adjustPaymentModal.hide();
+        this.adjustmentDialogRef.close();
     }
 
     /**
@@ -1714,7 +1719,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public toggleMoreDetail(): void {
         this.showAdvanced = !this.showAdvanced;
-        this.dialogRef.close(["moreDetailOpen", this.showAdvanced]);
     }
 
     /**
@@ -1776,7 +1780,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     private openAdjustPaymentModal(): void {
-        this.adjustPaymentModal.show();
+        this.adjustmentDialogRef = this.dialog.open(this.adjustPaymentModal, {
+            width: '980px'
+        });
     }
 
     /**
@@ -2148,7 +2154,18 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
     }
 
-    public toggleOtherTaxesAsideMenu(vm: any): void {
-        this.dialogRef.close(["toggleOtherTaxesAsideMenu", vm])
+    public toggleOtherTaxesAsideMenu(vm: any, templateRef: TemplateRef<any>): void {
+        this.vm.companyTaxesList$.pipe(take(1)).subscribe(taxes => this.companyTaxesList = taxes);
+        this.asideMenuStateForOtherTaxes = 'in';
+        this.otherTaxDialogRef = this.dialog.open(templateRef);
+    }
+
+    public calculateOtherTaxes(modal: SalesOtherTaxesModal) {
+        this.vm.calculateOtherTaxes(modal);
+    }
+    
+    public toggleOtherTaxesAsidePane(): void {
+        this.asideMenuStateForOtherTaxes = 'out';
+        this.otherTaxDialogRef.close();
     }
 }

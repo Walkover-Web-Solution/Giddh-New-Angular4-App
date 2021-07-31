@@ -1,6 +1,6 @@
 @charset "utf-8";
 @import "../css/giddh-common.scss";
-@import "@angular/material/prebuilt-themes/deeppurple-amber.css";
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
 @import "../css/ngx-bs-datepicker.scss";
 
 /* table css need to removed at last  (start)
@@ -8011,10 +8011,10 @@ input.mat-input-element {
 .mat-form-field-underline {
     display: none !important;
 }
-.cdk-overlay-container,
-.cdk-global-overlay-wrapper {
-    z-index: 99999;
-}
+// .cdk-overlay-container,
+// .cdk-global-overlay-wrapper {
+//     z-index: 99999;
+// }
 .mat-calendar-body-selected {
     background-color: $midnight-blue;
 }
@@ -10229,4 +10229,11 @@ mat-year-view table tr td.mat-calendar-body-label {
 /** Angular material datepicker **/
 .pd-0 {
     padding: 0px !important;
+}
+input[type="checkbox"].cdk-visually-hidden::before, input[type="checkbox"].cdk-visually-hidden::after {
+    height: 1px !important;
+    position: absolute !important;
+    width: 1px !important;
+    outline: 0px !important;
+    border: none !important;
 }

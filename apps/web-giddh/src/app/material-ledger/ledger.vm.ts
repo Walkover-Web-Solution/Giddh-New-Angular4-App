@@ -486,3 +486,5 @@ export const AVAILABLE_ITC_LIST = [
     { label: 'Import of services', value: AvailableItc.ImportOfServices },
     { label: 'Others', value: AvailableItc.Others }
 ];
+
+export const MaterialColorPalette = "primary";

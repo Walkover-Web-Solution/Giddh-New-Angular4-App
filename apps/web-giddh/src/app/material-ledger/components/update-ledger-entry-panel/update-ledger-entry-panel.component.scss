@@ -488,3 +488,31 @@ p.edit-message {
         transform: rotate(360deg);
     }
 }
+#update-ledger-quantity {
+    padding-right: 6px !important;
+    width: 91%;
+    height: 34px;
+    margin-top: 2px;
+}
+#update-ledger-unit {
+    margin-top: 2px;
+    padding-top: 7px !important;
+}
+#update-ledger-price, #update-ledger-amount, #update-ledger-other-tax-disabled {
+    padding-right: 6px !important;
+    width: 98% !important;
+}
+#update-ledger-total-amount {
+    padding-right: 6px !important;
+    width: 95% !important;
+}
+#update-ledger-voucher-no {
+    padding-left: 3px !important;
+}
+#update-ledger-cheque-number {
+    padding-left: 5px !important;
+}
+#update-ledger-adjust-voucher, #update-ledger-inclusive-tax-edit-mode {
+    padding-left: 5px !important;
+    width: 98%;
+}
