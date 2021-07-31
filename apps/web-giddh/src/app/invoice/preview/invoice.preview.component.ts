@@ -295,7 +295,14 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.advanceSearchFilter.count = PAGINATION_LIMIT;
         this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a && a.accountUniqueName && a.purchaseRecordUniqueName) {
-                this._receiptServices.GetPurchaseRecordDetails(a.accountUniqueName, a.purchaseRecordUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
+                const apiCallObservable = this.generalService.voucherApiVersion === 2 ?
+                    this._receiptServices.getVoucherDetailsV4(a.accountUniqueName, {
+                        invoiceNumber: '',
+                        voucherType: VoucherTypeEnum.purchase,
+                        uniqueName: a.purchaseRecordUniqueName
+                    }) :
+                    this._receiptServices.GetPurchaseRecordDetails(a.accountUniqueName, a.purchaseRecordUniqueName);
+                apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
                     if (res && res.body) {
                         if (res.body.date) {
                             this.invoiceSearchRequest.from = res.body.date;
@@ -1334,7 +1341,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             }
 
             let grandTotalConversionRate = 0, balanceDueAmountConversionRate = 0;
-            if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
+            if (this.generalService.voucherApiVersion === 2) {
+                grandTotalConversionRate = item.exchangeRate;
+            } else if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
                 grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(2);
             }
             if (balanceDueAmountForCompany && balanceDueAmountForAccount) {
