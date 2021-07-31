@@ -17,13 +17,13 @@
                                         <td class="text-right width-70">
                                             <label class="mr-r05 font-12">{{localeData?.qty}}</label>
                                             <input matInput id="ledger-quantity" type="text" name="inventory_quantity"
-                                                class="form-control text-right"
+                                                class="form-control text-right mat-field-border pd-0"
                                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields || isReadOnly ? 'disabled' : null"
                                                 (change)="changeQuantity($event.target.value)"
                                                 [(ngModel)]="currentTxn?.inventory.quantity" decimalDigitsDirective
                                                 [DecimalPlaces]="4" />
                                         </td>
-                                        <td *ngIf="currentTxn?.unitRate">
+                                        <td [style.width.px]="79" *ngIf="currentTxn?.unitRate">
                                             <label class="font-12">{{commonLocaleData?.app_unit}}</label>
                                             <mat-select id="ledger-unit" class="form-control"
                                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
@@ -50,7 +50,7 @@
                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
                                 [mask]="inputMaskFormat" [customDecimalPlaces]="ratePrecision"
                                 (ngModelChange)="changePrice($event)" name="unitPrice"
-                                (keyup)="isInclusiveEntry = false" class="form-control text-right" />
+                                (keyup)="isInclusiveEntry = false" class="form-control text-right mat-field-border pd-0" />
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 <span class="d-inline-flex">
@@ -577,15 +577,14 @@
         </div>
     </div>
 </ng-template>
-<div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #adjustPaymentModal="bs-modal"
-    [config]="{ animated: true, ignoreBackdropClick: true, keyboard: false }" bsModal role="dialog">
+<ng-template #adjustPaymentModal>
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <advance-receipt-adjustment-component *ngIf="adjustPaymentModal.isShown" #advanceReceiptComponent
+            <advance-receipt-adjustment-component
                 [adjustedVoucherType]="blankLedger.voucherType" [invoiceFormDetails]="adjustVoucherConfiguration"
                 [advanceReceiptAdjustmentUpdatedData]="currentTxn.voucherAdjustments"
                 (closeModelEvent)="closeAdjustmentModal($event)" (submitClicked)="getAdjustedPaymentData($event)">
             </advance-receipt-adjustment-component>
         </div>
     </div>
-</div>
+</ng-template>
