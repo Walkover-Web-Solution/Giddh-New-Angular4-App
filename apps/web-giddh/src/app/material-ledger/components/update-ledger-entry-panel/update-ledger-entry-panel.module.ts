@@ -27,6 +27,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
+import { DeleteTemplateConfirmationModalModule } from '../../../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
 
 @NgModule({
     declarations: [
@@ -59,7 +60,8 @@ import { MatSelectModule } from '@angular/material/select';
         MatTooltipModule,
         MatButtonModule,
         MatDialogModule,
-        MatSelectModule
+        MatSelectModule,
+        DeleteTemplateConfirmationModalModule
     ],
     exports: [UpdateLedgerEntryPanelComponent, UpdateLedgerTaxControlComponent, UpdateLedgerDiscountComponent]
 })

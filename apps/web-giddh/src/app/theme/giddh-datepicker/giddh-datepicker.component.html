@@ -1,6 +1,6 @@
 <mat-form-field appearance="fill" [floatLabel]="'auto'">
     <input matInput [matDatepicker]="picker" [placeholder]="placeholder" [value]="calendarDate" [min]="minDate"
-        autocomplete="off" (focus)="picker.open()" (click)="picker.open()" (dateChange)="dateChange($event)">
+        autocomplete="off" (focus)="picker.open()" (click)="picker.open()" (dateChange)="dateChange($event)" [class]="cssClass">
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
 </mat-form-field>

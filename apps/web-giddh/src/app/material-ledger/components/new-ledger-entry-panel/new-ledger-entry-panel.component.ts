@@ -65,7 +65,7 @@ import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
-import { AVAILABLE_ITC_LIST, BlankLedgerVM, TransactionVM } from '../../ledger.vm';
+import { AVAILABLE_ITC_LIST, BlankLedgerVM, MaterialColorPalette, TransactionVM } from '../../ledger.vm';
 import { LedgerDiscountComponent } from '../ledger-discount/ledger-discount.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../../theme/new-confirm-modal/confirm-modal.component';
@@ -233,6 +233,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     private isExchangeRateSwapped: boolean = false;
     /** True if entry value is calculated inclusively */
     private isInclusiveEntry: boolean = false;
+    /** Color paletter for material */
+    public materialColorPalette: string = MaterialColorPalette;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -991,7 +993,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 if (!className) {
                     return;
                 }
-                return className.contains('currencyToggler') || className.contains('mat-datepicker-input');
+                return className.contains('currencyToggler') || className.contains('mat-calendar');
             });
 
             if (shouldNotClose) {

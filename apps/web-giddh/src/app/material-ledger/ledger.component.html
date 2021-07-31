@@ -31,12 +31,12 @@
                                 <!-- please remove hidden attribute after functionality works -->
                                 <div class="select-all-icons" *ngIf="checkedTrxWhileHovering?.length > 0 && isMobileScreen">
                                     <div *ngIf="visibleTransactionTypeMobile && checkedTrxWhileHovering?.length > 0">
-                                        <mat-checkbox *ngIf="visibleTransactionTypeMobile === 'all'" id="select-all-entries"
+                                        <mat-checkbox [color]="materialColorPalette" *ngIf="visibleTransactionTypeMobile === 'all'" id="select-all-entries"
                                             [(ngModel)]="debitCreditSelectAll" (change)="selectAllEntries($event, visibleTransactionTypeMobile)"></mat-checkbox>
-                                        <mat-checkbox *ngIf="visibleTransactionTypeMobile === 'credit'" id="select-all-entries-cr"
+                                        <mat-checkbox [color]="materialColorPalette" *ngIf="visibleTransactionTypeMobile === 'credit'" id="select-all-entries-cr"
                                             [(ngModel)]="creditSelectAll"
                                             (change)="selectAllEntries($event, visibleTransactionTypeMobile)"></mat-checkbox>
-                                        <mat-checkbox *ngIf="visibleTransactionTypeMobile === 'debit'" id="select-all-entries-dr"
+                                        <mat-checkbox [color]="materialColorPalette" *ngIf="visibleTransactionTypeMobile === 'debit'" id="select-all-entries-dr"
                                             [(ngModel)]="debitSelectAll"
                                             (change)="selectAllEntries($event, visibleTransactionTypeMobile)"></mat-checkbox>
                                         {{commonLocaleData?.app_select_all}}
@@ -224,7 +224,7 @@
                                 <div *ngIf="isLedgerAccountAllowsMultiCurrency" class="advance-search-block">
                                     <span class="mr-r15 d-inline-block font-14">{{ baseCurrencyDetails?.code }}</span>
                                     <div class="toggle d-inline-block currency-toggler" data-key="disabled">
-                                        <mat-slide-toggle [(ngModel)]="currencyTogglerModel" (change)="toggleCurrency($event)"></mat-slide-toggle>
+                                        <mat-slide-toggle [color]="materialColorPalette" [(ngModel)]="currencyTogglerModel" (change)="toggleCurrency($event)"></mat-slide-toggle>
                                     </div>
                                     <span class="mr-l15 d-inline-block font-14">{{ foreignCurrencyDetails?.code }}</span>
                                 </div>
@@ -262,7 +262,7 @@
                     <div *ngIf="isLedgerAccountAllowsMultiCurrency && isMobileScreen" class="advance-search-block mr-t05">
                         <span class="mr-r15 d-inline-block font-14">{{ baseCurrencyDetails?.code }}</span>
                         <div class="toggle d-inline-block currency-toggler" data-key="disabled">
-                            <mat-slide-toggle [(ngModel)]="currencyTogglerModel" (change)="toggleCurrency($event)"></mat-slide-toggle>
+                            <mat-slide-toggle [color]="materialColorPalette" [(ngModel)]="currencyTogglerModel" (change)="toggleCurrency($event)"></mat-slide-toggle>
                         </div>
                         <span class="mr-l15 d-inline-block font-14">{{ foreignCurrencyDetails?.code }}</span>
                     </div>
@@ -316,7 +316,7 @@
                                         </mat-grid-list>
                                     </div>
                                     <div class="ledger-book">
-                                        <div class="left-col-new">
+                                        <div class="left-col-new" (clickOutside)="hideBankLedgerPopup($event)" (click)="$event.stopPropagation()">
                                             <mat-grid-list cols="3" rowHeight="43px" class="ledger-table transaction-mapped-table">
                                                 <mat-grid-tile class="bold no-right-border">
                                                     {{commonLocaleData?.app_date}}
@@ -328,8 +328,7 @@
                                                     {{commonLocaleData?.app_amount}}
                                                 </mat-grid-tile>
                                             </mat-grid-list>
-                                            <mat-grid-list id="ledger-transaction-left-list" cols="3" rowHeight="50px" (clickOutside)="hideBankLedgerPopup($event)"
-                                            (click)="$event.stopPropagation()">
+                                            <mat-grid-list id="ledger-transaction-left-list" cols="3" rowHeight="50px">
                                                 <ng-container *ngFor="let item of lc.bankTransactionsDebitData; trackBy: trackByTransactionId; let i = index">
                                                     <ng-container *ngFor="let txn of item.transactions; trackBy: trackById">    
                                                         <mat-grid-tile>
@@ -337,7 +336,7 @@
                                                             [ngClass]="{'compound-entry': txn.id === lc.selectedBankTxnUniqueName}">
                                                                 <div class="d-flex align-items-center">
                                                                     <span class="pd-l05 checkbox-span">
-                                                                        <mat-checkbox
+                                                                        <mat-checkbox [color]="materialColorPalette"
                                                                             [id]="'transaction-mapped-select-entry-dr-' + i"
                                                                             (change)="selectEntryForBulkAction($event, item)"
                                                                             [disabled]="(currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2)"></mat-checkbox>
@@ -457,7 +456,7 @@
                                                 </ng-container>    
                                             </mat-grid-list>
                                         </div>
-                                        <div class="right-col-new">
+                                        <div class="right-col-new" (clickOutside)="hideBankLedgerPopup($event)" (click)="$event.stopPropagation()">
                                             <mat-grid-list cols="3" rowHeight="43px" class="ledger-table transaction-mapped-table">
                                                 <mat-grid-tile class="bold no-right-border">
                                                     {{commonLocaleData?.app_date}} 
@@ -469,8 +468,7 @@
                                                     {{commonLocaleData?.app_amount}}
                                                 </mat-grid-tile>
                                             </mat-grid-list>
-                                            <mat-grid-list id="ledger-transaction-right-list" cols="3" rowHeight="50px" (clickOutside)="hideBankLedgerPopup($event)"
-                                            (click)="$event.stopPropagation()">
+                                            <mat-grid-list id="ledger-transaction-right-list" cols="3" rowHeight="50px">
                                                 <ng-container *ngFor="let item of lc.bankTransactionsCreditData; trackBy: trackByTransactionId; let i = index">
                                                     <ng-container *ngFor="let txn of item.transactions; trackBy: trackById">    
                                                         <mat-grid-tile>
@@ -478,7 +476,7 @@
                                                             [ngClass]="{'compound-entry': txn.id === lc.selectedBankTxnUniqueName}">
                                                                 <div class="d-flex align-items-center">
                                                                     <span class="pd-l05 checkbox-span">
-                                                                        <mat-checkbox
+                                                                        <mat-checkbox [color]="materialColorPalette"
                                                                             [id]="'transaction-mapped-select-entry-cr-' + i"
                                                                             [(ngModel)]="txn.isChecked"
                                                                             (change)="selectEntryForBulkAction($event, item)"
@@ -673,7 +671,7 @@
                                                     (mouseover)="entryHovered(transactions.entryUniqueName)"
                                                     (mouseout)="selectedTrxWhileHovering = ''">
                                                     <span class="pull-left account-holder-checkbox">
-                                                        <mat-checkbox [id]="'mobile-view-select-entry-cr-' + i"
+                                                        <mat-checkbox [color]="materialColorPalette" [id]="'mobile-view-select-entry-cr-' + i"
                                                             [ngClass]="{'d-none': (selectedTrxWhileHovering !== transactions.entryUniqueName && !(transactions.isChecked) && checkedTrxWhileHovering?.length === 0)}"
                                                             class="d-none" [(ngModel)]="transactions.isChecked"
                                                             (change)="entrySelected($event, transactions.entryUniqueName, visibleTransactionTypeMobile)"></mat-checkbox>
@@ -763,7 +761,7 @@
                             <mat-grid-list cols="3" rowHeight="50px" tabindex="-1"
                             *ngIf="ledgerTxnBalance?.forwardedBalance?.amount > 0 && ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'">
                                 <mat-grid-tile [attr.data-title]="commonLocaleData?.app_date">
-                                    <mat-checkbox id="select-entries-date-cr" [(ngModel)]="debitSelectAll" *ngIf="checkedTrxWhileHovering?.length > 0" (change)="selectAllEntries($event, 'debit')"></mat-checkbox>
+                                    <mat-checkbox [color]="materialColorPalette" id="select-entries-date-cr" [(ngModel)]="debitSelectAll" *ngIf="checkedTrxWhileHovering?.length > 0" (change)="selectAllEntries($event, 'debit')"></mat-checkbox>
                                 </mat-grid-tile>
                                 <mat-grid-tile [attr.data-title]="commonLocaleData?.app_particular">
                                     <span *ngIf="(lc.transactionData$ | async)?.page <= 1">{{localeData?.to_balance_bf}}</span>
@@ -793,7 +791,7 @@
 
                             <mat-grid-list cols="3" rowHeight="50px">
                                 <mat-grid-tile [attr.data-title]="commonLocaleData?.app_select_all">
-                                    <mat-checkbox [(ngModel)]="debitSelectAll" id="select-entries-all-cr"
+                                    <mat-checkbox [color]="materialColorPalette" [(ngModel)]="debitSelectAll" id="select-entries-all-cr"
                                         *ngIf="checkedTrxWhileHovering?.length > 0"
                                         (change)="selectAllEntries($event, 'debit')"></mat-checkbox>
                                 </mat-grid-tile>
@@ -812,7 +810,7 @@
                                 <mat-grid-tile [attr.data-title]="commonLocaleData?.app_date">
                                     <div class="d-flex align-items-center">
                                         <span class='float-left'>
-                                            <mat-checkbox [id]="'select-entry-dr-' + i"
+                                            <mat-checkbox [color]="materialColorPalette" [id]="'select-entry-dr-' + i"
                                                 [ngClass]="{'d-none': (selectedTrxWhileHovering !== txn.entryUniqueName && !(txn.isChecked) && checkedTrxWhileHovering?.length === 0)}"
                                                 [(ngModel)]="txn.isChecked"
                                                 (change)="entrySelected($event, txn.entryUniqueName, 'debit')"></mat-checkbox>
@@ -867,7 +865,7 @@
                                     <div class="width-100 no-left-border" *ngIf="txn.type === 'DEBIT'">
                                         <div class="width-100 ledger-main">
                                             <mat-grid-list cols="3" rowHeight="50px" class="ledger-row">
-                                                <mat-grid-tile
+                                                <mat-grid-tile class="new-entry-date"
                                                     [attr.data-title]="commonLocaleData?.app_date">
                                                     <div class="d-flex align-items-center">
                                                         <span class="ledger-checkbox pull-left">
@@ -953,36 +951,36 @@
                                                         (click)="showNewLedgerEntryPopup(txn);blankLedgerAmountClick()">
                                                 </mat-grid-tile>
                                             </mat-grid-list>
-                                            <!--new ledge popup-->
-                                            <div class="pos-abs entry-modal" (click)="shDebit?.hide()"
-                                                *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT' && lc.currentBlankTxn?.id === txn.id ">
-                                                <new-ledger-entry-panel #newLedPanel [blankLedger]="lc.blankLedger"
-                                                    [currentTxn]="lc.currentBlankTxn"
-                                                    [needToReCalculate]="needToReCalculate" [tcsOrTds]="tcsOrTds"
-                                                    [baseCurrencyDetails]="baseCurrencyDetails"
-                                                    (moreDetailOpen)="handleOpenMoreDetail($event)"
-                                                    [foreignCurrencyDetails]="foreignCurrencyDetails"
-                                                    [giddhBalanceDecimalPlaces]="giddhBalanceDecimalPlaces"
-                                                    [selectedCurrency]="selectedCurrency"
-                                                    [selectedPrefixForCurrency]="selectedPrefixForCurrency"
-                                                    [selectedSuffixForCurrency]="selectedSuffixForCurrency"
-                                                    [isLedgerAccountAllowsMultiCurrency]="isLedgerAccountAllowsMultiCurrency"
-                                                    [inputMaskFormat]="inputMaskFormat"
-                                                    (changeTransactionType)="toggleTransactionType($event)"
-                                                    [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
-                                                    (resetBlankLedger)="resetBlankTransaction()"
-                                                    (saveBlankLedger)="saveBlankTransaction()"
-                                                    (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
-                                                    (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
-                                                    (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
-                                                    [invoiceList]="invoiceList"
-                                                    [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount"
-                                                    [shouldShowItcSection]="shouldShowItcSection"
-                                                    [isTouristSchemeApplicable]="isTouristSchemeApplicable"
-                                                    (saveOtherTax)="saveOtherTax(lc.blankLedger, $event)"
-                                                    [localeData]="localeData" [commonLocaleData]="commonLocaleData">
-                                                </new-ledger-entry-panel>
-                                            </div>
+                                        </div>
+                                        <!--new ledge popup-->
+                                        <div class="pos-abs entry-modal" (click)="shDebit?.hide()"
+                                            *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT' && lc.currentBlankTxn?.id === txn.id ">
+                                            <new-ledger-entry-panel #newLedPanel [blankLedger]="lc.blankLedger"
+                                                [currentTxn]="lc.currentBlankTxn"
+                                                [needToReCalculate]="needToReCalculate" [tcsOrTds]="tcsOrTds"
+                                                [baseCurrencyDetails]="baseCurrencyDetails"
+                                                (moreDetailOpen)="handleOpenMoreDetail($event)"
+                                                [foreignCurrencyDetails]="foreignCurrencyDetails"
+                                                [giddhBalanceDecimalPlaces]="giddhBalanceDecimalPlaces"
+                                                [selectedCurrency]="selectedCurrency"
+                                                [selectedPrefixForCurrency]="selectedPrefixForCurrency"
+                                                [selectedSuffixForCurrency]="selectedSuffixForCurrency"
+                                                [isLedgerAccountAllowsMultiCurrency]="isLedgerAccountAllowsMultiCurrency"
+                                                [inputMaskFormat]="inputMaskFormat"
+                                                (changeTransactionType)="toggleTransactionType($event)"
+                                                [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
+                                                (resetBlankLedger)="resetBlankTransaction()"
+                                                (saveBlankLedger)="saveBlankTransaction()"
+                                                (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
+                                                (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
+                                                (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
+                                                [invoiceList]="invoiceList"
+                                                [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount"
+                                                [shouldShowItcSection]="shouldShowItcSection"
+                                                [isTouristSchemeApplicable]="isTouristSchemeApplicable"
+                                                (saveOtherTax)="saveOtherTax(lc.blankLedger, $event)"
+                                                [localeData]="localeData" [commonLocaleData]="commonLocaleData">
+                                            </new-ledger-entry-panel>
                                         </div>
                                     </div>
                                 </ng-container>
@@ -1014,7 +1012,7 @@
                                 *ngIf="ledgerTxnBalance?.forwardedBalance?.amount > 0 && ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'">
                                 <mat-grid-tile
                                     [attr.data-title]="commonLocaleData?.app_date">
-                                    <mat-checkbox id="select-all-entries-dr" [(ngModel)]="creditSelectAll"
+                                    <mat-checkbox [color]="materialColorPalette" id="select-all-entries-dr" [(ngModel)]="creditSelectAll"
                                         *ngIf="checkedTrxWhileHovering?.length > 0"
                                         (change)="selectAllEntries($event,'credit')"></mat-checkbox>
                                 </mat-grid-tile>
@@ -1050,7 +1048,7 @@
                             <mat-grid-list cols="3" rowHeight="50px" class="ledger-row"
                                 *ngIf="ledgerTxnBalance?.forwardedBalance?.type !== 'CREDIT' || (ledgerTxnBalance?.forwardedBalance?.amount == 0)">
                                 <mat-grid-tile>
-                                    <mat-checkbox id="select-all-entries-credit"
+                                    <mat-checkbox [color]="materialColorPalette" id="select-all-entries-credit"
                                         [(ngModel)]="creditSelectAll" *ngIf="checkedTrxWhileHovering?.length > 0"
                                         (change)="selectAllEntries($event,'credit')"></mat-checkbox>
                                 </mat-grid-tile>
@@ -1073,7 +1071,7 @@
                                     [attr.data-title]="commonLocaleData?.app_date">
                                     <div class="d-flex align-items-center">
                                         <span class="ledger-checkbox pull-left">
-                                            <mat-checkbox [id]="'select-entry-cr-' + i"
+                                            <mat-checkbox [color]="materialColorPalette" [id]="'select-entry-cr-' + i"
                                                 [ngClass]="{'d-none': (selectedTrxWhileHovering !== txn.entryUniqueName && !(txn.isChecked) && checkedTrxWhileHovering?.length === 0)}"
                                                 class="d-none" [(ngModel)]="txn.isChecked"
                                                 (change)="entrySelected($event, txn.entryUniqueName, 'credit')"></mat-checkbox>
@@ -1126,6 +1124,7 @@
                                         <div class="width-100 h-table ledger-main">
                                             <mat-grid-list cols="3" rowHeight="50px" class="ledger-row">
                                                 <mat-grid-tile
+                                                    class="new-entry-date"
                                                     [attr.data-title]="commonLocaleData?.app_date">
                                                     <div class="d-flex align-items-center">
                                                         <span class="ledger-checkbox pull-left">
@@ -1211,37 +1210,37 @@
                                                         (click)="showNewLedgerEntryPopup(txn);blankLedgerAmountClick()">
                                                 </mat-grid-tile>
                                             </mat-grid-list>
-                                            <!--new ledge popup-->
-                                            <div class="position-absolute entry-modal" (click)="shCredit?.hide()"
-                                            (keydown)="$event.stopPropagation()"
-                                                *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
-                                                <new-ledger-entry-panel #newLedPanel [blankLedger]="lc.blankLedger"
-                                                    [currentTxn]="lc.currentBlankTxn"
-                                                    [needToReCalculate]="needToReCalculate" [tcsOrTds]="tcsOrTds"
-                                                    [baseCurrencyDetails]="baseCurrencyDetails"
-                                                    [foreignCurrencyDetails]="foreignCurrencyDetails"
-                                                    (moreDetailOpen)="handleOpenMoreDetail($event)"
-                                                    [selectedCurrency]="selectedCurrency"
-                                                    [giddhBalanceDecimalPlaces]="giddhBalanceDecimalPlaces"
-                                                    [selectedPrefixForCurrency]="selectedPrefixForCurrency"
-                                                    [selectedSuffixForCurrency]="selectedSuffixForCurrency"
-                                                    [inputMaskFormat]="inputMaskFormat"
-                                                    [isLedgerAccountAllowsMultiCurrency]="isLedgerAccountAllowsMultiCurrency"
-                                                    (changeTransactionType)="toggleTransactionType($event)"
-                                                    [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
-                                                    (resetBlankLedger)="resetBlankTransaction()"
-                                                    (saveBlankLedger)="saveBlankTransaction()"
-                                                    (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
-                                                    (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
-                                                    (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
-                                                    [invoiceList]="invoiceList"
-                                                    [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount"
-                                                    [shouldShowItcSection]="shouldShowItcSection"
-                                                    [isTouristSchemeApplicable]="isTouristSchemeApplicable"
-                                                    (saveOtherTax)="saveOtherTax(lc.blankLedger, $event)"
-                                                    [localeData]="localeData" [commonLocaleData]="commonLocaleData">
-                                                </new-ledger-entry-panel>
-                                            </div>
+                                        </div>
+                                        <!--new ledge popup-->
+                                        <div class="position-absolute entry-modal" (click)="shCredit?.hide()"
+                                        (keydown)="$event.stopPropagation()"
+                                            *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
+                                            <new-ledger-entry-panel #newLedPanel [blankLedger]="lc.blankLedger"
+                                                [currentTxn]="lc.currentBlankTxn"
+                                                [needToReCalculate]="needToReCalculate" [tcsOrTds]="tcsOrTds"
+                                                [baseCurrencyDetails]="baseCurrencyDetails"
+                                                [foreignCurrencyDetails]="foreignCurrencyDetails"
+                                                (moreDetailOpen)="handleOpenMoreDetail($event)"
+                                                [selectedCurrency]="selectedCurrency"
+                                                [giddhBalanceDecimalPlaces]="giddhBalanceDecimalPlaces"
+                                                [selectedPrefixForCurrency]="selectedPrefixForCurrency"
+                                                [selectedSuffixForCurrency]="selectedSuffixForCurrency"
+                                                [inputMaskFormat]="inputMaskFormat"
+                                                [isLedgerAccountAllowsMultiCurrency]="isLedgerAccountAllowsMultiCurrency"
+                                                (changeTransactionType)="toggleTransactionType($event)"
+                                                [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
+                                                (resetBlankLedger)="resetBlankTransaction()"
+                                                (saveBlankLedger)="saveBlankTransaction()"
+                                                (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
+                                                (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
+                                                (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
+                                                [invoiceList]="invoiceList"
+                                                [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount"
+                                                [shouldShowItcSection]="shouldShowItcSection"
+                                                [isTouristSchemeApplicable]="isTouristSchemeApplicable"
+                                                (saveOtherTax)="saveOtherTax(lc.blankLedger, $event)"
+                                                [localeData]="localeData" [commonLocaleData]="commonLocaleData">
+                                            </new-ledger-entry-panel>
                                         </div>
                                     </div>
                                 </ng-container>
@@ -1589,16 +1588,6 @@
                 (onShortcutPress)="toggleAsidePane()" (closeAsideEvent)="toggleAsidePane()">
             </ledger-aside-pane>
             <!-- aside menu section -->
-            <!-- update ladger entry popup -->
-            <!-- aside menu section -->
-            <div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
-            <app-aside-menu-sales-other-taxes *ngIf="asideMenuStateForOtherTaxes === 'in' && updateLedgerComponentInstance"
-                [class]="asideMenuStateForOtherTaxes" [taxes]="companyTaxesList"
-                [otherTaxesModal]="updateLedgerComponentInstance.vm.selectedLedger.otherTaxModal"
-                [commonLocaleData]="commonLocaleData" [@slideInOut]="asideMenuStateForOtherTaxes"
-                (closeModal)="toggleOtherTaxesAsidePane(null)"
-                (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(null);">
-            </app-aside-menu-sales-other-taxes>
             <!-- endregion -->
             <ng-template #datepickerTemplate>
                 <div class="datepicker-modal">

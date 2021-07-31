@@ -11,7 +11,7 @@
                 <div class="pd-b2 clearfix export-type">
                     <label class="w125">{{commonLocaleData?.app_type}}:</label>
                     <div>
-                        <mat-radio-group [attr.aria-label]="commonLocaleData?.app_type" name="emailTypeSelected"
+                        <mat-radio-group [color]="materialColorPalette" [attr.aria-label]="commonLocaleData?.app_type" name="emailTypeSelected"
                             [(ngModel)]="emailTypeSelected">
                             <mat-radio-button id="mini" (change)="handleReportTypeChange($event)"
                                 [value]="emailTypeMini">{{commonLocaleData?.app_mini}}</mat-radio-button>
@@ -25,7 +25,7 @@
                 <div class="pd-b2 clearfix export-type">
                     <label class="w125">{{commonLocaleData?.app_export_as}}:</label>
                     <div>
-                        <mat-radio-group [attr.aria-label]="commonLocaleData?.app_export_as" name="exportAs"
+                        <mat-radio-group [color]="materialColorPalette" [attr.aria-label]="commonLocaleData?.app_export_as" name="exportAs"
                             [(ngModel)]="exportAs">
                             <mat-radio-button [hidden]="emailTypeSelected === 'columnar'" id="pdf" [value]="'pdf'">
                                 {{commonLocaleData?.app_pdf}}</mat-radio-button>
@@ -37,7 +37,7 @@
                 <div class="pd-b2 clearfix export-type">
                     <label class="w125">{{commonLocaleData?.app_order}}:</label>
                     <div>
-                        <mat-radio-group [attr.aria-label]="commonLocaleData?.app_order" name="order"
+                        <mat-radio-group [color]="materialColorPalette" [attr.aria-label]="commonLocaleData?.app_order" name="order"
                             [(ngModel)]="order">
                             <mat-radio-button id="ascending" [value]="'asc'">{{commonLocaleData?.app_ascending}}
                             </mat-radio-button>
@@ -50,13 +50,13 @@
                     [hidden]="emailTypeSelected === 'admin-condensed' || emailTypeSelected === 'columnar'">
                     <label class="w125">{{commonLocaleData?.app_invoice_no}}:</label>
                     <label class="radio-inline p-0">
-                        <mat-checkbox name="withInvoiceNumber" [(ngModel)]="withInvoiceNumber"></mat-checkbox>
+                        <mat-checkbox [color]="materialColorPalette" name="withInvoiceNumber" [(ngModel)]="withInvoiceNumber"></mat-checkbox>
                     </label>
                 </div>
                 <div class="pd-b2 clearfix" [hidden]="emailTypeSelected !== 'columnar'">
                     <label class="w125">{{localeData?.cr_dr}}</label>
                     <label class="radio-inline p-0">
-                        <mat-checkbox name="balanceTypeAsSign" [(ngModel)]="balanceTypeAsSign"></mat-checkbox>
+                        <mat-checkbox [color]="materialColorPalette" name="balanceTypeAsSign" [(ngModel)]="balanceTypeAsSign"></mat-checkbox>
                     </label>
                 </div>
                 <button mat-button class="btn-success btn unbold"

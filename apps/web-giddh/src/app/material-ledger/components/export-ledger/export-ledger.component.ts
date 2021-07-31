@@ -14,6 +14,7 @@ import { take, takeUntil } from 'rxjs/operators';
 import { download } from '@giddh-workspaces/utils';
 import { GeneralService } from '../../../services/general.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MaterialColorPalette } from '../../ledger.vm';
 
 @Component({
     selector: 'export-ledger',
@@ -40,6 +41,8 @@ export class ExportLedgerComponent implements OnInit {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Color paletter for material */
+    public materialColorPalette: string = MaterialColorPalette;
 
     constructor(private ledgerService: LedgerService, private toaster: ToasterService, private permissionDataService: PermissionDataService, private store: Store<AppState>, private generalService: GeneralService, @Inject(MAT_DIALOG_DATA) public inputData, public dialogRef: MatDialogRef<any>) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
