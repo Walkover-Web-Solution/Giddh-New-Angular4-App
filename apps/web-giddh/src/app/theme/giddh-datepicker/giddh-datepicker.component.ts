@@ -32,6 +32,8 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     @Input() public ngModel: any;
     /** Min date */
     @Input() public minDate: Date;
+    /** Taking any css class as input to be applied on date input field */
+    @Input() public cssClass: string = "";
     /** Emitting selected date object as output */
     @Output() public dateSelected: EventEmitter<any> = new EventEmitter<any>();
 
@@ -41,8 +43,7 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     public calendarDate: any = '';
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
-    //Placeholders for the callbacks which are later provided by the Control Value Accessor
+    /** Placeholders for the callbacks which are later provided by the Control Value Accessor */
     private onTouchedCallback: () => void = noop;
     private onChangeCallback: (_: any) => void = noop;
 

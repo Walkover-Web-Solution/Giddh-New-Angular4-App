@@ -446,7 +446,7 @@ aside-menu-account .container-fluid {
 }
 
 .mr-l2 {
-    margin-left: 20px;
+    margin-left: 20px !important;
 }
 
 .mr-r2 {
@@ -2792,4 +2792,25 @@ mat-dialog-container .modal-header {
 }
 .mat-field-border {
     border: 1px solid $gainsboro !important;
+}
+.mat-grid-tile.select2-parent.select2-ledger .mat-grid-tile-content {
+    padding-left: 0px !important;
+}
+.ledg-head mat-grid-list mat-grid-tile.new-entry-date .mat-grid-tile-content {
+    padding-left: 10px !important;
+}
+.ledger-advance-search-field {
+    .mat-form-field-suffix {
+        right: 10px !important;
+    }
+    input.mat-input-element {
+        padding-left: 8px !important;
+        width: 96%;
+    }
+    input.mat-input-element.date-field, input.mat-input-element.description-field {
+        width: 98% !important;
+    }
+}
+update-ledger-entry-panel .ledger-main .mat-form-field {
+    min-width: auto !important;
 }

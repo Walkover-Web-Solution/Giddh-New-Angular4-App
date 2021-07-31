@@ -199,3 +199,15 @@ span.eligible-ITC {
         transform: rotate(360deg);
     }
 }
+#new-ledger-enter-amount,#new-ledger-enter-amount-advance-receipt,#ledger-total-amount {
+    padding-right: 10px !important;
+    width: 95%;
+}
+#ledger-cheque-number {
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+    width: 93%;
+}
+#ledger-description {
+    width: 98.6%;
+}

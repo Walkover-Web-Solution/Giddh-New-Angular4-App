@@ -15,6 +15,7 @@ import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.co
 import { SearchService } from '../../../services/search.service';
 import { InventoryService } from '../../../services/inventory.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MaterialColorPalette } from '../../ledger.vm';
 
 @Component({
     selector: 'advance-search-model',
@@ -123,6 +124,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy {
     public isDefaultStocksLoading: boolean = true;
     /** True if default groups api call in progress */
     public isDefaultGroupsLoading: boolean = true;
+    /** Color paletter for material */
+    public materialColorPalette: string = MaterialColorPalette;
 
     constructor(
         private groupService: GroupService,
