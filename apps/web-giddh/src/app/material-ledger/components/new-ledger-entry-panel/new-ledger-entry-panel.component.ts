@@ -13,6 +13,7 @@ import {
     OnInit,
     Output,
     SimpleChanges,
+    TemplateRef,
     ViewChild,
 } from '@angular/core';
 import { isAndroidCordova, isIOSCordova } from '@giddh-workspaces/utils';
@@ -223,7 +224,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     /** account other applicable discount list which contains account's discount else immediate group's discount(inherited) */
     public accountOtherApplicableDiscount: any[] = [];
     /** Adjustment modal */
-    @ViewChild('adjustPaymentModal', { static: true }) public adjustPaymentModal: ModalDirective;
+    @ViewChild('adjustPaymentModal', { static: true }) public adjustPaymentModal: TemplateRef<any>;
     /** Stores the multi-lingual label of current voucher */
     public currentVoucherLabel: string;
 
@@ -235,6 +236,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     private isInclusiveEntry: boolean = false;
     /** Color paletter for material */
     public materialColorPalette: string = MaterialColorPalette;
+    public adjustmentDialogRef: any;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -1353,7 +1355,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
         }
 
-        this.adjustPaymentModal.hide();
+        this.adjustmentDialogRef.close();
     }
 
     /**
@@ -1371,7 +1373,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
             this.isAdjustVoucherSelected = false;
         }
-        this.adjustPaymentModal.hide();
+        this.adjustmentDialogRef.close();
     }
 
     /**
@@ -1480,7 +1482,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     private openAdjustPaymentModal(): void {
-        this.adjustPaymentModal.show();
+        this.adjustmentDialogRef = this.dialog.open(this.adjustPaymentModal);
     }
 
     /**
