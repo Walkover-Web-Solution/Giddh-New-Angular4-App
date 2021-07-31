@@ -47,7 +47,6 @@ import { OnBoardingComponent } from './on-boarding/on-boarding.component';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 import { AsideHelpSupportComponent } from './header/components/aside-help-support/aside-help-support.component';
 import { AsideSettingComponent } from './header/components/aside-setting/aside-setting.component';
-import { DeleteTemplateConfirmationModelComponent } from '../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.component';
 import { LoaderComponent } from '../loader/loader.component';
 import { ProformaAddBulkItemsComponent } from '../proforma-invoice/components/proforma-add-bulk-items/proforma-add-bulk-items.component';
 import { RevisionHistoryComponent } from './revision-history/revision-history.component';
@@ -66,7 +65,8 @@ import { HamburgerMenuModule } from './header/components/hamburger-menu/hamburge
 import { GenericAsideMenuAccountComponent } from './generic-aside-menu-account/generic.aside.menu.account.component';
 import { GiddhPageLoaderModule } from './giddh-page-loader/giddh-page-loader.module';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
-import { GiddhDateRangepickerModule } from '../theme/giddh-daterangepicker/giddh-datepicker.module';
+import { GiddhDateRangepickerModule } from '../theme/giddh-daterangepicker/giddh-daterangepicker.module';
+import { DeleteTemplateConfirmationModalModule } from '../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -104,7 +104,6 @@ export function provideConfig() {
         AsideMenuOtherTaxes,
         AccountUpdateNewDetailsComponent,
         WelcomeComponent,
-        DeleteTemplateConfirmationModelComponent,
         LoaderComponent,
         ProformaAddBulkItemsComponent,
         RevisionHistoryComponent,
@@ -157,7 +156,8 @@ export function provideConfig() {
         ValidateSectionPermissionDirectiveModule,
         GiddhPageLoaderModule,
         GiddhDatepickerModule,
-        GiddhDateRangepickerModule
+        GiddhDateRangepickerModule,
+        DeleteTemplateConfirmationModalModule
     ],
     exports: [
         CommonModule,
@@ -194,7 +194,6 @@ export function provideConfig() {
         TooltipModule,
         BsDatepickerModule,
         NgxDaterangepickerMd,
-        DeleteTemplateConfirmationModelComponent,
         LoaderComponent,
         ProformaAddBulkItemsComponent,
         RevisionHistoryComponent,
@@ -214,7 +213,8 @@ export function provideConfig() {
         GenericAsideMenuAccountComponent,
         GiddhPageLoaderModule,
         GiddhDatepickerModule,
-        GiddhDateRangepickerModule
+        GiddhDateRangepickerModule,
+        DeleteTemplateConfirmationModalModule
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,

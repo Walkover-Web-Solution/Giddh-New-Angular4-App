@@ -6,7 +6,7 @@
         <div class="multi-select adjust">
             <input #taxInputElement matInput type="text" id="update-ledger-tax" readonly [mask]="maskInput"
                 [rawInputValue]="formattedTotal" [prefix]="prefixInput" [suffix]="suffixInput" name="formattedTotal"
-                class="form-control cursor-pointer text-right" [(ngModel)]="formattedTotal"
+                class="form-control cursor-pointer text-right mat-field-border pd-0" [(ngModel)]="formattedTotal"
                 (focus)="handleInputFocus()" />
             <span class="caret"></span>
         </div>
@@ -17,10 +17,10 @@
             <li *ngFor="let tax of taxRenderData;trackBy: trackByFn; let i = index">
                 <label class="checkbox overflow-hidden width-100 p-0 m-0 custom-item bd-rb px-1 py-1 mr-b05"
                     (click)="$event.stopPropagation()" [ngClass]="{'disabled-label': tax.isDisabled}">
-                    <mat-checkbox class="pull-left" [id]="'update-ledger-tax-checkbox-' + i"
+                    <mat-checkbox [color]="materialColorPalette" class="pull-left" [id]="'update-ledger-tax-checkbox-' + i"
                         [(ngModel)]="tax.isChecked" [disabled]="tax.isDisabled" (change)="change()"
                         (click)="$event.stopPropagation()"></mat-checkbox>
-                    <span class="pull-left text-ellipsis">{{tax.name}}</span>
+                    <span class="pull-left mr-l1 text-ellipsis">{{tax.name}}</span>
                 </label>
             </li>
         </ul>

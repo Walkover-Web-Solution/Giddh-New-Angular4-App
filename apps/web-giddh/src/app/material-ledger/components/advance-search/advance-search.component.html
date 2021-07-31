@@ -12,7 +12,7 @@
                 <span aria-hidden="true" class="close" (click)="onCancel()">×</span>
             </div>
         </div>
-        <div class="modal-body clearfix" id="export-body">
+        <div class="modal-body clearfix ledger-advance-search-field" id="export-body">
             <form [formGroup]="advanceSearchForm">
                 <div class="clearfix">
                     <div class="row mb-2">
@@ -23,11 +23,11 @@
                             <div class="input-group" (click)="showGiddhDatepicker($event)">
                                 <mat-form-field appearance="fill">
                                     <input matInput type="text" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" required
-                                    [placeholder]="commonLocaleData?.app_select_range" class="form-control" />
+                                    [placeholder]="commonLocaleData?.app_select_range" class="form-control mat-field-border pd-0 date-field" />
+                                    <span matSuffix class="cursor-pointer">
+                                        <i class="icon-calender" aria-hidden="true"></i>
+                                    </span>
                                 </mat-form-field>
-                                <span class="input-group-addon cursor-pointer">
-                                    <i class="icon-calender" aria-hidden="true"></i>
-                                </span>
                             </div>
                         </div>
                     </div>
@@ -82,7 +82,7 @@
                             <div class="row">
                                 <div class="pr-0 col-sm-3 col-12 switch-wrapper">
                                     <div class="checkbox square-switch">
-                                        <mat-slide-toggle id="includeParticulars" formControlName="includeParticulars">
+                                        <mat-slide-toggle [color]="materialColorPalette" id="includeParticulars" formControlName="includeParticulars">
                                             <span class="pull-left"
                                                 *ngIf="advanceSearchForm.get('includeParticulars').value">{{commonLocaleData?.app_include}}</span>
                                             <span class="pull-right"
@@ -116,7 +116,7 @@
                             <div class="row">
                                 <div class="pr-0 col-sm-3 col-12 switch-wrapper">
                                     <div class="checkbox square-switch">
-                                        <mat-slide-toggle id="includeVouchers" formControlName="includeVouchers">
+                                        <mat-slide-toggle [color]="materialColorPalette" id="includeVouchers" formControlName="includeVouchers">
                                             <span class="pull-left"
                                                 *ngIf="advanceSearchForm.get( 'includeVouchers').value">{{commonLocaleData?.app_include}}</span>
                                             <span class="pull-right"
@@ -154,7 +154,7 @@
                                     <div class="form-group">
                                         <mat-form-field appearance="fill">
                                             <input matInput type="text" decimalDigitsDirective [DecimalPlaces]="2"
-                                            formControlName="amount" class="form-control">
+                                            formControlName="amount" class="form-control mat-field-border pd-0">
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -171,7 +171,7 @@
                             <div class="row">
                                 <div class="col-6 col-md-6">
                                     <div class="form-group">
-                                        <mat-checkbox formControlName="cancelledEntries"></mat-checkbox>
+                                        <mat-checkbox [color]="materialColorPalette" formControlName="cancelledEntries"></mat-checkbox>
                                     </div>
                                 </div>
                             </div>
@@ -200,7 +200,7 @@
                                     <div class="row">
                                         <div class="pr-0 col-sm-3 col-12 switch-wrapper">
                                             <div class="checkbox square-switch">
-                                                <mat-slide-toggle id="includeInventory" formControlName="includeInventory">
+                                                <mat-slide-toggle [color]="materialColorPalette" id="includeInventory" formControlName="includeInventory">
                                                     <span class="pull-left"
                                                         *ngIf="advanceSearchForm.get( 'inventory.includeInventory').value">{{commonLocaleData?.app_include}}</span>
                                                     <span class="pull-right"
@@ -232,7 +232,7 @@
                                         <div class="col-6 col-md-6">
                                             <div class="form-group">
                                                 <mat-form-field appearance="fill">
-                                                    <input matInput type="text" class="form-control" decimalDigitsDirective
+                                                    <input matInput type="text" class="form-control mat-field-border pd-0" decimalDigitsDirective
                                                     [DecimalPlaces]="4" formControlName="quantity"
                                                     [placeholder]="commonLocaleData?.app_quantity">
                                                 </mat-form-field>    
@@ -252,7 +252,7 @@
                                             <div class="form-group">
                                                 <mat-form-field appearance="fill">
                                                     <input matInput type="text" decimalDigitsDirective [DecimalPlaces]="3"
-                                                    class="form-control" formControlName="itemValue"
+                                                    class="form-control mat-field-border pd-0" formControlName="itemValue"
                                                     [placeholder]="commonLocaleData?.app_value">
                                                 </mat-form-field>
                                             </div>
@@ -271,13 +271,13 @@
                                         <div class="form-group">
                                             <mat-form-field appearance="fill">
                                                 <input matInput type="text" [placeholder]="commonLocaleData?.app_cheque_number"
-                                                formControlName="chequeNumber" class="form-control">
+                                                formControlName="chequeNumber" class="form-control mat-field-border pd-0">
                                             </mat-form-field>
                                         </div>
                                     </div>
                                     <div class="col-6 col-md-6">
                                         <div class="form-group">
-                                            <giddh-datepicker [placeholder]="commonLocaleData?.app_clearance_date" name="from"
+                                            <giddh-datepicker [cssClass]="'mat-field-border bdr form-control pd-0'" [placeholder]="commonLocaleData?.app_clearance_date" name="from"
                                                 formControlName="dateOnCheque"></giddh-datepicker>
                                         </div>
                                     </div>
@@ -292,7 +292,7 @@
                                 <div class="form-group">
                                     <mat-form-field appearance="fill">
                                         <input matInput type="text" formControlName="description"
-                                        [placeholder]="commonLocaleData?.app_description" class="form-control">
+                                        [placeholder]="commonLocaleData?.app_description" class="form-control mat-field-border pd-0 description-field">
                                     </mat-form-field>    
                                 </div>
                             </div>

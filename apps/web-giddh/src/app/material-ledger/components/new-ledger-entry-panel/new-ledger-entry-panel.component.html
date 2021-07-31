@@ -70,14 +70,14 @@
                             class="item-padding text-right amount">
                             <label class="primary-color font-12">{{commonLocaleData?.app_amount}}</label>
                             <input matInput [disabled]="isReadOnly" id="new-ledger-enter-amount" *ngIf="!isAdvanceReceipt"
-                                type="text" name="amount" class="form-control text-right"
+                                type="text" name="amount" class="form-control text-right mat-field-border pd-0"
                                 [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                                 [mask]="inputMaskFormat" [(ngModel)]="currentTxn.amount" (focus)="hideDiscountTax()"
                                 (keyup)="amountChanged();calculateTotal()" />
 
                             <input matInput [disabled]="isReadOnly" id="new-ledger-enter-amount-advance-receipt"
                                 *ngIf="isAdvanceReceipt" type="text" name="advanceAmount"
-                                class="form-control text-right" [prefix]="selectedPrefixForCurrency"
+                                class="form-control text-right mat-field-border pd-0" [prefix]="selectedPrefixForCurrency"
                                 [suffix]="selectedSuffixForCurrency" disabled [mask]="inputMaskFormat"
                                 [(ngModel)]="currentTxn.advanceReceiptAmount" (focus)="hideDiscountTax()"
                                 (keyup)="amountChanged();calculateTotal()" />
@@ -171,7 +171,7 @@
                             <label class="primary-color font-12">{{commonLocaleData?.app_total}}</label>
                             <input matInput [disabled]="isReadOnly" type="text" id="ledger-total-amount"
                                 [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
-                                [mask]="inputMaskFormat" name="totalAmount" class="form-control text-right"
+                                [mask]="inputMaskFormat" name="totalAmount" class="form-control text-right mat-field-border pd-0"
                                 [(ngModel)]="currentTxn.total" (blur)="calculateAmount()"
                                 [disabled]="isAdvanceReceipt ? 'disabled' : null" />
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
@@ -199,11 +199,9 @@
             <div class="col-md-8" [ngClass]="{'offset-md-4' : !(currentTxn?.selectedAccount?.stock)}">
                 <div class="text-right mr-b1" *ngIf="currentTxn.selectedAccount && showTaxationDiscountBox">
                     <ng-container *ngIf="isTcsTdsApplicable">
-                        <mat-checkbox [disabled]="isReadOnly" id="ledger-other-tax"
+                        <mat-checkbox [color]="materialColorPalette" [disabled]="isReadOnly" id="ledger-other-tax"
                             [(ngModel)]="blankLedger.isOtherTaxesApplicable" *ngIf="!blankLedger.isOtherTaxesApplicable"
-                            (change)="toggleOtherTaxesAsidePane(blankLedger.isOtherTaxesApplicable)"></mat-checkbox>
-                        <span *ngIf="!blankLedger.isOtherTaxesApplicable">{{localeData?.other_tax}}</span>
-
+                            (change)="toggleOtherTaxesAsidePane(blankLedger.isOtherTaxesApplicable)">{{localeData?.other_tax}}</mat-checkbox>
                         <div class="clearfix">
                             <div *ngIf="blankLedger.isOtherTaxesApplicable" class="mr-t1 pull-right"
                                 [ngStyle]="{ 'width': totalTdElementWidth + 'px'}">
@@ -251,7 +249,7 @@
         </ng-container>
 
         <div class="clearfix">
-            <textarea matInput [disabled]="isReadOnly" id="ledger-description" rows="3" name="des" class="form-control"
+            <textarea matInput [disabled]="isReadOnly" id="ledger-description" rows="3" name="des" class="form-control mat-field-border"
                 [placeholder]="commonLocaleData?.app_description" [(ngModel)]="blankLedger.description"></textarea>
         </div>
 
@@ -348,21 +346,21 @@
                             <td *ngIf="blankLedger.voucherType &&
                                 (blankLedger.voucherType !== 'jr' && blankLedger.voucherType !== 'cntr' && blankLedger.voucherType !== 'rcpt'
                                 && blankLedger.voucherType !== 'advance-receipt')" class="pd-r1 pt-2 hidden-xs">
-                                <mat-checkbox [disabled]="isReadOnly" id="ledger-adjust-sale"
+                                <mat-checkbox [color]="materialColorPalette" [disabled]="isReadOnly" id="ledger-adjust-sale"
                                     name="adjustSales" (change)="handleVoucherAdjustment()"
                                     [(ngModel)]="isAdjustVoucherSelected"></mat-checkbox>
                                 {{localeData?.adjust_voucher | replace:'[VOUCHER_TYPE]':currentVoucherLabel}}
                             </td>
                             <td *ngIf="blankLedger.voucherType == 'rcpt' && !shouldShowAdvanceReceipt"
                                 class="pd-r1 pt-2 hidden-xs">
-                                <mat-checkbox [disabled]="isReadOnly" id="ledger-adjust-receipt"
+                                <mat-checkbox [color]="materialColorPalette" [disabled]="isReadOnly" id="ledger-adjust-receipt"
                                     name="adjustReceipt" (change)="handleVoucherAdjustment()"
                                     [(ngModel)]="isAdjustReceiptSelected"></mat-checkbox>
                                 {{localeData?.adjust_receipt}}
                             </td>
                             <td *ngIf="blankLedger.voucherType == 'advance-receipt' && shouldShowAdvanceReceipt"
                                 class="pd-r1 pt-2 hidden-xs">
-                                <mat-checkbox [disabled]="isReadOnly" id="ledger-adjust-advance-receipt"
+                                <mat-checkbox [color]="materialColorPalette" [disabled]="isReadOnly" id="ledger-adjust-advance-receipt"
                                     name="adjustAdvanceReceipt" (change)="handleVoucherAdjustment()"
                                     [(ngModel)]="isAdjustAdvanceReceiptSelected"></mat-checkbox>
                                 {{localeData?.adjust_advance_receipt}}
@@ -389,12 +387,12 @@
                                 <td class="pd-r1">
                                     <label class="default-color">{{commonLocaleData?.app_cheque_number}}</label>
                                     <input matInput [disabled]="isReadOnly" id="ledger-cheque-number" type="text"
-                                        [placeholder]="localeData?.cheque_number_placeholder" class="form-control"
+                                        [placeholder]="localeData?.cheque_number_placeholder" class="form-control mat-field-border pd-0"
                                         [(ngModel)]="blankLedger.chequeNumber" />
                                 </td>
                                 <td>
                                     <label class="default-color">{{commonLocaleData?.app_cheque_clearance_date}}</label>
-                                    <giddh-datepicker [disabled]="isReadOnly" id="chequeClearanceDate" [(ngModel)]="blankLedger.chequeClearanceDate"></giddh-datepicker>
+                                    <giddh-datepicker class="db" [cssClass]="'mat-field-border bdr form-control pd-0'" [disabled]="isReadOnly" id="cheque-clearance-date" [(ngModel)]="blankLedger.chequeClearanceDate"></giddh-datepicker>
                                 </td>
                             </tr>
                         </tbody>
@@ -450,10 +448,9 @@
             <div class="col-12 col-md-12 clearfix mr-t1">
                 <div class="mr-r1 form-group pull-left cp">
                     <label class="pull-left cp font-16">
-                        <mat-checkbox id="ledger-generate-voucher" class="pull-left" name="generateInvoice"
+                        <mat-checkbox [color]="materialColorPalette" id="ledger-generate-voucher" class="pull-left" name="generateInvoice"
                             [disabled]="((isAdvanceReceipt || isAdjustReceiptSelected || isAdjustVoucherSelected || blankLedger.voucherType === 'credit note' || blankLedger.voucherType === 'debit note') && blankLedger.generateInvoice) || isReadOnly ? 'disabled' : null"
-                            [(ngModel)]="blankLedger.generateInvoice"></mat-checkbox>
-                        {{commonLocaleData?.app_generate_voucher}}
+                            [(ngModel)]="blankLedger.generateInvoice">{{commonLocaleData?.app_generate_voucher}}</mat-checkbox>
                     </label>
                 </div>
                 <div class="pull-right">
@@ -523,11 +520,11 @@
                         (click)="addToDrOrCr('DEBIT',$event)">{{localeData?.add_to_dr}}
                     </button>
 
-                    <button mat-button id="ledger-add-button-cr" [hidden]="isBankTransaction" class="btn btn-default btn-sm"
+                    <button mat-button id="ledger-add-button-cr" [hidden]="isBankTransaction" class="btn btn-default btn-sm mr-l2"
                         (click)="addToDrOrCr('CREDIT',$event)">{{localeData?.add_to_cr}}
                     </button>
 
-                    <button mat-button id="saveLedger" class="btn btn-success btn-sm mr-0"
+                    <button mat-button id="saveLedger" class="btn btn-success btn-sm mr-0 mr-l2"
                         [disabled]="isFileUploading || isReadOnly" [ladda]="isLedgerCreateInProcess$ | async"
                         (click)="saveLedger()">{{commonLocaleData?.app_save}}
                     </button>
@@ -552,7 +549,7 @@
 </ng-template>
 <ng-template #rcmEntryCheckbox>
     <div *ngIf="currentTxn?.shouldShowRcmEntry" class="rcm-entry pd-b1 mt-b1">
-        <mat-checkbox [disabled]="isReadOnly" id="tourist-scheme-1"
+        <mat-checkbox [color]="materialColorPalette" [disabled]="isReadOnly" id="tourist-scheme-1"
             [ngModel]="isRcmEntry" (change)="!isReadOnly ? toggleRcmCheckbox($event) : ''"><span [innerHTML]="localeData?.transaction_available_rc"></span></mat-checkbox>
         <span class="text-light font-12"> ({{localeData?.tax_compulsory}})</span>
     </div>
@@ -562,7 +559,7 @@
         <div class="col-md-6">
             <div class="d-flex align-items-center">
                 <span class="pull-left">
-                    <mat-checkbox [disabled]="isReadOnly" id="tourist-scheme" name="touristSchemeApplicable"
+                    <mat-checkbox [color]="materialColorPalette" [disabled]="isReadOnly" id="tourist-scheme" name="touristSchemeApplicable"
                         [(ngModel)]="blankLedger.touristSchemeApplicable"
                         (change)="touristSchemeApplicableToggle($event)"></mat-checkbox>
                 </span>
