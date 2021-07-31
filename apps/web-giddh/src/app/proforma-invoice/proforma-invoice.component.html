@@ -2038,7 +2038,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="table-row" *ngIf="invFormData.voucherDetails.tcsTotal > 0">
+                                        <div class="table-row" *ngIf="isTcsPresent">
                                             <div class="table-cell">{{commonLocaleData?.app_tcs}}</div>
                                             <div class="table-cell figure-cell">
                                                 <span class="d-flex justify-content-end">
@@ -2051,7 +2051,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="table-row" *ngIf="invFormData.voucherDetails.tdsTotal > 0">
+                                        <div class="table-row" *ngIf="isTdsPresent">
                                             <div class="table-cell">{{commonLocaleData?.app_tds}}</div>
                                             <div class="table-cell figure-cell">
                                                 <span class="d-flex justify-content-end">
@@ -3127,7 +3127,7 @@
                                     </div>
                                 </div>
 
-                                <div class="table-row" *ngIf="invFormData.voucherDetails.tcsTotal > 0">
+                                <div class="table-row" *ngIf="isTcsPresent">
                                     <div class="table-cell">{{commonLocaleData?.app_tcs}}</div>
                                     <div class="table-cell figure-cell">
                                         <span class="d-flex justify-content-end">
@@ -3139,7 +3139,7 @@
                                     </div>
                                 </div>
 
-                                <div class="table-row" *ngIf="invFormData.voucherDetails.tdsTotal > 0">
+                                <div class="table-row" *ngIf="isTdsPresent">
                                     <div class="table-cell">{{commonLocaleData?.app_tds}}</div>
                                     <div class="table-cell figure-cell">
                                         <span class="d-flex justify-content-end">

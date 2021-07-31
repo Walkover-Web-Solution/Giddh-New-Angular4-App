@@ -597,6 +597,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private isSidebarExpanded: boolean = false;
     /** Stores the current voucher form detail */
     public currentVoucherFormDetails: VoucherForm;
+    /** True, if at least a single TCS type (payable or receivable) tax is present */
+    public isTcsPresent: boolean;
+    /** True, if at least a single TDS type (payable or receivable) tax is present */
+    public isTdsPresent: boolean;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -2877,12 +2881,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public calculateTcsTdsTotal() {
         let tcsSum: number = 0;
         let tdsSum: number = 0;
-
+        let isTcsPresent: boolean;
+        let isTdsPresent: boolean;
         this.invFormData.entries.forEach(entry => {
-            tcsSum += entry.otherTaxType === 'tcs' ? entry.otherTaxSum : 0;
-            tdsSum += entry.otherTaxType === 'tds' ? entry.otherTaxSum : 0;
+            if (entry.otherTaxType === 'tcs') {
+                tcsSum += entry.otherTaxSum;
+                isTcsPresent = true;
+            } else if (entry.otherTaxType === 'tds') {
+                tdsSum += entry.otherTaxSum;
+                isTdsPresent = true;
+            }
         });
-
+        this.isTcsPresent = isTcsPresent;
+        this.isTdsPresent = isTdsPresent;
         this.invFormData.voucherDetails.tcsTotal = tcsSum;
         this.invFormData.voucherDetails.tdsTotal = tdsSum;
         /** Call calculateBalanceDue if advance receipt adjusted for balance due added TDS TCS taxes  */
@@ -4325,6 +4336,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             entry.otherTaxSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
             entry.otherTaxModal = modal;
         } else {
+            entry.otherTaxType = undefined;
             entry.otherTaxSum = 0;
             entry.isOtherTaxApplicable = false;
             entry.otherTaxModal = new SalesOtherTaxesModal();
