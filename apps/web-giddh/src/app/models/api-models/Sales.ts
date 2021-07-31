@@ -327,7 +327,7 @@ export class SalesEntryClass {
     public isNewEntryInUpdateMode?: boolean;
     public isOtherTaxApplicable: boolean = false;
     public otherTaxSum: number;
-    public otherTaxType: 'tcs' | 'tds';
+    public otherTaxType: 'tcs' | 'tds' | undefined;
     public cessSum: number;
     public otherTaxModal: SalesOtherTaxesModal;
     public tcsCalculationMethod: SalesOtherTaxesCalculationMethodEnum;
