@@ -121,9 +121,9 @@
                                             class="icon-trash"></i>
                                     </button>
 
-                                    <button mat-raised-button color="accent"
+                                    <button mat-raised-button color="primary"
                                         [disabled]="currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2"
-                                        id="generate-invoice"
+                                        id="generate-invoice" class="mr-l1"
                                         (click)="performBulkAction('generate')"
                                         [matTooltip]="commonLocaleData?.app_generate_voucher" [matTooltipPosition]="'above'"><i
                                             class="icon-generate-invoice"></i>
@@ -131,7 +131,7 @@
 
                                     <button mat-raised-button
                                         [disabled]="currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2"
-                                        class="btn btn-success mr-0" id="attach-file"
+                                        class="btn btn-success mr-l1" id="attach-file"
                                         (click)="performBulkAction('upload', BulkUploadfileInput)"
                                         [matTooltip]="localeData?.attach_file" [matTooltipPosition]="'above'"><i
                                             class="icon-file-path"></i>
@@ -316,7 +316,7 @@
                                         </mat-grid-list>
                                     </div>
                                     <div class="ledger-book">
-                                        <div class="left-col-new" (clickOutside)="hideBankLedgerPopup($event)" (click)="$event.stopPropagation()">
+                                        <div class="left-col-new" (click)="$event.stopPropagation()">
                                             <mat-grid-list cols="3" rowHeight="43px" class="ledger-table transaction-mapped-table">
                                                 <mat-grid-tile class="bold no-right-border">
                                                     {{commonLocaleData?.app_date}}
@@ -456,7 +456,7 @@
                                                 </ng-container>    
                                             </mat-grid-list>
                                         </div>
-                                        <div class="right-col-new" (clickOutside)="hideBankLedgerPopup($event)" (click)="$event.stopPropagation()">
+                                        <div class="right-col-new" (click)="$event.stopPropagation()">
                                             <mat-grid-list cols="3" rowHeight="43px" class="ledger-table transaction-mapped-table">
                                                 <mat-grid-tile class="bold no-right-border">
                                                     {{commonLocaleData?.app_date}} 
@@ -859,8 +859,7 @@
                             </mat-grid-list>
 
                             <!-- region blank ledger-->
-                            <div class="width-100 h-table" no-tree (click)="$event.stopPropagation();"
-                                id="blank-ledger-container" (clickOutside)="hideNewLedgerEntryPopup($event)">
+                            <div class="width-100 h-table" no-tree id="blank-ledger-container" (click)="$event.stopPropagation()">
                                 <ng-container *ngFor="let txn of lc.blankLedger.transactions; let i = index">
                                     <div class="width-100 no-left-border" *ngIf="txn.type === 'DEBIT'">
                                         <div class="width-100 ledger-main">
@@ -1117,8 +1116,7 @@
                             <!-- endregion -->
 
                             <!-- region blank ledger-->
-                            <div class="width-100" no-tree (clickOutside)="hideNewLedgerEntryPopup($event)"
-                                (click)="$event.stopPropagation()">
+                            <div class="width-100" no-tree (click)="$event.stopPropagation()">
                                 <ng-container *ngFor="let txn of lc.blankLedger.transactions; let i = index">
                                     <div class="width-100" *ngIf="txn.type === 'CREDIT'">
                                         <div class="width-100 h-table ledger-main">
