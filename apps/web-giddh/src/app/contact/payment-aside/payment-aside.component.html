@@ -15,7 +15,7 @@
                             <label>{{localeData?.select_bank}}<span class="red-text">*</span></label>
                             <div class="relative">
                                 <img *ngIf="(isGetAllIntegratedBankInProgress$ | async)" class="dropdown-loader"
-                                    src="assets/images/loader.gif" alt="">
+                                    src="{{imgPath}}loader.gif" alt="">
                                 <sh-select [options]="selectIntegratedBankList" [disabled]="isPayClicked" #selectBankEle
                                     [multiple]="false" [ItemHeight]="33" [fixedValue]="selectedBankName"
                                     [isFilterEnabled]="true" class="text-left" [(ngModel)]="selectedBankUniqueName"
@@ -47,7 +47,7 @@
                             <label>{{localeData?.select_payor}}<span class="red-text">*</span></label>
                             <div class="relative">
                                 <img *ngIf="isPayorListInProgress" class="dropdown-loader"
-                                    src="assets/images/loader.gif" alt="">
+                                    src="{{imgPath}}loader.gif" alt="">
                                 <sh-select required [isRequired]="isPayorRequired" [placeholder]="localeData?.select_payor" [options]="payorsList" (selected)="selectPayor($event)" name="urn" [forceClearReactive]="forceClear$ | async"></sh-select>
                             </div>    
                         </div>
@@ -71,11 +71,11 @@
                         <div class="form-group mr-r15">
                             <label class="d-flex"> &nbsp; </label>
                             <button type="button" *ngIf="!isPayClicked" class="btn btn-success"
-                                [disabled]="!isBankSelectedForBulkPayment || !isValidData" [ladda]="isRequestInProcess"
+                                [disabled]="!isBankSelectedForBulkPayment || !selectedBankUrn || !isValidData" [ladda]="isRequestInProcess"
                                 (click)="payClicked()">{{commonLocaleData?.app_pay}}</button>
 
                             <button *ngIf="isPayClicked" class="btn btn-success"
-                                [disabled]="!isBankSelectedForBulkPayment || !isValidData || !receivedOtp"
+                                [disabled]="!isBankSelectedForBulkPayment || !selectedBankUrn || !isValidData || !receivedOtp"
                                 [ladda]="isRequestInProcess"
                                 (click)="confirmOTP()">{{commonLocaleData?.app_confirm}}</button>
                             <button type="button" *ngIf="isPayClicked" class="btn btn-primary"
@@ -134,7 +134,7 @@
                                                 class="text-danger">*</span></label>
                                         <input class="form-control" name="closingBalanceAmount{{entryIdx}}"
                                             maxLength="12" decimalDigitsDirective
-                                            (blur)="getTotalAmount();preventZero(item.closingBalanceAmount, entryIdx);"
+                                            (blur)="getTotalAmount(); getBankAccountPayorsList(); preventZero(item.closingBalanceAmount, entryIdx);"
                                             [mask]="inputMaskFormat" [(ngModel)]="item.closingBalanceAmount" type="text"
                                             [required]="!isPayClicked" [disabled]="isPayClicked">
                                     </div>

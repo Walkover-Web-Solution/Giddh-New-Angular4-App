@@ -407,7 +407,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @memberof PaymentAsideComponent
      */
     public selectBank(event: IOption): void {
+        let loadPayorList = false;
         if (event) {
+            loadPayorList = (this.requestObjectToGetOTP.uniqueName !== event.value);
             this.selectedBankUniqueName = event.value;
             this.isBankSelectedForBulkPayment = true;
             this.selectedBankName = event.label;
@@ -416,11 +418,15 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             this.otpReceiverNameMessage = '';
             this.requestObjectToGetOTP.uniqueName = event.value;
             this.requestObjectToGetOTP.bankName = event.label;
-            this.selectedBankUrn = '';
-            this.requestObjectToGetOTP.urn = '';
             this.totalAvailableBalance = event.additional.effectiveBal;
         }
         this.getTotalAmount();
+
+        if(loadPayorList) {
+            this.selectedBankUrn = '';
+            this.requestObjectToGetOTP.urn = '';
+            this.getBankAccountPayorsList();
+        }
     }
 
     /**
@@ -490,7 +496,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             }, 0);
         }
         this.totalSelectedAccountAmount = Number(this.totalSelectedAccountAmount);
-        this.getBankAccountPayorsList();
         if (selectedAccount && selectedAccount.length) {
             this.isValidData = selectedAccount.every(item => {
                 return item.closingBalanceAmount && item.remarks ? true : false;
@@ -692,6 +697,11 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 response?.body?.forEach(payor => {
                     this.payorsList.push({label: payor?.user?.name, value: payor?.urn});
                 });
+
+                if(this.payorsList?.length === 1) {
+                    this.selectPayor(this.payorsList[0]);
+                }
+
                 this.isPayorRequired = true;
             } else {
                 if(response?.body?.message) {

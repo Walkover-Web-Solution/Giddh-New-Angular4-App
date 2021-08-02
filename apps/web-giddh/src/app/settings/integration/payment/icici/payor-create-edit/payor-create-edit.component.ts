@@ -102,9 +102,7 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
                 this.accountUserForm.get('duration')?.patchValue(UNLIMITED_LIMIT);
             }
             
-            if(!this.accountUserForm.get('duration')?.value && this.accountUserForm.get('maxAmount')?.value) {
-                this.toaster.clearAllToaster();
-                this.toaster.errorToast(this.localeData?.payment?.duration_error);
+            if(!this.validateAmountLimit()) {
                 return;
             }
 
@@ -121,6 +119,22 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
                     this.toaster.errorToast(response?.message);
                 }
             });
+        }
+    }
+
+    /**
+     * This will validate the duration and amount field
+     *
+     * @returns {boolean}
+     * @memberof PayorCreateEditComponent
+     */
+    public validateAmountLimit(): boolean {
+        if((!this.accountUserForm.get('duration')?.value || this.accountUserForm.get('duration')?.value === UNLIMITED_LIMIT) && this.accountUserForm.get('maxAmount')?.value) {
+            this.toaster.clearAllToaster();
+            this.toaster.errorToast(this.localeData?.payment?.duration_error);
+            return false;
+        } else {
+            return true;
         }
     }
 
@@ -161,6 +175,10 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
         if (!this.accountUserForm?.invalid) {
             if (!this.accountUserForm.get('maxAmount')?.value) {
                 this.accountUserForm.get('duration')?.patchValue(UNLIMITED_LIMIT);
+            }
+
+            if(!this.validateAmountLimit()) {
+                return;
             }
 
             let request = { bankAccountUniqueName: this.activeBankAccount?.iciciDetailsResource?.uniqueName, urn: this.activePayorAccount?.urn };
