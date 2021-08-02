@@ -34,8 +34,12 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     @Input() public minDate: Date;
     /** Taking any css class as input to be applied on date input field */
     @Input() public cssClass: string = "";
+    /** Will show toggle icon if true */
+    @Input() public showToggleIcon: boolean = true;
     /** Emitting selected date object as output */
     @Output() public dateSelected: EventEmitter<any> = new EventEmitter<any>();
+    /** Emitting the state of datepicker (open/close) */
+    @Output() public datepickerState: EventEmitter<any> = new EventEmitter<any>();
 
     /** Internal data model */
     private innerValue: any = '';
@@ -100,6 +104,16 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
         let selectedDate = moment(event.value, GIDDH_DATE_FORMAT).toDate();
         this.onChangeCallback(selectedDate);
         this.dateSelected.emit(selectedDate);
+    }
+
+    /**
+     * Callback for datepicker state change
+     *
+     * @param {boolean} state
+     * @memberof GiddhDatepickerComponent
+     */
+    public emitDatepickerState(state: boolean): void {
+        this.datepickerState.emit(state);
     }
 
     //////// ControlValueAccessor //////////

@@ -94,6 +94,7 @@
 
                                         <td class="col-3" [attr.data-title]="commonLocaleData?.app_date">
                                             <giddh-datepicker
+                                                [showToggleIcon]="false"
                                                 [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                                                 [id]="'giddh-datepicker-left-' + i" name="datess"
                                                 [(ngModel)]="vm.selectedLedger.entryDate"
@@ -285,6 +286,7 @@
                                     <ng-container *ngIf="txn.type == 'CREDIT'">
                                         <td [attr.data-title]="commonLocaleData?.app_date" class="col-3">
                                             <giddh-datepicker
+                                                [showToggleIcon]="false"
                                                 [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                                                 [id]="'giddh-datepicker-right-' + i" name="datepic"
                                                 [(ngModel)]="vm.selectedLedger.entryDate"
@@ -967,6 +969,7 @@
                                             <label
                                                 class="default-color">{{commonLocaleData?.app_cheque_clearance_date}}</label>
                                             <giddh-datepicker
+                                                [showToggleIcon]="false"
                                                 class="db"
                                                 [cssClass]="'mat-field-border bdr form-control pd-0'"
                                                 [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"

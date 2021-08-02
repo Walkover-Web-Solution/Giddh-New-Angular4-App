@@ -1,6 +1,13 @@
 @charset "utf-8";
+@import '~@angular/material/theming';
 @import "../css/giddh-common.scss";
 @import "@angular/material/prebuilt-themes/indigo-pink.css";
+
+$custom-typography: mat-typography-config(
+    $font-family: "opensans-regular"
+);
+@include angular-material-typography($custom-typography);
+
 @import "../css/ngx-bs-datepicker.scss";
 
 /* table css need to removed at last  (start)
@@ -1165,12 +1172,12 @@ modal-container.modal {
     color: $nobel;
 }
 .price-input {
-    border: 1px solid $gainsboro;
-    font-size: 14px;
-    background: $white;
-    padding: 1px 2px;
+    border: 1px solid $gainsboro !important;
+    font-size: 14px !important;
+    background: #ffffff !important;
+    padding: 1px 2px !important;
     display: inline-block;
-    max-width: 90px;
+    max-width: 90px !important;
     min-width: 70px;
 }
 
@@ -3838,9 +3845,13 @@ label {
     background: $floral-white !important;
 }
 
-.dropdown-container .dropdown-menu li label span {
+.dropdown-container .dropdown-menu li label span:not(.mat-checkbox-inner-container) {
     max-width: calc(100% - 22px);
     color: $night-rider;
+}
+.dropdown-container .dropdown-menu li label span.mat-checkbox-inner-container {
+    color: $night-rider;
+    width: 38px;
 }
 
 .dropdown-container .dropdown-menu {

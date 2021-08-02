@@ -41,8 +41,7 @@
                         <label class="checkbox overflow-hidden width-100 p-0 m-0" (click)="$event.stopPropagation()">
                             <mat-checkbox class="pull-left" [id]="'update-ledger-discount-checkbox-' + idx"
                                 name="tax_{{idx}}" [(ngModel)]="discount.isActive" (change)="change()"
-                                (click)="$event.stopPropagation()"></mat-checkbox>
-                            <span class="pull-left text-ellipsis">{{discount.name}}</span>
+                                (click)="$event.stopPropagation()">{{discount.name}}</mat-checkbox>
                         </label>
                     </li>
                 </ng-container>

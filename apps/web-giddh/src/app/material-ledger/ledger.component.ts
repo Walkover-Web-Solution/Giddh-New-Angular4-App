@@ -1763,7 +1763,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let isThereBlankEntry = this.lc.blankLedger.transactions.some(s => s.selectedAccount);
         if (isThereBlankEntry) {
             this.toaster.errorToast(this.localeData?.save_unfinished_entry);
-            event.preventDefault();
             return false;
         }
         this.selectedCurrency = event.checked ? 1 : 0;
