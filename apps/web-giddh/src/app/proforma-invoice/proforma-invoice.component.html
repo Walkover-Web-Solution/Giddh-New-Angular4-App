@@ -1783,7 +1783,7 @@
                         <div class="row mr-0 ml-0 other-details-section">
                                 <div class="col-md-6">
                                     <!-- region other details-->
-                                    <div *ngIf="!this.currentVoucherFormDetails || this.currentVoucherFormDetails?.otherDetails">
+                                    <div *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.otherDetails">
                                         <div class="collapse-pane clearfix">
 
                                             <div class="collapse-pane-heading"
@@ -2934,7 +2934,7 @@
                         </div>
 
                         <div class="other-detail-card">
-                            <div *ngIf="!this.currentVoucherFormDetails || this.currentVoucherFormDetails?.otherDetails">
+                            <div *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.otherDetails">
                                 <div class="collapse-pane clearfix">
                                     <div class="collapse-pane-heading"
                                         (click)="isOthrDtlCollapsed = !isOthrDtlCollapsed">
