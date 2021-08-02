@@ -1,4 +1,4 @@
-<div class="ledger-panel giddh-overlap-block" (click)="hideDiscountTax()" #entryContent (keyup)="saveCtrlEnter($event)">
+<div class="ledger-panel giddh-overlap-block" (click)="hideDiscountTax()" #entryContent (keyup)="saveCtrlEnter($event)" (clickOutside)="clickedOutside($event)">
     <div class="wrapper">
         <!-- reverse charge transction start (make it functional by developer end) -->
         <ng-container *ngTemplateOutlet="rcmEntryCheckbox"></ng-container>
@@ -301,11 +301,11 @@
                                 *ngIf="(blankLedger.voucherType === 'sal' || blankLedger.voucherType === 'pur' || blankLedger.voucherType == 'pay')">
                                 <label class="default-color">{{commonLocaleData?.app_invoice_no}}</label>
                                 <input matInput [disabled]="isReadOnly" id="ledger-invoice-number" type="text"
-                                    [placeholder]="commonLocaleData?.app_invoice_no" class="form-control"
+                                    [placeholder]="commonLocaleData?.app_invoice_no" class="form-control mat-field-border pd-0"
                                     [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher" />
                             </td>
 
-                            <td class="pd-r1"
+                            <td class="pd-r1" [style.width.px]="190"
                                 *ngIf="blankLedger.voucherType == 'credit note' || blankLedger.voucherType === 'debit note'">
                                 <div class="form-group">
                                     <label class="default-color">{{commonLocaleData?.app_voucher_no}}</label>
@@ -392,7 +392,7 @@
                                 </td>
                                 <td>
                                     <label class="default-color">{{commonLocaleData?.app_cheque_clearance_date}}</label>
-                                    <giddh-datepicker class="db" [cssClass]="'mat-field-border bdr form-control pd-0'" [disabled]="isReadOnly" id="cheque-clearance-date" [(ngModel)]="blankLedger.chequeClearanceDate"></giddh-datepicker>
+                                    <giddh-datepicker class="db" [showToggleIcon]="false" [cssClass]="'mat-field-border bdr form-control pd-0'" [disabled]="isReadOnly" id="cheque-clearance-date" (datepickerState)="datepickerState($event)" [(ngModel)]="blankLedger.chequeClearanceDate"></giddh-datepicker>
                                 </td>
                             </tr>
                         </tbody>
