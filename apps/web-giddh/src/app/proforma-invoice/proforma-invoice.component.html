@@ -571,7 +571,7 @@
                                 <!-- endregion-->
 
                                 <!-- region email -->
-                                <div class="row mt-b1">
+                                <div class="row mt-1">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{commonLocaleData?.app_email_id}}</label>
                                     </div>
@@ -587,7 +587,7 @@
                                 <!-- endregion-->
 
                                 <!-- region mobile no -->
-                                <div class="row mt-b1">
+                                <div class="row mt-1">
 
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{commonLocaleData?.app_mobile_number}}</label>
@@ -604,7 +604,7 @@
                                 </div>
                                 <!-- endregion-->
                                 <!-- warehouse selection -->
-                                <div class="row mt-b1"
+                                <div class="row mt-1"
                                     *ngIf="shouldShowWarehouse && warehouses && warehouses.length > 1">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{commonLocaleData?.app_warehouse}}</label>
@@ -621,7 +621,7 @@
                                 </div>
                                 <!-- end warehouse field -->
 
-                                <div class="row mb-1 delivery-from-field" *ngIf="isPurchaseInvoice || currentVoucherFormDetails?.addressAllowed">
+                                <div class="row mb-1 delivery-from-field" *ngIf="isPurchaseInvoice">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{localeData?.deliver_to}}<span class="red-text">*</span></label>
                                     </div>
@@ -805,7 +805,7 @@
                                         </section>
                                     </div>
                                 </div>
-                                <div class="row mt-b1"
+                                <div class="row mt-1"
                                     *ngIf="isPurchaseInvoice && (!isUpdateMode || (isUpdateMode && poLinkUpdated))">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{localeData?.link_purchase_order}}</label>
@@ -846,7 +846,7 @@
                                 <!-- end Link purchase order -->
 
                                 <!-- region invoice no, invoice date, Expiry date -->
-                                <div class="row mt-b1">
+                                <div class="row mt-1">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label> {{ invoiceNoLabel }} </label>
                                     </div>
@@ -948,7 +948,7 @@
                                     </div>
                                 </div>
 
-                                <div class="row mt-b1" *ngIf="isMobileScreen">
+                                <div class="row mt-1" *ngIf="isMobileScreen">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ invoiceDateLabel }}</label>
                                     </div>
@@ -970,7 +970,7 @@
                                     </div>
                                 </div>
 
-                                <div class="row mt-b1"
+                                <div class="row mt-1"
                                     *ngIf="isMobileScreen && (currentVoucherFormDetails?.dueDate || isSalesInvoice || isPurchaseInvoice || isProformaInvoice || isEstimateInvoice)">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ invoiceDueDateLabel }}</label>
@@ -992,7 +992,7 @@
 
                                 <!-- reverse charge transction start -->
                                 <!-- for purchase record start -->
-                                <div class="row mt-b1" *ngIf="isPurchaseInvoice || currentVoucherFormDetails?.rcmAllowed">
+                                <div class="row mt-1" *ngIf="isPurchaseInvoice || currentVoucherFormDetails?.rcmAllowed">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3" *ngIf="!isMobileView">
                                         <label></label>
                                     </div>
@@ -1018,7 +1018,7 @@
                                 <!-- For Tourist Scheme start -->
                                 <!-- for sales invoice start (ngModelChange)="touristSchemeApplicableToggle($event)"-->
                                 <ng-container *ngIf="companyCountryCode === 'AE'">
-                                    <div class="row mt-b1" *ngIf="isSalesInvoice || isCashInvoice">
+                                    <div class="row mt-1" *ngIf="isSalesInvoice || isCashInvoice">
                                         <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3" *ngIf="!isMobileView">
                                             <label></label>
                                         </div>
@@ -1036,7 +1036,7 @@
                                     </div>
 
                                     <!-- endregion -->
-                                    <div class="row mt-b1 "
+                                    <div class="row mt-1 "
                                         *ngIf="(isSalesInvoice || isCashInvoice) && invFormData.touristSchemeApplicable ">
                                         <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                             <label>{{localeData?.passport_number}}</label>
