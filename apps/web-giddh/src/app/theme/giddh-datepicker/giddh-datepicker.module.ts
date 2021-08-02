@@ -4,7 +4,7 @@ import localeEn from '@angular/common/locales/en-GB';
 import localeHi from '@angular/common/locales/hi';
 import localeMr from '@angular/common/locales/mr';
 import { DateAdapter, MatNativeDateModule, MAT_DATE_FORMATS, NativeDateAdapter } from "@angular/material/core";
-import { formatDate, registerLocaleData } from "@angular/common";
+import { CommonModule, formatDate, registerLocaleData } from "@angular/common";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
@@ -38,7 +38,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         MatNativeDateModule,
         MatFormFieldModule,
         MatInputModule,
-        MatDatepickerModule
+        MatDatepickerModule,
+        CommonModule
     ],
     exports: [
         GiddhDatepickerComponent

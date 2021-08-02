@@ -237,6 +237,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     /** Color paletter for material */
     public materialColorPalette: string = MaterialColorPalette;
     public adjustmentDialogRef: any;
+    public isDatepickerOpen: boolean = false;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -984,26 +985,39 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
     }
 
+    public datepickerState(event: any): void {
+        this.isDatepickerOpen = event;
+    }
+
     @HostListener('window:click', ['$event'])
-    public clickedOutsideOfComponent(e) {
-        let classList = e.path.map(m => {
+    public clickedOutsideOfComponent(event) {
+        this.clickedOutside(event);
+    }
+
+    public clickedOutside(event: any): void {
+        let classList = event.path.map(m => {
             return m.classList;
         });
+
+        if(this.isDatepickerOpen) {
+            return;
+        }
 
         if (classList && classList instanceof Array) {
             const shouldNotClose = classList.some((className: DOMTokenList) => {
                 if (!className) {
                     return;
                 }
-                return className.contains('currencyToggler') || className.contains('mat-calendar');
+                return className.contains('currency-toggler') || className.contains("cdk-overlay-container") || className.contains('mat-calendar');
             });
 
             if (shouldNotClose) {
                 return;
             }
         }
-        if (!e.relatedTarget || !this.entryContent?.nativeElement.contains(e.relatedTarget)) {
-            this.clickedOutsideEvent.emit(e);
+
+        if (!event.relatedTarget || !this.entryContent?.nativeElement.contains(event.relatedTarget)) {
+            this.clickedOutsideEvent.emit(event);
         }
     }
 
@@ -1482,7 +1496,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     private openAdjustPaymentModal(): void {
-        this.adjustmentDialogRef = this.dialog.open(this.adjustPaymentModal);
+        this.adjustmentDialogRef = this.dialog.open(this.adjustPaymentModal, {
+            width: '980px'
+        });
     }
 
     /**
