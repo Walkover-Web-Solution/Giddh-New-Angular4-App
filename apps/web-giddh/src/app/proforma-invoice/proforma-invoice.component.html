@@ -574,7 +574,7 @@
 
                                 <!-- region email -->
                                 <div class="row mt-1">
-                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
+                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{commonLocaleData?.app_email_id}}</label>
                                     </div>
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
@@ -623,7 +623,7 @@
                                 </div>
                                 <!-- end warehouse field -->
 
-                                <div class="row mt-1 delivery-from-field" *ngIf="isPurchaseInvoice || currentVoucherFormDetails?.addressAllowed">
+                                <div class="row mt-1 delivery-from-field" *ngIf="isPurchaseInvoice">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{localeData?.deliver_to}}<span class="red-text">*</span></label>
                                     </div>
@@ -849,7 +849,7 @@
 
                                 <!-- region invoice no, invoice date, Expiry date -->
                                 <div class="row mt-1">
-                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
+                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label> {{ invoiceNoLabel }} </label>
                                     </div>
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
@@ -951,7 +951,7 @@
                                 </div>
 
                                 <div class="row mt-1" *ngIf="isMobileScreen">
-                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
+                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ invoiceDateLabel }}</label>
                                     </div>
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
@@ -1021,8 +1021,7 @@
                                 <!-- for sales invoice start (ngModelChange)="touristSchemeApplicableToggle($event)"-->
                                 <ng-container *ngIf="companyCountryCode === 'AE'">
                                     <div class="row mt-1" *ngIf="isSalesInvoice || isCashInvoice">
-                                        <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12"
-                                            *ngIf="!isMobileView">
+                                        <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3" *ngIf="!isMobileView">
                                             <label></label>
                                         </div>
                                         <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
