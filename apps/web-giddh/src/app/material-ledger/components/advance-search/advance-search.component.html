@@ -1,9 +1,11 @@
 <ng-container appTranslate [file]="'ledger/advance-search'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="setVoucherTypes($event)">
-    <giddh-page-loader *ngIf="isDefaultAccountsLoading || isDefaultStocksLoading || isDefaultGroupsLoading"></giddh-page-loader>
+    <giddh-page-loader *ngIf="isDefaultAccountsLoading || isDefaultStocksLoading || isDefaultGroupsLoading">
+    </giddh-page-loader>
     <div class="advance-search" [hidden]="isDefaultAccountsLoading || isDefaultStocksLoading || isDefaultGroupsLoading">
         <div class="modal-header theme-bg">
-            <h3 mat-dialog-title class="modal-title bg unbold" id="modal-title">{{commonLocaleData?.app_advance_search}}</h3>
+            <h3 mat-dialog-title class="modal-title bg unbold" id="modal-title">{{commonLocaleData?.app_advance_search}}
+            </h3>
             <div class="clear-filter-close">
                 <a class="cp" href="javascript:void(0);" (click)="resetAdvanceSearchModal()"
                     [matTooltip]="commonLocaleData?.app_reset_advance_search" [matTooltipPosition]="'above'">
@@ -22,8 +24,10 @@
                         <div class="col-sm-7">
                             <div class="input-group" (click)="showGiddhDatepicker($event)">
                                 <mat-form-field appearance="fill">
-                                    <input matInput type="text" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" required
-                                    [placeholder]="commonLocaleData?.app_select_range" class="form-control mat-field-border pd-0 date-field" />
+                                    <input matInput type="text"
+                                        [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" required
+                                        [placeholder]="commonLocaleData?.app_select_range"
+                                        class="form-control mat-field-border pd-0 date-field" />
                                     <span matSuffix class="cursor-pointer">
                                         <i class="icon-calender" aria-hidden="true"></i>
                                     </span>
@@ -44,8 +48,7 @@
                                     (onClear)="onDDClear('accountUniqueNames')" formControlName="accountUniqueNames"
                                     [isFilterEnabled]="true" [multiple]="true"
                                     [placeholder]="commonLocaleData?.app_select_accounts" [enableDynamicSearch]="true"
-                                    [isPaginationEnabled]="true"
-                                    (scrollEnd)="handleScrollEnd()"
+                                    [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()"
                                     (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"></sh-select>
                             </div>
                         </div>
@@ -61,8 +64,9 @@
                         <div class="col-sm-7">
                             <div class="form-group">
                                 <sh-select [options]="groups$ | async" name="groups"
-                                    (onClear)="onDDClear( 'groupUniqueNames')" formControlName="groupUniqueNames"
-                                    [isFilterEnabled]="true" [multiple]="true" [placeholder]="localeData?.select_groups" [enableDynamicSearch]="true" [isPaginationEnabled]="true"
+                                    (onClear)="onDDClear('groupUniqueNames')" formControlName="groupUniqueNames"
+                                    [isFilterEnabled]="true" [multiple]="true" [placeholder]="localeData?.select_groups"
+                                    [enableDynamicSearch]="true" [isPaginationEnabled]="true"
                                     (scrollEnd)="handleGroupScrollEnd()"
                                     (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"></sh-select>
                             </div>
@@ -82,7 +86,8 @@
                             <div class="row">
                                 <div class="pr-0 col-sm-3 col-12 switch-wrapper">
                                     <div class="checkbox square-switch">
-                                        <mat-slide-toggle [color]="materialColorPalette" id="includeParticulars" formControlName="includeParticulars">
+                                        <mat-slide-toggle [color]="materialColorPalette" id="includeParticulars"
+                                            formControlName="includeParticulars">
                                             <span class="pull-left"
                                                 *ngIf="advanceSearchForm.get('includeParticulars').value">{{commonLocaleData?.app_include}}</span>
                                             <span class="pull-right"
@@ -93,8 +98,9 @@
                                 <div class="col-sm-9 col-8 col-12">
                                     <div class="form-group">
                                         <sh-select [options]="accounts$ | async" name="particulars"
-                                            (onClear)="onDDClear( 'particulars')" formControlName="particulars"
-                                            [isFilterEnabled]="true" [multiple]="true" [placeholder]="commonLocaleData?.app_select_accounts"
+                                            (onClear)="onDDClear('particulars')" formControlName="particulars"
+                                            [isFilterEnabled]="true" [multiple]="true"
+                                            [placeholder]="commonLocaleData?.app_select_accounts"
                                             [enableDynamicSearch]="true" [isPaginationEnabled]="true"
                                             (scrollEnd)="handleScrollEnd()"
                                             (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"></sh-select>
@@ -116,11 +122,12 @@
                             <div class="row">
                                 <div class="pr-0 col-sm-3 col-12 switch-wrapper">
                                     <div class="checkbox square-switch">
-                                        <mat-slide-toggle [color]="materialColorPalette" id="includeVouchers" formControlName="includeVouchers">
+                                        <mat-slide-toggle [color]="materialColorPalette" id="includeVouchers"
+                                            formControlName="includeVouchers">
                                             <span class="pull-left"
-                                                *ngIf="advanceSearchForm.get( 'includeVouchers').value">{{commonLocaleData?.app_include}}</span>
+                                                *ngIf="advanceSearchForm.get('includeVouchers').value">{{commonLocaleData?.app_include}}</span>
                                             <span class="pull-right"
-                                                *ngIf="!advanceSearchForm.get( 'includeVouchers').value">{{commonLocaleData?.app_exclude}}</span>
+                                                *ngIf="!advanceSearchForm.get('includeVouchers').value">{{commonLocaleData?.app_exclude}}</span>
                                         </mat-slide-toggle>
                                     </div>
                                 </div>
@@ -128,7 +135,8 @@
                                     <div class="form-group">
                                         <sh-select [options]="voucherTypeList | async" name="particulars"
                                             (onClear)="onDDClear('vouchers')" formControlName="vouchers"
-                                            [isFilterEnabled]="true" [multiple]="true" [placeholder]="commonLocaleData?.app_select_accounts"></sh-select>
+                                            [isFilterEnabled]="true" [multiple]="true"
+                                            [placeholder]="commonLocaleData?.app_select_accounts"></sh-select>
                                     </div>
                                 </div>
                             </div>
@@ -145,7 +153,7 @@
                                 <div class="col-6 col-md-6">
                                     <div class="form-group">
                                         <sh-select [showClear]="false" [width]="'100%'" formControlName="amountOption"
-                                            (selected)="onRangeSelect( 'amount', $event)"
+                                            (selected)="onRangeSelect('amount', $event)"
                                             [options]="comparisonFilterDropDown$ | async" name="particulars"
                                             [placeholder]="commonLocaleData?.app_select_range"></sh-select>
                                     </div>
@@ -154,7 +162,7 @@
                                     <div class="form-group">
                                         <mat-form-field appearance="fill">
                                             <input matInput type="text" decimalDigitsDirective [DecimalPlaces]="2"
-                                            formControlName="amount" class="form-control mat-field-border pd-0">
+                                                formControlName="amount" class="form-control mat-field-border pd-0">
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -171,7 +179,8 @@
                             <div class="row">
                                 <div class="col-6 col-md-6">
                                     <div class="form-group">
-                                        <mat-checkbox [color]="materialColorPalette" formControlName="cancelledEntries"></mat-checkbox>
+                                        <mat-checkbox [color]="materialColorPalette" formControlName="cancelledEntries">
+                                        </mat-checkbox>
                                     </div>
                                 </div>
                             </div>
@@ -189,7 +198,7 @@
                 </div>
 
                 <!-- other details container -->
-                <ng-container *ngIf="advanceSearchForm.get( 'includeDescription').value">
+                <ng-container *ngIf="advanceSearchForm.get('includeDescription').value">
                     <div class="clearfix mt-2">
                         <div class=" mr-b1 clearfix">
                             <div class="row">
@@ -200,19 +209,21 @@
                                     <div class="row">
                                         <div class="pr-0 col-sm-3 col-12 switch-wrapper">
                                             <div class="checkbox square-switch">
-                                                <mat-slide-toggle [color]="materialColorPalette" id="includeInventory" formControlName="includeInventory">
+                                                <mat-slide-toggle [color]="materialColorPalette" id="includeInventory"
+                                                    formControlName="includeInventory">
                                                     <span class="pull-left"
-                                                        *ngIf="advanceSearchForm.get( 'inventory.includeInventory').value">{{commonLocaleData?.app_include}}</span>
+                                                        *ngIf="advanceSearchForm.get('inventory.includeInventory').value">{{commonLocaleData?.app_include}}</span>
                                                     <span class="pull-right"
-                                                        *ngIf="!advanceSearchForm.get( 'inventory.includeInventory').value">{{commonLocaleData?.app_exclude}}</span>
+                                                        *ngIf="!advanceSearchForm.get('inventory.includeInventory').value">{{commonLocaleData?.app_exclude}}</span>
                                                 </mat-slide-toggle>
                                             </div>
                                         </div>
                                         <div class="col-sm-9 col-12">
                                             <div class="form-group">
                                                 <sh-select [options]="stockListDropDown$ | async" name="inventory"
-                                                    (onClear)="onDDClear( 'inventory')" formControlName="inventories"
-                                                    [isFilterEnabled]="true" [multiple]="true" [placeholder]="commonLocaleData?.app_select_accounts"
+                                                    (onClear)="onDDClear('inventory')" formControlName="inventories"
+                                                    [isFilterEnabled]="true" [multiple]="true"
+                                                    [placeholder]="commonLocaleData?.app_select_accounts"
                                                     [enableDynamicSearch]="true" [isPaginationEnabled]="true"
                                                     (scrollEnd)="handleStockScrollEnd()"
                                                     (dynamicSearchedQuery)="onStockSearchQueryChanged($event)">
@@ -223,8 +234,9 @@
                                     <div class="row">
                                         <div class="col-6 col-md-6">
                                             <div class="form-group">
-                                                <sh-select [showClear]="false" [width]="'100%'" formControlName="inventoryQty"
-                                                    (selected)="onRangeSelect( 'inventoryQty', $event)"
+                                                <sh-select [showClear]="false" [width]="'100%'"
+                                                    formControlName="inventoryQty"
+                                                    (selected)="onRangeSelect('inventoryQty', $event)"
                                                     [options]="comparisonFilterDropDown$ | async" name="particulars"
                                                     [placeholder]="commonLocaleData?.app_select_range"></sh-select>
                                             </div>
@@ -232,18 +244,21 @@
                                         <div class="col-6 col-md-6">
                                             <div class="form-group">
                                                 <mat-form-field appearance="fill">
-                                                    <input matInput type="text" class="form-control mat-field-border pd-0" decimalDigitsDirective
-                                                    [DecimalPlaces]="4" formControlName="quantity"
-                                                    [placeholder]="commonLocaleData?.app_quantity">
-                                                </mat-form-field>    
+                                                    <input matInput type="text"
+                                                        class="form-control mat-field-border pd-0"
+                                                        decimalDigitsDirective [DecimalPlaces]="4"
+                                                        formControlName="quantity"
+                                                        [placeholder]="commonLocaleData?.app_quantity">
+                                                </mat-form-field>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-6 col-md-6">
                                             <div class="form-group">
-                                                <sh-select [showClear]="false" [width]="'100%'" formControlName="inventoryVal"
-                                                    (selected)="onRangeSelect( 'inventoryVal', $event)"
+                                                <sh-select [showClear]="false" [width]="'100%'"
+                                                    formControlName="inventoryVal"
+                                                    (selected)="onRangeSelect('inventoryVal', $event)"
                                                     [options]="comparisonFilterDropDown$ | async" name="particulars"
                                                     [placeholder]="commonLocaleData?.app_select_range"></sh-select>
                                             </div>
@@ -251,9 +266,10 @@
                                         <div class="col-6 col-md-6">
                                             <div class="form-group">
                                                 <mat-form-field appearance="fill">
-                                                    <input matInput type="text" decimalDigitsDirective [DecimalPlaces]="3"
-                                                    class="form-control mat-field-border pd-0" formControlName="itemValue"
-                                                    [placeholder]="commonLocaleData?.app_value">
+                                                    <input matInput type="text" decimalDigitsDirective
+                                                        [DecimalPlaces]="3" class="form-control mat-field-border pd-0"
+                                                        formControlName="itemValue"
+                                                        [placeholder]="commonLocaleData?.app_value">
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -270,14 +286,17 @@
                                     <div class="col-6 col-md-6">
                                         <div class="form-group">
                                             <mat-form-field appearance="fill">
-                                                <input matInput type="text" [placeholder]="commonLocaleData?.app_cheque_number"
-                                                formControlName="chequeNumber" class="form-control mat-field-border pd-0">
+                                                <input matInput type="text"
+                                                    [placeholder]="commonLocaleData?.app_cheque_number"
+                                                    formControlName="chequeNumber"
+                                                    class="form-control mat-field-border pd-0">
                                             </mat-form-field>
                                         </div>
                                     </div>
                                     <div class="col-6 col-md-6">
                                         <div class="form-group">
-                                            <giddh-datepicker [cssClass]="'mat-field-border bdr form-control pd-0'" [placeholder]="commonLocaleData?.app_clearance_date" name="from"
+                                            <giddh-datepicker [cssClass]="'mat-field-border bdr form-control pd-0'"
+                                                [placeholder]="commonLocaleData?.app_clearance_date" name="from"
                                                 formControlName="dateOnCheque"></giddh-datepicker>
                                         </div>
                                     </div>
@@ -292,8 +311,9 @@
                                 <div class="form-group">
                                     <mat-form-field appearance="fill">
                                         <input matInput type="text" formControlName="description"
-                                        [placeholder]="commonLocaleData?.app_description" class="form-control mat-field-border pd-0 description-field">
-                                    </mat-form-field>    
+                                            [placeholder]="commonLocaleData?.app_description"
+                                            class="form-control mat-field-border pd-0 description-field">
+                                    </mat-form-field>
                                 </div>
                             </div>
                         </div>
@@ -311,11 +331,11 @@
             <div class="modal-body">
                 <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
                     [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true"
-                    [ranges]="datePickerOptions" [selectedRangeLabel]="selectedRangeLabel" 
-                    [showCustomRangeLabel]="true" [showClearButton]="false" [showCancel]="true"
-                    [linkedCalendars]="true" [showDropdowns]="true" (rangeClicked)="dateSelectedCallback($event)" 
-                    (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false" 
-                    [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+                    [ranges]="datePickerOptions" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
+                    [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
+                    (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
+                    [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
+                    [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
             </div>
         </div>
     </ng-template>

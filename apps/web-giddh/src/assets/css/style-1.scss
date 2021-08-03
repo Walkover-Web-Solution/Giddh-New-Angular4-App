@@ -2807,10 +2807,28 @@ mat-dialog-container .modal-header {
         padding-left: 8px !important;
         width: 96%;
     }
-    input.mat-input-element.date-field, input.mat-input-element.description-field {
-        width: 98% !important;
+    input.mat-input-element {
+        &.date-field, &.description-field {
+            width: 98% !important;
+        }
     }
 }
 update-ledger-entry-panel .ledger-main .mat-form-field {
     min-width: auto !important;
+}
+.mat-snack-bar-container {
+    color: $white !important;
+    font-size: 13px;
+}
+.mat-snack-bar-container.error {
+    background-color: $red-toast !important;
+}
+.mat-snack-bar-container.success {
+    background-color: $green-toast !important;
+}
+.mat-snack-bar-container.warning {
+    background-color: $warning-toast !important;
+}
+.mat-snack-bar-container.info {
+    background-color: $info-toast !important;
 }

@@ -40,7 +40,7 @@ import { BorderConfiguration, IOption } from '../theme/ng-virtual-select/sh-opti
 import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
 import { NewLedgerEntryPanelComponent } from './components/new-ledger-entry-panel/new-ledger-entry-panel.component';
 import { UpdateLedgerEntryPanelComponent } from './components/update-ledger-entry-panel/update-ledger-entry-panel.component';
-import { BlankLedgerVM, LedgerVM, MaterialColorPalette, TransactionVM } from './ledger.vm';
+import { BlankLedgerVM, LedgerVM, MATERIAL_COLOR_PALETTE, TransactionVM } from './ledger.vm';
 import { download } from "@giddh-workspaces/utils";
 import { SearchService } from '../services/search.service';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
@@ -234,7 +234,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** True if user has ledger permission */
     public hasLedgerPermission: boolean = true;
     /** Color paletter for material */
-    public materialColorPalette: string = MaterialColorPalette;
+    public materialColorPalette: string = MATERIAL_COLOR_PALETTE;
 
     constructor(
         private store: Store<AppState>,
@@ -752,7 +752,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.isLedgerCreateSuccess$.subscribe(s => {
             if (s) {
-                this.toaster.successToast(this.localeData?.entry_created, 'Success');
+                this.toaster.showSnackBar("success", this.localeData?.entry_created, this.commonLocaleData?.app_success);
                 this.lc.showNewLedgerPanel = false;
                 this.lc.showBankLedgerPanel = false;
                 this.isMoreDetailsOpened = false;
@@ -935,7 +935,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (blankTransactionObj && blankTransactionObj.transactions && blankTransactionObj.transactions.length > 0) {
             this.store.dispatch(this.ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
         } else {
-            this.toaster.errorToast(this.localeData?.transaction_required, this.commonLocaleData?.app_error);
+            this.toaster.showSnackBar("error", this.localeData?.transaction_required, this.commonLocaleData?.app_error);
         }
     }
 
@@ -1009,7 +1009,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 let blob = this.generalService.base64ToBlob(d.body.uploadedFile, `image/${d.body.fileType}`, 512);
                 download(d.body.name, blob, `image/${d.body.fileType}`)
             } else {
-                this.toaster.errorToast(d.message);
+                this.toaster.showSnackBar("error", d.message);
             }
         });
     }
@@ -1027,7 +1027,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
                 download(`${activeAccount.name} - ${invoiceName}.pdf`, blob, 'application/pdf');
             } else {
-                this.toaster.errorToast(d.message);
+                this.toaster.showSnackBar("error", d.message);
             }
         });
     }
@@ -1254,7 +1254,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         if (this.lc.blankLedger.entryDate) {
             if (!moment(this.lc.blankLedger.entryDate, GIDDH_DATE_FORMAT).isValid()) {
-                this.toaster.errorToast(this.localeData?.invalid_date);
+                this.toaster.showSnackBar("error", this.localeData?.invalid_date);
                 this.loaderService.hide();
                 return;
             } else {
@@ -1264,7 +1264,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         if (this.lc.blankLedger.chequeClearanceDate) {
             if (!moment(this.lc.blankLedger.chequeClearanceDate, GIDDH_DATE_FORMAT).isValid()) {
-                this.toaster.errorToast(this.localeData?.invalid_cheque_clearance_date);
+                this.toaster.showSnackBar("error", this.localeData?.invalid_cheque_clearance_date);
                 this.loaderService.hide();
                 return;
             } else {
@@ -1280,7 +1280,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
             this.store.dispatch(this.ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
         } else {
-            this.toaster.errorToast(this.localeData?.transaction_required, this.commonLocaleData?.app_error);
+            this.toaster.showSnackBar("error", this.localeData?.transaction_required, this.commonLocaleData?.app_error);
             this.loaderService.hide();
         }
     }
@@ -1541,7 +1541,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 ...creditTrx.filter(f => f.isChecked).map(ct => ct.entryUniqueName),
             ]);
         if (!this.entryUniqueNamesForBulkAction || !this.entryUniqueNamesForBulkAction.length) {
-            this.toaster.errorToast(this.localeData?.select_one_entry, this.commonLocaleData?.app_error);
+            this.toaster.showSnackBar("error", this.localeData?.select_one_entry, this.commonLocaleData?.app_error);
             return;
         }
         switch (actionType) {
@@ -1555,7 +1555,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 fileInput.click();
                 break;
             default:
-                this.toaster.warningToast(this.localeData?.select_valid_action, this.commonLocaleData?.app_warning);
+                this.toaster.showSnackBar("warning", this.localeData?.select_valid_action, this.commonLocaleData?.app_warning);
         }
     }
 
@@ -1706,10 +1706,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.entryUniqueNamesForBulkAction = [];
                 this.getTransactionData();
                 this.isFileUploading = false;
-                this.toaster.successToast(this.localeData?.file_uploaded);
+                this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
             } else {
                 this.isFileUploading = false;
-                this.toaster.errorToast(output.file.response.message);
+                this.toaster.showSnackBar("error", output.file.response.message);
             }
         }
     }
@@ -1721,7 +1721,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public openSelectFilePopup(fileInput: any) {
         if (!this.entryUniqueNamesForBulkAction || !this.entryUniqueNamesForBulkAction.length) {
-            this.toaster.errorToast(this.localeData?.select_one_entry, this.commonLocaleData?.app_error);
+            this.toaster.showSnackBar("error", this.localeData?.select_one_entry, this.commonLocaleData?.app_error);
             return;
         }
         fileInput.click();
@@ -1752,7 +1752,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public deleteBankTxn(transactionId) {
         this.ledgerService.DeleteBankTransaction(transactionId).pipe(takeUntil(this.destroyed$)).subscribe((res: BaseResponse<any, string>) => {
             if (res.status === 'success') {
-                this.toaster.successToast(this.localeData?.bank_transaction_deleted);
+                this.toaster.showSnackBar("success", this.localeData?.bank_transaction_deleted);
             }
         });
     }
@@ -1762,7 +1762,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public toggleCurrency(event) {
         let isThereBlankEntry = this.lc.blankLedger.transactions.some(s => s.selectedAccount);
         if (isThereBlankEntry) {
-            this.toaster.errorToast(this.localeData?.save_unfinished_entry);
+            this.toaster.showSnackBar("error", this.localeData?.save_unfinished_entry);
             return false;
         }
         this.selectedCurrency = event.checked ? 1 : 0;
@@ -2302,12 +2302,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let transactionIds = this.entryUniqueNamesForBulkAction.map((transaction: any) => transaction.transactionId);
         let params = { transactionIds: transactionIds };
         this.ledgerService.deleteBankTransactions(this.trxRequest.accountUniqueName, params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.toaster.clearAllToaster();
             if (response?.status === "success") {
                 this.getBankTransactions();
-                this.toaster.successToast(response?.body);
+                this.toaster.showSnackBar("success", response?.body);
             } else {
-                this.toaster.errorToast(response?.message);
+                this.toaster.showSnackBar("error", response?.message);
             }
         });
     }
