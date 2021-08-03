@@ -46,7 +46,7 @@ export class ImportStatementComponent implements OnDestroy {
 
         if (!isValidFileType) {
             if (file && file.length > 0) {
-                this.toaster.errorToast(this.inputData?.localeData?.import_error);
+                this.toaster.showSnackBar("error", this.inputData?.localeData?.import_error);
             }
             this.selectedFile = null;
             this.postRequest.file = null;
@@ -67,10 +67,10 @@ export class ImportStatementComponent implements OnDestroy {
 
         this.ledgerService.importStatement(this.getRequest, this.postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response.status === 'success') {
-                this.toaster.successToast(this.inputData?.localeData?.import_success);
+                this.toaster.showSnackBar("success", this.inputData?.localeData?.import_success);
                 this.dialogRef.close(true);
             } else {
-                this.toaster.errorToast(response.message, response.code);
+                this.toaster.showSnackBar("error", response.message, response.code);
             }
         });
     }

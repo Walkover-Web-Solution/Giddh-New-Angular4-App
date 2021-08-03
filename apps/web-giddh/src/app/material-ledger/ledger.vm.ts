@@ -487,4 +487,4 @@ export const AVAILABLE_ITC_LIST = [
     { label: 'Others', value: AvailableItc.Others }
 ];
 
-export const MaterialColorPalette = "primary";
+export const MATERIAL_COLOR_PALETTE = "primary";

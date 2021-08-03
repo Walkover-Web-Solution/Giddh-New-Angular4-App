@@ -1174,7 +1174,7 @@ modal-container.modal {
 .price-input {
     border: 1px solid $gainsboro !important;
     font-size: 14px !important;
-    background: #ffffff !important;
+    background: $white !important;
     padding: 1px 2px !important;
     display: inline-block;
     max-width: 90px !important;
@@ -8022,10 +8022,6 @@ input.mat-input-element {
 .mat-form-field-underline {
     display: none !important;
 }
-// .cdk-overlay-container,
-// .cdk-global-overlay-wrapper {
-//     z-index: 99999;
-// }
 .mat-calendar-body-selected {
     background-color: $midnight-blue;
 }
