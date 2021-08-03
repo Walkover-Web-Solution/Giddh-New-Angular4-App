@@ -29,7 +29,6 @@ import {
     SubVoucher,
 } from 'apps/web-giddh/src/app/app.constant';
 import { AccountResponse, AccountResponseV2 } from 'apps/web-giddh/src/app/models/api-models/Account';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
 import { BehaviorSubject, Observable, of as observableOf, ReplaySubject } from 'rxjs';
@@ -66,7 +65,7 @@ import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
-import { AVAILABLE_ITC_LIST, BlankLedgerVM, MaterialColorPalette, TransactionVM } from '../../ledger.vm';
+import { AVAILABLE_ITC_LIST, BlankLedgerVM, MATERIAL_COLOR_PALETTE, TransactionVM } from '../../ledger.vm';
 import { LedgerDiscountComponent } from '../ledger-discount/ledger-discount.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../../theme/new-confirm-modal/confirm-modal.component';
@@ -235,17 +234,19 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     /** True if entry value is calculated inclusively */
     private isInclusiveEntry: boolean = false;
     /** Color paletter for material */
-    public materialColorPalette: string = MaterialColorPalette;
+    public materialColorPalette: string = MATERIAL_COLOR_PALETTE;
+    /** Dialog reference for adjustment modal */
     public adjustmentDialogRef: any;
+    /** True if datepicker is open */
     public isDatepickerOpen: boolean = false;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
         private generalService: GeneralService,
-        private _ledgerService: LedgerService,
-        private _loaderService: LoaderService,
+        private ledgerService: LedgerService,
+        private loaderService: LoaderService,
         private settingsUtilityService: SettingsUtilityService,
-        private _toasty: ToasterService,
+        private toaster: ToasterService,
         public dialog: MatDialog
     ) {
         this.discountAccountsList$ = this.store.pipe(select(p => p.settings.discount.discountList), takeUntil(this.destroyed$));
@@ -728,7 +729,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 })
                 .catch(e => {
                     if (e !== 'User canceled.') {
-                        this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                        this.toaster.showSnackBar("error", this.commonLocaleData?.app_something_went_wrong);
                     }
                     this.isFileUploading = false;
                 });
@@ -740,7 +741,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 })
                 .catch(err => {
                     if (err !== 'canceled') {
-                        this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                        this.toaster.showSnackBar("error", this.commonLocaleData?.app_something_went_wrong);
                     }
                     this.isFileUploading = false;
                 });
@@ -770,14 +771,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     this.isFileUploading = false;
                     this.blankLedger.attachedFile = result.body.uniqueName;
                     this.blankLedger.attachedFileName = result.body.uniqueName;
-                    this._toasty.successToast(this.localeData?.file_uploaded);
+                    this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
                 }
             }, (err) => {
                 // show toaster
                 this.isFileUploading = false;
                 this.blankLedger.attachedFile = '';
                 this.blankLedger.attachedFileName = '';
-                this._toasty.errorToast(err.body.message);
+                this.toaster.showSnackBar("error", err.body.message);
             });
     }
 
@@ -798,19 +799,19 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.uploadInput.emit(event);
         } else if (output.type === 'start') {
             this.isFileUploading = true;
-            this._loaderService.show();
+            this.loaderService.show();
         } else if (output.type === 'done') {
-            this._loaderService.hide();
+            this.loaderService.hide();
             if (output.file.response.status === 'success') {
                 this.isFileUploading = false;
                 this.blankLedger.attachedFile = output.file.response.body.uniqueName;
                 this.blankLedger.attachedFileName = output.file.response.body.name;
-                this._toasty.successToast(this.localeData?.file_uploaded);
+                this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
             } else {
                 this.isFileUploading = false;
                 this.blankLedger.attachedFile = '';
                 this.blankLedger.attachedFileName = '';
-                this._toasty.errorToast(output.file.response.message);
+                this.toaster.showSnackBar("success", output.file.response.message);
             }
         }
     }
@@ -843,7 +844,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public deleteAttachedFile() {
-        this._ledgerService.removeAttachment(this.blankLedger.attachedFile).subscribe((response) => {
+        this.ledgerService.removeAttachment(this.blankLedger.attachedFile).subscribe((response) => {
             if (response?.status === 'success') {
                 this.blankLedger.attachedFile = '';
                 this.blankLedger.attachedFileName = '';
@@ -851,9 +852,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     this.webFileInput.nativeElement.value = '';
                 }
                 this.detectChanges();
-                this._toasty.successToast(this.localeData?.remove_file);
+                this.toaster.showSnackBar("success", this.localeData?.remove_file);
             } else {
-                this._toasty.errorToast(response?.message)
+                this.toaster.showSnackBar("error", response?.message)
             }
         });
     }
@@ -870,7 +871,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         o.accountUniqueName = this.trxRequest.accountUniqueName;
         o.from = (this.trxRequest.from) ? moment(this.trxRequest.from).format(GIDDH_DATE_FORMAT) : "";
         o.to = (this.trxRequest.to) ? moment(this.trxRequest.to).format(GIDDH_DATE_FORMAT) : "";
-        this._ledgerService.GetReconcile(o.accountUniqueName, o.from, o.to, o.chequeNumber).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+        this.ledgerService.GetReconcile(o.accountUniqueName, o.from, o.to, o.chequeNumber).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             let data: BaseResponse<ReconcileResponse[], string> = res;
             if (data.status === 'success') {
                 if (data.body && data.body.length) {
@@ -892,13 +893,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     this.showErrMsgOnUI();
                 }
             } else {
-                this._toasty.errorToast(data.message, data.code);
+                this.toaster.showSnackBar("error", data.message, data.code);
             }
         });
     }
 
     public showErrMsgOnUI() {
-        this._toasty.warningToast(this.localeData?.no_matching_entry_found);
+        this.toaster.showSnackBar("warning", this.localeData?.no_matching_entry_found);
     }
 
     public confirmBankTransactionMap(item: ReconcileResponse) {
@@ -933,16 +934,16 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 accountUniqueName: this.trxRequest.accountUniqueName,
                 transactionId: this.blankLedger.transactionId
             };
-            this._ledgerService.MapBankTransactions(model, unqObj).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            this.ledgerService.MapBankTransactions(model, unqObj).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res.status === 'success') {
                     if (typeof (res.body) === 'string') {
-                        this._toasty.successToast(res.body);
+                        this.toaster.showSnackBar("success", res.body);
                     } else {
-                        this._toasty.successToast(this.localeData?.entry_mapped);
+                        this.toaster.showSnackBar("success", this.localeData?.entry_mapped);
                     }
                     this.clickedOutsideEvent.emit(false);
                 } else {
-                    this._toasty.errorToast(res.message, res.code);
+                    this.toaster.showSnackBar("error", res.message, res.code);
                 }
             });
         }

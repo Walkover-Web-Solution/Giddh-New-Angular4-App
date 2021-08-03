@@ -5,7 +5,7 @@ import { AppState } from '../../../store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { IDiscountList, LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
-import { MaterialColorPalette } from '../../ledger.vm';
+import { MATERIAL_COLOR_PALETTE } from '../../ledger.vm';
 
 @Component({
     selector: 'ledger-discount',
@@ -38,7 +38,7 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public prefixInput: string;
     @Input() public suffixInput: string;
     /** Color paletter for material */
-    public materialColorPalette: string = MaterialColorPalette;
+    public materialColorPalette: string = MATERIAL_COLOR_PALETTE;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 

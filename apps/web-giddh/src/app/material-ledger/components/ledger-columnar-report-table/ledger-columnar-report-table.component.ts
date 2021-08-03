@@ -129,7 +129,7 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
                 }
             } else {
                 this.backClick.emit(true);
-                this.toaster.errorToast(response.message);
+                this.toaster.showSnackBar("error", response.message);
             }
         });
     }
