@@ -137,7 +137,7 @@
                                                     [amount]="
                                                         enableVoucherAdjustmentMultiCurrency && isSalesInvoice
                                                             ? getConvertedBalanceDue()
-                                                            : invFormData.voucherDetails.balanceDue * exchangeRate
+                                                            : invFormData.voucherDetails.convertedBalanceDue
                                                     "
                                                     [currencySymbol]="baseCurrencySymbol"
                                                     [currencyCode]="companyCurrency"
@@ -908,7 +908,7 @@
                                                     adjustPaymentBalanceDueData === 0 &&
                                                     invFormData.voucherDetails.balanceDue === 0
                                                         ? getConvertedBalanceDue(true)
-                                                        : invFormData.voucherDetails.balanceDue * exchangeRate
+                                                        : invFormData.voucherDetails.convertedBalanceDue
                                                 "
                                                 [currencySymbol]="baseCurrencySymbol"
                                                 [currencyCode]="companyCurrency"
@@ -2094,7 +2094,7 @@
                                         <div class="differ-currency d-flex justify-content-end">
                                             <span *ngIf="!transaction.isStockTxn && isMulticurrencyAccount">
                                                 <amount-field
-                                                    [amount]="transaction.amount * exchangeRate || 0"
+                                                    [amount]="transaction.convertedAmount"
                                                     [currencySymbol]="baseCurrencySymbol"
                                                     [currencyCode]="companyCurrency"
                                                 >
@@ -2635,6 +2635,7 @@
                                                     class="form-control text-right"
                                                     [(ngModel)]="transaction.amount"
                                                     decimalDigitsDirective
+                                                    (ngModelChange)="calculateConvertedAmount(transaction)"
                                                     [prefix]="invFormData.accountDetails.currencySymbol"
                                                     [suffix]="selectedSuffixForCurrency"
                                                     [mask]="inputMaskFormat"
@@ -2643,7 +2644,7 @@
                                             <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                                 <span *ngIf="!transaction.isStockTxn">
                                                     <amount-field
-                                                        [amount]="transaction.amount * exchangeRate || 0"
+                                                        [amount]="transaction.convertedAmount"
                                                         [currencySymbol]="baseCurrencySymbol"
                                                         [currencyCode]="companyCurrency"
                                                     >
@@ -3786,7 +3787,7 @@
                                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                                         <amount-field
                                                             *ngIf="!transaction.isStockTxn"
-                                                            [amount]="transaction.amount * exchangeRate || 0"
+                                                            [amount]="transaction.convertedAmount"
                                                             [currencySymbol]="baseCurrencySymbol"
                                                             [currencyCode]="companyCurrency"
                                                         >
@@ -4361,7 +4362,7 @@
                                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                                         <amount-field
                                                             *ngIf="!transaction.isStockTxn"
-                                                            [amount]="transaction.amount * exchangeRate || 0"
+                                                            [amount]="transaction.convertedAmount"
                                                             [currencySymbol]="baseCurrencySymbol"
                                                             [currencyCode]="companyCurrency"
                                                         >
