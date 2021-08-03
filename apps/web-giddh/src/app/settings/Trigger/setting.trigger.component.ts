@@ -14,7 +14,7 @@ import { SearchService } from '../../services/search.service';
 import { GroupService } from '../../services/group.service';
 import { API_COUNT_LIMIT } from '../../app.constant';
 import { cloneDeep, each } from '../../lodash-optimized';
-import { NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 
 @Component({
     selector: 'setting-trigger',
@@ -102,12 +102,15 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
+    firstFormGroup: FormGroup;
+
     constructor(
         private groupService: GroupService,
         private store: Store<AppState>,
         private _settingsTriggersActions: SettingsTriggersActions,
         private searchService: SearchService,
-        private _toaster: ToasterService
+        private _toaster: ToasterService,
+        private _formBuilder: FormBuilder
     ) {
 
     }
@@ -147,6 +150,10 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.settings.isGetAllTriggersInProcess), takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = response;
+        });
+
+        this.firstFormGroup = this._formBuilder.group({
+            firstCtrl: ['', Validators.required]
         });
     }
 

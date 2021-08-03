@@ -3,29 +3,29 @@
     <div class="clearfix">
         <tabset [ngClass]="{'tab-integration': true, 'hide-payment-tab' : !isIndianCompany}" #integrationTab
             id="tab-integration">
-            <tab (selectTab)="loadSmsData($event); tabChanged('sms');">
+            <!--<tab (selectTab)="loadSmsData($event); tabChanged('sms');">
                 <ng-template tabHeading>
                     <span class="icon-chat2"></span> {{localeData?.sms?.tab_heading}}
                 </ng-template>
-
-                <!--<div class="box clearfix">
+            
+                <div class="box clearfix">
                     <h3 class="font-20 bold mb-2">{{localeData?.sms?.form_heading}}</h3>
                     <form #msgform="ngForm" (ngSubmit)="onSubmitMsgform(msgform)" class="smsForm">
                         <section ngModelGroup="smsFormObj" #smsFormObjCtrl="ngModelGroup">
                             <div class="row">
                                 <div class="form-group col-md-5 col-lg-3">
-
+            
                                     <label>{{localeData?.sms?.auth_key_label}}</label>
                                     <br>
-                                    <input type="text" [placeholder]="localeData?.sms?.auth_key_placeholder"
-                                        class="form-control" [ngModel]="smsFormObj.authKey" name="authKey" required />
-
+                                    <input type="text" [placeholder]="localeData?.sms?.auth_key_placeholder" class="form-control"
+                                        [ngModel]="smsFormObj.authKey" name="authKey" required />
+            
                                 </div>
                                 <div class="form-group col-md-5 col-lg-3">
                                     <label>{{localeData?.sms?.sender_id_label}}</label>
                                     <br>
-                                    <input type="text" [placeholder]="localeData?.sms?.sender_id_placeholder"
-                                        class="form-control" [ngModel]="smsFormObj.senderId" name="senderId" required />
+                                    <input type="text" [placeholder]="localeData?.sms?.sender_id_placeholder" class="form-control"
+                                        [ngModel]="smsFormObj.senderId" name="senderId" required />
                                 </div>
                                 <div class="form-group col-md-2 col-lg-3">
                                     <div class="empty-label">
@@ -38,44 +38,57 @@
                             </div>
                         </section>
                     </form>
-                </div>-->
+                </div>
+            </tab>-->
+
+            <tab (selectTab)="loadSmsData($event); tabChanged('msg-91');">
+                <ng-template tabHeading>
+                    <span class="icon-chat2"></span> MSG 91
+                </ng-template>
                 <div class="row">
                     <div class="col-md-6">
-                        <form #msgform="ngForm" (ngSubmit)="onSubmitMsgform(msgform)" class="smsForm">
-                            <mat-stepper orientation="vertical" #stepper ngModelGroup="smsFormObj" #smsFormObjCtrl="ngModelGroup">
+                        <form #msgform="ngForm">
+                            <mat-stepper orientation="vertical" #stepper>
                                 <mat-step [stepControl]="firstFormGroup">
                                     <form [formGroup]="firstFormGroup">
                                         <ng-template matStepLabel>{{localeData?.sms?.auth_key_label}}</ng-template>
                                         <mat-form-field appearance="fill">
                                             <mat-label>{{localeData?.sms?.auth_key_label}}</mat-label>
                                             <input matInput [placeholder]="localeData?.sms?.auth_key_placeholder"
-                                                formControlName="firstCtrl" [ngModel]="smsFormObj.authKey" name="authKey" required>
+                                                formControlName="firstCtrl" name="authKey" required>
                                         </mat-form-field>
                                         <div>
                                             <button mat-button matStepperNext class="btn btn-success">Next</button>
                                         </div>
                                     </form>
                                 </mat-step>
-                                <mat-step [stepControl]="secondFormGroup">
-                                    <form [formGroup]="secondFormGroup">
-                                        <ng-template matStepLabel>{{localeData?.sms?.sender_id_label}}</ng-template>
-                                        <mat-form-field appearance="fill">
-                                            <mat-label>{{localeData?.sms?.sender_id_label}}</mat-label>
-                                            <input matInput [placeholder]="localeData?.sms?.sender_id_placeholder"
-                                                formControlName="secondCtrl" [ngModel]="smsFormObj.senderId" name="senderId" required>
-                                        </mat-form-field>
+                                <mat-step>
+                                        <ng-template matStepLabel>Our IPs</ng-template>
+                                        <div class="row mr-b2 mr-t1">
+                                            <div class="col-md-6">
+                                                <div class="total-details-box mr-r05 border-none payment-receipt">
+                                                    <h5>
+                                                        <span>White List our IPs</span>
+                                                        <div>
+                                                            <span class="d-inline-flex number-total">
+                                                                192.168.11.11, 192.156.91.11
+                                                            </span>
+                                                        </div>
+                                                    </h5>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div>
                                             <button mat-button matStepperPrevious class="btn btn-default">Back</button>
                                             <button mat-button matStepperNext class="btn btn-success"
-                                                [disabled]="smsFormObjCtrl.invalid">{{commonLocaleData?.app_save}}</button>
+                                                >{{commonLocaleData?.verify}}</button>
                                         </div>
-                                    </form>
                                 </mat-step>
                                 <mat-step>
                                     <ng-template matStepLabel>Verification Successful</ng-template>
                                     <div class="mr-t1">
-                                        <button mat-button matStepperPrevious class="btn btn-default">Back</button>
-                                        <button mat-button (click)="stepper.reset()" class="btn btn-danger">Reset</button>
+                                        <button mat-button matStepperPrevious class="btn btn-sky-blue">Edit</button>
+                                        <button mat-button (click)="stepper.reset()" class="btn btn-danger">Delete</button>
                                     </div>
                                 </mat-step>
                             </mat-stepper>
@@ -83,23 +96,23 @@
                     </div>
                     <div class="col-md-6">
                         <div class="no-account">
-                            <a href="" class="cursor-pointer">Not having any account?</a>
+                            <a href="https://control.msg91.com/signup/" target="_blank" class="cursor-pointer">Not having any account?</a>
                         </div>
 
                     </div>
                 </div>
-
             </tab>
+            
 
             <tab (selectTab)="loadEmailData($event); tabChanged('email');">
                 <ng-template tabHeading>
-                    <span class="icon-mail"></span> {{localeData?.email?.tab_heading}}
+                    <span class="icon-mail"></span> Gmail
                 </ng-template>
 
                 <div class="row">
                     <div class="col-md-6">
                 
-                        <form #emailform="ngForm" (ngSubmit)="onSubmitEmailform(emailform)">
+                        <form #emailform="ngForm">
                             <mat-stepper orientation="vertical" #stepper>
                                 <mat-step [stepControl]="firstFormGroup">
                                     <form [formGroup]="firstFormGroup">
@@ -135,42 +148,18 @@
                                         </div>
                                     </form>
                                 </mat-step>
-                                <mat-step [stepControl]="secondFormGroup">
-                                    <form [formGroup]="secondFormGroup">
-                                        <ng-template matStepLabel>{{localeData?.email?.auth_key_label}}</ng-template>
-                                        <mat-form-field appearance="fill">
-                                            <mat-label>{{localeData?.email?.auth_key_label}}</mat-label>
-                                            <input matInput formControlName="secondCtrl"
-                                                [placeholder]="localeData?.email?.auth_key_placeholder" [ngModel]="emailFormObj.authKey"
-                                                name="authKey" required>
-                                        </mat-form-field>
-                                        <div>
-                                            <button mat-button matStepperPrevious class="btn btn-default">Back</button>
-                                            <button mat-button matStepperNext class="btn btn-success">Next</button>
-                                        </div>
-                                    </form>
-                                </mat-step>
-                                <mat-step [stepControl]="thirdFormGroup">
-                                    <form [formGroup]="thirdFormGroup">
-                                        <ng-template matStepLabel>{{localeData?.email?.email_subject_label}}</ng-template>
-                                        <mat-form-field appearance="fill">
-                                            <mat-label>{{localeData?.email?.email_subject_label}}</mat-label>
-                                            <input matInput formControlName="thirdCtrl"
-                                                [placeholder]="localeData?.email?.email_subject_placeholder"
-                                                [ngModel]="emailFormObj.subject" name="subject" required>
-                                        </mat-form-field>
-                                        <div>
-                                            <button mat-button matStepperPrevious class="btn btn-default">Back</button>
-                                            <button mat-button matStepperNext class="btn btn-success"
-                                                [disabled]="emailform.invalid">{{commonLocaleData?.app_save}}</button>
-                                        </div>
-                                    </form>
+                                <mat-step>
+                                    <ng-template matStepLabel>Verify</ng-template>
+                                    <div class="mr-t1">
+                                        <button mat-button matStepperPrevious class="btn btn-default">Back</button>
+                                        <button mat-button class="btn btn-success">{{commonLocaleData?.verify}}</button>
+                                    </div>
                                 </mat-step>
                                 <mat-step>
                                     <ng-template matStepLabel>Verification Successful</ng-template>
                                     <div class="mr-t1">
-                                        <button mat-button matStepperPrevious class="btn btn-default">Back</button>
-                                        <button mat-button class="btn btn-danger" (click)="stepper.reset()">Reset</button>
+                                        <button mat-button matStepperPrevious class="btn btn-sky-blue">Edit</button>
+                                        <button mat-button class="btn btn-danger" (click)="stepper.reset()">Delete</button>
                                     </div>
                                 </mat-step>
                             </mat-stepper>
