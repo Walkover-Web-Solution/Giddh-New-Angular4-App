@@ -5,9 +5,6 @@ import { SnackBarComponent } from "./snackbar.component";
     declarations: [
         SnackBarComponent
     ],
-    imports: [
-
-    ],
     exports: [
         SnackBarComponent
     ]
