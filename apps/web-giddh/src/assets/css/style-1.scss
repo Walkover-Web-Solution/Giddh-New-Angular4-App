@@ -1258,19 +1258,19 @@ aside-menu-account .container-fluid {
     border-left: 7px solid $whisper-color;
 }
 
-.table-container > div > section.assets {
+.table-container > div > section.assets, .table-container > div > .cdk-virtual-scroll-viewport section.assets {
     border-left: 7px solid $bus-yellow;
 }
 
-.table-container > div > section.liabilities {
+.table-container > div > section.liabilities, .table-container > div > .cdk-virtual-scroll-viewport section.liabilities {
     border-left: 7px solid $cactus;
 }
 
-.table-container > div > section.income {
+.table-container > div > section.income, .table-container > div > .cdk-virtual-scroll-viewport section.income {
     border-left: 7px solid $cornflower-blue-dark;
 }
 
-.table-container > div > section.expenses {
+.table-container > div > section.expenses, .table-container > div > .cdk-virtual-scroll-viewport section.expenses {
     border-left: 7px solid $flamingo;
 }
 

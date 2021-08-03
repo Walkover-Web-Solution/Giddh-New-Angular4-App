@@ -8479,9 +8479,17 @@ body.update-scroll-hidden{
 .transactions-table.table-striped {
     white-space: nowrap;
 }
+.trial-balance-viewport {
+    height: 500px;
+}
 .stock-group-parent > ul{
     height: calc(100vh - 320px);
     overflow: auto;
+}
+.financial-report-account-detail-container {
+    .popover-arrow {
+        display: none;
+    }
 }
 /* responsive  starts here*/
 
