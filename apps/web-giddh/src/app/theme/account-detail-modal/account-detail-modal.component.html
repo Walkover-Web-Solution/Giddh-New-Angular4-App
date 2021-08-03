@@ -41,9 +41,9 @@
                                 <a href="javascript:;" (click)="performActions(2)">{{commonLocaleData?.app_generate_invoice}}</a>
                             </li>
 
-                            <li class="li-link">
+                            <!-- <li class="li-link">
                                 <a href="javascript:;" (click)="performActions(3, $event)">{{commonLocaleData?.app_send_sms}}</a>
-                            </li>
+                            </li> -->
 
                             <li class="li-link">
                                 <a href="javascript:;" (click)="performActions(4, $event)">{{commonLocaleData?.app_send_email}}</a>
@@ -62,7 +62,7 @@
 
 
     <!--Modal for Mail/SMS-->
-    <div class="modal fade border-radius-0" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true"
+    <div class="modal account-detail-modal fade border-radius-0" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true"
         (click)="$event.stopPropagation()">
         <div class="modal-dialog modal-md" style="margin:auto;margin-top: 200px">
 

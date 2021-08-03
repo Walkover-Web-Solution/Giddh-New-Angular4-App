@@ -905,7 +905,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             isDefault: filteredEntity.isDefault,
             entity: filteredEntity.entity
         }));
-        
         const requestObj = {
             taxNumber: addressDetails.formValue.taxNumber,
             stateCode: addressDetails.formValue.state,

@@ -488,7 +488,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         };
         this._authenticationService.saveGmailAuthCode(dataToSave).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res.status === 'success') {
-                this._toasty.successToast(this.localeData?.gmail_account_added, 'Success');
+                this._toasty.successToast(this.localeData?.gmail_account_added, this.commonLocaleData?.app_success);
             } else {
                 this._toasty.errorToast(res.message, res.code);
             }

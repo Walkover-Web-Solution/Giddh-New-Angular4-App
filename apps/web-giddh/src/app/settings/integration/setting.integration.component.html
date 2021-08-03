@@ -175,7 +175,6 @@
                     <span class="icon-card"></span> {{localeData?.collection?.tab_heading}}
                 </ng-template>
 
-
                 <div class="box clearfix mb-2">
                     <h3 class="font-20 bold mb-2">{{localeData?.collection?.razorpay_form_heading}}</h3>
                     <form #razorPayform="ngForm" novalidate class="">
@@ -256,7 +255,6 @@
                 <ng-template tabHeading>
                     <span class="icon-ecomm"></span> {{localeData?.ecommerce?.tab_heading}}
                 </ng-template>
-
                 <div class="mr-t2 box clearfix">
                     <h3 class="section-head mb-2">{{localeData?.ecommerce?.shopify_form_heading}}</h3>
                     <span
@@ -273,7 +271,7 @@
                         <span class="icon-payment"></span> {{localeData?.payment?.tab_heading}}
                     </ng-template>
                     <div class="mb-2 bank-logo">
-                        <img src="assets/images/ICICI-logo.png"/>
+                        <img src="{{imgPath}}ICICI-logo.png"/>
                     </div>
                     <div class="row">
                         <div class="form-group mr-l2">
@@ -306,7 +304,7 @@
                                         <span class="payment-updates view-only-field inline" *ngIf="bankAccount?.iciciDetailsResource?.paymentAlerts?.length > 0">
                                             <ng-container *ngFor="let alert of bankAccount?.iciciDetailsResource?.paymentAlerts; let i = index; trackBy: trackByAlertUniqueName;">{{alert?.name}}{{ (i < bankAccount?.iciciDetailsResource?.paymentAlerts?.length - 1) ? ", " : "" }}</ng-container>
                                         </span>
-                                        <span class="mr-l15 action-div">
+                                        <span class="mr-l1 action-div">
                                             <a href="javascript:;" class="icon-edit-pencil" (click)="openEditAccountModal(bankAccount)"></a>
                                         </span>
                                     </div>

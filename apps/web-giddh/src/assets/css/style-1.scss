@@ -251,7 +251,6 @@ aside-menu-account .container-fluid {
 .pd {
     padding: 5px;
 }
-
 .pd-1 {
     padding: 10px !important;
 }
@@ -287,7 +286,6 @@ aside-menu-account .container-fluid {
 .pd-r05 {
     padding-right: 5px;
 }
-
 .pd-t1 {
     padding-top: 10px;
 }
@@ -1252,7 +1250,7 @@ aside-menu-account .container-fluid {
     display: none;
 }
 
-.profitLoss.table-container > div > section {
+.profit-loss.table-container > div > section {
     border-left: 1px solid $whisper-color;
 }
 
@@ -1260,19 +1258,19 @@ aside-menu-account .container-fluid {
     border-left: 7px solid $whisper-color;
 }
 
-.table-container > div > section.assets {
+.table-container > div > section.assets, .table-container > div > .cdk-virtual-scroll-viewport section.assets {
     border-left: 7px solid $bus-yellow;
 }
 
-.table-container > div > section.liabilities {
+.table-container > div > section.liabilities, .table-container > div > .cdk-virtual-scroll-viewport section.liabilities {
     border-left: 7px solid $cactus;
 }
 
-.table-container > div > section.income {
+.table-container > div > section.income, .table-container > div > .cdk-virtual-scroll-viewport section.income {
     border-left: 7px solid $cornflower-blue-dark;
 }
 
-.table-container > div > section.expenses {
+.table-container > div > section.expenses, .table-container > div > .cdk-virtual-scroll-viewport section.expenses {
     border-left: 7px solid $flamingo;
 }
 
@@ -2669,12 +2667,17 @@ form#groupDetailForm {
     bs-daterangepicker-container,
     bs-datepicker-container {
         overflow-y: auto;
-        height: 300px;
+        height: auto;
         box-shadow: 0 0 10px 0 $wistful;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
     }
+
     .no-data {
         font-size: 26px;
     }
+
     #setting-tab .nav > li > a:hover {
         color: inherit !important;
     }

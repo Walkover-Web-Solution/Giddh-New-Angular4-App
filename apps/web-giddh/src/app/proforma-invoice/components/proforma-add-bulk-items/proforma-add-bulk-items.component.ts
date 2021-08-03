@@ -222,7 +222,7 @@ export class ProformaAddBulkItemsComponent implements OnDestroy {
      * @memberof ProformaAddBulkItemsComponent
      */
     public translationComplete(event: any): void {
-        if(event) {
+        if (event) {
             this.onSearchQueryChanged('');
 
             setTimeout(() => {

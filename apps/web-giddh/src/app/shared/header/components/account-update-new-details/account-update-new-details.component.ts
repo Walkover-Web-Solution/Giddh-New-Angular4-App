@@ -262,6 +262,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         // fill form with active account
         this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(acc => {
             if (acc) {
+                this.resetBankDetailsForm();
                 if (acc && acc.parentGroups[0].uniqueName) {
                     let col = acc.parentGroups[0].uniqueName;
                     this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
@@ -279,7 +280,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                             this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
                         }
                     });
-                    
                 }
 
                 let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
@@ -344,6 +344,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     if (accountDetails.addresses.length === 0) {
                         this.addBlankGstForm();
                     }
+                }
+                // render custom field data
+                if (accountDetails.customFields && accountDetails.customFields.length > 0) {
+                    accountDetails.customFields.map(item => {
+                        this.renderCustomFieldDetails(item, accountDetails.customFields.length);
+                    });
                 }
 
                 // render custom field data
@@ -1414,7 +1420,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             customField.push(this.initialCustomFieldDetailsForm(obj));
         }
     }
-
 
     /**
      * To initialize custom field form

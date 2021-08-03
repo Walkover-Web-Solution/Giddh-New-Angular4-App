@@ -156,6 +156,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public unlimitedLimit: string = UNLIMITED_LIMIT;
     /** This will hold active company data */
     public activeCompany: any;
+    /** Holds image path */
+    public imgPath: string = '';
 
     firstFormGroup: FormGroup;
     secondFormGroup: FormGroup;
@@ -191,7 +193,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public ngOnInit() {
-
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         //logic to switch to payment tab if coming from vedor tabs add payment
         if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
             this.selectTab(this.selectedTabParent);

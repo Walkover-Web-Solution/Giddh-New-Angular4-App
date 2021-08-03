@@ -327,7 +327,7 @@ export class SalesEntryClass {
     public isNewEntryInUpdateMode?: boolean;
     public isOtherTaxApplicable: boolean = false;
     public otherTaxSum: number;
-    public otherTaxType: 'tcs' | 'tds';
+    public otherTaxType: 'tcs' | 'tds' | undefined;
     public cessSum: number;
     public otherTaxModal: SalesOtherTaxesModal;
     public tcsCalculationMethod: SalesOtherTaxesCalculationMethodEnum;
@@ -385,14 +385,7 @@ export class OtherSalesItemClass {
     public message2?: string;
     public slogan?: any;
 
-    constructor() {
-        this.shippingDate = null;
-        this.shippedVia = null;
-        this.trackingNumber = null;
-        this.customField1 = null;
-        this.customField2 = null;
-        this.customField3 = null;
-    }
+    constructor() { }
 }
 
 /**

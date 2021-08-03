@@ -107,7 +107,7 @@
                 <thead class="thead-background1" (mouseleave)="showSelectAllItemCheckbox = false" [hidden]="!purchaseOrders.totalItems && !purchaseOrderPostRequest?.purchaseOrderNumber && !purchaseOrderPostRequest?.vendorName">
                     <tr (mouseenter)="showSelectAllItemCheckbox = true">
                         <th class="min-wid-check" width="3%">
-                            <div class="check-img">
+                            <div class="check-image">
                                 <span *ngIf="!showSelectAllItemCheckbox && !allItemsSelected">#</span>
                                 <div class="table-checkbox-field" *ngIf="showSelectAllItemCheckbox || allItemsSelected">
                                     <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"

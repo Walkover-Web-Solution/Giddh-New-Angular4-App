@@ -21,7 +21,6 @@ import { AppState } from '../store';
 import { IOption } from '../theme/ng-select/ng-select';
 import { GstReport } from './constants/gst.constant';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-
 @Component({
     templateUrl: './gst.component.html',
     styleUrls: ['./gst.component.scss'],
@@ -130,6 +129,7 @@ export class GstComponent implements OnInit, OnDestroy {
         this.gstr2TransactionCounts$.subscribe(s => {
             this.gstr2TransactionCounts = s;
         });
+        this.store.dispatch(this._gstAction.SetActiveCompanyGstin(''));
     }
 
     public ngOnInit(): void {
@@ -203,7 +203,6 @@ export class GstComponent implements OnInit, OnDestroy {
             }
         });
     }
-
     /**
      * Unsubscribes from subscription
      *
@@ -213,7 +212,7 @@ export class GstComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.asideGstSidebarMenuState === 'out'
+        this.asideGstSidebarMenuState === 'out';
     }
 
     /**
@@ -341,7 +340,7 @@ export class GstComponent implements OnInit, OnDestroy {
      * @memberof GstComponent
      */
     public handleNavigation(type: string): void {
-        switch (type) {
+        switch(type) {
             case GstReport.Gstr1: case GstReport.Gstr2:
                 this.navigateToOverview(type);
                 break;

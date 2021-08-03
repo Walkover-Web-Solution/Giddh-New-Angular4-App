@@ -71,7 +71,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public showDiscount: boolean = false;
     /** Stores list of discount */
     public discountList: any[] = [];
+    /** Observable of company discounts list */
     public discountList$: Observable<IDiscountList[]>;
+    /** Selected discount list */
     public selectedDiscounts: any[] = [];
     /** To check applied taxes modified  */
     public isTaxesSaveDisable$: Observable<boolean> = of(true);
@@ -187,7 +189,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                 let arr: IOption[] = [];
                 if (taxes) {
                     if (activeGroup) {
-                        let applicableTaxes = activeGroupTaxHierarchy.applicableTaxes.map(p => p.uniqueName);
+                        let applicableTaxes = activeGroupTaxHierarchy?.applicableTaxes.map(p => p.uniqueName);
                         if (activeGroupTaxHierarchy) {
                             // prepare drop down options
                             this.companyTaxDropDown = differenceBy(taxes.map(p => {

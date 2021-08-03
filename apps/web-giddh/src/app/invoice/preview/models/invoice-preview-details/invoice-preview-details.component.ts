@@ -238,7 +238,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if ('items' in changes && changes.items.currentValue !== changes.items.previousValue) {
+        if ('items' in changes && changes.items.currentValue.filter(newItem => (!changes?.items?.previousValue || changes?.items?.previousValue?.every(oldItem => oldItem.uniqueName !== newItem?.uniqueName)))?.length) {
             this.filteredData = changes.items.currentValue;
             if (this.selectedItem && this.selectedItem.uniqueName) {
                 this.selectedItem = this.filteredData.filter(item => {
@@ -703,6 +703,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     this.detectChanges();
                 } else {
                     this.isAccountHaveAdvanceReceipts = false;
+                    this.detectChanges();
                 }
             });
         }
@@ -794,7 +795,14 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public getLinkedPurchaseOrders(): void {
         this.purchaseOrderNumbers = [];
         if (this.selectedItem.voucherType === VoucherTypeEnum.purchase) {
-            this._receiptService.GetPurchaseRecordDetails(this.selectedItem.account?.uniqueName, this.selectedItem.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
+            const apiCallObservable = this._generalService.voucherApiVersion === 2 ?
+                this._receiptService.getVoucherDetailsV4(this.selectedItem.account?.uniqueName, {
+                    invoiceNumber: this.selectedItem?.voucherNumber,
+                    voucherType: this.selectedItem.voucherType,
+                    uniqueName: this.selectedItem?.uniqueName
+                }) :
+                this._receiptService.GetPurchaseRecordDetails(this.selectedItem.account?.uniqueName, this.selectedItem.uniqueName);
+            apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
                 if (res && res.body) {
                     this.purchaseOrderNumbers = res.body.purchaseOrderDetails;
                 }

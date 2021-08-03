@@ -40,6 +40,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
     public disableStockButton: boolean = false;
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private _fb: FormBuilder, private _toasty: ToasterService, private _inventoryService: InventoryService,

@@ -17,6 +17,7 @@ export interface ReciptDeleteRequest {
 export class ReceiptVoucherDetailsRequest {
     public invoiceNumber: string;
     public voucherType: string;
+    public uniqueName?: string;
 }
 
 export interface ReceiptAccount {
@@ -188,8 +189,10 @@ class CurrencyClass {
 export class VoucherRequest {
     public number: string;
     public type: string;
-    constructor(voucherNumber: string, type: string) {
+    public uniqueName: string;
+    constructor(voucherNumber: string, type: string, uniqueName?: string) {
         this.number = voucherNumber ?? '';
         this.type = type ?? '';
+        this.uniqueName = uniqueName;
     }
 }

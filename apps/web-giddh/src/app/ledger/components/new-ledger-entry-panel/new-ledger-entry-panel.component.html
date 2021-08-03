@@ -394,7 +394,6 @@
                                             [currencySymbol]="false" [currencyCode]="false">
                                         </amount-field>
                                     </span>
-
                                 </span>
                             </td>
                         </tr>
@@ -492,7 +491,7 @@
 
                 <div class="pull-right">
                     <div class="clearfix">
-                        <p class="primary-color" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                        <p class="primary-color d-flex" *ngIf="isLedgerAccountAllowsMultiCurrency">
                             {{ localeData?.total_in_currency | replace:'[CURRENCY]':(selectedCurrency === 0) ?
                             (foreignCurrencyDetails?.code || '') : (baseCurrencyDetails?.code || '')}}:
                             <span class="d-inline-flex">
@@ -616,7 +615,7 @@
     </span>
 </ng-template>
 <ng-template #rcmEntryCheckbox>
-    <div *ngIf="currentTxn?.shouldShowRcmEntry" class="rcm-entry pd-b1 mt-b1">
+    <div *ngIf="currentTxn?.shouldShowRcmEntry" class="rcm-entry pd-b1 mt-1">
         <input [disabled]="isReadOnly" id="tourist-scheme-1" class="checkbox-custom" type="checkbox"
             [ngModel]="isRcmEntry" (click)="!isReadOnly ? toggleRcmCheckbox($event) : ''">
         <label for="tourist-scheme-1" class="checkbox-custom-label" #rcmPopup="bs-popover" [popover]="rcmTemplate"

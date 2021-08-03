@@ -166,7 +166,7 @@
                         [(ngModel)]="messageBody.subject" type="text" [placeholder]="localeData?.subject_placeholder" />
                     <h1 class="mr-b1">{{localeData?.message_body_label}}</h1>
                     <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control resize-none" rows="4"
-                        style="resize:none;" [placeholder]="localeData?.message_body_placeholder"></textarea>
+                        [placeholder]="localeData?.message_body_placeholder"></textarea>
                     <small class="mr-t05 mr-b05 grey">{{localeData?.message_body_tips}}</small>
                     <div class="row mr-t2">
                         <ul class="list-inline pills">

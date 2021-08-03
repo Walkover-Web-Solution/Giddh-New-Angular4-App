@@ -21,7 +21,6 @@ import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
 import { AsideMenuSalesOtherTaxesModule } from './aside-menu-sales-other-taxes/aside-menu-sales-other-taxes.module';
 import { DiscountListComponent } from './discount-list/discountList.component';
-
 export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost', 'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
 
 @NgModule({
