@@ -5,9 +5,6 @@ import { DeleteTemplateConfirmationModelComponent } from "./confirmation.modal.c
     declarations: [
         DeleteTemplateConfirmationModelComponent
     ],
-    imports: [
-
-    ],
     exports: [
         DeleteTemplateConfirmationModelComponent
     ]

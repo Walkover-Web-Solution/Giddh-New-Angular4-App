@@ -54,6 +54,8 @@ import { reducers } from './store';
 import { ShSelectModule } from './theme/ng-virtual-select/sh-select.module';
 import { QuicklinkModule, QuicklinkStrategy } from 'ngx-quicklink';
 import { DownloadComponent } from './download/download.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { SnackBarModule } from './theme/snackbar/snackbar.module';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -137,6 +139,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
             relativeLinkResolution: 'corrected'
         }),
         QuicklinkModule,
+        MatSnackBarModule,
+        SnackBarModule,
         ...CONDITIONAL_IMPORTS
     ],
     /**

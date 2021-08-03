@@ -14,7 +14,7 @@ import { take, takeUntil } from 'rxjs/operators';
 import { download } from '@giddh-workspaces/utils';
 import { GeneralService } from '../../../services/general.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MaterialColorPalette } from '../../ledger.vm';
+import { MATERIAL_COLOR_PALETTE } from '../../ledger.vm';
 
 @Component({
     selector: 'export-ledger',
@@ -42,7 +42,7 @@ export class ExportLedgerComponent implements OnInit {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Color paletter for material */
-    public materialColorPalette: string = MaterialColorPalette;
+    public materialColorPalette: string = MATERIAL_COLOR_PALETTE;
 
     constructor(private ledgerService: LedgerService, private toaster: ToasterService, private permissionDataService: PermissionDataService, private store: Store<AppState>, private generalService: GeneralService, @Inject(MAT_DIALOG_DATA) public inputData, public dialogRef: MatDialogRef<any>) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
@@ -97,17 +97,16 @@ export class ExportLedgerComponent implements OnInit {
                             return download(`${this.inputData?.accountUniqueName}.pdf`, blob, 'application/pdf');
                         }
                     } else if (response.body.message) {
-                        this.toaster.infoToast(response.body.message);
+                        this.toaster.showSnackBar("info", response.body.message);
                     }
                 }
             } else {
-                this.toaster.errorToast(response.message, response.code);
+                this.toaster.showSnackBar("error", response.message, response.code);
             }
         });
     }
 
     public sendLedgEmail() {
-        this.toaster.clearAllToaster();
         let data = this.emailData;
         const sendData = new MailLedgerRequest();
         data = (data) ? data.replace(RegExp(' ', 'g'), '') : "";
@@ -118,7 +117,7 @@ export class ExportLedgerComponent implements OnInit {
                 if (validateEmail(cdata[i])) {
                     sendData.recipients.push(cdata[i]);
                 } else {
-                    this.toaster.warningToast(this.localeData?.email_error, 'Warning');
+                    this.toaster.showSnackBar("warning", this.localeData?.email_error, this.commonLocaleData?.app_warning);
                     data = '';
                     sendData.recipients = [];
                     break;
@@ -147,10 +146,10 @@ export class ExportLedgerComponent implements OnInit {
             emailRequestParams.branchUniqueName = this.inputData?.advanceSearchRequest.branchUniqueName;
             this.ledgerService.MailLedger(sendData, this.inputData?.accountUniqueName, emailRequestParams).pipe(takeUntil(this.destroyed$)).subscribe(sent => {
                 if (sent.status === 'success') {
-                    this.toaster.successToast(sent.body, sent.status);
+                    this.toaster.showSnackBar("success", sent.body, sent.status);
                     this.emailData = '';
                 } else {
-                    this.toaster.errorToast(sent.message, sent.status);
+                    this.toaster.showSnackBar("error", sent.message, sent.status);
                 }
             });
         }
