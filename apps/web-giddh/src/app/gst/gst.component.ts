@@ -129,6 +129,7 @@ export class GstComponent implements OnInit, OnDestroy {
         this.gstr2TransactionCounts$.subscribe(s => {
             this.gstr2TransactionCounts = s;
         });
+        this.store.dispatch(this._gstAction.SetActiveCompanyGstin(''));
     }
 
     public ngOnInit(): void {
@@ -211,7 +212,7 @@ export class GstComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.asideGstSidebarMenuState === 'out'
+        this.asideGstSidebarMenuState === 'out';
     }
 
     /**
