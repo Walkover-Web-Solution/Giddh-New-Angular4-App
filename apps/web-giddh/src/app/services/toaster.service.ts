@@ -47,6 +47,14 @@ export class ToasterService {
         this._toaster.clear();
     }
 
+    /**
+     * This will show snack bar for alert messages
+     *
+     * @param {string} type
+     * @param {string} message
+     * @param {string} [title=APP_DEFAULT_TITLE]
+     * @memberof ToasterService
+     */
     public showSnackBar(type: string, message: string, title: string = APP_DEFAULT_TITLE): void {
         this.snackBar.openFromComponent(SnackBarComponent, {
             data: { title: title, message: message },
