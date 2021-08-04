@@ -22,7 +22,7 @@ import { SettingsDiscountActions } from 'apps/web-giddh/src/app/actions/settings
 import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/SettingsDiscount';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
-import { API_COUNT_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { API_COUNT_LIMIT, TCS_TDS_TAXES_TYPES } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
     selector: 'group-update',
@@ -709,6 +709,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         } else if (isCreditor) {
             // Only allow TDS payable and TCS receivable
             this.companyTaxDropDown = this.companyTaxDropDown.filter(tax => ['tdspay', 'tcsrc'].indexOf(tax?.additional?.taxType) > -1);
+        } else {
+            // Only normal (non-other) taxes
+            this.companyTaxDropDown = this.companyTaxDropDown.filter(tax => TCS_TDS_TAXES_TYPES.indexOf(tax?.additional?.taxType) === -1);
         }
     }
 }
