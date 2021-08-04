@@ -237,6 +237,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     public maxQuantity?: number;
     public purchaseOrderItemMapping?: { uniqueName: string; entryUniqueName: any; };
     public showCodeType: string;
+    public highPrecisionAmount?: number;
 
     constructor() {
         super();
@@ -475,6 +476,7 @@ export class VoucherDetailsClass {
     public balance?: any;
     public deposit?: any;
     public balanceDue?: number;
+    public convertedBalanceDue?: number;
     public balanceStatus?: string;
     public totalAsWords: string;
     public grandTotal: number;
