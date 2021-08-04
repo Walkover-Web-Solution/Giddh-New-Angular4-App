@@ -116,6 +116,7 @@
         "connected": "Connected",
         "used": "Used",
         "get_instant_overdraft": "Get Instant Overdraft",
-        "duration_error": "Please select duration for given amount"
+        "duration_error": "Please select duration for given amount",
+        "required_field_error": "Please fill all required fields"
     }
 }
