@@ -47,6 +47,8 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Hides the data while a new search is made to refresh the virtual list */
+    public hideData: boolean;
 
     constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
 
@@ -62,7 +64,11 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
                 if (newValue === '') {
                     this.showClearSearch = false;
                 }
-                this.cd.detectChanges();
+                this.hideData = true;
+                setTimeout(() => {
+                    this.hideData = false;
+                    this.cd.detectChanges();
+                }, 10);
             });
     }
 
