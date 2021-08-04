@@ -138,19 +138,21 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
                 this.paymentAlertsUsersList = [];
                 let index = 0;
 
-                this.paymentAlertsUsersList.push({ index: index, label: this.commonLocaleData?.app_select_all, value: this.selectAllRecords });
-                index++;
-
-                response.forEach(user => {
-                    this.paymentAlertsUsersList.push({ index: index, label: user.userName, value: user.userUniqueName });
-                    this.usersList.push({ index: index, label: user.userName, value: user.userUniqueName });
+                if(response?.length > 0) {
+                    this.paymentAlertsUsersList.push({ index: index, label: this.commonLocaleData?.app_select_all, value: this.selectAllRecords });
                     index++;
-                });
 
-                let isAllOptionsChecked = this.paymentAlerts.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords); 
-                if((isAllOptionsChecked?.length === this.paymentAlertsUsersList?.length - 1)) {
-                    // if all options checked and select all is unchecked, we need to show select all as selected
-                    this.paymentAlerts.push(this.selectAllRecords);
+                    response.forEach(user => {
+                        this.paymentAlertsUsersList.push({ index: index, label: user.userName, value: user.userUniqueName });
+                        this.usersList.push({ index: index, label: user.userName, value: user.userUniqueName });
+                        index++;
+                    });
+
+                    let isAllOptionsChecked = this.paymentAlerts.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords); 
+                    if((isAllOptionsChecked?.length === this.paymentAlertsUsersList?.length - 1)) {
+                        // if all options checked and select all is unchecked, we need to show select all as selected
+                        this.paymentAlerts.push(this.selectAllRecords);
+                    }
                 }
             }
         });
@@ -178,6 +180,9 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
                     this.toaster.errorToast(response?.message);
                 }
             });
+        } else {
+            this.toaster.clearAllToaster();
+            this.toaster.errorToast(this.localeData?.payment?.required_field_error);
         }
     }
 
