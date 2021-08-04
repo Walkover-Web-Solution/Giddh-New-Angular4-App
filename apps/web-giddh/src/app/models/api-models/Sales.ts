@@ -244,6 +244,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     public maxQuantity?: number;
     public purchaseOrderItemMapping?: { uniqueName: string; entryUniqueName: any; };
     public showCodeType: string;
+    public highPrecisionAmount?: number;
 
     constructor() {
         super();
