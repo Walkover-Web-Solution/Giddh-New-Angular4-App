@@ -1,4 +1,4 @@
-<div class="row row-2 tb-pl-bs-grid-row" [financial-accordion]="groupDetail"
+<div class="row row-2 tb-pl-bs-grid-row" [financial-accordion]="groupDetail" [hidden]="!groupDetail.isVisible"
     *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)">
     <div class="col-4 group" [ngStyle]="{'padding-left': padding+'px'}"
         [innerHTML]="groupDetail.groupName | uppercase | highlight:search">
@@ -41,7 +41,7 @@
 </ng-container>
 <ng-content></ng-content>
 <ng-template #templateSection let-account>
-    <section class="row-2 account overflow-visible" (dblclick)="accountInfo(account,$event)"
+    <section class="row-2 account overflow-visible" *ngIf="account.isVisible" (dblclick)="accountInfo(account,$event)"
         (clickOutside)="hideModal();accountDetailPopup?.hide()" [exclude]="'.row-item'">
         <div class="row row-item">
             <div class="col-4 account no-select" [ngStyle]="{'padding-left': (padding+20)+'px'}">

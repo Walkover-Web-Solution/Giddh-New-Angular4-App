@@ -61,9 +61,9 @@
                     </div>
                 </section>
                 <!--Start Grid-->
-                <div *ngIf="data$.groupDetails">
+                <div *ngIf="data$.groupDetails && !hideData">
                     <ng-template #groupDetails let-list let-padding="padding" let-isSubGroup="isSubGroup">
-                        <ng-container *ngIf="!expandAll || isSubGroup">
+                        <ng-container *ngIf="!expandAll || isSubGroup || (expandAll && search)">
                             <ng-container *ngFor="let grp of list; trackBy: trackByFn">
                                 <section class="row-1" *ngIf="grp.isVisible || grp.isCreated"
                                     [ngClass]="!isSubGroup ? grp.category : ''" grid-row [groupDetail]="grp" [padding]="padding"
@@ -74,7 +74,7 @@
                                 </section>
                             </ng-container>
                         </ng-container>
-                        <cdk-virtual-scroll-viewport *ngIf="expandAll && !isSubGroup" [itemSize]="35" class="trial-balance-viewport">
+                        <cdk-virtual-scroll-viewport *ngIf="expandAll && !isSubGroup && !search" [itemSize]="35" class="trial-balance-viewport">
                             <ng-container *cdkVirtualFor="let grp of list; trackBy: trackByFn">
                                 <section class="row-1" *ngIf="grp.isVisible || grp.isCreated"
                                     [ngClass]="!isSubGroup ? grp.category : ''" grid-row [groupDetail]="grp" [padding]="padding"
