@@ -2894,9 +2894,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public calculateStockEntryAmount(trx: SalesTransactionItemClass) {
         trx.amount = Number(trx.quantity) * Number(trx.rate);
+        trx.highPrecisionAmount = trx.amount;
     }
 
     public calculateEntryTotal(entry: SalesEntryClass, trx: SalesTransactionItemClass) {
+        this.calculateConvertedAmount(trx);
         this.calculateConvertedTotal(entry, trx);
         this.calculateSubTotal();
         this.calculateTotalDiscount();
@@ -2907,9 +2909,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass, fromTransactionField: boolean = false, event?: any) {
         if (trx?.accountName || trx?.accountUniqueName) {
-            if (fromTransactionField && this.transactionAmount === trx.amount) {
-                this.transactionAmount = 0;
-                return;
+            if (fromTransactionField) {
+                trx.highPrecisionAmount = trx.amount;
+                if (this.transactionAmount === trx.amount) {
+                    this.transactionAmount = 0;
+                    return;
+                }
             }
             if (event && event.discount && event.isActive) {
                 this.accountAssignedApplicableDiscounts.forEach(item => {
@@ -2953,7 +2958,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
 
             if (trx.isStockTxn) {
-                trx.rate = Number((trx.amount / trx.quantity).toFixed(this.highPrecisionRate));
+                trx.rate = Number(((trx.highPrecisionAmount ?? 0) / trx.quantity).toFixed(this.highPrecisionRate));
             }
 
             if (this.isUpdateMode && (this.isEstimateInvoice || this.isProformaInvoice)) {
@@ -3008,6 +3013,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // Calculate amount with inclusive tax
         transaction.amount = giddhRoundOff(((Number(transaction.total) + fixedDiscountTotal + 0.01 * fixedDiscountTotal * Number(taxTotal)) /
             (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), 2);
+        transaction.highPrecisionAmount = giddhRoundOff(((Number(transaction.total) + fixedDiscountTotal + 0.01 * fixedDiscountTotal * Number(taxTotal)) /
+            (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), this.highPrecisionRate);
         let perFromAmount = giddhRoundOff(((percentageDiscountTotal * transaction.amount) / 100), 2);
         entry.discountSum = giddhRoundOff(perFromAmount + fixedDiscountTotal, 2);
         if (isNaN(entry.discountSum)) {
@@ -3332,6 +3339,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             } else {
                                 if (selectedAcc.amount) {
                                     txn.amount = selectedAcc.amount.amountForAccount;
+                                    txn.highPrecisionAmount = txn.amount;
                                 }
                             }
 
@@ -3346,6 +3354,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }, () => {
                     txn.isStockTxn = false;
                     txn.amount = 0;
+                    txn.highPrecisionAmount = txn.amount;
                     txn.accountName = null;
                     txn.accountUniqueName = null;
                     txn.hsnOrSac = 'sac';
@@ -3363,6 +3372,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         } else {
             txn.isStockTxn = false;
             txn.amount = 0;
+            txn.highPrecisionAmount = txn.amount;
             txn.accountName = null;
             txn.accountUniqueName = null;
             txn.hsnOrSac = 'sac';
@@ -3481,6 +3491,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             transaction.rate = null;
             transaction.quantity = null;
             transaction.amount = 0;
+            transaction.highPrecisionAmount = transaction.amount;
             transaction.taxableValue = 0;
             this.handleWarehouseVisibility();
         }
@@ -3576,6 +3587,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         txn.rate = null;
         txn.quantity = null;
         txn.amount = null;
+        txn.highPrecisionAmount = txn.amount;
         txn.taxableValue = null;
         txn.sacNumber = null;
         txn.hsnNumber = null;
@@ -4728,6 +4740,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                 newTrxObj.accountName = trx.accountName;
                 newTrxObj.amount = trx.amount;
+                newTrxObj.highPrecisionAmount = trx.amount;
                 newTrxObj.description = trx.description;
                 newTrxObj.stockDetails = trx.stockDetails;
                 newTrxObj.taxableValue = trx.taxableValue;
@@ -5023,6 +5036,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 salesTransactionItemClass.accountUniqueName = t.account?.uniqueName;
                 salesTransactionItemClass.accountName = t.account.name;
                 salesTransactionItemClass.amount = t?.amount?.amountForAccount ?? 0;
+                salesTransactionItemClass.highPrecisionAmount = t?.amount?.amountForAccount ?? 0;
                 salesTransactionItemClass.hsnNumber = t.hsnNumber ?? entry.hsnNumber;
                 salesTransactionItemClass.sacNumber = t.sacNumber ?? entry.sacNumber;
                 salesTransactionItemClass.sacNumberExists = (t.sacNumber ?? entry.sacNumber) ? true : false;
@@ -5513,6 +5527,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public transactionAmountClicked(transaction: SalesTransactionItemClass) {
         if (Number(transaction.amount) === 0) {
             transaction.amount = undefined;
+            transaction.highPrecisionAmount = transaction.amount;
         }
         this.transactionAmount = transaction.amount;
     }
@@ -7669,7 +7684,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @param {SalesTransactionItemClass} transaction Current edited transaction
      * @memberof ProformaInvoiceComponent
      */
-     public calculateConvertedAmount(transaction: SalesTransactionItemClass): void {
+    public calculateConvertedAmount(transaction: SalesTransactionItemClass): void {
         if (this.isMulticurrencyAccount) {
             if (transaction.isStockTxn) {
                 transaction.convertedAmount = giddhRoundOff(transaction.quantity * ((transaction.rate * this.exchangeRate) ? transaction.rate * this.exchangeRate : 0), 2);
