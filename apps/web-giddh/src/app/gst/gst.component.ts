@@ -129,7 +129,6 @@ export class GstComponent implements OnInit, OnDestroy {
         this.gstr2TransactionCounts$.subscribe(s => {
             this.gstr2TransactionCounts = s;
         });
-        this.store.dispatch(this._gstAction.SetActiveCompanyGstin(''));
     }
 
     public ngOnInit(): void {
