@@ -687,6 +687,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             return;
         }
         this.isPayorRequired = false;
+        this.selectedBankUrn = '';
+        this.requestObjectToGetOTP.urn = '';
         this.forceClear$ = of({ status: true });
         this.isPayorListInProgress = true;
         this.settingsIntegrationService.getBankAccountPayorsList(this.selectedBankUniqueName, this.totalSelectedAccountAmount).pipe(take(1)).subscribe(response => {
@@ -703,6 +705,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
 
                 this.isPayorRequired = true;
             } else {
+                this.payorsList = [];
                 if(response?.message) {
                     this._toaster.clearAllToaster();
                     this._toaster.errorToast(response?.message);
