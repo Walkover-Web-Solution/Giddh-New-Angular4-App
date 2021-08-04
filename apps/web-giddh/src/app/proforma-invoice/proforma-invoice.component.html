@@ -1258,20 +1258,12 @@
                                             </div>
                                         </div>
                                         <div class="differ-currency d-flex justify-content-end">
-                                            <span *ngIf="!transaction.isStockTxn && isMulticurrencyAccount">
+                                            <span *ngIf="isMulticurrencyAccount">
                                                 <amount-field [amount]="transaction.convertedAmount"
                                                     [currencySymbol]="baseCurrencySymbol"
                                                     [currencyCode]="companyCurrency">
                                                 </amount-field>
                                             </span>
-                                            <span *ngIf="transaction.isStockTxn && isMulticurrencyAccount">
-                                                <amount-field
-                                                    [amount]="(transaction.quantity * ((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0))"
-                                                    [currencySymbol]="baseCurrencySymbol"
-                                                    [currencyCode]="companyCurrency">
-                                                </amount-field>
-                                            </span>
-
                                         </div>
                                     </td>
                                     <td class="item-discount" *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.discountAllowed">
@@ -1612,27 +1604,16 @@
                                                     name="transaction.amount_{{entryIdx}}"
                                                     class="form-control text-right" [(ngModel)]="transaction.amount"
                                                     decimalDigitsDirective
-                                                    (ngModelChange)="calculateConvertedAmount(transaction)"
                                                     [prefix]="invFormData.accountDetails.currencySymbol"
                                                     [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" />
                                             </div>
                                             <div class="differ-currency" *ngIf="isMulticurrencyAccount">
-                                                <span *ngIf="!transaction.isStockTxn">
+                                                <span>
                                                     <amount-field [amount]="transaction.convertedAmount"
                                                         [currencySymbol]="baseCurrencySymbol"
                                                         [currencyCode]="companyCurrency">
                                                     </amount-field>
                                                 </span>
-
-                                                <span *ngIf="transaction.isStockTxn">
-                                                    <amount-field
-                                                        [amount]="(transaction.quantity * ((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0))"
-                                                        [currencySymbol]="baseCurrencySymbol"
-                                                        [currencyCode]="companyCurrency">
-                                                    </amount-field>
-                                                </span>
-
-
                                             </div>
                                         </div>
                                     </td>
@@ -2376,18 +2357,11 @@
                                                     </p>
 
                                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount">
-                                                        <amount-field *ngIf="!transaction.isStockTxn"
+                                                        <amount-field
                                                             [amount]="transaction.convertedAmount"
                                                             [currencySymbol]="baseCurrencySymbol"
                                                             [currencyCode]="companyCurrency">
                                                         </amount-field>
-
-                                                        <amount-field *ngIf="transaction.isStockTxn"
-                                                            [amount]="(transaction.quantity * ((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0))"
-                                                            [currencySymbol]="baseCurrencySymbol"
-                                                            [currencyCode]="companyCurrency">
-                                                        </amount-field>
-
                                                     </div>
                                                 </div>
                                             </div>
@@ -2771,17 +2745,11 @@
                                                             [mask]="inputMaskFormat" />
                                                     </div>
                                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount">
-
-                                                        <amount-field *ngIf="!transaction.isStockTxn"
+                                                        <amount-field
                                                             [amount]="transaction.convertedAmount"
-                                                                                          [currencySymbol]="baseCurrencySymbol"
-                                                                                          [currencyCode]="companyCurrency">
-                                                                                        </amount-field>
-                                                        <amount-field *ngIf="transaction.isStockTxn"
-                                                            [amount]="(transaction.quantity * ((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0))"
-                                                                                          [currencySymbol]="baseCurrencySymbol"
-                                                                                          [currencyCode]="companyCurrency">
-                                                                                    </amount-field>
+                                                            [currencySymbol]="baseCurrencySymbol"
+                                                            [currencyCode]="companyCurrency">
+                                                        </amount-field>
                                                     </div>
                                                 </div>
 
