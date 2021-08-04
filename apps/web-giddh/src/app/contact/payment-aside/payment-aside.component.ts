@@ -587,7 +587,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
 
         if (this.timerOn) {
             this.timerOn = false;
-            this.receivedOtp = null;
             return;
         }
     }
@@ -704,9 +703,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
 
                 this.isPayorRequired = true;
             } else {
-                if(response?.body?.message) {
+                if(response?.message) {
                     this._toaster.clearAllToaster();
-                    this._toaster.errorToast(response?.body?.message);
+                    this._toaster.errorToast(response?.message);
                 }
             }
             this.isPayorListInProgress = false;

@@ -1014,7 +1014,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.settingsIntegrationService.getPayorRegistrationStatus(request).pipe(take(1)).subscribe(response => {
             payor.registrationStatus = response?.body?.response;
 
-            if(response?.body?.response !== "SUCCESS" && response?.body?.message) {
+            if(response?.body?.response !== "Success" && response?.body?.message) {
                 this.toasty.errorToast(response?.body?.message);
             }
         });
