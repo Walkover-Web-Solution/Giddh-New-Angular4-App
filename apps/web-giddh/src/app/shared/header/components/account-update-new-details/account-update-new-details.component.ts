@@ -47,7 +47,7 @@ import { digitsOnly } from '../../../helpers';
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
-import { API_COUNT_LIMIT, EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
+import { API_COUNT_LIMIT, EMAIL_VALIDATION_REGEX, TCS_TDS_TAXES_TYPES } from 'apps/web-giddh/src/app/app.constant';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 import { INameUniqueName } from 'apps/web-giddh/src/app/models/api-models/Inventory';
@@ -1758,6 +1758,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         } else if (this.activeGroupUniqueName === 'sundrycreditors' || this.activeParentGroup === 'sundrycreditors') {
             // Only allow TDS payable and TCS receivable
             return taxes.filter(tax => ['tdspay', 'tcsrc'].indexOf(tax?.additional?.taxType) > -1);
+        } else {
+            // Only normal (non-other) taxes
+            return taxes.filter(tax => TCS_TDS_TAXES_TYPES.indexOf(tax?.additional?.taxType) === -1);
         }
     }
 
