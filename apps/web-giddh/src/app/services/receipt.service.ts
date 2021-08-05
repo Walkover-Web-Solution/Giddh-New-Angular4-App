@@ -1,9 +1,6 @@
-import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable, OnInit, Optional } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-
-import { LoaderService } from '../loader/loader.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
 import {
@@ -36,18 +33,13 @@ import { HttpWrapperService } from './httpWrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
 @Injectable()
-export class ReceiptService implements OnInit {
+export class ReceiptService {
     private companyUniqueName: string;
     private user: UserDetails;
 
-    constructor(private _generalService: GeneralService, private _http: HttpWrapperService,
-        private _httpClient: HttpClient, private errorHandler: GiddhErrorHandler,
-        @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs, private _loaderService: LoaderService) {
+    constructor(private _generalService: GeneralService, private _http: HttpWrapperService, private errorHandler: GiddhErrorHandler,
+        @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
         this.companyUniqueName = this._generalService.companyUniqueName;
-    }
-
-    public ngOnInit() {
-        //
     }
 
     public UpdateReceipt(accountUniqueName: string, model: ReciptRequest): Observable<BaseResponse<string, ReciptRequest>> {
@@ -123,7 +115,7 @@ export class ReceiptService implements OnInit {
             advanceSearchRequest.grandTotalOperation = PURCHASE_RECORD_GRAND_TOTAL_OPERATION.LESS_THAN;
         }
 
-        if(request.purchaseOrderNumber) {
+        if (request.purchaseOrderNumber) {
             advanceSearchRequest.purchaseOrderNumber = request.purchaseOrderNumber;
         }
 
@@ -146,28 +138,6 @@ export class ReceiptService implements OnInit {
             }),
             catchError((e) => this.errorHandler.HandleCatch<string, ReciptDeleteRequest>(e, accountUniqueName))
         )
-        // let sessionId = this._generalService.sessionId;
-        // let args: any = {headers: {}};
-        // if (sessionId) {
-        //   args.headers['Session-Id'] = sessionId;
-        // }
-        // args.headers['Content-Type'] = 'application/json';
-        // args.headers['Accept'] = 'application/json';
-        // args.headers = new HttpHeaders(args.headers);
-        //
-        // return this._httpClient.request('delete', this.config.apiUrl + RECEIPT_API.DELETE
-        //   .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-        //   .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)),
-        //   {
-        //     body: queryRequest,
-        //     headers: args.headers,
-        //   }).pipe(
-        //   map((res) => {
-        //     let data: any = res;
-        //     data.request = queryRequest;
-        //     data.queryString = {accountUniqueName};
-        //     return data;
-        //   }), catchError((e) => this.errorHandler.HandleCatch<string, ReciptDeleteRequest>(e, accountUniqueName)));
     }
 
     public DownloadVoucher(model: DownloadVoucherRequest, accountUniqueName: string, isPreview: boolean = false): any {
@@ -233,9 +203,9 @@ export class ReceiptService implements OnInit {
             url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
         }
         return this._http.get(url).pipe(map((res) => {
-                let data: BaseResponse<SalesRegisteDetailedResponse, string> = res;
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<string, SalesRegisteDetailedResponse>(e, ReportsDetailedRequestFilter)));
+            let data: BaseResponse<SalesRegisteDetailedResponse, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, SalesRegisteDetailedResponse>(e, ReportsDetailedRequestFilter)));
     }
 
     /*
@@ -252,9 +222,9 @@ export class ReceiptService implements OnInit {
             url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
         }
         return this._http.get(url).pipe(map((res) => {
-                let data: BaseResponse<SalesRegisteDetailedResponse, string> = res;
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<string, SalesRegisteDetailedResponse>(e, ReportsDetailedRequestFilter)));
+            let data: BaseResponse<SalesRegisteDetailedResponse, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, SalesRegisteDetailedResponse>(e, ReportsDetailedRequestFilter)));
     }
 
     private createQueryString(str, model) {
@@ -333,13 +303,13 @@ export class ReceiptService implements OnInit {
         const companyUniqueName = String(requestObject.companyUniqueName);
         delete requestObject.companyUniqueName;
         let url = `${this.config.apiUrl}${RECEIPT_API.GET_ALL_ADVANCE_RECEIPTS}`
-        .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
-        .replace(':sortBy', requestObject && requestObject.sortBy ? requestObject.sortBy : '')
-        .replace(':sort', requestObject && requestObject.sort ? requestObject.sort : '')
-        .replace(':page', (requestObject && requestObject.page) ? String(requestObject.page) : '')
-        .replace(':count', requestObject && requestObject.count ? String(requestObject.count) : '')
-        .replace(':from', requestObject && requestObject.from ? requestObject.from : '')
-        .replace(':to', requestObject && requestObject.to ? requestObject.to : '');
+            .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+            .replace(':sortBy', requestObject && requestObject.sortBy ? requestObject.sortBy : '')
+            .replace(':sort', requestObject && requestObject.sort ? requestObject.sort : '')
+            .replace(':page', (requestObject && requestObject.page) ? String(requestObject.page) : '')
+            .replace(':count', requestObject && requestObject.count ? String(requestObject.count) : '')
+            .replace(':from', requestObject && requestObject.from ? requestObject.from : '')
+            .replace(':to', requestObject && requestObject.to ? requestObject.to : '');
         if (requestObject.branchUniqueName) {
             url = url.concat(`&branchUniqueName=${requestObject.branchUniqueName !== companyUniqueName ? requestObject.branchUniqueName : ''}`);
         }
@@ -357,9 +327,9 @@ export class ReceiptService implements OnInit {
         const companyUniqueName = String(requestObject.companyUniqueName);
         delete requestObject.companyUniqueName;
         let url = `${this.config.apiUrl}${RECEIPT_API.GET_ADVANCE_RECEIPTS_SUMMARY}`
-        .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
-        .replace(':from', requestObject && requestObject.from ? requestObject.from : '')
-        .replace(':to', requestObject && requestObject.to ? requestObject.to : '');
+            .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+            .replace(':from', requestObject && requestObject.from ? requestObject.from : '')
+            .replace(':to', requestObject && requestObject.to ? requestObject.to : '');
         if (requestObject.branchUniqueName) {
             url = url.concat(`&branchUniqueName=${requestObject.branchUniqueName !== companyUniqueName ? requestObject.branchUniqueName : ''}`);
         }

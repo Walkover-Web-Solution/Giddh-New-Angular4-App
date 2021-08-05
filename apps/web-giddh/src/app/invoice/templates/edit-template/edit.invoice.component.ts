@@ -5,7 +5,6 @@ import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { CustomTemplateResponse, GetInvoiceTemplateDetailsResponse, ISection } from '../../../models/api-models/Invoice';
-import * as _ from '../../../lodash-optimized';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { InvoiceTemplatesService } from '../../../services/invoice.templates.service';
 import { InvoiceUiDataService } from '../../../services/invoice.ui.data.service';
@@ -14,6 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 import { InvoiceTemplateModalComponent } from './modals/template-modal/template-modal.component';
 import { VoucherTypeEnum } from '../../../models/api-models/Sales';
 import { InvoiceService } from '../../../services/invoice.service';
+import { cloneDeep } from '../../../lodash-optimized';
 
 /**
  * Created by kunalsaxena on 6/29/17.
@@ -27,11 +27,11 @@ import { InvoiceService } from '../../../services/invoice.service';
 
 export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
 
-    @ViewChild('templateModal', {static: true}) public templateModal: ModalDirective;
-    @ViewChild('customTemplateConfirmationModal', {static: true}) public customTemplateConfirmationModal: ModalDirective;
-    @ViewChild('invoiceTemplatePreviewModal', {static: true}) public invoiceTemplatePreviewModal: ModalDirective;
+    @ViewChild('templateModal', { static: true }) public templateModal: ModalDirective;
+    @ViewChild('customTemplateConfirmationModal', { static: true }) public customTemplateConfirmationModal: ModalDirective;
+    @ViewChild('invoiceTemplatePreviewModal', { static: true }) public invoiceTemplatePreviewModal: ModalDirective;
     public voucherType: string;
-    @ViewChild(InvoiceTemplateModalComponent, {static: true}) public invoiceTemplateModalComponent: InvoiceTemplateModalComponent;
+    @ViewChild(InvoiceTemplateModalComponent, { static: true }) public invoiceTemplateModalComponent: InvoiceTemplateModalComponent;
 
     public selectedVoucherType: VoucherTypeEnum;
     public templateId: string = 'common_template_a';
@@ -634,6 +634,8 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
     public showinvoiceTemplatePreviewModal: boolean = false;
     public showtemplateModal: boolean = false;
     public templateType: any;
+    /** True if user has invoice template permissions */
+    public hasInvoiceTemplatePermissions: boolean = true;
 
     constructor(
         private _toasty: ToasterService,
@@ -644,7 +646,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         private invoiceService: InvoiceService,
         private _invoiceUiDataService: InvoiceUiDataService
     ) {
-        this.store.dispatch(this.invoiceActions.getTemplateState());
+        
     }
 
     /**
@@ -659,9 +661,10 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
+        this.store.dispatch(this.invoiceActions.getTemplateState());
         this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(route => {
-            if(route && route.selectedType) {
-                if(route.selectedType === VoucherTypeEnum.creditNote || route.selectedType === VoucherTypeEnum.debitNote) {
+            if (route && route.selectedType) {
+                if (route.selectedType === VoucherTypeEnum.creditNote || route.selectedType === VoucherTypeEnum.debitNote) {
                     this.voucherTypeChanged(route.selectedType);
                 } else {
                     this.voucherTypeChanged("sales");
@@ -684,7 +687,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         // Get custom created templates
         this.store.pipe(select(c => c.invoiceTemplate), takeUntil(this.destroyed$)).subscribe((s) => {
             if (s && s.customCreatedTemplates) {
-                this.customCreatedTemplates = _.cloneDeep(s.customCreatedTemplates);
+                this.customCreatedTemplates = cloneDeep(s.customCreatedTemplates);
                 this.customCreatedTemplates.sort((a, b) => {
                     if (a.uniqueName < b.uniqueName) {
                         return -1;
@@ -695,6 +698,10 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                     return 0;
                 });
             }
+        });
+
+        this.store.pipe(select(state => state.invoiceTemplate.hasInvoiceTemplatePermissions), takeUntil(this.destroyed$)).subscribe(response => {
+            this.hasInvoiceTemplatePermissions = response;
         });
     }
 
@@ -761,10 +768,10 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
      * createTemplate
      */
     public createTemplate(vouchertyp: string) {
-        let data = _.cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
+        let data = cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
         data.type = vouchertyp;
         this.templateType = vouchertyp;
-        let copiedTemplate = _.cloneDeep(data);
+        let copiedTemplate = cloneDeep(data);
         if (data.name) {
             data = this.newLineToBR(data);
             data.sections['header'].data['companyName'].label = '';
@@ -779,12 +786,28 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 data.fontDefault = data.fontSize;
                 data.fontMedium = data.fontSize - 2;
             }
-            if (!data.sections['footer'].data['textUnderSlogan'].display || !data?.sections['footer']?.data['textUnderSlogan']?.label) {
+            if (!data.sections['footer'].data['textUnderSlogan']?.display || !data?.sections['footer']?.data['textUnderSlogan']?.label) {
                 // If user checks the checkbox but didn't provide label then remove the selection
-                data.sections['footer'].data['textUnderSlogan'].display = false;
-                data.sections['footer'].data['textUnderSlogan'].label = '';
+                if (!data.sections['footer'].data['textUnderSlogan']) {
+                    data.sections['footer'].data['textUnderSlogan'] = {
+                        label: '',
+                        display: false
+                    };
+                } else {
+                    data.sections['footer'].data['textUnderSlogan'].display = false;
+                    data.sections['footer'].data['textUnderSlogan'].label = '';
+                }
             }
             delete data['uniqueName'];
+            if (data.templateType?.toLowerCase() !== 'gst_template_a' && data.templateType?.toLowerCase() !== 'gst_template_e') {
+                delete data?.sections?.header?.data?.showCompanyAddress;
+                delete data?.sections?.header?.data?.showQrCode;
+                delete data?.sections?.header?.data?.showIrnNumber;
+                delete data?.sections?.table?.data?.showDescriptionInRows;
+                delete data?.sections?.footer?.data?.showNotesAtLastPage;
+                delete data?.sections?.footer?.data?.showMessage2;
+                delete data?.sections?.footer?.data?.textUnderSlogan;
+            }
 
             this._invoiceTemplatesService.saveTemplates(data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res.status === 'success') {
@@ -805,7 +828,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
      * updateTemplate
      */
     public updateTemplate(templateType: string) {
-        let data = _.cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
+        let data = cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
         if (data.name) {
             data.updatedAt = null;
             data.updatedBy = null;
@@ -882,7 +905,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this._invoiceUiDataService.setTemplateUniqueName(template.uniqueName, 'preview', customCreatedTemplates, defaultTemplate);
-        // let data = _.cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
+        // let data = cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
         this.showinvoiceTemplatePreviewModal = true;
         this.invoiceTemplatePreviewModal.show();
     }
@@ -911,7 +934,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
      */
     public onSetTemplateAsDefault(template, templateType: string) {
         if (template) {
-            let selectedTemplate = _.cloneDeep(template);
+            let selectedTemplate = cloneDeep(template);
             this.store.dispatch(this.invoiceActions.setTemplateAsDefault(selectedTemplate.uniqueName, templateType));
         }
     }
@@ -922,7 +945,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
     public onDeleteTemplate(template) {
         if (template) {
             this.confirmationFlag = 'deleteConfirmation';
-            let selectedTemplate = _.cloneDeep(template);
+            let selectedTemplate = cloneDeep(template);
             this.deleteTemplateConfirmationMessage = `Are you sure you want to delete "<b>${selectedTemplate.name}</b>" template?`;
             this.selectedTemplateUniqueName = selectedTemplate.uniqueName;
             this.customTemplateConfirmationModal.show();
@@ -940,7 +963,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 this.invoiceTemplateModalComponent.editFiltersComponent.openTab('design');
             }
             if (this._invoiceUiDataService.unusedImageSignature) {
-                this.invoiceService.removeSignature(this._invoiceUiDataService.unusedImageSignature).subscribe(() => {});
+                this.invoiceService.removeSignature(this._invoiceUiDataService.unusedImageSignature).subscribe(() => { });
             }
             this._invoiceUiDataService.resetCustomTemplate();
             this._invoiceUiDataService.setLogoPath('');

@@ -10,7 +10,7 @@ import {
 import { BsModalService, BsModalRef, ModalDirective } from "ngx-bootstrap/modal";
 import { InventoryService } from '../../../services/inventory.service';
 import { ReplaySubject, Observable, of as observableOf } from 'rxjs';
-import { Store, select, createSelector } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { takeUntil, take } from 'rxjs/operators';
 import { NewBranchTransferListResponse, NewBranchTransferListPostRequestParams, NewBranchTransferListGetRequestParams, NewBranchTransferDownloadRequest } from '../../../models/api-models/BranchTransfer';
@@ -48,10 +48,11 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 })
 
 export class NewBranchTransferListComponent implements OnInit, OnDestroy {
-    @ViewChild('branchtransfertemplate', {static: true}) public branchtransfertemplate: ElementRef;
-    @ViewChild('deleteBranchTransferModal', {static: true}) public deleteBranchTransferModal: ModalDirective;
-    @ViewChild('senderReceiverField', {static: true}) public senderReceiverField;
-    @ViewChild('warehouseNameField', {static: true}) public warehouseNameField;
+
+    @ViewChild('branchtransfertemplate', { static: true }) public branchtransfertemplate: ElementRef;
+    @ViewChild('deleteBranchTransferModal', { static: true }) public deleteBranchTransferModal: ModalDirective;
+    @ViewChild('senderReceiverField', { static: true }) public senderReceiverField;
+    @ViewChild('warehouseNameField', { static: true }) public warehouseNameField;
 
     public modalRef: BsModalRef;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -212,7 +213,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
             } else {
                 if (this._generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
                 }
             }
         });
@@ -470,24 +471,24 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
 
         setTimeout(() => {
             if (this.inlineSearch === 'senderReceiver') {
-                if(this.senderReceiverField && this.senderReceiverField.nativeElement) {
+                if (this.senderReceiverField && this.senderReceiverField.nativeElement) {
                     this.senderReceiverField.nativeElement.focus();
                 }
             } else if (this.inlineSearch === 'warehouseName') {
-                if(this.warehouseNameField && this.warehouseNameField.nativeElement) {
+                if (this.warehouseNameField && this.warehouseNameField.nativeElement) {
                     this.warehouseNameField.nativeElement.focus();
                 }
             }
         }, 200);
     }
 
-  /**
-   * To show the datepicker
-   *
-   * @param {*} element
-   * @memberof NewBranchTransferListComponent
-   */
-  public showGiddhDatepicker(element: any): void {
+    /**
+     * To show the datepicker
+     *
+     * @param {*} element
+     * @memberof NewBranchTransferListComponent
+     */
+    public showGiddhDatepicker(element: any): void {
         if (element) {
             this.dateFieldPosition = this._generalService.getPosition(element.target);
         }
@@ -513,7 +514,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
      * @memberof NewBranchTransferListComponent
      */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }

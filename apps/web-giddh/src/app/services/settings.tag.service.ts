@@ -75,30 +75,4 @@ export class SettingsTagService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<TagRequest, TagRequest>(e, model)));
     }
-
-    //   /*
-    //   * Remove branch
-    //   */
-    //  public RemoveBranch(branchUniqueName: string): Observable<BaseResponse<any, any>> {
-    //     this.user = this._generalService.user;
-    //     this.companyUniqueName = this._generalService.companyUniqueName;
-    //     return this._http.delete(this.config.apiUrl + SETTINGS_TAG_API.REMOVE_BRANCH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':childUniqueName', encodeURIComponent(branchUniqueName))).map((res) => {
-    //       let data: BaseResponse<any, any> = res;
-    //       data.queryString = {};
-    //       return data;
-    //     }).catch((e) => this.errorHandler.HandleCatch<any, any>(e));
-    //   }
-
-    // /*
-    //   * Get all branches
-    //   */
-    //  public GetParentCompany(): Observable<BaseResponse<any, any>> {
-    //     this.user = this._generalService.user;
-    //     this.companyUniqueName = this._generalService.companyUniqueName;
-    //     return this._http.get(this.config.apiUrl + SETTINGS_TAG_API.GET_PARENT_COMPANY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
-    //       let data: BaseResponse<any, any> = res;
-    //       data.queryString = {};
-    //       return data;
-    //     }).catch((e) => this.errorHandler.HandleCatch<any, any>(e));
-    //   }
 }

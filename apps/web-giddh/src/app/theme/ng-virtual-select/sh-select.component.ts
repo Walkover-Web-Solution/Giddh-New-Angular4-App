@@ -1,6 +1,3 @@
-/**
- * Created by yonifarin on 12/3/16.
- */
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { BorderConfiguration, IOption } from './sh-options.interface';
@@ -36,7 +33,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Input() public notFoundMsg: string = 'No results found';
     @Input() public notFoundLinkText: string = 'Create New';
     @Input() public notFoundLink: boolean = false;
-    @ContentChild('notFoundLinkTemplate', {static: true}) public notFoundLinkTemplate: TemplateRef<any>;
+    @ContentChild('notFoundLinkTemplate', { static: true }) public notFoundLinkTemplate: TemplateRef<any>;
     @Input() public showNotFoundLinkAsDefault: boolean = false;
     @Input() public isFilterEnabled: boolean = true;
     @Input() public width: string = 'auto';
@@ -75,11 +72,11 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     /** To unsubscribe from the dynamic search query subscription */
     private stopDynamicSearch$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    @ViewChild('inputFilter', {static: false}) public inputFilter: ElementRef;
-    @ViewChild('mainContainer', {static: true}) public mainContainer: ElementRef;
-    @ViewChild('menuEle', {static: true}) public menuEle: ShSelectMenuComponent;
-    @ContentChild('optionTemplate', {static: true}) public optionTemplate: TemplateRef<any>;
-    @ViewChild('dd', {static: true}) public ele: ElementRef;
+    @ViewChild('inputFilter', { static: false }) public inputFilter: ElementRef;
+    @ViewChild('mainContainer', { static: true }) public mainContainer: ElementRef;
+    @ViewChild('menuEle', { static: true }) public menuEle: ShSelectMenuComponent;
+    @ContentChild('optionTemplate', { static: true }) public optionTemplate: TemplateRef<any>;
+    @ViewChild('dd', { static: true }) public ele: ElementRef;
     @Output() public onHide: EventEmitter<any[]> = new EventEmitter<any[]>();
     @Output() public onShow: EventEmitter<any[]> = new EventEmitter<any[]>();
     @Output() public onClear: EventEmitter<any> = new EventEmitter<any>(); // emits last cleared value
@@ -137,7 +134,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         if (!Array.isArray(val)) {
             val = [val];
         }
-        if (val.length > 0 && this.rows) {
+        if (val?.length > 0 && this.rows) {
             if (this.doNotResetSelectedValues) {
                 this._selectedValues = this._selectedValues.filter(selected => val.indexOf(selected.value) > -1);
             } else {
@@ -190,8 +187,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
                 includesArr.push(item);
             }
         });
-        startsWithArr = startsWithArr.sort((a, b) => a.label.length - b.label.length);
-        includesArr = includesArr.sort((a, b) => a.label.length - b.label.length);
+        startsWithArr = startsWithArr.sort((a, b) => a.label?.length - b.label?.length);
+        includesArr = includesArr.sort((a, b) => a.label?.length - b.label?.length);
 
         return concat(startsWithArr, includesArr);
     }
@@ -223,7 +220,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
      * @memberof ShSelectComponent
      */
     public handleInputChange(inputText: string): void {
-        if(inputText) {
+        if (inputText) {
             if (!this.enableDynamicSearch) {
                 this.updateFilter(inputText);
             }
@@ -249,10 +246,10 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
             if (this.customSorting) {
                 this.filteredData = filteredData.sort(this.customSorting);
             } else {
-                this.filteredData = filteredData.sort((a, b) => a.label.length - b.label.length);
+                this.filteredData = filteredData.sort((a, b) => a.label?.length - b.label?.length);
             }
         }
-        if (this.filteredData.length === 0) {
+        if (this.filteredData?.length === 0) {
             this.noOptionsFound.emit(true);
         }
         this.updateRows(this.filteredData);
@@ -280,12 +277,6 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         }
         this.clearFilter();
 
-        // if (!this.multiple) {
-        //     if (this._selectedValues[0] && this._selectedValues[0].value === item.value) {
-        //         callChanges = false;
-        //     }
-        // }
-
         if (callChanges && !this.multiple) {
             // check last selected value is there
             if (this.selectedValues[0]) {
@@ -305,7 +296,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     }
 
     public selectSingle(item) {
-        this._selectedValues.splice(0, this.rows.length);
+        this._selectedValues.splice(0, this.rows?.length);
         this._selectedValues.push(item);
         this.hide();
     }
@@ -319,9 +310,6 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     }
 
     public focusFilter() {
-        if (this.isFilterEnabled && this.filter && this.filter !== '') {
-            // this.updateFilter(this.filter);
-        }
         setTimeout(() => {
             (this.inputFilter?.nativeElement as any)['focus'].apply(this.inputFilter?.nativeElement);
         }, 0);
@@ -336,7 +324,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         this.focusFilter();
         this.onShow.emit();
         if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-            let item = this.rows.find(p => p.value === (this._selectedValues.length > 0 ? this._selectedValues[0] : (this.rows.length > 0 ? this.rows[0].value : null)));
+            let item = this.rows.find(p => p.value === (this._selectedValues?.length > 0 ? this._selectedValues[0] : (this.rows?.length > 0 ? this.rows[0].value : null)));
             if (item !== null) {
                 this.menuEle.virtualScrollElm.scrollInto(item);
             }
@@ -356,41 +344,26 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
                         this.toggleSelected(item);
                     }
                 }
-                // this.selectHighlightedOption();
-
             } else if (key === this.KEYS.UP) {
                 if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
                     let item = this.menuEle.virtualScrollElm.getPreviousHilightledOption();
                     if (item !== null) {
-                        // this.toggleSelected(item);
                         this.menuEle.virtualScrollElm.scrollInto(item);
                         this.menuEle.virtualScrollElm.startupLoop = true;
                         this.menuEle.virtualScrollElm.refresh();
                         event.preventDefault();
                     }
                 }
-                // this.optionList.highlightPreviousOption();
-                // this.dropdown.moveHighlightedIntoView();
-                // if (!this.filterEnabled) {
-                //   event.preventDefault();
-                // }
             } else if (key === this.KEYS.DOWN) {
                 if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
                     let item = this.menuEle.virtualScrollElm.getNextHilightledOption();
                     if (item !== null) {
-                        // this.toggleSelected(item);
                         this.menuEle.virtualScrollElm.scrollInto(item);
                         this.menuEle.virtualScrollElm.startupLoop = true;
                         this.menuEle.virtualScrollElm.refresh();
                         event.preventDefault();
                     }
                 }
-                // ----
-                // this.optionList.highlightNextOption();
-                // this.dropdown.moveHighlightedIntoView();
-                // if (!this.filterEnabled) {
-                //   event.preventDefault();
-                // }
             }
         }
         this.cdRef.detectChanges();
@@ -448,7 +421,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
             this.onClear.emit(this._selectedValues);
         } else {
             let newValue: IOption;
-            if (this.selectedValues.length > 0) {
+            if (this.selectedValues?.length > 0) {
                 newValue = this.selectedValues[0];
             }
             if (!newValue) {
@@ -463,11 +436,11 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         }
 
         this.selectedValues = [];
-        if(hide) {
+        if (hide) {
             this.onChange();
         }
         this.clearFilter();
-        if(hide) {
+        if (hide) {
             this.hide();
         }
     }
@@ -520,7 +493,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
             }
         }
 
-        if('placeholder' in changes) {
+        if ('placeholder' in changes) {
             if (changes.placeholder && changes.placeholder.currentValue) {
                 this.placeholder = changes.placeholder.currentValue;
             }
@@ -574,7 +547,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
             this.selected.emit(this._selectedValues);
         } else {
             let newValue: IOption;
-            if (this.selectedValues.length > 0) {
+            if (this.selectedValues?.length > 0) {
                 newValue = this.selectedValues[0];
             }
             if (!newValue) {

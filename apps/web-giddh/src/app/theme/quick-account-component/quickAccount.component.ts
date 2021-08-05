@@ -1,6 +1,5 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
@@ -9,12 +8,12 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { GroupsWithAccountsResponse } from 'apps/web-giddh/src/app/models/api-models/GroupsWithAccounts';
 import { LedgerActions } from 'apps/web-giddh/src/app/actions/ledger/ledger.actions';
-import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
 import { States } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { IFlattenGroupsAccountsDetail } from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
+import { cloneDeep } from '../../lodash-optimized';
 
 @Component({
     selector: 'quickAccount',
@@ -24,7 +23,7 @@ import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service'
 export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
     @Input() public needAutoFocus: boolean = false;
     @Output() public closeQuickAccountModal: EventEmitter<any> = new EventEmitter();
-    @ViewChild('groupDDList', {static: true}) public groupDDList: any;
+    @ViewChild('groupDDList', { static: true }) public groupDDList: any;
     public groupsArrayStream$: Observable<GroupsWithAccountsResponse[]>;
     public flattenGroupsArray: IOption[] = [];
     public statesStream$: Observable<States[]>;
@@ -39,11 +38,23 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private _fb: FormBuilder, private _groupService: GroupService, private _toaster: ToasterService,
-        private ledgerAction: LedgerActions, private store: Store<AppState>, private _generalActions: GeneralActions) {
+        private ledgerAction: LedgerActions, private store: Store<AppState>) {
         this.isQuickAccountInProcess$ = this.store.pipe(select(p => p.ledger.isQuickAccountInProcess), takeUntil(this.destroyed$));
         this.isQuickAccountCreatedSuccessfully$ = this.store.pipe(select(p => p.ledger.isQuickAccountCreatedSuccessfully), takeUntil(this.destroyed$));
         this.groupsArrayStream$ = this.store.pipe(select(p => p.general.groupswithaccounts), takeUntil(this.destroyed$));
 
+        // bind state sources
+        this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                Object.keys(res.stateList).forEach(key => {
+                    this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
+                });
+                this.statesSource$ = observableOf(this.states);
+            }
+        });
+    }
+
+    public ngOnInit() {
         this._groupService.GetFlattenGroupsAccounts('', 1, 5000, 'true').pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (result.status === 'success') {
                 let groupsListArray: IOption[] = [];
@@ -60,19 +71,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
             }
         });
-
-        // bind state sources
-        this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
-            if (res) {
-                Object.keys(res.stateList).forEach(key => {
-                    this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
-                });
-                this.statesSource$ = observableOf(this.states);
-            }
-        });
-    }
-
-    public ngOnInit() {
+        
         this.newAccountForm = this._fb.group({
             name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
             uniqueName: ['', [Validators.required]],
@@ -125,7 +124,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
         let gstVal: string = gstForm.get('gstNumber').value;
-        if (gstVal.length >= 2) {
+        if (gstVal?.length >= 2) {
             this.statesSource$.pipe(take(1)).subscribe(state => {
                 let s = state.find(st => st.value === gstVal.substr(0, 2));
                 statesEle.disabled = true;
@@ -173,16 +172,16 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
         const fixedArr = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost',
             'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
         return data.filter(da => {
-            return !(fixedArr.indexOf(da.groupUniqueName) > -1);
+            return !(fixedArr.indexOf(da?.groupUniqueName) > -1);
         });
     }
 
     public submit() {
-        let createAccountRequest: AccountRequestV2 = _.cloneDeep(this.newAccountForm.value);
+        let createAccountRequest: AccountRequestV2 = cloneDeep(this.newAccountForm.value);
         if (!this.showGstBox) {
             delete createAccountRequest.addresses;
         }
-        this.store.dispatch(this.ledgerAction.createQuickAccountV2(this.newAccountForm.value.groupUniqueName, createAccountRequest));
+        this.store.dispatch(this.ledgerAction.createQuickAccountV2(this.newAccountForm.value?.groupUniqueName, createAccountRequest));
     }
 
     /**

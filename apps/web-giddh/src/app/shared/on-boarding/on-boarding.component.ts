@@ -8,7 +8,6 @@ import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-
 import { CommonActions } from '../../actions/common.actions';
 import { CompanyActions } from '../../actions/company.actions';
 import { LoginActions } from '../../actions/login.action';
@@ -31,8 +30,8 @@ import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 export class OnBoardingComponent implements OnInit, OnDestroy {
     @Output() public closeCompanyModal: EventEmitter<any> = new EventEmitter();
     @Output() public closeCompanyModalAndShowAddManege: EventEmitter<string> = new EventEmitter();
-    @ViewChild('logoutModal', {static: true}) public logoutModal: ModalDirective;
-    @ViewChild('companyForm', {static: true}) public companyForm: NgForm;
+    @ViewChild('logoutModal', { static: true }) public logoutModal: ModalDirective;
+    @ViewChild('companyForm', { static: true }) public companyForm: NgForm;
     @Input() public createBranch: boolean = false;
 
     /** Stores the on boarding type of any item */
@@ -111,7 +110,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         this.getCallingCodes();
 
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(p => p.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
-        this.imgPath = (isElectron ||isCordova)  ? '' : AppUrl + APP_FOLDER + '';
+        this.imgPath = (isElectron || isCordova) ? '' : AppUrl + APP_FOLDER + '';
         this.logedInuser = this._generalService.user;
         if (this._generalService.createNewCompany) {
             this.company = this._generalService.createNewCompany;
@@ -163,9 +162,9 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         });
     }
 
-	/**
-	 * createCompany
-	 */
+    /**
+     * createCompany
+     */
     public createCompany(mobileNoEl) {
         this.checkMobileNo(mobileNoEl);
 
@@ -211,7 +210,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         this.closeCompanyModal.emit();
         if (isElectron) {
             this.store.dispatch(this._loginAction.ClearSession());
-        } else if(isCordova){
+        } else if (isCordova) {
             // todo: Logout user in Cordova.
             (window as any).plugins.googleplus.logout(
                 (msg) => {
@@ -326,7 +325,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
             }
         });
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
+            if (activeCompany) {
                 const countryDetails = activeCompany.countryV2;
                 this.company.country = countryDetails.alpha2CountryCode || countryDetails.alpha3CountryCode;
                 this.company.phoneCode = countryDetails.callingCode;

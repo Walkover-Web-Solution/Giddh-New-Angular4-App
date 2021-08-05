@@ -18,9 +18,9 @@ import { GeneralService } from '../../../services/general.service';
 })
 export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy {
 
-    @ViewChild(ElementViewContainerRef, {static: true}) public elementViewContainerRef: ElementViewContainerRef;
-    @ViewChild('permissionModel', {static: true}) public permissionModel: ModalDirective;
-    @ViewChild('permissionConfirmationModel', {static: true}) public permissionConfirmationModel: ModalDirective;
+    @ViewChild(ElementViewContainerRef, { static: true }) public elementViewContainerRef: ElementViewContainerRef;
+    @ViewChild('permissionModel', { static: true }) public permissionModel: ModalDirective;
+    @ViewChild('permissionConfirmationModel', { static: true }) public permissionConfirmationModel: ModalDirective;
 
     public localState: any;
     public allRoles: IRoleCommonResponseAndRequest[] = [];
@@ -55,7 +55,7 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
 
         // This module should be accessible to superuser only
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
+            if (activeCompany) {
                 let superAdminIndx = activeCompany.userEntityRoles.findIndex((entity) => entity.role.uniqueName === 'super_admin');
                 if (superAdminIndx === -1) {
                     this.redirectToDashboard();
@@ -78,7 +78,7 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
      * @memberof PermissionListComponent
      */
     public ngAfterViewInit(): void {
-        if(this.showBackButton) {
+        if (this.showBackButton) {
             this.openPermissionModal();
         }
     }
@@ -86,7 +86,6 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        //    this.store.dispatch(this.permissionActions.RemoveNewlyCreatedRoleFromStore());
     }
 
     public redirectToDashboard() {
@@ -95,7 +94,6 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
             next: { type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home' },
             previous: { type: 'MENU', name: 'Permissions', uniqueName: '/pages/permissions/list', isInvalidState: true }
         });
-        // this.router.navigateByUrl('/home');
     }
 
     public closePopupEvent(userAction) {

@@ -30,32 +30,22 @@
     font-size: 12px;
 }
 .aging-table {
-    max-width: 1170px;
     width: 100%;
     background: transparent;
-    min-height: 210px;
 }
 .pagination-wrapper {
     width: 100%;
 }
-.customer-right table {
-    float: right;
-    width: auto;
-}
-.wrap-searching-aging a {
-    color: $gray;
+.wrap-searching-aging{
+    display:none !important;
 }
 .advance-icon {
-    width: 32px;
-    height: 32px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    font-size: 18px;
-    margin-left: 10px;
-    border-radius: 2px;
-    color: $midnight-blue;
-    background: $white;
+    font-size: 14px;
+    border-radius: 5px;
+    margin-right:0;
 }
 
 .search-field {
@@ -78,19 +68,15 @@ span.input-addon {
     background-color: $chetwode-blue;
     color: $white;
     font-size: 18px;
-    border-radius: 2px;
+    border-radius: 5px;
     top: 0;
 }
-tr.aging-table-top {
-    border-bottom: 1px solid $gainsboro;
-}
+
 tr.aging-table-top td {
     padding: 8px 0;
 }
-.aging-table-top + tr > th {
-    border-bottom: none !important;
-}
-.refresh-btn{
+
+.refresh-btn {
     width: 36px;
     height: 36px;
     display: inline-flex;
@@ -100,14 +86,35 @@ tr.aging-table-top td {
     border: 1px solid $gainsboro;
     margin-left: 10px !important;
 }
-.customer-right-wrap{
-    .customer-right, .total-result{
-        padding-right: 90px !important;
-    }
+
+.name-width {
+    width: 210px;
 }
 
-.name-width{
-    width: 210px;
+.mobile-view{
+    display:none;
+}
+
+.word-break{
+    word-break: break-word !important;
+}
+.input-container {
+    input {
+        height: 36px;
+        min-width: 100%;
+        padding: 11px;
+        padding-right: 40px;
+        color: $nero;
+        border: none;
+        background-color: $gray-95;
+    }
+}
+.top-aging-table-top {
+    background: none !important;
+}
+
+.empty-table {
+    height: 120px;
 }
 
 // responsive
@@ -118,178 +125,83 @@ tr.aging-table-top td {
 }
 
 @media (max-width: 768px) {
-    .customer-right-wrap h4.mr-b1.pd-r2 {
-        margin-bottom: 0;
-    }
     .contact-main .table-aging-report {
         margin-top: 0 !important;
     }
-    .customer-right table tr td {
-        padding: 0px 15px;
-        color: $dark-gray;
-    }
-    .result-total {
-        position: fixed;
-        bottom: 0;
-        background-color: $white;
-        text-align: left;
-        float: none;
-        width: 100%;
-        z-index: 1;
-        padding-top: 10px;
-    }
-    .customer-right-wrap {
-        padding-bottom: 10px;
-        padding: 0 0 10px;
+    .table-aging-report span.justify-content-end {
+        justify-content: flex-start !important;
     }
 }
 @media (max-width: 767px) {
-    .customer-right-wrap{
-        padding-left: 15px;
-        .text-right{
-            text-align: left!important;
-            padding-left: 5px!important;
-        }
-        .customer-right{
-            background: $white;
-            padding: 0;
-            float: none;
-            table{
-                float: none!important;
-                width: 100%!important;
-                tr{
-                    td{
-                        margin-bottom: 5px;
-                        padding: 0 5px;
-                        color: $gray;
-                        width: 100%;
-                        display: flex;
-                        p{
-                            font-size: 14px;
-                            margin-bottom: 2px;
-                            float: left;
-                            width: 110px;
-                        }
-                        h3{
-                            font-size: 14px;
-                        }
-                    }
-                }
-            }
-        }
-    }
     span.input-addon {
         top: 0;
     }
-    .result-total {
-        position: relative;
-    }
     .pagination-wrapper {
         margin-bottom: 0px;
-    }
-    .wrap-searching-aging .max-width-250 {
-        max-width: calc(100% - 30px);
-        width: 100%;
     }
     .wrap-searching-aging .max-width-250.default-width {
         max-width: calc(100% - 90px);
         width: 100%;
     }
-    .advance-clear-filter-icons{
+    .advance-clear-filter-icons {
         display: flex;
-        span{
-            width: 36px;
-            height: 36px;
+        width: auto !important;
+        margin-left: auto !important;
+        span {
             justify-content: center;
             align-items: center;
             display: flex;
-            i{
+            i {
                 color: $gray;
             }
         }
     }
-    .customer-right-wrap h4.mr-b1.pd-r2 {
-        margin-bottom: 10px;
-        padding-left: 15px;
-    }
-    .customer-right-wrap{
-        padding-left: 15px;
-    }
-    .customer-right table {
-        float: none !important;
-        width: 100% !important;
-        text-align: left;
-    }
-    .customer-right table tr td {
-        padding: 0 15px;
-    }
-    .customer-right table tr td p {
-        font-size: 14px;
-        margin-bottom: 2px;
-        float: left;
-        width: 110px;
-    }
-    .customer-right table tr td h3 {
-        font-size: 14px;
-        padding-bottom: 7px;
-    }
-    .customer-right table tr td {
-        margin-bottom: 5px;
-    }
-    .customer-right table tr td {
-        padding: 0px 5px;
-        color: $dark-gray;
-        width: 100%;
-        display: block;
-    }
-    .customer-right {
-        background: $white;
-        padding: 0;
-        float: none;
-    }
-    .customer-right-wrap .text-right {
-        text-align: left !important;
-        padding-left: 5px !important;
-    }
-    .customer-right table tr td p {
-        font-size: 14px;
-        margin-bottom: 2px;
-        float: left;
-        width: 110px;
-    }
-    .customer-right table tr td h3 {
-        font-size: 14px;
-    }
-    .aging-form-inline{
-        flex-direction: column;
+    .aging-form-inline {
+        flex-direction: column-reverse;
         display: flex;
-        .linked-entities{
+        margin-bottom: 15px;
+        .linked-entities {
             margin-right: 0;
             margin-bottom: 0;
             width: 100%;
         }
-        .btn-group{
+        .btn-group {
             width: 100%;
-            .btn{
+            .btn {
                 width: 100%;
             }
         }
     }
-    .wrap-searching-aging .max-width-250 {
-        max-width: 250px;
-        width: 100%;
-    }
+    .wrap-searching-aging{
+        display: flex !important;
+        a {
+            color: $gray;
+        }
+        .max-width-250 {
+            max-width: 250px;
+            width: 100%;
+        }
+    } 
     .wrap-searching-aging .max-width-250.default-width {
         max-width: 250px;
         width: 100%;
     }
-    .wrap-searching-aging .max-width-250 input {
-        width: 100% !important;
-    }
+
     .wrap-searching-aging {
         float: none !important;
         justify-content: space-between;
-        margin-bottom: 15px;
+    }
+    .input-grp-date-range-picker{
+        display:none;
+    }
+    .aging-top-bar{
+        flex-direction: column;
+    }
+    .on-desktop-view{
+        display: none !important;
+    }
+    .mobile-view{
+        display: block;
     }
 }
 @media (max-width: 575px) {
@@ -299,7 +211,6 @@ tr.aging-table-top td {
     }
 }
 @media (max-width: 575px) {
-
     .btn-group.plus-btn {
         float: none;
         width: 100%;
@@ -308,17 +219,15 @@ tr.aging-table-top td {
         float: none;
         width: 100%;
     }
-    .aging-form-inline{
-        flex-direction: column;
-        display: flex;
-        .linked-entities{
+    .aging-form-inline {
+        .linked-entities {
             margin-right: 0;
             margin-bottom: 0;
             width: 100%;
         }
-        .btn-group{
+        .btn-group {
             width: 100%;
-            .btn{
+            .btn {
                 width: 100%;
             }
         }
@@ -328,5 +237,14 @@ tr.aging-table-top td {
 @media (max-width: 375px) {
     .wrap-searching-aging + .btn-group {
         float: left !important;
+    }
+}
+
+@media (min-width: 769px){
+    .mobile-card-wrapper{
+        .table-responsive{
+            max-height: calc(100vh - 295px);
+            overflow-y: auto;
+        }
     }
 }

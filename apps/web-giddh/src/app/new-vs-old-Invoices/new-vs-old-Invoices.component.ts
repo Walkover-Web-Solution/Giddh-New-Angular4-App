@@ -47,7 +47,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     public newSalesInvCount: number = 0;
     public totalSalesInvCount: number = 0;
     public invoiceCountAll: number = 0;
-    @ViewChild('paginationChild', {static: true}) public paginationChild: ElementViewContainerRef;
+    @ViewChild('paginationChild', { static: true }) public paginationChild: ElementViewContainerRef;
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if api call in progress */
@@ -76,23 +76,23 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                 this.yearOptions = [];
                 let startYear = Number(moment(response.startDate, GIDDH_DATE_FORMAT).format("YYYY"));
                 let endYear = Number(moment(response.endDate, GIDDH_DATE_FORMAT).format("YYYY"));
-                
-                for(startYear; startYear <= endYear; startYear++) {
-                    this.yearOptions.push({label: String(startYear), value: String(startYear)});
+
+                for (startYear; startYear <= endYear; startYear++) {
+                    this.yearOptions.push({ label: String(startYear), value: String(startYear) });
                 }
             }
         });
 
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe(response => {
-            if(response) {
+            if (response) {
                 let universalEndDate = moment(response[1]).format("YYYY");
 
-                if(moment(response[1]).toDate() >= moment().toDate()) {
+                if (moment(response[1]).toDate() >= moment().toDate()) {
                     this.selectedYear = (new Date()).getFullYear().toString();
                     this.selectedmonth = ("0" + (new Date().getMonth() + 1)).slice(-2).toString();
                     this.go();
                 } else {
-                    this.selectedYear = universalEndDate;                    
+                    this.selectedYear = universalEndDate;
                     this.selectedmonth = ("0" + (moment(response[1]).format("M"))).slice(-2).toString();
                     this.go();
                 }
@@ -120,15 +120,12 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                 }, 0);
                 this.newSalesClientTotal = s.newSales.uniqueCount;
                 this.totalSalesClientTotal = s.totalSales.uniqueCount;
-                // this.clientAllTotal = this.clientTotal + this.newSalesClientTotal + this.totalSalesClientTotal;
                 this.clientAllTotal = s.totalSales.uniqueCount;
                 this.newSalesAmount = s.newSales.total;
                 this.totalSalesAmount = s.totalSales.total;
-                // this.totalAmount = this.crdTotal + this.newSalesAmount + this.totalSalesAmount;
                 this.totalAmount = s.totalSales.total;
                 this.newSalesInvCount = s.newSales.invoiceCount;
                 this.totalSalesInvCount = s.totalSales.invoiceCount;
-                // this.invoiceCountAll = this.invTotal + this.newSalesInvCount + this.totalSalesInvCount;
                 this.invoiceCountAll = s.totalSales.invoiceCount;
             } else {
                 this.clientAllTotal = 0;
@@ -145,25 +142,6 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     }
 
     public go(form?: NgForm) {
-        // if (!this.selectedYear) {
-        //   this.showErrorToast('please select year');
-        //   return;
-        // }
-        //
-        // if (!this.selectedType) {
-        //   this.showErrorToast('please select type');
-        //   return;
-        // }
-        //
-        // if (this.selectedType && this.selectedType === 'month' && !(this.selectedmonth)) {
-        //   this.showErrorToast('please select month');
-        //   return;
-        // }
-        //
-        // if (this.selectedType && this.selectedType === 'quater' && !(this.selectedQuater)) {
-        //   this.showErrorToast('please select quater');
-        //   return;
-        // }
         this.isLoading = true;
         this.NewVsOldInvoicesQueryRequest.type = this.selectedType;
         if (this.NewVsOldInvoicesQueryRequest.type === 'month') {
@@ -197,9 +175,9 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
      * @memberof NewVsOldInvoicesComponent
      */
     public translationComplete(event: boolean): void {
-        if(event) {
+        if (event) {
             this.monthOptions = [{ label: this.commonLocaleData?.app_months_full.january, value: '01' }, { label: this.commonLocaleData?.app_months_full.february, value: '02' }, { label: this.commonLocaleData?.app_months_full.march, value: '03' }, { label: this.commonLocaleData?.app_months_full.april, value: '04' }, { label: this.commonLocaleData?.app_months_full.may, value: '05' }, { label: this.commonLocaleData?.app_months_full.june, value: '06' }, { label: this.commonLocaleData?.app_months_full.july, value: '07' }, { label: this.commonLocaleData?.app_months_full.august, value: '08' }, { label: this.commonLocaleData?.app_months_full.september, value: '09' }, { label: this.commonLocaleData?.app_months_full.october, value: '10' }, { label: this.commonLocaleData?.app_months_full.november, value: '11' }, { label: this.commonLocaleData?.app_months_full.december, value: '12' }];
-            
+
             this.GetTypeOptions = [{ label: this.localeData?.get_type_options?.month, value: 'month' }, { label: this.localeData?.get_type_options?.quarter, value: 'quater' }];
             this.quaterOptions = [{ label: this.localeData?.quarters?.q1, value: '01' }, { label: this.localeData?.quarters?.q2, value: '02' }, { label: this.localeData?.quarters?.q3, value: '03' }, { label: this.localeData?.quarters?.q4, value: '04' }];
 
@@ -211,7 +189,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                     } else if (this.NewVsOldInvoicesQueryRequest.type === 'quater' && this.selectedQuater) {
                         this.columnName = this.quaterOptions.find(f => f.value === this.selectedQuater)?.label;
                     }
-    
+
                     this.bifurcationClients = this.localeData?.bifurcation_clients.replace("[COLUMN_NAME]", this.columnName);
                 }
             });

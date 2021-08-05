@@ -35,8 +35,8 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public isLoading: boolean = false;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public forceClearMonths$: Observable<IForceClear> = observableOf({ status: false });
-    public fromMonth: any = '';
-    public toMonth: any = '';
+    public fromMonth: any = null;
+    public toMonth: any = null;
     public financialYearSelected: any;
     public activeFinancialYear: string = '';
     public activeFinancialYearLabel: string = '';
@@ -81,14 +81,6 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     ) {
         this.exportRequest.fileType = 'xls';
         this.exportRequest.balanceTypeAsSign = false;
-
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany && !this.activeFinancialYear) {
-                this.companyUniqueName = activeCompany.uniqueName;
-                this.activeFinancialYear = activeCompany.activeFinancialYear.uniqueName;
-                this.selectActiveFinancialYear();
-            }
-        });
     }
 
     /**
@@ -97,6 +89,16 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     public ngOnInit(): void {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany && !this.activeFinancialYear) {
+                this.companyUniqueName = activeCompany.uniqueName;
+                if(activeCompany.activeFinancialYear) {
+                    this.activeFinancialYear = activeCompany.activeFinancialYear.uniqueName;
+                    this.selectActiveFinancialYear();
+                }
+            }
+        });
+
         this.getColumnarRequestModel = new ReportsDetailedRequestFilter();
         this.getColumnarRequestModel.page = 1;
         this.getColumnarRequestModel.count = this.paginationCount;
@@ -311,12 +313,12 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     }
 
     /**
-   * To call API according to pagination
-   *
-   * @param {*} event Pagination page change event
-   * @returns {void}
-   * @memberof ColumnarReportComponent
-   */
+     * To call API according to pagination
+     *
+     * @param {*} event Pagination page change event
+     * @returns {void}
+     * @memberof ColumnarReportComponent
+     */
     public pageChanged(event: any): void {
         if (event && this.getColumnarRequestModel) {
             if (event && event.page === this.getColumnarRequestModel.page) {
@@ -336,6 +338,8 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public clearFilter(): void {
         this.exportRequest = {};
         this.groupUniqueName = '';
+        this.fromMonth = null;
+        this.toMonth = null;
         this.forceClear$ = observableOf({ status: true });
         this.forceClearMonths$ = observableOf({ status: true });
         this.fromMonthNames = [];
@@ -427,7 +431,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                         this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
                         this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 

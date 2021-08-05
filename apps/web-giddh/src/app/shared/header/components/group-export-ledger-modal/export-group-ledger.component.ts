@@ -30,42 +30,6 @@ export class ExportGroupLedgerComponent implements OnInit {
     public fileType: string = 'pdf';
     public order: string = 'asc';
     public dateRange: { from: string, to: string } = { from: '', to: '' };
-
-    public datePickerOptions: any = {
-        locale: {
-            applyClass: 'btn-green',
-            applyLabel: 'Go',
-            fromLabel: 'From',
-            format: 'D-MMM-YY',
-            toLabel: 'To',
-            cancelLabel: 'Cancel',
-            customRangeLabel: 'Custom range'
-        },
-        ranges: {
-            'Last 1 Day': [
-                moment().subtract(1, 'days'),
-                moment()
-            ],
-            'Last 7 Days': [
-                moment().subtract(6, 'days'),
-                moment()
-            ],
-            'Last 30 Days': [
-                moment().subtract(29, 'days'),
-                moment()
-            ],
-            'Last 6 Months': [
-                moment().subtract(6, 'months'),
-                moment()
-            ],
-            'Last 1 Year': [
-                moment().subtract(12, 'months'),
-                moment()
-            ]
-        },
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment()
-    };
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
@@ -94,8 +58,7 @@ export class ExportGroupLedgerComponent implements OnInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
 
-    constructor(private store: Store<AppState>, private _permissionDataService: PermissionDataService,  private generalService: GeneralService, private modalService: BsModalService) {
-        //
+    constructor(private store: Store<AppState>, private _permissionDataService: PermissionDataService, private generalService: GeneralService, private modalService: BsModalService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -104,14 +67,13 @@ export class ExportGroupLedgerComponent implements OnInit {
         this.dateRange.from = moment(moment().subtract(30, 'days')).format(GIDDH_DATE_FORMAT);
         this.dateRange.to = moment(moment()).format(GIDDH_DATE_FORMAT);
 
-        if(this._permissionDataService.getData && this._permissionDataService.getData.length > 0) {
+        if (this._permissionDataService.getData && this._permissionDataService.getData.length > 0) {
             this._permissionDataService.getData.forEach(f => {
                 if (f.name === 'LEDGER') {
                     let isAdmin = some(f.permissions, (prm) => prm.code === 'UPDT');
                     this.emailTypeSelected = isAdmin ? 'admin-detailed' : 'view-detailed';
                     this.emailTypeMini = isAdmin ? 'admin-condensed' : 'view-condensed';
                     this.emailTypeDetail = isAdmin ? 'admin-detailed' : 'view-detailed';
-
                 }
             });
         }
@@ -136,12 +98,12 @@ export class ExportGroupLedgerComponent implements OnInit {
         this.dateRange.to = moment(ev.picker.endDate).format(GIDDH_DATE_FORMAT);
     }
 
-     /**
-     *To show the datepicker
-     *
-     * @param {*} element
-     * @memberof AuditLogsFormComponent
-     */
+    /**
+    *To show the datepicker
+    *
+    * @param {*} element
+    * @memberof AuditLogsFormComponent
+    */
     public showGiddhDatepicker(element: any): void {
         if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
@@ -168,7 +130,7 @@ export class ExportGroupLedgerComponent implements OnInit {
      * @memberof AuditLogsFormComponent
      */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }

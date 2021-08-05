@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';
@@ -8,7 +8,8 @@ import { ReplaySubject } from 'rxjs';
 @Component({
     selector: 'import-statement',
     templateUrl: './import-statement.component.html',
-    styleUrls: ['./import-statement.component.scss']
+    styleUrls: ['./import-statement.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class ImportStatementComponent implements OnDestroy {
@@ -21,9 +22,9 @@ export class ImportStatementComponent implements OnDestroy {
     /** Variable for File Upload */
     public selectedFile: any;
     /** Object for API request parameters */
-    public getRequest: any = {entity: 'pdf', companyUniqueName: '', accountUniqueName: ''};
+    public getRequest: any = { entity: 'pdf', companyUniqueName: '', accountUniqueName: '' };
     /** Object for API post parameters */
-    public postRequest: any = {file: '', password: ''};
+    public postRequest: any = { file: '', password: '' };
 
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -48,7 +49,7 @@ export class ImportStatementComponent implements OnDestroy {
         let isValidFileType = validExtensions.some(extension => type === extension);
 
         if (!isValidFileType) {
-            if(file && file.length > 0) {
+            if (file && file.length > 0) {
                 this.toaster.errorToast(this.localeData?.import_error);
             }
             this.selectedFile = null;

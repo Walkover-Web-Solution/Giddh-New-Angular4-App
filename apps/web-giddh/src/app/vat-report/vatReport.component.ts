@@ -3,7 +3,6 @@ import { takeUntil } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, } from '@angular/core';
 import { Router } from '@angular/router';
 import { VatReportRequest } from '../models/api-models/Vat';
-import * as _ from '../lodash-optimized';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store';
 import { GeneralService } from '../services/general.service';
@@ -19,7 +18,8 @@ import { IOption } from '../theme/ng-select/ng-select';
 import { GstReconcileService } from '../services/GstReconcile.service';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../models/user-login-state';
-
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { cloneDeep } from '../lodash-optimized';
 @Component({
     selector: 'app-vat-report',
     styleUrls: ['./vatReport.component.scss'],
@@ -38,8 +38,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public fromDate: string = '';
     public toDate: string = '';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    @ViewChild('monthWise', {static: true}) public monthWise: BsDropdownDirective;
-    @ViewChild('periodDropdown', {static: true}) public periodDropdown;
+    @ViewChild('monthWise', { static: true }) public monthWise: BsDropdownDirective;
+    @ViewChild('periodDropdown', { static: true }) public periodDropdown;
     public isMonthSelected: boolean = true;
     public selectedMonth: any = null;
     public currentPeriod: any = {};
@@ -66,6 +66,10 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /* This will hold the value out/in to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: string = 'in';
+    /* this will check mobile screen size */
+    public isMobileScreen: boolean = false;
 
     constructor(
         private gstReconcileService: GstReconcileService,
@@ -77,11 +81,32 @@ export class VatReportComponent implements OnInit, OnDestroy {
         private companyActions: CompanyActions,
         private _route: Router,
         private settingsBranchAction: SettingsBranchActions,
+        private breakpointObserver: BreakpointObserver
     ) {
 
     }
 
     public ngOnInit() {
+        document.querySelector('body').classList.add('gst-sidebar-open');
+        this.breakpointObserver
+        .observe(['(max-width: 767px)'])
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((state: BreakpointState) => {
+            this.isMobileScreen = state.matches;
+            if (!this.isMobileScreen) {
+                this.asideGstSidebarMenuState = 'in';
+            }
+        });
+        this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
+            if (this.isMobileScreen) {
+                if (shouldOpen) {
+                    this.asideGstSidebarMenuState = 'in';
+                } else {
+                    this.asideGstSidebarMenuState = 'out';
+                }
+            }
+        });
+
         this.currentOrganizationType = this._generalService.currentOrganizationType;
         this.loadTaxDetails();
         this.saveLastState(this._generalService.companyUniqueName);
@@ -127,7 +152,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this._generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                        this.currentBranch = cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
@@ -140,7 +165,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
             } else {
                 if (this._generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
                 }
             }
         });
@@ -152,10 +177,12 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector('body').classList.remove('gst-sidebar-open');
+        this.asideGstSidebarMenuState === 'out'
     }
 
     public getVatReport(event?: any) {
-        if(event && event.value) {
+        if (event && event.value) {
             this.taxNumber = event.value;
         }
 
@@ -168,7 +195,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
             this.vatReport = [];
 
             this.vatService.getVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                if(res) {
+                if (res) {
                     if (res.status === 'success') {
                         this.vatReport = res.body.sections;
                         this.cdRef.detectChanges();
@@ -248,7 +275,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
         this.datepickerVisibility = visibility;
 
         setTimeout(() => {
-            if(this.datepickerVisibility === "hidden" && this.monthWise && this.monthWise.isOpen === false) {
+            if (this.datepickerVisibility === "hidden" && this.monthWise && this.monthWise.isOpen === false) {
                 this.hidePeriodDropdown();
             }
         }, 500);
@@ -261,7 +288,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
      */
     public checkIfDatepickerVisible() {
         setTimeout(() => {
-            if(this.datepickerVisibility === "hidden") {
+            if (this.datepickerVisibility === "hidden") {
                 this.hidePeriodDropdown();
             }
         }, 500);
@@ -302,7 +329,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
      * Loads the tax details of a company
      *
      * @private
-     * @memberof GstComponent
+     * @memberof VatReportComponent
      */
     private loadTaxDetails(): void {
         this.isTaxApiInProgress = true;

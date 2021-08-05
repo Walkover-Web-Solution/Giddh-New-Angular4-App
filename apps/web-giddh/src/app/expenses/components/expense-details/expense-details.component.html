@@ -1,5 +1,5 @@
 <div *ngIf="ispPettycashEntrySuccess$ | async">
-    <div class="clearfix p-15">
+    <div class="clearfix p-15 pt-0">
         <div class="row">
             <div class="col-sm-6">
                 <p class="bold mr-b05">{{selectedItem?.entryDate}} | {{selectedItem.baseAccount.name}}</p>
@@ -8,8 +8,9 @@
                 <button type="button" class="mr-b05 btn btn-success" (click)="showApproveConfirmPopup(ApproveConfirm)">
                     {{localeData?.approve}}
                 </button>
-                <button type="button" class="mr-b05 btn btn-danger" (click)="openModal(RejectionReason)">{{localeData?.reject}}</button>
-                <span class="close-modal cp" (click)="closeDetailsMode()">
+                <button type="button" class="mr-b05 btn btn-danger"
+                    (click)="openModal(RejectionReason)">{{localeData?.reject}}</button>
+                <span class="close-modal cp pull-right" (click)="closeDetailsMode()">
                     <img src="assets/images/multiply.svg">
                 </span>
             </div>
@@ -65,7 +66,8 @@
                                 [(ngModel)]="entryAgainstObject.model" (selected)="onSelectEntryAgainstAccount($event)"
                                 [placeholder]="commonLocaleData?.app_select_account" [notFoundLink]="false"
                                 [enableDynamicSearch]="true" [isPaginationEnabled]="true"
-                                (scrollEnd)="handleAccountScrollEnd()" (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
+                                (scrollEnd)="handleAccountScrollEnd()"
+                                (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
                                 [defaultValue]="entryAgainstObject.name" [fixedValue]="entryAgainstObject.name"
                                 [forceClearReactive]="forceClear$ | async" [multiple]="false" [ItemHeight]="33"
                                 [useInBuiltFilterForIOptionTypeItems]="true">
@@ -78,19 +80,6 @@
                             </sh-select>
                         </div>
                     </div>
-
-                    <!-- <div class="d-inline-block">
-                <span class="mr-1 d-inline-block font-14">USD</span>
-                <div class="toggle d-inline-block" data-key="disabled">
-                    <input type="checkbox" class="toggle-checkbox" id="disabled">
-                    <label class="toggle-label" for="disabled">
-            <span class="toggle-inner"></span>
-            <span class="toggle-switch"></span>
-          </label>
-                </div>
-                <span class="ml-1 d-inline-block font-14">INR</span>
-            </div> -->
-
                 </div>
 
                 <div class="col-sm-4 text-right xs-left" (click)="toggleEntryAgainst()"
@@ -114,7 +103,8 @@
 <ng-template #RejectionReason>
     <div class="modal-header">
         <h3 class="modal-title pull-left">{{localeData?.rejection_reason}}</h3>
-        <button type="button" class="close pull-right" [attr.aria-label]="commonLocaleData?.app_close" (click)="modalRef.hide()">
+        <button type="button" class="close pull-right" [attr.aria-label]="commonLocaleData?.app_close"
+            (click)="modalRef.hide()">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
@@ -147,7 +137,8 @@
                 </div>
                 <div class="col-xs-8 col-sm-8">
                     <p class="font-14">
-                        <i>{{selectedItem?.currencySymbol}} {{ selectedItem?.amount}}</i></p>
+                        <i>{{selectedItem?.currencySymbol}} {{ selectedItem?.amount}}</i>
+                    </p>
                 </div>
             </div>
         </div>
@@ -166,7 +157,8 @@
 <!-- region approve entry confirm -->
 <ng-template #ApproveConfirm>
     <petty-cash-approve-confirm-dialog [selectedEntryForApprove]="selectedEntryForApprove"
-        [approveEntryRequestInProcess]="approveEntryRequestInProcess" [localeData]="localeData" [commonLocaleData]="commonLocaleData" (approveEntry)="hideApproveConfirmPopup($event)">
+        [approveEntryRequestInProcess]="approveEntryRequestInProcess" [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData" (approveEntry)="hideApproveConfirmPopup($event)">
     </petty-cash-approve-confirm-dialog>
 </ng-template>
 <!-- endregion -->
@@ -175,7 +167,8 @@
 <div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
 <app-aside-menu-sales-other-taxes *ngIf="asideMenuStateForOtherTaxes === 'in'" [class]="asideMenuStateForOtherTaxes"
     [taxes]="companyTaxesList" [otherTaxesModal]="updateLedgerComponentInstance.vm.selectedLedger.otherTaxModal"
-    [@slideInOut]="asideMenuStateForOtherTaxes" [commonLocaleData]="commonLocaleData" (closeModal)="toggleOtherTaxesAsidePane(null)"
+    [@slideInOut]="asideMenuStateForOtherTaxes" [commonLocaleData]="commonLocaleData"
+    (closeModal)="toggleOtherTaxesAsidePane(null)"
     (applyTaxes)="updateLedgerComponentInstance.vm.calculateOtherTaxes($event);toggleOtherTaxesAsidePane(null);">
 </app-aside-menu-sales-other-taxes>
 <!-- endregion -->

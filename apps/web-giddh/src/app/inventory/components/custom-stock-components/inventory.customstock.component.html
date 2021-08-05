@@ -26,10 +26,11 @@
 
                             <div class="form-group col-xs-6 col-sm-6">
                                 <label>Unit Code<sup>*</sup></label>
-                                <!-- [disabled]="country === 'india' || (isStockUnitCodeAvailable$ | async)" -->
-                                <input placeholder="Unique name" type="text" name="code" [class.error-box]="unitCode?.errors?.pattern"
-                                    [pattern]="stockUnitCodeRegex" #unitCode="ngModel" [(ngModel)]="customUnitObj.code"
-                                    (change)="handleUnitCodeValidation(unitCode?.errors)" class="form-control" required />
+                                <input placeholder="Unique name" type="text" name="code"
+                                    [class.error-box]="unitCode?.errors?.pattern" [pattern]="stockUnitCodeRegex"
+                                    #unitCode="ngModel" [(ngModel)]="customUnitObj.code"
+                                    (change)="handleUnitCodeValidation(unitCode?.errors)" class="form-control"
+                                    required />
                             </div>
 
                             <div class="form-group col-xs-5 col-sm-5">
@@ -54,10 +55,6 @@
                                                 Multiply</span>
                                         </label>
                                     </div>
-                                    <!-- <div class="btn-group unit_action" role="group" aria-label="...">
-                                    <button type="button" class="btn btn-default" [ngClass]="{'isSelected': isDivide}" (click)="changeType(true)"><img src="./assets/images/divide-ico.svg" /></button>
-                                    <button type="button" class="btn btn-default" [ngClass]="{'isSelected': !isDivide}" (click)="changeType(false)"><img src="./assets/images/multiply.svg" /></button>
-                                </div> -->
                                 </div>
                             </div>
 
@@ -73,7 +70,8 @@
                                 {{customUnitObj?.parentStockUnit?.name}} </div>
                             <div class="grey-color col-xs-12 mr-b2 division"
                                 *ngIf="customUnitObj.name && customUnitObj.quantityPerUnit && isDivide">
-                                <span class="mr-r05">1 {{customUnitObj?.name}}</span> <span class="mr-r05 font-18">=</span>
+                                <span class="mr-r05">1 {{customUnitObj?.name}}</span> <span
+                                    class="mr-r05 font-18">=</span>
                                 <div class="text-center">
                                     1 {{customUnitObj.parentStockUnit?.name}}
                                     <div class="hr"></div> {{customUnitObj?.quantityPerUnit}}
@@ -118,7 +116,8 @@
                                 <td>{{item.name}} ({{item.code}})</td>
                                 <td>{{item.parentStockUnit?.name}} <span *ngIf="!item.parentStockUnit?.name">-</span>
                                 </td>
-                                <td class="text-right">{{item.displayQuantityPerUnit | giddhRoundOff : giddhDecimalPlaces}}</td>
+                                <td class="text-right">{{item.displayQuantityPerUnit | giddhRoundOff :
+                                    giddhDecimalPlaces}}</td>
                                 <td class="action ico-btn">
                                     <button class="btn-default btn-xs" [disabled]="editMode" (click)="editUnit(item)"><i
                                             class="icon-edit-pencil"></i></button>

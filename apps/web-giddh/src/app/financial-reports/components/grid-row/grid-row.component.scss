@@ -1,0 +1,77 @@
+@import "../../../../assets/css/color.scss";
+.tb-pl-modal-header {
+    position: absolute;
+    top: 20px;
+    left: 30%;
+    right: auto;
+    z-index: 1;
+    margin: 0px;
+    background: $white;
+    width: 50%;
+    padding: 1px;
+    box-shadow: 1px 0px 9px $gray;
+}
+
+.tb-pl-modal-header-div {
+    padding: 0px;
+    border-radius: 0px;
+}
+
+.tb-pl-modal-div {
+    height: 100%;
+    padding: 0;
+}
+
+.tb-pl-custom-header {
+    border-right: 0px;
+    padding: 11px 10px 10px 10px;
+    width: 100%;
+    background: $chablis;
+}
+.tb-pl-custom-title {
+    font-family: "opensans-semibold" !important;
+    font-size: 16px !important;
+}
+
+.tb-pl-padding {
+    padding: 1px;
+}
+
+.custom-detail h4 {
+    color: $gray;
+    margin-top: 7px;
+    font-size: 14px !important;
+}
+
+.height-82px {
+    padding: 10px 10px 15px 10px;
+    border-top: 1px solid $gainsboro;
+}
+
+ul.list-unstyled li {
+    margin-top: 7px;
+}
+
+ul.list-unstyled li a {
+    color: $black;
+}
+.no-select {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.account {
+    div {
+        -webkit-line-clamp: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+.row.row-item {
+    height: 35px !important;
+}
+.trial-balance-viewport {
+    background-color: $solitude;
+}

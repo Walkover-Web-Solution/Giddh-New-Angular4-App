@@ -1,21 +1,19 @@
 import { Injectable } from '@angular/core';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { BehaviorSubject, Subject } from 'rxjs';
-
 import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../common/confirmation-modal/confirmation-modal.interface';
 import { CompanyCreateRequest } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
-import * as moment from 'moment';
 import { cloneDeep, find } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
+import { Router } from '@angular/router';
+import { AdjustedVoucherType } from '../app.constant';
 
 @Injectable()
 export class GeneralService {
     invokeEvent: Subject<any> = new Subject();
-    // TODO : It is commented due to we have implement calendly and its under discussion to remove
-    // public talkToSalesModal: BehaviorSubject<boolean> = new BehaviorSubject(false);
     public isCurrencyPipeLoaded: boolean = false;
 
     /** Stores the current organization type */
@@ -25,44 +23,6 @@ export class GeneralService {
     public menuClickedFromOutSideHeader: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
     public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
     public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    private _dateRangePickerDefaultRanges = {
-        Today: [moment(), moment()],
-        Yesterday: [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-        'This Month': [moment().startOf('month'), moment().endOf('month')],
-        'Last Month': [
-            moment().subtract(1, 'month').startOf('month'),
-            moment().subtract(1, 'month').endOf('month')
-        ],
-        'This Week': [{
-            'Sun - Today': [moment().startOf('week'), moment()],
-            'Mon - Today': [moment().startOf('week').add(1, 'd'), moment()]
-        }],
-        'This Quarter to Date': [
-            moment().quarter(moment().quarter()).startOf('quarter'),
-            moment()
-        ],
-        'This Financial Year to Date': [
-            moment().startOf('year').subtract(9, 'year'),
-            moment()
-        ],
-        'This Year to Date': [
-            moment().startOf('year'),
-            moment()
-        ],
-        'Last Quarter': [
-            moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
-            moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
-        ],
-        'Last Financial Year': [
-            moment().startOf('year').subtract(10, 'year'),
-            moment().endOf('year').subtract(10, 'year')
-        ],
-        'Last Year': [
-            moment().subtract(1, 'year').startOf('year'),
-            moment().subtract(1, 'year').endOf('year')
-        ]
-    };
 
     get user(): UserDetails {
         return this._user;
@@ -86,14 +46,6 @@ export class GeneralService {
 
     set sessionId(sessionId: string) {
         this._sessionId = sessionId;
-    }
-
-    get dateRangePickerDefaultRanges(): any {
-        return this._dateRangePickerDefaultRanges;
-    }
-
-    set dateRangePickerDefaultRanges(value: any) {
-        this._dateRangePickerDefaultRanges = value;
     }
 
     // currencyType define specific type of currency out of four type of urrencyType a.1,00,00,000 ,b.10,000,000,c.10\'000\'000,d.10 000 000
@@ -125,11 +77,9 @@ export class GeneralService {
 
     private _sessionId: string;
 
-    public resetGeneralServiceState() {
-        this.user = null;
-        this.sessionId = null;
-        this.companyUniqueName = null;
-    }
+    constructor(
+        private router: Router
+    ) {}
 
     public SetIAmLoaded(iAmLoaded: boolean) {
         this.IAmLoaded.next(iAmLoaded);
@@ -164,12 +114,9 @@ export class GeneralService {
         }
         return url;
     }
+
     public setIsMobileView(isMobileView: boolean) {
         this.isMobileSite.next(isMobileView);
-    }
-
-    public capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
     public base64ToBlob(b64Data, contentType, sliceSize) {
@@ -178,7 +125,7 @@ export class GeneralService {
         let byteCharacters = atob(b64Data);
         let byteArrays = [];
         let offset = 0;
-        if(byteCharacters && byteCharacters.length > 0) {
+        if (byteCharacters && byteCharacters.length > 0) {
             while (offset < byteCharacters.length) {
                 let slice = byteCharacters.slice(offset, offset + sliceSize);
                 let byteNumbers = new Array(slice.length);
@@ -275,16 +222,16 @@ export class GeneralService {
             footerCssClass,
             buttons
         } : {
-                headerText,
-                headerCssClass,
-                messageText: (commonLocaleData) ? commonLocaleData?.app_rc_unselected_note : `Note: If you uncheck this transaction from Reverse Charge, applied
+            headerText,
+            headerCssClass,
+            messageText: (commonLocaleData) ? commonLocaleData?.app_rc_unselected_note : `Note: If you uncheck this transaction from Reverse Charge, applied
                 taxes will be considered as normal taxes and reverse
                 charge effect will be removed from tax report.`,
-                messageCssClass,
-                footerText: (commonLocaleData) ? commonLocaleData?.app_rs_unselected_footer_note : 'Are you sure you want to uncheck this transaction from Reverse Charge?',
-                footerCssClass,
-                buttons
-            };
+            messageCssClass,
+            footerText: (commonLocaleData) ? commonLocaleData?.app_rs_unselected_footer_note : 'Are you sure you want to uncheck this transaction from Reverse Charge?',
+            footerCssClass,
+            buttons
+        };
     }
 
     /**
@@ -317,20 +264,6 @@ export class GeneralService {
         return false;
     }
 
-    public getGoogleCredentials() {
-        if (PRODUCTION_ENV) {
-            return {
-                GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com',
-                GOOGLE_CLIENT_SECRET: 'eWzLFEb_T9VrzFjgE40Bz6_l'
-            };
-        } else {
-            return {
-                GOOGLE_CLIENT_ID: '641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com',
-                GOOGLE_CLIENT_SECRET: '8htr7iQVXfZp_n87c99-jm7a'
-            };
-        }
-    }
-
     /**
      * Covert UTC time zone( server time zone ) into local system timezone
      *
@@ -359,26 +292,6 @@ export class GeneralService {
         } else {
             return '';
         }
-    }
-
-    /**
-     * This will remove the selectall value from array used for multi checkbox dropdown
-     *
-     * @param {Array<string>} array
-     * @returns {Array<string>}
-     * @memberof GeneralService
-     */
-    public removeSelectAllFromArray(array: Array<string>): Array<string> {
-        let newArray = [];
-        if (array && array.length > 0) {
-            array.forEach(key => {
-                if (key !== "selectall") {
-                    newArray.push(key);
-                }
-            });
-        }
-
-        return newArray;
     }
 
     /**
@@ -443,31 +356,6 @@ export class GeneralService {
         }
 
         return { x: xPosition, y: yPosition };
-    }
-
-    /**
-     * Returns a particular cookie value
-     *
-     * @param {string} cookieName Name of the cookie whose value is required
-     * @returns {string} Cookie value
-     * @memberof GeneralService
-     */
-    public getCookie(cookieName: string): string {
-        const name = `${cookieName}=`;
-        const decodedCookie = decodeURIComponent(document.cookie);
-        const availableCookies = decodedCookie.split(';');
-        if(availableCookies && availableCookies.length > 0) {
-            for (let index = 0; index < availableCookies.length; index++) {
-                let cookie = availableCookies[index];
-                while (cookie.charAt(0) === ' ') {
-                    cookie = cookie.substring(1);
-                }
-                if (cookie.indexOf(name) === 0) {
-                    return cookie.substring(name.length, cookie.length);
-                }
-            }
-        }
-        return '';
     }
 
     /**
@@ -736,36 +624,36 @@ export class GeneralService {
      * @returns {ConfirmationModalConfiguration}
      * @memberof GeneralService
      */
-    public getDateChangeConfiguration(isVoucherDateSelected: boolean): ConfirmationModalConfiguration {
+    public getDateChangeConfiguration(localeData: any, commonLocaleData: any, isVoucherDateSelected: boolean): ConfirmationModalConfiguration {
         const buttons: Array<ConfirmationModalButton> = [{
-            text: 'Yes',
+            text: commonLocaleData?.app_yes,
             cssClass: 'btn btn-success'
         },
         {
-            text: 'No',
+            text: commonLocaleData?.app_no,
             cssClass: 'btn btn-danger'
         }];
-        const headerText: string = 'Date Change Confirmation';
+        const headerText: string = localeData?.date_change_confirmation_heading;
         const headerCssClass: string = 'd-inline-block mr-1';
         const messageCssClass: string = 'mr-b1 text-light';
         const footerCssClass: string = 'mr-b1';
         return (isVoucherDateSelected) ? {
             headerText,
             headerCssClass,
-            messageText: `Do you want to change the entry date as well?`,
+            messageText: localeData?.change_single_entry_date,
             messageCssClass,
             footerText: '',
             footerCssClass,
             buttons
         } : {
-                headerText,
-                headerCssClass,
-                messageText: `Do you want to change the all entries date with this date?`,
-                messageCssClass,
-                footerText: '',
-                footerCssClass,
-                buttons
-            };
+            headerText,
+            headerCssClass,
+            messageText: localeData?.change_all_entry_dates,
+            messageCssClass,
+            footerText: '',
+            footerCssClass,
+            buttons
+        };
     }
 
     /**
@@ -844,7 +732,7 @@ export class GeneralService {
      * @returns {boolean} True, if bank details are valid
      * @memberof GeneralService
      */
-     public checkForValidBankDetails(bankDetails: any, countryCode: string): boolean {
+    public checkForValidBankDetails(bankDetails: any, countryCode: string): boolean {
         const fieldsWithValue = bankDetails;
         const keys = countryCode === 'AE' ?
             ['beneficiaryName', 'bankName', 'branchName', 'bankAccountNo', 'swiftCode'] :
@@ -890,23 +778,151 @@ export class GeneralService {
     /**
      * Returns the visible menu items to be shown for menu panel (as per permission)
      *
+     * @param {string} module name
      * @param {Array<any>} apiItems List of permissible items obtained from API
      * @param {Array<AllItems>} itemList List of all the items of menu
      * @returns {Array<AllItems>} Array of permissible menu items
      * @memberof GeneralService
      */
-    public getVisibleMenuItems(apiItems: Array<any>, itemList: Array<AllItems>): Array<AllItems> {
+    public getVisibleMenuItems(module: string, apiItems: Array<any>, itemList: Array<AllItems>): Array<AllItems> {
         const visibleMenuItems = cloneDeep(itemList);
-        itemList.forEach((menuItem, menuIndex) => {
+        itemList?.forEach((menuItem, menuIndex) => {
             visibleMenuItems[menuIndex].items = [];
-            menuItem.items.forEach(item => {
+            menuItem.items?.forEach(item => {
                 const isValidItem = apiItems.find(apiItem => apiItem.uniqueName === item.link);
-                if (isValidItem || item.alwaysPresent) {
+                if ((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) {
                     // If items returned from API have the current item which can be shown in branch/company mode, add it
                     visibleMenuItems[menuIndex].items.push(item);
                 }
             });
         });
         return visibleMenuItems;
+    }
+
+    /**
+     * Navigates to the route provided
+     *
+     * @param {*} route Route to navigate to
+     * @param {*} [parameter] Route params
+     * @param {*} [isSocialLogin] To Reload page
+     * @memberof GeneralService
+     */
+    public finalNavigate(route: any, parameter?: any, isSocialLogin?: boolean): void {
+        let isQueryParams: boolean;
+        if (screen.width <= 767 || isCordova) {
+            this.router.navigate(["/pages/mobile-home"]);
+        } else {
+            if (route.includes('?')) {
+                parameter = parameter || {};
+                isQueryParams = true;
+                const splittedRoute = route.split('?');
+                route = splittedRoute[0];
+                const paramString = splittedRoute[1];
+                const params = paramString?.split('&');
+                params?.forEach(param => {
+                    const [key, value] = param.split('=');
+                    parameter[key] = value;
+                });
+            }
+            if (isQueryParams) {
+                this.router.navigate([route], { queryParams: parameter });
+            } else {
+                this.router.navigate([route], parameter);
+            }
+            if(isElectron && isSocialLogin) {
+                setTimeout(() => {
+                    window.location.reload();
+                }, 200);
+            }
+        }
+    }
+
+    /**
+     * This will sort branches by alias
+     *
+     * @param {*} branchA
+     * @param {*} branchB
+     * @returns {*}
+     * @memberof CompanyBranchComponent
+     */
+    public sortBranches(branchA: any, branchB: any): any {
+        var regexA = /[^a-zA-Z]/g;
+        var regexN = /[^0-9]/g;
+
+        var branchAInt = parseInt(branchA?.alias, 10);
+        var branchBInt = parseInt(branchB?.alias, 10);
+
+        if (isNaN(branchAInt) && isNaN(branchBInt)) {
+            var branchAOutput = branchA?.alias?.toLowerCase()?.replace(regexA, "");
+            var branchBOutput = branchB?.alias?.toLowerCase()?.replace(regexA, "");
+            if (branchAOutput === branchBOutput) {
+                var branchANumeric = parseInt(branchA?.alias?.toLowerCase()?.replace(regexN, ""), 10);
+                var branchBNumeric = parseInt(branchB?.alias?.toLowerCase()?.replace(regexN, ""), 10);
+                return branchANumeric === branchBNumeric ? 0 : branchANumeric > branchBNumeric ? 1 : -1;
+            } else {
+                return branchAOutput > branchBOutput ? 1 : -1;
+            }
+        } else if (isNaN(branchAInt)) { //A is not an Int
+            return 1; //to make alphanumeric sort first return -1 here
+        } else if (isNaN(branchBInt)) { //B is not an Int
+            return -1; //to make alphanumeric sort first return 1 here
+        } else {
+            return branchAInt > branchBInt ? 1 : -1;
+        }
+    }
+
+    /**
+     * This will give multi-lingual current voucher label
+     *
+     * @param {string} voucherCode Voucher code
+     * @param {*} commonLocaleData Global context of multi-lingual keys
+     * @return {*} {string} Multi-lingual current voucher label
+     * @memberof GeneralService
+     */
+     public getCurrentVoucherLabel(voucherCode: string, commonLocaleData: any): string {
+        switch(voucherCode) {
+            case AdjustedVoucherType.Sales: case AdjustedVoucherType.SalesInvoice: return commonLocaleData?.app_voucher_types.sales;
+            case AdjustedVoucherType.Purchase: return commonLocaleData?.app_voucher_types.purchase;
+            case AdjustedVoucherType.CreditNote: return commonLocaleData?.app_voucher_types.credit_note;
+            case AdjustedVoucherType.DebitNote: return commonLocaleData?.app_voucher_types.debit_note;
+            case AdjustedVoucherType.Payment: return commonLocaleData?.app_voucher_types.payment;
+            default: return '';
+        }
+    }
+
+    /**
+     * Determines if an element is child element to another element
+     *
+     * @param {*} child Element received as child
+     * @param {*} parent Element received as parent
+     * @return {boolean} True, if element is child of another element
+     * @memberof GeneralService
+     */
+    public childOf(child: any, parent: any): boolean {
+        while ((child = child.parentNode) && child !== parent) {
+        }
+        return !!child;
+    }
+
+    /* This will expand left sidebar
+     *
+     * @memberof GeneralService
+     */
+    public expandSidebar(): void {
+        const isAccountModalOpened = document.querySelector('.create-acc-form');
+        if (!isAccountModalOpened) {
+            document.querySelector('.primary-sidebar')?.classList?.remove('sidebar-collapse');
+            document.querySelector('.nav-left-bar')?.classList?.remove('width-60');
+        }
+    }
+
+    /**
+     * This will collapse left sidebar
+     *
+     * @memberof GeneralService
+     */
+    public collapseSidebar(): void {
+        document.querySelector('.primary-sidebar')?.classList?.add('sidebar-collapse');
+        document.querySelector('.nav-left-bar')?.classList?.add('width-60');
     }
 }

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-
 import {
     ConfirmationModalButton,
     ConfirmationModalConfiguration,
@@ -16,25 +15,25 @@ export class ProformaInvoiceUtilityService {
      * @returns {ConfirmationModalConfiguration} Popup configuration for purchase record confirmation popup
      * @memberof ProformaInvoiceUtilityService
      */
-    public getPurchaseRecordConfirmationConfiguration(): ConfirmationModalConfiguration {
+    public getPurchaseRecordConfirmationConfiguration(localeData: any, commonLocaleData: any): ConfirmationModalConfiguration {
         const buttons: Array<ConfirmationModalButton> = [{
-            text: 'Yes',
+            text: commonLocaleData?.app_yes,
             cssClass: 'btn btn-success'
         },
         {
-            text: 'No',
+            text: commonLocaleData?.app_no,
             cssClass: 'btn btn-danger'
         }];
-        const headerText: string = 'Purchase Bill Confirmation';
+        const headerText: string = localeData?.purchase_record_confirmation_heading;
         const headerCssClass: string = 'd-inline-block mr-1 purchase-record-confirm-header';
         const messageCssClass: string = 'mr-b1';
         const footerCssClass: string = 'mr-b1 text-light';
         return {
             headerText,
             headerCssClass,
-            messageText: `<span class="mr-b1 text-light">You have already created a purchase bill with the same invoice number, invoice date and vendor details.</span><span class="mr-b1"> Do you want to merge this transaction with the previous one?<span>`,
+            messageText: '<span class="mr-b1 text-light">' + localeData?.purchase_record_note1 + '</span><span class="mr-b1"> ' + localeData?.purchase_record_note2 + '<span>',
             messageCssClass,
-            footerText: 'If no then change either purchase invoice number or vendor details.',
+            footerText: localeData?.purchase_record_footer_note,
             footerCssClass,
             buttons
         };

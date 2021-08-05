@@ -10,16 +10,19 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
+import * as moment from 'moment';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-
 import { CompanyActions } from '../actions/company.actions';
 import { GeneralActions } from '../actions/general/general.actions';
 import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
+import { GstReport } from '../gst/constants/gst.constant';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { OrganizationType } from '../models/user-login-state';
 import { GeneralService } from '../services/general.service';
-import { ALL_ITEMS, AllItem } from '../shared/helpers/allItems';
+import { GstReconcileService } from '../services/GstReconcile.service';
+import { AllItem } from '../shared/helpers/allItems';
+import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { AppState } from '../store';
 
 @Component({
@@ -44,6 +47,16 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
     public itemIndex: number = -1;
     /** Subject to unsubscribe from listeners */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
+    /** Holds current date period for GST report */
+    public currentPeriod: any = {};
+    /** this is store actvie company gst number */
+    public activeCompanyGstNumber: string;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -52,7 +65,8 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
         private generalActions: GeneralActions,
         private groupWithAction: GroupWithAccountsAction,
         private router: Router,
-        private store: Store<AppState>
+        private store: Store<AppState>,
+        private gstReconcileService: GstReconcileService
     ) {
 
     }
@@ -108,8 +122,10 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
         }
         if (event.key === 'Enter' && this.menuIndex !== -1 && this.itemIndex !== -1) {
             const currentFocusedItem = items[this.menuIndex]?.items[this.itemIndex];
-            if (currentFocusedItem) {
-                this.router.navigate([currentFocusedItem.link], { queryParams: currentFocusedItem.additional});
+            if (currentFocusedItem?.link) {
+                this.router.navigate([currentFocusedItem.link], { queryParams: currentFocusedItem.additional });
+            } else {
+                this.handleItemClick(currentFocusedItem);
             }
         }
     }
@@ -120,15 +136,14 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
      * @memberof AllGiddhItemComponent
      */
     public ngOnInit(): void {
+        this.loadTaxDetails();
+        this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
+        this.currentPeriod = {
+            from: moment().startOf('month').format(GIDDH_DATE_FORMAT),
+            to: moment().endOf('month').format(GIDDH_DATE_FORMAT)
+        };
+
         this.store.dispatch(this.generalActions.getSideMenuItems());
-        this.store.pipe(select(appStore => appStore.general.menuItems), takeUntil(this.destroyed$)).subscribe(items => {
-            if (items) {
-                const allItems = this.generalService.getVisibleMenuItems(items, ALL_ITEMS);
-                this.allItems$ = of(allItems);
-                this.filteredItems$ = of(allItems);
-                this.changeDetectorRef.detectChanges();
-            }
-        });
         this.searchField?.nativeElement?.focus();
         this.saveLastState();
     }
@@ -200,8 +215,10 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
      * @memberof AllGiddhItemComponent
      */
     public handleItemClick(item: AllItem): void {
-        if (item.label === 'Master') {
+        if (item.label === this.commonLocaleData?.app_master) {
             this.store.dispatch(this.groupWithAction.OpenAddAndManageFromOutside(''));
+        } else if(item?.additional?.isGstMenu === true) {
+            this.navigate(item?.additional?.type);
         }
     }
 
@@ -218,5 +235,83 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
         stateDetailsRequest.lastState = `/pages/${state}`;
 
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof AllGiddhItemComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.store.pipe(select(appStore => appStore.general.menuItems), takeUntil(this.destroyed$)).subscribe(items => {
+                if (items) {
+                    const allItems = this.generalService.getVisibleMenuItems("all-items", items, this.localeData?.items);
+                    this.allItems$ = of(allItems);
+                    this.filteredItems$ = of(allItems);
+                    this.changeDetectorRef.detectChanges();
+                }
+            });
+        }
+    }
+
+    /**
+     * Get tax numbers
+     *
+     * @memberof AllGiddhItemComponent
+     */
+     public loadTaxDetails(): void {
+        this.activeCompanyGstNumber = "";
+        this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.body) {
+                let taxes = response.body;
+                if(taxes?.length === 1) {
+                    this.activeCompanyGstNumber = taxes[0];
+                }
+            }
+        });
+    }
+
+    /**
+    * This is navigate menu item
+    *
+    * @param {string} type Type of GST module
+    * @memberof AllGiddhItemComponent
+    */
+     public navigate(type: string): void {
+        if(this.activeCompanyGstNumber) {
+            switch (type) {
+                case GstReport.Gstr1: case GstReport.Gstr2:
+                    this.navigateToOverview(type);
+                    break;
+                case GstReport.Gstr3b:
+                    this.navigateToGstR3B(type);
+                    break;
+                default: break;
+            }
+        } else {
+            this.router.navigate(['pages', 'gstfiling']);
+        }
+    }
+
+    /**
+     * This will navigate to Gstr1/Gstr2 report
+     *
+     * @param {string} type
+     * @memberof AllGiddhItemComponent
+     */
+    public navigateToOverview(type: string): void {
+        this.router.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: 0, selectedGst: this.activeCompanyGstNumber } });
+    }
+
+    /**
+     * This will navigate to Gstr3b report
+     *
+     * @param {string} type
+     * @memberof AllGiddhItemComponent
+     */
+    public navigateToGstR3B(type: string): void {
+        this.router.navigate(['pages', 'gstfiling', 'gstR3'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, isCompany: this.isCompany, selectedGst: this.activeCompanyGstNumber } });
     }
 }

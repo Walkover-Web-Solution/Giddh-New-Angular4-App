@@ -1,5 +1,4 @@
 import { empty as observableEmpty, Observable } from 'rxjs';
-
 import { catchError, map } from 'rxjs/operators';
 import { GroupUpateRequest, MoveGroupResponse } from './../models/api-models/Group';
 import { Inject, Injectable, Optional } from '@angular/core';
@@ -8,16 +7,14 @@ import { HttpWrapperService } from './httpWrapper.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
-import { FlattenGroupsAccountsResponse, GroupCreateRequest, GroupResponse, GroupSharedWithResponse, GroupsTaxHierarchyResponse, MoveGroupRequest, ShareGroupRequest } from '../models/api-models/Group';
+import { FlattenGroupsAccountsResponse, GroupCreateRequest, GroupResponse, GroupSharedWithResponse, GroupsTaxHierarchyResponse, MoveGroupRequest } from '../models/api-models/Group';
 import { GROUP_API } from './apiurls/group.api';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { IPaginatedResponse } from '../models/interfaces/paginatedResponse.interface';
 
 declare var _: any;
 
-// import { UserManager, Log, MetadataService, User } from 'oidc-client';
 @Injectable()
 export class GroupService {
     private companyUniqueName: string;
@@ -74,28 +71,6 @@ export class GroupService {
             data.request = modele;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<GroupResponse, GroupUpateRequest>(e, modele, { groupUniqueName })));
-    }
-
-    public ShareGroup(modele: ShareGroupRequest, groupUniqueName: string): Observable<BaseResponse<string, ShareGroupRequest>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-
-        return this._http.put(this.config.apiUrl + GROUP_API.SHARE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)), modele).pipe(map((res) => {
-            let data: BaseResponse<string, ShareGroupRequest> = res;
-            data.queryString = { groupUniqueName };
-            data.request = modele;
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<string, ShareGroupRequest>(e, modele, { groupUniqueName })));
-    }
-
-    public GetGrouptDetails(groupUniqueName: string): Observable<BaseResponse<GroupResponse, string>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + GROUP_API.GET_GROUP_DETAILS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).pipe(map((res) => {
-            let data: BaseResponse<GroupResponse, string> = res;
-            data.queryString = { groupUniqueName };
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<GroupResponse, string>(e)));
     }
 
     // need to check on Effect
@@ -187,12 +162,11 @@ export class GroupService {
                 url = url.concat(`&branchUniqueName=${branchUniqueName !== this.companyUniqueName ? branchUniqueName : ''}`);
             }
             return this._http.get(url).pipe(map((res) => {
-                    let data: BaseResponse<FlattenGroupsAccountsResponse, string> = res;
-                    data.request = '';
-                    data.queryString = { q, page, count, showEmptyGroups };
-                    // data.response.results.forEach(p => p.isOpen = false);
-                    return data;
-                }), catchError((e) => this.errorHandler.HandleCatch<FlattenGroupsAccountsResponse, string>(e, '', { q, page, count, showEmptyGroups })));
+                let data: BaseResponse<FlattenGroupsAccountsResponse, string> = res;
+                data.request = '';
+                data.queryString = { q, page, count, showEmptyGroups };
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<FlattenGroupsAccountsResponse, string>(e, '', { q, page, count, showEmptyGroups })));
         } else {
             return observableEmpty();
         }
@@ -207,44 +181,6 @@ export class GroupService {
             data.queryString = { groupUniqueName };
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<GroupsTaxHierarchyResponse, string>(e, groupUniqueName, { groupUniqueName })));
-    }
-
-    /**
-     * get subgroups of a group
-     * @param groupUniqueName
-     */
-    public GetGroupSubgroups(groupUniqueName: string): Observable<BaseResponse<any, string>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        if (this.companyUniqueName) {
-            return this._http.get(this.config.apiUrl + GROUP_API.GET_SUB_GROUPS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).pipe(map((res) => {
-                let data: BaseResponse<any, string> = res;
-                data.request = groupUniqueName;
-                data.queryString = { groupUniqueName };
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, groupUniqueName, { groupUniqueName })));
-        } else {
-            return observableEmpty();
-        }
-
-    }
-
-    /**
-     * get flatten groups with breadcrumb
-     */
-    public GetFlattenGroups(q?: any): Observable<BaseResponse<IPaginatedResponse, string>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        if (this.companyUniqueName) {
-            let URL = this.prepareURI(GROUP_API.FLATTEN_GROUPS_LIST);
-            return this._http.get(URL).pipe(map((res) => {
-                let data: BaseResponse<IPaginatedResponse, string> = res;
-                data.request = q;
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<IPaginatedResponse, string>(e, q)));
-        } else {
-            return observableEmpty();
-        }
     }
 
     /**
@@ -264,13 +200,13 @@ export class GroupService {
         }), catchError((exception) => this.errorHandler.HandleCatch<string, any>(exception, model)));
     }
 
-     /**
-     * API call to get custom fields for company
-     *
-     * @param {*} model
-     * @returns {Observable<BaseResponse<any, string>>}
-     * @memberof GroupService
-     */
+    /**
+    * API call to get custom fields for company
+    *
+    * @param {*} model
+    * @returns {Observable<BaseResponse<any, string>>}
+    * @memberof GroupService
+    */
     public getCompanyCustomField(): Observable<BaseResponse<any, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
@@ -304,23 +240,4 @@ export class GroupService {
         return this._http.get(contextPath)
             .pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
-
-    /**
-     * returns an URL after doing errands
-     * @param cStr [company uniquename]
-     * @param gStr [group uniquename]
-     * @param aStr [ac uniquename]
-     */
-    private prepareURI(cStr?: string, gStr?: string, gName?: string, aStr?: string) {
-        let cUName = this._generalService.companyUniqueName;
-        let URL = this.config.apiUrl;
-        if (cStr) {
-            URL += cStr.replace(':companyUniqueName', encodeURIComponent(cUName));
-        }
-        if (gStr && gName) {
-            URL += gStr.replace(':groupUniqueName', encodeURIComponent(gName));
-        }
-        return URL;
-    }
-
 }

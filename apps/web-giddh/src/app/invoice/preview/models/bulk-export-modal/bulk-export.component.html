@@ -1,6 +1,8 @@
 <div class="modal-header">
-    <h4 class="modal-title pull-left">Bulk Export - Total {{totalItems}}</h4>
-    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal();">
+    <h4 class="modal-title pull-left">{{commonLocaleData?.app_bulk_export}} - {{commonLocaleData?.app_total}}
+        {{totalItems}}</h4>
+    <button type="button" class="close pull-right" [attr.aria-label]="commonLocaleData?.app_close"
+        (click)="closeModal();">
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
@@ -9,67 +11,20 @@
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </div>
     <div class="export-modal-wrapper" *ngIf="!isLoading">
-        <!-- <div class="row mr-b15">
-            <div class="col-sm-4">
-                <label>Export</label>
-            </div>
-            <div class="col-sm-8">
-                <div class="export-container">
-                    <span class="pd0 mrR3">
-                        <input id="radio-1" name="pdfType" type="radio" class="radio-custom cp ml0">
-                        <label for="radio-1" class="radio-custom-label">PDf</label>
-                    </span>
-                    <span class="pd0 mrR3">
-                        <input id="radio-2" name="pdfType" type="radio" class="radio-custom cp ml0">
-                        <label for="radio-2" class="radio-custom-label">Excel</label>
-                    </span>
-                </div>
-            </div>
-        </div>
         <div class="row mr-b15">
             <div class="col-sm-4">
-                <label>PDF</label>
+                <label>{{localeData?.select_copy}}</label>
             </div>
             <div class="col-sm-8">
-                <div class="export-container">
-                    <span class="pd0 mrR3">
-                        <input id="radio-3" name="exportType" type="radio" class="radio-custom cp ml0">
-                        <label for="radio-3" class="radio-custom-label">Single PDF</label>
-                    </span>
-                    <span class="pd0 mrR3">
-                        <input id="radio-4" name="exportType" type="radio" class="radio-custom cp ml0">
-                        <label for="radio-4" class="radio-custom-label">Separate PDF</label>
-                    </span>
-                </div>
-            </div>
-        </div> -->
-        <!-- <div class="row mr-b15">
-            <div class="col-sm-4">
-                <label>Order</label>
-            </div>
-            <div class="col-sm-8">
-                <div class="export-container">
-                    <span class="pd0 mrR3">
-                        <input id="radio-3" name="orderType" type="radio" class="radio-custom cp ml0">
-                        <label for="radio-3" class="radio-custom-label">Ascending</label>
-                    </span>
-                    <span class="pd0 mrR3">
-                        <input id="radio-4" name="orderType" type="radio" class="radio-custom cp ml0">
-                        <label for="radio-4" class="radio-custom-label">Descending</label>
-                    </span>
-                </div>
-            </div>
-        </div> -->
-        <div class="row mr-b15">
-            <div class="col-sm-4">
-                <label>Select Copy</label>
-            </div>
-            <div class="col-sm-8">
-                <sh-select [options]="downloadCopyOptions" placeholder="Select Order" [multiple]="true" name="downloadCopy" [(ngModel)]="copyTypes" [isFilterEnabled]="true" [useInBuiltFilterForIOptionTypeItems]="true">
+                <sh-select [options]="downloadCopyOptions" [placeholder]="localeData?.select_order" [multiple]="true"
+                    name="downloadCopy" [(ngModel)]="copyTypes" [isFilterEnabled]="true"
+                    [useInBuiltFilterForIOptionTypeItems]="true">
                     <ng-template #optionTemplate let-option="option">
                         <ng-container>
                             <a href="javascript:void(0)" class="list-item d-flex">
-                                <span class="min-width-auto"><input type="checkbox" [checked]="copyTypes.includes(option.value)" [value]="option.value"></span>&nbsp;
+                                <span class="min-width-auto"><input type="checkbox"
+                                        [checked]="copyTypes.includes(option.value)"
+                                        [value]="option.value"></span>&nbsp;
                                 <span>
                                     <div class="item">{{ option.label }}</div>
                                 </span>
@@ -79,35 +34,26 @@
                 </sh-select>
             </div>
         </div>
-        <!-- <div class="row mr-b15">
-            <div class="col-sm-4 d-flex">
-                <input type="checkbox" class="show-on-mobile mr-3">
-                <label>Attachment</label>
-            </div>
-            <div class="col-sm-8 hide-on-mobile">
-                <div class="toggle d-inline-block" data-key="disabled">
-                    <input type="checkbox">
-
-                </div>
-            </div>
-        </div> -->
         <div class="row mr-b15">
             <div class="col-sm-12">
-            <button class="btn btn-success" [disabled]="!copyTypes || copyTypes.length === 0 || isLoading" (click)="exportVouchers(false)">Download</button>
-                <!-- <button class="btn btn-success">Print</button> -->
+                <button class="btn btn-success" [disabled]="!copyTypes || copyTypes.length === 0 || isLoading"
+                    (click)="exportVouchers(false)">{{commonLocaleData?.app_download}}</button>
             </div>
         </div>
-        OR
+        {{commonLocaleData?.app_or}}
         <br>
         <br>
         <div class="row mr-b15">
             <div class="col-sm-12">
-                <label class="mb-1">You can add multiple id's comma separated</label>
+                <label class="mb-1">{{localeData?.add_multiple_email}}</label>
             </div>
             <div class="col-sm-12">
                 <!-- Email id could be mulitiple   -->
-                <textarea type="text" placeholder="Recipient Email Id's" class="form-control mr-b15 multiple-email" name="recipients" [(ngModel)]="recipients"></textarea>
-                <button class="btn btn-success" [disabled]="!recipients || recipients.length === 0 || !copyTypes || copyTypes.length === 0 || isLoading" (click)="exportVouchers(true)">Send Email</button>
+                <textarea type="text" [placeholder]="localeData?.recipients_email"
+                    class="form-control mr-b15 multiple-email" name="recipients" [(ngModel)]="recipients"></textarea>
+                <button class="btn btn-success"
+                    [disabled]="!recipients || recipients.length === 0 || !copyTypes || copyTypes.length === 0 || isLoading"
+                    (click)="exportVouchers(true)">{{commonLocaleData?.app_send_email}}</button>
             </div>
         </div>
     </div>

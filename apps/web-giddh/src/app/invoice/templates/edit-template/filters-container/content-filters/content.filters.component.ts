@@ -4,17 +4,16 @@ import { take, takeUntil } from 'rxjs/operators';
 import { Component, DoCheck, EventEmitter, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../../../../services/invoice.ui.data.service';
 import { CustomTemplateResponse } from '../../../../../models/api-models/Invoice';
-import * as _ from '../../../../../lodash-optimized';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../../store';
 import { Configuration } from '../../../../../app.constant';
 import { humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput } from 'ngx-uploader';
-// import {ViewChild, ElementRef} from '@angular/core';
 import { INVOICE_API } from 'apps/web-giddh/src/app/services/apiurls/invoice';
 import { CurrentCompanyState } from 'apps/web-giddh/src/app/store/Company/company.reducer';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { NgForm } from '@angular/forms';
+import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
     selector: 'content-selector',
@@ -110,26 +109,26 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
             // this.getVoucher(false);
         });
         this._invoiceUiDataService.templateVoucherType.pipe(takeUntil(this.destroyed$)).subscribe((voucherType: string) => {
-            this.voucherType = _.cloneDeep(voucherType);
+            this.voucherType = cloneDeep(voucherType);
         });
         this._invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
             if (this.contentForm) {
                 this._invoiceUiDataService.setContentForm(this.contentForm);
             }
-            this.customTemplate = _.cloneDeep(template);
+            this.customTemplate = cloneDeep(template);
             this.assignImageSignature();
         });
 
         this._invoiceUiDataService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
-            this.templateUISectionVisibility = _.cloneDeep(info);
+            this.templateUISectionVisibility = cloneDeep(info);
         });
 
         this._invoiceUiDataService.isCompanyNameVisible.pipe(takeUntil(this.destroyed$)).subscribe((yesOrNo: boolean) => {
-            this.showCompanyName = _.cloneDeep(yesOrNo);
+            this.showCompanyName = cloneDeep(yesOrNo);
         });
 
         this._invoiceUiDataService.fieldsAndVisibility.pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
-            this.fieldsAndVisibility = _.cloneDeep(obj);
+            this.fieldsAndVisibility = cloneDeep(obj);
         });
 
         this.fileUploadOptions = { concurrency: 1, allowedContentTypes: ['image/png', 'image/jpeg'] };
@@ -160,13 +159,13 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
      * onFieldChange
      */
     public onFieldChange(sectionName: string, fieldName: string, value: string) {
-        let template = _.cloneDeep(this.customTemplate);
+        let template = cloneDeep(this.customTemplate);
         this._invoiceUiDataService.setContentForm(this.contentForm);
         this._invoiceUiDataService.setCustomTemplate(template);
     }
 
     public changeDisableShipping() {
-        let template = _.cloneDeep(this.customTemplate);
+        let template = cloneDeep(this.customTemplate);
         // if (!template.sections.header.data.billingAddress.display) {
         //   template.sections.header.data.billingGstin.display = false;
         //   template.sections.header.data.billingState.display = false;
@@ -186,7 +185,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
         this._invoiceUiDataService.setCustomTemplate(template);
     }
     public changeDisableBilling() {
-        let template = _.cloneDeep(this.customTemplate);
+        let template = cloneDeep(this.customTemplate);
         if (!template.sections.header.data.billingAddress.display) {
             template.sections.header.data.billingGstin.display = false;
             template.sections.header.data.billingState.display = false;
@@ -201,7 +200,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
      * onChangeFieldVisibility
      */
     public onChangeFieldVisibility(sectionName: string, fieldName: string, value: boolean) {
-        let template = _.cloneDeep(this.customTemplate);
+        let template = cloneDeep(this.customTemplate);
         this._invoiceUiDataService.setContentForm(this.contentForm);
         this._invoiceUiDataService.setCustomTemplate(template);
     }
@@ -296,7 +295,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
      * @memberof ContentFilterComponent
      */
     public removeFileFromServer(): void {
-        this.invoiceService.removeSignature(this._invoiceUiDataService.unusedImageSignature).subscribe(() => {});
+        this.invoiceService.removeSignature(this._invoiceUiDataService.unusedImageSignature).subscribe(() => { });
     }
 
     public removeAllFiles(): void {
@@ -307,7 +306,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
      * chooseSigntureType
      */
     public chooseSigntureType(val) {
-        let template = _.cloneDeep(this.customTemplate);
+        let template = cloneDeep(this.customTemplate);
         if (val === 'slogan') {
             template.sections.footer.data.slogan.display = true;
             template.sections.footer.data.imageSignature.display = false;
@@ -325,8 +324,8 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
      * @memberof ContentFilterComponent
      */
     public changeDisableQuantity(): void {
-        let template = _.cloneDeep(this.customTemplate);
-        if(template && template.sections && template.sections.table && template.sections.table.data && template.sections.table.data.totalQuantity) {
+        let template = cloneDeep(this.customTemplate);
+        if (template && template.sections && template.sections.table && template.sections.table.data && template.sections.table.data.totalQuantity) {
             if (!template.sections.table.data.quantity.display) {
                 template.sections.table.data.totalQuantity.display = false;
             } else {
@@ -344,7 +343,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
      * @memberof ContentFilterComponent
      */
     public checkedTaxBifurcation(label: string, sectionType: string) {
-        let template = _.cloneDeep(this.customTemplate);
+        let template = cloneDeep(this.customTemplate);
         if (sectionType === 'table' && template && template.sections && template.sections.table && template.sections.table.data && template.sections.table.data.taxBifurcation) {
             if (template.sections.table.data.taxBifurcation.display) {
                 template.sections.table.data.taxBifurcation.label = label;

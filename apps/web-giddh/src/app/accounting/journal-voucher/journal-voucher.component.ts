@@ -137,6 +137,10 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
     public branches: Array<any>;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     /** @ignore */
     constructor(

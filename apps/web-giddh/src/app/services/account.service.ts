@@ -1,10 +1,9 @@
 import { empty as observableEmpty, Observable, of } from 'rxjs';
-
 import { catchError, map } from 'rxjs/operators';
 import { ShareRequestForm } from '../models/api-models/Permission';
 import { AccountMergeRequest, AccountMoveRequest, AccountRequest, AccountRequestV2, AccountResponse, AccountResponseV2, AccountSharedWithResponse, AccountsTaxHierarchyResponse, AccountUnMergeRequest, FlattenAccountsResponse, ShareAccountRequest, ShareEntityRequest } from '../models/api-models/Account';
 import { HttpWrapperService } from './httpWrapper.service';
-import { Inject, Injectable, OnInit, Optional } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { ACCOUNTS_API, ACCOUNTS_API_V2 } from './apiurls/account.api';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
@@ -17,7 +16,7 @@ import { AssignDiscountRequestForAccount, ApplyDiscountRequestV2 } from '../mode
 import { APPLY_DISCOUNT_API } from './apiurls/applyDiscount';
 
 @Injectable()
-export class AccountService implements OnInit {
+export class AccountService {
 
     private user: UserDetails;
     private companyUniqueName: string;
@@ -26,26 +25,6 @@ export class AccountService implements OnInit {
         private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-    }
-
-    public ngOnInit() {
-        //
-    }
-
-    /**
-     * Create Account Service
-     */
-    public CreateAccount(model: AccountRequest, groupUniqueName: string): Observable<BaseResponse<AccountResponse, AccountRequest>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + ACCOUNTS_API.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)), model).pipe(
-            map((res) => {
-                let data: BaseResponse<AccountResponse, AccountRequest> = res;
-                data.request = model;
-                data.queryString = { groupUniqueName };
-                return data;
-            }),
-            catchError((e) => this.errorHandler.HandleCatch<AccountResponse, AccountRequest>(e, model, { groupUniqueName })));
     }
 
     public UpdateAccount(model: AccountRequest, accountUniqueName: string): Observable<BaseResponse<AccountResponse, AccountRequest>> {
@@ -59,27 +38,6 @@ export class AccountService implements OnInit {
                 return data;
             }),
             catchError((e) => this.errorHandler.HandleCatch<AccountResponse, AccountRequest>(e)));
-    }
-
-    public GetAccountDetails(accountUniqueName: string): Observable<BaseResponse<AccountResponse, string>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + ACCOUNTS_API.DETAILS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).pipe(map((res) => {
-            let data: BaseResponse<AccountResponse, string> = res;
-            data.queryString = { accountUniqueName };
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<AccountResponse, string>(e)));
-    }
-
-    public GetAccountUniqueName(accountUniqueName: string): Observable<BaseResponse<AccountResponse, string>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + ACCOUNTS_API.DETAILS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).pipe(map((res) => {
-            let data: BaseResponse<AccountResponse, string> = res;
-            data.queryString = { accountUniqueName };
-            data.request = accountUniqueName;
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<AccountResponse, string>(e)));
     }
 
     public MergeAccount(model: AccountMergeRequest[], accountUniqueName: string): Observable<BaseResponse<string, AccountMergeRequest[]>> {
@@ -133,6 +91,7 @@ export class AccountService implements OnInit {
             }),
             catchError((e) => this.errorHandler.HandleCatch<string, AssignDiscountRequestForAccount>(e)));
     }
+    
     public GetApplyDiscount(accountUniqueName: string): Observable<BaseResponse<any, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
@@ -142,22 +101,6 @@ export class AccountService implements OnInit {
             data.request = accountUniqueName;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
-    }
-
-    public DeleteDiscount(discountUniqueName: string, accountUniqueName: string): Observable<BaseResponse<string, string>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.delete(this.config.apiUrl + APPLY_DISCOUNT_API.DELETE_DISCOUNT
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':discountUniqueName', encodeURIComponent(discountUniqueName))
-            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
-        ).pipe(
-            map((res) => {
-                let data: BaseResponse<string, string> = res;
-                data.queryString = { discountUniqueName, accountUniqueName };
-                return data;
-            }),
-            catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
     }
 
     public AccountMove(model: AccountMoveRequest, accountUniqueName: string, activeGroupUniqueName: string): Observable<BaseResponse<string, AccountMoveRequest>> {
@@ -275,17 +218,6 @@ export class AccountService implements OnInit {
         }
     }
 
-    public GetFlatternAccountsOfGroup(groupUniqueNames: { groupUniqueNames: string[] }, count?: any, q?: string, page?: any): Observable<BaseResponse<FlattenAccountsResponse, { groupUniqueNames: string[] }>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + ACCOUNTS_API.FLATTEN_ACCOUNTS_OF_GROUPS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':count', count || 0).replace(':q', encodeURIComponent(q || '')).replace(':page', encodeURIComponent(page || 1)), groupUniqueNames).pipe(map((res) => {
-            let data: BaseResponse<FlattenAccountsResponse, { groupUniqueNames: string[] }> = res;
-            data.request = groupUniqueNames;
-            data.queryString = { count, q, page };
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<FlattenAccountsResponse, { groupUniqueNames: string[] }>(e)));
-    }
-
     public GetTaxHierarchy(accountUniqueName: string): Observable<BaseResponse<AccountsTaxHierarchyResponse, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
@@ -331,8 +263,8 @@ export class AccountService implements OnInit {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.put(this.config.apiUrl + ACCOUNTS_API_V2.UPDATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':groupUniqueName', encodeURIComponent(reqObj.groupUniqueName))
-            .replace(':accountUniqueName', encodeURIComponent(reqObj.accountUniqueName)), model).pipe(
+            .replace(':groupUniqueName', encodeURIComponent(reqObj?.groupUniqueName))
+            .replace(':accountUniqueName', encodeURIComponent(reqObj?.accountUniqueName)), model).pipe(
                 map((res) => {
                     let data: BaseResponse<AccountResponseV2, AccountRequestV2> = res;
                     data.request = model;

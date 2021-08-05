@@ -113,7 +113,6 @@ export class LedgerResponse {
     public tdsTaxes?: string[];
     public otherTaxType?: 'tcs' | 'tds';
     public exchangeRate?: number = 1;
-    public exchangeRateForDisplay?: number = 1;
     public valuesInAccountCurrency?: boolean = false;
     public discountResources?: any[];
     public subVoucher?: string = '';
@@ -127,23 +126,6 @@ export class LedgerResponse {
     public voucherAdjustments?: VoucherAdjustments;
     public unitRates?: Array<any>;
     public entryVoucherTotals?: any;
-}
-/** Model for Ledger Advance receipts for invoices */
-export class VoucherAdjustmentsForInvoice {
-    adjustedInvoices: AdjustedInvoice[];
-    totalAdjustmentAmount: number;
-    description: string;
-}
-
-/** Model for invoices list for ledger Advance receipts */
-export class AdjustedInvoice {
-    invoiceNumber: string;
-    invoiceUniqueName: string;
-    adjustedAmount: AdjustedAmount;
-    invoiceDate: string;
-    taxAmount?: number;
-    taxRate: number;
-    taxUniqueName: string[];
 }
 
 /** Model adjusted amounts for invoices */

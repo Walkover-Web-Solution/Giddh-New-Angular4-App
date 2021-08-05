@@ -7,18 +7,16 @@ import { ToasterService } from '../services/toaster.service';
 import { SignupWithMobile, UserDetails, VerifyMobileModel } from '../models/api-models/loginModels';
 import { LoginActions } from '../actions/login.action';
 import { AuthenticationService } from '../services/authentication.service';
-import { CompanyService } from '../services/companyService.service';
-import { CompanyResponse, GetCouponResp, StateDetailsRequest } from '../models/api-models/Company';
+import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
 import { cloneDeep } from '../lodash-optimized';
 import { CompanyActions } from '../actions/company.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SessionActions } from '../actions/session.action';
 import * as moment from 'moment';
-import { GIDDH_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT_DD_MM_YYYY, GIDDH_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { GeneralActions } from '../actions/general/general.actions';
-import { CurrentPage } from '../models/api-models/Common';
 import { API_POSTMAN_DOC_URL } from '../app.constant';
 import { BreakpointObserver } from '@angular/cdk/layout';
 
@@ -28,7 +26,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
     styleUrls: [`./userDetails.component.scss`],
 })
 export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
-    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
+    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
     public userAuthKey: string = '';
     public expandLongCode: boolean = false;
     public twoWayAuth: boolean = false;
@@ -45,7 +43,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public payAlert: any[] = [];
     public directPay: boolean = false;
     public disableRazorPay: boolean = false;
-    public coupRes: GetCouponResp = new GetCouponResp();
     public contactNo$: Observable<string>;
     public subscriptions: any;
     public transactions: any;
@@ -69,16 +66,18 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public activeTab: string = '';
     public isUpdateCompanyInProgress$: Observable<boolean>;
     public isCreateAndSwitchCompanyInProcess: boolean;
-    public asideSettingMenuState: string = 'in';
     public isMobileScreen: boolean = true;
     public apiPostmanDocUrl: String = API_POSTMAN_DOC_URL;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>,
         private _toasty: ToasterService,
         private _loginService: AuthenticationService,
         private loginAction: LoginActions,
-        private _companyService: CompanyService,
         private companyActions: CompanyActions,
         private router: Router,
         private _sessionAction: SessionActions,
@@ -95,6 +94,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
                 return s.session.user.countryCode;
             }
         }), takeUntil(this.destroyed$));
+
         this.isAddNewMobileNoInProcess$ = this.store.pipe(select(s => s.login.isAddNewMobileNoInProcess), takeUntil(this.destroyed$));
         this.isAddNewMobileNoSuccess$ = this.store.pipe(select(s => s.login.isAddNewMobileNoSuccess), takeUntil(this.destroyed$));
         this.isVerifyAddNewMobileNoInProcess$ = this.store.pipe(select(s => s.login.isVerifyAddNewMobileNoInProcess), takeUntil(this.destroyed$));
@@ -110,21 +110,17 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngOnInit() {
+        document.querySelector('body').classList.add('setting-sidebar-open');
+        
         this.breakPointObservar.observe([
             '(max-width:767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
-            if (!this.isMobileScreen) {
-                this.asideSettingMenuState = "in";
-                this.toggleBodyClass();
-            } else {
-                this.asideSettingMenuState = "out";
-            }
         });
 
-        if (!this.isCreateAndSwitchCompanyInProcess){
+        if (!this.isCreateAndSwitchCompanyInProcess) {
             document.querySelector('body').classList.add('tabs-page');
-        } else{
+        } else {
             document.querySelector('body').classList.remove('tabs-page');
         }
 
@@ -132,25 +128,21 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
             if (params['type'] && this.activeTab !== params['type']) {
                 this.setStateDetails(params['type']);
                 this.activeTab = params['type'];
-                if(this.activeTab === "auth-key") {
-                    this.setCurrentPageTitle("Api");
-                }
             } else if (!params['type'] && !this.activeTab) {
                 this.setStateDetails("auth-key");
                 this.activeTab = "auth-key";
-                this.setCurrentPageTitle("Api");
             }
         });
 
         this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            if(params && params.tabIndex) {
-                if(params && params.tabIndex == "0") {
+            if (params && params.tabIndex) {
+                if (params && params.tabIndex == "0") {
                     this.activeTab = "auth-key";
-                } else if(params && params.tabIndex == "1") {
+                } else if (params && params.tabIndex == "1") {
                     this.activeTab = "mobile-number";
-                } else if(params && params.tabIndex == "2") {
+                } else if (params && params.tabIndex == "2") {
                     this.activeTab = "session";
-                } else if(params && params.tabIndex == "3") {
+                } else if (params && params.tabIndex == "3") {
                     this.activeTab = "subscription";
                 }
                 this.router.navigate(['pages/user-details/', this.activeTab], { replaceUrl: true });
@@ -195,7 +187,16 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.userSessionResponse$.subscribe(s => {
             if (s && s.length) {
-                this.userSessionList = s;
+                this.userSessionList = s.map(session => {
+                    // Calculate sign in date
+                    session.signInDate = moment(session.createdAt).format(GIDDH_DATE_FORMAT_DD_MM_YYYY);
+                    // Calculate sign in time
+                    session.signInTime = moment(session.createdAt).format('LTS');
+                    // Calculate duration
+                    const duration = moment.duration(moment().diff(session.createdAt));
+                    session.sessionDuration = `${duration.days()}/${duration.hours()}/${duration.minutes()}/${duration.seconds()}`;
+                    return session;
+                });
             } else {
                 this.store.dispatch(this._sessionAction.getAllSession());
             }
@@ -217,7 +218,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         });
 
-        if(document.getElementsByClassName('nav-item') && document.getElementsByClassName('nav-item')[3]) {
+        if (document.getElementsByClassName('nav-item') && document.getElementsByClassName('nav-item')[3]) {
             document.getElementsByClassName('nav-item')[3].addEventListener('click', (event) => {
                 this.onTabChanged("subscription");
             });
@@ -232,7 +233,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
             request.mobileNumber = this.phoneNumber;
             this.store.dispatch(this.loginAction.AddNewMobileNo(request));
         } else {
-            this._toasty.errorToast('Please enter number in format: 9998899988');
+            this._toasty.errorToast(this.localeData?.mobile_number?.mobile_number_validation_error);
         }
     }
 
@@ -265,35 +266,8 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public selectTab(id: number) {
-        if(this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[id]) {
+        if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[id]) {
             this.staticTabs.tabs[id].active = true;
-        }
-    }
-
-    /**
-  * This will toggle the settings popup
-  *
-  * @param {*} [event]
-  * @memberof SettingsComponent
-  */
-    public toggleSettingPane(event?): void {
-        this.toggleBodyClass();
-
-        if (this.isMobileScreen && event && this.asideSettingMenuState === 'in') {
-            this.asideSettingMenuState = "out";
-        }
-    }
-
-    /**
-     * This will toggle the fixed class on body
-     *
-     * @memberof SettingsComponent
-     */
-    public toggleBodyClass(): void {
-        if (this.asideSettingMenuState === 'in') {
-            document.querySelector('body').classList.add('setting-sidebar-open');
-        } else {
-            document.querySelector('body').classList.remove('setting-sidebar-open');
         }
     }
 
@@ -301,7 +275,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('setting-sidebar-open');
-        this.asideSettingMenuState = "out";
     }
 
     /**
@@ -353,10 +326,43 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
-    public setCurrentPageTitle(title) {
-        let currentPageObj = new CurrentPage();
-        currentPageObj.name = "User-Details > " + title;
-        currentPageObj.url = this.router.url;
-        this.store.dispatch(this.generalActions.setPageTitle(currentPageObj));
+    /**
+     * This will return page heading based on active tab
+     *
+     * @param {boolean} event
+     * @memberof UserDetailsComponent
+     */
+      public getPageHeading(): string {
+        let pageHeading = "";
+
+        if (this.isMobileScreen) {
+            switch (this.activeTab) {
+                case 'auth-key':
+                    pageHeading = this.localeData?.auth_key?.tab_heading;
+                    break;
+                case 'mobile-number':
+                    pageHeading = this.localeData?.mobile_number?.tab_heading;
+                    break;
+                case 'session':
+                    pageHeading = this.localeData?.session?.tab_heading;
+                    break;
+                case 'subscription':
+                    pageHeading = this.localeData?.subscription?.tab_heading;
+                    break;
+            }
+        }
+        return pageHeading;
+    }
+
+    /**
+     * Tracks by sessionId
+     *
+     * @param {number} index Index of current session
+     * @param {*} item Session ID instance
+     * @return {*} {string} Session's ID for unique identification
+     * @memberof UserDetailsComponent
+     */
+    public trackBySessionId(index: number, item: any): string {
+        return item.sessionId;
     }
 }

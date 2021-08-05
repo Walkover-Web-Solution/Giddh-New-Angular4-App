@@ -1,8 +1,7 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Action, Store } from '@ngrx/store';
-import { AppState } from '../../store/roots';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import { Action } from '@ngrx/store';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
 import { InventoryService } from '../../services/inventory.service';
 import { CustomActions } from '../../store/customActions';
@@ -14,7 +13,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class InventoryReportActions {
 
-    public genReport$: Observable<Action> = createEffect( ()=>this.action$
+    public genReport$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVENTORY_REPORT_ACTIONS.GENERATE_REPORT),
             switchMap((action: CustomActions) => this._inventoryService.GetInventoryReport_v2(action.payload)),
@@ -28,7 +27,7 @@ export class InventoryReportActions {
                 return { type: 'EmptyAction' };
             })));
 
-    constructor(private store: Store<AppState>, private _inventoryService: InventoryService, private action$: Actions,
+    constructor(private _inventoryService: InventoryService, private action$: Actions,
         private _toasty: ToasterService) {
 
     }
@@ -44,13 +43,6 @@ export class InventoryReportActions {
         return {
             type: INVENTORY_REPORT_ACTIONS.GENERATE_REPORT_RESPONSE,
             payload: value
-        };
-    }
-
-    public getInOutReport(from?: string, to?: string, page?: number, count?: number, reportFilters?: InventoryFilter): CustomActions {
-        return {
-            type: INVENTORY_REPORT_ACTIONS.GENERATE_REPORT,
-            payload: { reportFilters, from, to, page, count }
         };
     }
 }

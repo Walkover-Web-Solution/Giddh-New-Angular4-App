@@ -1,15 +1,15 @@
-import { ICommonResponseOfManufactureItem, IManufacturingItemRequest, IManufacturingUnqItemObj } from '../../../models/interfaces/manufacturing.interface';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import * as _ from '../../lodash-optimized';
 import { CustomTemplateResponse } from '../../models/api-models/Invoice';
 import { INVOICE } from '../../actions/invoice/invoice.const';
 import { CustomActions } from '../customActions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
+import { UNAUTHORISED } from '../../app.constant';
 
 export interface CustomTemplateState {
     sampleTemplates: CustomTemplateResponse[];
     customCreatedTemplates: CustomTemplateResponse[];
     defaultTemplate: CustomTemplateResponse;
+    hasInvoiceTemplatePermissions: boolean;
 }
 
 export const initialState: CustomTemplateState = {
@@ -105,17 +105,17 @@ export const initialState: CustomTemplateState = {
                         display: true,
                         width: null
                     },
-                     tcs: { // this is for template a
+                    tcs: { // this is for template a
                         label: 'TCS',
                         display: true,
                         width: null
                     },
-                     tds: { // this is for template a
+                    tds: { // this is for template a
                         label: 'TDS',
                         display: true,
                         width: null
                     },
-                     taxBifurcation: { // this is for template a
+                    taxBifurcation: { // this is for template a
                         label: 'Tax Bifurcation',
                         display: true,
                         width: null
@@ -343,6 +343,11 @@ export const initialState: CustomTemplateState = {
                         display: true,
                         width: '10'
                     },
+                    showDescriptionInRows: {
+                        label: '',
+                        display: false,
+                        width: null
+                    },
                     hsnSac: {
                         label: 'HSN/SAC',
                         display: true,
@@ -353,31 +358,11 @@ export const initialState: CustomTemplateState = {
                         display: true,
                         width: null
                     },
-                    //  tcs: {  // this is for template e
-                    //     label: 'TCS',
-                    //     display: true,
-                    //     width: null
-                    // },
-                    //  tds: { // this is for template e
-                    //     label: 'TDS',
-                    //     display: true,
-                    //     width: null
-                    // },
-                    //  totalDue: { // this is for template e
-                    //     label: 'Total Due',
-                    //     display: true,
-                    //     width: null
-                    // },
                     totalQuantity: { // this is for template e
                         label: 'Total Quantity',
                         display: true,
                         width: null
-                    },
-                    // taxBifurcation: { // this is for template e
-                    //     label: 'Tax Bifurcation',
-                    //     display: true,
-                    //     width: null
-                    // },
+                    }
                 }
             }
         },
@@ -394,7 +379,8 @@ export const initialState: CustomTemplateState = {
         tableColor: '#f2f3f4',
         templateType: 'gst_template_a',
         name: '',
-    }
+    },
+    hasInvoiceTemplatePermissions: true
 
 };
 
@@ -416,13 +402,16 @@ export function InvoiceTemplateReducer(state = initialState, action: CustomActio
             let res: BaseResponse<CustomTemplateResponse[], string> = action.payload;
             if (res && res.status === 'success') {
                 nextState.customCreatedTemplates = _.sortBy(res.body, [(o) => !o.isDefault]);
+                nextState.hasInvoiceTemplatePermissions = true;
+            } else if(res.status === 'error' && res.statusCode === UNAUTHORISED) {
+                nextState.hasInvoiceTemplatePermissions = false;
             }
             return Object.assign({}, state, nextState);
         }
         case INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT_RESPONSE: {
             let nextState = _.cloneDeep(state);
             let res: BaseResponse<any, string> = action.payload;
-            if (res.status === 'success') {
+            if (res?.status === 'success') {
                 let uniqName = res.queryString.templateUniqueName;
                 let indx = nextState.customCreatedTemplates.findIndex((template) => template.uniqueName === uniqName);
                 if (indx > -1) {

@@ -1,29 +1,4 @@
 @import "../../../assets/css/color.scss";
-:host ::ng-deep .parent-group {
-    padding-left: 0;
-}
-
-:host ::ng-deep .account-accordion .main-account-list .title:before {
-    content: none;
-}
-
-:host ::ng-deep .accountli {
-    margin: 7px;
-    text-transform: capitalize;
-}
-
-:host ::ng-deep .accounts-side-bar {
-    box-shadow: none;
-    overflow: auto;
-    width: 100%;
-}
-
-.custom-input-group-addon {
-    min-width: 40px;
-    border-radius: 0;
-    padding: 0;
-    border: none;
-}
 
 .bg-wrap {
     background: $gray-95;
@@ -90,22 +65,11 @@
     color: $night-rider;
 }
 
-.account-listbar {
-    overflow-y: hidden;
-    height: 100vh;
-    width: 250px;
-    background: $white;
-    position: absolute;
-    left: -250px;
-    z-index: 0;
-}
-
 .sidebar-menu {
     min-height: 100vh;
     background: $nero;
     color: $white;
     float: right;
-    /* width: 250px; */
     position: relative;
 }
 
@@ -142,13 +106,6 @@
 .sidebar-list h3 {
     background: $white;
 }
-/*
-.label.isActive {
-  font-weight: normal;
-  background: #F85C88;
-  color: #fff !important;
-  cursor: auto;
-} */
 
 input[name="entryDate"] {
     background: transparent !important;
@@ -181,8 +138,8 @@ textarea[name="narration"]:focus {
 :host ::ng-deep .menu {
     border-left: 0 !important;
 }
-@media(max-width:991px){
-    .account-wrapper{
+@media (max-width: 991px) {
+    .account-wrapper {
         margin-top: 50px;
     }
 }

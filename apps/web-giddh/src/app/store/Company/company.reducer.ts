@@ -2,12 +2,10 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { TaxResponse } from '../../models/api-models/Company';
 import { CompanyActions } from '../../actions/company.actions';
 import { SETTINGS_TAXES_ACTIONS } from '../../actions/settings/taxes/settings.taxes.const';
-import * as _ from '../../lodash-optimized';
 import { CustomActions } from '../customActions';
 import * as moment from 'moment/moment';
 import { IntegratedBankList, IRegistration } from "../../models/interfaces/registration.interface";
-import { DEFAULT_DATE_RANGE_PICKER_RANGES, DatePickerDefaultRangeEnum } from '../../app.constant';
-import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { DEFAULT_DATE_RANGE_PICKER_RANGES, UNAUTHORISED } from '../../app.constant';
 
 /**
  * Keeping Track of the CompanyState
@@ -17,17 +15,16 @@ export interface CurrentCompanyState {
     account: IRegistration;
     isTaxesLoading: boolean;
     isGetTaxesSuccess: boolean;
-    activeFinancialYear: object;
     dateRangePickerConfig: any;
     isTaxCreationInProcess: boolean;
     isTaxCreatedSuccessfully: boolean;
     isTaxUpdatingInProcess: boolean;
     isTaxUpdatedSuccessfully: boolean;
-    isCompanyActionInProgress: boolean;
     isAccountInfoLoading: boolean;
     isTcsTdsApplicable: boolean;
     isGetAllIntegratedBankInProgress: boolean;
     integratedBankList: IntegratedBankList[];
+    hasManageTaxPermission: boolean;
 }
 
 /**
@@ -38,7 +35,6 @@ const initialState: CurrentCompanyState = {
     integratedBankList: null,
     isTaxesLoading: false,
     isGetTaxesSuccess: false,
-    activeFinancialYear: null,
     dateRangePickerConfig: {
         opens: 'left',
         locale: {
@@ -59,10 +55,10 @@ const initialState: CurrentCompanyState = {
     isTaxCreatedSuccessfully: false,
     isTaxUpdatingInProcess: false,
     isTaxUpdatedSuccessfully: false,
-    isCompanyActionInProgress: false,
     isAccountInfoLoading: false,
     isTcsTdsApplicable: false,
-    isGetAllIntegratedBankInProgress: false
+    isGetAllIntegratedBankInProgress: false,
+    hasManageTaxPermission: false
 };
 
 export function CompanyReducer(state: CurrentCompanyState = initialState, action: CustomActions): CurrentCompanyState {
@@ -82,6 +78,12 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
                     taxes: taxes.body,
                     isTaxesLoading: false,
                     isGetTaxesSuccess: true,
+                    hasManageTaxPermission: true
+                });
+            } else if(taxes.status === 'error' && taxes.statusCode === UNAUTHORISED) {
+                return Object.assign({}, state, {
+                    isTaxesLoading: false,
+                    hasManageTaxPermission: false
                 });
             }
             return Object.assign({}, state, {
@@ -156,42 +158,6 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
                 return Object.assign({}, state, newState);
             }
             return state;
-        }
-        case CompanyActions.SET_ACTIVE_FINANCIAL_YEAR: {
-            let res = action.payload;
-            if (res) {
-
-                return {
-                    ...state,
-                    dateRangePickerConfig: {
-                        ...state.dateRangePickerConfig,
-                        ranges: state.dateRangePickerConfig.ranges.map(range => {
-                            if (range.name === DatePickerDefaultRangeEnum.ThisFinancialYearToDate) {
-                                range.value = [moment(res.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day'), moment()];
-                            } else if (range.name === DatePickerDefaultRangeEnum.LastFinancialYear) {
-                                range.value = [
-                                    moment(res.financialYearStarts, GIDDH_DATE_FORMAT).subtract(1, 'year'),
-                                    moment(res.financialYearStarts, GIDDH_DATE_FORMAT).subtract(1, 'year')
-                                ];
-                            }
-                            return range;
-                        })
-                    }
-                };
-            }
-            break;
-        }
-        case CompanyActions.DELETE_COMPANY: {
-            return {
-                ...state,
-                isCompanyActionInProgress: true
-            };
-        }
-        case CompanyActions.DELETE_COMPANY_RESPONSE: {
-            return {
-                ...state,
-                isCompanyActionInProgress: false
-            };
         }
         case CompanyActions.GET_REGISTRATION_ACCOUNT:
             return Object.assign({}, state, {

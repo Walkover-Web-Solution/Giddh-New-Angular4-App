@@ -5,7 +5,6 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import * as moment from 'moment/moment';
-import * as _ from '../../../lodash-optimized';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import {
     ProfitLossData,
@@ -20,6 +19,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { TlPlService } from '../../../services/tl-pl.service';
+import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
     selector: 'profit-loss',
@@ -30,7 +30,7 @@ import { TlPlService } from '../../../services/tl-pl.service';
 export class ProfitLossComponent implements OnInit, OnDestroy {
     @Input() public refresh: boolean = false;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: ElementRef;
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
     /* This will store modal reference */
@@ -68,6 +68,8 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /* this will store active company data */
+    public activeCompany: any = {};
 
     constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService, private tlPlService: TlPlService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
@@ -78,8 +80,9 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
+            if (activeCompany) {
                 this.amountSettings.baseCurrencySymbol = activeCompany.baseCurrencySymbol;
+                this.activeCompany = activeCompany;
             }
         });
 
@@ -234,7 +237,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     * @memberof ProfitLossComponent
     */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }
@@ -263,16 +266,16 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
      * @memberof ProfitLossComponent
      */
     public getProfitLossData(): void {
-        this.tlPlService.GetProfitLoss(_.cloneDeep(this.plRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if(response?.status === "success" && response?.body) {
+        this.tlPlService.GetProfitLoss(cloneDeep(this.plRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body) {
                 this.dataFound = true;
-                let data = _.cloneDeep(response.body) as ProfitLossData;
+                let data = cloneDeep(response.body) as ProfitLossData;
                 let revenue;
                 let expense;
                 let npl;
 
                 if (data && data.incomeStatment && data.incomeStatment.revenue) {
-                    revenue = _.cloneDeep(data.incomeStatment.revenue) as GetRevenueResponse;
+                    revenue = cloneDeep(data.incomeStatment.revenue) as GetRevenueResponse;
                     this.totalIncome = revenue.amount;
                     this.totalIncomeType = (revenue.type === "CREDIT") ? "Cr." : "Dr.";
                 } else {
@@ -281,7 +284,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
                 }
 
                 if (data && data.incomeStatment && data.incomeStatment.totalExpenses) {
-                    expense = _.cloneDeep(data.incomeStatment.totalExpenses) as GetTotalExpenseResponse;
+                    expense = cloneDeep(data.incomeStatment.totalExpenses) as GetTotalExpenseResponse;
                     this.totalExpense = expense.amount;
                     this.totalExpenseType = (expense.type === "CREDIT") ? "Cr." : "Dr.";
                 } else {
@@ -290,7 +293,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
                 }
 
                 if (data && data.incomeStatment && data.incomeStatment.incomeBeforeTaxes) {
-                    npl = _.cloneDeep(data.incomeStatment.incomeBeforeTaxes) as GetIncomeBeforeTaxes;
+                    npl = cloneDeep(data.incomeStatment.incomeBeforeTaxes) as GetIncomeBeforeTaxes;
                     this.netProfitLossType = (npl.type === "CREDIT") ? "+" : "-";
                     this.netProfitLoss = npl.amount;
                 } else {

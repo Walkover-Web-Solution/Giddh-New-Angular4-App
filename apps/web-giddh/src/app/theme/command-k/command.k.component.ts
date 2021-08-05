@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, NgZone, OnDestroy, OnInit, Output, Renderer2, ViewChild, Input, EventEmitter, HostListener } from '@angular/core';
-import { ReplaySubject, Subject, Observable } from 'rxjs';
+import { ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { ALT, BACKSPACE, CAPS_LOCK, CONTROL, DOWN_ARROW, ENTER, ESCAPE, LEFT_ARROW, MAC_META, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, RIGHT_ARROW, SHIFT, TAB, UP_ARROW } from '@angular/cdk/keycodes';
 import { ScrollComponent } from './virtual-scroll/vscroll';
@@ -25,11 +25,11 @@ const SPECIAL_KEYS = [...DIRECTIONAL_KEYS, CAPS_LOCK, TAB, SHIFT, CONTROL, ALT, 
 
 export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
 
-    @ViewChild('mainEle', {static: true}) public mainEle: ElementRef;
-    @ViewChild('searchEle', {static: false}) public searchEle: ElementRef;
-    @ViewChild('searchWrapEle', {static: true}) public searchWrapEle: ElementRef;
-    @ViewChild('wrapper', {static: true}) public wrapper: ElementRef;
-    @ViewChild(ScrollComponent, {static: false}) public virtualScrollElem: ScrollComponent;
+    @ViewChild('mainEle', { static: true }) public mainEle: ElementRef;
+    @ViewChild('searchEle', { static: false }) public searchEle: ElementRef;
+    @ViewChild('searchWrapEle', { static: true }) public searchWrapEle: ElementRef;
+    @ViewChild('wrapper', { static: true }) public wrapper: ElementRef;
+    @ViewChild(ScrollComponent, { static: false }) public virtualScrollElem: ScrollComponent;
 
     @Input() public preventOutSideClose: boolean = false;
     @Input() public dontShowNoResultMsg: boolean = false;
@@ -66,6 +66,10 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         totalPages: 1,
         isMobile: false
     };
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private store: Store<AppState>,
@@ -189,10 +193,15 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     /**
      * This function will get called if we want to create a/c or group
      *
+     * @param {string} entity
      * @memberof CommandKComponent
      */
-    public triggerAddManage(): void {
-        this.newTeamCreationEmitter.emit(true);
+    public triggerAddManage(entity: string): void {
+        if(this.listOfSelectedGroups?.length > 0) {
+            this.newTeamCreationEmitter.emit([entity, this.listOfSelectedGroups[this.listOfSelectedGroups.length - 1]]);
+        } else {
+            this.newTeamCreationEmitter.emit([entity, ""]);
+        }
     }
 
     /**
@@ -249,16 +258,6 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             }
         });
-    }
-
-    /**
-     * This function will get called if clicked outside of modal
-     *
-     * @param {*} e
-     * @memberof CommandKComponent
-     */
-    public handleOutSideClick(e: any): void {
-
     }
 
     /**
@@ -501,7 +500,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     public getPageUniqueName(route: string): string {
         let string = route.replace(/\s+/g, '-');
         string = string.replace(/\//g, '-');
-        string = string.replace(/^-|-$/g,'');
+        string = string.replace(/^-|-$/g, '');
         return string;
     }
 
@@ -512,7 +511,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public onPasteInSearch(): void {
         setTimeout(() => {
-            if(this.searchEle && this.searchEle.nativeElement) {
+            if (this.searchEle && this.searchEle.nativeElement) {
                 let term = this.searchEle.nativeElement.value;
                 term = (term) ? term.trim() : "";
                 this.searchSubject.next(term);

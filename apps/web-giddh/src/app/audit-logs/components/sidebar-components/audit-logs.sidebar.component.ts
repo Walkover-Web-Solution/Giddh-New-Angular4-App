@@ -1,10 +1,9 @@
 import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import {map as lodashMap } from '../../../lodash-optimized';
+import { map as lodashMap } from '../../../lodash-optimized';
 import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
 import { flatten, omit, union } from '../../../lodash-optimized';
 import { LogsRequest } from '../../../models/api-models/Logs';
@@ -74,13 +73,10 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private _companyService: CompanyService,
         private _auditLogsActions: AuditLogsActions,
-        private bsConfig: BsDatepickerConfig,
         private groupService: GroupService,
         private searchService: SearchService
     ) {
-        this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
-        this.bsConfig.rangeInputFormat = GIDDH_DATE_FORMAT;
-        this.bsConfig.showWeekNumbers = false;
+        
     }
 
     public ngOnInit() {
@@ -88,7 +84,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         this.vm.getLogsInprocess$ = this.store.pipe(select(p => p.auditlog.getLogInProcess), takeUntil(this.destroyed$));
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
+            if (activeCompany) {
                 this.vm.selectedCompany = observableOf(activeCompany);
             }
         });
@@ -103,7 +99,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
             if (data.status === 'success') {
                 let users: IOption[] = [];
                 data.body.map((d) => {
-                    users.push({label: d.userName, value: d.userUniqueName, additional: d});
+                    users.push({ label: d.userName, value: d.userUniqueName, additional: d });
                 });
                 this.vm.canManageCompany = true;
                 this.vm.users$ = observableOf(users);
@@ -127,7 +123,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
                 name: listItem.name,
                 uniqueName: listItem.uniqueName
             });
-            listItem = Object.assign({}, listItem, {parentGroups: []});
+            listItem = Object.assign({}, listItem, { parentGroups: [] });
             listItem.parentGroups = newParents;
             if (listItem.groups.length > 0) {
                 result = this.flattenGroup(listItem.groups, newParents);
@@ -181,11 +177,8 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
 
     public getLogfilters() {
         let reqBody: LogsRequest = new LogsRequest();
-        // reqBody.fromDate = this.vm.selectedFromDate ? moment(this.vm.selectedFromDate).format(GIDDH_DATE_FORMAT) : '';
-        // reqBody.toDate = this.vm.selectedToDate ? moment(this.vm.selectedToDate).format(GIDDH_DATE_FORMAT) : '';
         reqBody.operation = this.vm.selectedOperation === 'All' ? '' : this.vm.selectedOperation;
         reqBody.entity = this.vm.selectedEntity === 'All' ? '' : this.vm.selectedEntity;
-        // reqBody.entryDate = this.vm.selectedLogDate ? moment(this.vm.selectedLogDate).format(GIDDH_DATE_FORMAT) : '';
         reqBody.userUniqueName = this.vm.selectedUserUnq;
         reqBody.accountUniqueName = this.vm.selectedAccountUnq;
         reqBody.groupUniqueName = this.vm.selectedGroupUnq;
@@ -298,7 +291,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
                         this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
                         this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 
@@ -382,7 +375,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
                         this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
                         this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 

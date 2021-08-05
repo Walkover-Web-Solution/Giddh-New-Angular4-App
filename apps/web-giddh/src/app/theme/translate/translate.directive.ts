@@ -49,17 +49,20 @@ export class TranslateDirective implements OnInit, OnDestroy {
      * @memberof TranslateDirective
      */
     public getLocale(): void {
-        if(this.file && this.currentLanguage) {
+        if (this.file && this.currentLanguage) {
             this.localeService.getLocale(this.file, this.currentLanguage).subscribe(response => {
                 this.localeData.emit(response);
                 this.translationComplete.emit(true);
             });
         }
 
-        if(this.requireCommonData) {
+        if (this.requireCommonData) {
             this.store.pipe(select(state => state.session.commonLocaleData), takeUntil(this.destroyed$)).subscribe((response) => {
-                if(response) {
+                if (response) {
                     this.commonLocaleData.emit(response);
+                    if (!this.file) {
+                        this.translationComplete.emit(true);
+                    }
                 }
             });
         }

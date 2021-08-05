@@ -9,7 +9,6 @@ import { select, Store } from '@ngrx/store';
 import { FormControl } from '@angular/forms';
 import { CommonPaginatedRequest } from '../../../models/api-models/Invoice';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { IForceClear } from '../../../models/api-models/Sales';
@@ -19,12 +18,11 @@ import { LEDGER_API } from '../../../services/apiurls/ledger.api';
 import { DownloadLedgerAttachmentResponse } from '../../../models/api-models/Ledger';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { TaxResponse } from '../../../models/api-models/Company';
-import { UpdateLedgerEntryPanelComponent } from '../../../ledger/components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
+import { UpdateLedgerEntryPanelComponent } from '../../../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { cloneDeep } from '../../../lodash-optimized';
 import { SearchService } from '../../../services/search.service';
-import { AccountService } from '../../../services/account.service';
 
 @Component({
     selector: 'app-expense-details',
@@ -58,8 +56,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     @Output() public selectedDetailedRowInput: EventEmitter<ExpenseResults> = new EventEmitter();
     @Input() public selectedRowItem: any;
     @Output() public refreshPendingItem: EventEmitter<boolean> = new EventEmitter();
-    @ViewChild(UpdateLedgerEntryPanelComponent, {static: false}) public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
-    @ViewChild('entryAgainstAccountDropDown', {static: false}) public entryAgainstAccountDropDown: ShSelectComponent;
+    @ViewChild(UpdateLedgerEntryPanelComponent, { static: false }) public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
+    @ViewChild('entryAgainstAccountDropDown', { static: false }) public entryAgainstAccountDropDown: ShSelectComponent;
 
     public selectedItem: ExpenseResults;
     public rejectReason = new FormControl();
@@ -162,7 +160,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     private pettyCashEntryType: string;
 
     constructor(
-        private accountService: AccountService,
         private modalService: BsModalService,
         private _toasty: ToasterService,
         private _ledgerActions: LedgerActions,
@@ -405,24 +402,18 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
 
     public onUploadFileOutput(output: UploadOutput): void {
         if (output.type === 'allAddedToQueue') {
-            // this.logoAttached = true;
             this.imgAttached = true;
-            // this.previewFile(output.file);
             this.startUpload();
         } else if (output.type === 'start') {
             this.imgUploadInprogress = true;
         } else if (output.type === 'done') {
             if (output.file.response.status === 'success') {
-                // let imageData = `data: image/${output.file.response.body.fileType};base64,${output.file.response.body.uploadedFile}`;
                 this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName;
                 let img = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName;
                 this.DownloadAttachedImgResponse.push(output.file.response.body);
                 this.imgAttachedFileName = output.file.response.body.name;
                 this.imageURL.push(img);
-                this.imgAttachedFileName = output.file.response.body.name;
-                // this.customTemplate.sections.footer.data.imageSignature.label = output.file.response.body.uniqueName;
                 this._toasty.successToast(this.localeData?.file_upload_success);
-                // this.startUpload();
             } else {
                 this._toasty.errorToast(output.file.response.message, output.file.response.code);
             }
@@ -453,15 +444,11 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         let reader = new FileReader();
         reader.onloadend = () => {
             preview.src = reader.result;
-            // this._invoiceUiDataService.setLogoPath(preview.src);
         };
         if (file) {
             reader.readAsDataURL(file);
-            // this.logoAttached = true;
         } else {
             preview.src = '';
-            // this.logoAttached = false;
-            // this._invoiceUiDataService.setLogoPath('');
         }
     }
 
@@ -667,7 +654,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                         this.defaultDebtorAccountPaginationData.page = this.debtorAccountsSearchResultsPaginationData.page;
                         this.defaultDebtorAccountPaginationData.totalPages = this.debtorAccountsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 
@@ -770,7 +757,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                         this.defaultDebtorAccountPaginationData.page = this.creditorAccountsSearchResultsPaginationData.page;
                         this.defaultDebtorAccountPaginationData.totalPages = this.creditorAccountsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 
@@ -873,7 +860,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                         this.defaultCashBankAccountPaginationData.page = this.cashBankAccountsSearchResultsPaginationData.page;
                         this.defaultCashBankAccountPaginationData.totalPages = this.cashBankAccountsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 
@@ -913,7 +900,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public buildCreatorString(): void {
-        if(this.selectedItem && this.selectedItem.createdBy) {
+        if (this.selectedItem && this.selectedItem.createdBy) {
             this.byCreator = this.localeData?.by_creator;
             this.byCreator = this.byCreator.replace("[CREATOR_NAME]", this.selectedItem.createdBy.name);
         } else {

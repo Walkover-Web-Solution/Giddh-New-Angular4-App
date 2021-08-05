@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { ToasterService } from '../../services/toaster.service';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { CustomActions } from '../../store/customActions';
 import { IMPORT_EXCEL } from './import-excel.const';
@@ -14,7 +14,7 @@ import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
 @Injectable()
 export class ImportExcelActions {
 
-    public uploadFile$: Observable<Action> = createEffect( ()=>this.action$
+    public uploadFile$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(IMPORT_EXCEL.UPLOAD_FILE_REQUEST),
             switchMap((action: CustomActions) => {
@@ -24,10 +24,9 @@ export class ImportExcelActions {
                     this._toasty.errorToast(res.message);
                 }
                 return this.uploadFileResponse(res);
-                // return this.validateResponse(res, this.uploadFileResponse(res.body), true, this.uploadFileResponse(res.body));
             })));
 
-    public processImport$: Observable<Action> =createEffect( ()=> this.action$
+    public processImport$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(IMPORT_EXCEL.PROCESS_IMPORT_REQUEST),
             switchMap((action: CustomActions) => {
@@ -36,8 +35,7 @@ export class ImportExcelActions {
                 return this.validateResponse(res, this.processImportResponse(res.body), true, this.processImportResponse(null));
             })));
 
-
-    public getImportStatus$: Observable<Action> =createEffect( ()=> this.action$
+    public getImportStatus$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(IMPORT_EXCEL.IMPORT_STATUS_REQUEST),
             switchMap((action: CustomActions) => {
@@ -50,7 +48,7 @@ export class ImportExcelActions {
             })));
 
     constructor(private action$: Actions, private _toasty: ToasterService, private _importExcelService: ImportExcelService) {
-        //
+        
     }
 
     public uploadFileRequest(entity: string, data: any): CustomActions {

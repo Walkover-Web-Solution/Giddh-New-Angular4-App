@@ -1,10 +1,10 @@
-<div class="aside-pane aside-pane-other-tax text-left" (clickOutside)="hideListItems()" [clickOutsideEnabled]="!isMobileScreen" [keyboardShortcut]="'esc'"
-    (onShortcutPress)="saveTaxes()">
+<div class="aside-pane aside-pane-other-tax text-left" (clickOutside)="hideListItems()"
+    [clickOutsideEnabled]="!isMobileScreen" [keyboardShortcut]="'esc'" (onShortcutPress)="saveTaxes()">
 
     <button id="close" type="button" (click)="saveTaxes()"><i class="icon-cross"></i></button>
 
     <div class="form-header">
-        <h3 class="aside-title">Tax applicable</h3>
+        <h3 class="aside-title">{{commonLocaleData?.app_tax_applicable}}</h3>
     </div>
 
     <div class="aside-body">
@@ -14,16 +14,15 @@
                 <div class="col-sm-6">
 
                     <div class="select-tax-dropdown d-flex flex-column">
-                        <label>Select Tax<span class="text-danger">*</span></label>
+                        <label>{{commonLocaleData?.app_select_tax}}<span class="text-danger">*</span></label>
 
                         <div class="mr-b2">
-                            <sh-select name="selectTax" [placeholder]="'Select Tax'" [options]="taxesOptions"
-                                [(ngModel)]="selectedTaxUniqueName" (selected)="applyTax($event)" (onClear)="onClear()"
-                                [showClear]="true">
+                            <sh-select name="selectTax" [placeholder]="commonLocaleData?.app_select_tax"
+                                [options]="taxesOptions" [(ngModel)]="selectedTaxUniqueName"
+                                (selected)="applyTax($event)" (onClear)="onClear()" [showClear]="true">
                             </sh-select>
 
-                            <label class="label-tax"
-                                *ngIf="otherTaxesModal?.appliedOtherTax?.name">
+                            <label class="label-tax" *ngIf="otherTaxesModal?.appliedOtherTax?.name">
                                 {{ otherTaxesModal?.appliedOtherTax?.name | uppercase}}
                             </label>
                         </div>
@@ -35,12 +34,12 @@
                 <div class="col-sm-6">
 
                     <div>
-                        <label>Calculation Method<span class="text-danger">*</span></label>
+                        <label>{{commonLocaleData?.app_calculation_method}}<span class="text-danger">*</span></label>
                     </div>
 
                     <div class="mb-2">
                         <sh-select [options]="calculationMethodOptions" name="tcsCalculationMethod"
-                            [placeholder]="'Select Method'" [disabled]="isDisabledCalMethod"
+                            [placeholder]="commonLocaleData?.app_select_method" [disabled]="isDisabledCalMethod"
                             [(ngModel)]="otherTaxesModal.tcsCalculationMethod"></sh-select>
                     </div>
 
@@ -50,7 +49,7 @@
             <div>
                 <button class="btn btn-success" type="button" [disabled]="!otherTaxesModal.tcsCalculationMethod"
                     (click)="saveTaxes()">
-                    Apply
+                    {{commonLocaleData?.app_apply}}
                 </button>
             </div>
         </div>

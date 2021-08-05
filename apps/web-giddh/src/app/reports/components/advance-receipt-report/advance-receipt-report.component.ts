@@ -13,7 +13,6 @@ import * as moment from 'moment/moment';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { fromEvent, merge, Observable, ReplaySubject } from 'rxjs';
 import { debounceTime, takeUntil, take } from 'rxjs/operators';
-
 import { GeneralActions } from '../../../actions/general/general.actions';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
@@ -41,77 +40,28 @@ import { ReceiptAdvanceSearchComponent } from '../receipt-advance-search/receipt
 export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, OnInit {
 
     /** Customer name search bar */
-    @ViewChild('customerName', {static: true}) public customerName: ElementRef;
+    @ViewChild('customerName', { static: true }) public customerName: ElementRef;
     /** Parent of customer name search bar */
-    @ViewChild('customerNameParent', {static: true}) public customerNameParent: ElementRef;
+    @ViewChild('customerNameParent', { static: true }) public customerNameParent: ElementRef;
     /** Receipt number search bar */
-    @ViewChild('receiptNumber', {static: true}) public receiptNumber: ElementRef;
+    @ViewChild('receiptNumber', { static: true }) public receiptNumber: ElementRef;
     /** Parent of receipt number search bar */
-    @ViewChild('receiptNumberParent', {static: true}) public receiptNumberParent: ElementRef;
+    @ViewChild('receiptNumberParent', { static: true }) public receiptNumberParent: ElementRef;
     /** Payment mode search bar */
-    @ViewChild('paymentMode', {static: true}) public paymentMode: ElementRef;
+    @ViewChild('paymentMode', { static: true }) public paymentMode: ElementRef;
     /** Parent of payment mode search bar */
-    @ViewChild('paymentModeParent', {static: true}) public paymentModeParent: ElementRef;
+    @ViewChild('paymentModeParent', { static: true }) public paymentModeParent: ElementRef;
     /** Invoice number search bar */
-    @ViewChild('invoiceNumber', {static: true}) public invoiceNumber: ElementRef;
+    @ViewChild('invoiceNumber', { static: true }) public invoiceNumber: ElementRef;
     /** Parent of invoice number search bar */
-    @ViewChild('invoiceNumberParent', {static: true}) public invoiceNumberParent: ElementRef;
+    @ViewChild('invoiceNumberParent', { static: true }) public invoiceNumberParent: ElementRef;
     /** Advance search modal instance */
-    @ViewChild('receiptAdvanceSearchFilterModal', {static: true}) public receiptAdvanceSearchFilterModal: ElementViewContainerRef;
+    @ViewChild('receiptAdvanceSearchFilterModal', { static: true }) public receiptAdvanceSearchFilterModal: ElementViewContainerRef;
     /** Container of Advance search modal instance */
-    @ViewChild('receiptAdvanceSearchModalContainer', {static: true}) public receiptAdvanceSearchModalContainer: ModalDirective;
+    @ViewChild('receiptAdvanceSearchModalContainer', { static: true }) public receiptAdvanceSearchModalContainer: ModalDirective;
 
     /** Moment method */
     public moment = moment;
-    /** Date picker options for date filter */
-    public datePickerOptions: any = {
-        hideOnEsc: true,
-        locale: {
-            applyClass: 'btn-green',
-            applyLabel: 'Go',
-            fromLabel: 'From',
-            format: 'D-MMM-YY',
-            toLabel: 'To',
-            cancelLabel: 'Cancel',
-            customRangeLabel: 'Custom range'
-        },
-        ranges: {
-            'This Month to Date': [
-                moment().startOf('month'),
-                moment()
-            ],
-            'This Quarter to Date': [
-                moment().quarter(moment().quarter()).startOf('quarter'),
-                moment()
-            ],
-            'This Financial Year to Date': [
-                moment().startOf('year').subtract(9, 'month'),
-                moment()
-            ],
-            'This Year to Date': [
-                moment().startOf('year'),
-                moment()
-            ],
-            'Last Month': [
-                moment().subtract(1, 'month').startOf('month'),
-                moment().subtract(1, 'month').endOf('month')
-            ],
-            'Last Quater': [
-                moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
-                moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
-            ],
-            'Last Financial Year': [
-                moment().startOf('year').subtract(10, 'year'),
-                moment().endOf('year').subtract(10, 'year')
-            ],
-            'Last Year': [
-                moment().startOf('year').subtract(1, 'year'),
-                moment().endOf('year').subtract(1, 'year')
-            ]
-        },
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment()
-    };
     /** Receipt type for filter */
     public receiptType: Array<any>;
     public modalRef: BsModalRef;
@@ -214,7 +164,6 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public advanceReceiptAdvanceSearchAmountFilters: any;
     /** List of receipt types for filters */
     public receiptTypes: any;
-
     /** @ignore */
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -236,12 +185,6 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((applicationDate) => {
             if (applicationDate) {
                 this.universalDate = applicationDate;
-                this.datePickerOptions = {
-                    ...this.datePickerOptions,
-                    startDate: moment(applicationDate[0], GIDDH_DATE_FORMAT).toDate(),
-                    endDate: moment(applicationDate[1], GIDDH_DATE_FORMAT).toDate(),
-                    chosenLabel: applicationDate[2]
-                }
                 let universalDate = _.cloneDeep(applicationDate);
                 this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
                 this.selectedDateRangeUi = moment(applicationDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(applicationDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -290,7 +233,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
                 }
             }
         });
@@ -407,19 +350,6 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     }
 
     /**
-     * Date picker change handler
-     *
-     * @param {*} event Selected dates
-     * @memberof AdvanceReceiptReportComponent
-     */
-    public onDateChange(event: any): void {
-        this.datePickerOptions.startDate = event.picker.startDate._d;
-        this.datePickerOptions.endDate = event.picker.endDate._d;
-        this.showClearFilter = true;
-        this.fetchReceiptsData();
-    }
-
-    /**
      * Pagination change handler
      *
      * @param {*} event Selected page details
@@ -448,12 +378,6 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      */
     public resetAdvanceSearch(): void {
         this.showClearFilter = false;
-        this.datePickerOptions = {
-            ...this.datePickerOptions,
-            startDate: moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate(),
-            endDate: moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate(),
-            chosenLabel: this.universalDate[2]
-        }
         this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
         this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
         this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
@@ -640,12 +564,12 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         }
     }
 
-     /**
-     *To show the datepicker
-     *
-     * @param {*} element
-     * @memberof AuditLogsFormComponent
-     */
+    /**
+    *To show the datepicker
+    *
+    * @param {*} element
+    * @memberof AuditLogsFormComponent
+    */
     public showGiddhDatepicker(element: any): void {
         if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
@@ -672,7 +596,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @memberof AuditLogsFormComponent
      */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }
@@ -687,8 +611,6 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
-            this.datePickerOptions.startDate = this.fromDate;
-            this.datePickerOptions.endDate = this.toDate;
             this.showClearFilter = true;
             this.fetchReceiptsData();
         }
@@ -701,7 +623,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @memberof AdvanceReceiptReportComponent
      */
     public translationComplete(event: boolean): void {
-        if(event) {
+        if (event) {
             this.advanceReceiptAdvanceSearchAmountFilters = [
                 { label: this.commonLocaleData?.app_comparision_filters.greater_than, value: 'GREATER_THAN' },
                 { label: this.commonLocaleData?.app_comparision_filters.greater_than_equals, value: 'GREATER_THAN_OR_EQUALS' },

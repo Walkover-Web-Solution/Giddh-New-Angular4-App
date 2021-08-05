@@ -2,14 +2,10 @@ import { map, switchMap } from 'rxjs/operators';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { LogsService } from '../../services/logs.service';
 import { ToasterService } from '../../services/toaster.service';
-import { AppState } from '../../store';
 import { LogsRequest, LogsResponse, GetAuditLogsRequest, AuditLogsResponse } from '../../models/api-models/Logs';
-/**
- * Created by ad on 04-07-2017.
- */
 import { Injectable } from '@angular/core';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
-import { Action, Store } from '@ngrx/store';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AUDIT_LOGS_ACTIONS, AUDIT_LOGS_ACTIONS_V2 } from './audit-logs.const';
 import { CustomActions } from '../../store/customActions';
@@ -17,7 +13,7 @@ import { CustomActions } from '../../store/customActions';
 @Injectable()
 export class AuditLogsActions {
 
-    public GET_LOGS$: Observable<Action> = createEffect( ()=> this.action$
+    public GET_LOGS$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(AUDIT_LOGS_ACTIONS.GET_LOGS),
             switchMap((action: CustomActions) => {
@@ -31,7 +27,7 @@ export class AuditLogsActions {
                     })));
             })));
 
-     public LoadMore$: Observable<Action> =  createEffect( ()=>this.action$
+    public LoadMore$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS),
             switchMap((action: CustomActions) => {
@@ -62,7 +58,6 @@ export class AuditLogsActions {
 
     constructor(private action$: Actions,
         private _toasty: ToasterService,
-        private store: Store<AppState>,
         private logService: LogsService) {
     }
 

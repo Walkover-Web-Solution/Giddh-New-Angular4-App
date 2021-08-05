@@ -15,7 +15,6 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { SettingsTagsComponent } from './tags/tags.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BunchComponent } from './bunch/bunch.component';
 import { AuthenticationService } from '../services/authentication.service';
 import { GeneralActions } from '../actions/general/general.actions';
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
@@ -23,30 +22,28 @@ import { WarehouseActions } from './warehouse/action/warehouse.action';
 import { PAGINATION_LIMIT, SETTING_INTEGRATION_TABS } from '../app.constant';
 import { HttpClient } from "@angular/common/http";
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { SettingsTagActions } from '../actions/settings/tag/settings.tag.actions';
-import { CurrentPage } from '../models/api-models/Common';
+import { LocaleService } from '../services/locale.service';
 
 @Component({
     templateUrl: './settings.component.html',
     styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit, OnDestroy {
-    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
+    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
     /* Event emitter for close sidebar popup event */
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-    @ViewChild('integrationComponent', {static: false}) public integrationComponent: SettingIntegrationComponent;
-    @ViewChild('profileComponent', {static: false}) public profileComponent: SettingProfileComponent;
-    @ViewChild('financialYearComp', {static: false}) public financialYearComp: FinancialYearComponent;
-    @ViewChild('eBankComp', {static: false}) public eBankComp: SettingLinkedAccountsComponent;
-    @ViewChild('permissionComp', {static: false}) public permissionComp: SettingPermissionComponent;
-    @ViewChild('tagComp', {static: false}) public tagComp: SettingsTagsComponent;
-    @ViewChild('bunchComp', {static: false}) public bunchComp: BunchComponent;
+    @ViewChild('integrationComponent', { static: false }) public integrationComponent: SettingIntegrationComponent;
+    @ViewChild('profileComponent', { static: false }) public profileComponent: SettingProfileComponent;
+    @ViewChild('financialYearComp', { static: false }) public financialYearComp: FinancialYearComponent;
+    @ViewChild('eBankComp', { static: false }) public eBankComp: SettingLinkedAccountsComponent;
+    @ViewChild('permissionComp', { static: false }) public permissionComp: SettingPermissionComponent;
+    @ViewChild('tagComp', { static: false }) public tagComp: SettingsTagsComponent;
 
     public isUserSuperAdmin: boolean = false;
     public isUpdateCompanyInProgress$: Observable<boolean>;
     public isCompanyProfileUpdated: boolean = false;
     //variable to hold sub tab value inside any tab e.g. integration -> payment
-    public selectedChildTab: number = SETTING_INTEGRATION_TABS.SMS.VALUE;
+    public selectedChildTab: number = SETTING_INTEGRATION_TABS.EMAIL.VALUE;
     public activeTab: string = 'taxes';
     public integrationtab: string;
     public isMobileScreen: boolean = true;
@@ -55,8 +52,16 @@ export class SettingsComponent implements OnInit, OnDestroy {
         return document.activeElement === document.body;
     }
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** This holds the active locale */
+    public activeLocale: string = "";
+    /** This holds heading for profile tab */
+    public profileTabHeading: string = "";
     /* This will hold the value out/in to open/close setting sidebar popup */
-    public asideSettingMenuState: string = 'in';
+    public asideGstSidebarMenuState: string = 'in';
 
     constructor(
         private store: Store<AppState>,
@@ -68,10 +73,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
         private _toast: ToasterService,
         private _generalActions: GeneralActions,
         private settingsIntegrationActions: SettingsIntegrationActions,
-        private settingsTagsActions: SettingsTagActions,
         private warehouseActions: WarehouseActions,
         private http: HttpClient,
-        private breakPointObservar: BreakpointObserver
+        private breakPointObservar: BreakpointObserver,
+        private localeService: LocaleService
     ) {
         this.isUserSuperAdmin = this._permissionDataService.isUserSuperAdmin;
         this.isUpdateCompanyInProgress$ = this.store.pipe(select(state => state.settings.updateProfileInProgress), takeUntil(this.destroyed$));
@@ -83,12 +88,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
             '(max-width:767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
-            if (!this.isMobileScreen) {
-                this.asideSettingMenuState = "in";
-                this.toggleBodyClass();
-            } else {
-                this.asideSettingMenuState = "out";
-            }
         });
 
         this._route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
@@ -99,7 +98,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 this.integrationtab = params['referrer'];
                 this.activeTab = params['type'];
             } else if (params['type'] && this.activeTab !== params['type']) {
-                this.selectedChildTab = SETTING_INTEGRATION_TABS.SMS.VALUE;
+                this.selectedChildTab = SETTING_INTEGRATION_TABS.EMAIL.VALUE;
                 this.integrationtab = '';
                 this.activeTab = params['type'];
             } else {
@@ -130,7 +129,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 }, 0);
             } else if (this.activeTab === "permission") {
                 setTimeout(() => {
-                    if(this.permissionComp) {
+                    if (this.permissionComp) {
                         this.permissionComp.getInitialData();
                     }
                 }, 0);
@@ -140,6 +139,17 @@ export class SettingsComponent implements OnInit, OnDestroy {
                         this.tagComp.getTags();
                     }
                 }, 0);
+            }
+
+            if(this.activeTab === "taxes") {
+                this.asideGstSidebarMenuState = "in";
+                document.querySelector('body').classList.remove('setting-sidebar-open');
+                document.querySelector('body').classList.add('gst-sidebar-open');
+                this.toggleGstPane();
+            } else {
+                this.asideGstSidebarMenuState = "out";
+                document.querySelector('body').classList.add('setting-sidebar-open');
+                document.querySelector('body').classList.remove('gst-sidebar-open');
             }
         });
 
@@ -155,6 +165,15 @@ export class SettingsComponent implements OnInit, OnDestroy {
             if (yes) {
                 this.isCompanyProfileUpdated = true;
             }
+        });
+
+        this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
+            if (this.activeLocale && this.activeLocale !== response?.value) {
+                this.localeService.getLocale('settings', response?.value).subscribe(response => {
+                    this.localeData = response;
+                });
+            }
+            this.activeLocale = response?.value;
         });
     }
 
@@ -172,7 +191,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     public selectTab(id: number) {
-        if(this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs.length) {
+        if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs.length) {
             this.staticTabs.tabs[id].active = true;
         }
     }
@@ -187,15 +206,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 return SETTING_INTEGRATION_TABS.COLLECTION.VALUE;
             case SETTING_INTEGRATION_TABS.EMAIL.LABEL:
                 return SETTING_INTEGRATION_TABS.EMAIL.VALUE;
-            case SETTING_INTEGRATION_TABS.SMS.LABEL:
-                return SETTING_INTEGRATION_TABS.SMS.VALUE;
+            // case SETTING_INTEGRATION_TABS.SMS.LABEL:
+            //     return SETTING_INTEGRATION_TABS.SMS.VALUE;
             default:
-                return SETTING_INTEGRATION_TABS.SMS.VALUE;
+                return SETTING_INTEGRATION_TABS.EMAIL.VALUE;
         }
-    }
-
-    public disableEnable() {
-        this.staticTabs.tabs[2].disabled = !this.staticTabs.tabs[2].disabled;
     }
 
     public profileSelected(e) {
@@ -226,12 +241,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
         }
     }
 
-    public bunchTabSelected(e) {
-        if (e.heading === 'bunch') {
-            this.bunchComp.getAllBunch();
-        }
-    }
-
     public tabChanged(tab: string) {
         if ((tab === 'integration' || tab === 'profile') && this.integrationtab) {
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab + '/' + this.integrationtab));
@@ -247,8 +256,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
     private saveGmailAuthCode(authCode: string) {
         const getAccessTokenData = {
             code: authCode,
-            client_secret: this.getGoogleCredentials().GOOGLE_CLIENT_SECRET,
-            client_id: this.getGoogleCredentials().GOOGLE_CLIENT_ID,
+            client_secret: GOOGLE_CLIENT_SECRET,
+            client_id: GOOGLE_CLIENT_ID,
             grant_type: 'authorization_code',
             redirect_uri: this.getRedirectUrl(AppUrl)
         };
@@ -268,7 +277,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
             this._authenticationService.saveGmailToken(dataToSave).pipe(take(1)).subscribe((res) => {
 
                 if (res.status === 'success') {
-                    this._toast.successToast('Gmail account added successfully.', 'Success');
+                    this._toast.successToast(this.localeData?.gmail_account_added, this.commonLocaleData?.app_success);
                 } else {
                     this._toast.errorToast(res.message, res.code);
                 }
@@ -279,20 +288,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     private getRedirectUrl(baseHref: string) {
         return `${baseHref}pages/settings?tab=integration`;
-    }
-
-    private getGoogleCredentials() {
-        if (PRODUCTION_ENV || isElectron || isCordova) {
-            return {
-                GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com',
-                GOOGLE_CLIENT_SECRET: 'eWzLFEb_T9VrzFjgE40Bz6_l'
-            };
-        } else {
-            return {
-                GOOGLE_CLIENT_ID: '641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com',
-                GOOGLE_CLIENT_SECRET: '8htr7iQVXfZp_n87c99-jm7a'
-            };
-        }
     }
 
     private setStateDetails(type, referer?: string) {
@@ -324,54 +319,35 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will toggle the settings popup
-     *
-     * @param {*} [event]
-     * @memberof SettingsComponent
-     */
-    public toggleSettingPane(event?): void {
-        this.toggleBodyClass();
-
-        if (this.isMobileScreen && event && this.asideSettingMenuState === 'in') {
-            this.asideSettingMenuState = "out";
-        }
-    }
-
-    /**
-     * This will toggle the fixed class on body
-     *
-     * @memberof SettingsComponent
-     */
-    public toggleBodyClass(): void {
-        if (this.asideSettingMenuState === 'in') {
-            document.querySelector('body').classList.add('setting-sidebar-open');
-        } else {
-            document.querySelector('body').classList.remove('setting-sidebar-open');
-        }
-    }
-
-    /**
      * Releases all the observables to avoid memory leaks
      *
      * @memberof SettingsComponent
      */
     public ngOnDestroy(): void {
         document.querySelector('body').classList.remove('setting-sidebar-open');
-        this.asideSettingMenuState = "out";
+        document.querySelector('body').classList.remove('gst-sidebar-open');
+        this.asideGstSidebarMenuState = "out";
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
     /**
-     * Sets the current page title
+      * This will toggle the gst sidebar
+      *
+      * @memberof SettingsComponent
+      */
+     public toggleGstPane(): void {
+        if (this.isMobileScreen && this.asideGstSidebarMenuState === 'in') {
+            this.asideGstSidebarMenuState = "out";
+        }
+    }
+
+    /**
+     * Handles GST Sidebar Navigation
      *
-     * @param {string} title Title of the page
      * @memberof SettingsComponent
      */
-    public setCurrentPageTitle(title: string): void {
-        let currentPageObj = new CurrentPage();
-        currentPageObj.name = "Settings > " + title;
-        currentPageObj.url = this.router.url;
-        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
+     public handleNavigation(): void {
+        this.router.navigate(['pages', 'gstfiling']);
     }
 }

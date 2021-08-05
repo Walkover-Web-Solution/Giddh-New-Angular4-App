@@ -1,10 +1,12 @@
-import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { BulkVoucherExportService } from 'apps/web-giddh/src/app/services/bulkvoucherexport.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { select, Store } from '@ngrx/store';
+import { AppState } from 'apps/web-giddh/src/app/store';
 
 @Component({
     selector: 'invoice-bulk-export',
@@ -12,7 +14,7 @@ import { ReplaySubject } from 'rxjs';
     styleUrls: [`./bulk-export.component.scss`]
 })
 
-export class BulkExportModal implements OnDestroy {
+export class BulkExportModal implements OnInit, OnDestroy {
     /** Type of voucher */
     @Input() public type: string = "sales";
     /** Selected Vouchers */
@@ -23,15 +25,15 @@ export class BulkExportModal implements OnDestroy {
     @Input() public dateRange: any;
     /** Total Items For Export */
     @Input() public totalItems: any = 0;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     /** Emit the close modal event */
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
 
     /** Download Voucher Copy Options */
-    public downloadCopyOptions: any[] = [
-        { label: 'Original', value: 'ORIGINAL' },
-        { label: 'Customer', value: 'CUSTOMER' },
-        { label: 'Transport', value: 'TRANSPORT' }
-    ];
+    public downloadCopyOptions: any[] = [];
 
     /** Selected download Voucher Copy Options */
     public copyTypes: any = [];
@@ -46,8 +48,36 @@ export class BulkExportModal implements OnDestroy {
     constructor(
         private bulkVoucherExportService: BulkVoucherExportService,
         private generalService: GeneralService,
-        private toaster: ToasterService) {
+        private toaster: ToasterService,
+        private store: Store<AppState>) {
 
+    }
+
+    /**
+     * Initializes the component
+     *
+     * @memberof BulkExportModal
+     */
+    public ngOnInit(): void {
+        this.downloadCopyOptions = [
+            { label: this.localeData?.invoice_copy_options?.original, value: 'ORIGINAL' },
+            { label: this.localeData?.invoice_copy_options?.customer, value: 'CUSTOMER' },
+            { label: this.localeData?.invoice_copy_options?.transport, value: 'TRANSPORT' }
+        ];
+        this.getEmail();
+    }
+    
+    /**
+     * Get company email
+     * @returns updated recipient value to company email
+     */
+    public getEmail(): any {
+        this.store.pipe(select(appState => appState.session.user), take(1)).subscribe(result => {
+            if (result && result.user) {
+                this.recipients = result.user.email;
+            }
+        });
+        return this.recipients;
     }
 
     /**
@@ -57,14 +87,14 @@ export class BulkExportModal implements OnDestroy {
      * @memberof BulkExportModal
      */
     public exportVouchers(event: boolean): void {
-        if(this.isLoading) {
+        if (this.isLoading) {
             return;
         }
 
         let getRequest: any = { from: "", to: "", type: "", mail: false, q: "" };
         let postRequest: any;
 
-        if(!this.advanceSearch.invoiceDate && !this.advanceSearch.dueDate) {
+        if (!this.advanceSearch.invoiceDate && !this.advanceSearch.dueDate) {
             getRequest.from = this.dateRange.from;
             getRequest.to = this.dateRange.to;
         }
@@ -86,15 +116,18 @@ export class BulkExportModal implements OnDestroy {
         if (event && this.recipients) {
             let recipients = this.recipients.split(",");
             let validEmails = [];
-            if(recipients && recipients.length > 0) {
+            if (recipients && recipients.length > 0) {
                 recipients.forEach(email => {
-                    if(validRecipients && email.trim() && !EMAIL_VALIDATION_REGEX.test(email.trim())) {
+                    if (validRecipients && email.trim() && !EMAIL_VALIDATION_REGEX.test(email.trim())) {
                         this.toaster.clearAllToaster();
-                        this.toaster.errorToast(email + " is invalid email!");
+
+                        let invalidEmail = this.localeData?.invalid_email;
+                        invalidEmail = invalidEmail?.replace("[EMAIL]", email);
+                        this.toaster.errorToast(invalidEmail);
                         validRecipients = false;
                     }
 
-                    if(validRecipients && email.trim() && EMAIL_VALIDATION_REGEX.test(email.trim())) {
+                    if (validRecipients && email.trim() && EMAIL_VALIDATION_REGEX.test(email.trim())) {
                         validEmails.push(email.trim());
                     }
                 });
@@ -102,7 +135,7 @@ export class BulkExportModal implements OnDestroy {
             postRequest.sendTo = { recipients: validEmails };
         }
 
-        if(!validRecipients) {
+        if (!validRecipients) {
             return;
         }
 
@@ -111,10 +144,10 @@ export class BulkExportModal implements OnDestroy {
         this.bulkVoucherExportService.bulkExport(getRequest, postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
             if (response.status === "success" && response.body) {
-                if(response.body.type === "base64") {
+                if (response.body.type === "base64") {
                     this.closeModal();
                     let blob = this.generalService.base64ToBlob(response.body.file, 'application/zip', 512);
-                    return saveAs(blob, this.type+`.zip`);
+                    return saveAs(blob, this.type + `.zip`);
                 } else {
                     this.toaster.clearAllToaster();
                     this.toaster.successToast(response.body.file);

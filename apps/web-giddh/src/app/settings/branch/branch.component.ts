@@ -6,16 +6,15 @@ import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
-import { BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { createSelector } from 'reselect';
 import { fromEvent, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-
 import { CommonActions } from '../../actions/common.actions';
 import { CompanyActions } from '../../actions/company.actions';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
-import * as _ from '../../lodash-optimized';
+import { cloneDeep, each, isEmpty, orderBy } from '../../lodash-optimized';
 import { BranchFilterRequest, CompanyResponse } from '../../models/api-models/Company';
 import { GeneralService } from '../../services/general.service';
 import { SettingsProfileService } from '../../services/settings.profile.service';
@@ -26,14 +25,6 @@ import { ElementViewContainerRef } from '../../shared/helpers/directives/element
 import { AppState } from '../../store/roots';
 import { SettingsAsideConfiguration, SettingsAsideFormType } from '../constants/settings.constant';
 import { SettingsUtilityService } from '../services/settings-utility.service';
-
-export const IsyncData = [
-    { label: 'Debtors', value: 'debtors' },
-    { label: 'Creditors', value: 'creditors' },
-    { label: 'Inventory', value: 'inventory' },
-    { label: 'Taxes', value: 'taxes' },
-    { label: 'Bank', value: 'bank' }
-];
 
 @Component({
     selector: 'setting-branch',
@@ -55,10 +46,10 @@ export const IsyncData = [
 })
 
 export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
-    @ViewChild('branchModal', {static: false}) public branchModal: ModalDirective;
-    @ViewChild('addCompanyModal', {static: false}) public addCompanyModal: ModalDirective;
-    @ViewChild('companyadd', {static: false}) public companyadd: ElementViewContainerRef;
-    @ViewChild('confirmationModal', {static: false}) public confirmationModal: ModalDirective;
+    @ViewChild('branchModal', { static: false }) public branchModal: ModalDirective;
+    @ViewChild('addCompanyModal', { static: false }) public addCompanyModal: ModalDirective;
+    @ViewChild('companyadd', { static: false }) public companyadd: ElementViewContainerRef;
+    @ViewChild('confirmationModal', { static: false }) public confirmationModal: ModalDirective;
     public bsConfig: Partial<BsDatepickerConfig> = {
         showWeekNumbers: false,
         dateInputFormat: GIDDH_DATE_FORMAT,
@@ -66,7 +57,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         containerClass: 'theme-green myDpClass'
     };
     public isMobileScreen: boolean = false;
-    public dataSyncOption = IsyncData;
+    public dataSyncOption = [];
     public currentBranch: string = null;
     public currentBranchNameAlias: string = null;
     public companies$: Observable<CompanyResponse[]>;
@@ -94,7 +85,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public searchBranchQuery: string;
 
     /** Branch search field instance */
-    @ViewChild('branchSearch', {static: true}) public branchSearch: ElementRef;
+    @ViewChild('branchSearch', { static: true }) public branchSearch: ElementRef;
 
     /** Stores the address configuration */
     public addressConfiguration: SettingsAsideConfiguration = {
@@ -110,6 +101,12 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
     /** Stores the selected branch details */
     private branchDetails: any;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold profile JSON data */
+    public profileLocaleData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private router: Router,
@@ -122,17 +119,20 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         private commonActions: CommonActions,
         private _generalService: GeneralService,
         private _breakPointObservar: BreakpointObserver,
-        private modalService: BsModalService,
         private settingsUtilityService: SettingsUtilityService,
         private toasterService: ToasterService
     ) {
+        
+    }
+
+    public ngOnInit() {
         this.getOnboardingForm();
 
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
 
         this.store.pipe(select(state => state.settings && state.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
-            if (profile && !_.isEmpty(profile)) {
-                let companyInfo = _.cloneDeep(profile);
+            if (profile && !isEmpty(profile)) {
+                let companyInfo = cloneDeep(profile);
                 this.currentBranch = companyInfo.name;
                 this.currentBranchNameAlias = companyInfo.nameAlias;
             }
@@ -152,7 +152,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches], (companies, branches) => {
             if (branches) {
                 if (branches.length) {
-                    this.unFilteredBranchList = _.orderBy(branches, 'name');
+                    this.unFilteredBranchList = orderBy(branches, 'name');
                     this.branches$ = observableOf(this.unFilteredBranchList);
                 } else if (branches.length === 0) {
                     this.unFilteredBranchList = [];
@@ -162,8 +162,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             }
             if (companies && companies.length && branches) {
                 let companiesWithSuperAdminRole = [];
-                _.each(companies, (cmp) => {
-                    _.each(cmp.userEntityRoles, (company) => {
+                each(companies, (cmp) => {
+                    each(cmp.userEntityRoles, (company) => {
                         if (company.entity.entity === 'COMPANY' && company.role.uniqueName === 'super_admin') {
                             if (branches && branches.length) {
                                 let existIndx = branches.findIndex((b) => b.uniqueName === cmp.uniqueName);
@@ -176,12 +176,10 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                         }
                     });
                 });
-                this.companies$ = observableOf(_.orderBy(companiesWithSuperAdminRole, 'name'));
+                this.companies$ = observableOf(orderBy(companiesWithSuperAdminRole, 'name'));
             }
         })), takeUntil(this.destroyed$)).subscribe();
-    }
-
-    public ngOnInit() {
+        
         this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 if (res.isBranch) {
@@ -207,7 +205,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             this.changeBranchViewType('card')
         });
 
-        this.imgPath =  (isElectron|| isCordova) ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
     }
 
     /**
@@ -254,7 +252,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             };
             this.toggleAsidePane();
         });
-        // this.openCreateCompanyModal(true);
     }
 
     public hideAddCompanyModal() {
@@ -287,18 +284,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public openAddBranchModal() {
-        // this.removeCompanySessionData();
-        // this.openCreateCompanyModal();
         this.router.navigate(['pages/settings/create-branch']);
-    }
-
-    public onHide() {
-        // let companyUniqueName = null;
-        // this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
-        // let stateDetailsRequest = new StateDetailsRequest();
-        // stateDetailsRequest.companyUniqueName = companyUniqueName;
-        // stateDetailsRequest.lastState = 'settings';
-        // this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
     public hideAddBranchModal() {
@@ -313,7 +299,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.selectedCompaniesName = [];
         if (ev.target.checked) {
             this.companies$.pipe(take(1)).subscribe((companies) => {
-                _.each(companies, (company) => {
+                each(companies, (company) => {
                     this.selectedCompaniesUniquename.push(company.uniqueName);
                     this.selectedCompaniesName.push(company);
                 });
@@ -347,7 +333,9 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public removeBranch(branchUniqueName, companyName) {
         this.selectedBranch = branchUniqueName;
-        this.confirmationMessage = `Are you sure want to remove <p class="remvBrnchName"><b>${companyName}?</b></p>`;
+        let message = this.localeData?.remove_branch;
+        message = message?.replace("[COMPANY_NAME]", companyName);
+        this.confirmationMessage = message;
         this.confirmationModal.show();
     }
 
@@ -486,8 +474,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.settingsProfileService.updateBranchInfo(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response.status === 'success') {
                 this.closeAddressSidePane = 'out';
-                this.store.dispatch(this.settingsBranchActions.GetALLBranches({from: '', to: ''}));
-                this.toasterService.successToast('Branch updated successfully');
+                this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '' }));
+                this.toasterService.successToast(this.localeData?.branch_updated);
             } else {
                 this.toasterService.errorToast(response.message);
             }
@@ -537,7 +525,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             };
         }
         this.settingsProfileService.updateBranchInfo(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(() => {
-            this.store.dispatch(this.settingsBranchActions.GetALLBranches({from: '', to: ''}));
+            this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '' }));
         });
     }
 
@@ -574,5 +562,23 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
             }
         });
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof BranchComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.dataSyncOption = [
+                { label: this.localeData?.data_sync_options?.debtors, value: 'debtors' },
+                { label: this.localeData?.data_sync_options?.creditors, value: 'creditors' },
+                { label: this.localeData?.data_sync_options?.inventory, value: 'inventory' },
+                { label: this.localeData?.data_sync_options?.taxes, value: 'taxes' },
+                { label: this.localeData?.data_sync_options?.bank, value: 'bank' }
+            ];
+        }
     }
 }

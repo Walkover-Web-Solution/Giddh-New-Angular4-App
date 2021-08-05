@@ -1,0 +1,20 @@
+<ng-container appTranslate [file]="'trial-profit-balance/trial-balance'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
+    <financial-filter #filter [selectedCompany]="selectedCompany" [showLoader]="showLoader | async" [showLabels]="true"
+        (seachChange)="searchChanged($event)" (onPropertyChanged)="filterData($event)"
+        (expandAll)="expandAllEvent($event)" [tbExportCsv]="true"
+        [tbExportPdf]="true" [tbExportXLS]="true"></financial-filter>
+    <div *ngIf="(showLoader | async)">
+        <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+    </div>
+    <div *ngIf="(data$ | async) && !(showLoader | async)">
+        <trial-balance-grid #tbGrid [search]="search" [from]="from" [to]="to" (searchChange)="searchChanged($event)"
+            [expandAll]="expandAll" [data$]="data$ | async"></trial-balance-grid>
+    </div>
+    <div *ngIf="(!(showLoader | async) && !(data$ | async))"
+    class="d-flex align-items-center justify-content-center tb-pl-bs-data">
+        <div class="d-flex">
+            <h2>{{localeData?.no_data_found}}</h2>
+        </div>
+    </div>
+</ng-container>

@@ -16,7 +16,7 @@ import { CompanyResponse, ActiveFinancialYear } from '../../../models/api-models
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { GeneralService } from '../../../services/general.service';
 import { OrganizationType } from '../../../models/user-login-state';
-
+import { BreakpointObserver } from '@angular/cdk/layout';
 @Component({
     selector: 'reports-details-component',
     templateUrl: './report.details.component.html',
@@ -32,60 +32,10 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     private selectedMonth: string;
     public dateRange: Date[];
     public moment = moment;
-    public datePickerOptions: any = {
-        hideOnEsc: true,
-        // parentEl: '#dp-parent',
-        locale: {
-            applyClass: 'btn-green',
-            applyLabel: 'Go',
-            fromLabel: 'From',
-            format: 'D-MMM-YY',
-            toLabel: 'To',
-            cancelLabel: 'Cancel',
-            customRangeLabel: 'Custom range'
-        },
-        ranges: {
-            'This Month to Date': [
-                moment().startOf('month'),
-                moment()
-            ],
-            'This Quarter to Date': [
-                moment().quarter(moment().quarter()).startOf('quarter'),
-                moment()
-            ],
-            'This Financial Year to Date': [
-                moment().startOf('year').subtract(9, 'year'),
-                moment()
-            ],
-            'This Year to Date': [
-                moment().startOf('year'),
-                moment()
-            ],
-            'Last Month': [
-                moment().subtract(1, 'month').startOf('month'),
-                moment().subtract(1, 'month').endOf('month')
-            ],
-            'Last Quater': [
-                moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
-                moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
-            ],
-            'Last Financial Year': [
-                moment().startOf('year').subtract(10, 'year'),
-                moment().endOf('year').subtract(10, 'year')
-            ],
-            'Last Year': [
-                moment().startOf('year').subtract(1, 'year'),
-                moment().endOf('year').subtract(1, 'year')
-            ]
-        },
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment(),
-        // parentEl: '#dateRangeParent'
-    };
     public financialOptions: IOption[] = [];
     public selectedCompany: CompanyResponse;
     private interval: any;
-    public currentActiveFinacialYear: IOption = {label: '', value: ''};
+    public currentActiveFinacialYear: IOption = { label: '', value: '' };
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** Stores the branch list of a company */
@@ -100,7 +50,8 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-
+    /* This will hold if it's mobile screen or not */
+    public isMobileScreen: boolean = false;
     constructor(
         private router: Router,
         private store: Store<AppState>,
@@ -108,8 +59,13 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         private companyService: CompanyService,
         private _toaster: ToasterService,
         private settingsBranchAction: SettingsBranchActions,
-        private generalService: GeneralService) {
-        
+        private generalService: GeneralService,
+        private breakPointObservar: BreakpointObserver) {
+            this.breakPointObservar.observe([
+                '(max-width: 767px)'
+            ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+                this.isMobileScreen = result.matches;
+            });
     }
 
     ngOnInit() {
@@ -120,56 +76,56 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 // Reset the chosen financial year when user leaves the module
                 this.store.dispatch(this.companyActions.resetUserChosenFinancialYear());
             });
-            this.store.pipe(
-                select(state => state.session.activeCompany), take(1)
-            ).subscribe(activeCompany => {
-                this.activeCompany = activeCompany;
-            });
-            this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
-            this.currentCompanyBranches$.subscribe(response => {
-                if (response && response.length) {
-                    this.currentCompanyBranches = response.map(branch => ({
-                        label: branch.alias,
-                        value: branch.uniqueName,
-                        name: branch.name,
-                        parentBranch: branch.parentBranch
-                    }));
-                    this.currentCompanyBranches.unshift({
-                        label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
-                        name: this.activeCompany ? this.activeCompany.name : '',
-                        value: this.activeCompany ? this.activeCompany.uniqueName : '',
-                        isCompany: true
-                    });
-                    if (!this.currentBranch || !this.currentBranch.uniqueName) {
-                        let currentBranchUniqueName;
-                        if (this.currentOrganizationType === OrganizationType.Branch) {
-                            currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                            this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
-                        } else {
-                            currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
-                            this.currentBranch = {
-                                name: this.activeCompany ? this.activeCompany.name : '',
-                                alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
-                                uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
-                            };
-                        }
+        this.store.pipe(
+            select(state => state.session.activeCompany), take(1)
+        ).subscribe(activeCompany => {
+            this.activeCompany = activeCompany;
+        });
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+        this.currentCompanyBranches$.subscribe(response => {
+            if (response && response.length) {
+                this.currentCompanyBranches = response.map(branch => ({
+                    label: branch.alias,
+                    value: branch.uniqueName,
+                    name: branch.name,
+                    parentBranch: branch.parentBranch
+                }));
+                this.currentCompanyBranches.unshift({
+                    label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                    name: this.activeCompany ? this.activeCompany.name : '',
+                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    isCompany: true
+                });
+                if (!this.currentBranch || !this.currentBranch.uniqueName) {
+                    let currentBranchUniqueName;
+                    if (this.currentOrganizationType === OrganizationType.Branch) {
+                        currentBranchUniqueName = this.generalService.currentBranchUniqueName;
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
-                        const selectedBranch = _.cloneDeep(response.find(branch => branch.uniqueName === this.currentBranch.uniqueName));
-                        if (selectedBranch) {
-                            this.currentBranch.name = selectedBranch.name;
-                            this.currentBranch.alias = selectedBranch.alias;
-                        } else {
-                            // Company was selected from the branch dropdown
-                            this.currentBranch.name = this.activeCompany.name;
-                        }
+                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                        this.currentBranch = {
+                            name: this.activeCompany ? this.activeCompany.name : '',
+                            alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                        };
                     }
                 } else {
-                    if (this.generalService.companyUniqueName) {
-                        // Avoid API call if new user is onboarded
-                        this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                    const selectedBranch = _.cloneDeep(response.find(branch => branch.uniqueName === this.currentBranch.uniqueName));
+                    if (selectedBranch) {
+                        this.currentBranch.name = selectedBranch.name;
+                        this.currentBranch.alias = selectedBranch.alias;
+                    } else {
+                        // Company was selected from the branch dropdown
+                        this.currentBranch.name = this.activeCompany.name;
                     }
                 }
-            });
+            } else {
+                if (this.generalService.companyUniqueName) {
+                    // Avoid API call if new user is onboarded
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                }
+            }
+        });
     }
 
     public goToDashboard() {
@@ -363,9 +319,6 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
             let month = (dt.getMonth() + 1).toString(),
                 year = dt.getFullYear();
 
-            // GET THE FIRST AND LAST DATE OF THE MONTH.
-            //let firstDay = new Date(year, month , 0).toISOString().replace(/T.*/,'').split('-').reverse().join('-');
-            //let lastDay = new Date(year, month + 1, 1).toISOString().replace(/T.*/,'').split('-').reverse().join('-');
             if (parseInt(month) < 10) {
                 month = '0' + month;
             }
@@ -434,7 +387,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
      * @memberof ReportsDetailsComponent
      */
     public translationComplete(event: boolean): void {
-        if(event) {
+        if (event) {
             this.monthNames = [this.commonLocaleData?.app_months_full.january, this.commonLocaleData?.app_months_full.february, this.commonLocaleData?.app_months_full.march, this.commonLocaleData?.app_months_full.april, this.commonLocaleData?.app_months_full.may, this.commonLocaleData?.app_months_full.june, this.commonLocaleData?.app_months_full.july, this.commonLocaleData?.app_months_full.august, this.commonLocaleData?.app_months_full.september, this.commonLocaleData?.app_months_full.october, this.commonLocaleData?.app_months_full.november, this.commonLocaleData?.app_months_full.december];
             this.setCurrentFY();
             this.getSelectedDuration();
@@ -448,11 +401,11 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
      * @memberof ReportsDetailsComponent
      */
     public getSelectedDuration(): string {
-        if(this.selectedType?.toLowerCase() === "monthly") {
+        if (this.selectedType?.toLowerCase() === "monthly") {
             return this.commonLocaleData?.app_duration?.monthly;
-        } else if(this.selectedType?.toLowerCase() === "quarterly") {
+        } else if (this.selectedType?.toLowerCase() === "quarterly") {
             return this.commonLocaleData?.app_duration?.quarterly;
-        } else if(this.selectedType?.toLowerCase() === "weekly") {
+        } else if (this.selectedType?.toLowerCase() === "weekly") {
             return this.commonLocaleData?.app_duration?.weekly;
         }
     }

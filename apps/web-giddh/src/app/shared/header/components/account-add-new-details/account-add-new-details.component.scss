@@ -9,7 +9,6 @@
     background-color: $white;
     box-shadow: 0px 3px 6px $black-russian;
     padding: 15px 15px;
-    //  height: 100vh;
     overflow: auto;
     scroll-behavior: smooth;
     position: relative;
@@ -63,14 +62,14 @@ span.dr-label {
 
 .upper-form {
     margin-bottom: 20px;
-     .input-group{
-        .input-group-addon{
+    .input-group {
+        .input-group-addon {
             border-left: 1px solid $gainsboro !important;
         }
-        input{
+        input {
             border-left: 1px solid $gainsboro !important;
             border-right: none;
-            &:focus{
+            &:focus {
                 border-left: 1px solid $chetwode-blue !important;
             }
         }
@@ -89,12 +88,12 @@ form.gstin-form {
     align-items: center;
     margin: 20px 0;
 }
-.add-address-btn{
+.add-address-btn {
     width: 130px;
     display: flex;
     justify-content: center;
     align-items: center;
-    .icon-plus{
+    .icon-plus {
         margin-right: 10px;
     }
 }

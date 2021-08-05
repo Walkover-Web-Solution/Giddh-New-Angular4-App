@@ -1,7 +1,6 @@
 import { GroupsWithStocksHierarchyMin } from '../../models/api-models/GroupsWithStocks';
 import { CreateStockRequest, GroupStockReportResponse, INameUniqueName, StockDetailResponse, StockGroupRequest, StockGroupResponse, StockReportResponse, StocksResponse, StockUnitRequest } from '../../models/api-models/Inventory';
 import { IGroupsWithStocksHierarchyMinItem } from '../../models/interfaces/groupsWithStocks.interface';
-import * as _ from '../../lodash-optimized';
 import { CUSTOM_STOCK_UNIT_ACTIONS, InventoryActionsConst, STOCKS_REPORT_ACTIONS } from '../../actions/inventory/inventory.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { CustomActions } from '../customActions';
@@ -75,7 +74,6 @@ const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStoc
 /**
  * Setting the InitialState for this Reducer's Store
  */
-// stocks: [{ uniqueName: 'sabji', name: 'Sabji' }, { uniqueName: 'kadi', name: 'Kadi' }]
 const initialState: InventoryState = {
     groupsWithStocks: [],
     stocksList: null,
@@ -462,7 +460,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
             if (updateStockResp.status === 'success') {
                 groupArray = _.cloneDeep(state.groupsWithStocks);
                 let activeGroupUniqueName = _.cloneDeep(updateStockResp.queryString.stockGroupUniqueName);
-                updateStockIteminGroupArray(groupArray,activeGroupUniqueName, updateStockResp);
+                updateStockIteminGroupArray(groupArray, activeGroupUniqueName, updateStockResp);
                 return Object.assign({}, state, {
                     groupsWithStocks: groupArray,
                     activeStock: updateStockResp.body,
@@ -573,7 +571,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
         case CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT_RESPONSE:
             return Object.assign({}, state, {
                 stockUnits: state.stockUnits.map(unit => {
-                    if(unit.code === action.payload.code ) {
+                    if (unit.code === action.payload.code) {
                         return action.payload
                     }
                     return unit;
@@ -675,7 +673,6 @@ const setRecursivlyStock = (groups: IGroupsWithStocksHierarchyMinItem[], group: 
                     st = Object.assign({}, st, {
                         isActive: st.uniqueName === stockUniqueName
                     });
-                    // st.isActive = ();
                 }
             }
             el.isActive = true;

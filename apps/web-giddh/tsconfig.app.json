@@ -1,12 +1,6 @@
 {
     "extends": "./tsconfig.json",
     "compilerOptions": {
-        // "allowJs": true,
-        // "allowSyntheticDefaultImports": true,
-        // "noEmit":true,
-        // "noEmitHelpers":true,
-        // "strictNullChecks":false,
-        // "baseUrl": "./src",
         "outDir": "../../dist/out-tsc/apps/web-giddh",
         "types": [],
         "typeRoots": [
@@ -18,9 +12,11 @@
         "**/*.spec.ts"
     ],
     "include": [
-        "src/main.ts",
-        "src/polyfills.ts",
-        "src/**/*.ts",
         "src/**/*.d.ts"
+    ],
+    "files": [
+        "src/main.ts",
+        "src/main.electron.ts",
+        "src/polyfills.ts"
     ]
 }

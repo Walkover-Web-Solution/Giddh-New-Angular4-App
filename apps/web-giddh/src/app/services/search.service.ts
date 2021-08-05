@@ -1,5 +1,4 @@
 import { Inject, Injectable, Optional } from '@angular/core';
-
 import { HttpWrapperService } from './httpWrapper.service';
 import { Router } from '@angular/router';
 import { catchError, map } from 'rxjs/operators';
@@ -111,8 +110,8 @@ export class SearchService {
     public loadDetails(uniqueName: string, params?: any): Observable<any> {
         const companyUniqueName = this._generalService.companyUniqueName;
         let contextPath = `${this.config.apiUrl}${SEARCH_API.ACCOUNT_DETAIL}`
-        .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
-        .replace(':accountUniqueName', encodeURIComponent(uniqueName));
+            .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+            .replace(':accountUniqueName', encodeURIComponent(uniqueName));
         if (params) {
             Object.keys(params).forEach((key, index) => {
                 const delimiter = index === 0 ? '?' : '&';
