@@ -9,7 +9,8 @@
             [ngClass]="{
                 active:
                     grp.isOpen &&
-                    activeGroup && activeGroup.uniqueName === grp.uniqueName &&
+                    activeGroup &&
+                    activeGroup.uniqueName === grp.uniqueName &&
                     !(activeStockUniqueName$ | async)
             }"
         >
@@ -27,7 +28,8 @@
                     (click)="goToManageGroup(grp)"
                     *ngIf="
                         grp.isOpen &&
-                        activeGroup && activeGroup.uniqueName === grp.uniqueName &&
+                        activeGroup &&
+                        activeGroup.uniqueName === grp.uniqueName &&
                         !(activeStockUniqueName$ | async)
                     "
                 >

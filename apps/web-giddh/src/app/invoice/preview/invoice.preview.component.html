@@ -1252,7 +1252,8 @@
                                 voucherData &&
                                 voucherData.items.length > 0 &&
                                 !(isGetAllRequestInProcess$ | async) &&
-                                selectedVoucher !== 'sales' && selectedVoucher !== 'purchase'
+                                selectedVoucher !== 'sales' &&
+                                selectedVoucher !== 'purchase'
                             "
                             (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
                             (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"

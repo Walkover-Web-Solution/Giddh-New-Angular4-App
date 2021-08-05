@@ -404,11 +404,9 @@
                                                                     startDate,
                                                                     hoveredDate
                                                                 ) &&
-                                                                    calendarMonth.end &&
-                                                                        calendarMonth.end.calendar[1][1].month() ==
-                                                                            calendarMonth.end.calendar[row][
-                                                                                col
-                                                                            ].month(),
+                                                                calendarMonth.end &&
+                                                                calendarMonth.end.calendar[1][1].month() ==
+                                                                    calendarMonth.end.calendar[row][col].month(),
                                                             activatedDate:
                                                                 (calendarMonth.start.calendar[row][col].format(
                                                                     'YYYY-MM-DD'
@@ -689,8 +687,8 @@
                                                                 startDate,
                                                                 hoveredDate
                                                             ) &&
-                                                                calendarMonth.end.calendar[1][1].month() ==
-                                                                    calendarMonth.end.calendar[row][col].month(),
+                                                            calendarMonth.end.calendar[1][1].month() ==
+                                                                calendarMonth.end.calendar[row][col].month(),
                                                         activatedDate:
                                                             (calendarMonth.end.calendar[row][col].format(
                                                                 'YYYY-MM-DD'
