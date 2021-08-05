@@ -41,14 +41,14 @@
                         (clickOutside)="methodForToggleSection('timeSpanSection')"
                     >
                         <label *ngIf="isLblShow">{{ localeData?.time_span }}</label>
-                        <div class="btn-group" [ngClass]="{ open: showTimeSpan, 'btn-group-liq': !isHorizntl }">
+                        <div class="btn-group" [ngClass]="{ 'open': showTimeSpan, 'btn-group-liq': !isHorizntl }">
                             <button (click)="showTimeSpan = !showTimeSpan" type="button" class="form-control text-left">
                                 {{ selectedTimeSpan }}
                                 <span class="pull-right"><span class="fa fa-caret-down"></span></span>
                             </button>
                             <section
                                 class="dropdown-menu custom-dropdown mr-b1 time-span-dropdown"
-                                [ngClass]="{ open: showTimeSpan }"
+                                [ngClass]="{ 'open': showTimeSpan }"
                             >
                                 <div class="clearfix pd-1 option-box">
                                     <span
@@ -138,7 +138,7 @@
                         (clickOutside)="methodForToggleSection('rangeSpanSection')"
                     >
                         <label *ngIf="isLblShow">{{ localeData?.ip_addresses }}</label>
-                        <div class="btn-group" [ngClass]="{ open: showIPWrap, 'btn-group-liq': !isHorizntl }">
+                        <div class="btn-group" [ngClass]="{ 'open': showIPWrap, 'btn-group-liq': !isHorizntl }">
                             <button (click)="showIPWrap = !showIPWrap" type="button" class="form-control text-left">
                                 {{ selectedIPRange }}
                                 <span class="pull-right"><span class="fa fa-caret-down"></span></span>
@@ -146,7 +146,7 @@
                             <section
                                 class="dropdown-menu custom-dropdown ip-addresses-dropdown"
                                 role="menu"
-                                [ngClass]="{ open: showIPWrap }"
+                                [ngClass]="{ 'open': showIPWrap }"
                             >
                                 <div class="clearfix option-box pd-1">
                                     <span

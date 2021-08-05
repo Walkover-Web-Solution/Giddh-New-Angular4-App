@@ -99,7 +99,7 @@
                                     'active-toggle-btn':
                                         addAccountForm.get('openingBalanceType').value === 'DEBIT' &&
                                         addAccountForm.get('openingBalance').value > 0,
-                                    cp: addAccountForm.get('openingBalance').value > 0
+                                    'cp': addAccountForm.get('openingBalance').value > 0
                                 }"
                                 *ngIf="addAccountForm.get('openingBalance').value > 0"
                             >
@@ -112,7 +112,7 @@
                                     'active-toggle-btn':
                                         addAccountForm.get('openingBalanceType').value === 'CREDIT' &&
                                         addAccountForm.get('openingBalance').value > 0,
-                                    cp: addAccountForm.get('openingBalance').value > 0
+                                    'cp': addAccountForm.get('openingBalance').value > 0
                                 }"
                                 *ngIf="addAccountForm.get('openingBalance').value > 0"
                             >
@@ -148,7 +148,7 @@
                                     (click)="openingBalanceTypeChnaged('DEBIT')"
                                     [ngClass]="{
                                         'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT',
-                                        cp: addAccountForm.get('openingBalance').value > 0
+                                        'cp': addAccountForm.get('openingBalance').value > 0
                                     }"
                                     *ngIf="addAccountForm.get('foreignOpeningBalance').value > 0"
                                 >
@@ -160,7 +160,7 @@
                                     [ngClass]="{
                                         'active-toggle-btn':
                                             addAccountForm.get('openingBalanceType').value === 'CREDIT',
-                                        cp: addAccountForm.get('openingBalance').value > 0
+                                        'cp': addAccountForm.get('openingBalance').value > 0
                                     }"
                                     *ngIf="addAccountForm.get('foreignOpeningBalance').value > 0"
                                 >
@@ -233,7 +233,7 @@
                     [heading]="localeData?.tabs?.address"
                     [active]="isDebtorCreditor"
                     [disabled]="!isDebtorCreditor"
-                    [ngClass]="{ active: isDebtorCreditor }"
+                    [ngClass]="{ 'active': isDebtorCreditor }"
                     class="gstin-address"
                 >
                     <ng-container>
@@ -631,7 +631,7 @@
                                     [ngClass]="{
                                         'active-toggle-btn':
                                             addAccountForm.get('closingBalanceTriggerAmountType').value === 'DEBIT',
-                                        cp: addAccountForm.get('closingBalanceTriggerAmount').value > 0
+                                        'cp': addAccountForm.get('closingBalanceTriggerAmount').value > 0
                                     }"
                                     *ngIf="addAccountForm.get('closingBalanceTriggerAmount').value > 0"
                                 >
@@ -643,7 +643,7 @@
                                     [ngClass]="{
                                         'active-toggle-btn':
                                             addAccountForm.get('closingBalanceTriggerAmountType').value === 'CREDIT',
-                                        cp: addAccountForm.get('closingBalanceTriggerAmount').value > 0
+                                        'cp': addAccountForm.get('closingBalanceTriggerAmount').value > 0
                                     }"
                                     *ngIf="addAccountForm.get('closingBalanceTriggerAmount').value > 0"
                                 >

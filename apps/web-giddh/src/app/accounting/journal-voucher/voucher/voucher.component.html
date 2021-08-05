@@ -57,7 +57,7 @@
                                     [ngModel]="transaction.type"
                                     (ngModelChange)="selectEntryType(transaction, $event, i)"
                                     (focus)="selectRow(true, i); hideListItems()"
-                                    [ngClass]="{ focus: isSelectedRow && selectedIdx === i }"
+                                    [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
                                     value="{{ transaction.type | lowercase }}"
                                     maxlength="2"
                                 />
@@ -81,7 +81,7 @@
                                         )
                                     "
                                     (blur)="onAccountBlur($event)"
-                                    [ngClass]="{ focus: isSelectedRow && selectedIdx === i }"
+                                    [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
                                     (keydown)="detectKey($event)"
                                     (keydown.Tab)="validateAccount(transaction, $event, i)"
                                     (keydown.arrowDown)="openCreateAccountPopupIfRequired($event)"
@@ -208,7 +208,9 @@
                                                         [placeholder]="localeData?.search_stock_placeholder"
                                                         class="form-control stock-field"
                                                         [(ngModel)]="inventory.stock.name"
-                                                        [ngClass]="{ focus: isSelectedRow && selectedStockIdx === idx }"
+                                                        [ngClass]="{
+                                                            'focus': isSelectedRow && selectedStockIdx === idx
+                                                        }"
                                                         (focus)="onStockFocus($event, idx, i)"
                                                         (blur)="onStockBlur(qty)"
                                                     />
@@ -223,7 +225,9 @@
                                                         class="form-control text-right"
                                                         [(ngModel)]="inventory.quantity"
                                                         (ngModelChange)="changeQuantity(idx, inventory.quantity)"
-                                                        [ngClass]="{ focus: isSelectedRow && selectedStockIdx === idx }"
+                                                        [ngClass]="{
+                                                            'focus': isSelectedRow && selectedStockIdx === idx
+                                                        }"
                                                         decimalDigitsDirective
                                                         [mask]="inputMaskFormat"
                                                         (focus)="selectedIdx = i"
@@ -239,7 +243,9 @@
                                                         [(ngModel)]="inventory.unit.rate"
                                                         (ngModelChange)="changePrice(idx, inventory.unit.rate)"
                                                         (focus)="selectedStockIdx = idx; selectedIdx = i"
-                                                        [ngClass]="{ focus: isSelectedRow && selectedStockIdx === idx }"
+                                                        [ngClass]="{
+                                                            'focus': isSelectedRow && selectedStockIdx === idx
+                                                        }"
                                                         decimalDigitsDirective
                                                         [mask]="inputMaskFormat"
                                                     />
@@ -265,7 +271,9 @@
                                                         #toAmountField
                                                         [(ngModel)]="inventory.amount"
                                                         (focus)="selectedStockIdx = idx; selectedIdx = i"
-                                                        [ngClass]="{ focus: isSelectedRow && selectedStockIdx === idx }"
+                                                        [ngClass]="{
+                                                            'focus': isSelectedRow && selectedStockIdx === idx
+                                                        }"
                                                         (ngModelChange)="amountChanged(idx)"
                                                         (keydown.Tab)="validateAndAddNewStock(idx)"
                                                         (keyup.Enter)="validateAndAddNewStock(idx)"
@@ -293,7 +301,7 @@
                                     (focus)="selectRow(true, i); hideListItems()"
                                     (keydown.Enter)="addNewEntry(transaction.amount, transaction, i)"
                                     (blur)="addNewEntry(transaction.amount, transaction, i)"
-                                    [ngClass]="{ focus: isSelectedRow && selectedIdx === i }"
+                                    [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
                                     [disabled]="transaction.stocks && transaction.stocks.length && transaction.amount"
                                     (ngModelChange)="calModAmt(transaction.amount, transaction, i)"
                                 />
@@ -317,7 +325,7 @@
                                         addNewEntry(transaction.amount, transaction, i);
                                         openAdjustmentModal($event, transaction, receiptEntry)
                                     "
-                                    [ngClass]="{ focus: isSelectedRow && selectedIdx === i }"
+                                    [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
                                     [disabled]="transaction.stocks && transaction.stocks.length && transaction.amount"
                                     (ngModelChange)="calModAmt(transaction.amount, transaction, i)"
                                 />

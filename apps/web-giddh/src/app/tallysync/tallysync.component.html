@@ -5,14 +5,14 @@
         <div class="m-t-15">
             <button
                 class="btn btn-default"
-                [ngClass]="{ active: activeTab === 'inprogress' }"
+                [ngClass]="{ 'active': activeTab === 'inprogress' }"
                 (click)="tabChanged('inprogress')"
             >
                 {{ localeData?.inprogress }}
             </button>
             <button
                 class="btn btn-default"
-                [ngClass]="{ active: activeTab === 'completed' }"
+                [ngClass]="{ 'active': activeTab === 'completed' }"
                 (click)="tabChanged('completed')"
             >
                 {{ localeData?.completed }}

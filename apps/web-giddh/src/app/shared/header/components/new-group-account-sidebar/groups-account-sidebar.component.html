@@ -47,7 +47,7 @@
                                     class="list-item"
                                     (click)="onGroupClick(item, i)"
                                     [ngClass]="{
-                                        isActive:
+                                        'isActive':
                                             ((activeGroupUniqueName$ | async) === item?.uniqueName ||
                                                 (searchString &&
                                                     (i === mc.columns?.length - 1 ||
@@ -58,7 +58,7 @@
                                                                     0))) &&
                                                     j === 0)) &&
                                             !(activeAccount | async),
-                                        isParent: item?.isOpen
+                                        'isParent': item?.isOpen
                                     }"
                                     tooltip="{{ item.synonyms }}"
                                     placement="bottom"
@@ -72,7 +72,7 @@
                                     nav-vr-item
                                     class="list-item isAcc"
                                     [ngClass]="{
-                                        isActive:
+                                        'isActive':
                                             (activeAccount | async)?.uniqueName === item?.uniqueName ||
                                             (searchString && i === mc.columns?.length - 1 && j === 0)
                                     }"

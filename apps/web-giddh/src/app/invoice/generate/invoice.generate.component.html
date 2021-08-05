@@ -218,7 +218,7 @@
                         >
                             <tr
                                 *ngFor="let item of ledgersData?.results; let i = index"
-                                [ngClass]="{ danger: item.hasGenerationErr }"
+                                [ngClass]="{ 'danger': item.hasGenerationErr }"
                                 (mouseover)="hoveredItemForAction = item.uniqueName"
                             >
                                 <td

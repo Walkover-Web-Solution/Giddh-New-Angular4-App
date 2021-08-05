@@ -1318,14 +1318,14 @@
                                 >
                                     <ng-template #notFoundLinkTemplate>
                                         <a
-                                            [ngClass]="{ active: keydownClassAdded }"
+                                            [ngClass]="{ 'active': keydownClassAdded }"
                                             class="notfound-option"
                                             [keyboardShortcut]="'alt+c'"
                                             (onShortcutPress)="keydownPressed()"
                                         >
                                             <span
                                                 (click)="toggleTransporterModel()"
-                                                [ngClass]="{ active: keydownClassAdded }"
+                                                [ngClass]="{ 'active': keydownClassAdded }"
                                                 >Create New</span
                                             >
                                         </a>

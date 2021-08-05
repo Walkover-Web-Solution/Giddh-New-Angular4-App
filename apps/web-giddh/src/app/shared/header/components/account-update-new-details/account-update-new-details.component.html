@@ -96,7 +96,7 @@
                                         'active-toggle-btn':
                                             addAccountForm.get('openingBalanceType').value === 'DEBIT' &&
                                             addAccountForm.get('openingBalance').value > 0,
-                                        cp: addAccountForm.get('openingBalance').value > 0
+                                        'cp': addAccountForm.get('openingBalance').value > 0
                                     }"
                                     *ngIf="addAccountForm.get('openingBalance').value > 0"
                                 >
@@ -109,7 +109,7 @@
                                         'active-toggle-btn':
                                             addAccountForm.get('openingBalanceType').value === 'CREDIT' &&
                                             addAccountForm.get('openingBalance').value > 0,
-                                        cp: addAccountForm.get('openingBalance').value > 0
+                                        'cp': addAccountForm.get('openingBalance').value > 0
                                     }"
                                     *ngIf="addAccountForm.get('openingBalance').value > 0"
                                 >
@@ -144,7 +144,7 @@
                                 (click)="openingBalanceTypeChnaged('DEBIT')"
                                 [ngClass]="{
                                     'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT',
-                                    cp: addAccountForm.get('openingBalance').value > 0
+                                    'cp': addAccountForm.get('openingBalance').value > 0
                                 }"
                                 *ngIf="addAccountForm.get('foreignOpeningBalance').value > 0"
                             >
@@ -155,7 +155,7 @@
                                 (click)="openingBalanceTypeChnaged('CREDIT')"
                                 [ngClass]="{
                                     'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'CREDIT',
-                                    cp: addAccountForm.get('openingBalance').value > 0
+                                    'cp': addAccountForm.get('openingBalance').value > 0
                                 }"
                                 *ngIf="addAccountForm.get('foreignOpeningBalance').value > 0"
                             >
@@ -649,7 +649,7 @@
                                     [ngClass]="{
                                         'active-toggle-btn':
                                             addAccountForm.get('closingBalanceTriggerAmountType').value === 'DEBIT',
-                                        cp: addAccountForm.get('closingBalanceTriggerAmount').value > 0
+                                        'cp': addAccountForm.get('closingBalanceTriggerAmount').value > 0
                                     }"
                                     *ngIf="addAccountForm.get('closingBalanceTriggerAmount').value > 0"
                                 >
@@ -661,7 +661,7 @@
                                     [ngClass]="{
                                         'active-toggle-btn':
                                             addAccountForm.get('closingBalanceTriggerAmountType').value === 'CREDIT',
-                                        cp: addAccountForm.get('closingBalanceTriggerAmount').value > 0
+                                        'cp': addAccountForm.get('closingBalanceTriggerAmount').value > 0
                                     }"
                                     *ngIf="addAccountForm.get('closingBalanceTriggerAmount').value > 0"
                                 >
@@ -877,7 +877,7 @@
                             <li *ngFor="let merged of (activeAccount$ | async)?.mergedAccounts.split(',')">
                                 <a
                                     href="javascript:void(0);"
-                                    [ngClass]="{ isActive: setAccountForMove === merged }"
+                                    [ngClass]="{ 'isActive': setAccountForMove === merged }"
                                     (click)="setAccountForMoveFunc(merged)"
                                 >
                                     {{ merged }}

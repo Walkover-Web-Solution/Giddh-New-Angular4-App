@@ -57,7 +57,7 @@
                         [ngClass]="{
                             'active-toggle-btn':
                                 groupDetailForm.get('closingBalanceTriggerAmountType').value === 'DEBIT',
-                            cp: groupDetailForm.get('closingBalanceTriggerAmount').value > 0
+                            'cp': groupDetailForm.get('closingBalanceTriggerAmount').value > 0
                         }"
                         *ngIf="groupDetailForm.get('closingBalanceTriggerAmount').value > 0"
                     >
@@ -69,7 +69,7 @@
                         [ngClass]="{
                             'active-toggle-btn':
                                 groupDetailForm.get('closingBalanceTriggerAmountType').value === 'CREDIT',
-                            cp: groupDetailForm.get('closingBalanceTriggerAmount').value > 0
+                            'cp': groupDetailForm.get('closingBalanceTriggerAmount').value > 0
                         }"
                         *ngIf="groupDetailForm.get('closingBalanceTriggerAmount').value > 0"
                     >

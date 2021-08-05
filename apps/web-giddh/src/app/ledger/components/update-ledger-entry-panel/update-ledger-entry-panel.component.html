@@ -218,16 +218,16 @@
                                                         <ng-template #notFoundLinkTemplate>
                                                             <a
                                                                 id="createNewId"
-                                                                [ngClass]="{ active: keydownClassAdded }"
+                                                                [ngClass]="{ 'active': keydownClassAdded }"
                                                                 class="notfound-option"
                                                                 [keyboardShortcut]="'alt+c'"
                                                                 (onShortcutPress)="toggleAsidePaneOpen()"
                                                             >
-                                                                <span [ngClass]="{ active: keydownClassAdded }">{{
+                                                                <span [ngClass]="{ 'active': keydownClassAdded }">{{
                                                                     commonLocaleData?.app_create_new
                                                                 }}</span>
                                                                 <span
-                                                                    [ngClass]="{ active: keydownClassAdded }"
+                                                                    [ngClass]="{ 'active': keydownClassAdded }"
                                                                     class="pull-right"
                                                                     >{{ commonLocaleData?.app_alt_c }}</span
                                                                 >
@@ -513,16 +513,16 @@
                                                         <ng-template #notFoundLinkTemplate>
                                                             <a
                                                                 id="createNewId2"
-                                                                [ngClass]="{ active: keydownClassAdded }"
+                                                                [ngClass]="{ 'active': keydownClassAdded }"
                                                                 class="notfound-option"
                                                                 [keyboardShortcut]="'alt+c'"
                                                                 (onShortcutPress)="toggleAsidePaneOpen()"
                                                             >
-                                                                <span [ngClass]="{ active: keydownClassAdded }">{{
+                                                                <span [ngClass]="{ 'active': keydownClassAdded }">{{
                                                                     commonLocaleData?.app_create_new
                                                                 }}</span>
                                                                 <span
-                                                                    [ngClass]="{ active: keydownClassAdded }"
+                                                                    [ngClass]="{ 'active': keydownClassAdded }"
                                                                     class="pull-right"
                                                                     >{{ commonLocaleData?.app_alt_c }}</span
                                                                 >
@@ -734,7 +734,7 @@
                         >
                             <ng-template [ngIf]="vm.showNewEntryPanel && vm.stockTrxEntry">
                                 <div
-                                    [ngClass]="{ width40: vm.stockTrxEntry }"
+                                    [ngClass]="{ 'width40': vm.stockTrxEntry }"
                                     class="table-amount text-right pr-1 width-80"
                                 >
                                     <label class="font-12">{{ commonLocaleData?.app_quantity }}</label>
@@ -1773,7 +1773,7 @@
                                         >
                                     </div>
 
-                                    <label class="upload-div" [ngClass]="{ hide: vm.selectedLedger.attachedFile }">
+                                    <label class="upload-div" [ngClass]="{ 'hide': vm.selectedLedger.attachedFile }">
                                         <input
                                             [disabled]="
                                                 !isPettyCash &&

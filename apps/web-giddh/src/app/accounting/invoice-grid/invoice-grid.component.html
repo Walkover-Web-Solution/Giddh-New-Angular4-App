@@ -147,7 +147,7 @@
                                                     searchStock($event);
                                                     changeStock(i, transaction?.inventory?.stock?.name)
                                                 "
-                                                [ngClass]="{ focus: isSelectedRow && selectedRowIdx === i }"
+                                                [ngClass]="{ 'focus': isSelectedRow && selectedRowIdx === i }"
                                                 (focus)="onPartyAccBlur(); onStockFocus($event, i)"
                                                 (blur)="onStockItemBlur($event, qty); filterByText = ''"
                                                 (keydown)="detectKey($event)"
@@ -162,7 +162,7 @@
                                                 [(ngModel)]="transaction.inventory.quantity"
                                                 (ngModelChange)="changeQuantity(i, $event)"
                                                 (focus)="selectRow(true, i, null); hideListItems()"
-                                                [ngClass]="{ focus: isSelectedRow && selectedRowIdx === i }"
+                                                [ngClass]="{ 'focus': isSelectedRow && selectedRowIdx === i }"
                                                 decimalDigitsDirective
                                                 [DecimalPlaces]="2"
                                                 [disabled]="!transaction.inventory.stock.name"
@@ -176,7 +176,7 @@
                                                 [(ngModel)]="transaction.inventory.unit.rate"
                                                 (ngModelChange)="changePrice(i, $event)"
                                                 (focus)="selectRow(true, i, null)"
-                                                [ngClass]="{ focus: isSelectedRow && selectedRowIdx === i }"
+                                                [ngClass]="{ 'focus': isSelectedRow && selectedRowIdx === i }"
                                                 decimalDigitsDirective
                                                 [DecimalPlaces]="2"
                                                 [disabled]="!transaction.inventory.stock.name"
@@ -208,7 +208,7 @@
                                                 (keydown.Tab)="
                                                     addNewStock(transaction.inventory.amount, transaction, i)
                                                 "
-                                                [ngClass]="{ focus: isSelectedRow && selectedRowIdx === i }"
+                                                [ngClass]="{ 'focus': isSelectedRow && selectedRowIdx === i }"
                                                 decimalDigitsDirective
                                                 [DecimalPlaces]="2"
                                                 [disabled]="!transaction.inventory.stock.name"
@@ -248,7 +248,7 @@
                                             [(ngModel)]="transaction.selectedAccount.account"
                                             (ngModelChange)="searchAccount($event)"
                                             (focus)="selectedAccIdx = i; onAccountFocus($event, i)"
-                                            [ngClass]="{ focus: isSelectedRow && selectedAccIdx === i }"
+                                            [ngClass]="{ 'focus': isSelectedRow && selectedAccIdx === i }"
                                             (keydown)="detectKey($event, i === 0)"
                                             (blur)="onAccountBlur(particular)"
                                         />
@@ -263,7 +263,7 @@
                                             [(ngModel)]="transaction.rate"
                                             (ngModelChange)="calculateRate(i, transaction?.rate)"
                                             (focus)="selectedAccIdx = i; hideListItems()"
-                                            [ngClass]="{ focus: isSelectedRow && selectedAccIdx === i }"
+                                            [ngClass]="{ 'focus': isSelectedRow && selectedAccIdx === i }"
                                             [disabled]="!transaction.selectedAccount.account"
                                         />
                                     </td>
@@ -288,7 +288,7 @@
                                             [DecimalPlaces]="2"
                                             [(ngModel)]="transaction.amount"
                                             (keyup.Enter)="selectedAccIdx = i; addNewAccount(transaction.amount, l)"
-                                            [ngClass]="{ focus: isSelectedRow && selectedAccIdx === i }"
+                                            [ngClass]="{ 'focus': isSelectedRow && selectedAccIdx === i }"
                                             [disabled]="!transaction.selectedAccount.account"
                                             (blur)="checkIfEnteredAmountIsZero(transaction.amount, i, 'account')"
                                             onReturn

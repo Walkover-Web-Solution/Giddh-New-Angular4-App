@@ -20,35 +20,35 @@
         <i class="icon-cross text-right close-modal" aria-hidden="true" (click)="onCancel('closed')"></i>
 
         <!-- drop down for Esignature area -->
-        <div class="dropdown-menu mr-l3" [ngClass]="{ open: showEsign }">
+        <div class="dropdown-menu mr-l3" [ngClass]="{ 'open': showEsign }">
             <div class="form-group">
                 <e-sign-modal-component [localeData]="localeData"></e-sign-modal-component>
             </div>
         </div>
 
         <!-- drop down for invoice copies -->
-        <div class="dropdown-menu mr-l3 p-0" id="setting-tab" [ngClass]="{ open: showMore }">
+        <div class="dropdown-menu mr-l3 p-0" id="setting-tab" [ngClass]="{ 'open': showMore }">
             <ul class="nav nav-tabs">
-                <li class="nav-item" [ngClass]="{ active: emailTabActive }">
+                <li class="nav-item" [ngClass]="{ 'active': emailTabActive }">
                     <a
                         class="nav-link cp"
-                        [ngClass]="{ active: emailTabActive }"
+                        [ngClass]="{ 'active': emailTabActive }"
                         (click)="emailTabActive = true; downloadTabActive = false; smsTabActive = false"
                         >{{ commonLocaleData?.app_send_email }}</a
                     >
                 </li>
-                <li class="nav-item" [ngClass]="{ active: downloadTabActive }">
+                <li class="nav-item" [ngClass]="{ 'active': downloadTabActive }">
                     <a
                         class="nav-link cp"
-                        [ngClass]="{ active: downloadTabActive }"
+                        [ngClass]="{ 'active': downloadTabActive }"
                         (click)="emailTabActive = false; downloadTabActive = true; smsTabActive = false"
                         >{{ commonLocaleData?.app_download }}</a
                     >
                 </li>
-                <li class="nav-item" [ngClass]="{ active: smsTabActive }" *ngIf="isSendSmsEnabled">
+                <li class="nav-item" [ngClass]="{ 'active': smsTabActive }" *ngIf="isSendSmsEnabled">
                     <a
                         class="nav-link cp"
-                        [ngClass]="{ active: smsTabActive }"
+                        [ngClass]="{ 'active': smsTabActive }"
                         (click)="emailTabActive = false; downloadTabActive = false; smsTabActive = true"
                         >{{ commonLocaleData?.app_send_sms }}</a
                     >
@@ -155,10 +155,10 @@
     <div class="modal-body p-0 clearfix" id="export-body" *ngIf="isMobileScreen">
         <!-- drop down for invoice copies -->
         <ul class="nav nav-tabs">
-            <li class="nav-item" [ngClass]="{ active: emailTabActive }">
+            <li class="nav-item" [ngClass]="{ 'active': emailTabActive }">
                 <a
                     class="nav-link cp"
-                    [ngClass]="{ active: emailTabActive }"
+                    [ngClass]="{ 'active': emailTabActive }"
                     (click)="emailTabActive = true; downloadTabActive = false; smsTabActive = false"
                     >{{ commonLocaleData?.app_send_email }}</a
                 >
@@ -166,7 +166,7 @@
             <li class="nav-item" [ngClass]="{ active: downloadTabActive }">
                 <a
                     class="nav-link cp"
-                    [ngClass]="{ active: downloadTabActive }"
+                    [ngClass]="{ 'active': downloadTabActive }"
                     (click)="emailTabActive = false; downloadTabActive = true; smsTabActive = false"
                     >{{ commonLocaleData?.app_download }}</a
                 >
@@ -174,7 +174,7 @@
             <li class="nav-item" [ngClass]="{ active: smsTabActive }" *ngIf="isSendSmsEnabled">
                 <a
                     class="nav-link cp"
-                    [ngClass]="{ active: smsTabActive }"
+                    [ngClass]="{ 'active': smsTabActive }"
                     (click)="emailTabActive = false; downloadTabActive = false; smsTabActive = true"
                     >{{ commonLocaleData?.app_send_sms }}</a
                 >

@@ -29,7 +29,7 @@
                                         <div class="your-account">
                                             <div
                                                 class="inner-your-account"
-                                                [ngClass]="{ active: showPlans === 'multiple' }"
+                                                [ngClass]="{ 'active': showPlans === 'multiple' }"
                                             >
                                                 <h3 class="plan-heading">
                                                     {{ defaultMultipleCompanyPlan?.planDetails?.name }}
@@ -212,7 +212,7 @@
                                         <div class="your-account">
                                             <div
                                                 class="inner-your-account popular"
-                                                [ngClass]="{ active: showPlans === 'single' }"
+                                                [ngClass]="{ 'active': showPlans === 'single' }"
                                             >
                                                 <img src="assets/images/popular.svg" class="popular-icon" alt="" />
                                                 <h3 class="plan-heading">
@@ -401,7 +401,7 @@
                                         <div class="your-account">
                                             <div
                                                 class="inner-your-account"
-                                                [ngClass]="{ active: showPlans === 'free' }"
+                                                [ngClass]="{ 'active': showPlans === 'free' }"
                                             >
                                                 <h3 class="plan-heading">{{ defaultFreePlan?.planDetails?.name }}</h3>
                                                 <div>
@@ -594,7 +594,7 @@
                                     item?.planDetails?.companiesLimit === 1) ||
                                 (showPlans === 'free' && !item?.planDetails?.amount))
                         "
-                        [ngClass]="{ popular: item?.planDetails?.name === defaultPopularPlan }"
+                        [ngClass]="{ 'popular': item?.planDetails?.name === defaultPopularPlan }"
                     >
                         <img
                             src="assets/images/popular.svg"

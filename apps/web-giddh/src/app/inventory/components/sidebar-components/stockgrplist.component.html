@@ -1,13 +1,13 @@
 <ul class="list-unstyled stock-grp-list clearfix">
     <li
         class="clearfix main-group p-0"
-        [ngClass]="{ isGrp: grp.childStockGroups.length > 0, 'group-open': grp.isOpen }"
+        [ngClass]="{ 'isGrp': grp.childStockGroups.length > 0, 'group-open': grp.isOpen }"
         *ngFor="let grp of Groups"
     >
         <div
             class="item-group"
             [ngClass]="{
-                active:
+                'active':
                     grp.isOpen &&
                     activeGroup &&
                     activeGroup.uniqueName === grp.uniqueName &&
@@ -19,7 +19,7 @@
                 <i
                     (click)="OpenGroup(grp, $event)"
                     class="icon-arrow-down position-relative"
-                    [ngClass]="{ open: grp.isOpen }"
+                    [ngClass]="{ 'open': grp.isOpen }"
                 ></i>
             </a>
             <span class="pull-right">

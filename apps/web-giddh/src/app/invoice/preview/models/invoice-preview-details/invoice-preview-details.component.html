@@ -57,7 +57,7 @@
                             <li
                                 class="single-invoice-detail cp"
                                 *ngFor="let item of filteredData"
-                                [ngClass]="{ activeItem: item.uniqueName === selectedItem.uniqueName }"
+                                [ngClass]="{ 'activeItem': item.uniqueName === selectedItem.uniqueName }"
                                 (click)="selectVoucher(item)"
                             >
                                 <div class="row mr-0">
@@ -353,7 +353,7 @@
                                                 <span
                                                     *ngIf="shouldShowPrintDocument"
                                                     [ngClass]="{
-                                                        disabled:
+                                                        'disabled':
                                                             isVoucherDownloading ||
                                                             isVoucherDownloadError ||
                                                             isFileUploading
@@ -383,7 +383,7 @@
                                                 <span
                                                     *ngIf="selectedItem?.voucherType !== 'purchase'"
                                                     [ngClass]="{
-                                                        disabled:
+                                                        'disabled':
                                                             isVoucherDownloading ||
                                                             isVoucherDownloadError ||
                                                             isFileUploading ||
@@ -405,7 +405,7 @@
                                                         attachedDocumentType?.type
                                                     "
                                                     [ngClass]="{
-                                                        disabled:
+                                                        'disabled':
                                                             isVoucherDownloading ||
                                                             isVoucherDownloadError ||
                                                             isFileUploading ||

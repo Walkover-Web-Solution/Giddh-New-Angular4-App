@@ -30,7 +30,7 @@
                 autocomplete="disabled"
                 type="text"
                 class="pd-l1 form-control"
-                [ngClass]="{ hasValue: filter?.length, 'bottom-border-only': showBottomBorderOnly }"
+                [ngClass]="{ 'hasValue': filter?.length, 'bottom-border-only': showBottomBorderOnly }"
                 #inputFilter
                 tabindex="0"
                 (blur)="filterInputBlur($event)"

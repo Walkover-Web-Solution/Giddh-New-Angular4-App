@@ -24,7 +24,7 @@
                             <li *ngIf="subscriptions.length == 0">{{ commonLocaleData?.app_no_result_found }}</li>
                             <li
                                 *ngFor="let item of subscriptions"
-                                [ngClass]="{ active: seletedUserPlans == item }"
+                                [ngClass]="{ 'active': seletedUserPlans == item }"
                                 role="menuitem"
                                 class="cursor-pointer"
                             >
@@ -466,7 +466,7 @@
                         <div
                             class="font-14"
                             [ngClass]="{
-                                active: calculateRemainingDays(item?.expiry) === commonLocaleData?.app_active
+                                'active': calculateRemainingDays(item?.expiry) === commonLocaleData?.app_active
                             }"
                             *ngIf="item?.status === 'trial'"
                         >

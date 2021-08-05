@@ -67,7 +67,7 @@
                         <li
                             class="btn-group"
                             *ngFor="let company of companyListForFilter"
-                            [ngClass]="{ active: company.uniqueName === activeCompany?.uniqueName }"
+                            [ngClass]="{ 'active': company.uniqueName === activeCompany?.uniqueName }"
                             [tooltip]="company.name"
                             placement="top"
                         >
@@ -152,7 +152,7 @@
                             <li *ngFor="let branch of companyBranches?.branches">
                                 <a
                                     class="d-flex align-items-center"
-                                    [ngClass]="{ active: branch?.uniqueName === currentBranchUniqueName }"
+                                    [ngClass]="{ 'active': branch?.uniqueName === currentBranchUniqueName }"
                                     href="javascript:;"
                                     (click)="changeBranch(companyBranches.uniqueName, branch?.uniqueName, $event)"
                                     [tooltip]="branch?.alias"

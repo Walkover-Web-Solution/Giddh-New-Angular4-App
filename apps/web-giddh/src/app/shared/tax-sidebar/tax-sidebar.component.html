@@ -23,16 +23,16 @@
                     </li>
                     <li
                         [ngClass]="{
-                            disabled: !activeCompanyGstNumber || !isMonthSelected,
-                            active: selectedGstModule === GstReport.Gstr3b
+                            'disabled': !activeCompanyGstNumber || !isMonthSelected,
+                            'active': selectedGstModule === GstReport.Gstr3b
                         }"
                     >
                         <a
                             href="javascript:void(0);"
                             [attr.disabled]="!activeCompanyGstNumber || !isMonthSelected"
                             [ngClass]="{
-                                disabled: !activeCompanyGstNumber || !isMonthSelected,
-                                active: selectedGstModule === GstReport.Gstr3b
+                                'disabled': !activeCompanyGstNumber || !isMonthSelected,
+                                'active': selectedGstModule === GstReport.Gstr3b
                             }"
                             class="d-block clearfix"
                             (click)="navigate(GstReport.Gstr3b)"
@@ -42,13 +42,16 @@
                         </a>
                     </li>
                     <li
-                        [ngClass]="{ disabled: !activeCompanyGstNumber, active: selectedGstModule === GstReport.Gstr1 }"
+                        [ngClass]="{
+                            'disabled': !activeCompanyGstNumber,
+                            active: selectedGstModule === GstReport.Gstr1
+                        }"
                     >
                         <a
                             href="javascript:void(0);"
                             [ngClass]="{
-                                disabled: !activeCompanyGstNumber,
-                                active: selectedGstModule === GstReport.Gstr1
+                                'disabled': !activeCompanyGstNumber,
+                                'active': selectedGstModule === GstReport.Gstr1
                             }"
                             class="d-block clearfix"
                             (click)="navigate(GstReport.Gstr1)"
@@ -59,15 +62,15 @@
                     </li>
                     <li
                         [ngClass]="{
-                            disabled: !activeCompanyGstNumber || !isMonthSelected,
-                            active: selectedGstModule === GstReport.Gstr2
+                            'disabled': !activeCompanyGstNumber || !isMonthSelected,
+                            'active': selectedGstModule === GstReport.Gstr2
                         }"
                     >
                         <a
                             href="javascript:void(0);"
                             [ngClass]="{
-                                disabled: !activeCompanyGstNumber || !isMonthSelected,
-                                active: selectedGstModule === GstReport.Gstr2
+                                'disabled': !activeCompanyGstNumber || !isMonthSelected,
+                                'active': selectedGstModule === GstReport.Gstr2
                             }"
                             class="d-block clearfix"
                             (click)="navigate(GstReport.Gstr2)"

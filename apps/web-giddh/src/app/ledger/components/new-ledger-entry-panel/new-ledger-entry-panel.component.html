@@ -867,7 +867,7 @@
                     />
                     <label
                         class="upload-div pd-r15"
-                        [ngClass]="{ hide: blankLedger?.generateInvoice || blankLedger?.attachedFile }"
+                        [ngClass]="{ 'hide': blankLedger?.generateInvoice || blankLedger?.attachedFile }"
                     >
                         <label for="invoiceFile" class="cp font-16">
                             <i [ngClass]="!isFileUploading ? 'icon-file-path' : 'fa fa-spinner rotate'"></i>

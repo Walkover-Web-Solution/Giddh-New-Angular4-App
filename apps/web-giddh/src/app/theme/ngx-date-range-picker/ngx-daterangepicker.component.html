@@ -7,10 +7,10 @@
         class="md-drppicker"
         #pickerContainer
         [ngClass]="{
-            ltr: locale.direction === 'ltr',
-            rtl: locale.direction === 'rtl',
-            inline: inline,
-            double: !singleDatePicker && showCalInRanges,
+            'ltr': locale.direction === 'ltr',
+            'rtl': locale.direction === 'rtl',
+            'inline': inline,
+            'double': !singleDatePicker && showCalInRanges,
             'show-ranges': ranges?.length
         }"
         [class]="'drops-' + drops + '-' + opens"
@@ -39,7 +39,7 @@
                                 class="btn-angle-down"
                                 (click)="setSelectedRange(i); clickRange($event, range)"
                                 [ngClass]="{
-                                    active:
+                                    'active':
                                         range.isSelected ||
                                         (selectedRangeLabel && selectedRangeLabel === range.name) ||
                                         checkIfSubRangeSelected(range)
@@ -60,7 +60,7 @@
                                         type="button"
                                         (click)="clickRange($event, subRange)"
                                         [ngClass]="{
-                                            active:
+                                            'active':
                                                 subRange.isSelected ||
                                                 (selectedRangeLabel && selectedRangeLabel === subRange.name)
                                         }"
@@ -75,7 +75,7 @@
                                 type="button"
                                 class="btn-angle-down"
                                 (click)="dropdownShow = !dropdownShow"
-                                [ngClass]="{ active: checkIfFinancialYearSelected(financialYears) || dropdownShow }"
+                                [ngClass]="{ 'active': checkIfFinancialYearSelected(financialYears) || dropdownShow }"
                             >
                                 {{ commonLocaleData?.app_datepicker?.select_financial_year }}
                                 <span class="available prev angle-down"></span>
@@ -89,7 +89,7 @@
                                         type="button"
                                         (click)="clickFinancialYear(financialYear)"
                                         [ngClass]="{
-                                            active: selectedRangeLabel && selectedRangeLabel === financialYear.label
+                                            'active': selectedRangeLabel && selectedRangeLabel === financialYear.label
                                         }"
                                     >
                                         {{ financialYear.label }}
@@ -282,7 +282,10 @@
                         </div>
                         <!-- table sticky days -->
                         <div>
-                            <div class="calendar days" [ngClass]="{ right: singleDatePicker, left: !singleDatePicker }">
+                            <div
+                                class="calendar days"
+                                [ngClass]="{ 'right': singleDatePicker, 'left': !singleDatePicker }"
+                            >
                                 <div class="calendar-table">
                                     <div class="table-condensed sticky-header">
                                         <div>
@@ -318,7 +321,7 @@
                             <div
                                 class="calendar"
                                 *ngIf="calendarMonth && calendarMonth.start"
-                                [ngClass]="{ right: singleDatePicker, left: !singleDatePicker }"
+                                [ngClass]="{ 'right': singleDatePicker, 'left': !singleDatePicker }"
                             >
                                 <div class="calendar-table">
                                     <div class="table-condensed">
@@ -407,7 +410,7 @@
                                                                 calendarMonth.end &&
                                                                 calendarMonth.end.calendar[1][1].month() ==
                                                                     calendarMonth.end.calendar[row][col].month(),
-                                                            activatedDate:
+                                                            'activatedDate':
                                                                 (calendarMonth.start.calendar[row][col].format(
                                                                     'YYYY-MM-DD'
                                                                 ) === startDate.format('YYYY-MM-DD') ||
@@ -689,7 +692,7 @@
                                                             ) &&
                                                             calendarMonth.end.calendar[1][1].month() ==
                                                                 calendarMonth.end.calendar[row][col].month(),
-                                                        activatedDate:
+                                                        'activatedDate':
                                                             (calendarMonth.end.calendar[row][col].format(
                                                                 'YYYY-MM-DD'
                                                             ) === startDate.format('YYYY-MM-DD') ||

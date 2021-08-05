@@ -2,7 +2,7 @@
     class="row pl-grid-row"
     [financial-accordion]="groupDetail"
     *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)"
-    [ngClass]="{ isHidden: !groupDetail.isVisible }"
+    [ngClass]="{ 'isHidden': !groupDetail.isVisible }"
 >
     <div
         class="col-4 group"
@@ -56,7 +56,7 @@
 </ng-container>
 <ng-content></ng-content>
 <ng-template #templateSection let-account>
-    <section class="row-2 account pl-grid-row" [ngClass]="{ isHidden: !account.isVisible }">
+    <section class="row-2 account pl-grid-row" [ngClass]="{ 'isHidden': !account.isVisible }">
         <div class="row" (dblclick)="entryClicked(account)">
             <div
                 class="col-4 account"

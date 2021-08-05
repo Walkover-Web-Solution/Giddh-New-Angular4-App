@@ -497,7 +497,7 @@
                     <div class="custom-tabs mt-2 mb-2">
                         <tabset>
                             <ul class="nav nav-tabs pt-0">
-                                <li [ngClass]="{ active: visibleTransactionTypeMobile === 'all' }">
+                                <li [ngClass]="{ 'active': visibleTransactionTypeMobile === 'all' }">
                                     <a
                                         href="javascript:void(0)"
                                         id="ledger-all-tab"
@@ -507,7 +507,7 @@
                                 </li>
                                 <li
                                     role="presentation"
-                                    [ngClass]="{ active: visibleTransactionTypeMobile === 'debit' }"
+                                    [ngClass]="{ 'active': visibleTransactionTypeMobile === 'debit' }"
                                 >
                                     <a
                                         href="javascript:void(0)"
@@ -518,7 +518,7 @@
                                 </li>
                                 <li
                                     role="presentation"
-                                    [ngClass]="{ active: visibleTransactionTypeMobile === 'credit' }"
+                                    [ngClass]="{ 'active': visibleTransactionTypeMobile === 'credit' }"
                                 >
                                     <a
                                         href="javascript:void(0)"
@@ -1770,7 +1770,7 @@
                                                                     </ng-template>
                                                                     <ng-template #notFoundLinkTemplate>
                                                                         <a
-                                                                            [ngClass]="{ active: keydownClassAdded }"
+                                                                            [ngClass]="{ 'active': keydownClassAdded }"
                                                                             class="notfound-option"
                                                                             [keyboardShortcut]="'alt+c'"
                                                                             (onShortcutPress)="
@@ -1780,7 +1780,7 @@
                                                                             <span
                                                                                 class="pl-0"
                                                                                 [ngClass]="{
-                                                                                    active: keydownClassAdded
+                                                                                    'active': keydownClassAdded
                                                                                 }"
                                                                                 >Create
                                                                                 {{ localeData?.new_account }}</span
@@ -2235,7 +2235,7 @@
                                                                     </ng-template>
                                                                     <ng-template #notFoundLinkTemplate>
                                                                         <a
-                                                                            [ngClass]="{ active: keydownClassAdded }"
+                                                                            [ngClass]="{ 'active': keydownClassAdded }"
                                                                             class="notfound-option"
                                                                             [keyboardShortcut]="'alt+c'"
                                                                             (onShortcutPress)="
@@ -2245,7 +2245,7 @@
                                                                             <span
                                                                                 class="pl-0"
                                                                                 [ngClass]="{
-                                                                                    active: keydownClassAdded
+                                                                                    'active': keydownClassAdded
                                                                                 }"
                                                                                 >Create
                                                                                 {{ localeData?.new_account }}</span

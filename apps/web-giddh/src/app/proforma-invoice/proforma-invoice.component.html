@@ -655,7 +655,7 @@
                                                                 </div>
                                                                 <div
                                                                     class="billing-address"
-                                                                    [ngClass]="{ disabled: autoFillShipping }"
+                                                                    [ngClass]="{ 'disabled': autoFillShipping }"
                                                                 >
                                                                     <textarea
                                                                         [readonly]="autoFillShipping"
@@ -1229,7 +1229,7 @@
                                                                                 [disabled]="autoFillCompanyShipping"
                                                                                 class="select-border-bottom"
                                                                                 [ngClass]="{
-                                                                                    disabled: autoFillCompanyShipping
+                                                                                    'disabled': autoFillCompanyShipping
                                                                                 }"
                                                                                 (selected)="
                                                                                     fillShippingBillingCompanyDetails(

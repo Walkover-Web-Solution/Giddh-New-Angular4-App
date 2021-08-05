@@ -1014,7 +1014,7 @@
                                         (click)="onSelectInvoice(item)"
                                         [ngClass]="{
                                             'remove-capitalize': selectedVoucher === 'purchase',
-                                            cp: selectedVoucher === 'purchase' && !item.voucherNumber
+                                            'cp': selectedVoucher === 'purchase' && !item.voucherNumber
                                         }"
                                         class="d-flex position-relative"
                                     >
@@ -1037,7 +1037,7 @@
                                 <td
                                     width="14%"
                                     [attr.data-title]="commonLocaleData?.app_customer"
-                                    [ngClass]="{ cp: selectedVoucher !== 'purchase' }"
+                                    [ngClass]="{ 'cp': selectedVoucher !== 'purchase' }"
                                     (dblclick)="
                                         selectedVoucher !== 'purchase' ? (modalUniqueName = item.uniqueName) : ''
                                     "
