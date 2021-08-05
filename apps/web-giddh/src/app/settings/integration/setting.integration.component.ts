@@ -29,7 +29,7 @@ import { GeneralService } from '../../services/general.service';
 import { ShareRequestForm } from '../../models/api-models/Permission';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
 import { SettingsIntegrationService } from '../../services/settings.integraion.service';
-import { SettingsIntegrationTab, UNLIMITED_LIMIT } from '../constants/settings.constant';
+import { ACCOUNT_REGISTERED_STATUS, SettingsIntegrationTab, UNLIMITED_LIMIT } from '../constants/settings.constant';
 import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
 import { cloneDeep, find, isEmpty } from '../../lodash-optimized';
@@ -1012,9 +1012,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         let request = { bankAccountUniqueName: bankAccount?.iciciDetailsResource?.uniqueName, urn: payor?.urn };
 
         this.settingsIntegrationService.getPayorRegistrationStatus(request).pipe(take(1)).subscribe(response => {
-            payor.registrationStatus = response?.body?.response;
+            payor.isConnected = (response?.body?.status === ACCOUNT_REGISTERED_STATUS);
 
-            if(response?.body?.response !== "Success" && response?.body?.message) {
+            if(!payor.isConnected && response?.body?.message) {
                 this.toasty.errorToast(response?.body?.message);
             }
         });
