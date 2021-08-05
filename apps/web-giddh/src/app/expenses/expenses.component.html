@@ -32,15 +32,16 @@
                     <div class="expense-head">
                     <ng-container *ngIf="currentSelectedTab === 'pending'">
                         <app-pending-list #pendingListComponent *ngIf="!isSelectedRow" [isClearFilter]="isClearFilter"
-                            [localeData]="localeData" [commonLocaleData]="commonLocaleData"
+                            [localeData]="localeData" [commonLocaleData]="commonLocaleData" [pettyCashPendingReportResponse]="pettyCashPendingReportResponse" [isPettyCashPendingReportLoading]="isPettyCashPendingReportLoading"
                             (isFilteredSelected)="isFilteredSelected($event);"
                             (selectedRowToggle)="selectedRowToggle($event);"
                             (selectedRowInput)="selectedRowInput($event);"
-                            (reportDates)="reportDates($event)"></app-pending-list>
+                            (reportDates)="reportDates($event)"
+                            (reloadReportList)="getPettyCashPendingReports($event)"></app-pending-list>
                         <div class="main-edit-expense" *ngIf="isSelectedRow">
                             <div class="left-expense">
                                 <app-filter-list *ngIf="localeData?.pending" [selectedRowItem]="selectedRowItem"
-                                    [localeData]="localeData" [commonLocaleData]="commonLocaleData"
+                                    [localeData]="localeData" [commonLocaleData]="commonLocaleData" [expensesDetailedItems]="pettyCashPendingReportResponse?.results"
                                     (selectedDetailedRowInput)="selectedDetailedRowInput($event);"></app-filter-list>
                             </div>
                             <div class="main-expense-details ">
@@ -59,7 +60,7 @@
                     <ng-container *ngIf="currentSelectedTab === 'rejected'">
                         <app-rejected-list #rejectedListComponent (isFilteredSelected)="isFilteredSelected($event);"
                             [isClearFilter]="isClearFilter" [localeData]="localeData"
-                            [commonLocaleData]="commonLocaleData" (reportDates)="reportDates($event)"></app-rejected-list>
+                            [commonLocaleData]="commonLocaleData" [pettyCashRejectedReportResponse]="pettyCashRejectedReportResponse" [isPettyCashRejectedReportLoading]="isPettyCashRejectedReportLoading" (reportDates)="reportDates($event)" (reloadReportList)="getPettyCashRejectedReports($event)" (reloadPendingReportList)="getPettyCashPendingReports($event)"></app-rejected-list>
                     </ng-container>
                 </div>
                 </tab>
@@ -67,42 +68,6 @@
         </div>
     </div>
 
-    <ng-template #filterModal>
-        <div class="modal-header ">
-            <h3 class="modal-title pull-left ">{{localeData?.filter_data}}</h3>
-            <button type="button " class="close pull-right " aria-label="Close " (click)="modalRef.hide() ">
-                <span aria-hidden="true ">&times;</span>
-            </button>
-        </div>
-
-        <div class="modal-body ">
-            <div class="row ">
-                <div class="col-sm-5 ">
-                    <label class="pd-t05 ">{{commonLocaleData?.app_total_amount}}</label>
-                </div>
-                <div class="col-sm-7 d-flex ">
-                    <div class="select-style mb-2 ">
-                        <select name=" ">
-                            <option value=" " selected disabled>{{commonLocaleData?.app_select_range}}</option>
-                            <option value=" ">{{commonLocaleData?.app_comparision_filters?.equals}}</option>
-                            <option value=" ">{{commonLocaleData?.app_comparision_filters?.greater_than}}</option>
-                            <option value=" ">{{commonLocaleData?.app_comparision_filters?.less_than}}</option>
-                            <option value=" ">{{commonLocaleData?.app_comparision_filters?.exclude}}</option>
-                        </select>
-                    </div>
-                    <div class="form-group ml-1 ">
-                        <input type="text " placeholder="1500 " value="1500 " class="form-control ">
-                    </div>
-                </div>
-            </div>
-            <div class="row mb-2 ">
-                <div class="col-sm-5 ">
-                </div>
-                <div class="col-sm-7 ">
-                </div>
-            </div>
-        </div>
-    </ng-template>
     <ng-template #datepickerTemplate>
         <div class="datepicker-modal">
             <div class="modal-body">

@@ -1,13 +1,12 @@
-import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppState } from '../store';
 import { select, Store } from '@ngrx/store';
-import { ExpencesAction } from '../actions/expences/expence.action';
 import { CommonPaginatedRequest } from '../models/api-models/Invoice';
-import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
-import { ExpenseResults } from '../models/api-models/Expences';
+import { ExpenseResults, PettyCashReportResponse } from '../models/api-models/Expences';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { CompanyActions } from '../actions/company.actions';
@@ -18,13 +17,14 @@ import { PendingListComponent } from './components/pending-list/pending-list.com
 import { RejectedListComponent } from './components/rejected-list/rejected-list.component';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { ExpenseService } from '../services/expences.service';
+import { ToasterService } from '../services/toaster.service';
 
 @Component({
     selector: 'app-expenses',
     templateUrl: './expenses.component.html',
     styleUrls: ['./expenses.component.scss'],
 })
-
 export class ExpensesComponent implements OnInit, OnDestroy {
     @ViewChild('tabset', { static: true }) tabset: TabsetComponent;
 
@@ -83,17 +83,27 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** This will store screen size */
     public isMobileScreen: boolean = false;
+    /** Petty cash pending report response */
+    public pettyCashPendingReportResponse: PettyCashReportResponse;
+    /** True if petty cash pending report is loading */
+    public isPettyCashPendingReportLoading: boolean = false;
+    /** Petty cash rejected report response */
+    public pettyCashRejectedReportResponse: PettyCashReportResponse;
+    /** True if petty cash rejected report is loading */
+    public isPettyCashRejectedReportLoading: boolean = false;
 
-    constructor(private store: Store<AppState>,
-        private _expenceActions: ExpencesAction,
+    constructor(
+        private store: Store<AppState>,
         private route: ActivatedRoute,
         private modalService: BsModalService,
         private companyActions: CompanyActions,
-        private _cdRf: ChangeDetectorRef,
-        private _generalService: GeneralService,
+        private cdRf: ChangeDetectorRef,
+        private generalService: GeneralService,
         private router: Router,
-        private breakPointObservar: BreakpointObserver) {
-
+        private breakPointObservar: BreakpointObserver,
+        private expenseService: ExpenseService,
+        private toasterService: ToasterService
+    ) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         this.todaySelected$ = this.store.pipe(select(p => p.session.todaySelected), takeUntil(this.destroyed$));
 
@@ -105,7 +115,6 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.store.dispatch(this.companyActions.getTax());
         this.getActiveTab();
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
@@ -156,6 +165,8 @@ export class ExpensesComponent implements OnInit, OnDestroy {
                             this.pettycashRequest.sortBy = this.rejectedListComponent.pettycashRequest.sortBy;
                         }
                         this.getPettyCashRejectedReports(this.pettycashRequest);
+
+                        this.detectChanges();
                     });
                 }, 100);
             }
@@ -231,16 +242,30 @@ export class ExpensesComponent implements OnInit, OnDestroy {
 
     public getPettyCashPendingReports(request: CommonPaginatedRequest) {
         request.status = 'pending';
-        this.store.dispatch(this._expenceActions.GetPettycashReportRequest(request));
+        this.isPettyCashPendingReportLoading = true;
+        this.expenseService.getPettycashReports(request).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if(response?.status === "success") {
+                this.pettyCashPendingReportResponse = response?.body;
+            } else {
+                this.toasterService.clearAllToaster();
+                this.toasterService.errorToast(response?.message);
+            }
+            this.isPettyCashPendingReportLoading = false;
+        });
     }
 
     public getPettyCashRejectedReports(request: CommonPaginatedRequest) {
         request.status = 'rejected';
-        this.store.dispatch(this._expenceActions.GetPettycashRejectedReportRequest(request));
-    }
-
-    public openModal(filterModal: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(filterModal, { class: 'modal-md' });
+        this.isPettyCashRejectedReportLoading = true;
+        this.expenseService.getPettycashRejectedReports(request).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if(response?.status === "success") {
+                this.pettyCashRejectedReportResponse = response?.body;
+            } else {
+                this.toasterService.clearAllToaster();
+                this.toasterService.errorToast(response?.message);
+            }
+            this.isPettyCashRejectedReportLoading = false;
+        });
     }
 
     public clearFilter() {
@@ -304,13 +329,12 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = `pages/expenses-manager${state ? +'/' + state : ''}`;
-
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
     detectChanges() {
-        if (!this._cdRf['destroyed']) {
-            this._cdRf.detectChanges();
+        if (!this.cdRf['destroyed']) {
+            this.cdRf.detectChanges();
         }
     }
 
@@ -338,7 +362,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
      */
     public showGiddhDatepicker(element: any): void {
         if (element) {
-            this.dateFieldPosition = this._generalService.getPosition(element.target);
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
         }
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,
