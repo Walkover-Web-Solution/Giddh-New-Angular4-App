@@ -61,6 +61,7 @@
     "release:windows:ci": "npm run build.electron.giddh && cd dist/apps/web-giddh-prod && npx electron-builder build --config ./../../../electron-sign/electron-builder-ci.json --win --ia32 --x64 --publish always",
     "release:mac:ci": "npm run build.electron.giddh && cd dist/apps/web-giddh-prod && npx electron-builder build --config ./../../../electron-sign/electron-builder-ci.json --macos --x64 --publish always",
     "format:code": "npx prettier --write --ignore-unknown .",
+    "check:code": "npx prettier --check --ignore-unknown .",
     "cy:ran": "cypress run",
     "cy:verify": "cypress verify",
     "env:run": "npm run print-env && npm run cy:run",
@@ -208,6 +209,6 @@
     "prefix": "foo"
   },
   "lint-staged": {
-    "*.{html,scss}": "npm run format:code"
+    "*.{html,scss}": "npx prettier --write --ignore-unknown"
   }
 }
