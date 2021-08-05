@@ -3,6 +3,7 @@ import { GSTR_ACTIONS } from '../../actions/gst-reconcile/GstReconcile.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GetGspSessionResponse, GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult, Gstr3bOverviewResult, Gstr3bOverviewResult2 } from '../../models/api-models/GstReconcile';
 import { GST_RETURN_ACTIONS } from '../../actions/purchase-invoice/purchase-invoice.const';
+import { COMMON_ACTIONS } from '../../actions/common.const';
 
 export interface GstRReducerState {
     gstr1OverViewDataInProgress: boolean;
@@ -349,7 +350,9 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
                 gspSessionOtpAuthorized: false
             };
         }
-
+        case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
+            return Object.assign({}, state, initialState);
+        }
         default:
             return state;
     }
