@@ -1,19 +1,13 @@
 import { NgModule } from '@angular/core';
-
 import { ContactModule } from '../contact/contact.module';
 import { AsideMenuCreateTaxModule } from '../shared/aside-menu-create-tax/aside-menu-create-tax.module';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
-import { OmitByKeyPipeModule } from '../shared/helpers/pipes/omitBy/omitBy.module';
 import { SharedModule } from '../shared/shared.module';
 import { BranchComponent } from './branch/branch.component';
-import { BunchComponent } from './bunch/bunch.component';
-import { BunchAddCompanyModalComponent } from './bunch/components-modal/add-company/bunch-add-company.component';
-import { CreateBunchModalComponent } from './bunch/components-modal/create-bunch/create-bunch.component';
-import { GetBunchModalComponent } from './bunch/components-modal/get-companies/get-companies.component';
 import { DiscountComponent } from './discount/discount.component';
 import { FinancialYearComponent } from './financial-year/financial-year.component';
 import { SettingIntegrationComponent } from './integration/setting.integration.component';
-import { SettingLinkedAccountsConfirmationModalComponent} from './linked-accounts/confirmation-modal/confirmation.modal.component';
+import { SettingLinkedAccountsConfirmationModalComponent } from './linked-accounts/confirmation-modal/confirmation.modal.component';
 import { ConnectBankModalComponent } from './linked-accounts/connect-bank-modal/connect.bank.modal.component';
 import { SettingLinkedAccountsComponent } from './linked-accounts/setting.linked.accounts.component';
 import { SettingPermissionFormComponent } from './permissions/form/form.component';
@@ -27,7 +21,6 @@ import { SettingTaxesComponent } from './Taxes/setting.taxes.component';
 import { SettingTriggerComponent } from './Trigger/setting.trigger.component';
 import { CreateWarehouseComponent } from './warehouse/create-warehouse/create-warehouse.component';
 import { WarehouseComponent } from './warehouse/warehouse.component';
-import { SettingsServiceModule } from './settings-service.module';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/lib/perfect-scrollbar.interfaces';
 import { TextMaskModule } from 'angular2-text-mask';
@@ -41,6 +34,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CreateAddressComponent } from './create-address/create-address.component';
 import { CreateBranchComponent } from './branch/create-branch/create-branch.component';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
+import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
+import { NoDataModule } from '../shared/no-data/no-data.module';
+import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.module';
+import { SettingIntegrationPaymentModule } from './integration/payment/setting.integration.payment.module';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -64,10 +61,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         DiscountComponent,
         SettingsTagsComponent,
         SettingTriggerComponent,
-        BunchComponent,
-        CreateBunchModalComponent,
-        BunchAddCompanyModalComponent,
-        GetBunchModalComponent,
         WarehouseComponent,
         CreateWarehouseComponent,
         CreateAddressComponent,
@@ -83,14 +76,16 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ContactModule,
         ReactiveFormsModule,
         CurrencyModule,
-        OmitByKeyPipeModule,
-        SettingsServiceModule,
         PerfectScrollbarModule,
         TextMaskModule,
         NgxMaskModule.forRoot(),
         DigitsOnlyModule,
         ShSelectModule,
-        SalesShSelectModule
+        SalesShSelectModule,
+        TaxSidebarModule,
+        ReplacePipeModule,
+        NoDataModule,
+        SettingIntegrationPaymentModule
     ],
     providers: [
         {

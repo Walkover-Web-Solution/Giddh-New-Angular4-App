@@ -17,6 +17,7 @@ import { GeneralService } from '../services/general.service';
 import { PendingListComponent } from './components/pending-list/pending-list.component';
 import { RejectedListComponent } from './components/rejected-list/rejected-list.component';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
     selector: 'app-expenses',
@@ -25,9 +26,8 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
 })
 
 export class ExpensesComponent implements OnInit, OnDestroy {
-    @ViewChild('tabset', {static: true}) tabset: TabsetComponent;
+    @ViewChild('tabset', { static: true }) tabset: TabsetComponent;
 
-    public universalDate: Date[];
     public universalDate$: Observable<any>;
     public todaySelected: boolean = false;
     public isSelectedRow: boolean = false;
@@ -40,62 +40,8 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     public isFilterSelected: boolean = false;
     public currentSelectedTab: string = 'pending';
     public activeTab: string;
-
     public pettycashRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public datePickerOptions: any = {
-        hideOnEsc: true,
-        // parentEl: '#dateRangePickerParent',
-        locale: {
-            applyClass: 'btn-green',
-            applyLabel: 'Go',
-            fromLabel: 'From',
-            format: 'D-MMM-YY',
-            toLabel: 'To',
-            cancelLabel: 'Cancel',
-            customRangeLabel: 'Custom range'
-        },
-        ranges: {
-            'This Month to Date': [
-                moment().startOf('month'),
-                moment()
-            ],
-            'This Quarter to Date': [
-                moment().quarter(moment().quarter()).startOf('quarter'),
-                moment()
-            ],
-            'This Financial Year to Date': [
-                moment().startOf('year').subtract(9, 'year'),
-                moment()
-            ],
-            'This Year to Date': [
-                moment().startOf('year'),
-                moment()
-            ],
-            'Last Month': [
-                moment().subtract(1, 'month').startOf('month'),
-                moment().subtract(1, 'month').endOf('month')
-            ],
-            'Last Quater': [
-                moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
-                moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
-            ],
-            'Last Financial Year': [
-                moment().startOf('year').subtract(10, 'year'),
-                moment().endOf('year').subtract(10, 'year')
-            ],
-            'Last Year': [
-                moment().startOf('year').subtract(1, 'year'),
-                moment().endOf('year').subtract(1, 'year')
-            ]
-        },
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment()
-    };
-    public selectedDate = {
-        dateFrom: '',
-        dateTo: ''
-    };
     public routerSub: any;
     /** Instance of pending list component */
     @ViewChild('pendingListComponent', { read: PendingListComponent, static: false }) public pendingListComponent: PendingListComponent;
@@ -135,6 +81,8 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** This will store screen size */
+    public isMobileScreen: boolean = false;
 
     constructor(private store: Store<AppState>,
         private _expenceActions: ExpencesAction,
@@ -143,14 +91,21 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         private companyActions: CompanyActions,
         private _cdRf: ChangeDetectorRef,
         private _generalService: GeneralService,
-        private router: Router) {
+        private router: Router,
+        private breakPointObservar: BreakpointObserver) {
 
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         this.todaySelected$ = this.store.pipe(select(p => p.session.todaySelected), takeUntil(this.destroyed$));
-        this.store.dispatch(this.companyActions.getTax());
+
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
     }
 
     public ngOnInit() {
+        this.store.dispatch(this.companyActions.getTax());
         this.getActiveTab();
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
@@ -165,49 +120,44 @@ export class ExpensesComponent implements OnInit, OnDestroy {
             }
         });
 
-        observableCombineLatest(this.universalDate$, this.route.params, this.todaySelected$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
-            if (!Array.isArray(resp[0])) {
-                return;
-            }
-            let dateObj = resp[0];
-            this.todaySelected = resp[2];
-
+        this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
-                this.universalFrom = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.universalTo = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
 
-                this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
-                this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                setTimeout(() => {
+                    this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
+                        this.todaySelected = response;
 
-                this.datePickerOptions = {
-                    ...this.datePickerOptions,
-                    startDate: moment(universalDate[0], GIDDH_DATE_FORMAT).toDate(),
-                    endDate: moment(universalDate[1], GIDDH_DATE_FORMAT).toDate(),
-                    chosenLabel: universalDate[2]
-                };
+                        if (universalDate && !this.todaySelected) {
+                            this.universalFrom = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                            this.universalTo = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
 
-                if (this.universalFrom && this.universalTo) {
-                    this.pettycashRequest.from = this.universalFrom;
-                    this.pettycashRequest.to = this.universalTo;
-                    this.pettycashRequest.page = 1;
-                    this.selectedDate.dateFrom = this.pettycashRequest.from;
-                    this.selectedDate.dateTo = this.pettycashRequest.to;
+                            this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
+                            this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                            this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                            this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
 
-                    if(this.pendingListComponent) {
-                        this.pettycashRequest.sort = this.pendingListComponent.pettycashRequest.sort;
-                        this.pettycashRequest.sortBy = this.pendingListComponent.pettycashRequest.sortBy;
-                    }
-                    this.getPettyCashPendingReports(this.pettycashRequest);
+                            this.pettycashRequest.from = this.universalFrom;
+                            this.pettycashRequest.to = this.universalTo;
+                        } else {
+                            this.pettycashRequest.from = "";
+                            this.pettycashRequest.to = "";
+                        }
 
-                    if(this.rejectedListComponent) {
-                        this.pettycashRequest.sort = this.rejectedListComponent.pettycashRequest.sort;
-                        this.pettycashRequest.sortBy = this.rejectedListComponent.pettycashRequest.sortBy;
-                    }
-                    this.getPettyCashRejectedReports(this.pettycashRequest);
-                }
+                        this.pettycashRequest.page = 1;
+                        if (this.pendingListComponent) {
+                            this.pettycashRequest.sort = this.pendingListComponent.pettycashRequest.sort;
+                            this.pettycashRequest.sortBy = this.pendingListComponent.pettycashRequest.sortBy;
+                        }
+                        this.getPettyCashPendingReports(this.pettycashRequest);
+
+                        if (this.rejectedListComponent) {
+                            this.pettycashRequest.sort = this.rejectedListComponent.pettycashRequest.sort;
+                            this.pettycashRequest.sortBy = this.rejectedListComponent.pettycashRequest.sortBy;
+                        }
+                        this.getPettyCashRejectedReports(this.pettycashRequest);
+                    });
+                }, 100);
             }
         });
 
@@ -219,10 +169,10 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     }
 
     public selectedRowInput(item: ExpenseResults) {
-        if(this.currentSelectedTab === "rejected" && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest) {
+        if (this.currentSelectedTab === "rejected" && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest) {
             this.rejectedTabSortOptions.sort = this.rejectedListComponent.pettycashRequest.sort;
             this.rejectedTabSortOptions.sortBy = this.rejectedListComponent.pettycashRequest.sortBy;
-        } else if(this.currentSelectedTab === "pending" && this.pendingListComponent && this.pendingListComponent.pettycashRequest) {
+        } else if (this.currentSelectedTab === "pending" && this.pendingListComponent && this.pendingListComponent.pettycashRequest) {
             this.pendingTabSortOptions.sort = this.pendingListComponent.pettycashRequest.sort;
             this.pendingTabSortOptions.sortBy = this.pendingListComponent.pettycashRequest.sortBy;
         }
@@ -241,10 +191,10 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         this.isSelectedRow = !e;
 
         setTimeout(() => {
-            if(this.currentSelectedTab == "pending" && this.pendingListComponent && this.pendingListComponent.pettycashRequest && this.pendingTabSortOptions) {
+            if (this.currentSelectedTab == "pending" && this.pendingListComponent && this.pendingListComponent.pettycashRequest && this.pendingTabSortOptions) {
                 this.pendingListComponent.pettycashRequest.sort = this.pendingTabSortOptions.sort;
                 this.pendingListComponent.pettycashRequest.sortBy = this.pendingTabSortOptions.sortBy;
-            } else if(this.currentSelectedTab === "rejected" && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest && this.rejectedTabSortOptions) {
+            } else if (this.currentSelectedTab === "rejected" && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest && this.rejectedTabSortOptions) {
                 this.rejectedListComponent.pettycashRequest.sort = this.rejectedTabSortOptions.sort;
                 this.rejectedListComponent.pettycashRequest.sortBy = this.rejectedTabSortOptions.sortBy;
             }
@@ -253,22 +203,22 @@ export class ExpensesComponent implements OnInit, OnDestroy {
 
     public refreshPendingItem(e) {
         if (e) {
-            if(this.pendingTabSortOptions) {
+            if (this.pendingTabSortOptions) {
                 this.pettycashRequest.sort = this.pendingTabSortOptions.sort;
                 this.pettycashRequest.sortBy = this.pendingTabSortOptions.sortBy;
             }
             this.getPettyCashPendingReports(this.pettycashRequest);
 
-            if(this.rejectedTabSortOptions) {
+            if (this.rejectedTabSortOptions) {
                 this.pettycashRequest.sort = this.rejectedTabSortOptions.sort;
                 this.pettycashRequest.sortBy = this.rejectedTabSortOptions.sortBy;
             }
             this.getPettyCashRejectedReports(this.pettycashRequest);
             setTimeout(() => {
-                if(this.currentSelectedTab == "pending" && this.pendingListComponent && this.pendingListComponent.pettycashRequest && this.pendingTabSortOptions) {
+                if (this.currentSelectedTab == "pending" && this.pendingListComponent && this.pendingListComponent.pettycashRequest && this.pendingTabSortOptions) {
                     this.pendingListComponent.pettycashRequest.sort = this.pendingTabSortOptions.sort;
                     this.pendingListComponent.pettycashRequest.sortBy = this.pendingTabSortOptions.sortBy;
-                } else if(this.currentSelectedTab === "rejected" && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest && this.rejectedTabSortOptions) {
+                } else if (this.currentSelectedTab === "rejected" && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest && this.rejectedTabSortOptions) {
                     this.rejectedListComponent.pettycashRequest.sort = this.rejectedTabSortOptions.sort;
                     this.rejectedListComponent.pettycashRequest.sortBy = this.rejectedTabSortOptions.sortBy;
                 }
@@ -292,54 +242,34 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         this.modalRef = this.modalService.show(filterModal, { class: 'modal-md' });
     }
 
-    public bsValueChange(event: any) {
-        if (event) {
-            this.pettycashRequest.from = moment(event.picker.startDate._d).format(GIDDH_DATE_FORMAT);
-            this.pettycashRequest.to = moment(event.picker.endDate._d).format(GIDDH_DATE_FORMAT);
-            this.selectedDate.dateFrom = this.pettycashRequest.from;
-            this.selectedDate.dateTo = this.pettycashRequest.to;
-            this.isFilterSelected = true;
-
-            if(this.pendingListComponent && this.pendingListComponent.pettycashRequest) {
-                this.pettycashRequest.sort = this.pendingListComponent.pettycashRequest.sort;
-                this.pettycashRequest.sortBy = this.pendingListComponent.pettycashRequest.sortBy;
-            }
-            this.getPettyCashPendingReports(this.pettycashRequest);
-
-            if(this.rejectedListComponent && this.rejectedListComponent.pettycashRequest) {
-                this.pettycashRequest.sort = this.rejectedListComponent.pettycashRequest.sort;
-                this.pettycashRequest.sortBy = this.rejectedListComponent.pettycashRequest.sortBy;
-            }
-            this.getPettyCashRejectedReports(this.pettycashRequest);
-        }
-    }
-
     public clearFilter() {
         this.universalDate$.subscribe(res => {
             if (res) {
                 this.universalFrom = moment(res[0]).format(GIDDH_DATE_FORMAT);
                 this.universalTo = moment(res[1]).format(GIDDH_DATE_FORMAT);
                 let universalDate = _.cloneDeep(res);
-                this.selectedDateRange = { startDate: moment(res[0]), endDate: moment(res[1]) };
-                this.selectedDateRangeUi = moment(res[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(res[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-            }
-            this.datePickerOptions = {
-                ...this.datePickerOptions, startDate: res[0],
-                endDate: res[1],
-                chosenLabel: res[2]
-            };
-        });
-        this.pettycashRequest.from = this.universalFrom;
-        this.pettycashRequest.to = this.universalTo;
-        this.pettycashRequest.sortBy = '';
-        this.pettycashRequest.sort = '';
-        this.pettycashRequest.page = 1;
-        this.isFilterSelected = false;
 
-        this.getPettyCashPendingReports(this.pettycashRequest);
-        this.getPettyCashRejectedReports(this.pettycashRequest);
+                if (universalDate && !this.todaySelected) {
+                    this.selectedDateRange = { startDate: moment(res[0]), endDate: moment(res[1]) };
+                    this.selectedDateRangeUi = moment(res[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(res[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                    this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                    this.pettycashRequest.from = this.universalFrom;
+                    this.pettycashRequest.to = this.universalTo;
+                } else {
+                    this.pettycashRequest.from = "";
+                    this.pettycashRequest.to = "";
+                }
+
+                this.pettycashRequest.sortBy = '';
+                this.pettycashRequest.sort = '';
+                this.pettycashRequest.page = 1;
+                this.isFilterSelected = false;
+
+                this.getPettyCashPendingReports(this.pettycashRequest);
+                this.getPettyCashRejectedReports(this.pettycashRequest);
+            }
+        });
     }
 
     public tabChanged(tab: string, e) {
@@ -347,20 +277,20 @@ export class ExpensesComponent implements OnInit, OnDestroy {
             this.saveLastState(tab);
         }
 
-        if(tab === "pending" && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest) {
+        if (tab === "pending" && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest) {
             this.rejectedTabSortOptions.sort = this.rejectedListComponent.pettycashRequest.sort;
             this.rejectedTabSortOptions.sortBy = this.rejectedListComponent.pettycashRequest.sortBy;
-        } else if(tab === "rejected" && this.pendingListComponent && this.pendingListComponent.pettycashRequest) {
+        } else if (tab === "rejected" && this.pendingListComponent && this.pendingListComponent.pettycashRequest) {
             this.pendingTabSortOptions.sort = this.pendingListComponent.pettycashRequest.sort;
             this.pendingTabSortOptions.sortBy = this.pendingListComponent.pettycashRequest.sortBy;
         }
         this.currentSelectedTab = tab;
 
         setTimeout(() => {
-            if(tab == "pending" && this.pendingListComponent && this.pendingListComponent.pettycashRequest) {
+            if (tab == "pending" && this.pendingListComponent && this.pendingListComponent.pettycashRequest) {
                 this.pendingListComponent.pettycashRequest.sort = this.pendingTabSortOptions.sort;
                 this.pendingListComponent.pettycashRequest.sortBy = this.pendingTabSortOptions.sortBy;
-            } else if(tab === "rejected" && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest) {
+            } else if (tab === "rejected" && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest) {
                 this.rejectedListComponent.pettycashRequest.sort = this.rejectedTabSortOptions.sort;
                 this.rejectedListComponent.pettycashRequest.sortBy = this.rejectedTabSortOptions.sortBy;
             }
@@ -431,7 +361,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
      * @memberof ExpensesComponent
      */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }
@@ -448,21 +378,46 @@ export class ExpensesComponent implements OnInit, OnDestroy {
             this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
             this.pettycashRequest.from = this.fromDate;
             this.pettycashRequest.to = this.toDate;
-            this.selectedDate.dateFrom = this.pettycashRequest.from;
-            this.selectedDate.dateTo = this.pettycashRequest.to;
             this.isFilterSelected = true;
 
-            if(this.pendingListComponent && this.pendingListComponent.pettycashRequest) {
+            if (this.pendingListComponent && this.pendingListComponent.pettycashRequest) {
                 this.pettycashRequest.sort = this.pendingListComponent.pettycashRequest.sort;
                 this.pettycashRequest.sortBy = this.pendingListComponent.pettycashRequest.sortBy;
             }
             this.getPettyCashPendingReports(this.pettycashRequest);
 
-            if(this.rejectedListComponent && this.rejectedListComponent.pettycashRequest) {
+            if (this.rejectedListComponent && this.rejectedListComponent.pettycashRequest) {
                 this.pettycashRequest.sort = this.rejectedListComponent.pettycashRequest.sort;
                 this.pettycashRequest.sortBy = this.rejectedListComponent.pettycashRequest.sortBy;
             }
             this.getPettyCashRejectedReports(this.pettycashRequest);
+        }
+    }
+
+    /**
+     * This will return page heading based on active tab
+     *
+     * @memberof ExpensesComponent
+     */
+    public getPageHeading(): string {
+        if (this.currentSelectedTab === 'pending') {
+            return this.localeData?.pending;
+        }
+        else if (this.currentSelectedTab === 'rejected') {
+            return this.localeData?.rejected;
+        }
+    }
+
+    /**
+     * This will get report date to set in datepicker if today is selected
+     *
+     * @param {*} event
+     * @memberof ExpensesComponent
+     */
+    public reportDates(event: any): void {
+        if(this.todaySelected && event) {
+            this.selectedDateRange = { startDate: moment(event[0], GIDDH_DATE_FORMAT), endDate: moment(event[1], GIDDH_DATE_FORMAT) };
+            this.selectedDateRangeUi = moment(event[0], GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(event[1], GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
         }
     }
 }

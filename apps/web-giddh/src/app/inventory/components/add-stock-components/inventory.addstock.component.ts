@@ -2,7 +2,7 @@ import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, EventEmitter, Output } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, EventEmitter, Output, TemplateRef } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { decimalDigits, digitsOnly, stockManufacturingDetailsValidator } from '../../../shared/helpers';
@@ -18,11 +18,11 @@ import { InventoryService } from '../../../services/inventory.service';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
 import { IForceClear } from '../../../models/api-models/Sales';
 import { TaxResponse } from '../../../models/api-models/Company';
-import { CompanyActions } from '../../../actions/company.actions';
 import { InvViewService } from '../../inv.view.service';
 import { INVALID_STOCK_ERROR_MESSAGE } from '../../../app.constant';
 import { SalesService } from '../../../services/sales.service';
 import { InvoiceService } from '../../../services/invoice.service';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
     selector: 'inventory-add-stock',
@@ -40,8 +40,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public purchaseAccountsDropDown$: Observable<IOption[]>;
     public salesAccountsDropDown$: Observable<IOption[]>;
 
-    @ViewChild('formDiv', {static: true}) public formDiv: ElementRef;
-    @ViewChild('groupDDList', {static: true}) public groupDDList: any;
+    @ViewChild('formDiv', { static: true }) public formDiv: ElementRef;
+    @ViewChild('groupDDList', { static: true }) public groupDDList: any;
     public formDivBoundingRect: Subject<any> = new Subject<any>();
 
     public groupUniqueName: string;
@@ -95,6 +95,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public allowReset: boolean = false;
     /** This will hold inventory settings */
     public inventorySettings: any;
+    /** This will hold modal reference */
+    public modalRef: BsModalRef;
 
     constructor(
         private store: Store<AppState>,
@@ -105,10 +107,10 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         private customStockActions: CustomStockUnitAction,
         private _toasty: ToasterService,
         private _inventoryService: InventoryService,
-        private companyActions: CompanyActions,
         private invViewService: InvViewService,
         private cdr: ChangeDetectorRef,
-        private invoiceService: InvoiceService
+        private invoiceService: InvoiceService,
+        private modalService: BsModalService
     ) {
         this.fetchingStockUniqueName$ = this.store.pipe(select(state => state.inventory.fetchingStockUniqueName), takeUntil(this.destroyed$));
         this.isStockNameAvailable$ = this.store.pipe(select(state => state.inventory.isStockNameAvailable), takeUntil(this.destroyed$));
@@ -132,11 +134,10 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                 this.stockUnitsDropDown$ = of(unitArr);
             }
         });
-
-        this.getParentGroupData();
     }
 
     public ngOnInit() {
+        this.getParentGroupData();
         // get all groups
         this.formDivBoundingRect.next({
             top: 0,
@@ -153,12 +154,14 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
 
         // subscribe getActiveView parameters
         this.invViewService.getActiveView().pipe(takeUntil(this.destroyed$)).subscribe(v => {
-            this.groupUniqueName = v.groupUniqueName;
-            this.groupName = v.stockName;
-            this.stockUniqueName = v.stockUniqueName;
-            this.activeGroup = v;
-            if (this.groupUniqueName && this.stockUniqueName) {
-                this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName, this.groupUniqueName));
+            if (v) {
+                this.groupUniqueName = v.groupUniqueName;
+                this.groupName = v.stockName;
+                this.stockUniqueName = v.stockUniqueName;
+                this.activeGroup = v;
+                if (this.groupUniqueName && this.stockUniqueName) {
+                    this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName, this.groupUniqueName));
+                }
             }
         });
 
@@ -364,7 +367,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                 }
                 this.store.dispatch(this.inventoryAction.hideLoaderForStock());
                 this.allowReset = true;
-                // this.addStockForm.controls['parentGroup'].disable();
             } else {
                 this.isUpdatingStockForm = false;
             }
@@ -541,12 +543,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     }
 
     public ngAfterViewInit() {
-        if (this.groupUniqueName) {
-            // this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
-        }
         const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
         manufacturingDetailsContorl.disable();
-
     }
 
     // generate uniquename
@@ -554,7 +552,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         if (this.isUpdatingStockForm) {
             return true;
         }
-        let groupName = null;
         let val: string = this.addStockForm.controls['name'].value;
         if (val) {
             val = uniqueNameInvalidStringReplace(val);
@@ -705,9 +702,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
 
         this.addStockForm.reset();
         this.companyTaxesList$.pipe(map((item) => {
-           return item.map(tax=> tax.isChecked = false);
-        }), takeUntil(this.destroyed$)).subscribe(res=>{
-              return res;
+            return item.map(tax => tax.isChecked = false);
+        }), takeUntil(this.destroyed$)).subscribe(res => {
+            return res;
         });
         this.taxTempArray = [];
 
@@ -798,8 +795,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         if (formObj.enableSales) {
             if (this.validateStock(formObj.saleUnitRates)) {
                 formObj.saleUnitRates = formObj.saleUnitRates.filter((pr) => {
-                    // Aditya: In inventory while creating purchase and sales unit and rate are mandatory error issue
-                    // return pr.stockUnitCode && pr.rate;
                     return pr.stockUnitCode || pr.rate;
                 });
                 stockObj.salesAccountDetails = {
@@ -826,10 +821,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             stockObj.manufacturingDetails = null;
         }
         let parentSelected = false;
-        // if (!_.isString && formObj.parentGroup.value) {
-        //   formObj.parentGroup = formObj.parentGroup.value;
-        //   parentSelected = true;
-        // }
         let defaultGrpisExist = false;
         if (formObj.parentGroup) {
             parentSelected = true;
@@ -954,7 +945,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             if (data.status === 'success') {
                 this.flattenDATA(data.body.results, flattenData);
                 this.groupsData$ = of(flattenData);
-                // this.setActiveGroupOnCreateStock(); // G0-321
             }
         });
     }
@@ -988,28 +978,12 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     // group selected
     public groupSelected(event: IOption) {
         let selected;
-        // this.generateUniqueName();
         this.groupsData$.pipe(takeUntil(this.destroyed$)).subscribe(p => {
             selected = p.find(q => q.value === event.value);
         });
-        // this.activeGroup = selected;
     }
 
-    // public autoGroupSelect(grpname) {
-    //   if (grpname) {
-    //     this.groupsData$.subscribe(p => {
-    //     let selected = p.find(q => q.value === grpname);
-    //       if (selected) {
-    //       this.addStockForm?.patchValue({ parentGroup: selected.value });
-    //       } else {
-    //         this.addStockForm?.patchValue({ parentGroup: null });
-    //       }
-    //     });
-    //   }
-    // }
-
     public ngOnDestroy() {
-        // this.store.dispatch(this.inventoryAction.resetActiveStock());
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -1184,7 +1158,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public mapSavedTaxes(taxes) {
         let taxToMap = [];
         let e: any = { target: { checked: true } };
-        let common = this.companyTaxesList$.subscribe(a => {
+        this.companyTaxesList$.subscribe(a => {
             _.filter(a, (tax) => {
                 _.find(taxes, (unq) => {
                     if (unq === tax.uniqueName) {
@@ -1238,7 +1212,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
      * @memberof InventoryAddStockComponent
      */
     public resetPurchaseInformation(): void {
-        if(this.addStock || (!this.addStock && this.allowReset)) {
+        if (this.addStock || (!this.addStock && this.allowReset)) {
             const purchaseUnitRatesControls = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
             this.addStockForm.get('purchaseAccountUniqueName')?.patchValue(null);
             this.forceClearPurchaseAccount$ = of({ status: true });
@@ -1256,7 +1230,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
      * @memberof InventoryAddStockComponent
      */
     public resetSalesInformation(): void {
-        if(this.addStock || (!this.addStock && this.allowReset)) {
+        if (this.addStock || (!this.addStock && this.allowReset)) {
             const saleUnitRatesControls = this.addStockForm.controls['saleUnitRates'] as FormArray;
             this.addStockForm.get('salesAccountUniqueName')?.patchValue(null);
             this.forceClearSalesAccount$ = of({ status: true });
@@ -1290,16 +1264,35 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public toggleOtherDetails(): void {
         this.showOtherDetails = !this.showOtherDetails;
 
-        if(this.addStockForm.get("hsnNumber").value) {
+        if (this.addStockForm.get("hsnNumber").value) {
             this.addStockForm.get("showCodeType")?.patchValue("hsn");
-        } else if(this.addStockForm.get("sacNumber").value) {
+        } else if (this.addStockForm.get("sacNumber").value) {
             this.addStockForm.get("showCodeType")?.patchValue("sac");
         } else {
-            if(this.inventorySettings?.manageInventory) {
+            if (this.inventorySettings?.manageInventory) {
                 this.addStockForm.get("showCodeType")?.patchValue("hsn");
             } else {
                 this.addStockForm.get("showCodeType")?.patchValue("sac");
             }
         }
+    }
+
+    /**
+     * Opens the modal with the provided template
+     *
+     * @param {TemplateRef<any>} template
+     * @memberof InventoryAddStockComponent
+     */
+    public openModal(template: TemplateRef<any>): void {
+        this.modalRef = this.modalService.show(template);
+    }
+
+    /**
+     * Hides the current opened modal
+     *
+     * @memberof InventoryAddGroupComponent
+     */
+    public hideModal(): void {
+        this.modalRef.hide();
     }
 }

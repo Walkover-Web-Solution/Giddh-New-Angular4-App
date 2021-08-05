@@ -66,13 +66,13 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         this.graphParams.currentTo = moment(this.getCurrentWeekStartEndDate[1]).format(GIDDH_DATE_FORMAT);
         this.graphParams.previousFrom = moment(this.getPreviousWeekStartEndDate[0]).format(GIDDH_DATE_FORMAT);
         this.graphParams.previousTo = moment(this.getPreviousWeekStartEndDate[1]).format(GIDDH_DATE_FORMAT);
-
-        this.getRevenueGraphTypes();
     }
 
     public ngOnInit() {
+        this.getRevenueGraphTypes();
+        
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
+            if (activeCompany) {
                 this.activeCompany = activeCompany;
             }
         });
@@ -108,7 +108,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         this.requestInFlight = true;
         let revenueGraphDataRequest = new RevenueGraphDataRequest();
         revenueGraphDataRequest = this.graphParams;
-        
+
         this.dashboardService.GetRevenueGraphData(revenueGraphDataRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.currentData = [];
             this.previousData = [];
@@ -189,7 +189,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 
                 this.generateChart();
             } else {
-                if(response?.status === "error" && response?.message) {
+                if (response?.status === "error" && response?.message) {
                     this.toasterService.errorToast(response.message);
                 }
             }

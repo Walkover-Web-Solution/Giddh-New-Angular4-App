@@ -13,10 +13,10 @@ import { OnboardingFormRequest } from '../../models/api-models/Common';
 import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { CommonActions } from '../../actions/common.actions';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
-import { base64ToBlob } from '../../shared/helpers/helperFunctions';
 import { saveAs } from 'file-saver';
 import { PurchaseOrderActions } from '../../actions/purchase-order/purchase-order.action';
 import { DomSanitizer } from '@angular/platform-browser';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'purchase-order-preview',
@@ -33,8 +33,12 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     @Input() public purchaseOrderUniqueName: any;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     @Input() public isCompany: boolean;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     /* Search element */
-    @ViewChild('searchElement', {static: true}) public searchElement: ElementRef;
+    @ViewChild('searchElement', { static: true }) public searchElement: ElementRef;
     /* Confirm box */
     @ViewChild('poConfirmationModel') public poConfirmationModel: ModalDirective;
     /** Attached document preview container instance */
@@ -85,6 +89,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     public sanitizedPdfFileUrl: any = '';
     /** PDF src */
     public pdfFileURL: any = '';
+    /** True if left sidebar is expanded */
+    private isSidebarExpanded: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -95,10 +101,10 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         private commonActions: CommonActions,
         private invoiceActions: InvoiceActions,
         private purchaseOrderActions: PurchaseOrderActions,
-        private domSanitizer: DomSanitizer
+        private domSanitizer: DomSanitizer,
+        private generalService: GeneralService
     ) {
-        this.getInventorySettings();
-        this.store.dispatch(this.invoiceActions.getInvoiceSetting());
+        
     }
 
     /**
@@ -107,18 +113,28 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      * @memberof PurchaseOrderPreviewComponent
      */
     public ngOnInit(): void {
+        if(document.getElementsByClassName("sidebar-collapse")?.length > 0) {
+            this.isSidebarExpanded = false;
+        } else {
+            this.isSidebarExpanded = true;
+            this.generalService.collapseSidebar();
+        }
+        document.querySelector('body').classList.add('setting-sidebar-open');
+        this.getInventorySettings();
+        this.store.dispatch(this.invoiceActions.getInvoiceSetting());
+        
         this.getPurchaseOrder();
 
         if (this.purchaseOrders && this.purchaseOrders.items) {
             this.filteredData = this.purchaseOrders.items;
 
-            if(this.poSearch) {
+            if (this.poSearch) {
                 this.filterPo(this.poSearch);
             }
         }
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
+            if (activeCompany) {
                 this.selectedCompany = activeCompany;
             }
         });
@@ -143,9 +159,9 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         });
 
         this.store.pipe(select(state => state.purchaseOrder.poSearch), takeUntil(this.destroyed$)).subscribe(res => {
-            if(res) {
+            if (res) {
                 this.poSearch = res;
-                if(this.searchElement && this.searchElement.nativeElement) {
+                if (this.searchElement && this.searchElement.nativeElement) {
                     this.searchElement.nativeElement.value = this.poSearch;
                 }
             }
@@ -153,7 +169,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationStart) {
-                if(!event.url.includes('/purchase-order/edit')) {
+                if (!event.url.includes('/purchase-order/edit')) {
                     this.store.dispatch(this.purchaseOrderActions.serPurchaseOrderPreviewSearch(null));
                 }
             }
@@ -169,7 +185,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes.purchaseOrders && changes.purchaseOrders.currentValue && changes.purchaseOrders.currentValue.items) {
             this.filteredData = changes.purchaseOrders.currentValue.items;
-            if(this.poSearch) {
+            if (this.poSearch) {
                 this.filterPo(this.poSearch);
             }
         }
@@ -362,7 +378,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
                 }
             });
         } else {
-            this.toaster.errorToast("Invalid Purchase Order");
+            this.toaster.errorToast(this.localeData?.invalid_po);
         }
     }
 
@@ -385,6 +401,11 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      * @memberof PurchaseOrderPreviewComponent
      */
     public ngOnDestroy() {
+        if(this.isSidebarExpanded) {
+            this.isSidebarExpanded = false;
+            this.generalService.expandSidebar();
+        }
+        document.querySelector('body').classList.remove('setting-sidebar-open');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -456,7 +477,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
 
         this.purchaseOrderService.getPdf(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === "success" && response.body) {
-                let blob: Blob = base64ToBlob(response.body, 'application/pdf', 512);
+                let blob: Blob = this.generalService.base64ToBlob(response.body, 'application/pdf', 512);
                 this.attachedDocumentBlob = blob;
                 const file = new Blob([blob], { type: 'application/pdf' });
                 URL.revokeObjectURL(this.pdfFileURL);
@@ -479,7 +500,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         if (this.pdfPreviewHasError || !this.pdfPreviewLoaded) {
             return;
         }
-        saveAs(this.attachedDocumentBlob, 'purchaseorder.pdf');
+        saveAs(this.attachedDocumentBlob, this.localeData?.download_po_filename);
     }
 
     /**

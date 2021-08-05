@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
     selector: 'all-features',
@@ -6,14 +6,14 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
     templateUrl: './all-features.component.html'
 })
 
-export class AllFeaturesComponent implements OnInit {
+export class AllFeaturesComponent {
     @Output() public closeEvent = new EventEmitter<boolean>();
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor() {
-
-    }
-
-    public ngOnInit() {
 
     }
 

@@ -72,7 +72,7 @@
     "tax_compulsory": "Tax is compulsory",
     "transaction_available_ts": "Is this transaction applicable for Tourist Scheme?",
     "passport_number": "Passport Number",
-    "no_matching_entry_found": "no entry with matching amount found, please create a new entry with same amount as this transaction.",
+    "no_matching_entry_found": "No entry with matching amount found, please create a new entry with same amount as this transaction.",
     "map_cheque_bank_transaction": "Selected bank transaction will be mapped with cheque number [CHEQUE_NUMBER] Click yes to accept.",
     "entry_mapped": "Entry Mapped Successfully",
     "by_balance_cf": "By Balance C/F",
@@ -196,5 +196,8 @@
     "import_services": "Import of services",
     "others": "Others",
     "choose_file": "Choose File",
-    "remove_file": "Deleted Successfully."
+    "remove_file": "Deleted Successfully.",
+    "delete_bank_transactions": "Delete bank transactions",
+    "delete_bank_transactions_title": "Do you want to delete the selected bank transaction(s)?",
+    "reload_bank_transactions": "Reload bank transactions"
 }

@@ -5,11 +5,12 @@ import * as moment from 'moment/moment';
 import { AccountFlat, BulkEmailRequest, SearchDataSet, SearchRequest } from '../../../models/api-models/Search';
 import { AppState } from '../../../store';
 import { saveAs } from 'file-saver';
-import * as _ from '../../../lodash-optimized';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyService } from '../../../services/companyService.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { map, take, takeUntil } from 'rxjs/operators';
+import { GeneralService } from '../../../services/general.service';
+import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
     selector: 'search-grid',
@@ -81,8 +82,8 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             value: '%s_AN',
         },
     ];
-    @ViewChild('mailModal', {static: true}) public mailModal: ModalDirective;
-    @ViewChild('messageBox', {static: true}) public messageBox: ElementRef;
+    @ViewChild('mailModal', { static: true }) public mailModal: ModalDirective;
+    @ViewChild('messageBox', { static: true }) public messageBox: ElementRef;
     public searchRequest$: Observable<SearchRequest>;
     public isAllChecked: boolean = false;
 
@@ -93,7 +94,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     // reversing sort
     public set sortReverse(value: boolean) {
         this._sortReverse = value;
-        this.searchResponseFiltered$ = this.searchResponseFiltered$.pipe(map(p => _.cloneDeep(p).sort((a, b) => (value ? -1 : 1) * a[this._sortType].toString().localeCompare(b[this._sortType]))));
+        this.searchResponseFiltered$ = this.searchResponseFiltered$.pipe(map(p => cloneDeep(p).sort((a, b) => (value ? -1 : 1) * a[this._sortType].toString().localeCompare(b[this._sortType]))));
     }
 
     // pagination related
@@ -113,7 +114,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     /**
      * TypeScript public modifiers
      */
-    constructor(private store: Store<AppState>, private _companyServices: CompanyService, private _toaster: ToasterService) {
+    constructor(private store: Store<AppState>, private _companyServices: CompanyService, private _toaster: ToasterService, private generalService: GeneralService) {
         this.searchResponse$ = this.store.pipe(select(p => p.search.value), takeUntil(this.destroyed$));
         this.searchResponse$.subscribe(p => this.searchResponseFiltered$ = this.searchResponse$);
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
@@ -205,7 +206,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         this.checkboxInfo[this.checkboxInfo.selectedPage] = isAllChecked;
 
         this.searchResponseFiltered$.pipe(take(1)).subscribe(p => {
-            let entries = _.cloneDeep(p);
+            let entries = cloneDeep(p);
             this.isAllChecked = isAllChecked;
 
             entries.forEach((entry) => {
@@ -228,81 +229,11 @@ export class SearchGridComponent implements OnInit, OnDestroy {
 
     // Filter data of table By Filters
     public filterData(searchQuery: SearchDataSet[]) {
-
         let queryForApi = this.createSearchQueryReqObj();
-
         let formattedQuery = this.formatQuery(queryForApi, searchQuery);
-
         this.formattedQuery = formattedQuery;
-
         this.FilterByAPIEvent.emit(formattedQuery);
-
-        // Old logic (filter data on UI)
-        // this.searchResponseFiltered$ = this.searchResponse$.map(p => {
-        //   return _.cloneDeep(p).map(j => {
-        //     j.isSelected = false;
-        //     return j;
-        //   }).sort((a, b) => a['name'].toString().localeCompare(b['name']));
-        // });
-        // searchQuery.forEach((query, indx) => {
-        //   if (indx === 0) {
-        //     this.searchAndFilter(query, this.searchResponse$);
-        //   } else {
-        //     this.searchAndFilter(query, this.searchResponseFiltered$);
-        //   }
-        // });
     }
-
-    // public searchAndFilter(query, searchIn) {
-    //   this.searchResponseFiltered$ = searchIn.map((accounts) => {
-    //     return accounts.filter((account) => {
-    //       let amount;
-    //       amount = +query.amount;
-    //       switch (query.queryDiffer) {
-    //         case 'Greater':
-    //           if (amount === 0) {
-    //             return account[query.queryType] > amount;
-    //           } else {
-    //             if (query.queryType === 'openingBalance') {
-    //               return account.openingBalance > amount && account.openBalanceType === query.balType;
-    //             }
-    //             if (query.queryType === 'closingBalance') {
-    //               return account.closingBalance > amount && account.closeBalanceType === query.balType;
-    //             } else {
-    //               return account[query.queryType] > amount;
-    //             }
-    //           }
-    //         case 'Less':
-    //           if (amount === 0) {
-    //             return account[query.queryType] < amount;
-    //           } else {
-    //             if (query.queryType === 'openingBalance') {
-    //               return account.openingBalance < amount && account.openBalanceType === query.balType;
-    //             }
-    //             if (query.queryType === 'closingBalance') {
-    //               return account.closingBalance < amount && account.closeBalanceType === query.balType;
-    //             } else {
-    //               return account[query.queryType] < amount;
-    //             }
-    //           }
-    //         case 'Equals':
-    //           if (amount === 0) {
-    //             return account[query.queryType] === amount;
-    //           } else {
-    //             if (query.queryType === 'openingBalance') {
-    //               return account.openingBalance === amount && account.openBalanceType === query.balType;
-    //             }
-    //             if (query.queryType === 'closingBalance') {
-    //               return account.closingBalance === amount && account.closeBalanceType === query.balType;
-    //             } else {
-    //               return account[query.queryType] === amount;
-    //             }
-    //           }
-    //         default:
-    //       }
-    //     });
-    //   });
-    // }
 
     // Reset Filters and show all
     public resetFilters(isFiltered) {
@@ -364,69 +295,17 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             this._companyServices.downloadCSV(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 this.searchLoader$ = of(false);
                 if (res.status === 'success') {
-                    let blobData = this.base64ToBlob(res.body, 'text/csv', 512);
+                    let blobData = this.generalService.base64ToBlob(res.body, 'text/csv', 512);
                     return saveAs(blobData, `${p.groupName}.csv`);
                 }
             });
 
         });
-        // Old logic (Create CSV on UI)
-        // let blob;
-        // let csv;
-        // let header;
-        // let row;
-        // let title;
-        // header = this.getCSVHeader();
-        // title = '';
-        // header.forEach((head) => {
-        //   return title += head + ',';
-        // });
-        // title = title.replace(/.$/, '');
-        // title += '\r\n';
-        // row = '';
-        // this.searchResponseFiltered$.take(1).subscribe(p => p.forEach((data) => {
-        //   if (data.name.indexOf(',')) {
-        //     data.name.replace(',', '');
-        //   }
-        //   row += data.name + ',' + data.uniqueName + ',' + this.roundNum(data.openingBalance, 2) + ',' + data.openBalanceType + ',' + this.roundNum(data.debitTotal, 2) + ',' + this.roundNum(data.creditTotal, 2) + ',' + this.roundNum(data.closingBalance, 2) + ',' + data.closeBalanceType + ',' + data.parent;
-        //   return row += '\r\n';
-        // }));
-        // csv = title + row;
-        // blob = new Blob([csv], {
-        //   type: 'application/octet-binary'
-        // });
-        // return saveAs(blob, 'demo' + '.csv');
-    }
-
-    public base64ToBlob(b64Data, contentType, sliceSize) {
-        contentType = contentType || '';
-        sliceSize = sliceSize || 512;
-        let byteCharacters = atob(b64Data);
-        let byteArrays = [];
-        let offset = 0;
-        if(byteCharacters) {
-            while (offset < byteCharacters.length) {
-                let slice = byteCharacters.slice(offset, offset + sliceSize);
-                let byteNumbers = new Array((slice ? slice.length : 0));
-                let i = 0;
-                if(slice) {
-                    while (i < slice.length) {
-                        byteNumbers[i] = slice.charCodeAt(i);
-                        i++;
-                    }
-                }
-                let byteArray = new Uint8Array(byteNumbers);
-                byteArrays.push(byteArray);
-                offset += sliceSize;
-            }
-        }
-        return new Blob(byteArrays, { type: contentType });
     }
 
     // Add Selected Value to Message Body
     public addValueToMsg(val: any) {
         this.typeInTextarea(val.value);
-        // this.messageBody.msg += ` ${val.value} `;
     }
 
     public typeInTextarea(newText) {
@@ -476,13 +355,6 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     // Send Email/Sms for Accounts
     public async send() {
         let accountsUnqList = [];
-        // this.searchResponseFiltered$.take(1).subscribe(p => {
-        //   p.map(i => {
-        //     if (i.isSelected) {
-        //       accountsUnqList.push(i.uniqueName);
-        //     }
-        //   });
-        // });
 
         await this.searchResponseFiltered$.pipe(take(1)).subscribe(p => {
             accountsUnqList = [];
@@ -492,9 +364,6 @@ export class SearchGridComponent implements OnInit, OnDestroy {
                 }
             });
         });
-
-        // accountsUnqList = _.uniq(this.selectedItems);
-        // this.searchResponse$.forEach(p => accountsUnqList.push(_.reduce(p, (r, v, k) => v.uniqueName, '')));
 
         this.searchRequest$.pipe(take(1)).subscribe(p => {
             if (!p) {

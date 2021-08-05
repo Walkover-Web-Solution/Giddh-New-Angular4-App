@@ -6,7 +6,7 @@ import { StateDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/Co
 import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 
 @Component({
-    selector: 'import-excel',  // <home></home>
+    selector: 'import-excel',
     styleUrls: ['./import-excel.component.scss'],
     templateUrl: './import-excel.component.html'
 })
@@ -14,7 +14,7 @@ import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 export class ImportComponent implements OnInit {
 
     constructor(private store: Store<AppState>, private _companyActions: CompanyActions) {
-        
+
     }
 
     public ngOnInit() {

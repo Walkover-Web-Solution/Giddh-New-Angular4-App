@@ -45,7 +45,8 @@
                             <div class="pull-right">
                                 <div class="btn-group " dropdown placement="bottom right">
                                     <button id="buttonalignment" dropdownToggle type="button"
-                                        class="btn-link mr-b05 cp mr-1 dropdown-toggle" aria-controls="dropdown-alignment">
+                                        class="btn-link mr-b05 cp mr-1 dropdown-toggle"
+                                        aria-controls="dropdown-alignment">
                                         <i class="icon-download"></i> Download
                                     </button>
                                     <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right"
@@ -85,7 +86,7 @@
                                                     [ngClass]="{'active-text-color': filter.sortBy === 'entry_date' && filter.sort === 'asc'}">
                                                 </div>
                                                 <!-- after sort click -->
-                                                <div class="icon-sort-dsc text-right"
+                                                <div class="icon-sort-asc text-right"
                                                     *ngIf="filter.sortBy === 'entry_date' && filter.sort === 'desc'"
                                                     (click)="sortButtonClicked('asc', 'entry_date')"
                                                     [ngClass]="{'active-text-color': filter.sortBy === 'entry_date' && filter.sort === 'desc'}">
@@ -102,13 +103,7 @@
                                         (clickOutside)="clickedOutside($event,null, 'product')">
                                         <div [hidden]="showProductSearch">
                                             <span>Product Name</span>
-                                            <!-- <i class="icon-search" (click)="showSearchBox('product')"></i> -->
                                         </div>
-                                        <!-- <div class="input-container" [hidden]="!showProductSearch">
-                    <input type="text" #productName placeholder="Product Name" class="w100"
-                        [formControl]="productUniqueNameInput" />
-                    <i class="icon-search" (click)="showProductSearch = false;"></i>
-                </div> -->
                                     </th>
                                     <th class="bd-rr bd-rb" *ngIf="type ==='stock'" width="15%">
                                         <div class="btn-group btn-group-voucher-type" dropdown placement="bottom right">
@@ -124,7 +119,8 @@
                                                 <li role="menuitem dropdown-item" *ngFor="let item of VOUCHER_TYPES">
                                                     <label><input type="checkbox" [(ngModel)]="item.checked"
                                                             (click)="filterByCheck(item.value, $event.target.checked)" />
-                                                        {{item.label}}</label></li>
+                                                        {{item.label}}</label>
+                                                </li>
                                             </ul>
                                         </div>
                                     </th>
@@ -137,7 +133,6 @@
                                         <div class="input-container" [hidden]="!showSenderSearch">
                                             <input type="text" #senderName placeholder="Sender's Name" class="w100"
                                                 [formControl]="senderUniqueNameInput" />
-                                            <!-- <i class="icon-search" (click)="showSenderSearch = false;"></i> -->
                                         </div>
                                     </th>
                                     <th class="bd-rr bd-rb td-search-box" width="15%"
@@ -149,7 +144,6 @@
                                         <div class="input-container" [hidden]="!showReceiverSearch">
                                             <input type="text" #receiverName placeholder="Receiver's Name" class="w100"
                                                 [formControl]="receiverUniqueNameInput" />
-                                            <!-- <i class="icon-search" (click)="showReceiverSearch = false;"></i> -->
                                         </div>
                                     </th>
                                     <th class="bd-rr bd-rb">Description</th>
@@ -164,7 +158,7 @@
                                                     [ngClass]="{'active-text-color': filter.sortBy === 'QUANTITY' && filter.sort === 'asc'}">
                                                 </div>
                                                 <!-- after sort click -->
-                                                <div class="icon-sort-dsc text-right"
+                                                <div class="icon-sort-asc text-right"
                                                     *ngIf="filter.sortBy === 'QUANTITY' && filter.sort === 'desc'"
                                                     (click)="sortButtonClicked('asc', 'QUANTITY')"
                                                     [ngClass]="{'active-text-color': filter.sortBy === 'QUANTITY' && filter.sort === 'desc'}">
@@ -206,16 +200,6 @@
                                     </td>
                                 </tr>
                             </tbody>
-                            <!-- <tfoot>
-                <tr>
-                    <td colspan="5">
-                        Total
-                    </td>
-                    <td colspan="2">
-                        60,000
-                    </td>
-                </tr>
-            </tfoot> -->
                             <tbody
                                 *ngIf="inventoryReport && inventoryReport.transactions.length<=0 || !inventoryReport">
                                 <tr>

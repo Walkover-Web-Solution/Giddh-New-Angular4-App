@@ -9,7 +9,6 @@ import { SETTINGS_PROFILE_ACTIONS } from './../../actions/settings/profile/setti
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
 import {
-    LinkedInRequestModel,
     SignupWithMobile,
     UserDetails,
     VerifyEmailModel,
@@ -24,7 +23,6 @@ import {
     StateDetailsRequest,
     StateDetailsResponse
 } from '../../models/api-models/Company';
-import * as _ from '../../lodash-optimized';
 import { CustomActions } from '../customActions';
 import * as moment from 'moment';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
@@ -288,17 +286,6 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
             newState.isSocialLogoutAttempted = false;
             return newState;
         }
-        // important if logged in via social accounts for web only
-        case LoginActions.SIGNUP_WITH_LINKEDIN_RESPONSE: {
-            let newState = _.cloneDeep(state);
-            let LINKEDIN_RESPONSE: BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel> = action.payload as BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel>;
-            if (LINKEDIN_RESPONSE.status === 'success') {
-                newState.isLoggedInWithSocialAccount = true;
-            } else {
-                newState.isLoggedInWithSocialAccount = false;
-            }
-            return newState;
-        }
         case LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE: {
             let newState = _.cloneDeep(state);
             let GOOGLE_RESPONSE: BaseResponse<VerifyEmailResponseModel, string> = action.payload as BaseResponse<VerifyEmailResponseModel, string>;
@@ -422,7 +409,7 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
                     signupVerifyEmail: res.request.email
                 });
             } else {
-                 return Object.assign({}, state, {
+                return Object.assign({}, state, {
                     isSignupWithPasswordInProcess: false,
                     isSignupWithPasswordSuccess: false,
                 });
@@ -456,7 +443,7 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
                     isForgotPasswordInProcess: false
                 });
             } else {
-                 return Object.assign({}, state, {
+                return Object.assign({}, state, {
                     isResetPasswordInSuccess: false,
                     isForgotPasswordInProcess: false
                 });
@@ -480,18 +467,6 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
         }
         case LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE: {
             let data: BaseResponse<VerifyEmailResponseModel, string> = action.payload as BaseResponse<VerifyEmailResponseModel, string>;
-            if (data.status === 'success') {
-                return Object.assign({}, state, {
-                    user: data.body
-                });
-            } else {
-                return Object.assign({}, state, {
-                    user: null
-                });
-            }
-        }
-        case LoginActions.SIGNUP_WITH_LINKEDIN_RESPONSE: {
-            let data: BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel> = action.payload as BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel>;
             if (data.status === 'success') {
                 return Object.assign({}, state, {
                     user: data.body
@@ -594,7 +569,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
                 }
                 let fromDate: any = data.fromDate ? moment(data.fromDate, GIDDH_DATE_FORMAT) : moment().subtract(30, 'days');
                 let toDate: any = data.toDate ? moment(data.toDate, GIDDH_DATE_FORMAT) : moment();
-                latestState.applicationDate = [fromDate._d, toDate._d, chosenLabel, !!data.fromDate ];
+                latestState.applicationDate = [fromDate._d, toDate._d, chosenLabel, !!data.fromDate];
                 return Object.assign({}, state, latestState);
             }
             return state;
@@ -653,13 +628,9 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
                 d.isCompanyCreated = false;
                 return Object.assign({}, state, d);
             }
-            // return state;
         }
         case CompanyActions.USER_SELECTED_PLANS:
             return Object.assign({}, state, { userSelectedSubscriptionPlan: action.payload });
-
-        case CompanyActions.CURRENT_COMPANY_SUBSCRIPTIONS_PLANS:
-            return Object.assign({}, state, { currentCompanySubscriptionPlan: action.payload });
 
         case CompanyActions.TOTAL_COMPANIES:
             return Object.assign({}, state, { totalNumberOfcompanies: action.payload });
@@ -677,7 +648,6 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
             return Object.assign({}, state, {
                 isRefreshing: true,
                 isCompanyCreated: false
-                // isCompanyCreated: state.isCompanyCreated
             });
         case CompanyActions.REFRESH_COMPANIES_RESPONSE:
             let companies: BaseResponse<CompanyResponse[], string> = action.payload;
@@ -685,15 +655,6 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
                 return Object.assign({}, state, {
                     isRefreshing: false,
                     companies: action.payload.body
-                });
-            }
-            return state;
-        case CompanyActions.DELETE_COMPANY_RESPONSE:
-            let uniqueName: BaseResponse<string, string> = action.payload;
-            if (uniqueName.status === 'success') {
-                let array = state.companies.filter(cmp => cmp.uniqueName !== uniqueName.body);
-                return Object.assign({}, state, {
-                    companies: array
                 });
             }
             return state;
@@ -803,6 +764,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
             return state;
         }
         case CompanyActions.SET_ACTIVE_COMPANY_DATA: {
+            delete action.payload.activeFinancialYear;
             return Object.assign({}, state, {
                 activeCompany: action.payload
             });
@@ -815,6 +777,11 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
         case CommonActions.SET_ACTIVE_LOCALE: {
             return Object.assign({}, state, {
                 currentLocale: action.payload
+            });
+        }
+        case CommonActions.SET_ACTIVE_FINANCIAL_YEAR: {
+            return Object.assign({}, state, {
+                activeCompany: action.payload
             });
         }
 

@@ -1,6 +1,5 @@
 import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
-
 import { HttpWrapperService } from './httpWrapper.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -98,9 +97,6 @@ export class ExpenseService {
         if ((model.sortBy)) {
             url = url + '&sortBy=' + model.sortBy;
         }
-        // if ((model.q)) {
-        //   url = url + '&q=' + model.q;
-        // }
         return url;
     }
 

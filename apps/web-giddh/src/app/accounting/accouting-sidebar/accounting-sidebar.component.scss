@@ -1,14 +1,4 @@
-@import '../../../assets/css/color.scss';
-
-.account-listbar {
-    overflow-y: hidden;
-    height: 100vh;
-    width: 250px;
-    background: $white;
-    position: absolute;
-    left: -250px;
-    z-index: 0;
-}
+@import "../../../assets/css/color.scss";
 
 .appearance-none {
     background: none !important;

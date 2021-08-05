@@ -1,21 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Action, Store } from '@ngrx/store';
+import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { StockUnitRequest, StockUnitResponse } from '../../models/api-models/Inventory';
 import { InventoryService } from '../../services/inventory.service';
 import { ToasterService } from '../../services/toaster.service';
 import { CustomActions } from '../../store/customActions';
-import { AppState } from '../../store/roots';
 import { CUSTOM_STOCK_UNIT_ACTIONS } from './inventory.const';
 
 @Injectable()
 export class CustomStockUnitAction {
 
-    public CreateStockUnit$: Observable<Action> = createEffect( ()=> this.action$
+    public CreateStockUnit$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CUSTOM_STOCK_UNIT_ACTIONS.CREATE_STOCK_UNIT),
             switchMap((action: CustomActions) => {
@@ -31,7 +29,7 @@ export class CustomStockUnitAction {
                     }));
             })));
 
-     public GetStockUnit$: Observable<Action> =  createEffect( ()=>this.action$
+    public GetStockUnit$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT),
             switchMap((action: CustomActions) => {
@@ -42,7 +40,7 @@ export class CustomStockUnitAction {
                     })));
             })));
 
-    public UpdateStockUnit$: Observable<Action> = createEffect( ()=> this.action$
+    public UpdateStockUnit$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT),
             switchMap((action: CustomActions) => {
@@ -53,7 +51,7 @@ export class CustomStockUnitAction {
                     }, true, 'Unit Updated Successfully')));
             })));
 
-     public DeleteStockUnit$: Observable<Action> = createEffect( ()=> this.action$
+    public DeleteStockUnit$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT),
             switchMap((action: CustomActions) => {
@@ -68,7 +66,7 @@ export class CustomStockUnitAction {
             })));
 
 
-     public GetStockUnitByName$: Observable<Action> = createEffect( ()=> this.action$
+    public GetStockUnitByName$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT_NAME),
             switchMap((action: CustomActions) => this._inventoryService.GetStockUnitByName(action.payload)),
@@ -77,7 +75,7 @@ export class CustomStockUnitAction {
             })));
 
 
-    public GetStockUnitByNameResponse$: Observable<Action> = createEffect( ()=> this.action$
+    public GetStockUnitByNameResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT_NAME_RESPONSE),
             map((action: CustomActions) => {
@@ -86,7 +84,6 @@ export class CustomStockUnitAction {
 
     constructor(private action$: Actions,
         private _toasty: ToasterService,
-        private store: Store<AppState>,
         private _inventoryService: InventoryService) {
     }
 

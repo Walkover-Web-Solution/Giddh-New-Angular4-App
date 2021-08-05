@@ -40,28 +40,27 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     public purchaseAccountsDropDown$: Observable<IOption[]>;
     public salesAccountsDropDown$: Observable<IOption[]>;
 
-    @ViewChild('formDiv', {static: true}) public formDiv: ElementRef;
-    @ViewChild('groupDDList', {static: true}) public groupDDList: any;
+    @ViewChild('formDiv', { static: true }) public formDiv: ElementRef;
+    @ViewChild('groupDDList', { static: true }) public groupDDList: any;
     public formDivBoundingRect: Subject<any> = new Subject<any>();
 
 
     @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
-    @Output() public animateAside: EventEmitter<any> = new EventEmitter();
 
-    @ViewChild('uniqueName', {static: false}) public uniqueName: ElementRef;
-    @ViewChild('stockName', {static: false}) public stockName: ElementRef;
+    @ViewChild('uniqueName', { static: false }) public uniqueName: ElementRef;
+    @ViewChild('stockName', { static: false }) public stockName: ElementRef;
 
-    @ViewChild('purchaseAccountUniqueName', {static: false}) public purchaseAccountUniqueName: any;
-    @ViewChild('purchaseStockUnitCode', {static: false}) public purchaseStockUnitCode: any;
-    @ViewChild('purchaseRate', {static: false}) public purchaseRate: ElementRef;
+    @ViewChild('purchaseAccountUniqueName', { static: false }) public purchaseAccountUniqueName: any;
+    @ViewChild('purchaseStockUnitCode', { static: false }) public purchaseStockUnitCode: any;
+    @ViewChild('purchaseRate', { static: false }) public purchaseRate: ElementRef;
 
-    @ViewChild('salesAccountUniqueName', {static: false}) public salesAccountUniqueName: any;
-    @ViewChild('salesStockUnitCode', {static: false}) public salesStockUnitCode: any;
-    @ViewChild('salesRate', {static: false}) public salesRate: ElementRef;
+    @ViewChild('salesAccountUniqueName', { static: false }) public salesAccountUniqueName: any;
+    @ViewChild('salesStockUnitCode', { static: false }) public salesStockUnitCode: any;
+    @ViewChild('salesRate', { static: false }) public salesRate: ElementRef;
 
-    @ViewChild('manufacturingQuantity', {static: false}) public manufacturingQuantity: ElementRef;
-    @ViewChild('manufacturingStockUniqueName', {static: false}) public manufacturingStockUniqueName: any;
-    @ViewChild('manufacturingStockUnitCode', {static: false}) public manufacturingStockUnitCode; any;
+    @ViewChild('manufacturingQuantity', { static: false }) public manufacturingQuantity: ElementRef;
+    @ViewChild('manufacturingStockUniqueName', { static: false }) public manufacturingStockUniqueName: any;
+    @ViewChild('manufacturingStockUnitCode', { static: false }) public manufacturingStockUnitCode; any;
 
     public groupUniqueName: string;
     public stockUniqueName: string;
@@ -143,11 +142,10 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
                 this.stockUnitsDropDown$ = of(unitArr);
             }
         });
-
-        this.getParentGroupData();
     }
 
     public ngOnInit() {
+        this.getParentGroupData();
         // get all groups
         this.formDivBoundingRect.next({
             top: 0,
@@ -164,9 +162,9 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
 
         // subscribe getActiveView parameters
         this.invViewService.getActiveView().pipe(takeUntil(this.destroyed$)).subscribe(v => {
-            this.groupUniqueName = v.groupUniqueName;
-            this.groupName = v.stockName;
-            this.stockUniqueName = v.stockUniqueName;
+            this.groupUniqueName = v?.groupUniqueName;
+            this.groupName = v?.stockName;
+            this.stockUniqueName = v?.stockUniqueName;
             this.activeGroup = v;
             if (this.groupUniqueName && this.stockUniqueName) {
                 this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName, this.groupUniqueName));
@@ -533,9 +531,6 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     }
 
     public ngAfterViewInit() {
-        if (this.groupUniqueName) {
-            // this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
-        }
         const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
         manufacturingDetailsContorl.disable();
 
@@ -749,7 +744,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     public submit() {
         let stockObj = new CreateStockRequest();
         let uniqueName = this.addStockForm.get('uniqueName');
-        if(uniqueName.value) {
+        if (uniqueName.value) {
             uniqueName?.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
         }
         this.addStockForm.get('uniqueName').enable();
@@ -1202,12 +1197,12 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     public toggleOtherDetails(): void {
         this.showOtherDetails = !this.showOtherDetails;
 
-        if(this.addStockForm.get("hsnNumber").value) {
+        if (this.addStockForm.get("hsnNumber").value) {
             this.addStockForm.get("showCodeType")?.patchValue("hsn");
-        } else if(this.addStockForm.get("sacNumber").value) {
+        } else if (this.addStockForm.get("sacNumber").value) {
             this.addStockForm.get("showCodeType")?.patchValue("sac");
         } else {
-            if(this.inventorySettings?.manageInventory) {
+            if (this.inventorySettings?.manageInventory) {
                 this.addStockForm.get("showCodeType")?.patchValue("hsn");
             } else {
                 this.addStockForm.get("showCodeType")?.patchValue("sac");

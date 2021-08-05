@@ -9,29 +9,33 @@ import { combineLatest, ReplaySubject } from 'rxjs';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { VoucherTypeEnum } from '../models/api-models/Sales';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { CurrentPage } from '../models/api-models/Common';
-import { GeneralActions } from '../actions/general/general.actions';
 @Component({
     templateUrl: './invoice.component.html',
-    styleUrls:[`./invoice.component.scss`]
+    styleUrls: [`./invoice.component.scss`]
 })
 export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
-    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
+    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
 
-    public tabsDropdown:boolean = false;
+    public tabsDropdown: boolean = false;
     public selectedVoucherType: VoucherTypeEnum;
     public activeTab: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public isMobileView = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will store screen size */
+    public isMobileScreen: boolean = false;
 
     constructor(private store: Store<AppState>,
         private companyActions: CompanyActions,
-        private router: Router, private _activatedRoute: ActivatedRoute, private _breakPointObservar: BreakpointObserver, private _generalActions: GeneralActions) {
+        private router: Router, private _activatedRoute: ActivatedRoute, private _breakPointObservar: BreakpointObserver) {
 
         this._breakPointObservar.observe([
-            '(max-width: 1023px)'
+            '(max-width: 1023px)',
+            '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileView = result.matches;
+            this.isMobileView = result?.breakpoints['(max-width: 1023px)'];
+            this.isMobileScreen = result?.breakpoints['(max-width: 767px)'];
         });
     }
 
@@ -68,7 +72,7 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
                             }, 500);
                         }
                         this.tabChanged(queryParams.tab, null);
-                    } else if(queryParams.tab) {
+                    } else if (queryParams.tab) {
                         this.activeTab = queryParams.tab;
                     }
                 } else {
@@ -106,14 +110,51 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
         if (e && !e.target) {
             this.saveLastState(tab);
         }
+    }
+    /**
+     * This will return page heading based on active tab
+     *
+     * @param {boolean} event
+     * @memberof InvoiceComponent
+     */
+     public getPageHeading(): string {
+        let pageHeading = "";
 
-        if(tab === "pending") {
-            this.setCurrentPageTitle("Pending");
-        } else if(tab === "templates") {
-            this.setCurrentPageTitle("Templates");
-        } else if(tab === "settings") {
-            this.setCurrentPageTitle("Settings");
+        if (this.isMobileScreen) {
+            switch (this.activeTab) {
+                case 'debit note':
+                    pageHeading = this.localeData?.tabs?.debit_note;
+                    break;
+                case 'credit note':
+                    pageHeading = this.localeData?.tabs?.credit_note;
+                    break;
+                case 'pending':
+                    pageHeading = this.localeData?.tabs?.pending;
+                    break;
+                case 'templates':
+                    pageHeading = this.localeData?.tabs?.templates;
+                    break;
+                case 'settings':
+                    pageHeading = this.localeData?.tabs?.settings;
+                    break;
+                case 'estimates':
+                    pageHeading = this.localeData?.tabs?.estimates;
+                    break;
+                case 'proformas':
+                    pageHeading = this.localeData?.tabs?.proformas;
+                    break;
+                case 'invoice':
+                    pageHeading = this.localeData?.tabs?.invoices;
+                    break;
+                case 'sales':
+                    pageHeading = this.localeData?.tabs?.invoices;
+                    break;
+                case 'recurring':
+                    pageHeading = this.localeData?.tabs?.recurring;
+                    break;
+            }
         }
+        return pageHeading;
     }
 
     public ngOnDestroy() {
@@ -129,18 +170,5 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
         stateDetailsRequest.lastState = `pages/invoice/preview/${state}/${this.selectedVoucherType !== state ? this.selectedVoucherType : ''}`;
 
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-    }
-
-    /**
-     * This function will set the page heading
-     *
-     * @param {string} title
-     * @memberof InvoiceComponent
-     */
-    public setCurrentPageTitle(title: string) : void {
-        let currentPageObj = new CurrentPage();
-        currentPageObj.name = (this.selectedVoucherType !== 'debit note' && this.selectedVoucherType !== 'credit note') ? "Invoice > " + title : title;
-        currentPageObj.url = this.router.url;
-        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 }

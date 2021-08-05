@@ -4,7 +4,6 @@ import { FormControl } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-
 import { PAGINATION_LIMIT } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
 import { OrganizationProfile, SettingsAsideFormType } from '../constants/settings.constant';
@@ -28,7 +27,7 @@ import { OrganizationProfile, SettingsAsideFormType } from '../constants/setting
 })
 export class AddressSettingsComponent implements OnInit, OnDestroy {
     /** Stores the confirmation modal instance */
-    @ViewChild('deleteAddressConfirmationModal', {static: true}) public deleteAddressConfirmationModal: ModalDirective;
+    @ViewChild('deleteAddressConfirmationModal', { static: true }) public deleteAddressConfirmationModal: ModalDirective;
 
     /** Stores the type of the organization (company or profile)  */
     @Input() public organizationType: OrganizationType;
@@ -69,7 +68,10 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
     /** Stores the current organization uniqueName
      * (required for checking the entity same as the organization in create-address link-entity field) */
     @Input() public currentOrganizationUniqueName: string;
-
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     /** Page change event emitter */
     @Output() public pageChanged: EventEmitter<any> = new EventEmitter<any>();
     /** Search field event emitter */
@@ -411,5 +413,18 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
      */
     public onCancel(): void {
         this.deleteAddressConfirmationModal.hide();
+    }
+
+    /**
+     * Returns the search field text
+     *
+     * @param {*} title
+     * @returns {string}
+     * @memberof AddressSettingsComponent
+     */
+    public getSearchFieldText(title: any): string {
+        let searchField = this.localeData?.search_field;
+        searchField = searchField?.replace("[FIELD]", title);
+        return searchField;
     }
 }

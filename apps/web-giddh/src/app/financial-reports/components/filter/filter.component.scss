@@ -1,0 +1,181 @@
+@import "../../../../assets/css/color.scss";
+.daterange-picker-tb-pl-bs {
+    background-color: $white !important;
+    text-decoration: none;
+    text-align: left;
+    border: 1px solid $gainsboro;
+    vertical-align: middle;
+    height: 36px;
+
+    font-size: 14px;
+}
+.tb-btn-apply {
+    margin-top: 5px;
+}
+.liabilities-assets {
+    max-width: 760px;
+    width: 100%;
+}
+.input-wrapper:before {
+    position: absolute;
+    content: "";
+    display: block;
+    height: 36px;
+    width: 1px;
+    background-color: $gainsboro;
+    left: 37px !important;
+    z-index: 100;
+    top: 0;
+}
+.expand-icon {
+    height: 36px;
+    display: flex;
+    align-items: flex-end;
+}
+.expand-icon span {
+    display: flex;
+    width: 36px;
+    height: 36px;
+    justify-content: center;
+    align-items: center;
+    background-color: $white;
+    font-size: 18px;
+    color: $midnight-blue !important;
+    border: 1px solid $gainsboro;
+    border-radius: 5px;
+}
+.download-data-icon {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    a {
+        display: flex;
+        width: 36px;
+        height: 36px;
+        justify-content: center;
+        align-items: center;
+        background-color: $white;
+        font-size: 16px;
+        color: $midnight-blue !important;
+        border: 1px solid $gainsboro;
+        border-radius: 5px;
+    }
+}
+.d-inline-flex {
+    display: inline-flex;
+}
+.glyphicon-triangle-bottom {
+    z-index: 1;
+    position: absolute;
+    left: 152px;
+    font-size: 9px;
+    color: $very-light-gray;
+    top: 14px;
+}
+.company-branch-dropdown {
+    width: 178px;
+}
+.linked-entities {
+    .list-item {
+        .entity-icon {
+            padding: 4px;
+        }
+        .entity-details {
+            margin-left: 6px;
+            flex: 1;
+            .item {
+                font-family: "opensans-semibold";
+            }
+        }
+        .default-entity {
+            align-items: center;
+            display: flex;
+            &:hover:after {
+                color: $rich-blue;
+            }
+            .icon-favorite-selected {
+                color: $rich-blue;
+            }
+        }
+    }
+}
+.icon-calender {
+    position: absolute;
+    z-index: 1;
+    height: 32px;
+    width: 36px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: 36px !important;
+    border-right: 1px solid $gainsboro !important;
+    cursor: pointer;
+}
+@media (max-width: 1099px) and (min-width: 1019px) {
+    .financial-select-year {
+        margin-bottom: 15px;
+        .company-branch-dropdown {
+            width: 158px;
+        }
+        .expand-collapse-icon {
+            position: absolute;
+            bottom: -36px;
+            right: 15px;
+        }
+    }
+    .download-data-icon {
+        padding-right: 60px !important;
+    }
+}
+@media (min-width: 768px) {
+    .form-inline.financial-select-year .form-group {
+        min-width: auto !important;
+    }
+}
+@media (max-width: 991px) {
+    .datepicker-field {
+        min-width: 220px !important;
+        width: 220px !important;
+    }
+    .download-data-icon {
+        a {
+            width: 36px;
+            height: 36px;
+        }
+    }
+    .form-inline.financial-select-year {
+        flex-flow: row nowrap !important;
+    }
+    .download-data-icon {
+        margin: 10px 0 2px;
+    }
+}
+@media screen and (max-width: 767px) {
+    .tb-mobile-header {
+        .datepicker-field,
+        .custom-datepicker {
+            min-width: 100% !important;
+            width: 100% !important;
+            input {
+                min-width: 100% !important;
+                width: 100% !important;
+                text-align: left;
+                padding-left: 40px !important;
+            }
+        }
+        .refresh-btn {
+            display: flex;
+            width: 36px;
+            height: 36px;
+            justify-content: center;
+            align-items: center;
+            background-color: $white;
+            font-size: 16px;
+            color: $midnight-blue !important;
+            border: 1px solid $gainsboro;
+        }
+    }
+    .list-inline > li {
+        font-size: 12px;
+    }
+}

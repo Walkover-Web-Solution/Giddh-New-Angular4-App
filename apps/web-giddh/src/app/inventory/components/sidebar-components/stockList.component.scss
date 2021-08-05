@@ -7,12 +7,17 @@
     color: $jacksons-purple !important;
 }
 .span {
-    color: black;
+    color: $black;
     font-size: 14px;
 }
 .in-list {
     display: flex;
     align-items: center;
+    a{
+        white-space: normal;
+        word-break: break-word;
+        padding-right: 8px;
+    }
 }
 .in-list .btn {
     line-height: 14px !important;

@@ -1,0 +1,74 @@
+@import "../../../../../../assets/css/color.scss";
+.liabilities-assets {
+    max-width: 760px;
+    width: 100%;
+}
+.trial-balance {
+    span {
+        i.glyphicon-search {
+            position: relative;
+            z-index: 1;
+            font-size: 13px;
+            color: $gray;
+            padding-right: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+    }
+    input {
+        height: 47px;
+    }
+}
+.tb-wrapper {
+    width: 70%;
+    margin: auto;
+}
+.list-inline {
+    padding-left: 0;
+    list-style: none;
+    > li {
+        display: inline-block;
+        padding-right: 5px;
+    }
+}
+.table-footer th {
+    border-top: none !important;
+}
+.tb-section {
+    padding-left: 7px;
+    background-color: $white;
+    .search-container {
+        padding: 0;
+        display: flex;
+        align-items: center;
+        .show-clear-search {
+            width: 103%;
+            margin-left: -7px;
+            display: flex;
+        }
+    }
+    .table-th {
+        padding: 14px 8px 14px 0;
+    }
+
+    .table-th-closing {
+        padding: 14px 20px 14px 0;
+    }
+}
+@media (max-width: 1024px) {
+    .tb-wrapper {
+        width: 100%;
+        margin: auto;
+        .table-container {
+            overflow-x: auto;
+        }
+    }
+}
+@media screen and (max-width: 767px) {
+    .list-inline {
+        > li {
+            font-size: 12px;
+        }
+    }
+}

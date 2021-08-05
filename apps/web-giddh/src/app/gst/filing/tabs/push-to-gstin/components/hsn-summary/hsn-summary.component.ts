@@ -1,5 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { HSNSummary } from '../../../../../../models/api-models/GstReconcile';
 
@@ -9,31 +8,23 @@ import { HSNSummary } from '../../../../../../models/api-models/GstReconcile';
     templateUrl: './hsn-summary.component.html',
     styleUrls: ['hsn-summary.component.css'],
 })
-export class HsnSummaryComponent implements OnInit, OnChanges, OnDestroy {
+export class HsnSummaryComponent implements OnInit, OnDestroy {
 
     @Input() public hsnSummary: HSNSummary = new HSNSummary();
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     public imgPath: string = '';
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor() {
-        //
+        
     }
 
     public ngOnInit() {
-        this.imgPath = (isElectron ||isCordova)  ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
-    }
-
-    public pageChanged(event) {
-        // this.request['page'] = event.page;
-        // this._store.dispatch(this.gstrAction.GetReturnSummary(this.selectedGst, this.request));
-    }
-
-    /**
-     * ngOnChnages
-     */
-    public ngOnChanges(s: SimpleChanges) {
-        //
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
     }
 
     public ngOnDestroy() {

@@ -8,7 +8,7 @@
     flex: 1 1 auto;
 }
 
-.sh-select-dropdown{
+.sh-select-dropdown {
     width: 230px;
 }
 /*td-in-searchbox_style*/
@@ -158,14 +158,14 @@
     white-space: nowrap;
     min-width: 140px;
     max-width: 140px;
-    &.show{
+    &.show {
         display: inline-flex !important;
     }
     button {
         text-align: left;
         width: 100%;
         color: $nero;
-         margin-right: 0;
+        margin-right: 0;
         &:focus,
         &:hover {
             text-decoration: none;
@@ -226,8 +226,7 @@ button[aria-expanded="true"] i {
     padding-left: 3px;
     text-transform: lowercase;
 }
-.icon-pointer .icon-sort-asc,
-.icon-pointer .icon-sort-dsc {
+.icon-pointer .icon-sort-asc {
     line-height: 20px;
     width: 15px;
     color: $wild-blue-yonder;
@@ -289,7 +288,7 @@ button[aria-expanded="true"] i {
     font-size: 18px;
     margin-left: 10px;
     border: 1px solid $chetwode-blue;
-    border-radius: 2px;
+    border-radius: 5px;
     color: $midnight-blue;
     background: $white;
 }
@@ -313,20 +312,21 @@ button.btn.btn-filter {
 .stock-not-found {
     text-transform: none;
 }
-.head-report{
+.head-report {
     font-size: 20px;
     font-weight: bold;
-    text-transform:capitalize;
+    text-transform: capitalize;
 }
-.td-mobile-head{
-    display:none;
+.td-mobile-head {
+    display: none;
 }
-.table-responsive{
-    overflow-x:auto;
-    display:table;
+.table-responsive {
+    overflow-x: auto;
+    display: table;
 }
 .icon-btn {
     border: 1px solid $gainsboro;
+    border-radius: 5px;
     height: 36px;
     width: 36px;
     margin-top: 0;
@@ -335,82 +335,82 @@ button.btn.btn-filter {
         font-weight: bold;
     }
 }
-.mobile-card-wrapper{
-    table.table{
-        tr{
-            &:last-child{
-                td{
+.mobile-card-wrapper {
+    table.table {
+        tr {
+            &:last-child {
+                td {
                     border-bottom: 1px solid $gainsboro;
                 }
             }
         }
     }
 }
-.inventory-branch-dropdown{
+.inventory-branch-dropdown {
     display: none !important;
 }
 
-@media(max-width:1440px){
+@media (max-width: 1440px) {
     .head-report {
         max-width: 245px;
         white-space: normal;
         word-break: break-all;
     }
-    .right-inventory{
+    .right-inventory {
         width: 43%;
         justify-content: flex-start;
         align-items: flex-start;
         flex-direction: row !important;
         text-align: right;
-        .transfer-btn{
+        .transfer-btn {
             margin-top: 0;
             margin-right: 15px;
         }
     }
 }
-@media(max-width:1024px){
-    .wrap-head-report{
-       width: 55%;
-       .head-report{
+@media (max-width: 1024px) {
+    .wrap-head-report {
+        width: 55%;
+        .head-report {
             font-size: 16px;
             white-space: normal;
             word-break: break-all;
         }
     }
-    .sticky-footer.sticky-footer-sale-amount{
+    .sticky-footer.sticky-footer-sale-amount {
         padding-left: 0 !important;
     }
 }
-@media (max-width:767px){
-    .btn-sky-blue{
-        display:none;
+@media (max-width: 767px) {
+    .btn-sky-blue {
+        display: none;
     }
-    .advance-icon{
-        display:none;
+    .advance-icon {
+        display: none;
     }
-    .head-report{
+    .head-report {
         font-size: 16px;
     }
-    .btn-link{
-        font-size:12px;
-        margin-right:0 !important;
-        margin-top:0 !important;
+    .btn-link {
+        font-size: 12px;
+        margin-right: 0 !important;
+        margin-top: 0 !important;
     }
-    .inventory-stock-table{
+    .inventory-stock-table {
         table-layout: auto;
     }
     .basic > tbody > tr > td,
-        .basic > thead > tr > th {
-            min-width: 100px !important;
-        }
+    .basic > thead > tr > th {
+        min-width: 100px !important;
+    }
 
-    .download-icon{
-        span{
-            display:none;
+    .download-icon {
+        span {
+            display: none;
         }
     }
-    .td-mobile-head{
-        display:block;
+    .td-mobile-head {
+        display: block;
     }
 
     .table-border {
@@ -418,9 +418,8 @@ button.btn.btn-filter {
     }
 }
 
-@media(max-width:1622px){
-    .table-responsive{
-        display:block;
+@media (max-width: 1622px) {
+    .table-responsive {
+        display: block;
     }
 }
-

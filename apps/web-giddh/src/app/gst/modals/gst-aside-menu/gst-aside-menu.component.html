@@ -3,19 +3,15 @@
     <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
 
     <div class="form-header">
-        <h3 *ngIf="selectedService === 'TAXPRO' || 'VAYANA' && (!gstAuthenticated && !gspSessionOtpAuthorized)">Choose
-            Provider (GSP)</h3>
-        <h3 *ngIf="gstAuthenticated && !pointsAcceptedSubmitted">Please take a note of the following before you submit
-            your
-            GST return:</h3>
-        <h3 *ngIf="gstAuthenticated && pointsAcceptedSubmitted">Submit GST Return:</h3>
-        <h3 *ngIf="selectedService === 'RECONCILE'">Gst Reconcile</h3>
+        <h3 *ngIf="selectedService === 'TAXPRO' || 'VAYANA' && (!gstAuthenticated && !gspSessionOtpAuthorized)">{{localeData?.aside_menu?.choose_provider}}</h3>
+        <h3 *ngIf="gstAuthenticated && !pointsAcceptedSubmitted">{{localeData?.aside_menu?.gst_return_note}}:</h3>
+        <h3 *ngIf="gstAuthenticated && pointsAcceptedSubmitted">{{localeData?.aside_menu?.submit_gst_returns}}:</h3>
+        <h3 *ngIf="selectedService === 'RECONCILE'">{{localeData?.aside_menu?.gst_reconcile}}</h3>
     </div>
 
     <div class="aside-body">
         <div class="aside-pane-form">
             <div class="form-body white-bg clearfix margin-child-label">
-
                 <div class="clearfix">
 
                     <!-- region not gst authenticated and before otp verified -->
@@ -28,12 +24,12 @@
 
                                     <div class="form-group">
 
-                                        <label for="tax_pro_otp">Select Platform</label>
+                                        <label for="tax_pro_otp">{{localeData?.aside_menu?.select_platform}}</label>
 
                                         <select class="form-control" (click)="changeProvider()"
                                             [(ngModel)]="selectedService" [disabled]="otpSentSuccessFully">
-                                            <option value="VAYANA">Giddh Provider 1</option>
-                                            <option value="TAXPRO">Giddh Provider 2</option>
+                                            <option value="VAYANA">{{localeData?.aside_menu?.giddh_provider1}}</option>
+                                            <option value="TAXPRO">{{localeData?.aside_menu?.giddh_provider2}}</option>
                                         </select>
 
                                     </div>
@@ -51,7 +47,7 @@
                                 <div class="col-6">
 
                                     <div class="form-group">
-                                        <label for="tax_pro_username">Username:</label>
+                                        <label for="tax_pro_username">{{localeData?.aside_menu?.username}}:</label>
                                         <input autocomplete="off" type="text" name="username" class="form-control"
                                             id="tax_pro_username" [(ngModel)]="taxProForm.userName" required
                                             [disabled]="otpSentSuccessFully">
@@ -62,7 +58,7 @@
                                 <div class="col-6">
 
                                     <div class="form-group">
-                                        <label for="tax_pro_gst_number">GSTIN:</label>
+                                        <label for="tax_pro_gst_number">{{commonLocaleData?.app_gstin}}:</label>
                                         <input autocomplete="off" type="text" name="gstin" class="form-control"
                                             id="tax_pro_gst_number" [(ngModel)]="taxProForm.gstin" required
                                             [disabled]="otpSentSuccessFully">
@@ -75,15 +71,14 @@
                                     <div class="d-flex">
 
                                         <div>
-                                            <label for="tax_pro_otp">Enter OTP:</label>
+                                            <label for="tax_pro_otp">{{localeData?.aside_menu?.enter_otp}}:</label>
                                             <input autocomplete="off" type="text" name="otp" class="form-control"
                                                 id="tax_pro_otp" [(ngModel)]="taxProForm.otp">
                                         </div>
 
                                         <div class="align-self-end">
                                             <a class="btn btn-link" (click)="resendOtp()"
-                                                href="javascript:void 0">Resend
-                                                Otp</a>
+                                                href="javascript:void 0">{{localeData?.aside_menu?.resend_otp}}</a>
                                         </div>
 
                                     </div>
@@ -96,11 +91,11 @@
                                 <div class="col-12 mr-t1">
                                     <button class="btn btn-success"
                                         [ladda]="saveGspSessionInProcess || authorizeGspSessionOtpInProcess"
-                                        (click)="save()"
-                                        [disabled]="(!taxProForm.gstin || !taxProForm.userName)">{{ !otpSentSuccessFully ? 'Get Otp' : 'Verify Otp'}}
+                                        (click)="save()" [disabled]="(!taxProForm.gstin || !taxProForm.userName)">{{
+                                        !otpSentSuccessFully ? localeData?.aside_menu?.get_otp : localeData?.aside_menu?.verify_otp}}
                                     </button>
                                     <button class="btn btn-default"
-                                        (click)="toggleCancelModel();resetLocalFlags()">Cancel</button>
+                                        (click)="toggleCancelModel();resetLocalFlags()">{{commonLocaleData?.app_cancel}}</button>
                                 </div>
 
                             </div>
@@ -118,7 +113,7 @@
                                         <div class="col-6">
 
                                             <div class="form-group">
-                                                <label for="tax_pro_username">Username:</label>
+                                                <label for="tax_pro_username">{{localeData?.aside_menu?.username}}:</label>
                                                 <input autocomplete="off" type="text" name="username"
                                                     class="form-control" id="reconcile_username"
                                                     [(ngModel)]="reconcileForm.uid">
@@ -131,7 +126,7 @@
 
                                         <div class="col-6" *ngIf="(reconcileOtpSuccess$ | async)">
                                             <div class="form-group">
-                                                <label for="reconcile_otp">OTP:</label>
+                                                <label for="reconcile_otp">{{localeData?.aside_menu?.otp}}:</label>
                                                 <input autocomplete="off" type="text" name="otp" class="form-control"
                                                     id="reconcile_otp" [(ngModel)]="reconcileForm.otp">
                                             </div>
@@ -143,7 +138,7 @@
 
                                         <div class="col-6" *ngIf="activeCompanyGstNumber">
                                             <div class="form-group">
-                                                <label for="reconcile_otp">GSTN:</label>
+                                                <label for="reconcile_otp">{{localeData?.gstn}}:</label>
                                                 <input autocomplete="off" type="text" name="otp" class="form-control"
                                                     id="reconcile_gstn" [value]="(companyGst$ | async)"
                                                     [disabled]="true">
@@ -157,7 +152,7 @@
 
                                     <div class="col-12">
                                         <span>
-                                            Gst No - {{ (companyGst$ | async) }} Verified Successfully
+                                            {{localeData?.aside_menu?.gst_no}} {{ (companyGst$ | async) }} {{localeData?.aside_menu?.verified_successfully}}
                                         </span>
                                     </div>
 
@@ -170,17 +165,17 @@
 
                                     <button class="btn btn-success" (click)="generateReconcileOtp(reconcileForm)"
                                         *ngIf="!(reconcileOtpSuccess$ | async)" [ladda]="reconcileOtpInProcess$ | async"
-                                        [disabled]="!reconcileForm.uid">Submit
+                                        [disabled]="!reconcileForm.uid">{{commonLocaleData?.app_submit}}
                                     </button>
 
                                     <button class="btn btn-success" (click)="sendReconcileOtp(reconcileForm)"
                                         *ngIf="(reconcileOtpSuccess$ | async)"
                                         [ladda]="reconcileOtpVerifyInProcess$ | async"
-                                        [disabled]="!reconcileForm.otp">Submit
+                                        [disabled]="!reconcileForm.otp">{{commonLocaleData?.app_submit}}
                                     </button>
 
                                     <button class="btn btn-default"
-                                        (click)="toggleCancelModel();resetLocalFlags()">Cancel</button>
+                                        (click)="toggleCancelModel();resetLocalFlags()">{{commonLocaleData?.app_cancel}}</button>
 
                                 </div>
 
@@ -195,8 +190,7 @@
                     <div *ngIf="gstAuthenticated">
 
                         <span class="d-flex auth-state">
-                            <p>You Are Already Authenticated with Giddh Provider {{ isVayanaAuthenticated ? '1' : '2'}}
-                            </p>
+                            <p>{{ getGstAuthenticatedText()}}</p>
                         </span>
 
                         <!-- region note point before submitting -->
@@ -209,24 +203,9 @@
 
                                         <ul>
 
-                                            <li> The transactions under the Transaction Summary tab will be pushed to
-                                                the
-                                                GSTN
-                                                as individual
-                                                transactions.
-                                            </li>
-                                            <li class="pd-t1"> Along with the documents issued, the
-                                                transactions
-                                                under HSL, NiL, and
-                                                B2CS category will be pushed to the GSTN as summaries.
-                                            </li>
-                                            <li class="pd-t1"> When you Submit and File data to the GSTN,
-                                                the
-                                                email
-                                                updates will be
-                                                sent to xyz@abc.com.
-                                                This can be easily edited and changed in the Profile tab under Settings.
-                                            </li>
+                                            <li>{{localeData?.aside_menu?.gst_file_note1}}</li>
+                                            <li class="pd-t1">{{localeData?.aside_menu?.gst_file_note2}}</li>
+                                            <li class="pd-t1">{{localeData?.aside_menu?.gst_file_note3}}</li>
 
                                         </ul>
                                     </div>
@@ -243,10 +222,7 @@
                                         </span>
                                         <label for="pointsAccepted">
                                             <em>
-                                                Make sure that you have entered the number of Documents Issued(current
-                                                period)
-                                                in the Documents
-                                                Issued tab.
+                                                {{localeData?.aside_menu?.points_accepted_note}}
                                             </em>
                                         </label>
                                     </div>
@@ -259,7 +235,7 @@
                             <div>
 
                                 <button class="btn btn-default" [disabled]="!pointsAccepted"
-                                    (click)="pointsAcceptedSubmitted = true">Next
+                                    (click)="pointsAcceptedSubmitted = true">{{commonLocaleData?.app_next}}
                                 </button>
 
                             </div>
@@ -275,7 +251,7 @@
 
                                     <div class="col-lg-6 col-md-6 col-sm-6">
                                         <label class="text-muted">
-                                            GSTN Username
+                                            {{localeData?.aside_menu?.gstn_username}}
                                         </label>
                                     </div>
 
@@ -290,7 +266,7 @@
 
                                     <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
                                         <label class="text-muted">
-                                            GSTIN
+                                            {{commonLocaleData?.app_gstin}}
                                         </label>
                                     </div>
 
@@ -304,7 +280,7 @@
 
                                     <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
                                         <label class="text-muted">
-                                            Filing Period
+                                            {{localeData?.aside_menu?.filing_period}}
                                         </label>
                                     </div>
 
@@ -320,14 +296,14 @@
 
                                     <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
                                         <label class="text-muted">
-                                            GST Return Type
+                                            {{localeData?.aside_menu?.gst_return_type}}
                                         </label>
                                     </div>
 
                                     <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
-                                        <span *ngIf="returnType === 'gstr2'">GSTR-2</span>
-                                        <span *ngIf="returnType === 'gstr1'">GSTR-1</span>
-                                        <span *ngIf="returnType === 'gstr3b'">GSTR-3B</span>
+                                        <span *ngIf="returnType === GstReport.Gstr2">{{localeData?.gstr2_label}}</span>
+                                        <span *ngIf="returnType === GstReport.Gstr1">{{localeData?.gstr1_label}}</span>
+                                        <span *ngIf="returnType === GstReport.Gstr3b">{{localeData?.gstr_3b_label}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -337,10 +313,7 @@
                                 <div class="row mt-1">
 
                                     <div class="col-lg-6 col-md-6 col-xs-6 col-sm-6">
-                                        <label>
-                                            Type <strong>SUBMIT</strong> in the text box<span
-                                                class="text-danger">*</span>
-                                        </label>
+                                        <label [innerHTML]="localeData?.type_submit"></label>
                                     </div>
 
                                     <div class="col-lg-6 col-md-6 col-xs-6 col-sm-6">
@@ -358,10 +331,7 @@
                                         </span>
                                         <label for="submitGstFormIsAccepted">
                                             <em>
-                                                I accept that on clicking proceed, the return will be locked.
-                                                I can’t undo this or make changes to the return either via Giddh or the
-                                                GSTN
-                                                portal.
+                                                {{localeData?.aside_menu?.gst_form_acceptance}}
                                             </em>
                                         </label>
                                     </div>
@@ -372,9 +342,9 @@
                             <div class="mt-1">
 
                                 <button class="btn btn-success" [ladda]="gstReturnInProcess" (click)="submitGstReturn()"
-                                    [disabled]="!submitGstForm.isAccepted">Proceed
+                                    [disabled]="!submitGstForm.isAccepted">{{commonLocaleData?.app_proceed}}
                                 </button>
-                                <button class="btn btn-default" (click)="toggleCancelModel()">Cancel</button>
+                                <button class="btn btn-default" (click)="toggleCancelModel()">{{commonLocaleData?.app_cancel}}</button>
 
                             </div>
                         </div>

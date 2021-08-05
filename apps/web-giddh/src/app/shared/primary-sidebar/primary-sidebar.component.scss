@@ -8,7 +8,12 @@
     padding-top: 0 !important;
     .company-branch-block {
         background-color: $solitude-light;
-        padding: 14px 0;
+        ul.branch-connection{
+            padding: 14px 0;
+        }
+        #button-company-branch{
+            list-style: none;
+        }
         .branch-connection {
             span.outer-span {
                 width: 12px;
@@ -30,115 +35,46 @@
                     display: block;
                     background-color: $grey-chateau;
                     border-radius: 50%;
-                    content: '';
+                    content: "";
                     left: -4px;
                 }
-                &:before{
+                &:before {
                     position: absolute;
                     width: 7px;
                     height: 7px;
                     display: block;
                     background-color: $grey-chateau;
                     border-radius: 50%;
-                    content: '';
+                    content: "";
                     bottom: -4px;
                     right: -4px;
-
                 }
             }
         }
         .company-name {
-            .icon-down-new{
-                 position: relative;
+            .icon-down-new {
+                position: relative;
                 right: 5px;
+            }
+            .icon-cross{
+                display: flex;
+                font-size: 12px;
+                color: $omiod;
             }
             .head-nav {
                 background: $white-smoke;
                 border-bottom: 1px solid $gainsboro;
                 margin-bottom: 0;
             }
-            .user-dropdown-header {
-                left: auto !important;
-                right: -286px !important;
-                top: 0 !important;
-            }
-            .company-text {
-                padding: 8px 8px 10px 0 !important;
-                .company-name-finance-year {
-                    display: inline-block;
-                    padding-left: 15px;
-                    width: 90%;
-                    .text-ellipsis{
-                        white-space: normal;
-                        word-break: break-all;
-                    }
-                }
-                .unique-name-financial-year{
-                    .branch-ellipsis{
-                        white-space: normal;
-                        word-break: break-all;
-                        i.icon-branch1{
-                            position: relative;
-                            top: 3px;
-                        }
-                    }
-                }
-                .switch-company-btn{
-                    a{
-                        color: $night-rider;
-                        &:hover{
-                            background-color: transparent;
-                        }
-                    }
-                    .sub-menu-nav{
-                        left: 253px;
-                    }
-                    span.icon-arrow-down{
-                        font-size: 9px;
-                        float: right;
-                        transform: rotate(270deg );
-                        border: 2px solid $gray;
-                        padding: 3px;
-                        border-radius: 50%;
-                        justify-content: center;
-                        align-items: center;
-                        display: flex;
-                        color: $gray;
-                        width: 19px;
-                        height: 19px;
-                    }
-                }
-                .current-branch-name{
-                    a{
-                        &:hover{
-                            background-color: transparent;
-                        }
-                    }
-                    .switch-branch{
-                        .icon-arrow-down{
-                            font-size: 9px;
-                            float: right;
-                            transform: rotate(270deg);
-                            border: 2px solid $gray;
-                            padding: 3px;
-                            border-radius: 50%;
-                            justify-content: center;
-                            align-items: center;
-                            display: flex;
-                            color: $gray;
-                        }
-                    }
-                }
-            }
         }
         h3 {
             font-family: "opensans-semibold";
-            color: $black-pearl;
+            color: $omiod;
             .company-alice {
                 width: 26px;
                 height: 26px;
                 min-width: 26px;
-                border: 1px solid $black-pearl;
+                border: 1px solid $omiod;
                 padding: 5px;
                 border-radius: 50px;
                 display: inline-flex;
@@ -153,22 +89,22 @@
                 word-break: break-word;
                 font-size: 14px;
                 padding-left: 5px;
-                .icon-branch-connect{
+                .icon-branch-connect {
                     position: absolute;
                     bottom: 0;
                 }
-                .company-ellipsis{
+                .company-ellipsis {
                     white-space: nowrap;
                     width: 150px;
                     overflow: hidden;
                     text-overflow: ellipsis;
                 }
-                .branch-ellipsis{
+                .branch-ellipsis {
                     white-space: nowrap;
                     width: 140px;
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    font-family: 'opensans-regular';
+                    font-family: "opensans-regular";
                     font-size: 13px;
                     margin-left: 18px;
                     margin-top: 7px;
@@ -187,16 +123,24 @@
             .branch-alice {
                 display: none !important;
             }
-            .switch-branch{
+            .switch-branch {
                 display: flex !important;
                 justify-content: space-between;
                 align-items: center;
             }
-            .switch-branch-alice{
+            .switch-branch-alice {
                 display: none;
             }
         }
-
+        .company-branch-nav{
+            height: calc(100vh - 110px);
+            box-shadow: none;
+            border: none;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            display: block;
+        }
     }
     .search-box {
         .input-group-text {
@@ -208,13 +152,17 @@
             padding-left: 0 !important;
             border-right: none !important;
             background-color: $solitude-new !important;
+            border-top-left-radius: 0px !important;
+            border-bottom-left-radius: 0px !important;
+            border-top-right-radius: 0px !important;
+            border-bottom-right-radius: 0px !important;
             &:focus {
                 border-color: $gainsboro !important;
             }
         }
-        .input-group-append{
+        .input-group-append {
             font-size: 12px;
-            color: $grey-chateau;;
+            color: $grey-chateau;
             right: 10px;
             top: 0;
             padding: 0 5px;
@@ -224,7 +172,10 @@
             align-items: center;
             background-color: $solitude-new;
             border: 1px solid $gainsboro;
+            border-radius: 5px;
             border-left: none;
+            border-top-left-radius: 0px !important;
+            border-bottom-left-radius: 0px !important;
         }
     }
     .wrap-menus {
@@ -232,11 +183,14 @@
         max-height: calc(100vh - 200px);
         overflow-y: auto;
         overflow-x: hidden;
-        padding-bottom: 90px;
     }
     .account-block {
+        overflow: hidden;
+        white-space: nowrap;
+        position: relative;
         .account-collapse {
             p {
+                display: block;
                 i {
                     font-size: 18px;
                     color: $grey-chateau;
@@ -255,6 +209,9 @@
                 line-height: 1.3;
                 margin-bottom: 10px;
                 margin-top: 10px;
+                overflow: hidden;
+                white-space: nowrap;
+                position: relative;
                 a {
                     color: $trout;
                     line-height: 16px;
@@ -263,7 +220,7 @@
                         text-decoration: underline;
                         font-size: 12px;
                     }
-                    &:hover{
+                    &:hover {
                         color: $cornflower;
                     }
                 }
@@ -284,26 +241,31 @@
                     .icon-arrow-down {
                         transform: rotate(0deg);
                     }
-                    &.rotate-180{
-                        i.icon-down-new{
-                             transform: rotate(180deg);
+                    &.rotate-180 {
+                        i.icon-down-new {
+                            transform: rotate(180deg);
                         }
                     }
-                    &.rotate-0{
-                        i.icon-down-new{
-                             transform: rotate(0deg);
+                    &.rotate-0 {
+                        i.icon-down-new {
+                            transform: rotate(0deg);
                         }
                     }
                 }
             }
         }
         .menu-item-wrapper {
-            line-height: 40px;
+            line-height: 20px;
             ul {
                 .main-item {
                     display: flex;
                     align-items: flex-start;
                     flex-direction: column;
+                    p{
+                        span.text-gray{
+                            display: flex;
+                        }
+                    }
                     a {
                         color: $trout;
                         font-family: "opensans-semibold";
@@ -311,7 +273,7 @@
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
-                        &:hover{
+                        &:hover {
                             color: $cornflower;
                         }
                         &.dropdown-toggle {
@@ -321,23 +283,30 @@
                             color: $cornflower !important;
                             background-color: transparent;
                         }
-
+                        &:first-child{
+                            span{
+                                padding: 10px 0;
+                                &.item-name{
+                                    padding: 0;
+                                }
+                            }
+                        }
                         span {
                             min-width: 140px;
                             display: flex;
                             align-items: center;
                             i {
-                                font-size: 20px;
+                                font-size: 22px;
                                 margin-right: 10px;
                             }
                         }
-                        i.icon-right{
+                        i.icon-right {
                             transform: rotate(90deg);
                         }
                     }
-                    &.open{
-                        a{
-                            i.icon-right{
+                    &.open {
+                        a {
+                            i.icon-right {
                                 transform: rotate(270deg);
                             }
                         }
@@ -352,7 +321,6 @@
                             display: flex;
                             font-family: "opensans-regular";
                         }
-
                     }
                     .sub-menu {
                         &.show {
@@ -369,6 +337,7 @@
                         }
                         li {
                             padding: 0;
+                            margin-bottom: 0 !important;
                             a {
                                 color: $trout;
                                 align-items: center;
@@ -379,16 +348,28 @@
                                 padding: 10px 0 10px 50px;
 
                                 i {
-                                    font-size: 20px;
+                                    font-size: 22px;
                                     margin-right: 10px;
                                 }
                                 &.active {
-                                    @include highlight-color($cornflower, $white);
+                                    @include highlight-color(
+                                        $cornflower,
+                                        $white
+                                    );
                                 }
                             }
                             &:hover {
                                 a {
-                                    @include highlight-color($link-water, $night-rider);
+                                    @include highlight-color(
+                                        $link-water,
+                                        $night-rider
+                                    );
+                                    &.active {
+                                        @include highlight-color(
+                                            $cornflower,
+                                            $white
+                                        );
+                                    }
                                 }
                             }
                         }
@@ -414,155 +395,53 @@
             align-items: center;
         }
     }
-    .switch-branch-wrapper {
-        .btn-group {
-            display: flex;
-            a.dropdown-toggle {
-                font-size: 14px;
-                display: flex;
-                padding: 0;
-                font-family: "opensans-regular";
-                color: $nero;
-                width: 100%;
-                align-items: flex-start;
-                justify-content: space-between;
-                word-break: break-word;
-                white-space: inherit;
-                .branch-name-full{
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: flex-start;
-                    width: 100%;
-                    padding-left: 6px;
-                    font-size: 13px;
-                }
-                i {
-                    position: relative;
-                    top: 3px;
-                }
-                span.icon-down-new {
-                    font-size: 9px;
-                    float: right;
-                    padding-top: 4px;
-                    transform: rotate(270deg);
-                    border: 2px solid $gray;
-                    padding: 3px;
-                    border-radius: 50%;
-                    justify-content: center;
-                    align-items: center;
-                    display: flex;
-                    color: $gray;
-                }
-            }
-            .dropdown-menu {
-                left: auto !important;
-                 right: -278px !important;
-                 top: -2px !important;
-                transform: translateY(0px);
-                bottom: auto;
-                border: 1px solid $gainsboro;
-                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-                min-width: 270px;
-                max-width: 270px;
-                max-height: 315px;
-                overflow-y: auto;
-                padding-top: 0;
-                border-top: none;
-                overflow-x: hidden;
-                li {
-                    a {
-                        padding: 6px 10px;
-                        white-space: normal;
-                        word-break: break-word;
-                        display: flex;
-                        align-items: center;
-                        justify-content: space-between;
-                        color: $nero !important;
-                        cursor: pointer;
-                        &.dropdown-item.active-branch {
-                            color: $chetwode-blue;
-                            font-weight: bold;
-                        }
-                        &.company-create {
-                            color: $chetwode-blue !important;
-                        }
-                        &:hover {
-                            color: $chetwode-blue !important;
-                        }
-                    }
-                    span {
-                        a {
-                            padding: 0;
-                        }
-                    }
-                    .branch-alias-name {
-                        width: 90%;
-                    }
-                }
-                .go-to-company {
-                    color: $deep-sky-blue;
-                    &.company-label {
-                        flex-direction: column;
-                        justify-content: flex-start;
-                        align-items: flex-start;
-                    }
-                }
-                .company-create {
-                    color: $chetwode-blue;
-                }
-                div {
-                    input {
-                        padding-left: 30px;
-                        border-left: none;
-                    }
-                    .input-group-addon {
-                        display: flex;
-                        align-items: center;
-                    }
-                }
-            }
-        }
-    }
     &.sidebar-collapse {
+        .company-branch-nav{
+            display: none !important;
+        }
         .company-full-name {
             margin-top: 5px;
             display: none !important;
         }
         .company-branch-block {
-            padding:10px 10px !important;
+            padding: 0 10px !important;
             .branch-connection {
-                .outer-span{
+                padding: 20px 0;
+                .outer-span {
                     display: none;
+                }
+                &.padding-14{
+                    padding: 14px 10px !important;
                 }
             }
             h3 {
+                justify-content: center;
+                align-items: center;
                 .company-alice {
-                    margin-right: 7px;
+                    margin-right: 0;
                     width: 26px;
                     height: 26px;
                     min-width: 26px;
                 }
             }
-            .company-name{
-                .user-dropdown-header{
-                    right: -281px !important;
-                }
+            .company-name {
                 .icon-down-new{
                     right: 5px;
                     transform: rotate(-90deg);
+                    display: none;
+                }
+                .icon-cross{
+                    display: none;
                 }
             }
             .current-branch-name {
                 margin-top: 0;
                 margin-left: 0;
                 .branch-name {
-                    .branch-name-full{
+                    .branch-name-full {
                         display: none;
                     }
-                    .switch-branch{
-
-                    }
-                    .switch-branch-alice{
+                    .switch-branch-alice {
                         display: flex !important;
                         justify-content: center;
                         align-items: center;
@@ -574,11 +453,10 @@
                         height: 36px;
                         width: 36px;
                         min-width: 45px;
-                        i{
+                        i {
                             top: 0;
                         }
                     }
-
                 }
                 .branch-alice {
                     display: flex !important;
@@ -593,13 +471,8 @@
                     width: 36px;
                 }
             }
-            .switch-branch-wrapper{
-                .switch-branch-section{
-                    width: 100%;
-                }
-                .btn-group{
-                    width: 100%;
-                }
+            .company-branch-nav{
+                display: block;
             }
         }
         .account-dropdown-collapse {
@@ -630,8 +503,9 @@
         .search-block {
             padding: 0 10px !important;
             .search-box {
-                margin-top: 15px !important;
                 .input-group {
+                    display: flex;
+                    justify-content: center;
                     .input-group-prepend {
                         .input-group-text {
                             border-radius: 50%;
@@ -642,7 +516,8 @@
                             align-items: center;
                         }
                     }
-                    input , .input-group-append{
+                    input,
+                    .input-group-append {
                         display: none;
                     }
                 }
@@ -655,20 +530,41 @@
             overflow: initial !important;
             .menu-block {
                 .menu-item {
-                    display: none;
+                    display: flex;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    position: relative;
+                    span{
+                        i.icon-go{
+                            display: none;
+                        }
+                    }
+                    &:after{
+                        position: absolute;
+                        content: "";
+                        background-color: $white;
+                        width: 100%;
+                        height: 100%;
+                        left: 40px;
+                        z-index: 999;
+                        top: 0;
+                        box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+                        filter: blur(7px);
+                    }
                 }
                 .menu-item-wrapper {
                     .giddh-primary-items {
-                        margin-top: 80px;
+                        margin-top: 0;
                     }
                     .main-item {
                         margin-bottom: 0;
                         a {
-                            padding: 10px 8px 10px 20px !important;
+                            padding: 0 20px !important;
                             display: flex;
                             justify-content: flex-start;
                             align-items: center;
-                            &:hover, &.active {
+                            &:hover,
+                            &.active {
                                 @include highlight-color($cornflower, $white);
                             }
                             a.dropdown-toggle {
@@ -680,7 +576,7 @@
                                     display: none;
                                 }
                                 i {
-                                    font-size: 20px;
+                                    font-size: 22px;
                                     margin-right: 0px !important;
                                     width: 22px !important;
                                     height: 20px;
@@ -692,12 +588,12 @@
                                 width: 14px;
                                 height: 14px;
                                 display: flex;
-                                &.icon-right{
+                                &.icon-right {
                                     transform: none;
                                     opacity: 0.5;
+                                    display: none;
                                 }
                             }
-
                         }
                         .sub-menu {
                             position: absolute !important;
@@ -726,14 +622,23 @@
                 }
             }
             .account-block {
-                padding-left: 0 !important;
-                margin-top: 15px;
-                padding-right: 0 !important;
+                padding-right: 10px !important;
+                position: relative;
+                overflow: hidden;
+                white-space: nowrap;
+                position: relative;
                 .account-collapse {
-                    display: none;
+                    display: block;
+                    ul{
+                        li{
+                            overflow: hidden;
+                            white-space: nowrap;
+                            position: relative;
+                            }
+                        }
                 }
                 .account-dropdown {
-                    display: flex !important;
+                    display: none !important;
                     padding: 8px 8px 8px 22px;
                     justify-content: center;
                     a {
@@ -759,12 +664,24 @@
                             justify-content: center;
                             align-items: center;
                             margin-left: 0;
-                            &.icon-right{
+                            &.icon-right {
                                 margin-left: 3px;
                                 opacity: 0.5;
                             }
                         }
                     }
+                }
+                &:after{
+                    position: absolute;
+                    content: "";
+                    background-color: $white;
+                    width: 100%;
+                    height: 100%;
+                    left: 40px;
+                    z-index: 999;
+                    top: 0;
+                    box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+                    filter: blur(7px);
                 }
             }
             .toogle-sidebar {
@@ -776,8 +693,8 @@
     }
 }
 /*responsive starts here*/
-@media (min-height: 800px) and (max-height:1024px) {
-    .primary-sidebar{
+@media (min-height: 800px) and (max-height: 1024px) {
+    .primary-sidebar {
         .wrap-menus {
             height: 100vh;
             max-height: calc(100vh - 240px);
@@ -795,13 +712,13 @@
         }
     }
     .menu-block {
-        padding-bottom: 40px;
+        padding-bottom: 20px;
     }
-    .primary-sidebar.sidebar-collapse{
-         .menu-item-wrapper{
-            ul{
-                .main-item{
-                    .sub-menu{
+    .primary-sidebar.sidebar-collapse {
+        .menu-item-wrapper {
+            ul {
+                .main-item {
+                    .sub-menu {
                         overflow-y: auto;
                         max-height: 285px;
                     }

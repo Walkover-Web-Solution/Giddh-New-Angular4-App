@@ -1,9 +1,8 @@
 import { SETTINGS_PERMISSION_ACTIONS } from '../../actions/settings/permissions/settings.permissions.const';
-import * as _ from '../../lodash-optimized';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { SETTINGS_INTEGRATION_ACTIONS } from '../../actions/settings/settings.integration.const';
 import { SETTINGS_PROFILE_ACTIONS } from '../../actions/settings/profile/settings.profile.const';
-import { ActiveFinancialYear, CompanyResponse } from '../../models/api-models/Company';
+import { CompanyResponse } from '../../models/api-models/Company';
 import { EmailKeyClass, IntegrationPage, IntegrationPageClass, PaymentClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
 import { BankAccountsResponse } from '../../models/api-models/Dashboard';
 import { SETTINGS_LINKED_ACCOUNTS_ACTIONS } from '../../actions/settings/linked-accounts/settings.linked.accounts.const';
@@ -18,6 +17,8 @@ import { SETTINGS_DISCOUNT_ACTIONS } from '../../actions/settings/discount/setti
 import { AccountResponse } from '../../models/api-models/Account';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 import { SETTINGS_TAXES_ACTIONS } from "../../actions/settings/taxes/settings.taxes.const";
+import { cloneDeep, filter, map, orderBy } from '../../lodash-optimized';
+import { UNAUTHORISED } from '../../app.constant';
 
 export interface LinkedAccountsState {
     bankAccounts?: BankAccountsResponse[];
@@ -71,18 +72,6 @@ export interface Taxes {
     }]
 }
 
-const taxesInitialState: Taxes = {
-    taxes: [{
-        label: '',
-        value: '',
-        types: [{
-            label: '',
-            value: ''
-        }],
-        countries: []
-    }]
-};
-
 export interface SettingsState {
     integration: IntegrationPage;
     profile: any;
@@ -103,8 +92,6 @@ export interface SettingsState {
     amazonState: AmazonState;
     isGmailIntegrated: boolean;
     profileRequest: boolean;
-    isPaymentAdditionSuccess: boolean;
-    isPaymentUpdationSuccess: boolean;
     taxes: Taxes;
     branchRemoved: boolean;
     financialYearLimits: any;
@@ -132,8 +119,6 @@ export const initialState: SettingsState = {
     refreshCompany: false,
     amazonState: AmazonInititalState,
     isGmailIntegrated: false,
-    isPaymentAdditionSuccess: false,
-    isPaymentUpdationSuccess: false,
     taxes: null,
     branchRemoved: false,
     // Get profile API call in process
@@ -145,7 +130,7 @@ export const initialState: SettingsState = {
 };
 
 export function SettingsReducer(state = initialState, action: CustomActions): SettingsState {
-    let newState = _.cloneDeep(state);
+    let newState = cloneDeep(state);
     switch (action.type) {
         case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
             return Object.assign({}, state, initialState);
@@ -188,15 +173,12 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             let crtpytres: BaseResponse<string, PaymentClass> = action.payload;
             if (crtpytres.status === 'success') {
                 newState.integration.paymentForm = crtpytres.request;
-                newState.isPaymentAdditionSuccess = true;
                 return Object.assign({}, state, newState);
             }
             return state;
         case SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_KEY_RESPONSE:
             let crtpytUpres: BaseResponse<string, PaymentClass> = action.payload;
             if (crtpytUpres.status === 'success') {
-                //newState.integration.paymentForm = crtpytUpres.request;
-                newState.isPaymentUpdationSuccess = true;
                 return Object.assign({}, state, newState);
             }
             return state;
@@ -225,9 +207,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
 
         // region profile
 
-       case SETTINGS_PROFILE_ACTIONS.GET_PROFILE_INFO: {
+        case SETTINGS_PROFILE_ACTIONS.GET_PROFILE_INFO: {
             return Object.assign({}, state, { getProfileInProgress: true });
-       }
+        }
 
         case SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE: {
             let response: BaseResponse<CompanyResponse, string> = action.payload;
@@ -236,7 +218,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 newState.profileRequest = true;
                 newState.getProfileInProgress = false;
                 return Object.assign({}, state, newState);
-            } else if (response.status === 'error' && response.code === 'UNAUTHORISED') {
+            } else if (response.status === 'error' && response.statusCode === UNAUTHORISED) {
                 return { ...state, updateProfileInProgress: false, getProfileInProgress: false };
             }
             return { ...state, updateProfileInProgress: true, getProfileInProgress: false };
@@ -252,7 +234,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         case SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE: {
             let response: BaseResponse<CompanyResponse, string> = action.payload;
             if (response.status === 'success') {
-                newState.profile = _.cloneDeep(response.body);
+                newState.profile = cloneDeep(response.body);
                 newState.updateProfileSuccess = true;
                 newState.profileRequest = true;
                 return Object.assign({}, state, newState);
@@ -282,7 +264,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             if (response.status === 'success') {
                 return {
                     ...state,
-                    profile: _.cloneDeep(response.body),
+                    profile: cloneDeep(response.body),
                     updateProfileSuccess: true,
                     updateProfileInProgress: false,
                     profileRequest: true
@@ -306,7 +288,6 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         case SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY_RESPONSE: {
             let response: BaseResponse<CompanyResponse, string> = action.payload;
             if (response.status === 'success') {
-                // newState.profile = _.cloneDeep(response.body);
                 newState.updateProfileSuccess = true;
                 newState.profileRequest = true;
                 newState.inventory = action.payload.request;
@@ -326,7 +307,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             let response: BaseResponse<BankAccountsResponse[], string> = action.payload;
             if (response.status === 'success') {
                 newState.linkedAccounts.isBankAccountsInProcess = false;
-                newState.linkedAccounts.bankAccounts = _.orderBy(response.body, ['siteName'], ['asc']);
+                newState.linkedAccounts.bankAccounts = orderBy(response.body, ['siteName'], ['asc']);
             } else {
                 newState.linkedAccounts.isBankAccountsInProcess = false;
             }
@@ -351,13 +332,11 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         case SETTINGS_LINKED_ACCOUNTS_ACTIONS.DELETE_BANK_ACCOUNT_RESPONSE: {
             let response: BaseResponse<string, string> = action.payload;
             if (response.status === 'success') {
-                _.map(newState.linkedAccounts.bankAccounts, (ac) => {
-                    _.filter(ac.accounts, (account) => account.loginId !== response.request);
+                map(newState.linkedAccounts.bankAccounts, (ac) => {
+                    filter(ac.accounts, (account) => account.loginId !== response.request);
                 });
-                // newState.linkedAccounts.needReloadingLinkedAccounts = true;
             } else {
                 newState.linkedAccounts.isDeleteBankAccountIsInProcess = false;
-                // newState.linkedAccounts.needReloadingLinkedAccounts = false;
             }
             newState.linkedAccounts.needReloadingLinkedAccounts = !newState.linkedAccounts.needReloadingLinkedAccounts;
             return Object.assign({}, state, newState);
@@ -380,14 +359,6 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
         case SETTINGS_FINANCIAL_YEAR_ACTIONS.UNLOCK_FINANCIAL_YEAR_RESPONSE: {
             let response: BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest> = action.payload;
-            if (response.status === 'success') {
-                newState.financialYears = null;
-                return Object.assign({}, state, newState);
-            }
-            return state;
-        }
-        case SETTINGS_FINANCIAL_YEAR_ACTIONS.SWITCH_FINANCIAL_YEAR_RESPONSE: {
-            let response: BaseResponse<ActiveFinancialYear, string> = action.payload;
             if (response.status === 'success') {
                 newState.financialYears = null;
                 return Object.assign({}, state, newState);
@@ -439,15 +410,6 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             if (response.status === 'success') {
                 newState.branches = response.body;
                 return Object.assign({}, state, newState);
-            }
-            return Object.assign({}, state, newState);
-        }
-        case SETTINGS_BRANCH_ACTIONS.GET_PARENT_COMPANY_RESPONSE: {
-            let response: BaseResponse<any, any> = action.payload;
-            if (response.status === 'success') {
-                newState.parentCompany = response.body;
-            } else {
-                newState.parentCompany = null;
             }
             return Object.assign({}, state, newState);
         }
@@ -584,7 +546,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 });
             }
 
-            let discountList = _.cloneDeep(state.discount.discountList);
+            let discountList = cloneDeep(state.discount.discountList);
             discountList.push(response.body);
             return Object.assign({}, state, {
                 discount: Object.assign({}, state.discount, {
@@ -615,7 +577,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 });
             }
 
-            let discountList = _.cloneDeep(state.discount.discountList);
+            let discountList = cloneDeep(state.discount.discountList);
             discountList = discountList.map(dis => {
                 if (dis.uniqueName === response.queryString) {
                     dis = response.body;
@@ -684,7 +646,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             if (AmazonSellerRes.status === 'success') {
                 // debugger;
                 let seller = state.integration.amazonSeller.findIndex(p => p.sellerId === AmazonSellerRes.body.sellerId);
-                newState.integration.amazonSeller[seller] = _.cloneDeep(AmazonSellerRes.body);
+                newState.integration.amazonSeller[seller] = cloneDeep(AmazonSellerRes.body);
                 newState.amazonState.isSellerUpdated = true;
                 return Object.assign({}, state, newState);
             }
@@ -753,7 +715,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return Object.assign({}, state, {});
         }
         case SETTINGS_BRANCH_ACTIONS.RESET_ALL_BRANCHES_RESPONSE: {
-            return Object.assign({}, state, {branches: null});
+            return Object.assign({}, state, { branches: null });
         }
 
         case SETTINGS_PROFILE_ACTIONS.FREE_PLAN_SUBSCRIBED: {

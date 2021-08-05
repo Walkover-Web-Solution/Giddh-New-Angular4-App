@@ -1,6 +1,5 @@
 import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
-
 import { HttpWrapperService } from './httpWrapper.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -38,17 +37,6 @@ export class LogsService {
     }
 
     /**
-     * Returns the observable of get filters service call to carry out further operations
-     *
-     * @returns {Observable<BaseResponse<LogsResponse, LogsRequest>>} Observable of service call to carry out further operations
-     * @memberof LogsService
-     */
-    public getFilters(): Observable<BaseResponse<LogsResponse, LogsRequest>> {
-        return this._http.get(`${this.config.apiUrl}${LOGS_API.GET_FILTERS}`, {}).pipe(
-            catchError((error) => this.errorHandler.HandleCatch<LogsResponse, LogsRequest>(error)));
-    }
-
-    /**
     * API call to get selected filters operations
     *
     * @returns {Observable<BaseResponse<LogsResponse, LogsRequest>>} Observable of service call to carry out further operations
@@ -60,7 +48,7 @@ export class LogsService {
     }
 
     /**
-     * API call to get audit log  
+     * API call to get audit log
      *
      * @param {LogsRequest} model Request model
      * @param {number} [page=1] Page number

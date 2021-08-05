@@ -1,4 +1,4 @@
-@import '../../../../assets/css/color.scss';
+@import "../../../../assets/css/color.scss";
 .basic > thead > tr > th {
     position: relative;
 }
@@ -19,7 +19,7 @@
     cursor: pointer;
     top: 12px;
 }
-.action-btns{
+.action-btns {
     display: flex;
 }
 .btn-icon {
@@ -34,6 +34,7 @@
     margin-right: 0;
     margin: 0 5px;
     border: 1px solid $gainsboro;
+    border-radius: 5px;
     height: 34px;
     width: 34px;
     background-color: $white;

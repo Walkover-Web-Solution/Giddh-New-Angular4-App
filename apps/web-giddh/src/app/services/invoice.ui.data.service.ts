@@ -29,11 +29,14 @@ export class InvoiceUiDataService {
     public templateVoucherType: BehaviorSubject<string> = new BehaviorSubject(null);
     /** Stores the content form instance  */
     public contentForm: NgForm;
-
+    /** Stores the content form controls with errors  */
+    public contentFormErrors: number;
     /** Stores the image uniquename, if signature image got uploaded to the server but not updated with invoice, used
      * to avoid unused uploading of images on the server
     */
     public unusedImageSignature: string;
+    /** True, if logo update is successful */
+    public isLogoUpdateInProgress: boolean;
 
     private companyName: string;
     private companyAddress: string;
@@ -42,7 +45,6 @@ export class InvoiceUiDataService {
     constructor(@Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
         this._ = config._;
         _ = config._;
-        //
     }
 
     /**
@@ -88,7 +90,6 @@ export class InvoiceUiDataService {
         template.sections['header'].data['companyName'].label = this.companyName;
         if (template.sections && template.sections.footer.data.companyName) {
             template.sections['footer'].data['companyName'].label = this.companyName;
-            //  template.sections['footer'].data['companyAddress'].label = this.companyAddress;
         }
 
         this.BRToNewLine(template);
@@ -143,15 +144,13 @@ export class InvoiceUiDataService {
      */
     public resetCustomTemplate() {
         this.customTemplate.next(new CustomTemplateResponse());
+        this.isLogoUpdateInProgress = false;
     }
 
     public BRToNewLine(template) {
         template.sections['footer'].data['message1'].label = template.sections['footer'].data['message1'].label ? template.sections['footer'].data['message1'].label.replace(/<br\s*[\/]?>/gi, '\n') : '';
         template.sections['footer'].data['companyAddress'].label = template.sections['footer'].data['companyAddress'].label ? template.sections['footer'].data['companyAddress'].label.replace(/<br\s*[\/]?>/gi, '\n') : '';
         template.sections['footer'].data['slogan'].label = template.sections['footer'].data['slogan'].label ? template.sections['footer'].data['slogan'].label.replace(/<br\s*[\/]?>/gi, '\n') : '';
-        // template.sections[2].content[5].label = template.sections[2].content[5].label.replace(/<br\s*[\/]?>/gi, '\n');
-        // template.sections[2].content[6].label = template.sections[2].content[6].label.replace(/<br\s*[\/]?>/gi, '\n');
-        // template.sections[2].content[9].label = template.sections[2].content[9].label.replace(/<br\s*[\/]?>/gi, '\n');
         return template;
     }
 
@@ -172,19 +171,11 @@ export class InvoiceUiDataService {
             let selectedTemplate = _.cloneDeep(allTemplates[selectedTemplateIndex]);
 
             if (selectedTemplate) {
-                // &&
-                // if (mode === 'create' && (selectedTemplate.sections[0].content[9].field !== 'trackingNumber' || selectedTemplate.sections[1].content[4].field !== 'description') && defaultTemplate) { // this is default(old) template
-                //   selectedTemplate.sections = _.cloneDeep(defaultTemplate.sections);
-                // }
-
                 if (selectedTemplate.sections['header'].data['companyName'].display) {
                     this.isCompanyNameVisible.next(true);
                 }
                 if (this.companyName && mode === 'create') {
                     selectedTemplate.sections['footer'].data['companyName'].label = this.companyName;
-                }
-                if (this.companyAddress) { // due to this on edit mode company address was not pre-filling
-                    // selectedTemplate.sections['footer'].data['companyAddress'].label = this.companyAddress;
                 }
                 selectedTemplate.sections['header'].data['companyName'].label = this.companyName;
                 if (!selectedTemplate.logoUniqueName) {
@@ -199,14 +190,6 @@ export class InvoiceUiDataService {
                     field: 'attentionTo',
                     width: null
                 };
-                if (selectedTemplate?.sections && selectedTemplate?.sections?.footer?.data?.message1?.label === '') {
-                    if (selectedTemplate?.templateType === 'gst_template_a') {
-                        selectedTemplate.sections.footer.data.message1.label = `All payments to be made in cash.\nContact us for queries on
-                        these quotations.`;
-                    } else if (selectedTemplate?.templateType === 'gst_template_e') {
-                        selectedTemplate.sections.footer.data.message1.label = `We declare that this invoice shows the actual price of the services rendered and that all particulars are true and correct.`;
-                    }
-                }
                 if (!selectedTemplate.sections['header'].data['showCompanyAddress']) {
                     // Assign the default value based on value of warehouseAddress
                     selectedTemplate.sections['header'].data['showCompanyAddress'] = {
@@ -236,11 +219,11 @@ export class InvoiceUiDataService {
                 if (!selectedTemplate.sections['header'].data['gstComposition']) {
                     // Assign the default value based on value of warehouseAddress
                     selectedTemplate.sections['header'].data['gstComposition'] = defaultTemplate ?
-                    defaultTemplate.sections['header'].data['gstComposition'] : {
-                        label: '',
-                        display: true,
-                        width: null
-                    };
+                        defaultTemplate.sections['header'].data['gstComposition'] : {
+                            label: '',
+                            display: true,
+                            width: null
+                        };
                 }
                 if (!selectedTemplate.sections['footer'].data['textUnderSlogan']) {
                     // Assign the default value based of company name if not present
@@ -261,6 +244,14 @@ export class InvoiceUiDataService {
                 if (!selectedTemplate.sections['footer'].data['showMessage2']) {
                     selectedTemplate.sections['footer'].data['showMessage2'] = defaultTemplate ?
                         defaultTemplate.sections['footer'].data['showMessage2'] : {
+                            label: '',
+                            display: false,
+                            width: null
+                        };
+                }
+                if (!selectedTemplate.sections['table'].data['showDescriptionInRows']) {
+                    selectedTemplate.sections['table'].data['showDescriptionInRows'] = defaultTemplate ? 
+                        defaultTemplate.sections['table'].data['showDescriptionInRows'] : {
                             label: '',
                             display: false,
                             width: null
@@ -291,6 +282,12 @@ export class InvoiceUiDataService {
     public setContentForm(form: NgForm): void {
         if (form) {
             this.contentForm = form;
+            this.contentFormErrors = 0;
+            Object.keys(form.controls).forEach(key => {
+                if (form.controls[key].errors) {
+                    this.contentFormErrors++;
+                }
+            });
         }
     }
 }

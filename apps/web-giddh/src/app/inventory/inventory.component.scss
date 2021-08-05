@@ -1,7 +1,7 @@
 @import "../../assets/css/color.scss";
 
-.inventory-main{
-    min-height:100%;
+.inventory-main {
+    min-height: 100%;
 }
 
 .inventory-control ::ng-deep.nav > li > a {
@@ -24,8 +24,8 @@
     top: 0;
     left: 0;
     width: 100%;
-    padding: 10px 0px 0 50px !important;
-    border-bottom:1px solid $gainsboro;
+    padding: 10px 0px 0 15px !important;
+    border-bottom: 1px solid $gainsboro;
 }
 .inventory-control ::ng-deep.nav-tabs > li > a:hover {
     border-color: transparent !important;
@@ -58,7 +58,7 @@
 .right-bar {
     width: calc(100% - 260px);
 }
-.right-bar.welcome-inventory-page{
+.right-bar.welcome-inventory-page {
     width: 100%;
 }
 .inventory-control ::ng-deep.nav-tabs > li:nth-child(2) {
@@ -68,47 +68,53 @@
 .inventory-control .container-fluid {
     .branch-warehouse-filter {
         width: 100%;
-        sh-select{
+        sh-select {
             min-width: 175px;
         }
     }
     .branch-filter {
         margin-right: 15px;
-        min-width : 217px;
+        min-width: 217px;
         width: 240px;
     }
     .warehouse-filter {
-       min-width : 217px;
+        min-width: 217px;
         width: 240px;
     }
-    .warehouse-filter{
+    .warehouse-filter {
         max-width: 250px;
         width: 100%;
     }
 }
-@media(max-width:767px){
+.inventory-head{
+    padding-top: 55px;
+}
+@media (max-width: 767px) {
     .inventory-control ::ng-deep.nav.nav-tabs {
         position: fixed !important;
         width: 100%;
         top: 90px;
         padding: 5px 0px 0 15px !important;
     }
+    .inventory-head{
+        padding-top: 15px;
+    }
 }
-@media(max-width:1024px){
-    .wrap-top-inventory{
+@media (max-width: 1024px) {
+    .wrap-top-inventory {
         display: flex;
     }
 }
-@media(max-width:575px){
-    .wrap-top-inventory{
+@media (max-width: 575px) {
+    .wrap-top-inventory {
         flex-direction: column;
     }
 }
-@media (max-width:445px){
+@media (max-width: 445px) {
     .inventory-control .container-fluid {
         .branch-warehouse-filter {
             width: 100%;
-            sh-select{
+            sh-select {
                 min-width: auto;
             }
         }
@@ -116,17 +122,17 @@
             margin-right: 0px;
             width: 100% !important;
         }
-        .warehouse-filter{
+        .warehouse-filter {
             max-width: auto;
             width: 100%;
-            margin-left:15px;
+            margin-left: 15px;
         }
     }
 }
 
-@media(max-width:325px){
-.inventory-control ::ng-deep.nav.nav-tabs {
-    display: inline-block;
-    white-space: nowrap;
+@media (max-width: 325px) {
+    .inventory-control ::ng-deep.nav.nav-tabs {
+        display: inline-block;
+        white-space: nowrap;
     }
 }

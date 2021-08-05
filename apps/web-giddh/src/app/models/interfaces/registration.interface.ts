@@ -1,5 +1,3 @@
-
-
 export interface IRegistration {
     iciciCorporateDetails: {
         corpId: string,
@@ -15,7 +13,7 @@ export interface IRegistration {
 
 /** Integrated list of bank object */
 export class IntegratedBankList {
-    urn: string;
+    uniqueName: string;
     bankName: string;
     accountNo: string;
     effectiveBal: string;
@@ -25,6 +23,7 @@ export class IntegratedBankList {
 export class GetOTPRequest {
     bankName: string;
     urn: string;
+    uniqueName: string;
     totalAmount: string;
     bankPaymentTransactions: BankTransactionForOTP[];
 }

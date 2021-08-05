@@ -44,11 +44,11 @@
     }
     .user-name-email {
         width: 40%;
-        color: $night-rider;
+        color: $night-rider !important;
         display: flex;
         white-space: normal;
         word-break: break-all;
-        i{
+        i {
             position: relative;
             top: 3px;
         }
@@ -64,7 +64,7 @@
     }
 }
 
-.selected-permission{
+.selected-permission {
     width: calc(100% - 123px) !important;
     min-width: 200px;
     margin-right: 10px;

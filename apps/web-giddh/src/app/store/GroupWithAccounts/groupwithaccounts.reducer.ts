@@ -1,10 +1,9 @@
 import { ShareRequestForm } from './../../models/api-models/Permission';
-import { FlattenGroupsAccountsResponse, GroupCreateRequest, GroupResponse, GroupSharedWithResponse, GroupsTaxHierarchyResponse, GroupUpateRequest, MoveGroupRequest, MoveGroupResponse } from '../../models/api-models/Group';
+import { GroupCreateRequest, GroupResponse, GroupSharedWithResponse, GroupsTaxHierarchyResponse, GroupUpateRequest, MoveGroupRequest, MoveGroupResponse } from '../../models/api-models/Group';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.interface';
-import * as _ from '../../lodash-optimized';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { AccountMergeRequest, AccountMoveRequest, AccountRequest, AccountRequestV2, AccountResponse, AccountResponseV2, AccountSharedWithResponse, AccountsTaxHierarchyResponse } from '../../models/api-models/Account';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
@@ -29,7 +28,6 @@ export interface CurrentGroupAndAccountState {
     activeGroupUniqueName: string;
     groupAndAccountSearchString: string;
     flattenGroupsAccounts: IFlattenGroupsAccountsDetail[];
-    isRefreshingFlattenGroupsAccounts: boolean;
     activeGroupInProgress: boolean;
     activeGroupSharedWith?: ShareRequestForm[];
     activeAccountSharedWith?: ShareRequestForm[];
@@ -47,8 +45,6 @@ export interface CurrentGroupAndAccountState {
     isMoveGroupInProcess?: boolean;
     isMoveGroupSuccess?: boolean;
     isGroupNameAvailable?: boolean;
-    fetchingAccUniqueName: boolean;
-    isAccountNameAvailable?: boolean;
     createAccountInProcess?: boolean;
     createAccountIsSuccess?: boolean;
     updateAccountInProcess?: boolean;
@@ -96,7 +92,6 @@ const initialState: CurrentGroupAndAccountState = {
     activeGroup: null,
     activeGroupUniqueName: null,
     groupAndAccountSearchString: '',
-    isRefreshingFlattenGroupsAccounts: false,
     activeGroupInProgress: false,
     activeGroupSharedWith: null,
     activeAccountSharedWith: null,
@@ -104,7 +99,6 @@ const initialState: CurrentGroupAndAccountState = {
     addAccountOpen: false,
     activeAccount: null,
     fetchingGrpUniqueName: false,
-    fetchingAccUniqueName: false,
     flattenGroupsAccounts: [],
     newlyCreatedAccount: null,
     isDeleteGroupSuccess: false,
@@ -141,18 +135,6 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
             return Object.assign({}, state, {
                 activeGroupUniqueName: action.payload
             });
-        case GroupWithAccountsAction.RESET_ACTIVE_GROUP:
-            return Object.assign({}, state, {
-                activeGroup: null,
-                activeGroupUniqueName: null,
-                activeGroupTaxHierarchy: null,
-                activeGroupSharedWith: null,
-                showAddNew: false,
-                showAddNewAccount: false,
-                showAddNewGroup: false,
-                showEditGroup: false,
-                showEditAccount: false
-            });
         case GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS:
             return Object.assign({}, state, {
                 isGroupWithAccountsLoading: true
@@ -161,10 +143,6 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         case GroupWithAccountsAction.SET_GROUP_ACCOUNTS_SEARCH_STRING:
             return Object.assign({}, state, {
                 groupAndAccountSearchString: action.payload
-            });
-        case GroupWithAccountsAction.RESET_GROUP_ACCOUNTS_SEARCH_STRING:
-            return Object.assign({}, state, {
-                groupAndAccountSearchString: ''
             });
         case GroupWithAccountsAction.OPEN_ADD_AND_MANAGE_FROM_OUTSIDE: {
             return Object.assign({}, state, {
@@ -215,20 +193,6 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                     showAddNewGroup: false,
                     showEditGroup: true,
                     showEditAccount: false
-                });
-            }
-            return state;
-        case GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS:
-            return Object.assign({}, state, {
-                isRefreshingFlattenGroupsAccounts: true
-            });
-        case GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS_RESPONSE:
-            let data1: BaseResponse<FlattenGroupsAccountsResponse, string> = action.payload;
-            if (data1.status === 'success') {
-                let newData = prepareFlattenGroupsAccounts(data1.body.results);
-                return Object.assign({}, state, {
-                    flattenGroupsAccounts: newData,
-                    isRefreshingFlattenGroupsAccounts: false
                 });
             }
             return state;
@@ -294,7 +258,6 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                 isGroupWithAccountsLoading: false,
                 activeGroup: null,
                 activeGroupUniqueName: null,
-                isRefreshingFlattenGroupsAccounts: false,
                 activeGroupInProgress: false,
                 activeGroupSharedWith: [],
                 activeAccount: null,
@@ -345,37 +308,6 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                 showAddNew: false,
                 showAddNewAccount: false,
                 showAddNewGroup: true,
-                showEditGroup: false,
-                showEditAccount: false
-            });
-        case GroupWithAccountsAction.HIDE_ADD_GROUP_FORM:
-            return Object.assign({}, state, {
-                addAccountOpen: false,
-                activeAccount: null,
-                showAddNew: false,
-                showAddNewAccount: false,
-                showAddNewGroup: false,
-                showEditGroup: false,
-                showEditAccount: false
-            });
-
-        case GroupWithAccountsAction.SHOW_EDIT_GROUP_FORM:
-            return Object.assign({}, state, {
-                addAccountOpen: false,
-                activeAccount: null,
-                showAddNew: false,
-                showAddNewAccount: false,
-                showAddNewGroup: false,
-                showEditGroup: true,
-                showEditAccount: false
-            });
-        case GroupWithAccountsAction.HIDE_EDIT_GROUP_FORM:
-            return Object.assign({}, state, {
-                addAccountOpen: false,
-                activeAccount: null,
-                showAddNew: false,
-                showAddNewAccount: false,
-                showAddNewGroup: false,
                 showEditGroup: false,
                 showEditAccount: false
             });
@@ -430,7 +362,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                 let newObj = Object.assign({}, activeGrpData.body, { isOpen: true, isActive: true });
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 let result = false;
-                updateActiveGroupFunc(groupArray, activeGrpData.queryString.groupUniqueName, activeGrpData.body, result);
+                updateActiveGroupFunc(groupArray, activeGrpData.queryString?.groupUniqueName, activeGrpData.body, result);
                 return Object.assign({}, state, {
                     activeGroup: newObj,
                     activeGroupUniqueName: newObj.uniqueName,
@@ -462,7 +394,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
             let updatedAccount: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
             if (updatedAccount.status === 'success') {
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString.groupUniqueName, updatedAccount.queryString.accountUniqueName, false);
+                UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString?.groupUniqueName, updatedAccount.queryString?.accountUniqueName, false);
                 return Object.assign({}, state, {
                     activeAccount: action.payload.body,
                     updateAccountInProcess: false,
@@ -474,30 +406,6 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         }
         case AccountsAction.RESET_ACTIVE_ACCOUNT:
             return Object.assign({}, state, { activeAccount: null, addAccountOpen: false });
-        case AccountsAction.GET_ACCOUNT_UNIQUENAME:
-            return Object.assign({}, state, { fetchingAccUniqueName: true, isAccountNameAvailable: null });
-        case AccountsAction.GET_ACCOUNT_UNIQUENAME_RESPONSE:
-            let responseData: BaseResponse<AccountResponse, string> = action.payload;
-            if (responseData.status === 'success') {
-                return Object.assign({}, state, { fetchingAccUniqueName: false, isAccountNameAvailable: false });
-            } else {
-                if (responseData.code === 'ACCOUNT_NOT_FOUND') {
-                    return Object.assign({}, state, { fetchingAccUniqueName: false, isAccountNameAvailable: true });
-                }
-                return state;
-            }
-        case GroupWithAccountsAction.GET_GROUP_UNIQUENAME:
-            return Object.assign({}, state, { fetchingGrpUniqueName: true, isGroupNameAvailable: null });
-        case GroupWithAccountsAction.GET_GROUP_UNIQUENAME_RESPONSE:
-            let resData: BaseResponse<AccountResponse, string> = action.payload;
-            if (resData.status === 'success') {
-                return Object.assign({}, state, { fetchingGrpUniqueName: false, isGroupNameAvailable: false });
-            } else {
-                if (resData.code === 'GROUP_NOT_FOUND') {
-                    return Object.assign({}, state, { fetchingGrpUniqueName: false, isGroupNameAvailable: true });
-                }
-                return state;
-            }
         case AccountsAction.DELETE_ACCOUNT:
             return {
                 ...state,
@@ -509,11 +417,11 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
             let d: BaseResponse<string, any> = action.payload;
             if (d.status === 'success') {
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                removeAccountFunc(groupArray, d.request.accountUniqueName, d.request.groupUniqueName, null);
+                removeAccountFunc(groupArray, d.request.accountUniqueName, d.request?.groupUniqueName, null);
                 return Object.assign({}, state, {
                     groupswithaccounts: groupArray,
                     activeAccount: null,
-                    activeGroup: { uniqueName: d.request.groupUniqueName },
+                    activeGroup: { uniqueName: d.request?.groupUniqueName },
                     isDeleteAccSuccess: true,
                     isDeleteAccInProcess: false
                 });
@@ -558,7 +466,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
             let m: BaseResponse<MoveGroupResponse, MoveGroupRequest> = action.payload;
             if (m.status === 'success') {
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                let deletedItem = removeGroupFunc(groupArray, m.queryString.groupUniqueName, null);
+                let deletedItem = removeGroupFunc(groupArray, m.queryString?.groupUniqueName, null);
                 addNewGroupFunc(groupArray, deletedItem, m.request.parentGroupUniqueName, false);
                 return Object.assign({}, state, {
                     groupswithaccounts: groupArray,
@@ -632,7 +540,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                 };
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 if (groupArray) {
-                    addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString.groupUniqueName, false);
+                    addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString?.groupUniqueName, false);
                 }
                 return Object.assign({}, state, {
                     createAccountInProcess: false,
@@ -653,9 +561,8 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                     uniqueName: accountData.body.uniqueName
                 };
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                let result = false;
                 if (groupArray) {
-                    addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString.groupUniqueName, false);
+                    addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString?.groupUniqueName, false);
                 }
                 return Object.assign({}, state, {
                     createAccountInProcess: false,
@@ -692,7 +599,6 @@ const toggleActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string
             }
             if (grp.groups) {
                 myChildElementIsOpen = toggleActiveGroupFunc(grp.groups, uniqueName);
-                // grp.isOpen = myChildElementIsOpen;
                 if (grp.isOpen) {
                     return myChildElementIsOpen;
                 }
@@ -726,7 +632,6 @@ const updateActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string
     return result;
 };
 const AddAndActiveGroupFunc = (groups: IGroupsWithAccounts[], gData: BaseResponse<GroupResponse, GroupCreateRequest>, myChildElementIsOpen: boolean): boolean => {
-    // let myChildElementIsOpen = false;
     if (groups) {
         for (let grp of groups) {
             if (grp.uniqueName === gData.request.parentGroupUniqueName) {

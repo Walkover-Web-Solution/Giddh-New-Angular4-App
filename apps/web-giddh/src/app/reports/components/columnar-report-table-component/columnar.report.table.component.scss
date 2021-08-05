@@ -12,7 +12,7 @@
         display: inline-block;
     }
 }
-.branch-transfer-report .basic>thead>tr>th {
+.branch-transfer-report .basic > thead > tr > th {
     border-top: 1px solid $gainsboro !important;
 }
 
@@ -27,8 +27,6 @@
         margin-right: 0px;
     }
 }
-
- 
 
 .icon-calender {
     position: absolute;
@@ -65,20 +63,20 @@
         outline: none;
     }
 }
-.giddh-table{
-    .no-record-found{
+.giddh-table {
+    .no-record-found {
         border: none !important;
-        tr{
+        tr {
             box-shadow: none !important;
-            td{
+            td {
                 padding-left: 0 !important;
                 text-align: center;
             }
         }
-    }  
+    }
 }
 @media only screen and (max-width: 767px) {
-    .basic>thead>tr>th {
+    .basic > thead > tr > th {
         min-width: initial;
     }
 }

@@ -38,7 +38,7 @@ export class ContactAdvanceSearchComponent implements OnInit, OnChanges {
     }
 
     public ngOnChanges() {
-        if(this.advanceSearch4 === 'customer') {
+        if (this.advanceSearch4 === 'customer') {
             this.categoryOptions = [
                 { label: this.localeData?.customer_category_options.opening_balance, value: 'openingBalance' },
                 { label: this.localeData?.customer_category_options.sales, value: 'sales' },

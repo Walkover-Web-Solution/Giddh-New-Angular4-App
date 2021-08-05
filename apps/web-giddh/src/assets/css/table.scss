@@ -1,6 +1,6 @@
 .giddh-table {
     background: #fff;
-    font-family: 'opensans-semibold';
+    font-family: "opensans-semibold";
     border: 1px solid $gainsboro;
     width: 100%;
     max-width: 100%;
@@ -11,26 +11,39 @@
     thead > tr > th {
         vertical-align: middle;
         font-size: 14px;
-        color: #1c1c1c;
         border-left: none;
         border-right: none;
         background: #fff;
         padding: 15px 11px;
         border-bottom: 1px solid $gainsboro;
-        font-family: 'opensans-semibold';
+        font-family: "opensans-semibold";
     }
     thead > tr > th {
-        border-top: 1px solid $gainsboro !important;
-        border-bottom: none !important;
+        border-top: none;
         white-space: nowrap;
-        .d-flex{
+        color: $midnight-blue !important;
+        position: sticky !important;
+        top: 0;
+        z-index: 1;
+        border-bottom: 1px solid $link-water !important;
+        .d-flex {
             align-items: center;
         }
-        .icon-pointer{
-            margin-left: 6px;
+        .icon-pointer {
+            margin-left: 0px;
             cursor: pointer;
         }
     }
+    thead > .register-table-th > th {
+        color: $black !important;
+        border-bottom: none !important;
+        background: $light-orange;
+        font-size: 16px;
+    }
+    thead > .register-sales-purchase > th {
+        top: 54px !important;
+    }
+
     thead > tr > th.td-search-box {
         min-width: 190px !important;
     }
@@ -42,25 +55,32 @@
         vertical-align: middle !important;
         font-size: 14px;
         word-break: break-word;
-        white-space: nowrap !important;
         border-left: none;
         border-right: none;
-        font-family: 'opensans-regular';
+        font-family: "opensans-regular";
         border-bottom: none !important;
         white-space: nowrap !important;
-        &.text-break{
+        color: $omiod;
+        border-top: 1px solid $dark-fog !important;
+        &.text-break {
             white-space: normal !important;
         }
     }
+    tbody > tr > td:first-child{
+        color: $black-pearl;
+    }
     thead > tr > th:first-child,
     tbody > tr > td:first-child {
-        border-left: 1px solid $gainsboro;
+        border-left: none;
         white-space: normal !important;
         word-break: inherit;
     }
+    tbody > tr > td.no-wrap{
+        white-space: nowrap !important;
+    }
     thead > tr > th:last-child,
     tbody > tr > td:last-child {
-        border-right: 1px solid $gainsboro;
+        border-right: none;
     }
     tfoot > tr > td {
         vertical-align: middle !important;
@@ -69,14 +89,14 @@
         white-space: nowrap;
     }
     tbody tr:hover td {
-        background: rgba(221, 225, 230, 0.5);
+        background: $light-alice-blue;
     }
     tbody tr:last-child td {
         border-bottom: 1px solid $gainsboro !important;
     }
-    .icon-sort-asc,
-    .icon-sort-dsc {
-        color: $wild-blue-yonder;
+    .icon-sort-asc {
+        color: $omiod;
+        font-size: 16px !important;
     }
     .icon-pointer .active-text-color {
         color: $deep-sky-blue;
@@ -89,12 +109,12 @@
         div {
             display: flex;
             span {
-                padding: 8px 0 8px 10px;
+                padding: 8px 0 8px 0px;
             }
         }
         div i {
             margin-top: 1px;
-            color: #757bb9;
+            color: $midnight-blue;
             padding-right: 8px;
             cursor: pointer;
             display: flex;
@@ -103,7 +123,7 @@
             padding-left: 8px;
         }
         .input-container input {
-            height: 50px;
+            height: 36px;
             min-width: 100%;
             padding: 11px;
             padding-right: 40px;
@@ -136,7 +156,7 @@
     /*card responsive code*/
     .on-mobile-view {
         display: block;
-       .table-bordered > tfoot > tr > td {
+        .table-bordered > tfoot > tr > td {
             border: none;
         }
         .table-bordered {
@@ -176,7 +196,7 @@
             margin: 10px auto 22px;
             width: 100%;
             max-width: 100%;
-            &:first-child{
+            &:first-child {
                 margin-top: 0;
             }
         }
@@ -195,7 +215,7 @@
             font-size: 14px !important;
             margin-bottom: 14px;
             width: 100%;
-            &:last-child{
+            &:last-child {
                 border-right: none !important;
             }
         }
@@ -257,8 +277,8 @@
             text-align: center !important;
             padding: 5px 10px 5px 0% !important;
         }
-        td.empty-table{
-                border-right: none !important;
+        td.empty-table {
+            border-right: none !important;
         }
     }
 }

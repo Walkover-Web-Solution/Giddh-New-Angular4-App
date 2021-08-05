@@ -1,7 +1,7 @@
 import { StockGroupResponse } from '../../../models/api-models/Inventory';
 import { AppState } from '../../../store/roots';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Observable, ReplaySubject, Subscription } from 'rxjs';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
 import { Store, select } from '@ngrx/store';
@@ -59,7 +59,9 @@ export class StockListComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.sub = this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            this.groupUniqueName = params['groupUniqueName'];
+            if(params) {
+                this.groupUniqueName = params['groupUniqueName'];
+            }
         });
         this.breakPointObserver.observe([
             '(max-width:1024px)'

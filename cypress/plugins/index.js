@@ -18,7 +18,7 @@
 const fs = require('fs-extra')
 const path = require('path')
 
-function getConfigurationByFile (file) {
+function getConfigurationByFile(file) {
     const pathToConfigFile = path.resolve(__dirname, "../../cypress/config", `${file}.json`)
 
     return fs.readJson(pathToConfigFile)
@@ -38,7 +38,7 @@ module.exports = (on, config) => {
     //   // return config
     //   return config
 
-    const file = config.env.configFile || 'test'
+    const file = config.env.configFile || 'production'
 
     return getConfigurationByFile(file)
 }

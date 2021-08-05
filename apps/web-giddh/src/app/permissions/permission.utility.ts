@@ -1,5 +1,4 @@
 import { Permission, Scope } from '../models/api-models/Permission';
-import { PermissionActions } from '../../../services/actions/permission/permission.action';
 
 export class NewRoleClass {
     constructor(

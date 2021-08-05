@@ -44,7 +44,7 @@
     label {
         line-height: 2.3;
     }
-    .form-group{
+    .form-group {
         margin-bottom: 0;
     }
 }
@@ -54,8 +54,11 @@
 .container-fluid {
     padding-left: 0;
 }
-@media(max-width:767px){
-    label{
+@media (max-width: 767px) {
+    label {
         line-height: 2.3;
+    }
+    .border-bottom{
+        margin-top: 5px;
     }
 }

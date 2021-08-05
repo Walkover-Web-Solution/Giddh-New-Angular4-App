@@ -31,21 +31,16 @@
                 <div class="col-6 form-group" *ngIf="mode === 'sender'">
                     <label>Product Name <sup>*</sup></label>
                     <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'"
-                        [disabled]="stock.disabled" formControlName="stock" (selected)="stockChanged($event)" [isRequired]="true">
+                        [disabled]="stock?.disabled" formControlName="stock" (selected)="stockChanged($event)"
+                        [isRequired]="true">
                     </sh-select>
-                    <!-- <span *ngIf="stock.invalid">
-              <span *ngIf="stock?.errors && stock?.errors['required']" class="text-danger">Please select Product.</span>
-                    </span> -->
                 </div>
 
                 <div class="col-6 form-group" *ngIf="mode === 'product'">
                     <label>Sender <sup>*</sup></label>
                     <sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Sender'"
-                        formControlName="inventoryUser" (selected)="userChanged($event)" [isRequired]="true"></sh-select>
-                    <!-- <span *ngIf="inventoryUser.invalid">
-              <span *ngIf="inventoryUser?.errors && inventoryUser?.errors['required']"
-                    class="text-danger">Please select Sender.</span>
-                    </span> -->
+                        formControlName="inventoryUser" (selected)="userChanged($event)" [isRequired]="true">
+                    </sh-select>
                 </div>
 
             </div>
@@ -73,28 +68,24 @@
                 <div [formGroupName]="i">
 
                     <div class="col-4 form-group" *ngIf="mode === 'sender'">
-                        <!-- <label class="mr-b1">Sender</label> -->
                         <sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Sender'"
-                            (selected)="userChanged($event,i)" formControlName="inventoryUser" [ItemHeight]="'33'" [isRequired]="true">
+                            (selected)="userChanged($event,i)" formControlName="inventoryUser" [ItemHeight]="'33'"
+                            [isRequired]="true">
                         </sh-select>
-                        <!-- <span [hidden]="!item.get('inventoryUser')?.errors?.required"
-                  class="text-danger">Please select Sender.</span> -->
                     </div>
                     <div class="col-4 form-group" *ngIf="mode === 'product'">
-                        <!-- <label class="mr-b1">Product Name</label> -->
                         <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'"
-                            (selected)="stockChanged($event,i)" [ItemHeight]="'33'" formControlName="stock" [isRequired]="true"></sh-select>
-                        <!-- <span [hidden]="!item.get('stock')?.errors?.required" class="text-danger">Please select Product.</span> -->
+                            (selected)="stockChanged($event,i)" [ItemHeight]="'33'" formControlName="stock"
+                            [isRequired]="true"></sh-select>
                     </div>
 
                     <div class="col-4 form-group">
                         <sh-select [options]="stockUnitsOptions" [placeholder]="'Choose unit'"
-                            formControlName="stockUnit" [multiple]="false" [ItemHeight]="33" [isRequired]="true"></sh-select>
-                        <!-- <span [hidden]="!item.get('stockUnit')?.errors?.required" class="text-danger">Please select Unit.</span> -->
+                            formControlName="stockUnit" [multiple]="false" [ItemHeight]="33" [isRequired]="true">
+                        </sh-select>
                     </div>
 
                     <div class="col-4 form-group">
-                        <!-- <label class="mr-b1">Quantity</label> -->
                         <div class="row">
                             <div class="col-10">
                                 <input name="" type="text" formControlName="quantity" class="form-control">
@@ -111,7 +102,6 @@
                                 </button>
                             </div>
                         </div>
-                        <!-- <span [hidden]="!item.get('quantity')?.errors?.required" class="text-danger">Please enter quantity.</span> -->
                     </div>
 
                 </div>
@@ -159,7 +149,8 @@
 
                                     <div class="col-5 form-group">
                                         <sh-select [options]="stockUnitsOptions" formControlName="manufacturingUnitCode"
-                                            [placeholder]="'Select Unit'" [multiple]="false" [ItemHeight]="33" [isRequired]="true"></sh-select>
+                                            [placeholder]="'Select Unit'" [multiple]="false" [ItemHeight]="33"
+                                            [isRequired]="true"></sh-select>
                                     </div>
 
                                     <div class="col-3 d-flex align-items-center height-30"

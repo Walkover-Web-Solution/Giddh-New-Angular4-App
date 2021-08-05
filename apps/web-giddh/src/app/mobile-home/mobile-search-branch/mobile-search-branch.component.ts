@@ -5,7 +5,6 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../actions/company.actions';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
-
 import { Organization, OrganizationDetails } from '../../models/api-models/Company';
 import { OrganizationType } from '../../models/user-login-state';
 import { CompanyService } from '../../services/companyService.service';
@@ -35,6 +34,10 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
 
     /** Subject to unsubscribe from all the subscription */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     /** @ignore */
     constructor(
@@ -156,7 +159,7 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
         });
         if (branchName) {
             this.currentCompanyBranches = branches.filter(branch => {
-                if(branch) {
+                if (branch) {
                     if (!branch.alias) {
                         return branch.name.toLowerCase().includes(branchName.toLowerCase());
                     } else {
@@ -177,7 +180,7 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
     public loadCompanyBranches(): void {
         if (this.generalService.companyUniqueName) {
             // Avoid API call if new user is onboarded
-            this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+            this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
         }
     }
 

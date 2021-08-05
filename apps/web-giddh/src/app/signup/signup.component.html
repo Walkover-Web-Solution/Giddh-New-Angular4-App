@@ -1,4 +1,5 @@
-<div class="flex-container" *ngIf="!((isSignupWithPasswordInProcess$ | async) || (isTwoWayAuthInProcess$ | async) ||  (isVerifyEmailInProcess$ | async) ||  (isLoginWithEmailInProcess$ | async) ||  (isLoginWithGoogleInProcess$ | async))">
+<div class="flex-container"
+    *ngIf="!((isSignupWithPasswordInProcess$ | async) || (isTwoWayAuthInProcess$ | async) ||  (isVerifyEmailInProcess$ | async) ||  (isLoginWithEmailInProcess$ | async) ||  (isLoginWithGoogleInProcess$ | async))">
     <div class="login-box">
         <div class="row mx-0">
             <div class="col-md-6 col-lg-6 col-sm-12 col-12 px-0">
@@ -47,35 +48,23 @@
                                                     (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)">Resend
                                                     code</a>
                                             </div>
-
-                                            <!-- <div class="clearfix">
-                                    <small class="">We have sent a verification code to your registered email.</small>
-                                </div> -->
                                         </div>
                                     </form>
                                     <!-- form end/ -->
 
 
                                     <!-- login with userName form -->
-                                    <form class="position-relative" id="signUpWithPwd" [formGroup]="signUpWithPasswdForm"
+                                    <form class="position-relative" id="signUpWithPwd"
+                                        [formGroup]="signUpWithPasswdForm"
                                         (ngSubmit)="SignupWithPasswd(signUpWithPasswdForm)"
                                         *ngIf="loginUsing === 'userName'"
                                         [hidden]="isSignupWithPasswordSuccess$ | async" autocomplete="off">
                                         <div class="clearfix form-group">
                                             <input class="form-control mr-b1" type="text" formControlName="email"
                                                 placeholder="Email Id" />
-                                            <input class="form-control" type="password"
-                                                (ngModelChange)="validatePwd($event)" formControlName="password"
+                                            <input class="form-control" type="password" formControlName="password"
                                                 name="password" placeholder="Password" [minlength]="8" [maxlength]="20"
                                                 autocomplete="false" />
-                                            <div class="hint" [hidden]="!showPwdHint">
-                                                <ul>
-                                                    <li>Provide minimum 8 and maximum 20 characters.</li>
-                                                    <li>1 number and 1 special character (@$!%*?&_).</li>
-                                                    <!-- <li>1 uppercase letter.</li>
-                                    <li>1 lowercase letter.</li> -->
-                                                </ul>
-                                            </div>
                                             <button class="btn btn-success btn-lg btn-block mr-t1" type="submit"
                                                 [disabled]="!signUpWithPasswdForm.controls['email'].valid || !signUpWithPasswdForm.controls['password'].value">
                                                 Signup
@@ -86,7 +75,6 @@
                                     <form class="" *ngIf="isSignupWithPasswordSuccess$ | async" id="signupVerifyForm"
                                         [formGroup]="signupVerifyForm" autocomplete="off">
                                         <div class="clearfix">
-                                            <!-- <input class="form-control mr-b1" formControlName="email" type="text" placeholder="Email Id" required> -->
                                             <input class="form-control mr-b1" formControlName="verificationCode"
                                                 type="text" placeholder="Enter verification code here" required>
                                             <div class="clearfix mr-b2">
@@ -110,21 +98,14 @@
                                             (click)="signInWithProviders('google')"><i class="ico-google">
                                                 <img src="./assets/images/new/google_ico.svg" />
                                             </i><span>Signup with Google</span></a></li>
-                                    <!--
-                                        commented code may be it will be used in future
-                                        <li class="linkedin-ico"><a href="javascript:void(0);"
-                                            (click)="signInWithProviders('linkedin')"><i class="fa fa-linkedin"></i></a>
-                                    </li> -->
-
                                 </ul>
                                 <div class="login-with" *ngIf="loginUsing !== 'userName'">
-                                    <!--  -->
-                                    Signup with <a class="bold" href="javascript:void(0);" (click)="loginUsing = 'userName'"> email and password</a>
-                                    <!-- ,<a href="javascript:void(0);" (click)="loginUsing = 'email'">Email</a> -->
+                                    Signup with <a class="bold" href="javascript:void(0);"
+                                        (click)="loginUsing = 'userName'"> email and password</a>
                                 </div>
                                 <div class="d-flex align-items-center account mt-1">
-                                    <p class="mb-0 mr-2 bold text-light-2">Already have an account?</p> <a routerLink="/login"
-                                        class="btn btn-sm btn-secondary">Login</a>
+                                    <p class="mb-0 mr-2 bold text-light-2">Already have an account?</p> <a
+                                        routerLink="/login" class="btn btn-sm btn-secondary">Login</a>
                                 </div>
                             </div>
 
@@ -197,7 +178,8 @@
                         [formGroup]="mobileVerifyForm">
                         <div class="clearfix form-group-lg" *ngIf="!(isLoginWithMobileSubmited$ | async)">
                             <sh-select [options]="countryCodeList" class="form-inline"
-                                (selected)="setCountryCode($event)" [placeholder]="'CC'" formControlName="country"></sh-select>
+                                (selected)="setCountryCode($event)" [placeholder]="'CC'" formControlName="country">
+                            </sh-select>
                             <input class="form-control input-width-mobile" formControlName="mobileNumber" type="text"
                                 placeholder="Enter your Mobile No" required />
                         </div>
@@ -205,13 +187,13 @@
                             class="btn sharp btn-block btn-success btn-lg mr-t1"
                             (click)="getOtp(mobileVerifyForm.controls['mobileNumber'].value,mobileVerifyForm.controls['country'].value)"
                             [ladda]="isLoginWithMobileInProcess$ | async"
-                            [disabled]="!mobileVerifyForm.controls['mobileNumber'].valid">{{ !(isLoginWithMobileInProcess$ |
-              async) ? 'Get Otp' : 'Resend' }}
+                            [disabled]="!mobileVerifyForm.controls['mobileNumber'].valid">{{
+                            !(isLoginWithMobileInProcess$ |
+                            async) ? 'Get Otp' : 'Resend' }}
                         </button>
                         <div class="clearfix form-group form-group-lg" *ngIf="(isLoginWithMobileSubmited$ | async)">
                             <hr class="mrtb10">
-                            <input class="form-control square" placeholder="Enter OTP"
-                                formControlName="otp">
+                            <input class="form-control square" placeholder="Enter OTP" formControlName="otp">
                             <button type="login" class="btn sharp btn-block btn-success btn-lg mr-t1"
                                 [ladda]="isVerifyMobileInProcess$ | async"
                                 (click)="VerifyCode(mobileVerifyForm.controls['mobileNumber'].value,mobileVerifyForm.controls['otp'].value)"
@@ -241,8 +223,7 @@
                         [formGroup]="twoWayOthForm">
                         <div class="clearfix form-group form-group-lg">
                             <hr class="mrtb10">
-                            <input class="form-control square" placeholder="Enter OTP"
-                                formControlName="otp">
+                            <input class="form-control square" placeholder="Enter OTP" formControlName="otp">
                             <small>We have sent an OTP to your registered mobile number.</small>
                             <button type="login" class="btn sharp btn-block btn-success btn-lg mr-t1"
                                 [ladda]="isTwoWayAuthInProcess$ | async" (click)="verifyTwoWayCode()"
@@ -256,6 +237,7 @@
     </div>
 </div>
 <!-- two way auth popup -->
-<div *ngIf="(isSignupWithPasswordInProcess$ | async) || (isTwoWayAuthInProcess$ | async) ||  (isVerifyEmailInProcess$ | async) ||  (isLoginWithEmailInProcess$ | async) ||  (isLoginWithGoogleInProcess$ | async) ">
+<div
+    *ngIf="(isSignupWithPasswordInProcess$ | async) || (isTwoWayAuthInProcess$ | async) ||  (isVerifyEmailInProcess$ | async) ||  (isLoginWithEmailInProcess$ | async) ||  (isLoginWithGoogleInProcess$ | async) ">
     <giddh-page-loader></giddh-page-loader>
 </div>

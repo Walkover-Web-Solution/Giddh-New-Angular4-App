@@ -8,7 +8,6 @@ body.unresponsive {
 }
 
 .intro.login {
-    /* background: url('../images/new/login_bg.jpg') no-repeat top center scroll; */
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
@@ -150,11 +149,11 @@ body.unresponsive {
     margin: 0 auto 20px;
 }
 
-.form-inline{
+.form-inline {
     width: 80px;
 }
 
-.input-width-mobile{
+.input-width-mobile {
     width: calc(100% - 80px);
 }
 
@@ -206,10 +205,6 @@ button.close {
     text-shadow: none;
     opacity: 1;
 }
-
-/* .modal-body {
-    overflow: hidden;
-} */
 
 .email {
     background: $deep-sky-blue-hover;
@@ -351,7 +346,6 @@ small {
 .feature-list {
     display: flex;
     flex-direction: column;
-    /* height: 100%; */
     align-items: left;
     justify-content: space-evenly;
     align-self: self-start;
@@ -381,7 +375,6 @@ small {
 
 .client-testimonial {
     align-self: flex-start;
-    /* padding-left: 55px; */
     position: relative;
     width: 100%;
     background: rgba(106, 106, 168, 15%);
@@ -429,11 +422,9 @@ small {
 
 .hint {
     position: absolute;
-    /* left: -335px; */
     left: 0;
     z-index: 1;
     background: $white;
-    /* bottom: 0; */
     bottom: -38px;
     border-radius: 0;
     padding: 4px;
@@ -449,8 +440,6 @@ small {
     border-top: 8px solid transparent;
     border-bottom: 8px solid transparent;
     border-left: 8px solid $gainsboro;
-    /* right: -8px; */
-    /* top: 3px; */
     left: 6px;
     top: -12px;
     transform: rotate(-90deg);

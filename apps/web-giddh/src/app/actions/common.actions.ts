@@ -4,9 +4,8 @@ import { CommonService } from '../services/common.service';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { CountryRequest, CountryResponse, CurrencyResponse, CallingCodesResponse, OnboardingFormRequest, OnboardingFormResponse } from '../models/api-models/Common';
 import { Injectable } from '@angular/core';
-import { Action, Store } from '@ngrx/store';
+import { Action } from '@ngrx/store';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { AppState } from '../store/roots';
 import { CustomActions } from '../store/customActions';
 import { LocaleService } from '../services/locale.service';
 
@@ -16,7 +15,7 @@ export class CommonActions {
     public static GET_COUNTRY = 'GetCountry';
     public static GET_COUNTRY_RESPONSE = "GetCountryResponse";
     public static GET_ALL_COUNTRY = 'GetAllCountry';
-    public static GET_ALL_COUNTRY_RESPONSE = "GetA;;CountryResponse";
+    public static GET_ALL_COUNTRY_RESPONSE = "GetAllCountryResponse";
     public static GET_CALLING_CODES = 'GetCallingCodes';
     public static GET_CALLING_CODES_RESPONSE = "GetCallingCodesResponse";
     public static GET_ONBOARDING_FORM = 'GetOnboardingForm';
@@ -29,6 +28,7 @@ export class CommonActions {
     public static SET_COMMON_LOCALE_DATA = 'SetCommonLocaleData';
     public static GET_COMMON_LOCALE_DATA = 'GetCommonLocaleData';
     public static SET_ACTIVE_LOCALE = 'SetActiveLocale';
+    public static SET_ACTIVE_FINANCIAL_YEAR = 'SetActiveFinancialYear';
 
     public getCountry$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -125,6 +125,7 @@ export class CommonActions {
             payload: value
         };
     }
+
     public GetPartyType(): CustomActions {
         return {
             type: CommonActions.GET_PARTY_TYPE,
@@ -137,6 +138,7 @@ export class CommonActions {
             payload: value
         };
     }
+    
     public resetOnboardingForm(): CustomActions {
         return {
             type: CommonActions.RESET_ONBOARDING_FORM_RESPONSE
@@ -201,6 +203,20 @@ export class CommonActions {
     public setActiveLocale(data: any): CustomActions {
         return {
             type: CommonActions.SET_ACTIVE_LOCALE,
+            payload: data
+        }
+    }
+
+    /**
+     * This will set active financial year
+     *
+     * @param {*} data
+     * @returns {CustomActions}
+     * @memberof CommonActions
+     */
+    public setActiveFinancialYear(data: any): CustomActions {
+        return  {
+            type: CommonActions.SET_ACTIVE_FINANCIAL_YEAR,
             payload: data
         }
     }

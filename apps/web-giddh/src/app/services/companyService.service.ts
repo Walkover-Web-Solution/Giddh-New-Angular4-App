@@ -1,5 +1,4 @@
 import { empty as observableEmpty, Observable } from 'rxjs';
-
 import { catchError, map } from 'rxjs/operators';
 import {
     ICurrencyResponse,
@@ -9,10 +8,7 @@ import {
 } from './../models/api-models/Company';
 import { AccountSharedWithResponse } from '../models/api-models/Account';
 import {
-    BankTransferRequest,
-    CompanyRequest,
     CompanyResponse,
-    GetCouponResp,
     StateDetailsRequest,
     StateDetailsResponse,
     States,
@@ -30,7 +26,6 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { IRegistration, GetOTPRequest, BulkPaymentResponse, BulkPaymentConfirmRequest } from "../models/interfaces/registration.interface";
 import { ReportsRequestModel, ReportsResponseModel } from "../models/api-models/Reports";
 
-
 @Injectable()
 export class CompanyService {
 
@@ -43,22 +38,9 @@ export class CompanyService {
         this.companyUniqueName = this._generalService.companyUniqueName;
     }
 
-	/**
-	 * CreateCompany
-	 */
-    public CreateCompany(company: CompanyRequest): Observable<BaseResponse<CompanyResponse, CompanyRequest>> {
-        return this._http.post(this.config.apiUrl + COMPANY_API.CREATE_COMPANY, company).pipe(
-            map((res) => {
-                let data: BaseResponse<CompanyResponse, CompanyRequest> = res;
-                data.request = company;
-                return data;
-            }),
-            catchError((e) => this.errorHandler.HandleCatch<CompanyResponse, CompanyRequest>(e, company)));
-    }
-
-	/**
-	 * CreateNewCompany
-	 */
+    /**
+     * CreateNewCompanyPage
+     */
     public CreateNewCompany(company: CompanyCreateRequest): Observable<BaseResponse<CompanyResponse, CompanyCreateRequest>> {
         return this._http.post(this.config.apiUrl + COMPANY_API.CREATE_COMPANY, company).pipe(
             map((res) => {
@@ -69,9 +51,9 @@ export class CompanyService {
             catchError((e) => this.errorHandler.HandleCatch<CompanyResponse, CompanyCreateRequest>(e, company)));
     }
 
-	/**
-	 * CreateCompany
-	 */
+    /**
+     * CreateCompany
+     */
     public SocketCreateCompany(company: SocketNewCompanyRequest): Observable<BaseResponse<any, SocketNewCompanyRequest>> {
         return this._http.post('https://sokt.io/app/KyMrjhxQhqznF1sn4K6Y/zwueyKWYsnTBuf6Qg2VH', company).pipe(
             map((res) => {
@@ -82,9 +64,9 @@ export class CompanyService {
             catchError((e) => this.errorHandler.HandleCatch<any, SocketNewCompanyRequest>(e, SocketNewCompanyRequest)));
     }
 
-	/**
-	 * CompanyList
-	 */
+    /**
+     * CompanyList
+     */
     public CompanyList(): Observable<BaseResponse<CompanyResponse[], string>> {
         this.user = this._generalService.user;
         let uniqueName = (this.user) ? this.user.uniqueName : "";
@@ -95,20 +77,6 @@ export class CompanyService {
                 return data;
             }),
             catchError((e) => this.errorHandler.HandleCatch<CompanyResponse[], string>(e, '')));
-    }
-
-    // Get business type for create company
-    public GetAllBusinessTypeList() {
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + COMPANY_API.BUSINESS_TYPE_LIST
-        ).pipe(
-            map((res) => {
-                let data: BaseResponse<any, any> = res;
-                data.request = '';
-                data.queryString = {};
-                return data;
-            }),
-            catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
     // Get business nature for create company
@@ -124,9 +92,9 @@ export class CompanyService {
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
-	/**
-	 * CurrencyList
-	 */
+    /**
+     * CurrencyList
+     */
     public CurrencyList(): Observable<BaseResponse<ICurrencyResponse[], string>> {
         return this._http.get(this.config.apiUrl + 'currency').pipe(
             map((res) => {
@@ -136,21 +104,9 @@ export class CompanyService {
             catchError((e) => this.errorHandler.HandleCatch<ICurrencyResponse[], string>(e, '')));
     }
 
-	/**
-	 * DeleteCompany
-	 */
-    public DeleteCompany(companyUniqueName: string): Observable<BaseResponse<string, string>> {
-        return this._http.delete(this.config.apiUrl + COMPANY_API.DELETE_COMPANY.replace(':companyUniqueName', companyUniqueName)).pipe(
-            map((res) => {
-                let data: BaseResponse<string, string> = res;
-                data.queryString = { companyUniqueName };
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
-    }
-
-	/**
-	 * get state details
-	 */
+    /**
+     * get state details
+     */
     public getStateDetails(cmpUniqueName?: string, fetchLastState?: boolean): Observable<BaseResponse<StateDetailsResponse, string>> {
         let url = '';
         let delimeter = '';
@@ -170,27 +126,6 @@ export class CompanyService {
             data.request = cmpUniqueName;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<StateDetailsResponse, string>(e, cmpUniqueName, cmpUniqueName)));
-    }
-
-    //Get applicable Taxes
-    public getApplicabletaxes(): Observable<BaseResponse<string, any>> {
-        return this._http.get(this.config.apiUrl + COMPANY_API.APPLICABLE_TAXES).pipe(map((res) => {
-            let data: BaseResponse<string, any> = res;
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e)));
-    }
-
-    public getStateDetailsAuthGuard(cmpUniqueName?: string): Observable<BaseResponse<StateDetailsResponse, string>> {
-        let url = '';
-        if (cmpUniqueName) {
-            url = this.config.apiUrl + COMPANY_API.GET_STATE_DETAILS.replace(':companyUniqueName', encodeURIComponent(cmpUniqueName ? cmpUniqueName : ''));
-        } else {
-            url = this.config.apiUrl + COMPANY_API.GET_STATE_DETAILS.replace('?companyUniqueName=:companyUniqueName', '');
-        }
-        return this._http.get(url).pipe(map((res) => {
-            let data: BaseResponse<StateDetailsResponse, string> = res;
-            return data;
-        }));
     }
 
     //Get razorPay paymentID
@@ -270,7 +205,7 @@ export class CompanyService {
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.post(this.config.apiUrl + COMPANY_API.SEND_EMAIL
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':groupUniqueName', encodeURIComponent(request.params.groupUniqueName))
+            .replace(':groupUniqueName', encodeURIComponent(request.params?.groupUniqueName))
             .replace(':from', encodeURIComponent(request.params.from))
             .replace(':to', encodeURIComponent(request.params.to))
             .replace(':sortBy', encodeURIComponent(request.params.sortBy))
@@ -285,7 +220,7 @@ export class CompanyService {
         this.companyUniqueName = this._generalService.companyUniqueName;
         let url = this.config.apiUrl + COMPANY_API.DOWNLOAD_CSV
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':groupUniqueName', encodeURIComponent(request.params.groupUniqueName))
+            .replace(':groupUniqueName', encodeURIComponent(request.params?.groupUniqueName))
             .replace(':from', encodeURIComponent(request.params.from))
             .replace(':to', encodeURIComponent(request.params.to))
             .replace(':sortBy', encodeURIComponent(request.params.sortBy))
@@ -305,7 +240,7 @@ export class CompanyService {
         return this._http.post(this.config.apiUrl + COMPANY_API.SEND_SMS
 
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':groupUniqueName', encodeURIComponent(request.params.groupUniqueName))
+            .replace(':groupUniqueName', encodeURIComponent(request.params?.groupUniqueName))
             .replace(':from', encodeURIComponent(request.params.from))
             .replace(':to', encodeURIComponent(request.params.to))
             .replace(':sortBy', encodeURIComponent(request.params.sortBy))
@@ -315,9 +250,9 @@ export class CompanyService {
             }), catchError((e) => this.errorHandler.HandleCatch<string, BulkEmailRequest>(e)));
     }
 
-	/**
-	 * get all states
-	 */
+    /**
+     * get all states
+     */
     public getAllStates(request: StatesRequest): Observable<BaseResponse<States, string>> {
         let url = this.config.apiUrl + COMPANY_API.GET_ALL_STATES;
         url = url.replace(":country", request.country);
@@ -328,35 +263,9 @@ export class CompanyService {
         }), catchError((e) => this.errorHandler.HandleCatch<States, string>(e)));
     }
 
-	/**
-	 * get coupon details
-	 * @param {string} couponCode
-	 * @returns {Observable<BaseResponse<GetCouponResp, string>>}
-	 * @memberof CompanyService
-	 */
-    public getCoupon(couponCode: string): Observable<BaseResponse<GetCouponResp, string>> {
-        return this._http.get(this.config.apiUrl + COMPANY_API.GET_COUPON
-            .replace(':code', encodeURIComponent(couponCode))).pipe(map((res) => {
-                let data: BaseResponse<GetCouponResp, string> = res;
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<GetCouponResp, string>(e)));
-    }
-
-	/**
-	 * ContactFrom
-	 */
-    public ContactFrom(formObj): Observable<BaseResponse<any, any>> {
-        let domainURL = 'http://giddh.com/';
-        return this._http.post(domainURL + COMPANY_API.CONTACT_FORM, formObj).pipe(
-            map((res) => {
-                let data = res;
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
-    }
-
-	/**
-	 * Registered Account Details
-	 */
+    /**
+     * Registered Account Details
+     */
     public getRegisteredAccount(): Observable<BaseResponse<IRegistration, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
@@ -370,9 +279,9 @@ export class CompanyService {
         }
     }
 
-	/**
-	 * get OTP
-	 */
+    /**
+     * get OTP
+     */
     public getOTP(request) {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
@@ -386,21 +295,7 @@ export class CompanyService {
         }
     }
 
-	/**
-	 * confirm OTP
-	 */
-    public confirmOTP(bankTransferRequest: BankTransferRequest): Observable<BaseResponse<string, StateDetailsRequest>> {
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        if (this.companyUniqueName) {
-            return this._http.post(this.config.apiUrl + COMPANY_API.CONFIRM_OTP.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), bankTransferRequest).pipe(map((res) => {
-                return res;
-            }), catchError((e) => this.errorHandler.HandleCatch<string, BankTransferRequest>(e, bankTransferRequest)));
-        } else {
-            return observableEmpty();
-        }
-    }
-
-	/*
+    /*
   * get registered sales
   * */
     public getSalesRegister(request: ReportsRequestModel) {
@@ -420,7 +315,7 @@ export class CompanyService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, ReportsRequestModel>(e, ReportsRequestModel)));
     }
 
-	/**
+    /**
      * To get registered sales
      *
      * @param {ReportsRequestModel} request Request body
@@ -430,21 +325,21 @@ export class CompanyService {
     public getPurchaseRegister(request: ReportsRequestModel) {
         this.companyUniqueName = this._generalService.companyUniqueName;
         let contextPath = this.config.apiUrl + COMPANY_API.GET_REGISTERED_PURCHASE
-        .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-        .replace(':fromDate', encodeURIComponent(request.from))
-        .replace(':toDate', encodeURIComponent(request.to))
-        .replace(':interval', encodeURIComponent(request.interval));
+            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            .replace(':fromDate', encodeURIComponent(request.from))
+            .replace(':toDate', encodeURIComponent(request.to))
+            .replace(':interval', encodeURIComponent(request.interval));
         if (request.branchUniqueName) {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             contextPath = contextPath.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
         }
         return this._http.get(contextPath).pipe(map((res) => {
-                let data: BaseResponse<ReportsResponseModel, string> = res;
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<string, ReportsRequestModel>(e, ReportsRequestModel)));
+            let data: BaseResponse<ReportsResponseModel, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, ReportsRequestModel>(e, ReportsRequestModel)));
     }
 
-	/**
+    /**
      *Get all integrated banks list
      *
      * @param {ReportsRequestModel} request
@@ -460,22 +355,6 @@ export class CompanyService {
     }
 
     /**
-     * Get all integrated banks data from bank server
-     *
-     * @param {string} companyUniqueName company unique name
-     * @param {string} urn urn number
-     * @returns
-     * @memberof CompanyService
-     */
-    public getAllBankDetailsOfIntegrated(companyUniqueName: string, urn: string): Observable<BaseResponse<any, any>> {
-        let url = this.config.apiUrl + COMPANY_API.GET_COMPANY_INTEGRATED_BANK_DETAILS.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)).replace(':urn', urn);
-        return this._http.get(url).pipe(map((res) => {
-            let data: BaseResponse<any, string> = res;
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e, ReportsRequestModel)));
-    }
-
-    /**
      * Bulk pay vendor API call
      *
      * @param {string} companyUniqueName  company unique name
@@ -484,24 +363,25 @@ export class CompanyService {
      * @memberof CompanyService
      */
     public bulkVendorPayment(companyUniqueName: string, bankTransferRequest: GetOTPRequest): Observable<BaseResponse<BulkPaymentResponse, GetOTPRequest>> {
-            return this._http.post(this.config.apiUrl + COMPANY_API.BULK_PAYMENT.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)), bankTransferRequest).pipe(map((res) => {
-                return res;
-            }), catchError((e) => this.errorHandler.HandleCatch<BulkPaymentResponse, GetOTPRequest>(e, bankTransferRequest)));
+        return this._http.post(this.config.apiUrl + COMPANY_API.BULK_PAYMENT.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)), bankTransferRequest).pipe(map((res) => {
+            return res;
+        }), catchError((e) => this.errorHandler.HandleCatch<BulkPaymentResponse, GetOTPRequest>(e, bankTransferRequest)));
     }
 
     /**
      * Bulk pay vendor API call
      *
      * @param {string} companyUniqueName  Company unique name
-     * @param {string} urn Selected bank urn number
+     * @param {string} urn selected payor urn number
+     * @param {string} bankAccountUniqueName Selected bank
      * @param {BulkPaymentConfirmRequest} requestObject Request object
      * @returns {Observable<BaseResponse<BulkPaymentResponse, BulkPaymentConfirmRequest>>}
      * @memberof CompanyService
      */
-    public bulkVendorPaymentConfirm(companyUniqueName: string, urn: string, requestObject: BulkPaymentConfirmRequest): Observable<BaseResponse<BulkPaymentResponse, BulkPaymentConfirmRequest>> {
-            return this._http.post(this.config.apiUrl + COMPANY_API.BULK_PAYMENT_CONFIRM.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)).replace(':urn', urn), requestObject).pipe(map((res) => {
-                return res;
-            }), catchError((e) => this.errorHandler.HandleCatch<BulkPaymentResponse, BulkPaymentConfirmRequest>(e, BulkPaymentConfirmRequest)));
+    public bulkVendorPaymentConfirm(companyUniqueName: string, urn: string, bankAccountUniqueName: string, requestObject: BulkPaymentConfirmRequest): Observable<BaseResponse<BulkPaymentResponse, BulkPaymentConfirmRequest>> {
+        return this._http.post(this.config.apiUrl + COMPANY_API.BULK_PAYMENT_CONFIRM.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)).replace(':urn', urn).replace(':uniqueName', encodeURIComponent(bankAccountUniqueName)), requestObject).pipe(map((res) => {
+            return res;
+        }), catchError((e) => this.errorHandler.HandleCatch<BulkPaymentResponse, BulkPaymentConfirmRequest>(e, BulkPaymentConfirmRequest)));
     }
 
     /**
@@ -509,11 +389,12 @@ export class CompanyService {
     *
     * @param {string} companyUniqueName Company unique name
     * @param {string} urn Urn number
+    * @param {string} uniqueName Account unique name
     * @returns
     * @memberof CompanyService
     */
-    public resendOtp(companyUniqueName: string, urn: string, requestId: string): Observable<BaseResponse<any, any>> {
-        let url = this.config.apiUrl + COMPANY_API.BULK_PAYMENT_RESEND_OTP.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)).replace(':urn', urn).replace(':requestId', requestId);
+    public resendOtp(companyUniqueName: string, urn: string, requestId: string, uniqueName: string): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + COMPANY_API.BULK_PAYMENT_RESEND_OTP.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)).replace(':uniqueName', encodeURIComponent(uniqueName)).replace(':urn', urn).replace(':requestId', requestId);
         return this._http.get(url).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             return data;
@@ -583,7 +464,7 @@ export class CompanyService {
         let url = `${this.config.apiUrl}${COMPANY_API.GET_SIDE_BAR_ITEM}`;
         url = url.replace(':companyUniqueName', encodeURIComponent(this._generalService.companyUniqueName));
         return this._http.get(url).pipe(
-                catchError((e) => this.errorHandler.HandleCatch<string, any>(e, ReportsRequestModel)));
+            catchError((e) => this.errorHandler.HandleCatch<string, any>(e, ReportsRequestModel)));
     }
 
     /**

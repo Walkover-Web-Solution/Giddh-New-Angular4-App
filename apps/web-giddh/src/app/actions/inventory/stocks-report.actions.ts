@@ -1,14 +1,10 @@
 import { map, switchMap } from 'rxjs/operators';
-/**
- * Created by ad on 04-07-2017.
- */
 import { GroupStockReportRequest, GroupStockReportResponse, StockReportRequest, StockReportResponse } from '../../models/api-models/Inventory';
 import { STOCKS_REPORT_ACTIONS } from './inventory.const';
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
-import { Action, Store } from '@ngrx/store';
-import { AppState } from '../../store/roots';
+import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { InventoryService } from '../../services/inventory.service';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
@@ -17,7 +13,7 @@ import { CustomActions } from '../../store/customActions';
 @Injectable()
 export class StockReportActions {
 
-     public GetStocksReport$: Observable<Action> = createEffect( ()=>this.action$
+    public GetStocksReport$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(STOCKS_REPORT_ACTIONS.GET_STOCKS_REPORT),
             switchMap((action: CustomActions) => {
@@ -39,10 +35,9 @@ export class StockReportActions {
                             return { type: 'EmptyAction' };
                         }
                     }));
-
             })));
 
-     public GetGroupStocksReport$: Observable<Action> =createEffect( ()=> this.action$
+    public GetGroupStocksReport$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(STOCKS_REPORT_ACTIONS.GET_GROUP_STOCKS_REPORT),
             switchMap((action: CustomActions) => {
@@ -64,7 +59,6 @@ export class StockReportActions {
 
     constructor(private action$: Actions,
         private _toasty: ToasterService,
-        private store: Store<AppState>,
         private _inventoryService: InventoryService) {
     }
 

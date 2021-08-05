@@ -1,7 +1,7 @@
 {
-    "no_data_found" : "Sorry, No Data Found!",
-    "particular" : "Particular",
-    "opening_balance" : "Opening Bal",
-    "closing_balance" : "Closing Bal",
-    "grand_total" : "Grand Total"
+    "no_data_found": "Sorry, No Data Found!",
+    "particular": "Particular",
+    "opening_balance": "Opening Bal",
+    "closing_balance": "Closing Bal",
+    "grand_total": "Grand Total"
 }

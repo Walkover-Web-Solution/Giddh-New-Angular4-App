@@ -17,7 +17,7 @@ export class ConfirmModalComponent implements OnInit {
     @Output() public successCallBack: EventEmitter<any> = new EventEmitter();
     @Output() public cancelCallBack: EventEmitter<any> = new EventEmitter();
     /** This will hold the permanently delete message */
-    public permanentlyDeleteMessage: string = "";
+    @Input() public permanentlyDeleteMessage: string = "";
 
     // tslint:disable-next-line:no-empty
     constructor(private store: Store<AppState>) {
@@ -30,7 +30,7 @@ export class ConfirmModalComponent implements OnInit {
      */
     public ngOnInit(): void {
         this.store.pipe(select(state => state.session.commonLocaleData), take(1)).subscribe((response) => {
-            if(response) {
+            if (response) {
                 if (!this.title) {
                     this.title = response.app_confirmation;
                 }
@@ -40,8 +40,9 @@ export class ConfirmModalComponent implements OnInit {
                 if (!this.cancel) {
                     this.cancel = response.app_no;
                 }
-
-                this.permanentlyDeleteMessage = response.app_permanently_delete_message;
+                if (!this.permanentlyDeleteMessage) {
+                    this.permanentlyDeleteMessage = response.app_permanently_delete_message;
+                }
             }
         });
     }

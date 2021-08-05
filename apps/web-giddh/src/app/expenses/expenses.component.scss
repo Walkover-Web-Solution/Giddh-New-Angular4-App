@@ -15,13 +15,14 @@
 }
 .input-calender {
     width: 225px;
+    top: 55px;
 }
 .input-calender > span {
     background: none;
     border-radius: 0px;
     border-left: 1px solid $gainsboro !important;
 }
-.input-group-addon{
+.input-group-addon {
     display: flex;
     font-size: 14px;
     font-weight: 400;
@@ -35,6 +36,10 @@
     justify-content: center;
     color: $gray;
 }
+.expense-head{
+    padding-top: 55px;
+}
+
 @media only screen and (max-width: 767px) {
     .left-expense {
         width: 100%;
@@ -42,4 +47,14 @@
     .main-edit-expense {
         display: block;
     }
+    .expense-head{
+        padding-top: 20px;
+    }
+    .input-calender {
+        top: 15px;
+    }
+}
+.clear-filter-div {
+    position: relative;
+    top: 55px;
 }

@@ -14,12 +14,16 @@
                         <div class="row">
                             <div class="form-group col-sm-5 col-12">
                                 <label>Under Group</label>
-                                <sh-select #groupDDList [options]="groupsData$ | async" formControlName="parentGroup" [placeholder]="'Select Group'" [multiple]="false" [ItemHeight]="33" (selected)="groupSelected($event)" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async"
-                                    [notFoundLinkText]="'+ Add New'" (noResultsClicked)="addNewGroupPane()" [notFoundLink]="false"></sh-select>
+                                <sh-select #groupDDList [options]="groupsData$ | async" formControlName="parentGroup"
+                                    [placeholder]="'Select Group'" [multiple]="false" [ItemHeight]="33"
+                                    (selected)="groupSelected($event)" [isFilterEnabled]="true"
+                                    [forceClearReactive]="forceClear$ | async" [notFoundLinkText]="'+ Add New'"
+                                    (noResultsClicked)="addNewGroupPane()" [notFoundLink]="false"></sh-select>
                             </div>
                             <div class="form-group col-sm-5 col-12" *ngIf="isUpdatingStockForm">
                                 <label class="d-block">&nbsp;</label>
-                                <button type="button" class="btn btn-default" (click)="moveStock()" [disabled]="addStockForm.get('parentGroup').value === activeGroup.uniqueName">Move
+                                <button type="button" class="btn btn-default" (click)="moveStock()"
+                                    [disabled]="addStockForm.get('parentGroup').value === activeGroup?.uniqueName">Move
                                 </button>
 
                             </div>
@@ -32,7 +36,9 @@
                             </div>
                             <div class="form-group col-sm-5 col-12">
                                 <label>Stock Unit <sup>*</sup></label>
-                                <sh-select [options]="stockUnitsDropDown$ | async" formControlName="stockUnitCode" [placeholder]="'Choose a parent unit'" [multiple]="false" [ItemHeight]="33" [forceClearReactive]="forceClear$ | async" [isRequired]="true"></sh-select>
+                                <sh-select [options]="stockUnitsDropDown$ | async" formControlName="stockUnitCode"
+                                    [placeholder]="'Choose a parent unit'" [multiple]="false" [ItemHeight]="33"
+                                    [forceClearReactive]="forceClear$ | async" [isRequired]="true"></sh-select>
                             </div>
                         </div>
                         <!-- other details -->
@@ -52,43 +58,28 @@
                             <div class="row">
                                 <div class="form-group col-sm-4 col-12">
                                     <label>Unique Name</label>
-                                    <input type="text" name="uniqueName" UniqueNameDirective textCaseChangeDirective [control]="addStockForm.get('uniqueName')" class="form-control" formControlName="uniqueName">
+                                    <input type="text" name="uniqueName" UniqueNameDirective textCaseChangeDirective
+                                        [control]="addStockForm.get('uniqueName')" class="form-control"
+                                        formControlName="uniqueName">
                                 </div>
                                 <div class="form-group col-sm-4 col-12">
                                     <span class="mr-r15">
-                                        <input type="radio" class="radio-custom radio-theme" name="showCodeType" id="hsnCodeType" formControlName="showCodeType" value="hsn">
+                                        <input type="radio" class="radio-custom radio-theme" name="showCodeType"
+                                            id="hsnCodeType" formControlName="showCodeType" value="hsn">
                                         <label for="hsnCodeType" class="radio-custom-label">HSN Code</label>
                                     </span>
                                     <span>
-                                        <input type="radio" class="radio-custom radio-theme" name="showCodeType" id="sacCodeType" formControlName="showCodeType" value="sac">
+                                        <input type="radio" class="radio-custom radio-theme" name="showCodeType"
+                                            id="sacCodeType" formControlName="showCodeType" value="sac">
                                         <label for="sacCodeType" class="ml-1 radio-custom-label">SAC Code</label>
                                     </span>
-									<input type="text" class="form-control" maxlength="10" decimalDigitsDirective
-                                        formControlName="hsnNumber" *ngIf="addStockForm.get('showCodeType').value === 'hsn'" />
+                                    <input type="text" class="form-control" maxlength="10" decimalDigitsDirective
+                                        formControlName="hsnNumber"
+                                        *ngIf="addStockForm.get('showCodeType').value === 'hsn'" />
                                     <input type="text" class="form-control" maxlength="10" formControlName="sacNumber"
-                                        decimalDigitsDirective *ngIf="addStockForm.get('showCodeType').value === 'sac'" />
+                                        decimalDigitsDirective
+                                        *ngIf="addStockForm.get('showCodeType').value === 'sac'" />
                                 </div>
-
-                                <!--                  <div class="form-group col-4">-->
-                                <!--                    <label>Discount</label>-->
-                                <!--                    <div class="btn-group btn-block" dropdown>-->
-                                <!--                      <button dropdownToggle type="button"-->
-                                <!--                              class="dropdown-toggle form-control text-left"> Selected-->
-                                <!--                        ({{ addStockForm.get('taxes').value.length }}) <span-->
-                                <!--                          class="pull-right"><span class="caret"></span></span></button>-->
-                                <!--                      <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">-->
-                                <!--                        <li role="menuitem" *ngFor="let tax of (companyTaxesList$ | async)">-->
-                                <!--                          <a class="dropdown-item" (click)="$event.stopPropagation()"><input-->
-                                <!--                            type="checkbox" [checked]="tax.isChecked"-->
-                                <!--                            (click)="selectTax($event, tax)"/> {{tax.name}}</a>-->
-                                <!--                        </li>-->
-                                <!--                        <li *ngIf="(companyTaxesList$ | async).length < 1">-->
-                                <!--                          <a class="dropdown-item" (click)="$event.stopPropagation()">No Tax-->
-                                <!--                            Found</a>-->
-                                <!--                        </li>-->
-                                <!--                      </ul>-->
-                                <!--                    </div>-->
-                                <!--                  </div>-->
 
 
                                 <div class="form-group col-sm-4 col-12">
@@ -97,12 +88,17 @@
 
 
                                     <div class="btn-group btn-block" dropdown>
-                                        <button dropdownToggle type="button" class="dropdown-toggle form-control text-left"> Selected
+                                        <button dropdownToggle type="button"
+                                            class="dropdown-toggle form-control text-left"> Selected
                                             ({{ taxTempArray?.length }}) <span class="pull-right"><span
                                                     class="caret"></span></span></button>
                                         <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
-                                            <li role="menuitem" *ngFor="let tax of (companyTaxesList$ | async)" [ngClass]="{'opacity' : tax.isDisabled}">
-                                                <a class="dropdown-item" (click)="$event.stopPropagation()"><input type="checkbox" [disabled]="tax.isDisabled" [checked]="tax.isChecked" (click)="selectTax($event, tax)" /> {{tax.name}}
+                                            <li role="menuitem" *ngFor="let tax of (companyTaxesList$ | async)"
+                                                [ngClass]="{'opacity' : tax.isDisabled}">
+                                                <a class="dropdown-item" (click)="$event.stopPropagation()"><input
+                                                        type="checkbox" [disabled]="tax.isDisabled"
+                                                        [checked]="tax.isChecked" (click)="selectTax($event, tax)" />
+                                                    {{tax.name}}
                                                 </a>
                                             </li>
                                             <li *ngIf="(companyTaxesList$ | async)?.length < 1">
@@ -119,17 +115,22 @@
 
                                 <div class="form-group col-sm-4 col-12">
                                     <label>Open. Qty</label>
-                                    <input type="text" name="openingQuantity" decimalDigitsDirective [DecimalPlaces]="4" (change)="calCulateRate()" class="form-control" formControlName="openingQuantity">
+                                    <input type="text" name="openingQuantity" decimalDigitsDirective [DecimalPlaces]="4"
+                                        (change)="calCulateRate()" class="form-control"
+                                        formControlName="openingQuantity">
                                 </div>
 
                                 <div class="form-group col-sm-4 col-12">
                                     <label>Amount</label>
-                                    <input type="text" name="openingAmount" (change)="calCulateRate()" decimalDigitsDirective [DecimalPlaces]="2" class="form-control" formControlName="openingAmount">
+                                    <input type="text" name="openingAmount" (change)="calCulateRate()"
+                                        decimalDigitsDirective [DecimalPlaces]="2" class="form-control"
+                                        formControlName="openingAmount">
                                 </div>
 
                                 <div class="form-group col-sm-4 col-12">
                                     <label>Rate</label>
-                                    <input type="text" name="stockRate" formControlName="stockRate" class="form-control" placeholder="Auto calculate">
+                                    <input type="text" name="stockRate" formControlName="stockRate" class="form-control"
+                                        placeholder="Auto calculate">
                                 </div>
 
                             </div>
@@ -139,12 +140,14 @@
                                 <!-- SKU Code -->
                                 <div class="form-group col-sm-4 col-12">
                                     <label>SKU Code</label>
-                                    <input type="text" name="skuCode" class="form-control" maxlength="20" formControlName="skuCode" (keyup)="validateSKU($event)">
+                                    <input type="text" name="skuCode" class="form-control" maxlength="20"
+                                        formControlName="skuCode" (keyup)="validateSKU($event)">
                                 </div>
 
 
                                 <!-- field 1 -->
-                                <div class="form-group col-sm-4 col-12" *ngIf="customField1 || addStockForm.controls['customField1Heading'].value">
+                                <div class="form-group col-sm-4 col-12"
+                                    *ngIf="customField1 || addStockForm.controls['customField1Heading'].value">
 
                                     <label>
                                         <span
@@ -163,11 +166,13 @@
                                                 (click)="removeCustomField('remove', 1)"></i>
                                         </span>
                                     </label>
-                                    <input type="text" name="customField1Value" class="form-control" maxlength="30" formControlName="customField1Value">
+                                    <input type="text" name="customField1Value" class="form-control" maxlength="30"
+                                        formControlName="customField1Value">
 
                                 </div>
                                 <!-- field 2 -->
-                                <div class="form-group col-sm-4 col-12" *ngIf="customField2 || addStockForm.controls['customField2Heading'].value">
+                                <div class="form-group col-sm-4 col-12"
+                                    *ngIf="customField2 || addStockForm.controls['customField2Heading'].value">
                                     <label>
                                         <span
                                             *ngIf="!customField2HeadingEditing && !addStockForm.controls['customField2Heading'].value">Custom
@@ -185,11 +190,13 @@
                                                 (click)="removeCustomField('remove', 2)"></i>
                                         </span>
                                     </label>
-                                    <input type="text" name="customField2Value" class="form-control" maxlength="30" formControlName="customField2Value">
+                                    <input type="text" name="customField2Value" class="form-control" maxlength="30"
+                                        formControlName="customField2Value">
                                 </div>
                                 <!-- field 2 end -->
                                 <div class="form-group col-sm-4 col-12">
-                                    <div class="new-custom-btn" (click)="addCustomField()" *ngIf="!customField2 || !customField1">+ Custom field
+                                    <div class="new-custom-btn" (click)="addCustomField()"
+                                        *ngIf="!customField2 || !customField1">+ Custom field
                                     </div>
                                 </div>
 
@@ -207,7 +214,11 @@
                             </div>
                             <div class="form-group">
                                 <label class="bold-head">Account Name</label>
-                                <sh-select [options]="purchaseAccountsDropDown$ | async" formControlName="purchaseAccountUniqueName" [placeholder]="'select purchase account'" [multiple]="false" [ItemHeight]="33" [disabled]="!addStockForm.controls['enablePurchase'].value" [forceClearReactive]="forceClearPurchaseAccount$ | async"></sh-select>
+                                <sh-select [options]="purchaseAccountsDropDown$ | async"
+                                    formControlName="purchaseAccountUniqueName"
+                                    [placeholder]="'select purchase account'" [multiple]="false" [ItemHeight]="33"
+                                    [disabled]="!addStockForm.controls['enablePurchase'].value"
+                                    [forceClearReactive]="forceClearPurchaseAccount$ | async"></sh-select>
                             </div>
 
                             <div class="row">
@@ -220,20 +231,28 @@
                             </div>
 
                             <div formArrayName="purchaseUnitRates">
-                                <div *ngFor="let item of addStockForm.get('purchaseUnitRates')['controls']; let i=index;let f = first; let l = last">
-                                    <div [formGroupName]="i"  class="row">
+                                <div
+                                    *ngFor="let item of addStockForm.get('purchaseUnitRates')['controls']; let i=index;let f = first; let l = last">
+                                    <div [formGroupName]="i" class="row">
                                         <div class="form-group col-7 col-sm-7">
-                                            <sh-select [options]="stockUnitsDropDown$ | async" formControlName="stockUnitCode" [multiple]="false" [placeholder]="'Select Unit'" [ItemHeight]="33" [disabled]="!addStockForm.controls['enablePurchase'].value" [forceClearReactive]="forceClearPurchaseStock$ | async"
-                                                [notFoundLinkText]="'+ Add New'" (noResultsClicked)="addNewStockUnit()" [notFoundLink]="true">
+                                            <sh-select [options]="stockUnitsDropDown$ | async"
+                                                formControlName="stockUnitCode" [multiple]="false"
+                                                [placeholder]="'Select Unit'" [ItemHeight]="33"
+                                                [disabled]="!addStockForm.controls['enablePurchase'].value"
+                                                [forceClearReactive]="forceClearPurchaseStock$ | async"
+                                                [notFoundLinkText]="'+ Add New'" (noResultsClicked)="addNewStockUnit()"
+                                                [notFoundLink]="true">
                                             </sh-select>
                                         </div>
                                         <div class="form-group row col-4 col-sm-4">
-                                            <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" formControlName="rate" />
+                                            <input type="text" class="form-control" decimalDigitsDirective
+                                                [DecimalPlaces]="4" formControlName="rate" />
                                         </div>
                                         <div class="pull-right unit-add">
-                                            <button class="btn-link btn mr-0" (click)="addPurchaseUnitRates(i)" *ngIf="l"><i class="icon-plus add-row"></i></button>
-                                            <button class="btn-link btn" (click)="removePurchaseUnitRates(i)" *ngIf="!l"><i
-                                                    class="icon-cross delete"></i></button>
+                                            <button class="btn-link btn mr-0" (click)="addPurchaseUnitRates(i)"
+                                                *ngIf="l"><i class="icon-plus add-row"></i></button>
+                                            <button class="btn-link btn" (click)="removePurchaseUnitRates(i)"
+                                                *ngIf="!l"><i class="icon-cross delete"></i></button>
                                         </div>
                                     </div>
                                 </div>
@@ -250,7 +269,11 @@
                             </div>
                             <div class="form-group">
                                 <label class="">Account Name</label>
-                                <sh-select [options]="salesAccountsDropDown$ | async" formControlName="salesAccountUniqueName" [multiple]="false" [disabled]="!addStockForm.controls['enableSales'].value" [placeholder]="'select sales account'" [ItemHeight]="33" [forceClearReactive]="forceClearSalesAccount$ | async">
+                                <sh-select [options]="salesAccountsDropDown$ | async"
+                                    formControlName="salesAccountUniqueName" [multiple]="false"
+                                    [disabled]="!addStockForm.controls['enableSales'].value"
+                                    [placeholder]="'select sales account'" [ItemHeight]="33"
+                                    [forceClearReactive]="forceClearSalesAccount$ | async">
                                 </sh-select>
                             </div>
                             <div class="row">
@@ -263,19 +286,27 @@
                             </div>
 
                             <div formArrayName="saleUnitRates">
-                                <div *ngFor="let item of addStockForm.get('saleUnitRates')['controls']; let i=index; let f = first; let l = last">
-                                    <div [formGroupName]="i"  class="row">
+                                <div
+                                    *ngFor="let item of addStockForm.get('saleUnitRates')['controls']; let i=index; let f = first; let l = last">
+                                    <div [formGroupName]="i" class="row">
                                         <div class="form-group col-7 col-sm-7">
-                                            <sh-select [options]="stockUnitsDropDown$ | async" formControlName="stockUnitCode" [multiple]="false" [disabled]="!addStockForm.controls['enableSales'].value" [placeholder]="'Select Unit'" [ItemHeight]="33" [forceClearReactive]="forceClearSalesStock$ | async"
-                                                [notFoundLinkText]="'+ Add New'" (noResultsClicked)="addNewStockUnit()" [notFoundLink]="true"></sh-select>
-                                            <!--<select2 [data]="stockUnitsDropDown$ | async" [options]="UnitDropDownOptions" formControlName="stockUnitCode"></select2>-->
+                                            <sh-select [options]="stockUnitsDropDown$ | async"
+                                                formControlName="stockUnitCode" [multiple]="false"
+                                                [disabled]="!addStockForm.controls['enableSales'].value"
+                                                [placeholder]="'Select Unit'" [ItemHeight]="33"
+                                                [forceClearReactive]="forceClearSalesStock$ | async"
+                                                [notFoundLinkText]="'+ Add New'" (noResultsClicked)="addNewStockUnit()"
+                                                [notFoundLink]="true"></sh-select>
                                         </div>
                                         <div class="form-group row col-4 col-sm-4">
-                                            <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" formControlName="rate" />
+                                            <input type="text" class="form-control" decimalDigitsDirective
+                                                [DecimalPlaces]="4" formControlName="rate" />
                                         </div>
                                         <div class="pull-right unit-add">
-                                            <button class="btn-link btn mr-0" (click)="addSaleUnitRates(i)" *ngIf="l"><i class="icon-plus add-row"></i></button>
-                                            <button class="btn-link btn" (click)="removeSaleUnitRates(i)" *ngIf="!l"><i class="icon-cross delete"></i></button>
+                                            <button class="btn-link btn mr-0" (click)="addSaleUnitRates(i)" *ngIf="l"><i
+                                                    class="icon-plus add-row"></i></button>
+                                            <button class="btn-link btn" (click)="removeSaleUnitRates(i)" *ngIf="!l"><i
+                                                    class="icon-cross delete"></i></button>
                                         </div>
                                     </div>
                                 </div>
@@ -304,13 +335,19 @@
                                     <tr class="output-row">
                                         <td class="form-group">
                                             <label>Output Qty <sup>*</sup></label>
-                                            <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" name="manufacturingQuantity" placeholder="Quantity" formControlName="manufacturingQuantity" />
+                                            <input type="text" class="form-control" decimalDigitsDirective
+                                                [DecimalPlaces]="4" name="manufacturingQuantity" placeholder="Quantity"
+                                                formControlName="manufacturingQuantity" />
                                         </td>
                                         <td class="form-group">
                                             <label>Stock Unit <sup>*</sup></label>
-                                            <sh-select [options]="stockUnitsDropDown$ | async" formControlName="manufacturingUnitCode" [placeholder]="'Select Unit'" [multiple]="false" [ItemHeight]="33" [forceClearReactive]="forceClear$ | async"></sh-select>
+                                            <sh-select [options]="stockUnitsDropDown$ | async"
+                                                formControlName="manufacturingUnitCode" [placeholder]="'Select Unit'"
+                                                [multiple]="false" [ItemHeight]="33"
+                                                [forceClearReactive]="forceClear$ | async"></sh-select>
                                         </td>
-                                        <td *ngIf="addStockForm.controls['manufacturingDetails'].controls['manufacturingQuantity'].value" colspan="2">
+                                        <td *ngIf="addStockForm.controls['manufacturingDetails'].controls['manufacturingQuantity'].value"
+                                            colspan="2">
                                             <label class="d-block">&nbsp;</label>
                                             <span class="width-100"><strong>= (
                                                     {{addStockForm.controls['manufacturingDetails'].controls['manufacturingQuantity'].value}}
@@ -327,24 +364,36 @@
                                     </tr>
 
                                     <ng-container formArrayName="linkedStocks">
-                                        <tr *ngFor="let list of addStockForm.get('manufacturingDetails')['controls']['linkedStocks'].controls;let i = index; let l = last" [formGroupName]="i" class="fsstock">
+                                        <tr *ngFor="let list of addStockForm.get('manufacturingDetails')['controls']['linkedStocks'].controls;let i = index; let l = last"
+                                            [formGroupName]="i" class="fsstock">
                                             <td>
                                                 <label class="input-label-stock">Input Stock Name</label>
-                                                <sh-select [options]="stockListDropDown$ | async" formControlName="stockUniqueName" [multiple]="false" [placeholder]="'Select Stock'" [ItemHeight]="33" (selected)="findAddedStock($event?.value, i)" [forceClearReactive]="forceClearStock$ | async"></sh-select>
+                                                <sh-select [options]="stockListDropDown$ | async"
+                                                    formControlName="stockUniqueName" [multiple]="false"
+                                                    [placeholder]="'Select Stock'" [ItemHeight]="33"
+                                                    (selected)="findAddedStock($event?.value, i)"
+                                                    [forceClearReactive]="forceClearStock$ | async"></sh-select>
                                             </td>
 
                                             <td>
                                                 <label class="input-label-stock">Stock Qty</label>
-                                                <input type="text" formControlName="quantity" decimalDigitsDirective [DecimalPlaces]="4" name="quantity" placeholder="Enter Quantity" class="form-control" />
+                                                <input type="text" formControlName="quantity" decimalDigitsDirective
+                                                    [DecimalPlaces]="4" name="quantity" placeholder="Enter Quantity"
+                                                    class="form-control" />
                                             </td>
                                             <td>
                                                 <label class="input-label-stock">Stock Unit</label>
-                                                <sh-select [options]="stockUnitsDropDown$ | async" formControlName="stockUnitCode" [multiple]="false" [placeholder]="'Select Unit'" [ItemHeight]="33" [forceClearReactive]="forceClearStockUnit$ | async"></sh-select>
+                                                <sh-select [options]="stockUnitsDropDown$ | async"
+                                                    formControlName="stockUnitCode" [multiple]="false"
+                                                    [placeholder]="'Select Unit'" [ItemHeight]="33"
+                                                    [forceClearReactive]="forceClearStockUnit$ | async"></sh-select>
                                             </td>
                                             <td>
-                                                <button class="btn-link btn" (click)="addItemInLinkedStocks(list, i, i)" *ngIf="l" [disabled]="disableStockButton"><i
+                                                <button class="btn-link btn" (click)="addItemInLinkedStocks(list, i, i)"
+                                                    *ngIf="l" [disabled]="disableStockButton"><i
                                                         class="icon-plus add-row"></i></button>
-                                                <button class="btn-link btn" (click)="removeItemInLinkedStocks(i)" *ngIf="!l"><i class="icon-cross delete"></i></button>
+                                                <button class="btn-link btn" (click)="removeItemInLinkedStocks(i)"
+                                                    *ngIf="!l"><i class="icon-cross delete"></i></button>
                                             </td>
                                         </tr>
                                     </ng-container>
@@ -357,13 +406,19 @@
                         <div class="col-12 col-sm-12 text-left">
                             <div class="mt-5 pd-l05 pd-r05">
 
-                                <button type="submit" *ngIf="!isUpdatingStockForm" [ladda]="isStockAddInProcess$ | async" (click)="submit()" class="btn btn-success" [disabled]="addStockForm.invalid || disableStockButton">Save
+                                <button type="submit" *ngIf="!isUpdatingStockForm"
+                                    [ladda]="isStockAddInProcess$ | async" (click)="submit()" class="btn btn-success"
+                                    [disabled]="addStockForm.invalid || disableStockButton">Save
                                 </button>
-                                <button type="button" *ngIf="isUpdatingStockForm" [ladda]="isStockUpdateInProcess$ | async" class="btn btn-primary" (click)="update()" [disabled]="addStockForm.invalid || disableStockButton">Update
+                                <button type="button" *ngIf="isUpdatingStockForm"
+                                    [ladda]="isStockUpdateInProcess$ | async" class="btn btn-primary" (click)="update()"
+                                    [disabled]="addStockForm.invalid || disableStockButton">Update
                                 </button>
-                                <button *ngIf="isUpdatingStockForm" [ladda]="isStockDeleteInProcess$ | async" class="btn btn-danger" (click)="deleteStock()">Delete Stock
+                                <button *ngIf="isUpdatingStockForm" [ladda]="isStockDeleteInProcess$ | async"
+                                    class="btn btn-danger" (click)="openModal(deleteGroupStockTemplate)">Delete Stock
                                 </button>
-                                <button type="button" *ngIf="!isUpdatingStockForm" (click)="resetStockForm()" class="btn btn-default">Reset
+                                <button type="button" *ngIf="!isUpdatingStockForm" (click)="resetStockForm()"
+                                    class="btn btn-default">Reset
                                 </button>
                             </div>
                         </div>
@@ -377,47 +432,14 @@
 
     <div class="clearfix"></div>
     <!--manufactre details  -->
-
-
     <div class="clearfix"></div>
-
-
 </form>
-
-<!--ngbusy  -->
-<div [hidden]="true">
-    <!-- *ngIf="showLoadingForStockEditInProcess$ | async" -->
-    <div class="ng-busy ng-trigger ng-trigger-flyInOut" [ngStyle]="{
-    'position': 'absolute',
-    'background-color': 'rgba(216, 216, 203, 0.5)',
-    'top': (formDivBoundingRect | async)?.top + 'px',
-    'bottom': (formDivBoundingRect | async)?.bottom + 'px',
-    'left': (formDivBoundingRect | async)?.left + 'px',
-    'right': (formDivBoundingRect | async)?.right + 'px',
-    'height': (formDivBoundingRect | async)?.height + 'px',
-    'width': (formDivBoundingRect | async)?.width + 'px'
-  }">
-        <div>
-            <div class="ng-busy-default-wrapper">
-                <div class="ng-busy-default-sign">
-                    <div class="ng-busy-default-spinner">
-                        <div class="bar1"></div>
-                        <div class="bar2"></div>
-                        <div class="bar3"></div>
-                        <div class="bar4"></div>
-                        <div class="bar5"></div>
-                        <div class="bar6"></div>
-                        <div class="bar7"></div>
-                        <div class="bar8"></div>
-                        <div class="bar9"></div>
-                        <div class="bar10"></div>
-                        <div class="bar11"></div>
-                        <div class="bar12"></div>
-                    </div>
-                    <div class="ng-busy-default-text">Loading...</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!--ngbusy  -->
+<!-- popup for the delete group -->
+<ng-template #deleteGroupStockTemplate>
+    <confirm-modal [title]="'Confirmation'"
+        [body]="'Deleting this stock will un-link & delete it forever. Are you sure you want to delete the stock?'"
+        [permanentlyDeleteMessage]="'It will be deleted permanently and will no longer be accessible from any other module.'" [ok]="'Yes'" [cancel]="'No'"
+        (cancelCallBack)="hideModal()" (successCallBack)="deleteStock();hideModal()">
+    </confirm-modal>
+</ng-template>
+<!-- popup end -->

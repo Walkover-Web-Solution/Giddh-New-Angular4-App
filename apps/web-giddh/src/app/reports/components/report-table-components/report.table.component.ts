@@ -20,11 +20,11 @@ export class ReportsTableComponent implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-    
+
     @Input() public reportRespone: ReportsModel[];
     @Input() public activeFinacialYr: any;
     @Input() salesRegisterTotal: any;
-    @ViewChild('mailModal', {static: true}) public mailModal: ModalDirective;
+    @ViewChild('mailModal', { static: true }) public mailModal: ModalDirective;
     public messageBody = {
         header: {
             email: 'Send Email',
@@ -159,7 +159,7 @@ export class ReportsTableComponent implements OnInit, OnDestroy {
         let aa = this.activeFinacialYr;
 
         if (from != null && to != null) {
-            this._router.navigate(['pages', 'reports', 'sales-detailed-expand'], {queryParams: {from: from, to: to, branchUniqueName: this.currentBranchUniqueName}});
+            this._router.navigate(['pages', 'reports', 'sales-detailed-expand'], { queryParams: { from: from, to: to, branchUniqueName: this.currentBranchUniqueName } });
         }
     }
 }
