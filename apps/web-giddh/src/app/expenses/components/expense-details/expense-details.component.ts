@@ -21,7 +21,6 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { cloneDeep } from '../../../lodash-optimized';
 import { SearchService } from '../../../services/search.service';
-import { CompanyService } from '../../../services/companyService.service';
 
 @Component({
     selector: 'app-expense-details',
@@ -157,8 +156,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         private ledgerActions: LedgerActions,
         private store: Store<AppState>,
         private expenseService: ExpenseService,
-        private searchService: SearchService,
-        private companyService: CompanyService
+        private searchService: SearchService
     ) {
         this.files = [];
         this.uploadInput = new EventEmitter<UploadInput>();
@@ -172,8 +170,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
 
     public ngOnInit() {
         this.fileUploadOptions = { concurrency: 1, allowedContentTypes: ['image/png', 'image/jpeg'] };
-        this.companyService.getCompanyTaxes().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.companyTaxesList = response?.body || [];
+        this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
+            this.companyTaxesList = res || [];
         });
         this.buildCreatorString();
     }

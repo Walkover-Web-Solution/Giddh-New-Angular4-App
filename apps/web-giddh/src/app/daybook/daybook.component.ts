@@ -21,7 +21,6 @@ import { LedgerVM } from '../ledger/ledger.vm';
 import { SalesOtherTaxesModal } from '../models/api-models/Sales';
 import { UpdateLedgerEntryPanelComponent } from '../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.component';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { CompanyService } from '../services/companyService.service';
 import { DaybookService } from '../services/daybook.service';
 import { ToasterService } from '../services/toaster.service';
 
@@ -133,7 +132,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
         private modalService: BsModalService,
         private settingsBranchAction: SettingsBranchActions,
         private ledgerActions: LedgerActions,
-        private companyService: CompanyService,
         private daybookService: DaybookService,
         private toasterService: ToasterService
     ) {
@@ -591,8 +589,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @memberof DaybookComponent
      */
     private getCompanyTaxes(): void {
-        this.companyService.getCompanyTaxes().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.companyTaxesList = response?.body || [];
+        this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
+            this.companyTaxesList = res || [];
         });
     }
 }
