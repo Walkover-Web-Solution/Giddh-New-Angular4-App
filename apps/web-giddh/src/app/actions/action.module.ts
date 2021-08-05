@@ -7,7 +7,6 @@ import { LoginActions } from './login.action';
 import { GroupWithAccountsAction } from './groupwithaccounts.actions';
 import { AccountsAction } from './accounts.actions';
 import { SidebarAction } from './inventory/sidebar.actions';
-import { DaybookActions } from './daybook/daybook.actions';
 import { CustomStockUnitAction } from './inventory/customStockUnit.actions';
 import { PermissionActions } from './permission/permission.action';
 import { InventoryAction } from './inventory/inventory.actions';
@@ -79,7 +78,6 @@ import { PurchaseOrderActions } from './purchase-order/purchase-order.action';
             ManufacturingActions,
             TBPlBsActions,
             LedgerActions,
-            DaybookActions,
             InvoiceActions,
             SettingsIntegrationActions,
             SettingsProfileActions,
