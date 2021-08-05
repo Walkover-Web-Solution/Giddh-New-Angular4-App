@@ -3,32 +3,47 @@
         <div class="padd15">
             <div class="form-group width-sidebar-form-control">
                 <div class="select-style middle">
-                    <select class="form-control" (change)="selectReportType($event.target.value)" [value]='reportType'>
+                    <select class="form-control" (change)="selectReportType($event.target.value)" [value]="reportType">
                         <option value="stock">Stock Report</option>
                         <option value="person">Person Report</option>
                     </select>
                 </div>
             </div>
             <div class="position-relative">
-                <input class="form-control width-sidebar-form-control-search" type="search"
-                    placeholder="Search {{reportType}}" [(ngModel)]="nameSearch" #search>
+                <input
+                    class="form-control width-sidebar-form-control-search"
+                    type="search"
+                    placeholder="Search {{ reportType }}"
+                    [(ngModel)]="nameSearch"
+                    #search
+                />
                 <i class="fa fa-search text-light-2 position-absolute"></i>
             </div>
         </div>
         <div>
-            <ul *ngIf="reportType==='stock' && stocksList" class="list-unstyled stock-grp-list clearfix">
-                <li *ngFor="let s of stocksList" [ngClass]="{'active': uniqueName === s.uniqueName}"
-                    (click)="showReport(s)"><a href="javascript:void(0);">{{s.name}}</a></li>
-                <li class="no-data-box text-center text-light" *ngIf="stocksList && stocksList.length<=0">
-                    <img src="assets/images/search-data-not-found.svg" /><br>
+            <ul *ngIf="reportType === 'stock' && stocksList" class="list-unstyled stock-grp-list clearfix">
+                <li
+                    *ngFor="let s of stocksList"
+                    [ngClass]="{ 'active': uniqueName === s.uniqueName }"
+                    (click)="showReport(s)"
+                >
+                    <a href="javascript:void(0);">{{ s.name }}</a>
+                </li>
+                <li class="no-data-box text-center text-light" *ngIf="stocksList && stocksList.length <= 0">
+                    <img src="assets/images/search-data-not-found.svg" /><br />
                     No Data Found
                 </li>
             </ul>
-            <ul *ngIf="reportType==='person' && inventoryUsers" class="list-unstyled stock-grp-list clearfix">
-                <li *ngFor="let p of inventoryUsers" [ngClass]="{'active': uniqueName === p.uniqueName}"
-                    (click)="showReport(p)"><a href="javascript:void(0);">{{p.name}}</a></li>
-                <li class="no-data-box text-center text-light" *ngIf="inventoryUsers && inventoryUsers.length<=0">
-                    <img src="assets/images/search-data-not-found.svg" /><br>
+            <ul *ngIf="reportType === 'person' && inventoryUsers" class="list-unstyled stock-grp-list clearfix">
+                <li
+                    *ngFor="let p of inventoryUsers"
+                    [ngClass]="{ 'active': uniqueName === p.uniqueName }"
+                    (click)="showReport(p)"
+                >
+                    <a href="javascript:void(0);">{{ p.name }}</a>
+                </li>
+                <li class="no-data-box text-center text-light" *ngIf="inventoryUsers && inventoryUsers.length <= 0">
+                    <img src="assets/images/search-data-not-found.svg" /><br />
                     No Data Found
                 </li>
             </ul>

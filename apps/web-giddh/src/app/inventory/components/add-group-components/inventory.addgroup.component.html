@@ -14,75 +14,134 @@
                             <div class="row">
                                 <div class="form-group col-xs-6 col-sm-6">
                                     <label>Name <sup>*</sup></label>
-                                    <input type="text" name="name" (change)="generateUniqueName()" class="form-control"
-                                        formControlName="name" />
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        (change)="generateUniqueName()"
+                                        class="form-control"
+                                        formControlName="name"
+                                    />
                                 </div>
                                 <div class="form-group col-xs-6 col-sm-6">
                                     <label>Unique Name <sup>*</sup></label>
-                                    <input type="text" name="uniqueName" UniqueNameDirective textCaseChangeDirective
+                                    <input
+                                        type="text"
+                                        name="uniqueName"
+                                        UniqueNameDirective
+                                        textCaseChangeDirective
                                         [control]="addGroupForm.get('uniqueName')"
-                                        (blur)="validateUniqueName($event?.target?.value)" formControlName="uniqueName"
-                                        class="form-control">
+                                        (blur)="validateUniqueName($event?.target?.value)"
+                                        formControlName="uniqueName"
+                                        class="form-control"
+                                    />
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-xs-6 col-sm-6">
                                     <span class="mr-r15">
-                                        <input type="radio" class="radio-custom radio-theme" name="showCodeType"
-                                            id="hsnCodeType" formControlName="showCodeType" value="hsn">
+                                        <input
+                                            type="radio"
+                                            class="radio-custom radio-theme"
+                                            name="showCodeType"
+                                            id="hsnCodeType"
+                                            formControlName="showCodeType"
+                                            value="hsn"
+                                        />
                                         <label for="hsnCodeType" class="radio-custom-label">HSN Code</label>
                                     </span>
                                     <span>
-                                        <input type="radio" class="radio-custom radio-theme" name="showCodeType"
-                                            id="sacCodeType" formControlName="showCodeType" value="sac">
+                                        <input
+                                            type="radio"
+                                            class="radio-custom radio-theme"
+                                            name="showCodeType"
+                                            id="sacCodeType"
+                                            formControlName="showCodeType"
+                                            value="sac"
+                                        />
                                         <label for="sacCodeType" class="ml-1 radio-custom-label">SAC Code</label>
                                     </span>
-                                    <input type="text" class="form-control" maxlength="10" decimalDigitsDirective
-                                        formControlName="hsnNumber"
-                                        *ngIf="addGroupForm.get('showCodeType').value === 'hsn'" />
-                                    <input type="text" class="form-control" maxlength="10" formControlName="sacNumber"
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        maxlength="10"
                                         decimalDigitsDirective
-                                        *ngIf="addGroupForm.get('showCodeType').value === 'sac'" />
+                                        formControlName="hsnNumber"
+                                        *ngIf="addGroupForm.get('showCodeType').value === 'hsn'"
+                                    />
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        maxlength="10"
+                                        formControlName="sacNumber"
+                                        decimalDigitsDirective
+                                        *ngIf="addGroupForm.get('showCodeType').value === 'sac'"
+                                    />
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-xs-6 col-sm-6">
                                     <div class="pd-b1" [hidden]="defaultGrpActive">
                                         <label for="isSelfParentUpdt">
-                                            <input type="checkbox" formControlName="isSubGroup" id="isSelfParentUpdt"
-                                                name="parentStockGroup">Is
-                                            it a sub group?</label>
+                                            <input
+                                                type="checkbox"
+                                                formControlName="isSubGroup"
+                                                id="isSelfParentUpdt"
+                                                name="parentStockGroup"
+                                            />Is it a sub group?</label
+                                        >
                                     </div>
                                     <div class="form-group">
                                         <label>Parent Group</label>
-                                        <sh-select [options]="groupsData$ | async"
+                                        <sh-select
+                                            [options]="groupsData$ | async"
                                             formControlName="parentStockGroupUniqueName"
                                             [disabled]="!addGroupForm.get('isSubGroup').value"
-                                            [placeholder]="'Select Parent Group'" [multiple]="false"
-                                            (selected)="groupSelected($event)" [ItemHeight]="33"
-                                            [forceClearReactive]="forceClear$ | async" [isRequired]="true"></sh-select>
+                                            [placeholder]="'Select Parent Group'"
+                                            [multiple]="false"
+                                            (selected)="groupSelected($event)"
+                                            [ItemHeight]="33"
+                                            [forceClearReactive]="forceClear$ | async"
+                                            [isRequired]="true"
+                                        ></sh-select>
                                     </div>
                                 </div>
                                 <div class="form-group col-xs-6 col-sm-6">
                                     <label>Tax</label>
-                                    <div class="btn-group btn-block" dropdown #taxDropDownWeb="bs-dropdown"
-                                        [attachOutsideOnClick]="true" (clickOutside)="taxDropDownWeb.hide()">
-                                        <button dropdownToggle type="button"
-                                            class="dropdown-toggle form-control text-left"> Selected
-                                            ({{ taxTempArray.length }}) <span class="pull-right"><span
-                                                    class="caret"></span></span></button>
+                                    <div
+                                        class="btn-group btn-block"
+                                        dropdown
+                                        #taxDropDownWeb="bs-dropdown"
+                                        [attachOutsideOnClick]="true"
+                                        (clickOutside)="taxDropDownWeb.hide()"
+                                    >
+                                        <button
+                                            dropdownToggle
+                                            type="button"
+                                            class="dropdown-toggle form-control text-left"
+                                        >
+                                            Selected ({{ taxTempArray.length }})
+                                            <span class="pull-right"><span class="caret"></span></span>
+                                        </button>
                                         <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
-                                            <li role="menuitem" *ngFor="let tax of (companyTaxesList$ | async)"
-                                                [ngClass]="{'opacity' : tax.isDisabled}">
-                                                <a class="dropdown-item" (click)="$event.stopPropagation()"><input
-                                                        type="checkbox" [disabled]="tax.isDisabled"
-                                                        [checked]="tax.isChecked" (click)="selectTax($event, tax)" />
-                                                    {{tax.name}}
+                                            <li
+                                                role="menuitem"
+                                                *ngFor="let tax of companyTaxesList$ | async"
+                                                [ngClass]="{ 'opacity': tax.isDisabled }"
+                                            >
+                                                <a class="dropdown-item" (click)="$event.stopPropagation()"
+                                                    ><input
+                                                        type="checkbox"
+                                                        [disabled]="tax.isDisabled"
+                                                        [checked]="tax.isChecked"
+                                                        (click)="selectTax($event, tax)"
+                                                    />
+                                                    {{ tax.name }}
                                                 </a>
                                             </li>
                                             <li *ngIf="(companyTaxesList$ | async).length < 1">
-                                                <a class="dropdown-item" (click)="$event.stopPropagation()">No Tax
-                                                    Found</a>
+                                                <a class="dropdown-item" (click)="$event.stopPropagation()"
+                                                    >No Tax Found</a
+                                                >
                                             </li>
                                         </ul>
                                     </div>
@@ -90,20 +149,34 @@
                             </div>
                             <div class="clearfix text-left mt-5">
                                 <div *ngIf="addGroup">
-                                    <button type="submit" class="btn btn-success"
-                                        [ladda]="isAddNewGroupInProcess$ | async" (click)="addNewGroup()"
-                                        [disabled]="addGroupForm.invalid">Save
+                                    <button
+                                        type="submit"
+                                        class="btn btn-success"
+                                        [ladda]="isAddNewGroupInProcess$ | async"
+                                        (click)="addNewGroup()"
+                                        [disabled]="addGroupForm.invalid"
+                                    >
+                                        Save
                                     </button>
                                     <button type="reset" class="btn btn-primary">Cancel</button>
                                 </div>
                                 <div *ngIf="!addGroup">
-                                    <button type="submit" [disabled]="addGroupForm.invalid || defaultGrpActive"
-                                        [ladda]="isUpdateGroupInProcess$ | async" class="btn btn-success"
-                                        (click)="updateGroup()">Update
+                                    <button
+                                        type="submit"
+                                        [disabled]="addGroupForm.invalid || defaultGrpActive"
+                                        [ladda]="isUpdateGroupInProcess$ | async"
+                                        class="btn btn-success"
+                                        (click)="updateGroup()"
+                                    >
+                                        Update
                                     </button>
-                                    <button type="submit" class="btn btn-danger"
-                                        [ladda]="isDeleteGroupInProcess$ | async" (click)="openModal(deleteGroupModalTemplate)"
-                                        >Delete
+                                    <button
+                                        type="submit"
+                                        class="btn btn-danger"
+                                        [ladda]="isDeleteGroupInProcess$ | async"
+                                        (click)="openModal(deleteGroupModalTemplate)"
+                                    >
+                                        Delete
                                     </button>
                                 </div>
                             </div>
@@ -116,10 +189,19 @@
 </section>
 <!-- popup for the delete group -->
 <ng-template #deleteGroupModalTemplate>
-    <confirm-modal [title]="'Confirmation'"
-        [body]="'Deleting this group will delete & un-link all the stocks under it. Are you sure you want to delete the group?'"
-        [permanentlyDeleteMessage]="'It will be deleted permanently and will no longer be accessible from any other module.'" [ok]="'Yes'" [cancel]="'No'"
-        (cancelCallBack)="hideModal()" (successCallBack)="removeGroup();hideModal()">
+    <confirm-modal
+        [title]="'Confirmation'"
+        [body]="
+            'Deleting this group will delete & un-link all the stocks under it. Are you sure you want to delete the group?'
+        "
+        [permanentlyDeleteMessage]="
+            'It will be deleted permanently and will no longer be accessible from any other module.'
+        "
+        [ok]="'Yes'"
+        [cancel]="'No'"
+        (cancelCallBack)="hideModal()"
+        (successCallBack)="removeGroup(); hideModal()"
+    >
     </confirm-modal>
 </ng-template>
 <!-- popup end -->

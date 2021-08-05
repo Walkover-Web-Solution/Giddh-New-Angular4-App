@@ -1,8 +1,13 @@
-<ng-container appTranslate [file]="'invoice/recurring'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+<ng-container
+    appTranslate
+    [file]="'invoice/recurring'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
     <div class="aside-pane account-aside-menu-state">
         <div class="form-header">
-            <h3 class="aside-title">{{localeData?.recurring_account}}</h3>
+            <h3 class="aside-title">{{ localeData?.recurring_account }}</h3>
         </div>
         <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
         <div class="aside-body">
@@ -10,50 +15,89 @@
                 <form [formGroup]="form">
                     <div class="row">
                         <div class="col-xs-4 col-sm-4 form-group">
-                            <label class="mr-b1">{{commonLocaleData?.app_start_date}}<span
-                                    class="text-danger">*</span></label>
-                            <input name="dateRange" formControlName="nextCronDate" type="text" autocomplete="off"
-                                class="form-control" bsDatepicker [minDate]="today"
-                                [bsConfig]=" {dateInputFormat: giddhDateFormat}">
+                            <label class="mr-b1"
+                                >{{ commonLocaleData?.app_start_date }}<span class="text-danger">*</span></label
+                            >
+                            <input
+                                name="dateRange"
+                                formControlName="nextCronDate"
+                                type="text"
+                                autocomplete="off"
+                                class="form-control"
+                                bsDatepicker
+                                [minDate]="today"
+                                [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                            />
                         </div>
 
                         <div class="col-xs-4 col-sm-4 form-group" *ngIf="!IsNotExpirable">
-                            <label class="mr-b1">{{commonLocaleData?.app_end_date}}<span
-                                    class="text-danger">*</span></label>
-                            <input name="dateRange" formControlName="cronEndDate" type="text" autocomplete="off"
-                                [minDate]="maxEndDate" class="form-control" bsDatepicker
-                                [bsConfig]="{dateInputFormat: giddhDateFormat}">
+                            <label class="mr-b1"
+                                >{{ commonLocaleData?.app_end_date }}<span class="text-danger">*</span></label
+                            >
+                            <input
+                                name="dateRange"
+                                formControlName="cronEndDate"
+                                type="text"
+                                autocomplete="off"
+                                [minDate]="maxEndDate"
+                                class="form-control"
+                                bsDatepicker
+                                [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                            />
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <input [checked]="IsNotExpirable" (change)="isExpirableChanged($event.target)"
-                            type="checkbox" /> {{localeData?.never_expire}}
+                        <input
+                            [checked]="IsNotExpirable"
+                            (change)="isExpirableChanged($event.target)"
+                            type="checkbox"
+                        />
+                        {{ localeData?.never_expire }}
                     </div>
 
                     <div class="form-group ng-select-wrap select-list select-group">
-                        <label class="mr-b1">{{localeData?.interval}}<span class="text-danger">*</span></label>
-                        <ng-select [placeholder]="localeData?.select_interval"
-                            [filterPlaceholder]="localeData?.type_to_search" class="w-100" formControlName="duration"
-                            name="duration" [options]="intervalOptions">
+                        <label class="mr-b1">{{ localeData?.interval }}<span class="text-danger">*</span></label>
+                        <ng-select
+                            [placeholder]="localeData?.select_interval"
+                            [filterPlaceholder]="localeData?.type_to_search"
+                            class="w-100"
+                            formControlName="duration"
+                            name="duration"
+                            [options]="intervalOptions"
+                        >
                             <ng-template #optionTemplate let-option="option">
-                                <div class="account-list-item">{{option?.label}}</div>
-                                <div class="account-list-item font-12">{{option?.value}}</div>
+                                <div class="account-list-item">{{ option?.label }}</div>
+                                <div class="account-list-item font-12">{{ option?.value }}</div>
                             </ng-template>
                         </ng-select>
                     </div>
 
                     <div class="clearfix text-right" *ngIf="mode === 'create'">
-                        <button class="btn btn-sm"
-                            (click)="closeAsidePane($event)">{{commonLocaleData?.app_cancel}}</button>
-                        <button class="btn btn-success btn-sm" [ladda]="isLoading"
-                            (click)="saveRecurringInvoice()">{{commonLocaleData?.app_save}}</button>
+                        <button class="btn btn-sm" (click)="closeAsidePane($event)">
+                            {{ commonLocaleData?.app_cancel }}
+                        </button>
+                        <button class="btn btn-success btn-sm" [ladda]="isLoading" (click)="saveRecurringInvoice()">
+                            {{ commonLocaleData?.app_save }}
+                        </button>
                     </div>
                     <div class="clearfix text-right" *ngIf="mode === 'update'">
-                        <button *ngIf="!isCompany" class="btn btn-danger btn-sm" [ladda]="isDeleteLoading"
-                            (click)="deleteInvoice()">{{commonLocaleData?.app_delete}}</button>
-                        <button *ngIf="!isCompany" class="btn btn-success btn-sm" [ladda]="isLoading"
-                            (click)="saveRecurringInvoice()">{{commonLocaleData?.app_update}}</button>
+                        <button
+                            *ngIf="!isCompany"
+                            class="btn btn-danger btn-sm"
+                            [ladda]="isDeleteLoading"
+                            (click)="deleteInvoice()"
+                        >
+                            {{ commonLocaleData?.app_delete }}
+                        </button>
+                        <button
+                            *ngIf="!isCompany"
+                            class="btn btn-success btn-sm"
+                            [ladda]="isLoading"
+                            (click)="saveRecurringInvoice()"
+                        >
+                            {{ commonLocaleData?.app_update }}
+                        </button>
                     </div>
                 </form>
             </div>

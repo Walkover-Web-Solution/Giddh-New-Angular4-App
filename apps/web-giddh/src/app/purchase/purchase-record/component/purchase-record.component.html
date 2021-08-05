@@ -3,21 +3,36 @@
         <hamburger-menu [pageHeading]="getPageHeading()"></hamburger-menu>
         <div class="invoice-control" id="purchase-tab">
             <tabset class="purchase-tabset">
-                <tab [heading]="localeData?.purchase_order" [active]="activeTab == 'order'" (selectTab)="onTabChanged('order')"
-                    [id]="(activeTab == 'order') ? 'giddh-page-heading': ''">
+                <tab
+                    [heading]="localeData?.purchase_order"
+                    [active]="activeTab == 'order'"
+                    (selectTab)="onTabChanged('order')"
+                    [id]="activeTab == 'order' ? 'giddh-page-heading' : ''"
+                >
                     <div *ngIf="activeTab == 'order'" class="purchase-pre-head">
                         <purchase-order (refreshPurchaseBill)="purchaseOrderOutput($event)"></purchase-order>
                     </div>
                 </tab>
-                <tab [heading]="localeData?.purchase_bill" [active]="activeTab == 'bill'" (selectTab)="onTabChanged('bill')"
-                    [id]="(activeTab == 'bill') ? 'giddh-page-heading': ''">
+                <tab
+                    [heading]="localeData?.purchase_bill"
+                    [active]="activeTab == 'bill'"
+                    (selectTab)="onTabChanged('bill')"
+                    [id]="activeTab == 'bill' ? 'giddh-page-heading' : ''"
+                >
                     <div *ngIf="activeTab == 'bill'" class="purchase-pre-head">
-                        <app-invoice-preview [selectedVoucher]="'purchase'" [refreshPurchaseBill]="refreshPurchaseBill"
-                            (resetRefreshPurchaseBill)="purchaseOrderOutput($event)"></app-invoice-preview>
+                        <app-invoice-preview
+                            [selectedVoucher]="'purchase'"
+                            [refreshPurchaseBill]="refreshPurchaseBill"
+                            (resetRefreshPurchaseBill)="purchaseOrderOutput($event)"
+                        ></app-invoice-preview>
                     </div>
                 </tab>
-                <tab [heading]="localeData?.settings" [active]="activeTab == 'settings'" (selectTab)="onTabChanged('settings')"
-                    [id]="(activeTab == 'settings') ? 'giddh-page-heading': ''">
+                <tab
+                    [heading]="localeData?.settings"
+                    [active]="activeTab == 'settings'"
+                    (selectTab)="onTabChanged('settings')"
+                    [id]="activeTab == 'settings' ? 'giddh-page-heading' : ''"
+                >
                     <div>
                         <purchase-setting></purchase-setting>
                     </div>

@@ -1,36 +1,50 @@
-<div id="live" appTranslate [file]="'home/bank-accounts'" [requireCommonData]="false"
-    (localeData)="localeData = $event">
+<div
+    id="live"
+    appTranslate
+    [file]="'home/bank-accounts'"
+    [requireCommonData]="false"
+    (localeData)="localeData = $event"
+>
     <div class="card">
         <div class="panel-heading clearfix">
-            <strong>{{localeData?.chart_title}}</strong>
+            <strong>{{ localeData?.chart_title }}</strong>
         </div>
         <div class="card-body position-relative" *ngIf="localeData">
             <div class="bank-details-block">
                 <perfect-scrollbar [scrollIndicators]="true" *ngIf="!isLoading && bankAccounts.length > 0">
                     <div class="wrap-single-bank-detail">
-                        <div class="single-bank-detail" *ngFor="let bankaccount of bankAccounts;">
-                            <p class="bank-name"> {{bankaccount.name}} </p>
+                        <div class="single-bank-detail" *ngFor="let bankaccount of bankAccounts">
+                            <p class="bank-name">{{ bankaccount.name }}</p>
                             <p class="bank-balance">
-                                <span>{{localeData?.in_giddh}}</span>
-                                <span>{{activeCompany.baseCurrencySymbol}}
-                                    {{bankaccount.closingBalance.amount | giddhCurrency}}
-                                    <span
-                                        *ngIf="bankaccount.closingBalance.type == 'CREDIT'">{{localeData?.cr_heading}}</span>
-                                    <span
-                                        *ngIf="bankaccount.closingBalance.type == 'DEBIT'">{{localeData?.dr_heading}}</span></span>
+                                <span>{{ localeData?.in_giddh }}</span>
+                                <span
+                                    >{{ activeCompany.baseCurrencySymbol }}
+                                    {{ bankaccount.closingBalance.amount | giddhCurrency }}
+                                    <span *ngIf="bankaccount.closingBalance.type == 'CREDIT'">{{
+                                        localeData?.cr_heading
+                                    }}</span>
+                                    <span *ngIf="bankaccount.closingBalance.type == 'DEBIT'">{{
+                                        localeData?.dr_heading
+                                    }}</span></span
+                                >
                             </p>
                         </div>
                     </div>
                 </perfect-scrollbar>
                 <div class="add-bank-details" *ngIf="!isLoading && bankAccounts.length === 0">
-                    <p>{{localeData?.no_banks_found}}</p>
-                    <a class="connect-bank"
-                        [routerLink]="['/pages/settings/linked-accounts']">{{localeData?.connect_bank}}</a>
+                    <p>{{ localeData?.no_banks_found }}</p>
+                    <a class="connect-bank" [routerLink]="['/pages/settings/linked-accounts']">{{
+                        localeData?.connect_bank
+                    }}</a>
                 </div>
                 <giddh-page-loader *ngIf="isLoading" [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </div>
-            <a class="connect-bank" *ngIf="bankAccounts.length > 0"
-                [routerLink]="['/pages/settings/linked-accounts']">{{localeData?.connect_bank}}</a>
+            <a
+                class="connect-bank"
+                *ngIf="bankAccounts.length > 0"
+                [routerLink]="['/pages/settings/linked-accounts']"
+                >{{ localeData?.connect_bank }}</a
+            >
         </div>
     </div>
 </div>

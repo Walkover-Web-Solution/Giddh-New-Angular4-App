@@ -179,8 +179,8 @@ $input-height: 3rem !default;
         th,
         .th-div {
             font-size: 100%;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-                Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell,
+                "Helvetica Neue", sans-serif;
             font: 400 14px system-ui;
             margin-bottom: 0 !important;
         }
@@ -212,8 +212,7 @@ $input-height: 3rem !default;
         /* new calendar */
     }
     .calendar-table {
-        border: $md-drppicker-calendar-border-size solid
-            $md-drppicker-calendar-border-color;
+        border: $md-drppicker-calendar-border-size solid $md-drppicker-calendar-border-color;
         padding: $md-drppicker-calendar-margin;
         border-radius: $md-drppicker-calendar-border-radius;
         background-color: $md-drppicker-calendar-bg-color;
@@ -245,8 +244,7 @@ $input-height: 3rem !default;
         text-align: center;
         width: $md-drppicker-cell-width;
         height: $md-drppicker-cell-height;
-        border: $md-drppicker-cell-border-size solid
-            $md-drppicker-cell-border-color;
+        border: $md-drppicker-cell-border-size solid $md-drppicker-cell-border-color;
         white-space: nowrap;
         cursor: pointer;
         height: 2em;
@@ -309,8 +307,7 @@ $input-height: 3rem !default;
         text-align: center;
         width: $md-drppicker-cell-width;
         height: $md-drppicker-cell-height;
-        border: $md-drppicker-cell-border-size solid
-            $md-drppicker-cell-border-color;
+        border: $md-drppicker-cell-border-size solid $md-drppicker-cell-border-color;
         white-space: nowrap;
         cursor: pointer;
         height: 2em;
@@ -595,8 +592,7 @@ $input-height: 3rem !default;
         cursor: not-allowed;
     }
     .label-input {
-        border: $md-drppicker-control-border-size solid
-            $md-drppicker-control-border-color;
+        border: $md-drppicker-control-border-size solid $md-drppicker-control-border-color;
         border-radius: $md-drppicker-control-border-radius;
         color: $md-drppicker-control-color;
         height: $md-drppicker-control-line-height;
@@ -607,8 +603,7 @@ $input-height: 3rem !default;
         padding: 0 0 0 28px;
         width: 100%;
         &.active {
-            border: $md-drppicker-control-active-border-size solid
-                $md-drppicker-control-active-border-color;
+            border: $md-drppicker-control-active-border-size solid $md-drppicker-control-active-border-color;
             border-radius: $md-drppicker-control-active-border-radius;
         }
     }
@@ -1090,7 +1085,8 @@ td:hover span {
 }
 /* new calendar */
 
-.md-drppicker td.end-date.active, .md-drppicker .td-div.end-date.active {
+.md-drppicker td.end-date.active,
+.md-drppicker .td-div.end-date.active {
     background-color: $white !important;
 
     span {
@@ -1904,12 +1900,7 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
             min-width: 38px;
         }
     }
-    .md-drppicker
-        .calender-container
-        .calender-container-wrapper
-        .calender-body
-        .upper-part
-        .sticky-header {
+    .md-drppicker .calender-container .calender-container-wrapper .calender-body .upper-part .sticky-header {
         max-width: 320px !important;
         margin: 0 auto;
         width: 100% !important;

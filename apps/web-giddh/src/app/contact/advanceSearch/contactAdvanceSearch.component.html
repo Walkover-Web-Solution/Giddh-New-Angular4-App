@@ -1,7 +1,6 @@
 <div>
-
     <div class="modal-header theme-bg pd-2 pd-l2 pd-r2 clearfix">
-        <h3 class="modal-title bg" id="modal-title">{{commonLocaleData?.app_advance_search}}</h3>
+        <h3 class="modal-title bg" id="modal-title">{{ commonLocaleData?.app_advance_search }}</h3>
         <i class="icon-cross text-right close-modal" aria-hidden="true" (click)="onCancel()"></i>
     </div>
     <div class="modal-body pd-l2 pd-r2 clearfix" id="export-body">
@@ -10,28 +9,44 @@
             <div class="modal-wrap mr-b2">
                 <div class="row mt-2 mb-2">
                     <div class="col-xs-12 col-sm-4">
-                        <label>{{commonLocaleData?.app_select_category}}</label>
+                        <label>{{ commonLocaleData?.app_select_category }}</label>
                     </div>
                     <div class="col-xs-12 col-sm-8">
-                        <sh-select [placeholder]="commonLocaleData?.app_select" name="entryCategory"
-                            [options]="categoryOptions" [ItemHeight]="33" [(ngModel)]="request.category"></sh-select>
+                        <sh-select
+                            [placeholder]="commonLocaleData?.app_select"
+                            name="entryCategory"
+                            [options]="categoryOptions"
+                            [ItemHeight]="33"
+                            [(ngModel)]="request.category"
+                        ></sh-select>
                     </div>
                 </div>
                 <div class="row mt-2 mb-2">
                     <div class="col-xs-12 col-sm-4">
-                        <label>{{commonLocaleData?.app_amount}}</label>
+                        <label>{{ commonLocaleData?.app_amount }}</label>
                     </div>
                     <div class="col-xs-12 col-sm-8">
                         <div class="row">
                             <div class="col-sm-8 col-xs-6 mr-b1">
-                                <sh-select [placeholder]="commonLocaleData?.app_select" name="entryTotalBy"
-                                    [options]="filtersForEntryTotal" [ItemHeight]="33" [(ngModel)]="request.amountType">
+                                <sh-select
+                                    [placeholder]="commonLocaleData?.app_select"
+                                    name="entryTotalBy"
+                                    [options]="filtersForEntryTotal"
+                                    [ItemHeight]="33"
+                                    [(ngModel)]="request.amountType"
+                                >
                                 </sh-select>
                             </div>
                             <div class="col-sm-4 col-xs-6">
-                                <input class="form-control" type="tel"
-                                    [placeholder]="commonLocaleData?.app_numbers?.zero+''+commonLocaleData?.app_numbers?.zero"
-                                    name="total" [(ngModel)]="request.amount">
+                                <input
+                                    class="form-control"
+                                    type="tel"
+                                    [placeholder]="
+                                        commonLocaleData?.app_numbers?.zero + '' + commonLocaleData?.app_numbers?.zero
+                                    "
+                                    name="total"
+                                    [(ngModel)]="request.amount"
+                                />
                             </div>
                         </div>
                     </div>
@@ -39,10 +54,12 @@
             </div>
             <!--endregion-->
             <div class="pull-right">
-                <button type="submit" class="btn btn-md btn-success mr-r1"
-                    (click)="save()">{{commonLocaleData?.app_search}}</button>
-                <button type="submit" class="btn btn-md btn-cancel"
-                    (click)="onCancel()">{{commonLocaleData?.app_cancel}}</button>
+                <button type="submit" class="btn btn-md btn-success mr-r1" (click)="save()">
+                    {{ commonLocaleData?.app_search }}
+                </button>
+                <button type="submit" class="btn btn-md btn-cancel" (click)="onCancel()">
+                    {{ commonLocaleData?.app_cancel }}
+                </button>
             </div>
         </form>
     </div>
