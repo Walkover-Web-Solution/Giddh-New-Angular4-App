@@ -1,27 +1,43 @@
 <div class="aside-pane">
-    <div class="form-header" *ngIf="selectedAsideView=='mainview'">
+    <div class="form-header" *ngIf="selectedAsideView == 'mainview'">
         <h3>Create</h3>
     </div>
-    <button id="close" (click)="closeAsidePane($event)" *ngIf="selectedAsideView=='mainview'"><i
-            class="icon-cross"></i></button>
-    <button id="back" (click)="backButtonPressed()" *ngIf="selectedAsideView!='mainview'">Back</button>
+    <button id="close" (click)="closeAsidePane($event)" *ngIf="selectedAsideView == 'mainview'">
+        <i class="icon-cross"></i>
+    </button>
+    <button id="back" (click)="backButtonPressed()" *ngIf="selectedAsideView != 'mainview'">Back</button>
     <div [ngSwitch]="selectedAsideView">
         <ng-container *ngSwitchCase="'inward'">
-            <transfer-inward-note [stockList]="stockList$ | async" [userList]="userList$ | async"
-                [stockUnits]="stockUnits$ | async" [isLoading]="isLoading" (onSave)="onSave($event)"
-                (onCancel)="onCancel()">
+            <transfer-inward-note
+                [stockList]="stockList$ | async"
+                [userList]="userList$ | async"
+                [stockUnits]="stockUnits$ | async"
+                [isLoading]="isLoading"
+                (onSave)="onSave($event)"
+                (onCancel)="onCancel()"
+            >
             </transfer-inward-note>
         </ng-container>
         <ng-container *ngSwitchCase="'outward'">
-            <transfer-outward-note [stockList]="stockList$ | async" [userList]="userList$ | async"
-                [stockUnits]="stockUnits$ | async" [isLoading]="isLoading" (onSave)="onSave($event)"
-                (onCancel)="onCancel()">
+            <transfer-outward-note
+                [stockList]="stockList$ | async"
+                [userList]="userList$ | async"
+                [stockUnits]="stockUnits$ | async"
+                [isLoading]="isLoading"
+                (onSave)="onSave($event)"
+                (onCancel)="onCancel()"
+            >
             </transfer-outward-note>
         </ng-container>
         <ng-container *ngSwitchCase="'transfer'">
-            <transfer-notes [stockList]="stockList$ | async" [userList]="userList$ | async"
-                [stockUnits]="stockUnits$ | async" [isLoading]="isLoading" (onSave)="onSave($event.entry,$event.user)"
-                (onCancel)="onCancel()">
+            <transfer-notes
+                [stockList]="stockList$ | async"
+                [userList]="userList$ | async"
+                [stockUnits]="stockUnits$ | async"
+                [isLoading]="isLoading"
+                (onSave)="onSave($event.entry, $event.user)"
+                (onCancel)="onCancel()"
+            >
             </transfer-notes>
         </ng-container>
         <ng-container *ngSwitchCase="'createStock'">
@@ -35,20 +51,24 @@
         <ng-container *ngSwitchDefault>
             <div class="aside-body flexy-child vertical-align-middle aside-panel-ledger" vr-item>
                 <div class="pd-1 text-center">
-                    <button type="button" class="btn btn-lg btn-primary" (click)="selectView('inward')">Inward
-                        Note</button>
+                    <button type="button" class="btn btn-lg btn-primary" (click)="selectView('inward')">
+                        Inward Note
+                    </button>
                 </div>
                 <div class="pd-1 text-center">
-                    <button type="button" class="btn btn-lg btn-primary" (click)="selectView('outward')">Outward
-                        Note</button>
+                    <button type="button" class="btn btn-lg btn-primary" (click)="selectView('outward')">
+                        Outward Note
+                    </button>
                 </div>
                 <div class="pd-1 text-center">
-                    <button type="button" class="btn btn-lg btn-primary" (click)="selectView('createStock')">Create
-                        Stock</button>
+                    <button type="button" class="btn btn-lg btn-primary" (click)="selectView('createStock')">
+                        Create Stock
+                    </button>
                 </div>
                 <div class="pd-1 text-center">
-                    <button type="button" class="btn btn-lg btn-primary" (click)="selectView('createAccount')">Create
-                        Account</button>
+                    <button type="button" class="btn btn-lg btn-primary" (click)="selectView('createAccount')">
+                        Create Account
+                    </button>
                 </div>
             </div>
         </ng-container>

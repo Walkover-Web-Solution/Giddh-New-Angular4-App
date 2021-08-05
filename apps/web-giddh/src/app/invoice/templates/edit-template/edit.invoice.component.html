@@ -1,19 +1,24 @@
 <div validateSectionPermission [hasPermission]="hasInvoiceTemplatePermissions">
     <div class="template-grid-container">
         <div class="clearfix" id="template-grid-wrapper">
-
             <label class="mr-b05">Select Design for</label>
 
             <div class="select-design">
                 <div class="btn-group d-inline-block mr-b1" dropdown triggers="mouseover" #dp="bs-dropdown">
-                    <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
-                        aria-controls="dropdown-basic">
-                        {{ (voucherType === "debit note" || voucherType === "credit note") ? 'Credit/Debit Note' :
-                        voucherType | titlecase}}
+                    <button
+                        dropdownToggle
+                        type="button"
+                        class="btn more-btn-dropdown dropdown-toggle"
+                        aria-controls="dropdown-basic"
+                    >
+                        {{
+                            voucherType === "debit note" || voucherType === "credit note"
+                                ? "Credit/Debit Note"
+                                : (voucherType | titlecase)
+                        }}
                         <span class="caret"></span>
                     </button>
                     <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-
                         <li role="menuitem" (click)="voucherTypeChanged('sales')">
                             <a class="dropdown-item cp" href="javascript:void(0)">Sales</a>
                         </li>
@@ -28,25 +33,25 @@
             <div class="template-grid">
                 <h3 class="text-left">Design Template</h3>
                 <small class="mr-t3 text-left grey d-block">
-                    Click to add a template from our gallery. You can customize the template title, columns,and headers in
-                    line item
-                    table.
+                    Click to add a template from our gallery. You can customize the template title, columns,and headers
+                    in line item table.
                 </small>
                 <button class="btn pull-left isActive mt-5" (click)="onOpenTemplateModal()">Add New</button>
             </div>
             <ng-container *ngFor="let template of customCreatedTemplates; let i = index">
-
-                <div class="template-grid" *ngIf="template.type === 'invoice' && voucherType==='sales' ">
+                <div class="template-grid" *ngIf="template.type === 'invoice' && voucherType === 'sales'">
                     <div class="template-info text-center">
-                        <h3 class="primary-color">{{template.name}}</h3>
+                        <h3 class="primary-color">{{ template.name }}</h3>
 
-                        <span *ngIf="template.isDefault" class="badge btn-sky-blue mr-t2"><i
-                                class="icon-favorite-selected"></i> Default
-                            Template</span>
-                        <span *ngIf="!template.isDefault" class="badge btn-success mr-t2 cp"
-                            (click)="onSetTemplateAsDefault(template,'invoice')"><i class="icon-favorite-selected"></i>
-                            Set as
-                            Default</span>
+                        <span *ngIf="template.isDefault" class="badge btn-sky-blue mr-t2"
+                            ><i class="icon-favorite-selected"></i> Default Template</span
+                        >
+                        <span
+                            *ngIf="!template.isDefault"
+                            class="badge btn-success mr-t2 cp"
+                            (click)="onSetTemplateAsDefault(template, 'invoice')"
+                            ><i class="icon-favorite-selected"></i> Set as Default</span
+                        >
                     </div>
 
                     <div class="template-action">
@@ -58,30 +63,34 @@
                         <button class="btn btn-default" (click)="onUpdateTemplate(template)">
                             <i class="icon-edit-pencil" tooltip="Edit template" aria-hidden="true"></i>
                         </button>
-                        <button [disabled]="template.isDefault" class="btn btn-default"
-                            (click)="onDeleteTemplate(template)">
+                        <button
+                            [disabled]="template.isDefault"
+                            class="btn btn-default"
+                            (click)="onDeleteTemplate(template)"
+                        >
                             <i class="icon-trash" tooltip="Delete" aria-hidden="true"></i>
                         </button>
 
                         <div class="template-meta">
-                            <small class="text-ellipsis">Created by: {{template.createdBy.name}}</small>
+                            <small class="text-ellipsis">Created by: {{ template.createdBy.name }}</small>
                         </div>
-
-
                     </div>
                 </div>
 
                 <ng-container *ngIf="voucherType === 'credit note' || voucherType === 'debit note'">
                     <div class="template-grid" *ngIf="template.type === 'voucher'">
                         <div class="template-info text-center">
-                            <h3 class="primary-color">{{template.name}}</h3>
+                            <h3 class="primary-color">{{ template.name }}</h3>
 
-                            <span *ngIf="template.isDefaultForVoucher" class="badge btn-sky-blue mr-t2"><i
-                                    class="icon-favorite-selected"></i> Default Template</span>
-                            <span *ngIf="!template.isDefaultForVoucher" class="badge btn-success mr-t2 cp"
-                                (click)="onSetTemplateAsDefault(template,'voucher')"><i class="icon-favorite-selected"></i>
-                                Set as
-                                Default</span>
+                            <span *ngIf="template.isDefaultForVoucher" class="badge btn-sky-blue mr-t2"
+                                ><i class="icon-favorite-selected"></i> Default Template</span
+                            >
+                            <span
+                                *ngIf="!template.isDefaultForVoucher"
+                                class="badge btn-success mr-t2 cp"
+                                (click)="onSetTemplateAsDefault(template, 'voucher')"
+                                ><i class="icon-favorite-selected"></i> Set as Default</span
+                            >
                         </div>
 
                         <div class="template-action">
@@ -93,16 +102,17 @@
                             <button class="btn btn-default" (click)="onUpdateTemplate(template)">
                                 <i class="icon-edit-pencil" tooltip="Edit template" aria-hidden="true"></i>
                             </button>
-                            <button [disabled]="template.isDefaultForVoucher" class="btn btn-default"
-                                (click)="onDeleteTemplate(template)">
+                            <button
+                                [disabled]="template.isDefaultForVoucher"
+                                class="btn btn-default"
+                                (click)="onDeleteTemplate(template)"
+                            >
                                 <i class="icon-trash" tooltip="Delete" aria-hidden="true"></i>
                             </button>
 
                             <div class="template-meta">
-                                <small class="text-ellipsis">Created by: {{template.createdBy.name}}</small>
+                                <small class="text-ellipsis">Created by: {{ template.createdBy.name }}</small>
                             </div>
-
-
                         </div>
                     </div>
                 </ng-container>
@@ -110,32 +120,45 @@
         </div>
     </div>
     <!-- Template modal -->
-    <div bsModal #templateModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
+    <div bsModal #templateModal="bs-modal" class="modal fade" role="dialog" [config]="{ keyboard: true }" tabindex="-1">
         <div class="modal-dialog full-modal">
             <!-- modal-liq-90 class is removed for now-->
             <div class="modal-content border-radius-none">
-                <invoice-template-modal [templateSections]="currentTemplateSections" [templateId]="templateId"
-                    (closeModelEvent)="onCloseTemplateModal()" [editMode]="transactionMode"></invoice-template-modal>
+                <invoice-template-modal
+                    [templateSections]="currentTemplateSections"
+                    [templateId]="templateId"
+                    (closeModelEvent)="onCloseTemplateModal()"
+                    [editMode]="transactionMode"
+                ></invoice-template-modal>
             </div>
         </div>
         <div class="sticky-footer pd-2">
             <!--<button class="btn btn-default">Preview</button>-->
-            <div class="pull-right mr-r4" *ngIf="voucherType ==='sales' ">
-                <button [attr.disabled]="isFormInValid ? true : null" *ngIf="transactionMode == 'create'"
-                    class="btn btn-success" (click)="createTemplate('invoice')">Save
+            <div class="pull-right mr-r4" *ngIf="voucherType === 'sales'">
+                <button
+                    [attr.disabled]="isFormInValid ? true : null"
+                    *ngIf="transactionMode == 'create'"
+                    class="btn btn-success"
+                    (click)="createTemplate('invoice')"
+                >
+                    Save
                 </button>
-                <button [attr.disabled]="isFormInValid ? true : null" *ngIf="transactionMode == 'update'"
-                    class="btn btn-success" (click)="updateTemplate('invoice')">Update
-                    Template
+                <button
+                    [attr.disabled]="isFormInValid ? true : null"
+                    *ngIf="transactionMode == 'update'"
+                    class="btn btn-success"
+                    (click)="updateTemplate('invoice')"
+                >
+                    Update Template
                 </button>
                 <button class="btn btn-danger mr-r4" (click)="onCloseTemplateModal()">Close</button>
             </div>
             <div class="pull-right mr-r4" *ngIf="voucherType === 'credit note' || voucherType === 'debit note'">
-                <button *ngIf="transactionMode == 'create'" class="btn btn-success" (click)="createTemplate('voucher')">Save
+                <button *ngIf="transactionMode == 'create'" class="btn btn-success" (click)="createTemplate('voucher')">
+                    Save
                 </button>
-                <button *ngIf="transactionMode == 'update'" class="btn btn-success"
-                    (click)="updateTemplate('voucher')">Update
-                    Template
+                <button *ngIf="transactionMode == 'update'" class="btn btn-success" (click)="updateTemplate('voucher')">
+                    Update Template
                 </button>
                 <button class="btn btn-danger mr-r4" (click)="onCloseTemplateModal()">Close</button>
             </div>
@@ -143,24 +166,41 @@
     </div>
 
     <!--delete custom template confirmation modal -->
-    <div bsModal #customTemplateConfirmationModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
-        tabindex="-1">
+    <div
+        bsModal
+        #customTemplateConfirmationModal="bs-modal"
+        class="modal fade"
+        role="dialog"
+        [config]="{ keyboard: true }"
+        tabindex="-1"
+    >
         <div class="modal-dialog modal-md">
             <!-- modal-liq-90 class is removed for now-->
             <div class="modal-content">
-                <delete-template-confirmation-modal [message]='deleteTemplateConfirmationMessage' [flag]="confirmationFlag"
-                    (closeModelEvent)="onCloseConfirmationModal($event)"></delete-template-confirmation-modal>
+                <delete-template-confirmation-modal
+                    [message]="deleteTemplateConfirmationMessage"
+                    [flag]="confirmationFlag"
+                    (closeModelEvent)="onCloseConfirmationModal($event)"
+                ></delete-template-confirmation-modal>
             </div>
         </div>
     </div>
 
     <!--invoice-template-preview-modal -->
-    <div bsModal #invoiceTemplatePreviewModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
-        tabindex="-1">
+    <div
+        bsModal
+        #invoiceTemplatePreviewModal="bs-modal"
+        class="modal fade"
+        role="dialog"
+        [config]="{ keyboard: true }"
+        tabindex="-1"
+    >
         <div class="modal-dialog modal-xl">
             <!-- modal-liq-90 class is removed for now-->
             <div class="modal-content">
-                <invoice-template-preview-modal (closeModelEvent)="onClosePreviewModal()"></invoice-template-preview-modal>
+                <invoice-template-preview-modal
+                    (closeModelEvent)="onClosePreviewModal()"
+                ></invoice-template-preview-modal>
             </div>
         </div>
     </div>

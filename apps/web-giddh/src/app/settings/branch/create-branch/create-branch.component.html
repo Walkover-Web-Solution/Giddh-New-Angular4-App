@@ -1,5 +1,9 @@
-<ng-container appTranslate [file]="'settings/branch'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'settings/branch'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <hamburger-menu></hamburger-menu>
     <div class="container-fluid setting-data">
         <div class="create-branch-page mr-b15">
@@ -7,26 +11,32 @@
                 <div class="row">
                     <div class="col-lg-10 col-sm-10">
                         <div class="branch-under-company">
-                            <p class="heading mr-t15 mr-b15">{{localeData?.create_branch_under}}:</p>
+                            <p class="heading mr-t15 mr-b15">{{ localeData?.create_branch_under }}:</p>
                             <div class="branch-company-name">
                                 <div class="label-wrapper mr-b15">
-                                    <label>{{commonLocaleData?.app_company}}:</label>
-                                    <span>{{companyDetails?.name}} ({{companyDetails?.businessType}})</span>
+                                    <label>{{ commonLocaleData?.app_company }}:</label>
+                                    <span>{{ companyDetails?.name }} ({{ companyDetails?.businessType }})</span>
                                 </div>
                                 <div class="label-wrapper mr-b15">
-                                    <label>{{localeData?.country_currency}}:</label>
-                                    <span><img *ngIf="companyDetails?.country?.countryCode"
-                                            src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@master/svg/{{companyDetails?.country?.countryCode}}.svg">
-                                        {{companyDetails?.country?.countryName}} -
-                                        {{companyDetails?.country?.currencyCode}}
-                                        {{companyDetails?.country?.currencyName}}</span>
+                                    <label>{{ localeData?.country_currency }}:</label>
+                                    <span
+                                        ><img
+                                            *ngIf="companyDetails?.country?.countryCode"
+                                            src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@master/svg/{{
+                                                companyDetails?.country?.countryCode
+                                            }}.svg"
+                                        />
+                                        {{ companyDetails?.country?.countryName }} -
+                                        {{ companyDetails?.country?.currencyCode }}
+                                        {{ companyDetails?.country?.currencyName }}</span
+                                    >
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-2 col-sm-2">
                         <div class="branch-image">
-                            <img class="branch-image m-15" src="{{ imgPath }}" [alt]="localeData?.branch_image">
+                            <img class="branch-image m-15" src="{{ imgPath }}" [alt]="localeData?.branch_image" />
                         </div>
                     </div>
                 </div>
@@ -34,66 +44,99 @@
             <form [formGroup]="branchForm" novalidate (ngSubmit)="handleFormSubmit()">
                 <div class="branch-form">
                     <div class="branch-form-field">
-                        <label>
-                            {{commonLocaleData?.app_branch_name}} <span class="red-text">*</span>
-                        </label>
-                        <input maxlength="50"
+                        <label> {{ commonLocaleData?.app_branch_name }} <span class="red-text">*</span> </label>
+                        <input
+                            maxlength="50"
                             [class.error-box]="branchForm?.get('alias')?.touched && branchForm?.get('alias')?.invalid"
-                            type="text" class="form-control" formControlName="alias"
-                            [placeholder]="localeData?.enter_name">
-                        <span class="danger pl-1"
-                            *ngIf="branchForm?.get('alias')?.touched && branchForm?.get('alias')?.errors?.maxlength">
-                            {{commonLocaleData?.app_max_50_characters_allowed_limit}}
+                            type="text"
+                            class="form-control"
+                            formControlName="alias"
+                            [placeholder]="localeData?.enter_name"
+                        />
+                        <span
+                            class="danger pl-1"
+                            *ngIf="branchForm?.get('alias')?.touched && branchForm?.get('alias')?.errors?.maxlength"
+                        >
+                            {{ commonLocaleData?.app_max_50_characters_allowed_limit }}
                         </span>
                     </div>
                     <!-- This field is kept hidden, DO NOT REMOVE -->
                     <div hidden class="branch-form-field">
-                        <label>
-                            {{commonLocaleData?.app_branch_name}} <span class="red-text">*</span>
-                        </label>
-                        <input type="text" class="form-control" formControlName="name"
-                            [placeholder]="localeData?.enter_name">
+                        <label> {{ commonLocaleData?.app_branch_name }} <span class="red-text">*</span> </label>
+                        <input
+                            type="text"
+                            class="form-control"
+                            formControlName="name"
+                            [placeholder]="localeData?.enter_name"
+                        />
                     </div>
                     <div class="branch-form-field">
                         <label>
-                            {{localeData?.addresses}}
+                            {{ localeData?.addresses }}
                         </label>
                         <div class="address-dropdown form-group mb-0">
-                            <sales-sh-select [options]="addresses" formControlName="address" name="particulars"
-                                [notFoundLink]="true" (clearSingleItem)="handleFinalSelection($event)"
-                                [isFilterEnabled]="true" [multiple]="true" [placeholder]="localeData?.select_addresses"
-                                class="linked-add create" (noResultsClicked)="handleShortcutPress()">
+                            <sales-sh-select
+                                [options]="addresses"
+                                formControlName="address"
+                                name="particulars"
+                                [notFoundLink]="true"
+                                (clearSingleItem)="handleFinalSelection($event)"
+                                [isFilterEnabled]="true"
+                                [multiple]="true"
+                                [placeholder]="localeData?.select_addresses"
+                                class="linked-add create"
+                                (noResultsClicked)="handleShortcutPress()"
+                            >
                                 <ng-template #optionTemplate let-option="option">
                                     <ng-container>
-                                        <a (click)="selectAddress(option)" href="javascript:void(0)"
-                                            class="list-item d-flex">
-                                            <span><input type="checkbox"
-                                                    [checked]="branchForm?.get('address')?.value?.includes(option.value)"
-                                                    [value]="option.value"></span>&nbsp;
+                                        <a
+                                            (click)="selectAddress(option)"
+                                            href="javascript:void(0)"
+                                            class="list-item d-flex"
+                                        >
+                                            <span
+                                                ><input
+                                                    type="checkbox"
+                                                    [checked]="
+                                                        branchForm?.get('address')?.value?.includes(option.value)
+                                                    "
+                                                    [value]="option.value" /></span
+                                            >&nbsp;
                                             <span class="entity-details">
-                                                <div class="item giddh-limit single-line-clamp">{{ option.label || '-'
-                                                    }}</div>
+                                                <div class="item giddh-limit single-line-clamp">
+                                                    {{ option.label || "-" }}
+                                                </div>
                                                 <div class="item-unique">
-                                                    <p *ngIf="option.taxType && option.taxNumber">{{ option.taxType }} :
-                                                        {{ option.taxNumber }}</p>
+                                                    <p *ngIf="option.taxType && option.taxNumber">
+                                                        {{ option.taxType }} : {{ option.taxNumber }}
+                                                    </p>
                                                 </div>
                                             </span>
                                             <span class="default-entity">
-                                                <i (click)="setDefault(option, $event)" *ngIf="!option.isDefault"
-                                                    class="icon-no-selected mr-r05"></i>
-                                                <i (click)="setDefault(option, $event)" *ngIf="option.isDefault"
-                                                    class="icon-favorite-selected mr-r05"></i>
+                                                <i
+                                                    (click)="setDefault(option, $event)"
+                                                    *ngIf="!option.isDefault"
+                                                    class="icon-no-selected mr-r05"
+                                                ></i>
+                                                <i
+                                                    (click)="setDefault(option, $event)"
+                                                    *ngIf="option.isDefault"
+                                                    class="icon-favorite-selected mr-r05"
+                                                ></i>
                                             </span>
                                         </a>
                                     </ng-container>
                                 </ng-template>
                                 <ng-template #notFoundLinkTemplate>
-                                    <a href="javascript:void(0)" [keyboardShortcut]="'alt+c'"
+                                    <a
+                                        href="javascript:void(0)"
+                                        [keyboardShortcut]="'alt+c'"
                                         (onShortcutPress)="handleShortcutPress()"
                                         class="list-item pd-l05 pd-r05 border-none d-flex justify-content-between w-100"
-                                        [keyboardShortcut]="'alt+c'">
-                                        <div class="item">{{localeData?.add_address}}</div>
-                                        <div class="item">{{commonLocaleData?.app_alt_c}}</div>
+                                        [keyboardShortcut]="'alt+c'"
+                                    >
+                                        <div class="item">{{ localeData?.add_address }}</div>
+                                        <div class="item">{{ commonLocaleData?.app_alt_c }}</div>
                                     </a>
                                 </ng-template>
                             </sales-sh-select>
@@ -102,23 +145,38 @@
                 </div>
                 <div class="footer-btn row">
                     <div class="button-group">
-                        <button type="reset" (click)="handleFormClear()"
-                            class="btn btn-primary mr-r15">{{commonLocaleData?.app_clear}}</button>
-                        <button type="submit" [disabled]="branchForm?.invalid"
-                            class="btn btn-success">{{localeData?.create_branch}}</button>
+                        <button type="reset" (click)="handleFormClear()" class="btn btn-primary mr-r15">
+                            {{ commonLocaleData?.app_clear }}
+                        </button>
+                        <button type="submit" [disabled]="branchForm?.invalid" class="btn btn-success">
+                            {{ localeData?.create_branch }}
+                        </button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
     <div class="aside-overlay" *ngIf="addressAsideMenuState === 'in'"></div>
-    <ng-container appTranslate [file]="'settings/profile'" (localeData)="profileLocaleData = $event"
-        [requireCommonData]="false" *ngIf="addressAsideMenuState === 'in'">
-        <create-address [class]="addressAsideMenuState" [@slideInOut]="addressAsideMenuState" [keyboardShortcut]="'esc'"
-            (onShortcutPress)="toggleAddressAsidePane()" [currentOrganizationUniqueName]="currentOrganizationUniqueName"
-            [showLoader]="isAddressChangeInProgress" (saveAddress)="createNewAddress($event)"
-            [addressConfiguration]="addressConfiguration" (closeAsideEvent)="toggleAddressAsidePane($event)"
-            *ngIf="addressAsideMenuState === 'in'" [localeData]="profileLocaleData"
-            [commonLocaleData]="commonLocaleData"></create-address>
+    <ng-container
+        appTranslate
+        [file]="'settings/profile'"
+        (localeData)="profileLocaleData = $event"
+        [requireCommonData]="false"
+        *ngIf="addressAsideMenuState === 'in'"
+    >
+        <create-address
+            [class]="addressAsideMenuState"
+            [@slideInOut]="addressAsideMenuState"
+            [keyboardShortcut]="'esc'"
+            (onShortcutPress)="toggleAddressAsidePane()"
+            [currentOrganizationUniqueName]="currentOrganizationUniqueName"
+            [showLoader]="isAddressChangeInProgress"
+            (saveAddress)="createNewAddress($event)"
+            [addressConfiguration]="addressConfiguration"
+            (closeAsideEvent)="toggleAddressAsidePane($event)"
+            *ngIf="addressAsideMenuState === 'in'"
+            [localeData]="profileLocaleData"
+            [commonLocaleData]="commonLocaleData"
+        ></create-address>
     </ng-container>
 </ng-container>

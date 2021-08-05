@@ -37,7 +37,7 @@
             }
         }
     }
-    .advance-icon{
+    .advance-icon {
         display: inline-flex;
         justify-content: center;
         align-items: center;
@@ -273,11 +273,11 @@
         .date-advance-search {
             width: 100%;
             flex-direction: column-reverse;
-            .btn-wrapper{
+            .btn-wrapper {
                 margin-right: auto;
             }
         }
-        .add-invoice{
+        .add-invoice {
             flex-direction: column-reverse;
             align-items: flex-start;
         }
@@ -297,13 +297,13 @@
         display: flex;
     }
 
-    .advance-icon{
+    .advance-icon {
         height: 36px;
         margin-left: auto;
     }
-    .more-toggle{
-        margin-top:15px;
-        .btn-primary{
+    .more-toggle {
+        margin-top: 15px;
+        .btn-primary {
             margin-right: 0 !important;
         }
     }
@@ -357,8 +357,8 @@
     }
 }
 
-@media (min-width: 769px){
-    .table-responsive{
+@media (min-width: 769px) {
+    .table-responsive {
         max-height: calc(100vh - 230px);
         overflow-y: auto;
     }

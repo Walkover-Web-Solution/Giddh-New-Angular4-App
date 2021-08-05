@@ -1,9 +1,25 @@
 <mat-form-field appearance="fill" [floatLabel]="'auto'">
     <mat-date-range-input [rangePicker]="picker">
-        <input matStartDate [min]="minDate" [max]="maxDate" [(ngModel)]="startDate" autocomplete="off"
-            (focus)="openDatepicker()" (click)="openDatepicker()" (dateChange)="dateChange('start', $event)">
-        <input matEndDate [min]="minDate" [max]="maxDate" [(ngModel)]="endDate" autocomplete="off"
-            (focus)="openDatepicker()" (click)="openDatepicker()" (dateChange)="dateChange('end', $event)">
+        <input
+            matStartDate
+            [min]="minDate"
+            [max]="maxDate"
+            [(ngModel)]="startDate"
+            autocomplete="off"
+            (focus)="openDatepicker()"
+            (click)="openDatepicker()"
+            (dateChange)="dateChange('start', $event)"
+        />
+        <input
+            matEndDate
+            [min]="minDate"
+            [max]="maxDate"
+            [(ngModel)]="endDate"
+            autocomplete="off"
+            (focus)="openDatepicker()"
+            (click)="openDatepicker()"
+            (dateChange)="dateChange('end', $event)"
+        />
     </mat-date-range-input>
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-date-range-picker #picker></mat-date-range-picker>

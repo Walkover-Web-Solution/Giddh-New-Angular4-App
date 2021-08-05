@@ -1,73 +1,127 @@
-<h1 class="page-title ml-0 mr-b15">{{localeData?.filter_heading}}</h1>
+<h1 class="page-title ml-0 mr-b15">{{ localeData?.filter_heading }}</h1>
 <div class="clearfix mr-t15">
-    <label>{{localeData?.filter_by_label}}</label>
-    <sh-select [options]="vm.dateOptions" [isFilterEnabled]="true" [placeholder]="commonLocaleData?.app_select_option"
-        [(ngModel)]="vm.selectedDateOption"></sh-select>
+    <label>{{ localeData?.filter_by_label }}</label>
+    <sh-select
+        [options]="vm.dateOptions"
+        [isFilterEnabled]="true"
+        [placeholder]="commonLocaleData?.app_select_option"
+        [(ngModel)]="vm.selectedDateOption"
+    ></sh-select>
 </div>
 <div class="clearfix mr-t15" *ngIf="vm.selectedDateOption == '1'">
-    <label>{{localeData?.from_date}}</label>
-    <input type="text" name="from" [placeholder]="giddhDateFormat" #fromdp="bsDatepicker" bsDatepicker
-        [(ngModel)]="vm.selectedFromDate" class="form-control" />
+    <label>{{ localeData?.from_date }}</label>
+    <input
+        type="text"
+        name="from"
+        [placeholder]="giddhDateFormat"
+        #fromdp="bsDatepicker"
+        bsDatepicker
+        [(ngModel)]="vm.selectedFromDate"
+        class="form-control"
+    />
 </div>
 <div class="clearfix mr-t15" *ngIf="vm.selectedDateOption == '1'">
-    <label>{{localeData?.to_date}}</label>
-    <input type="text" name="to" [placeholder]="giddhDateFormat" #todp="bsDatepicker" bsDatepicker
-        [(ngModel)]="vm.selectedToDate" class="form-control" />
+    <label>{{ localeData?.to_date }}</label>
+    <input
+        type="text"
+        name="to"
+        [placeholder]="giddhDateFormat"
+        #todp="bsDatepicker"
+        bsDatepicker
+        [(ngModel)]="vm.selectedToDate"
+        class="form-control"
+    />
 </div>
 <div class="clearfix mr-t15" *ngIf="vm.selectedDateOption == '0'">
     <div class="mb-2 select-log">
         <p class="input-group pull-left" for="entryDate">
-            <label>{{localeData?.entry_date}}
+            <label
+                >{{ localeData?.entry_date }}
                 <input id="entryDate" type="radio" name="entryDate" [(ngModel)]="vm.logOrEntry" value="entryDate" />
             </label>
         </p>
         <p class="input-group pull-left" for="logDate">
-            <label>{{localeData?.log_date}}
+            <label
+                >{{ localeData?.log_date }}
                 <input id="logDate" type="radio" name="logDate" [(ngModel)]="vm.logOrEntry" value="logDate" />
             </label>
         </p>
         <br />
     </div>
     <div class="input-group">
-        <input type="text" name="logdate" [placeholder]="giddhDateFormat" #logdate="bsDatepicker" bsDatepicker
-            [(ngModel)]="vm.selectedLogDate" class="form-control" [placement]="'right'" />
+        <input
+            type="text"
+            name="logdate"
+            [placeholder]="giddhDateFormat"
+            #logdate="bsDatepicker"
+            bsDatepicker
+            [(ngModel)]="vm.selectedLogDate"
+            class="form-control"
+            [placement]="'right'"
+        />
     </div>
 </div>
 
 <div class="clearfix mr-t15">
-    <label>{{localeData?.select_operation_label}}</label>
-    <sh-select [options]="vm.filters" [placeholder]="commonLocaleData?.app_select_option"
-        [(ngModel)]="vm.selectedOperation"></sh-select>
+    <label>{{ localeData?.select_operation_label }}</label>
+    <sh-select
+        [options]="vm.filters"
+        [placeholder]="commonLocaleData?.app_select_option"
+        [(ngModel)]="vm.selectedOperation"
+    ></sh-select>
 </div>
 
 <div class="clearfix mr-t15">
-    <label>{{commonLocaleData?.app_select_entity}}</label>
-    <sh-select [options]="vm.entities" [isFilterEnabled]="true" [placeholder]="commonLocaleData?.app_select_option"
-        [(ngModel)]="vm.selectedEntity"></sh-select>
+    <label>{{ commonLocaleData?.app_select_entity }}</label>
+    <sh-select
+        [options]="vm.entities"
+        [isFilterEnabled]="true"
+        [placeholder]="commonLocaleData?.app_select_option"
+        [(ngModel)]="vm.selectedEntity"
+    ></sh-select>
 </div>
 
 <div class="clearfix mr-t15">
-    <label>{{commonLocaleData?.app_select_account}}</label>
-    <sh-select [options]="vm.accounts$ | async" [isFilterEnabled]="true"
-        [placeholder]="commonLocaleData?.app_select_option" [(ngModel)]="vm.selectedAccountUnq"
-        [enableDynamicSearch]="true" [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()"
-        (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"></sh-select>
+    <label>{{ commonLocaleData?.app_select_account }}</label>
+    <sh-select
+        [options]="vm.accounts$ | async"
+        [isFilterEnabled]="true"
+        [placeholder]="commonLocaleData?.app_select_option"
+        [(ngModel)]="vm.selectedAccountUnq"
+        [enableDynamicSearch]="true"
+        [isPaginationEnabled]="true"
+        (scrollEnd)="handleScrollEnd()"
+        (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
+    ></sh-select>
 </div>
 
 <div class="clearfix mr-t15">
-    <label>{{localeData?.select_group_label}}</label>
-    <sh-select [options]="vm.groups$ | async" [isFilterEnabled]="true"
-        [placeholder]="commonLocaleData?.app_select_option" [(ngModel)]="vm.selectedGroupUnq"
-        [enableDynamicSearch]="true" [isPaginationEnabled]="true" (scrollEnd)="handleGroupScrollEnd()"
-        (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"></sh-select>
+    <label>{{ localeData?.select_group_label }}</label>
+    <sh-select
+        [options]="vm.groups$ | async"
+        [isFilterEnabled]="true"
+        [placeholder]="commonLocaleData?.app_select_option"
+        [(ngModel)]="vm.selectedGroupUnq"
+        [enableDynamicSearch]="true"
+        [isPaginationEnabled]="true"
+        (scrollEnd)="handleGroupScrollEnd()"
+        (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
+    ></sh-select>
 </div>
 <div class="clearfix mr-t15">
-    <label>{{localeData?.select_user_label}}</label>
-    <sh-select [options]="vm.users$ | async" [customFilter]="customUserFilter" [isFilterEnabled]="true"
-        [placeholder]="commonLocaleData?.app_select_option" [(ngModel)]="vm.selectedUserUnq"></sh-select>
+    <label>{{ localeData?.select_user_label }}</label>
+    <sh-select
+        [options]="vm.users$ | async"
+        [customFilter]="customUserFilter"
+        [isFilterEnabled]="true"
+        [placeholder]="commonLocaleData?.app_select_option"
+        [(ngModel)]="vm.selectedUserUnq"
+    ></sh-select>
 </div>
-<button class='btn btn-success pull-left mr-t15' [ladda]="vm.getLogsInprocess$ | async"
-    (click)='getLogfilters()'>{{localeData?.get_logs}}</button>
-<button class="btn btn-warning pull-left mr-t15 mr-l05"
-    (click)="resetFilters()">{{commonLocaleData?.app_reset}}</button>
+<button class="btn btn-success pull-left mr-t15" [ladda]="vm.getLogsInprocess$ | async" (click)="getLogfilters()">
+    {{ localeData?.get_logs }}
+</button>
+<button class="btn btn-warning pull-left mr-t15 mr-l05" (click)="resetFilters()">
+    {{ commonLocaleData?.app_reset }}
+</button>
 <br />

@@ -1,87 +1,129 @@
 <div class="modal-header theme-bg pd-2 pd-l2 pd-r2 clearfix dark-grey-bg">
-    <h3 class="modal-title bg" id="modal-title">{{localeData?.download_voucher}}</h3>
+    <h3 class="modal-title bg" id="modal-title">{{ localeData?.download_voucher }}</h3>
     <i aria-hidden="true" class="icon-cross text-right close-modal" (click)="cancel()"></i>
 </div>
 
 <div class="modal-body">
-
-
     <ng-template>
         <div class="clearfix font-14">
             <div class="mb-5">
-                <p class="mr-b1">{{localeData?.tax_invoice_copies}}</p>
-                <p class="mr-b1"><label class="pointer"><input type="checkbox" checked> <strong>{{localeData?.original_copy}}:</strong>
-                        {{localeData?.buyer_copy}}</label></p>
-                <p class="mr-b1"><label class="pointer"><input type="checkbox" checked> <strong>{{localeData?.duplicate_copy}}:</strong>
-                        {{localeData?.transporter_copy}}</label></p>
-                <p class="mr-b1"><label class="pointer"><input type="checkbox" checked> <strong>{{localeData?.triplicate_copy}}:</strong> {{localeData?.supplier_copy}}</label></p>
+                <p class="mr-b1">{{ localeData?.tax_invoice_copies }}</p>
+                <p class="mr-b1">
+                    <label class="pointer"
+                        ><input type="checkbox" checked /> <strong>{{ localeData?.original_copy }}:</strong>
+                        {{ localeData?.buyer_copy }}</label
+                    >
+                </p>
+                <p class="mr-b1">
+                    <label class="pointer"
+                        ><input type="checkbox" checked /> <strong>{{ localeData?.duplicate_copy }}:</strong>
+                        {{ localeData?.transporter_copy }}</label
+                    >
+                </p>
+                <p class="mr-b1">
+                    <label class="pointer"
+                        ><input type="checkbox" checked /> <strong>{{ localeData?.triplicate_copy }}:</strong>
+                        {{ localeData?.supplier_copy }}</label
+                    >
+                </p>
             </div>
 
             <div class="mr-b05">
-                <p class="mr-b1">{{localeData?.export_multicurrency}} <a class="text-gray d-inline-block middle"
-                        [tooltip]="localeData?.test" href="javascript:void(0)"><i class="icon-info"></i></a></p>
-                <p class="mr-b1"><label class="pointer"><input type="checkbox" checked>
-                        <strong>{{commonLocaleData?.app_account_currency}} </strong> {{localeData?.usd}}</label></p>
-                <p class="mr-b1"><label class="pointer"><input type="checkbox" checked>
-                        <strong>{{commonLocaleData?.app_company_currency}} </strong> {{localeData?.inr}}</label></p>
-                <p class="mr-b1"><label class="pointer"><input type="checkbox" checked>
-                        <strong>{{localeData?.both_currency}}</strong> {{localeData?.usd_conversion_inr}}</label></p>
+                <p class="mr-b1">
+                    {{ localeData?.export_multicurrency }}
+                    <a class="text-gray d-inline-block middle" [tooltip]="localeData?.test" href="javascript:void(0)"
+                        ><i class="icon-info"></i
+                    ></a>
+                </p>
+                <p class="mr-b1">
+                    <label class="pointer"
+                        ><input type="checkbox" checked />
+                        <strong>{{ commonLocaleData?.app_account_currency }} </strong> {{ localeData?.usd }}</label
+                    >
+                </p>
+                <p class="mr-b1">
+                    <label class="pointer"
+                        ><input type="checkbox" checked />
+                        <strong>{{ commonLocaleData?.app_company_currency }} </strong> {{ localeData?.inr }}</label
+                    >
+                </p>
+                <p class="mr-b1">
+                    <label class="pointer"
+                        ><input type="checkbox" checked /> <strong>{{ localeData?.both_currency }}</strong>
+                        {{ localeData?.usd_conversion_inr }}</label
+                    >
+                </p>
             </div>
         </div>
 
         <div class="bd-rt pt-2 pb-1">
             <div class="btn-group">
-                <button type="button" class="btn btn-success">{{commonLocaleData?.app_yes}}
-                </button>
-                <button type="button" class="btn btn-primary">{{commonLocaleData?.app_no}}</button>
+                <button type="button" class="btn btn-success">{{ commonLocaleData?.app_yes }}</button>
+                <button type="button" class="btn btn-primary">{{ commonLocaleData?.app_no }}</button>
             </div>
         </div>
     </ng-template>
 
-
     <div class="clearfix">
-        <h3 class="font-16 mr-b05">{{localeData?.invoice_copy}}</h3>
-        <hr>
+        <h3 class="font-16 mr-b05">{{ localeData?.invoice_copy }}</h3>
+        <hr />
 
         <div class="checkbox">
             <label>
-                <input name="originalCopy" type="checkbox" value="Transport" checked [(ngModel)]="isOriginal" (change)="invoiceTypeChanged($event)">
-                {{localeData?.invoice_copy_options?.original}}
+                <input
+                    name="originalCopy"
+                    type="checkbox"
+                    value="Transport"
+                    checked
+                    [(ngModel)]="isOriginal"
+                    (change)="invoiceTypeChanged($event)"
+                />
+                {{ localeData?.invoice_copy_options?.original }}
             </label>
         </div>
         <div class="checkbox">
             <label>
-                <input type="checkbox" value="Transport" (change)="invoiceTypeChanged($event)"
-                    [(ngModel)]="isTransport">
-                {{localeData?.transport}}
+                <input
+                    type="checkbox"
+                    value="Transport"
+                    (change)="invoiceTypeChanged($event)"
+                    [(ngModel)]="isTransport"
+                />
+                {{ localeData?.transport }}
             </label>
         </div>
 
         <div class="checkbox">
             <label>
-                <input type="checkbox" value="Customer" (change)="invoiceTypeChanged($event)" [(ngModel)]="isCustomer">
-                {{commonLocaleData?.app_customer}}
+                <input
+                    type="checkbox"
+                    value="Customer"
+                    (change)="invoiceTypeChanged($event)"
+                    [(ngModel)]="isCustomer"
+                />
+                {{ commonLocaleData?.app_customer }}
             </label>
         </div>
     </div>
-
 
     <!-- region buttons -->
     <div class="row mr-t2 mr-b1">
         <div class="col-sm-12">
-
             <div class="btn-group" role="group">
-
-                <button [disabled]="!isOriginal && !isTransport && !isCustomer" type="button" class="btn btn-success"
-                    (click)="onDownloadInvoiceEvent()">{{commonLocaleData?.app_download}}
+                <button
+                    [disabled]="!isOriginal && !isTransport && !isCustomer"
+                    type="button"
+                    class="btn btn-success"
+                    (click)="onDownloadInvoiceEvent()"
+                >
+                    {{ commonLocaleData?.app_download }}
                 </button>
 
-                <button type="button" class="btn btn-danger"
-                    (click)="cancel()">{{commonLocaleData?.app_cancel}}</button>
-
+                <button type="button" class="btn btn-danger" (click)="cancel()">
+                    {{ commonLocaleData?.app_cancel }}
+                </button>
             </div>
         </div>
     </div>
     <!-- endregion -->
-
 </div>

@@ -191,9 +191,7 @@ form label {
     }
 }
 @media (max-width: 767px) {
-    .selected-bank-details
-    .bank-details-wrapper
-    .readonly-bank-details {
+    .selected-bank-details .bank-details-wrapper .readonly-bank-details {
         max-width: 100% !important;
     }
 
