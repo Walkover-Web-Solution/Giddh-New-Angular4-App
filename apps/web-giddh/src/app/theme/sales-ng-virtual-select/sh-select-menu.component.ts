@@ -35,8 +35,8 @@ export class SalesShSelectMenuComponent implements OnChanges {
 
     @Output() public noToggleClick: EventEmitter<any> = new EventEmitter<any>();
     @Output() public noResultClicked = new EventEmitter<null>();
-    @ViewChild(VirtualScrollComponent, {static: false}) public virtualScrollElm: VirtualScrollComponent;
-    @ViewChild('listContainer', {static: true}) public listContainer: ElementRef;
+    @ViewChild(VirtualScrollComponent, { static: false }) public virtualScrollElm: VirtualScrollComponent;
+    @ViewChild('listContainer', { static: true }) public listContainer: ElementRef;
     public math: any = Math;
     public viewPortItems: IOption[];
     public _rows: IOption[];
@@ -46,7 +46,7 @@ export class SalesShSelectMenuComponent implements OnChanges {
     @Input() set rows(val: IOption[]) {
         this._rows = val;
 
-        if(!isEqual(this._rows, this.existingData)) {
+        if (!isEqual(this._rows, this.existingData)) {
             this.existingData = this._rows;
             this.autoSelectIfSingleValueAvailable();
         }
@@ -57,11 +57,7 @@ export class SalesShSelectMenuComponent implements OnChanges {
     }
 
     public ngOnChanges(changes: SimpleChanges) {
-        // if (changes['isOpen'] && changes['isOpen'].currentValue) {
-        //   this.dyHeight = Number(window.getComputedStyle(this.listContainer.nativeElement).height);
-        // }
-
-        if(changes['isRequired'] && changes['isRequired'].currentValue !== changes['isRequired'].previousValue) {
+        if (changes['isRequired'] && changes['isRequired'].currentValue !== changes['isRequired'].previousValue) {
             this.autoSelectIfSingleValueAvailable();
         }
     }
@@ -85,7 +81,7 @@ export class SalesShSelectMenuComponent implements OnChanges {
      * @memberof SalesShSelectMenuComponent
      */
     public autoSelectIfSingleValueAvailable(): void {
-        if(this.isRequired && this._rows && this._rows.length === 1 && !this.filter) {
+        if (this.isRequired && this._rows && this._rows.length === 1 && !this.filter) {
             this.toggleSelected(this._rows[0]);
         }
     }

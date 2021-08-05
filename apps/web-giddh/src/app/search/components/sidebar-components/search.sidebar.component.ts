@@ -1,29 +1,29 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { AppState } from '../../../store/roots';
-import * as _ from '../../../lodash-optimized';
 import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import * as moment from 'moment/moment';
 import { SearchRequest } from '../../../models/api-models/Search';
 import { SearchActions } from '../../../actions/search.actions';
-import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
 import { GroupService } from '../../../services/group.service';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
-	selector: 'search-sidebar',
+    selector: 'search-sidebar',
     templateUrl: './search.sidebar.component.html',
     styleUrls: [`./search.sidebar.component.scss`],
 })
 export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 
-	@Input() public pageChangeEvent: any = null;
+    @Input() public pageChangeEvent: any = null;
     @Input() public filterEventQuery: any = null;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -33,49 +33,14 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
     /** Emits the current selected branch */
     @Output() public currentBranchChanged: EventEmitter<string> = new EventEmitter();
 
-	public showFromDatePicker: boolean;
-	public showToDatePicker: boolean;
-	public toDate: string;
-	public fromDate: string;
-	public moment = moment;
-	public groupName: string;
-	public groupUniqueName: string;
-	public dataSource = [];
-	public datePickerOptions: any = {
-		locale: {
-			applyClass: 'btn-green',
-			applyLabel: 'Go',
-			fromLabel: 'From',
-			format: 'D-MMM-YY',
-			toLabel: 'To',
-			cancelLabel: 'Cancel',
-			customRangeLabel: 'Custom range'
-		},
-		ranges: {
-			'Last 1 Day': [
-				moment().subtract(1, 'days'),
-				moment()
-			],
-			'Last 7 Days': [
-				moment().subtract(6, 'days'),
-				moment()
-			],
-			'Last 30 Days': [
-				moment().subtract(29, 'days'),
-				moment()
-			],
-			'Last 6 Months': [
-				moment().subtract(6, 'months'),
-				moment()
-			],
-			'Last 1 Year': [
-				moment().subtract(12, 'months'),
-				moment()
-			]
-		},
-		startDate: moment().subtract(30, 'days'),
-		endDate: moment()
-    };
+    public showFromDatePicker: boolean;
+    public showToDatePicker: boolean;
+    public toDate: string;
+    public fromDate: string;
+    public moment = moment;
+    public groupName: string;
+    public groupUniqueName: string;
+    public dataSource = [];
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** Stores the branch list of a company */
@@ -84,7 +49,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
     public currentBranch: any = { name: '', uniqueName: '' };
     /** Stores the current company */
     public activeCompany: any;
-	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private paginationPageNumber: number;
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
@@ -125,32 +90,27 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
 
-	/**
-	 * TypeScript public modifiers
-	 */
-	constructor(
+    /**
+     * TypeScript public modifiers
+     */
+    constructor(
         private store: Store<AppState>,
         public searchActions: SearchActions,
         private generalService: GeneralService,
         private groupService: GroupService,
         private modalService: BsModalService,
         private settingsBranchAction: SettingsBranchActions
-    ) {	}
+    ) { }
 
-	public ngOnInit() {
+    public ngOnInit() {
         this.currentOrganizationType = this.generalService.currentOrganizationType;
-		this.fromDate = moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
-		this.toDate = moment().format(GIDDH_DATE_FORMAT);
+        this.fromDate = moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
+        this.toDate = moment().format(GIDDH_DATE_FORMAT);
         this.loadDefaultGroupsSuggestions();
 
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
-                let universalDate = _.cloneDeep(dateObj);
-                this.datePickerOptions = {
-                    ...this.datePickerOptions, startDate: moment(universalDate[0], GIDDH_DATE_FORMAT).toDate(),
-                    endDate: moment(universalDate[1], GIDDH_DATE_FORMAT).toDate(),
-                    chosenLabel: universalDate[2]
-                };
+                let universalDate = cloneDeep(dateObj);
                 this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
 
@@ -185,7 +145,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
@@ -198,59 +158,59 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
                 }
             }
         });
-	}
+    }
 
-	public ngOnChanges(changes: any) {
-		if ('pageChangeEvent' in changes && changes['pageChangeEvent'].currentValue) {
-			if (changes['pageChangeEvent'].firstChange || (!changes['pageChangeEvent'].previousValue || changes['pageChangeEvent'].currentValue.page !== changes['pageChangeEvent'].previousValue.page)) {
-				let page = changes.pageChangeEvent.currentValue.page;
-				this.paginationPageNumber = page;
-				if (this.filterEventQuery) {
-					this.getClosingBalance(false, null, this.paginationPageNumber, this.filterEventQuery);
-				} else {
-					this.getClosingBalance(false, null, page);
-				}
+    public ngOnChanges(changes: any) {
+        if ('pageChangeEvent' in changes && changes['pageChangeEvent'].currentValue) {
+            if (changes['pageChangeEvent'].firstChange || (!changes['pageChangeEvent'].previousValue || changes['pageChangeEvent'].currentValue.page !== changes['pageChangeEvent'].previousValue.page)) {
+                let page = changes.pageChangeEvent.currentValue.page;
+                this.paginationPageNumber = page;
+                if (this.filterEventQuery) {
+                    this.getClosingBalance(false, null, this.paginationPageNumber, this.filterEventQuery);
+                } else {
+                    this.getClosingBalance(false, null, page);
+                }
 
-			}
-		}
+            }
+        }
 
-		if ('filterEventQuery' in changes && changes['filterEventQuery'].currentValue) {
-			if (changes['filterEventQuery'].firstChange || (!changes['filterEventQuery'].previousValue || changes['filterEventQuery'].currentValue !== changes['filterEventQuery'].previousValue)) {
-				this.getClosingBalance(false, null, this.paginationPageNumber, changes['filterEventQuery'].currentValue);
-			}
-		}
-	}
+        if ('filterEventQuery' in changes && changes['filterEventQuery'].currentValue) {
+            if (changes['filterEventQuery'].firstChange || (!changes['filterEventQuery'].previousValue || changes['filterEventQuery'].currentValue !== changes['filterEventQuery'].previousValue)) {
+                this.getClosingBalance(false, null, this.paginationPageNumber, changes['filterEventQuery'].currentValue);
+            }
+        }
+    }
 
-	public getClosingBalance(isRefresh: boolean, event: any, page?: number, searchReqBody?: any) {
-		let searchRequest: SearchRequest = {
-			groupName: this.groupUniqueName,
-			refresh: isRefresh,
-			toDate: this.toDate,
-			fromDate: this.fromDate,
+    public getClosingBalance(isRefresh: boolean, event: any, page?: number, searchReqBody?: any) {
+        let searchRequest: SearchRequest = {
+            groupName: this.groupUniqueName,
+            refresh: isRefresh,
+            toDate: this.toDate,
+            fromDate: this.fromDate,
             page: page ? page : 1,
             branchUniqueName: this.currentBranch?.uniqueName
-		};
-		this.store.dispatch(this.searchActions.GetStocksReport(searchRequest, searchReqBody));
-		if (event) {
-			event.target.blur();
-		}
-	}
+        };
+        this.store.dispatch(this.searchActions.GetStocksReport(searchRequest, searchReqBody));
+        if (event) {
+            event.target.blur();
+        }
+    }
 
-	public ngOnDestroy() {
-		this.destroyed$.next(true);
-		this.destroyed$.complete();
-	}
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 
-	public onSelectGroup(group: IOption) {
-		this.groupName = group.label;
-		this.groupUniqueName = group.value;
-	}
+    public onSelectGroup(group: IOption) {
+        this.groupName = group.label;
+        this.groupUniqueName = group.value;
+    }
 
-	public selectedDate(value: any) {
+    public selectedDate(value: any) {
         this.fromDate = moment(value.picker.startDate).format(GIDDH_DATE_FORMAT);
         this.toDate = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
     }
@@ -287,7 +247,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof SearchSidebarComponent
      */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }
@@ -396,7 +356,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
                         this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
                         this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 

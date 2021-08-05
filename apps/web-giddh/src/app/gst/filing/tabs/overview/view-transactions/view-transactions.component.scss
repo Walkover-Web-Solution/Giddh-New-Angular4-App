@@ -1,0 +1,20 @@
+.filter-row {
+    height: auto;
+}
+
+.back-ico {
+    position: relative;
+    top: 3px;
+}
+@media screen and (max-width:767px) {
+    .filter-band{
+        height: auto !important;
+        .back-button{
+            display: flex;
+        }
+        .filter-row{
+            margin-left: 0;
+            margin-bottom: 10px;
+        }
+    }
+}

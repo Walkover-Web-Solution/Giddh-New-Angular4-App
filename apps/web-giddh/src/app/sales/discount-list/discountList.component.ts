@@ -1,7 +1,6 @@
 import { Observable, ReplaySubject } from 'rxjs';
-
 import { take, takeUntil } from 'rxjs/operators';
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { ElementViewContainerRef } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -9,9 +8,9 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 
 @Component({
-	selector: 'discount-list',
-	templateUrl: 'discountList.component.html',
-	styles: [`
+    selector: 'discount-list',
+    templateUrl: 'discountList.component.html',
+    styles: [`
       .dropdown-menu > li > a.btn-link {
           color: #10aae0;
       }
@@ -25,7 +24,7 @@ import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/Sett
           right: -110px;
           left: auto;
           top: 8px;
-      }
+	}
 
       td {
           vertical-align: middle !important;
@@ -47,10 +46,6 @@ import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/Sett
       .custom-item:hover span {
           color:#5B64C9 !important;
       }
-
-      // .multi-select input.form-control {
-      //     background-image: unset !important;
-      // }
 
       .multi-select .caret {
           display: block !important;
@@ -82,160 +77,160 @@ import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/Sett
 
 export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
 
-	@Input() public isMenuOpen: boolean = false;
-	@Output() public selectedDiscountItems: EventEmitter<any[]> = new EventEmitter();
-	@Output() public selectedDiscountItemsTotal: EventEmitter<number> = new EventEmitter();
-	@ViewChild('quickAccountComponent', {static: true}) public quickAccountComponent: ElementViewContainerRef;
-	@ViewChild('quickAccountModal', {static: true}) public quickAccountModal: ModalDirective;
-	@ViewChild('disInptEle', {static: true}) public disInptEle: ElementRef;
+    @Input() public isMenuOpen: boolean = false;
+    @Output() public selectedDiscountItems: EventEmitter<any[]> = new EventEmitter();
+    @Output() public selectedDiscountItemsTotal: EventEmitter<number> = new EventEmitter();
+    @ViewChild('quickAccountComponent', { static: true }) public quickAccountComponent: ElementViewContainerRef;
+    @ViewChild('quickAccountModal', { static: true }) public quickAccountModal: ModalDirective;
+    @ViewChild('disInptEle', { static: true }) public disInptEle: ElementRef;
 
-	// new code
-	@Input() public discountSum: number;
-	@Input() public discountAccountsDetails: LedgerDiscountClass[];
-	@Input() public totalAmount: number = 0;
-	@Output() public discountTotalUpdated: EventEmitter<number> = new EventEmitter();
-	public discountAccountsList$: Observable<IDiscountList[]>;
-	public discountFromPer: boolean = true;
-	public discountFromVal: boolean = true;
-	public discountPercentageModal: number = 0;
-	public discountFixedValueModal: number = 0;
+    // new code
+    @Input() public discountSum: number;
+    @Input() public discountAccountsDetails: LedgerDiscountClass[];
+    @Input() public totalAmount: number = 0;
+    @Output() public discountTotalUpdated: EventEmitter<number> = new EventEmitter();
+    public discountAccountsList$: Observable<IDiscountList[]>;
+    public discountFromPer: boolean = true;
+    public discountFromVal: boolean = true;
+    public discountPercentageModal: number = 0;
+    public discountFixedValueModal: number = 0;
 
-	public get defaultDiscount(): LedgerDiscountClass {
-		return this.discountAccountsDetails[0];
-	}
+    public get defaultDiscount(): LedgerDiscountClass {
+        return this.discountAccountsDetails[0];
+    }
 
-	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-	constructor(
-		private store: Store<AppState>
-	) {
-		this.discountAccountsList$ = this.store.pipe(select(p => p.settings.discount.discountList), takeUntil(this.destroyed$));
-		this.discountAccountsList$.subscribe(data => {
-			if (data && data.length) {
-				this.prepareDiscountList();
-			}
-		});
-	}
+    constructor(
+        private store: Store<AppState>
+    ) {
+        this.discountAccountsList$ = this.store.pipe(select(p => p.settings.discount.discountList), takeUntil(this.destroyed$));
+    }
 
-	public ngOnInit() {
-		if (this.defaultDiscount.discountType === 'FIX_AMOUNT') {
-			this.discountFixedValueModal = this.defaultDiscount.amount;
-		} else {
-			this.discountPercentageModal = this.defaultDiscount.amount;
-		}
-	}
+    public ngOnInit() {
+        this.discountAccountsList$.subscribe(data => {
+            if (data && data.length) {
+                this.prepareDiscountList();
+            }
+        });
 
-	public ngOnChanges(changes: SimpleChanges): void {
-		if ('discountAccountsDetails' in changes && changes.discountAccountsDetails.currentValue !== changes.discountAccountsDetails.previousValue) {
-			this.prepareDiscountList();
+        if (this.defaultDiscount.discountType === 'FIX_AMOUNT') {
+            this.discountFixedValueModal = this.defaultDiscount.amount;
+        } else {
+            this.discountPercentageModal = this.defaultDiscount.amount;
+        }
+    }
 
-			if (this.defaultDiscount.discountType === 'FIX_AMOUNT') {
-				this.discountFixedValueModal = this.defaultDiscount.amount;
-			} else {
-				this.discountPercentageModal = this.defaultDiscount.amount;
-			}
-			// this.change();
-		}
+    public ngOnChanges(changes: SimpleChanges): void {
+        if ('discountAccountsDetails' in changes && changes.discountAccountsDetails.currentValue !== changes.discountAccountsDetails.previousValue) {
+            this.prepareDiscountList();
 
-		if ('totalAmount' in changes && changes.totalAmount.currentValue !== changes.totalAmount.previousValue) {
-			this.change();
-		}
-	}
+            if (this.defaultDiscount.discountType === 'FIX_AMOUNT') {
+                this.discountFixedValueModal = this.defaultDiscount.amount;
+            } else {
+                this.discountPercentageModal = this.defaultDiscount.amount;
+            }
+        }
 
-	public discountInputBlur(event) {
-		if (event && event.relatedTarget && this.disInptEle && !this.disInptEle?.nativeElement.contains(event.relatedTarget)) {
-			this.hideDiscountMenu();
-		}
-	}
+        if ('totalAmount' in changes && changes.totalAmount.currentValue !== changes.totalAmount.previousValue) {
+            this.change();
+        }
+    }
 
-	/**
-	 * prepare discount obj
-	 */
-	public prepareDiscountList() {
-		let discountAccountsList: IDiscountList[] = [];
-		this.discountAccountsList$.pipe(take(1)).subscribe(d => discountAccountsList = d);
-		if (discountAccountsList.length && this.discountAccountsDetails && this.discountAccountsDetails.length) {
-			discountAccountsList.forEach(acc => {
-				let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc.uniqueName);
+    public discountInputBlur(event) {
+        if (event && event.relatedTarget && this.disInptEle && !this.disInptEle?.nativeElement.contains(event.relatedTarget)) {
+            this.hideDiscountMenu();
+        }
+    }
 
-				if (!hasItem) {
-					let obj: LedgerDiscountClass = new LedgerDiscountClass();
-					obj.amount = acc.discountValue;
-					obj.discountValue = acc.discountValue;
-					obj.discountType = acc.discountType;
-					obj.isActive = false;
-					obj.particular = acc.linkAccount.uniqueName;
-					obj.discountUniqueName = acc.uniqueName;
-					obj.name = acc.name;
-					this.discountAccountsDetails.push(obj);
-				}
-			});
-		}
-	}
+    /**
+     * prepare discount obj
+     */
+    public prepareDiscountList() {
+        let discountAccountsList: IDiscountList[] = [];
+        this.discountAccountsList$.pipe(take(1)).subscribe(d => discountAccountsList = d);
+        if (discountAccountsList.length && this.discountAccountsDetails && this.discountAccountsDetails.length) {
+            discountAccountsList.forEach(acc => {
+                let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc.uniqueName);
 
-	public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', val: string) {
-		this.defaultDiscount.amount = parseFloat(val);
-		this.defaultDiscount.discountValue = parseFloat(val);
-		this.defaultDiscount.discountType = type;
+                if (!hasItem) {
+                    let obj: LedgerDiscountClass = new LedgerDiscountClass();
+                    obj.amount = acc.discountValue;
+                    obj.discountValue = acc.discountValue;
+                    obj.discountType = acc.discountType;
+                    obj.isActive = false;
+                    obj.particular = acc.linkAccount.uniqueName;
+                    obj.discountUniqueName = acc.uniqueName;
+                    obj.name = acc.name;
+                    this.discountAccountsDetails.push(obj);
+                }
+            });
+        }
+    }
 
-		this.change();
+    public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', val: string) {
+        this.defaultDiscount.amount = parseFloat(val);
+        this.defaultDiscount.discountValue = parseFloat(val);
+        this.defaultDiscount.discountType = type;
 
-		if (!val) {
-			this.discountFromVal = true;
-			this.discountFromPer = true;
-			return;
-		}
-		if (type === 'PERCENTAGE') {
-			this.discountFromPer = true;
-			this.discountFromVal = false;
-		} else {
-			this.discountFromPer = false;
-			this.discountFromVal = true;
-		}
-	}
+        this.change();
 
-	/**
-	 * on change of discount amount
-	 */
-	public change() {
-		this.discountTotalUpdated.emit();
-	}
+        if (!val) {
+            this.discountFromVal = true;
+            this.discountFromPer = true;
+            return;
+        }
+        if (type === 'PERCENTAGE') {
+            this.discountFromPer = true;
+            this.discountFromVal = false;
+        } else {
+            this.discountFromPer = false;
+            this.discountFromVal = true;
+        }
+    }
 
-	/**
-	 * generate total of discount amount
-	 * @returns {number}
-	 */
-	public generateTotal() {
-		let percentageListTotal = this.discountAccountsDetails.filter(f => f.isActive)
-			.filter(s => s.discountType === 'PERCENTAGE')
-			.reduce((pv, cv) => {
-				return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
-			}, 0) || 0;
+    /**
+     * on change of discount amount
+     */
+    public change() {
+        this.discountTotalUpdated.emit();
+    }
 
-		let fixedListTotal = this.discountAccountsDetails.filter(f => f.isActive)
-			.filter(s => s.discountType === 'FIX_AMOUNT')
-			.reduce((pv, cv) => {
-				return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
-			}, 0) || 0;
+    /**
+     * generate total of discount amount
+     * @returns {number}
+     */
+    public generateTotal() {
+        let percentageListTotal = this.discountAccountsDetails.filter(f => f.isActive)
+            .filter(s => s.discountType === 'PERCENTAGE')
+            .reduce((pv, cv) => {
+                return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+            }, 0) || 0;
 
-		let perFromAmount = ((percentageListTotal * this.totalAmount) / 100);
-		return perFromAmount + fixedListTotal;
-	}
+        let fixedListTotal = this.discountAccountsDetails.filter(f => f.isActive)
+            .filter(s => s.discountType === 'FIX_AMOUNT')
+            .reduce((pv, cv) => {
+                return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+            }, 0) || 0;
 
-	public trackByFn(index) {
-		return index; // or item.id
-	}
+        let perFromAmount = ((percentageListTotal * this.totalAmount) / 100);
+        return perFromAmount + fixedListTotal;
+    }
 
-	public hideDiscountMenu() {
-		this.isMenuOpen = false;
-	}
+    public trackByFn(index) {
+        return index;
+    }
 
-	public toggleDiscountMenu() {
-		this.isMenuOpen = (!this.isMenuOpen);
-	}
+    public hideDiscountMenu() {
+        this.isMenuOpen = false;
+    }
 
-	public ngOnDestroy(): void {
-		this.destroyed$.next(true);
-		this.destroyed$.complete();
-	}
+    public toggleDiscountMenu() {
+        this.isMenuOpen = (!this.isMenuOpen);
+    }
+
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 }

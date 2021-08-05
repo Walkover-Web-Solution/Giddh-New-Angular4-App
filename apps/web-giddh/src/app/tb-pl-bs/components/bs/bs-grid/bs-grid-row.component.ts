@@ -1,12 +1,12 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ChildGroup } from '../../../../models/api-models/Search';
 
 @Component({
-    selector: '[bs-grid-row]',  // <home></home>
+    selector: '[bs-grid-row]',
     templateUrl: './bs-grid-row.component.html',
     styleUrls: [`./bs-grid-row.component.scss`],
 })
-export class BsGridRowComponent implements OnInit, OnChanges {
+export class BsGridRowComponent implements OnChanges {
     @Input() public groupDetail: ChildGroup;
     @Input() public search: string;
     @Input() public padding: string;
@@ -14,7 +14,7 @@ export class BsGridRowComponent implements OnInit, OnChanges {
     @Input() public to: string = '';
 
     constructor(private cd: ChangeDetectorRef) {
-        //
+        
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -26,17 +26,13 @@ export class BsGridRowComponent implements OnInit, OnChanges {
         }
     }
 
-    public ngOnInit() {
-        //
-    }
-
     public entryClicked(acc) {
         let url = location.href + '?returnUrl=ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
             url = location.origin + location.pathname + '#./pages/ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
             console.log(ipcRenderer.send('open-url', url));
-        } else if(isCordova){
+        } else if (isCordova) {
             // todo: Entry Click need to be handeled in cordova
         } else {
             (window as any).open(url);

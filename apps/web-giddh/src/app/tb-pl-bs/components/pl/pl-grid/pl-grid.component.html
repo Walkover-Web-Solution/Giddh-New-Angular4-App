@@ -1,5 +1,5 @@
-
-<ng-container appTranslate [file]="'trial-profit-balance/profit-loss/grid'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'trial-profit-balance/profit-loss/grid'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
     <!-- no data start -->
     <div class="no-data" *ngIf="noData">
         <h1>{{localeData?.no_data_found}}</h1>
@@ -18,20 +18,21 @@
                                 <thead>
                                     <tr>
                                         <th class="p-0" width="60%">
-                                            <div #searchContainer (clickOutside)="clickedOutside($event, searchContainer)">
-                                                <div [ngStyle]="{'display': showClearSearch ? 'none' : 'flex'}" class="align-items-center">
+                                            <div #searchContainer
+                                                (clickOutside)="clickedOutside($event, searchContainer)">
+                                                <div [ngStyle]="{'display': showClearSearch ? 'none' : 'flex'}"
+                                                    class="align-items-center">
                                                     <span class="mr-l15 mr-1">{{localeData?.account}}</span>
-                                                    <i class="icon-search2" (click)="toggleSearch()" ></i>
+                                                    <i class="icon-search" (click)="toggleSearch()"></i>
                                                 </div>
                                                 <div [hidden]="!showClearSearch">
-                                                    <input type="search" #searchInputEl
-                                                        class="form-control" [placeholder]="commonLocaleData?.app_search"
+                                                    <input type="search" #searchInputEl class="form-control"
+                                                        [placeholder]="commonLocaleData?.app_search"
                                                         aria-describedby="sizing-addon3" id="w-398px"
                                                         [formControl]="plSearchControl">
                                                 </div>
                                             </div>
                                         </th>
-                                        <!-- <th class="col-3 ">Note</th> -->
                                         <th class="text-right" width="40%">
                                             {{commonLocaleData?.app_as_of}}
                                             <span
@@ -44,9 +45,9 @@
                             <div *ngIf="plData && plData.incArr">
                                 <!--Grid-->
                                 <ng-template #groupDetails let-list let-padding="padding">
-                                    <section class="row-1" *ngFor="let grp of list" [hidden]="!grp.isVisible" pl-grid-row
-                                        [groupDetail]="grp" [padding]="padding" [search]="search" [from]="from" [to]="to"
-                                        [incomeStatement]="plData?.incomeStatment">
+                                    <section class="row-1" *ngFor="let grp of list" [hidden]="!grp.isVisible"
+                                        pl-grid-row [groupDetail]="grp" [padding]="padding" [search]="search"
+                                        [from]="from" [to]="to" [incomeStatement]="plData?.incomeStatment">
                                         <ng-container
                                             *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 10  }">
                                         </ng-container>
@@ -64,9 +65,9 @@
                                         </div>
                                         <div class="col-4  bd-rl group text-right pull-right">
                                             <span>
-                                                 <!-- {{ cogsData?.closingBalance.amount | giddhCurrency }}  -->
                                                 <span class="d-inline-flex">
-                                                    <amount-field [amount]="cogsData?.closingBalance.amount" [currencySymbol]="false" [currencyCode]="false">
+                                                    <amount-field [amount]="cogsData?.closingBalance.amount"
+                                                        [currencySymbol]="false" [currencyCode]="false">
                                                     </amount-field>
                                                 </span>
                                             </span>
@@ -81,15 +82,14 @@
                                 </div>
                                 <div class="col-4  group text-right pull-right bd-rl pd-1">
                                     <strong>
-                                        <!-- {{ plData?.incomeStatment.grossProfit.amount | giddhCurrency }} -->
                                         <span class="d-inline-flex">
-                                            <amount-field [amount]="plData?.incomeStatment.grossProfit.amount" [currencySymbol]="false" [currencyCode]="false">
+                                            <amount-field [amount]="plData?.incomeStatment.grossProfit.amount"
+                                                [currencySymbol]="false" [currencyCode]="false">
                                             </amount-field>
                                         </span>
                                     </strong>
                                 </div>
                             </div>
-                            <!-- <hr class="bd-rt" /> -->
                         </div>
                     </div>
                     <div class="expenses">
@@ -98,7 +98,6 @@
                                 <!--Grid-->
                                 <ng-template #groupDetails let-list let-padding="padding">
                                     <ng-container *ngFor="let grp of list">
-                                        <!-- *ngIf="grp.isVisible || grp.isCreated" -->
                                         <section class="row-1" [hidden]="!grp.isVisible" pl-grid-row [groupDetail]="grp"
                                             [padding]="padding" [search]="search" [padding]="padding" [from]="from"
                                             [to]="to">
@@ -111,9 +110,10 @@
                                                 <div class="col-8  group pd-l1">{{localeData?.total_revenue}}</div>
                                                 <div class="col-4  bd-rl group text-right pull-right pd-l1">
                                                     <span>
-                                                        <!-- {{ plData?.incomeStatment.revenue.amount | giddhCurrency }} -->
                                                         <span class="d-inline-flex">
-                                                            <amount-field [amount]="plData?.incomeStatment.revenue.amount" [currencySymbol]="false" [currencyCode]="false">
+                                                            <amount-field
+                                                                [amount]="plData?.incomeStatment.revenue.amount"
+                                                                [currencySymbol]="false" [currencyCode]="false">
                                                             </amount-field>
                                                         </span>
                                                     </span>
@@ -126,9 +126,10 @@
                                                 {{localeData?.total_operating_expenses}}
                                             </div>
                                             <div class="col-4  group text-right pull-right bd-rl pd-l1">
-                                                <!-- {{ plData?.incomeStatment.operatingExpenses.amount | giddhCurrency }} -->
                                                 <span class="d-inline-flex">
-                                                    <amount-field [amount]="plData?.incomeStatment.operatingExpenses.amount" [currencySymbol]="false" [currencyCode]="false">
+                                                    <amount-field
+                                                        [amount]="plData?.incomeStatment.operatingExpenses.amount"
+                                                        [currencySymbol]="false" [currencyCode]="false">
                                                     </amount-field>
                                                 </span>
                                             </div>
@@ -139,38 +140,33 @@
                                                 <strong class="font-16">{{localeData?.operating_profit_loss}}</strong>
                                             </div>
                                             <div class="col-4  group text-right pull-right bd-rl pd-1">
-                                                <strong
-                                                    class="font-16">
-                                                    <!-- {{ plData?.incomeStatment.operatingProfit.amount | giddhCurrency }} -->
+                                                <strong class="font-16">
                                                     <span class="d-inline-flex">
-                                                        <amount-field [amount]="plData?.incomeStatment.operatingProfit.amount" [currencySymbol]="false"
-                                                            [currencyCode]="false">
+                                                        <amount-field
+                                                            [amount]="plData?.incomeStatment.operatingProfit.amount"
+                                                            [currencySymbol]="false" [currencyCode]="false">
                                                         </amount-field>
                                                     </span>
-                                             </strong>
+                                                </strong>
                                             </div>
                                         </div>
-                                        <section class="row-1" *ngIf="grp.groupName && grp.uniqueName === 'otherexpenses'">
+                                        <section class="row-1"
+                                            *ngIf="grp.groupName && grp.uniqueName === 'otherexpenses'">
                                             <div class="pl-grid-row row">
-                                                <div class="col-8  group pd-l1">{{localeData?.total_other_expense}}</div>
+                                                <div class="col-8  group pd-l1">{{localeData?.total_other_expense}}
+                                                </div>
                                                 <div class="col-4  bd-rl group text-right pull-right pd-l1">
                                                     <span>
-                                                        <!-- {{ plData?.incomeStatment.otherExpenses.amount | giddhCurrency }} -->
                                                         <span class="d-inline-flex">
-                                                            <amount-field [amount]="plData?.incomeStatment.otherExpenses.amount" [currencySymbol]="false"
-                                                                [currencyCode]="false">
+                                                            <amount-field
+                                                                [amount]="plData?.incomeStatment.otherExpenses.amount"
+                                                                [currencySymbol]="false" [currencyCode]="false">
                                                             </amount-field>
                                                         </span>
                                                     </span>
                                                 </div>
                                             </div>
                                         </section>
-                                        <!-- <div class="group clearfix" *ngIf="grp.groupName && grp.uniqueName === 'otherexpenses'">
-                        <div class="col-4  group pd-l1" style="padding-left: 10px;">Total </div>
-                        <div class="col-3  bd-rl group text-right pull-right bd-rl pd-l1">
-                            <span> {{ plData?.incomeStatment.otherExpenses.amount | giddhCurrency }} </span>
-                        </div>
-                    </div> -->
                                     </ng-container>
                                 </ng-template>
                                 <ng-container
@@ -188,10 +184,9 @@
                             <strong>
                                 <span
                                     *ngIf="plData?.incomeStatment.incomeBeforeTaxes.type === 'DEBIT' && plData?.incomeStatment.incomeBeforeTaxes.amount !== 0">-</span>
-                                <!-- {{ plData?.incomeStatment.incomeBeforeTaxes.amount | giddhCurrency }} -->
                                 <span class="d-inline-flex">
-                                    <amount-field [amount]="plData?.incomeStatment.incomeBeforeTaxes.amount" [currencySymbol]="false"
-                                        [currencyCode]="false">
+                                    <amount-field [amount]="plData?.incomeStatment.incomeBeforeTaxes.amount"
+                                        [currencySymbol]="false" [currencyCode]="false">
                                     </amount-field>
                                 </span>
                             </strong>
@@ -204,7 +199,6 @@
                                 {{localeData?.taxes_30}}
                             </div>
                             <div class="col-4  group text-right pull-right bd-rl pd-l1">
-                                <!-- {{ plData?.incomeStatment.appliedTax | giddhCurrency }} -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="plData?.incomeStatment.appliedTax" [currencySymbol]="false"
                                         [currencyCode]="false">

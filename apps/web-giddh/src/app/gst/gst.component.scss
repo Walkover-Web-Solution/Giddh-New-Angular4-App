@@ -67,15 +67,15 @@ svg.icon.icon-xxlg-md {
     width: 40px;
 }
 
-.return-content{
+.return-content {
     .return-top {
         display: inline-block;
         margin-left: 1%;
-        .font-xlarge{
+        .font-xlarge {
             margin: 3px auto;
         }
     }
-} 
+}
 
 .text-middle {
     vertical-align: middle;
@@ -170,7 +170,7 @@ svg.icon {
 .text-overdue {
     color: $chetwode-blue;
     margin: 20px 0px 0px;
-    i{
+    i {
         padding: 0 4%;
     }
 }
@@ -398,6 +398,7 @@ hr {
     position: absolute;
     top: 10px !important;
     left: 160px !important;
+    z-index: 9 !important;
     li {
         a {
             background-color: transparent !important;
@@ -412,6 +413,7 @@ hr {
 
 .header-info .btn-group > .dropdown-menu {
     margin-top: 0;
+    z-index: 989;
 }
 ::ng-deep #monthPicker button.btn.btn-default.btn-info {
     background: $chetwode-blue !important;
@@ -466,19 +468,12 @@ hr {
     padding-left: 0;
     margin-left: -5px;
     list-style: none;
-    >li {
+    > li {
         display: inline-block;
         padding-right: 5px;
         padding-left: 5px;
     }
 }
-.tax-heading {
-    max-width: 10%;
-}
-.tax-dropdown {
-    max-width: 30%;
-}
-
 @keyframes loading {
     from {
         left: 0px;
@@ -506,7 +501,18 @@ hr {
     color: inherit;
 }
 /*responsive*/
+@media screen and (max-width:768px) {
+    .month-picker {
+        position: absolute;
+        top: 100px !important;
+        left: 0 !important;
+        right: auto !important;
+    }
+}
 @media (max-width: 767px) {
+    .daterangePicker{
+        right: 0;
+    }
     .return-content {
         background-color: $white;
     }
@@ -516,16 +522,28 @@ hr {
     .return-content .content-graph {
         padding: 15px 0;
     }
+    .gstr-1-label, .gstr-2-label{
+        display: flex !important;
+        margin-left: 0 !important;
+        img{
+            margin-right: 10px;
+        }
+    }
+}
+.return-content .sales-colm {
+    width: 100%;
 }
 @media (max-width: 575px) {
-    .month-picker {
-        position: absolute;
-        top: 0 !important;
-        left: 0 !important;
-    }
     .view-summary-btn {
         float: none !important;
         display: block;
         margin-top: 10px;
+    }
+    .list-inline.list-middle{
+        display: flex;
+        flex-direction: column;
+        li{
+            margin-bottom: 8px;
+        }
     }
 }

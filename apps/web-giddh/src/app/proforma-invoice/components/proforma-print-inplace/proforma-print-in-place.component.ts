@@ -2,13 +2,13 @@ import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, 
 import { DownloadVoucherRequest } from '../../../models/api-models/recipt';
 import { ProformaDownloadRequest } from '../../../models/api-models/proforma';
 import { VoucherTypeEnum } from '../../../models/api-models/Sales';
-import { base64ToBlob } from '../../../shared/helpers/helperFunctions';
 import { ToasterService } from '../../../services/toaster.service';
 import { ProformaService } from '../../../services/proforma.service';
 import { ReceiptService } from '../../../services/receipt.service';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: 'proforma-print-in-place-component',
@@ -19,6 +19,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class ProformaPrintInPlaceComponent implements OnInit, OnDestroy {
     @Input() public voucherType: VoucherTypeEnum = VoucherTypeEnum.sales;
     @Input() public selectedItem: { voucherNumber: string, uniqueName: string, blob?: Blob };
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     @Output() public cancelEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** Instance of PDF container iframe */
     @ViewChild('pdfContainer', { static: false }) pdfContainer: ElementRef;
@@ -37,7 +41,8 @@ export class ProformaPrintInPlaceComponent implements OnInit, OnDestroy {
         private _toasty: ToasterService,
         private _proformaService: ProformaService,
         private _receiptService: ReceiptService,
-        private domSanitizer: DomSanitizer
+        private domSanitizer: DomSanitizer,
+        private generalService: GeneralService
     ) { }
 
     ngOnInit() {
@@ -55,8 +60,8 @@ export class ProformaPrintInPlaceComponent implements OnInit, OnDestroy {
                 voucherType: this.voucherType,
                 voucherNumber: [this.selectedItem.voucherNumber]
             };
-            let accountUniqueName: string = this.selectedItem.uniqueName;
-            //
+            let accountUniqueName: string = this.selectedItem?.uniqueName;
+
             this._receiptService.DownloadVoucher(model, accountUniqueName, false).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                 if (result) {
                     this.selectedItem.blob = result;
@@ -70,7 +75,7 @@ export class ProformaPrintInPlaceComponent implements OnInit, OnDestroy {
                     this.isVoucherDownloadError = false;
                 } else {
                     this.isVoucherDownloadError = true;
-                    this._toasty.errorToast('Something went wrong please try again!');
+                    this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
                 }
                 this.isVoucherDownloading = false;
             }, (err) => {
@@ -81,17 +86,17 @@ export class ProformaPrintInPlaceComponent implements OnInit, OnDestroy {
         } else {
             let request: ProformaDownloadRequest = new ProformaDownloadRequest();
             request.fileType = fileType;
-            request.accountUniqueName = this.selectedItem.uniqueName;
+            request.accountUniqueName = this.selectedItem?.uniqueName;
 
             if (this.voucherType === VoucherTypeEnum.generateProforma) {
-                request.proformaNumber = this.selectedItem.voucherNumber;
+                request.proformaNumber = this.selectedItem?.voucherNumber;
             } else {
-                request.estimateNumber = this.selectedItem.voucherNumber;
+                request.estimateNumber = this.selectedItem?.voucherNumber;
             }
 
             this._proformaService.download(request, this.voucherType).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                 if (result && result.status === 'success') {
-                    let blob: Blob = base64ToBlob(result.body, 'application/pdf', 512);
+                    let blob: Blob = this.generalService.base64ToBlob(result.body, 'application/pdf', 512);
                     const file = new Blob([blob], { type: 'application/pdf' });
                     URL.revokeObjectURL(this.pdfFileURL);
                     this.pdfFileURL = URL.createObjectURL(file);

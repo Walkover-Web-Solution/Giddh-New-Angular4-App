@@ -1,341 +1,383 @@
-<div class="container-fluid pd-t15" *ngIf="!purchaseOrderUniqueName">
-    <div class="d-flex justify-content-between purchase-order-header">
-        <div class="d-flex date-advance-search">
-            <form #invoiceForm="ngForm" novalidate class="form-inline">
-                <div class="form-group mr-r1 d-flex">
-                    <div class="input-group custom-datepicker">
+<ng-container appTranslate [file]="'purchase-order'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+    <div class="container-fluid" *ngIf="!purchaseOrderUniqueName">
+        <div class="d-flex purchase-order-header justify-content-between">
+            <div class="d-flex date-advance-search">
+                <div class="btn-wrapper">
+                    <button *ngIf="!isCompany" class="btn btn-sky-blue desktop-view-btn"
+                        [routerLink]="['/pages/purchase-management/purchase-order/new']">{{localeData?.new_order}}
+                    </button>
+                </div>
+                <form #invoiceForm="ngForm" novalidate class="form-inline">
+                    <div class="form-group mr-r1 d-flex">
+                        <div class="input-group custom-datepicker">
                             <i class="icon-calender calendar-addon"></i>
                             <input type="text" name="dateRange" (click)="showGiddhDatepicker($event)"
                                 [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
                                 class="giddh-datepicker form-control date-range-picker" />
+                        </div>
                     </div>
-                    <div class="advance-icon" tooltip="Advance Search"
-                        (click)="openAdvanceSearchModal(purchaseAdvanceSearch)">
-                        <span class="icon-advance-filter"></span>
+                </form>
+            </div>
+            <div class="clear-filter" *ngIf="showClearFilterButton() && !isMobileScreen">
+                <button class="btn btn-default mr-0" (click)="clearFilter()">
+                    <span class="icon-cross"></span> {{commonLocaleData?.app_clear_filter}}
+                </button>
+            </div>
+            <div class="d-flex add-invoice">
+                <div *ngIf="purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0" class="more-toggle">
+                    <div *ngIf="!isCompany" class="btn-group" dropdown #dp="bs-dropdown">
+                        <button dropdownToggle type="button" class="btn btn-primary desktop-view-btn dropdown-toggle"
+                            aria-controls="dropdown-basic">
+                            {{commonLocaleData?.app_more}}
+                            <span class="caret"></span>
+                        </button>
+                        <ul *dropdownMenu class="dropdown-menu fixed-dropdown-plus" role="menu"
+                            aria-labelledby="button-basic">
+                            <li role="menuitem">
+                                <a class="dropdown-item cp" href="javascript:void(0)"
+                                    (click)="openModalBulkUpdate(template)">{{localeData?.bulk_update}}</a>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item cp" href="javascript:void(0)"
+                                    (click)="bulkUpdate('create_purchase_bill')">
+                                    {{localeData?.convert_tobill}}</a>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item cp" href="javascript:void(0)" (click)="bulkUpdate('expire')">
+                                    {{localeData?.expired}}</a>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item cp" href="javascript:void(0)"
+                                    (click)="confirmBulkDelete()">{{commonLocaleData?.app_delete}}</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-            </form>
+                <div class="d-flex align-items-center advance-icon btn btn-primary mr-0" [tooltip]="commonLocaleData?.app_advance_search"
+                    (click)="openAdvanceSearchModal(purchaseAdvanceSearch)">
+                    <span class="pd-r05 d-sm-flex d-none">{{commonLocaleData?.app_filter}}</span>
+                    <span class="icon-advance-filter"></span>
+                </div>
+            </div>
         </div>
-        <div class="clear-filter" *ngIf="showClearFilterButton() && !isMobileScreen">
-            <button class="btn btn-default mr-0" (click)="clearFilter()">
-                <span class="icon-cross"></span> Clear Filter
-            </button>
-        </div>
-        <div class="d-flex add-invoice">
-            <div *ngIf="purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0">
+        <div class="mobile-search" *ngIf="!isMobileScreen">
+            <div class="clear-filter mr-1" *ngIf="showClearFilterButton()">
+                <button class="btn btn-default mr-0" (click)="clearFilter()">
+                    <span class="icon-cross"></span> {{commonLocaleData?.app_clear_filter}}
+                </button>
+            </div>
+            <div>
                 <div *ngIf="!isCompany" class="btn-group" dropdown #dp="bs-dropdown">
                     <button dropdownToggle type="button" class="btn btn-primary desktop-view-btn dropdown-toggle"
                         aria-controls="dropdown-basic">
-                        More
+                        {{commonLocaleData?.app_more}}
                         <span class="caret"></span>
                     </button>
                     <ul *dropdownMenu class="dropdown-menu fixed-dropdown-plus" role="menu"
                         aria-labelledby="button-basic">
                         <li role="menuitem">
                             <a class="dropdown-item cp" href="javascript:void(0)"
-                                (click)="openModalBulkUpdate(template)">Bulk Update</a>
+                                (click)="openModalBulkUpdate(template)">{{localeData?.bulk_update}}</a>
                         </li>
                         <li role="menuitem">
-                            <a class="dropdown-item cp" href="javascript:void(0)" (click)="bulkUpdate('create_purchase_bill')">
-                                Convert to bill</a>
+                            <a class="dropdown-item cp" href="javascript:void(0)"
+                                (click)="bulkUpdate('create_purchase_bill')">
+                                {{localeData?.convert_tobill}}</a>
                         </li>
                         <li role="menuitem">
                             <a class="dropdown-item cp" href="javascript:void(0)" (click)="bulkUpdate('expire')">
-                                Expired</a>
+                                {{localeData?.expired}}</a>
                         </li>
                         <li role="menuitem">
-                            <a class="dropdown-item cp" href="javascript:void(0)" (click)="confirmBulkDelete()">Delete</a>
+                            <a class="dropdown-item cp" href="javascript:void(0)"
+                                (click)="confirmBulkDelete()">{{commonLocaleData?.app_delete}}</a>
                         </li>
                     </ul>
                 </div>
             </div>
             <div class="btn-wrapper">
                 <button *ngIf="!isCompany" class="btn btn-sky-blue desktop-view-btn mr-0"
-                    [routerLink]="['/pages/purchase-management/purchase-order/new']">+
-                    New Order
+                    [routerLink]="['/pages/purchase-management/purchase-order/new']">{{localeData?.new_order}}
                 </button>
             </div>
         </div>
-    </div>
-    <div class="mobile-search" *ngIf="!isMobileScreen">
-        <div class="clear-filter mr-1" *ngIf="showClearFilterButton()">
-            <button class="btn btn-default mr-0" (click)="clearFilter()">
-                <span class="icon-cross"></span> Clear Filter
-            </button>
+        <div class="table-responsive mr-t15">
+            <table class="table basic table-bordered giddh-table on-mobile-view">
+                <thead class="thead-background1" (mouseleave)="showSelectAllItemCheckbox = false" [hidden]="!purchaseOrders.totalItems && !purchaseOrderPostRequest?.purchaseOrderNumber && !purchaseOrderPostRequest?.vendorName">
+                    <tr (mouseenter)="showSelectAllItemCheckbox = true">
+                        <th class="min-wid-check" width="3%">
+                            <div class="check-image">
+                                <span *ngIf="!showSelectAllItemCheckbox && !allItemsSelected">#</span>
+                                <div class="table-checkbox-field" *ngIf="showSelectAllItemCheckbox || allItemsSelected">
+                                    <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
+                                        (click)="toggleAllItems(true)">
+                                    <img src="assets/images/checked.png" *ngIf="allItemsSelected"
+                                        (click)="toggleAllItems(false)">
+                                </div>
+                            </div>
+                        </th>
+
+                        <th width="10%" class="td-search-box">
+                            <div class="d-flex pr-1 pl-1">
+                                <div>{{commonLocaleData?.app_date}}</div>
+                                <div class="icon-pointer">
+                                    <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'purchaseDate'}">
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </th>
+
+                        <th width="15%" class="td-search-box" (clickOutside)="showPurchaseOrderNumberSearch = false">
+                            <div>
+                                <i class="icon-search" (click)="showInlineSearch('purchaseOrderNumber', searchBox);"
+                                    [hidden]="showPurchaseOrderNumberSearch || purchaseOrderPostRequest.purchaseOrderNumber"></i>
+                                    <span
+                                    [hidden]="showPurchaseOrderNumberSearch || purchaseOrderPostRequest.purchaseOrderNumber">{{localeData?.po_number}}</span>
+                            </div>
+                            <div class="input-container"
+                                [hidden]="!showPurchaseOrderNumberSearch && !purchaseOrderPostRequest.purchaseOrderNumber">
+                                <input type="text" [placeholder]="localeData?.search_po_number" class="w100" #searchBox
+                                    [(ngModel)]="purchaseOrderPostRequest.purchaseOrderNumber" (keyup)="columnSearch()"
+                                    (keydown)="columnSearch()" />
+                            </div>
+                        </th>
+
+                        <th width="15%" class="td-search-box" (clickOutside)="showVendorNameSearch = false">
+                            <div>
+                                    <i class="icon-search" (click)="showInlineSearch('vendorName', searchBox);"
+                                    [hidden]="showVendorNameSearch || purchaseOrderPostRequest.vendorName"></i>
+                                <span
+                                    [hidden]="showVendorNameSearch || purchaseOrderPostRequest.vendorName">{{commonLocaleData?.app_vendor_name}}</span>
+                            </div>
+                            <div class="input-container"
+                                [hidden]="!showVendorNameSearch && !purchaseOrderPostRequest.vendorName">
+                                <input type="text" [placeholder]="localeData?.search_vendor_name" class="w100"
+                                    #searchBox [(ngModel)]="purchaseOrderPostRequest.vendorName"
+                                    (keyup)="columnSearch()" (keydown)="columnSearch()" />
+                            </div>
+                        </th>
+
+                        <th width="15%" class="min-wid-amt">
+                            <div class="d-flex justify-content-end">
+                                <div>{{localeData?.total_amount}}</div>
+                                <div class="icon-pointer">
+                                    <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'grandTotal'}">
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </th>
+
+                        <th width="15%">
+                            <div class="d-flex">
+                                <div>{{localeData?.expected_delivery}}</div>
+                                <div class="icon-pointer">
+                                    <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'dueDate'}">
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </th>
+
+                        <th width="15%" class="min-wid-status">
+                            <div class="d-flex">
+                                <div>{{commonLocaleData?.app_status}}</div>
+                                <div class="icon-pointer">
+
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="!isLoading && purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0"
+                    (mouseleave)="hoveredItem = '';">
+                    <tr *ngFor="let item of purchaseOrders.items; let i = index;"
+                        (mouseenter)="hoveredItem = item.uniqueName">
+                        <td data-title="#">
+                            <span
+                                *ngIf="hoveredItem !== item.uniqueName && !item.isSelected && selectedItem !== item.uniqueName">{{
+                                (purchaseOrderGetRequest.count * (purchaseOrderGetRequest.page - 1)) + (i+1) }}</span>
+                            <div class="check-img"
+                                *ngIf="hoveredItem === item.uniqueName || item.isSelected || selectedItem === item.uniqueName">
+                                <img *ngIf="!item.isSelected" src="assets/images/unchecked.png"
+                                    (click)="toggleItem(item, true)" />
+                                <img *ngIf="item.isSelected" src="assets/images/checked.png"
+                                    (click)="toggleItem(item, false)" />
+                            </div>
+                        </td>
+                        <td [attr.data-title]="commonLocaleData?.app_date">
+                            {{item.voucherDate}}
+                        </td>
+                        <td [attr.data-title]="localeData?.po_number">
+                            <a
+                                routerLink="/pages/purchase-management/purchase-orders/preview/{{item.uniqueName}}">{{item.voucherNumber}}</a>
+                        </td>
+                        <td [attr.data-title]="commonLocaleData?.app_vendor_name">
+                            {{item.vendor?.name}}
+                        </td>
+                        <td [attr.data-title]="localeData?.total_amount" [tooltip]="grandTotalPopupTemplate"
+                            container="body">
+                            <span class="d-flex justify-content-end">
+                                <amount-field [amount]="item.grandTotal?.amountForAccount"
+                                    [currencySymbol]="item.grandTotal?.currencyForAccount?.symbol"
+                                    [currencyCode]="false">
+                                </amount-field>
+                            </span>
+
+                        </td>
+                        <ng-template #grandTotalPopupTemplate><span [innerHTML]="item.grandTotalTooltipText"></span>
+                        </ng-template>
+                        <td [attr.data-title]="localeData?.expected_delivery">
+                            <span [ngClass]="{'ontime-delivery': item.dueDays > 0, 'late-delivery': item.dueDays < 0}"
+                                *ngIf="item.dueDays && item.dueDays <= 7">{{getDeliveryDaysText(item.dueDays)}}</span>
+                            <span *ngIf="item.dueDays && item.dueDays > 7">{{item.dueDate}}</span>
+                            <span class="ontime-delivery" *ngIf="item.dueDays === 0">Today</span>
+                        </td>
+                        <td [attr.data-title]="commonLocaleData?.app_status"
+                            class="d-flex align-items-center status-mobile pt-0 pb-0">
+                            <span class="d-flex">
+                                {{item.status}}</span>
+                            <div class="action-icon ml-auto"
+                                *ngIf="hoveredItem === item.uniqueName || item.isSelected || selectedItem === item.uniqueName">
+                                <a [tooltip]="localeData?.convert_tobill" *ngIf="item.status === 'open' && !isCompany"
+                                    (click)="bulkUpdate('create_purchase_bill', item.voucherNumber)">
+                                    <span class="icon-tick font-12"></span>
+                                </a>
+                                <a [tooltip]="commonLocaleData?.app_send_email"
+                                    (click)="openSendMailModal(item, sendEmailModal)">
+                                    <span class="icon-envelope font-12"></span>
+                                </a>
+                                <a *ngIf="!isCompany" [tooltip]="commonLocaleData?.app_copy"
+                                    [routerLink]="['/pages/purchase-management/purchase-order/new/'+item.uniqueName]">
+                                    <span class="icon-copy-small font-14"></span>
+                                </a>
+                                <a *ngIf="!isCompany" [tooltip]="commonLocaleData?.app_delete"
+                                    (click)="confirmDelete(item)">
+                                    <i class="icon-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody *ngIf="isLoading">
+                    <tr>
+                        <td colspan="8">
+                            <giddh-page-loader></giddh-page-loader>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <div>
-            <div *ngIf="!isCompany" class="btn-group" dropdown #dp="bs-dropdown">
-                <button dropdownToggle type="button" class="btn btn-primary desktop-view-btn dropdown-toggle"
-                    aria-controls="dropdown-basic">
-                    More
-                    <span class="caret"></span>
+        <pagination [hidden]="isLoading" *ngIf="purchaseOrders.totalPages > 1" class="pagination"
+            [(ngModel)]="purchaseOrderGetRequest.page" [totalItems]="purchaseOrders.totalItems"
+            [itemsPerPage]="purchaseOrderGetRequest.count" [maxSize]="5" [boundaryLinks]="true" [rotate]="false"
+            (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first"
+            [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next"
+            [lastText]="commonLocaleData?.app_last"></pagination>
+        <div class="no-data" *ngIf="!isLoading && !purchaseOrders.totalItems">
+            <no-data [secondaryMessageClass]="'p-0'"></no-data>
+        </div>
+    </div>
+    <ng-template #template>
+        <div class="purchase-order-bulk-update">
+            <div class="modal-header">
+                <h4 class="modal-title pull-left">{{localeData?.bulk_update}}</h4>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                    <span aria-hidden="true">&times;</span>
                 </button>
-                <ul *dropdownMenu class="dropdown-menu fixed-dropdown-plus" role="menu" aria-labelledby="button-basic">
-                    <li role="menuitem">
-                        <a class="dropdown-item cp" href="javascript:void(0)"
-                            (click)="openModalBulkUpdate(template)">Bulk
-                            Update</a>
-                    </li>
-                    <li role="menuitem">
-                        <a class="dropdown-item cp" href="javascript:void(0)" (click)="bulkUpdate('create_purchase_bill')">
-                            Convert to bill</a>
-                    </li>
-                    <li role="menuitem">
-                        <a class="dropdown-item cp" href="javascript:void(0)" (click)="bulkUpdate('expire')">
-                            Expired</a>
-                    </li>
-                    <li role="menuitem">
-                        <a class="dropdown-item cp" href="javascript:void(0)" (click)="confirmBulkDelete()">Delete</a>
-                    </li>
-                </ul>
             </div>
-        </div>
-        <div class="btn-wrapper">
-            <button *ngIf="!isCompany" class="btn btn-sky-blue desktop-view-btn mr-0"
-                [routerLink]="['/pages/purchase-management/purchase-order/new']">+
-                New Order
-            </button>
-        </div>
-    </div>
-    <div class="table-responsive">
-        <table class="table basic mr-t15 table-bordered giddh-table on-mobile-view">
-            <thead class="thead-background1" (mouseleave)="showSelectAllItemCheckbox = false">
-                <tr (mouseenter)="showSelectAllItemCheckbox = true">
-                    <th class="min-wid-check" width="3%">
-                        <div class="check-img">
-                            <span *ngIf="!showSelectAllItemCheckbox && !allItemsSelected">#</span>
-                            <div class="table-checkbox-field" *ngIf="showSelectAllItemCheckbox || allItemsSelected">
-                                <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
-                                    (click)="toggleAllItems(true)">
-                                <img src="assets/images/checked.png" *ngIf="allItemsSelected"
-                                    (click)="toggleAllItems(false)">
+            <div class="modal-body">
+                <div class="form">
+                    <div class="d-flex flex-column">
+                        <p class="mb-3">{{localeData?.bulk_update_header}}</p>
+                        <div class="d-flex justify-content-between mb-3 modal-form">
+                            <sh-select class="mr-r15" name="bulkUpdate" [(ngModel)]="bulkUpdateGetParams.action"
+                                [options]="bulkUpdateFields" [ItemHeight]="33"></sh-select>
+                            <div class="select-date"
+                                *ngIf="bulkUpdateGetParams.action === 'purchasedate' || bulkUpdateGetParams.action === 'duedate' || bulkUpdateGetParams.action === 'warehouse'">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" bsDatepicker
+                                        [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="purchaseDate"
+                                        [(ngModel)]="bulkUpdatePostParams.purchaseDate"
+                                        [placeholder]="localeData?.select_date"
+                                        *ngIf="bulkUpdateGetParams.action === 'purchasedate'">
+                                    <input type="text" class="form-control" bsDatepicker
+                                        [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="dueDate"
+                                        [(ngModel)]="bulkUpdatePostParams.dueDate"
+                                        [placeholder]="localeData?.select_date"
+                                        *ngIf="bulkUpdateGetParams.action === 'duedate'">
+                                    <span class="input-group-addon"
+                                        *ngIf="bulkUpdateGetParams.action === 'purchasedate' || bulkUpdateGetParams.action === 'duedate'">
+                                        <span class="icon-calender"></span>
+                                    </span>
+                                    <sh-select name="warehouse" [placeholder]="localeData?.select_warehouse"
+                                        [(ngModel)]="bulkUpdatePostParams.warehouseUniqueName" [options]="warehouses"
+                                        *ngIf="bulkUpdateGetParams.action === 'warehouse'"></sh-select>
+                                </div>
                             </div>
                         </div>
-                    </th>
-
-                    <th width="10%" class="td-search-box">
-                        <div class="d-flex pr-1 pl-1">
-                            <div>Date</div>
-                            <div class="icon-pointer">
-                                <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'purchaseDate'}">
-                                </ng-container>
-                            </div>
+                        <p class="mb-3">{{localeData?.bulk_update_note}}</p>
+                        <div class="btn-group">
+                            <button class="btn btn-success"
+                                (click)="validateBulkUpdateFields()">{{commonLocaleData?.app_update}}</button>
+                            <button class="btn btn-cancel"
+                                (click)="modalRef.hide()">{{commonLocaleData?.app_cancel}}</button>
                         </div>
-                    </th>
-
-                    <th width="15%" class="td-search-box" (clickOutside)="showPurchaseOrderNumberSearch = false">
-                        <div>
-                            <span [hidden]="showPurchaseOrderNumberSearch || purchaseOrderPostRequest.purchaseOrderNumber">Purchase Order#</span>
-                            <i class="icon-search" (click)="showInlineSearch('purchaseOrderNumber', searchBox);"
-                                [hidden]="showPurchaseOrderNumberSearch || purchaseOrderPostRequest.purchaseOrderNumber"></i>
-                        </div>
-                        <div class="input-container" [hidden]="!showPurchaseOrderNumberSearch && !purchaseOrderPostRequest.purchaseOrderNumber">
-                            <input type="text" placeholder="Search Purchase Order#" class="w100" #searchBox
-                                [(ngModel)]="purchaseOrderPostRequest.purchaseOrderNumber" (keyup)="columnSearch()"
-                                (keydown)="columnSearch()" />
-                        </div>
-                    </th>
-
-                    <th width="15%" class="td-search-box" (clickOutside)="showVendorNameSearch = false">
-                        <div>
-                            <span [hidden]="showVendorNameSearch || purchaseOrderPostRequest.vendorName">Vendor Name</span>
-                            <i class="icon-search" (click)="showInlineSearch('vendorName', searchBox);"
-                                [hidden]="showVendorNameSearch || purchaseOrderPostRequest.vendorName"></i>
-                        </div>
-                        <div class="input-container" [hidden]="!showVendorNameSearch && !purchaseOrderPostRequest.vendorName">
-                            <input type="text" placeholder="Search Vendor Name" class="w100" #searchBox
-                                [(ngModel)]="purchaseOrderPostRequest.vendorName" (keyup)="columnSearch()"
-                                (keydown)="columnSearch()" />
-                        </div>
-                    </th>
-
-                    <th width="15%" class="min-wid-amt">
-                        <div class="d-flex justify-content-end">
-                            <div> Total Amt.</div>
-                            <div class="icon-pointer">
-                                <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'grandTotal'}">
-                                </ng-container>
-                            </div>
-                        </div>
-                    </th>
-
-                    <th width="15%">
-                        <div class="d-flex">
-                            <div>Expected Delivery</div>
-                            <div class="icon-pointer">
-                                <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'dueDate'}">
-                                </ng-container>
-                            </div>
-                        </div>
-                    </th>
-
-                    <th width="15%" class="min-wid-status">
-                        <div class="d-flex">
-                            <div>Status</div>
-                            <div class="icon-pointer">
-
-                            </div>
-                        </div>
-                    </th>
-                </tr>
-            </thead>
-            <tbody *ngIf="!isLoading && purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0" (mouseleave)="hoveredItem = '';">
-                <tr *ngFor="let item of purchaseOrders.items; let i = index;" (mouseenter)="hoveredItem = item.uniqueName">
-                    <td data-title="#">
-                        <span *ngIf="hoveredItem !== item.uniqueName && !item.isSelected && selectedItem !== item.uniqueName">{{ (purchaseOrderGetRequest.count * (purchaseOrderGetRequest.page - 1)) + (i+1) }}</span>
-                        <div class="check-img" *ngIf="hoveredItem === item.uniqueName || item.isSelected || selectedItem === item.uniqueName">
-                            <img *ngIf="!item.isSelected" src="assets/images/unchecked.png"
-                                (click)="toggleItem(item, true)" />
-                            <img *ngIf="item.isSelected" src="assets/images/checked.png"
-                                (click)="toggleItem(item, false)" />
-                        </div>
-                    </td>
-                    <td data-title="Date">
-                        {{item.voucherDate}}
-                    </td>
-                    <td data-title="Purchase Order">
-                        <a routerLink="/pages/purchase-management/purchase-orders/preview/{{item.uniqueName}}">{{item.voucherNumber}}</a>
-                    </td>
-                    <td data-title="Vendor Name">
-                        {{item.vendor?.name}}
-                    </td>
-                    <td data-title="Total Amt." [tooltip]="grandTotalPopupTemplate" container="body">
-                        <span class="d-flex justify-content-end">
-                            <amount-field [amount]="item.grandTotal?.amountForAccount" [currencySymbol]="item.grandTotal?.currencyForAccount?.symbol"
-                                [currencyCode]="false">
-                            </amount-field>
-                        </span>
-
-                    </td>
-                    <ng-template #grandTotalPopupTemplate><span [innerHTML]="item.grandTotalTooltipText"></span>
-                    </ng-template>
-                    <td data-title="Expected Delivery">
-                        <span [ngClass]="{'ontime-delivery': item.dueDays > 0, 'late-delivery': item.dueDays < 0}" *ngIf="item.dueDays && item.dueDays <= 7">{{item.dueDays > 0 ? 'Delivery in ' + item.dueDays + ((item.dueDays === 1) ? ' day ' : ' days') : 'Delayed by ' + formatNumber(item.dueDays) + ' days' }}</span>
-                        <span *ngIf="item.dueDays && item.dueDays > 7">{{item.dueDate}}</span>
-                        <span class="ontime-delivery" *ngIf="item.dueDays === 0">Today</span>
-                    </td>
-                    <td data-title="status" class="d-flex align-items-center status-mobile pt-0 pb-0">
-                        <span class="d-flex">
-                            {{item.status}}</span>
-                        <div class="action-icon ml-auto" *ngIf="hoveredItem === item.uniqueName || item.isSelected || selectedItem === item.uniqueName">
-                            <a tooltip="Convert to bill" *ngIf="item.status === 'open' && !isCompany" (click)="bulkUpdate('create_purchase_bill', item.voucherNumber)">
-                                <span class="icon-tick font-12"></span>
-                            </a>
-                            <a tooltip="Send Email" (click)="openSendMailModal(item, sendEmailModal)">
-                                <span class="icon-envelope font-12"></span>
-                            </a>
-                            <a *ngIf="!isCompany" tooltip="Copy" [routerLink]="['/pages/purchase-management/purchase-order/new/'+item.uniqueName]">
-                                <span class="icon-copy-small font-14"></span>
-                            </a>
-                            <a *ngIf="!isCompany" tooltip="Delete" (click)="confirmDelete(item)">
-                                <i class="icon-trash"></i>
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-            <tbody *ngIf="!isLoading && !purchaseOrders.totalItems">
-                <tr>
-                    <td colspan="7" class="text-center empty-table">
-                        <h1>No Record Found !!</h1>
-                    </td>
-                </tr>
-            </tbody>
-            <tbody *ngIf="isLoading">
-                <tr>
-                    <td colspan="8">
-                        <giddh-page-loader></giddh-page-loader>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <pagination [hidden]="isLoading" *ngIf="purchaseOrders.totalPages > 1" class="pagination" [(ngModel)]="purchaseOrderGetRequest.page" [totalItems]="purchaseOrders.totalItems" [itemsPerPage]="purchaseOrderGetRequest.count" [maxSize]="5" [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
-</div>
-<ng-template #template>
-    <div class="purchase-order-bulk-update">
-        <div class="modal-header">
-            <h4 class="modal-title pull-left">Bulk Update</h4>
-            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="form">
-                <div class="d-flex flex-column">
-                    <p class="mb-3">Choose a field from the dropdown and update with new information.</p>
-                    <div class="d-flex justify-content-between mb-3 modal-form">
-                        <sh-select class="mr-r15" name="bulkUpdate" [(ngModel)]="bulkUpdateGetParams.action" [options]="bulkUpdateFields" [ItemHeight]="33"></sh-select>
-                        <div class="select-date" *ngIf="bulkUpdateGetParams.action === 'purchasedate' || bulkUpdateGetParams.action === 'duedate' || bulkUpdateGetParams.action === 'warehouse'">
-                            <div class="input-group">
-                                <input type="text" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="purchaseDate" [(ngModel)]="bulkUpdatePostParams.purchaseDate" placeholder="Select date" *ngIf="bulkUpdateGetParams.action === 'purchasedate'">
-                                <input type="text" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="dueDate" [(ngModel)]="bulkUpdatePostParams.dueDate" placeholder="Select date" *ngIf="bulkUpdateGetParams.action === 'duedate'">
-                                <span class="input-group-addon" *ngIf="bulkUpdateGetParams.action === 'purchasedate' || bulkUpdateGetParams.action === 'duedate'">
-                                    <span class="icon-calender"></span>
-                                </span>
-                                <sh-select name="warehouse" [placeholder]="'Select Warehouse'" [(ngModel)]="bulkUpdatePostParams.warehouseUniqueName" [options]="warehouses" *ngIf="bulkUpdateGetParams.action === 'warehouse'"></sh-select>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="mb-3">Note: All the selected Purchase Orders will be updated with new information and you
-                        cannot undo this.</p>
-                    <div class="btn-group">
-                        <button class="btn btn-success" (click)="validateBulkUpdateFields()">Update</button>
-                        <button class="btn btn-cancel" (click)="modalRef.hide()">Cancel</button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</ng-template>
-<ng-template #purchaseAdvanceSearch>
-    <purchase-advance-search [purchaseOrderPostRequest]="purchaseOrderPostRequest"
-        (closeModelEvent)="advanceSearchCallback($event)"></purchase-advance-search>
-</ng-template>
-<ng-template #datepickerTemplate>
-    <div class="datepicker-modal">
-        <div class="modal-body">
-            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true"
-                [ranges]="datePickerOptions" [selectedRangeLabel]="selectedRangeLabel"
-                [showCustomRangeLabel]="true" [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true"
-                [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)"
-                (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+    </ng-template>
+    <ng-template #purchaseAdvanceSearch>
+        <purchase-advance-search [purchaseOrderPostRequest]="purchaseOrderPostRequest" [localeData]="localeData"
+            [commonLocaleData]="commonLocaleData" (closeModelEvent)="advanceSearchCallback($event)">
+        </purchase-advance-search>
+    </ng-template>
+    <ng-template #datepickerTemplate>
+        <div class="datepicker-modal">
+            <div class="modal-body">
+                <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
+                    [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true"
+                    [ranges]="datePickerOptions" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
+                    [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
+                    (rangeClicked)="dateSelectedCallback($event)"
+                    (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"
+                    [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #sortTemplate let-column="column">
+        <div class="icon-sort-asc" *ngIf="purchaseOrderGetRequest.sortBy !== column"
+            (click)="sortPurchaseOrders('asc', column)"
+            [ngClass]="{'active-text-color': purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'asc'}">
+        </div>
+        <div class="icon-sort-asc"
+            *ngIf="purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'asc'"
+            (click)="sortPurchaseOrders('desc', column)"
+            [ngClass]="{'active-text-color': purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'asc'}">
+        </div>
+        <div class="icon-sort-asc"
+            *ngIf="purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'desc'"
+            (click)="sortPurchaseOrders('asc', column)"
+            [ngClass]="{'active-text-color': purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'desc'}">
+        </div>
+    </ng-template>
+    <div bsModal #poConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
+        tabindex="-1">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <delete-role-confirmation-model *ngIf="poConfirmationModel.isShown" [module]="deleteModule"
+                    (confirmDeleteEvent)="processDelete()" (closeModelEvent)="closeConfirmationPopup()">
+                </delete-role-confirmation-model>
+            </div>
         </div>
     </div>
-</ng-template>
-<ng-template #sortTemplate let-column="column">
-    <div class="icon-sort-asc" *ngIf="purchaseOrderGetRequest.sortBy !== column"
-        (click)="sortPurchaseOrders('asc', column)"
-        [ngClass]="{'active-text-color': purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'asc'}">
-    </div>
-    <div class="icon-sort-asc"
-        *ngIf="purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'asc'"
-        (click)="sortPurchaseOrders('desc', column)"
-        [ngClass]="{'active-text-color': purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'asc'}">
-    </div>
-    <div class="icon-sort-dsc"
-        *ngIf="purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'desc'"
-        (click)="sortPurchaseOrders('asc', column)"
-        [ngClass]="{'active-text-color': purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'desc'}">
-    </div>
-</ng-template>
-<div bsModal #poConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <delete-role-confirmation-model *ngIf="poConfirmationModel.isShown"
-                [module]="deleteModule"
-                (confirmDeleteEvent)="processDelete()"
-                (closeModelEvent)="closeConfirmationPopup()">
-            </delete-role-confirmation-model>
-        </div>
-    </div>
-</div>
-<purchase-order-preview *ngIf="purchaseOrderUniqueName" [purchaseOrders]="purchaseOrders"
-    [companyUniqueName]="purchaseOrderGetRequest.companyUniqueName" [purchaseOrderUniqueName]="purchaseOrderUniqueName"
-    [isCompany]="isCompany">
-</purchase-order-preview>
-<ng-template #sendEmailModal>
-    <purchase-send-email-modal [module]="'purchase-order'" [sendEmailRequest]="sendEmailRequest" (closeModelEvent)="closeSendMailPopup($event)"></purchase-send-email-modal>
-</ng-template>
+    <purchase-order-preview *ngIf="purchaseOrderUniqueName" [purchaseOrders]="purchaseOrders"
+        [companyUniqueName]="purchaseOrderGetRequest.companyUniqueName"
+        [purchaseOrderUniqueName]="purchaseOrderUniqueName" [isCompany]="isCompany" [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData">
+    </purchase-order-preview>
+    <ng-template #sendEmailModal>
+        <purchase-send-email-modal [module]="'purchase-order'" [sendEmailRequest]="sendEmailRequest"
+            (closeModelEvent)="closeSendMailPopup($event)"></purchase-send-email-modal>
+    </ng-template>
+</ng-container>

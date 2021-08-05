@@ -1,5 +1,4 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-
 import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren, ChangeDetectorRef } from '@angular/core';
 import { ILedgersInvoiceResult, InvoicePaymentRequest } from '../../../../models/api-models/Invoice';
@@ -14,7 +13,6 @@ import { orderBy } from '../../../../lodash-optimized';
 import { LedgerService } from "../../../../services/ledger.service";
 import { ReceiptItem } from "../../../../models/api-models/recipt";
 import { INameUniqueName } from "../../../../models/api-models/Inventory";
-import { GeneralService } from "../../../../services/general.service";
 import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
 import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 
@@ -28,8 +26,12 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     @Input() public selectedInvoiceForDelete: ILedgersInvoiceResult;
     @Output() public closeModelEvent: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
     @ViewChildren(ShSelectComponent) public allShSelectComponents: QueryList<ShSelectComponent>;
-    @ViewChild('amountField', {static: true}) amountField;
+    @ViewChild('amountField', { static: true }) amountField;
     @Input() public selectedInvoiceForPayment: ReceiptItem;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 
     public paymentActionFormObj: InvoicePaymentRequest;
     public moment = moment;
@@ -71,7 +73,6 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
         this.paymentActionFormObj = new InvoicePaymentRequest();
         this.paymentActionFormObj.paymentDate = moment().toDate();
         this.isActionSuccess$ = this.store.pipe(select(s => s.invoice.invoiceActionUpdated), takeUntil(this.destroyed$));
-        this.store.dispatch(this._settingsTagActions.GetALLTags());
         // get user country from his profile
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
             if (profile) {
@@ -98,6 +99,8 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     };
 
     public ngOnInit() {
+        this.store.dispatch(this._settingsTagActions.GetALLTags());
+        
         this.store.pipe(select(s => s.settings.tags), takeUntil(this.destroyed$)).subscribe((tags => {
             if (tags && tags.length) {
                 let arr: IOption[] = [];
@@ -115,12 +118,6 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
         });
 
         this.loadPaymentModes();
-
-        // this._generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe(value => {
-        //     if (value === 'loadPaymentModes') {
-        //         this.loadPaymentModes();
-        //     }
-        // });
     }
 
     public onConfirmation(formObj) {
@@ -174,10 +171,6 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
             this.paymentActionFormObj.chequeClearanceDate = '';
             this.paymentActionFormObj.chequeNumber = '';
         }
-    }
-
-    public onTagSelected(ev) {
-        //
     }
 
     public resetFrom() {

@@ -5,13 +5,13 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { takeUntil } from 'rxjs/operators';
-import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
 import { uniqueNameInvalidStringReplace } from '../helpers/helperFunctions';
 import { IForceClear } from "../../models/api-models/Sales";
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 import { SalesService } from '../../services/sales.service';
+import { cloneDeep } from '../../lodash-optimized';
 
 @Component({
     selector: 'aside-menu-create-tax-component',
@@ -22,17 +22,13 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
     @Input() public tax: TaxResponse;
     @Input() public asidePaneState: string;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     public taxList: IOption[] = [];
-    public duration: IOption[] = [
-        { label: 'Monthly', value: 'MONTHLY' },
-        { label: 'Quarterly', value: 'QUARTERLY' },
-        { label: 'Half-Yearly', value: 'HALFYEARLY' },
-        { label: 'Yearly', value: 'YEARLY' }
-    ];
-    public tdsTcsTaxSubTypes: IOption[] = [
-        { label: 'Receivable', value: 'rc' },
-        { label: 'Payable', value: 'pay' }
-    ];
+    public duration: IOption[] = [];
+    public tdsTcsTaxSubTypes: IOption[] = [];
     public allTaxes: IOption[] = [];
     public selectedTaxType: string = '';
     public checkIfTdsOrTcs: boolean = false;
@@ -54,13 +50,26 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
         private _settingsTaxesActions: SettingsTaxesActions,
         private salesService: SalesService
     ) {
-        for (let i = 1; i <= 31; i++) {
-            this.days.push({ label: i.toString(), value: i.toString() });
-        }
         this.newTaxObj.date = moment().toDate();
     }
 
     ngOnInit() {
+        for (let i = 1; i <= 31; i++) {
+            this.days.push({ label: i.toString(), value: i.toString() });
+        }
+
+        this.duration = [
+            { label: this.commonLocaleData?.app_duration?.monthly, value: 'MONTHLY' },
+            { label: this.commonLocaleData?.app_duration?.quarterly, value: 'QUARTERLY' },
+            { label: this.commonLocaleData?.app_duration?.half_yearly, value: 'HALFYEARLY' },
+            { label: this.commonLocaleData?.app_duration?.yearly, value: 'YEARLY' }
+        ];
+
+        this.tdsTcsTaxSubTypes = [
+            { label: this.commonLocaleData?.app_tax_subtypes?.receivable, value: 'rc' },
+            { label: this.commonLocaleData?.app_tax_subtypes?.payable, value: 'pay' }
+        ];
+
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany && activeCompany.countryV2) {
                 this.getTaxList(activeCompany.countryV2.alpha2CountryCode);
@@ -97,9 +106,9 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
                 subTyp = this.tax.taxType.includes('rc') ? 'rc' : 'pay';
             }
 
-            if(subTyp) {
+            if (subTyp) {
                 this.tdsTcsTaxSubTypes.forEach(key => {
-                    if(key.value === subTyp) {
+                    if (key.value === subTyp) {
                         this.selectedTaxType = key.label;
                     }
                 });
@@ -140,11 +149,11 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     }
 
     public onSubmit() {
-        let dataToSave = _.cloneDeep(this.newTaxObj);
+        let dataToSave = cloneDeep(this.newTaxObj);
 
         if (dataToSave.taxType === 'tcs' || dataToSave.taxType === 'tds') {
-            if(this.tax && this.tax.uniqueName) {
-                dataToSave.taxType = dataToSave.taxType+dataToSave.tdsTcsTaxSubTypes;
+            if (this.tax && this.tax.uniqueName) {
+                dataToSave.taxType = dataToSave.taxType + dataToSave.tdsTcsTaxSubTypes;
             } else {
                 dataToSave.taxType = dataToSave.tdsTcsTaxSubTypes;
             }
@@ -231,7 +240,6 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             }
         });
     }
-
 
     /**
      * Unsubscribe from all listeners

@@ -6,7 +6,7 @@ import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { EBANKS, YODLEE_FASTLINK } from './apiurls/settings.linked.accounts.api';
-import { IAccessTokenResponse, IGetAllEbankAccountResponse, IGetEbankTokenResponse } from '../models/api-models/SettingsLinkedAccounts';
+import { IAccessTokenResponse, IGetAllEbankAccountResponse } from '../models/api-models/SettingsLinkedAccounts';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
@@ -18,30 +18,6 @@ export class SettingsLinkedAccountsService {
 
     constructor(private errorHandler: GiddhErrorHandler, private _http: HttpWrapperService,
         private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
-    }
-
-    /**
-     * Get ebank token
-     */
-    public GetEbankToken(): Observable<BaseResponse<IGetEbankTokenResponse, string>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + EBANKS.GET_TOKEN.replace(':companyUniqueName', this.companyUniqueName)).pipe(map((res) => {
-            let data: BaseResponse<IGetEbankTokenResponse, string> = res;
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<IGetEbankTokenResponse, string>(e)));
-    }
-
-    /**
-     * Get all ebank accounts
-     */
-    public GetAllEbankAccounts(): Observable<BaseResponse<IGetAllEbankAccountResponse[], string>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + EBANKS.GET_ALL_ACCOUNTS.replace(':companyUniqueName', this.companyUniqueName)).pipe(map((res) => {
-            let data: BaseResponse<IGetAllEbankAccountResponse[], string> = res;
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<IGetAllEbankAccountResponse[], string>(e)));
     }
 
     /**

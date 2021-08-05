@@ -1,4 +1,5 @@
-<ng-container appTranslate [file]="'trial-profit-balance/trial-balance/grid'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'trial-profit-balance/trial-balance/grid'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
     <!-- no data start -->
     <div class="no-data" *ngIf="noData">
         <h1>{{localeData?.no_data_found}}</h1>
@@ -34,11 +35,11 @@
             <div class="table-container clearfix trial-balance">
                 <section class="tb-section">
                     <div class="row">
-                        <div class="col-4 search-container"  #searchContainer
+                        <div class="col-4 search-container" #searchContainer
                             (clickOutside)="clickedOutside($event, searchContainer)">
                             <span [ngStyle]="{'display': showClearSearch ? 'none' : 'flex'}" class="align-items-center">
                                 <span class="pd-r1"><strong>{{localeData?.particular}}</strong></span>
-                                <i class="icon-search2" id="showSearch" (click)="toggleSearch()"></i>
+                                <i class="icon-search" id="showSearch" (click)="toggleSearch()"></i>
                             </span>
                             <span [hidden]="!showClearSearch" class="show-clear-search">
                                 <input type="search" #searchInputEl class="form-control"
@@ -47,7 +48,8 @@
                             </span>
                         </div>
                         <div class="col-2 text-right table-th">
-                            <strong>{{localeData?.opening_balance}}</strong></div>
+                            <strong>{{localeData?.opening_balance}}</strong>
+                        </div>
                         <div class="col-2 text-right table-th">
                             <strong>{{commonLocaleData?.app_debit}}</strong>
                         </div>
@@ -84,31 +86,31 @@
                                         <span>{{localeData?.grand_total}}</span>
                                     </th>
                                     <th width="16.6%;" class="text-right">
-                                        <!-- {{ data$.forwardedBalance?.amount | giddhCurrency}} -->
                                         <span class="d-inline-flex">
-                                            <amount-field [amount]="data$.forwardedBalance?.amount" [currencySymbol]="false" [currencyCode]="false">
+                                            <amount-field [amount]="data$.forwardedBalance?.amount"
+                                                [currencySymbol]="false" [currencyCode]="false">
                                             </amount-field>
                                         </span>
                                     </th>
                                     <th width="16.6%;" class="text-right">
-                                        <!-- {{ data$.debitTotal | giddhCurrency}} -->
                                         <span class="d-inline-flex">
-                                            <amount-field [amount]="data$.debitTotal" [currencySymbol]="false" [currencyCode]="false">
+                                            <amount-field [amount]="data$.debitTotal" [currencySymbol]="false"
+                                                [currencyCode]="false">
                                             </amount-field>
                                         </span>
                                     </th>
                                     <th width="16.6%;" class="text-right">
-                                        <!-- {{ data$.creditTotal | giddhCurrency}} -->
                                         <span class="d-inline-flex">
-                                            <amount-field [amount]="data$.creditTotal" [currencySymbol]="false" [currencyCode]="false">
+                                            <amount-field [amount]="data$.creditTotal" [currencySymbol]="false"
+                                                [currencyCode]="false">
                                             </amount-field>
                                         </span>
                                     </th>
                                     <th width="16.6%;" class="text-right">
                                         <span>
-                                            <!-- {{ data$.closingBalance?.amount | giddhCurrency}} -->
                                             <span class="d-inline-flex">
-                                                <amount-field [amount]="data$.closingBalance?.amount" [currencySymbol]="false" [currencyCode]="false">
+                                                <amount-field [amount]="data$.closingBalance?.amount"
+                                                    [currencySymbol]="false" [currencyCode]="false">
                                                 </amount-field>
                                             </span>
                                         </span>

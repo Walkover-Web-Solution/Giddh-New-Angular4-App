@@ -1,0 +1,15 @@
+{
+	"page_heading": "आर्थिक वर्ष",
+	"sr_no": "अनुक्रमांक संख्या",
+	"lock_status": "लॉक स्थिती",
+	"locked": "लॉक केलेले",
+	"unlocked": "अनलॉक केले",
+	"select_financial_year": "आर्थिक वर्ष निवडा",
+	"add_financial_year": "आर्थिक वर्ष जोडा",
+	"financial_year_period": "आर्थिक वर्षाचा कालावधी",
+	"financial_year_period_options": {
+		"jan_dec": "जानेवारी-डिसेंम्बर",
+		"apr_mar": "एप्रिल-मार्च",
+		"july_july": "जुलै-जुलै"
+	}
+}

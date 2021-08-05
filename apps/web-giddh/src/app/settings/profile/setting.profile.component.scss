@@ -16,60 +16,145 @@
     }
 }
 
-.custom-select{
-    padding:0 !important;
+.custom-select {
+    padding: 0 !important;
 }
 
-.profile-form{
-    .form-group{
+.profile-form {
+    .form-group {
         .input-group {
             .input-group-addon {
-            border-left: 1px solid $gainsboro !important;
-        }
-        input{
+                border-left: 1px solid $gainsboro !important;
+            }
+            input {
                 border-left: none !important;
                 border-right: none !important;
             }
         }
-
     }
 }
-.branch-vector{
+.branch-vector {
     text-align: right;
     position: absolute;
     bottom: -70px;
     right: 90px;
 }
-@media(max-width:768px){
-    .multicurrency-checkbox{
+@media (max-width: 768px) {
+    .multicurrency-checkbox {
         display: block !important;
         font-size: 12px;
     }
 }
-@media(max-width:767px){
-    .branch-vector{
-        img{
+@media (max-width: 767px) {
+    .branch-vector {
+        img {
             width: 150px;
         }
     }
 }
-@media (min-width:992px) and (max-width:1359px){
-    .profile-form{
+@media (min-width: 992px) and (max-width: 1359px) {
+    .profile-form {
         flex: 0 0 100% !important;
         max-width: 100% !important;
     }
-    .decimal-system{
+    .decimal-system {
         flex: 0 0 100% !important;
         max-width: 100% !important;
     }
 }
 
-@media (min-width:1360px) and (max-width:1386px){
-    .number-system{
+@media (min-width: 1360px) and (max-width: 1386px) {
+    .number-system {
         flex-flow: column;
         display: flex;
     }
 }
 
+::ng-deep .dropdown-divider {
+    height: 1px;
+    margin: 0.5rem 0;
+    overflow: hidden;
+    background-color: $whisper-light;
+}
 
+::ng-deep .dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 3px 7px;
+    clear: both;
+    font-weight: normal;
+    color: $night-rider;
+    text-align: inherit;
+    white-space: nowrap;
+    background: none;
+    border: 0;
+    text-transform: capitalize;
+}
 
+::ng-deep .dropdown-item:focus,
+.dropdown-item:hover {
+    color: $night-rider;
+    text-decoration: none;
+    background-color: $white-smoke;
+}
+
+::ng-deep .dropdown-item.active,
+.dropdown-item:active {
+    background: $solitude;
+}
+
+::ng-deep .dropdown-item.disabled,
+.dropdown-item:disabled {
+    color: $dark-gray;
+    cursor: not-allowed;
+    background-color: transparent;
+}
+
+::ng-deep .dropdown-item.active,
+.dropdown-item:active {
+    background: $solitude;
+}
+
+.has-error {
+    border: 1px solid $red;
+}
+
+#createCompForm p {
+    font-size: 14px;
+    color: $silver;
+    text-align: center;
+    margin-left: -28px;
+    margin-right: -28px;
+}
+
+#createCompForm .text-danger {
+    display: block;
+    /* clear: both; */
+    /* float: none; */
+}
+
+.giddh-logo-welcome img {
+    max-width: 140px;
+    margin: 50px auto;
+    display: block;
+}
+
+.add-company-detail p {
+    max-width: 300px;
+    margin: 0 auto !important;
+    display: block;
+    text-align: center;
+    width: 100%;
+}
+
+#share-modal .btn.btn-sky-blue {
+    width: 100%;
+}
+.add-company-detail {
+    background-color: $alice-blue-light;
+}
+
+.phone-code-caret{
+    width: 85px;
+    margin-right: 28px;
+}

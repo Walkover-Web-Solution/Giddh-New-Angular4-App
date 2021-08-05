@@ -1,0 +1,130 @@
+@import "../../../assets/css/color.scss";
+
+:host.gst-sidebar {
+    position: fixed;
+    top: 57px;
+    bottom: 0;
+    min-height: 100vh;
+    background: $white;
+    width: 240px;
+    left: 0;
+    z-index: 999;
+    box-shadow: -2px -2px 15px rgba(0, 0, 0, 0.2) !important;
+    .aside-pane {
+        background: $white;
+        overflow: initial;
+        z-index: unset;
+        .back-to-main-slider {
+            display: block;
+            padding: 15px 15px 3px;
+            margin-bottom: 0;
+        }
+        .help-aside-body {
+            .gst-menu-items {
+                ul {
+                    li {
+                        padding: 0px;
+                        a {
+                            display: flex;
+                            align-items: flex-start;
+                            padding: 7px 20px;
+                            margin-bottom: 4px;
+                            span {
+                                i {
+                                    color: $gray;
+                                    margin-right: 10px;
+                                    font-size: 20px;
+                                }
+                            }
+                            &.disabled {
+                                span {
+                                    color: $gray !important;
+                                }
+                            }
+                            &.active {
+                                background-color: $cornflower !important;
+                                span,
+                                span i {
+                                    color: $white !important;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.gst-menu-items {
+    padding: 15px 0 0;
+    ul {
+        padding: 0;
+        list-style: none;
+        font-size: 14px;
+        font-family: "opensans-semibold";
+        color: $trout;
+        li {
+            padding: 6px 20px;
+            margin-bottom: 0px;
+            &.disabled {
+                &:hover {
+                    background-color: transparent;
+                    span{
+                        i{
+                            color: $gray !important;
+                        }
+                    }
+                }
+
+            }
+            a {
+                cursor: pointer;
+                pointer-events: all;
+                &.disabled {
+                    pointer-events: none;
+                }
+                img {
+                    margin-right: 12px;
+                }
+                span {
+                    color: $trout;
+                    &:first-child {
+                        line-height: 1.6;
+                        height: 20px;
+                        display: inline-flex;
+                        -webkit-box-align: center;
+                        align-items: center;
+                        width: 28px;
+                        float: left;
+                    }
+                    &:last-child {
+                        float: left;
+                        width: 80%;
+                    }
+                }
+            }
+            &:hover {
+                background-color: $lavender;
+                span{
+                    i{
+                        color: $nero !important;
+                    }
+                }
+            }
+
+        }
+    }
+}
+@media (max-width: 767px) {
+    :host.gst-sidebar {
+        z-index: 9999;
+        top: 0;
+    }
+}
+@media (max-height: 700px) {
+    .help-aside-body {
+        height: 100%;
+        overflow-y: scroll;
+    }
+}

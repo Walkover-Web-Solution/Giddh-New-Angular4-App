@@ -1,5 +1,5 @@
 // tslint:disable:variable-name
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -7,6 +7,7 @@ import { GstSaveGspSessionRequest, VerifyOtpRequest } from '../../../models/api-
 import { AppState } from '../../../store';
 import { GstReconcileActions } from '../../../actions/gst-reconcile/GstReconcile.actions';
 import { ToasterService } from '../../../services/toaster.service';
+import { GstReport } from '../../constants/gst.constant';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -14,7 +15,7 @@ import { ToasterService } from '../../../services/toaster.service';
     styleUrls: [`./gst-aside-menu.component.scss`],
     templateUrl: './gst-aside-menu.component.html'
 })
-export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
+export class GstAsideMenuComponent implements OnInit, OnDestroy {
 
     @Input() public selectedService: 'VAYANA' | 'TAXPRO' | 'RECONCILE' | 'JIO_GST';
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
@@ -24,6 +25,10 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public activeCompanyGstNumber = '';
     @Input() public returnType: string;
     @Output() public cancelConfirmationEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 
     public taxProForm: GstSaveGspSessionRequest = new GstSaveGspSessionRequest();
     public reconcileForm: any = {};
@@ -49,6 +54,10 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
     public gstReturnInProcess = false;
     public isTaxproAuthenticated = false;
     public isVayanaAuthenticated = false;
+    /** Returns the enum to be used in template */
+    public get GstReport() {
+        return GstReport;
+    }
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -137,12 +146,6 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
         });
     }
 
-    public ngOnChanges(changes) {
-        if ('selectedService' in changes && changes['selectedService'].currentValue) {
-            // alert('selectedService ' + changes['selectedService'].currentValue);
-        }
-    }
-
     public closeAsidePane(event) {
         this.resetLocalFlags();
         this.closeAsideEvent.emit(event);
@@ -172,7 +175,7 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
             this.store.dispatch(this.gstReconcileActions.SaveGSPSession(this.taxProForm));
         } else if ((this.selectedService === 'TAXPRO' || this.selectedService === 'VAYANA') && this.otpSentSuccessFully) {
             if (!(/^(?!\s*$).+/g.test(this.taxProForm.otp))) {
-                this._toaster.errorToast('Please add Otp..');
+                this._toaster.errorToast(this.localeData?.aside_menu?.otp_required_error);
                 return;
             }
             this.store.dispatch(this.gstReconcileActions.SaveGSPSessionWithOTP(this.taxProForm));
@@ -196,7 +199,7 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
     public submitGstReturn() {
         this.submitGstForm.isAccepted = true;
         if (this.submitGstForm.txtVal.toLowerCase() !== 'SUBMIT'.toLowerCase()) {
-            this._toaster.errorToast('Please Enter Submit In Text Box..');
+            this._toaster.errorToast(this.localeData?.aside_menu?.submit_gst_error);
             return;
         }
         this.fileGst.emit(true);
@@ -219,5 +222,17 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * This will return gst authenticated text
+     *
+     * @returns {string}
+     * @memberof GstAsideMenuComponent
+     */
+    public getGstAuthenticatedText(): string {
+        let text = this.localeData?.aside_menu?.gst_authenticated;
+        text = text?.replace("[IS_VAYANA_AUTHENTICATED]", (this.isVayanaAuthenticated ? this.commonLocaleData?.app_numbers?.one : this.commonLocaleData?.app_numbers?.two));
+        return text;
     }
 }

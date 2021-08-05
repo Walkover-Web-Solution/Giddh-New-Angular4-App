@@ -2,12 +2,10 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, OnChanges } 
 import { select, Store } from '@ngrx/store';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { find, take, takeUntil } from 'rxjs/operators';
-
 import { CustomStockUnitAction } from '../../../actions/inventory/customStockUnit.actions';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
-import * as _ from '../../../lodash-optimized';
 import { StockUnitRequest } from '../../../models/api-models/Inventory';
 import { IForceClear } from '../../../models/api-models/Sales';
 import { InventoryService } from '../../../services/inventory.service';
@@ -16,9 +14,10 @@ import { AppState } from '../../../store/roots';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { StockUnits } from './stock-unit';
 import { ToasterService } from '../../../services/toaster.service';
+import { clone, cloneDeep, isEmpty } from '../../../lodash-optimized';
 
 @Component({
-    selector: 'inventory-custom-stock',  // <home></home>
+    selector: 'inventory-custom-stock',
     templateUrl: './inventory.customstock.component.html',
     styleUrls: ['./inventory.customstock.component.scss']
 })
@@ -72,9 +71,17 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
             }
         });
 
+        this.activeGroupUniqueName$ = this.store.pipe(select(s => s.inventory.activeGroupUniqueName), takeUntil(this.destroyed$));
+        this.createCustomStockInProcess$ = this.store.pipe(select(s => s.inventory.createCustomStockInProcess), takeUntil(this.destroyed$));
+        this.updateCustomStockInProcess$ = this.store.pipe(select(s => s.inventory.updateCustomStockInProcess), takeUntil(this.destroyed$));
+        this.deleteCustomStockInProcessCode$ = this.store.pipe(select(s => s.inventory.deleteCustomStockInProcessCode), takeUntil(this.destroyed$));
+        this.createCustomStockSuccess$ = this.store.pipe(select(s => s.inventory.createCustomStockSuccess), takeUntil(this.destroyed$));
+    }
+
+    public ngOnInit() {
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((profileData) => {
-            if (!_.isEmpty(profileData)) {
-                this.companyProfile = _.cloneDeep(profileData);
+            if (!isEmpty(profileData)) {
+                this.companyProfile = cloneDeep(profileData);
                 this.giddhDecimalPlaces = this.companyProfile.balanceDecimalPlaces || 2;
                 this.inventoryService.getUnitCodeRegex('stockUnit', this.companyProfile.country || '').pipe(takeUntil(this.destroyed$)).subscribe((data: any) => {
                     if (data && data.body) {
@@ -94,24 +101,15 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
                 this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             }
         });
-        this.activeGroupUniqueName$ = this.store.pipe(select(s => s.inventory.activeGroupUniqueName), takeUntil(this.destroyed$));
-        this.createCustomStockInProcess$ = this.store.pipe(select(s => s.inventory.createCustomStockInProcess), takeUntil(this.destroyed$));
-        this.updateCustomStockInProcess$ = this.store.pipe(select(s => s.inventory.updateCustomStockInProcess), takeUntil(this.destroyed$));
-        this.deleteCustomStockInProcessCode$ = this.store.pipe(select(s => s.inventory.deleteCustomStockInProcessCode), takeUntil(this.destroyed$));
-        this.createCustomStockSuccess$ = this.store.pipe(select(s => s.inventory.createCustomStockSuccess), takeUntil(this.destroyed$));
-    }
-
-    public ngOnInit() {
+        
         let activeGroup = null;
         this.activeGroupUniqueName$.pipe(take(1)).subscribe(a => activeGroup = a);
         if (activeGroup) {
             this.store.dispatch(this.sidebarAction.OpenGroup(activeGroup));
         }
 
-        // this.store.dispatch(this.inventoryAction.resetActiveGroup());
         this.store.dispatch(this.inventoryAction.resetActiveStock());
         this.store.dispatch(this.customStockActions.GetStockUnit());
-        // this.stockUnit$.subscribe(p => this.clearFields());
 
         this.createCustomStockSuccess$.subscribe((a) => {
             if (a) {
@@ -129,29 +127,29 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     }
 
     public saveUnit(): any {
-        let customUnitObj = _.clone(this.customUnitObj);
+        let customUnitObj = clone(this.customUnitObj);
         if (!this.editMode) {
             if (this.isIndia && this.selectedUnitName) {
-                customUnitObj.name = _.cloneDeep(this.selectedUnitName);
+                customUnitObj.name = cloneDeep(this.selectedUnitName);
             }
             if (this.isDivide) {
-                customUnitObj.quantityPerUnit = 1 * _.cloneDeep(customUnitObj.quantityPerUnit);
+                customUnitObj.quantityPerUnit = 1 * cloneDeep(customUnitObj.quantityPerUnit);
                 customUnitObj.quantityPerUnit = Number(customUnitObj.quantityPerUnit.toFixed(4));
             } else {
-                customUnitObj.quantityPerUnit = 1 / _.cloneDeep(customUnitObj.quantityPerUnit);
+                customUnitObj.quantityPerUnit = 1 / cloneDeep(customUnitObj.quantityPerUnit);
                 customUnitObj.quantityPerUnit = Number(customUnitObj.quantityPerUnit.toFixed(16));
             }
-            this.store.dispatch(this.customStockActions.CreateStockUnit(_.cloneDeep(customUnitObj)));
+            this.store.dispatch(this.customStockActions.CreateStockUnit(cloneDeep(customUnitObj)));
         } else {
             if (this.isDivide) {
-                customUnitObj.quantityPerUnit = 1 * _.cloneDeep(customUnitObj.quantityPerUnit);
+                customUnitObj.quantityPerUnit = 1 * cloneDeep(customUnitObj.quantityPerUnit);
                 customUnitObj.quantityPerUnit = Number(customUnitObj.quantityPerUnit.toFixed(4));
             } else {
-                customUnitObj.quantityPerUnit = 1 / _.cloneDeep(customUnitObj.quantityPerUnit);
+                customUnitObj.quantityPerUnit = 1 / cloneDeep(customUnitObj.quantityPerUnit);
                 customUnitObj.quantityPerUnit = Number(customUnitObj.quantityPerUnit.toFixed(16));
             }
 
-            this.store.dispatch(this.customStockActions.UpdateStockUnit(_.cloneDeep(customUnitObj), this.editCode));
+            this.store.dispatch(this.customStockActions.UpdateStockUnit(cloneDeep(customUnitObj), this.editCode));
             this.customUnitObj.name = null;
         }
     }
@@ -163,7 +161,6 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     public editUnit(item: StockUnitRequest) {
         this.customUnitObj = Object.assign({}, item);
         this.selectedUnitName = item.name;
-        // this.setUnitName(this.customUnitObj.name);
         if (item.displayQuantityPerUnit) {
             this.customUnitObj.quantityPerUnit = giddhRoundOff(item.displayQuantityPerUnit, this.giddhDecimalPlaces);
         }
@@ -197,7 +194,6 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        // this.clearFields();
     }
 
     public setUnitName(name) {
@@ -232,7 +228,6 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         if (this.editMode) {
             return true;
         }
-        let groupName = null;
         let val: string = this.customUnitObj.code;
         if (val && this.stockUnitsList.includes({ label: val, value: val })) {
             val = uniqueNameInvalidStringReplace(val);
@@ -262,11 +257,11 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     public noUnitFound(selectElem) {
         if (selectElem) {
             let val: string = selectElem.filter;
-            this.customUnitObj.name = _.cloneDeep(val);
+            this.customUnitObj.name = cloneDeep(val);
             this.selectedUnitName = '';
             if (!this.editMode && val) {
                 val = uniqueNameInvalidStringReplace(val);
-                this.customUnitObj.code = _.cloneDeep(val);
+                this.customUnitObj.code = cloneDeep(val);
             }
         }
     }

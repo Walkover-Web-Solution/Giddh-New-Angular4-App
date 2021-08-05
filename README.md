@@ -1,13 +1,27 @@
+# Setup Guide
+
+1. Clone https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App.git.
+
+2. This project requires Node version 14+, install Node from [here](https://nodejs.org/en/).
+
+3. Go inside the cloned directory `Giddh-New-Angular4-App` in any terminal and run these following commands in the terminal to install dependency and start local serve.
+
+4. Run `npm i` for installation of dependencies.
+
+5. You need to add a ```.env``` file at the root of the project (similar to ```.env.example``` already present at the root) which is  used to store credentials related to Google, Razorpay, LinkedIn, Twitter. You can get the ```.env``` file from any of the contributors of this project.
+
+5. Run `npm run start` to local serve the project.
+
 # Angular Style Guide
 
 This is a guide to Angular syntax, conventions, and application structure. This style guide presents preferred conventions to write scalable Angular Apps with syntax that is easy to read, understand, and navigate through.
-  
+
 
 **NOTE**: Most of it is inherited from  [Angular-Style Guide](https://angular.io/guide/styleguide).
 
 
 ## File/Folder Structure and Naming Conventions
-  
+
 
 1. Use consistent names for all files/symbols is a must.
 
@@ -49,11 +63,11 @@ This is a guide to Angular syntax, conventions, and application structure. This 
 
 18. Name the feature module symbol reflecting the name of the feature area, folder, and file; for example, `app/cart/cart.module.ts` defines `CartModule`.
 
-  
+
 
 ## Single Responsibility
 
-  
+
 
 Apply the [Single Responsibility Principle(SRP)](https://wikipedia.org/wiki/Single_responsibility_principle) to all components, services, and other symbols. This helps make the app cleaner, easier to read and maintain, and more testable. In order to do just that, keep the following points in mind:
 
@@ -67,19 +81,19 @@ Apply the [Single Responsibility Principle(SRP)](https://wikipedia.org/wiki/Sing
 
 5. Application logic should reside in a Component or a Service.
 
-  
+
 
 ### Single Responsibility for Functions
 
-  
+
 
 Just like files, functions also follow the single responsibility princinple. Define small functions. A function should be no more than **75 lines**.
 
-  
+
 
 ## Misc
 
-  
+
 
 1. Variable declarations that aren't reassigned **must** be declared as const.
 
@@ -93,11 +107,11 @@ Just like files, functions also follow the single responsibility princinple. Def
 
 6. Import symbols from their closest locations instead of importing everything from their parent module.
 
-  
+
 
 ## App Structure and Modules
 
-  
+
 
 1. All of the app's code goes in a folder named `src`.
 
@@ -111,13 +125,13 @@ Just like files, functions also follow the single responsibility princinple. Def
 
 6. Try to be DRY (Don't Repeat Yourself). But **avoid** being so DRY that you sacrifice readability. For example, it's redundant to name a template `cart-view.component.html` because with the `.html` extension, it is obviously a view. But if something is not obvious or departs from a convention, then spell it out.
 
-  
 
-  
+
+
 
 ## Modules
 
-  
+
 
 1. Create an NgModule for each feature area.
 
@@ -127,11 +141,11 @@ Just like files, functions also follow the single responsibility princinple. Def
 
 4. Create dedicated modules for cases like routing, using third party packages like Angular Material, Firebase etc.
 
-  
+
 
 ### Shared Feature Module
 
-  
+
 
 1. Create a feature module named `SharedModule` in a `shared` folder; for example, `app/shared/shared.module.ts` defines `SharedModule`.
 
@@ -145,11 +159,11 @@ Just like files, functions also follow the single responsibility princinple. Def
 
 6.  **Don't specify app-wide singleton providers** in a `SharedModule`. Intentional singletons are OK. Take care.
 
-  
+
 
 ### Core Feature Module
 
-  
+
 
 1. Collect numerous, auxiliary, single-use classes inside a core module to simplify the apparent structure of a feature module.
 
@@ -175,11 +189,11 @@ Just like files, functions also follow the single responsibility princinple. Def
 
 12. Don't allow modules in sibling and parent folders to directly import a module in a _lazy loaded feature_. Directly importing and using a module will load it immediately when the intention is to load it on demand.
 
-  
+
 
 ## Component
 
-  
+
 
 1. Give components an **element** selector, as opposed to **attribute** or **class** selectors.
 
@@ -207,8 +221,8 @@ Just like files, functions also follow the single responsibility princinple. Def
 
 13. Limit logic in a component to only that required for the view. All other logic should be delegated to services.
 
-  
-  
+
+
 
 ### Component Selector Naming Conventions
 
@@ -216,21 +230,21 @@ Just like files, functions also follow the single responsibility princinple. Def
 
 2. Always use a **custom prefix for a component selector**. This can preferably be the module name itself. For example, the prefix `pb` represents **P**izza **B**uilder module and the prefix `cart` represents cart module. For eg. the preview component inside a cart module would have a selector of `cart-preview`.
 
-  
+
 
 ## Class Member Sequences
 
-  
+
 
 1. Place properties up top followed by methods.
 
 2. Place private members after public members, alphabetized.
 
-  
+
 
 ## Directives
 
-  
+
 
 1. Use the [`@Input`](https://angular.io/api/core/Input) and [`@Output`](https://angular.io/api/core/Output) class decorators instead of the `inputs` and `outputs` properties of the [`@Directive`](https://angular.io/api/core/Directive) metadata.
 
@@ -242,17 +256,17 @@ Just like files, functions also follow the single responsibility princinple. Def
 
 5. Use Renderer2 instead of ElementRef's NativeElement for DOM Manipulations.
 
-  
+
 
 ### Directive Selector Naming Conventions
 
-  
+
 
 1. Always use **lowerCamelCase** for naming the selectors of directives.
 
 2. Just like components, always use a custom prefix for the selector of directives. For eg. the form-validate directive in the cart module will have a selector of `cartFormValidate`.
 
-  
+
 
 ## Services
 
@@ -276,12 +290,11 @@ Just like files, functions also follow the single responsibility princinple. Def
 
 10. Make data services responsible for XHR calls, local storage, stashing in memory, or any other data operations.
 
-  
+
 
 ## Lifecycle Hooks
 
-  
+
 
 1. Implement the lifecycle hook interfaces. Don't just use methods without implementing the Lifecycle Hook Interfaces.
 
-  

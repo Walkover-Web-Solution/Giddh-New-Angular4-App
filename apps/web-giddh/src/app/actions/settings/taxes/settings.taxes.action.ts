@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
-
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
+import { LocaleService } from '../../../services/locale.service';
 import { SettingsTaxesService } from '../../../services/settings.taxes.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { CustomActions } from '../../../store/customActions';
@@ -16,7 +15,7 @@ import { SETTINGS_TAXES_ACTIONS } from './settings.taxes.const';
 @Injectable()
 export class SettingsTaxesActions {
 
-     public CreateTax$: Observable<Action> =createEffect( ()=>  this.action$
+    public CreateTax$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAXES_ACTIONS.CREATE_TAX),
             switchMap((action: CustomActions) => {
@@ -24,8 +23,7 @@ export class SettingsTaxesActions {
                     map(response => this.CreateTaxResponse(response)));
             })));
 
-
-    public CreateTaxResponse$: Observable<Action> =createEffect( ()=>  this.action$
+    public CreateTaxResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAXES_ACTIONS.CREATE_TAX_RESPONSE),
             map((response: CustomActions) => {
@@ -33,13 +31,12 @@ export class SettingsTaxesActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Tax Created Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.tax_created"));
                 }
-                return {type: 'EmptyAction'};
+                return { type: 'EmptyAction' };
             })));
 
-
-    public UpdateTax$: Observable<Action> =createEffect( ()=>  this.action$
+    public UpdateTax$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAXES_ACTIONS.UPDATE_TAX),
             switchMap((action: CustomActions) => {
@@ -47,8 +44,7 @@ export class SettingsTaxesActions {
                     map(response => this.UpdateTaxResponse(response)));
             })));
 
-
-    public UpdateTaxResponse$: Observable<Action> =createEffect( ()=>  this.action$
+    public UpdateTaxResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAXES_ACTIONS.UPDATE_TAX_RESPONSE),
             map((response: CustomActions) => {
@@ -56,13 +52,12 @@ export class SettingsTaxesActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Tax Updated Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.tax_updated"));
                 }
-                return {type: 'EmptyAction'};
+                return { type: 'EmptyAction' };
             })));
 
-
-    public DeleteTax$: Observable<Action> =createEffect( ()=>  this.action$
+    public DeleteTax$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAXES_ACTIONS.DELETE_TAX),
             switchMap((action: CustomActions) => {
@@ -75,8 +70,7 @@ export class SettingsTaxesActions {
                     map(response => this.DeleteTaxResponse(response)));
             })));
 
-
-    public DeleteTaxResponse$: Observable<Action> =createEffect( ()=>  this.action$
+    public DeleteTaxResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAXES_ACTIONS.DELETE_TAX_RESPONSE),
             map((response: CustomActions) => {
@@ -84,13 +78,12 @@ export class SettingsTaxesActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Tax Deleted Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.tax_deleted"));
                 }
-                return {type: 'EmptyAction'};
+                return { type: 'EmptyAction' };
             })));
 
-
-    public GetTaxList$: Observable<Action> = createEffect( ()=> this.action$
+    public GetTaxList$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAXES_ACTIONS.GET_TAX),
             switchMap((action: CustomActions) => {
@@ -99,11 +92,11 @@ export class SettingsTaxesActions {
             })));
 
     constructor(private action$: Actions,
-                private toasty: ToasterService,
-                private router: Router,
-                private store: Store<AppState>,
-                private generalActions: GeneralActions,
-                private settingsTaxesService: SettingsTaxesService) {
+        private toasty: ToasterService,
+        private localeService: LocaleService,
+        private store: Store<AppState>,
+        private generalActions: GeneralActions,
+        private settingsTaxesService: SettingsTaxesService) {
     }
 
     public CreateTax(value): CustomActions {
@@ -151,7 +144,7 @@ export class SettingsTaxesActions {
         };
     }
 
-    public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = {type: 'EmptyAction'}): CustomActions {
+    public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
         if (response.status === 'error') {
             if (showToast) {
                 this.toasty.errorToast(response.message);

@@ -1,12 +1,3 @@
-<!-- <div class="p-15 d-flex">
-    <div class="input-group input-search mr-1">
-        <span class="input-group-addon" id="basic-addon1">
-      <i class=" icon-search2"></i>
-    </span>
-        <input type="text" class="form-control" placeholder="Search" aria-describedby="basic-addon1">
-    </div>
-</div> -->
-
 <div class="filter-list">
     <ul class="inner-filter-list">
         <ng-container *ngFor="let filterItem of expensesDetailedItems">
@@ -29,7 +20,8 @@
                         <i class="icon-cash" *ngIf="filterItem.baseAccountCategory==='CASH'"></i>
                         <i class="icon-atm-card" *ngIf="filterItem.baseAccountCategory==='BANK'"></i>
                         <i class="icon-image" *ngIf="filterItem.fileNames"></i>
-                        <i class="text-gray" *ngIf="filterItem.baseAccountCategory==='OTHER'">{{commonLocaleData?.app_ac}}</i>
+                        <i class="text-gray"
+                            *ngIf="filterItem.baseAccountCategory==='OTHER'">{{commonLocaleData?.app_ac}}</i>
                     </p>
                 </div>
             </li>

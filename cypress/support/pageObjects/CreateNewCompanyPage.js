@@ -1,26 +1,26 @@
 class CreateNewCompanyPage {
 
-    companyName(companyName){
-        return cy.get('#name', {timeout: 80000}).clear().type(companyName);
+    companyName(companyName) {
+        return cy.get('#name').clear().type(companyName);
     }
 
-    country(){
+    country() {
         return cy.xpath("//sh-select[@id='country']");
     }
 
-    countryList(){
+    countryList() {
         return cy.get("#select-menu-0 > .list-item > .item");
     }
 
-    mobileNumber(contactNumber){
+    mobileNumber(contactNumber) {
         return cy.xpath("//input[@id='contactNo']").clear().type(contactNumber);
     }
 
-    nextButton(){
+    nextButton() {
         return cy.xpath("//button[@type='submit']").click()
     }
 
-    submitButton(){
+    submitButton() {
         return cy.xpath("//button[normalize-space()='Submit']").click()
     }
 

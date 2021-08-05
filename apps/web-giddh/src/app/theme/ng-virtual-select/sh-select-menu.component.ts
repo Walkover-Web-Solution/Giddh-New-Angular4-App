@@ -36,8 +36,8 @@ export class ShSelectMenuComponent implements OnChanges {
 
     @Output() public noToggleClick: EventEmitter<any> = new EventEmitter<any>();
     @Output() public noResultClicked = new EventEmitter<null>();
-    @ViewChild(VirtualScrollComponent, {static: false}) public virtualScrollElm: VirtualScrollComponent;
-    @ViewChild('listContainer', {static: true}) public listContainer: ElementRef;
+    @ViewChild(VirtualScrollComponent, { static: false }) public virtualScrollElm: VirtualScrollComponent;
+    @ViewChild('listContainer', { static: true }) public listContainer: ElementRef;
     public math: any = Math;
     public viewPortItems: IOption[];
     public _rows: IOption[];
@@ -47,7 +47,7 @@ export class ShSelectMenuComponent implements OnChanges {
     @Input() set rows(val: IOption[]) {
         this._rows = val;
 
-        if(!isEqual(this._rows, this.existingData)) {
+        if (!isEqual(this._rows, this.existingData)) {
             this.existingData = this._rows;
             this.autoSelectIfSingleValueAvailable();
         }
@@ -58,26 +58,23 @@ export class ShSelectMenuComponent implements OnChanges {
     }
 
     public ngOnChanges(changes: SimpleChanges) {
-        // if (changes['isOpen'] && changes['isOpen'].currentValue) {
-        //   this.dyHeight = Number(window.getComputedStyle(this.listContainer.nativeElement).height);
-        // }
-        if(changes['isRequired'] && changes['isRequired'].currentValue !== changes['isRequired'].previousValue) {
+        if (changes['isRequired'] && changes['isRequired'].currentValue !== changes['isRequired'].previousValue) {
             this.autoSelectIfSingleValueAvailable();
         }
     }
 
     public toggleSelected(row) {
         if (this.showCheckbox) {
-            if(row.value === "selectall") {
+            if (row.value === "selectall") {
                 let isSelectAllChecked = this.selectedValues.indexOf(row);
 
                 this._rows.forEach(key => {
-                    if(isSelectAllChecked === -1) {
-                        if(this.selectedValues.indexOf(key) === -1) {
+                    if (isSelectAllChecked === -1) {
+                        if (this.selectedValues.indexOf(key) === -1) {
                             this.noToggleClick.emit(key);
                         }
                     } else {
-                        if(this.selectedValues.indexOf(key) !== -1) {
+                        if (this.selectedValues.indexOf(key) !== -1) {
                             this.noToggleClick.emit(key);
                         }
                     }
@@ -86,7 +83,7 @@ export class ShSelectMenuComponent implements OnChanges {
                 this.noToggleClick.emit(row);
             }
         } else {
-            if(!row.disabled) {
+            if (!row?.disabled) {
                 this.noToggleClick.emit(row);
             }
         }
@@ -107,7 +104,7 @@ export class ShSelectMenuComponent implements OnChanges {
      * @memberof ShSelectMenuComponent
      */
     public autoSelectIfSingleValueAvailable(): void {
-        if(this.isRequired && this._rows && this._rows.length === 1 && !this.filter) {
+        if (this.isRequired && this._rows && this._rows.length === 1 && !this.filter) {
             setTimeout(() => {
                 this.toggleSelected(this._rows[0]);
             }, 150);

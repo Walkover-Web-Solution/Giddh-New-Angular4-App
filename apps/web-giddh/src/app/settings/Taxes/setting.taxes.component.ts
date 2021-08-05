@@ -1,33 +1,18 @@
-import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
-import {debounceTime, take, takeUntil} from 'rxjs/operators';
-import {GIDDH_DATE_FORMAT} from './../../shared/helpers/defaultDateFormat';
-import {select, Store} from '@ngrx/store';
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {AppState} from '../../store';
-import * as _ from '../../lodash-optimized';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
+import { select, Store } from '@ngrx/store';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AppState } from '../../store';
 import * as moment from 'moment/moment';
-import {CompanyActions} from '../../actions/company.actions';
-import {TaxResponse} from '../../models/api-models/Company';
-import {SettingsTaxesActions} from '../../actions/settings/taxes/settings.taxes.action';
-import {AccountService} from '../../services/account.service';
+import { CompanyActions } from '../../actions/company.actions';
+import { TaxResponse } from '../../models/api-models/Company';
+import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import {IOption} from '../../theme/ng-select/ng-select';
-import {ToasterService} from '../../services/toaster.service';
-import {IForceClear} from '../../models/api-models/Sales';
-import {animate, state, style, transition, trigger} from '@angular/animations';
-
-const taxesType = [
-    {label: 'GST', value: 'GST'},
-    {label: 'InputGST', value: 'InputGST'},
-    {label: 'Others', value: 'others'}
-];
-
-const taxDuration = [
-    {label: 'Monthly', value: 'MONTHLY'},
-    {label: 'Quarterly', value: 'QUARTERLY'},
-    {label: 'Half-Yearly', value: 'HALFYEARLY'},
-    {label: 'Yearly', value: 'YEARLY'}
-];
+import { IOption } from '../../theme/ng-select/ng-select';
+import { IForceClear } from '../../models/api-models/Sales';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { cloneDeep, each, map } from '../../lodash-optimized';
 
 @Component({
     selector: 'setting-taxes',
@@ -48,7 +33,7 @@ const taxDuration = [
 })
 export class SettingTaxesComponent implements OnInit, OnDestroy {
 
-    @ViewChild('taxConfirmationModel', {static: true}) public taxConfirmationModel: ModalDirective;
+    @ViewChild('taxConfirmationModel', { static: true }) public taxConfirmationModel: ModalDirective;
 
     public availableTaxes: TaxResponse[] = [];
     public newTaxObj: TaxResponse = new TaxResponse();
@@ -62,42 +47,46 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
     public confirmationMessage: string;
     public confirmationFor: string;
     public accounts$: IOption[];
-    public taxList: IOption[] = taxesType;
-    public duration: IOption[] = taxDuration;
-    public forceClear$: Observable<IForceClear> = observableOf({status: false});
+    public taxList: IOption[] = [];
+    public duration: IOption[] = [];
+    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public taxAsideMenuState: string = 'out';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** True if api call in progress */
     public isLoading: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private store: Store<AppState>,
         private _companyActions: CompanyActions,
-        private _accountService: AccountService,
-        private _settingsTaxesActions: SettingsTaxesActions,
-        private _toaster: ToasterService
+        private _settingsTaxesActions: SettingsTaxesActions
     ) {
-        for (let i = 1; i <= 31; i++) {
-            let day = i.toString();
-            this.days.push({label: day, value: day});
-        }
-
-        this.store.dispatch(this._companyActions.getTax());
+        
     }
 
     public ngOnInit() {
+        for (let i = 1; i <= 31; i++) {
+            let day = i.toString();
+            this.days.push({ label: day, value: day });
+        }
+
+        this.store.dispatch(this._companyActions.getTax());
+        
         this.store.pipe(select(p => p.company), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.taxes) {
-                this.forceClear$ = observableOf({status: true});
-                _.map(o.taxes, (tax) => {
-                    _.each(tax.taxDetail, (t) => {
+                this.forceClear$ = observableOf({ status: true });
+                map(o.taxes, (tax) => {
+                    each(tax.taxDetail, (t) => {
                         t.date = moment(t.date, GIDDH_DATE_FORMAT);
                     });
                 });
                 this.onCancel();
-                this.availableTaxes = _.cloneDeep(o.taxes);
+                this.availableTaxes = cloneDeep(o.taxes);
             }
 
             this.isLoading = o.isTaxesLoading;
@@ -115,15 +104,19 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
     public deleteTax(taxToDelete) {
         this.newTaxObj = taxToDelete;
         this.selectedTax = this.availableTaxes.find((tax) => tax.uniqueName === taxToDelete.uniqueName);
-        this.confirmationMessage = `Are you sure you want to delete ${this.selectedTax.name}?`;
+        let message = this.localeData?.tax_delete_message;
+        message = message?.replace("[TAX_NAME]", this.selectedTax.name);
+        this.confirmationMessage = message;
         this.confirmationFor = 'delete';
         this.taxConfirmationModel.show();
     }
 
     public updateTax(taxIndex: number) {
-        let selectedTax = _.cloneDeep(this.availableTaxes[taxIndex]);
+        let selectedTax = cloneDeep(this.availableTaxes[taxIndex]);
         this.newTaxObj = selectedTax;
-        this.confirmationMessage = `Are you sure want to update ${selectedTax.name}?`;
+        let message = this.localeData?.tax_update_message;
+        message = message?.replace("[TAX_NAME]", this.selectedTax.name);
+        this.confirmationMessage = message;
         this.confirmationFor = 'edit';
         this.taxConfirmationModel.show();
     }
@@ -143,7 +136,7 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
             } else if (this.confirmationFor === 'delete') {
                 this.store.dispatch(this._settingsTaxesActions.DeleteTax(this.newTaxObj.uniqueName));
             } else if (this.confirmationFor === 'edit') {
-                _.each(this.newTaxObj.taxDetail, (tax) => {
+                each(this.newTaxObj.taxDetail, (tax) => {
                     tax.date = moment(tax.date).format(GIDDH_DATE_FORMAT);
                 });
                 this.store.dispatch(this._settingsTaxesActions.UpdateTax(this.newTaxObj));
@@ -152,13 +145,13 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
     }
 
     public addMoreDateAndPercentage(taxIndex: number) {
-        let taxes = _.cloneDeep(this.availableTaxes);
-        taxes[taxIndex].taxDetail.push({date: null, taxValue: null});
+        let taxes = cloneDeep(this.availableTaxes);
+        taxes[taxIndex].taxDetail.push({ date: null, taxValue: null });
         this.availableTaxes = taxes;
     }
 
     public removeDateAndPercentage(parentIndex: number, childIndex: number) {
-        let taxes = _.cloneDeep(this.availableTaxes);
+        let taxes = cloneDeep(this.availableTaxes);
         taxes[parentIndex].taxDetail.splice(childIndex, 1);
         this.availableTaxes = taxes;
     }
@@ -167,7 +160,7 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
         this.store.pipe(select(p => p.company), take(1)).subscribe((o) => {
             if (o.taxes) {
                 this.onCancel();
-                this.availableTaxes = _.cloneDeep(o.taxes);
+                this.availableTaxes = cloneDeep(o.taxes);
             }
         });
     }
@@ -204,5 +197,28 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof SettingTaxesComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.taxList = [
+                { label: this.commonLocaleData?.app_tax_types?.gst, value: 'GST' },
+                { label: this.commonLocaleData?.app_tax_types?.input_gst, value: 'InputGST' },
+                { label: this.commonLocaleData?.app_tax_types?.others, value: 'others' }
+            ];
+
+            this.duration = [
+                { label: this.commonLocaleData?.app_duration?.monthly, value: 'MONTHLY' },
+                { label: this.commonLocaleData?.app_duration?.quarterly, value: 'QUARTERLY' },
+                { label: this.commonLocaleData?.app_duration?.half_yearly, value: 'HALFYEARLY' },
+                { label: this.commonLocaleData?.app_duration?.yearly, value: 'YEARLY' }
+            ];
+        }
     }
 }

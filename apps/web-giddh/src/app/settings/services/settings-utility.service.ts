@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { SettingsServiceModule } from '../settings-service.module';
 
 @Injectable({
-    providedIn: SettingsServiceModule
+    providedIn: 'root'
 })
 export class SettingsUtilityService {
     /** @ignore */
@@ -115,7 +114,7 @@ export class SettingsUtilityService {
         return {
             name: branchDetails.name,
             alias: branchDetails.alias,
-            linkAddresses: (branchDetails.addresses && branchDetails.addresses.length > 0) ? branchDetails.addresses.map(address => ({uniqueName: address.uniqueName, isDefault: address.isDefault})) : []
+            linkAddresses: (branchDetails.addresses && branchDetails.addresses.length > 0) ? branchDetails.addresses.map(address => ({ uniqueName: address.uniqueName, isDefault: address.isDefault })) : []
         };
     }
 

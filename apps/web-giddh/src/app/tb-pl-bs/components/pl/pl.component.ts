@@ -5,11 +5,11 @@ import { CompanyResponse } from '../../../models/api-models/Company';
 import { AppState } from '../../../store';
 import { TBPlBsActions } from '../../../actions/tl-pl.actions';
 import { GetCogsResponse, ProfitLossData, ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
-import * as _ from '../../../lodash-optimized';
 import { Observable, ReplaySubject } from 'rxjs';
 import { PlGridComponent } from './pl-grid/pl-grid.component';
 import { Account, ChildGroup } from '../../../models/api-models/Search';
 import { ToasterService } from '../../../services/toaster.service';
+import { cloneDeep, each } from '../../../lodash-optimized';
 
 @Component({
     selector: 'pl',
@@ -41,7 +41,6 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
                 from: value.activeFinancialYear.financialYearStarts,
                 to: value.activeFinancialYear.financialYearEnds
             };
-            // this.filterData(this.request);
         }
     }
 
@@ -53,7 +52,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
     @Input() public isDateSelected: boolean = false;
 
     public search: string;
-    @ViewChild('plGrid', {static: true}) public plGrid: PlGridComponent;
+    @ViewChild('plGrid', { static: true }) public plGrid: PlGridComponent;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     private _selectedCompany: CompanyResponse;
@@ -65,10 +64,10 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
     public ngOnInit() {
         this.store.pipe(select(p => p.tlPl.pl.data), takeUntil(this.destroyed$)).subscribe(p => {
             if (p) {
-                let data = _.cloneDeep(p) as ProfitLossData;
+                let data = cloneDeep(p) as ProfitLossData;
                 let cogs;
                 if (data && data.incomeStatment && data.incomeStatment.costOfGoodsSold) {
-                    cogs = _.cloneDeep(data.incomeStatment.costOfGoodsSold) as GetCogsResponse;
+                    cogs = cloneDeep(data.incomeStatment.costOfGoodsSold) as GetCogsResponse;
                 } else {
                     cogs = null;
                 }
@@ -104,8 +103,6 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
                         cg.isOpen = false;
                         cg.uniqueName = f;
                         cg.groupName = (f) ? f.replace(/([a-z0-9])([A-Z])/g, '$1 $2') : "";
-                        // removed following line in favour of G0-908
-                        // cg.category = f === 'closingInventory' ? 'expenses' : 'income';
                         cg.category = f === 'income';
                         cg.closingBalance = {
                             amount: cogs[f],
@@ -161,11 +158,11 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public InitData(d: ChildGroup[]) {
-        _.each(d, (grp: ChildGroup) => {
+        each(d, (grp: ChildGroup) => {
             grp.isVisible = false;
             grp.isCreated = false;
             grp.isIncludedInSearch = true;
-            _.each(grp.accounts, (acc: Account) => {
+            each(grp.accounts, (acc: Account) => {
                 acc.isIncludedInSearch = true;
                 acc.isCreated = false;
                 acc.isVisible = false;
@@ -177,12 +174,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public ngAfterViewInit() {
-        //
         this.cd.detectChanges();
-    }
-
-    public exportXLS(event) {
-        //
     }
 
     public filterData(request: ProfitLossRequest) {
@@ -195,8 +187,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
         if (!request.tagName) {
             delete request.tagName;
         }
-        this.store.dispatch(this.tlPlActions.GetProfitLoss(_.cloneDeep(request)));
-        // this.store.dispatch(this.tlPlActions.GetCogs({from: request.from, to: request.to}));
+        this.store.dispatch(this.tlPlActions.GetProfitLoss(cloneDeep(request)));
     }
 
     public ngOnDestroy(): void {
@@ -206,7 +197,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public findIndex(activeFY, financialYears) {
         let tempFYIndex = 0;
-        _.each(financialYears, (fy: any, index: number) => {
+        each(financialYears, (fy: any, index: number) => {
             if (fy.uniqueName === activeFY.uniqueName) {
                 if (index === 0) {
                     tempFYIndex = index;
@@ -228,11 +219,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public searchChanged(event: string) {
-        // this.cd.checkNoChanges();
         this.search = event;
         this.cd.detectChanges();
-        // setTimeout(() => {
-        //   this.search = event;
-        // }, 1);
     }
 }

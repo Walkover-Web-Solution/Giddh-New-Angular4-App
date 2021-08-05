@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { OnboardingFormRequest } from '../../../models/api-models/Common';
 import { CommonService } from '../../../services/common.service';
 import { CompanyService } from '../../../services/companyService.service';
@@ -72,6 +71,12 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
 
     /** Unsubscribe from listener */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold profile JSON data */
+    public profileLocaleData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private commonService: CommonService,
@@ -86,9 +91,17 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
     ) {
         this.warehouseForm = this.formBuilder.group({
             name: ['', Validators.required],
-            address: [''],
-            // linkedEntity: [[]]
+            address: ['']
         });
+    }
+
+    /**
+     * Initializes the component
+     *
+     * @memberof CreateWarehouseComponent
+     */
+    public ngOnInit(): void {
+        document.querySelector('body').classList.add('setting-sidebar-open');
         this.store.pipe(select(appState => appState.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.name) {
                 this.companyDetails = {
@@ -108,14 +121,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                 }
             }
         });
-    }
 
-    /**
-     * Initializes the component
-     *
-     * @memberof CreateWarehouseComponent
-     */
-    public ngOnInit(): void {
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
         this.loadLinkedEntities();
         this.loadAddresses('GET', { count: 0 });
@@ -144,7 +150,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.imgPath =  (isElectron|| isCordova) ? 'assets/images/warehouse-image.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-image.svg';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/warehouse-image.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-image.svg';
     }
 
     /**
@@ -215,23 +221,17 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
      * @memberof CreateWarehouseComponent
      */
     public handleFormSubmit(): void {
-        // const linkEntity = this.addressConfiguration.linkedEntities.filter(entity => (this.warehouseForm.value.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
-        //     uniqueName: filteredEntity.uniqueName,
-        //     isDefault: filteredEntity.isDefault,
-        //     entity: filteredEntity.entity
-        // }));
         const requestObj = {
             name: this.warehouseForm.value.name,
             linkAddresses: this.addresses?.filter(address => this.warehouseForm.value.address.includes(address.uniqueName))?.map(filteredAddress => ({
                 uniqueName: filteredAddress.uniqueName,
                 isDefault: filteredAddress.isDefault
-            })),
-            // linkEntity
+            }))
         };
         this.settingsProfileService.createNewWarehouse(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (response.status === 'success') {
-                    this.toastService.successToast('Warehouse created successfully');
+                    this.toastService.successToast(this.localeData?.warehouse_created);
                     this.warehouseForm.reset();
                     this.router.navigate(['/pages/settings/warehouse']);
                 } else {
@@ -318,7 +318,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                     label: response.body.name,
                     value: response.body.uniqueName
                 })
-                this.toastService.successToast('Address created successfully');
+                this.toastService.successToast(this.profileLocaleData?.address_created);
             } else {
                 this.toastService.errorToast(response.message);
             }
@@ -464,6 +464,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
      */
     public ngOnDestroy(): void {
         document.querySelector('body').classList.remove('fixed');
+        document.querySelector('body').classList.remove('setting-sidebar-open');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

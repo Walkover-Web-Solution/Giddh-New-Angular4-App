@@ -10,6 +10,7 @@ import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { FormControl } from '@angular/forms';
 import { PAGINATION_LIMIT } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/Company/company.reducer';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
     selector: 'sales-register-expand',
@@ -35,12 +36,10 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
 
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     // searching
-    @ViewChild('invoiceSearch', {static: true}) public invoiceSearch: ElementRef;
-    // @ViewChild('customerSearch') public customerSearch: ElementRef;
-    @ViewChild('filterDropDownList', {static: true}) public filterDropDownList: BsDropdownDirective;
+    @ViewChild('invoiceSearch', { static: true }) public invoiceSearch: ElementRef;
+    @ViewChild('filterDropDownList', { static: true }) public filterDropDownList: BsDropdownDirective;
 
     public voucherNumberInput: FormControl = new FormControl();
-    // public customerNameInput: FormControl = new FormControl();
     public monthNames = [];
     public monthYear: string[] = [];
     public modalUniqueName: string;
@@ -59,15 +58,22 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /* This will hold if it's mobile screen or not */
+    public isMobileScreen: boolean = false;
 
-    constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef) {
+    constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver) {
         this.salesRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
         this.isGetSalesDetailsInProcess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsInProcess), takeUntil(this.destroyed$));
         this.isGetSalesDetailsSuccess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsSuccess), takeUntil(this.destroyed$));
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
     }
 
     ngOnInit() {
-        this.imgPath = (isElectron||isCordova)  ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
+        this.imgPath = (isElectron || isCordova) ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
         this.getDetailedsalesRequestFilter.page = 1;
         this.getDetailedsalesRequestFilter.count = 50;
         this.getDetailedsalesRequestFilter.q = '';
@@ -96,7 +102,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
                 });
                 if (this.voucherNumberInput.value) {
                     setTimeout(() => {
-                        if(this.invoiceSearch && this.invoiceSearch.nativeElement) {
+                        if (this.invoiceSearch && this.invoiceSearch.nativeElement) {
                             this.invoiceSearch.nativeElement.focus();
                         }
                     }, 200);
@@ -215,9 +221,6 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         let month = (dt.getMonth() + 1).toString(),
             year = dt.getFullYear();
 
-        // GET THE FIRST AND LAST DATE OF THE MONTH.
-        //let firstDay = new Date(year, month , 0).toISOString().replace(/T.*/,'').split('-').reverse().join('-');
-        //let lastDay = new Date(year, month + 1, 1).toISOString().replace(/T.*/,'').split('-').reverse().join('-');
         if (parseInt(month) < 10) {
             month = '0' + month;
         }
@@ -229,24 +232,14 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public toggleSearch(fieldName: string) {
         if (fieldName === 'invoiceNumber') {
             this.showSearchInvoiceNo = true;
-            // this.showSearchCustomer = false;
 
             setTimeout(() => {
-                if(this.invoiceSearch && this.invoiceSearch.nativeElement) {
+                if (this.invoiceSearch && this.invoiceSearch.nativeElement) {
                     this.invoiceSearch.nativeElement.focus();
                 }
             }, 200);
-        }
-        // else if (fieldName === 'customerUniqueName') {
-        //   this.showSearchCustomer = true;
-        //   this.showSearchInvoiceNo = false;
-        //   setTimeout(() => {
-        //     this.customerSearch.nativeElement.focus();
-        //   }, 200);
-        // }
-        else {
+        } else {
             this.showSearchInvoiceNo = false;
-            // this.showSearchCustomer = false;
         }
         this.detectChange();
     }
@@ -268,7 +261,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
      * @memberof SalesRegisterExpandComponent
      */
     public translationComplete(event: boolean): void {
-        if(event) {
+        if (event) {
             this.monthNames = [this.commonLocaleData?.app_months_full.january, this.commonLocaleData?.app_months_full.february, this.commonLocaleData?.app_months_full.march, this.commonLocaleData?.app_months_full.april, this.commonLocaleData?.app_months_full.may, this.commonLocaleData?.app_months_full.june, this.commonLocaleData?.app_months_full.july, this.commonLocaleData?.app_months_full.august, this.commonLocaleData?.app_months_full.september, this.commonLocaleData?.app_months_full.october, this.commonLocaleData?.app_months_full.november, this.commonLocaleData?.app_months_full.december];
             this.getCurrentMonthYear();
         }

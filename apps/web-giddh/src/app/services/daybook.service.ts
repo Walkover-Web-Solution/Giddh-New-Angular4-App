@@ -1,6 +1,5 @@
 import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
-
 import { HttpWrapperService } from './httpWrapper.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -33,13 +32,13 @@ export class DaybookService {
             .replace(':to', encodeURIComponent(queryRequest.to));
         url = url.concat(`&branchUniqueName=${queryRequest.branchUniqueName !== this.companyUniqueName ? encodeURIComponent(queryRequest.branchUniqueName) : ''}`);
         return this._http.post(url, request).pipe(
-                map((res) => {
-                    let data: BaseResponse<DayBookResponseModel, DayBookRequestModel> = res;
-                    data.request = request;
-                    data.queryString = queryRequest;
-                    return data;
-                }),
-                catchError((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request, queryRequest)));
+            map((res) => {
+                let data: BaseResponse<DayBookResponseModel, DayBookRequestModel> = res;
+                data.request = request;
+                data.queryString = queryRequest;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request, queryRequest)));
     }
 
     public ExportDaybook(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): Observable<BaseResponse<DayBookResponseModel, DayBookRequestModel>> {
@@ -59,13 +58,13 @@ export class DaybookService {
             url = url.concat(`&branchUniqueName=${queryRequest.branchUniqueName}`);
         }
         return this._http.get(url).pipe(
-                map((res) => {
-                    let data: BaseResponse<DayBookResponseModel, DayBookRequestModel> = res;
-                    data.queryString = queryRequest;
-                    data.queryString.requestType = queryRequest.format === 'pdf' ? 'application/pdf' : 'application/vnd.ms-excel';
-                    return data;
-                }),
-                catchError((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request)));
+            map((res) => {
+                let data: BaseResponse<DayBookResponseModel, DayBookRequestModel> = res;
+                data.queryString = queryRequest;
+                data.queryString.requestType = queryRequest.format === 'pdf' ? 'application/pdf' : 'application/vnd.ms-excel';
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request)));
     }
 
     public ExportDaybookPost(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): Observable<BaseResponse<DayBookResponseModel, DayBookRequestModel>> {
@@ -85,12 +84,12 @@ export class DaybookService {
             url = url.concat(`&branchUniqueName=${queryRequest.branchUniqueName}`);
         }
         return this._http.post(url, request).pipe(map((res) => {
-                    let data: BaseResponse<DayBookResponseModel, DayBookRequestModel> = res;
-                    data.request = request;
-                    data.queryString = queryRequest;
-                    data.queryString.requestType = queryRequest.format === 'pdf' ? 'application/pdf' : 'application/vnd.ms-excel';
-                    return data;
-                }),
-                catchError((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request)));
+            let data: BaseResponse<DayBookResponseModel, DayBookRequestModel> = res;
+            data.request = request;
+            data.queryString = queryRequest;
+            data.queryString.requestType = queryRequest.format === 'pdf' ? 'application/pdf' : 'application/vnd.ms-excel';
+            return data;
+        }),
+            catchError((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request)));
     }
 }

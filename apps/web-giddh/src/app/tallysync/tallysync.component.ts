@@ -1,6 +1,6 @@
 import { delay, takeUntil } from 'rxjs/operators';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 
@@ -12,14 +12,14 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 export class TallysyncComponent implements OnInit, OnDestroy {
     public activeTab: string = 'inprogress';
     public showInvoiceNav: boolean = false;
-    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
+    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
     public localeData: any = {};
 
     constructor(private _activatedRoute: ActivatedRoute) {
-        
+
     }
 
     public ngOnInit() {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, Renderer2, Output, EventEmitter, OnChanges, SimpleChanges, HostListener } from '@angular/core';
+import { Component, OnInit, Input, Renderer2, Output, EventEmitter, OnChanges, SimpleChanges, HostListener } from '@angular/core';
 import * as _moment from 'moment';
 
 @Component({
@@ -60,11 +60,11 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
      */
     public ngOnInit(): void {
 
-        if(!this.inputStartDate) {
+        if (!this.inputStartDate) {
             this.inputStartDate = _moment().startOf('day');
         }
 
-        if(!this.inputEndDate) {
+        if (!this.inputEndDate) {
             this.inputEndDate = _moment().endOf('day');
         }
 
@@ -150,8 +150,8 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
      */
     @HostListener('window:scroll', ['$event'])
     public onWindowScroll(event: any): void {
-        if(this.updatePosition) {
-            if(window.pageYOffset > this.initialWindowOffset) {
+        if (this.updatePosition) {
+            if (window.pageYOffset > this.initialWindowOffset) {
                 this.dateFieldPosition.y = this.initialDatepickerYPosition - (window.pageYOffset - this.initialWindowOffset);
             } else {
                 this.dateFieldPosition.y = this.initialDatepickerYPosition + (this.initialWindowOffset - window.pageYOffset);

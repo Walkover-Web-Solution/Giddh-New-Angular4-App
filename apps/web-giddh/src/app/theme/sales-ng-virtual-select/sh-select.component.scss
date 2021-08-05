@@ -1,4 +1,4 @@
-@import '../../../assets/css/color.scss';
+@import "../../../assets/css/color.scss";
 :host {
     display: block;
     position: relative;
@@ -15,7 +15,6 @@
 
 .header.open {
     border-radius: 2px 2px 0 0;
-    /* box-shadow: 0 2px 3px 0 rgba(34, 36, 38, .15); */
     border-bottom: none;
     line-height: auto;
 }
@@ -28,28 +27,10 @@ div {
     display: block;
 }
 
-/* input[type="text"] {
-    border: none !important;
-    vertical-align: middle !important;
-    width: 100%;
-    margin: 0 !important;
-    padding: 0px !important;
-    box-sizing: border-box;
-    background-color: white;
-    font-size: 1.0rem !important;
-    line-height: 2rem !important;
-    letter-spacing: 0.01rem !important;
-    font-family: 'RobotoDraft', 'Roboto', 'Helvetica Neue, Helvetica, Arial', sans-serif;
-    font-style: normal !important;
-    font-weight: 300 !important;
-    -webkit-font-smoothing: antialiased !important;
-    -moz-osx-font-smoothing: grayscale !important;
-    text-rendering: optimizeLegibility !important;
-} */
-
 input[type="text"] {
     outline: none;
     width: 100%;
+    border-radius: 5px !important;
 }
 
 [hidden] {
@@ -78,7 +59,7 @@ i.close.icon.clear:hover::after {
     font-weight: 500;
     line-height: 100%;
     opacity: 0.5;
-    color: black;
+    color: $black;
     transform: translateY(-50%);
 }
 
@@ -86,6 +67,7 @@ i.close.icon.clear:hover::after {
     background-color: $whisper;
     color: $bay-of-many;
     cursor: not-allowed;
+    border-radius: 5px;
 }
 
 .chip {
@@ -95,9 +77,8 @@ i.close.icon.clear:hover::after {
     font-size: 14px;
     line-height: 30px;
     border-radius: 4px;
-    background-color: #f4f5f8;
+    background-color: $solitude;
     margin: 8px 0 5px 8px;
-    /* color: white; */
 }
 
 .chip-close-btn {
@@ -112,7 +93,7 @@ i.close.icon.clear:hover::after {
 .chip-close-btn:hover {
     font-weight: 700;
     opacity: 0.5;
-    color: black;
+    color: $black;
 }
 
 .sh-select-disabled .selected-val,

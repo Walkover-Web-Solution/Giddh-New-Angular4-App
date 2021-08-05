@@ -18,6 +18,10 @@ export class AddCompanyComponent implements OnInit {
     @Input() public activeCompany: any;
     /* This will accept all associated company data */
     @Input() public allAssociatedCompanies: any[] = [];
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     /* This will contain all active company data based on criteria */
     public associatedCompanies: any[] = [];
     /* This will contain list of all active company data which we will show in dropdown */
@@ -86,5 +90,17 @@ export class AddCompanyComponent implements OnInit {
      */
     public closePopup(): void {
         this.addCompany.emit(false);
+    }
+
+    /**
+     * This will return add company text
+     *
+     * @returns {string}
+     * @memberof AddCompanyComponent
+     */
+    public getAddCompanyText(): string {
+        let text = this.localeData?.subscription?.add_company_note;
+        text = text?.replace("[PLAN_NAME]", this.activeCompany?.subscription?.planDetails?.name);
+        return text;
     }
 }

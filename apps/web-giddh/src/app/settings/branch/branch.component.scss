@@ -12,7 +12,7 @@
     font-size: 14px;
 }
 
-.custom-multi-select{
+.custom-multi-select {
     li {
         background: $white-smoke;
         color: $white;
@@ -21,7 +21,7 @@
         font-size: 14px;
         border-radius: 3px;
         cursor: pointer;
-        a{
+        a {
             color: $gray;
         }
     }
@@ -30,7 +30,7 @@
     font-size: 14px;
     margin-bottom: 5px;
 }
-.buttonYesCancel {
+.button-yes-cancel {
     margin-top: 25px;
     margin-bottom: 20px;
 }
@@ -98,9 +98,6 @@
     border-bottom: 1px solid $gainsboro;
 }
 .branch-sales-details {
-    padding: 20px;
-}
-.branch-sales-details {
     border-top: 1px solid $gainsboro;
     padding-top: 20px;
     label {
@@ -156,12 +153,12 @@
     width: 900px !important;
 }
 
-.search-branch-box{
+.search-branch-box {
     max-width: 220px;
     width: 100%;
     margin-right: 8px;
-    input{
-        background-image: url('../../../assets/images/searchIcon.svg') !important;
+    input {
+        background-image: url("../../../assets/images/searchIcon.svg") !important;
         background-repeat: no-repeat !important;
         padding-left: 30px !important;
         background-position: 7px 9px !important;
@@ -197,7 +194,7 @@
     justify-content: center;
     align-items: center;
     font-size: 18px;
-    border-radius: 2px;
+    border-radius: 5px;
     background: $white;
     margin-right: 15px;
 
@@ -310,10 +307,10 @@
 .right-card-section {
     margin-top: -15px;
 }
-.branch-vector{
+.branch-vector {
     text-align: right;
     position: absolute;
-    bottom: -70px;;
+    bottom: -70px;
     right: 90px;
 }
 @media (max-width: 375px) {
@@ -344,12 +341,12 @@
                 margin-right: 0;
             }
         }
-        .search-field{
+        .search-field {
             margin-right: 0;
-            .search-branch-box{
+            .search-branch-box {
                 max-width: 180px;
             }
-            .clear-filter-btn{
+            .clear-filter-btn {
                 width: 122px !important;
                 padding: 0 12px;
             }
@@ -361,12 +358,12 @@
             margin-bottom: 0;
         }
     }
-    .btn-sky-blue.pull-right{
+    .btn-sky-blue.pull-right {
         float: none;
         margin-bottom: 15px;
     }
-    .branch-vector{
-        img{
+    .branch-vector {
+        img {
             width: 150px;
         }
     }
@@ -385,17 +382,16 @@
     }
     .branch-header-content {
         margin-right: 0;
-        .search-field{
+        .search-field {
             margin-right: 0;
-            .search-branch-box{
+            .search-branch-box {
                 max-width: 160px;
             }
-            .clear-filter-btn{
+            .clear-filter-btn {
                 width: 122px !important;
                 padding: 0 6px;
             }
         }
-
     }
 }
 
@@ -422,28 +418,27 @@
     }
 }
 
-
-@media (max-width: 950px){
+@media (max-width: 950px) {
     .modal-width {
         width: auto !important;
     }
 }
 
-@media(max-width:575px){
+@media (max-width: 575px) {
     .date-advance-search {
         .input-group-date-range-picker {
-            width:100%;
+            width: 100%;
         }
     }
-    .branch-header{
+    .branch-header {
         flex-direction: column;
-        .search-branch-box{
+        .search-branch-box {
             max-width: 100%;
             margin-bottom: 15px;
         }
     }
 
-    .search-field{
+    .search-field {
         .clear-filter-btn {
             padding: 0px 8px;
             font-size: 12px;

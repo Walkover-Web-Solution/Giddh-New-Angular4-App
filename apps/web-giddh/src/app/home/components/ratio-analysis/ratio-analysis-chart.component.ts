@@ -1,15 +1,11 @@
 import { skipWhile, takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
-import { ActiveFinancialYear } from '../../../models/api-models/Company';
 import { Observable, ReplaySubject } from 'rxjs';
 import { HomeActions } from '../../../actions/home/home.actions';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import * as moment from 'moment/moment';
-import * as _ from '../../../lodash-optimized';
-import { IComparisionChartResponse } from '../../../models/interfaces/dashboard.interface';
-import { isNullOrUndefined } from 'util';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
 @Component({
@@ -19,11 +15,8 @@ import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 })
 
 export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
-    @Input() public comparisionChartData: Observable<IComparisionChartResponse>;
     @Input() public refresh: boolean = false;
 
-    public activeFinancialYear: ActiveFinancialYear;
-    public lastFinancialYear: ActiveFinancialYear;
     public requestInFlight = true;
     public currentRatioChart: typeof Highcharts = Highcharts;
     public currentRatioChartOptions: Highcharts.Options;
@@ -45,28 +38,6 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.store.dispatch(this._homeActions.getRatioAnalysis(moment().format(GIDDH_DATE_FORMAT), this.refresh));
-
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
-                let financialYears = [];
-
-                this.activeFinancialYear = activeCompany.activeFinancialYear;
-                if (this.activeFinancialYear && activeCompany.financialYears.length > 1) {
-                    financialYears = activeCompany.financialYears.filter(cm => cm.uniqueName !== this.activeFinancialYear.uniqueName);
-                    financialYears = _.filter(financialYears, (it: ActiveFinancialYear) => {
-                        let a = moment(this.activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT);
-                        let b = moment(it.financialYearEnds, GIDDH_DATE_FORMAT);
-                        return b.diff(a, 'days') < 0;
-                    });
-                    financialYears = _.orderBy(financialYears, (p: ActiveFinancialYear) => {
-                        let a = moment(this.activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT);
-                        let b = moment(p.financialYearEnds, GIDDH_DATE_FORMAT);
-                        return b.diff(a, 'days');
-                    }, 'desc');
-                    this.lastFinancialYear = financialYears[0];
-                }
-            }
-        });
     }
 
     public hardRefresh() {
@@ -92,7 +63,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
             title: {
                 verticalAlign: 'middle',
                 align: 'center',
-                text: '<span class="pie-text_center">' + this.ratioObj.currentRatio + '</span>',
+                text: '<span class="pie-text_center">' + this.ratioObj?.currentRatio + '</span>',
                 style: { color: '#005b77', fontSize: '26px' },
                 useHTML: true,
                 y: 8
@@ -145,8 +116,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
             series: [{
                 name: this.localeData?.current_ratio,
                 type: undefined,
-                // showInLegend: false,
-                data: [[this.localeData?.current_assets, this.ratioObj.currentRatio * 100], [this.localeData?.current_liabilities, 100]],
+                data: [[this.localeData?.current_assets, this.ratioObj?.currentRatio * 100], [this.localeData?.current_liabilities, 100]],
             }],
         };
 
@@ -157,12 +127,11 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                 polar: false,
                 width: 170,
                 height: '180px'
-                //   height: '250px'
             },
             title: {
                 verticalAlign: 'middle',
                 align: 'center',
-                text: '<span class="pie-text_center">' + this.ratioObj.debtEquityRatio + '</span>',
+                text: '<span class="pie-text_center">' + this.ratioObj?.debtEquityRatio + '</span>',
                 style: { color: '#005b77', fontSize: '26px' },
                 useHTML: true,
                 y: 8
@@ -213,9 +182,8 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                 useHTML: true
             },
             series: [{
-                // name: 'Debt Equity Ratio',
                 type: 'pie',
-                data: [[this.localeData?.current_liability + ' + ' + this.localeData?.noncurrent_liability, this.ratioObj.debtEquityRatio * 100], [this.localeData?.shareholders_fund, 100]],
+                data: [[this.localeData?.current_liability + ' + ' + this.localeData?.noncurrent_liability, this.ratioObj?.debtEquityRatio * 100], [this.localeData?.shareholders_fund, 100]],
 
             }]
         };
@@ -227,12 +195,11 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                 polar: false,
                 width: 170,
                 height: '180px'
-                //   height: '250px'
             },
             title: {
                 verticalAlign: 'middle',
                 align: 'center',
-                text: '<span class="pie-text_center">' + this.ratioObj.proprietaryRatio + '</span>',
+                text: '<span class="pie-text_center">' + this.ratioObj?.proprietaryRatio + '</span>',
                 style: { color: '#005b77', fontSize: '26px' },
                 useHTML: true,
                 y: 8
@@ -285,7 +252,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
             series: [{
                 name: this.localeData?.proprietary_ratio,
                 type: 'pie',
-                data: [[this.localeData?.shareholders_fund, this.ratioObj.proprietaryRatio * 100], [this.localeData?.total_assets, 100]],
+                data: [[this.localeData?.shareholders_fund, this.ratioObj?.proprietaryRatio * 100], [this.localeData?.total_assets, 100]],
 
             }]
         };
@@ -301,7 +268,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
             title: {
                 verticalAlign: 'middle',
                 align: 'center',
-                text: '<span class="pie-text_center">' + this.ratioObj.fixedAssetRatio + '</span>',
+                text: '<span class="pie-text_center">' + this.ratioObj?.fixedAssetRatio + '</span>',
                 style: { color: '#005b77', fontSize: '26px' },
                 useHTML: true,
                 y: 8
@@ -354,7 +321,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
             series: [{
                 name: this.localeData?.fixed_assets_ratio,
                 type: 'pie',
-                data: [[this.localeData?.fixed_assets + ' / ' + this.localeData?.noncurrent_liability, this.ratioObj.fixedAssetRatio * 100], [this.localeData?.shareholders_fund, 100]],
+                data: [[this.localeData?.fixed_assets + ' / ' + this.localeData?.noncurrent_liability, this.ratioObj?.fixedAssetRatio * 100], [this.localeData?.shareholders_fund, 100]],
             }]
         };
     }
@@ -371,8 +338,8 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
      * @memberof RatioAnalysisChartComponent
      */
     public translationComplete(event: boolean): void {
-        if(event) {
-            this.rationResponse$.pipe(skipWhile(response => (isNullOrUndefined(response)))).subscribe(response => {
+        if (event) {
+            this.rationResponse$.pipe(skipWhile(response => (response === null || response === undefined))).subscribe(response => {
                 this.ratioObj = response;
                 this.generateCharts();
                 this.requestInFlight = false;

@@ -38,7 +38,6 @@ export class LedgerVM {
     public accountUnq: string = '';
     public blankLedger: BlankLedgerVM;
     public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
-    // public datePipe = createAutoCorrectedDatePipe('dd-mm-yyyy');
     public showTaxationDiscountBox: boolean = false;
     public ledgerUnderStandingObj = {
         accountType: '',
@@ -101,7 +100,6 @@ export class LedgerVM {
             otherTaxesSum: 0,
             otherTaxType: 'tcs',
             exchangeRate: 1,
-            exchangeRateForDisplay: 1,
             valuesInAccountCurrency: true
         };
     }
@@ -165,7 +163,6 @@ export class LedgerVM {
     public prepareBlankLedgerRequestObject(): BlankLedgerVM {
         let requestObj: BlankLedgerVM;
         requestObj = cloneDeep(this.blankLedger);
-        // requestObj.entryDate = moment(requestObj.entryDate).format(GIDDH_DATE_FORMAT);
 
         // filter transactions which have selected account
         requestObj.transactions = requestObj.transactions.filter((bl: TransactionVM) => bl.particular);
@@ -215,7 +212,7 @@ export class LedgerVM {
     }
 
     public getUnderstandingText(selectedLedgerAccountType, accountName, parentGroups, localeData?: any) {
-        if(localeData) {
+        if (localeData) {
             let data;
             let isReverseChargeAccount = false;
 
@@ -236,17 +233,17 @@ export class LedgerVM {
             }
 
             if (data) {
-                if(data.balanceText && data.balanceText.cr) {
+                if (data.balanceText && data.balanceText.cr) {
                     data.balanceText.cr = data.balanceText.cr.replace('<accountName>', accountName);
                 }
-                if(data.balanceText && data.balanceText.dr) {
+                if (data.balanceText && data.balanceText.dr) {
                     data.balanceText.dr = data.balanceText.dr.replace('<accountName>', accountName);
                 }
 
-                if(data.text && data.text.dr) {
+                if (data.text && data.text.dr) {
                     data.text.dr = data.text.dr.replace('<accountName>', accountName);
                 }
-                if(data.text && data.text.cr) {
+                if (data.text && data.text.cr) {
                     data.text.cr = data.text.cr.replace('<accountName>', accountName);
                 }
                 this.ledgerUnderStandingObj = _.cloneDeep(data);
@@ -382,7 +379,6 @@ export class BlankLedgerVM {
     public tdsTcsTaxesSum: number;
     public otherTaxType: 'tcs' | 'tds';
     public exchangeRate: number = 1;
-    public exchangeRateForDisplay: number = 1;
     public valuesInAccountCurrency: boolean = true;
     public baseCurrencyToDisplay?: ICurrencyResponse;
     public foreignCurrencyToDisplay?: ICurrencyResponse;

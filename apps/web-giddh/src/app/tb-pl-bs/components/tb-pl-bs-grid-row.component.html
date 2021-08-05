@@ -1,10 +1,9 @@
-<div class="row row-2 tb-pl-bs-grid-row"  [trial-accordion]="groupDetail"
-    [hidden]="!groupDetail.isVisible" *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)">
+<div class="row row-2 tb-pl-bs-grid-row" [trial-accordion]="groupDetail" [hidden]="!groupDetail.isVisible"
+    *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)">
     <div class="col-4 group" [ngStyle]="{'padding-left': padding+'px'}"
         [innerHTML]="groupDetail.groupName | uppercase | highlight:search">
     </div>
     <div class="col-2 group text-right">
-        <!-- {{ groupDetail.forwardedBalance?.amount | giddhCurrency }}  -->
         <span class="d-inline-flex">
             <amount-field [amount]="groupDetail.forwardedBalance?.amount" [currencySymbol]="false"
                 [currencyCode]="false">
@@ -12,21 +11,18 @@
         </span>{{groupDetail.forwardedBalance | recType }}
     </div>
     <div class="col-2 group text-right">
-        <!-- {{ groupDetail.debitTotal | giddhCurrency }}  -->
         <span class="d-inline-flex">
             <amount-field [amount]="groupDetail.debitTotal" [currencySymbol]="false" [currencyCode]=" false">
             </amount-field>
         </span>
     </div>
     <div class="col-2 group text-right">
-        <!-- {{ groupDetail.creditTotal | giddhCurrency }}  -->
         <span class="d-inline-flex">
             <amount-field [amount]="groupDetail.creditTotal" [currencySymbol]="false" [currencyCode]=" false">
             </amount-field>
         </span>
     </div>
     <div class="col-2 group text-right">
-        <!-- {{ groupDetail.closingBalance?.amount | giddhCurrency }}  -->
         <span class="d-inline-flex">
             <amount-field [amount]="groupDetail.closingBalance?.amount" [currencySymbol]="false" [currencyCode]="false">
             </amount-field>
@@ -34,7 +30,6 @@
     </div>
 </div>
 <ng-container *ngFor="let account of groupDetail.accounts;trackBy: trackByFn">
-    <!-- <section class="row row-2 account " [ngClass]="{'isHidden': !account.isVisible }"> -->
     <section class="row-2 account overflow-visible" *ngIf="account.isVisible || account.isCreated"
         [hidden]="!account.isVisible" (dblclick)="accountInfo(account,$event)" (clickOutside)="hideModal()"
         [exclude]="'.row-item'">
@@ -51,8 +46,6 @@
                 </span>
             </div>
             <div class="col-2 account text-right">
-                <!-- {{ account.openingBalance?.amount | giddhCurrency }} {{account.openingBalance | recType }}  -->
-
                 <span class="d-inline-flex">
                     <amount-field [amount]="account.openingBalance?.amount" [currencySymbol]="false"
                         [currencyCode]="false">
@@ -61,21 +54,18 @@
 
             </div>
             <div class="col-2 account text-right">
-                <!-- {{ account.debitTotal | giddhCurrency }}  -->
                 <span class="d-inline-flex">
                     <amount-field [amount]="account.debitTotal" [currencySymbol]="false" [currencyCode]="false">
                     </amount-field>
                 </span>
             </div>
             <div class="col-2 account text-right">
-                <!-- {{ account.creditTotal | giddhCurrency }}  -->
                 <span class="d-inline-flex">
                     <amount-field [amount]="account.creditTotal" [currencySymbol]="false" [currencyCode]="false">
                     </amount-field>
                 </span>
             </div>
             <div class="col-2 account text-right">
-                <!-- {{ account.closingBalance?.amount | giddhCurrency }}  -->
                 <span class="d-inline-flex">
                     <amount-field [amount]="account.closingBalance?.amount" [currencySymbol]="false"
                         [currencyCode]="false">

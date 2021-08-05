@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxj
 import { distinctUntilChanged, filter, take, takeUntil, map } from 'rxjs/operators';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
-import { AfterViewInit, Component, Input, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit, Output, EventEmitter, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -16,7 +16,7 @@ import { IForceClear } from '../../../models/api-models/Sales';
 import { isObject, cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { InvoiceService } from '../../../services/invoice.service';
-
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 @Component({
     selector: 'inventory-add-group',
     templateUrl: './inventory.addgroup.component.html',
@@ -43,7 +43,6 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public defaultGrpActive: boolean = false;
     public manageInProcess$: Observable<any>;
-    public canDeleteGroup: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will hold temporary tax list */
     public taxTempArray: any[] = [];
@@ -51,13 +50,15 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     public companyTaxesList$: Observable<TaxResponse[]>;
     /** This will hold inventory settings */
     public inventorySettings: any;
+    /** This will hold modal reference */
+    public modalRef: BsModalRef;
 
     /**
      * TypeScript public modifiers
      */
     constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
         private _fb: FormBuilder, private _inventoryService: InventoryService, private inventoryActions: InventoryAction,
-        private router: Router, private invoiceService: InvoiceService) {
+        private router: Router, private invoiceService: InvoiceService, private modalService: BsModalService) {
         this.fetchingGrpUniqueName$ = this.store.pipe(select(state => state.inventory.fetchingGrpUniqueName), takeUntil(this.destroyed$));
         this.isGroupNameAvailable$ = this.store.pipe(select(state => state.inventory.isGroupNameAvailable), takeUntil(this.destroyed$));
         this.activeGroup$ = this.store.pipe(select(state => state.inventory.activeGroup), takeUntil(this.destroyed$));
@@ -66,21 +67,23 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         this.isUpdateGroupInProcess$ = this.store.pipe(select(state => state.inventory.isUpdateGroupInProcess), takeUntil(this.destroyed$));
         this.isDeleteGroupInProcess$ = this.store.pipe(select(state => state.inventory.isDeleteGroupInProcess), takeUntil(this.destroyed$));
         this.manageInProcess$ = this.store.pipe(select(s => s.inventory.inventoryAsideState), takeUntil(this.destroyed$));
+        this.companyTaxesList$ = this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$));
+    }
+
+    public ngOnInit() {
         this.store.pipe(take(1)).subscribe(state => {
             if (state.inventory.groupsWithStocks === null) {
                 this.store.dispatch(this.sideBarAction.GetGroupsWithStocksHierarchyMin());
             }
         });
-        this.companyTaxesList$ = this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$));
-    }
-
-    public ngOnInit() {
         // get all groups
         this.getParentGroupData();
         this.getInvoiceSettings();
         // subscribe to url
         this.sub = this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            this.groupUniqueName = params['groupUniqueName'];
+            if(params) {
+                this.groupUniqueName = params['groupUniqueName'];
+            }
         });
 
         // add group form
@@ -135,7 +138,6 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
 
                 if (account.parentStockGroup) {
                     this.selectedGroup = { label: account.parentStockGroup.name, value: account.parentStockGroup.uniqueName };
-                    // updGroupObj.parentStockGroupUniqueName = this.selectedGroup.value;
                     this.parentStockSearchString = account.parentStockGroup.uniqueName;
                     updGroupObj.isSubGroup = true;
                 } else {
@@ -149,9 +151,9 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                     this.addGroupForm?.patchValue({ parentStockGroupUniqueName: account.parentStockGroup.uniqueName });
                 }
 
-                if(account.hsnNumber) {
+                if (account.hsnNumber) {
                     this.addGroupForm.get("showCodeType")?.patchValue("hsn");
-                } else if(account.sacNumber) {
+                } else if (account.sacNumber) {
                     this.addGroupForm.get("showCodeType")?.patchValue("sac");
                 }
 
@@ -162,11 +164,6 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                     this.addGroupForm?.patchValue({ name: '', uniqueName: '', hsnNumber: '', sacNumber: '', isSubGroup: false });
                 }
                 this.parentStockSearchString = '';
-            }
-            if (account && account.stocks.length > 0) {
-                this.canDeleteGroup = false;
-            } else {
-                this.canDeleteGroup = true;
             }
 
             this.companyTaxesList$.subscribe((tax) => {
@@ -246,7 +243,6 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     }
 
     public ngOnDestroy() {
-        // this.store.dispatch(this.inventoryActions.resetActiveGroup());
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -281,20 +277,20 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         if unique name is not available then server will assign number suffix **/
 
         if (val) {
-            this.addGroupForm?.patchValue({uniqueName: val});
+            this.addGroupForm?.patchValue({ uniqueName: val });
         } else {
-            this.addGroupForm?.patchValue({uniqueName: ''});
+            this.addGroupForm?.patchValue({ uniqueName: '' });
         }
     }
 
     public addNewGroup() {
         let stockRequest = new StockGroupRequest();
         let uniqueNameField = this.addGroupForm.get('uniqueName');
-        if(uniqueNameField && uniqueNameField.value) {
+        if (uniqueNameField && uniqueNameField.value) {
             uniqueNameField?.patchValue(uniqueNameField.value.replace(/ /g, '').toLowerCase());
         }
 
-        if(this.addGroupForm.get("showCodeType").value === "hsn") {
+        if (this.addGroupForm.get("showCodeType").value === "hsn") {
             this.addGroupForm.get('sacNumber')?.patchValue("");
         } else {
             this.addGroupForm.get('hsnNumber')?.patchValue("");
@@ -312,7 +308,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
             stockRequest.parentStockGroupUniqueName = uniqName.value;
         }
 
-        if(!stockRequest.taxes) {
+        if (!stockRequest.taxes) {
             stockRequest.taxes = [];
         }
 
@@ -325,11 +321,11 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         let uniqueNameField = this.addGroupForm.get('uniqueName');
 
         this.activeGroup$.pipe(take(1)).subscribe(a => activeGroup = a);
-        if(uniqueNameField && uniqueNameField.value) {
+        if (uniqueNameField && uniqueNameField.value) {
             uniqueNameField?.patchValue(uniqueNameField.value.replace(/ /g, '').toLowerCase());
         }
 
-        if(this.addGroupForm.get("showCodeType").value === "hsn") {
+        if (this.addGroupForm.get("showCodeType").value === "hsn") {
             this.addGroupForm.get('sacNumber')?.patchValue("");
         } else {
             this.addGroupForm.get('hsnNumber')?.patchValue("");
@@ -344,7 +340,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
             stockRequest.parentStockGroupUniqueName = uniqName.value;
         }
 
-        if(!stockRequest.taxes) {
+        if (!stockRequest.taxes) {
             stockRequest.taxes = [];
         }
 
@@ -357,10 +353,9 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     public removeGroup() {
         let activeGroup: StockGroupResponse = null;
         this.activeGroup$.pipe(take(1)).subscribe(a => activeGroup = a);
-        if(activeGroup) {
+        if (activeGroup) {
             this.store.dispatch(this.inventoryActions.removeGroup(activeGroup.uniqueName));
         }
-        this.addGroupForm.reset();
         this.router.navigateByUrl('/pages/inventory');
     }
 
@@ -516,8 +511,8 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                 let invoiceSettings = _.cloneDeep(response.body);
                 this.inventorySettings = invoiceSettings.companyInventorySettings;
 
-                if(!this.addGroupForm.get("showCodeType").value) {
-                    if(this.inventorySettings?.manageInventory) {
+                if (!this.addGroupForm.get("showCodeType").value) {
+                    if (this.inventorySettings?.manageInventory) {
                         this.addGroupForm.get("showCodeType")?.patchValue("hsn");
                     } else {
                         this.addGroupForm.get("showCodeType")?.patchValue("sac");
@@ -525,5 +520,24 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                 }
             }
         });
+    }
+
+    /**
+     * Opens the modal with the provided template
+     *
+     * @param {TemplateRef<any>} template
+     * @memberof InventoryAddGroupComponent
+     */
+    public openModal(template: TemplateRef<any>): void {
+        this.modalRef = this.modalService.show(template);
+    }
+
+    /**
+     * Hides the current opened modal
+     *
+     * @memberof InventoryAddGroupComponent
+     */
+    public hideModal(): void {
+        this.modalRef.hide();
     }
 }

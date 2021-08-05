@@ -11,7 +11,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
-import { cloneDeep, forEach, isEqual, sumBy, filter, find, without, maxBy , findIndex} from 'apps/web-giddh/src/app/lodash-optimized';
+import { cloneDeep, forEach, isEqual, sumBy, filter, find, without, maxBy, findIndex } from 'apps/web-giddh/src/app/lodash-optimized';
 import * as moment from 'moment';
 import { Router } from '@angular/router';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
@@ -58,20 +58,20 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     @Input() public newSelectedAccount: AccountResponse;
     @Output() public showAccountList: EventEmitter<boolean> = new EventEmitter();
 
-    @ViewChild('quickAccountComponent', {static: true}) public quickAccountComponent: ElementViewContainerRef;
-    @ViewChild('quickAccountModal', {static: true}) public quickAccountModal: ModalDirective;
-    @ViewChild('chequeEntryModal', {static: true}) public chequeEntryModal: ModalDirective;
-    @ViewChild('particular', {static: true}) public accountField: any;
-    @ViewChild('dateField', {static: true}) public dateField: ElementRef;
-    @ViewChild('narrationBox', {static: true}) public narrationBox: ElementRef;
-    @ViewChild('chequeNumberInput', {static: true}) public chequeNumberInput: ElementRef;
-    @ViewChild('chequeClearanceDateInput', {static: true}) public chequeClearanceDateInput: ElementRef;
-    @ViewChild('chqFormSubmitBtn', {static: true}) public chqFormSubmitBtn: ElementRef;
-    @ViewChild('submitButton', {static: true}) public submitButton: ElementRef;
-    @ViewChild('resetButton', {static: true}) public resetButton: ElementRef;
-    @ViewChild('manageGroupsAccountsModal', {static: true}) public manageGroupsAccountsModal: ModalDirective;
-    @ViewChild('byAmountField', {static: true}) public byAmountField: ElementRef;
-    @ViewChild('toAmountField', {static: true}) public toAmountField: ElementRef;
+    @ViewChild('quickAccountComponent', { static: true }) public quickAccountComponent: ElementViewContainerRef;
+    @ViewChild('quickAccountModal', { static: true }) public quickAccountModal: ModalDirective;
+    @ViewChild('chequeEntryModal', { static: true }) public chequeEntryModal: ModalDirective;
+    @ViewChild('particular', { static: true }) public accountField: any;
+    @ViewChild('dateField', { static: true }) public dateField: ElementRef;
+    @ViewChild('narrationBox', { static: true }) public narrationBox: ElementRef;
+    @ViewChild('chequeNumberInput', { static: true }) public chequeNumberInput: ElementRef;
+    @ViewChild('chequeClearanceDateInput', { static: true }) public chequeClearanceDateInput: ElementRef;
+    @ViewChild('chqFormSubmitBtn', { static: true }) public chqFormSubmitBtn: ElementRef;
+    @ViewChild('submitButton', { static: true }) public submitButton: ElementRef;
+    @ViewChild('resetButton', { static: true }) public resetButton: ElementRef;
+    @ViewChild('manageGroupsAccountsModal', { static: true }) public manageGroupsAccountsModal: ModalDirective;
+    @ViewChild('byAmountField', { static: true }) public byAmountField: ElementRef;
+    @ViewChild('toAmountField', { static: true }) public toAmountField: ElementRef;
 
     public showLedgerAccountList: boolean = false;
     public selectedInput: 'by' | 'to' = 'by';
@@ -425,7 +425,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             transaction.amount = transaction.amount ? transaction.amount : null;
 
             if (acc) {
-                this.groupUniqueName = accModel.groupUniqueName;
+                this.groupUniqueName = accModel?.groupUniqueName;
                 this.selectAccUnqName = acc.uniqueName;
 
                 let len = this.requestObj.transactions[idx].inventory ? this.requestObj.transactions[idx].inventory.length : 0;
@@ -930,7 +930,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     }
 
     public loadQuickAccountComponent() {
-        if(this.quickAccountModal && this.quickAccountModal.config) {
+        if (this.quickAccountModal && this.quickAccountModal.config) {
             this.quickAccountModal.config.backdrop = false;
         }
         let componentFactory = this.componentFactoryResolver.resolveComponentFactory(QuickAccountComponent);

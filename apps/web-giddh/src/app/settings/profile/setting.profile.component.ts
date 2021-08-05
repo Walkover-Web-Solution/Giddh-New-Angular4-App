@@ -2,10 +2,9 @@ import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { select, Store } from '@ngrx/store';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { AppState } from '../../store';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
-import * as _ from '../../lodash-optimized';
 import { ToasterService } from '../../services/toaster.service';
 import { Organization, States, StatesRequest } from '../../models/api-models/Company';
 import { LocationService } from '../../services/location.service';
@@ -23,7 +22,9 @@ import { CommonService } from '../../services/common.service';
 import { CompanyService } from '../../services/companyService.service';
 import { GeneralService } from '../../services/general.service';
 import { Router, ActivatedRoute } from '@angular/router';
-
+import { LocaleService } from '../../services/locale.service';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { cloneDeep, uniqBy, without } from '../../lodash-optimized';
 export interface IGstObj {
     newGstNumber: string;
     newstateCode: number;
@@ -35,8 +36,8 @@ export interface IGstObj {
 @Component({
     selector: 'setting-profile',
     templateUrl: './setting.profile.component.html',
-    styleUrls: ['../../shared/header/components/company-add/company-add.component.scss', './setting.profile.component.scss'],
-    host: {'class': 'settings-profile'},
+    styleUrls: ['./setting.profile.component.scss'],
+    host: { 'class': 'settings-profile' },
     animations: [
         trigger('fadeInAndSlide', [
             transition(':enter', [
@@ -57,6 +58,9 @@ export interface IGstObj {
     ]
 })
 export class SettingProfileComponent implements OnInit, OnDestroy {
+    /** This will emit pageHeading */
+    @Output() public pageHeading: EventEmitter<string> = new EventEmitter();
+
     public countrySource: IOption[] = [];
     public countrySource$: Observable<IOption[]> = observableOf([]);
     public currencies: IOption[] = [];
@@ -152,6 +156,16 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public imgPath: string = '';
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** This holds the active locale */
+    public activeLocale: string = "";
+    /** This holds perforsonal information tab heading */
+    public personalInformationTabHeading: string = "";
+    /* This will store screen size */
+    public isMobileScreen: boolean = false;
 
     constructor(
         private commonService: CommonService,
@@ -167,9 +181,21 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         private settingsProfileService: SettingsProfileService,
         private settingsUtilityService: SettingsUtilityService,
         private router: Router,
-        public route: ActivatedRoute
+        public route: ActivatedRoute,
+        private localeService: LocaleService,
+        private breakPointObservar: BreakpointObserver
     ) {
 
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
+
+        this.getCompanyProfileInProgress$ = this.store.pipe(select(settingsStore => settingsStore.settings.getProfileInProgress), takeUntil(this.destroyed$));
+    }
+
+    public ngOnInit() {
         this.getCountry();
         this.getCurrency();
 
@@ -179,11 +205,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         digitAfterDecimal.map(decimal => {
             this.decimalDigitSource.push({ value: decimal.value, label: decimal.name });
         });
-        this.getCompanyProfileInProgress$ = this.store.pipe(select(settingsStore => settingsStore.settings.getProfileInProgress),takeUntil(this.destroyed$));
 
-    }
-
-    public ngOnInit() {
         this.initProfileObj();
         this.dataSource = (text$: Observable<any>): Observable<any> => {
             return text$.pipe(
@@ -203,7 +225,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     }));
                 }),
                 map((res) => {
-                    // let data = res.map(item => item.address_components[0].long_name);
                     let data = res.map(item => item.city);
                     this.dataSourceBackup = res;
                     return data;
@@ -221,16 +242,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             .pipe(debounceTime(3000), distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((event: any) => {
                 if (this.isGstValid) {
-
-                    // let addresses = [];
-                    //
-                    // for(let addressLoop = 0; addressLoop < this.companyProfileObj.addresses.length; addressLoop++) {
-                    //   if(this.companyProfileObj.addresses[addressLoop].taxNumber && this.companyProfileObj.addresses[addressLoop].stateCode) {
-                    //     addresses.push(this.companyProfileObj.addresses[addressLoop]);
-                    //   }
-                    // }
-
-                    //this.patchProfile({addresses: addresses});
                     this.patchProfile({ addresses: this.companyProfileObj.addresses });
                 }
             });
@@ -246,7 +257,17 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             this.currentTab = (params['referrer']) ? params['referrer'] : "personal";
         });
 
-        this.imgPath =  (isElectron|| isCordova) ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
+
+        this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
+            if (this.activeLocale && this.activeLocale !== response?.value) {
+                this.localeService.getLocale('settings/profile', response?.value).subscribe(response => {
+                    this.localeData = response;
+                    this.translationComplete(true);
+                });
+            }
+            this.activeLocale = response?.value;
+        });
     }
 
     public getInitialProfileData() {
@@ -282,7 +303,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(p => p.settings.inventory), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.profileRequest || 1 === 1) {
-                let inventorySetting = _.cloneDeep(o);
+                let inventorySetting = cloneDeep(o);
                 this.CompanySettingsObj = inventorySetting;
             }
         });
@@ -297,7 +318,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                         ...this.companyProfileObj,
                         country: {
                             countryName: response.countryV2 ? response.countryV2.countryName : '',
-                            countryCode: response.countryV2 ? response.countryV2.alpha2CountryCode.toLowerCase() : '',
+                            countryCode: response.countryV2 ? response.countryV2.alpha2CountryCode?.toLowerCase() : '',
                             currencyCode: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.code : '',
                             currencyName: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.symbol : ''
                         },
@@ -326,12 +347,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     }
 
     public addGst() {
-        let addresses = _.cloneDeep(this.companyProfileObj.addresses);
+        let addresses = cloneDeep(this.companyProfileObj.addresses);
         let gstNumber;
         let isValid;
         if (addresses && addresses.length) {
             gstNumber = addresses[addresses.length - 1].taxNumber;
-            //isValid = (Number(gstNumber.substring(0, 2)) > 37 || Number(gstNumber.substring(0, 2)) < 1 || gstNumber.length !== 15) ? false : true;
 
             if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
@@ -349,7 +369,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         }
 
         if (isValid) {
-            let companyDetails = _.cloneDeep(this.companyProfileObj);
+            let companyDetails = cloneDeep(this.companyProfileObj);
             let newGstObj = {
                 taxNumber: '',
                 stateCode: '',
@@ -366,7 +386,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     }
 
     public stateSelected(v, indx) {
-        let profileObj = _.cloneDeep(this.companyProfileObj);
+        let profileObj = cloneDeep(this.companyProfileObj);
         let selectedStateCode = v.value;
         let selectedState = this.states.find((state) => state.value === selectedStateCode);
         if (selectedState && selectedState.value) {
@@ -377,21 +397,19 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     }
 
     public updateProfile(data) {
-
-        let dataToSave = _.cloneDeep(data);
+        let dataToSave = cloneDeep(data);
         if (dataToSave.addresses.length > 0) {
             for (let entry of dataToSave.addresses) {
                 if (!entry.taxNumber && !entry.stateCode && !entry.address) {
-                    dataToSave.addresses = _.without(dataToSave.addresses, entry);
+                    dataToSave.addresses = without(dataToSave.addresses, entry);
                 }
             }
         }
         delete dataToSave.financialYears;
         delete dataToSave.activeFinancialYear;
-        // dataToSave.contactNo = this.countryCode + '-' + dataToSave.contactNo;
-        this.companyProfileObj = _.cloneDeep(dataToSave);
+        this.companyProfileObj = cloneDeep(dataToSave);
         if (this.gstDetailsBackup) {
-            dataToSave.addresses = _.cloneDeep(this.gstDetailsBackup);
+            dataToSave.addresses = cloneDeep(this.gstDetailsBackup);
         }
 
         this.store.dispatch(this.settingsProfileActions.UpdateProfile(dataToSave));
@@ -399,13 +417,13 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     }
 
     public updateInventorySetting(data) {
-        let dataToSaveNew = _.cloneDeep(this.CompanySettingsObj);
+        let dataToSaveNew = cloneDeep(this.CompanySettingsObj);
         dataToSaveNew.companyInventorySettings = { manageInventory: data };
         this.store.dispatch(this.settingsProfileActions.UpdateInventory(dataToSaveNew));
     }
 
     public removeGstEntry(indx) {
-        let profileObj = _.cloneDeep(this.companyProfileObj);
+        let profileObj = cloneDeep(this.companyProfileObj);
         if (indx > -1) {
             profileObj.addresses.splice(indx, 1);
             if (this.gstDetailsBackup) {
@@ -440,22 +458,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         }
         return '';
     }
-
-    // public checkGstNumValidation(ele: HTMLInputElement) {
-    //   let isInvalid: boolean = false;
-    //   if (ele.value) {
-    //     if (ele.value.length !== 15 || (Number(ele.value.substring(0, 2)) < 1) || (Number(ele.value.substring(0, 2)) > 37)) {
-    //       this._toasty.errorToast('Invalid GST number');
-    //       ele.classList.add('error-box');
-    //       this.isGstValid = false;
-    //     } else {
-    //       ele.classList.remove('error-box');
-    //       this.isGstValid = true;
-    //     }
-    //   } else {
-    //     ele.classList.remove('error-box');
-    //   }
-    // }
 
     public checkGstNumValidation(ele: HTMLInputElement) {
         let isValid: boolean = false;
@@ -497,7 +499,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
 
                 let s = state.find(st => st.value === stateCode);
-                _.uniqBy(s, 'value');
+                uniqBy(s, 'value');
                 if (s) {
                     this.companyProfileObj.addresses[index].stateCode = s.value;
                 } else {
@@ -556,7 +558,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             this.showAllGST = !this.showAllGST;
             if (this.gstDetailsBackup) {
                 if (this.showAllGST) {
-                    this.companyProfileObj.addresses = _.cloneDeep(this.gstDetailsBackup);
+                    this.companyProfileObj.addresses = cloneDeep(this.gstDetailsBackup);
                 } else {
                     this.companyProfileObj.addresses = this.companyProfileObj.addresses.slice(0, 3);
                 }
@@ -569,7 +571,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      */
     public checkCountry(event) {
         if (event) {
-            let country: any = _.cloneDeep(this.companyProfileObj.country || '');
+            let country: any = cloneDeep(this.companyProfileObj.country || '');
             country = country.toLocaleLowerCase();
             if (event.value === 'IN') {
                 this.countryIsIndia = true;
@@ -625,8 +627,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         }, 100);
     }
     /**
-* checkNumberSystem
-*/
+    * checkNumberSystem
+    */
     public checkNumberSystem(event) {
         if (event) {
             this.patchProfile({ balanceDisplayFormat: this.companyProfileObj.balanceDisplayFormat });
@@ -746,7 +748,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      */
     public getState(gst): string {
         let state = "";
-        if(gst.stateCode) {
+        if (gst.stateCode) {
             state = gst.stateCode + " - " + gst.stateName;
         }
         return state;
@@ -779,7 +781,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public updateBranchProfile(params?: any): void {
         this.currentBranchDetails.name = this.companyProfileObj.name;
         this.currentBranchDetails.alias = this.companyProfileObj.alias;
-        this.settingsProfileService.updateBranchInfo(this.settingsUtilityService.getUpdateBranchRequestObject(params? params : this.currentBranchDetails))
+        this.settingsProfileService.updateBranchInfo(this.settingsUtilityService.getUpdateBranchRequestObject(params ? params : this.currentBranchDetails))
             .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
                 if (response) {
@@ -808,6 +810,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 this.loadStates(this.currentCompanyDetails.countryV2.alpha2CountryCode);
             }
         }
+        this.getPageHeading();
         this.router.navigateByUrl('/pages/settings/profile/' + tabName);
     }
 
@@ -836,7 +839,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public loadStates(countryCode: string): void {
-        this.companyService.getAllStates({country: countryCode}).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.companyService.getAllStates({ country: countryCode }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 const result = response.body;
                 this.addressConfiguration.stateList = [];
@@ -919,13 +922,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             isDefault: filteredEntity.isDefault,
             entity: filteredEntity.entity
         }));
-        // if (this.currentOrganizationType === OrganizationType.Branch) {
-        //     linkEntity.push({
-        //         uniqueName: this.generalService.currentBranchUniqueName,
-        //         isDefault: false,
-        //         entity: 'BRANCH'
-        //     });
-        // }
+
         const requestObj = {
             taxNumber: addressDetails.formValue.taxNumber,
             stateCode: addressDetails.formValue.state,
@@ -1065,12 +1062,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      */
     private handleCompanyProfileResponse(response: any): void {
         if (response.profileRequest || 1 === 1) {
-            let profileObj = _.cloneDeep(response);
+            let profileObj = cloneDeep(response);
             if (profileObj.contactNo && profileObj.contactNo.indexOf('-') > -1) {
                 profileObj.contactNo = profileObj.contactNo.substring(profileObj.contactNo.indexOf('-') + 1);
             }
             if (profileObj.addresses && profileObj.addresses.length > 3) {
-                this.gstDetailsBackup = _.cloneDeep(profileObj.addresses);
+                this.gstDetailsBackup = cloneDeep(profileObj.addresses);
                 this.showAllGST = false;
                 profileObj.addresses = profileObj.addresses.slice(0, 3);
             }
@@ -1099,7 +1096,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 uniqueName: profileObj.uniqueName,
                 country: {
                     countryName: profileObj.countryV2 ? profileObj.countryV2.countryName : '',
-                    countryCode: profileObj.countryV2 ? profileObj.countryV2.alpha2CountryCode.toLowerCase() : '',
+                    countryCode: profileObj.countryV2 ? profileObj.countryV2.alpha2CountryCode?.toLowerCase() : '',
                     currencyCode: profileObj.countryV2 && profileObj.countryV2.currency ? profileObj.countryV2.currency.code : '',
                     currencyName: profileObj.countryV2 && profileObj.countryV2.currency ? profileObj.countryV2.currency.symbol : ''
                 },
@@ -1184,4 +1181,52 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.addressTabPaginationData.count = response.count;
     }
 
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof SettingProfileComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
+                if (organization) {
+                    if (organization.type === OrganizationType.Branch) {
+                        this.personalInformationTabHeading = this.localeData?.branch_information;
+                    } else {
+                        this.personalInformationTabHeading = this.localeData?.company_information;
+                    }
+                } else {
+                    this.personalInformationTabHeading = this.localeData?.company_information;
+                }
+            });
+
+            this.getPageHeading();
+        }
+    }
+
+    /**
+     * This will return page heading based on active tab
+     *
+     * @param {boolean} event
+     * @memberof SettingProfileComponent
+     */
+     public getPageHeading(): void {
+        let pageHeading = "";
+
+        if (this.isMobileScreen) {
+            switch (this.currentTab) {
+                case 'personal':
+                    pageHeading = this.personalInformationTabHeading;
+                    break;
+                case 'address':
+                    pageHeading = this.companyProfileObj?.taxType ? (this.localeData?.address + this.companyProfileObj?.taxType) : this.localeData?.addresses;
+                    break;
+                case 'other':
+                    pageHeading = this.localeData?.other;
+                    break;
+            }
+        }
+        this.pageHeading.emit(pageHeading);
+    }
 }

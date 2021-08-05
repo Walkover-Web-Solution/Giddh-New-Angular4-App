@@ -1,4 +1,5 @@
 import {
+    ChangeDetectionStrategy,
     Component,
     ElementRef,
     EventEmitter,
@@ -32,13 +33,13 @@ import { InventoryService } from '../../../services/inventory.service';
 @Component({
     selector: 'advance-search-model',
     templateUrl: './advance-search.component.html',
-    styleUrls: ['./advance-search.component.scss']
+    styleUrls: ['./advance-search.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges {
 
     @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
-    // @ViewChild('dp') public dateRangePicker: BsDaterangepickerDirective;
     public bsRangeValue: string[];
     @Input() public advanceSearchRequest: AdvanceSearchRequest;
     @Output() public closeModelEvent: EventEmitter<{ advanceSearchData, isClose }> = new EventEmitter(null);
@@ -52,10 +53,9 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     public voucherTypeList: Observable<IOption[]>;
     public stockListDropDown$: Observable<IOption[]>;
     public comparisonFilterDropDown$: Observable<IOption[]>;
-    private moment = moment;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** datepickerTemplate element reference  */
-    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: ElementRef;
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
     /* This will store modal reference */
@@ -145,7 +145,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         private generalService: GeneralService,
         private searchService: SearchService,
     ) {
-        
+
     }
 
     public ngOnInit() {
@@ -153,13 +153,13 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         this.loadDefaultStocksSuggestions();
         this.loadDefaultGroupsSuggestions();
 
-        if(!this.advanceSearchForm) {
+        if (!this.advanceSearchForm) {
             this.setAdvanceSearchForm();
         }
     }
 
     public ngOnChanges(s: SimpleChanges) {
-        if(!this.advanceSearchForm) {
+        if (!this.advanceSearchForm) {
             this.setAdvanceSearchForm();
         }
 
@@ -174,33 +174,33 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             }
         }
 
-        if(this.advanceSearchForm && 'advanceSearchRequest' in s && s.advanceSearchRequest.currentValue && s.advanceSearchRequest.currentValue.dataToSend) {
+        if (this.advanceSearchForm && 'advanceSearchRequest' in s && s.advanceSearchRequest.currentValue && s.advanceSearchRequest.currentValue.dataToSend) {
             let dataToSend = s.advanceSearchRequest.currentValue.dataToSend;
 
             this.groupUniqueNames = [];
 
             setTimeout(() => {
-                if(dataToSend.accountUniqueNames) {
+                if (dataToSend.accountUniqueNames) {
                     this.advanceSearchForm.get('accountUniqueNames')?.patchValue(dataToSend.accountUniqueNames);
                 }
 
-                if(dataToSend.groupUniqueNames) {
-                    if(this.groups && this.groups.length > 0) {
+                if (dataToSend.groupUniqueNames) {
+                    if (this.groups && this.groups.length > 0) {
                         this.advanceSearchForm.get('groupUniqueNames')?.patchValue(dataToSend.groupUniqueNames);
                     }
 
                     this.groupUniqueNames = dataToSend.groupUniqueNames;
                 }
 
-                if(dataToSend.particulars) {
+                if (dataToSend.particulars) {
                     this.advanceSearchForm.get('particulars')?.patchValue(dataToSend.particulars);
                 }
 
-                if(dataToSend.vouchers) {
+                if (dataToSend.vouchers) {
                     this.advanceSearchForm.get('vouchers')?.patchValue(dataToSend.vouchers);
                 }
 
-                if(dataToSend.inventory) {
+                if (dataToSend.inventory) {
                     this.advanceSearchForm.get('inventory')?.patchValue(dataToSend.inventory);
                 }
             }, 500);
@@ -231,6 +231,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         this.bsRangeValue.push(t._d);
         this.advanceSearchRequest.dataToSend = new AdvanceSearchModel();
         this.advanceSearchRequest.page = 1;
+        this.showOtherDetails = false;
         this.setAdvanceSearchForm();
     }
 
@@ -273,13 +274,13 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             }),
         });
 
-        if(this.advanceSearchRequest) {
+        if (this.advanceSearchRequest) {
             this.advanceSearchForm?.patchValue(this.advanceSearchRequest.dataToSend);
         }
     }
 
     public setVoucherTypes(event?: any) {
-        if(event) {
+        if (event) {
             this.voucherTypeList = observableOf([{
                 label: this.commonLocaleData?.app_voucher_types?.sales,
                 value: 'sales'
@@ -353,7 +354,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      */
     public onDDElementSelect(type: string, data: any[]) {
         let values = [];
-        if(data && data.length > 0) {
+        if (data && data.length > 0) {
             data.forEach(element => {
                 values.push(element.value);
             });
@@ -558,7 +559,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
        * @memberof AdvanceSearchModelComponent
        */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }
@@ -662,7 +663,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                         this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
                         this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 
@@ -806,7 +807,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                         this.defaultStockPaginationData.page = this.stocksSearchResultsPaginationData.page;
                         this.defaultStockPaginationData.totalPages = this.stocksSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 
@@ -833,7 +834,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                         this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
                         this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 

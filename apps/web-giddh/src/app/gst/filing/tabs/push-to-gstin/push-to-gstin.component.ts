@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { GstReconcileActions } from '../../../../actions/gst-reconcile/GstReconcile.actions';
 import { select, Store } from '@ngrx/store';
 import { GstDatePeriod, Gstr1SummaryRequest, Gstr1SummaryResponse } from '../../../../models/api-models/GstReconcile';
@@ -13,13 +13,17 @@ import { takeUntil } from 'rxjs/operators';
     templateUrl: './push-to-gstin.component.html',
     styleUrls: ['./push-to-gstin.component.scss'],
 })
-export class PushToGstInComponent implements OnInit, OnChanges, OnDestroy {
+export class PushToGstInComponent implements OnInit, OnDestroy {
 
     @Input() public currentPeriod: GstDatePeriod = null;
     @Input() public activeCompanyGstNumber: string = '';
     @Input() public selectedGst: string = '';
     /** True, if HSN tab needs to be opened by default (required if a user clicks on HSN data in GSTR1) */
     @Input() public showHsn: boolean;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 
     /** Emitted when back button is clicked on HSN summary page */
     @Output() public backClicked: EventEmitter<void> = new EventEmitter();
@@ -52,20 +56,6 @@ export class PushToGstInComponent implements OnInit, OnChanges, OnDestroy {
 
     public ngOnInit() {
         this.getSummary();
-    }
-
-    /**
-     * ngOnChnages
-     */
-    public ngOnChanges(s: SimpleChanges) {
-        //
-    }
-
-    /**
-     * selectTab
-     */
-    public selectTab() {
-        //
     }
 
     public getSummary() {

@@ -6,7 +6,6 @@ import { FormArray, FormBuilder, FormGroup, NgForm, Validators } from '@angular/
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
-import * as _ from '../../lodash-optimized';
 import {
     AmazonSellerClass,
     CashfreeClass,
@@ -18,13 +17,10 @@ import {
 } from '../../models/api-models/SettingsIntegraion';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
-import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { TabsetComponent, TabDirective } from "ngx-bootstrap/tabs";
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyActions } from "../../actions/company.actions";
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
-import { CurrentPage } from '../../models/api-models/Common';
-import { GeneralActions } from '../../actions/general/general.actions';
 import { Configuration } from "../../app.constant";
 import { AuthenticationService } from "../../services/authentication.service";
 import { IForceClear } from '../../models/api-models/Sales';
@@ -37,6 +33,7 @@ import { SettingsIntegrationService } from '../../services/settings.integraion.s
 import { SettingsIntegrationTab } from '../constants/settings.constant';
 import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
+import { cloneDeep, find, isEmpty } from '../../lodash-optimized';
 
 export declare const gapi: any;
 
@@ -88,10 +85,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isUpdateBankFormValid$: Observable<boolean> = of(false);
 
     @Input() private selectedTabParent: number;
-    @ViewChild('integrationTab', {static: true}) public integrationTab: TabsetComponent;
-    @ViewChild('removegmailintegration', {static: true}) public removegmailintegration: ModalDirective;
-    @ViewChild('paymentForm', {static: true}) paymentForm: NgForm;
-    @ViewChild('paymentFormAccountName', {static: true}) paymentFormAccountName: ShSelectComponent;
+    @ViewChild('integrationTab', { static: true }) public integrationTab: TabsetComponent;
+    @ViewChild('removegmailintegration', { static: true }) public removegmailintegration: ModalDirective;
+    @ViewChild('paymentForm', { static: true }) paymentForm: NgForm;
+    @ViewChild('paymentFormAccountName', { static: true }) paymentFormAccountName: ShSelectComponent;
 
 
     //variable holding account Info
@@ -103,16 +100,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isEcommerceShopifyUserVerified: boolean = false;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     /** List OTP type  */
-    public typeOTPList: IOption[] =
-        [
-            { label: "Bank OTP", value: "BANK" },
-            { label: "GIDDH OTP", value: "GIDDH" },
-        ];
-    public amountUpToList: IOption[] =
-        [
-            { label: "Max limit as per Bank", value: "max" },
-            { label: "Custom", value: "custom" },
-        ];
+    public typeOTPList: IOption[] = [];
+    public amountUpToList: IOption[] = [];
     public approvalNameList: IOption[] = [];
     public selectedCompanyUniqueName: string;
     public isCreateInvalid: boolean = false;
@@ -148,6 +137,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     };
     /** Stores the list of accounts */
     public accounts: IOption[];
+    /** This will hold users list */
+    public usersList: any[] = [];
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private router: Router,
@@ -158,7 +153,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private _companyActions: CompanyActions,
         private _authenticationService: AuthenticationService,
         private _fb: FormBuilder,
-        private _generalActions: GeneralActions,
         private settingsPermissionActions: SettingsPermissionActions,
         private changeDetectionRef: ChangeDetectorRef,
         private generalService: GeneralService,
@@ -166,7 +160,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private searchService: SearchService,
         private salesService: SalesService
     ) {
-        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', this.getGoogleCredentials().GOOGLE_CLIENT_ID);
+        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
         this.isSellerAdded = this.store.pipe(select(s => s.settings.amazonState.isSellerSuccess), takeUntil(this.destroyed$));
         this.isSellerUpdate = this.store.pipe(select(s => s.settings.amazonState.isSellerUpdated), takeUntil(this.destroyed$));
@@ -180,7 +174,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.loggedInUserEmail = result.user.email;
             }
         });
-        this.setCurrentPageTitle();
     }
 
     public ngOnInit() {
@@ -203,7 +196,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             // set razor pay form data
             if (o.razorPayForm) {
                 if (typeof o.razorPayForm !== "string") {
-                    this.razorPayObj = _.cloneDeep(o.razorPayForm);
+                    this.razorPayObj = cloneDeep(o.razorPayForm);
                     if (this.razorPayObj && this.razorPayObj.account === null) {
                         this.razorPayObj.account = { name: null, uniqueName: null };
                         this.forceClearLinkAccount$ = observableOf({ status: true });
@@ -217,32 +210,29 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
             // set cashfree form data
             if (o.payoutForm && o.payoutForm.userName) {
-                this.payoutObj = _.cloneDeep(o.payoutForm);
-                // this.payoutObj.password = 'YOU_ARE_NOT_ALLOWED';
+                this.payoutObj = cloneDeep(o.payoutForm);
                 this.payoutAdded = true;
             } else {
                 this.payoutObj = new CashfreeClass();
                 this.payoutAdded = false;
             }
             if (o.autoCollect && o.autoCollect.userName) {
-                this.autoCollectObj = _.cloneDeep(o.autoCollect);
-                // this.autoCollectObj.password = 'YOU_ARE_NOT_ALLOWED';
+                this.autoCollectObj = cloneDeep(o.autoCollect);
                 this.autoCollectAdded = true;
             } else {
                 this.autoCollectObj = new CashfreeClass();
                 this.autoCollectAdded = false;
             }
             if (o.paymentGateway && o.paymentGateway.userName) {
-                this.paymentGateway = _.cloneDeep(o.paymentGateway);
+                this.paymentGateway = cloneDeep(o.paymentGateway);
                 this.paymentGatewayAdded = true;
             } else {
                 this.paymentGateway = new CashfreeClass();
                 this.paymentGatewayAdded = false;
             }
             if (o.amazonSeller && o.amazonSeller.length) {
-                this.amazonSellerRes = _.cloneDeep(o.amazonSeller);
+                this.amazonSellerRes = cloneDeep(o.amazonSeller);
                 this.amazonSellerForm.controls['sellers']?.patchValue(this.amazonSellerRes);
-                // this.amazonSellerForm.controls['sellers'].disable();
                 this.addAmazonSellerRow();
             }
         });
@@ -265,8 +255,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
             }
         });
-        //logic to get all registered account for integration tab
-        // this.store.dispatch(this._companyActions.getAllRegistrations());
 
         this.store.pipe(select(p => p.company), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o && o.account) {
@@ -298,7 +286,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         });
 
         this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res && !_.isEmpty(res)) {
+            if (res && !isEmpty(res)) {
                 if (res && res.ecommerceDetails && res.ecommerceDetails.length > 0) {
                     res.ecommerceDetails.forEach(item => {
                         if (item && item.ecommerceType && item.ecommerceType.name && item.ecommerceType.name === "shopify") {
@@ -312,7 +300,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
             if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
                 this.isIndianCompany = profile.countryV2.alpha2CountryCode === 'IN' ? true : false;
-                if (!this.isIndianCompany && this.selectedTabParent === 4) {
+                if (!this.isIndianCompany && this.selectedTabParent === 3) {
                     this.selectedTabParent = 0;
                     this.selectTab(this.selectedTabParent);
                 }
@@ -328,7 +316,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     if (value[0].emailId === this.loggedInUserEmail) {
                         value[0].isLoggedInUser = true;
                     }
-                    // arr.push({ name: value[0].userName, rows: value });
                     arr.push({ label: value[0].userName, value: value[0].userUniqueName, additional: value });
                 });
                 let sortedArray = [];
@@ -343,7 +330,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     }
                 });
                 this.approvalNameList = sortedArray;
-                // this.approvalNameList = _.sortBy(sortedArray, ['label']);
             }
         });
         if (this.selectedCompanyUniqueName) {
@@ -363,22 +349,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         }
         this.loadTabData();
     }
-
-    // public getInitialData() {
-    //     // this.store.dispatch(this.settingsIntegrationActions.GetSMSKey());
-    //     // this.store.dispatch(this.settingsIntegrationActions.GetEmailKey());
-    //     this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
-    //     this.store.dispatch(this.settingsIntegrationActions.GetCashfreeDetails());
-    //     this.store.dispatch(this.settingsIntegrationActions.GetAutoCollectDetails());
-    //     this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
-    //     this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
-    //     // this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
-    //     this.store.pipe(take(1)).subscribe(s => {
-    //         this.selectedCompanyUniqueName = s.session.companyUniqueName;
-    //         this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
-    //         this.getValidationForm('ICICI')
-    //     });
-    // }
 
     public setDummyData() {
         this.razorPayObj.userName = '';
@@ -411,7 +381,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
         if (fomValue) {
             this.selecetdUpdateIndex = null;
-            let requestObject = _.cloneDeep(fomValue);
+            let requestObject = cloneDeep(fomValue);
             if (requestObject.userAmountRanges) {
                 requestObject.userAmountRanges.map(element => {
                     element.maxBankLimit = (element.maxBankLimit === 'max') ? 'true' : 'false';
@@ -430,7 +400,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public selectAccount(event: IOption) {
         if (event.value) {
             this.accounts$.subscribe((arr: IOption[]) => {
-                let res = _.find(arr, (o) => o.value === event.value);
+                let res = find(arr, (o) => o.value === event.value);
                 if (res) {
                     this.razorPayObj.account.name = res.text;
                 }
@@ -439,23 +409,23 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public saveRazorPayDetails() {
-        let data = _.cloneDeep(this.razorPayObj);
+        let data = cloneDeep(this.razorPayObj);
         this.store.dispatch(this.settingsIntegrationActions.SaveRazorPayDetails(data));
     }
 
     public updateRazorPayDetails() {
-        let data = _.cloneDeep(this.razorPayObj);
+        let data = cloneDeep(this.razorPayObj);
         this.store.dispatch(this.settingsIntegrationActions.UpdateRazorPayDetails(data));
     }
 
     public unlinkAccountFromRazorPay() {
         if (this.razorPayObj.account && this.razorPayObj.account.name && this.razorPayObj.account.uniqueName) {
-            let data = _.cloneDeep(this.razorPayObj);
+            let data = cloneDeep(this.razorPayObj);
             data.account.uniqueName = null;
             data.account.name = null;
             this.store.dispatch(this.settingsIntegrationActions.UpdateRazorPayDetails(data));
         } else {
-            this.toasty.warningToast('You don\'t have any account linked with Razorpay.');
+            this.toasty.warningToast(this.localeData?.collection?.unlink_razorpay_message);
         }
     }
 
@@ -477,7 +447,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     public submitCashfreeDetail(f) {
         if (f.userName && f.password) {
-            let objToSend = _.cloneDeep(f);
+            let objToSend = cloneDeep(f);
             this.store.dispatch(this.settingsIntegrationActions.SaveCashfreeDetails(objToSend));
         }
     }
@@ -488,21 +458,21 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     public updateCashfreeDetail(f) {
         if (f.userName && f.password) {
-            let objToSend = _.cloneDeep(f);
+            let objToSend = cloneDeep(f);
             this.store.dispatch(this.settingsIntegrationActions.UpdateCashfreeDetails(objToSend));
         }
     }
 
     public submitAutoCollect(f) {
         if (f.userName && f.password) {
-            let objToSend = _.cloneDeep(f);
+            let objToSend = cloneDeep(f);
             this.store.dispatch(this.settingsIntegrationActions.AddAutoCollectUser(objToSend));
         }
     }
 
     public updateAutoCollect(f) {
         if (f.userName && f.password) {
-            let objToSend = _.cloneDeep(f);
+            let objToSend = cloneDeep(f);
             this.store.dispatch(this.settingsIntegrationActions.UpdateAutoCollectUser(objToSend));
         }
     }
@@ -541,7 +511,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public saveAmazonSeller(obj) {
         let sellers = [];
-        sellers.push(_.cloneDeep(obj.value));
+        sellers.push(cloneDeep(obj.value));
         this.store.dispatch(this.settingsIntegrationActions.AddAmazonSeller(sellers));
     }
 
@@ -552,7 +522,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         if (!obj.value.sellerId) {
             return;
         }
-        let sellerObj = _.cloneDeep(obj.value);
+        let sellerObj = cloneDeep(obj.value);
         delete sellerObj['secretKey'];
         this.store.dispatch(this.settingsIntegrationActions.UpdateAmazonSeller(sellerObj));
     }
@@ -582,7 +552,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public addAmazonSellerRow(i?: number, item?: any) {
-        const AmazonSellerControl = this.amazonSellerForm.controls['sellers'] as FormArray;
         const control = this.amazonSellerForm.controls['sellers'] as FormArray;
         if (item) {
             if (control.controls[i]) {
@@ -643,20 +612,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         return `${baseHref}pages/settings?tab=integration`;
     }
 
-    private getGoogleCredentials() {
-        if (PRODUCTION_ENV || isCordova) {
-            return {
-                GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com',
-                GOOGLE_CLIENT_SECRET: 'eWzLFEb_T9VrzFjgE40Bz6_l'
-            };
-        } else {
-            return {
-                GOOGLE_CLIENT_ID: '641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com',
-                GOOGLE_CLIENT_SECRET: '8htr7iQVXfZp_n87c99-jm7a'
-            };
-        }
-    }
-
     public selectTab(id: number) {
         if (this.integrationTab.tabs[id] && this.integrationTab.tabs[id] !== undefined) {
             this.integrationTab.tabs[id].active = true;
@@ -696,7 +651,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public updateIciciDetails(regAcc: IntegratedBankList, index: number) {
         this.selecetdUpdateIndex = index;
         this.store.dispatch(this.settingsIntegrationActions.ResetICICIFlags());
-        let registeredAccountObj = _.cloneDeep(regAcc);
+        let registeredAccountObj = cloneDeep(regAcc);
         registeredAccountObj.userAmountRanges.map(item => {
             item.maxBankLimit = item.maxBankLimit === "max" ? 'true' : 'false';
         });
@@ -707,13 +662,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         }
         this.store.dispatch(this.settingsIntegrationActions.UpdatePaymentInfo(requestData));
         this.paymentFormObj = new PaymentClass();
-    }
-
-    public setCurrentPageTitle() {
-        let currentPageObj = new CurrentPage();
-        currentPageObj.name = "Settings > Integration";
-        currentPageObj.url = this.router.url;
-        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 
     /**
@@ -741,7 +689,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 // google
                 const t = ipcRenderer.send("authenticate-send-email", provider);
                 ipcRenderer.once('take-your-gmail-token', (sender, arg: any) => {
-                    // this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
                     const dataToSave = {
                         "access_token": arg.access_token,
                         "expires_in": arg.expiry_date,
@@ -750,20 +697,18 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     this._authenticationService.saveGmailToken(dataToSave).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
 
                         if (res.status === 'success') {
-                            this.toasty.successToast('Gmail account added successfully.', 'Success');
+                            this.toasty.successToast(this.localeData?.email?.gmail_added_successfully, this.commonLocaleData?.app_success);
                         } else {
                             this.toasty.errorToast(res.message, res.code);
                         }
                         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
                         this.router.navigateByUrl('/pages/settings/integration/email');
-                        // this.router.navigateByUrl('/pages/settings?tab=integration&tabIndex=1');
                     });
                 });
 
             } else {
                 // linked in
                 const t = ipcRenderer.send("authenticate", provider);
-                // this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
             }
 
         }
@@ -799,7 +744,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @param {number} index index number
      * @memberof SettingIntegrationComponent
      */
-    public selectedMaxOrCustom(index: number, isUpdate: boolean, parentIndex?: number, ): void {
+    public selectedMaxOrCustom(index: number, isUpdate: boolean, parentIndex?: number,): void {
         if (!isUpdate && this.paymentFormObj.userAmountRanges) {
             this.paymentFormObj.userAmountRanges[index].amount = null;
         }
@@ -831,7 +776,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     userAmountRanges.controls[index].get('amount')?.patchValue(null);
                     userAmountRanges.controls[index].get('amount').setErrors({ 'incorrect': true });
                     userAmountRanges.controls[index].get('amount').setValidators(Validators.compose([Validators.required]));
-                    this.toasty.infoToast('You can not select max bank limit more than 1');
+                    this.toasty.infoToast(this.localeData?.payment?.max_limit_alert);
                 }
             } else {
                 userAmountRanges.controls[index].get('maxBankLimit')?.patchValue('custom');
@@ -860,7 +805,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             if (event === 'max' && this.checkIsMaxBankLimitSelected(this.paymentFormObj.userAmountRanges, index)) {
                 this.paymentFormObj.userAmountRanges[index].maxBankLimit = "custom";
                 this.paymentFormObj.userAmountRanges[index].amount = null;
-                this.toasty.infoToast('You can not select max bank limit more than 1');
+                this.toasty.infoToast(this.localeData?.payment?.max_limit_alert);
             } else {
                 this.paymentFormObj.userAmountRanges[index].amount = null;
             }
@@ -868,7 +813,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             if (event === 'max' && this.checkIsMaxBankLimitSelected(this.registeredAccount[parentIndex].userAmountRanges, index)) {
                 this.registeredAccount[parentIndex].userAmountRanges[index].maxBankLimit = "custom";
                 this.registeredAccount[parentIndex].userAmountRanges[index].amount = null;
-                this.toasty.infoToast('You can not select max bank limit more than 1');
+                this.toasty.infoToast(this.localeData?.payment?.max_limit_alert);
             } else {
                 this.registeredAccount[parentIndex].userAmountRanges[index].amount = null;
             }
@@ -1018,7 +963,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             approvalUniqueName: '',
             maxBankLimit: 'custom',
         }
-        // return new UserAmountRangeRequests();
         return userAmountRanges;
     }
 
@@ -1036,7 +980,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     this.paymentFormObj.userAmountRanges.splice(itemIndx, 1);
                 }
             } else {
-                this.toasty.infoToast('At least 1 row is required');
+                this.toasty.infoToast(this.localeData?.payment?.row_delete_error);
             }
 
         }
@@ -1047,7 +991,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     this.registeredAccount[indexUpdateList - 1].userAmountRanges.splice(itemIndxOfUpdate, 1);
                 }
             } else {
-                this.toasty.infoToast('At least 1 row is required');
+                this.toasty.infoToast(this.localeData?.payment?.row_delete_error);
             }
 
         }
@@ -1169,7 +1113,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public addUserAmountRangesForm(): any {    // commented code because we no need GSTIN No. to add new address
-        // if (value && !value.startsWith(' ', 0)) {
         const transactions = this.addBankForm.get('userAmountRanges') as FormArray;
         transactions.push(this.initialUserAmountRangesForm());
         return;
@@ -1197,7 +1140,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         if (transactions.controls.length > 1) {
             transactions.removeAt(index);
         } else {
-            this.toasty.infoToast('At least 1 row is required');
+            this.toasty.infoToast(this.localeData?.payment?.row_delete_error);
         }
         this.isCreateInvalid = this.isUpdateInvalid = this.toCheckBankAmountCustomFieldValidation(transactions.value);
     }
@@ -1337,9 +1280,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.loadDefaultAccountsSuggestions();
             this.loadDefaultBankAccountsSuggestions();
             this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
-            // this.store.dispatch(this.settingsIntegrationActions.GetCashfreeDetails());
-            // this.store.dispatch(this.settingsIntegrationActions.GetAutoCollectDetails());
-            // this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
         }
     }
 
@@ -1377,7 +1317,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     private loadTabData(): void {
-        switch(this.selectedTabParent) {
+        switch (this.selectedTabParent) {
             case SettingsIntegrationTab.Sms:
                 this.loadSmsData();
                 break;
@@ -1487,7 +1427,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                         this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
                         this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 
@@ -1537,5 +1477,96 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Callback for user selected
+     *
+     * @param {*} event
+     * @memberof SettingIntegrationComponent
+     */
+    public selectUser(event: any): void {
+        if (event) {
+            this.addBankForm.get('userNames')?.patchValue(event.map(ev => ev.label));
+        }
+    }
+
+    /**
+     * Selects the users
+     *
+     * @param {*} user Selected user
+     * @param {*} event Select event
+     * @param {*} userIndex Current user index in list
+     * @memberof SettingIntegrationComponent
+     */
+    public selectUsers(user: any, event: any, userIndex): void {
+        if (event && user) {
+            if (event.target.checked) {
+                user.isSelected = event.target.checked;
+                this.usersList[userIndex].isSelected = true;
+            } else {
+                this.usersList[userIndex].isSelected = false;
+            }
+            this.addBankForm.get('userNames')?.patchValue(this.usersList.filter(ev => ev.isSelected && ev.label).map(user => user.label));
+            this.addBankForm.get('emailIds')?.patchValue(this.usersList.filter(ev => ev.isSelected && ev.value).map(user => user.value));
+        }
+        event.stopPropagation();
+    }
+
+    public removeUser(user: any, isUpdate?: boolean): void {
+        let i = 0;
+        let matchedIndex = -1;
+
+        for (i; i < this.usersList.length; i++) {
+            if (user === this.usersList[i].value) {
+                matchedIndex = i;
+                break;
+            }
+        }
+
+        let indx = -1;
+        if (isUpdate) {
+            indx = this.registeredAccount[this.isBankUpdateInEdit].selectedUsers.findIndex(selectedUser => selectedUser.value === user.value);
+            this.registeredAccount[this.isBankUpdateInEdit].selectedUsers.splice(indx, 1);
+        } else {
+            indx = this.usersList.findIndex(selectedUser => selectedUser.value === user.value);
+            this.usersList[indx].isSelected = false;
+        }
+
+        if (matchedIndex > -1) {
+            this.usersList[matchedIndex].isSelected = false;
+        }
+    }
+
+    public resetUserSelection(): void {
+        this.usersList.forEach(user => user.isSelected = false);
+    }
+
+    public setUserSelection(): void {
+        this.usersList.forEach(user => user.isSelected = this.registeredAccount[this.isBankUpdateInEdit].selectedUsers.some(selectedUser => selectedUser.value === user.value));
+    }
+
+    public getSelectedItemCount(items: Array<any>): number {
+        return items?.filter(user => user.isSelected).length;
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof SettingIntegrationComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.typeOTPList = [
+                { label: this.localeData?.payment?.otp_types?.bank_otp, value: "BANK" },
+                { label: this.localeData?.payment?.otp_types?.giddh_otp, value: "GIDDH" },
+            ];
+
+            this.amountUpToList = [
+                { label: this.localeData?.payment?.amount_limit_types?.bank_limit, value: "max" },
+                { label: this.localeData?.payment?.amount_limit_types?.custom, value: "custom" },
+            ];
+        }
     }
 }

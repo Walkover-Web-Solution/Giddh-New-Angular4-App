@@ -1,10 +1,10 @@
-import {Component, Input, OnInit, ViewChild, OnDestroy} from '@angular/core';
-import {PurchaseReportsModel} from "../../../models/api-models/Reports";
-import {Store, select} from "@ngrx/store";
-import {AppState} from "../../../store";
-import {GroupWithAccountsAction} from "../../../actions/groupwithaccounts.actions";
+import { Component, Input, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { PurchaseReportsModel } from "../../../models/api-models/Reports";
+import { Store, select } from "@ngrx/store";
+import { AppState } from "../../../store";
+import { GroupWithAccountsAction } from "../../../actions/groupwithaccounts.actions";
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
@@ -22,7 +22,7 @@ export class PurchaseRegisterTableComponent implements OnInit, OnDestroy {
     /** Stores the current branch unique name used for filtering */
     @Input() public currentBranchUniqueName: string;
 
-    @ViewChild('mailModal', {static: true}) public mailModal: ModalDirective;
+    @ViewChild('mailModal', { static: true }) public mailModal: ModalDirective;
     public messageBody = {
         header: {
             email: 'Send Email',
@@ -157,7 +157,6 @@ export class PurchaseRegisterTableComponent implements OnInit, OnDestroy {
     public gotoDetailedPurchase(item: PurchaseReportsModel) {
         let from = item.from;
         let to = item.to;
-        let aa = this.activeFinacialYr;
 
         if (from != null && to != null) {
             this._router.navigate(['pages', 'reports', 'purchase-detailed-expand'], {

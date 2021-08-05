@@ -1,10 +1,10 @@
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { GroupsAccountSidebarComponent } from '../new-group-account-sidebar/groups-account-sidebar.component';
-import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
 import { AppState } from '../../../../store/roots';
 import { Store, select } from '@ngrx/store';
-import { Observable, of, ReplaySubject, Subject } from 'rxjs';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
@@ -20,50 +20,42 @@ import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
 
 @Component({
-	selector: 'app-manage-groups-accounts',
-	templateUrl: './manage-groups-accounts.component.html',
+    selector: 'app-manage-groups-accounts',
+    templateUrl: './manage-groups-accounts.component.html',
     styleUrls: ['./manage-groups-accounts.component.scss']
 })
 export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterViewChecked {
-	@Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);
-	@ViewChild('header', {static: true}) public header: ElementRef;
-	@ViewChild('grpSrch', {static: true}) public groupSrch: ElementRef;
-	public headerRect: any;
-	public showForm: boolean = false;
-	@ViewChild('myModel', {static: true}) public myModel: ElementRef;
-	@ViewChild('groupsidebar', {static: true}) public groupsidebar: GroupsAccountSidebarComponent;
-	public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
-	@ViewChild('perfectdirective', {static: true}) public directiveScroll: PerfectScrollbarComponent;
+    @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);
+    @ViewChild('header', { static: true }) public header: ElementRef;
+    @ViewChild('grpSrch', { static: true }) public groupSrch: ElementRef;
+    public headerRect: any;
+    public showForm: boolean = false;
+    @ViewChild('myModel', { static: true }) public myModel: ElementRef;
+    @ViewChild('groupsidebar', { static: true }) public groupsidebar: GroupsAccountSidebarComponent;
+    public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
+    @ViewChild('perfectdirective', { static: true }) public directiveScroll: PerfectScrollbarComponent;
 
-	public breadcrumbPath: string[] = [];
-	public breadcrumbUniquePath: string[] = [];
-	public myModelRect: any;
-	public searchLoad: Observable<boolean>;
+    public breadcrumbPath: string[] = [];
+    public breadcrumbUniquePath: string[] = [];
+    public myModelRect: any;
+    public searchLoad: Observable<boolean>;
     /** model reference */
     public modalRef: BsModalRef;
-	public groupList$: Observable<GroupsWithAccountsResponse[]>;
-	public currentColumns: GroupAccountSidebarVM;
-	public psConfig: PerfectScrollbarConfigInterface;
-	public groupAndAccountSearchString$: Observable<string>;
-	private groupSearchTerms = new Subject<string>();
-	public searchString: any = '';
+    public groupList$: Observable<GroupsWithAccountsResponse[]>;
+    public currentColumns: GroupAccountSidebarVM;
+    public psConfig: PerfectScrollbarConfigInterface;
+    public groupAndAccountSearchString$: Observable<string>;
+    private groupSearchTerms = new Subject<string>();
+    public searchString: any = '';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold if keyup for focus in search field is initialized */
     public keyupInitialized: boolean = false;
-
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
     /** Add custom field form reference */
     public customFieldForm: FormGroup;
-
     /** List custom row data type  */
     public dataTypeList: IOption[] = [];
-    /** List of custom row value type */
-    public booleanDataTypeList: IOption[] =
-        [
-            { label: "Yes", value: "true" },
-            { label: "No", value: "false" },
-        ];
     /** To check API call in progress */
     public isGetCustomInProgress: boolean = true;
     /** To check API call in progress */
@@ -80,8 +72,10 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True if initial component load */
+    public initialLoad: boolean = true;
 
-	// tslint:disable-next-line:no-empty
+    // tslint:disable-next-line:no-empty
     constructor(
         private store: Store<AppState>,
         private groupWithAccountsAction: GroupWithAccountsAction,
@@ -94,16 +88,16 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         private groupService: GroupService,
         private toasterService: ToasterService
     ) {
-		this.searchLoad = this.store.pipe(select(state => state.groupwithaccounts.isGroupWithAccountsLoading), takeUntil(this.destroyed$));
-		this.groupAndAccountSearchString$ = this.store.pipe(select(s => s.groupwithaccounts.groupAndAccountSearchString), takeUntil(this.destroyed$));
-		this.psConfig = { maxScrollbarLength: 80 };
+        this.searchLoad = this.store.pipe(select(state => state.groupwithaccounts.isGroupWithAccountsLoading), takeUntil(this.destroyed$));
+        this.groupAndAccountSearchString$ = this.store.pipe(select(s => s.groupwithaccounts.groupAndAccountSearchString), takeUntil(this.destroyed$));
+        this.psConfig = { maxScrollbarLength: 80 };
         this.groupList$ = this.store.pipe(select(state => state.groupwithaccounts.groupswithaccounts), takeUntil(this.destroyed$));
-	}
+    }
 
-	@HostListener('window:resize', ['$event'])
-	public resizeEvent(e) {
-		this.headerRect = this.header.nativeElement?.getBoundingClientRect();
-		this.myModelRect = this.myModel.nativeElement?.getBoundingClientRect();
+    @HostListener('window:resize', ['$event'])
+    public resizeEvent(e) {
+        this.headerRect = this.header.nativeElement?.getBoundingClientRect();
+        this.myModelRect = this.myModel.nativeElement?.getBoundingClientRect();
     }
 
     /**
@@ -114,7 +108,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
      */
     @HostListener('keyup', ['$event'])
     public onKeyUp(event: any): void {
-        if(!this.keyupInitialized && this._generalService.allowCharactersNumbersSpecialCharacters(event)) {
+        if (!this.keyupInitialized && this._generalService.allowCharactersNumbersSpecialCharacters(event)) {
             this.groupSrch?.nativeElement.focus();
             this.searchString = event.key;
             this.keyupInitialized = true;
@@ -132,8 +126,8 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.selectedRowIndex = index;
     }
 
-	// tslint:disable-next-line:no-empty
-	public ngOnInit() {
+    // tslint:disable-next-line:no-empty
+    public ngOnInit() {
         this.breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -141,81 +135,90 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         });
         this.customFieldForm = this.createCustomFieldForm();
         this.getCompanyCustomField();
-		// search groups
-		this.groupSearchTerms.pipe(
-			debounceTime(700), takeUntil(this.destroyed$))
-			.subscribe(term => {
-                this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
-			});
+        // search groups
+        this.groupSearchTerms.pipe(
+            debounceTime(700), takeUntil(this.destroyed$))
+            .subscribe(term => {
+                if(!this.initialLoad) {
+                    this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
+                } else {
+                    this.searchLoad.subscribe(response => {
+                        if(!response && this.initialLoad) {
+                            this.initialLoad = false;
+                            this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
+                        }
+                    });
+                }
+            });
 
-		this.groupAndAccountSearchString$.subscribe(s => {
-			// set search string and pass next to groupSearchTerms subject
-			this.searchString = s;
-			this.groupSearchTerms.next(s);
-			this.breadcrumbPath = [];
-			this.breadcrumbUniquePath = [];
-		});
+        this.groupAndAccountSearchString$.subscribe(s => {
+            // set search string and pass next to groupSearchTerms subject
+            this.searchString = s;
+            this.groupSearchTerms.next(s);
+            this.breadcrumbPath = [];
+            this.breadcrumbUniquePath = [];
+        });
 
-		this._generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe(value => {
-			if (value[0] === "accountdeleted") {
-				if (this.searchString) {
-					this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
-					this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(this.searchString));
-				}
-			}
+        this._generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe(value => {
+            if (value[0] === "accountdeleted") {
+                if (this.searchString) {
+                    this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
+                    this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(this.searchString));
+                }
+            }
         });
 
         this.groupList$.subscribe(response => {
-            if(this.keyupInitialized) {
+            if (this.keyupInitialized) {
                 setTimeout(() => {
                     this.groupSrch?.nativeElement.focus();
                 }, 200);
             }
         });
-	}
+    }
 
-	public ngAfterViewChecked() {
-		this.cdRef.detectChanges();
-	}
+    public ngAfterViewChecked() {
+        this.cdRef.detectChanges();
+    }
 
-	public searchGroups(term: string): void {
-		this.store.dispatch(this.groupWithAccountsAction.setGroupAndAccountsSearchString(term));
-		this.groupSearchTerms.next(term);
-		this.breadcrumbPath = [];
-		this.breadcrumbUniquePath = [];
-	}
+    public searchGroups(term: string): void {
+        this.store.dispatch(this.groupWithAccountsAction.setGroupAndAccountsSearchString(term));
+        this.groupSearchTerms.next(term);
+        this.breadcrumbPath = [];
+        this.breadcrumbUniquePath = [];
+    }
 
-	public resetGroupSearchString(needToFireRequest: boolean = true) {
-		if (needToFireRequest) {
-			this.groupSearchTerms.next('');
-			this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
-		}
+    public resetGroupSearchString(needToFireRequest: boolean = true) {
+        if (needToFireRequest) {
+            this.groupSearchTerms.next('');
+            this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
+        }
 
-		this.breadcrumbPath = [];
-		this.breadcrumbUniquePath = [];
-		this.renderer.setProperty(this.groupSrch?.nativeElement, 'value', '');
-	}
+        this.breadcrumbPath = [];
+        this.breadcrumbUniquePath = [];
+        this.renderer.setProperty(this.groupSrch?.nativeElement, 'value', '');
+    }
 
-	public closePopupEvent() {
-		this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
-		this.closeEvent.emit(true);
-	}
+    public closePopupEvent() {
+        this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
+        this.closeEvent.emit(true);
+    }
 
-	public ngOnDestroy() {
-		this.destroyed$.next(true);
-		this.destroyed$.complete();
-	}
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 
-	public ScrollToRight() {
-		if (this.directiveScroll) {
-			this.directiveScroll.directiveRef.scrollToRight();
-		}
-	}
+    public ScrollToRight() {
+        if (this.directiveScroll) {
+            this.directiveScroll.directiveRef.scrollToRight();
+        }
+    }
 
-	public breadcrumbPathChanged(obj) {
-		this.breadcrumbUniquePath = obj.breadcrumbUniqueNamePath;
-		this.breadcrumbPath = obj.breadcrumbPath;
-	}
+    public breadcrumbPathChanged(obj) {
+        this.breadcrumbUniquePath = obj.breadcrumbUniqueNamePath;
+        this.breadcrumbPath = obj.breadcrumbPath;
+    }
 
     /**
      * To submit custom field data
@@ -267,7 +270,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
                 if (response.status === 'success') {
                     this.renderCustomField(response.body);
                     this.updateModeLength = response.body.length;
-                } else if(response.message){
+                } else if (response.message) {
                     this.toasterService.errorToast(response.message);
                 }
             }
@@ -439,35 +442,12 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
      * @memberof ManageGroupsAccountsComponent
      */
     public translationComplete(event: boolean): void {
-        if(event) {
+        if (event) {
             this.dataTypeList = [
                 { label: this.commonLocaleData?.app_datatype_list?.string, value: "STRING" },
                 { label: this.commonLocaleData?.app_datatype_list?.number, value: "NUMERIC" },
                 { label: this.commonLocaleData?.app_datatype_list?.boolean, value: "BOOLEAN" }
             ];
         }
-    }
-
-    /**
-     * Loads the default groups
-     *
-     * @private
-     * @memberof ManageGroupsAccountsComponent
-     */
-    private loadDefaultGroups(): void {
-        const requestObject: any = {
-            q: '',
-            onlyTop: true
-        }
-        this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data?.body?.results) {
-                this.groupList$ = of(data.body.results);
-                if (this.keyupInitialized) {
-                    setTimeout(() => {
-                        this.groupSrch?.nativeElement.focus();
-                    }, 200);
-                }
-            }
-        });
     }
 }

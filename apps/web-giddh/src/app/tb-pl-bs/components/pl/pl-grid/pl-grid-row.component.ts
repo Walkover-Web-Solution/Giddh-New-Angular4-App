@@ -1,8 +1,8 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ChildGroup } from '../../../../models/api-models/Search';
 
 @Component({
-    selector: '[pl-grid-row]',  // <home></home>
+    selector: '[pl-grid-row]',
     template: `
 <div class="pl-grid-row row" [trial-accordion]="groupDetail"
     *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)"
@@ -10,24 +10,19 @@ import { ChildGroup } from '../../../../models/api-models/Search';
     <div class="col-8  group" [innerHTML]="groupDetail.groupName | highlight:search"
         [ngStyle]="{'padding-left': padding+'px'}"></div>
     <div class="col-4  bd-rl group pull-right" *ngIf="!groupDetail.level1">
-        <!-- {{groupDetail.closingBalance | recType}} -->
         <div class="row">
             <span class="col-sm-6 col-12 text-right"
                 [ngClass]="{'invisible': groupDetail.isOpen && (groupDetail.accounts.length || groupDetail.childGroups.length)}">
                 <span
                     *ngIf="groupDetail.category === 'income' && groupDetail.closingBalance.type === 'DEBIT' && groupDetail.closingBalance.amount !== 0">-</span>
-                <!-- span *ngIf="groupDetail.category === 'income' && groupDetail.closingBalance.type === 'CREDIT'">+</span -->
                 <span
                     *ngIf="groupDetail.category === 'expenses' && groupDetail.closingBalance.type === 'CREDIT' && groupDetail.closingBalance.amount !== 0">-</span>
-                <!-- span *ngIf="groupDetail.category === 'expenses' && groupDetail.closingBalance.type === 'DEBIT'">+</span -->
-                <!-- {{groupDetail.closingBalance.amount | giddhCurrency}} -->
                 <span class="d-inline-flex">
                     <amount-field [amount]="groupDetail.closingBalance.amount" [currencySymbol]="false" [currencyCode]="false">
                     </amount-field>
                 </span>
             </span>
             <span class="col-sm-6 col-12 invisible">
-                <!-- {{groupDetail.closingBalance.amount | giddhCurrency}}  -->
                 <span class="d-inline-flex">
                     <amount-field [amount]="groupDetail.closingBalance.amount" [currencySymbol]="false" [currencyCode]="false">
                     </amount-field>
@@ -36,7 +31,7 @@ import { ChildGroup } from '../../../../models/api-models/Search';
         </div>
     </div>
     <div class="col-4  bd-rl group text-right pull-right pd-1" *ngIf="groupDetail.level1">&nbsp;</div>
-            <!--    <div class="col-2  bd-rl group text-right"> <span>{{groupDetail.forwardedBalance.amount | giddhCurrency}}{{groupDetail.forwardedBalance | recType}} </span></div> -->
+            
     </div>
 <ng-container *ngFor="let account of groupDetail.accounts">
     <section class=" row-2  pl-grid-row account" [ngClass]="{'isHidden': !account.isVisible }"
@@ -47,16 +42,13 @@ import { ChildGroup } from '../../../../models/api-models/Search';
                 [innerHTML]="account.name | lowercase  | highlight:search"></div>
             <div class="col-4 bd-rl text-left pull-right">
                 <div class="row d-flex">
-                    <!-- {{account.closingBalance | recType}} -->
                     <span class="col-sm-6 col-12 text-right">
-                        <!-- {{account.closingBalance.amount | giddhCurrency}}  -->
                         <span class="d-inline-flex">
                             <amount-field [amount]="account.closingBalance.amount" [currencySymbol]="false" [currencyCode]="false">
                             </amount-field>
                         </span>
                     </span>
                     <span class="col-sm-6 col-12 invisible">
-                        <!-- {{account.closingBalance.amount | giddhCurrency}}  -->
                         <span class="d-inline-flex">
                             <amount-field [amount]="account.closingBalance.amount" [currencySymbol]="false" [currencyCode]="false">
                             </amount-field>
@@ -64,14 +56,13 @@ import { ChildGroup } from '../../../../models/api-models/Search';
                     </span>
                 </div>
             </div>
-            <!-- <div class="col-2 bd-rl text-left"><span>{{account.openingBalance.amount | giddhCurrency}}{{account.openingBalance | recType}}</span></div> -->
         </div>
     </section>
 </ng-container>
 <ng-content></ng-content>
   `,
 })
-export class PlGridRowComponent implements OnInit, OnChanges {
+export class PlGridRowComponent implements OnChanges {
     @Input() public groupDetail: ChildGroup;
     @Input() public search: string;
     @Input() public padding: string;
@@ -80,7 +71,7 @@ export class PlGridRowComponent implements OnInit, OnChanges {
     @Input() public to: string = '';
 
     constructor(private cd: ChangeDetectorRef) {
-        //
+        
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -92,17 +83,13 @@ export class PlGridRowComponent implements OnInit, OnChanges {
         }
     }
 
-    public ngOnInit() {
-        //
-    }
-
     public entryClicked(acc) {
         let url = location.href + '?returnUrl=ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
             url = location.origin + location.pathname + '#./pages/ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
             console.log(ipcRenderer.send('open-url', url));
-        }else if(isCordova){
+        } else if (isCordova) {
             // todo: entry Clicked in Cordova needs to be done.
         } else {
             (window as any).open(url);

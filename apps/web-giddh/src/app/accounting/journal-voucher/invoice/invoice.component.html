@@ -6,7 +6,8 @@
                 <div class="d-flex">
                     <span class="btn label isActive">{{data.voucherType}}</span>
                     <input type="text" [(ngModel)]="data.invoiceNumberAgainstVoucher" [disabled]="!isCustomInvoice"
-                        name="invoiceNumberAgainstVoucher" placeholder="Invoice No" class="text-center appearance-none invoice-width" />
+                        name="invoiceNumberAgainstVoucher" placeholder="Invoice No"
+                        class="text-center appearance-none invoice-width" />
                 </div>
 
                 <div class="pull-right text-right mr-b1">
@@ -21,7 +22,9 @@
                 <div class="max-width-350 form-group" [hidden]="isSalesInvoiceSelected">
                     <!-- decimalDigitsDirective -->
                     <label>{{ invoiceNoHeading }}:</label> <input type="text" placeholder="Invoice no."
-                        [(ngModel)]="data.invoiceNumberAgainstVoucher" class="form-control max-height28 appearance-none invoice-no-width" [disabled]="isSalesInvoiceSelected" />
+                        [(ngModel)]="data.invoiceNumberAgainstVoucher"
+                        class="form-control max-height28 appearance-none invoice-no-width"
+                        [disabled]="isSalesInvoiceSelected" />
                 </div>
             </div>
             <!-- /invoice num -->
@@ -41,7 +44,7 @@
                         (blur)="onPartyAccBlur();selectedField=null;focusedField = null;filterByText = ''" />
                 </div>
                 <!-- [hidden]="!isPurchaseInvoiceSelected" -->
-                <div class="form-group" class="mr-t05" *ngIf="isPurchaseInvoiceSelected">
+                <div class="form-group mr-t05" *ngIf="isPurchaseInvoiceSelected">
                     <label>Ledger name:<sup>*</sup></label>
                     <input name="ledger_name" type="text" placeholder="Ledger name"
                         class="form-control max-height28 appearance-none upper-fields invoice-no-width"
@@ -81,8 +84,7 @@
                                                 (ngModelChange)="searchStock($event);changeStock(i, transaction?.inventory?.stock?.name)"
                                                 [ngClass]="{'focus': isSelectedRow && selectedRowIdx === i}"
                                                 (focus)="onPartyAccBlur();onStockFocus($event, i)"
-                                                (blur)="onStockItemBlur($event, qty);"
-                                                (keydown)="detectKey($event)" />
+                                                (blur)="onStockItemBlur($event, qty);" (keydown)="detectKey($event)" />
                                         </td>
                                         <td>
                                             <input onReturn type="text" class="form-control text-right" #qty
@@ -223,6 +225,7 @@
 </div>
 
 <div class="aside-overlay" (click)="closeCreateStock($event)" *ngIf="asideMenuStateForProductService === 'in'"></div>
-<aside-inventory-stock-group *ngIf="asideMenuStateForProductService === 'in'" [autoFocus]="autoFocusStockGroupField" (closeAsideEvent)="closeCreateStock()"
-    [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService">
+<aside-inventory-stock-group *ngIf="asideMenuStateForProductService === 'in'" [autoFocus]="autoFocusStockGroupField"
+    (closeAsideEvent)="closeCreateStock()" [class]="asideMenuStateForProductService"
+    [@slideInOut]="asideMenuStateForProductService">
 </aside-inventory-stock-group>

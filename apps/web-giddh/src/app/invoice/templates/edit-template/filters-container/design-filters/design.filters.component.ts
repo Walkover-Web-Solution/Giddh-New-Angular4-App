@@ -1,6 +1,5 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import * as _ from '../../../../../lodash-optimized';
 import { humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput } from 'ngx-uploader';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../../store/roots';
@@ -14,7 +13,8 @@ import { InvoiceTemplatesService } from '../../../../../services/invoice.templat
 import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
 import { IOption } from '../../../../../theme/ng-virtual-select/sh-options.interface';
 import { ActivatedRoute } from '@angular/router';
-import {Font} from "ngx-font-picker";
+import { Font } from "ngx-font-picker";
+import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 
 export class TemplateDesignUISectionVisibility {
     public templates: boolean = false;
@@ -80,7 +80,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public showUploadButton: boolean = false;
     public showDeleteButton: boolean = false;
-    @ViewChild('fileInput', {static: true}) logoFile: ElementRef;
+    @ViewChild('fileInput', { static: true }) logoFile: ElementRef;
     public selectedFont: string = "";
     public selectedFontSize: string = "";
     /** Default image size */
@@ -108,7 +108,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(s => s.invoiceTemplate.sampleTemplates), take(2)).subscribe((sampleTemplates: CustomTemplateResponse[]) => {
-            this.sampleTemplates = _.cloneDeep(sampleTemplates);
+            this.sampleTemplates = cloneDeep(sampleTemplates);
         });
         this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
 
@@ -123,7 +123,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     public ngOnInit() {
 
         this._invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
-            this.customTemplate = _.cloneDeep(template);
+            this.customTemplate = cloneDeep(template);
 
             this.setFontAndFontSize();
 
@@ -152,18 +152,20 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
                         this.customTemplate.logoSize === '80' ? 'M' : 'S';
                 }
                 if (this.customTemplate.logoUniqueName) {
-                    this.showDeleteButton = true;
-                    this.showUploadButton = false;
                     this.logoAttached = true;
                     this.isFileUploaded = false;
-                    let preview: any = document.getElementById('logoImage');
-                    preview.setAttribute('src', ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName);
+                    if (!this._invoiceUiDataService.isLogoUpdateInProgress) {
+                        this.showDeleteButton = true;
+                        this.showUploadButton = false;
+                        let preview: any = document.getElementById('logoImage');
+                        preview.setAttribute('src', ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName);
+                    }
                 }
             }
         });
 
         this._invoiceUiDataService.logoPath.pipe(takeUntil(this.destroyed$)).subscribe((path: string) => {
-			if (!path) {
+            if (!path) {
                 this.showDeleteButton = false;
                 this.showUploadButton = true;
                 this.logoAttached = false;
@@ -172,7 +174,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
                 const preview: any = document.getElementById('logoImage');
                 preview.setAttribute('src', '');
             }
-		});
+        });
 
     }
 
@@ -180,7 +182,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
      * onValueChange
      */
     public onValueChange(fieldName: string, value: string) {
-        let template = _.cloneDeep(this.customTemplate);
+        let template = cloneDeep(this.customTemplate);
         if (fieldName) {
             template[fieldName] = value;
         }
@@ -191,7 +193,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
      * changeColor
      */
     public changeColor(primaryColor: string, secondaryColor: string) {
-        let template = _.cloneDeep(this.customTemplate);
+        let template = cloneDeep(this.customTemplate);
         template.templateColor = primaryColor;
         template.tableColor = secondaryColor;
         this._invoiceUiDataService.setCustomTemplate(template);
@@ -203,31 +205,31 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     public onDesignChange(fieldName, value) {
         let template;
         if (fieldName === 'uniqueName') { // change whole template
-            const selectedTemplate = _.cloneDeep(this.sampleTemplates.find((t: CustomTemplateResponse) => (t.uniqueName === value)));
-            template = selectedTemplate ? selectedTemplate : _.cloneDeep(this.customTemplate);
+            const selectedTemplate = cloneDeep(this.sampleTemplates.find((t: CustomTemplateResponse) => (t.uniqueName === value)));
+            template = selectedTemplate ? selectedTemplate : cloneDeep(this.customTemplate);
             if (this.mode === 'update' && selectedTemplate) {
-                template.uniqueName = _.cloneDeep(this.customTemplate.uniqueName);
-                template.name = _.cloneDeep(this.customTemplate.name);
+                template.uniqueName = cloneDeep(this.customTemplate.uniqueName);
+                template.name = cloneDeep(this.customTemplate.name);
             }
         } else { // change specific field
-            template = _.cloneDeep(this.customTemplate);
+            template = cloneDeep(this.customTemplate);
             template[fieldName] = value;
         }
-        template.copyFrom = _.cloneDeep(value);
+        template.copyFrom = cloneDeep(value);
         this.selectedTemplateUniqueName = value;
-        this._invoiceUiDataService.setCustomTemplate(_.cloneDeep(template));
+        this._invoiceUiDataService.setCustomTemplate(cloneDeep(template));
     }
 
     /**
      * resetPrintSetting
      */
     public resetPrintSetting() {
-        let template = _.cloneDeep(this.customTemplate);
+        let template = cloneDeep(this.customTemplate);
         template.topMargin = 10;
         template.bottomMargin = 10;
         template.leftMargin = 10;
         template.rightMargin = 10;
-        this.customTemplate = _.cloneDeep(template);
+        this.customTemplate = cloneDeep(template);
         this.setFontAndFontSize();
         this.onValueChange(null, null);
     }
@@ -244,7 +246,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
      */
     public onFontSizeSelect(fontSize: IOption) {
         if (!fontSize.value) {
-            let template = _.cloneDeep(this.customTemplate);
+            let template = cloneDeep(this.customTemplate);
             this.onValueChange('fontSize', template.fontSize);
         } else {
             this.onValueChange('fontSize', fontSize.value);
@@ -255,7 +257,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
      * onChangeVisibility
      */
     public onChangeVisibility(section: string) {
-        let visibility = _.cloneDeep(this.templateUISectionVisibility);
+        let visibility = cloneDeep(this.templateUISectionVisibility);
         visibility.color = false;
         visibility.font = false;
         visibility.fontSize = false;
@@ -280,12 +282,14 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
             this.previewFile(output.file);
             this.toogleLogoVisibility(true);
             this.isFileUploaded = false;
+            this._invoiceUiDataService.isLogoUpdateInProgress = true;
         } else if (output.type === 'start') {
             this.isFileUploadInProgress = true;
             this.showUploadButton = false;
             this.showDeleteButton = false;
             this.removeAllFiles();
             this.isFileUploaded = false;
+            this._invoiceUiDataService.isLogoUpdateInProgress = true;
         } else if (output.type === 'done') {
             this.isFileUploadInProgress = false;
             if (output.file.response.status === 'success') {
@@ -295,6 +299,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
                 //this.updateTemplate(output.file.response.body.uniqueName); //unused call to save template after logo upload
                 this.onValueChange('logoUniqueName', output.file.response.body.uniqueName);
                 this.isFileUploaded = true;
+                this._invoiceUiDataService.isLogoUpdateInProgress = false;
                 this._toasty.successToast('file uploaded successfully.');
             } else {
                 this._toasty.errorToast(output.file.response.message, output.file.response.code);
@@ -303,7 +308,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     }
 
     public updateTemplate(logoUniqueName: string) {
-        let data = _.cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
+        let data = cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
         if (data.name) {
             data.logoUniqueName = logoUniqueName;
             data.updatedAt = null;

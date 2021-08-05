@@ -2,11 +2,11 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import * as _ from '../../../../../../lodash-optimized';
 import { TemplateContentUISectionVisibility } from '../../../../../../services/invoice.ui.data.service';
 import { CustomTemplateResponse } from '../../../../../../models/api-models/Invoice';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { SettingsProfileActions } from 'apps/web-giddh/src/app/actions/settings/profile/settings.profile.action';
+import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
     selector: 'gst-template-e',
@@ -45,7 +45,7 @@ export class GstTemplateEComponent implements OnInit, OnDestroy, OnChanges {
     public ngOnInit() {
         this.companySetting$.subscribe(a => {
             if (a && a.address) {
-                this.companyAddress = _.cloneDeep(a.address);
+                this.companyAddress = cloneDeep(a.address);
             } else if (!a) {
                 this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             }
@@ -60,8 +60,8 @@ export class GstTemplateEComponent implements OnInit, OnDestroy, OnChanges {
                     this.columnsVisibled++;
                 }
                 if (changes.fieldsAndVisibility.currentValue.table.item && changes.fieldsAndVisibility.currentValue.table.item.display) {
-					this.columnsVisibled++;
-				}
+                    this.columnsVisibled++;
+                }
                 if (changes.fieldsAndVisibility.currentValue.table.hsnSac && changes.fieldsAndVisibility.currentValue.table.hsnSac.display) {
                     this.columnsVisibled++;
                 }

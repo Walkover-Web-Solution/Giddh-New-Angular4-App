@@ -54,7 +54,7 @@ export class AsidePaneComponent implements OnInit, OnChanges, OnDestroy {
                 this.isAddGroupOpen = false;
             }
         });
-        
+
         this.asideClose = false;
     }
 
@@ -97,9 +97,7 @@ export class AsidePaneComponent implements OnInit, OnChanges, OnDestroy {
         setTimeout(() => {
             this.asideClose = false;
         }, 500);
-        if (e) {
-            //
-        } else {
+        if (!e) {
             this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(false));
             this.closeAsideEvent.emit();
             let objToSend = { isOpen: false, isGroup: false, isUpdate: false };
