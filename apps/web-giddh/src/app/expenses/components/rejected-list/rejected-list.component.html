@@ -51,7 +51,7 @@
                         <a (click)="revertActionClicked(expenses)" class="btn-icon">
                             <i class="icon-Revert"></i>
                         </a>
-                        <a (click)="deleteActionClicked(expenses)" class="btn-icon">
+                        <a (click)="deleteActionClicked(expenses); deleteEntryModal?.show()" class="btn-icon">
                             <i class="icon-trash"></i>
                         </a>
                     </td>
@@ -94,3 +94,17 @@
     </div>
 </ng-template>
 <!-- endregion -->
+<!--delete Account modal  -->
+<div bsModal #deleteEntryModal="bs-modal" class="modal fade aaa" role="dialog">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content" *ngIf="deleteEntryModal?.isShown">
+            <confirm-modal
+                [title]="commonLocaleData?.app_delete"
+                [body]="localeData?.delete_transaction"
+                (cancelCallBack)="deleteEntryModal?.hide()"
+                (successCallBack)="deleteEntry(); deleteEntryModal?.hide()"
+            >
+            </confirm-modal>
+        </div>
+    </div>
+</div>
