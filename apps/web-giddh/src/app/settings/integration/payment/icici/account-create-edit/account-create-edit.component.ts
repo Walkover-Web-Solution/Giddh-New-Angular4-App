@@ -74,7 +74,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
             this.paymentAlerts = this.activeBankAccount?.iciciDetailsResource?.paymentAlerts?.map(user => user.uniqueName);
 
             this.accountForm = this.formBuilder.group({
-                accountNumber: [this.activeBankAccount?.iciciDetailsResource?.accountNumber],
+                accountNumber: [this.activeBankAccount?.iciciDetailsResource?.accountNumber, Validators.compose([Validators.required, Validators.minLength(9), Validators.maxLength(18)])],
                 accountUniqueName: [this.activeBankAccount?.account?.uniqueName],
                 paymentAlerts: [this.paymentAlerts]
             });
