@@ -238,7 +238,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         const requestObj = {
             name: this.branchForm.value.name,
             alias: this.branchForm.value.alias,
-            linkAddresses: this.addresses.filter(address => this.branchForm.value.address?.includes(address.uniqueName)).map(filteredAddress => ({
+            linkAddresses: this.addresses?.filter(address => this.branchForm.value.address?.includes(address.uniqueName))?.map(filteredAddress => ({
                 uniqueName: filteredAddress.uniqueName,
                 isDefault: filteredAddress.isDefault
             }))
