@@ -8,37 +8,58 @@
         </div>
         <div>
             <label class="d-none">&nbsp;</label>
-            <button *ngIf="!isCompany" class="btn isActive pull-right mr-0" (click)="goToCreateNewPage()"
-                type="button">Create
-                Manufacture</button>
+            <button *ngIf="!isCompany" class="btn isActive pull-right mr-0" (click)="goToCreateNewPage()" type="button">
+                Create Manufacture
+            </button>
         </div>
     </div>
     <div class="col-12 col-sm-12 mf-report-head">
         <div class="row">
-            <div class="col-12"
-                [ngClass]="currentCompanyBranches?.length > 2 ? 'manufacturing-head' : 'no-branch-head'">
+            <div
+                class="col-12"
+                [ngClass]="currentCompanyBranches?.length > 2 ? 'manufacturing-head' : 'no-branch-head'"
+            >
                 <div class="row">
-                    <div class="col-xl-3 col-lg-4 col-md-6 mr-b15"
-                        *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
-                        <div class="link-entity-dropdown"><label class="d-block pb-1 font-14">Entity</label>
-                            <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName"
-                                class="branch-dropdown" name="entityDropdown" [showClear]="false" [ItemHeight]="33"
-                                width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
-                                placeholder="Select Entity" [fixedValue]="currentBranch?.alias">
+                    <div
+                        class="col-xl-3 col-lg-4 col-md-6 mr-b15"
+                        *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                    >
+                        <div class="link-entity-dropdown">
+                            <label class="d-block pb-1 font-14">Entity</label>
+                            <sh-select
+                                [options]="currentCompanyBranches"
+                                [(ngModel)]="currentBranch.uniqueName"
+                                class="branch-dropdown"
+                                name="entityDropdown"
+                                [showClear]="false"
+                                [ItemHeight]="33"
+                                width="100%"
+                                (selected)="handleBranchChange($event)"
+                                [isFilterEnabled]="true"
+                                placeholder="Select Entity"
+                                [fixedValue]="currentBranch?.alias"
+                            >
                                 <ng-template #optionTemplate let-option="option">
                                     <ng-container>
                                         <a href="javascript:void(0)" class="list-item d-flex">
                                             <span class="entity-icon">
-                                                <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany"
-                                                    tooltip="Branch"></i>
-                                                <i class="icon-company-profile pull-right" *ngIf="option.isCompany"
-                                                    tooltip="Company"></i>
+                                                <i
+                                                    class="icon-branch-icon pull-right"
+                                                    *ngIf="!option.isCompany"
+                                                    tooltip="Branch"
+                                                ></i>
+                                                <i
+                                                    class="icon-company-profile pull-right"
+                                                    *ngIf="option.isCompany"
+                                                    tooltip="Company"
+                                                ></i>
                                             </span>
                                             <span class="entity-details">
-                                                <div class="item giddh-limit single-line-clamp">{{ option.label || '-'
-                                                    }}</div>
+                                                <div class="item giddh-limit single-line-clamp">
+                                                    {{ option.label || "-" }}
+                                                </div>
                                                 <div class="item-unique giddh-limit single-line-clamp">
-                                                    {{ option.name || '-' }}
+                                                    {{ option.name || "-" }}
                                                 </div>
                                             </span>
                                         </a>
@@ -47,75 +68,132 @@
                             </sh-select>
                         </div>
                     </div>
-                    <div class="col-md-6 mr-b15 datepicker-flex"
-                        [ngClass]="(currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY') ? 'col-xl-3 col-lg-4 ' : 'col-xl-3 col-lg-4'">
+                    <div
+                        class="col-md-6 mr-b15 datepicker-flex"
+                        [ngClass]="
+                            currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'
+                                ? 'col-xl-3 col-lg-4 '
+                                : 'col-xl-3 col-lg-4'
+                        "
+                    >
                         <label class="d-block font-14 pb-1">From - To</label>
                         <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                             <i class="icon-calender calendar-addon"></i>
-                            <input type="text" name="selectedDateRange"
-                                [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
-                                class="giddh-datepicker date-range-picker" />
+                            <input
+                                type="text"
+                                name="selectedDateRange"
+                                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                class="giddh-datepicker date-range-picker"
+                            />
                         </div>
                     </div>
-                    <div class="col-md-6"
-                        [ngClass]="(currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY') ? 'col-xl-6 col-lg-4' : 'col-xl-9 col-lg-8'"
-                        *ngIf="!isMobileScreen">
-                        <div class="d-flex"
-                            [ngClass]="(showClearFilter()) ? 'justify-content-between' : 'justify-content-end'">
+                    <div
+                        class="col-md-6"
+                        [ngClass]="
+                            currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'
+                                ? 'col-xl-6 col-lg-4'
+                                : 'col-xl-9 col-lg-8'
+                        "
+                        *ngIf="!isMobileScreen"
+                    >
+                        <div
+                            class="d-flex"
+                            [ngClass]="showClearFilter() ? 'justify-content-between' : 'justify-content-end'"
+                        >
                             <div *ngIf="showClearFilter()">
                                 <label class="d-block">&nbsp;</label>
-                                <button type="button" class="no-btn clear-filter" (click)="clearFilters()">Clear
-                                    Filter</button>
+                                <button type="button" class="no-btn clear-filter" (click)="clearFilters()">
+                                    Clear Filter
+                                </button>
                             </div>
                             <div>
                                 <label class="d-block">&nbsp;</label>
-                                <button *ngIf="!isCompany" class="btn isActive pull-right mr-0 mobile-none"
-                                    (click)="goToCreateNewPage()" type="button">Create
-                                    Manufacture</button>
+                                <button
+                                    *ngIf="!isCompany"
+                                    class="btn isActive pull-right mr-0 mobile-none"
+                                    (click)="goToCreateNewPage()"
+                                    type="button"
+                                >
+                                    Create Manufacture
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
     <!-- form -->
     <div class="col-12 col-sm-12">
         <div class="mf-stock-search-request-form clearfix">
-            <form #mfStockSearchRequestForm="ngForm" class="mt-0 col-12 pl-0 pr-0 mr-t15 mr-b05 manufacturing-form"
-                (submit)="getReports()" autocomplete="off">
+            <form
+                #mfStockSearchRequestForm="ngForm"
+                class="mt-0 col-12 pl-0 pr-0 mr-t15 mr-b05 manufacturing-form"
+                (submit)="getReports()"
+                autocomplete="off"
+            >
                 <div class="row">
                     <div class="form-group col-xl-2 col-lg-2 col-md-6">
                         <label class="d-block">Final Product</label>
-                        <sh-select placeholder="--Select Product--" name="product" #productList="ngModel" required
-                            [(ngModel)]="mfStockSearchRequest.product" [options]="stockListDropDown" [ItemHeight]="33"
-                            (selected)="setActiveStockGroup($event)" [forceClearReactive]="forceClear$ | async">
+                        <sh-select
+                            placeholder="--Select Product--"
+                            name="product"
+                            #productList="ngModel"
+                            required
+                            [(ngModel)]="mfStockSearchRequest.product"
+                            [options]="stockListDropDown"
+                            [ItemHeight]="33"
+                            (selected)="setActiveStockGroup($event)"
+                            [forceClearReactive]="forceClear$ | async"
+                        >
                         </sh-select>
                     </div>
                     <div class="form-group col-xl-2 col-lg-3 col-md-6 col-12">
                         <label class="d-block">Warehouse</label>
-                        <sh-select placeholder="--Select Warehouse--" name="warehouse" [options]="warehouses"
-                            [(ngModel)]="mfStockSearchRequest.warehouseUniqueName" (onClear)="clearWarehouse()"
-                            [forceClearReactive]="forceClearWarehouse$ | async"></sh-select>
+                        <sh-select
+                            placeholder="--Select Warehouse--"
+                            name="warehouse"
+                            [options]="warehouses"
+                            [(ngModel)]="mfStockSearchRequest.warehouseUniqueName"
+                            (onClear)="clearWarehouse()"
+                            [forceClearReactive]="forceClearWarehouse$ | async"
+                        ></sh-select>
                     </div>
 
                     <div class="form-group col-xl-2 col-lg-2 col-md-6 col-xs-6">
                         <label class="d-block">Search By</label>
-                        <sh-select placeholder="--Select--" name="searchBy" [(ngModel)]="mfStockSearchRequest.searchBy"
-                            [options]="filtersForSearchBy" [ItemHeight]="33" [forceClearReactive]="forceClear$ | async">
+                        <sh-select
+                            placeholder="--Select--"
+                            name="searchBy"
+                            [(ngModel)]="mfStockSearchRequest.searchBy"
+                            [options]="filtersForSearchBy"
+                            [ItemHeight]="33"
+                            [forceClearReactive]="forceClear$ | async"
+                        >
                         </sh-select>
                     </div>
                     <div class="form-group col-xl-2 col-lg-2 col-md-6 col-xs-6">
                         <label class="d-block">Operation</label>
-                        <sh-select placeholder="--Select--" name="searchOperation"
-                            [(ngModel)]="mfStockSearchRequest.searchOperation" [options]="filtersForSearchOperation"
-                            [ItemHeight]="33" [forceClearReactive]="forceClear$ | async"></sh-select>
+                        <sh-select
+                            placeholder="--Select--"
+                            name="searchOperation"
+                            [(ngModel)]="mfStockSearchRequest.searchOperation"
+                            [options]="filtersForSearchOperation"
+                            [ItemHeight]="33"
+                            [forceClearReactive]="forceClear$ | async"
+                        ></sh-select>
                     </div>
                     <div class="form-group col-xl-2 col-lg-2 col-md-6 col-xs-6">
                         <label class="d-block">Value</label>
-                        <input type="text" decimalDigitsDirective [DecimalPlaces]="4" class="form-control"
-                            placeholder="Value" name="searchValue" [(ngModel)]="mfStockSearchRequest.searchValue" />
+                        <input
+                            type="text"
+                            decimalDigitsDirective
+                            [DecimalPlaces]="4"
+                            class="form-control"
+                            placeholder="Value"
+                            name="searchValue"
+                            [(ngModel)]="mfStockSearchRequest.searchValue"
+                        />
                     </div>
                     <div class="form-group col-xl-1 col-lg-1 col-md-6">
                         <label class="d-block d-none-xs">&nbsp;</label>
@@ -126,11 +204,13 @@
         </div>
     </div>
     <!-- search form end -->
-    <section *ngIf="(isReportLoading$ | async)" class="clearfix mr-t100 col-md-12">
+    <section *ngIf="isReportLoading$ | async" class="clearfix mr-t100 col-md-12">
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </section>
-    <div class="no-data mr-t100 col-12 col-sm-12"
-        *ngIf="!(isReportLoading$ | async) && reportData && reportData.results.length === 0">
+    <div
+        class="no-data mr-t100 col-12 col-sm-12"
+        *ngIf="!(isReportLoading$ | async) && reportData && reportData.results.length === 0"
+    >
         <h1>No entries found within given criteria.</h1>
         <h1>Do search with some other dates</h1>
     </div>
@@ -152,7 +232,6 @@
                                         <th class="regular-font">Qty Inwards</th>
                                         <th class="regular-font">Unit</th>
                                     </tr>
-
                                 </table>
                             </th>
 
@@ -161,11 +240,11 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of reportData.results" (dblclick)="editMFItem(item)">
-                            <td data-title="Date">{{moment(item.date, 'DD-MM-YYYY') | date: 'd MMM y'}}</td>
-                            <td data-title="Voucher No." class="cursor-pointer">{{item.voucherNumber}}</td>
-                            <td data-title="Product Name">{{item.stockName}}</td>
-                            <td data-title="Qty Outwards">{{item.manufacturingQuantity}}</td>
-                            <td data-title="Unit">{{item.manufacturingUnit}}</td>
+                            <td data-title="Date">{{ moment(item.date, "DD-MM-YYYY") | date: "d MMM y" }}</td>
+                            <td data-title="Voucher No." class="cursor-pointer">{{ item.voucherNumber }}</td>
+                            <td data-title="Product Name">{{ item.stockName }}</td>
+                            <td data-title="Qty Outwards">{{ item.manufacturingQuantity }}</td>
+                            <td data-title="Unit">{{ item.manufacturingUnit }}</td>
                             <td class="material-data">
                                 <div class="d-flex flex-column data-title-td">
                                     <div *ngFor="let row of item.linkedStocks" class="mr-b15">
@@ -173,30 +252,40 @@
                                         <div>Qty Inwards</div>
                                         <div>Unit</div>
                                     </div>
-
                                 </div>
                                 <div>
-                                    <div class="d-flex flex-md-row flex-column nested-div"
-                                        *ngFor="let row of item.linkedStocks">
-                                        <div class="d-flex flex-column"> <span>{{row.stockName}}</span> </div>
-                                        <div class="d-flex flex-column"> <span>{{row.manufacturingQuantity}}</span>
+                                    <div
+                                        class="d-flex flex-md-row flex-column nested-div"
+                                        *ngFor="let row of item.linkedStocks"
+                                    >
+                                        <div class="d-flex flex-column">
+                                            <span>{{ row.stockName }}</span>
                                         </div>
                                         <div class="d-flex flex-column">
-                                            <span>{{row.manufacturingUnit}}</span>
+                                            <span>{{ row.manufacturingQuantity }}</span>
+                                        </div>
+                                        <div class="d-flex flex-column">
+                                            <span>{{ row.manufacturingUnit }}</span>
                                         </div>
                                     </div>
                                 </div>
-
                             </td>
-                            <td data-title="Warehouse">{{item.warehouse?.name}}</td>
+                            <td data-title="Warehouse">{{ item.warehouse?.name }}</td>
                         </tr>
                     </tbody>
                 </table>
                 <div *ngIf="reportData?.totalPages > 1" class="pagination-wrapper">
                     <div class="text-center">
-                        <pagination [totalItems]="reportData.totalItems" [(ngModel)]="reportData.page" [maxSize]="5"
-                            class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false"
-                            (pageChanged)="pageChanged($event)"></pagination>
+                        <pagination
+                            [totalItems]="reportData.totalItems"
+                            [(ngModel)]="reportData.page"
+                            [maxSize]="5"
+                            class="pagination-sm"
+                            [boundaryLinks]="true"
+                            [itemsPerPage]="20"
+                            [rotate]="false"
+                            (pageChanged)="pageChanged($event)"
+                        ></pagination>
                     </div>
                 </div>
             </div>
@@ -206,13 +295,23 @@
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
-            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption"
-                [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
-                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
-                (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOption"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
         </div>
     </div>
 </ng-template>

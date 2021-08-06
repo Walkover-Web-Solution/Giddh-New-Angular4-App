@@ -1,14 +1,23 @@
-<div id="live" appTranslate [file]="'home/profit-loss'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<div
+    id="live"
+    appTranslate
+    [file]="'home/profit-loss'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <div class="card">
         <div class="panel-heading">
-            <strong>{{localeData?.chart_title}}</strong>
-            <div class=" pull-right dashboard-filter">
-                <i class="icon-refresh  mr-1" (click)="refreshChart()"></i>
+            <strong>{{ localeData?.chart_title }}</strong>
+            <div class="pull-right dashboard-filter">
+                <i class="icon-refresh mr-1" (click)="refreshChart()"></i>
                 <div (click)="showGiddhDatepicker($event)">
-                    <input type="text" readonly name="selectedDateRange"
-                        [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
-                        class="giddh-datepicker form-control date-range-picker dashboard-datepicker" />
+                    <input
+                        type="text"
+                        readonly
+                        name="selectedDateRange"
+                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                        class="giddh-datepicker form-control date-range-picker dashboard-datepicker"
+                    />
                 </div>
             </div>
         </div>
@@ -21,16 +30,19 @@
                 <highcharts-chart *ngIf="chartOptions" [Highcharts]="profitLossChart" [options]="chartOptions">
                 </highcharts-chart>
                 <div class="no-data-available" *ngIf="!dataFound">
-                    <img src="{{imgPath}}noDataChart.svg" [alt]="commonLocaleData?.app_no_data_found">
+                    <img src="{{ imgPath }}noDataChart.svg" [alt]="commonLocaleData?.app_no_data_found" />
                 </div>
                 <div class="clearfix mb-2 total-income">
                     <div>
-                        <span class="mr-b1 due-amount">{{localeData?.net_profit_loss}}</span>
+                        <span class="mr-b1 due-amount">{{ localeData?.net_profit_loss }}</span>
                         <span class="total-amount pull-right">
-                            {{netProfitLossType}}
+                            {{ netProfitLossType }}
                             <span class="d-inline-flex">
-                                <amount-field [amount]="netProfitLoss" [currencySymbol]="amountSettings.baseCurrencySymbol"
-                                    [currencyCode]="activeCompany.baseCurrency">
+                                <amount-field
+                                    [amount]="netProfitLoss"
+                                    [currencySymbol]="amountSettings.baseCurrencySymbol"
+                                    [currencyCode]="activeCompany.baseCurrency"
+                                >
                                 </amount-field>
                             </span>
                         </span>
@@ -38,27 +50,32 @@
                 </div>
                 <div class="clearfix mb-2 total-income">
                     <div>
-                        <span class="mr-b1 due-amount">{{localeData?.total_income}}</span>
-                        <span
-                            class="total-amount pull-right total-expenses-text">
+                        <span class="mr-b1 due-amount">{{ localeData?.total_income }}</span>
+                        <span class="total-amount pull-right total-expenses-text">
                             <span class="d-inline-flex">
-                                <amount-field [amount]="totalIncome" [currencySymbol]="amountSettings.baseCurrencySymbol"
-                                    [currencyCode]="activeCompany.baseCurrency">
+                                <amount-field
+                                    [amount]="totalIncome"
+                                    [currencySymbol]="amountSettings.baseCurrencySymbol"
+                                    [currencyCode]="activeCompany.baseCurrency"
+                                >
                                 </amount-field>
-                            </span> {{totalIncomeType}}
+                            </span>
+                            {{ totalIncomeType }}
                         </span>
                     </div>
                 </div>
                 <div class="clearfix mb-2 total-income">
                     <div>
-                        <span class="mr-b1 due-amount">{{localeData?.total_expense}}</span>
-                        <span
-                            class="total-amount pull-right total-income-text">
+                        <span class="mr-b1 due-amount">{{ localeData?.total_expense }}</span>
+                        <span class="total-amount pull-right total-income-text">
                             <span class="d-inline-flex">
-                                <amount-field [amount]="totalExpense" [currencySymbol]="amountSettings.baseCurrencySymbol"
-                                    [currencyCode]="activeCompany.baseCurrency">
-                                </amount-field>
-                            </span>{{totalExpenseType}}
+                                <amount-field
+                                    [amount]="totalExpense"
+                                    [currencySymbol]="amountSettings.baseCurrencySymbol"
+                                    [currencyCode]="activeCompany.baseCurrency"
+                                >
+                                </amount-field> </span
+                            >{{ totalExpenseType }}
                         </span>
                     </div>
                 </div>
@@ -69,13 +86,23 @@
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
-            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions"
-                [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
-                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
-                (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOptions"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
         </div>
     </div>
 </ng-template>

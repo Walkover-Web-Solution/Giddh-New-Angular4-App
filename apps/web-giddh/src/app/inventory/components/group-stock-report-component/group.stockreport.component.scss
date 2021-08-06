@@ -281,9 +281,9 @@ td.border-right-none {
     border-right: none !important;
 }
 
-.inventory-stock-table{
+.inventory-stock-table {
     td {
-        &:first-child{
+        &:first-child {
             white-space: inherit;
         }
     }

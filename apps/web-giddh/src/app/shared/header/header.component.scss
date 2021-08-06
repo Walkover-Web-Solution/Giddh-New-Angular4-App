@@ -232,12 +232,7 @@ a[vr-item]:focus {
     justify-content: space-between;
 }
 
-:host
-    ::ng-deep
-    .left-fixed-header
-    perfect-scrollbar
-    > .ps.ps--scrolling-y
-    > .ps__rail-y {
+:host ::ng-deep .left-fixed-header perfect-scrollbar > .ps.ps--scrolling-y > .ps__rail-y {
     opacity: 0;
 }
 
@@ -255,11 +250,7 @@ a[vr-item]:focus {
     > .ps.ps--active-y
     > .ps-overlay:not(.ps-at-bottom)
     .ps-indicator-bottom {
-    background: linear-gradient(
-        to bottom,
-        rgb(43, 42, 42) 0,
-        rgba(0, 0, 0, 0) 100%
-    );
+    background: linear-gradient(to bottom, rgb(43, 42, 42) 0, rgba(0, 0, 0, 0) 100%);
 }
 
 .left-fixed-header h6 {
@@ -314,7 +305,7 @@ a[vr-item]:focus {
 .nav-left-bar.open {
     left: 0;
     width: 240px;
-    &.width-60{
+    &.width-60 {
         width: 60px;
     }
 }
@@ -632,7 +623,7 @@ ul.sub-list {
 
 .company-name .text-ellipsis {
     font-size: 13px;
-    font-family: 'opensans-regular';
+    font-family: "opensans-regular";
 }
 
 .overlay-cal {
@@ -969,8 +960,8 @@ ul.sub-list {
                 padding: 3px !important;
                 font-size: 22px;
             }
-            &.disable-icon{
-                i{
+            &.disable-icon {
+                i {
                     color: $gainsboro !important;
                     cursor: no-drop;
                 }
@@ -1004,7 +995,6 @@ aside-setting {
         right: 0;
     }
 }
-
 
 /* responsive */
 @media (max-height: 800px) {
@@ -1063,7 +1053,8 @@ aside-setting {
         position: absolute;
         top: 0;
     }
-    .gst-menu-icon, .setting-menu-icon {
+    .gst-menu-icon,
+    .setting-menu-icon {
         padding: 4px 8px;
         display: none;
         width: 32px;
@@ -1298,7 +1289,8 @@ aside-setting {
             margin: 0 15px;
         }
     }
-    .gst-menu-icon, .setting-menu-icon {
+    .gst-menu-icon,
+    .setting-menu-icon {
         padding: 4px 8px 4px 8px;
         display: none;
         width: 32px;

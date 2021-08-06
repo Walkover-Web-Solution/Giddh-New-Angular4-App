@@ -1,34 +1,59 @@
-<div class="top-aging-table-top1" (clickOutside)="closeAging($event)" [clickOutsideEnabled]="true"
-    [delayClickOutsideInit]="true">
+<div
+    class="top-aging-table-top1"
+    (clickOutside)="closeAging($event)"
+    [clickOutsideEnabled]="true"
+    [delayClickOutsideInit]="true"
+>
     <div class="row">
         <div class="col-md-3 col-sm-3 col-xs-6">
-            <p>{{localeData?.first_interval}}</p>
+            <p>{{ localeData?.first_interval }}</p>
             <div class="top-aging-table-box">
                 <span>0 -</span>
-                <input class="input-design" name="opt_4th" type="number" digitsOnlyDirective
-                    (blur)="saveAgingDropdown()" [(ngModel)]="options.fourth" (click)="$event.stopPropagation()" />
+                <input
+                    class="input-design"
+                    name="opt_4th"
+                    type="number"
+                    digitsOnlyDirective
+                    (blur)="saveAgingDropdown()"
+                    [(ngModel)]="options.fourth"
+                    (click)="$event.stopPropagation()"
+                />
             </div>
         </div>
         <div class="col-md-3 col-sm-3 col-xs-6">
-            <p>{{localeData?.second_interval}}</p>
+            <p>{{ localeData?.second_interval }}</p>
             <div class="top-aging-table-box">
-                <span>{{options.fourth+1}} -</span>
-                <input class="input-design" name="opt_4th" type="number" digitsOnlyDirective [(ngModel)]="options.fifth"
-                    (blur)="saveAgingDropdown()" (click)="$event.stopPropagation()" />
+                <span>{{ options.fourth + 1 }} -</span>
+                <input
+                    class="input-design"
+                    name="opt_4th"
+                    type="number"
+                    digitsOnlyDirective
+                    [(ngModel)]="options.fifth"
+                    (blur)="saveAgingDropdown()"
+                    (click)="$event.stopPropagation()"
+                />
             </div>
         </div>
         <div class="col-md-3 col-sm-3 col-xs-6">
-            <p>{{localeData?.third_interval}}</p>
+            <p>{{ localeData?.third_interval }}</p>
             <div class="top-aging-table-box">
-                <span>{{options.fifth+1}} -</span>
-                <input class="input-design" name="opt_4th" digitsOnlyDirective type="number" [(ngModel)]="options.sixth"
-                    (blur)="saveAgingDropdown()" (click)="$event.stopPropagation()" />
+                <span>{{ options.fifth + 1 }} -</span>
+                <input
+                    class="input-design"
+                    name="opt_4th"
+                    digitsOnlyDirective
+                    type="number"
+                    [(ngModel)]="options.sixth"
+                    (blur)="saveAgingDropdown()"
+                    (click)="$event.stopPropagation()"
+                />
             </div>
         </div>
         <div class="col-md-3 col-sm-3 col-xs-6">
-            <p>{{localeData?.last_interval}}</p>
+            <p>{{ localeData?.last_interval }}</p>
             <div class="top-aging-table-box">
-                <span>+{{options.sixth+1}}</span>
+                <span>+{{ options.sixth + 1 }}</span>
             </div>
         </div>
     </div>

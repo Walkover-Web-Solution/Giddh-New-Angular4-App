@@ -1,179 +1,293 @@
-<form name="permissionForm" [formGroup]="permissionForm" [ngClass]="{'permission-form': isHorizntl}"
-    (ngSubmit)="submitPermissionForm()">
+<form
+    name="permissionForm"
+    [formGroup]="permissionForm"
+    [ngClass]="{ 'permission-form': isHorizntl }"
+    (ngSubmit)="submitPermissionForm()"
+>
     <div class="row">
         <div class="col-xl-10 col-md-12">
-
             <div class="row">
                 <div class="col-xl-3 col-md-6 col-sm-4 pr-0">
                     <div class="form-group ml-0">
-                        <label *ngIf="isLblShow">{{localeData?.unique_name_email_label}}</label>
-                        <input type="text" name="emailId" formControlName="emailId"
-                            [placeholder]="localeData?.unique_name_email_placeholder" class="form-control"
-                            [attr.readonly]="userdata?.uniqueName" />
+                        <label *ngIf="isLblShow">{{ localeData?.unique_name_email_label }}</label>
+                        <input
+                            type="text"
+                            name="emailId"
+                            formControlName="emailId"
+                            [placeholder]="localeData?.unique_name_email_placeholder"
+                            class="form-control"
+                            [attr.readonly]="userdata?.uniqueName"
+                        />
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6 col-sm-4 pr-0">
                     <div class="form-group">
-                        <label *ngIf="isLblShow">{{localeData?.role_name_label}}</label>
-                        <sh-select [placeholder]="localeData?.role_name_placeholder" formControlName="roleUniqueName"
-                            [forceClearReactive]="permissionRoleClear$ | async" [options]="allRoles"
-                            [isRequired]="true"></sh-select>
+                        <label *ngIf="isLblShow">{{ localeData?.role_name_label }}</label>
+                        <sh-select
+                            [placeholder]="localeData?.role_name_placeholder"
+                            formControlName="roleUniqueName"
+                            [forceClearReactive]="permissionRoleClear$ | async"
+                            [options]="allRoles"
+                            [isRequired]="true"
+                        ></sh-select>
                     </div>
                 </div>
                 <div class="col-xl-2 col-md-6 col-sm-4 pr-0">
                     <!-- time span -->
-                    <div class="form-group" [exclude]="'.time-span-dropdown'" [attachOutsideOnClick]="true"
-                        (clickOutside)="methodForToggleSection('timeSpanSection')">
-                        <label *ngIf="isLblShow">{{localeData?.time_span}}</label>
-                        <div class="btn-group" [ngClass]="{'open': showTimeSpan, 'btn-group-liq': !isHorizntl}">
-                            <button (click)="showTimeSpan = !showTimeSpan" type="button"
-                                class="form-control text-left ">
-                                {{selectedTimeSpan}}
+                    <div
+                        class="form-group"
+                        [exclude]="'.time-span-dropdown'"
+                        [attachOutsideOnClick]="true"
+                        (clickOutside)="methodForToggleSection('timeSpanSection')"
+                    >
+                        <label *ngIf="isLblShow">{{ localeData?.time_span }}</label>
+                        <div class="btn-group" [ngClass]="{ 'open': showTimeSpan, 'btn-group-liq': !isHorizntl }">
+                            <button (click)="showTimeSpan = !showTimeSpan" type="button" class="form-control text-left">
+                                {{ selectedTimeSpan }}
                                 <span class="pull-right"><span class="fa fa-caret-down"></span></span>
                             </button>
-                            <section class="dropdown-menu custom-dropdown mr-b1 time-span-dropdown"
-                                [ngClass]="{'open': showTimeSpan}">
-
+                            <section
+                                class="dropdown-menu custom-dropdown mr-b1 time-span-dropdown"
+                                [ngClass]="{ 'open': showTimeSpan }"
+                            >
                                 <div class="clearfix pd-1 option-box">
-
-                                    <span class="p-0 mr-r3"
-                                        (click)="isOpenedInModal ? handleTimeSpanChange('daterange'): ''">
-                                        <input id="dateRange" class="radio-custom cp ml-0" type="radio"
-                                            name="periodOptions" formControlName="periodOptions" value="daterange">
-                                        <label for="dateRange"
-                                            class="radio-custom-label">{{commonLocaleData?.app_date_range}}</label>
+                                    <span
+                                        class="p-0 mr-r3"
+                                        (click)="isOpenedInModal ? handleTimeSpanChange('daterange') : ''"
+                                    >
+                                        <input
+                                            id="dateRange"
+                                            class="radio-custom cp ml-0"
+                                            type="radio"
+                                            name="periodOptions"
+                                            formControlName="periodOptions"
+                                            value="daterange"
+                                        />
+                                        <label for="dateRange" class="radio-custom-label">{{
+                                            commonLocaleData?.app_date_range
+                                        }}</label>
                                     </span>
 
-                                    <span class="p-0 mr-r3"
-                                        (click)="isOpenedInModal ? handleTimeSpanChange('pastperiod'): ''">
-                                        <input id="pastPeriod" class="radio-custom cp ml-0" type="radio"
-                                            name="periodOptions" formControlName="periodOptions" value="pastperiod">
-                                        <label for="pastPeriod"
-                                            class="radio-custom-label">{{localeData?.past_period}}</label>
+                                    <span
+                                        class="p-0 mr-r3"
+                                        (click)="isOpenedInModal ? handleTimeSpanChange('pastperiod') : ''"
+                                    >
+                                        <input
+                                            id="pastPeriod"
+                                            class="radio-custom cp ml-0"
+                                            type="radio"
+                                            name="periodOptions"
+                                            formControlName="periodOptions"
+                                            value="pastperiod"
+                                        />
+                                        <label for="pastPeriod" class="radio-custom-label">{{
+                                            localeData?.past_period
+                                        }}</label>
                                     </span>
-
                                 </div>
 
-                                <section class="periods container-fluid mr-b1"
-                                    *ngIf="permissionForm.get('periodOptions').value === 'daterange'">
+                                <section
+                                    class="periods container-fluid mr-b1"
+                                    *ngIf="permissionForm.get('periodOptions').value === 'daterange'"
+                                >
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <label>{{localeData?.from_to_label}}</label>
-                                            <input name="DateRangePicker" [bsValue]="dateRangePickerValue"
+                                            <label>{{ localeData?.from_to_label }}</label>
+                                            <input
+                                                name="DateRangePicker"
+                                                [bsValue]="dateRangePickerValue"
                                                 (bsValueChange)="onSelectDateRange($event)"
-                                                [placeholder]="localeData?.from_to_placeholder" type="text"
-                                                class="form-control" bsDaterangepicker container="body">
+                                                [placeholder]="localeData?.from_to_placeholder"
+                                                type="text"
+                                                class="form-control"
+                                                bsDaterangepicker
+                                                container="body"
+                                            />
                                         </div>
                                     </div>
                                 </section>
 
-                                <section class="periods container-fluid mr-b1"
-                                    *ngIf="permissionForm.get('periodOptions').value === 'pastperiod'">
-                                    <label>{{localeData?.select_past_period_label}}</label>
+                                <section
+                                    class="periods container-fluid mr-b1"
+                                    *ngIf="permissionForm.get('periodOptions').value === 'pastperiod'"
+                                >
+                                    <label>{{ localeData?.select_past_period_label }}</label>
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <input class="form-control " name="duration" digitsOnlyDirective
-                                                formControlName="duration" type="number"
-                                                [placeholder]="localeData?.select_past_period_placeholder" />
+                                            <input
+                                                class="form-control"
+                                                name="duration"
+                                                digitsOnlyDirective
+                                                formControlName="duration"
+                                                type="number"
+                                                [placeholder]="localeData?.select_past_period_placeholder"
+                                            />
                                         </div>
                                     </div>
                                 </section>
-
                             </section>
                         </div>
                     </div>
                     <!-- time span end -->
                 </div>
                 <div class="col-xl-2 col-md-6 col-sm-4 pr-0">
-                    <div class="form-group" [exclude]="'.ip-addresses-dropdown'" [attachOutsideOnClick]="true"
-                        (clickOutside)="methodForToggleSection('rangeSpanSection')">
-                        <label *ngIf="isLblShow">{{localeData?.ip_addresses}}</label>
-                        <div class="btn-group " [ngClass]="{'open': showIPWrap, 'btn-group-liq': !isHorizntl}">
-                            <button (click)="showIPWrap = !showIPWrap" type="button" class="form-control text-left ">
-                                {{selectedIPRange}}
+                    <div
+                        class="form-group"
+                        [exclude]="'.ip-addresses-dropdown'"
+                        [attachOutsideOnClick]="true"
+                        (clickOutside)="methodForToggleSection('rangeSpanSection')"
+                    >
+                        <label *ngIf="isLblShow">{{ localeData?.ip_addresses }}</label>
+                        <div class="btn-group" [ngClass]="{ 'open': showIPWrap, 'btn-group-liq': !isHorizntl }">
+                            <button (click)="showIPWrap = !showIPWrap" type="button" class="form-control text-left">
+                                {{ selectedIPRange }}
                                 <span class="pull-right"><span class="fa fa-caret-down"></span></span>
                             </button>
-                            <section class="dropdown-menu custom-dropdown ip-addresses-dropdown" role="menu"
-                                [ngClass]="{'open': showIPWrap}">
+                            <section
+                                class="dropdown-menu custom-dropdown ip-addresses-dropdown"
+                                role="menu"
+                                [ngClass]="{ 'open': showIPWrap }"
+                            >
                                 <div class="clearfix option-box pd-1">
-
-                                    <span (click)="isOpenedInModal ? handleIpAddressChange('cidr_range'): ''"
-                                        class="p-0 mr-r3">
-                                        <input id="cidrRange" class="radio-custom cp ml-0" type="radio" name="ipOptions"
-                                            formControlName="ipOptions" value="cidr_range">
-                                        <label for="cidrRange"
-                                            class="radio-custom-label">{{localeData?.cidr_range}}</label>
+                                    <span
+                                        (click)="isOpenedInModal ? handleIpAddressChange('cidr_range') : ''"
+                                        class="p-0 mr-r3"
+                                    >
+                                        <input
+                                            id="cidrRange"
+                                            class="radio-custom cp ml-0"
+                                            type="radio"
+                                            name="ipOptions"
+                                            formControlName="ipOptions"
+                                            value="cidr_range"
+                                        />
+                                        <label for="cidrRange" class="radio-custom-label">{{
+                                            localeData?.cidr_range
+                                        }}</label>
                                     </span>
 
-                                    <span (click)="isOpenedInModal ? handleIpAddressChange('ip_address'): ''"
-                                        class="p-0 mr-r3">
-                                        <input id="address" class="radio-custom cp ml-0" type="radio" name="ipOptions"
-                                            formControlName="ipOptions" value="ip_address">
-                                        <label for="address"
-                                            class="radio-custom-label">{{commonLocaleData?.app_address}}</label>
+                                    <span
+                                        (click)="isOpenedInModal ? handleIpAddressChange('ip_address') : ''"
+                                        class="p-0 mr-r3"
+                                    >
+                                        <input
+                                            id="address"
+                                            class="radio-custom cp ml-0"
+                                            type="radio"
+                                            name="ipOptions"
+                                            formControlName="ipOptions"
+                                            value="ip_address"
+                                        />
+                                        <label for="address" class="radio-custom-label">{{
+                                            commonLocaleData?.app_address
+                                        }}</label>
                                     </span>
-
                                 </div>
 
-                                <section formArrayName="allowedCidrs" class="ip-range container-fluid"
-                                    *ngIf="permissionForm.get('ipOptions').value === 'cidr_range'">
-                                    <div class="row mr-b1"
-                                        *ngFor="let item of permissionForm.get('allowedCidrs')['controls']; let i = index; let l = last"
-                                        [formGroupName]="i">
+                                <section
+                                    formArrayName="allowedCidrs"
+                                    class="ip-range container-fluid"
+                                    *ngIf="permissionForm.get('ipOptions').value === 'cidr_range'"
+                                >
+                                    <div
+                                        class="row mr-b1"
+                                        *ngFor="
+                                            let item of permissionForm.get('allowedCidrs')['controls'];
+                                            let i = index;
+                                            let l = last
+                                        "
+                                        [formGroupName]="i"
+                                    >
                                         <div class="col-11">
-                                            <input class="form-control " name="item_{{i}}" formControlName="range"
-                                                type="text" [placeholder]="localeData?.cidr_example" />
+                                            <input
+                                                class="form-control"
+                                                name="item_{{ i }}"
+                                                formControlName="range"
+                                                type="text"
+                                                [placeholder]="localeData?.cidr_example"
+                                            />
                                         </div>
                                         <div class="pull-left lh-34">
-                                            <i *ngIf="!l" (click)="delRow('allowedCidrs', i, $event)"
-                                                class="icon-trash cursor-pointer"></i>
-                                            <i *ngIf="l" (click)="addNewRow('allowedCidrs', item, $event)"
-                                                class="icon-plus cursor-pointer"></i>
+                                            <i
+                                                *ngIf="!l"
+                                                (click)="delRow('allowedCidrs', i, $event)"
+                                                class="icon-trash cursor-pointer"
+                                            ></i>
+                                            <i
+                                                *ngIf="l"
+                                                (click)="addNewRow('allowedCidrs', item, $event)"
+                                                class="icon-plus cursor-pointer"
+                                            ></i>
                                         </div>
                                     </div>
                                 </section>
 
-                                <section formArrayName="allowedIps" class="ip-range container-fluid"
-                                    *ngIf="permissionForm.get('ipOptions').value === 'ip_address'">
-                                    <div class="row mr-b1"
-                                        *ngFor="let item of permissionForm.get('allowedIps')['controls']; let i = index; let l = last"
-                                        [formGroupName]="i">
+                                <section
+                                    formArrayName="allowedIps"
+                                    class="ip-range container-fluid"
+                                    *ngIf="permissionForm.get('ipOptions').value === 'ip_address'"
+                                >
+                                    <div
+                                        class="row mr-b1"
+                                        *ngFor="
+                                            let item of permissionForm.get('allowedIps')['controls'];
+                                            let i = index;
+                                            let l = last
+                                        "
+                                        [formGroupName]="i"
+                                    >
                                         <div class="col-11">
-                                            <input class="form-control" (keypress)="allowOnlyNumbersAndDot($event)"
-                                                name="item_{{i}}" formControlName="range" type="text"
-                                                [placeholder]="localeData?.ip_example" />
+                                            <input
+                                                class="form-control"
+                                                (keypress)="allowOnlyNumbersAndDot($event)"
+                                                name="item_{{ i }}"
+                                                formControlName="range"
+                                                type="text"
+                                                [placeholder]="localeData?.ip_example"
+                                            />
                                         </div>
                                         <div class="pull-left lh-34">
-                                            <i *ngIf="!l" (click)="delRow('allowedIps', i, $event)"
-                                                class="icon-trash cursor-pointer"></i>
-                                            <i *ngIf="l" (click)="addNewRow('allowedIps', item, $event)"
-                                                class="icon-plus cursor-pointer"></i>
+                                            <i
+                                                *ngIf="!l"
+                                                (click)="delRow('allowedIps', i, $event)"
+                                                class="icon-trash cursor-pointer"
+                                            ></i>
+                                            <i
+                                                *ngIf="l"
+                                                (click)="addNewRow('allowedIps', item, $event)"
+                                                class="icon-plus cursor-pointer"
+                                            ></i>
                                         </div>
                                     </div>
                                 </section>
-
                             </section>
                         </div>
                     </div>
                 </div>
                 <div class="col-xl-2 col-md-6 col-sm-4 pr-0">
-
                     <div class="form-group add-btn">
                         <label class="d-block" *ngIf="isUpdtCase">&nbsp;</label>
-                        <button [ladda]="createPermissionInProcess$ | async" [disabled]="permissionForm.invalid"
-                            class="btn btn-success">
-                            <span *ngIf="!isUpdtCase">{{commonLocaleData?.app_add}}</span>
-                            <span *ngIf="isUpdtCase">{{commonLocaleData?.app_update}}</span>
+                        <button
+                            [ladda]="createPermissionInProcess$ | async"
+                            [disabled]="permissionForm.invalid"
+                            class="btn btn-success"
+                        >
+                            <span *ngIf="!isUpdtCase">{{ commonLocaleData?.app_add }}</span>
+                            <span *ngIf="isUpdtCase">{{ commonLocaleData?.app_update }}</span>
                         </button>
                     </div>
                 </div>
             </div>
-
         </div>
         <div class="col-xl-2 col-md-12" *ngIf="isSuperAdminCompany">
-            <a href="javascript:void(0)" *ngIf="!isUpdtCase" class="btn btn-sky-blue pull-right create-btn mr-0"
+            <a
+                href="javascript:void(0)"
+                *ngIf="!isUpdtCase"
+                class="btn btn-sky-blue pull-right create-btn mr-0"
                 [routerLink]="['/pages/permissions/list']"
-                [queryParams]="{ tab: 'settings' }">{{localeData?.add_custom_role}}</a>
+                [queryParams]="{ tab: 'settings' }"
+                >{{ localeData?.add_custom_role }}</a
+            >
         </div>
     </div>
 </form>

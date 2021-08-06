@@ -70,13 +70,12 @@
             &.disabled {
                 &:hover {
                     background-color: transparent;
-                    span{
-                        i{
+                    span {
+                        i {
                             color: $gray !important;
                         }
                     }
                 }
-
             }
             a {
                 cursor: pointer;
@@ -106,13 +105,12 @@
             }
             &:hover {
                 background-color: $lavender;
-                span{
-                    i{
+                span {
+                    i {
                         color: $nero !important;
                     }
                 }
             }
-
         }
     }
 }

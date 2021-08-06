@@ -9,6 +9,11 @@
 
 <!-- aside menu section -->
 <div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
-<aside-pane [class]="asideMenuState" [@slideInOut]="asideMenuState" [keyboardShortcut]="'esc'"
-    (onShortcutPress)="toggleAsidePane()" (closeAsideEvent)="toggleAsidePane()"></aside-pane>
+<aside-pane
+    [class]="asideMenuState"
+    [@slideInOut]="asideMenuState"
+    [keyboardShortcut]="'esc'"
+    (onShortcutPress)="toggleAsidePane()"
+    (closeAsideEvent)="toggleAsidePane()"
+></aside-pane>
 <!-- aside menu section -->

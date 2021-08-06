@@ -6,11 +6,13 @@
                 <!-- branch profile element start -->
                 <div class="other-detail-section">
                     <div class="mr-b15">
-                        <label>{{localeData?.number_system_label}}</label> <span>{{numberSystem}}</span>
+                        <label>{{ localeData?.number_system_label }}</label> <span>{{ numberSystem }}</span>
                     </div>
                     <div class="mr-b15">
-                        <label>{{localeData?.inventory_type}}</label> <span>{{profileData?.manageInventory ?
-                            commonLocaleData?.app_product : commonLocaleData?.app_service}}</span>
+                        <label>{{ localeData?.inventory_type }}</label>
+                        <span>{{
+                            profileData?.manageInventory ? commonLocaleData?.app_product : commonLocaleData?.app_service
+                        }}</span>
                     </div>
                 </div>
                 <!-- branch profile element end -->
@@ -25,51 +27,80 @@
                         <div class="row">
                             <div class="col-12 col-sm-6">
                                 <div class="form-group">
-                                    <label>{{localeData?.digits_after_decimal}}</label>
-                                    <sh-select [options]="decimalDigitSource"
+                                    <label>{{ localeData?.digits_after_decimal }}</label>
+                                    <sh-select
+                                        [options]="decimalDigitSource"
                                         [placeholder]="commonLocaleData?.app_select_type"
-                                        (selected)="profileUpdated('balanceDecimalPlaces')" [isFilterEnabled]="true "
-                                        name="balanceDecimalPlaces" [(ngModel)]="profileData.balanceDecimalPlaces">
+                                        (selected)="profileUpdated('balanceDecimalPlaces')"
+                                        [isFilterEnabled]="true"
+                                        name="balanceDecimalPlaces"
+                                        [(ngModel)]="profileData.balanceDecimalPlaces"
+                                    >
                                     </sh-select>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-6">
                                 <div class="form-group">
-                                    <label>{{localeData?.number_system_label}}</label>
-                                    <sh-select [options]="numberSystemSource"
+                                    <label>{{ localeData?.number_system_label }}</label>
+                                    <sh-select
+                                        [options]="numberSystemSource"
                                         [placeholder]="commonLocaleData?.app_select_type"
-                                        (selected)="profileUpdated('balanceDisplayFormat')" [isFilterEnabled]="true "
-                                        name="balanceDisplayFormat" [(ngModel)]="profileData.balanceDisplayFormat">
+                                        (selected)="profileUpdated('balanceDisplayFormat')"
+                                        [isFilterEnabled]="true"
+                                        name="balanceDisplayFormat"
+                                        [(ngModel)]="profileData.balanceDisplayFormat"
+                                    >
                                     </sh-select>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-6">
                                 <div class="form-group">
-                                    <label>{{localeData?.inventory_type}}</label>
+                                    <label>{{ localeData?.inventory_type }}</label>
                                     <div class="mr-t1">
                                         <span class="p-0 mr-r3">
-                                            <input id="radio-1" class="radio-custom cp ml-0" name="radio-group"
-                                                type="radio" [checked]="profileData?.manageInventory"
-                                                (change)="inventoryTypeUpdated(true)" name="inventoryType" checked>
-                                            <label for="radio-1"
-                                                class="radio-custom-label">{{commonLocaleData?.app_product}}</label>
+                                            <input
+                                                id="radio-1"
+                                                class="radio-custom cp ml-0"
+                                                name="radio-group"
+                                                type="radio"
+                                                [checked]="profileData?.manageInventory"
+                                                (change)="inventoryTypeUpdated(true)"
+                                                name="inventoryType"
+                                                checked
+                                            />
+                                            <label for="radio-1" class="radio-custom-label">{{
+                                                commonLocaleData?.app_product
+                                            }}</label>
                                         </span>
                                         <span class="p-0">
-                                            <input id="radio-2" class="radio-custom cp ml-0" name="radio-group"
-                                                type="radio" [checked]="!profileData?.manageInventory"
-                                                (change)="inventoryTypeUpdated(false)" name="inventoryType">
-                                            <label for="radio-2"
-                                                class="radio-custom-label">{{commonLocaleData?.app_service}}</label>
+                                            <input
+                                                id="radio-2"
+                                                class="radio-custom cp ml-0"
+                                                name="radio-group"
+                                                type="radio"
+                                                [checked]="!profileData?.manageInventory"
+                                                (change)="inventoryTypeUpdated(false)"
+                                                name="inventoryType"
+                                            />
+                                            <label for="radio-2" class="radio-custom-label">{{
+                                                commonLocaleData?.app_service
+                                            }}</label>
                                         </span>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-6">
                                 <div class="form-group">
-                                    <label>{{localeData?.language}}</label>
-                                    <sh-select class="language-selection" [options]="translationLocales"
-                                        [placeholder]="localeData?.select_language" (selected)="selectLocale($event)"
-                                        [isFilterEnabled]="true" name="activeLocale" [(ngModel)]="activeLocale">
+                                    <label>{{ localeData?.language }}</label>
+                                    <sh-select
+                                        class="language-selection"
+                                        [options]="translationLocales"
+                                        [placeholder]="localeData?.select_language"
+                                        (selected)="selectLocale($event)"
+                                        [isFilterEnabled]="true"
+                                        name="activeLocale"
+                                        [(ngModel)]="activeLocale"
+                                    >
                                     </sh-select>
                                 </div>
                             </div>

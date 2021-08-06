@@ -1,16 +1,21 @@
 <div>
     <div class="clearfix" id="export-body">
-        <form name="esignature" id="eSignForm" #eSign autocomplete="off" action="" target="_blank"
-            method="post">
-            <input id="AadhaarNumber" [placeholder]="localeData?.your_aadhar_no" name="AadhaarNumber" type="text"
-                class="form-control" [(ngModel)]="eSignModel.AadhaarNumber">
+        <form name="esignature" id="eSignForm" #eSign autocomplete="off" action="" target="_blank" method="post">
+            <input
+                id="AadhaarNumber"
+                [placeholder]="localeData?.your_aadhar_no"
+                name="AadhaarNumber"
+                type="text"
+                class="form-control"
+                [(ngModel)]="eSignModel.AadhaarNumber"
+            />
 
             <p class="mr-t1" [innerHTML]="localeData?.aadhar_required_note"></p>
             <div class="pull-left mr-t1">
-                <button type="submit" class="btn btn-md btn-success" (click)="onConfirmation(eSign)">{{localeData?.go}}</button>
+                <button type="submit" class="btn btn-md btn-success" (click)="onConfirmation(eSign)">
+                    {{ localeData?.go }}
+                </button>
             </div>
         </form>
-
-
     </div>
 </div>

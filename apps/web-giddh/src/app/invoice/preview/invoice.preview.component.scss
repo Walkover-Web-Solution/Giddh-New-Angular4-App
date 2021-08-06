@@ -340,7 +340,7 @@ ul.select-action-dropdown {
     color: $nobel;
 }
 
-.advance-icon{
+.advance-icon {
     width: auto !important;
     height: auto !important;
     display: inline-flex;
@@ -547,19 +547,19 @@ span.icon-export-icon {
     }
 }
 
-@media (max-width: 1124px){
-    .add-invoice{
+@media (max-width: 1124px) {
+    .add-invoice {
         flex-direction: column-reverse;
-        .justify-content-end{
+        .justify-content-end {
             margin-top: 10px;
         }
     }
 
-    .ladda-button{
+    .ladda-button {
         margin-right: 0 !important;
     }
 
-    .input-grp-date-range-picker{
+    .input-grp-date-range-picker {
         align-items: flex-start;
     }
 }
@@ -715,8 +715,8 @@ span.icon-export-icon {
     .total-due-sale {
         padding-bottom: 5px;
     }
-    .advance-icon{
-        margin-right:0 !important;
+    .advance-icon {
+        margin-right: 0 !important;
     }
 }
 
@@ -763,22 +763,22 @@ span.icon-export-icon {
         padding-bottom: 0px !important;
     }
 
-    .export-new-invoice{
+    .export-new-invoice {
         align-items: flex-start !important;
     }
-    .cancel-filter-export{
+    .cancel-filter-export {
         flex-flow: column-reverse;
         align-items: flex-end;
-        .d-flex{
+        .d-flex {
             margin-top: 10px;
         }
     }
 
-    .more-btn-dropdown{
+    .more-btn-dropdown {
         margin-right: 0 !important;
     }
 
-    .advance-icon{
+    .advance-icon {
         margin-right: 0 !important;
     }
 }
@@ -795,7 +795,6 @@ span.icon-export-icon {
 }
 
 @media (max-width: 360px) {
-  
 }
 
 @media (max-width: 320px) {
@@ -853,7 +852,7 @@ span.icon-export-icon {
             margin-right: 0 !important;
             justify-content: space-between;
         }
-        .btn{
+        .btn {
             padding-left: 0;
             padding-top: 10px;
             padding-bottom: 0;
@@ -864,23 +863,23 @@ span.icon-export-icon {
         top: 5px;
     }
 
-    .date-advance-search{
-        .input-grp-date-range-picker{
+    .date-advance-search {
+        .input-grp-date-range-picker {
             width: 90%;
-            .flex-fill{
+            .flex-fill {
                 width: 80%;
             }
         }
     }
 
     .search-icon-block {
-        .icon-search{
+        .icon-search {
             padding: 0 5px;
         }
     }
 
-    .advance-icon{
-        .icon-advance-filter{
+    .advance-icon {
+        .icon-advance-filter {
             padding: 2px 0px;
         }
     }
@@ -889,41 +888,40 @@ span.icon-export-icon {
         width: 200px !important;
         max-width: 200px !important;
     }
-
 }
 
-@media (min-width:769px){
-    .table-responsive{
+@media (min-width: 769px) {
+    .table-responsive {
         max-height: calc(100vh - 295px);
         overflow-y: auto;
     }
 }
 
-@media (max-width: 480px){
-    .cancel-more{
+@media (max-width: 480px) {
+    .cancel-more {
         display: flex !important;
     }
-    .cancel-filter-export{
-        .d-flex{
+    .cancel-filter-export {
+        .d-flex {
             display: none !important;
         }
     }
 }
 
-@media (min-width: 768px) and (max-width:865px){
-    .visible-center{
+@media (min-width: 768px) and (max-width: 865px) {
+    .visible-center {
         display: flex !important;
     }
 
-    .visible-on-desktop{
+    .visible-on-desktop {
         display: none !important;
     }
 
-    .more-btn-dropdown.desktop-view-btn{
+    .more-btn-dropdown.desktop-view-btn {
         display: none !important;
     }
-    .add-invoice{
-        .justify-content-end{
+    .add-invoice {
+        .justify-content-end {
             margin-left: -165px;
         }
     }

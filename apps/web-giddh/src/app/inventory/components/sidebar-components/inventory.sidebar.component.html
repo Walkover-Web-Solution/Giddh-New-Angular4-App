@@ -1,50 +1,107 @@
-<section id="inventory-sidebar" class="sidebar pull-left" #sidebar
-    [ngClass]="{'invisible': stockGroupData?.length==0 && isSearching==false}">
+<section
+    id="inventory-sidebar"
+    class="sidebar pull-left"
+    #sidebar
+    [ngClass]="{ 'invisible': stockGroupData?.length == 0 && isSearching == false }"
+>
     <div class="clearfix">
         <div class="search-sidebar">
-            <input class="form-control" type="search" placeholder="Search Stock/Group" #search>
+            <input class="form-control" type="search" placeholder="Search Stock/Group" #search />
             <i class="fa fa-search text-light-2"></i>
             <div class="btn-group" dropdown placement="bottom left">
                 <div class="btn-group" dropdown [autoClose]="true" container="body">
-                    <button id="button-nested" dropdownToggle type="button" class="btn ml-0 dropdown-toggle"
-                        aria-controls="dropdown-nested"> <i class="fa fa-ellipsis-v"></i> <span class="caret"></span>
+                    <button
+                        id="button-nested"
+                        dropdownToggle
+                        type="button"
+                        class="btn ml-0 dropdown-toggle"
+                        aria-controls="dropdown-nested"
+                    >
+                        <i class="fa fa-ellipsis-v"></i> <span class="caret"></span>
                     </button>
-                    <ul id="dropdown-nested" *dropdownMenu class="dropdown-menu" role="menu"
-                        aria-labelledby="button-nested">
+                    <ul
+                        id="dropdown-nested"
+                        *dropdownMenu
+                        class="dropdown-menu"
+                        role="menu"
+                        aria-labelledby="button-nested"
+                    >
                         <li role="menuitem" dropdown placement="right" container="body">
                             <a dropdownToggle class="dropdown-item dropdown-toggle">Download all groups wise</a>
                             <ul class="dropdown-menu" role="menu">
-                                <li role="menuitem"><a class="dropdown-item" (click)="false"
-                                        (click)="downloadAllInventoryReports('allgroup', 'xlsx')" href="">XLS</a></li>
-                                <li role="menuitem"><a class="dropdown-item" (click)="false"
-                                        (click)="downloadAllInventoryReports('allgroup', 'csv')" href="">CSV</a></li>
+                                <li role="menuitem">
+                                    <a
+                                        class="dropdown-item"
+                                        (click)="(false)"
+                                        (click)="downloadAllInventoryReports('allgroup', 'xlsx')"
+                                        href=""
+                                        >XLS</a
+                                    >
+                                </li>
+                                <li role="menuitem">
+                                    <a
+                                        class="dropdown-item"
+                                        (click)="(false)"
+                                        (click)="downloadAllInventoryReports('allgroup', 'csv')"
+                                        href=""
+                                        >CSV</a
+                                    >
+                                </li>
                             </ul>
                         </li>
 
                         <li role="menuitem" dropdown placement="right" container="body">
                             <a dropdownToggle class="dropdown-item dropdown-toggle">Download all stock wise</a>
                             <ul class="dropdown-menu" role="menu">
-                                <li role="menuitem"><a class="dropdown-item" (click)="false"
-                                        (click)="downloadAllInventoryReports('allstock', 'xlsx')" href="">XLS</a></li>
-                                <li role="menuitem"><a class="dropdown-item" (click)="false"
-                                        (click)="downloadAllInventoryReports('allstock', 'csv')" href="">CSV</a></li>
+                                <li role="menuitem">
+                                    <a
+                                        class="dropdown-item"
+                                        (click)="(false)"
+                                        (click)="downloadAllInventoryReports('allstock', 'xlsx')"
+                                        href=""
+                                        >XLS</a
+                                    >
+                                </li>
+                                <li role="menuitem">
+                                    <a
+                                        class="dropdown-item"
+                                        (click)="(false)"
+                                        (click)="downloadAllInventoryReports('allstock', 'csv')"
+                                        href=""
+                                        >CSV</a
+                                    >
+                                </li>
                             </ul>
                         </li>
                         <li role="menuitem" dropdown placement="right" container="body">
-                            <a dropdownToggle class="dropdown-item dropdown-toggle" (click)="false">Download all account
-                                wise <span class="caret"></span></a>
+                            <a dropdownToggle class="dropdown-item dropdown-toggle" (click)="(false)"
+                                >Download all account wise <span class="caret"></span
+                            ></a>
                             <ul class="dropdown-menu" role="menu">
-                                <li role="menuitem"><a class="dropdown-item" (click)="false"
-                                        (click)="downloadAllInventoryReports('account', 'xlsx')" href="">XLS</a></li>
-                                <li role="menuitem"><a class="dropdown-item" (click)="false"
-                                        (click)="downloadAllInventoryReports('account', 'csv')" href="">CSV</a></li>
+                                <li role="menuitem">
+                                    <a
+                                        class="dropdown-item"
+                                        (click)="(false)"
+                                        (click)="downloadAllInventoryReports('account', 'xlsx')"
+                                        href=""
+                                        >XLS</a
+                                    >
+                                </li>
+                                <li role="menuitem">
+                                    <a
+                                        class="dropdown-item"
+                                        (click)="(false)"
+                                        (click)="downloadAllInventoryReports('account', 'csv')"
+                                        href=""
+                                        >CSV</a
+                                    >
+                                </li>
                             </ul>
                         </li>
                     </ul>
                 </div>
             </div>
         </div>
-        <stockgrp-list class="parent-group stock-group-parent" [Groups]='stockGroupData'>
-        </stockgrp-list>
+        <stockgrp-list class="parent-group stock-group-parent" [Groups]="stockGroupData"> </stockgrp-list>
     </div>
 </section>

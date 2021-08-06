@@ -1,62 +1,91 @@
-<div class="responsive table-responsive" appTranslate [file]="'reports/purchase-register'"
-    (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<div
+    class="responsive table-responsive"
+    appTranslate
+    [file]="'reports/purchase-register'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <table class="table basic giddh-table on-mobile-view">
         <thead>
             <tr class="register-table-th">
-                <th>{{purchaseRegisterTotal.particular }}</th>
+                <th>{{ purchaseRegisterTotal.particular }}</th>
                 <th class="text-right">
                     <span class="d-inline-flex">
-                        <amount-field [amount]="purchaseRegisterTotal.purchase" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field
+                            [amount]="purchaseRegisterTotal.purchase"
+                            [currencySymbol]="false"
+                            [currencyCode]="false"
+                        >
                         </amount-field>
                     </span>
                 </th>
                 <th *ngIf="purchaseRegisterTotal.returns" class="text-right">
                     <span class="d-inline-flex">
-                        <amount-field [amount]="purchaseRegisterTotal.returns" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field
+                            [amount]="purchaseRegisterTotal.returns"
+                            [currencySymbol]="false"
+                            [currencyCode]="false"
+                        >
                         </amount-field>
                     </span>
                 </th>
                 <th *ngIf="purchaseRegisterTotal.taxTotal" class="text-right">
                     <span class="d-inline-flex">
-                        <amount-field [amount]="purchaseRegisterTotal.taxTotal" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field
+                            [amount]="purchaseRegisterTotal.taxTotal"
+                            [currencySymbol]="false"
+                            [currencyCode]="false"
+                        >
                         </amount-field>
                     </span>
                 </th>
                 <th *ngIf="purchaseRegisterTotal.discountTotal" class="text-right">
                     <span class="d-inline-flex">
-                        <amount-field [amount]="purchaseRegisterTotal.discountTotal" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field
+                            [amount]="purchaseRegisterTotal.discountTotal"
+                            [currencySymbol]="false"
+                            [currencyCode]="false"
+                        >
                         </amount-field>
                     </span>
                 </th>
                 <th *ngIf="isTcsTdsApplicable && purchaseRegisterTotal.tcsTotal" class="text-right">
                     <span class="d-inline-flex">
-                        <amount-field [amount]="purchaseRegisterTotal.tcsTotal" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field
+                            [amount]="purchaseRegisterTotal.tcsTotal"
+                            [currencySymbol]="false"
+                            [currencyCode]="false"
+                        >
                         </amount-field>
                     </span>
                 </th>
                 <th *ngIf="isTcsTdsApplicable && purchaseRegisterTotal.tdsTotal" class="text-right">
                     <span class="d-inline-flex">
-                        <amount-field [amount]="purchaseRegisterTotal.tdsTotal" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field
+                            [amount]="purchaseRegisterTotal.tdsTotal"
+                            [currencySymbol]="false"
+                            [currencyCode]="false"
+                        >
                         </amount-field>
                     </span>
                 </th>
                 <th *ngIf="purchaseRegisterTotal.netPurchase" class="text-right">
                     <span class="d-inline-flex">
-                        <amount-field [amount]="purchaseRegisterTotal.netPurchase" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field
+                            [amount]="purchaseRegisterTotal.netPurchase"
+                            [currencySymbol]="false"
+                            [currencyCode]="false"
+                        >
                         </amount-field>
                     </span>
                 </th>
                 <th *ngIf="purchaseRegisterTotal.cumulative" class="text-right">
                     <span class="d-inline-flex">
-                        <amount-field [amount]="purchaseRegisterTotal.cumulative" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field
+                            [amount]="purchaseRegisterTotal.cumulative"
+                            [currencySymbol]="false"
+                            [currencyCode]="false"
+                        >
                         </amount-field>
                     </span>
                 </th>
@@ -64,132 +93,147 @@
             <tr class="register-sales-purchase">
                 <th>
                     <div class="d-flex align-items-center">
-                        {{commonLocaleData?.app_particular}}
+                        {{ commonLocaleData?.app_particular }}
                     </div>
                 </th>
                 <th class="width-200px">
                     <div class="d-flex">
-                        <div class="flex-fill text-right ">
-                            {{commonLocaleData?.app_purchase}}
+                        <div class="flex-fill text-right">
+                            {{ commonLocaleData?.app_purchase }}
                         </div>
                     </div>
                 </th>
                 <th *ngIf="purchaseRegisterTotal.returns" class="width-200px">
                     <div class="d-flex">
-                        <div class="flex-fill text-right ">
-                            {{commonLocaleData?.app_return}}
+                        <div class="flex-fill text-right">
+                            {{ commonLocaleData?.app_return }}
                         </div>
                     </div>
                 </th>
                 <th *ngIf="purchaseRegisterTotal.taxTotal" class="width-200px">
                     <div class="d-flex">
-                        <div class="flex-fill text-right ">
-                            {{commonLocaleData?.app_tax}}
+                        <div class="flex-fill text-right">
+                            {{ commonLocaleData?.app_tax }}
                         </div>
                     </div>
                 </th>
                 <th *ngIf="purchaseRegisterTotal.discountTotal" class="width-200px">
                     <div class="d-flex">
-                        <div class="flex-fill text-right ">
-                            {{commonLocaleData?.app_discount}}
+                        <div class="flex-fill text-right">
+                            {{ commonLocaleData?.app_discount }}
                         </div>
                     </div>
                 </th>
                 <th *ngIf="isTcsTdsApplicable && purchaseRegisterTotal.tcsTotal" class="width-200px">
                     <div class="d-flex">
-                        <div class="flex-fill text-right ">
-                            {{commonLocaleData?.app_tcs}}
+                        <div class="flex-fill text-right">
+                            {{ commonLocaleData?.app_tcs }}
                         </div>
                     </div>
                 </th>
                 <th *ngIf="isTcsTdsApplicable && purchaseRegisterTotal.tdsTotal" class="width-200px">
                     <div class="d-flex">
-                        <div class="flex-fill text-right ">
-                            {{commonLocaleData?.app_tds}}
+                        <div class="flex-fill text-right">
+                            {{ commonLocaleData?.app_tds }}
                         </div>
                     </div>
                 </th>
                 <th *ngIf="purchaseRegisterTotal.netPurchase" class="width-200px">
                     <div class="d-flex">
-                        <div class="flex-fill text-right ">
-                            {{commonLocaleData?.app_net_purchase}}
+                        <div class="flex-fill text-right">
+                            {{ commonLocaleData?.app_net_purchase }}
                         </div>
                     </div>
                 </th>
                 <th *ngIf="purchaseRegisterTotal.cumulative" class="width-200px">
                     <div class="d-flex">
-                        <div class="flex-fill text-right ">
-                            {{commonLocaleData?.app_cumulative}}
+                        <div class="flex-fill text-right">
+                            {{ commonLocaleData?.app_cumulative }}
                         </div>
                     </div>
                 </th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let item of reportRespone" [ngClass]="{'bgChange': item.reportType === 'combined'}">
-                <td [attr.data-title]="commonLocaleData?.app_particular"><a
-                        [class.cursor-pointer]="item.reportType !== 'combined'"
-                        (click)="gotoDetailedPurchase(item)">{{item.particular}}</a></td>
+            <tr *ngFor="let item of reportRespone" [ngClass]="{ 'bgChange': item.reportType === 'combined' }">
+                <td [attr.data-title]="commonLocaleData?.app_particular">
+                    <a [class.cursor-pointer]="item.reportType !== 'combined'" (click)="gotoDetailedPurchase(item)">{{
+                        item.particular
+                    }}</a>
+                </td>
                 <td [attr.data-title]="commonLocaleData?.app_purchase" class="text-right">
                     <span class="d-inline-flex">
-                        <amount-field [amount]="item.purchase" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field [amount]="item.purchase" [currencySymbol]="false" [currencyCode]="false">
                         </amount-field>
                     </span>
                 </td>
-                <td [attr.data-title]="commonLocaleData?.app_return" *ngIf="purchaseRegisterTotal.returns"
-                    class="text-right">
+                <td
+                    [attr.data-title]="commonLocaleData?.app_return"
+                    *ngIf="purchaseRegisterTotal.returns"
+                    class="text-right"
+                >
                     <span class="d-inline-flex">
-                        <amount-field [amount]="item.returns" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field [amount]="item.returns" [currencySymbol]="false" [currencyCode]="false">
                         </amount-field>
                     </span>
                 </td>
-                <td [attr.data-title]="commonLocaleData?.app_tax" *ngIf="purchaseRegisterTotal.taxTotal"
-                    class="text-right">
+                <td
+                    [attr.data-title]="commonLocaleData?.app_tax"
+                    *ngIf="purchaseRegisterTotal.taxTotal"
+                    class="text-right"
+                >
                     <span class="d-inline-flex">
-                        <amount-field [amount]="item.taxTotal" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field [amount]="item.taxTotal" [currencySymbol]="false" [currencyCode]="false">
                         </amount-field>
                     </span>
                 </td>
-                <td [attr.data-title]="commonLocaleData?.app_discount" *ngIf="purchaseRegisterTotal.discountTotal"
-                    class="text-right">
+                <td
+                    [attr.data-title]="commonLocaleData?.app_discount"
+                    *ngIf="purchaseRegisterTotal.discountTotal"
+                    class="text-right"
+                >
                     <span class="d-inline-flex">
-                        <amount-field [amount]="item.discountTotal" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field [amount]="item.discountTotal" [currencySymbol]="false" [currencyCode]="false">
                         </amount-field>
                     </span>
                 </td>
-                <td [attr.data-title]="commonLocaleData?.app_tcs"
-                    *ngIf="isTcsTdsApplicable && purchaseRegisterTotal.tcsTotal" class="text-right">
+                <td
+                    [attr.data-title]="commonLocaleData?.app_tcs"
+                    *ngIf="isTcsTdsApplicable && purchaseRegisterTotal.tcsTotal"
+                    class="text-right"
+                >
                     <span class="d-inline-flex">
-                        <amount-field [amount]="item.tcsTotal" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field [amount]="item.tcsTotal" [currencySymbol]="false" [currencyCode]="false">
                         </amount-field>
                     </span>
                 </td>
-                <td [attr.data-title]="commonLocaleData?.app_tds"
-                    *ngIf="isTcsTdsApplicable && purchaseRegisterTotal.tdsTotal" class="text-right">
+                <td
+                    [attr.data-title]="commonLocaleData?.app_tds"
+                    *ngIf="isTcsTdsApplicable && purchaseRegisterTotal.tdsTotal"
+                    class="text-right"
+                >
                     <span class="d-inline-flex">
-                        <amount-field [amount]="item.tdsTotal" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field [amount]="item.tdsTotal" [currencySymbol]="false" [currencyCode]="false">
                         </amount-field>
                     </span>
                 </td>
-                <td [attr.data-title]="commonLocaleData?.app_net_purchase" *ngIf="purchaseRegisterTotal.netPurchase"
-                    class="text-right">
+                <td
+                    [attr.data-title]="commonLocaleData?.app_net_purchase"
+                    *ngIf="purchaseRegisterTotal.netPurchase"
+                    class="text-right"
+                >
                     <span class="d-inline-flex">
-                        <amount-field [amount]="item.netPurchase" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field [amount]="item.netPurchase" [currencySymbol]="false" [currencyCode]="false">
                         </amount-field>
                     </span>
                 </td>
-                <td [attr.data-title]="commonLocaleData?.app_cumulative" *ngIf="purchaseRegisterTotal.cumulative"
-                    class="text-right">
+                <td
+                    [attr.data-title]="commonLocaleData?.app_cumulative"
+                    *ngIf="purchaseRegisterTotal.cumulative"
+                    class="text-right"
+                >
                     <span class="d-inline-flex">
-                        <amount-field [amount]="item.cumulative" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field [amount]="item.cumulative" [currencySymbol]="false" [currencyCode]="false">
                         </amount-field>
                     </span>
                 </td>
