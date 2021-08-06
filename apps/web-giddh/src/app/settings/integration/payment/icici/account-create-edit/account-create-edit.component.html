@@ -38,7 +38,7 @@
                         [placeholder]="localeData?.payment?.login_id_placeholder"
                     />
                 </div>
-                <div class="clearfix mr-t1" *ngIf="!activeBankAccount">
+                <div class="clearfix mr-t1">
                     <label>{{ localeData?.payment?.account_number_label }}<span class="red-text">*</span></label>
                     <input
                         class="form-control"
@@ -54,11 +54,6 @@
                         [placeholder]="localeData?.payment?.account_number_placeholder"
                         maxlength="18"
                     />
-                </div>
-                <div class="clearfix" *ngIf="activeBankAccount">
-                    <label>{{ localeData?.payment?.account_number_label }}</label
-                    ><br />
-                    <span class="font-14">{{ activeBankAccount?.iciciDetailsResource?.accountNumber }}</span>
                 </div>
                 <div class="clearfix mr-t1">
                     <label>{{ localeData?.payment?.link_account_label }}<span class="red-text">*</span></label>

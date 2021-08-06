@@ -74,7 +74,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
             this.paymentAlerts = this.activeBankAccount?.iciciDetailsResource?.paymentAlerts?.map(user => user.uniqueName);
 
             this.accountForm = this.formBuilder.group({
-                accountNumber: [this.activeBankAccount?.iciciDetailsResource?.accountNumber],
+                accountNumber: [this.activeBankAccount?.iciciDetailsResource?.accountNumber, Validators.compose([Validators.required, Validators.minLength(9), Validators.maxLength(18)])],
                 accountUniqueName: [this.activeBankAccount?.account?.uniqueName],
                 paymentAlerts: [this.paymentAlerts]
             });
@@ -138,21 +138,19 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
                 this.paymentAlertsUsersList = [];
                 let index = 0;
 
-                if(response?.length > 0) {
-                    this.paymentAlertsUsersList.push({ index: index, label: this.commonLocaleData?.app_select_all, value: this.selectAllRecords });
+                this.paymentAlertsUsersList.push({ index: index, label: this.commonLocaleData?.app_select_all, value: this.selectAllRecords });
+                index++;
+
+                response.forEach(user => {
+                    this.paymentAlertsUsersList.push({ index: index, label: user.userName, value: user.userUniqueName });
+                    this.usersList.push({ index: index, label: user.userName, value: user.userUniqueName });
                     index++;
+                });
 
-                    response.forEach(user => {
-                        this.paymentAlertsUsersList.push({ index: index, label: user.userName, value: user.userUniqueName });
-                        this.usersList.push({ index: index, label: user.userName, value: user.userUniqueName });
-                        index++;
-                    });
-
-                    let isAllOptionsChecked = this.paymentAlerts.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords); 
-                    if((isAllOptionsChecked?.length === this.paymentAlertsUsersList?.length - 1)) {
-                        // if all options checked and select all is unchecked, we need to show select all as selected
-                        this.paymentAlerts.push(this.selectAllRecords);
-                    }
+                let isAllOptionsChecked = this.paymentAlerts.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords); 
+                if((isAllOptionsChecked?.length === this.paymentAlertsUsersList?.length - 1)) {
+                    // if all options checked and select all is unchecked, we need to show select all as selected
+                    this.paymentAlerts.push(this.selectAllRecords);
                 }
             }
         });
@@ -180,9 +178,6 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
                     this.toaster.errorToast(response?.message);
                 }
             });
-        } else {
-            this.toaster.clearAllToaster();
-            this.toaster.errorToast(this.localeData?.payment?.required_field_error);
         }
     }
 
