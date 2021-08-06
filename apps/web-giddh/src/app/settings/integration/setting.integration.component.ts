@@ -90,7 +90,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     @ViewChild('paymentFormAccountName', { static: true }) paymentFormAccountName: ShSelectComponent;
     /** Instance of create new account modal */
     @ViewChild('createNewAccountModal', { static: false }) public createNewAccountModal: ModalDirective;
-    /** Instance of create new account modal */
+    /** Instance of edit account modal */
     @ViewChild('editAccountModal', { static: false }) public editAccountModal: ModalDirective;
     /** Instance of create new account user modal */
     @ViewChild('createNewAccountUserModal', { static: false }) public createNewAccountUserModal: ModalDirective;
