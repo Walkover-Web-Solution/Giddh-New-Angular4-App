@@ -1369,35 +1369,35 @@ export class ContactComponent implements OnInit, OnDestroy {
 
             this.dataVariables = [
                 {
-                    name: this.localeData?.data_variables.opening_balance,
+                    name: this.localeData?.data_variables?.opening_balance,
                     value: '%s_OB',
                 },
                 {
-                    name: this.localeData?.data_variables.closing_balance,
+                    name: this.localeData?.data_variables?.closing_balance,
                     value: '%s_CB',
                 },
                 {
-                    name: this.localeData?.data_variables.credit_total,
+                    name: this.localeData?.data_variables?.credit_total,
                     value: '%s_CT',
                 },
                 {
-                    name: this.localeData?.data_variables.debit_total,
+                    name: this.localeData?.data_variables?.debit_total,
                     value: '%s_DT',
                 },
                 {
-                    name: this.localeData?.data_variables.from_date,
+                    name: this.localeData?.data_variables?.from_date,
                     value: '%s_FD',
                 },
                 {
-                    name: this.localeData?.data_variables.to_date,
+                    name: this.localeData?.data_variables?.to_date,
                     value: '%s_TD',
                 },
                 {
-                    name: this.localeData?.data_variables.magic_link,
+                    name: this.localeData?.data_variables?.magic_link,
                     value: '%s_ML',
                 },
                 {
-                    name: this.localeData?.data_variables.account_name,
+                    name: this.localeData?.data_variables?.account_name,
                     value: '%s_AN',
                 }
             ];
