@@ -28,5 +28,6 @@
     "approve_entry_error": "Please Select Base Account First For Approving An Entry...",
     "reason_of_rejection": "Reason of Rejection",
     "search_field": "Search [FIELD]",
-    "by_creator": "By [CREATOR_NAME]"
+    "by_creator": "By [CREATOR_NAME]",
+    "delete_transaction": "Are you sure you want to delete the transaction?"
 }
