@@ -212,6 +212,14 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                 this.loadDefaultCreditorAccountsSuggestions();
                 break;
 
+            case 'Entry against Creditors':
+                this.entryAgainstObject.base = 'Creditor Name';
+                this.entryAgainstObject.against = 'Cash Expenses';
+                this.pettyCashEntryType = 'expense';
+                this.cashOrBankEntry = false;
+                this.loadDefaultCreditorAccountsSuggestions();
+                break;    
+
             case 'Cash Sales':
                 this.entryAgainstObject.base = 'Receipt Mode';
                 this.entryAgainstObject.against = 'Entry against Debtor';

@@ -121,14 +121,6 @@ export class RejectedListComponent implements OnInit, OnChanges {
     public deleteActionClicked(item: ExpenseResults) {
         this.actionPettycashRequest.actionType = 'delete';
         this.actionPettycashRequest.uniqueName = item.uniqueName;
-        this.expenseService.actionPettycashReports(this.actionPettycashRequest, {}).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res.status === 'success') {
-                this.toasty.successToast(res.body);
-                this.getPettyCashRejectedReports(this.pettycashRequest);
-            } else {
-                this.toasty.successToast(res.message);
-            }
-        });
     }
 
     public sort(order: 'asc' | 'desc' = 'asc', key: string) {
@@ -190,5 +182,21 @@ export class RejectedListComponent implements OnInit, OnChanges {
                 this.detectChanges();
             }, 400);
         }
+    }
+
+    /**
+     * Deleting the confirmed entry
+     *
+     * @memberof RejectedListComponent
+     */
+    public deleteEntry(): void {
+        this.expenseService.actionPettycashReports(this.actionPettycashRequest, {}).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            if (res.status === 'success') {
+                this.toasty.successToast(res.body);
+                this.getPettyCashRejectedReports(this.pettycashRequest);
+            } else {
+                this.toasty.successToast(res.message);
+            }
+        });
     }
 }
