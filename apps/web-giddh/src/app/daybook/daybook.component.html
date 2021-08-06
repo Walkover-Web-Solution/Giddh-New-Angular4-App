@@ -1,36 +1,55 @@
-<ng-container appTranslate [file]="'daybook'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'daybook'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
     <ng-container *ngIf="!showLoader">
         <div class="transactions-page pd-t1 position-relative clearfix">
-
             <!-- ledger header -->
             <div class="col-md-12">
                 <div class="d-flex justify-content-between">
                     <div class="d-flex">
                         <div class="d-flex company-date-picker">
-                            <div class="form-group mb-0 mr-r15 linked-entities"
-                            *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
+                            <div
+                                class="form-group mb-0 mr-r15 linked-entities"
+                                *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                            >
                                 <div class="form-group mb-0">
-                                    <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName"
-                                    [showClear]="false" [ItemHeight]="33" width="100%"
-                                    (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
-                                    [placeholder]="localeData?.select_entity" [fixedValue]="currentBranch?.alias">
+                                    <sh-select
+                                        [options]="currentCompanyBranches"
+                                        [(ngModel)]="currentBranch.uniqueName"
+                                        [showClear]="false"
+                                        [ItemHeight]="33"
+                                        width="100%"
+                                        (selected)="handleBranchChange($event)"
+                                        [isFilterEnabled]="true"
+                                        [placeholder]="localeData?.select_entity"
+                                        [fixedValue]="currentBranch?.alias"
+                                    >
                                         <ng-template #optionTemplate let-option="option">
                                             <ng-container>
                                                 <a href="javascript:void(0)" class="list-item d-flex">
                                                     <span class="entity-icon">
-                                                        <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany"
-                                                        tooltip="{{commonLocaleData?.app_branch}}"></i>
-                                                        <i class="icon-company-profile pull-right" *ngIf="option.isCompany"
-                                                        tooltip="{{commonLocaleData?.app_company}}"></i>
+                                                        <i
+                                                            class="icon-branch-icon pull-right"
+                                                            *ngIf="!option.isCompany"
+                                                            tooltip="{{ commonLocaleData?.app_branch }}"
+                                                        ></i>
+                                                        <i
+                                                            class="icon-company-profile pull-right"
+                                                            *ngIf="option.isCompany"
+                                                            tooltip="{{ commonLocaleData?.app_company }}"
+                                                        ></i>
                                                     </span>
                                                     <span class="entity-details">
-                                                        <div class="item giddh-limit single-line-clamp">{{ option.label || '-'
-                                                        }}</div>
+                                                        <div class="item giddh-limit single-line-clamp">
+                                                            {{ option.label || "-" }}
+                                                        </div>
                                                         <div class="item-unique giddh-limit single-line-clamp">
-                                                        {{ option.name || '-' }}
+                                                            {{ option.name || "-" }}
                                                         </div>
                                                     </span>
                                                 </a>
@@ -42,60 +61,99 @@
                             <div class="form-inline align-items-start d-flex flex-nowrap daybook-filter">
                                 <div class="form-group custom-datepicker mr-r15" (click)="showGiddhDatepicker($event)">
                                     <i class="icon-calender calendar-addon"></i>
-                                        <input type="text" name="selectedDateRange"
-                                        [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
-                                        class="giddh-datepicker date-range-picker border-radius-2" />
+                                    <input
+                                        type="text"
+                                        name="selectedDateRange"
+                                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                        class="giddh-datepicker date-range-picker border-radius-2"
+                                    />
                                 </div>
                             </div>
                         </div>
                         <div class="form-group mb-0 expand-collapse-btn">
-                            <a class="cp" (click)="toggleExpand()" data-toggle="tooltip" data-placement="top"
-                                title="{{commonLocaleData?.app_expand_all}}" *ngIf="!isAllExpanded">
+                            <a
+                                class="cp"
+                                (click)="toggleExpand()"
+                                data-toggle="tooltip"
+                                data-placement="top"
+                                title="{{ commonLocaleData?.app_expand_all }}"
+                                *ngIf="!isAllExpanded"
+                            >
                                 <span class="icon-expandIcon"></span>
                             </a>
-                            <a class="cp" (click)="toggleExpand()" data-toggle="tooltip" data-placement="top"
-                                title="{{commonLocaleData?.app_collapse_all}}" *ngIf="isAllExpanded">
+                            <a
+                                class="cp"
+                                (click)="toggleExpand()"
+                                data-toggle="tooltip"
+                                data-placement="top"
+                                title="{{ commonLocaleData?.app_collapse_all }}"
+                                *ngIf="isAllExpanded"
+                            >
                                 <span class="icon-collapse"></span>
                             </a>
                         </div>
                     </div>
-                        <div *ngIf="showAdvanceSearchIcon" class="clear-filter form-group mb-0" >
-                            <button class="btn btn-filter" (click)="initialRequest();">
-                                <span class="icon-cross"></span> {{commonLocaleData?.app_clear_filter}}
-                            </button>
-                        </div>
-                        <div class="filter-export d-flex">
-                            <div class="form-group mb-0 cursor-pointer">
-                                <div class="advance-icon align-items-center btn btn-primary"
-                                    [tooltip]="commonLocaleData?.app_advance_search" (click)="onOpenAdvanceSearch()">
-                                        <span class="pd-r05 d-sm-flex d-none">{{commonLocaleData?.app_filter}}</span>
-                                        <span class="icon-advance-filter"></span>
-                                </div>
+                    <div *ngIf="showAdvanceSearchIcon" class="clear-filter form-group mb-0">
+                        <button class="btn btn-filter" (click)="initialRequest()">
+                            <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
+                        </button>
+                    </div>
+                    <div class="filter-export d-flex">
+                        <div class="form-group mb-0 cursor-pointer">
+                            <div
+                                class="advance-icon align-items-center btn btn-primary"
+                                [tooltip]="commonLocaleData?.app_advance_search"
+                                (click)="onOpenAdvanceSearch()"
+                            >
+                                <span class="pd-r05 d-sm-flex d-none">{{ commonLocaleData?.app_filter }}</span>
+                                <span class="icon-advance-filter"></span>
                             </div>
-                            <button type="button" class="btn btn-default export-btn mr-0"
-                            (click)="exportDaybook()"
-                            *ngIf="((daybookData$ | async)?.entries?.length > 0)">{{commonLocaleData?.app_export}}</button>
                         </div>
-
+                        <button
+                            type="button"
+                            class="btn btn-default export-btn mr-0"
+                            (click)="exportDaybook()"
+                            *ngIf="(daybookData$ | async)?.entries?.length > 0"
+                        >
+                            {{ commonLocaleData?.app_export }}
+                        </button>
+                    </div>
                 </div>
                 <div class="d-md-none d-flex justify-content-between mr-t1">
-                    <button type="button" class="btn btn-default mr-0"
-                    (click)="exportDaybook()"
-                    *ngIf="((daybookData$ | async)?.entries?.length > 0)">{{commonLocaleData?.app_export}}</button>
-                        <div class="expand-collapse-btn">
-                            <a class="cp" (click)="toggleExpand()" data-toggle="tooltip" data-placement="top"
-                            title="{{commonLocaleData?.app_expand_all}}" *ngIf="!isAllExpanded">
-                                <span class="icon-expandIcon"></span>
-                            </a>
-                            <a class="cp" (click)="toggleExpand()" data-toggle="tooltip" data-placement="top"
-                                title="{{commonLocaleData?.app_collapse_all}}" *ngIf="isAllExpanded">
-                                <span class="icon-collapse"></span>
-                            </a>
-                        </div>
+                    <button
+                        type="button"
+                        class="btn btn-default mr-0"
+                        (click)="exportDaybook()"
+                        *ngIf="(daybookData$ | async)?.entries?.length > 0"
+                    >
+                        {{ commonLocaleData?.app_export }}
+                    </button>
+                    <div class="expand-collapse-btn">
+                        <a
+                            class="cp"
+                            (click)="toggleExpand()"
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            title="{{ commonLocaleData?.app_expand_all }}"
+                            *ngIf="!isAllExpanded"
+                        >
+                            <span class="icon-expandIcon"></span>
+                        </a>
+                        <a
+                            class="cp"
+                            (click)="toggleExpand()"
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            title="{{ commonLocaleData?.app_collapse_all }}"
+                            *ngIf="isAllExpanded"
+                        >
+                            <span class="icon-collapse"></span>
+                        </a>
+                    </div>
                 </div>
                 <div class="d-none clear-filter-responsive mr-t1 clear-filter" *ngIf="showAdvanceSearchIcon">
-                    <button class="btn btn-filter" (click)="initialRequest();">
-                        <span class="icon-cross"></span> {{commonLocaleData?.app_clear_filter}}
+                    <button class="btn btn-filter" (click)="initialRequest()">
+                        <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
             </div>
@@ -104,72 +162,90 @@
         <div class="container-fluid">
             <div class="box clearfix mr-t15">
                 <div [hidden]="!(daybookData$ | async)?.entries?.length" class="text-center mr-b2 transaction-report">
-                    <p>{{localeData?.transaction_report}}</p>
-                    <p>{{daybookQueryRequest.from }} - {{ daybookQueryRequest.to}}</p>
+                    <p>{{ localeData?.transaction_report }}</p>
+                    <p>{{ daybookQueryRequest.from }} - {{ daybookQueryRequest.to }}</p>
                 </div>
 
                 <div class="clearfix trial-balance table-responsive">
-
                     <table class="tb-head table-bordered giddh-table table basic on-mobile-view">
                         <thead [hidden]="!(daybookData$ | async)?.entries?.length">
                             <tr>
-                                <th>{{commonLocaleData?.app_date}}</th>
-                                <th>{{commonLocaleData?.app_particular}}</th>
-                                <th>{{localeData?.voucher_name}}</th>
-                                <th class=" text-right">{{localeData?.voucher_no}}</th>
-                                <th class=" text-right">{{localeData?.debit_amount}}</th>
-                                <th class=" text-right">{{localeData?.credit_amount}}</th>
+                                <th>{{ commonLocaleData?.app_date }}</th>
+                                <th>{{ commonLocaleData?.app_particular }}</th>
+                                <th>{{ localeData?.voucher_name }}</th>
+                                <th class="text-right">{{ localeData?.voucher_no }}</th>
+                                <th class="text-right">{{ localeData?.debit_amount }}</th>
+                                <th class="text-right">{{ localeData?.credit_amount }}</th>
 
                                 <ng-container *ngIf="isEntryExpanded">
-                                    <th>{{localeData?.product_service}}</th>
-                                    <th class="text-right">{{localeData?.qty}}</th>
-                                    <th>{{commonLocaleData?.app_unit}}</th>
-                                    <th class="text-right">{{commonLocaleData?.app_rate}}</th>
-                                    <th>{{commonLocaleData?.app_hsn_sac}}</th>
-                                    <th>{{commonLocaleData?.app_sku}}</th>
-                                    <th>{{commonLocaleData?.app_warehouse}}</th>
+                                    <th>{{ localeData?.product_service }}</th>
+                                    <th class="text-right">{{ localeData?.qty }}</th>
+                                    <th>{{ commonLocaleData?.app_unit }}</th>
+                                    <th class="text-right">{{ commonLocaleData?.app_rate }}</th>
+                                    <th>{{ commonLocaleData?.app_hsn_sac }}</th>
+                                    <th>{{ commonLocaleData?.app_sku }}</th>
+                                    <th>{{ commonLocaleData?.app_warehouse }}</th>
                                 </ng-container>
                             </tr>
                         </thead>
 
-                        <tbody *ngFor="let entry of (daybookData$ | async)?.entries" (click)="expandEntry(entry);"
-                            class="daybook-table-tbody">
-                            <tr (dblclick)="showUpdateLedgerModal(entry)"
-                                (keydown.enter)="showUpdateLedgerModal(entry)">
-                                <td [attr.data-title]="commonLocaleData?.app_date" class="no-wrap">{{ entry.entryDate }}</td>
-                                <td [attr.data-title]="commonLocaleData?.app_particular">{{ entry.particular.name }}
+                        <tbody
+                            *ngFor="let entry of (daybookData$ | async)?.entries"
+                            (click)="expandEntry(entry)"
+                            class="daybook-table-tbody"
+                        >
+                            <tr
+                                (dblclick)="showUpdateLedgerModal(entry)"
+                                (keydown.enter)="showUpdateLedgerModal(entry)"
+                            >
+                                <td [attr.data-title]="commonLocaleData?.app_date" class="no-wrap">
+                                    {{ entry.entryDate }}
+                                </td>
+                                <td [attr.data-title]="commonLocaleData?.app_particular">
+                                    {{ entry.particular.name }}
                                 </td>
                                 <td [attr.data-title]="localeData?.voucher_name">{{ entry.voucherName }}</td>
-                                <td class="text-right" [attr.data-title]="localeData?.voucher_no">{{ entry.voucherNo }}
+                                <td class="text-right" [attr.data-title]="localeData?.voucher_no">
+                                    {{ entry.voucherNo }}
                                 </td>
                                 <td class="text-right" [attr.data-title]="localeData?.debit_amount">
                                     <span class="d-flex justify-content-end">
-                                        <amount-field [amount]="entry.debitAmount || 0" [currencySymbol]="false"
-                                            [currencyCode]="false">
+                                        <amount-field
+                                            [amount]="entry.debitAmount || 0"
+                                            [currencySymbol]="false"
+                                            [currencyCode]="false"
+                                        >
                                         </amount-field>
                                     </span>
                                 </td>
                                 <td class="text-right" [attr.data-title]="localeData?.credit_amount">
                                     <span class="d-flex justify-content-end">
-                                        <amount-field [amount]="entry.creditAmount || 0" [currencySymbol]="false"
-                                            [currencyCode]="false">
+                                        <amount-field
+                                            [amount]="entry.creditAmount || 0"
+                                            [currencySymbol]="false"
+                                            [currencyCode]="false"
+                                        >
                                         </amount-field>
                                     </span>
                                 </td>
-                                <td *ngIf="isEntryExpanded" colspan="7"> </td>
+                                <td *ngIf="isEntryExpanded" colspan="7"></td>
                             </tr>
                             <ng-container *ngIf="entry !== undefined && entry.isExpanded">
                                 <tr *ngFor="let details of entry.otherTransactions">
                                     <td class="hide-td"></td>
-                                    <td [attr.data-title]="commonLocaleData?.app_particular">{{ details.particular.name
-                                        }}</td>
+                                    <td [attr.data-title]="commonLocaleData?.app_particular">
+                                        {{ details.particular.name }}
+                                    </td>
                                     <td class="hide-td"></td>
                                     <td class="hide-td"></td>
                                     <td class="text-right" [attr.data-title]="localeData?.debit_amount">
                                         <span *ngIf="details.type === 'DEBIT'">
                                             <span class="d-flex justify-content-end">
-                                                <amount-field [amount]="details.amount || 0" [currencySymbol]="false"
-                                                    [currencyCode]="false">
+                                                <amount-field
+                                                    [amount]="details.amount || 0"
+                                                    [currencySymbol]="false"
+                                                    [currencyCode]="false"
+                                                >
                                                 </amount-field>
                                             </span>
                                         </span>
@@ -178,39 +254,46 @@
                                     <td class="text-right" [attr.data-title]="localeData?.credit_amount">
                                         <span *ngIf="details.type === 'CREDIT'">
                                             <span class="d-flex justify-content-end">
-                                                <amount-field [amount]="(details.amount || 0)" [currencySymbol]="false"
-                                                    [currencyCode]="false">
+                                                <amount-field
+                                                    [amount]="details.amount || 0"
+                                                    [currencySymbol]="false"
+                                                    [currencyCode]="false"
+                                                >
                                                 </amount-field>
                                             </span>
                                         </span>
                                         <span *ngIf="details.type !== 'CREDIT'">-</span>
                                     </td>
                                     <ng-container *ngIf="isEntryExpanded">
-                                        <td>{{details.inventory?details.inventory.stock.name:''}}
+                                        <td>{{ details.inventory ? details.inventory.stock.name : "" }}</td>
+                                        <td *ngIf="details.inventory" class="text-right">
+                                            {{ details.inventory.quantity | giddhCurrency }}
                                         </td>
-                                        <td *ngIf="details.inventory" class=" text-right">{{details.inventory.quantity
-                                            |giddhCurrency}}
-                                        </td>
-                                        <td *ngIf="!details.inventory" class=" text-right">{{'-'}}
-                                        </td>
-                                        <td>{{details.inventory?details.inventory.unit.name:''}}
-                                        </td>
-                                        <td *ngIf="details.inventory" class=" text-right">
+                                        <td *ngIf="!details.inventory" class="text-right">{{ "-" }}</td>
+                                        <td>{{ details.inventory ? details.inventory.unit.name : "" }}</td>
+                                        <td *ngIf="details.inventory" class="text-right">
                                             <span class="d-flex justify-content-end">
-                                                <amount-field [amount]="details.inventory.rate" [currencySymbol]="false"
-                                                    [currencyCode]="false">
+                                                <amount-field
+                                                    [amount]="details.inventory.rate"
+                                                    [currencySymbol]="false"
+                                                    [currencyCode]="false"
+                                                >
                                                 </amount-field>
                                             </span>
                                         </td>
-                                        <td *ngIf="!details.inventory" class=" text-right">{{'-'}}
+                                        <td *ngIf="!details.inventory" class="text-right">{{ "-" }}</td>
+                                        <td>
+                                            {{
+                                                details.inventory
+                                                    ? details.inventory.hsnNumber
+                                                        ? details.inventory.hsnNumber
+                                                        : details.inventory.sacNumber
+                                                    : ""
+                                            }}
                                         </td>
-                                        <td>{{details.inventory?details.inventory.hsnNumber?
-                                            details.inventory.hsnNumber: details.inventory.sacNumber:''}}
-                                        </td>
-                                        <td>{{details.inventory?details.inventory.skuCode:''}}
-                                        </td>
+                                        <td>{{ details.inventory ? details.inventory.skuCode : "" }}</td>
                                         <td class="warehouse-name">
-                                            {{details.inventory?details.inventory.warehouse.name:''}}
+                                            {{ details.inventory ? details.inventory.warehouse.name : "" }}
                                         </td>
                                     </ng-container>
                                 </tr>
@@ -220,37 +303,43 @@
                 </div>
 
                 <div class="mr-t2 text-center" [hidden]="!(daybookData$ | async)?.entries?.length">
-                    <small class="grey" *ngIf="(daybookData$ | async)?.totalItems">{{(daybookData$ |
-                        async)?.totalItems}}
-                        {{commonLocaleData?.app_transactions}}
-                        | {{(daybookData$ | async)?.totalPages}} {{commonLocaleData?.app_pages}}
+                    <small class="grey" *ngIf="(daybookData$ | async)?.totalItems"
+                        >{{ (daybookData$ | async)?.totalItems }}
+                        {{ commonLocaleData?.app_transactions }}
+                        | {{ (daybookData$ | async)?.totalPages }} {{ commonLocaleData?.app_pages }}
                     </small>
-                    <small class="grey" *ngIf="!((daybookData$ | async)?.totalItems)">0
-                        {{commonLocaleData?.app_transactions}} | 0 {{commonLocaleData?.app_pages}}</small>
+                    <small class="grey" *ngIf="!(daybookData$ | async)?.totalItems"
+                        >0 {{ commonLocaleData?.app_transactions }} | 0 {{ commonLocaleData?.app_pages }}</small
+                    >
                 </div>
 
                 <!-- pagination -->
                 <div class="mt-1" [hidden]="!(daybookData$ | async)?.entries?.length">
-                    <pagination [totalItems]="daybookData?.totalItems" [(ngModel)]="daybookData.page" [maxSize]="5"
-                        class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="daybookData?.count"
-                        [rotate]="false" (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first"
-                        [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next"
-                        [lastText]="commonLocaleData?.app_last">
+                    <pagination
+                        [totalItems]="daybookData?.totalItems"
+                        [(ngModel)]="daybookData.page"
+                        [maxSize]="5"
+                        class="pagination-sm"
+                        [boundaryLinks]="true"
+                        [itemsPerPage]="daybookData?.count"
+                        [rotate]="false"
+                        (pageChanged)="pageChanged($event)"
+                        [firstText]="commonLocaleData?.app_first"
+                        [previousText]="commonLocaleData?.app_previous"
+                        [nextText]="commonLocaleData?.app_next"
+                        [lastText]="commonLocaleData?.app_last"
+                    >
                     </pagination>
                 </div>
                 <!-- pagination -->
-
             </div>
-            <div class="no-data"
-                *ngIf="!(daybookData$ | async)?.entries?.length">
+            <div class="no-data" *ngIf="!(daybookData$ | async)?.entries?.length">
                 <no-data></no-data>
             </div>
-            <div class="no-data"
-                *ngIf="!(daybookData$ | async)?.entries?.length">
+            <div class="no-data" *ngIf="!(daybookData$ | async)?.entries?.length">
                 <no-data></no-data>
             </div>
-            <div class="no-data"
-                *ngIf="!(daybookData$ | async)?.entries?.length">
+            <div class="no-data" *ngIf="!(daybookData$ | async)?.entries?.length">
                 <no-data></no-data>
             </div>
         </div>
@@ -260,9 +349,15 @@
     <div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
-                <daybook-advance-search-model *ngIf="isAdvanceSearchOpened" #daybookAdvanceSearch
-                    [startDate]="daybookQueryRequest.from" [endDate]="daybookQueryRequest.to" [localeData]="localeData"
-                    [commonLocaleData]="commonLocaleData" (closeModelEvent)="closeAdvanceSearchPopup($event)">
+                <daybook-advance-search-model
+                    *ngIf="isAdvanceSearchOpened"
+                    #daybookAdvanceSearch
+                    [startDate]="daybookQueryRequest.from"
+                    [endDate]="daybookQueryRequest.to"
+                    [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData"
+                    (closeModelEvent)="closeAdvanceSearchPopup($event)"
+                >
                 </daybook-advance-search-model>
             </div>
         </div>
@@ -273,8 +368,11 @@
     <div bsModal #exportDaybookModal="bs-modal" class="modal fade" role="dialog">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
-                <export-daybook [localeData]="localeData" [commonLocaleData]="commonLocaleData"
-                    (closeExportDaybookModal)="hideExportDaybookModal($event)"></export-daybook>
+                <export-daybook
+                    [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData"
+                    (closeExportDaybookModal)="hideExportDaybookModal($event)"
+                ></export-daybook>
             </div>
         </div>
     </div>
@@ -282,25 +380,44 @@
     <ng-template #datepickerTemplate>
         <div class="datepicker-modal">
             <div class="modal-body">
-                <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
-                    [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption"
-                    [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
-                    [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
-                    (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
-                    [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
-                    [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+                <app-datepicker-wrapper
+                    [inputStartDate]="selectedDateRange?.startDate"
+                    [inputEndDate]="selectedDateRange?.endDate"
+                    [alwaysShowCalendars]="true"
+                    [ranges]="datePickerOption"
+                    [selectedRangeLabel]="selectedRangeLabel"
+                    [showCustomRangeLabel]="true"
+                    [showClearButton]="false"
+                    [showCancel]="true"
+                    [linkedCalendars]="true"
+                    [showDropdowns]="true"
+                    (rangeClicked)="dateSelectedCallback($event)"
+                    (datesUpdated)="dateSelectedCallback($event)"
+                    [keepCalendarOpeningWithRange]="false"
+                    [showRangeLabelOnInput]="false"
+                    [dateFieldPosition]="dateFieldPosition"
+                ></app-datepicker-wrapper>
             </div>
         </div>
     </ng-template>
 </ng-container>
 
 <!-- update ladger entry popup -->
-<div bsModal #updateLedgerModal="bs-modal" class="modal fade update-ledger-modal" role="dialog"
-    [config]="{keyboard: true}" tabindex="-1">
+<div
+    bsModal
+    #updateLedgerModal="bs-modal"
+    class="modal fade update-ledger-modal"
+    role="dialog"
+    [config]="{ keyboard: true }"
+    tabindex="-1"
+>
     <div class="modal-dialog modal-xl modal-ledger">
         <div class="modal-content" *ngIf="updateLedgerModal.isShown">
-            <update-ledger-entry-panel [isPettyCash]="false" (closeUpdateLedgerModal)="hideUpdateLedgerModal()"
-                (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane()"></update-ledger-entry-panel>
+            <update-ledger-entry-panel
+                [isPettyCash]="false"
+                (closeUpdateLedgerModal)="hideUpdateLedgerModal()"
+                (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane()"
+            ></update-ledger-entry-panel>
         </div>
     </div>
     <div class="show-if-update-ledger-open"></div>
@@ -308,9 +425,14 @@
 
 <!-- aside menu section -->
 <div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
-<app-aside-menu-sales-other-taxes *ngIf="asideMenuStateForOtherTaxes === 'in'" [class]="asideMenuStateForOtherTaxes"
-    [taxes]="companyTaxesList" [otherTaxesModal]="updateLedgerComponent.vm.selectedLedger.otherTaxModal"
-    [commonLocaleData]="commonLocaleData" [@slideInOut]="asideMenuStateForOtherTaxes"
+<app-aside-menu-sales-other-taxes
+    *ngIf="asideMenuStateForOtherTaxes === 'in'"
+    [class]="asideMenuStateForOtherTaxes"
+    [taxes]="companyTaxesList"
+    [otherTaxesModal]="updateLedgerComponent.vm.selectedLedger.otherTaxModal"
+    [commonLocaleData]="commonLocaleData"
+    [@slideInOut]="asideMenuStateForOtherTaxes"
     (closeModal)="toggleOtherTaxesAsidePane(null)"
-    (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(null);">
+    (applyTaxes)="calculateOtherTaxes($event); toggleOtherTaxesAsidePane(null)"
+>
 </app-aside-menu-sales-other-taxes>

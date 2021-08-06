@@ -199,7 +199,9 @@ span.eligible-ITC {
         transform: rotate(360deg);
     }
 }
-#new-ledger-enter-amount,#new-ledger-enter-amount-advance-receipt,#ledger-total-amount {
+#new-ledger-enter-amount,
+#new-ledger-enter-amount-advance-receipt,
+#ledger-total-amount {
     padding-right: 10px !important;
     width: 95%;
 }

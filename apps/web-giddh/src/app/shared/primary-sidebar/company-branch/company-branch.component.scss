@@ -1,6 +1,6 @@
-@import '../../../../assets/css/color.scss';
-.company-branch-dropdown{
-    font-family: 'opensans-regular';
+@import "../../../../assets/css/color.scss";
+.company-branch-dropdown {
+    font-family: "opensans-regular";
     .search-box {
         padding: 0 20px;
         .input-group-text {
@@ -37,33 +37,33 @@
             border-bottom-left-radius: 0px !important;
         }
     }
-    .total-company{
-        .company-count{
+    .total-company {
+        .company-count {
             color: $comet;
         }
     }
-    tab{
+    tab {
         position: relative;
-        font-family: 'opensans-regular' !important;
+        font-family: "opensans-regular" !important;
     }
-    tab.icon-company{
+    tab.icon-company {
         margin: 0 -20px;
-        &::before{
+        &::before {
             display: none;
         }
     }
-    tab.icon-branch1{
+    tab.icon-branch1 {
         margin: 0 -20px;
-        &::before{
+        &::before {
             display: none;
         }
     }
-    .company-branch-opt-1{
-        .wrap-company-refresh{
+    .company-branch-opt-1 {
+        .wrap-company-refresh {
             padding: 0 20px !important;
-            p{
-                span{
-                    small{
+            p {
+                span {
+                    small {
                         background: $dark-fog;
                         color: $omiod;
                         font-size: 10px;
@@ -74,21 +74,21 @@
                     }
                 }
             }
-            .btn-sky-blue{
+            .btn-sky-blue {
                 padding: 5px 7px;
             }
         }
-        .company-list{
-            ul{
-                li{
-                    &.btn-group{
-                        span{
+        .company-list {
+            ul {
+                li {
+                    &.btn-group {
+                        span {
                             padding: 8px 0px;
                             margin: 0px;
-                            .company-name-right{
+                            .company-name-right {
                                 max-width: 100%;
                             }
-                            .branch-count{
+                            .branch-count {
                                 width: 50px;
                                 color: $grey-chateau;
                                 padding-left: 10px;
@@ -96,65 +96,67 @@
                             }
                         }
                     }
-                    span, a{
-                        i{
-                            display:  none;
+                    span,
+                    a {
+                        i {
+                            display: none;
                         }
                     }
-                    &:hover{
-                        span{
+                    &:hover {
+                        span {
                             background-color: transparent;
                         }
                     }
                 }
             }
-            .branch-alias, .branch-company-name{
+            .branch-alias,
+            .branch-company-name {
                 max-width: 190px !important;
             }
         }
     }
-    .company-list{
+    .company-list {
         height: calc(100vh - 345px) !important;
         overflow: auto;
         margin: 0;
         padding: 0;
 
-        ul{
-            li{
+        ul {
+            li {
                 padding: 8px 0;
                 cursor: pointer;
                 color: $omiod;
-                &:hover{
-                    span{
+                &:hover {
+                    span {
                         background-color: $light-alice-blue;
                     }
-                    .dropdown-menu{
-                        span{
+                    .dropdown-menu {
+                        span {
                             background-color: transparent !important;
                         }
                     }
                 }
-                &.btn-group{
+                &.btn-group {
                     display: flex;
                     flex-direction: column;
                     margin-bottom: 0 !important;
                     padding: 0 20px;
-                    &.active{
+                    &.active {
                         background-color: $light-alice-blue !important;
                     }
-                    &:hover{
+                    &:hover {
                         background-color: $light-alice-blue !important;
                     }
-                    span{
+                    span {
                         white-space: normal;
                         word-break: break-all;
                         padding: 8px 40px;
                         margin: 0 -20px;
-                        i.icon-company{
+                        i.icon-company {
                             float: left;
                             width: 14px;
                         }
-                        .company-name-right{
+                        .company-name-right {
                             float: left;
                             width: 100%;
                             white-space: nowrap;
@@ -164,44 +166,44 @@
                             padding: 0;
                         }
                     }
-                    &.open{
+                    &.open {
                         background-color: $dark-alice-blue;
                         margin: 0 -20px;
                         p.show-more-branches {
                             padding: 6px 15px;
                         }
-                        li.create-branch{
+                        li.create-branch {
                             padding: 10px 15px;
                         }
-                        .dropdown-toggle{
+                        .dropdown-toggle {
                             padding: 0 20px;
                         }
                     }
-                    .dropdown-menu{
+                    .dropdown-menu {
                         position: static !important;
                         box-shadow: none;
                         border: none;
-                        margin: 0 ;
+                        margin: 0;
                         background-color: transparent;
                         padding: 0;
-                        li{
-                            padding:  0;
+                        li {
+                            padding: 0;
                             margin-bottom: 0;
-                            &.show-more-branches, &.create-branch{
+                            &.show-more-branches,
+                            &.create-branch {
                                 padding: 0 20px;
                             }
-                            a{
+                            a {
                                 background-color: transparent;
-                                padding:5px 20px;
+                                padding: 5px 20px;
                                 color: $omiod !important;
-                                &:hover{
+                                &:hover {
                                     background-color: initial !important;
                                     color: $omiod !important;
-
                                 }
-                                &.head-branch{
+                                &.head-branch {
                                     color: $cornflower;
-                                    .branch-company-name{
+                                    .branch-company-name {
                                         max-width: 150px;
                                         text-overflow: ellipsis;
                                         overflow: hidden;
@@ -209,15 +211,16 @@
                                         padding: 3px 0;
                                     }
                                 }
-                                &.company-branches-list{
-                                    &.active{
+                                &.company-branches-list {
+                                    &.active {
                                         color: $omiod !important;
                                         background-color: $sunshine !important;
-                                        span{
+                                        span {
                                             color: $omiod !important;
                                         }
                                     }
-                                    .branch-alias, .branch-company-name{
+                                    .branch-alias,
+                                    .branch-company-name {
                                         max-width: 150px;
                                         text-overflow: ellipsis;
                                         overflow: hidden;
@@ -227,8 +230,8 @@
                                 }
                             }
 
-                            &:hover{
-                                a{
+                            &:hover {
+                                a {
                                     background-color: $sunshine !important;
                                 }
                             }
@@ -239,15 +242,16 @@
                         padding: 10px 0;
                         text-decoration: underline;
                     }
-                    li.create-branch{
+                    li.create-branch {
                         color: $orange;
                         padding: 6px 0;
                     }
                 }
             }
         }
-        &.company-branches-list{
-            .branch-alias , .branch-company-name{
+        &.company-branches-list {
+            .branch-alias,
+            .branch-company-name {
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 overflow: hidden;
@@ -255,41 +259,41 @@
                 padding: 3px 0;
             }
         }
-        &.branch-list{
-            ul{
+        &.branch-list {
+            ul {
                 margin: 0;
-                li{
+                li {
                     padding: 0;
                     cursor: pointer;
                     margin-bottom: 0;
-                    a{
+                    a {
                         background-color: transparent;
-                        padding:8px 20px;
+                        padding: 8px 20px;
                         color: $omiod;
                         white-space: normal;
                         word-break: break-all;
-                        &.active{
+                        &.active {
                             color: $omiod !important;
                             background-color: $sunshine !important;
                         }
-                        &:hover{
+                        &:hover {
                             background-color: initial !important;
                             color: $omiod !important;
-
                         }
-                        .main-company{
+                        .main-company {
                             text-overflow: ellipsis;
                             white-space: nowrap;
                             overflow: hidden;
                             max-width: 200px;
                         }
                     }
-                    &:hover{
-                        a{
+                    &:hover {
+                        a {
                             background-color: $sunshine !important;
                         }
                     }
-                    .branch-alias , .branch-company-name{
+                    .branch-alias,
+                    .branch-company-name {
                         text-overflow: ellipsis;
                         white-space: nowrap;
                         overflow: hidden;
@@ -308,7 +312,7 @@
         border-top: 1px solid $gainsboro;
         background-color: $white;
         z-index: 991;
-        .profile-name{
+        .profile-name {
             cursor: pointer;
             .profile-alice {
                 display: inline-flex;
@@ -323,10 +327,10 @@
                 letter-spacing: -1px;
             }
         }
-        .profile-logout{
+        .profile-logout {
             display: flex;
             align-items: center;
-            button{
+            button {
                 background-color: $white;
                 border: 1px solid $midnight-blue;
                 color: $midnight-blue;
@@ -337,7 +341,7 @@
                 padding: 5px 10px;
                 border-radius: 5px !important;
                 font-size: 12px;
-                &:hover{
+                &:hover {
                     background-color: $midnight-blue;
                     color: $white;
                 }
@@ -345,18 +349,18 @@
         }
     }
     .custom-tabs {
-        .icon-company-branch-connect{
+        .icon-company-branch-connect {
             position: absolute;
             top: 5px;
             left: 100px;
         }
     }
-    .company-branch-opt-2{
-        .wrap-company-refresh{
+    .company-branch-opt-2 {
+        .wrap-company-refresh {
             padding: 0 20px;
-            p{
-                span{
-                    small{
+            p {
+                span {
+                    small {
                         background: $dark-fog;
                         color: $omiod;
                         font-size: 10px;
@@ -367,79 +371,79 @@
                     }
                 }
             }
-            .btn-sky-blue{
+            .btn-sky-blue {
                 padding: 0px 10px;
                 height: 30px;
             }
         }
-        .company-list{
+        .company-list {
             height: calc(100vh - 292px) !important;
             overflow-x: hidden;
             padding: 0 !important;
-            ul{
+            ul {
                 position: relative;
-                li{
+                li {
                     padding: 0;
                     margin: 0;
-                    &:last-child{
+                    &:last-child {
                         margin-bottom: 10px !important;
                     }
-                    span{
+                    span {
                         padding: 8px 20px;
                         margin: 0;
                         &.company-name {
                             display: flex !important;
                             align-items: center !important;
                             justify-content: space-between !important;
-                                span{
-                                    i{
-                                        float: left;
-                                        width: 14px;
-                                    }
-                                    span.select-company-name{
-                                        float: left;
-                                        width: 100%;
-                                        padding: 0;
-                                        text-overflow: ellipsis;
-                                        white-space: nowrap;
-                                        overflow: hidden;
-                                        max-width: 150px;
-                                        padding: 3px 0;
-                                    }
+                            span {
+                                i {
+                                    float: left;
+                                    width: 14px;
+                                }
+                                span.select-company-name {
+                                    float: left;
+                                    width: 100%;
+                                    padding: 0;
+                                    text-overflow: ellipsis;
+                                    white-space: nowrap;
+                                    overflow: hidden;
+                                    max-width: 150px;
+                                    padding: 3px 0;
                                 }
                             }
                         }
-                    &.btn-group{
-                        &.open{
-                            span{
-                                &.dropdown-toggle{
+                    }
+                    &.btn-group {
+                        &.open {
+                            span {
+                                &.dropdown-toggle {
                                     padding: 8px 20px;
-                                    span{
+                                    span {
                                         color: $omiod;
                                     }
                                 }
-                                &.active{
+                                &.active {
                                     background-color: $dark-alice-blue;
                                     position: sticky;
                                     top: 0;
                                     z-index: 991;
                                 }
-                                .icon-down-new{
-                                    transform: rotate(180deg)
+                                .icon-down-new {
+                                    transform: rotate(180deg);
                                 }
                             }
                             background-color: transparent !important;
-                            ul{
+                            ul {
                                 padding: 0;
-                                li{
-                                    span{
+                                li {
+                                    span {
                                         padding: 0;
                                     }
                                 }
                             }
-                            .total-branches{
+                            .total-branches {
                                 padding: 10px 20px;
-                                .btn-sky-blue{
+                                .btn-sky-blue {
                                     width: 145px;
                                     padding: 0px 10px;
                                     height: 30px;
@@ -447,7 +451,7 @@
                             }
                         }
                     }
-                    a{
+                    a {
                         padding: 10px 20px !important;
                     }
                 }
@@ -455,27 +459,28 @@
         }
     }
 }
-.digit-blue{
+.digit-blue {
     color: $cornflower !important;
 }
-.digit-orange{
+.digit-orange {
     color: $orange-new !important;
 }
-.icon-reload{
+.icon-reload {
     color: $omiod;
 }
-.icon-plus, .icon-link-arrow{
+.icon-plus,
+.icon-link-arrow {
     width: 20px;
     display: inline-flex;
     margin-right: 2px;
 }
-.font-semibold{
-    font-family: 'opensans-semibold';
+.font-semibold {
+    font-family: "opensans-semibold";
 }
 
 @media screen and (max-height: 800px) {
     .company-branch-dropdown {
-        .company-branch-dropdown{
+        .company-branch-dropdown {
             .company-list {
                 height: calc(65vh - 60px) !important;
             }

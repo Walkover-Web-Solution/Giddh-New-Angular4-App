@@ -1,17 +1,22 @@
 <div class="aside-pane">
     <div class="form-header">
         <div>
-            <h3 class="aside-title">{{commonLocaleData?.app_create_account}}</h3>
+            <h3 class="aside-title">{{ commonLocaleData?.app_create_account }}</h3>
         </div>
     </div>
     <div class="aside-body">
         <div class="aside-pane-form">
             <div>
-                <account-add-new-details [activeGroupUniqueName]="activeGroupUniqueName" 
-                    [isLedgerModule]="true" (isGroupSelected)="isGroupSelected($event)"
+                <account-add-new-details
+                    [activeGroupUniqueName]="activeGroupUniqueName"
+                    [isLedgerModule]="true"
+                    (isGroupSelected)="isGroupSelected($event)"
                     [isDebtorCreditor]="isDebtorCreditor"
-                    [createAccountInProcess$]="createAccountInProcess$" (submitClicked)="addNewAcSubmit($event)"
-                    [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc">
+                    [createAccountInProcess$]="createAccountInProcess$"
+                    (submitClicked)="addNewAcSubmit($event)"
+                    [isGstEnabledAcc]="isGstEnabledAcc"
+                    [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
+                >
                 </account-add-new-details>
             </div>
         </div>

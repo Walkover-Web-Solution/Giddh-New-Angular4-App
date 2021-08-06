@@ -19,17 +19,19 @@
                 <tr>
                     <td data-title="Select">
                         <div class="d-block text-center text-left-sm">
-                            <input type="checkbox" id="select-group">
+                            <input type="checkbox" id="select-group" />
                         </div>
                     </td>
                     <td data-title="Name">
                         <div class="product-name-image d-flex">
                             <div>
-                                <img src="{{imgPath}}images/add-image.svg">
+                                <img src="{{ imgPath }}images/add-image.svg" />
                             </div>
                             <div class="cursor-pointer mx-2">
-                                <a href="javascript:void(0)"
-                                    [routerLink]="['/pages/new-inventory/about-product-service-detail']">
+                                <a
+                                    href="javascript:void(0)"
+                                    [routerLink]="['/pages/new-inventory/about-product-service-detail']"
+                                >
                                     <p>Product Name</p>
                                     <p class="text-gray">(34 Items)</p>
                                 </a>

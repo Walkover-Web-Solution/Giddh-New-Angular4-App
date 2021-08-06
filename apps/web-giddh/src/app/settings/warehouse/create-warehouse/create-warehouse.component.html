@@ -1,5 +1,9 @@
-<ng-container appTranslate [file]="'settings/warehouse'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'settings/warehouse'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <!-- create warehouse start -->
     <!-- hide branch element by *ngIf="isBranchElemnt" -->
     <hamburger-menu></hamburger-menu>
@@ -9,26 +13,32 @@
                 <div class="row">
                     <div class="col-lg-10 col-sm-10">
                         <div class="warehouse-under-company">
-                            <p class="mr-t15 mr-b15">{{localeData?.create_warehouse_under}}:</p>
+                            <p class="mr-t15 mr-b15">{{ localeData?.create_warehouse_under }}:</p>
                             <div class="warehouse-company-name">
                                 <div class="label-wrapper mr-b15">
-                                    <label>{{commonLocaleData?.app_company}}:</label>
-                                    <span>{{companyDetails?.name}} ({{companyDetails?.businessType}})</span>
+                                    <label>{{ commonLocaleData?.app_company }}:</label>
+                                    <span>{{ companyDetails?.name }} ({{ companyDetails?.businessType }})</span>
                                 </div>
                                 <div class="label-wrapper mr-b15">
-                                    <label>{{localeData?.country_currency}}:</label>
-                                    <span><img *ngIf="companyDetails?.country?.countryCode"
-                                            src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@master/svg/{{companyDetails?.country?.countryCode}}.svg">
-                                        {{companyDetails?.country?.countryName}} -
-                                        {{companyDetails?.country?.currencyCode}}
-                                        {{companyDetails?.country?.currencyName}}</span>
+                                    <label>{{ localeData?.country_currency }}:</label>
+                                    <span
+                                        ><img
+                                            *ngIf="companyDetails?.country?.countryCode"
+                                            src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@master/svg/{{
+                                                companyDetails?.country?.countryCode
+                                            }}.svg"
+                                        />
+                                        {{ companyDetails?.country?.countryName }} -
+                                        {{ companyDetails?.country?.currencyCode }}
+                                        {{ companyDetails?.country?.currencyName }}</span
+                                    >
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-2 col-sm-2">
-                        <div class="warehouse-image ">
-                            <img class="warehouse-image m-15" src="{{ imgPath }}" [alt]="localeData?.warehouse_image">
+                        <div class="warehouse-image">
+                            <img class="warehouse-image m-15" src="{{ imgPath }}" [alt]="localeData?.warehouse_image" />
                         </div>
                     </div>
                 </div>
@@ -36,48 +46,69 @@
             <form [formGroup]="warehouseForm" novalidate (ngSubmit)="handleFormSubmit()">
                 <div class="warehouse-form">
                     <div class="warehouse-form-field">
-                        <label>
-                            {{localeData?.warehouse_name}} <span class="red-text">*</span>
-                        </label>
+                        <label> {{ localeData?.warehouse_name }} <span class="red-text">*</span> </label>
                         <input
-                            [class.error-box]="warehouseForm?.get('name')?.touched && warehouseForm?.get('name')?.invalid"
-                            type="text" maxlength="100" required formControlName="name" class="form-control">
-                        <span class="danger pl-1"
-                            *ngIf="warehouseForm?.get('name')?.touched && warehouseForm?.get('name')?.errors?.maxlength">
-                            {{commonLocaleData?.app_max_100_characters_allowed_limit}}
+                            [class.error-box]="
+                                warehouseForm?.get('name')?.touched && warehouseForm?.get('name')?.invalid
+                            "
+                            type="text"
+                            maxlength="100"
+                            required
+                            formControlName="name"
+                            class="form-control"
+                        />
+                        <span
+                            class="danger pl-1"
+                            *ngIf="warehouseForm?.get('name')?.touched && warehouseForm?.get('name')?.errors?.maxlength"
+                        >
+                            {{ commonLocaleData?.app_max_100_characters_allowed_limit }}
                         </span>
                     </div>
                     <div class="warehouse-form-field">
                         <label>
-                            {{localeData?.addresses}}
+                            {{ localeData?.addresses }}
                         </label>
                         <div class="address-dropdown form-group mb-0">
-                            <sales-sh-select [options]="addresses" formControlName="address" name="particulars"
-                                [notFoundLink]="true" [isFilterEnabled]="true"
-                                [placeholder]="localeData?.select_address" class="linked-add create"
-                                (noResultsClicked)="handleShortcutPress()">
+                            <sales-sh-select
+                                [options]="addresses"
+                                formControlName="address"
+                                name="particulars"
+                                [notFoundLink]="true"
+                                [isFilterEnabled]="true"
+                                [placeholder]="localeData?.select_address"
+                                class="linked-add create"
+                                (noResultsClicked)="handleShortcutPress()"
+                            >
                                 <ng-template #optionTemplate let-option="option">
                                     <ng-container>
-                                        <a (click)="selectAddress(option)" href="javascript:void(0)"
-                                            class="list-item d-flex">
+                                        <a
+                                            (click)="selectAddress(option)"
+                                            href="javascript:void(0)"
+                                            class="list-item d-flex"
+                                        >
                                             <span class="entity-details">
-                                                <div class="item giddh-limit single-line-clamp">{{ option.label || '-'
-                                                    }}</div>
+                                                <div class="item giddh-limit single-line-clamp">
+                                                    {{ option.label || "-" }}
+                                                </div>
                                                 <div class="item-unique">
-                                                    <p *ngIf="option.taxType && option.taxNumber">{{ option.taxType }} :
-                                                        {{ option.taxNumber }}</p>
+                                                    <p *ngIf="option.taxType && option.taxNumber">
+                                                        {{ option.taxType }} : {{ option.taxNumber }}
+                                                    </p>
                                                 </div>
                                             </span>
                                         </a>
                                     </ng-container>
                                 </ng-template>
                                 <ng-template #notFoundLinkTemplate>
-                                    <a href="javascript:void(0)" [keyboardShortcut]="'alt+c'"
+                                    <a
+                                        href="javascript:void(0)"
+                                        [keyboardShortcut]="'alt+c'"
                                         (onShortcutPress)="handleShortcutPress()"
                                         class="list-item pd-l05 pd-r05 border-none d-flex justify-content-between w-100"
-                                        [keyboardShortcut]="'alt+c'">
-                                        <div class="item">{{localeData?.add_address}}</div>
-                                        <div class="item">{{commonLocaleData?.app_alt_c}}</div>
+                                        [keyboardShortcut]="'alt+c'"
+                                    >
+                                        <div class="item">{{ localeData?.add_address }}</div>
+                                        <div class="item">{{ commonLocaleData?.app_alt_c }}</div>
                                     </a>
                                 </ng-template>
                             </sales-sh-select>
@@ -86,10 +117,12 @@
                 </div>
                 <div class="footer-btn row">
                     <div class="button-group">
-                        <button type="reset" (click)="handleFormClear()"
-                            class="btn btn-primary mr-r15">{{commonLocaleData?.app_clear}}</button>
-                        <button type="submit" [disabled]="warehouseForm?.invalid"
-                            class="btn btn-success">{{localeData?.create_warehouse}}</button>
+                        <button type="reset" (click)="handleFormClear()" class="btn btn-primary mr-r15">
+                            {{ commonLocaleData?.app_clear }}
+                        </button>
+                        <button type="submit" [disabled]="warehouseForm?.invalid" class="btn btn-success">
+                            {{ localeData?.create_warehouse }}
+                        </button>
                     </div>
                 </div>
             </form>
@@ -97,14 +130,28 @@
     </div>
     <!-- aside pane for create address -->
     <div class="aside-overlay" *ngIf="addressAsideMenuState === 'in'"></div>
-    <ng-container appTranslate [file]="'settings/profile'" (localeData)="profileLocaleData = $event"
-        [requireCommonData]="false" *ngIf="addressAsideMenuState === 'in'">
-        <create-address [class]="addressAsideMenuState" [@slideInOut]="addressAsideMenuState" [keyboardShortcut]="'esc'"
-            (onShortcutPress)="toggleAddressAsidePane()" [addressConfiguration]="addressConfiguration"
-            [companyName]="companyDetails?.name" [currentOrganizationUniqueName]="currentOrganizationUniqueName"
-            (saveAddress)="createNewAddress($event)" [localeData]="profileLocaleData"
-            [commonLocaleData]="commonLocaleData" [showLoader]="isAddressChangeInProgress"
-            (closeAsideEvent)="toggleAddressAsidePane($event)" *ngIf="addressAsideMenuState === 'in'"></create-address>
+    <ng-container
+        appTranslate
+        [file]="'settings/profile'"
+        (localeData)="profileLocaleData = $event"
+        [requireCommonData]="false"
+        *ngIf="addressAsideMenuState === 'in'"
+    >
+        <create-address
+            [class]="addressAsideMenuState"
+            [@slideInOut]="addressAsideMenuState"
+            [keyboardShortcut]="'esc'"
+            (onShortcutPress)="toggleAddressAsidePane()"
+            [addressConfiguration]="addressConfiguration"
+            [companyName]="companyDetails?.name"
+            [currentOrganizationUniqueName]="currentOrganizationUniqueName"
+            (saveAddress)="createNewAddress($event)"
+            [localeData]="profileLocaleData"
+            [commonLocaleData]="commonLocaleData"
+            [showLoader]="isAddressChangeInProgress"
+            (closeAsideEvent)="toggleAddressAsidePane($event)"
+            *ngIf="addressAsideMenuState === 'in'"
+        ></create-address>
         <!-- aside pane for create address end -->
     </ng-container>
 </ng-container>
