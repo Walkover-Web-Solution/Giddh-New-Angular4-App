@@ -8,6 +8,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { NgxUploaderModule } from 'ngx-uploader';
 import { UpdateLedgerEntryPanelModule } from '../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.module';
 import { LedgerModule } from '../ledger/ledger.module';
+import { AsideMenuSalesOtherTaxesModule } from '../sales/aside-menu-sales-other-taxes/aside-menu-sales-other-taxes.module';
 import { SalesModule } from '../sales/sales.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
@@ -43,7 +44,8 @@ import { ExpensesRoutingModule } from './expenses.routing.module';
         ElementViewChildModule,
         SalesModule,
         UpdateLedgerEntryPanelModule,
-        NoDataModule
+        NoDataModule,
+        AsideMenuSalesOtherTaxesModule
     ],
     exports: [
         ExpensesComponent,
