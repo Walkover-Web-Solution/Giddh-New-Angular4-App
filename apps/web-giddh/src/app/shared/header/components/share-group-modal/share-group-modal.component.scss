@@ -65,35 +65,35 @@
     }
 }
 
-.input-share-width{
-    width:45%;
+.input-share-width {
+    width: 45%;
 }
 
-.input-group-btn{
+.input-group-btn {
     width: 53%;
 }
 
-.selected-permission{
+.selected-permission {
     width: 60% !important;
 }
 
-.btn-share{
+.btn-share {
     width: 36% !important;
 }
 
 .group-share-modal {
-	.add-mailer {
-		.input-group {
-			input {
-				min-width: 100%;
-				max-width: 100%;
-			}
-		}
-	}
+    .add-mailer {
+        .input-group {
+            input {
+                min-width: 100%;
+                max-width: 100%;
+            }
+        }
+    }
 }
 
-@media (min-width: 576px){
-#share-modal select {
-    max-width: 100%;
-}
+@media (min-width: 576px) {
+    #share-modal select {
+        max-width: 100%;
+    }
 }

@@ -1,29 +1,40 @@
-<ng-container appTranslate [file]="'aside-setting'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+<ng-container
+    appTranslate
+    [file]="'aside-setting'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
     <div class="aside-pane" (clickOutside)="closeAsidePaneIfMobile($event)">
         <div class="aside-help-header relative">
-            <h4 class="font-14" *ngIf="showSettingHeading">{{localeData?.page_heading}}</h4>
-            <div hidden id="close" class="cursor-pointer" (click)="closeAsidePane($event)"><i class="icon-cross"></i></div>
+            <h4 class="font-14" *ngIf="showSettingHeading">{{ localeData?.page_heading }}</h4>
+            <div hidden id="close" class="cursor-pointer" (click)="closeAsidePane($event)">
+                <i class="icon-cross"></i>
+            </div>
         </div>
         <div class="help-aside-body">
-            <div class="back-to-main-slider" [ngClass]="{'setting-close-icon' : isMobileScreen }">
+            <div class="back-to-main-slider" [ngClass]="{ 'setting-close-icon': isMobileScreen }">
                 <a href="javascript:;">
-                    <span class="d-flex align-items-center" *ngIf="!isMobileScreen && !showSettingHeading" (click)="goToPreviousPage()">
+                    <span
+                        class="d-flex align-items-center"
+                        *ngIf="!isMobileScreen && !showSettingHeading"
+                        (click)="goToPreviousPage()"
+                    >
                         <i class="icon-left font-22"></i>
-                        <span>{{commonLocaleData?.app_back}}</span>
+                        <span>{{ commonLocaleData?.app_back }}</span>
                     </span>
                     <span *ngIf="isMobileScreen" (click)="closeAsidePane($event)">
                         <i class="icon-cross"></i>
-                        {{localeData?.setting}}
+                        {{ localeData?.setting }}
                     </span>
                 </a>
             </div>
             <div class="setting-items">
-                <ul class="mb-3" *ngFor="let section of filteredSettingsPageTabs;">
-                    <li *ngFor="let tab of section;" routerLinkActive>
+                <ul class="mb-3" *ngFor="let section of filteredSettingsPageTabs">
+                    <li *ngFor="let tab of section" routerLinkActive>
                         <a class="d-block clearfix" [routerLink]="[tab.link]">
                             <span [innerHTML]="tab.icon"></span>
-                            <span>{{tab.label}}</span>
+                            <span>{{ tab.label }}</span>
                         </a>
                     </li>
                 </ul>

@@ -1,61 +1,119 @@
 <div class="container-fluid setting-profile-container">
     <div class="row">
-        <div *ngIf="organizationType === 'COMPANY'"
-            class="w-100 d-flex justify-content-between mb-4 align-items-center address-list-top">
+        <div
+            *ngIf="organizationType === 'COMPANY'"
+            class="w-100 d-flex justify-content-between mb-4 align-items-center address-list-top"
+        >
             <div class="search-container">
-                <div class="font-14">{{localeData?.company_address_list}}</div>
-                <a class="cp mr-l1 clear-filter-btn"
+                <div class="font-14">{{ localeData?.company_address_list }}</div>
+                <a
+                    class="cp mr-l1 clear-filter-btn"
                     *ngIf="searchStateInput?.value || searchAddressInput?.value || searchAddressNameInput?.value"
-                    href="javascript:;" (click)="resetFilter()" [tooltip]="localeData?.reset_search">
-                    <i aria-hidden="true" class="icon-refresh"></i> {{commonLocaleData?.app_clear_filter}}
+                    href="javascript:;"
+                    (click)="resetFilter()"
+                    [tooltip]="localeData?.reset_search"
+                >
+                    <i aria-hidden="true" class="icon-refresh"></i> {{ commonLocaleData?.app_clear_filter }}
                 </a>
             </div>
-            <button type="button" class="btn btn-sky-blue mr-0"
-                (click)="openAddAndManage()">{{localeData?.add_address}}</button>
+            <button type="button" class="btn btn-sky-blue mr-0" (click)="openAddAndManage()">
+                {{ localeData?.add_address }}
+            </button>
         </div>
         <!-- branch profile element start -->
-        <div *ngIf="organizationType === 'BRANCH'"
-            class="w-100 d-flex justify-content-between mb-4 align-items-center address-list-top">
-            <div class="font-14">{{localeData?.address_list}}</div>
-            <button type="button" class="btn btn-sky-blue mr-0"
-                (click)="openAddAndManage()">{{localeData?.add_address}}</button>
+        <div
+            *ngIf="organizationType === 'BRANCH'"
+            class="w-100 d-flex justify-content-between mb-4 align-items-center address-list-top"
+        >
+            <div class="font-14">{{ localeData?.address_list }}</div>
+            <button type="button" class="btn btn-sky-blue mr-0" (click)="openAddAndManage()">
+                {{ localeData?.add_address }}
+            </button>
         </div>
         <!-- branch profile element end -->
         <div *ngIf="organizationType === 'COMPANY'" class="w-100">
             <div class="table-responsive">
                 <table class="table basic table-bordered giddh-table on-mobile-view">
-                    <thead [hidden]="!addresses?.length && !addressSearchRequest?.name && !addressSearchRequest?.address && !addressSearchRequest?.state">
+                    <thead
+                        [hidden]="
+                            !addresses?.length &&
+                            !addressSearchRequest?.name &&
+                            !addressSearchRequest?.address &&
+                            !addressSearchRequest?.state
+                        "
+                    >
                         <tr>
                             <th class="min-wid-check" width="2%">
                                 <div>#</div>
                             </th>
-                            <th #searchAddressNameInputField width="15%" class="td-search-box"
-                                (clickOutside)="clickedOutside($event, searchAddressNameInputField, 'searchAddressNameInput')">
+                            <th
+                                #searchAddressNameInputField
+                                width="15%"
+                                class="td-search-box"
+                                (clickOutside)="
+                                    clickedOutside($event, searchAddressNameInputField, 'searchAddressNameInput')
+                                "
+                            >
                                 <div>
                                     <ng-container
-                                        *ngTemplateOutlet="searchTemplate;context:{ $implicit: showSearchName, title: commonLocaleData?.app_name, fieldName: 'searchAddressNameInput', formControl: searchAddressNameInput}">
+                                        *ngTemplateOutlet="
+                                            searchTemplate;
+                                            context: {
+                                                $implicit: showSearchName,
+                                                title: commonLocaleData?.app_name,
+                                                fieldName: 'searchAddressNameInput',
+                                                formControl: searchAddressNameInput
+                                            }
+                                        "
+                                    >
                                     </ng-container>
                                 </div>
                             </th>
-                            <th #searchAddressInputField width="25%" class="td-search-box"
-                                (clickOutside)="clickedOutside($event, searchAddressInputField, 'searchAddressInput')">
+                            <th
+                                #searchAddressInputField
+                                width="25%"
+                                class="td-search-box"
+                                (clickOutside)="clickedOutside($event, searchAddressInputField, 'searchAddressInput')"
+                            >
                                 <div>
                                     <ng-container
-                                        *ngTemplateOutlet="searchTemplate;context:{ $implicit: showSearchAddress, title: commonLocaleData?.app_address, fieldName: 'searchAddressInput', formControl: searchAddressInput}">
+                                        *ngTemplateOutlet="
+                                            searchTemplate;
+                                            context: {
+                                                $implicit: showSearchAddress,
+                                                title: commonLocaleData?.app_address,
+                                                fieldName: 'searchAddressInput',
+                                                formControl: searchAddressInput
+                                            }
+                                        "
+                                    >
                                     </ng-container>
                                 </div>
                             </th>
-                            <th #searchStateInputField width="15%" class="td-search-box"
-                                (clickOutside)="clickedOutside($event, searchStateInputField, 'searchStateInput')">
+                            <th
+                                #searchStateInputField
+                                width="15%"
+                                class="td-search-box"
+                                (clickOutside)="clickedOutside($event, searchStateInputField, 'searchStateInput')"
+                            >
                                 <div>
                                     <ng-container
-                                        *ngTemplateOutlet="searchTemplate;context:{ $implicit: showSearchState, title: commonLocaleData?.app_state, fieldName: 'searchStateInput', formControl: searchStateInput}">
+                                        *ngTemplateOutlet="
+                                            searchTemplate;
+                                            context: {
+                                                $implicit: showSearchState,
+                                                title: commonLocaleData?.app_state,
+                                                fieldName: 'searchStateInput',
+                                                formControl: searchStateInput
+                                            }
+                                        "
+                                    >
                                     </ng-container>
                                 </div>
                             </th>
                             <th width="25%" class="td-search-box">
                                 <div>
-                                    <span>{{localeData?.linked_with}}</span>
+                                    <span>{{ localeData?.linked_with }}</span>
                                 </div>
                             </th>
                         </tr>
@@ -63,43 +121,51 @@
                     <tbody *ngIf="!shouldShowLoader">
                         <tr class="cursor-pointer" *ngFor="let address of addresses; index as addressIndex">
                             <td data-title="#">
-                                <div>{{addressIndex + 1}}.</div>
+                                <div>{{ addressIndex + 1 }}.</div>
                             </td>
                             <td [attr.data-title]="commonLocaleData?.app_name">
-                                <div>{{address.name}}</div>
+                                <div>{{ address.name }}</div>
                             </td>
                             <td [attr.data-title]="commonLocaleData?.app_address">
                                 <div>
-                                    <p class="address-row">{{address.address}}</p>
+                                    <p class="address-row">{{ address.address }}</p>
                                     <ng-container *ngIf="address.taxType && address.taxNumber">
-                                        {{address.taxType}} : {{address.taxNumber}}&nbsp;
+                                        {{ address.taxType }} : {{ address.taxNumber }}&nbsp;
                                     </ng-container>
                                     <ng-container *ngIf="address.pincode">
-                                        {{commonLocaleData?.app_pin}}: {{address.pincode}}
+                                        {{ commonLocaleData?.app_pin }}: {{ address.pincode }}
                                     </ng-container>
                                 </div>
                             </td>
                             <td [attr.data-title]="commonLocaleData?.app_state">
-                                <div>{{address.stateCode}} - {{address.stateName}}</div>
+                                <div>{{ address.stateCode }} - {{ address.stateName }}</div>
                             </td>
                             <td [attr.data-title]="localeData?.linked_with" width="30%" class="linked-with">
                                 <div class="d-flex wrap-linked-company">
                                     <div class="d-flex flex-column linked-with w-100">
                                         <span *ngFor="let entity of address.linkedEntities" class="pb-1">
-                                            <i [tooltip]="commonLocaleData?.app_branch" *ngIf="entity.isBranch"
-                                                class="icon-branch-icon"></i>
-                                            <i [tooltip]="commonLocaleData?.app_warehouse" *ngIf="entity.isWarehouse"
-                                                class="icon-warehouse-icon"></i>
-                                            <span class="entity-alias"> {{entity.alias || entity.name}} </span>
+                                            <i
+                                                [tooltip]="commonLocaleData?.app_branch"
+                                                *ngIf="entity.isBranch"
+                                                class="icon-branch-icon"
+                                            ></i>
+                                            <i
+                                                [tooltip]="commonLocaleData?.app_warehouse"
+                                                *ngIf="entity.isWarehouse"
+                                                class="icon-warehouse-icon"
+                                            ></i>
+                                            <span class="entity-alias"> {{ entity.alias || entity.name }} </span>
                                         </span>
                                     </div>
 
                                     <div class="ml-auto">
                                         <div class="action-icon">
                                             <a href="javascript:void(0);" (click)="handleUpdateAddress(address)">
-                                                <span class="icon-edit"></span></a>
+                                                <span class="icon-edit"></span
+                                            ></a>
                                             <a href="javascript:void(0);" (click)="showConfirmationModal(address)">
-                                                <span class="icon-trash"></span></a>
+                                                <span class="icon-trash"></span
+                                            ></a>
                                         </div>
                                     </div>
                                 </div>
@@ -109,7 +175,7 @@
                 </table>
                 <giddh-page-loader *ngIf="shouldShowLoader"></giddh-page-loader>
                 <div class="no-data" *ngIf="addresses.length === 0 && !shouldShowLoader">
-                    <h1>{{localeData?.no_address_found}}</h1>
+                    <h1>{{ localeData?.no_address_found }}</h1>
                 </div>
             </div>
         </div>
@@ -118,42 +184,45 @@
             <div *ngFor="let address of addresses; index as addressIndex">
                 <div class="branch-profile-address-content col-md-12 mr-b15">
                     <div class="single-branch-detail mr-b15">
-                        <h4><i class="icon-branch-icon"></i>{{address?.name}}</h4>
+                        <h4><i class="icon-branch-icon"></i>{{ address?.name }}</h4>
                         <div class="row">
                             <div class="col-md-4">
-                                <label>{{commonLocaleData?.app_address}}:</label>
+                                <label>{{ commonLocaleData?.app_address }}:</label>
                                 <p>
-                                    {{address.address}}
+                                    {{ address.address }}
                                     <ng-container *ngIf="address.taxType && address.taxNumber">
                                         <br *ngIf="address.address" />
-                                        {{address.taxType}} : {{address.taxNumber}}
+                                        {{ address.taxType }} : {{ address.taxNumber }}
                                     </ng-container>
                                 </p>
                             </div>
                             <div class="col-md-4 mb-1">
                                 <div>
-                                    <label>{{commonLocaleData?.app_state}}:</label>
-                                    <p>{{address.stateCode}} - {{address.stateName}}</p>
+                                    <label>{{ commonLocaleData?.app_state }}:</label>
+                                    <p>{{ address.stateCode }} - {{ address.stateName }}</p>
                                 </div>
                                 <!-- static pincode  -->
                                 <div *ngIf="address.pincode">
-                                    <label>{{commonLocaleData?.app_pin}}:</label>
-                                    <p>{{address.pincode}}</p>
+                                    <label>{{ commonLocaleData?.app_pin }}:</label>
+                                    <p>{{ address.pincode }}</p>
                                 </div>
                                 <!-- static pincode  -->
                             </div>
                             <div class="col-md-4">
                                 <div class="set-default">
-                                    <p class="no-selected mb-1 cursor-pointer" hidden><i
-                                            class="icon-no-selected mr-r05"></i>{{localeData?.set_default}}</p>
-                                    <p (click)="handleSetDefaultAddress(address)"
-                                        class="selected-defualt mb-1 cursor-pointer">
+                                    <p class="no-selected mb-1 cursor-pointer" hidden>
+                                        <i class="icon-no-selected mr-r05"></i>{{ localeData?.set_default }}
+                                    </p>
+                                    <p
+                                        (click)="handleSetDefaultAddress(address)"
+                                        class="selected-defualt mb-1 cursor-pointer"
+                                    >
                                         <i *ngIf="address.isDefault" class="icon-favorite-selected mr-r05"></i>
                                         <i *ngIf="!address.isDefault" class="icon-no-selected mr-r05"></i>
-                                        {{localeData?.set_default}}
+                                        {{ localeData?.set_default }}
                                     </p>
                                     <p (click)="showConfirmationModal(address)" class="cursor-pointer">
-                                        <i class="icon-unlink mr-r05"></i>{{localeData?.unlink_address}}
+                                        <i class="icon-unlink mr-r05"></i>{{ localeData?.unlink_address }}
                                     </p>
                                 </div>
                             </div>
@@ -162,62 +231,94 @@
                 </div>
             </div>
             <div class="no-data" *ngIf="addresses.length === 0">
-                <h1>{{localeData?.no_address_found}}</h1>
+                <h1>{{ localeData?.no_address_found }}</h1>
             </div>
         </div>
         <!-- branch profile element end -->
         <div *ngIf="organizationType === 'COMPANY'" class="w-100 text-center">
-            <pagination [(ngModel)]="paginationConfig.page"
+            <pagination
+                [(ngModel)]="paginationConfig.page"
                 *ngIf="!shouldShowLoader && paginationConfig?.totalItems > paginationLimit"
-                [totalItems]="paginationConfig?.totalItems" [maxSize]="5" [itemsPerPage]="paginationConfig?.count"
-                [boundaryLinks]="true" [rotate]="true" (pageChanged)="handlePageChange($event)"
-                [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous"
-                [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last"></pagination>
+                [totalItems]="paginationConfig?.totalItems"
+                [maxSize]="5"
+                [itemsPerPage]="paginationConfig?.count"
+                [boundaryLinks]="true"
+                [rotate]="true"
+                (pageChanged)="handlePageChange($event)"
+                [firstText]="commonLocaleData?.app_first"
+                [previousText]="commonLocaleData?.app_previous"
+                [nextText]="commonLocaleData?.app_next"
+                [lastText]="commonLocaleData?.app_last"
+            ></pagination>
         </div>
     </div>
 </div>
 
 <!-- Create address part of Address Tab -->
-<div *ngIf="accountAsideMenuState === 'in' && !closeSidePane" [keyboardShortcut]="'esc'"
-    (onShortcutPress)="toggleAccountAsidePane()">
+<div
+    *ngIf="accountAsideMenuState === 'in' && !closeSidePane"
+    [keyboardShortcut]="'esc'"
+    (onShortcutPress)="toggleAccountAsidePane()"
+>
     <div class="aside-overlay"></div>
-    <create-address class="account-aside-menu-state  transform-inherit" [@slideInOut]="accountAsideMenuState"
+    <create-address
+        class="account-aside-menu-state transform-inherit"
+        [@slideInOut]="accountAsideMenuState"
         [companyName]="organizationType === 'BRANCH' ? profileData?.companyName : ''"
-        [currentOrganizationUniqueName]="currentOrganizationUniqueName" [showLoader]="isAddressChangeInProgress"
-        (saveAddress)="saveAddress($event)" (updateAddress)="updateAddress($event)" [addressToUpdate]="addressToUpdate"
-        (closeAsideEvent)="toggleAccountAsidePane()" [addressConfiguration]="addressConfiguration"
-        [localeData]="localeData" [commonLocaleData]="commonLocaleData">
+        [currentOrganizationUniqueName]="currentOrganizationUniqueName"
+        [showLoader]="isAddressChangeInProgress"
+        (saveAddress)="saveAddress($event)"
+        (updateAddress)="updateAddress($event)"
+        [addressToUpdate]="addressToUpdate"
+        (closeAsideEvent)="toggleAccountAsidePane()"
+        [addressConfiguration]="addressConfiguration"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+    >
     </create-address>
 </div>
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
     <div [hidden]="show">
         <span> {{ title }}</span>
-        <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
+        <i class="icon-search" (click)="toggleSearch(fieldName, searchBox)"></i>
     </div>
     <div class="input-container w-100" [hidden]="!show">
-        <input type="text" [placeholder]="getSearchFieldText(title)" class="w100" #searchBox
-            [formControl]="formControl" />
+        <input
+            type="text"
+            [placeholder]="getSearchFieldText(title)"
+            class="w100"
+            #searchBox
+            [formControl]="formControl"
+        />
     </div>
 </ng-template>
-<div bsModal #deleteAddressConfirmationModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
-    tabindex="-1">
+<div
+    bsModal
+    #deleteAddressConfirmationModal="bs-modal"
+    class="modal fade"
+    role="dialog"
+    [config]="{ keyboard: true }"
+    tabindex="-1"
+>
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div>
                 <div class="modal-header theme-bg pd-2 pl-2 pr-2 clearfix">
-                    <h3 class="modal-title bg" id="modal-title">{{commonLocaleData?.app_confirmation}} </h3>
+                    <h3 class="modal-title bg" id="modal-title">{{ commonLocaleData?.app_confirmation }}</h3>
                     <i class="icon-cross text-right close-modal" aria-hidden="true" (click)="onCancel()"></i>
                 </div>
                 <div class="modal-body pd-l2 pd-r2 clearfix" id="export-body">
                     <form name="newRole" novalidate autocomplete="off">
                         <div class="modal-wrap mr-b2">
-                            <h3>{{localeData?.want_to_continue}}</h3>
+                            <h3>{{ localeData?.want_to_continue }}</h3>
                         </div>
                         <div class="d-flex justify-content-start">
-                            <button type="submit" class="btn btn-md btn-success mr-r1"
-                                (click)="onConfirmation()">{{commonLocaleData?.app_yes}}</button>
-                            <button type="submit" class="btn btn-md btn-cancel"
-                                (click)="onCancel()">{{commonLocaleData?.app_no}}</button>
+                            <button type="submit" class="btn btn-md btn-success mr-r1" (click)="onConfirmation()">
+                                {{ commonLocaleData?.app_yes }}
+                            </button>
+                            <button type="submit" class="btn btn-md btn-cancel" (click)="onCancel()">
+                                {{ commonLocaleData?.app_no }}
+                            </button>
                         </div>
                     </form>
                 </div>

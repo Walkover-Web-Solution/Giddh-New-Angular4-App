@@ -6,11 +6,17 @@
                     <i class="icon-search"></i>
                 </span>
                 <div class="wrap-group-account-input">
-                    <input type="text" [(ngModel)]="searchCmp" (ngModelChange)="filterCompanyList($event)" #searchElement
-                        class="form-control" [placeholder]="localeData?.search_company" />
+                    <input
+                        type="text"
+                        [(ngModel)]="searchCmp"
+                        (ngModelChange)="filterCompanyList($event)"
+                        #searchElement
+                        class="form-control"
+                        [placeholder]="localeData?.search_company"
+                    />
                 </div>
                 <span class="close-addon" *ngIf="searchCmp && searchCmp.length">
-                    <i class="icon-cross" (click)="filterCompanyList('');searchCmp = ''"></i>
+                    <i class="icon-cross" (click)="filterCompanyList(''); searchCmp = ''"></i>
                 </span>
             </div>
         </div>
@@ -22,7 +28,7 @@
         <div class="all-company-list">
             <ul>
                 <li *ngFor="let company of companyList" (click)="changeCompany(company.uniqueName)">
-                    <a href="javascript:;">{{company?.name}}</a>
+                    <a href="javascript:;">{{ company?.name }}</a>
                 </li>
             </ul>
         </div>

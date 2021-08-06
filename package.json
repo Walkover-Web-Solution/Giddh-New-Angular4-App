@@ -60,6 +60,8 @@
     "package:mac:test": "npm run build.electron.giddh && cd dist/apps/web-giddh-prod && npx electron-builder build --config ./../../../electron-sign/electron-builder-test.json --macos --x64 --publish always",
     "release:windows:ci": "npm run build.electron.giddh && cd dist/apps/web-giddh-prod && npx electron-builder build --config ./../../../electron-sign/electron-builder-ci.json --win --ia32 --x64 --publish always",
     "release:mac:ci": "npm run build.electron.giddh && cd dist/apps/web-giddh-prod && npx electron-builder build --config ./../../../electron-sign/electron-builder-ci.json --macos --x64 --publish always",
+    "format:code": "npx prettier --write --ignore-unknown .",
+    "check:code": "npx prettier --check --ignore-unknown .",
     "cy:ran": "cypress run",
     "cy:verify": "cypress verify",
     "env:run": "npm run print-env && npm run cy:run",
@@ -71,7 +73,8 @@
     "Giddh": "npm run test -- --spec \"cypress/integration/Giddh/*\" ",
     "cy:run": "concurrently \"npm run start\" \"wait-on http-get://localhost:3000 && cypress run --record --key ddaa8e78-116b-428a-9581-0fd63d9fc7be --reporter mochawesome --browser chrome --headless\" --kill-others --success first",
     "cy:open": "concurrently \"npm run start\" \"wait-on http-get://localhost:3000 && npm run cy:open\" --kill-others --success first",
-    "cy:run1": "\"cypress run --record --key ddaa8e78-116b-428a-9581-0fd63d9fc7be --reporter mochawesome --browser chrome --headless\""
+    "cy:run1": "\"cypress run --record --key ddaa8e78-116b-428a-9581-0fd63d9fc7be --reporter mochawesome --browser chrome --headless\"",
+    "prepare": "husky install"
   },
   "private": true,
   "dependencies": {
@@ -177,6 +180,7 @@
     "electron-updater": "4.3.4",
     "html-webpack-plugin": "5.3.1",
     "http-server": "0.12.3",
+    "husky": "^7.0.1",
     "jasmine-core": "3.6.0",
     "jasmine-marbles": "0.6.0",
     "jasmine-spec-reporter": "5.0.2",
@@ -186,6 +190,7 @@
     "karma-coverage-istanbul-reporter": "3.0.3",
     "karma-jasmine": "4.0.1",
     "karma-jasmine-html-reporter": "1.6.0",
+    "lint-staged": "^11.1.1",
     "mocha": "^5.2.0",
     "mochawesome": "^4.0.1",
     "movefiles": "1.0.1",
@@ -202,5 +207,8 @@
   },
   "xplat": {
     "prefix": "foo"
+  },
+  "lint-staged": {
+    "*.{html,scss}": "npx prettier --write --ignore-unknown"
   }
 }

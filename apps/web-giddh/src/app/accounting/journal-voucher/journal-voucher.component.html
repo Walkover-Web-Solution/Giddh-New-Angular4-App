@@ -1,19 +1,35 @@
-<ng-container appTranslate [file]="'journal-voucher'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'journal-voucher'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="row mr-0 ml-0">
-        <account-as-voucher class="col-md-12 col-lg-10 account-wrapper" [currentDate]="currentDate"
-            [saveEntryOnCtrlA]="saveEntryInVoucher" [openDatePicker]="openDatePicker"
-            [openCreateAccountPopup]="openCreateAccountPopupInVoucher" [hidden]="gridType !== 'voucher'"
-            [isCompany]="isCompany" [localeData]="localeData" [commonLocaleData]="commonLocaleData">
+        <account-as-voucher
+            class="col-md-12 col-lg-10 account-wrapper"
+            [currentDate]="currentDate"
+            [saveEntryOnCtrlA]="saveEntryInVoucher"
+            [openDatePicker]="openDatePicker"
+            [openCreateAccountPopup]="openCreateAccountPopupInVoucher"
+            [hidden]="gridType !== 'voucher'"
+            [isCompany]="isCompany"
+            [localeData]="localeData"
+            [commonLocaleData]="commonLocaleData"
+        >
         </account-as-voucher>
 
-        <account-as-invoice class="col-md-12 col-lg-10 account-wrapper" [currentDate]="currentDate"
-            [saveEntryOnCtrlA]="saveEntryInInvoice" [openDatePicker]="openDatePicker"
-            [openCreateAccountPopup]="openCreateAccountPopupInInvoice" [hidden]="gridType !== 'invoice'">
+        <account-as-invoice
+            class="col-md-12 col-lg-10 account-wrapper"
+            [currentDate]="currentDate"
+            [saveEntryOnCtrlA]="saveEntryInInvoice"
+            [openDatePicker]="openDatePicker"
+            [openCreateAccountPopup]="openCreateAccountPopupInInvoice"
+            [hidden]="gridType !== 'invoice'"
+        >
         </account-as-invoice>
 
-        <input type="hidden" [attr.data-gridType]="gridType" id="get-grid-type">
+        <input type="hidden" [attr.data-gridType]="gridType" id="get-grid-type" />
 
         <div class="sidebar-menu col-md-12 col-lg-2 p-0">
             <accounting-sidebar [commonLocaleData]="commonLocaleData"></accounting-sidebar>

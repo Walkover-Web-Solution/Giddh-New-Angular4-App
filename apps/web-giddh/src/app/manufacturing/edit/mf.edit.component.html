@@ -11,25 +11,38 @@
                     <div class="col-xs-3 col-sm-3">
                         <div class="form-group">
                             <label class="d-block">Product Name</label>
-                            <sh-select [options]="stockListDropDown$ | async" [disabled]="isUpdateCase"
-                                defaultValue="{{selectedProductName}}" (selected)="getStocksWithRate($event)"
-                                [(ngModel)]="manufacturingDetails.stockUniqueName" name="stockUniqueName"
-                                placeholder="--Select product--" [ItemHeight]="33">
+                            <sh-select
+                                [options]="stockListDropDown$ | async"
+                                [disabled]="isUpdateCase"
+                                defaultValue="{{ selectedProductName }}"
+                                (selected)="getStocksWithRate($event)"
+                                [(ngModel)]="manufacturingDetails.stockUniqueName"
+                                name="stockUniqueName"
+                                placeholder="--Select product--"
+                                [ItemHeight]="33"
+                            >
                             </sh-select>
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3">
                         <div class="form-group position-relative">
                             <label class="d-block">Quantity</label>
-                            <input type="text" class="form-control" [disabled]="!manufacturingDetails.stockUniqueName"
-                                decimalDigitsDirective [DecimalPlaces]="4"
+                            <input
+                                type="text"
+                                class="form-control"
+                                [disabled]="!manufacturingDetails.stockUniqueName"
+                                decimalDigitsDirective
+                                [DecimalPlaces]="4"
                                 (keyup)="onQuantityChange(manufacturingDetails.manufacturingMultipleOf)"
                                 (blur)="onQuantityChange(manufacturingDetails.manufacturingMultipleOf)"
                                 [(ngModel)]="manufacturingDetails.manufacturingMultipleOf"
-                                name="manufacturingMultipleOf" />
-                            <small class="position-absolute right0">Multiple of <span
-                                    *ngIf="manufacturingDetails.multipleOf">{{manufacturingDetails.multipleOf |
-                                    json}}</span>
+                                name="manufacturingMultipleOf"
+                            />
+                            <small class="position-absolute right0"
+                                >Multiple of
+                                <span *ngIf="manufacturingDetails.multipleOf">{{
+                                    manufacturingDetails.multipleOf | json
+                                }}</span>
                             </small>
                         </div>
                     </div>
@@ -37,18 +50,30 @@
                         <div class="form-group mr-r1">
                             <label class="d-block">Date</label>
                             <div class="col-xs-8 p-0">
-                                <input type="text" name="invoiceDateRange" bsDatepicker required
-                                    class="form-control w-100" [(ngModel)]="manufacturingDetails.date"
-                                    [bsValue]="bsValue" [bsConfig]="{dateInputFormat: giddhDateFormat}" />
+                                <input
+                                    type="text"
+                                    name="invoiceDateRange"
+                                    bsDatepicker
+                                    required
+                                    class="form-control w-100"
+                                    [(ngModel)]="manufacturingDetails.date"
+                                    [bsValue]="bsValue"
+                                    [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                />
                             </div>
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3">
                         <div class="form-group">
                             <label class="d-block">Warehouse</label>
-                            <sh-select placeholder="Select Warehouse" [options]="warehouses"
-                                [(ngModel)]="manufacturingDetails.warehouseUniqueName" required [isRequired]="true"
-                                [defaultValue]="manufacturingDetails?.warehouse?.name"></sh-select>
+                            <sh-select
+                                placeholder="Select Warehouse"
+                                [options]="warehouses"
+                                [(ngModel)]="manufacturingDetails.warehouseUniqueName"
+                                required
+                                [isRequired]="true"
+                                [defaultValue]="manufacturingDetails?.warehouse?.name"
+                            ></sh-select>
                         </div>
                     </div>
                 </div>
@@ -61,7 +86,6 @@
     <!--  -->
     <ng-container *ngIf="!(isStockWithRateInprogress$ | async)">
         <div class="box clearfix" *ngIf="manufacturingDetails.stockUniqueName">
-
             <div class="row">
                 <!-- right column / add more resources -->
                 <div class="col-md-12 col-lg-6 source resources-table">
@@ -79,18 +103,25 @@
                                 </tr>
                             </thead>
                             <tbody *ngIf="manufacturingDetails">
-                                <tr *ngFor="let stock of manufacturingDetails.linkedStocks; let i = index;">
+                                <tr *ngFor="let stock of manufacturingDetails.linkedStocks; let i = index">
                                     <td colspan="2"><span class="hr"></span>{{ stock.stockUniqueName }}</td>
-                                    <td>{{ stock.quantity | number:'1.0-4'}}</td>
-                                    <td *ngIf="stock.manufacturingUnit; else unitCode">{{ stock.manufacturingUnit }}
+                                    <td>{{ stock.quantity | number: "1.0-4" }}</td>
+                                    <td *ngIf="stock.manufacturingUnit; else unitCode">
+                                        {{ stock.manufacturingUnit }}
                                     </td>
                                     <ng-template #unitCode>
                                         <td>{{ stock.stockUnitCode }}</td>
                                     </ng-template>
-                                    <td>{{ stock.rate | number:'1.0-4'}}</td>
-                                    <td>{{ stock.amount | number:'1.0-2'}}</td>
-                                    <td class="action"
-                                        *ngIf="(currentOrganizationType === 'COMPANY' && (currentCompanyBranches$ | async)?.length === 1) || currentOrganizationType === 'BRANCH'">
+                                    <td>{{ stock.rate | number: "1.0-4" }}</td>
+                                    <td>{{ stock.amount | number: "1.0-2" }}</td>
+                                    <td
+                                        class="action"
+                                        *ngIf="
+                                            (currentOrganizationType === 'COMPANY' &&
+                                                (currentCompanyBranches$ | async)?.length === 1) ||
+                                            currentOrganizationType === 'BRANCH'
+                                        "
+                                    >
                                         <i class="icon-cross" (click)="removeConsumptionItem(i)" aria-hidden="true"></i>
                                     </td>
                                 </tr>
@@ -98,52 +129,98 @@
                                 <tr *ngIf="toggleAddLinkedStocks" class="new-row">
                                     <td colspan="2">
                                         <span class="hr"></span>
-                                        <sh-select [forceClearReactive]="needForceClearProductList$ | async"
-                                            placeholder="--Select--" [options]="allStocksDropDown$ | async"
+                                        <sh-select
+                                            [forceClearReactive]="needForceClearProductList$ | async"
+                                            placeholder="--Select--"
+                                            [options]="allStocksDropDown$ | async"
                                             name="linkedStocks.stockUniqueName"
-                                            [(ngModel)]="linkedStocks.stockUniqueName" required [isRequired]="true"
+                                            [(ngModel)]="linkedStocks.stockUniqueName"
+                                            required
+                                            [isRequired]="true"
                                             #linkedStockList="ngModel"
-                                            (selected)="getStockUnit(linkedStocks.stockUniqueName, linkedStocks.quantity)"
-                                            [ItemHeight]="33"></sh-select>
+                                            (selected)="
+                                                getStockUnit(linkedStocks.stockUniqueName, linkedStocks.quantity)
+                                            "
+                                            [ItemHeight]="33"
+                                        ></sh-select>
                                     </td>
                                     <td>
-                                        <input type="text" decimalDigitsDirective [DecimalPlaces]="4" required
+                                        <input
+                                            type="text"
+                                            decimalDigitsDirective
+                                            [DecimalPlaces]="4"
+                                            required
                                             class="form-control text-right"
                                             (blur)="getStockUnit(linkedStocks.stockUniqueName, linkedStocks.quantity)"
-                                            [(ngModel)]="linkedStocks.quantity" #linkedStockQuantity="ngModel">
+                                            [(ngModel)]="linkedStocks.quantity"
+                                            #linkedStockQuantity="ngModel"
+                                        />
                                     </td>
-                                    <td><input type="text" class="form-control text-right"
-                                            [(ngModel)]="linkedStocks.manufacturingUnit" [disabled]="true"></td>
+                                    <td>
+                                        <input
+                                            type="text"
+                                            class="form-control text-right"
+                                            [(ngModel)]="linkedStocks.manufacturingUnit"
+                                            [disabled]="true"
+                                        />
+                                    </td>
 
-                                    <td><input type="number" [disabled]="true" required class="form-control text-right"
-                                            [(ngModel)]="linkedStocks.rate" #linkedStockRate="ngModel"></td>
-                                    <td> {{ getCalculatedAmount(linkedStockQuantity, linkedStockRate) | number:'1.0-2'
+                                    <td>
+                                        <input
+                                            type="number"
+                                            [disabled]="true"
+                                            required
+                                            class="form-control text-right"
+                                            [(ngModel)]="linkedStocks.rate"
+                                            #linkedStockRate="ngModel"
+                                        />
+                                    </td>
+                                    <td>
+                                        {{
+                                            getCalculatedAmount(linkedStockQuantity, linkedStockRate) | number: "1.0-2"
                                         }}
                                     </td>
                                     <td class="action">
                                         <button
-                                            [disabled]="linkedStockQuantity.invalid || linkedStockRate.invalid || linkedStockList.invalid"
-                                            (click)="addConsumption(linkedStocks, $event)" class="ico-btn p-0"><i
-                                                class="icon-plus text-danger" aria-hidden="true"></i></button>
+                                            [disabled]="
+                                                linkedStockQuantity.invalid ||
+                                                linkedStockRate.invalid ||
+                                                linkedStockList.invalid
+                                            "
+                                            (click)="addConsumption(linkedStocks, $event)"
+                                            class="ico-btn p-0"
+                                        >
+                                            <i class="icon-plus text-danger" aria-hidden="true"></i>
+                                        </button>
                                     </td>
                                 </tr>
 
                                 <tr>
                                     <td colspan="7">
                                         <button
-                                            *ngIf="(currentOrganizationType === 'COMPANY' && (currentCompanyBranches$ | async)?.length === 1) || currentOrganizationType === 'BRANCH'"
-                                            class="btn-link btn px-0" (click)="toggleAddLinkedStocks = !toggleAddLinkedStocks">Add New</button>
+                                            *ngIf="
+                                                (currentOrganizationType === 'COMPANY' &&
+                                                    (currentCompanyBranches$ | async)?.length === 1) ||
+                                                currentOrganizationType === 'BRANCH'
+                                            "
+                                            class="btn-link btn px-0"
+                                            (click)="toggleAddLinkedStocks = !toggleAddLinkedStocks"
+                                        >
+                                            Add New
+                                        </button>
                                     </td>
                                 </tr>
                             </tbody>
                             <tfoot class="bd-rt pd-t2 pd-b2 bd-rb">
                                 <tr>
                                     <th colspan="2">Total:</th>
-                                    <th class="text-right"> {{ getTotal('linkedStocks', 'quantity') | number:'1.0-4' }}
+                                    <th class="text-right">
+                                        {{ getTotal("linkedStocks", "quantity") | number: "1.0-4" }}
                                     </th>
                                     <th></th>
                                     <th></th>
-                                    <th class="text-right"> {{ getTotal('linkedStocks', 'amount') | number:'1.0-2' }}
+                                    <th class="text-right">
+                                        {{ getTotal("linkedStocks", "amount") | number: "1.0-2" }}
                                     </th>
                                     <th></th>
                                 </tr>
@@ -161,33 +238,53 @@
                     <form class="form-theme clearfix" name="expenseForm">
                         <div class="mr-b2 clearfix row">
                             <p class="col-xs-9 col-sm-9">Total Consumption Cost:</p>
-                            <p class="col-xs-3 col-sm-3 text-right">{{ getTotal('linkedStocks', 'amount') |
-                                number:'1.0-2' }}</p>
+                            <p class="col-xs-3 col-sm-3 text-right">
+                                {{ getTotal("linkedStocks", "amount") | number: "1.0-2" }}
+                            </p>
                         </div>
                         <table class="width-100">
                             <thead class="th-caption">
                                 <tr>
-                                    <td *ngIf="(currentOrganizationType === 'COMPANY' && (currentCompanyBranches$ | async)?.length === 1) || currentOrganizationType === 'BRANCH'"
-                                        class="cp btn-link" (click)="onToggleAddExpensesBlock(toggleAddExpenses);"
-                                        tooltip="Add A/C where expense entries will be done." placement="top" colspan="5"><i class="icon-plus"
-                                            aria-hidden="true"></i> Add Expense
+                                    <td
+                                        *ngIf="
+                                            (currentOrganizationType === 'COMPANY' &&
+                                                (currentCompanyBranches$ | async)?.length === 1) ||
+                                            currentOrganizationType === 'BRANCH'
+                                        "
+                                        class="cp btn-link"
+                                        (click)="onToggleAddExpensesBlock(toggleAddExpenses)"
+                                        tooltip="Add A/C where expense entries will be done."
+                                        placement="top"
+                                        colspan="5"
+                                    >
+                                        <i class="icon-plus" aria-hidden="true"></i> Add Expense
                                     </td>
                                 </tr>
                             </thead>
                             <tbody *ngIf="manufacturingDetails && liabilityGroupAccounts$ | async">
-                                <tr *ngFor="let expense of manufacturingDetails.otherExpenses; let i = index;">
+                                <tr *ngFor="let expense of manufacturingDetails.otherExpenses; let i = index">
                                     <td colspan="1">
                                         <div class="custom-select position-relative">
-                                            <sh-select [options]="liabilityGroupAccounts$ | async" [ItemHeight]="56"
-                                                [isFilterEnabled]="true" name="baseAccount{{i}}"
+                                            <sh-select
+                                                [options]="liabilityGroupAccounts$ | async"
+                                                [ItemHeight]="56"
+                                                [isFilterEnabled]="true"
+                                                name="baseAccount{{ i }}"
                                                 [(ngModel)]="expense.baseAccount.uniqueName"
-                                                class="pull-left  select-caret w-100" [enableDynamicSearch]="true"
+                                                class="pull-left select-caret w-100"
+                                                [enableDynamicSearch]="true"
                                                 [isPaginationEnabled]="true"
                                                 (scrollEnd)="handleLiabilitiesAssetAccountScrollEnd()"
-                                                (dynamicSearchedQuery)="onLiabilitiesAssetAccountSearchQueryChanged($event)"
+                                                (dynamicSearchedQuery)="
+                                                    onLiabilitiesAssetAccountSearchQueryChanged($event)
+                                                "
                                                 [defaultValue]="expense.baseAccount.defaultName"
                                                 [fixedValue]="expense.baseAccount.defaultName"
-                                                [disabled]="(currentOrganizationType === 'COMPANY' && (currentCompanyBranches$ | async)?.length > 1)">
+                                                [disabled]="
+                                                    currentOrganizationType === 'COMPANY' &&
+                                                    (currentCompanyBranches$ | async)?.length > 1
+                                                "
+                                            >
                                             </sh-select>
                                         </div>
                                     </td>
@@ -196,40 +293,69 @@
                                     </td>
                                     <td>
                                         <div class="custom-select position-relative">
-                                            <sh-select [options]="expenseGroupAccounts$ | async" [ItemHeight]="56"
-                                                [isFilterEnabled]="true" name="expense{{i}}"
+                                            <sh-select
+                                                [options]="expenseGroupAccounts$ | async"
+                                                [ItemHeight]="56"
+                                                [isFilterEnabled]="true"
+                                                name="expense{{ i }}"
                                                 [(ngModel)]="expense.transactions[0].account.uniqueName"
-                                                class="pull-left  select-caret w-100" [enableDynamicSearch]="true"
+                                                class="pull-left select-caret w-100"
+                                                [enableDynamicSearch]="true"
                                                 [isPaginationEnabled]="true"
                                                 (scrollEnd)="handleExpenseAccountScrollEnd()"
                                                 (dynamicSearchedQuery)="onExpenseAccountSearchQueryChanged($event)"
                                                 [defaultValue]="expense.transactions[0].account.defaultName"
                                                 [fixedValue]="expense.transactions[0].account.defaultName"
-                                                [disabled]="(currentOrganizationType === 'COMPANY' && (currentCompanyBranches$ | async)?.length > 1)">
+                                                [disabled]="
+                                                    currentOrganizationType === 'COMPANY' &&
+                                                    (currentCompanyBranches$ | async)?.length > 1
+                                                "
+                                            >
                                             </sh-select>
                                         </div>
                                     </td>
                                     <td class="text-right w100">
-                                        <div class="pd"><input type="text" decimalDigitsDirective [DecimalPlaces]="2"
-                                                required placeholder="Amount"
-                                                [(ngModel)]="expense.transactions[0].amount" name="amount{{i}}"
-                                                class="form-control text-right" [readonly]="(currentOrganizationType === 'COMPANY' && (currentCompanyBranches$ | async)?.length > 1)"></div>
+                                        <div class="pd">
+                                            <input
+                                                type="text"
+                                                decimalDigitsDirective
+                                                [DecimalPlaces]="2"
+                                                required
+                                                placeholder="Amount"
+                                                [(ngModel)]="expense.transactions[0].amount"
+                                                name="amount{{ i }}"
+                                                class="form-control text-right"
+                                                [readonly]="
+                                                    currentOrganizationType === 'COMPANY' &&
+                                                    (currentCompanyBranches$ | async)?.length > 1
+                                                "
+                                            />
+                                        </div>
                                     </td>
-                                    <td class="text-center"><i class="icon-cross" aria-hidden="true"
-                                            (click)="removeExpenseItem(i)"></i></td>
+                                    <td class="text-center">
+                                        <i class="icon-cross" aria-hidden="true" (click)="removeExpenseItem(i)"></i>
+                                    </td>
                                 </tr>
 
                                 <tr *ngIf="toggleAddExpenses">
                                     <td colspan="1">
-                                        <sh-select [forceClearReactive]="needForceClearLiability$ | async"
-                                            [ItemHeight]="56" (selected)="addExpense(otherExpenses)"
+                                        <sh-select
+                                            [forceClearReactive]="needForceClearLiability$ | async"
+                                            [ItemHeight]="56"
+                                            (selected)="addExpense(otherExpenses)"
                                             [options]="liabilityGroupAccounts$ | async"
                                             [(ngModel)]="otherExpenses.transactionAccountUniqueName"
-                                            name="baseAccountUniqueName" [placeholder]="'Liability/Asset A/c'"
-                                            [enableDynamicSearch]="true" [isPaginationEnabled]="true"
+                                            name="baseAccountUniqueName"
+                                            [placeholder]="'Liability/Asset A/c'"
+                                            [enableDynamicSearch]="true"
+                                            [isPaginationEnabled]="true"
                                             (scrollEnd)="handleLiabilitiesAssetAccountScrollEnd()"
                                             (dynamicSearchedQuery)="onLiabilitiesAssetAccountSearchQueryChanged($event)"
-                                            [disabled]="(currentOrganizationType === 'COMPANY' && (currentCompanyBranches$ | async)?.length > 1)">
+                                            [disabled]="
+                                                currentOrganizationType === 'COMPANY' &&
+                                                (currentCompanyBranches$ | async)?.length > 1
+                                            "
+                                        >
                                         </sh-select>
                                     </td>
                                     <td class="text-center">
@@ -237,73 +363,132 @@
                                     </td>
                                     <td>
                                         <div class="position-relative">
-                                            <sh-select [forceClearReactive]="needForceClearGroup$ | async"
+                                            <sh-select
+                                                [forceClearReactive]="needForceClearGroup$ | async"
                                                 (selected)="addExpense(otherExpenses)"
                                                 [options]="expenseGroupAccounts$ | async"
                                                 [(ngModel)]="otherExpenses.baseAccountUniqueName"
-                                                name="baseAccountUniqueName" [placeholder]="'Expense A/c'"
-                                                [ItemHeight]="56" [enableDynamicSearch]="true"
+                                                name="baseAccountUniqueName"
+                                                [placeholder]="'Expense A/c'"
+                                                [ItemHeight]="56"
+                                                [enableDynamicSearch]="true"
                                                 [isPaginationEnabled]="true"
                                                 (scrollEnd)="handleExpenseAccountScrollEnd()"
                                                 (dynamicSearchedQuery)="onExpenseAccountSearchQueryChanged($event)"
-                                                [disabled]="(currentOrganizationType === 'COMPANY' && (currentCompanyBranches$ | async)?.length > 1)">
+                                                [disabled]="
+                                                    currentOrganizationType === 'COMPANY' &&
+                                                    (currentCompanyBranches$ | async)?.length > 1
+                                                "
+                                            >
                                             </sh-select>
                                         </div>
                                     </td>
                                     <td class="text-right w100">
-                                        <div class="pd"><input type="text" (blur)="addExpense(otherExpenses)" decimalDigitsDirective [DecimalPlaces]="2"
-                                                required placeholder="Amount" [(ngModel)]="otherExpenses.transactionAmount" name="transactionAmounts"
-                                                class="form-control text-right" #transactionAmount
-                                                [disabled]="(currentOrganizationType === 'COMPANY' && (currentCompanyBranches$ | async)?.length > 1)"></div>
+                                        <div class="pd">
+                                            <input
+                                                type="text"
+                                                (blur)="addExpense(otherExpenses)"
+                                                decimalDigitsDirective
+                                                [DecimalPlaces]="2"
+                                                required
+                                                placeholder="Amount"
+                                                [(ngModel)]="otherExpenses.transactionAmount"
+                                                name="transactionAmounts"
+                                                class="form-control text-right"
+                                                #transactionAmount
+                                                [disabled]="
+                                                    currentOrganizationType === 'COMPANY' &&
+                                                    (currentCompanyBranches$ | async)?.length > 1
+                                                "
+                                            />
+                                        </div>
                                     </td>
                                     <td>
-                                        <button [disabled]="transactionAmount.invalid" *ngIf="(currentOrganizationType === 'COMPANY' && (currentCompanyBranches$ | async)?.length === 1) || currentOrganizationType === 'BRANCH'"
-                                            (click)="addExpense(otherExpenses)" class="ico-btn p-0 mr-t1"><i
-                                                class="icon-plus text-danger" aria-hidden="true"></i></button>
+                                        <button
+                                            [disabled]="transactionAmount.invalid"
+                                            *ngIf="
+                                                (currentOrganizationType === 'COMPANY' &&
+                                                    (currentCompanyBranches$ | async)?.length === 1) ||
+                                                currentOrganizationType === 'BRANCH'
+                                            "
+                                            (click)="addExpense(otherExpenses)"
+                                            class="ico-btn p-0 mr-t1"
+                                        >
+                                            <i class="icon-plus text-danger" aria-hidden="true"></i>
+                                        </button>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                         <div class="bd-rt clearfix pd-t1 mr-t1 mr-b1 row">
                             <span class="col-xs-7 col-sm-7"><strong>Total Manufacturing Expense:</strong></span>
-                            <span class="col-xs-5 col-sm-5 text-right"><strong>{{ getTotal('otherExpenses', 'amount') |
-                                    number:'1.0-2' }}</strong></span>
+                            <span class="col-xs-5 col-sm-5 text-right"
+                                ><strong>{{ getTotal("otherExpenses", "amount") | number: "1.0-2" }}</strong></span
+                            >
                         </div>
                         <div class="mr-b1 clearfix row">
                             <span class="col-xs-7 col-sm-7"><strong>Grand Total:</strong></span>
-                            <span class="col-xs-5 col-sm-5 text-right"><strong>{{ (getTotal('otherExpenses', 'amount') +
-                                    getTotal('linkedStocks', 'amount')) | number:'1.0-2' }}</strong></span>
+                            <span class="col-xs-5 col-sm-5 text-right"
+                                ><strong>{{
+                                    getTotal("otherExpenses", "amount") + getTotal("linkedStocks", "amount")
+                                        | number: "1.0-2"
+                                }}</strong></span
+                            >
                         </div>
                         <div class="mr-b1 clearfix row cost-per">
-                            <span class="col-xs-7 col-sm-7"><strong>Cost per {{selectedProductName}}:</strong></span>
-                            <span class="col-xs-5 col-sm-5 text-right"><strong>{{ getCostPerProduct() |
-                                    number:'1.0-2'}}</strong></span>
+                            <span class="col-xs-7 col-sm-7"
+                                ><strong>Cost per {{ selectedProductName }}:</strong></span
+                            >
+                            <span class="col-xs-5 col-sm-5 text-right"
+                                ><strong>{{ getCostPerProduct() | number: "1.0-2" }}</strong></span
+                            >
                         </div>
-                        <div class="pull-right mr-t1 clearfix row" *ngIf="!isUpdateCase && ((currentOrganizationType === 'COMPANY' && (currentCompanyBranches$ | async)?.length === 1) || currentOrganizationType === 'BRANCH')">
-                            <button type="submit" class="btn btn-sm btn-success" (click)="createEntry();">Save</button>
-                            <button type="button" class="btn btn-sm btn-primary"
-                                (click)="goBackToListPage()">Cancel</button>
+                        <div
+                            class="pull-right mr-t1 clearfix row"
+                            *ngIf="
+                                !isUpdateCase &&
+                                ((currentOrganizationType === 'COMPANY' &&
+                                    (currentCompanyBranches$ | async)?.length === 1) ||
+                                    currentOrganizationType === 'BRANCH')
+                            "
+                        >
+                            <button type="submit" class="btn btn-sm btn-success" (click)="createEntry()">Save</button>
+                            <button type="button" class="btn btn-sm btn-primary" (click)="goBackToListPage()">
+                                Cancel
+                            </button>
                         </div>
-                        <div class="pull-right mr-t1 clearfix row" *ngIf="isUpdateCase && ((currentOrganizationType === 'COMPANY' && (currentCompanyBranches$ | async)?.length === 1) || currentOrganizationType === 'BRANCH')">
+                        <div
+                            class="pull-right mr-t1 clearfix row"
+                            *ngIf="
+                                isUpdateCase &&
+                                ((currentOrganizationType === 'COMPANY' &&
+                                    (currentCompanyBranches$ | async)?.length === 1) ||
+                                    currentOrganizationType === 'BRANCH')
+                            "
+                        >
                             <button type="submit" class="btn btn-sm btn-success" (click)="updateEntry()">Update</button>
                             <button type="button" class="btn btn-sm btn-danger" (click)="deleteEntry()">Delete</button>
                         </div>
                     </form>
                 </div>
                 <!-- end left column -->
-
             </div>
         </div>
     </ng-container>
     <ng-container
-        *ngTemplateOutlet="loaderTemplate;context: { $implicit: (isStockWithRateInprogress$ | async),  isColumn: true}">
+        *ngTemplateOutlet="loaderTemplate; context: { $implicit: (isStockWithRateInprogress$ | async), isColumn: true }"
+    >
     </ng-container>
 </section>
 <ng-container
-    *ngTemplateOutlet="loaderTemplate;context: { $implicit: (isGetManufactureStockInProgress$ | async),  isColumn: false}">
+    *ngTemplateOutlet="
+        loaderTemplate;
+        context: { $implicit: (isGetManufactureStockInProgress$ | async), isColumn: false }
+    "
+>
 </ng-container>
 <ng-template #loaderTemplate let-isShow let-isColumn="isColumn">
-    <giddh-page-loader [cssClass]="(isColumn ? 'col-xs-12 col-sm-12' : '')" *ngIf="isShow"></giddh-page-loader>
+    <giddh-page-loader [cssClass]="isColumn ? 'col-xs-12 col-sm-12' : ''" *ngIf="isShow"></giddh-page-loader>
 </ng-template>
 
 <!--delete manufacturing confirmation modal -->

@@ -1,276 +1,382 @@
-<ng-container appTranslate [file]="'invoice/ewaybill'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+<ng-container
+    appTranslate
+    [file]="'invoice/ewaybill'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="padd15">
         <div>
             <form #generateInvForm="ngForm" autocomplete="off">
                 <div>
                     <!--part-A-->
-                    <div><strong>{{localeData?.part_a}}</strong></div>
+                    <div>
+                        <strong>{{ localeData?.part_a }}</strong>
+                    </div>
 
-                    <div class="row d-flex e-way-body ">
+                    <div class="row d-flex e-way-body">
                         <div class="col-md-3 col-lg-3 col-sm-12 mr-t15">
-                            <label>{{localeData?.sub_type}}</label>
+                            <label>{{ localeData?.sub_type }}</label>
                         </div>
 
                         <div class="col-md-8 col-lg-8 col-sm-12 mr-t15">
-                            <sh-select class="input" #subgrp [options]="SubsupplyTypesList"
-                                (selected)="subTypeElementSelected($event)" required [isRequired]="true"
-                                [placeholder]="localeData?.reason_placeholder" [isFilterEnabled]="true"
-                                name="subSupplyType" [(ngModel)]="generateEwayBillform.subSupplyType" [ItemHeight]="33">
+                            <sh-select
+                                class="input"
+                                #subgrp
+                                [options]="SubsupplyTypesList"
+                                (selected)="subTypeElementSelected($event)"
+                                required
+                                [isRequired]="true"
+                                [placeholder]="localeData?.reason_placeholder"
+                                [isFilterEnabled]="true"
+                                name="subSupplyType"
+                                [(ngModel)]="generateEwayBillform.subSupplyType"
+                                [ItemHeight]="33"
+                            >
                             </sh-select>
-
                         </div>
                     </div>
-                    <div class="row d-flex e-way-body ">
+                    <div class="row d-flex e-way-body">
                         <div class="col-md-3 col-lg-3 col-sm-12 mr-t15">
-                            <label>{{localeData?.document_type}}</label>
+                            <label>{{ localeData?.document_type }}</label>
                         </div>
 
                         <div class="col-md-8 col-lg-8 col-sm-12 mr-t15">
-                            <sh-select class="input" #doctypes autocomplete="xyz" [options]="TransporterDocType"
-                                required [isRequired]="true" [placeholder]="localeData?.reason_placeholder"
-                                [isFilterEnabled]="true" name="docType" [(ngModel)]="generateEwayBillform.docType"
-                                [ItemHeight]="33"></sh-select>
-
-
+                            <sh-select
+                                class="input"
+                                #doctypes
+                                autocomplete="xyz"
+                                [options]="TransporterDocType"
+                                required
+                                [isRequired]="true"
+                                [placeholder]="localeData?.reason_placeholder"
+                                [isFilterEnabled]="true"
+                                name="docType"
+                                [(ngModel)]="generateEwayBillform.docType"
+                                [ItemHeight]="33"
+                            ></sh-select>
                         </div>
                     </div>
-                    <div class="row d-flex e-way-body ">
+                    <div class="row d-flex e-way-body">
                         <div class="col-md-3 col-lg-3 col-sm-12 mr-t15">
-                            <label for="toGstIn">{{localeData?.gstin_receiver_label}}</label>
+                            <label for="toGstIn">{{ localeData?.gstin_receiver_label }}</label>
                         </div>
 
                         <div class="col-md-8 col-lg-8 col-sm-12 mr-t15 d-inline">
-
-                            <input type="text" disabled="true" name="toGstIn" required minlength="15" maxlength="15"
-                                autocomplete="off" [placeholder]="localeData?.gstin_receiver_placeholder"
+                            <input
+                                type="text"
+                                disabled="true"
+                                name="toGstIn"
+                                required
+                                minlength="15"
+                                maxlength="15"
+                                autocomplete="off"
+                                [placeholder]="localeData?.gstin_receiver_placeholder"
                                 [(ngModel)]="generateEwayBillform.toGstIn"
-                                class="form-control input d-inline-block mr-2 " />
-
+                                class="form-control input d-inline-block mr-2"
+                            />
                         </div>
                     </div>
 
-                    <div class="row d-flex e-way-body ">
+                    <div class="row d-flex e-way-body">
                         <div class="col-md-3 col-lg-3 col-sm-12 mr-t15">
-                            <label for="toPinCode">{{localeData?.pincode_receiver_label}}</label>
+                            <label for="toPinCode">{{ localeData?.pincode_receiver_label }}</label>
                         </div>
 
                         <div class="col-md-8 col-lg-8 col-sm-12 mr-t15">
-
-                            <input type="number" name="toPinCode" autocomplete="off" maxlength="6" digitsOnlyDirective
-                                required [(ngModel)]="generateEwayBillform.toPinCode"
-                                [placeholder]="localeData?.pincode_receiver_placeholder" class="form-control input " />
-
+                            <input
+                                type="number"
+                                name="toPinCode"
+                                autocomplete="off"
+                                maxlength="6"
+                                digitsOnlyDirective
+                                required
+                                [(ngModel)]="generateEwayBillform.toPinCode"
+                                [placeholder]="localeData?.pincode_receiver_placeholder"
+                                class="form-control input"
+                            />
                         </div>
                     </div>
-                    <div><strong class="mr-t15 d-block ">{{commonLocaleData?.app_transport_details}}</strong></div>
+                    <div>
+                        <strong class="mr-t15 d-block">{{ commonLocaleData?.app_transport_details }}</strong>
+                    </div>
 
-                    <div class="row d-flex e-way-body ">
+                    <div class="row d-flex e-way-body">
                         <div class="col-md-3 col-lg-3 col-sm-12 mr-t15">
-                            <label for="transporterName">{{commonLocaleData?.app_transporter}}</label>
+                            <label for="transporterName">{{ commonLocaleData?.app_transporter }}</label>
                         </div>
 
                         <div class="col-md-8 col-lg-8 col-sm-12 mr-t15">
-                            <sh-select class="input" #trans [showClear]="showClear"
-                                [options]="transporterDropdown$ | async" (keydown)="keydownPressed($event)"
+                            <sh-select
+                                class="input"
+                                #trans
+                                [showClear]="showClear"
+                                [options]="transporterDropdown$ | async"
+                                (keydown)="keydownPressed($event)"
                                 (selected)="selectTransporter($event)"
-                                [placeholder]="localeData?.transporter_placeholder" [notFoundLink]="true"
-                                [multiple]="false" [isFilterEnabled]="true" name="transporterId"
-                                [(ngModel)]="generateEwayBillform.transporterId" [ItemHeight]="33">
-
+                                [placeholder]="localeData?.transporter_placeholder"
+                                [notFoundLink]="true"
+                                [multiple]="false"
+                                [isFilterEnabled]="true"
+                                name="transporterId"
+                                [(ngModel)]="generateEwayBillform.transporterId"
+                                [ItemHeight]="33"
+                            >
                                 <ng-template #notFoundLinkTemplate>
-
-                                    <a [ngClass]="{'active': keydownClassAdded}" class="notfound-option"
-                                        [keyboardShortcut]="'alt+c'" (onShortcutPress)="keydownPressed()">
-                                        <span (click)="OpenTransporterModel()"
-                                            [ngClass]="{'active': keydownClassAdded}">Create New</span>
+                                    <a
+                                        [ngClass]="{ 'active': keydownClassAdded }"
+                                        class="notfound-option"
+                                        [keyboardShortcut]="'alt+c'"
+                                        (onShortcutPress)="keydownPressed()"
+                                    >
+                                        <span
+                                            (click)="OpenTransporterModel()"
+                                            [ngClass]="{ 'active': keydownClassAdded }"
+                                            >Create New</span
+                                        >
                                     </a>
                                 </ng-template>
                             </sh-select>
-
-
-
-
-
                         </div>
                     </div>
 
-                    <div class="row d-flex e-way-body ">
+                    <div class="row d-flex e-way-body">
                         <div class="col-md-3 col-lg-3 col-sm-12 mr-t15">
-                            <label>{{localeData?.distance_km_label}}</label>
+                            <label>{{ localeData?.distance_km_label }}</label>
                         </div>
 
                         <div class="col-md-8 col-lg-8 col-sm-12 mr-t15">
-
-                            <input type="number" maxLength="4" minlength="4" digitsOnlyDirective required
-                                name="transDistance" [(ngModel)]="generateEwayBillform.transDistance"
-                                [placeholder]="localeData?.distance_km_placeholder" class="form-control input " />
-
+                            <input
+                                type="number"
+                                maxLength="4"
+                                minlength="4"
+                                digitsOnlyDirective
+                                required
+                                name="transDistance"
+                                [(ngModel)]="generateEwayBillform.transDistance"
+                                [placeholder]="localeData?.distance_km_placeholder"
+                                class="form-control input"
+                            />
                         </div>
                     </div>
 
+                    <div>
+                        <strong class="mt-3 d-block">{{ localeData?.part_b }}</strong>
+                    </div>
 
-                    <div><strong class="mt-3 d-block ">{{localeData?.part_b}}</strong></div>
-
-                    <div class="row d-flex e-way-body ">
+                    <div class="row d-flex e-way-body">
                         <div class="col-md-3 col-lg-3 col-sm-12 mr-t15">
-                            <label>{{localeData?.mode_of_transportation}}</label>
+                            <label>{{ localeData?.mode_of_transportation }}</label>
                         </div>
 
                         <div class="col-md-8 col-lg-8 col-sm-12 mr-t15">
-
-                            <ul class="list-icon-group ">
+                            <ul class="list-icon-group">
                                 <li>
-                                    <input id="transMode1" type="radio" name="transMode"
-                                        (change)="selectedModeOfTrans('road')" value="1"
-                                        [(ngModel)]="generateEwayBillform.transMode">
-                                    <label for="transMode1"><img src="assets/icon/4.svg " />
-                                        {{commonLocaleData?.app_road}}</label>
+                                    <input
+                                        id="transMode1"
+                                        type="radio"
+                                        name="transMode"
+                                        (change)="selectedModeOfTrans('road')"
+                                        value="1"
+                                        [(ngModel)]="generateEwayBillform.transMode"
+                                    />
+                                    <label for="transMode1"
+                                        ><img src="assets/icon/4.svg " /> {{ commonLocaleData?.app_road }}</label
+                                    >
                                 </li>
                                 <li>
-                                    <input id="transMode2" type="radio" name="transMode"
-                                        (change)="selectedModeOfTrans('rail')" value="2"
-                                        [(ngModel)]="generateEwayBillform.transMode">
-                                    <label for="transMode2"><img src="assets/icon/3.svg " />
-                                        {{commonLocaleData?.app_rail}}</label>
+                                    <input
+                                        id="transMode2"
+                                        type="radio"
+                                        name="transMode"
+                                        (change)="selectedModeOfTrans('rail')"
+                                        value="2"
+                                        [(ngModel)]="generateEwayBillform.transMode"
+                                    />
+                                    <label for="transMode2"
+                                        ><img src="assets/icon/3.svg " /> {{ commonLocaleData?.app_rail }}</label
+                                    >
                                 </li>
                                 <li>
-                                    <input id="transMode3" type="radio" name="transMode"
-                                        (change)="selectedModeOfTrans('air')" value="3"
-                                        [(ngModel)]="generateEwayBillform.transMode">
-                                    <label for="transMode3"><img src="assets/icon/1.svg " />
-                                        {{commonLocaleData?.app_air}}</label>
+                                    <input
+                                        id="transMode3"
+                                        type="radio"
+                                        name="transMode"
+                                        (change)="selectedModeOfTrans('air')"
+                                        value="3"
+                                        [(ngModel)]="generateEwayBillform.transMode"
+                                    />
+                                    <label for="transMode3"
+                                        ><img src="assets/icon/1.svg " /> {{ commonLocaleData?.app_air }}</label
+                                    >
                                 </li>
                                 <li>
-                                    <input id="transMode4" type="radio" name="transMode"
-                                        (change)="selectedModeOfTrans('ship')" value="4"
-                                        [(ngModel)]="generateEwayBillform.transMode">
-                                    <label for="transMode4"><img src="assets/icon/2.svg " />
-                                        {{commonLocaleData?.app_ship}}</label>
+                                    <input
+                                        id="transMode4"
+                                        type="radio"
+                                        name="transMode"
+                                        (change)="selectedModeOfTrans('ship')"
+                                        value="4"
+                                        [(ngModel)]="generateEwayBillform.transMode"
+                                    />
+                                    <label for="transMode4"
+                                        ><img src="assets/icon/2.svg " /> {{ commonLocaleData?.app_ship }}</label
+                                    >
                                 </li>
-
                             </ul>
-
                         </div>
                     </div>
 
-                    <div class="row d-flex e-way-body ">
+                    <div class="row d-flex e-way-body">
                         <div class="col-md-3 col-lg-3 col-sm-12 mr-t15">
-                            <label>{{localeData?.vehicle_type}}</label>
+                            <label>{{ localeData?.vehicle_type }}</label>
                         </div>
 
                         <div class="col-md-8 col-lg-8 col-sm-12 mr-t15">
-
-
                             <span class="p-0 mr-3">
-                                <input id="regular" class="radio-custom cp ml-0" name="vehicleType" value="R"
-                                    [(ngModel)]="generateEwayBillform.vehicleType" type="radio">
-                                <label for="regular" class="radio-custom-label">{{localeData?.regular}}</label>
+                                <input
+                                    id="regular"
+                                    class="radio-custom cp ml-0"
+                                    name="vehicleType"
+                                    value="R"
+                                    [(ngModel)]="generateEwayBillform.vehicleType"
+                                    type="radio"
+                                />
+                                <label for="regular" class="radio-custom-label">{{ localeData?.regular }}</label>
                             </span>
-
 
                             <ng-container *ngIf="!isTransModeRoad">
                                 <span class="p-0 mr-3">
-                                    <input id="dimensional" class="radio-custom cp ml-0" name="vehicleType" value="O"
-                                        [(ngModel)]="generateEwayBillform.vehicleType" type="radio">
-                                    <label for="dimensional"
-                                        class="radio-custom-label">{{localeData?.over_dimensional_cargo}}
-                                        {{isTransModeRoad}}</label>
+                                    <input
+                                        id="dimensional"
+                                        class="radio-custom cp ml-0"
+                                        name="vehicleType"
+                                        value="O"
+                                        [(ngModel)]="generateEwayBillform.vehicleType"
+                                        type="radio"
+                                    />
+                                    <label for="dimensional" class="radio-custom-label"
+                                        >{{ localeData?.over_dimensional_cargo }} {{ isTransModeRoad }}</label
+                                    >
                                 </span>
                             </ng-container>
-
                         </div>
                     </div>
 
-                    <div class="row d-flex e-way-body ">
+                    <div class="row d-flex e-way-body">
                         <div class="col-md-3 col-lg-3 col-sm-12 mr-t15">
-                            <label>{{localeData?.vehicle_no_label}}</label>
+                            <label>{{ localeData?.vehicle_no_label }}</label>
                         </div>
 
                         <div class="col-md-8 col-lg-8 col-sm-12 mr-t15">
+                            <input
+                                #name="ngModel"
+                                type="text"
+                                name="vehicleNo"
+                                required
+                                [ngClass]="{
+                                    'has-error': name.invalid && name.touched && name.dirty,
+                                    'has-success': name.valid
+                                }"
+                                [placeholder]="localeData?.vehicle_no_placeholder"
+                                pattern="[a-zA-Z0-9]{7,11}"
+                                maxlength="11"
+                                minlength="7"
+                                [(ngModel)]="generateEwayBillform.vehicleNo"
+                                class="form-control input"
+                            />
 
-                            <input #name="ngModel" type="text" name="vehicleNo" required
-                                [ngClass]="{'has-error': name.invalid && name.touched && name.dirty, 'has-success':name.valid}"
-                                [placeholder]="localeData?.vehicle_no_placeholder" pattern="[a-zA-Z0-9]{7,11}"
-                                maxlength="11" minlength="7" [(ngModel)]="generateEwayBillform.vehicleNo"
-                                class="form-control input " />
-
-                            <small class="text-danger"
-                                *ngIf="name.invalid && name.touched && name.dirty">{{localeData?.vehicle_no_format}}</small>
+                            <small class="text-danger" *ngIf="name.invalid && name.touched && name.dirty">{{
+                                localeData?.vehicle_no_format
+                            }}</small>
                         </div>
                     </div>
 
-
-                    <div class="row d-flex e-way-body ">
+                    <div class="row d-flex e-way-body">
                         <div class="col-md-3 col-lg-3 col-sm-12 mr-t15">
-                            <label for="transDocNo">{{localeData?.transporter_doc_no_label}}</label>
+                            <label for="transDocNo">{{ localeData?.transporter_doc_no_label }}</label>
                         </div>
 
                         <div class="col-md-8 col-lg-8 col-sm-12 mr-t15">
-
-                            <input type="text " name="transDocNo" [placeholder]="localeData?.vehicle_no_placeholder"
-                                [(ngModel)]="generateEwayBillform.transDocNo" maxlength="15"
-                                class="form-control input " />
-
+                            <input
+                                type="text "
+                                name="transDocNo"
+                                [placeholder]="localeData?.vehicle_no_placeholder"
+                                [(ngModel)]="generateEwayBillform.transDocNo"
+                                maxlength="15"
+                                class="form-control input"
+                            />
                         </div>
                     </div>
 
-                    <div class="row d-flex e-way-body ">
+                    <div class="row d-flex e-way-body">
                         <div class="col-md-3 col-lg-3 col-sm-12 mr-t15">
-                            <label for="transDocDate">{{localeData?.transporter_doc_date_label}}</label>
+                            <label for="transDocDate">{{ localeData?.transporter_doc_date_label }}</label>
                         </div>
 
                         <div class="col-md-8 col-lg-8 col-sm-12 mr-t15">
-
                             <div class="input position-relative">
-                                <input name="transDocDate"
-                                    [placeholder]="localeData?.transporter_doc_date_required_placeholder" type="text"
-                                    [bsConfig]="{dateInputFormat: giddhDateFormat} "
-                                    [(ngModel)]="generateEwayBillform.transDocDate" class="form-control pd-r3"
-                                    bsDatepicker />
-                                <img class="text-light-2 position-absolute date-input-icon"
-                                    src="assets/icon/date.svg " />
+                                <input
+                                    name="transDocDate"
+                                    [placeholder]="localeData?.transporter_doc_date_required_placeholder"
+                                    type="text"
+                                    [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                    [(ngModel)]="generateEwayBillform.transDocDate"
+                                    class="form-control pd-r3"
+                                    bsDatepicker
+                                />
+                                <img
+                                    class="text-light-2 position-absolute date-input-icon"
+                                    src="assets/icon/date.svg "
+                                />
                             </div>
-
                         </div>
                     </div>
 
-                    <div class="row ">
-                        <div class="col-md-12 mt-4 ">
-                            <button class="btn btn-success " [disabled]="generateInvForm.invalid"
+                    <div class="row">
+                        <div class="col-md-12 mt-4">
+                            <button
+                                class="btn btn-success"
+                                [disabled]="generateInvForm.invalid"
                                 [ladda]="isEwaybillGenerateInProcess$ | async"
-                                (click)="onSubmitEwaybill(generateInvForm)">{{localeData?.save_generate}}</button>
-                            <button class="btn btn-danger "
-                                (click)="onCancelGenerateBill()">{{commonLocaleData?.app_cancel}}</button>
+                                (click)="onSubmitEwaybill(generateInvForm)"
+                            >
+                                {{ localeData?.save_generate }}
+                            </button>
+                            <button class="btn btn-danger" (click)="onCancelGenerateBill()">
+                                {{ commonLocaleData?.app_cancel }}
+                            </button>
                         </div>
                     </div>
                 </div>
             </form>
 
-
-
             <!--right-penal-bar-->
-            <div class="right-penal ">
+            <div class="right-penal">
                 <div>
-                    <ng-container *ngFor='let invoice of selectedInvoices'>
-                        <div class="card ">
-                            <h2 class="mb-2 "><a class="btn-link ">{{invoice?.voucherNumber}}</a></h2>
-                            <div class="mr-b1 ">
-                                <label>{{commonLocaleData?.app_date}}: </label><span>{{invoice?.voucherDate}}</span>
+                    <ng-container *ngFor="let invoice of selectedInvoices">
+                        <div class="card">
+                            <h2 class="mb-2">
+                                <a class="btn-link">{{ invoice?.voucherNumber }}</a>
+                            </h2>
+                            <div class="mr-b1">
+                                <label>{{ commonLocaleData?.app_date }}: </label><span>{{ invoice?.voucherDate }}</span>
                             </div>
-                            <div class="mr-b1 ">
-                                <label>{{commonLocaleData?.app_to}}: </label><span>{{invoice?.account.name}}</span>
+                            <div class="mr-b1">
+                                <label>{{ commonLocaleData?.app_to }}: </label><span>{{ invoice?.account.name }}</span>
                             </div>
-                            <div class="mr-b1 ">
-                                <label>{{localeData?.amount}}:
-                                </label><span>{{invoice?.grandTotal?.amountForAccount}}</span>
+                            <div class="mr-b1">
+                                <label>{{ localeData?.amount }}: </label
+                                ><span>{{ invoice?.grandTotal?.amountForAccount }}</span>
                             </div>
-                            <div><button (click)="removeInvoice(invoice)"
-                                    class="btn btn-danger ">{{commonLocaleData?.app_remove}}</button></div>
+                            <div>
+                                <button (click)="removeInvoice(invoice)" class="btn btn-danger">
+                                    {{ commonLocaleData?.app_remove }}
+                                </button>
+                            </div>
                         </div>
                     </ng-container>
-
                 </div>
             </div>
         </div>
@@ -283,75 +389,130 @@
             </div>
         </div>
     </div>
-    <div bsModal #invoiceRemoveConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
-        tabindex="-1">
+    <div
+        bsModal
+        #invoiceRemoveConfirmationModel="bs-modal"
+        class="modal fade"
+        role="dialog"
+        [config]="{ keyboard: true }"
+        tabindex="-1"
+    >
         <div class="modal-dialog modal-md">
             <div class="modal-content">
-                <delete-template-confirmation-modal [message]='deleteTemplateConfirmationMessage'
-                    [flag]="confirmationFlag" (closeModelEvent)="onCloseConfirmationModal($event)">
+                <delete-template-confirmation-modal
+                    [message]="deleteTemplateConfirmationMessage"
+                    [flag]="confirmationFlag"
+                    (closeModelEvent)="onCloseConfirmationModal($event)"
+                >
                 </delete-template-confirmation-modal>
             </div>
         </div>
     </div>
 
-
-
-
     <div class="right-modal account-aside-menu-state">
         <div class="aside-overlay" [ngClass]="status ? 'in' : 'out'"></div>
         <div class="aside-pane aside-right" [ngClass]="status ? 'in' : 'out'">
-            <button type="button" class="btn btn-sm btn-primary" id="close" (click)="OpenTransporterModel()"><i
-                    class="icon-cross"></i></button>
+            <button type="button" class="btn btn-sm btn-primary" id="close" (click)="OpenTransporterModel()">
+                <i class="icon-cross"></i>
+            </button>
             <div class="form-header">
-                <h3 class="aside-title pl-2">{{commonLocaleData?.app_manage_transporter}}</h3>
+                <h3 class="aside-title pl-2">{{ commonLocaleData?.app_manage_transporter }}</h3>
             </div>
             <form #generateTransporterForm="ngForm" autocomplete="off">
                 <div class="aside-body pt-2 pb-1 pr-2 pl-2 bg-gray">
                     <div class="form-group">
-                        <label for="transporterName">{{commonLocaleData?.app_transporter_name}} <span
-                                class="text-danger">*</span></label>
-                        <input #Transportersname="ngModel" type="text" class="form-control"
-                            [ngClass]="{'has-error': Transportersname.invalid && Transportersname.touched && Transportersname.dirty, 'has-success':Transportersname.valid}"
-                            required [placeholder]="commonLocaleData?.app_transporter_name_placeholder"
-                            pattern="[a-zA-Z0-9^ .&]{5,100}" name="transporterName"
-                            [(ngModel)]="generateNewTransporter.transporterName">
+                        <label for="transporterName"
+                            >{{ commonLocaleData?.app_transporter_name }} <span class="text-danger">*</span></label
+                        >
+                        <input
+                            #Transportersname="ngModel"
+                            type="text"
+                            class="form-control"
+                            [ngClass]="{
+                                'has-error':
+                                    Transportersname.invalid && Transportersname.touched && Transportersname.dirty,
+                                'has-success': Transportersname.valid
+                            }"
+                            required
+                            [placeholder]="commonLocaleData?.app_transporter_name_placeholder"
+                            pattern="[a-zA-Z0-9^ .&]{5,100}"
+                            name="transporterName"
+                            [(ngModel)]="generateNewTransporter.transporterName"
+                        />
 
-                        <small class="text-danger"
-                            *ngIf="Transportersname.invalid && Transportersname.touched && Transportersname.dirty && Transportersname.value">{{commonLocaleData?.app_invalid_transporter_name_message}}
+                        <small
+                            class="text-danger"
+                            *ngIf="
+                                Transportersname.invalid &&
+                                Transportersname.touched &&
+                                Transportersname.dirty &&
+                                Transportersname.value
+                            "
+                            >{{ commonLocaleData?.app_invalid_transporter_name_message }}
                         </small>
                     </div>
 
                     <div class="form-group">
-                        <label for="transporterId">{{commonLocaleData?.app_transporter_id}} <span
-                                class="text-danger">*</span></label>
-                        <input #TransportersID="ngModel" type="number" pattern="[0-9^ .&]{4,15}" minlength="4"
-                            class="form-control" onKeyPress="if(this.value.length==15) return false;"
-                            [ngClass]="{'has-error': TransportersID.invalid && TransportersID.touched && TransportersID.dirty, 'has-success':TransportersID.valid}"
-                            name="transporterId" [(ngModel)]="generateNewTransporter.transporterId" required
-                            [placeholder]="commonLocaleData?.app_transporter_id_placeholder">
-                        <small class="text-danger"
-                            *ngIf="TransportersID.invalid && TransportersID.touched && TransportersID.dirty && TransportersID.value">{{commonLocaleData?.app_invalid_transporter_id_message}}
+                        <label for="transporterId"
+                            >{{ commonLocaleData?.app_transporter_id }} <span class="text-danger">*</span></label
+                        >
+                        <input
+                            #TransportersID="ngModel"
+                            type="number"
+                            pattern="[0-9^ .&]{4,15}"
+                            minlength="4"
+                            class="form-control"
+                            onKeyPress="if(this.value.length==15) return false;"
+                            [ngClass]="{
+                                'has-error': TransportersID.invalid && TransportersID.touched && TransportersID.dirty,
+                                'has-success': TransportersID.valid
+                            }"
+                            name="transporterId"
+                            [(ngModel)]="generateNewTransporter.transporterId"
+                            required
+                            [placeholder]="commonLocaleData?.app_transporter_id_placeholder"
+                        />
+                        <small
+                            class="text-danger"
+                            *ngIf="
+                                TransportersID.invalid &&
+                                TransportersID.touched &&
+                                TransportersID.dirty &&
+                                TransportersID.value
+                            "
+                            >{{ commonLocaleData?.app_invalid_transporter_id_message }}
                         </small>
                     </div>
 
                     <div class="form-group mt-3">
                         <div class="clearfix" *ngIf="!transportEditMode">
-                            <button class="btn btn-md btn-success mr-r1" [disabled]="generateTransporterForm.invalid"
+                            <button
+                                class="btn btn-md btn-success mr-r1"
+                                [disabled]="generateTransporterForm.invalid"
                                 [ladda]="isGenarateTransporterInProcess$ | async"
                                 (click)="generateTransporter(generateTransporterForm)"
-                                type="submit">{{commonLocaleData?.app_save}}</button>
-                            <button class="btn btn-md btn-danger" (click)="clearTransportForm()"
-                                type="submit">{{commonLocaleData?.app_clear}}</button>
+                                type="submit"
+                            >
+                                {{ commonLocaleData?.app_save }}
+                            </button>
+                            <button class="btn btn-md btn-danger" (click)="clearTransportForm()" type="submit">
+                                {{ commonLocaleData?.app_clear }}
+                            </button>
                         </div>
                         <div class="clearfix" *ngIf="transportEditMode">
-                            <button class="btn btn-md btn-green mr-r1" [ladda]="updateTransporterInProcess$ | async"
+                            <button
+                                class="btn btn-md btn-green mr-r1"
+                                [ladda]="updateTransporterInProcess$ | async"
                                 (click)="updateTransporter(generateTransporterForm)"
-                                type="submit">{{commonLocaleData?.app_update}}</button>
-                            <button class="btn btn-md btn-danger"
-                                (click)="clearTransportForm()">{{commonLocaleData?.app_clear}}</button>
+                                type="submit"
+                            >
+                                {{ commonLocaleData?.app_update }}
+                            </button>
+                            <button class="btn btn-md btn-danger" (click)="clearTransportForm()">
+                                {{ commonLocaleData?.app_clear }}
+                            </button>
                         </div>
                     </div>
-
                 </div>
             </form>
 
@@ -359,52 +520,81 @@
                 <table class="table basic table-modal">
                     <thead>
                         <tr>
-                            <th width="45%">{{commonLocaleData?.app_name}}
+                            <th width="45%">
+                                {{ commonLocaleData?.app_name }}
                                 <div class="icon-pointer pull-right">
-                                    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                                    <div
+                                        class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
                                         (click)="sortButtonClicked('asc', 'transporterName')"
-                                        [ngClass]="{'active-text-color': transporterFilterRequest.sortBy === 'transporterName' && transporterFilterRequest.sort === 'asc'}">
-                                    </div>
-                                    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                transporterFilterRequest.sortBy === 'transporterName' &&
+                                                transporterFilterRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                    <div
+                                        class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
                                         (click)="sortButtonClicked('desc', 'transporterName')"
-                                        [ngClass]="{'active-text-color': transporterFilterRequest.sortBy === 'transporterName' && transporterFilterRequest.sort === 'desc'}">
-                                    </div>
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                transporterFilterRequest.sortBy === 'transporterName' &&
+                                                transporterFilterRequest.sort === 'desc'
+                                        }"
+                                    ></div>
                                 </div>
                             </th>
                             <th width="45%">
-                                {{commonLocaleData?.app_transporter_id}}
+                                {{ commonLocaleData?.app_transporter_id }}
                                 <div class="icon-pointer pull-right">
-                                    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                                    <div
+                                        class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
                                         (click)="sortButtonClicked('asc', 'transporterId')"
-                                        [ngClass]="{'active-text-color': transporterFilterRequest.sortBy === 'transporterId' && transporterFilterRequest.sort === 'asc'}">
-                                    </div>
-                                    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                transporterFilterRequest.sortBy === 'transporterId' &&
+                                                transporterFilterRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                    <div
+                                        class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
                                         (click)="sortButtonClicked('desc', 'transporterId')"
-                                        [ngClass]="{'active-text-color': transporterFilterRequest.sortBy === 'transporterId' && transporterFilterRequest.sort === 'desc'}">
-                                    </div>
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                transporterFilterRequest.sortBy === 'transporterId' &&
+                                                transporterFilterRequest.sort === 'desc'
+                                        }"
+                                    ></div>
                                 </div>
                             </th>
-                            <th width="10%" class="nowrap">{{commonLocaleData?.app_actions}}</th>
+                            <th width="10%" class="nowrap">{{ commonLocaleData?.app_actions }}</th>
                         </tr>
                     </thead>
                     <tr *ngFor="let item of transporterList$ | async">
-                        <td>{{item?.transporterName}}</td>
-                        <td>{{item?.transporterId}}</td>
+                        <td>{{ item?.transporterName }}</td>
+                        <td>{{ item?.transporterId }}</td>
                         <td class="nowrap">
-                            <button (click)="editTransporter(item);"><i class="icon-edit"></i></button>
-                            <button (click)="deleteTransporter(item);"><i class="fa fa-trash"></i></button>
+                            <button (click)="editTransporter(item)"><i class="icon-edit"></i></button>
+                            <button (click)="deleteTransporter(item)"><i class="fa fa-trash"></i></button>
                         </td>
                     </tr>
                 </table>
             </div>
             <div class="text-center mt-4 mb-4" *ngIf="transporterListDetails">
-                <pagination [totalItems]="transporterListDetails.totalPages" [(ngModel)]="transporterListDetails.page"
-                    [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
-                    (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first"
-                    [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next"
-                    [lastText]="commonLocaleData?.app_last"></pagination>
+                <pagination
+                    [totalItems]="transporterListDetails.totalPages"
+                    [(ngModel)]="transporterListDetails.page"
+                    [maxSize]="5"
+                    class="pagination-sm"
+                    [boundaryLinks]="true"
+                    [itemsPerPage]="1"
+                    [rotate]="false"
+                    (pageChanged)="pageChanged($event)"
+                    [firstText]="commonLocaleData?.app_first"
+                    [previousText]="commonLocaleData?.app_previous"
+                    [nextText]="commonLocaleData?.app_next"
+                    [lastText]="commonLocaleData?.app_last"
+                ></pagination>
             </div>
-
         </div>
     </div>
 </ng-container>

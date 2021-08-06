@@ -1,14 +1,23 @@
-<div id="live" appTranslate [file]="'home/total-overdues-chart'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<div
+    id="live"
+    appTranslate
+    [file]="'home/total-overdues-chart'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <div class="card">
         <div class="panel-heading">
-            <strong>{{localeData?.chart_title}}</strong>
+            <strong>{{ localeData?.chart_title }}</strong>
             <div class="pull-right dashboard-filter">
                 <i class="icon-refresh mr-1" (click)="refreshChart()"></i>
                 <div (click)="showGiddhDatepicker($event)">
-                    <input type="text" readonly name="selectedDateRange"
-                        [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
-                        class="giddh-datepicker form-control date-range-picker dashboard-datepicker" />
+                    <input
+                        type="text"
+                        readonly
+                        name="selectedDateRange"
+                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                        class="giddh-datepicker form-control date-range-picker dashboard-datepicker"
+                    />
                 </div>
             </div>
         </div>
@@ -17,48 +26,58 @@
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </div>
             <div class="chart-div" google-chart chart="chartData" *ngIf="!requestInFlight">
-                <highcharts-chart *ngIf="chartOptions && dataFound" [Highcharts]="totaloverDueChart"
-                    [options]="chartOptions"></highcharts-chart>
+                <highcharts-chart
+                    *ngIf="chartOptions && dataFound"
+                    [Highcharts]="totaloverDueChart"
+                    [options]="chartOptions"
+                ></highcharts-chart>
                 <div class="no-data-available" *ngIf="!dataFound">
-                    <img src="{{imgPath}}noDataChart.svg" [alt]="commonLocaleData?.app_no_data_found">
+                    <img src="{{ imgPath }}noDataChart.svg" [alt]="commonLocaleData?.app_no_data_found" />
                 </div>
                 <div class="clearfix mr-b2">
                     <div class="due">
-                        <span class="mr-b1 due-amount">{{localeData?.customer_due}}</span>
+                        <span class="mr-b1 due-amount">{{ localeData?.customer_due }}</span>
                         <span class="total-amount pull-right vendor-due-text">
                             <span class="d-inline-flex">
-                                <amount-field [amount]="totalRecievable" [currencySymbol]="amountSettings.baseCurrencySymbol"
-                                    [currencyCode]="activeCompany.baseCurrency">
+                                <amount-field
+                                    [amount]="totalRecievable"
+                                    [currencySymbol]="amountSettings.baseCurrencySymbol"
+                                    [currencyCode]="activeCompany.baseCurrency"
+                                >
                                 </amount-field>
                             </span>
                         </span>
                     </div>
                     <div class="clearfix">
-                        <small>{{localeData?.pending_invoices}}</small>
+                        <small>{{ localeData?.pending_invoices }}</small>
                         <small class="d-inline-flex pull-right">
-                            <amount-field [amount]="ReceivableDurationAmt" [currencySymbol]="false"
-                                [currencyCode]="false">
+                            <amount-field
+                                [amount]="ReceivableDurationAmt"
+                                [currencySymbol]="false"
+                                [currencyCode]="false"
+                            >
                             </amount-field>
                         </small>
                     </div>
                 </div>
                 <div class="clearfix mr-b2">
                     <div class="due">
-                        <span class="mr-b1 due-amount">{{localeData?.vendor_due}}</span>
-                        <span
-                            class="total-amount pull-right customer-due-text">
+                        <span class="mr-b1 due-amount">{{ localeData?.vendor_due }}</span>
+                        <span class="total-amount pull-right customer-due-text">
                             <span class="d-inline-flex">
-                                <amount-field [amount]="totalPayable" [currencySymbol]="amountSettings.baseCurrencySymbol"
-                                    [currencyCode]="activeCompany.baseCurrency">
+                                <amount-field
+                                    [amount]="totalPayable"
+                                    [currencySymbol]="amountSettings.baseCurrencySymbol"
+                                    [currencyCode]="activeCompany.baseCurrency"
+                                >
                                 </amount-field>
                             </span>
                         </span>
                     </div>
                     <div class="clearfix">
-                        <small>{{localeData?.pending_invoices}}</small>
+                        <small>{{ localeData?.pending_invoices }}</small>
                         <small class="d-inline-flex pull-right">
-                            <amount-field [amount]="PaybaleDurationAmt" [currencySymbol]="false"
-                                [currencyCode]="false">
+                            <amount-field [amount]="PaybaleDurationAmt" [currencySymbol]="false" [currencyCode]="false">
                             </amount-field>
                         </small>
                     </div>
@@ -70,13 +89,23 @@
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
-            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions"
-                [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
-                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
-                (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOptions"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
         </div>
     </div>
 </ng-template>

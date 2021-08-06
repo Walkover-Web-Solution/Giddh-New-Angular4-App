@@ -1,15 +1,23 @@
 <div class="btn-group btn-group-lg" role="group" aria-label="">
-    <button type="button" class="btn btn-default"
-        [ngClass]="{'active-tab': ifDesignSelected, 'inactive-tab': ifContentSelected}" (click)="openTab('design')"
-        id="defaultOpen">Design
+    <button
+        type="button"
+        class="btn btn-default"
+        [ngClass]="{ 'active-tab': ifDesignSelected, 'inactive-tab': ifContentSelected }"
+        (click)="openTab('design')"
+        id="defaultOpen"
+    >
+        Design
     </button>
-    <button type="button" class="btn btn-default content-tab"
-        [ngClass]="{'active-tab': ifContentSelected, 'inactive-tab': ifDesignSelected}" (click)="openTab('content')">
+    <button
+        type="button"
+        class="btn btn-default content-tab"
+        [ngClass]="{ 'active-tab': ifContentSelected, 'inactive-tab': ifDesignSelected }"
+        (click)="openTab('content')"
+    >
         <span>Content</span>
-        <span *ngIf="errorCount" class="badge">{{errorCount}}</span>
+        <span *ngIf="errorCount" class="badge">{{ errorCount }}</span>
     </button>
 </div>
-
 
 <div class="tab">
     <design-filters [hidden]="!ifDesignSelected" [design]="ifDesignSelected" [mode]="editMode"></design-filters>

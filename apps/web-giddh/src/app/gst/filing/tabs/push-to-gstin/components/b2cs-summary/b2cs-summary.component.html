@@ -1,59 +1,59 @@
 <div class="gstr-transactions-summary">
-    <h4 class="clearfix gstr-summary-title">{{localeData?.filing?.b2c_small_details}}</h4>
-    <p class="text-muted half pd-t05">{{localeData?.filing?.b2c_small_details_invoices}}</p>
+    <h4 class="clearfix gstr-summary-title">{{ localeData?.filing?.b2c_small_details }}</h4>
+    <p class="text-muted half pd-t05">{{ localeData?.filing?.b2c_small_details_invoices }}</p>
 
     <div>
         <div>
-            <table class="transactions-table table-striped  table zi-table on-mobile-view" *ngIf="brcsSummary.length">
+            <table class="transactions-table table-striped table zi-table on-mobile-view" *ngIf="brcsSummary.length">
                 <thead>
                     <tr>
                         <th class="text-left">
                             <div class="position-relative">
-                                <div class="pull-left over-flow"> {{localeData?.filing?.type}}</div>
+                                <div class="pull-left over-flow">{{ localeData?.filing?.type }}</div>
                             </div>
                         </th>
                         <th class="text-right">
                             <div class="position-relative">
-                                <div class="over-flow"> {{localeData?.filing?.rate}}</div>
+                                <div class="over-flow">{{ localeData?.filing?.rate }}</div>
                             </div>
                         </th>
                         <th class="text-right">
                             <div class="position-relative">
-                                <div class="over-flow"> {{localeData?.filing?.place_supply}}</div>
+                                <div class="over-flow">{{ localeData?.filing?.place_supply }}</div>
                             </div>
                         </th>
                         <th class="text-right">
                             <div class="position-relative">
-                                <div class="over-flow"> {{localeData?.filing?.taxable_amount}}</div>
-                            </div>
-                        </th>
-
-                        <th class="text-right">
-                            <div class="position-relative">
-                                <div class="over-flow"> {{localeData?.filing?.igst_amount}}</div>
-                            </div>
-                        </th>
-                        <th class="text-right">
-                            <div class="position-relative">
-                                <div class="over-flow"> {{localeData?.filing?.cgst_amount}}</div>
+                                <div class="over-flow">{{ localeData?.filing?.taxable_amount }}</div>
                             </div>
                         </th>
 
                         <th class="text-right">
                             <div class="position-relative">
-                                <div class="over-flow"> {{localeData?.filing?.sgst_amount}}</div>
+                                <div class="over-flow">{{ localeData?.filing?.igst_amount }}</div>
                             </div>
                         </th>
                         <th class="text-right">
                             <div class="position-relative">
-                                <div class="over-flow"> {{commonLocaleData?.app_cess}}</div>
+                                <div class="over-flow">{{ localeData?.filing?.cgst_amount }}</div>
+                            </div>
+                        </th>
+
+                        <th class="text-right">
+                            <div class="position-relative">
+                                <div class="over-flow">{{ localeData?.filing?.sgst_amount }}</div>
+                            </div>
+                        </th>
+                        <th class="text-right">
+                            <div class="position-relative">
+                                <div class="over-flow">{{ commonLocaleData?.app_cess }}</div>
                             </div>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of brcsSummary">
-                        <td [attr.data-title]="localeData?.filing?.type"> {{item.typ ? item.typ : '-'}} </td>
+                        <td [attr.data-title]="localeData?.filing?.type">{{ item.typ ? item.typ : "-" }}</td>
                         <td [attr.data-title]="localeData?.filing?.rate" class="text-right">
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item.rt" [currencySymbol]="false" [currencyCode]="false">
@@ -61,7 +61,7 @@
                             </span>
                         </td>
                         <td [attr.data-title]="localeData?.filing?.place_supply" class="text-right">
-                            {{item.pos ? item.pos : '-'}}
+                            {{ item.pos ? item.pos : "-" }}
                         </td>
                         <td [attr.data-title]="localeData?.filing?.taxable_amount" class="text-right">
                             <span class="d-inline-flex">
@@ -100,11 +100,11 @@
 
         <div *ngIf="!brcsSummary.length">
             <div class="filings-empty-state">
-                <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" />
-                <div class="empty-msg"><span> {{localeData?.filing?.b2c_small_details_no_invoices}} </span>
+                <img src="{{ imgPath }}nofound.svg" [style.max-width.px]="110" />
+                <div class="empty-msg">
+                    <span> {{ localeData?.filing?.b2c_small_details_no_invoices }} </span>
                 </div>
             </div>
         </div>
-
     </div>
 </div>

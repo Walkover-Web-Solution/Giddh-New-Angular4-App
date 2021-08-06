@@ -1,42 +1,68 @@
-<div class="aside-pane" appTranslate (commonLocaleData)="commonLocaleData = $event"
-    (translationComplete)="translationComplete($event)">
+<div
+    class="aside-pane"
+    appTranslate
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
     <div class="form-header">
         <div>
-            <h3><span>{{actionAccount}}</span></h3>
+            <h3>
+                <span>{{ actionAccount }}</span>
+            </h3>
         </div>
     </div>
     <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
     <div class="aside-body">
         <div class="aside-pane-form">
             <ng-container *ngIf="!selectedAccountUniqueName && activeGroupUniqueName && !createAccountFromCommandK">
-                <account-add-new-details [activeGroupUniqueName]="activeGroupUniqueName"
+                <account-add-new-details
+                    [activeGroupUniqueName]="activeGroupUniqueName"
                     (isGroupSelected)="isGroupSelected($event)"
-                    [createAccountInProcess$]="createAccountInProcess$" [isDebtorCreditor]="isDebtorCreditor"
-                    [isBankAccount]="isBankAccount" [flatGroupsOptions]="flatAccountWGroupsList"
-                    (submitClicked)="addNewAcSubmit($event)" [isGstEnabledAcc]="isGstEnabledAcc"
-                    [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" [showBankDetail]="showBankDetail"
-                    [isServiceCreation]="isServiceCreation" [isCustomerCreation]="isCustomerCreation">
+                    [createAccountInProcess$]="createAccountInProcess$"
+                    [isDebtorCreditor]="isDebtorCreditor"
+                    [isBankAccount]="isBankAccount"
+                    [flatGroupsOptions]="flatAccountWGroupsList"
+                    (submitClicked)="addNewAcSubmit($event)"
+                    [isGstEnabledAcc]="isGstEnabledAcc"
+                    [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
+                    [showBankDetail]="showBankDetail"
+                    [isServiceCreation]="isServiceCreation"
+                    [isCustomerCreation]="isCustomerCreation"
+                >
                 </account-add-new-details>
             </ng-container>
             <ng-container *ngIf="selectedAccountUniqueName && activeGroupUniqueName && !createAccountFromCommandK">
-                <account-update-new-details [activeGroupUniqueName]="activeGroupUniqueName"
+                <account-update-new-details
+                    [activeGroupUniqueName]="activeGroupUniqueName"
                     [createAccountInProcess$]="createAccountInProcess$"
-                    [updateAccountInProcess$]="updateAccountInProcess$" [isGstEnabledAcc]="isGstEnabledAcc"
-                    [isDebtorCreditor]="isDebtorCreditor" [flatGroupsOptions]="flatAccountWGroupsList"
-                    (isGroupSelected)="isGroupSelected($event)" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
-                    [showDeleteButton]="false" [showBankDetail]="showBankDetail"
-                    (submitClicked)="updateAccount($event)">
+                    [updateAccountInProcess$]="updateAccountInProcess$"
+                    [isGstEnabledAcc]="isGstEnabledAcc"
+                    [isDebtorCreditor]="isDebtorCreditor"
+                    [flatGroupsOptions]="flatAccountWGroupsList"
+                    (isGroupSelected)="isGroupSelected($event)"
+                    [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
+                    [showDeleteButton]="false"
+                    [showBankDetail]="showBankDetail"
+                    (submitClicked)="updateAccount($event)"
+                >
                 </account-update-new-details>
             </ng-container>
             <ng-container *ngIf="createAccountFromCommandK">
-                <account-add-new-details [activeGroupUniqueName]="activeGroupUniqueName"
+                <account-add-new-details
+                    [activeGroupUniqueName]="activeGroupUniqueName"
                     (isGroupSelected)="isGroupSelected($event)"
-                    [createAccountInProcess$]="createAccountInProcess$" [isDebtorCreditor]="isDebtorCreditor"
-                    [isBankAccount]="isBankAccount" [flatGroupsOptions]="flatAccountWGroupsList"
-                    (submitClicked)="addNewAcSubmit($event)" [isGstEnabledAcc]="isGstEnabledAcc"
-                    [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" [showBankDetail]="showBankDetail"
-                    [isServiceCreation]="isServiceCreation" [isCustomerCreation]="isCustomerCreation"
-                    [fromCommandK]="true">
+                    [createAccountInProcess$]="createAccountInProcess$"
+                    [isDebtorCreditor]="isDebtorCreditor"
+                    [isBankAccount]="isBankAccount"
+                    [flatGroupsOptions]="flatAccountWGroupsList"
+                    (submitClicked)="addNewAcSubmit($event)"
+                    [isGstEnabledAcc]="isGstEnabledAcc"
+                    [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
+                    [showBankDetail]="showBankDetail"
+                    [isServiceCreation]="isServiceCreation"
+                    [isCustomerCreation]="isCustomerCreation"
+                    [fromCommandK]="true"
+                >
                 </account-add-new-details>
             </ng-container>
         </div>
