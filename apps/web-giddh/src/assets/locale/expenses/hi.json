@@ -28,5 +28,6 @@
     "approve_entry_error": "कृपया एंट्री मंजूर करने के लिए पहले आधार खाता चुनें ...",
     "reason_of_rejection": "अस्वीकृति का कारण",
     "search_field": "[FIELD] ढूंढे",
-    "by_creator": "[CREATOR_NAME] द्वारा"
+    "by_creator": "[CREATOR_NAME] द्वारा",
+    "delete_transaction": "क्या आप वाकई लेनदेन को हटाना चाहते हैं?"
 }
