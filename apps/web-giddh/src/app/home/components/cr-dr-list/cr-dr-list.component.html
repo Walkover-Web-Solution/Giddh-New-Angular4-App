@@ -1,23 +1,36 @@
-<div id="live" appTranslate [file]="'home/cr-dr-list'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<div
+    id="live"
+    appTranslate
+    [file]="'home/cr-dr-list'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <div class="card">
         <div class="panel-heading">
             <div class="btn-group gst-dropdown cursor-pointer pull-left" dropdown>
                 <span id="button-basic" dropdownToggle class="dropdown-toggle" aria-controls="dropdown-basic">
-                    <span> <strong>{{localeData?.chart_title}} {{showRecords}}</strong> </span> <span
-                        class="icon-arrow-down mr-l1"></span>
+                    <span>
+                        <strong>{{ localeData?.chart_title }} {{ showRecords }}</strong>
+                    </span>
+                    <span class="icon-arrow-down mr-l1"></span>
                 </span>
                 <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                    <li role="menuitem"><a class="dropdown-item"
-                            (click)="changeShowRecords(5);">{{localeData?.chart_title}} 5</a></li>
-                    <li role="menuitem"><a class="dropdown-item"
-                            (click)="changeShowRecords(10);">{{localeData?.chart_title}} 10 </a></li>
+                    <li role="menuitem">
+                        <a class="dropdown-item" (click)="changeShowRecords(5)">{{ localeData?.chart_title }} 5</a>
+                    </li>
+                    <li role="menuitem">
+                        <a class="dropdown-item" (click)="changeShowRecords(10)">{{ localeData?.chart_title }} 10 </a>
+                    </li>
                 </ul>
             </div>
             <div class="this-week pull-right" (click)="showGiddhDatepicker($event)">
-                <input type="text" readonly name="selectedDateRange"
-                    [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
-                    class="form-control giddh-datepicker date-range-picker dashboard-datepicker" />
+                <input
+                    type="text"
+                    readonly
+                    name="selectedDateRange"
+                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                    class="form-control giddh-datepicker date-range-picker dashboard-datepicker"
+                />
             </div>
         </div>
         <div class="cr-dr-body card-body position-relative">
@@ -25,31 +38,48 @@
                 <div class="table-responsive debtors-table">
                     <table class="table basic giddh-table on-mobile-view">
                         <thead [hidden]="!drAccounts?.length">
-                            <th width="30%">{{localeData?.debtors}}</th>
-                            <th width="10%">{{localeData?.invoiced_on}}</th>
-                            <th width="20%" class="text-right">{{localeData?.bill_amount}}</th>
-                            <th width="40%" class="text-right">{{commonLocaleData?.app_due_as_on}} {{dueDate | date}}
+                            <th width="30%">{{ localeData?.debtors }}</th>
+                            <th width="10%">{{ localeData?.invoiced_on }}</th>
+                            <th width="20%" class="text-right">{{ localeData?.bill_amount }}</th>
+                            <th width="40%" class="text-right">
+                                {{ commonLocaleData?.app_due_as_on }} {{ dueDate | date }}
                             </th>
                         </thead>
                         <tbody *ngIf="!isLoading">
                             <tr *ngFor="let account of drAccounts">
-                                <td [attr.data-title]="localeData?.debtors">{{account.name}}</td>
-                                <td [attr.data-title]="localeData?.invoiced_on"><span
-                                        *ngIf="account.latestInvoiceDate">{{account.latestInvoiceDate}}</span><span
-                                        *ngIf="!account.latestInvoiceDate">-</span></td>
-                                <td [attr.data-title]="localeData?.bill_amount" class="text-right"
-                                    *ngIf="account.latestBillAmount">
+                                <td [attr.data-title]="localeData?.debtors">{{ account.name }}</td>
+                                <td [attr.data-title]="localeData?.invoiced_on">
+                                    <span *ngIf="account.latestInvoiceDate">{{ account.latestInvoiceDate }}</span
+                                    ><span *ngIf="!account.latestInvoiceDate">-</span>
+                                </td>
+                                <td
+                                    [attr.data-title]="localeData?.bill_amount"
+                                    class="text-right"
+                                    *ngIf="account.latestBillAmount"
+                                >
                                     <span class="d-inline-flex">
-                                        <amount-field [amount]="account.latestBillAmount.amount" [currencySymbol]="account.latestBillAmount.symbol"
-                                            [currencyCode]="activeCompany.baseCurrency">
+                                        <amount-field
+                                            [amount]="account.latestBillAmount.amount"
+                                            [currencySymbol]="account.latestBillAmount.symbol"
+                                            [currencyCode]="activeCompany.baseCurrency"
+                                        >
                                         </amount-field>
                                     </span>
                                 </td>
-                                <td [attr.data-title]="commonLocaleData?.app_due_as_on" class="text-right"
-                                    *ngIf="!account.latestBillAmount">-</td>
+                                <td
+                                    [attr.data-title]="commonLocaleData?.app_due_as_on"
+                                    class="text-right"
+                                    *ngIf="!account.latestBillAmount"
+                                >
+                                    -
+                                </td>
                                 <td [attr.data-title]="commonLocaleData?.app_due_as_on" class="text-right">
                                     <span class="d-inline-flex">
-                                        <amount-field [amount]="account.closingBalance.amount" [currencySymbol]="activeCompany.baseCurrencySymbol" [currencyCode]="activeCompany.baseCurrency">
+                                        <amount-field
+                                            [amount]="account.closingBalance.amount"
+                                            [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                            [currencyCode]="activeCompany.baseCurrency"
+                                        >
                                         </amount-field>
                                     </span>
                                 </td>
@@ -72,31 +102,48 @@
                 <div class="table-responsive creditors-table">
                     <table class="table basic giddh-table on-mobile-view">
                         <thead [hidden]="!crAccounts?.length">
-                            <th width="30%">{{localeData?.creditors}}</th>
-                            <th width="10%">{{localeData?.invoiced_on}}</th>
-                            <th width="20%" class="text-right">{{localeData?.bill_amount}}</th>
-                            <th width="40%" class="text-right">{{commonLocaleData?.app_due_as_on}} {{dueDate | date}}
+                            <th width="30%">{{ localeData?.creditors }}</th>
+                            <th width="10%">{{ localeData?.invoiced_on }}</th>
+                            <th width="20%" class="text-right">{{ localeData?.bill_amount }}</th>
+                            <th width="40%" class="text-right">
+                                {{ commonLocaleData?.app_due_as_on }} {{ dueDate | date }}
                             </th>
                         </thead>
                         <tbody *ngIf="!isLoading">
                             <tr *ngFor="let account of crAccounts">
-                                <td [attr.data-title]="localeData?.creditors">{{account.name}}</td>
-                                <td [attr.data-title]="localeData?.invoiced_on"><span
-                                        *ngIf="account.latestInvoiceDate">{{account.latestInvoiceDate}}</span><span
-                                        *ngIf="!account.latestInvoiceDate">-</span></td>
-                                <td [attr.data-title]="localeData?.bill_amount" class="text-right"
-                                    *ngIf="account.latestBillAmount">
+                                <td [attr.data-title]="localeData?.creditors">{{ account.name }}</td>
+                                <td [attr.data-title]="localeData?.invoiced_on">
+                                    <span *ngIf="account.latestInvoiceDate">{{ account.latestInvoiceDate }}</span
+                                    ><span *ngIf="!account.latestInvoiceDate">-</span>
+                                </td>
+                                <td
+                                    [attr.data-title]="localeData?.bill_amount"
+                                    class="text-right"
+                                    *ngIf="account.latestBillAmount"
+                                >
                                     <span class="d-inline-flex">
-                                        <amount-field [amount]="account.latestBillAmount.amount" [currencySymbol]="account.latestBillAmount.symbol" [currencyCode]="activeCompany.baseCurrency">
+                                        <amount-field
+                                            [amount]="account.latestBillAmount.amount"
+                                            [currencySymbol]="account.latestBillAmount.symbol"
+                                            [currencyCode]="activeCompany.baseCurrency"
+                                        >
                                         </amount-field>
                                     </span>
                                 </td>
-                                <td [attr.data-title]="commonLocaleData?.app_due_as_on" class="text-right"
-                                    *ngIf="!account.latestBillAmount">-</td>
+                                <td
+                                    [attr.data-title]="commonLocaleData?.app_due_as_on"
+                                    class="text-right"
+                                    *ngIf="!account.latestBillAmount"
+                                >
+                                    -
+                                </td>
                                 <td [attr.data-title]="commonLocaleData?.app_due_as_on" class="text-right">
                                     <span class="d-inline-flex">
-                                        <amount-field [amount]="account.closingBalance.amount"
-                                        [currencySymbol]="activeCompany.baseCurrencySymbol"  [currencyCode]="activeCompany.baseCurrency">
+                                        <amount-field
+                                            [amount]="account.closingBalance.amount"
+                                            [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                            [currencyCode]="activeCompany.baseCurrency"
+                                        >
                                         </amount-field>
                                     </span>
                                 </td>
@@ -123,13 +170,23 @@
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
-            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions"
-                [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
-                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
-                (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOptions"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
         </div>
     </div>
 </ng-template>

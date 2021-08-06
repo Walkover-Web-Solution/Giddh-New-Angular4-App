@@ -1,12 +1,23 @@
-<ng-container appTranslate [file]="'company-import-export'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'company-import-export'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="container-fluid settings-bg">
         <div class="row">
             <div class="col-xs-12 col-sm-12">
                 <div class="backup-data">
-                    {{ (isFirstScreen ? localeData?.backup : (mode === 'export' ? commonLocaleData?.app_export :
-                    commonLocaleData?.app_import)) + ' ' + localeData?.data }}
+                    {{
+                        (isFirstScreen
+                            ? localeData?.backup
+                            : mode === "export"
+                            ? commonLocaleData?.app_export
+                            : commonLocaleData?.app_import) +
+                            " " +
+                            localeData?.data
+                    }}
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12" id="setting-tab">
@@ -14,28 +25,34 @@
                     <div class="main-container-import-export">
                         <div>
                             <div>
-                                <h2 class="text-center">{{localeData?.import_export_note}}</h2>
+                                <h2 class="text-center">{{ localeData?.import_export_note }}</h2>
                             </div>
                             <div class="d-flex export-section">
-                                <div class="export-card btn" [ngClass]="{'selected': mode === 'export'}"
-                                    (click)="setActiveTab('export')">
+                                <div
+                                    class="export-card btn"
+                                    [ngClass]="{ 'selected': mode === 'export' }"
+                                    (click)="setActiveTab('export')"
+                                >
                                     <a href="javascript:void(0)">
                                         <div class="text-center import-export-icon">
                                             <i class="fa fa-upload"></i>
                                         </div>
                                         <div>
-                                            <span class="text-uppercase">{{commonLocaleData?.app_export}}</span>
+                                            <span class="text-uppercase">{{ commonLocaleData?.app_export }}</span>
                                         </div>
                                     </a>
                                 </div>
-                                <div class="import-card btn" [ngClass]="{'selected': mode === 'import'}"
-                                    (click)="setActiveTab('import')">
+                                <div
+                                    class="import-card btn"
+                                    [ngClass]="{ 'selected': mode === 'import' }"
+                                    (click)="setActiveTab('import')"
+                                >
                                     <a href="javascript:void(0)">
                                         <div class="text-center import-export-icon">
                                             <i class="fa fa-download"></i>
                                         </div>
                                         <div>
-                                            <span class="text-uppercase">{{commonLocaleData?.app_import}}</span>
+                                            <span class="text-uppercase">{{ commonLocaleData?.app_import }}</span>
                                         </div>
                                     </a>
                                 </div>
@@ -44,8 +61,12 @@
                     </div>
                 </ng-container>
                 <ng-container *ngIf="!isFirstScreen">
-                    <company-import-export-form-component [mode]="mode" [localeData]="localeData"
-                        [commonLocaleData]="commonLocaleData" (backPressed)="back()">
+                    <company-import-export-form-component
+                        [mode]="mode"
+                        [localeData]="localeData"
+                        [commonLocaleData]="commonLocaleData"
+                        (backPressed)="back()"
+                    >
                     </company-import-export-form-component>
                 </ng-container>
             </div>

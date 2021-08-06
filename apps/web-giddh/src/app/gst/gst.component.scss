@@ -501,7 +501,7 @@ hr {
     color: inherit;
 }
 /*responsive*/
-@media screen and (max-width:768px) {
+@media screen and (max-width: 768px) {
     .month-picker {
         position: absolute;
         top: 100px !important;
@@ -510,7 +510,7 @@ hr {
     }
 }
 @media (max-width: 767px) {
-    .daterangePicker{
+    .daterangePicker {
         right: 0;
     }
     .return-content {
@@ -522,10 +522,11 @@ hr {
     .return-content .content-graph {
         padding: 15px 0;
     }
-    .gstr-1-label, .gstr-2-label{
+    .gstr-1-label,
+    .gstr-2-label {
         display: flex !important;
         margin-left: 0 !important;
-        img{
+        img {
             margin-right: 10px;
         }
     }
@@ -539,10 +540,10 @@ hr {
         display: block;
         margin-top: 10px;
     }
-    .list-inline.list-middle{
+    .list-inline.list-middle {
         display: flex;
         flex-direction: column;
-        li{
+        li {
             margin-bottom: 8px;
         }
     }

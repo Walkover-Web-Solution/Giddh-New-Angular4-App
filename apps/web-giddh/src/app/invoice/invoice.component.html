@@ -3,15 +3,32 @@
         <nav class="navbar">
             <div class="invoice-control w-100 white-bg">
                 <div class="row mr-0 ml-0">
-                    <div class="btn-group tabs-dropdown" dropdown
-                        *ngIf="selectedVoucherType !== 'debit note' && selectedVoucherType !== 'credit note' && tabsDropdown">
-                        <button id="button1-basic" dropdownToggle type="button"
-                            class="btn more-btn-dropdown dropdown-toggle" aria-controls="dropdown-basic">
+                    <div
+                        class="btn-group tabs-dropdown"
+                        dropdown
+                        *ngIf="
+                            selectedVoucherType !== 'debit note' &&
+                            selectedVoucherType !== 'credit note' &&
+                            tabsDropdown
+                        "
+                    >
+                        <button
+                            id="button1-basic"
+                            dropdownToggle
+                            type="button"
+                            class="btn more-btn-dropdown dropdown-toggle"
+                            aria-controls="dropdown-basic"
+                        >
                             Estimates
                             <span class="caret"></span>
                         </button>
-                        <ul id="dropdown1-basic" *dropdownMenu class="dropdown-menu" role="menu"
-                            aria-labelledby="button-basic">
+                        <ul
+                            id="dropdown1-basic"
+                            *dropdownMenu
+                            class="dropdown-menu"
+                            role="menu"
+                            aria-labelledby="button-basic"
+                        >
                             <li role="menuitem">
                                 <a class="dropdown-item cp">estimates</a>
                             </li>
@@ -38,123 +55,155 @@
 
                     <div id="setting-tab" class="w-100">
                         <hamburger-menu *ngIf="localeData?.tabs" [pageHeading]="getPageHeading()"></hamburger-menu>
-                        <ng-template [ngIf]="selectedVoucherType === 'debit note' || selectedVoucherType === 'credit note'">
+                        <ng-template
+                            [ngIf]="selectedVoucherType === 'debit note' || selectedVoucherType === 'credit note'"
+                        >
                             <tabset #staticTabs>
-
-                                <tab [heading]="localeData?.tabs?.debit_note" [active]="activeTab === 'debit note'"
-                                    (selectTab)="tabChanged('debit note', $event);voucherChanged('debitNote')"
-                                    [id]="(activeTab === 'debit note') ? 'giddh-page-heading': ''">
+                                <tab
+                                    [heading]="localeData?.tabs?.debit_note"
+                                    [active]="activeTab === 'debit note'"
+                                    (selectTab)="tabChanged('debit note', $event); voucherChanged('debitNote')"
+                                    [id]="activeTab === 'debit note' ? 'giddh-page-heading' : ''"
+                                >
                                     <div *ngIf="activeTab === 'debit note'" class="debit-note">
                                         <app-invoice-preview [selectedVoucher]="selectedVoucherType">
                                         </app-invoice-preview>
                                     </div>
                                 </tab>
 
-                                <tab [heading]="localeData?.tabs?.credit_note" [active]="activeTab === 'credit note'"
-                                    (selectTab)="tabChanged('credit note', $event);voucherChanged('creditNote')"
-                                    [id]="(activeTab === 'credit note') ? 'giddh-page-heading': ''">
+                                <tab
+                                    [heading]="localeData?.tabs?.credit_note"
+                                    [active]="activeTab === 'credit note'"
+                                    (selectTab)="tabChanged('credit note', $event); voucherChanged('creditNote')"
+                                    [id]="activeTab === 'credit note' ? 'giddh-page-heading' : ''"
+                                >
                                     <div *ngIf="activeTab === 'credit note'">
                                         <app-invoice-preview [selectedVoucher]="selectedVoucherType">
                                         </app-invoice-preview>
                                     </div>
                                 </tab>
 
-                                <tab [heading]="localeData?.tabs?.pending"
-                                    (selectTab)="tabChanged('pending', $event, 'debit note');"
+                                <tab
+                                    [heading]="localeData?.tabs?.pending"
+                                    (selectTab)="tabChanged('pending', $event, 'debit note')"
                                     [active]="activeTab === 'pending'"
-                                    [id]="(activeTab === 'pending') ? 'giddh-page-heading': ''">
+                                    [id]="activeTab === 'pending' ? 'giddh-page-heading' : ''"
+                                >
                                     <div *ngIf="activeTab === 'pending'">
                                         <app-invoice-generate [selectedVoucher]="selectedVoucherType">
                                         </app-invoice-generate>
                                     </div>
                                 </tab>
 
-                                <tab *ngIf="!isMobileView" [heading]="localeData?.tabs?.templates"
-                                    (selectTab)="tabChanged('templates', $event, 'debit note');"
+                                <tab
+                                    *ngIf="!isMobileView"
+                                    [heading]="localeData?.tabs?.templates"
+                                    (selectTab)="tabChanged('templates', $event, 'debit note')"
                                     [active]="activeTab === 'templates'"
-                                    [id]="(activeTab === 'templates') ? 'giddh-page-heading': ''">
+                                    [id]="activeTab === 'templates' ? 'giddh-page-heading' : ''"
+                                >
                                     <div *ngIf="activeTab === 'templates'">
                                         <edit-invoice></edit-invoice>
                                     </div>
                                 </tab>
 
-                                <tab *ngIf="selectedVoucherType !== 'debit note' && selectedVoucherType !== 'credit note'"
+                                <tab
+                                    *ngIf="
+                                        selectedVoucherType !== 'debit note' && selectedVoucherType !== 'credit note'
+                                    "
                                     [heading]="localeData?.tabs?.settings"
-                                    (selectTab)="tabChanged('settings', $event , 'debit note')"
+                                    (selectTab)="tabChanged('settings', $event, 'debit note')"
                                     [active]="activeTab === 'settings'"
-                                    [id]="(activeTab === 'settings') ? 'giddh-page-heading': ''">
+                                    [id]="activeTab === 'settings' ? 'giddh-page-heading' : ''"
+                                >
                                     <div *ngIf="activeTab === 'settings'">
                                         <app-invoice-setting></app-invoice-setting>
                                     </div>
                                 </tab>
-
                             </tabset>
-
                         </ng-template>
 
-                        <ng-template [ngIf]="selectedVoucherType !== 'debit note' && selectedVoucherType !== 'credit note'">
+                        <ng-template
+                            [ngIf]="selectedVoucherType !== 'debit note' && selectedVoucherType !== 'credit note'"
+                        >
                             <tabset #staticTabs>
-
-                                <tab [heading]="localeData?.tabs?.estimates" (selectTab)="tabChanged('estimates', $event);
-                    voucherChanged('generateEstimate')" [id]="(activeTab === 'estimates') ? 'giddh-page-heading': ''"
-                                    [active]="activeTab === 'estimates'">
+                                <tab
+                                    [heading]="localeData?.tabs?.estimates"
+                                    (selectTab)="tabChanged('estimates', $event); voucherChanged('generateEstimate')"
+                                    [id]="activeTab === 'estimates' ? 'giddh-page-heading' : ''"
+                                    [active]="activeTab === 'estimates'"
+                                >
                                     <div *ngIf="activeTab === 'estimates'">
                                         <app-proforma-list-component [voucherType]="selectedVoucherType">
                                         </app-proforma-list-component>
                                     </div>
                                 </tab>
 
-                                <tab [heading]="localeData?.tabs?.proformas"
-                                    (selectTab)="tabChanged('proformas', $event);voucherChanged('generateProforma')"
+                                <tab
+                                    [heading]="localeData?.tabs?.proformas"
+                                    (selectTab)="tabChanged('proformas', $event); voucherChanged('generateProforma')"
                                     [active]="activeTab === 'proformas'"
-                                    [id]="(activeTab === 'proformas') ? 'giddh-page-heading': ''">
+                                    [id]="activeTab === 'proformas' ? 'giddh-page-heading' : ''"
+                                >
                                     <div *ngIf="activeTab === 'proformas'">
                                         <app-proforma-list-component [voucherType]="selectedVoucherType">
                                         </app-proforma-list-component>
                                     </div>
                                 </tab>
 
-                                <tab [heading]="localeData?.tabs?.invoices"
-                                    (selectTab)="tabChanged('sales', $event);voucherChanged('sales')"
+                                <tab
+                                    [heading]="localeData?.tabs?.invoices"
+                                    (selectTab)="tabChanged('sales', $event); voucherChanged('sales')"
                                     [active]="activeTab === 'sales'"
-                                    [id]="(activeTab === 'sales') ? 'giddh-page-heading': ''">
+                                    [id]="activeTab === 'sales' ? 'giddh-page-heading' : ''"
+                                >
                                     <div *ngIf="activeTab === 'sales'">
                                         <app-invoice-preview [selectedVoucher]="selectedVoucherType">
                                         </app-invoice-preview>
                                     </div>
                                 </tab>
 
-                                <tab [heading]="localeData?.tabs?.recurring"
-                                    (selectTab)="tabChanged('recurring', $event)" [active]="activeTab === 'recurring'"
-                                    [id]="(activeTab === 'recurring') ? 'giddh-page-heading': ''">
+                                <tab
+                                    [heading]="localeData?.tabs?.recurring"
+                                    (selectTab)="tabChanged('recurring', $event)"
+                                    [active]="activeTab === 'recurring'"
+                                    [id]="activeTab === 'recurring' ? 'giddh-page-heading' : ''"
+                                >
                                     <div *ngIf="activeTab === 'recurring'">
                                         <app-recurring></app-recurring>
                                     </div>
                                 </tab>
 
-                                <tab [heading]="localeData?.tabs?.pending"
-                                    (selectTab)="tabChanged('pending',$event, 'sales');"
+                                <tab
+                                    [heading]="localeData?.tabs?.pending"
+                                    (selectTab)="tabChanged('pending', $event, 'sales')"
                                     [active]="activeTab === 'pending'"
-                                    [id]="(activeTab === 'pending') ? 'giddh-page-heading': ''">
+                                    [id]="activeTab === 'pending' ? 'giddh-page-heading' : ''"
+                                >
                                     <div *ngIf="activeTab === 'pending'">
                                         <app-invoice-generate [selectedVoucher]="selectedVoucherType">
                                         </app-invoice-generate>
                                     </div>
                                 </tab>
 
-                                <tab [heading]="localeData?.tabs?.templates" *ngIf="!isMobileView"
-                                    (selectTab)="tabChanged('templates', $event, 'sales');"
+                                <tab
+                                    [heading]="localeData?.tabs?.templates"
+                                    *ngIf="!isMobileView"
+                                    (selectTab)="tabChanged('templates', $event, 'sales')"
                                     [active]="activeTab === 'templates'"
-                                    [id]="(activeTab === 'templates') ? 'giddh-page-heading': ''">
+                                    [id]="activeTab === 'templates' ? 'giddh-page-heading' : ''"
+                                >
                                     <div *ngIf="activeTab === 'templates'">
                                         <edit-invoice></edit-invoice>
                                     </div>
                                 </tab>
 
-                                <tab [heading]="localeData?.tabs?.settings"
+                                <tab
+                                    [heading]="localeData?.tabs?.settings"
                                     (selectTab)="tabChanged('settings', $event, 'sales')"
                                     [active]="activeTab === 'settings'"
-                                    [id]="(activeTab === 'settings') ? 'giddh-page-heading': ''">
+                                    [id]="activeTab === 'settings' ? 'giddh-page-heading' : ''"
+                                >
                                     <div *ngIf="activeTab === 'settings'">
                                         <app-invoice-setting></app-invoice-setting>
                                     </div>

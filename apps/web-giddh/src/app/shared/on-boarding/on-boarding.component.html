@@ -1,16 +1,17 @@
-<div id="share-modal" class=" share-grp ">
+<div id="share-modal" class="share-grp">
     <div class="modal-header">
-        <h3>Create New {{onBoardingType}}</h3>
-        <span aria-hidden="true" class="close" data-dismiss="modal"
-            (click)="removeCompanySessionData(); closeModal();">×</span>
+        <h3>Create New {{ onBoardingType }}</h3>
+        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="removeCompanySessionData(); closeModal()"
+            >×</span
+        >
     </div>
     <div class="modal-body p-0" id="SharePop">
         <div class="welcome-wrapper">
             <div class="giddh-logo-welcome">
-                <img src="{{imgPath}}assets/images/giddh-big-logo.svg">
+                <img src="{{ imgPath }}assets/images/giddh-big-logo.svg" />
             </div>
             <div class="welcome-header">
-                <h1>Welcome {{ this.logedInuser.name}}!</h1>
+                <h1>Welcome {{ this.logedInuser.name }}!</h1>
             </div>
         </div>
         <div class="form-group clearfix add-company-detail pd-b5">
@@ -19,46 +20,69 @@
                 <!--create company from-->
                 <form name="form" #companyForm="ngForm" class="clearfix" novalidate="" autocomplete="off">
                     <div class="company-form-body row">
-
                         <div class="col-sm-12 mr-t5">
                             <div class="input-group form-group d-block mr-b3">
-                                <p>Enter your {{onBoardingType?.toLowerCase()}} name to start hassle free accounting
-                                    with
-                                    Giddh.</p>
+                                <p>
+                                    Enter your {{ onBoardingType?.toLowerCase() }} name to start hassle free accounting
+                                    with Giddh.
+                                </p>
                             </div>
                         </div>
                         <div class="col-sm-12 mr-b3">
-                            <label for="name" class="mr-t4">{{onBoardingType}} Name<sup>*</sup></label>
-                            <input name="name" id="name" #itemName type="text" required placeholder="Name"
-                                (input)="handleOnBoardingNameChange($event?.target?.value)" [(ngModel)]="company.name"
+                            <label for="name" class="mr-t4">{{ onBoardingType }} Name<sup>*</sup></label>
+                            <input
+                                name="name"
+                                id="name"
+                                #itemName
+                                type="text"
+                                required
+                                placeholder="Name"
+                                (input)="handleOnBoardingNameChange($event?.target?.value)"
+                                [(ngModel)]="company.name"
                                 class="form-control"
-                                (blur)="makeMeCaptialize(company.name);validateOnBoardingItemName($event?.target?.value);">
-                            <span class="name-error"
-                                *ngIf="companyForm?.form?.controls['name']?.errors?.maxlength">Maximum characters limit:
-                                100</span>
+                                (blur)="
+                                    makeMeCaptialize(company.name); validateOnBoardingItemName($event?.target?.value)
+                                "
+                            />
+                            <span class="name-error" *ngIf="companyForm?.form?.controls['name']?.errors?.maxlength"
+                                >Maximum characters limit: 100</span
+                            >
                         </div>
 
                         <div class="row mr-0 ml-0">
-                            <div class="col-sm-6 mr-b3 ">
+                            <div class="col-sm-6 mr-b3">
                                 <span>
                                     <label for="country" class="d-block">Country<sup>*</sup></label>
-                                    <sh-select id="country" class="w-100"
-                                        [disabled]="(onBoardingType === 'Warehouse') ? 'disabled' : null"
-                                        [options]="countrySource$ | async" [isFilterEnabled]="true" name="country"
-                                        [(ngModel)]="company.country" class="pull-left select-caret width-100"
-                                        [required]='true' [isRequired]="true" (selected)="selectCountry($event)"
-                                        [defaultValue]="selectedCountry">
+                                    <sh-select
+                                        id="country"
+                                        class="w-100"
+                                        [disabled]="onBoardingType === 'Warehouse' ? 'disabled' : null"
+                                        [options]="countrySource$ | async"
+                                        [isFilterEnabled]="true"
+                                        name="country"
+                                        [(ngModel)]="company.country"
+                                        class="pull-left select-caret width-100"
+                                        [required]="true"
+                                        [isRequired]="true"
+                                        (selected)="selectCountry($event)"
+                                        [defaultValue]="selectedCountry"
+                                    >
                                     </sh-select>
                                 </span>
                             </div>
-                            <div class="col-sm-6 mr-b3 ">
+                            <div class="col-sm-6 mr-b3">
                                 <label>Currency <sup>*</sup></label>
                                 <div class="custom-select select-caret position-relative">
-                                    <sh-select name="baseCurrency" [options]="currencySource$ | async" required
+                                    <sh-select
+                                        name="baseCurrency"
+                                        [options]="currencySource$ | async"
+                                        required
                                         [isRequired]="true"
-                                        [disabled]="(onBoardingType === 'Warehouse') ? 'disabled' : null"
-                                        [isFilterEnabled]="true" [(ngModel)]="company.baseCurrency"
-                                        [defaultValue]="company.baseCurrency"></sh-select>
+                                        [disabled]="onBoardingType === 'Warehouse' ? 'disabled' : null"
+                                        [isFilterEnabled]="true"
+                                        [(ngModel)]="company.baseCurrency"
+                                        [defaultValue]="company.baseCurrency"
+                                    ></sh-select>
                                 </div>
                             </div>
                         </div>
@@ -66,21 +90,43 @@
                         <div class="col-sm-12 mr-b3">
                             <span>
                                 <label for="contactNo" class="d-block">Mobile Number<sup>*</sup></label>
-                                <div class="d-flex welcome-select ">
-                                    <sh-select class="pull-left select-caret" required [isRequired]="true"
-                                        name="phoneCode" [placeholder]="+91" [options]="countryPhoneCode"
-                                        [(ngModel)]="company.phoneCode" [defaultValue]="company.phoneCode">
+                                <div class="d-flex welcome-select">
+                                    <sh-select
+                                        class="pull-left select-caret"
+                                        required
+                                        [isRequired]="true"
+                                        name="phoneCode"
+                                        [placeholder]="+91"
+                                        [options]="countryPhoneCode"
+                                        [(ngModel)]="company.phoneCode"
+                                        [defaultValue]="company.phoneCode"
+                                    >
                                     </sh-select>
-                                    <input type="text" pattern="[0-9]*" class="form-control pull-right" required
-                                        placeholder="9998899988" id="contactNo" autocomplete="off"
-                                        (blur)="isValidMobileNumber(mobileNoEl)" [(ngModel)]="company.contactNo"
-                                        name="contactNo" #mobileNoEl />
+                                    <input
+                                        type="text"
+                                        pattern="[0-9]*"
+                                        class="form-control pull-right"
+                                        required
+                                        placeholder="9998899988"
+                                        id="contactNo"
+                                        autocomplete="off"
+                                        (blur)="isValidMobileNumber(mobileNoEl)"
+                                        [(ngModel)]="company.contactNo"
+                                        name="contactNo"
+                                        #mobileNoEl
+                                    />
                                 </div>
                             </span>
                         </div>
                         <div class="col-sm-12 mr-t1">
-                            <button class="btn btn-sky-blue ml-0" type="submit" (click)="createCompany(null)"
-                                [disabled]="companyForm.invalid" [ladda]="isCompanyCreationInProcess$ | async">Next
+                            <button
+                                class="btn btn-sky-blue ml-0"
+                                type="submit"
+                                (click)="createCompany(null)"
+                                [disabled]="companyForm.invalid"
+                                [ladda]="isCompanyCreationInProcess$ | async"
+                            >
+                                Next
                             </button>
                         </div>
                     </div>
@@ -91,12 +137,23 @@
     </div>
 </div>
 <!--logout modal-->
-<div bsModal #logoutModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog">
+<div
+    bsModal
+    #logoutModal="bs-modal"
+    [config]="{ backdrop: 'static', keyboard: false }"
+    class="modal fade"
+    role="dialog"
+>
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <confirm-modal [title]="'Log Out'"
-                [body]="'In order to be able to use Giddh, you must create a company. Are you sure you want to cancel and logout?'"
-                (successCallBack)="logoutUser()" (cancelCallBack)="hideLogoutModal()">
+            <confirm-modal
+                [title]="'Log Out'"
+                [body]="
+                    'In order to be able to use Giddh, you must create a company. Are you sure you want to cancel and logout?'
+                "
+                (successCallBack)="logoutUser()"
+                (cancelCallBack)="hideLogoutModal()"
+            >
             </confirm-modal>
         </div>
     </div>

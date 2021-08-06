@@ -1,85 +1,134 @@
-<ng-container appTranslate [file]="'invoice/download-or-send-mail'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'invoice/download-or-send-mail'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <div class="modal-header clearfix" *ngIf="!isMobileScreen">
         <span *ngIf="showPdfWrap">
-            <button type="button" class="btn btn-md btn-info mr-r1" *ngIf="showEditButton"
-                (click)="goToedit('sales')">{{commonLocaleData?.app_edit}}</button>
-            <button type="button" class="btn btn-md btn-default mr-r1"
-                (click)="showMore = ! showMore; showEsign= false;">{{commonLocaleData?.app_more}} <span class="caret"></span></button>
+            <button type="button" class="btn btn-md btn-info mr-r1" *ngIf="showEditButton" (click)="goToedit('sales')">
+                {{ commonLocaleData?.app_edit }}
+            </button>
+            <button
+                type="button"
+                class="btn btn-md btn-default mr-r1"
+                (click)="showMore = !showMore; showEsign = false"
+            >
+                {{ commonLocaleData?.app_more }} <span class="caret"></span>
+            </button>
         </span>
         <i class="icon-cross text-right close-modal" aria-hidden="true" (click)="onCancel('closed')"></i>
 
         <!-- drop down for Esignature area -->
-        <div class="dropdown-menu mr-l3" [ngClass]="{open: showEsign}">
+        <div class="dropdown-menu mr-l3" [ngClass]="{ open: showEsign }">
             <div class="form-group">
                 <e-sign-modal-component [localeData]="localeData"></e-sign-modal-component>
-
             </div>
         </div>
 
         <!-- drop down for invoice copies -->
-        <div class="dropdown-menu mr-l3 p-0" id="setting-tab" [ngClass]="{open: showMore}">
-
+        <div class="dropdown-menu mr-l3 p-0" id="setting-tab" [ngClass]="{ open: showMore }">
             <ul class="nav nav-tabs">
-                <li class="nav-item" [ngClass]="{'active': emailTabActive}">
-                    <a class="nav-link cp" [ngClass]="{'active': emailTabActive}"
-                        (click)="emailTabActive = true;downloadTabActive=false;smsTabActive=false">{{commonLocaleData?.app_send_email}}</a>
+                <li class="nav-item" [ngClass]="{ 'active': emailTabActive }">
+                    <a
+                        class="nav-link cp"
+                        [ngClass]="{ 'active': emailTabActive }"
+                        (click)="emailTabActive = true; downloadTabActive = false; smsTabActive = false"
+                        >{{ commonLocaleData?.app_send_email }}</a
+                    >
                 </li>
-                <li class="nav-item" [ngClass]="{'active': downloadTabActive}">
-                    <a class="nav-link cp" [ngClass]="{'active': downloadTabActive}"
-                        (click)="emailTabActive = false;downloadTabActive=true;smsTabActive=false">{{commonLocaleData?.app_download}}</a>
+                <li class="nav-item" [ngClass]="{ 'active': downloadTabActive }">
+                    <a
+                        class="nav-link cp"
+                        [ngClass]="{ 'active': downloadTabActive }"
+                        (click)="emailTabActive = false; downloadTabActive = true; smsTabActive = false"
+                        >{{ commonLocaleData?.app_download }}</a
+                    >
                 </li>
-                <li class="nav-item" [ngClass]="{'active': smsTabActive}" *ngIf="isSendSmsEnabled">
-                    <a class="nav-link cp" [ngClass]="{'active': smsTabActive}"
-                        (click)="emailTabActive = false;downloadTabActive=false;smsTabActive=true">{{commonLocaleData?.app_send_sms}}</a>
+                <li class="nav-item" [ngClass]="{ 'active': smsTabActive }" *ngIf="isSendSmsEnabled">
+                    <a
+                        class="nav-link cp"
+                        [ngClass]="{ 'active': smsTabActive }"
+                        (click)="emailTabActive = false; downloadTabActive = false; smsTabActive = true"
+                        >{{ commonLocaleData?.app_send_sms }}</a
+                    >
                 </li>
             </ul>
             <div class="pd-2 clearfix">
-
                 <div [hidden]="!emailTabActive" class="mr-b2">
-                    <textarea class="form-control" #emailList [placeholder]="localeData?.enter_email_addresses"></textarea>
+                    <textarea
+                        class="form-control"
+                        #emailList
+                        [placeholder]="localeData?.enter_email_addresses"
+                    ></textarea>
                 </div>
                 <div [hidden]="!smsTabActive" class="mr-b2">
                     <textarea class="form-control" #smsList [placeholder]="localeData?.enter_mobile_no"></textarea>
                 </div>
                 <div class="clearfix" [hidden]="smsTabActive">
-                    <h3 class="font-16 mr-b05">{{localeData?.invoice_copy}}</h3>
+                    <h3 class="font-16 mr-b05">{{ localeData?.invoice_copy }}</h3>
                     <hr />
                     <div class="checkbox">
-                        <label><input type="checkbox" value="Transport"
-                                (change)="onSelectInvoiceCopy($event)">{{localeData?.transport}}</label>
+                        <label
+                            ><input type="checkbox" value="Transport" (change)="onSelectInvoiceCopy($event)" />{{
+                                localeData?.transport
+                            }}</label
+                        >
                     </div>
                     <div class="checkbox">
-                        <label><input type="checkbox" value="Customer"
-                                (change)="onSelectInvoiceCopy($event)">{{commonLocaleData?.app_customer}}</label>
+                        <label
+                            ><input type="checkbox" value="Customer" (change)="onSelectInvoiceCopy($event)" />{{
+                                commonLocaleData?.app_customer
+                            }}</label
+                        >
                     </div>
                 </div>
 
                 <div class="clearfix">
-                    <button [hidden]="!emailTabActive" type="button" class="btn btn-sm btn-success"
-                        (click)="onSendInvoiceOnMail(emailList.value)">{{commonLocaleData?.app_send}}
+                    <button
+                        [hidden]="!emailTabActive"
+                        type="button"
+                        class="btn btn-sm btn-success"
+                        (click)="onSendInvoiceOnMail(emailList.value)"
+                    >
+                        {{ commonLocaleData?.app_send }}
                     </button>
-                    <button type="button" class="btn btn-sm btn-success" (click)="downloadInvoice()"
-                        [disabled]="!invoiceType.length" [hidden]="emailTabActive || smsTabActive">{{localeData?.download_invoice}}
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-success"
+                        (click)="downloadInvoice()"
+                        [disabled]="!invoiceType.length"
+                        [hidden]="emailTabActive || smsTabActive"
+                    >
+                        {{ localeData?.download_invoice }}
                     </button>
-                    <button [hidden]="!smsTabActive" type="button" class="btn btn-sm btn-success"
-                        (click)="onSendInvoiceOnSms(smsList.value)">{{commonLocaleData?.app_send}}
+                    <button
+                        [hidden]="!smsTabActive"
+                        type="button"
+                        class="btn btn-sm btn-success"
+                        (click)="onSendInvoiceOnSms(smsList.value)"
+                    >
+                        {{ commonLocaleData?.app_send }}
                     </button>
-
                 </div>
             </div>
         </div>
-
     </div>
     <div class="modal-body p-0 clearfix" id="export-body" *ngIf="!isMobileScreen">
         <div *ngIf="isErrOccured$ | async">
-            <p class="lead text-center">{{commonLocaleData?.app_oops_something_went_wrong}}</p>
+            <p class="lead text-center">{{ commonLocaleData?.app_oops_something_went_wrong }}</p>
         </div>
         <div class="mr-t4" *ngIf="!showPdfWrap">
             <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
         </div>
         <div id="pdf-wrapper" *ngIf="showPdfWrap" class="w-100 pdf-height">
-            <iframe #pdfContainer *ngIf="sanitizedPdfFileUrl" width="100%" height="600px"
-                [src]="sanitizedPdfFileUrl"></iframe>
+            <iframe
+                #pdfContainer
+                *ngIf="sanitizedPdfFileUrl"
+                width="100%"
+                height="600px"
+                [src]="sanitizedPdfFileUrl"
+            ></iframe>
         </div>
     </div>
 
@@ -90,57 +139,87 @@
         </span>
         <i class="icon-cross text-right close-modal" aria-hidden="true" (click)="onCancel('closed')"></i>
     </div>
-    <div class="modal-body  p-0 clearfix" id="export-body" *ngIf="isMobileScreen">
+    <div class="modal-body p-0 clearfix" id="export-body" *ngIf="isMobileScreen">
         <!-- drop down for invoice copies -->
-            <ul class="nav nav-tabs">
-                <li class="nav-item" [ngClass]="{'active': emailTabActive}">
-                    <a class="nav-link cp" [ngClass]="{'active': emailTabActive}"
-                        (click)="emailTabActive = true;downloadTabActive=false;smsTabActive=false">{{commonLocaleData?.app_send_email}}</a>
-                </li>
-                <li class="nav-item" [ngClass]="{'active': downloadTabActive}">
-                    <a class="nav-link cp" [ngClass]="{'active': downloadTabActive}"
-                        (click)="emailTabActive = false;downloadTabActive=true;smsTabActive=false">{{commonLocaleData?.app_download}}</a>
-                </li>
-                <li class="nav-item" [ngClass]="{'active': smsTabActive}" *ngIf="isSendSmsEnabled">
-                    <a class="nav-link cp" [ngClass]="{'active': smsTabActive}"
-                        (click)="emailTabActive = false;downloadTabActive=false;smsTabActive=true">{{commonLocaleData?.app_send_sms}}</a>
-                </li>
-            </ul>
-            <div class="pd-2 clearfix">
-
-                <div [hidden]="!emailTabActive" class="mr-b2">
-                    <textarea class="form-control" #emailList [placeholder]="localeData?.enter_email_addresses"></textarea>
+        <ul class="nav nav-tabs">
+            <li class="nav-item" [ngClass]="{ 'active': emailTabActive }">
+                <a
+                    class="nav-link cp"
+                    [ngClass]="{ 'active': emailTabActive }"
+                    (click)="emailTabActive = true; downloadTabActive = false; smsTabActive = false"
+                    >{{ commonLocaleData?.app_send_email }}</a
+                >
+            </li>
+            <li class="nav-item" [ngClass]="{ 'active': downloadTabActive }">
+                <a
+                    class="nav-link cp"
+                    [ngClass]="{ 'active': downloadTabActive }"
+                    (click)="emailTabActive = false; downloadTabActive = true; smsTabActive = false"
+                    >{{ commonLocaleData?.app_download }}</a
+                >
+            </li>
+            <li class="nav-item" [ngClass]="{ 'active': smsTabActive }" *ngIf="isSendSmsEnabled">
+                <a
+                    class="nav-link cp"
+                    [ngClass]="{ 'active': smsTabActive }"
+                    (click)="emailTabActive = false; downloadTabActive = false; smsTabActive = true"
+                    >{{ commonLocaleData?.app_send_sms }}</a
+                >
+            </li>
+        </ul>
+        <div class="pd-2 clearfix">
+            <div [hidden]="!emailTabActive" class="mr-b2">
+                <textarea class="form-control" #emailList [placeholder]="localeData?.enter_email_addresses"></textarea>
+            </div>
+            <div [hidden]="!smsTabActive" class="mr-b2">
+                <textarea class="form-control" #smsList [placeholder]="localeData?.enter_mobile_no"></textarea>
+            </div>
+            <div class="clearfix" [hidden]="smsTabActive">
+                <h3 class="font-16 mr-b05">{{ localeData?.invoice_copy }}</h3>
+                <hr />
+                <div class="checkbox">
+                    <label
+                        ><input type="checkbox" value="Transport" (change)="onSelectInvoiceCopy($event)" />{{
+                            localeData?.transport
+                        }}</label
+                    >
                 </div>
-                <div [hidden]="!smsTabActive" class="mr-b2">
-                    <textarea class="form-control" #smsList [placeholder]="localeData?.enter_mobile_no"></textarea>
-                </div>
-                <div class="clearfix" [hidden]="smsTabActive">
-                    <h3 class="font-16 mr-b05">{{localeData?.invoice_copy}}</h3>
-                    <hr />
-                    <div class="checkbox">
-                        <label><input type="checkbox" value="Transport"
-                                (change)="onSelectInvoiceCopy($event)">{{localeData?.transport}}</label>
-                    </div>
-                    <div class="checkbox">
-                        <label><input type="checkbox" value="Customer"
-                                (change)="onSelectInvoiceCopy($event)">{{commonLocaleData?.app_customer}}</label>
-                    </div>
-                </div>
-
-                <div class="clearfix mt-2">
-                    <button [hidden]="!emailTabActive" type="button" class="btn btn-sm btn-success"
-                        (click)="onSendInvoiceOnMail(emailList.value)">{{commonLocaleData?.app_send}}
-                    </button>
-                    <button type="button" class="btn btn-sm btn-success" (click)="downloadInvoice()"
-                        [disabled]="!invoiceType.length" [hidden]="emailTabActive || smsTabActive">{{localeData?.download_invoice}}
-                    </button>
-                    <button [hidden]="!smsTabActive" type="button" class="btn btn-sm btn-success"
-                        (click)="onSendInvoiceOnSms(smsList.value)">{{commonLocaleData?.app_send}}
-                    </button>
-
+                <div class="checkbox">
+                    <label
+                        ><input type="checkbox" value="Customer" (change)="onSelectInvoiceCopy($event)" />{{
+                            commonLocaleData?.app_customer
+                        }}</label
+                    >
                 </div>
             </div>
 
+            <div class="clearfix mt-2">
+                <button
+                    [hidden]="!emailTabActive"
+                    type="button"
+                    class="btn btn-sm btn-success"
+                    (click)="onSendInvoiceOnMail(emailList.value)"
+                >
+                    {{ commonLocaleData?.app_send }}
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-sm btn-success"
+                    (click)="downloadInvoice()"
+                    [disabled]="!invoiceType.length"
+                    [hidden]="emailTabActive || smsTabActive"
+                >
+                    {{ localeData?.download_invoice }}
+                </button>
+                <button
+                    [hidden]="!smsTabActive"
+                    type="button"
+                    class="btn btn-sm btn-success"
+                    (click)="onSendInvoiceOnSms(smsList.value)"
+                >
+                    {{ commonLocaleData?.app_send }}
+                </button>
+            </div>
+        </div>
     </div>
-
 </ng-container>

@@ -1,16 +1,34 @@
-<ng-container appTranslate [file]="'trial-profit-balance/export'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'trial-profit-balance/export'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <div class="btn-group" dropdown>
         <a dropdownToggle class="cp new-icon-img"><img src="{{ imgPath }}" /></a>
-        <ul id="dropdown-pdf" *dropdownMenu class="dropdown-menu dropdown-menu-right cp tbpl-dropdown" role="menu"
-            aria-labelledby="button-basic">
+        <ul
+            id="dropdown-pdf"
+            *dropdownMenu
+            class="dropdown-menu dropdown-menu-right cp tbpl-dropdown"
+            role="menu"
+            aria-labelledby="button-basic"
+        >
             <span class="caret"></span>
-            <li><a (click)="downloadCSV('group-wise')"
-                    data-report="group-wise">{{localeData?.csv?.group_wise_report}}</a></li>
-            <li><a (click)="downloadCSV('condensed')" data-report="condensed">{{localeData?.csv?.condensed_report}}</a>
+            <li>
+                <a (click)="downloadCSV('group-wise')" data-report="group-wise">{{
+                    localeData?.csv?.group_wise_report
+                }}</a>
             </li>
-            <li><a (click)="downloadCSV('account-wise')"
-                    data-report="account-wise">{{localeData?.csv?.account_wise_report}}</a></li>
+            <li>
+                <a (click)="downloadCSV('condensed')" data-report="condensed">{{
+                    localeData?.csv?.condensed_report
+                }}</a>
+            </li>
+            <li>
+                <a (click)="downloadCSV('account-wise')" data-report="account-wise">{{
+                    localeData?.csv?.account_wise_report
+                }}</a>
+            </li>
         </ul>
     </div>
 </ng-container>

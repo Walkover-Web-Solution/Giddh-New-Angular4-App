@@ -3,13 +3,14 @@
         <i class="fa fa-exclamation-circle mr-r3"></i>
         <div class="imported-file-design-content">
             <div class="clearfix">
-                <h2 class="mt-0">{{importedCountMessage}}</h2>
-                <h3>{{failedReportMessage}}</h3>
+                <h2 class="mt-0">{{ importedCountMessage }}</h2>
+                <h3>{{ failedReportMessage }}</h3>
             </div>
             <div class="clearfix mt-4">
-                <button class="btn btn-success" [routerLink]="['/pages/import/select-type']"
-                    type="button">{{commonLocaleData?.app_continue}}</button>
-                <a class="btn" (click)="downloadImportFile()">{{commonLocaleData?.app_download_report}}</a>
+                <button class="btn btn-success" [routerLink]="['/pages/import/select-type']" type="button">
+                    {{ commonLocaleData?.app_continue }}
+                </button>
+                <a class="btn" (click)="downloadImportFile()">{{ commonLocaleData?.app_download_report }}</a>
             </div>
         </div>
     </div>

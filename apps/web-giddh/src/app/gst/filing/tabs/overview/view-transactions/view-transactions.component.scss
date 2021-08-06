@@ -6,13 +6,13 @@
     position: relative;
     top: 3px;
 }
-@media screen and (max-width:767px) {
-    .filter-band{
+@media screen and (max-width: 767px) {
+    .filter-band {
         height: auto !important;
-        .back-button{
+        .back-button {
             display: flex;
         }
-        .filter-row{
+        .filter-row {
             margin-left: 0;
             margin-bottom: 10px;
         }

@@ -1,38 +1,39 @@
 <div class="gstr-transactions-summary">
-    <h4 class="clearfix gstr-summary-title">{{localeData?.filing?.nil_summary}}</h4>
-    <p class="text-muted half pd-t05">{{localeData?.filing?.nil_summary_description}}</p>
+    <h4 class="clearfix gstr-summary-title">{{ localeData?.filing?.nil_summary }}</h4>
+    <p class="text-muted half pd-t05">{{ localeData?.filing?.nil_summary_description }}</p>
     <div>
         <div *ngIf="nilSummary && nilSummary.inv">
-            <table class="transactions-table table-striped  table zi-table on-mobile-view">
+            <table class="transactions-table table-striped table zi-table on-mobile-view">
                 <thead>
                     <tr>
                         <th class="text-left">
                             <div class="position-relative">
-                                <div class="pull-left over-flow">{{localeData?.filing?.supply_type}}</div>
+                                <div class="pull-left over-flow">{{ localeData?.filing?.supply_type }}</div>
                             </div>
                         </th>
                         <th class="text-right">
                             <div class="position-relative">
-                                <div class="over-flow">{{localeData?.filing?.nil_amount}}</div>
+                                <div class="over-flow">{{ localeData?.filing?.nil_amount }}</div>
                             </div>
                         </th>
                         <th class="text-right">
                             <div class="position-relative">
-                                <div class="over-flow">{{localeData?.filing?.exempt_amount}}</div>
+                                <div class="over-flow">{{ localeData?.filing?.exempt_amount }}</div>
                             </div>
                         </th>
                         <th class="text-right">
                             <div class="position-relative">
-                                <div class="over-flow">{{localeData?.filing?.non_gst_amount}}</div>
+                                <div class="over-flow">{{ localeData?.filing?.non_gst_amount }}</div>
                             </div>
                         </th>
                     </tr>
-
                 </thead>
 
                 <tbody>
                     <tr *ngFor="let item of nilSummary.inv">
-                        <td [attr.data-title]="localeData?.filing?.supply_type"> {{item.sply_ty ? item.sply_ty : '-'}} </td>
+                        <td [attr.data-title]="localeData?.filing?.supply_type">
+                            {{ item.sply_ty ? item.sply_ty : "-" }}
+                        </td>
                         <td [attr.data-title]="localeData?.filing?.nil_amount" class="text-right">
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item.nil_amt" [currencySymbol]="false" [currencyCode]="false">
@@ -58,10 +59,11 @@
 
         <div *ngIf="!nilSummary">
             <div class="filings-empty-state">
-                <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" />
-                <div class="empty-msg"><span> {{localeData?.filing?.no_nil_summary}} </span></div>
+                <img src="{{ imgPath }}nofound.svg" [style.max-width.px]="110" />
+                <div class="empty-msg">
+                    <span> {{ localeData?.filing?.no_nil_summary }} </span>
+                </div>
             </div>
         </div>
-
     </div>
 </div>
