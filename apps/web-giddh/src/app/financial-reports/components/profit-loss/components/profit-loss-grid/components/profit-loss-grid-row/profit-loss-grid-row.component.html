@@ -29,7 +29,7 @@
     <div class="col-4  bd-rl group text-right pull-right pd-1" *ngIf="groupDetail.level1">&nbsp;</div>
 </div>
 <cdk-virtual-scroll-viewport
-    *ngIf="(groupDetail?.isOpen || (search && !isExpandToggledDuringSearch)) && (groupDetail?.accounts | accountsFilter)?.length >= minimumViewportLimit" [itemSize]="35"
+    *ngIf="(groupDetail?.isOpen || (search && !isExpandToggledDuringSearch)) && (groupDetail?.accounts | accountsFilter: !groupDetail?.isOpen && search)?.length >= minimumViewportLimit" [itemSize]="35"
     minBufferPx="500" maxBufferPx="1000" class="trial-balance-viewport">
     <ng-container *cdkVirtualFor="let account of (groupDetail?.accounts | accountsFilter);trackBy: trackByFn">
         <ng-container *ngTemplateOutlet="templateSection; context: { $implicit: account}"></ng-container>
