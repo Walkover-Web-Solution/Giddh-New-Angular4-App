@@ -292,10 +292,12 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 this.daybookData = response?.body;
                 this.checkIsStockEntryAvailable();
             } else {
-                this.daybookData = [];
                 if(response?.message) {
+                    this.daybookData = { entries: [], totalItems: 0, page: 0 };
                     this.toasterService.clearAllToaster();
                     this.toasterService.errorToast(response?.message);
+                } else {
+                    this.daybookData = response?.body;
                 }
             }
             this.showLoader = false;
