@@ -59,26 +59,14 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
 
     public createTag(tag: TagRequest) {
         this.settingsTagService.CreateTag(tag).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.toaster.clearAllToaster();
-            if (response?.status === "success") {
-                this.getTags();
-                this.toaster.successToast(this.commonLocaleData?.app_messages?.tag_created, this.commonLocaleData?.app_success);
-            } else {
-                this.toaster.errorToast(response?.message, response?.code);                
-            }
+            this.showToaster(this.commonLocaleData?.app_messages?.tag_created, response);
         });
         this.newTag = new TagRequest();
     }
 
     public updateTag(tag: TagRequest) {
         this.settingsTagService.UpdateTag(tag).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.toaster.clearAllToaster();
-            if (response?.status === "success") {
-                this.getTags();
-                this.toaster.successToast(this.commonLocaleData?.app_messages?.tag_updated, this.commonLocaleData?.app_success);
-            } else {
-                this.toaster.errorToast(response?.message, response?.code);                
-            }
+            this.showToaster(this.commonLocaleData?.app_messages?.tag_updated, response);
         });
         this.updateIndex = null;
     }
@@ -105,13 +93,7 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
         if (yesOrNo) {
             let data = cloneDeep(this.newTag);
             this.settingsTagService.DeleteTag(data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                this.toaster.clearAllToaster();
-                if (response?.status === "success") {
-                    this.getTags();
-                    this.toaster.successToast(this.commonLocaleData?.app_messages?.tag_deleted, this.commonLocaleData?.app_success);
-                } else {
-                    this.toaster.errorToast(response?.message, response?.code);                
-                }
+                this.showToaster(this.commonLocaleData?.app_messages?.tag_deleted, response);
             });
         }
         this.newTag = new TagRequest();
@@ -133,4 +115,21 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
+    /**
+     * This will show toaster for success/error message and will get all tags if success response received
+     *
+     * @private
+     * @param {string} successMessage
+     * @param {*} response
+     * @memberof SettingsTagsComponent
+     */
+    private showToaster(successMessage: string, response: any): void {
+        this.toaster.clearAllToaster();
+        if (response?.status === "success") {
+            this.getTags();
+            this.toaster.successToast(successMessage, this.commonLocaleData?.app_success);
+        } else {
+            this.toaster.errorToast(response?.message, response?.code);                
+        }
+    }
 }
