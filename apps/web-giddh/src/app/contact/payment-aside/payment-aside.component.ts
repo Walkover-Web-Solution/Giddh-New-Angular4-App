@@ -560,6 +560,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.isPayClicked = false;
         this.receivedOtp = null;
         this.timerOn = false;
+        this.otpReceiverNameMessage = '';
         clearTimeout(this.countDownTimerRef);
     }
 
