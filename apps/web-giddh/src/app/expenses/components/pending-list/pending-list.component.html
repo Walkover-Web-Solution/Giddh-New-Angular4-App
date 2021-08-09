@@ -135,9 +135,15 @@
 
 <!-- region approve entry confirm -->
 <ng-template #ApproveConfirm>
-    <petty-cash-approve-confirm-dialog [selectedEntryForApprove]="selectedEntryForApprove"
-        [approveEntryRequestInProcess]="approveEntryRequestInProcess" [localeData]="localeData"
-        [commonLocaleData]="commonLocaleData" (approveEntry)="hideApproveConfirmPopup($event)">
+    <petty-cash-approve-confirm-dialog
+        [selectedEntryForApprove]="selectedEntryForApprove"
+        [approveEntryRequestInProcess]="approveEntryRequestInProcess"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        [pettyCashEntry]="accountEntryPettyCash"
+        [entryAgainstObject]="entryAgainstObject"
+        (approveEntry)="hideApproveConfirmPopup($event)"
+    >
     </petty-cash-approve-confirm-dialog>
 </ng-template>
 <!-- endregion -->
