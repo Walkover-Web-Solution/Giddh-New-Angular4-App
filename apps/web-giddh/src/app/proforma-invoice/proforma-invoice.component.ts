@@ -4090,12 +4090,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.startLoader(false);
                 return;
             }
-            if (!this.autoFillShipping) {
-                this.checkGstNumValidation(data.accountDetails.shippingDetails.gstNumber, this.localeData?.shipping_address);
-                if (!this.isValidGstinNumber) {
-                    this.startLoader(false);
-                    return;
-                }
+        }
+        if (data.accountDetails.shippingDetails.gstNumber && !this.autoFillShipping) {
+            this.checkGstNumValidation(data.accountDetails.shippingDetails.gstNumber, this.localeData?.shipping_address);
+            if (!this.isValidGstinNumber) {
+                this.startLoader(false);
+                return;
             }
         }
 
