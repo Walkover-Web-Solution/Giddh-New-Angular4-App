@@ -200,13 +200,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         }
         
         this.settingsTriggersService.CreateTrigger(dataToSave).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.toaster.clearAllToaster();
-            if(response?.status === "success") {
-                this.getTriggers();
-                this.toaster.successToast(this.commonLocaleData?.app_messages?.trigger_created);
-            } else {
-                this.toaster.errorToast(response?.message, response?.code);
-            }
+            this.showToaster(this.commonLocaleData?.app_messages?.trigger_created, response);
         });
     }
 
@@ -239,14 +233,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         if (userResponse) {
             if (this.confirmationFor === 'delete') {
                 this.settingsTriggersService.DeleteTrigger(this.newTriggerObj.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                    this.toaster.clearAllToaster();
-
-                    if(response?.status === "success") {
-                        this.getTriggers();
-                        this.toaster.successToast(this.commonLocaleData?.app_messages?.trigger_deleted);
-                    } else {
-                        this.toaster.errorToast(response?.message, response?.code);
-                    }
+                    this.showToaster(this.commonLocaleData?.app_messages?.trigger_deleted, response);
                 });
             } else if (this.confirmationFor === 'edit') {
                 each(this.newTriggerObj.taxDetail, (tax) => {
@@ -255,13 +242,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
 
                 this.settingsTriggersService.UpdateTrigger(this.newTriggerObj, this.newTriggerObj.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.resetNewFormModel();
-                    this.toaster.clearAllToaster();
-                    if(response?.status === "success") {
-                        this.getTriggers();
-                        this.toaster.successToast(this.commonLocaleData?.app_messages?.trigger_updated);
-                    } else {
-                        this.toaster.errorToast(response?.message, response?.code);
-                    }
+                    this.showToaster(this.commonLocaleData?.app_messages?.trigger_updated, response);
                 });
             }
         } else {
@@ -599,5 +580,23 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         this.forceClear$ = observableOf({ status: true });
         this.createTriggerForm?.reset();
         this.onResetEntityType();
+    }
+
+    /**
+     * This will show toaster for success/error message and will get all triggers if success response received
+     *
+     * @private
+     * @param {string} successMessage
+     * @param {*} response
+     * @memberof SettingTriggerComponent
+     */
+     private showToaster(successMessage: string, response: any): void {
+        this.toaster.clearAllToaster();
+        if (response?.status === "success") {
+            this.getTriggers();
+            this.toaster.successToast(successMessage, this.commonLocaleData?.app_success);
+        } else {
+            this.toaster.errorToast(response?.message, response?.code);                
+        }
     }
 }
