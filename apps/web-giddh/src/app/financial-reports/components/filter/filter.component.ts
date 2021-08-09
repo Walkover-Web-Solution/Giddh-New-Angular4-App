@@ -47,11 +47,12 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     @Output() public tbExportXLSEvent = new EventEmitter<string>();
     @Output() public tbExportCsvEvent = new EventEmitter<string>();
     @Output() public plBsExportXLSEvent = new EventEmitter<string>();
+    /** True, when expand all operation is performed */
+    @Input() public expandAll: boolean;
     @Output()
-    public expandAll: EventEmitter<boolean> = new EventEmitter<boolean>();
+    public expandAllChange: EventEmitter<boolean> = new EventEmitter<boolean>();
     public showClearSearch: boolean;
     public request: TrialBalanceRequest = {};
-    public expand: boolean = false;
     public dateOptions: IOption[] = [];
     public imgPath: string;
     public universalDateICurrent: boolean = false;
@@ -334,6 +335,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         let data = cloneDeep(this.filterForm.value);
         data.refresh = true;
         this.onPropertyChanged.emit(data);
+        this.emitExpand(false);
     }
 
     public setFYFirstTime(selectedFY: string) {
@@ -359,10 +361,9 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     /**
      * emitExpand
      */
-    public emitExpand() {
-        this.expand = !this.expand;
+    public emitExpand(event: boolean) {
         setTimeout(() => {
-            this.expandAll.emit(this.expand);
+            this.expandAllChange.emit(event);
         }, 10);
     }
 
@@ -393,9 +394,8 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
      */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity?.label;
-        this.expand = false;
         setTimeout(() => {
-            this.expandAll.emit(this.expand);
+            this.expandAllChange.emit(false);
         }, 10);
         this.onPropertyChanged.emit(this.filterForm.value);
     }
