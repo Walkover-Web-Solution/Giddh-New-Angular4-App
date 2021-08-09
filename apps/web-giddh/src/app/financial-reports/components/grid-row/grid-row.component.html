@@ -54,7 +54,7 @@
                     <span account-detail-modal-component *ngIf="modalUniqueName && modalUniqueName === account.uniqueName"
                         [shouldShowGenerateInvoice]="false" [accountUniqueName]="account.uniqueName"
                         [isModalOpen]="account.uniqueName === modalUniqueName" [accInfo]="accountDetails" [from]="from"
-                        [to]="to">
+                        [to]="to" (modalOpened)="handleModalOpened($event)">
                     </span>
                 </ng-template>
             </div>

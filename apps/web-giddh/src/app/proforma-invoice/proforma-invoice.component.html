@@ -1548,7 +1548,7 @@
                                         <select class="form-control" [disabled]="!transaction.isStockTxn"
                                             name="transaction.stockUnit_{{entryIdx}}"
                                             [(ngModel)]="transaction.stockUnit"
-                                            (ngModelChange)="onChangeUnit(transaction, $event);transaction.setAmount(entry)">
+                                            (ngModelChange)="onChangeUnit(transaction, $event);transaction.setAmount(entry); calculateWhenTrxAltered(entry, transaction);">
                                             <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">
                                                 {{stock.text}}
                                             </option>
@@ -2673,7 +2673,7 @@
                                                                 [disabled]="!transaction.isStockTxn"
                                                                 name="transaction.stockUnit_{{entryIdx}}"
                                                                 [(ngModel)]="transaction.stockUnit"
-                                                                (ngModelChange)="onChangeUnit(transaction, $event);transaction.setAmount(entry)">
+                                                                (ngModelChange)="onChangeUnit(transaction, $event);transaction.setAmount(entry);  calculateWhenTrxAltered(entry, transaction);">
                                                                 <option *ngFor="let stock of transaction.stockList"
                                                                     [ngValue]="stock.id">
                                                                     {{stock.text}}

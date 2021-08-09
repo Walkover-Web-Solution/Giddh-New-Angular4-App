@@ -47,7 +47,7 @@ import { digitsOnly } from '../../../helpers';
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
-import { API_COUNT_LIMIT, EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
+import { API_COUNT_LIMIT, EMAIL_VALIDATION_REGEX, TCS_TDS_TAXES_TYPES } from 'apps/web-giddh/src/app/app.constant';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 import { INameUniqueName } from 'apps/web-giddh/src/app/models/api-models/Inventory';
@@ -492,20 +492,20 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                             } else {
                                 this.taxGroupForm.setValue({ taxes: applicableTaxes });
                             }
-                            return differenceBy(taxes.map(p => {
-                                return { label: p.name, value: p.uniqueName };
+                            const notInheritedTax = differenceBy(taxes.map(p => {
+                                return { label: p.name, value: p.uniqueName, additional: p };
                             }), flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-                                return { label: p.name, value: p.uniqueName };
+                                return { label: p.name, value: p.uniqueName, additional: p };
                             }), 'value');
-
+                            return this.filterTaxesForDebtorCreditor(notInheritedTax);
                         } else {
                             // set value in tax group form
                             this.taxGroupForm.setValue({ taxes: applicableTaxes });
 
-                            return taxes.map(p => {
-                                return { label: p.name, value: p.uniqueName };
+                            const formattedTax = taxes.map(p => {
+                                return { label: p.name, value: p.uniqueName, additional: p };
                             });
-
+                            return this.filterTaxesForDebtorCreditor(formattedTax);
                         }
                     }
                 }
@@ -1741,6 +1741,27 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
             this.accounts = [...this.defaultAccountSuggestions];
         });
+    }
+
+    /**
+     * Filters taxes for Sundry debtors and creditors
+     *
+     * @private
+     * @param {Array<any>} [taxes] Company taxes
+     * @return {Array<any>} Filtered taxes
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    private filterTaxesForDebtorCreditor(taxes?: Array<any>): Array<any> {
+        if (this.activeGroupUniqueName === 'sundrydebtors' || this.activeParentGroup === 'sundrydebtors') {
+            // Only allow TDS receivable and TCS payable
+            return taxes.filter(tax => ['tdsrc', 'tcspay'].indexOf(tax?.additional?.taxType) > -1);
+        } else if (this.activeGroupUniqueName === 'sundrycreditors' || this.activeParentGroup === 'sundrycreditors') {
+            // Only allow TDS payable and TCS receivable
+            return taxes.filter(tax => ['tdspay', 'tcsrc'].indexOf(tax?.additional?.taxType) > -1);
+        } else {
+            // Only normal (non-other) taxes
+            return taxes.filter(tax => TCS_TDS_TAXES_TYPES.indexOf(tax?.additional?.taxType) === -1);
+        }
     }
 
 }
