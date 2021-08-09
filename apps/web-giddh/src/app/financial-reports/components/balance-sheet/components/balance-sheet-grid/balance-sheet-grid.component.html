@@ -92,15 +92,14 @@
                                 <ng-container *ngFor="let grp of list">
                                     <section
                                         class="row-1"
-                                        *ngIf="grp.isVisible || grp.isCreated"
-                                        [hidden]="!grp.isVisible"
+                                        *ngIf="grp.isVisible"
                                         balance-sheet-grid-row
+                                        [isExpandToggledDuringSearch]="isExpandToggledDuringSearch"
                                         [groupDetail]="grp"
                                         [padding]="padding"
                                         [search]="search"
                                         [from]="from"
                                         [to]="to"
-                                        [padding]="padding"
                                         [expandAll]="expandAll"
                                     >
                                         <ng-container
@@ -163,26 +162,28 @@
                                 </div>
                             </div>
                             <ng-template #groupDetails let-list let-padding="padding">
-                                <section
-                                    class="row-1"
-                                    *ngFor="let grp of list"
-                                    [hidden]="!grp.isVisible"
-                                    balance-sheet-grid-row
-                                    [groupDetail]="grp"
-                                    [padding]="padding"
-                                    [search]="search"
-                                    [padding]="padding"
-                                    [from]="from"
-                                    [to]="to"
-                                >
-                                    <ng-container
-                                        *ngTemplateOutlet="
-                                            groupDetails;
-                                            context: { $implicit: grp.childGroups, padding: padding + 20 }
-                                        "
+                                <ng-container *ngFor="let grp of list">
+                                    <section
+                                        class="row-1"
+                                        *ngIf="grp.isVisible"
+                                        balance-sheet-grid-row
+                                        [isExpandToggledDuringSearch]="isExpandToggledDuringSearch"
+                                        [groupDetail]="grp"
+                                        [padding]="padding"
+                                        [search]="search"
+                                        [padding]="padding"
+                                        [from]="from"
+                                        [to]="to"
                                     >
-                                    </ng-container>
-                                </section>
+                                        <ng-container
+                                            *ngTemplateOutlet="
+                                                groupDetails;
+                                                context: { $implicit: grp.childGroups, padding: padding + 20 }
+                                            "
+                                        >
+                                        </ng-container>
+                                    </section>
+                                </ng-container>
                             </ng-template>
                             <ng-container
                                 *ngTemplateOutlet="
