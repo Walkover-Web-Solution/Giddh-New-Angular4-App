@@ -37,7 +37,10 @@
     </div>
 </div>
 <cdk-virtual-scroll-viewport
-    *ngIf="(groupDetail?.isOpen || search) && (groupDetail?.accounts | accountsFilter)?.length >= minimumViewportLimit"
+    *ngIf="
+        (groupDetail?.isOpen || (search && !isExpandToggledDuringSearch)) &&
+        (groupDetail?.accounts | accountsFilter)?.length >= minimumViewportLimit
+    "
     [itemSize]="35"
     minBufferPx="500"
     maxBufferPx="1000"
@@ -48,7 +51,10 @@
     </ng-container>
 </cdk-virtual-scroll-viewport>
 <ng-container
-    *ngIf="(groupDetail?.isOpen || search) && (groupDetail?.accounts | accountsFilter)?.length < minimumViewportLimit"
+    *ngIf="
+        (groupDetail?.isOpen || (search && !isExpandToggledDuringSearch)) &&
+        (groupDetail?.accounts | accountsFilter)?.length < minimumViewportLimit
+    "
 >
     <ng-container *ngFor="let account of groupDetail?.accounts | accountsFilter; trackBy: trackByFn">
         <ng-container *ngTemplateOutlet="templateSection; context: { $implicit: account }"></ng-container>

@@ -73,6 +73,7 @@
                                             class="row-1"
                                             *ngIf="grp.isVisible"
                                             profit-loss-grid-row
+                                            [isExpandToggledDuringSearch]="isExpandToggledDuringSearch"
                                             [expandAll]="expandAll"
                                             [groupDetail]="grp"
                                             [padding]="padding"
@@ -153,6 +154,7 @@
                                             class="row-1"
                                             *ngIf="grp.isVisible"
                                             profit-loss-grid-row
+                                            [isExpandToggledDuringSearch]="isExpandToggledDuringSearch"
                                             [groupDetail]="grp"
                                             [padding]="padding"
                                             [search]="search"
