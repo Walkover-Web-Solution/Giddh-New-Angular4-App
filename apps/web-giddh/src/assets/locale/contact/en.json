@@ -56,6 +56,7 @@
     "cashfree_details_required_message": "Please enter Cashfree details.",
     "select_bank": "Select Bank",
     "bal": "Bal",
+    "bank_bal": "Bank Bal",
     "account_number": "Account #",
     "payment_status": "Payment Status",
     "payment_status_note": "Status of all payments will be mailed shortly.",
