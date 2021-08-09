@@ -240,34 +240,30 @@
             [ngStyle]="{ 'background-color': inputTemplate.tableColor}">
             <thead>
                 <tr>
-                    <th [hidden]="!fieldsAndVisibility.table.sNo?.display" class="text-right">
-                        {{(fieldsAndVisibility.table.sNo?.label?.length > 0) ? fieldsAndVisibility.table.sNo?.label : 'S
-                        No'}}
+                    <th [hidden]="!fieldsAndVisibility.table.sNo?.display" class="text-left">
+                        {{(fieldsAndVisibility.table.sNo?.label?.length > 0) ? fieldsAndVisibility.table.sNo?.label : 'S No'}}
                     </th>
-                    <th *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">
-                        {{(fieldsAndVisibility.table.item?.display && fieldsAndVisibility.table.item?.label?.length > 0)
-                        ? fieldsAndVisibility.table.item?.label : 'Item'}}
+                    <th *ngIf="fieldsAndVisibility.table.item?.display"
+                        class="text-left word-break">
+                        {{(fieldsAndVisibility.table.item?.display && fieldsAndVisibility.table.item?.label?.length > 0) ? fieldsAndVisibility.table.item?.label : 'Item'}}
                     </th>
-                    <th [hidden]="!fieldsAndVisibility.table.hsnSac?.display" class="text-right">
-                        {{(fieldsAndVisibility.table.hsnSac?.label?.length > 0) ?
-                        fieldsAndVisibility.table.hsnSac?.label : 'HSN/SAC'}}
+                    <th [hidden]="!fieldsAndVisibility.table.hsnSac?.display" class="text-right word-break">
+                        {{(fieldsAndVisibility.table.hsnSac?.label?.length > 0) ? fieldsAndVisibility.table.hsnSac?.label : 'HSN/SAC'}}
                     </th>
-                    <th [hidden]="!fieldsAndVisibility.table.taxes?.display" class="text-right">Tax Rate</th>
-                    <th [hidden]="!fieldsAndVisibility.table.quantity?.display" class="text-right">
-                        {{(fieldsAndVisibility.table.quantity?.label?.length > 0) ?
-                        fieldsAndVisibility.table.quantity?.label : 'Qty.'}}
+                    <th [hidden]="!fieldsAndVisibility.table.taxes?.display" class="text-right word-break">Tax Rate</th>
+                    <th [hidden]="!fieldsAndVisibility.table.quantity?.display" class="text-right word-break">
+                        {{(fieldsAndVisibility.table.quantity?.label?.length > 0) ? fieldsAndVisibility.table.quantity?.label : 'Qty.'}}
                     </th>
-                    <th [hidden]="!fieldsAndVisibility.table.rate?.display" class="text-right">
-                        {{(fieldsAndVisibility.table.rate?.label?.length > 0) ? fieldsAndVisibility.table.rate?.label :
-                        'Rate'}}
+                    <th [hidden]="!fieldsAndVisibility.table.rate?.display" class="text-right word-break">
+                        {{(fieldsAndVisibility.table.rate?.label?.length > 0) ? fieldsAndVisibility.table.rate?.label : 'Rate'}}
                     </th>
-                    <th [hidden]="!fieldsAndVisibility.table.discount?.display" class="text-right">
-                        {{(fieldsAndVisibility.table.discount?.label?.length > 0) ?
-                        fieldsAndVisibility.table.discount?.label : 'Disc.'}}
+                    <th class="text-right word-break">
+                        Total before Dis.
                     </th>
-                    <th [hidden]="!fieldsAndVisibility.table.taxableValue?.display" class="text-right">
-                        {{(fieldsAndVisibility.table.taxableValue?.label?.length > 0) ?
-                        fieldsAndVisibility.table.taxableValue?.label : 'Taxable Amt.'}}</th>
+                    <th [hidden]="!fieldsAndVisibility.table.discount?.display" class="text-right word-break">
+                        {{(fieldsAndVisibility.table.discount?.label?.length > 0) ? fieldsAndVisibility.table.discount?.label : 'Disc.'}}
+                    </th>
+                    <th [hidden]="!fieldsAndVisibility.table.taxableValue?.display" class="text-right word-break">{{(fieldsAndVisibility.table.taxableValue?.label?.length > 0) ? fieldsAndVisibility.table.taxableValue?.label : 'Taxable Amt.'}}</th>
 
                     <th [hidden]="!fieldsAndVisibility.table.total?.display" class="text-right">
                         {{(fieldsAndVisibility.table.total?.label?.length > 0) ? fieldsAndVisibility.table.total?.label
@@ -284,8 +280,8 @@
                     </td>
                     <td>5000.00</td>
                 </tr>
-                <tr>
-                    <td [hidden]="!fieldsAndVisibility.table.sNo?.display" class="text-center">1</td>
+                <tr class="vertical-align-top">
+                    <td [hidden]="!fieldsAndVisibility.table.sNo?.display" class="text-left">1</td>
                     <td [hidden]="!fieldsAndVisibility.table.item?.display && !fieldsAndVisibility.table.date?.display"
                         class="text-left">
                         <span *ngIf="fieldsAndVisibility.table.item?.display">Dummy Product Edition 1 </span>
@@ -299,6 +295,7 @@
                     <td [hidden]="!fieldsAndVisibility.table.rate?.display" class="text-right">1000.00
                         <p class="font-10 text-gray line-height-initial">$14.28</p>
                     </td>
+                    <td class="text-right">2000.00</td>
                     <td [hidden]="!fieldsAndVisibility.table.discount?.display" class="text-right">-300.00</td>
                     <td [hidden]="!fieldsAndVisibility.table.taxableValue?.display" class="text-right">1700.00</td>
 
@@ -306,8 +303,8 @@
                         <p class="font-10 text-gray line-height-initial">$28.65</p>
                     </td>
                 </tr>
-                <tr>
-                    <td [hidden]="!fieldsAndVisibility.table.sNo?.display" class="text-center">2</td>
+                <tr class="vertical-align-top">
+                    <td [hidden]="!fieldsAndVisibility.table.sNo?.display" class="text-left">2</td>
                     <td [hidden]="!fieldsAndVisibility.table.item?.display && !fieldsAndVisibility.table.date?.display"
                         class="text-left">
                         <span *ngIf="fieldsAndVisibility.table.item?.display">Dummy Product Edition 2</span>
@@ -322,6 +319,7 @@
                     <td [hidden]="!fieldsAndVisibility.table.rate?.display" class="text-right">300.00
                         <p class="font-10 text-gray line-height-initial">$4.20</p>
                     </td>
+                    <td class="text-right">600.00</td>
                     <td [hidden]="!fieldsAndVisibility.table.discount?.display" class="text-right">-500.00</td>
                     <td [hidden]="!fieldsAndVisibility.table.taxableValue?.display" class="text-right">100.00</td>
 
