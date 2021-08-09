@@ -1,10 +1,9 @@
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { Store, select } from '@ngrx/store';
-import { AppState } from '../../../store';
-import { Observable, ReplaySubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { INameUniqueName } from '../../../models/api-models/Inventory';
-import { IDiscountList, LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
+import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
+import { SettingsDiscountService } from '../../../services/settings.discount.service';
 
 export class UpdateLedgerDiscountData {
     public particular: INameUniqueName = { name: '', uniqueName: '' };
@@ -31,7 +30,6 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
     @Input() public suffixInput: string;
 
     public discountTotal: number;
-    public discountAccountsList$: Observable<IDiscountList[]>;
     public appliedDiscount: UpdateLedgerDiscountData[] = [];
     public discountFromPer: boolean = true;
     public discountFromVal: boolean = true;
@@ -43,9 +41,15 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
     }
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** List of discounts */
+    private discountsList: any[] = [];
+    /** True if get discounts list api call in progress */
+    private getDiscountsLoading: boolean = false;
 
-    constructor(private store: Store<AppState>) {
-        this.discountAccountsList$ = this.store.pipe(select(p => p.settings.discount.discountList), takeUntil(this.destroyed$));
+    constructor(
+        private settingsDiscountService: SettingsDiscountService
+    ) {
+        
     }
 
     public ngOnInit() {
@@ -83,10 +87,32 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
      * prepare discount obj
      */
     public prepareDiscountList() {
-        let discountAccountsList: IDiscountList[] = [];
-        this.discountAccountsList$.pipe(take(1)).subscribe(d => discountAccountsList = d);
-        if (discountAccountsList && discountAccountsList.length) {
-            discountAccountsList.forEach(acc => {
+        if (this.discountsList?.length > 0) {
+            this.processDiscountList();
+        } else {
+            if (this.getDiscountsLoading) {
+                return;
+            }
+            this.getDiscountsLoading = true;
+            this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status === "success" && response?.body?.length > 0) {
+                    this.discountsList = response?.body;
+                    this.processDiscountList();
+                }
+                this.getDiscountsLoading = false;
+            });
+        }
+    }
+
+    /**
+     * This will process discount list
+     *
+     * @private
+     * @memberof UpdateLedgerDiscountComponent
+     */
+    private processDiscountList(): void {
+        this.discountsList.forEach(acc => {
+            if (this.discountAccountsDetails) {
                 let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc.uniqueName);
                 if (!hasItem) {
                     let obj: LedgerDiscountClass = new LedgerDiscountClass();
@@ -99,8 +125,10 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
                     obj.name = acc.name;
                     this.discountAccountsDetails.push(obj);
                 }
-            });
-        }
+            } else {
+                this.discountAccountsDetails = [];
+            }
+        });
     }
 
     public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', val: string) {

@@ -156,7 +156,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public sourceWarehouse: true;
     public uploadInput: EventEmitter<UploadInput>;
     public fileUploadOptions: UploaderOptions;
-    public discountAccountsList$: Observable<IDiscountList[]>;
     public companyTaxesList$: Observable<TaxResponse[]>;
     public sessionKey$: Observable<string>;
     public companyName$: Observable<string>;
@@ -250,7 +249,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         private _toasty: ToasterService,
         private settingsTagService: SettingsTagService
     ) {
-        this.discountAccountsList$ = this.store.pipe(select(p => p.settings.discount.discountList), takeUntil(this.destroyed$));
         this.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
         this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
         this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));

@@ -32,7 +32,6 @@ import { InventoryReportActions } from './inventory/inventory.report.actions';
 import { InventoryEntryActions } from './inventory/inventory.entry.actions';
 import { InventoryUsersActions } from './inventory/inventory.users.actions';
 import { ImportExcelActions } from './import-excel/import-excel.actions';
-import { SettingsDiscountActions } from './settings/discount/settings.discount.action';
 import { NewVsOldInvoicesActions } from './new-vs-old-invoices.actions';
 import { CompanyImportExportActions } from './company-import-export/company-import-export.actions';
 import { AgingReportActions } from './aging-report.actions';
@@ -86,7 +85,6 @@ import { PurchaseOrderActions } from './purchase-order/purchase-order.action';
             SettingsPermissionActions,
             SessionActions,
             ImportExcelActions,
-            SettingsDiscountActions,
             NewVsOldInvoicesActions,
             AgingReportActions,
             CompanyImportExportActions,
