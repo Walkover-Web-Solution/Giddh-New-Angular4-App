@@ -67,9 +67,9 @@
                         </div>
                     </div>
                     <div class="form-group" *ngIf="!(showLoader)">
-                        <div class="form-group pull-left mr-r15 d-inline-flex relative" *ngIf="(tags$ | async)?.length">
+                        <div class="form-group pull-left mr-r15 d-inline-flex relative" *ngIf="tags?.length">
                             <i class="glyphicon glyphicon-triangle-bottom"></i>
-                            <sh-select [options]="tags$ | async" name="selectedTag" formControlName="tagName"
+                            <sh-select [options]="tags" name="selectedTag" formControlName="tagName"
                                 [isFilterEnabled]="true" (selected)="onTagSelected($event)"
                                 [placeholder]="commonLocaleData?.app_select_tag" [ItemHeight]="35"
                                 [notFoundLink]="false" (noResultsClicked)="toggleTagsModal()"
@@ -177,9 +177,9 @@
                 </div>
             </div>
             <div class="form-group" *ngIf="!(showLoader)">
-                <div class="form-group pull-left mr-r15 d-inline-flex relative" *ngIf="(tags$ | async)?.length">
+                <div class="form-group pull-left mr-r15 d-inline-flex relative" *ngIf="tags?.length">
                     <i class="glyphicon glyphicon-triangle-bottom"></i>
-                    <sh-select [options]="tags$ | async" name="selectedTag" formControlName="tagName"
+                    <sh-select [options]="tags" name="selectedTag" formControlName="tagName"
                         [isFilterEnabled]="true" (selected)="onTagSelected($event)"
                         [placeholder]="commonLocaleData?.app_select_tag" [ItemHeight]="35" [notFoundLink]="false"
                         (noResultsClicked)="toggleTagsModal()" [showNotFoundLinkAsDefault]="false" [width]="'170px'">
