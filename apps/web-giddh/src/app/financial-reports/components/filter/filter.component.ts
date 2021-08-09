@@ -335,6 +335,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         let data = cloneDeep(this.filterForm.value);
         data.refresh = true;
         this.onPropertyChanged.emit(data);
+        this.emitExpand(false);
     }
 
     public setFYFirstTime(selectedFY: string) {

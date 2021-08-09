@@ -15,6 +15,6 @@ export class AccountsFilterPipe implements PipeTransform {
      * @memberof AccountsFilterPipe
      */
     transform(accounts: Array<Account>): Array<Account> {
-        return accounts.filter(account => (account.isVisible && account.name && (account.closingBalance?.amount !== 0 || account.openingBalance?.amount !== 0 || account.debitTotal || account.creditTotal)));
+        return accounts.filter(account => ((account.isVisible || account.isIncludedInSearch) && account.name && (account.closingBalance?.amount !== 0 || account.openingBalance?.amount !== 0 || account.debitTotal || account.creditTotal)));
     }
 }
