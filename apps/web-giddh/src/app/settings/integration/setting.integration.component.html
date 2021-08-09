@@ -268,15 +268,15 @@
                                                 </div>
                                                 <div class="col-md-4 v-align-top inline mt-2">
                                                     <br>
-                                                    <span class="account-approval-status pending-approval" *ngIf="payor?.registrationStatus !== 'Success'"><i class="icon-alert-2"></i> {{localeData?.payment?.pending_self_approval}}</span>
-                                                    <span class="account-approval-status approved" *ngIf="payor?.registrationStatus === 'Success'"><i class="icon-success"></i> {{localeData?.payment?.connected}}</span>
-                                                    <span class="mr-l15 user-action-div" *ngIf="payor?.registrationStatus === 'Success'">
+                                                    <span class="account-approval-status pending-approval" *ngIf="!payor?.isConnected"><i class="icon-alert-2"></i> {{localeData?.payment?.pending_self_approval}}</span>
+                                                    <span class="account-approval-status approved" *ngIf="payor?.isConnected"><i class="icon-success"></i> {{localeData?.payment?.connected}}</span>
+                                                    <span class="mr-l15 user-action-div" *ngIf="payor?.isConnected">
                                                         <a href="javascript:;" class="icon-edit-pencil" (click)="openEditAccountUserModal(bankAccount, payor)"></a>
                                                         <a href="javascript:;" class="fa fa-trash mr-l2" (click)="showDeleteBankAccountLoginConfirmationModal(bankAccount, payor)"></a>
                                                     </span>
                                                 </div>
                                             </div>
-                                            <div class="inline" *ngIf="payor?.registrationStatus !== 'Success'">
+                                            <div class="inline" *ngIf="!payor?.isConnected">
                                                 <div class="col-md-12">
                                                     <p class="font-12" [innerHTML]="localeData?.payment?.approval_request_sent"></p>
                                                     <p class="font-10">{{localeData?.payment?.approval_request_accepted}}</p>
@@ -285,7 +285,7 @@
                                         </div>
                                     </ng-container>
                                     <button type="button" class="btn btn-light-blue bold font-14 mt-2 mr-l15" (click)="openCreateNewAccountUserModal(bankAccount)">{{localeData?.payment?.add_more_users}}</button>
-                                    <a class="btn icici-button font-12 mt-2 pull-right mr-0" href="javascript:;"><span class="icon-icici-logo"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span> {{localeData?.payment?.get_instant_overdraft}}</a>
+                                    <!-- <a class="btn icici-button font-12 mt-2 pull-right mr-0" href="javascript:;"><span class="icon-icici-logo"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span> {{localeData?.payment?.get_instant_overdraft}}</a> -->
                                 </div>
                             </div>
                         </ng-container>    
