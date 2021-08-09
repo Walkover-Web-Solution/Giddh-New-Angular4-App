@@ -78,6 +78,7 @@
                                 />
                                 <sh-select
                                     required
+                                    [disabled]="isPayClicked"
                                     [isRequired]="isPayorRequired"
                                     [placeholder]="localeData?.select_payor"
                                     [options]="payorsList"
@@ -86,6 +87,12 @@
                                     [forceClearReactive]="forceClear$ | async"
                                 ></sh-select>
                             </div>
+                            <p *ngIf="selectIntegratedBankList?.length === 1 && totalAvailableBalance">
+                                <small class="text-gray"
+                                    >{{ localeData?.bank_bal }} {{ totalAvailableBalance | giddhCurrency }}
+                                    {{ commonLocaleData?.app_dr }}</small
+                                >
+                            </p>
                         </div>
                         <div class="form-group mr-r15">
                             <label>{{ commonLocaleData?.app_total_amount }}<span class="red-text">*</span></label>
