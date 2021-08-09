@@ -14,7 +14,7 @@
                 <div class="form-group search-bar">
                     <input type="text" name="grpSrch" #grpSrch id="grpSrch" [(ngModel)]="searchString"
                         (keyup)="searchGroups(grpSrch.value)" class="form-control"
-                        [placeholder]="localeData?.search_accounts" trial-accordion="search" [style.width.px]="260" />
+                        [placeholder]="localeData?.search_accounts" financial-accordion="search" [style.width.px]="260" />
                     <a href="javascript:void(0);" class="pos-abs btn-link" (click)="resetGroupSearchString()"
                         *ngIf="grpSrch.value">{{commonLocaleData?.app_clear}}</a>
                 </div>
