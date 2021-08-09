@@ -42,7 +42,7 @@
 <cdk-virtual-scroll-viewport
     *ngIf="
         (groupDetail?.isOpen || (search && !isExpandToggledDuringSearch)) &&
-        (groupDetail?.accounts | accountsFilter)?.length >= minimumViewportLimit
+        (groupDetail?.accounts | accountsFilter: !groupDetail?.isOpen && search)?.length >= minimumViewportLimit
     "
     [itemSize]="35"
     minBufferPx="500"
