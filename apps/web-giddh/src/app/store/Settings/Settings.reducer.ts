@@ -11,7 +11,6 @@ import { IFinancialYearResponse, ILockFinancialYearRequest } from '../../service
 import { CustomActions } from '../customActions';
 import { SETTINGS_BRANCH_ACTIONS } from '../../actions/settings/branch/settings.branch.const';
 import { SETTINGS_TAG_ACTIONS } from '../../actions/settings/tag/settings.tag.const';
-import { SETTINGS_TRIGGERS_ACTIONS } from '../../actions/settings/triggers/settings.triggers.const';
 import { CreateDiscountRequest, IDiscountList } from '../../models/api-models/SettingsDiscount';
 import { SETTINGS_DISCOUNT_ACTIONS } from '../../actions/settings/discount/settings.discount.const';
 import { AccountResponse } from '../../models/api-models/Account';
@@ -86,7 +85,6 @@ export interface SettingsState {
     branches: any;
     tags: any;
     parentCompany: CompanyResponse;
-    triggers: any;
     discount: DiscountState;
     refreshCompany: boolean;
     amazonState: AmazonState;
@@ -97,7 +95,6 @@ export interface SettingsState {
     financialYearLimits: any;
     freePlanSubscribed: boolean;
     isGetAllTagsInProcess: boolean;
-    isGetAllTriggersInProcess: boolean;
 }
 
 export const initialState: SettingsState = {
@@ -114,7 +111,6 @@ export const initialState: SettingsState = {
     branches: null,
     tags: null,
     parentCompany: null,
-    triggers: null,
     discount: discountInitialState,
     refreshCompany: false,
     amazonState: AmazonInititalState,
@@ -125,8 +121,7 @@ export const initialState: SettingsState = {
     getProfileInProgress: false,
     financialYearLimits: null,
     freePlanSubscribed: false,
-    isGetAllTagsInProcess: false,
-    isGetAllTriggersInProcess: false
+    isGetAllTagsInProcess: false
 };
 
 export function SettingsReducer(state = initialState, action: CustomActions): SettingsState {
@@ -425,21 +420,6 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 ...state,
                 isGetAllTagsInProcess: false, tags: response.status === 'success' ? response.body : null
             };
-        }
-        case SETTINGS_TRIGGERS_ACTIONS.GET_TRIGGERS: {
-            return {
-                ...state,
-                isGetAllTriggersInProcess: true
-            };
-        }
-        case SETTINGS_TRIGGERS_ACTIONS.GET_TRIGGERS_RESPONSE: {
-            let response: BaseResponse<any, any> = action.payload;
-            if (response.status === 'success') {
-                newState.triggers = response.body;
-                newState.isGetAllTriggersInProcess = false;
-                return Object.assign({}, state, newState);
-            }
-            return state;
         }
         case SETTINGS_INTEGRATION_ACTIONS.GET_CASHFREE_DETAILS_RESPONSE:
             let cashFreeRes: BaseResponse<any, any> = action.payload;
