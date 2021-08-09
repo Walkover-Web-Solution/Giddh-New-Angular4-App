@@ -12,12 +12,12 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
-import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { FinancialSearchPipe } from '../shared/header/pipe/financial-search.pipe';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
 import { RecTypeModule } from '../shared/helpers/pipes/recType/recType.module';
+import { SharedModule } from '../shared/shared.module';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
@@ -96,10 +96,10 @@ import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
         ScrollingModule,
         TranslateDirectiveModule,
         HamburgerMenuModule,
-        GiddhPageLoaderModule,
         AmountFieldComponentModule,
         DatepickerWrapperModule,
-        PopoverModule
+        PopoverModule,
+        SharedModule
     ],
 })
 export class FinancialReportsModule {
