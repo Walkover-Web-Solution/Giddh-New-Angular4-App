@@ -20,6 +20,8 @@ export class BalanceSheetGridRowComponent implements OnChanges {
     @Input() public expandAll: boolean;
     /** Minimum limit on which Trial balance viewport enables */
     public minimumViewportLimit = TRIAL_BALANCE_VIEWPORT_LIMIT;
+    /** True, when expand all button is toggled while search is enabled */
+    @Input() public isExpandToggledDuringSearch: boolean;
 
     constructor(private cd: ChangeDetectorRef) {
 
