@@ -11,7 +11,6 @@ import { IFinancialYearResponse, ILockFinancialYearRequest } from '../../service
 import { CustomActions } from '../customActions';
 import { SETTINGS_BRANCH_ACTIONS } from '../../actions/settings/branch/settings.branch.const';
 import { CreateDiscountRequest, IDiscountList } from '../../models/api-models/SettingsDiscount';
-import { SETTINGS_DISCOUNT_ACTIONS } from '../../actions/settings/discount/settings.discount.const';
 import { AccountResponse } from '../../models/api-models/Account';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 import { SETTINGS_TAXES_ACTIONS } from "../../actions/settings/taxes/settings.taxes.const";
@@ -472,106 +471,6 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 return Object.assign({}, state, newState);
             }
             return state;
-
-        //  region discount reducer
-        case SETTINGS_DISCOUNT_ACTIONS.GET_DISCOUNT: {
-            return Object.assign({}, state, {
-                discount: Object.assign({}, state.discount, { isDiscountListInProcess: true })
-            });
-        }
-        case SETTINGS_DISCOUNT_ACTIONS.GET_DISCOUNT_RESPONSE: {
-            return Object.assign({}, state, {
-                discount: Object.assign({}, state.discount, {
-                    isDiscountListInProcess: false,
-                    discountList: action.payload
-                })
-            });
-        }
-
-        case SETTINGS_DISCOUNT_ACTIONS.CREATE_DISCOUNT: {
-            return Object.assign({}, state, {
-                discount: Object.assign({}, state.discount, {
-                    isDiscountCreateInProcess: true,
-                    isDiscountCreateSuccess: false
-                })
-            });
-        }
-        case SETTINGS_DISCOUNT_ACTIONS.CREATE_DISCOUNT_RESPONSE: {
-            let response: BaseResponse<AccountResponse, CreateDiscountRequest> = action.payload;
-
-            if (response.status === 'error') {
-                return Object.assign({}, state, {
-                    discount: Object.assign({}, state.discount, {
-                        isDiscountCreateInProcess: false,
-                        isDiscountCreateSuccess: false,
-                    })
-                });
-            }
-
-            let discountList = cloneDeep(state.discount.discountList);
-            discountList.push(response.body);
-            return Object.assign({}, state, {
-                discount: Object.assign({}, state.discount, {
-                    isDiscountCreateInProcess: false,
-                    isDiscountCreateSuccess: true,
-                    discountList
-                })
-            });
-        }
-
-        case SETTINGS_DISCOUNT_ACTIONS.UPDATE_DISCOUNT: {
-            return Object.assign({}, state, {
-                discount: Object.assign({}, state.discount, {
-                    isDiscountUpdateInProcess: true,
-                    isDiscountUpdateSuccess: false
-                })
-            });
-        }
-        case SETTINGS_DISCOUNT_ACTIONS.UPDATE_DISCOUNT_RESPONSE: {
-            let response: BaseResponse<AccountResponse, CreateDiscountRequest> = action.payload;
-
-            if (response.status === 'error') {
-                return Object.assign({}, state, {
-                    discount: Object.assign({}, state.discount, {
-                        isDiscountUpdateInProcess: false,
-                        isDiscountUpdateSuccess: false,
-                    })
-                });
-            }
-
-            let discountList = cloneDeep(state.discount.discountList);
-            discountList = discountList.map(dis => {
-                if (dis.uniqueName === response.queryString) {
-                    dis = response.body;
-                }
-                return dis;
-            });
-            return Object.assign({}, state, {
-                discount: Object.assign({}, state.discount, {
-                    isDiscountUpdateInProcess: false,
-                    isDiscountUpdateSuccess: true,
-                    discountList
-                })
-            });
-        }
-
-        case SETTINGS_DISCOUNT_ACTIONS.DELETE_DISCOUNT: {
-            return Object.assign({}, state, {
-                discount: Object.assign({}, state.discount, {
-                    isDeleteDiscountInProcess: true,
-                    isDeleteDiscountSuccess: false
-                })
-            });
-        }
-        case SETTINGS_DISCOUNT_ACTIONS.DELETE_DISCOUNT_RESPONSE: {
-            return Object.assign({}, state, {
-                discount: Object.assign({}, state.discount, {
-                    isDeleteDiscountInProcess: false,
-                    isDeleteDiscountSuccess: true,
-                    discountList: state.discount.discountList.filter(d => d.uniqueName !== action.payload)
-                })
-            });
-        }
         case SETTINGS_INTEGRATION_ACTIONS.GET_AMAZON_SELLER_RESPONSE: {
             let AmazonSellerRes: BaseResponse<any, any> = action.payload;
             if (AmazonSellerRes.status === 'success') {
