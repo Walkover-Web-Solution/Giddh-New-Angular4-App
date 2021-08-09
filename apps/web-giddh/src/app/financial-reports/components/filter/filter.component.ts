@@ -7,8 +7,6 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import * as moment from 'moment/moment';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
-import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
-import { createSelector } from 'reselect';
 import { Observable, ReplaySubject } from 'rxjs';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
@@ -19,6 +17,8 @@ import { SettingsBranchActions } from '../../../actions/settings/branch/settings
 import { OrganizationType } from '../../../models/user-login-state';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { cloneDeep, map, orderBy } from '../../../lodash-optimized';
+import { SettingsTagService } from '../../../services/settings.tag.service';
+import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
     selector: 'financial-filter',
@@ -34,7 +34,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public search: string = '';
     public financialOptions: IOption[] = [];
     public accountSearchControl: FormControl = new FormControl();
-    public tags$: Observable<TagRequest[]>;
+    public tags: TagRequest[] = [];
     public selectedTag: string;
     @Input() public tbExportPdf: boolean = false;
     @Input() public tbExportXLS: boolean = false;
@@ -109,11 +109,13 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     constructor(private fb: FormBuilder,
         private cd: ChangeDetectorRef,
         private store: Store<AppState>,
-        private _settingsTagActions: SettingsTagActions,
+        private settingsTagService: SettingsTagService,
         private generalService: GeneralService,
         private modalService: BsModalService,
         private breakPointObservar: BreakpointObserver,
-        private settingsBranchAction: SettingsBranchActions) {
+        private settingsBranchAction: SettingsBranchActions,
+        private toaster: ToasterService
+    ) {
         this.filterForm = this.fb.group({
             from: [''],
             to: [''],
@@ -158,7 +160,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.store.dispatch(this._settingsTagActions.GetALLTags());
+        this.getTags();
 
         this.breakPointObservar.observe([
             '(max-width: 767px)'
@@ -178,16 +180,6 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 this.seachChange.emit(this.search);
                 this.cd.detectChanges();
             });
-
-        this.tags$ = this.store.pipe(select(createSelector([(state: AppState) => state.settings.tags], (tags) => {
-            if (tags && tags.length) {
-                map(tags, (tag) => {
-                    tag.value = tag.name;
-                    tag.label = tag.name;
-                });
-                return orderBy(tags, 'name');
-            }
-        })), takeUntil(this.destroyed$));
 
         this.universalDate$.subscribe((a) => {
             if (a) {
@@ -353,7 +345,15 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     }
 
     public createTag() {
-        this.store.dispatch(this._settingsTagActions.CreateTag(this.newTagForm.getRawValue()));
+        this.settingsTagService.CreateTag(this.newTagForm.getRawValue()).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.toaster.clearAllToaster();
+            if (response?.status === "success") {
+                this.getTags();
+                this.toaster.successToast(this.commonLocaleData?.app_messages?.tag_created, this.commonLocaleData?.app_success);
+            } else {
+                this.toaster.errorToast(response?.message, response?.code);                
+            }
+        });
         this.toggleTagsModal();
     }
 
@@ -465,5 +465,22 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 { label: this.commonLocaleData?.app_financial_year, value: '0' }
             ];
         }
+    }
+
+    /**
+     * Fetching list of tags
+     *
+     * @memberof FinancialReportsFilterComponent
+     */
+    public getTags(): void {
+        this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.length > 0) {
+                map(response?.body, (tag) => {
+                    tag.value = tag.name;
+                    tag.label = tag.name;
+                });
+                this.tags = orderBy(response?.body, 'name');
+            }
+        });
     }
 }
