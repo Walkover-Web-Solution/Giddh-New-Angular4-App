@@ -10,7 +10,6 @@ import { SETTINGS_FINANCIAL_YEAR_ACTIONS } from '../../actions/settings/financia
 import { IFinancialYearResponse, ILockFinancialYearRequest } from '../../services/settings.financial-year.service';
 import { CustomActions } from '../customActions';
 import { SETTINGS_BRANCH_ACTIONS } from '../../actions/settings/branch/settings.branch.const';
-import { SETTINGS_TAG_ACTIONS } from '../../actions/settings/tag/settings.tag.const';
 import { CreateDiscountRequest, IDiscountList } from '../../models/api-models/SettingsDiscount';
 import { SETTINGS_DISCOUNT_ACTIONS } from '../../actions/settings/discount/settings.discount.const';
 import { AccountResponse } from '../../models/api-models/Account';
@@ -83,7 +82,6 @@ export interface SettingsState {
     financialYears: IFinancialYearResponse;
     usersWithCompanyPermissions: any;
     branches: any;
-    tags: any;
     parentCompany: CompanyResponse;
     discount: DiscountState;
     refreshCompany: boolean;
@@ -94,7 +92,6 @@ export interface SettingsState {
     branchRemoved: boolean;
     financialYearLimits: any;
     freePlanSubscribed: boolean;
-    isGetAllTagsInProcess: boolean;
 }
 
 export const initialState: SettingsState = {
@@ -109,7 +106,6 @@ export const initialState: SettingsState = {
     financialYears: null,
     usersWithCompanyPermissions: null,
     branches: null,
-    tags: null,
     parentCompany: null,
     discount: discountInitialState,
     refreshCompany: false,
@@ -120,8 +116,7 @@ export const initialState: SettingsState = {
     // Get profile API call in process
     getProfileInProgress: false,
     financialYearLimits: null,
-    freePlanSubscribed: false,
-    isGetAllTagsInProcess: false
+    freePlanSubscribed: false
 };
 
 export function SettingsReducer(state = initialState, action: CustomActions): SettingsState {
@@ -407,19 +402,6 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 return Object.assign({}, state, newState);
             }
             return Object.assign({}, state, newState);
-        }
-        case SETTINGS_TAG_ACTIONS.GET_ALL_TAGS: {
-            return {
-                ...state,
-                isGetAllTagsInProcess: true
-            };
-        }
-        case SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE: {
-            let response: BaseResponse<any, any> = action.payload;
-            return {
-                ...state,
-                isGetAllTagsInProcess: false, tags: response.status === 'success' ? response.body : null
-            };
         }
         case SETTINGS_INTEGRATION_ACTIONS.GET_CASHFREE_DETAILS_RESPONSE:
             let cashFreeRes: BaseResponse<any, any> = action.payload;
