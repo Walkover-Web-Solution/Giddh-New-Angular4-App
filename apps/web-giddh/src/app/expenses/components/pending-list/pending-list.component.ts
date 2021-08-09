@@ -325,8 +325,8 @@ export class PendingListComponent implements OnInit, OnChanges {
      * Returns true, if the account belongs to cash or bank account
      *
      * @private
-     * @param {any} particular Account unique name
-     * @returns {boolean} Promise to carry out further operations
+     * @param {*} particular
+     * @returns {boolean}
      * @memberof PendingListComponent
      */
     private isCashBankAccount(particular: any): boolean {
