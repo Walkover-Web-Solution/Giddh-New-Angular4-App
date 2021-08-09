@@ -1,0 +1,58 @@
+.dropdown-menu > li > a.btn-link {
+    color: #10aae0;
+}
+
+:host .dropdown-menu {
+    overflow: auto;
+}
+
+.dropdown-menu {
+    right: -110px;
+    left: auto;
+    top: 8px;
+}
+
+td {
+    vertical-align: middle !important;
+}
+.custom-item {
+    padding-top: 5px;
+}
+
+.custom-item:hover {
+    background-color: #e3e4ed !important;
+}
+
+.custom-item {
+    padding: 5px;
+}
+
+.custom-item:hover span {
+    color: #5b64c9 !important;
+}
+
+.multi-select .caret {
+    display: block !important;
+}
+
+.multi-select.adjust .caret {
+    right: -2px !important;
+    top: 14px !important;
+}
+
+:host {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.fa-percent {
+    top: 9px;
+    right: 6px;
+    color: #acb0b9;
+}
+.discount-name-detail {
+    list-style: none;
+    overflow: auto;
+    max-height: 100px;
+}
