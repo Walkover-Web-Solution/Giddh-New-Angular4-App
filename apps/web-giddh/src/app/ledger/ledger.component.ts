@@ -20,7 +20,6 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { CompanyActions } from '../actions/company.actions';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { SettingsDiscountActions } from '../actions/settings/discount/settings.discount.action';
-import { SettingsTagActions } from '../actions/settings/tag/settings.tag.actions';
 import { LoaderService } from '../loader/loader.service';
 import { cloneDeep, filter, find, uniq } from '../lodash-optimized';
 import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
@@ -260,7 +259,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private _ledgerService: LedgerService,
         private _toaster: ToasterService,
         private _companyActions: CompanyActions,
-        private _settingsTagActions: SettingsTagActions,
         private componentFactoryResolver: ComponentFactoryResolver,
         private generalService: GeneralService,
         private _loginActions: LoginActions,
@@ -496,7 +494,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.store.dispatch(this._settingsDiscountAction.GetDiscount());
-        this.store.dispatch(this._settingsTagActions.GetALLTags());
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         // get company taxes
         this.store.dispatch(this._companyActions.getTax());
