@@ -47,7 +47,7 @@
                                 <ng-template #groupDetails let-list let-padding="padding">
                                     <ng-container *ngFor="let grp of list" >
                                         <section class="row-1" *ngIf="grp.isVisible"
-                                            profit-loss-grid-row [expandAll]="expandAll" [groupDetail]="grp" [padding]="padding" [search]="search"
+                                            profit-loss-grid-row [isExpandToggledDuringSearch]="isExpandToggledDuringSearch" [expandAll]="expandAll" [groupDetail]="grp" [padding]="padding" [search]="search"
                                             [from]="from" [to]="to" [incomeStatement]="plData?.incomeStatment">
                                             <ng-container
                                                 *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 10  }">
@@ -100,7 +100,7 @@
                                 <!--Grid-->
                                 <ng-template #groupDetails let-list let-padding="padding">
                                     <ng-container *ngFor="let grp of list">
-                                        <section class="row-1" *ngIf="grp.isVisible" profit-loss-grid-row [groupDetail]="grp"
+                                        <section class="row-1" *ngIf="grp.isVisible" profit-loss-grid-row [isExpandToggledDuringSearch]="isExpandToggledDuringSearch" [groupDetail]="grp"
                                             [padding]="padding" [search]="search" [padding]="padding" [from]="from"
                                             [to]="to">
                                             <ng-container

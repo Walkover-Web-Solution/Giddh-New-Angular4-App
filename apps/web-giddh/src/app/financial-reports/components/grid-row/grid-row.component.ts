@@ -36,6 +36,8 @@ export class GridRowComponent implements OnChanges, OnDestroy {
     public accountDetails: IFlattenAccountsResultItem;
     /** Minimum limit on which Trial balance viewport enables */
     public minimumViewportLimit = TRIAL_BALANCE_VIEWPORT_LIMIT;
+    /** True, when expand all button is toggled while search is enabled */
+    @Input() public isExpandToggledDuringSearch: boolean;
 
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
