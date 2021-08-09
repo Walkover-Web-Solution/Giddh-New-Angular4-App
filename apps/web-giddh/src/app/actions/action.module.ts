@@ -32,7 +32,6 @@ import { SettingsTagActions } from './settings/tag/settings.tag.actions';
 import { InventoryReportActions } from './inventory/inventory.report.actions';
 import { InventoryEntryActions } from './inventory/inventory.entry.actions';
 import { InventoryUsersActions } from './inventory/inventory.users.actions';
-import { SettingsTriggersActions } from './settings/triggers/settings.triggers.actions';
 import { ImportExcelActions } from './import-excel/import-excel.actions';
 import { SettingsDiscountActions } from './settings/discount/settings.discount.action';
 import { NewVsOldInvoicesActions } from './new-vs-old-invoices.actions';
@@ -88,7 +87,6 @@ import { PurchaseOrderActions } from './purchase-order/purchase-order.action';
             SettingsFinancialYearActions,
             SettingsPermissionActions,
             SessionActions,
-            SettingsTriggersActions,
             ImportExcelActions,
             SettingsDiscountActions,
             NewVsOldInvoicesActions,
