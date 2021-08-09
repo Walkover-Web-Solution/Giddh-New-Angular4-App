@@ -4,7 +4,7 @@ import { AppState } from '../../../store';
 import { ToasterService } from '../../../services/toaster.service';
 import { takeUntil } from 'rxjs/operators';
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { ActionPettycashRequest, ExpenseResults, PettyCashReportResponse } from '../../../models/api-models/Expences';
+import { ActionPettycashRequest, ExpenseResults, PettyCashReportResponse, PettyCashResonse } from '../../../models/api-models/Expences';
 import { ExpenseService } from '../../../services/expences.service';
 import { CommonPaginatedRequest } from '../../../models/api-models/Invoice';
 import { FormControl } from '@angular/forms';
@@ -54,12 +54,22 @@ export class PendingListComponent implements OnInit, OnChanges {
     public approveEntryModalRef: BsModalRef;
     public filterModalRef: BsModalRef;
     public approveEntryRequestInProcess: boolean = false;
+    /** Entry against object */
+    public entryAgainstObject = {
+        base: '',
+        against: '',
+        dropDownOption: [],
+        model: '',
+        name: ''
+    };
+    /** Entry object */
+    public accountEntryPettyCash: any = { particular: { name: "" } };
 
     constructor(
         private store: Store<AppState>,
         private expenseService: ExpenseService,
         private toasty: ToasterService,
-        private cdRf: ChangeDetectorRef, 
+        private cdRf: ChangeDetectorRef,
         private modalService: BsModalService
     ) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
@@ -90,6 +100,8 @@ export class PendingListComponent implements OnInit, OnChanges {
     }
 
     public showApproveConfirmPopup(ref: TemplateRef<any>, item: ExpenseResults) {
+        this.accountEntryPettyCash = { particular: { name: item?.baseAccount?.name } };
+        this.prepareEntryAgainstObject(item);
         this.approveEntryModalRef = this.modalService.show(ref, { class: 'modal-md', backdrop: true, ignoreBackdropClick: true });
         this.selectedEntryForApprove = item;
     }
@@ -167,7 +179,7 @@ export class PendingListComponent implements OnInit, OnChanges {
             }
         }
 
-        if(changes['pettyCashPendingReportResponse'] && changes['pettyCashPendingReportResponse'].currentValue) {
+        if (changes['pettyCashPendingReportResponse'] && changes['pettyCashPendingReportResponse'].currentValue) {
             this.getReportResponse();
         }
     }
@@ -283,5 +295,44 @@ export class PendingListComponent implements OnInit, OnChanges {
                 this.detectChanges();
             }, 500);
         }
+    }
+
+    /**
+     * Prepares the entry
+     *
+     * @private
+     * @param {PettyCashResonse} res Petty cash details
+     * @memberof PendingListComponent
+     */
+    private prepareEntryAgainstObject(res: ExpenseResults): void {
+        let cashOrBankEntry = res?.baseAccount ? this.isCashBankAccount(res.baseAccount) : false;
+        if (res?.entryType === 'sales') {
+            this.entryAgainstObject.base = cashOrBankEntry ? 'Receipt Mode' : 'Debtor Name';
+            this.entryAgainstObject.against = cashOrBankEntry ? 'Entry against Debtor' : 'Cash Sales';
+        } else if (res?.entryType === 'expense') {
+            this.entryAgainstObject.base = cashOrBankEntry ? 'Payment Mode' : 'Creditor Name';
+            this.entryAgainstObject.against = cashOrBankEntry ? 'Entry against Creditors' : 'Cash Expenses';
+        } else {
+            this.entryAgainstObject.base = 'Deposit To';
+            this.entryAgainstObject.against = null;
+        }
+
+        this.entryAgainstObject.model = res?.baseAccount?.uniqueName;
+        this.entryAgainstObject.name = res?.baseAccount?.name;
+    }
+
+    /**
+     * Returns true, if the account belongs to cash or bank account
+     *
+     * @private
+     * @param {any} particular Account unique name
+     * @returns {boolean} Promise to carry out further operations
+     * @memberof PendingListComponent
+     */
+    private isCashBankAccount(particular: any): boolean {
+        if (particular) {
+            return particular.parentGroups.some(parent => parent.uniqueName === 'bankaccounts' || parent.uniqueName === 'cash');
+        }
+        return false;
     }
 }
