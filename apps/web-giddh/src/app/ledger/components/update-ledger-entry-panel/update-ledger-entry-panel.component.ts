@@ -857,7 +857,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (requestObj.voucherType !== VoucherTypeEnum.creditNote && requestObj.voucherType !== VoucherTypeEnum.debitNote) {
             requestObj.invoiceLinkingRequest = null;
         }
-        if ((this.isAdvanceReceipt && !this.isAdjustAdvanceReceiptSelected) || (this.vm.selectedLedger.voucher.shortCode === 'rcpt' && !this.isAdjustReceiptSelected) || !this.isAdjustVoucherSelected) {
+        if ((this.isAdvanceReceipt && !this.isAdjustAdvanceReceiptSelected) || (this.vm.selectedLedger.voucher?.shortCode === 'rcpt' && !this.isAdjustReceiptSelected) || !this.isAdjustVoucherSelected) {
             // Clear the voucher adjustments if the adjust advance receipt or adjust receipt is not selected
             this.vm.selectedLedger.voucherAdjustments = undefined;
             requestObj.voucherAdjustments = undefined;
@@ -984,7 +984,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.vm.selectedLedger.generateInvoice = true;
         }
         this.isAdvanceReceipt = (event.value === 'advance-receipt');
-        this.currentVoucherLabel = this.generalService.getCurrentVoucherLabel(this.vm.selectedLedger.voucher.shortCode, this.commonLocaleData);
+        this.currentVoucherLabel = this.generalService.getCurrentVoucherLabel(this.vm.selectedLedger.voucher?.shortCode, this.commonLocaleData);
         this.handleAdvanceReceiptChange();
     }
 
@@ -995,7 +995,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public handleVoucherAdjustment(isUpdateMode?: boolean): void {
-        if (!this.vm.selectedLedger.voucherGenerated && this.vm.selectedLedger.voucher.shortCode !== 'pur') {
+        if (!this.vm.selectedLedger.voucherGenerated && this.vm.selectedLedger.voucher?.shortCode !== 'pur') {
             // Voucher must be generated for all vouchers except purchase order
             this._toasty.infoToast(ADJUSTMENT_INFO_MESSAGE, this.localeData?.app_giddh);
             if (this.isAdjustAdvanceReceiptSelected) {
@@ -1024,7 +1024,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public checkForGeneratedVoucher(event: any): void {
-        if (event && this.vm.selectedLedger.voucher.shortCode !== 'pur' && !this.vm.selectedLedger.voucherGenerated) {
+        if (event && this.vm.selectedLedger.voucher?.shortCode !== 'pur' && !this.vm.selectedLedger.voucherGenerated) {
             // Adjustment is not allowed until the voucher is generated
             this._toasty.infoToast(ADJUSTMENT_INFO_MESSAGE, this.localeData?.app_giddh);
             event.preventDefault();
@@ -1039,7 +1039,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public getInvoiceListsForCreditNote(): void {
         const request = {
             accountUniqueNames: [this.vm.selectedLedger.particular.uniqueName, this.vm.selectedLedger.transactions[0].particular.uniqueName],
-            voucherType: this.vm.selectedLedger.voucher.shortCode
+            voucherType: this.vm.selectedLedger.voucher?.shortCode
         }
         let date;
         if (typeof this.vm.selectedLedger.entryDate === 'string') {
@@ -1086,7 +1086,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public getInvoiveLists() {
-        if (this.vm.selectedLedger.voucher.shortCode === 'rcpt') {
+        if (this.vm.selectedLedger.voucher?.shortCode === 'rcpt') {
             if (this.isPettyCash && !this.accountUniqueName) {
                 let message = this.localeData?.account_entry_error;
                 message = message.replace("[ACCOUNT]", this.pettyCashBaseAccountTypeString);
@@ -1767,7 +1767,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
             if (this.isAdvanceReceipt) {
                 this.isAdjustAdvanceReceiptSelected = true;
-            } else if (this.vm.selectedLedger.voucher.shortCode === 'rcpt') {
+            } else if (this.vm.selectedLedger.voucher?.shortCode === 'rcpt') {
                 this.isAdjustReceiptSelected = true;
             }
         }
