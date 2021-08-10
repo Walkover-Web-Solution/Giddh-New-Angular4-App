@@ -660,9 +660,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     private loadTabData(): void {
         switch (this.selectedTabParent) {
-            case SettingsIntegrationTab.Sms:
-                this.loadSmsData();
-                break;
+            // case SettingsIntegrationTab.Sms:
+            //     this.loadSmsData();
+            //     break;
             case SettingsIntegrationTab.Email:
                 this.loadEmailData();
                 break;
