@@ -410,7 +410,7 @@
                                     : "Rate"
                             }}
                         </th>
-                        <th class="text-right word-break">Total before Dis.</th>
+                        <th *ngIf="voucherType === 'sales'" class="text-right word-break">Total before Dis.</th>
                         <th [hidden]="!fieldsAndVisibility.table.discount?.display" class="text-right word-break">
                             {{
                                 fieldsAndVisibility.table.discount?.label?.length > 0
@@ -468,7 +468,7 @@
                             1000.00
                             <p class="font-10 text-gray line-height-initial">$14.28</p>
                         </td>
-                        <td class="text-right">2000.00</td>
+                        <td *ngIf="voucherType === 'sales'" class="text-right">2000.00</td>
                         <td [hidden]="!fieldsAndVisibility.table.discount?.display" class="text-right">-300.00</td>
                         <td [hidden]="!fieldsAndVisibility.table.taxableValue?.display" class="text-right">1700.00</td>
 
@@ -498,7 +498,7 @@
                             300.00
                             <p class="font-10 text-gray line-height-initial">$4.20</p>
                         </td>
-                        <td class="text-right">600.00</td>
+                        <td *ngIf="voucherType === 'sales'" class="text-right">600.00</td>
                         <td [hidden]="!fieldsAndVisibility.table.discount?.display" class="text-right">-500.00</td>
                         <td [hidden]="!fieldsAndVisibility.table.taxableValue?.display" class="text-right">100.00</td>
 
