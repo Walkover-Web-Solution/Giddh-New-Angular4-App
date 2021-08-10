@@ -36,6 +36,8 @@ import { CreateBranchComponent } from './branch/create-branch/create-branch.comp
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
+import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.module';
+import { SettingIntegrationPaymentModule } from './integration/payment/setting.integration.payment.module';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -81,7 +83,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ShSelectModule,
         SalesShSelectModule,
         TaxSidebarModule,
-        NoDataModule
+        ReplacePipeModule,
+        NoDataModule,
+        SettingIntegrationPaymentModule
     ],
     providers: [
         {

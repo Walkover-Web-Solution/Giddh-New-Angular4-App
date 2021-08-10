@@ -25,8 +25,8 @@ export const COMPANY_API = {
     GET_DETAILED_REGISTERED_PURCHASE: 'v2/company/:companyUniqueName/purchases-register-detailed?',
     GET_COMPANY_INTEGRATED_BANK_LIST: 'company/:companyUniqueName/payment/banks/accounts',
     BULK_PAYMENT: 'company/:companyUniqueName/bank/payments',
-    BULK_PAYMENT_CONFIRM: 'company/:companyUniqueName/bank/payments/confirm?urn=:urn',
-    BULK_PAYMENT_RESEND_OTP: 'company/:companyUniqueName/bank/resend-otp?urn=:urn&requestId=:requestId',
+    BULK_PAYMENT_CONFIRM: 'company/:companyUniqueName/bank/payments/confirm?urn=:urn&uniqueName=:uniqueName',
+    BULK_PAYMENT_RESEND_OTP: 'company/:companyUniqueName/bank/resend-otp?urn=:urn&uniqueName=:uniqueName&requestId=:requestId',
 
     CREATE_NEW_BRANCH: 'company/:companyUniqueName/branch',
     GET_ALL_BRANCHES: 'company/:companyUniqueName/branch',

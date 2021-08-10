@@ -70,8 +70,8 @@
     "recordDashBoardTest": "npm run test -- --record --key fa423514-5a84-42a7-b6a0-b5e7191bba12 --reporter mochawesome",
     "Giddh": "npm run test -- --spec \"cypress/integration/Giddh/*\" ",
     "cy:run": "concurrently \"npm run start\" \"wait-on http-get://localhost:3000 && cypress run --record --key ddaa8e78-116b-428a-9581-0fd63d9fc7be --reporter mochawesome --browser chrome --headless\" --kill-others --success first",
-        "cy:open": "concurrently \"npm run start\" \"wait-on http-get://localhost:3000 && npm run cy:open\" --kill-others --success first",
-        "cy:run1": "\"cypress run --record --key ddaa8e78-116b-428a-9581-0fd63d9fc7be --reporter mochawesome --browser chrome --headless\""
+    "cy:open": "concurrently \"npm run start\" \"wait-on http-get://localhost:3000 && npm run cy:open\" --kill-others --success first",
+    "cy:run1": "\"cypress run --record --key ddaa8e78-116b-428a-9581-0fd63d9fc7be --reporter mochawesome --browser chrome --headless\""
   },
   "private": true,
   "dependencies": {

@@ -327,3 +327,4 @@ export const ENTRY_DESCRIPTION_LENGTH = 300;
 export const UNAUTHORISED = 401;
 /** This will hide the filing feature of GST module  */
 export const SHOW_GST_FILING = false;
+export const SELECT_ALL_RECORDS = "selectallrecords";

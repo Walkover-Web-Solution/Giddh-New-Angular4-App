@@ -7,19 +7,21 @@
 
         <!--region multiple-->
         <div *ngIf="multiple" [ngClass]="{'has-item':selectedValues?.length}" class="bdr bg-white">
-            <ng-container *ngIf="selectedValues?.length && !showCheckbox">
-                <span class="chip" *ngFor="let sl of selectedValues">
-                    {{ sl.label }}
-                    <span class="chip-close-btn" (mousedown)="clearSingleSelection($event, sl)"
-                        (click)="clearSingleSelection($event, sl)">&times;</span>
-                </span>
+            <ng-container *ngIf="selectedValues?.length">
+                <ng-container *ngFor="let sl of selectedValues">
+                    <span class="chip" *ngIf="sl.value !== selectAllRecords">
+                        {{ sl.label }}
+                        <span class="chip-close-btn" (mousedown)="clearSingleSelection($event, sl)"
+                            (click)="clearSingleSelection($event, sl)">&times;</span>
+                    </span>
+                </ng-container>
             </ng-container>
 
             <!-- removing this ( (blur)="filterInputBlur($event)" ) events because scrolling is not working -->
             <input type="text" autocomplete="disabled" class="pd-l1 form-control"
                 [ngClass]="{'hasValue':filter?.length}" #inputFilter tabindex="0"
                 [attr.style]="borderConfiguration?.style" (click)="showSearchSuggestion ? show($event) : '';"
-                [placeholder]="selectedValues?.length > 0 && !showCheckbox ? filter : placeholder" [(ngModel)]="filter"
+                [placeholder]="selectedValues?.length > 0 ? filter : placeholder" [(ngModel)]="filter"
                 (ngModelChange)="handleInputChange($event)">
         </div>
         <!--endregion-->
@@ -58,6 +60,6 @@
         [noResultLinkTemplate]="notFoundLinkTemplate" [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText"
         [ItemHeight]="ItemHeight" [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight"
         [showNotFoundLinkAsDefault]="showNotFoundLinkAsDefault" [dropdownMinHeight]="dropdownMinHeight"
-        [showCheckbox]="showCheckbox" [isRequired]="isRequired" [filter]="filter">
+        [isRequired]="isRequired" [filter]="filter" [isSelectAllChecked]="isSelectAllChecked">
     </sh-select-menu>
 </div>
