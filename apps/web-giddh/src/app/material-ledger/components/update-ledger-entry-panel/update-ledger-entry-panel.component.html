@@ -92,7 +92,7 @@
                                     *ngFor="let txn of vm.selectedLedger.transactions; let i = index; trackBy: trackByFunction">
                                     <ng-container *ngIf="txn.type === 'DEBIT'">
 
-                                        <td class="col-3" [attr.data-title]="commonLocaleData?.app_date">
+                                        <td class="col-3 d-flex align-items-center" [attr.data-title]="commonLocaleData?.app_date">
                                             <giddh-datepicker
                                                 [showToggleIcon]="false"
                                                 [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
@@ -103,7 +103,7 @@
                                         </td>
                                         <td [attr.data-title]="commonLocaleData?.app_particular" [id]="'debit-id-' + i"
                                             [ngClass]="{ 'other-account-entry': txn.particular.uniqueName === 'others' }"
-                                            class="col-5 position-relative select2-parent select2-ledger">
+                                            class="col-5 position-relative select2-parent select2-ledger d-flex align-items-center">
                                             <ng-template [ngIf]="!txn.isDiscount">
                                                 <div class="d-flex update-ledger-account">
                                                     <span
@@ -186,7 +186,7 @@
 
                                         </td>
 
-                                        <td class="col-4 text-right" [attr.data-title]="commonLocaleData?.app_amount">
+                                        <td class="col-4 text-right d-flex align-items-center" [attr.data-title]="commonLocaleData?.app_amount">
 
                                             <input matInput
                                                 [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
@@ -284,7 +284,7 @@
                                 <tr *ngFor="let txn of vm.selectedLedger.transactions; let i = index"
                                     class="credit-blank-row row">
                                     <ng-container *ngIf="txn.type == 'CREDIT'">
-                                        <td [attr.data-title]="commonLocaleData?.app_date" class="col-3">
+                                        <td [attr.data-title]="commonLocaleData?.app_date" class="col-3 d-flex align-items-center">
                                             <giddh-datepicker
                                                 [showToggleIcon]="false"
                                                 [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
@@ -293,7 +293,7 @@
                                                 (click)="addBlankTrx('CREDIT', txn, $event)"></giddh-datepicker>
                                         </td>
                                         <td [attr.data-title]="commonLocaleData?.app_particular" [id]="'credit-id-' + i"
-                                            class="position-relative col-5 select2-parent select2-ledger"
+                                            class="position-relative col-5 select2-parent select2-ledger d-flex align-items-center"
                                             [ngClass]="{ 'other-account-entry': txn.particular.uniqueName === 'others' }">
                                             <ng-template [ngIf]="!txn?.isDiscount">
                                                 <div class="d-flex update-ledger-account">
@@ -380,7 +380,7 @@
                                             </span>
                                         </td>
 
-                                        <td [attr.data-title]="commonLocaleData?.app_amount" class="col-4 text-right">
+                                        <td [attr.data-title]="commonLocaleData?.app_amount" class="col-4 text-right d-flex align-items-center">
                                             <input matInput
                                                 [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                                                 [id]="'update-ledger-amount-cr-' + i" class="form-control text-right pd-0"
