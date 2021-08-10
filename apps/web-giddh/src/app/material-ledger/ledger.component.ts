@@ -9,8 +9,6 @@ import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-selec
 import * as moment from 'moment/moment';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { PaginationComponent } from 'ngx-bootstrap/pagination';
-import { ModalDirective } from 'ngx-bootstrap/modal';
-import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
 import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject, } from 'rxjs';
@@ -18,8 +16,6 @@ import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CompanyActions } from '../actions/company.actions';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
-import { SettingsDiscountActions } from '../actions/settings/discount/settings.discount.action';
-import { SettingsTagActions } from '../actions/settings/tag/settings.tag.actions';
 import { LoaderService } from '../loader/loader.service';
 import { cloneDeep, filter, find, uniq } from '../lodash-optimized';
 import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
@@ -74,7 +70,6 @@ import { GenerateVoucherConfirmationModalComponent } from './components/generate
 export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('updateledgercomponent', { static: false }) public updateledgercomponent: ElementViewContainerRef;
     @ViewChild('paginationChild', { static: false }) public paginationChild: ElementViewContainerRef;
-    @ViewChild(BsDatepickerDirective, { static: true }) public datepickers: BsDatepickerDirective;
     @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
     public imgPath: string = '';
     public lc: LedgerVM;
@@ -243,12 +238,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private ledgerService: LedgerService,
         private toaster: ToasterService,
         private companyActions: CompanyActions,
-        private settingsTagActions: SettingsTagActions,
         private componentFactoryResolver: ComponentFactoryResolver,
         private generalService: GeneralService,
         private loginActions: LoginActions,
         private loaderService: LoaderService,
-        private settingsDiscountAction: SettingsDiscountActions,
         private warehouseActions: WarehouseActions,
         private cdRf: ChangeDetectorRef,
         private breakPointObservar: BreakpointObserver,
@@ -479,8 +472,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.store.dispatch(this.settingsDiscountAction.GetDiscount());
-        this.store.dispatch(this.settingsTagActions.GetALLTags());
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         // get company taxes
         this.store.dispatch(this.companyActions.getTax());
@@ -827,7 +818,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.isBankTransactionLoading = true;
 
             let getRequest = { accountUniqueName: this.trxRequest.accountUniqueName, from: this.trxRequest.from, count: this.bankTransactionsResponse.countPerPage, page: this.bankTransactionsResponse.page }
-            this.ledgerService.GetBankTranscationsForLedger(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            this.ledgerService.GetBankTransactionsForLedger(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 this.isBankTransactionLoading = false;
                 if (res.status === 'success') {
                     if (res.body) {
@@ -872,7 +863,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     if (!className) {
                         return;
                     }
-                    return className.contains('entry-picker') || className.contains('currencyToggler') || className.contains('mat-calendar');
+                    return className.contains('entry-picker') || className.contains('currency-toggler') || className.contains('mat-calendar');
                 });
 
                 if (shouldNotClose) {
@@ -892,9 +883,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public clickUnpaidInvoiceList(e?: boolean) {
         if (e) {
             if (this.accountUniquename === 'cash' || this.accountUniquename === 'bankaccounts' && this.selectedTxnAccUniqueName) {
-                this.getInvoiveLists({ accountUniqueName: this.selectedTxnAccUniqueName, status: 'unpaid' });
+                this.getInvoiceLists({ accountUniqueName: this.selectedTxnAccUniqueName, status: 'unpaid' });
             } else {
-                this.getInvoiveLists({ accountUniqueName: this.accountUniquename, status: 'unpaid' });
+                this.getInvoiceLists({ accountUniqueName: this.accountUniquename, status: 'unpaid' });
             }
         }
     }
@@ -1125,7 +1116,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     if (!className) {
                         return;
                     }
-                    return className.contains('currencyToggler') || className.contains('mat-calendar');
+                    return className.contains('currency-toggler') || className.contains('mat-calendar');
                 });
 
                 if (shouldNotClose) {
@@ -1800,7 +1791,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
     }
 
-    public getInvoiveLists(request) {
+    public getInvoiceLists(request) {
         this.invoiceList = [];
         this.ledgerService.GetInvoiceList(request).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
             _.map(res.body.invoiceList, (o) => {
