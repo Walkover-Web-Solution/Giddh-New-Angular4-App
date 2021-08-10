@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-4" *ngFor="let page of roleObj.scopes; let idx = index">
+                <div class="col-sm-4" *ngFor="let page of roleObj?.scopes; let idx = index">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             {{ page.name }}
