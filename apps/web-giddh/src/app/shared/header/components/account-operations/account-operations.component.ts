@@ -26,7 +26,6 @@ import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interfac
 import { createSelector } from 'reselect';
 import { DaybookQueryRequest } from '../../../../models/api-models/DaybookRequest';
 import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
-import { SettingsDiscountActions } from '../../../../actions/settings/discount/settings.discount.action';
 import { IDiscountList } from '../../../../models/api-models/SettingsDiscount';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 import { differenceBy, each, flatten, flattenDeep, map, omit, union } from 'apps/web-giddh/src/app/lodash-optimized';
@@ -93,7 +92,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public isRootLevelGroup: boolean = false;
     public companyTaxes$: Observable<TaxResponse[]>;
     public companyTaxDropDown: Observable<IOption[]>;
-    public companyDiscountDropDown: IOption[] = [];
     public accounts$: Observable<IOption[]>;
     public groupExportLedgerQueryRequest: DaybookQueryRequest = new DaybookQueryRequest();
     public showTaxDropDown: boolean = false;
@@ -102,7 +100,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public createAccountIsSuccess$: Observable<boolean>;
     public updateAccountInProcess$: Observable<boolean>;
     public updateAccountIsSuccess$: Observable<boolean>;
-    public discountList$: Observable<IDiscountList[]>;
+    public discountList: IDiscountList[];
     public moveAccountSuccess$: Observable<boolean>;
     public showDeleteMove: boolean = false;
     public isGstEnabledAcc: boolean = false;
@@ -126,10 +124,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public settings = {};
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-        private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private _toaster: ToasterService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions,
-        private _settingsDiscountAction: SettingsDiscountActions) {
+        private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private _toaster: ToasterService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions) {
         this.isUserSuperAdmin = _permissionDataService.isUserSuperAdmin;
-        
     }
 
     public ngOnInit() {
@@ -144,7 +140,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.activeGroupUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupUniqueName), takeUntil(this.destroyed$));
         this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
         this.virtualAccountEnable$ = this.store.pipe(select(state => state.invoice.settings), takeUntil(this.destroyed$));
-        this.discountList$ = this.store.pipe(select(s => s.settings.discount.discountList), takeUntil(this.destroyed$));
 
         // prepare drop down for taxes
         this.companyTaxDropDown = this.store.pipe(select(createSelector([
@@ -207,7 +202,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.updateAccountInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.updateAccountInProcess), takeUntil(this.destroyed$));
         this.updateAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.updateAccountIsSuccess), takeUntil(this.destroyed$));
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
-        this.store.dispatch(this._settingsDiscountAction.GetDiscount());
         
         this.selectedItems = [];
         this.settings = {
@@ -319,17 +313,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                 this.moveAccountForm.reset();
             }
         });
-
-        this.discountList$.subscribe(discount => {
-            if (discount) {
-                this.companyDiscountDropDown = discount.map(dis => {
-                    return { label: dis.name, value: dis.uniqueName };
-                });
-            } else {
-                this.companyDiscountDropDown = [];
-            }
-        });
-
 
         this.accountsAction.mergeAccountResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.selectedaccountForMerge = '';

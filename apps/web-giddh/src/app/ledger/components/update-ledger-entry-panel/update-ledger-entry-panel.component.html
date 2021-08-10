@@ -1641,7 +1641,7 @@
                                             <label class="default-color">{{ localeData?.assign_tag }}</label>
                                             <sh-select
                                                 id="update-ledger-assign-tag"
-                                                [options]="tags$ | async"
+                                                [options]="tags"
                                                 [isFilterEnabled]="true"
                                                 [class.disabled-ledger]="
                                                     !isPettyCash &&

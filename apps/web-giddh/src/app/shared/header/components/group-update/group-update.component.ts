@@ -18,11 +18,10 @@ import { BlankLedgerVM, TransactionVM } from '../../../../ledger/ledger.vm';
 import { cloneDeep, difference, differenceBy, flatten, flattenDeep, map, omit, union, uniq } from '../../../../lodash-optimized';
 import { LedgerDiscountComponent } from '../../../../ledger/components/ledger-discount/ledger-discount.component';
 import { TaxControlComponent } from '../../../../theme/tax-control/tax-control.component';
-import { SettingsDiscountActions } from 'apps/web-giddh/src/app/actions/settings/discount/settings.discount.action';
-import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/SettingsDiscount';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { API_COUNT_LIMIT, TCS_TDS_TAXES_TYPES } from 'apps/web-giddh/src/app/app.constant';
+import { SettingsDiscountService } from 'apps/web-giddh/src/app/services/settings.discount.service';
 
 @Component({
     selector: 'group-update',
@@ -71,8 +70,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public showDiscount: boolean = false;
     /** Stores list of discount */
     public discountList: any[] = [];
-    /** Observable of company discounts list */
-    public discountList$: Observable<IDiscountList[]>;
     /** Selected discount list */
     public selectedDiscounts: any[] = [];
     /** To check applied taxes modified  */
@@ -106,7 +103,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         private companyActions: CompanyActions,
         private accountsAction: AccountsAction,
         private groupService: GroupService,
-        private settingsDiscountAction: SettingsDiscountActions
+        private settingsDiscountService: SettingsDiscountService
     ) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
         this.activeGroupUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupUniqueName), takeUntil(this.destroyed$));
@@ -127,7 +124,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.activeGroupTaxHierarchy$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupTaxHierarchy), takeUntil(this.destroyed$));
         this.isUpdateGroupInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.isUpdateGroupInProcess), takeUntil(this.destroyed$));
         this.isUpdateGroupSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.isUpdateGroupSuccess), takeUntil(this.destroyed$));
-        this.discountList$ = this.store.pipe(select(state => state.settings.discount.discountList), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -549,18 +545,16 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof GroupUpdateComponent
      */
     public getDiscountList(): void {
-        this.discountList$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res) {
+        this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.length > 0) {
                 this.discountList = [];
-                Object.keys(res).forEach(key => {
+                Object.keys(response?.body).forEach(key => {
                     this.discountList.push({
-                        label: res[key].name,
-                        value: res[key].uniqueName,
+                        label: response?.body[key].name,
+                        value: response?.body[key].uniqueName,
                         isSelected: false
                     });
                 });
-            } else {
-                this.store.dispatch(this.settingsDiscountAction.GetDiscount());
             }
         });
     }

@@ -1,78 +1,15 @@
-import { Observable, ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { select, Store } from '@ngrx/store';
-import { AppState } from '../../store/roots';
 import { ElementViewContainerRef } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
+import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
+import { SettingsDiscountService } from '../../services/settings.discount.service';
 
 @Component({
     selector: 'discount-list',
     templateUrl: 'discountList.component.html',
-    styles: [`
-      .dropdown-menu > li > a.btn-link {
-          color: #10aae0;
-      }
-
-      :host .dropdown-menu {
-          overflow: auto;
-      }
-
-
-      .dropdown-menu {
-          right: -110px;
-          left: auto;
-          top: 8px;
-	}
-
-      td {
-          vertical-align: middle !important;
-      }
-      .custom-item {
-      padding-top: 5px;
-
-      }
-
-      .custom-item:hover {
-          background-color:#e3e4ed !important;
-      }
-
-      .custom-item {
-          padding: 5px;
-
-      }
-
-      .custom-item:hover span {
-          color:#5B64C9 !important;
-      }
-
-      .multi-select .caret {
-          display: block !important;
-      }
-
-      .multi-select.adjust .caret {
-          right: -2px !important;
-          top: 14px !important;
-      }
-
-      :host {
-          -moz-user-select: none;
-          -webkit-user-select: none;
-          -ms-user-select: none;
-          user-select: none;
-	  }
-	  .fa-percent{
-		top: 9px;
-		right: 6px;
-		color: #acb0b9;
-	  }
-	  .discount-name-detail{
-		list-style: none;
-		overflow: auto;
-		max-height: 100px;
-	  }
-  `]
+    styleUrls: ['./discountList.component.scss']
 })
 
 export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
@@ -89,7 +26,6 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public discountAccountsDetails: LedgerDiscountClass[];
     @Input() public totalAmount: number = 0;
     @Output() public discountTotalUpdated: EventEmitter<number> = new EventEmitter();
-    public discountAccountsList$: Observable<IDiscountList[]>;
     public discountFromPer: boolean = true;
     public discountFromVal: boolean = true;
     public discountPercentageModal: number = 0;
@@ -100,19 +36,19 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** List of discounts */
+    private discountsList: any[] = [];
+    /** True if get discounts list api call in progress */
+    private getDiscountsLoading: boolean = false;
 
     constructor(
-        private store: Store<AppState>
+        private settingsDiscountService: SettingsDiscountService
     ) {
-        this.discountAccountsList$ = this.store.pipe(select(p => p.settings.discount.discountList), takeUntil(this.destroyed$));
+        
     }
 
     public ngOnInit() {
-        this.discountAccountsList$.subscribe(data => {
-            if (data && data.length) {
-                this.prepareDiscountList();
-            }
-        });
+        this.prepareDiscountList();
 
         if (this.defaultDiscount.discountType === 'FIX_AMOUNT') {
             this.discountFixedValueModal = this.defaultDiscount.amount;
@@ -147,12 +83,33 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
      * prepare discount obj
      */
     public prepareDiscountList() {
-        let discountAccountsList: IDiscountList[] = [];
-        this.discountAccountsList$.pipe(take(1)).subscribe(d => discountAccountsList = d);
-        if (discountAccountsList.length && this.discountAccountsDetails && this.discountAccountsDetails.length) {
-            discountAccountsList.forEach(acc => {
-                let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc.uniqueName);
+        if (this.discountsList?.length > 0) {
+            this.processDiscountList();
+        } else {
+            if (this.getDiscountsLoading) {
+                return;
+            }
+            this.getDiscountsLoading = true;
+            this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status === "success" && response?.body?.length > 0) {
+                    this.discountsList = response?.body;
+                    this.processDiscountList();
+                }
+                this.getDiscountsLoading = false;
+            });
+        }
+    }
 
+    /**
+     * This will process discount list
+     *
+     * @private
+     * @memberof DiscountListComponent
+     */
+    private processDiscountList(): void {
+        this.discountsList.forEach(acc => {
+            if (this.discountAccountsDetails) {
+                let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc.uniqueName);
                 if (!hasItem) {
                     let obj: LedgerDiscountClass = new LedgerDiscountClass();
                     obj.amount = acc.discountValue;
@@ -164,8 +121,10 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
                     obj.name = acc.name;
                     this.discountAccountsDetails.push(obj);
                 }
-            });
-        }
+            } else {
+                this.discountAccountsDetails = [];
+            }
+        });
     }
 
     public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', val: string) {

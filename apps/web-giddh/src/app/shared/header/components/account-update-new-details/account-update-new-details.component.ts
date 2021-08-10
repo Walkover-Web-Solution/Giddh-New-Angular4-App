@@ -14,7 +14,6 @@ import {
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { createSelector, select, Store } from '@ngrx/store';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
-import { SettingsDiscountActions } from 'apps/web-giddh/src/app/actions/settings/discount/settings.discount.action';
 import { ApplyTaxRequest } from 'apps/web-giddh/src/app/models/api-models/ApplyTax';
 import { GroupResponse } from 'apps/web-giddh/src/app/models/api-models/Group';
 import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/SettingsDiscount';
@@ -54,6 +53,7 @@ import { INameUniqueName } from 'apps/web-giddh/src/app/models/api-models/Invent
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { clone, cloneDeep, differenceBy, flattenDeep, uniq } from 'apps/web-giddh/src/app/lodash-optimized';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
+import { SettingsDiscountService } from 'apps/web-giddh/src/app/services/settings.discount.service';
 
 @Component({
     selector: 'account-update-new-details',
@@ -207,7 +207,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         private accountsAction: AccountsAction,
         private searchService: SearchService,
         private groupWithAccountsAction: GroupWithAccountsAction,
-        private _settingsDiscountAction: SettingsDiscountActions,
         private _accountService: AccountService,
         private _toaster: ToasterService,
         private companyActions: CompanyActions,
@@ -216,7 +215,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         private generalService: GeneralService,
         private groupService: GroupService,
         private invoiceService: InvoiceService,
-        private changeDetectorRef: ChangeDetectorRef
+        private changeDetectorRef: ChangeDetectorRef,
+        private settingsDiscountService: SettingsDiscountService
     ) {
 
     }
@@ -231,11 +231,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.companyCurrency = clone(activeCompany.baseCurrency);
             }
         });
-        this.discountList$ = this.store.pipe(select(s => s.settings.discount.discountList), takeUntil(this.destroyed$));
         this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
         this.moveAccountSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.moveAccountSuccess), takeUntil(this.destroyed$));
         this.activeAccountTaxHierarchy$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccountTaxHierarchy), takeUntil(this.destroyed$));
-        this.store.dispatch(this._settingsDiscountAction.GetDiscount());
         this.getCompanyCustomField();
         this.getCountry();
         this.getCurrency();
@@ -512,23 +510,21 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 return arr;
             })), takeUntil(this.destroyed$));
     }
+
     public getDiscountList() {
-        this.discountList$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res) {
+        this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.length > 0) {
                 this.discountList = [];
-                Object.keys(res).forEach(key => {
+                Object.keys(response?.body).forEach(key => {
                     this.discountList.push({
-                        label: res[key].name,
-                        value: res[key].uniqueName,
+                        label: response?.body[key].name,
+                        value: response?.body[key].uniqueName,
                         isSelected: false
                     });
                 });
-            } else {
-                this.store.dispatch(this._settingsDiscountAction.GetDiscount());
             }
         });
     }
-
 
     public onViewReady(ev) {
         let accountCountry = this.addAccountForm.get('country').get('countryCode').value;

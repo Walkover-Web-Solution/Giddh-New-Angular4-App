@@ -60,7 +60,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
             this.viewPageObj = find(this.allRoles, function (o: IRoleCommonResponseAndRequest) {
                 return o.uniqueName === 'view';
             });
-            this.rawDataForAllRoles = cloneDeep(this.singlePageForFreshStart.scopes[0].permissions);
+            this.rawDataForAllRoles = cloneDeep(this.singlePageForFreshStart?.scopes[0]?.permissions);
             this.allRolesOfPage = this.getAllRolesOfPageReady(cloneDeep(this.rawDataForAllRoles));
             this.newRole = permission.newRole;
             this.pageList = permission.pages;
@@ -86,7 +86,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
 
     public handleShareSituation(roleObj: NewRoleClass) {
         let shareScopes = ['SHRALL', 'SHRLWR', 'SHRSM'];
-        roleObj.scopes.forEach((role) => {
+        roleObj?.scopes.forEach((role) => {
             if (role.name === 'SHARE') {
                 role.permissions = role.permissions.filter((p) => {
                     return shareScopes.indexOf(p.code) > -1;
@@ -106,7 +106,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
 
     public addNewPage(page: string) {
         if (page && !this.checkForAlreadyExistInPageArray(page)) {
-            let pageObj = find(this.singlePageForFreshStart.scopes, (o: Scope) => o.name === page);
+            let pageObj = find(this.singlePageForFreshStart?.scopes, (o: Scope) => o.name === page);
             pageObj.permissions = pageObj.permissions.map((o: Permission) => {
                 return o = new NewPermissionObj(o.code, false);
             });
@@ -115,11 +115,11 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     }
 
     public removePageFromScope(page: string) {
-        this.roleObj.scopes.splice(this.roleObj.scopes.findIndex((o: Scope) => o.name === page), 1);
+        this.roleObj.scopes.splice(this.roleObj.scopes?.findIndex((o: Scope) => o.name === page), 1);
     }
 
     public checkForAlreadyExistInPageArray(page: string): boolean {
-        let idx = findIndex(this.roleObj.scopes, (o: Scope) => {
+        let idx = findIndex(this.roleObj?.scopes, (o: Scope) => {
             return o.name === page;
         });
         if (idx !== -1) {
@@ -135,7 +135,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
 
     public getScopeDataReadyForAPI(data): Scope[] {
         let arr: Scope[];
-        arr = forEach(data.scopes, (page: Scope) => {
+        arr = forEach(data?.scopes, (page: Scope) => {
             remove(page.permissions, (o: Permission) => !o.isSelected);
         });
         return filter(arr, (o: Scope) => o.permissions.length > 0);
@@ -210,7 +210,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
 
     public generateFreshUI() {
         let arr = [];
-        let allRoles = cloneDeep(this.singlePageForFreshStart.scopes);
+        let allRoles = cloneDeep(this.singlePageForFreshStart?.scopes);
         forEach(this.newRole.pageList, (item: IPage) => {
             if (item.isSelected) {
                 let res = find(allRoles, (o: Scope) => o.name === item.name);
@@ -272,9 +272,9 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
             return false;
         }
         if (type === 'admin') {
-            page = find(this.adminPageObj.scopes, (o: Scope) => o.name === pageName);
+            page = find(this.adminPageObj?.scopes, (o: Scope) => o.name === pageName);
         } else {
-            page = find(this.viewPageObj.scopes, (o: Scope) => o.name === pageName);
+            page = find(this.viewPageObj?.scopes, (o: Scope) => o.name === pageName);
         }
         if (page) {
             let access = find(page.permissions, (p: Permission) => p.code === item.code);
@@ -289,14 +289,14 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     }
 
     public toggleItems(pageName: string, event: any) {
-        let res = find(this.roleObj.scopes, (o: Scope) => o.name === pageName);
+        let res = find(this.roleObj?.scopes, (o: Scope) => o.name === pageName);
         if (res) {
             map(res.permissions, (o: Permission) => o.isSelected = event.target.checked ? true : false);
         }
     }
 
     public toggleItem(pageName: string, item: Permission, event: any) {
-        let res = find(this.roleObj.scopes, (o: Scope) => o.name === pageName);
+        let res = find(this.roleObj?.scopes, (o: Scope) => o.name === pageName);
         if (event.target.checked) {
             let idx = findIndex(res.permissions, (o: Permission) => o.isSelected === false);
             if (idx !== -1) {

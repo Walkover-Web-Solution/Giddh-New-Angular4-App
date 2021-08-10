@@ -29,7 +29,6 @@ import { cloneDeep } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { DiscountListComponent } from '../../sales/discount-list/discountList.component';
 import { TaxControlComponent } from '../../theme/tax-control/tax-control.component';
-import { SettingsDiscountActions } from '../../actions/settings/discount/settings.discount.action';
 import { CompanyActions } from '../../actions/company.actions';
 import { ConfirmationModalConfiguration, CONFIRMATION_ACTIONS } from '../../common/confirmation-modal/confirmation-modal.interface';
 import { NgForm } from '@angular/forms';
@@ -371,7 +370,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         private settingsProfileActions: SettingsProfileActions,
         private toaster: ToasterService,
         private commonActions: CommonActions,
-        private settingsDiscountAction: SettingsDiscountActions,
         private companyActions: CompanyActions,
         private generalService: GeneralService,
         public purchaseOrderService: PurchaseOrderService,
@@ -403,7 +401,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.getInvoiceSettings();
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
-        this.store.dispatch(this.settingsDiscountAction.GetDiscount());
         this.store.dispatch(this.companyActions.getTax());
         this.store.dispatch(this.settingsBranchAction.resetAllBranches());
         this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));

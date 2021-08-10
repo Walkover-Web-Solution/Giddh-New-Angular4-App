@@ -1,13 +1,11 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Store, select } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AppState } from '../../store/roots';
-import { createSelector } from 'reselect';
-import { SettingsTagActions } from '../../actions/settings/tag/settings.tag.actions';
 import { TagRequest } from '../../models/api-models/settingsTags';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { cloneDeep, filter, map, orderBy } from '../../lodash-optimized';
+import { SettingsTagService } from '../../services/settings.tag.service';
+import { ToasterService } from '../../services/toaster.service';
 
 @Component({
     selector: 'setting-tags',
@@ -19,7 +17,7 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
     @ViewChild('confirmationModal', { static: true }) public confirmationModal: ModalDirective;
 
     public newTag: TagRequest = new TagRequest();
-    public tags$: Observable<TagRequest[]>;
+    public tags: TagRequest[] = [];
     public tagsBackup: TagRequest[];
     public updateIndex: number = null;
     public confirmationMessage: string = '';
@@ -33,42 +31,43 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
 
     constructor(
-        private store: Store<AppState>,
-        private settingsTagsActions: SettingsTagActions
+        private settingsTagService: SettingsTagService,
+        private toaster: ToasterService
     ) {
     }
 
     public ngOnInit() {
-        this.store.pipe(select(state => state.settings.isGetAllTagsInProcess), takeUntil(this.destroyed$)).subscribe(response => {
-            this.isLoading = response;
-        });
-
-        this.tags$ = this.store.pipe(select(createSelector([(state: AppState) => state.settings.tags], (tags) => {
-            if (tags && tags.length) {
-                map(tags, (tag) => {
-                    tag.uniqueName = tag.name;
-                });
-                let tagsData = orderBy(tags, 'name');
-                this.tagsBackup = cloneDeep(tagsData);
-                return tagsData;
-            } else {
-                this.tagsBackup = null;
-                return null;
-            }
-        })), takeUntil(this.destroyed$));
+        this.getTags();
     }
 
     public getTags() {
-        this.store.dispatch(this.settingsTagsActions.GetALLTags());
+        this.tags = [];
+        this.tagsBackup = null;
+        this.isLoading = true;
+        this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.length > 0) {
+                map(response?.body, (tag) => {
+                    tag.uniqueName = tag.name;
+                });
+                let tagsData = orderBy(response?.body, 'name');
+                this.tags = cloneDeep(tagsData);
+                this.tagsBackup = cloneDeep(tagsData);
+            }
+            this.isLoading = false;
+        });
     }
 
     public createTag(tag: TagRequest) {
-        this.store.dispatch(this.settingsTagsActions.CreateTag(tag));
+        this.settingsTagService.CreateTag(tag).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.showToaster(this.commonLocaleData?.app_messages?.tag_created, response);
+        });
         this.newTag = new TagRequest();
     }
 
-    public updateTag(tag: TagRequest, indx: number) {
-        this.store.dispatch(this.settingsTagsActions.UpdateTag(tag));
+    public updateTag(tag: TagRequest) {
+        this.settingsTagService.UpdateTag(tag).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.showToaster(this.commonLocaleData?.app_messages?.tag_updated, response);
+        });
         this.updateIndex = null;
     }
 
@@ -85,7 +84,7 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
     }
 
     public resetUpdateIndex() {
-        this.tags$ = observableOf(cloneDeep(this.tagsBackup));
+        this.tags = cloneDeep(this.tagsBackup);
         this.updateIndex = null;
     }
 
@@ -93,7 +92,9 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
         this.confirmationModal.hide();
         if (yesOrNo) {
             let data = cloneDeep(this.newTag);
-            this.store.dispatch(this.settingsTagsActions.DeleteTag(data));
+            this.settingsTagService.DeleteTag(data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.showToaster(this.commonLocaleData?.app_messages?.tag_deleted, response);
+            });
         }
         this.newTag = new TagRequest();
         this.confirmationMessage = '';
@@ -106,7 +107,7 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
         } else {
             tags = cloneDeep(this.tagsBackup);
         }
-        this.tags$ = observableOf(tags);
+        this.tags = tags;
     }
 
     public ngOnDestroy() {
@@ -114,4 +115,21 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
+    /**
+     * This will show toaster for success/error message and will get all tags if success response received
+     *
+     * @private
+     * @param {string} successMessage
+     * @param {*} response
+     * @memberof SettingsTagsComponent
+     */
+    private showToaster(successMessage: string, response: any): void {
+        this.toaster.clearAllToaster();
+        if (response?.status === "success") {
+            this.getTags();
+            this.toaster.successToast(successMessage, this.commonLocaleData?.app_success);
+        } else {
+            this.toaster.errorToast(response?.message, response?.code);                
+        }
+    }
 }
