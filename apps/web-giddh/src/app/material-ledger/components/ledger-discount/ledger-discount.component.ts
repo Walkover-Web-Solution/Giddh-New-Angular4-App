@@ -1,11 +1,10 @@
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { Store, select } from '@ngrx/store';
-import { AppState } from '../../../store';
-import { Observable, ReplaySubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { IDiscountList, LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { MATERIAL_COLOR_PALETTE } from '../../ledger.vm';
+import { SettingsDiscountService } from '../../../services/settings.discount.service';
 
 @Component({
     selector: 'ledger-discount',
@@ -26,7 +25,6 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
     @Output() public discountTotalUpdated: EventEmitter<{ discountTotal: number, isActive: any, discount: any }> = new EventEmitter();
     @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
     public discountTotal: number;
-    public discountAccountsList$: Observable<IDiscountList[]>;
     public discountFromPer: boolean = true;
     public discountFromVal: boolean = true;
     public discountPercentageModal: number = 0;
@@ -41,9 +39,14 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
     public materialColorPalette: string = MATERIAL_COLOR_PALETTE;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
-    constructor(private store: Store<AppState>) {
-        this.discountAccountsList$ = this.store.pipe(select(p => p.settings.discount.discountList), takeUntil(this.destroyed$));
+    /** List of discounts */	
+    private discountsList: any[] = [];	
+    /** True if get discounts list api call in progress */	
+    private getDiscountsLoading: boolean = false;	
+    constructor(
+        private settingsDiscountService: SettingsDiscountService	
+    ) {	
+        	
     }
 
     public onFocusLastDiv(el) {
@@ -96,13 +99,34 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
     /**
      * prepare discount obj
      */
-    public prepareDiscountList() {
-        let discountAccountsList: IDiscountList[] = [];
-        this.discountAccountsList$.pipe(take(1)).subscribe(d => discountAccountsList = d);
-        if (discountAccountsList && discountAccountsList.length) {
-            discountAccountsList.forEach(acc => {
-                let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc.uniqueName);
+     public prepareDiscountList() {
+        if (this.discountsList?.length > 0) {
+            this.processDiscountList();
+        } else {
+            if (this.getDiscountsLoading) {
+                return;
+            }
+            this.getDiscountsLoading = true;
+            this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status === "success" && response?.body?.length > 0) {
+                    this.discountsList = response?.body;
+                    this.processDiscountList();
+                }
+                this.getDiscountsLoading = false;
+            });
+        }
+    }
 
+    /**
+     * This will process discount list
+     *
+     * @private
+     * @memberof LedgerDiscountComponent
+     */
+    private processDiscountList(): void {
+        this.discountsList.forEach(acc => {
+            if (this.discountAccountsDetails) {
+                let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc.uniqueName);
                 if (!hasItem) {
                     let obj: LedgerDiscountClass = new LedgerDiscountClass();
                     obj.amount = acc.discountValue;
@@ -114,8 +138,10 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
                     obj.name = acc.name;
                     this.discountAccountsDetails.push(obj);
                 }
-            });
-        }
+            } else {
+                this.discountAccountsDetails = [];
+            }
+        });
     }
 
     public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', val: string) {

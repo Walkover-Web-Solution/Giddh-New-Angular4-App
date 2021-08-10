@@ -30,7 +30,6 @@ import {
 } from 'apps/web-giddh/src/app/app.constant';
 import { AccountResponse, AccountResponseV2 } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
-import { createSelector } from 'reselect';
 import { BehaviorSubject, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import * as moment from 'moment/moment';
@@ -49,7 +48,6 @@ import {
     SalesOtherTaxesModal,
     VoucherTypeEnum,
 } from '../../../models/api-models/Sales';
-import { IDiscountList } from '../../../models/api-models/SettingsDiscount';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { AdvanceSearchRequest } from '../../../models/interfaces/AdvanceSearchRequest';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
@@ -67,6 +65,7 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 import { AVAILABLE_ITC_LIST, BlankLedgerVM, MATERIAL_COLOR_PALETTE, TransactionVM } from '../../ledger.vm';
 import { LedgerDiscountComponent } from '../ledger-discount/ledger-discount.component';
+import { SettingsTagService } from '../../../services/settings.tag.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../../theme/new-confirm-modal/confirm-modal.component';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
@@ -151,7 +150,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public sourceWarehouse: true;
     public uploadInput: EventEmitter<UploadInput>;
     public fileUploadOptions: UploaderOptions;
-    public discountAccountsList$: Observable<IDiscountList[]>;
     public companyTaxesList$: Observable<TaxResponse[]>;
     public sessionKey$: Observable<string>;
     public companyName$: Observable<string>;
@@ -164,7 +162,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public showMatchingEntries: boolean = false;
     public mapBodyContent: string;
     public selectedItemToMap: ReconcileResponse;
-    public tags$: Observable<TagRequest[]>;
+    public tags: TagRequest[] = [];
     public activeAccount$: Observable<AccountResponse | AccountResponseV2>;
     public activeAccount: AccountResponse | AccountResponseV2;
     public currentAccountApplicableTaxes: string[] = [];
@@ -247,9 +245,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         private loaderService: LoaderService,
         private settingsUtilityService: SettingsUtilityService,
         private toaster: ToasterService,
-        public dialog: MatDialog
+        public dialog: MatDialog,	
+        private settingsTagService: SettingsTagService
     ) {
-        this.discountAccountsList$ = this.store.pipe(select(p => p.settings.discount.discountList), takeUntil(this.destroyed$));
         this.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
         this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
         this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
@@ -313,15 +311,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
         });
 
-        this.tags$ = this.store.pipe(select(createSelector([(st: AppState) => st.settings.tags], (tags) => {
-            if (tags && tags.length) {
-                _.map(tags, (tag) => {
-                    tag.label = tag.name;
-                    tag.value = tag.name;
-                });
-                return _.orderBy(tags, 'name');
-            }
-        })), takeUntil(this.destroyed$));
+        this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {	
+            if (response?.status === "success" && response?.body?.length > 0) {	
+                _.map(response?.body, (tag) => {	
+                    tag.label = tag.name;	
+                    tag.value = tag.name;	
+                });	
+                this.tags = _.orderBy(response?.body, 'name');	
+            }	
+        });
 
         // for tcs and tds identification
         if (this.tcsOrTds === 'tcs') {
@@ -463,7 +461,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.blankLedger.generateInvoice = false;
     }
 
-    public calculateDiscount(event: any) {
+    /**	
+     * To calculate discount	
+     *	
+     * @param {*} event	
+     * @memberof NewLedgerEntryPanelComponent	
+     */	
+    public calculateDiscount(event: any): void {
         this.currentTxn.discount = event.discountTotal;
         if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length > 0) {
             this.accountOtherApplicableDiscount.forEach(item => {
@@ -986,6 +990,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
     }
 
+    /**
+     * This maintains state of datepicker (open/closed)
+     *
+     * @param {*} event
+     * @memberof NewLedgerEntryPanelComponent
+     */
     public datepickerState(event: any): void {
         this.isDatepickerOpen = event;
     }
@@ -1542,7 +1552,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      *
      * @memberof NewLedgerEntryPanelComponent
      */
-    public preparePreAppliedDiscounts() {
+    public preparePreAppliedDiscounts(): void {
         if (this.currentTxn && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.accountApplicableDiscounts && this.currentTxn.selectedAccount.accountApplicableDiscounts.length) {
             this.currentTxn.selectedAccount.accountApplicableDiscounts.map(item => item.isActive = true);
             this.currentTxn.discounts.map(item => { item.isActive = false });
