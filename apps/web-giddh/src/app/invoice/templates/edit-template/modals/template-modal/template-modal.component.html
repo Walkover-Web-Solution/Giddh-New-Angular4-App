@@ -5,8 +5,12 @@
                 <edit-template-filters class="template-editor" [editMode]="editMode" (selectTab)="selectedTab($event)">
                 </edit-template-filters>
                 <!--[templateSections]="templateSections" [templateId]="templateId"-->
-                <invoice-template [hidden]="isEmailTabSelected" class="invoice-preview scroll-auto"
-                    [isPreviewMode]="isPreviewMode">this is pre</invoice-template>
+                <invoice-template
+                    [hidden]="isEmailTabSelected"
+                    class="invoice-preview scroll-auto"
+                    [isPreviewMode]="isPreviewMode"
+                    >this is pre</invoice-template
+                >
                 <div class="invoice-preview scroll-auto" [hidden]="!isEmailTabSelected" PageHeight>
                     <!--{{ emailObject | json}}-->
                     <!--<div id="email-template" class="clearfix">

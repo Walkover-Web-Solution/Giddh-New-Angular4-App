@@ -3,84 +3,110 @@
         <hamburger-menu [pageHeading]="getPageHeading()"></hamburger-menu>
         <div class="inventory-control">
             <tabset #inventoryStaticTabs>
-
-                <tab heading="Inventory" (selectTab)="redirectUrlToActiveTab('inventory', $event)"
-                    [active]="activeTabIndex === 0" [id]="(activeTabIndex === 0) ? 'giddh-page-heading': ''">
+                <tab
+                    heading="Inventory"
+                    (selectTab)="redirectUrlToActiveTab('inventory', $event)"
+                    [active]="activeTabIndex === 0"
+                    [id]="activeTabIndex === 0 ? 'giddh-page-heading' : ''"
+                >
                     <!--sidebar-->
                     <ng-container *ngIf="activeTabIndex === 0 && activeView !== 'receipt'">
                         <inventory-sidebar *ngIf="!isMobileScreen || (isMobileScreen && activeView !== 'group')">
                         </inventory-sidebar>
                         <!--/sidebar-->
 
-                        <section class="right-bar" *ngIf="!isMobileScreen || (isMobileScreen && activeView === 'group')"
-                            [ngClass]="{'welcome-inventory-page':!activeView}">
+                        <section
+                            class="right-bar"
+                            *ngIf="!isMobileScreen || (isMobileScreen && activeView === 'group')"
+                            [ngClass]="{ 'welcome-inventory-page': !activeView }"
+                        >
                             <!-- uiView: inventory-detail -->
-                            <section class="container-fluid  clearfix inventory-head">
-                                <div *ngIf="(shouldShowInventoryReport$ | async)" class="wrap-top-inventory">
+                            <section class="container-fluid clearfix inventory-head">
+                                <div *ngIf="shouldShowInventoryReport$ | async" class="wrap-top-inventory">
                                     <div *ngIf="isMobileScreen && activeView === 'group'" class="mr-b15">
-                                        <button class="btn btn-sky-blue" [routerLink]="['/pages/inventory/']"
-                                            (click)="activeView = null">Back</button>
+                                        <button
+                                            class="btn btn-sky-blue"
+                                            [routerLink]="['/pages/inventory/']"
+                                            (click)="activeView = null"
+                                        >
+                                            Back
+                                        </button>
                                     </div>
                                     <div *ngIf="activeView" class="d-flex mr-b1 branch-warehouse-filter">
                                         <sh-select
-                                            *ngIf="currentOrganizationType === 'COMPANY' && branches && branches.length > 2"
+                                            *ngIf="
+                                                currentOrganizationType === 'COMPANY' && branches && branches.length > 2
+                                            "
                                             class="multi-select branch-filter sh-select-border"
-                                            (ngModelChange)="loadReportByBranch($event)" [options]="branches"
+                                            (ngModelChange)="loadReportByBranch($event)"
+                                            [options]="branches"
                                             [placeholder]="'Select Branch'"
-                                            [(ngModel)]="currentBranchAndWarehouseFilterValues.branch"></sh-select>
-                                        <sh-select *ngIf="warehouses && warehouses.length > 1"
-                                            class="multi-select sh-select-border warehouse-filter" #warehouseFilter
-                                            (ngModelChange)="loadReportByWarehouse($event)" [ItemHeight]="41"
-                                            [options]="warehouses" [placeholder]="'Select Warehouse'"
-                                            [(ngModel)]="currentBranchAndWarehouseFilterValues.warehouse"></sh-select>
+                                            [(ngModel)]="currentBranchAndWarehouseFilterValues.branch"
+                                        ></sh-select>
+                                        <sh-select
+                                            *ngIf="warehouses && warehouses.length > 1"
+                                            class="multi-select sh-select-border warehouse-filter"
+                                            #warehouseFilter
+                                            (ngModelChange)="loadReportByWarehouse($event)"
+                                            [ItemHeight]="41"
+                                            [options]="warehouses"
+                                            [placeholder]="'Select Warehouse'"
+                                            [(ngModel)]="currentBranchAndWarehouseFilterValues.warehouse"
+                                        ></sh-select>
                                     </div>
                                 </div>
                                 <div *ngIf="(shouldShowInventoryReport$ | async) && activeView === 'stock'">
                                     <invetory-stock-report
-                                        [currentBranchAndWarehouse]="currentBranchAndWarehouseFilterValues">
+                                        [currentBranchAndWarehouse]="currentBranchAndWarehouseFilterValues"
+                                    >
                                     </invetory-stock-report>
                                 </div>
                                 <div *ngIf="(shouldShowInventoryReport$ | async) && activeView === 'group'">
                                     <invetory-group-stock-report
-                                        [currentBranchAndWarehouse]="currentBranchAndWarehouseFilterValues">
+                                        [currentBranchAndWarehouse]="currentBranchAndWarehouseFilterValues"
+                                    >
                                     </invetory-group-stock-report>
                                 </div>
                                 <div *ngIf="!activeView">
                                     <welcome-inventory></welcome-inventory>
                                 </div>
-                                <inventory-header>
-                                </inventory-header>
+                                <inventory-header> </inventory-header>
                             </section>
                         </section>
                     </ng-container>
                 </tab>
 
-                <tab heading="Job Work" (selectTab)="redirectUrlToActiveTab('jobwork', $event)"
-                    [active]="activeTabIndex === 1">
-
+                <tab
+                    heading="Job Work"
+                    (selectTab)="redirectUrlToActiveTab('jobwork', $event)"
+                    [active]="activeTabIndex === 1"
+                >
                     <ng-container *ngIf="activeTabIndex === 1">
                         <jobwork></jobwork>
                     </ng-container>
-
                 </tab>
 
-
-                <tab heading="Manufacturing" (selectTab)="redirectUrlToActiveTab('manufacturing', $event)"
-                    [active]="activeTabIndex === 2" [id]="(activeTabIndex === 2) ? 'giddh-page-heading': ''">
-
+                <tab
+                    heading="Manufacturing"
+                    (selectTab)="redirectUrlToActiveTab('manufacturing', $event)"
+                    [active]="activeTabIndex === 2"
+                    [id]="activeTabIndex === 2 ? 'giddh-page-heading' : ''"
+                >
                     <ng-container *ngIf="activeTabIndex === 2">
                         <manufacturing></manufacturing>
                     </ng-container>
-
                 </tab>
 
-                <tab heading="Report" (selectTab)="redirectUrlToActiveTab('report', $event)"
-                    [active]="activeTabIndex === 3" [id]="(activeTabIndex === 3) ? 'giddh-page-heading': ''">
+                <tab
+                    heading="Report"
+                    (selectTab)="redirectUrlToActiveTab('report', $event)"
+                    [active]="activeTabIndex === 3"
+                    [id]="activeTabIndex === 3 ? 'giddh-page-heading' : ''"
+                >
                     <ng-container *ngIf="activeTabIndex === 3">
                         <new-branch-transfer-list></new-branch-transfer-list>
                     </ng-container>
                 </tab>
-
             </tabset>
         </div>
     </div>

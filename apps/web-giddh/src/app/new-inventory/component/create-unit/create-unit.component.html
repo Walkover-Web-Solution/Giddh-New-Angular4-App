@@ -17,7 +17,7 @@
                     </div>
                     <div class="col-sm-6">
                         <label>Unit Code <span class="red-text">*</span></label>
-                        <input class="form-control" id="item-unit-code" placeholder="Unique Name">
+                        <input class="form-control" id="item-unit-code" placeholder="Unique Name" />
                     </div>
                 </div>
                 <div class="row">
@@ -30,18 +30,18 @@
                         <div class="checkbox square-switch">
                             <input type="checkbox" id="isDivide" [checked]="isDivide" (change)="isDivide = !isDivide" />
                             <label for="isDivide">
-                                <span class="pull-left width-100 text-left" *ngIf="isDivide"><img
-                                        src="./assets/images/divide-ico.svg" />
-                                    Divide</span>
-                                <span class="pull-right width-100 text-right" *ngIf="!isDivide"><img
-                                        src="./assets/images/multiply.svg" [style.width.px]="11" />
-                                    Multiply</span>
+                                <span class="pull-left width-100 text-left" *ngIf="isDivide"
+                                    ><img src="./assets/images/divide-ico.svg" /> Divide</span
+                                >
+                                <span class="pull-right width-100 text-right" *ngIf="!isDivide"
+                                    ><img src="./assets/images/multiply.svg" [style.width.px]="11" /> Multiply</span
+                                >
                             </label>
                         </div>
                     </div>
                     <div class="col-sm-3">
                         <label>Qty. per Unit <span class="red-text">*</span></label>
-                        <input type="text" class="form-control" id="quantity-per-unit" placeholder="Quanitity">
+                        <input type="text" class="form-control" id="quantity-per-unit" placeholder="Quanitity" />
                     </div>
                 </div>
                 <div class="row button-group mt-5">

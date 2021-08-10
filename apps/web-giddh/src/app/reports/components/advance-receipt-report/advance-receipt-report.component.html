@@ -1,32 +1,56 @@
-<ng-container appTranslate [file]="'reports/advance-receipt'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event);">
+<ng-container
+    appTranslate
+    [file]="'reports/advance-receipt'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="reverse-table-report">
         <div class="container-fluid">
-            <div class="mr-t15 mr-b15 input-grp-date-range-picker d-flex justify-content-between"
-                [ngClass]="{'clear-filter-applicable': showClearFilter}">
+            <div
+                class="mr-t15 mr-b15 input-grp-date-range-picker d-flex justify-content-between"
+                [ngClass]="{ 'clear-filter-applicable': showClearFilter }"
+            >
                 <!-- Invoice filter section -->
                 <div class="mr-r1 d-flex flex-sm-row flex-column">
-                    <div class="input-group linked-entities mr-r15"
-                        *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
-                        <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName"
-                            [showClear]="false" [ItemHeight]="33" class="entity-dropdown" width="100%"
-                            (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
-                            [placeholder]="commonLocaleData?.app_select_entity" [fixedValue]="currentBranch?.alias">
+                    <div
+                        class="input-group linked-entities mr-r15"
+                        *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                    >
+                        <sh-select
+                            [options]="currentCompanyBranches"
+                            [(ngModel)]="currentBranch.uniqueName"
+                            [showClear]="false"
+                            [ItemHeight]="33"
+                            class="entity-dropdown"
+                            width="100%"
+                            (selected)="handleBranchChange($event)"
+                            [isFilterEnabled]="true"
+                            [placeholder]="commonLocaleData?.app_select_entity"
+                            [fixedValue]="currentBranch?.alias"
+                        >
                             <ng-template #optionTemplate let-option="option">
                                 <ng-container>
                                     <a href="javascript:void(0)" class="list-item d-flex">
                                         <span class="entity-icon">
-                                            <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany"
-                                                tooltip="{{commonLocaleData?.app_branch}}"></i>
-                                            <i class="icon-company-profile pull-right" *ngIf="option.isCompany"
-                                                tooltip="{{commonLocaleData?.app_company}}"></i>
+                                            <i
+                                                class="icon-branch-icon pull-right"
+                                                *ngIf="!option.isCompany"
+                                                tooltip="{{ commonLocaleData?.app_branch }}"
+                                            ></i>
+                                            <i
+                                                class="icon-company-profile pull-right"
+                                                *ngIf="option.isCompany"
+                                                tooltip="{{ commonLocaleData?.app_company }}"
+                                            ></i>
                                         </span>
                                         <span class="entity-details">
-                                            <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}
+                                            <div class="item giddh-limit single-line-clamp">
+                                                {{ option.label || "-" }}
                                             </div>
                                             <div class="item-unique giddh-limit single-line-clamp">
-                                                {{ option.name || '-' }}
+                                                {{ option.name || "-" }}
                                             </div>
                                         </span>
                                     </a>
@@ -37,21 +61,35 @@
                     <div class="d-flex">
                         <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                             <i class="icon-calender calendar-addon"></i>
-                            <input type="text" name="selectedDateRange"
-                                [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
-                                class="giddh-datepicker date-range-picker" />
+                            <input
+                                type="text"
+                                name="selectedDateRange"
+                                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                class="giddh-datepicker date-range-picker"
+                            />
                         </div>
                     </div>
-
                 </div>
-                <div class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
-                    *ngIf="showClearFilter">
-                    <button class="btn btn-filter mr-0" (click)="resetAdvanceSearch()"><span class="icon-cross"></span>
-                        {{commonLocaleData?.app_clear_filter}}</button>
+                <div
+                    class="
+                        clear-filter
+                        align-items-center
+                        d-flex
+                        justify-content-xl-center justify-content-lg-start
+                        w-50
+                    "
+                    *ngIf="showClearFilter"
+                >
+                    <button class="btn btn-filter mr-0" (click)="resetAdvanceSearch()">
+                        <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
+                    </button>
                 </div>
-                <div class="advance-icon cursor-pointer btn btn-primary mr-0"
-                    [tooltip]="commonLocaleData?.app_advance_search" (click)="openModal()">
-                    <span class="pd-r05 d-sm-flex d-none">{{commonLocaleData?.app_filter}}</span>
+                <div
+                    class="advance-icon cursor-pointer btn btn-primary mr-0"
+                    [tooltip]="commonLocaleData?.app_advance_search"
+                    (click)="openModal()"
+                >
+                    <span class="pd-r05 d-sm-flex d-none">{{ commonLocaleData?.app_filter }}</span>
                     <span class="icon-advance-filter"></span>
                 </div>
                 <!-- Invoice filter section ends -->
@@ -61,11 +99,14 @@
                 <div class="d-flex w-100 justify-content-between overflow-x-auto">
                     <div class="total-details-box mr-r05 border-none opening-box">
                         <h5>
-                            {{localeData?.advanced_receipts}}
+                            {{ localeData?.advanced_receipts }}
                             <div>
-                                <span
-                                    class="number-total d-inline-flex">
-                                    <amount-field [amount]="receiptsSummaryData?.advance?.amount" [currencySymbol]="receiptsSummaryData?.advance?.symbol" [currencyCode]="activeCompany.baseCurrency">
+                                <span class="number-total d-inline-flex">
+                                    <amount-field
+                                        [amount]="receiptsSummaryData?.advance?.amount"
+                                        [currencySymbol]="receiptsSummaryData?.advance?.symbol"
+                                        [currencyCode]="activeCompany.baseCurrency"
+                                    >
                                     </amount-field>
                                 </span>
                             </div>
@@ -73,10 +114,14 @@
                     </div>
                     <div class="total-details-box mr-r05 border-none sales-purchase">
                         <h5>
-                            {{localeData?.normal_receipts}}
+                            {{ localeData?.normal_receipts }}
                             <div>
                                 <span class="d-inline-flex number-total">
-                                    <amount-field [amount]="receiptsSummaryData?.normal?.amount" [currencySymbol]="receiptsSummaryData?.normal?.symbol" [currencyCode]="activeCompany.baseCurrency">
+                                    <amount-field
+                                        [amount]="receiptsSummaryData?.normal?.amount"
+                                        [currencySymbol]="receiptsSummaryData?.normal?.symbol"
+                                        [currencyCode]="activeCompany.baseCurrency"
+                                    >
                                     </amount-field>
                                 </span>
                             </div>
@@ -84,10 +129,14 @@
                     </div>
                     <div class="total-details-box mr-r05 border-none payment-receipt">
                         <h5>
-                            {{localeData?.total_receipts}}
+                            {{ localeData?.total_receipts }}
                             <div>
                                 <span class="d-inline-flex number-total">
-                                    <amount-field [amount]="receiptsSummaryData?.total?.amount" [currencySymbol]="receiptsSummaryData?.total?.symbol" [currencyCode]="activeCompany.baseCurrency">
+                                    <amount-field
+                                        [amount]="receiptsSummaryData?.total?.amount"
+                                        [currencySymbol]="receiptsSummaryData?.total?.symbol"
+                                        [currencyCode]="activeCompany.baseCurrency"
+                                    >
                                     </amount-field>
                                 </span>
                             </div>
@@ -95,10 +144,14 @@
                     </div>
                     <div class="total-details-box mr-r05 border-none closing-box">
                         <h5>
-                            {{localeData?.unused_receipts}}
+                            {{ localeData?.unused_receipts }}
                             <div>
                                 <span class="d-inline-flex number-total">
-                                    <amount-field [amount]="receiptsSummaryData?.unUsed?.amount" [currencySymbol]="receiptsSummaryData?.unUsed?.symbol" [currencyCode]="activeCompany.baseCurrency">
+                                    <amount-field
+                                        [amount]="receiptsSummaryData?.unUsed?.amount"
+                                        [currencySymbol]="receiptsSummaryData?.unUsed?.symbol"
+                                        [currencyCode]="activeCompany.baseCurrency"
+                                    >
                                     </amount-field>
                                 </span>
                             </div>
@@ -107,50 +160,83 @@
                 </div>
             </div>
 
-            <div class="invoice-preview  table-responsive">
+            <div class="invoice-preview table-responsive">
                 <table class="table basic giddh-table on-mobile-view">
-                    <thead class="thead-background1" [hidden]="!allReceipts?.length && !searchQueryParams?.receiptNumber && !searchQueryParams?.baseAccountName && !searchQueryParams?.particularName && !searchQueryParams?.invoiceNumber && !searchQueryParams?.receiptTypes?.length">
+                    <thead
+                        class="thead-background1"
+                        [hidden]="
+                            !allReceipts?.length &&
+                            !searchQueryParams?.receiptNumber &&
+                            !searchQueryParams?.baseAccountName &&
+                            !searchQueryParams?.particularName &&
+                            !searchQueryParams?.invoiceNumber &&
+                            !searchQueryParams?.receiptTypes?.length
+                        "
+                    >
                         <tr>
                             <th>#</th>
                             <th #receiptNumberParent width="13%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="showReceiptSearchBar">
                                     <i class="icon-search" (click)="searchBy(null, 'receipt', true)"></i>
-                                    <span>{{localeData?.receipt_no_label}}</span>
+                                    <span>{{ localeData?.receipt_no_label }}</span>
                                 </div>
                                 <div class="input-container" [hidden]="!showReceiptSearchBar">
-                                    <input #receiptNumber
-                                        (clickOutside)="(showReceiptSearchBar) ? searchBy($event, 'receipt', false) : ''"
-                                        [(ngModel)]="searchQueryParams.receiptNumber" type="text"
-                                        [placeholder]="localeData?.receipt_no_placeholder" class="w100" />
+                                    <input
+                                        #receiptNumber
+                                        (clickOutside)="showReceiptSearchBar ? searchBy($event, 'receipt', false) : ''"
+                                        [(ngModel)]="searchQueryParams.receiptNumber"
+                                        type="text"
+                                        [placeholder]="localeData?.receipt_no_placeholder"
+                                        class="w100"
+                                    />
                                 </div>
                             </th>
 
                             <th class="td-search-box">
                                 <div class="d-flex align-items-center">
-                                    {{commonLocaleData?.app_date}}
+                                    {{ commonLocaleData?.app_date }}
                                     <div class="icon-pointer pl-1 pointer">
                                         <ng-container
-                                            *ngTemplateOutlet="sortTemplate;context: {column: 'RECEIPT_DATE'}">
+                                            *ngTemplateOutlet="sortTemplate; context: { column: 'RECEIPT_DATE' }"
+                                        >
                                         </ng-container>
                                     </div>
                                 </div>
                             </th>
 
                             <th width="15%">
-                                {{commonLocaleData?.app_type}}
+                                {{ commonLocaleData?.app_type }}
                                 <div class="voucher-type-dropdown pull-right">
-                                    <div class="btn-group d-inline-block" dropdown container="body"
-                                        placement="bottom right">
-                                        <a href="javascript:void(0)" id="button-basic" dropdownToggle
-                                            class="btn dropdown-toggle text-light-2" aria-controls="dropdown-alignment">
+                                    <div
+                                        class="btn-group d-inline-block"
+                                        dropdown
+                                        container="body"
+                                        placement="bottom right"
+                                    >
+                                        <a
+                                            href="javascript:void(0)"
+                                            id="button-basic"
+                                            dropdownToggle
+                                            class="btn dropdown-toggle text-light-2"
+                                            aria-controls="dropdown-alignment"
+                                        >
                                             <i class="fa fa-ellipsis-v"></i>
                                         </a>
-                                        <ul id="dropdown-alignment" *dropdownMenu
-                                            class="dropdown-menu dropdown-menu-right" role="menu"
-                                            aria-labelledby="button-alignment">
-                                            <li *ngFor="let type of receiptType" role="menuitem"><a
-                                                    class="dropdown-item" href="javascript:;"
-                                                    (click)="onReceiptTypeChanged(type.value);">{{type.label}}</a></li>
+                                        <ul
+                                            id="dropdown-alignment"
+                                            *dropdownMenu
+                                            class="dropdown-menu dropdown-menu-right"
+                                            role="menu"
+                                            aria-labelledby="button-alignment"
+                                        >
+                                            <li *ngFor="let type of receiptType" role="menuitem">
+                                                <a
+                                                    class="dropdown-item"
+                                                    href="javascript:;"
+                                                    (click)="onReceiptTypeChanged(type.value)"
+                                                    >{{ type.label }}</a
+                                                >
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -158,52 +244,72 @@
 
                             <th #customerNameParent width="13%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="showCustomerSearchBar">
-                                    <i class="icon-search" (click)="searchBy(null, 'customerName', true);"></i>
-                                    <span>{{localeData?.customer_name_label}}</span>
+                                    <i class="icon-search" (click)="searchBy(null, 'customerName', true)"></i>
+                                    <span>{{ localeData?.customer_name_label }}</span>
                                 </div>
                                 <div class="input-container" [hidden]="!showCustomerSearchBar">
-                                    <input #customerName
-                                        (clickOutside)="(showCustomerSearchBar) ? searchBy($event, 'customerName', false) : ''"
-                                        [(ngModel)]="searchQueryParams.baseAccountName" type="text"
-                                        [placeholder]="localeData?.customer_name_placeholder" class="w100"
-                                        #customerNameField name="customerName" />
+                                    <input
+                                        #customerName
+                                        (clickOutside)="
+                                            showCustomerSearchBar ? searchBy($event, 'customerName', false) : ''
+                                        "
+                                        [(ngModel)]="searchQueryParams.baseAccountName"
+                                        type="text"
+                                        [placeholder]="localeData?.customer_name_placeholder"
+                                        class="w100"
+                                        #customerNameField
+                                        name="customerName"
+                                    />
                                 </div>
                             </th>
 
                             <th #paymentModeParent width="13%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="showPaymentSearchBar">
                                     <i class="icon-search" (click)="searchBy(null, 'paymentMode', true)"></i>
-                                    <span>{{localeData?.payment_mode_label}}</span>
+                                    <span>{{ localeData?.payment_mode_label }}</span>
                                 </div>
                                 <div class="input-container" [hidden]="!showPaymentSearchBar">
-                                    <input #paymentMode
-                                        (clickOutside)="(showPaymentSearchBar) ? searchBy($event, 'paymentMode', false) : ''"
-                                        [(ngModel)]="searchQueryParams.particularName" type="text"
-                                        [placeholder]="localeData?.payment_mode_placeholder" class="w100"
-                                        #paymentModeField />
+                                    <input
+                                        #paymentMode
+                                        (clickOutside)="
+                                            showPaymentSearchBar ? searchBy($event, 'paymentMode', false) : ''
+                                        "
+                                        [(ngModel)]="searchQueryParams.particularName"
+                                        type="text"
+                                        [placeholder]="localeData?.payment_mode_placeholder"
+                                        class="w100"
+                                        #paymentModeField
+                                    />
                                 </div>
                             </th>
 
                             <th #invoiceNumberParent width="13%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="showInvoiceSearchBar">
                                     <i class="icon-search" (click)="searchBy(null, 'invoiceNumber', true)"></i>
-                                    <span>{{localeData?.invoice_no_label}}</span>
+                                    <span>{{ localeData?.invoice_no_label }}</span>
                                 </div>
                                 <div class="input-container" [hidden]="!showInvoiceSearchBar">
-                                    <input #invoiceNumber
-                                        (clickOutside)="(showInvoiceSearchBar) ? searchBy($event, 'invoiceNumber', false) : ''"
-                                        [(ngModel)]="searchQueryParams.invoiceNumber" type="text"
-                                        [placeholder]="localeData?.invoice_no_placeholder" class="w100"
-                                        #paymentModeField />
+                                    <input
+                                        #invoiceNumber
+                                        (clickOutside)="
+                                            showInvoiceSearchBar ? searchBy($event, 'invoiceNumber', false) : ''
+                                        "
+                                        [(ngModel)]="searchQueryParams.invoiceNumber"
+                                        type="text"
+                                        [placeholder]="localeData?.invoice_no_placeholder"
+                                        class="w100"
+                                        #paymentModeField
+                                    />
                                 </div>
                             </th>
 
                             <th>
                                 <div class="d-flex align-items-center">
-                                    {{commonLocaleData?.app_total_amount}}
+                                    {{ commonLocaleData?.app_total_amount }}
                                     <div class="icon-pointer pl-1 pointer">
                                         <ng-container
-                                            *ngTemplateOutlet="sortTemplate;context: {column: 'TOTAL_AMOUNT'}">
+                                            *ngTemplateOutlet="sortTemplate; context: { column: 'TOTAL_AMOUNT' }"
+                                        >
                                         </ng-container>
                                     </div>
                                 </div>
@@ -211,10 +317,11 @@
 
                             <th>
                                 <div class="d-flex align-items-center">
-                                    {{localeData?.unused_amount}}
+                                    {{ localeData?.unused_amount }}
                                     <div class="icon-pointer pl-1 pointer">
                                         <ng-container
-                                            *ngTemplateOutlet="sortTemplate;context: {column: 'UNUSED_AMOUNT'}">
+                                            *ngTemplateOutlet="sortTemplate; context: { column: 'UNUSED_AMOUNT' }"
+                                        >
                                         </ng-container>
                                     </div>
                                 </div>
@@ -224,31 +331,45 @@
                     <tbody *ngIf="!isLoading">
                         <tr *ngFor="let receipt of allReceipts; let i = index">
                             <td data-title="#">{{ i + 1 }}</td>
-                            <td width="13%" class="text-break" [attr.data-title]="localeData?.receipt_no_label">{{
-                                receipt?.receiptNumber }}</td>
+                            <td width="13%" class="text-break" [attr.data-title]="localeData?.receipt_no_label">
+                                {{ receipt?.receiptNumber }}
+                            </td>
                             <td class="entry-date" [attr.data-title]="localeData?.entry_date">{{ receipt?.date }}</td>
                             <td [attr.data-title]="localeData?.suppliers_name">{{ receipt?.type }}</td>
-                            <td width="13%" class="text-break" [attr.data-title]="commonLocaleData?.app_voucher_type">{{
-                                receipt?.baseAccountName }}</td>
+                            <td width="13%" class="text-break" [attr.data-title]="commonLocaleData?.app_voucher_type">
+                                {{ receipt?.baseAccountName }}
+                            </td>
                             <td [attr.data-title]="localeData?.payment_mode_label">
                                 <div *ngFor="let paymentMode of receipt?.particularNames?.split(',')">
                                     {{ paymentMode }}
                                 </div>
                             </td>
-                            <td width="13%" class="text-break" *ngIf="receipt?.invoices"
-                                [attr.data-title]="localeData?.invoice_no_label">
+                            <td
+                                width="13%"
+                                class="text-break"
+                                *ngIf="receipt?.invoices"
+                                [attr.data-title]="localeData?.invoice_no_label"
+                            >
                                 <div *ngFor="let invoice of receipt?.invoices?.split(',')">{{ invoice }}</div>
                             </td>
                             <td [attr.data-title]="localeData?.invoice_no_label" *ngIf="!receipt?.invoices">-</td>
                             <td [attr.data-title]="commonLocaleData?.app_total_amount">
                                 <span class="d-inline-flex">
-                                    <amount-field [amount]="receipt?.totalAmount.amount" [currencySymbol]="receipt?.totalAmount?.symbol" [currencyCode]="activeCompany.baseCurrency">
+                                    <amount-field
+                                        [amount]="receipt?.totalAmount.amount"
+                                        [currencySymbol]="receipt?.totalAmount?.symbol"
+                                        [currencyCode]="activeCompany.baseCurrency"
+                                    >
                                     </amount-field>
                                 </span>
                             </td>
                             <td [attr.data-title]="localeData?.unused_amount">
                                 <span class="d-inline-flex">
-                                    <amount-field [amount]="receipt?.unusedAmount.amount" [currencySymbol]="receipt?.unusedAmount?.symbol" [currencyCode]="activeCompany.baseCurrency">
+                                    <amount-field
+                                        [amount]="receipt?.unusedAmount.amount"
+                                        [currencySymbol]="receipt?.unusedAmount?.symbol"
+                                        [currencyCode]="activeCompany.baseCurrency"
+                                    >
                                     </amount-field>
                                 </span>
                             </td>
@@ -265,11 +386,20 @@
             </div>
 
             <div [hidden]="isLoading" *ngIf="pageConfiguration.totalItems > paginationLimit" class="pagination-wrapper">
-                <pagination [totalItems]="pageConfiguration.totalItems" [(ngModel)]="pageConfiguration.currentPage"
-                    [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit"
-                    [rotate]="false" (pageChanged)="onPageChanged($event)" [firstText]="commonLocaleData?.app_first"
-                    [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next"
-                    [lastText]="commonLocaleData?.app_last">
+                <pagination
+                    [totalItems]="pageConfiguration.totalItems"
+                    [(ngModel)]="pageConfiguration.currentPage"
+                    [maxSize]="5"
+                    class="pagination-sm"
+                    [boundaryLinks]="true"
+                    [itemsPerPage]="paginationLimit"
+                    [rotate]="false"
+                    (pageChanged)="onPageChanged($event)"
+                    [firstText]="commonLocaleData?.app_first"
+                    [previousText]="commonLocaleData?.app_previous"
+                    [nextText]="commonLocaleData?.app_next"
+                    [lastText]="commonLocaleData?.app_last"
+                >
                 </pagination>
             </div>
             <div class="no-data" *ngIf="!allReceipts?.length && !isLoading">
@@ -279,9 +409,14 @@
     </div>
 
     <!-- Adjust Payment modal start -->
-    <div bsModal #receiptAdvanceSearchModalContainer="bs-modal"
-        [config]="{ ignoreBackdropClick: 'true', keyboard: 'true'}" tabindex="-1" class="modal fade open-popup"
-        role="dialog">
+    <div
+        bsModal
+        #receiptAdvanceSearchModalContainer="bs-modal"
+        [config]="{ ignoreBackdropClick: 'true', keyboard: 'true' }"
+        tabindex="-1"
+        class="modal fade open-popup"
+        role="dialog"
+    >
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <ng-template element-view-container-ref #receiptAdvanceSearchFilterModal="elementviewcontainerref">
@@ -293,28 +428,47 @@
 
     <!-- region sort icon template -->
     <ng-template #sortTemplate let-column="column">
-        <div class="icon-sort-asc" *ngIf="searchQueryParams.sortBy !== column" (click)="handleSorting('asc', column)"
-            [ngClass]="{'active-text-color': searchQueryParams.sortBy === column && searchQueryParams.sort === 'asc'}">
-        </div>
-        <div class="icon-sort-asc" *ngIf="searchQueryParams.sortBy === column && searchQueryParams.sort === 'asc'"
-            (click)="handleSorting('desc', column)"
-            [ngClass]="{'active-text-color': searchQueryParams.sortBy === column && searchQueryParams.sort === 'asc'}">
-        </div>
-        <div class="icon-sort-asc" *ngIf="searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc'"
+        <div
+            class="icon-sort-asc"
+            *ngIf="searchQueryParams.sortBy !== column"
             (click)="handleSorting('asc', column)"
-            [ngClass]="{'active-text-color': searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc'}">
-        </div>
+            [ngClass]="{ 'active-text-color': searchQueryParams.sortBy === column && searchQueryParams.sort === 'asc' }"
+        ></div>
+        <div
+            class="icon-sort-asc"
+            *ngIf="searchQueryParams.sortBy === column && searchQueryParams.sort === 'asc'"
+            (click)="handleSorting('desc', column)"
+            [ngClass]="{ 'active-text-color': searchQueryParams.sortBy === column && searchQueryParams.sort === 'asc' }"
+        ></div>
+        <div
+            class="icon-sort-asc"
+            *ngIf="searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc'"
+            (click)="handleSorting('asc', column)"
+            [ngClass]="{
+                'active-text-color': searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc'
+            }"
+        ></div>
     </ng-template>
     <ng-template #datepickerTemplate>
         <div class="datepicker-modal">
             <div class="modal-body">
-                <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
-                    [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption"
-                    [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
-                    [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
-                    (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
-                    [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
-                    [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+                <app-datepicker-wrapper
+                    [inputStartDate]="selectedDateRange?.startDate"
+                    [inputEndDate]="selectedDateRange?.endDate"
+                    [alwaysShowCalendars]="true"
+                    [ranges]="datePickerOption"
+                    [selectedRangeLabel]="selectedRangeLabel"
+                    [showCustomRangeLabel]="true"
+                    [showClearButton]="false"
+                    [showCancel]="true"
+                    [linkedCalendars]="true"
+                    [showDropdowns]="true"
+                    (rangeClicked)="dateSelectedCallback($event)"
+                    (datesUpdated)="dateSelectedCallback($event)"
+                    [keepCalendarOpeningWithRange]="false"
+                    [showRangeLabelOnInput]="false"
+                    [dateFieldPosition]="dateFieldPosition"
+                ></app-datepicker-wrapper>
             </div>
         </div>
     </ng-template>

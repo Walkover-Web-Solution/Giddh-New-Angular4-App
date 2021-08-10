@@ -1,19 +1,40 @@
-<ng-container appTranslate [file]="'trial-profit-balance/profit-loss'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
-    <financial-filter #filter [selectedCompany]="selectedCompany" (onPropertyChanged)="filterData($event)"
-        [showLoader]="showLoader | async" (seachChange)="searchChanged($event)" (expandAll)="expandAllEvent($event)"
-        [tbExportCsv]="false" [tbExportPdf]="false" [tbExportXLS]="false" [plBsExportXLS]="true" [showLabels]="true"></financial-filter>
-    <div *ngIf="(showLoader | async)">
+<ng-container
+    appTranslate
+    [file]="'trial-profit-balance/profit-loss'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <financial-filter
+        #filter
+        [selectedCompany]="selectedCompany"
+        (onPropertyChanged)="filterData($event)"
+        [showLoader]="showLoader | async"
+        (seachChange)="searchChanged($event)"
+        (expandAll)="expandAllEvent($event)"
+        [tbExportCsv]="false"
+        [tbExportPdf]="false"
+        [tbExportXLS]="false"
+        [plBsExportXLS]="true"
+        [showLabels]="true"
+    ></financial-filter>
+    <div *ngIf="showLoader | async">
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </div>
-    <div *ngIf="(!(showLoader | async) && data)">
-        <profit-loss-grid #plGrid [search]="search" [from]="from" [to]="to" (searchChange)="searchChanged($event)"
-            [expandAll]="expandAll" [plData]="data" [cogsData]="cogsData"></profit-loss-grid>
+    <div *ngIf="!(showLoader | async) && data">
+        <profit-loss-grid
+            #plGrid
+            [search]="search"
+            [from]="from"
+            [to]="to"
+            (searchChange)="searchChanged($event)"
+            [expandAll]="expandAll"
+            [plData]="data"
+            [cogsData]="cogsData"
+        ></profit-loss-grid>
     </div>
-    <div *ngIf="(!(showLoader | async) && !(data))"
-        class="d-flex align-items-center justify-content-center tb-pl-bs-data">
+    <div *ngIf="!(showLoader | async) && !data" class="d-flex align-items-center justify-content-center tb-pl-bs-data">
         <div class="d-flex">
-            <h2>{{localeData?.no_data_found}}</h2>
+            <h2>{{ localeData?.no_data_found }}</h2>
         </div>
     </div>
 </ng-container>

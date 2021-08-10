@@ -661,8 +661,7 @@ input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
     padding-left: 0 !important;
 }
 
-.billing-address
-    input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
+.billing-address input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
     background: transparent !important;
     padding-left: 0 !important;
 }
@@ -1350,7 +1349,8 @@ section.new-table {
     min-width: 40px;
 }
 
-table.table.table-custom-invoice.basic , .other-details-section {
+table.table.table-custom-invoice.basic,
+.other-details-section {
     max-width: 1025px;
     width: 100%;
 }
@@ -1694,7 +1694,7 @@ span.eligible-ITC {
     .form-inline .wrap-billing-address .form-group.deliver-same-address {
         display: flex !important;
     }
-    .pro-invoice-heading{
+    .pro-invoice-heading {
         margin-left: 0;
     }
 }

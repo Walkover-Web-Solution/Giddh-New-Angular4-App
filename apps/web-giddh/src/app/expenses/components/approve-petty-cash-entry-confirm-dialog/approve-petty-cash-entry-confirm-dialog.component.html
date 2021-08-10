@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title pull-left">{{localeData?.approve}}</h3>
+    <h3 class="modal-title pull-left">{{ localeData?.approve }}</h3>
     <button type="button" class="close pull-right" aria-label="Close" (click)="approveEntry.emit(false)">
         <span aria-hidden="true">&times;</span>
     </button>
@@ -8,32 +8,32 @@
 <div class="modal-body approve-modal">
     <div class="clearfix modal-top">
         <p class="font-12 text-gray mr-b1">
-            <span>{{selectedEntryForApprove?.entryDate}} </span> |
-            <span>{{byCreator}}</span>
+            <span>{{ selectedEntryForApprove?.entryDate }} </span> |
+            <span>{{ byCreator }}</span>
         </p>
         <div class="row mr-b1">
             <div class="col-xs-4 col-sm-4">
-                <p class="font-14">{{localeData?.expenses}}:</p>
+                <p class="font-14">{{ localeData?.expenses }}:</p>
             </div>
             <div class="col-xs-8 col-sm-8">
-                <p class="font-14">{{selectedEntryForApprove?.particularAccount?.name}}</p>
+                <p class="font-14">{{ selectedEntryForApprove?.particularAccount?.name }}</p>
             </div>
         </div>
         <div class="row mr-b1">
             <div class="col-xs-4 col-sm-4">
-                <p class="font-14">{{commonLocaleData?.app_payment_mode}}:</p>
+                <p class="font-14">{{ commonLocaleData?.app_payment_mode }}:</p>
             </div>
             <div class="col-xs-8 col-sm-8">
-                <p class="font-14">{{selectedEntryForApprove?.baseAccount?.name}}</p>
+                <p class="font-14">{{ selectedEntryForApprove?.baseAccount?.name }}</p>
             </div>
         </div>
         <div class="row mr-b1">
             <div class="col-xs-4 col-sm-4">
-                <p class="font-14">{{commonLocaleData?.app_amount}}:</p>
+                <p class="font-14">{{ commonLocaleData?.app_amount }}:</p>
             </div>
             <div class="col-xs-8 col-sm-8">
                 <p class="font-14">
-                    <i>{{selectedEntryForApprove?.currencySymbol}} {{ selectedEntryForApprove?.amount}}</i>
+                    <i>{{ selectedEntryForApprove?.currencySymbol }} {{ selectedEntryForApprove?.amount }}</i>
                 </p>
             </div>
         </div>
@@ -41,14 +41,14 @@
 
     <div class="approve-modal">
         <div class="form-group">
-            <p>{{localeData?.confirm_transaction_approve}}</p>
+            <p>{{ localeData?.confirm_transaction_approve }}</p>
         </div>
 
         <div>
-            <button class="btn btn-warning" (click)="approveEntry.emit(false)">{{commonLocaleData?.app_no}}</button>
-            <button class="btn btn-success" (click)="approveEntry.emit(true)"
-                [ladda]="approveEntryRequestInProcess">{{commonLocaleData?.app_yes}}</button>
+            <button class="btn btn-warning" (click)="approveEntry.emit(false)">{{ commonLocaleData?.app_no }}</button>
+            <button class="btn btn-success" (click)="approveEntry.emit(true)" [ladda]="approveEntryRequestInProcess">
+                {{ commonLocaleData?.app_yes }}
+            </button>
         </div>
     </div>
-
 </div>

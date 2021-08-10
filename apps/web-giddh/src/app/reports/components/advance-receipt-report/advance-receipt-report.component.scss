@@ -124,7 +124,6 @@
     width: 200px;
 }
 @media screen and (max-width: 1199px) {
-
     .clear-filter {
         margin-left: 15px;
     }
@@ -147,7 +146,7 @@
             margin-left: 0;
         }
     }
-    .advance-icon{
+    .advance-icon {
         width: auto;
         margin-left: auto;
         position: relative;
@@ -195,8 +194,8 @@
     }
 }
 
-@media (min-width: 769px){
-    .table-responsive{
+@media (min-width: 769px) {
+    .table-responsive {
         max-height: calc(100vh - 295px);
         overflow-y: auto;
     }

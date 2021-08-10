@@ -1,19 +1,27 @@
 <div class="modal-header">
     <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closePopup()">×</span>
-    <h3>{{localeData?.subscription?.move_company}}</h3>
+    <h3>{{ localeData?.subscription?.move_company }}</h3>
 </div>
 <div id="my-frame" class="modal-body move-company-modal-body clearfix">
     <p class="mb-2" [innerHTML]="getMovePlanText()"></p>
     <div class="row mb-2">
         <div class="col-md-6">
-            <label class="font-14">{{localeData?.subscription?.select_plan}}<span class="text-danger">*</span></label>
+            <label class="font-14">{{ localeData?.subscription?.select_plan }}<span class="text-danger">*</span></label>
             <div class="select-caret position-relative">
-                <sh-select [placeholder]="localeData?.subscription?.select_plan" name="availablePlans" [options]="availablePlansOption"
-                    [isFilterEnabled]="true" [(ngModel)]="selectedPlan" [isRequired]="true"></sh-select>
+                <sh-select
+                    [placeholder]="localeData?.subscription?.select_plan"
+                    name="availablePlans"
+                    [options]="availablePlansOption"
+                    [isFilterEnabled]="true"
+                    [(ngModel)]="selectedPlan"
+                    [isRequired]="true"
+                ></sh-select>
             </div>
         </div>
     </div>
     <div class="clearfix">
-        <button class="btn btn-primary" (click)="moveCompanyInNewPlan()" [disabled]="!selectedPlan">{{localeData?.subscription?.move}}</button>
+        <button class="btn btn-primary" (click)="moveCompanyInNewPlan()" [disabled]="!selectedPlan">
+            {{ localeData?.subscription?.move }}
+        </button>
     </div>
 </div>

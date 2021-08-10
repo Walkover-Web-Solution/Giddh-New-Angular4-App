@@ -216,8 +216,7 @@ svg.icon.icon-xxlg {
 .tax-engine .summary-content {
     max-width: 930px;
     margin: 0 auto 30px;
-    font-family: ProximaNovaLight, ProximaNovaRegular, "Source Sans Pro", Arial,
-        sans-serif;
+    font-family: ProximaNovaLight, ProximaNovaRegular, "Source Sans Pro", Arial, sans-serif;
 }
 
 .tax-engine .summary-content .gstr-3b-user {
@@ -243,12 +242,7 @@ address {
     border: none;
 }
 
-.tax-engine
-    .summary-content
-    .gstr-3b-report.table
-    > thead
-    > tr
-    > td:first-child {
+.tax-engine .summary-content .gstr-3b-report.table > thead > tr > td:first-child {
     padding-left: 14px;
 }
 
@@ -320,8 +314,7 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: ProximaNovaRegular, "Source Sans Pro", Helvetica, Arial,
-        sans-serif;
+    font-family: ProximaNovaRegular, "Source Sans Pro", Helvetica, Arial, sans-serif;
     font-weight: 500;
     line-height: 1.1;
 }
@@ -554,8 +547,9 @@ ul#dropdown-menu {
     pointer-events: none !important;
 }
 .summary-content {
-    table{
-        th, td{
+    table {
+        th,
+        td {
             white-space: nowrap !important;
             word-break: break-all !important;
         }
@@ -592,20 +586,20 @@ ul#dropdown-menu {
         margin-top: 0 !important;
     }
 }
-@media screen and (max-width:575px) {
-    .gstr-summary-head{
+@media screen and (max-width: 575px) {
+    .gstr-summary-head {
         display: flex;
         width: 100%;
         justify-content: space-between;
-        .wrap-gst-date{
+        .wrap-gst-date {
             display: flex;
             flex-direction: column;
             width: 100%;
             padding-bottom: 15px;
-            .font-xlarge{
+            .font-xlarge {
                 font-size: 16px;
             }
-            .dropdown{
+            .dropdown {
                 margin-left: 0;
             }
         }
@@ -613,7 +607,7 @@ ul#dropdown-menu {
             align-items: flex-start;
             justify-content: flex-start;
         }
-        span{
+        span {
             margin-bottom: 10px;
             padding-right: 0;
         }

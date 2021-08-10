@@ -280,9 +280,7 @@ span.eligible-ITC {
 .table-amount[disabled] {
     pointer-events: none;
 }
-#update-ledger-assign-tag.disabled-ledger::ng-deep
-    .sh-select-disabled
-    .bg-white {
+#update-ledger-assign-tag.disabled-ledger::ng-deep .sh-select-disabled .bg-white {
     background-color: $whisper-light !important;
 }
 #update-ledger-assign-tag.disabled-ledger::ng-deep input,
