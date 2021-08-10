@@ -122,7 +122,9 @@ export function tbPlBsReducer(state = initialState, action: CustomActions): TBPl
         case TBPlBsActions.GET_BALANCE_SHEET_RESPONSE: {
             let data: BalanceSheetData = prepareBalanceSheetData(cloneDeep(action.payload));
             if (data) {
-                data.dates = cloneDeep(state.bs.data.dates);
+                if (state && state.bs && state.bs.data) {
+                    data.dates = cloneDeep(state.bs.data.dates);
+                }
                 addVisibleFlag(data.assets);
                 addVisibleFlag(data.liabilities);
                 return { ...state, bs: { ...state.bs, showLoader: false, data: { ...state.bs.data, ...data } } };
