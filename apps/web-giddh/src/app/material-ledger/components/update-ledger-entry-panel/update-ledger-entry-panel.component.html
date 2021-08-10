@@ -1049,7 +1049,7 @@
                                                 currentOrganizationType === 'COMPANY' &&
                                                 branches?.length > 1
                                             "
-                                            (change)="toggleOtherTaxesAsideMenu(vm, asideMenuOtherTaxes)"
+                                            (change)="toggleOtherTaxesAsideMenu(asideMenuOtherTaxes)"
                                             >{{ localeData?.other_tax }}</mat-checkbox
                                         >
                                     </div>
@@ -1063,7 +1063,7 @@
                                                 (click)="
                                                     (currentOrganizationType === 'COMPANY' && branches?.length === 1) ||
                                                     currentOrganizationType === 'BRANCH'
-                                                        ? toggleOtherTaxesAsideMenu(vm, asideMenuOtherTaxes)
+                                                        ? toggleOtherTaxesAsideMenu(asideMenuOtherTaxes)
                                                         : ''
                                                 "
                                             >
@@ -1343,7 +1343,7 @@
                         <table class="width-100">
                             <tbody>
                                 <tr>
-                                    <td class="primary-color" (click)="getInvoiveLists(); toggleMoreDetail()">
+                                    <td class="primary-color" (click)="getInvoiceLists(); toggleMoreDetail()">
                                         <i
                                             class="cp collapse-icons"
                                             [ngClass]="{ 'icon-minus': showAdvanced, 'icon-plus': !showAdvanced }"
@@ -1650,7 +1650,7 @@
                                             <label class="default-color">{{ localeData?.assign_tag }}</label>
                                             <sh-select
                                                 id="update-ledger-assign-tag"
-                                                [options]="tags$ | async"
+                                                [options]="tags"
                                                 [isFilterEnabled]="true"
                                                 [class.disabled-ledger]="
                                                     !isPettyCash &&
