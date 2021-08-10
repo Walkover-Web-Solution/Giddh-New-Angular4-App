@@ -69,7 +69,7 @@
                     <h3 class="pd-t1 pd-b1">{{commonLocaleData?.app_or | titlecase}}</h3>
                     <div>
                         <h3 class="light-gray pd-b05 size-xs">{{localeData?.add_multiple_id}}</h3>
-                        <mat-form-field appearance="fill">
+                        <mat-form-field appearance="fill" class="w-100">
                             <textarea matInput [(ngModel)]="emailData" required name="email" class="form-control mat-field-border receipient-email"
                                 [placeholder]="localeData?.receipient_email_ids"></textarea>
                         </mat-form-field>
