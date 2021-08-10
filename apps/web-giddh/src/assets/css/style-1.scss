@@ -2747,11 +2747,9 @@ mat-dialog-container .modal-header {
 .mat-radio-button {
     margin-right: 16px;
 }
-.ledg-head,
-#import-statement-modal,
-.xs-table-block {
-    .mat-form-field {
-        .mat-form-field-wrapper {
+.ledg-head, #import-statement-modal, .xs-table-block, .advance-search, #share-modal, #exportModal{
+    .mat-form-field{
+        .mat-form-field-wrapper{
             padding-bottom: 0 !important;
             .mat-form-field-flex {
                 padding: 0 !important;
@@ -2767,8 +2765,10 @@ mat-dialog-container .modal-header {
             }
         }
     }
-    .ledger-row {
-        .mat-input-element {
+}
+.ledg-head{
+    .ledger-row{
+        .mat-input-element{
             min-height: 38px;
             height: 38px;
         }
@@ -2843,7 +2843,7 @@ mat-dialog-container .modal-header {
 }
 .ledger-advance-search-field {
     .mat-form-field-suffix {
-        right: 10px !important;
+        right: 30px !important;
     }
     input.mat-input-element {
         padding-left: 8px !important;

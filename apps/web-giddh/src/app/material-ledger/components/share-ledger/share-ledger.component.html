@@ -25,7 +25,7 @@
                                 <label>{{ localeData?.share_with }}</label>
                                 <!--share account from-->
                                 <form name="shareGroupForm" #shareAccountForm="ngForm" novalidate="" autocomplete="off">
-                                    <div class="input-group">
+                                    <div class="input-group d-flex justify-content-between">
                                         <mat-form-field appearance="fill">
                                             <input
                                                 matInput
@@ -35,14 +35,14 @@
                                                 [(ngModel)]="email"
                                                 required
                                                 [placeholder]="commonLocaleData?.app_email_id"
-                                                class="form-control mat-field-border pd-0"
+                                                class="form-control mat-field-border pt-0 pb-0"
                                                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
                                             />
                                         </mat-form-field>
-                                        <span class="input-group-btn">
+                                        <span class="input-group-btn mr-l1">
                                             <button
                                                 mat-button
-                                                class="btn btn-success btn-md pd-0"
+                                                class="btn btn-success btn-md p-0"
                                                 type="submit"
                                                 [disabled]="shareAccountForm.invalid"
                                                 (click)="shareAccount()"
@@ -84,22 +84,22 @@
                                 </button>
                                 <span class="success" *ngIf="isCopied">{{ localeData?.copied }}</span>
                             </div>
-                            <div class="input-group">
+                            <div class="input-group d-flex justify-content-between">
                                 <mat-form-field appearance="fill">
                                     <input
                                         #magicLinkInput
                                         matInput
-                                        class="form-control dashed mat-field-border pd-0"
+                                        class="form-control dashed mat-field-border pt-0 pb-0"
                                         [readonly]="true"
                                         type="text"
                                         [(ngModel)]="magicLink"
                                     />
                                 </mat-form-field>
-                                <span class="input-group-btn">
+                                <span class="input-group-btn mr-l1">
                                     <button
                                         mat-button
                                         [disabled]="!magicLink ? 'disabled' : null"
-                                        class="btn btn-success pd-0"
+                                        class="btn btn-success p-0"
                                         (click)="toggleIsCopied()"
                                         [ngxClipboard]="magicLinkInput"
                                     >
