@@ -112,10 +112,10 @@
                         </div>
                     </div>
                     <div class="form-group" *ngIf="!showLoader">
-                        <div class="form-group pull-left mr-r15 d-inline-flex relative" *ngIf="(tags$ | async)?.length">
+                        <div class="form-group pull-left mr-r15 d-inline-flex relative" *ngIf="tags?.length">
                             <i class="glyphicon glyphicon-triangle-bottom"></i>
                             <sh-select
-                                [options]="tags$ | async"
+                                [options]="tags"
                                 name="selectedTag"
                                 formControlName="tagName"
                                 [isFilterEnabled]="true"
@@ -298,10 +298,10 @@
                 </div>
             </div>
             <div class="form-group" *ngIf="!showLoader">
-                <div class="form-group pull-left mr-r15 d-inline-flex relative" *ngIf="(tags$ | async)?.length">
+                <div class="form-group pull-left mr-r15 d-inline-flex relative" *ngIf="tags?.length">
                     <i class="glyphicon glyphicon-triangle-bottom"></i>
                     <sh-select
-                        [options]="tags$ | async"
+                        [options]="tags"
                         name="selectedTag"
                         formControlName="tagName"
                         [isFilterEnabled]="true"

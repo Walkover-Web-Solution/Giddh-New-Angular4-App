@@ -2,13 +2,14 @@ import { takeUntil } from 'rxjs/operators';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { CreateDiscountRequest, IDiscountList } from '../../models/api-models/SettingsDiscount';
-import { Observable, ReplaySubject } from 'rxjs';
-import { SettingsDiscountActions } from '../../actions/settings/discount/settings.discount.action';
+import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../store';
 import { Store, select } from '@ngrx/store';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SalesService } from '../../services/sales.service';
+import { SettingsDiscountService } from '../../services/settings.discount.service';
+import { ToasterService } from '../../services/toaster.service';
 
 @Component({
     selector: 'setting-discount',
@@ -34,54 +35,31 @@ export class DiscountComponent implements OnInit, OnDestroy {
     public accounts: IOption[];
     public createRequest: CreateDiscountRequest = new CreateDiscountRequest();
     public deleteRequest: string = null;
-    public discountList$: Observable<IDiscountList[]>;
-    public isDiscountListInProcess$: Observable<boolean>;
-    public isDiscountCreateInProcess$: Observable<boolean>;
-    public isDiscountCreateSuccess$: Observable<boolean>;
-    public isDiscountUpdateInProcess$: Observable<boolean>;
-    public isDiscountUpdateSuccess$: Observable<boolean>;
-    public isDeleteDiscountInProcess$: Observable<boolean>;
-    public isDeleteDiscountSuccess$: Observable<boolean>;
+    public discountList: IDiscountList[] = [];
+    /** Observable for create/update/delete api call in progress */
+    public isLoading$: Observable<boolean>;
     public accountAsideMenuState: string = 'out';
-
     private createAccountIsSuccess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True if get all discounts api call in progress */
+    public isLoading: boolean = false;
 
     constructor(
-        private _settingsDiscountAction: SettingsDiscountActions,
         private salesService: SalesService,
-        private store: Store<AppState>) {
-        this.discountList$ = this.store.pipe(select(s => s.settings.discount.discountList), takeUntil(this.destroyed$));
-        this.isDiscountListInProcess$ = this.store.pipe(select(s => s.settings.discount.isDiscountListInProcess), takeUntil(this.destroyed$));
-        this.isDiscountCreateInProcess$ = this.store.pipe(select(s => s.settings.discount.isDiscountCreateInProcess), takeUntil(this.destroyed$));
-        this.isDiscountCreateSuccess$ = this.store.pipe(select(s => s.settings.discount.isDiscountCreateSuccess), takeUntil(this.destroyed$));
-        this.isDiscountUpdateInProcess$ = this.store.pipe(select(s => s.settings.discount.isDiscountUpdateInProcess), takeUntil(this.destroyed$));
-        this.isDiscountUpdateSuccess$ = this.store.pipe(select(s => s.settings.discount.isDiscountUpdateSuccess), takeUntil(this.destroyed$));
-        this.isDeleteDiscountInProcess$ = this.store.pipe(select(s => s.settings.discount.isDeleteDiscountInProcess), takeUntil(this.destroyed$));
-        this.isDeleteDiscountSuccess$ = this.store.pipe(select(s => s.settings.discount.isDeleteDiscountSuccess), takeUntil(this.destroyed$));
+        private store: Store<AppState>,
+        private settingsDiscountService: SettingsDiscountService,
+        private toaster: ToasterService
+    ) {
         this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
         this.getDiscountAccounts();
-        this.store.dispatch(this._settingsDiscountAction.GetDiscount());
-
-        this.isDiscountCreateSuccess$.subscribe(s => {
-            this.createRequest = new CreateDiscountRequest();
-        });
-
-        this.isDiscountUpdateSuccess$.subscribe(s => {
-            this.createRequest = new CreateDiscountRequest();
-        });
-
-        this.isDeleteDiscountSuccess$.subscribe(d => {
-            this.createRequest = new CreateDiscountRequest();
-            this.deleteRequest = null;
-        });
+        this.getDiscounts();
 
         this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
             if (yes) {
@@ -111,9 +89,17 @@ export class DiscountComponent implements OnInit, OnDestroy {
 
     public submit() {
         if (this.createRequest.discountUniqueName) {
-            this.store.dispatch(this._settingsDiscountAction.UpdateDiscount(this.createRequest, this.createRequest.discountUniqueName));
+            this.isLoading$ = of(true);
+            this.settingsDiscountService.UpdateDiscount(this.createRequest, this.createRequest.discountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.showToaster(this.commonLocaleData?.app_messages?.discount_updated, response);
+                this.isLoading$ = of(false);
+            });
         } else {
-            this.store.dispatch(this._settingsDiscountAction.CreateDiscount(this.createRequest));
+            this.isLoading$ = of(true);
+            this.settingsDiscountService.CreateDiscount(this.createRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.showToaster(this.commonLocaleData?.app_messages?.discount_created, response);
+                this.isLoading$ = of(false);
+            });
         }
     }
 
@@ -136,7 +122,11 @@ export class DiscountComponent implements OnInit, OnDestroy {
     }
 
     public delete() {
-        this.store.dispatch(this._settingsDiscountAction.DeleteDiscount(this.deleteRequest));
+        this.isLoading$ = of(true);
+        this.settingsDiscountService.DeleteDiscount(this.deleteRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.showToaster(this.commonLocaleData?.app_messages?.discount_deleted, response);
+            this.isLoading$ = of(false);
+        });
         this.hideDeleteDiscountModal();
     }
 
@@ -174,6 +164,42 @@ export class DiscountComponent implements OnInit, OnDestroy {
                 { label: this.localeData?.discount_types?.as_per_value, value: 'FIX_AMOUNT' },
                 { label: this.localeData?.discount_types?.as_per_percent, value: 'PERCENTAGE' }
             ];
+        }
+    }
+
+    /**
+     * Fetching list of discounts
+     *
+     * @private
+     * @memberof DiscountComponent
+     */
+    private getDiscounts(): void {
+        this.isLoading = true;
+        this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.discountList = response?.body;
+            }
+            this.isLoading = false;
+        });
+    }
+
+    /**
+     * This will show toaster for success/error message and will get all discounts if success response received
+     *
+     * @private
+     * @param {string} successMessage
+     * @param {*} response
+     * @memberof DiscountComponent
+     */
+    private showToaster(successMessage: string, response: any): void {
+        this.toaster.clearAllToaster();
+        if (response?.status === "success") {
+            this.createRequest = new CreateDiscountRequest();
+            this.deleteRequest = null;
+            this.getDiscounts();
+            this.toaster.successToast(successMessage, this.commonLocaleData?.app_success);
+        } else {
+            this.toaster.errorToast(response?.message, response?.code);
         }
     }
 }

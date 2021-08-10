@@ -54,7 +54,7 @@
                     </div>
                     <div class="tags-table">
                         <table class="tags-table basic giddh-table table on-mobile-view">
-                            <thead [hidden]="!(tags$ | async)?.length">
+                            <thead [hidden]="!tags?.length">
                                 <tr>
                                     <th>{{ localeData?.s_no }}</th>
                                     <th>{{ localeData?.tags_name }}</th>
@@ -62,8 +62,8 @@
                                     <th>{{ commonLocaleData?.app_action }}</th>
                                 </tr>
                             </thead>
-                            <tbody *ngIf="!isLoading && (tags$ | async)?.length">
-                                <tr *ngFor="let tag of tags$ | async; let i = index">
+                            <tbody *ngIf="!isLoading && tags?.length">
+                                <tr *ngFor="let tag of tags; let i = index">
                                     <td data-title="#">{{ i + 1 }}</td>
                                     <td [attr.data-title]="localeData?.tags_name">
                                         <span *ngIf="updateIndex !== i">{{ tag.name }}</span>
@@ -111,7 +111,7 @@
                                         </button>
                                         <button
                                             *ngIf="updateIndex === i"
-                                            (click)="updateTag(tag, i)"
+                                            (click)="updateTag(tag)"
                                             type="button"
                                             class="btn btn-xs"
                                         >
@@ -139,7 +139,7 @@
                     </div>
                 </div>
             </div>
-            <div class="no-data" *ngIf="!isLoading && !(tags$ | async)?.length">
+            <div class="no-data" *ngIf="!isLoading && !tags?.length">
                 <no-data [secondaryMessage]="' '" [secondaryMessageClass]="'p-0'"></no-data>
             </div>
         </form>
