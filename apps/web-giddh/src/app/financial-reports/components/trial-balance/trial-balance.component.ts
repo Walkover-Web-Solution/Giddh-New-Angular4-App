@@ -120,15 +120,17 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    public expandAllEvent(event: boolean) {
+    public expandAllEvent() {
         setTimeout(() => {
-            this.expandAll = event;
             this.cd.detectChanges();
         }, 1);
     }
 
     public searchChanged(event: string) {
         this.search = event;
+        if (!this.search) {
+            this.expandAll = false;
+        }
         this.cd.detectChanges();
     }
 }

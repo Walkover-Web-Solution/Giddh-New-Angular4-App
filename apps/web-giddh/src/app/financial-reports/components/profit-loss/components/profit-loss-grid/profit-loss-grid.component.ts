@@ -51,6 +51,10 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Hides the data while a new search is made to refresh the virtual list */
+    public hideData: boolean;
+    /** True, when expand all button is toggled while search is enabled */
+    public isExpandToggledDuringSearch: boolean;
 
     constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
 
@@ -63,17 +67,22 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
             takeUntil(this.destroyed$))
             .subscribe((newValue) => {
                 this.searchInput = newValue;
+                this.hideData = true;
                 this.searchChange.emit(this.searchInput);
-
+                this.isExpandToggledDuringSearch = false;
                 if (newValue === '') {
                     this.showClearSearch = false;
                 }
-                this.cd.detectChanges();
+                setTimeout(() => {
+                    this.hideData = false;
+                    this.cd.detectChanges();
+                }, 10);
             });
     }
 
     public ngOnChanges(changes: SimpleChanges) {
         if (changes.expandAll && !changes.expandAll.firstChange && changes.expandAll.currentValue !== changes.expandAll.previousValue) {
+            this.isExpandToggledDuringSearch = true;
             if (this.plData && this.cogsData) {
                 this.zone.run(() => {
                     if (this.plData) {
