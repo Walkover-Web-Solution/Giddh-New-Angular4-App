@@ -22,10 +22,9 @@
                                                 <a href="javascript:void(0)" class="list-item d-flex">
                                                     <span class="entity-icon">
                                                         <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany"
-                                                            tooltip="{{commonLocaleData?.app_branch}}"></i>
-                                                        <i class="icon-company-profile pull-right"
-                                                            *ngIf="option.isCompany"
-                                                            tooltip="{{commonLocaleData?.app_company}}"></i>
+                                                        [tooltip]="commonLocaleData?.app_branch"></i>
+                                                        <i class="icon-company-profile pull-right" *ngIf="option.isCompany"
+                                                        [tooltip]="commonLocaleData?.app_company"></i>
                                                     </span>
                                                     <span class="entity-details">
                                                         <div class="item giddh-limit single-line-clamp">{{ option.label
@@ -52,11 +51,11 @@
                         </div>
                         <div class="form-group mb-0 expand-collapse-btn">
                             <a class="cp" (click)="toggleExpand()" data-toggle="tooltip" data-placement="top"
-                                title="{{commonLocaleData?.app_expand_all}}" *ngIf="!isAllExpanded">
+                                [title]="commonLocaleData?.app_expand_all" *ngIf="!isAllExpanded">
                                 <span class="icon-expandIcon"></span>
                             </a>
                             <a class="cp" (click)="toggleExpand()" data-toggle="tooltip" data-placement="top"
-                                title="{{commonLocaleData?.app_collapse_all}}" *ngIf="isAllExpanded">
+                                [title]="commonLocaleData?.app_collapse_all" *ngIf="isAllExpanded">
                                 <span class="icon-collapse"></span>
                             </a>
                         </div>
@@ -75,24 +74,24 @@
                             </div>
                         </div>
                         <button type="button" class="btn btn-default export-btn mr-0" (click)="exportDaybook()"
-                            *ngIf="((daybookData$ | async)?.entries?.length > 0)">{{commonLocaleData?.app_export}}</button>
+                            *ngIf="daybookData?.entries?.length > 0">{{commonLocaleData?.app_export}}</button>
                     </div>
 
                 </div>
                 <div class="d-md-none d-flex justify-content-between mr-t1">
-                    <button type="button" class="btn btn-default mr-0" (click)="exportDaybook()"
-                        *ngIf="((daybookData$ | async)?.entries?.length > 0)">{{commonLocaleData?.app_export}}</button>
+                    <button type="button" class="btn btn-default mr-0"
+                    (click)="exportDaybook()"
+                    *ngIf="daybookData?.entries?.length > 0">{{commonLocaleData?.app_export}}</button>
                     <div class="expand-collapse-btn">
                         <a class="cp" (click)="toggleExpand()" data-toggle="tooltip" data-placement="top"
-                            title="{{commonLocaleData?.app_expand_all}}" *ngIf="!isAllExpanded">
+                        [title]="commonLocaleData?.app_expand_all" *ngIf="!isAllExpanded">
                             <span class="icon-expandIcon"></span>
                         </a>
                         <a class="cp" (click)="toggleExpand()" data-toggle="tooltip" data-placement="top"
-                            title="{{commonLocaleData?.app_collapse_all}}" *ngIf="isAllExpanded">
+                            [title]="commonLocaleData?.app_collapse_all" *ngIf="isAllExpanded">
                             <span class="icon-collapse"></span>
                         </a>
                     </div>
-
                 </div>
                 <div class="d-none clear-filter-responsive mr-t1 clear-filter" *ngIf="showAdvanceSearchIcon">
                     <button class="btn btn-filter" (click)="initialRequest();">
@@ -104,7 +103,7 @@
 
         <div class="container-fluid">
             <div class="box clearfix mr-t15">
-                <div [hidden]="!(daybookData$ | async)?.entries?.length" class="text-center mr-b2 transaction-report">
+                <div [hidden]="!daybookData?.entries?.length" class="text-center mr-b2 transaction-report">
                     <p>{{localeData?.transaction_report}}</p>
                     <p>{{daybookQueryRequest.from }} - {{ daybookQueryRequest.to}}</p>
                 </div>
@@ -112,7 +111,7 @@
                 <div class="clearfix trial-balance table-responsive">
 
                     <table class="tb-head table-bordered giddh-table table basic on-mobile-view">
-                        <thead [hidden]="!(daybookData$ | async)?.entries?.length">
+                        <thead [hidden]="!daybookData?.entries?.length">
                             <tr>
                                 <th>{{commonLocaleData?.app_date}}</th>
                                 <th>{{commonLocaleData?.app_particular}}</th>
@@ -133,7 +132,7 @@
                             </tr>
                         </thead>
 
-                        <tbody *ngFor="let entry of (daybookData$ | async)?.entries" (click)="expandEntry(entry);"
+                        <tbody *ngFor="let entry of daybookData?.entries" (click)="expandEntry(entry);"
                             class="daybook-table-tbody">
                             <tr (dblclick)="showUpdateLedgerModal(entry)"
                                 (keydown.enter)="showUpdateLedgerModal(entry)">
@@ -221,18 +220,17 @@
                     </table>
                 </div>
 
-                <div class="mr-t2 text-center" [hidden]="!(daybookData$ | async)?.entries?.length">
-                    <small class="grey" *ngIf="(daybookData$ | async)?.totalItems">{{(daybookData$ |
-                        async)?.totalItems}}
+                <div class="mr-t2 text-center" [hidden]="!daybookData?.entries?.length">
+                    <small class="grey" *ngIf="daybookData?.totalItems">{{daybookData?.totalItems}}
                         {{commonLocaleData?.app_transactions}}
-                        | {{(daybookData$ | async)?.totalPages}} {{commonLocaleData?.app_pages}}
+                        | {{daybookData?.totalPages}} {{commonLocaleData?.app_pages}}
                     </small>
-                    <small class="grey" *ngIf="!((daybookData$ | async)?.totalItems)">0
+                    <small class="grey" *ngIf="!daybookData?.totalItems">0
                         {{commonLocaleData?.app_transactions}} | 0 {{commonLocaleData?.app_pages}}</small>
                 </div>
 
                 <!-- pagination -->
-                <div class="mt-1" [hidden]="!(daybookData$ | async)?.entries?.length">
+                <div class="mt-1" [hidden]="!daybookData?.entries?.length">
                     <pagination [totalItems]="daybookData?.totalItems" [(ngModel)]="daybookData.page" [maxSize]="5"
                         class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="daybookData?.count"
                         [rotate]="false" (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first"
@@ -244,7 +242,7 @@
 
             </div>
             <div class="no-data"
-                *ngIf="!(daybookData$ | async)?.entries?.length">
+                *ngIf="!daybookData?.entries?.length">
                 <no-data></no-data>
             </div>
         </div>

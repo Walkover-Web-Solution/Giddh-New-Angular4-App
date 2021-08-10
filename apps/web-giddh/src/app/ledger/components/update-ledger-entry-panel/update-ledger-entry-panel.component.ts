@@ -184,7 +184,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public tcsOrTds: 'tcs' | 'tds' = 'tcs';
     public totalTdElementWidth: number = 0;
     public multiCurrencyAccDetails: any = null;
-    public selectedPettycashEntry$: Observable<PettyCashResonse>;
     /** Amount of invoice select for credit note */
     public selectedInvoiceAmount: number = 0;
     /** Selected invoice for credit note */
@@ -293,7 +292,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.isTxnUpdateSuccess$ = this.store.pipe(select(p => p.ledger.isTxnUpdateSuccess), takeUntil(this.destroyed$));
         this.closeUpdateLedgerModal.pipe(takeUntil(this.destroyed$));
         this.vm.currencyList$ = this.store.pipe(select(s => s.session.currencies), takeUntil(this.destroyed$));
-        this.selectedPettycashEntry$ = this.store.pipe(select(p => p.expense.pettycashEntry), takeUntil(this.destroyed$));
     }
 
     toggleShow() {
@@ -355,13 +353,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         })), takeUntil(this.destroyed$));
 
         if (this.isPettyCash) {
-            this.selectedPettycashEntry$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
-                if (res) {
-                    this.entryUniqueName = res.uniqueName;
-                    this.accountUniqueName = res.particular.uniqueName;
-                    this.selectedLedgerStream$ = observableOf(res as LedgerResponse);
-                }
-            });
+            if (this.pettyCashEntry) {
+                this.entryUniqueName = this.pettyCashEntry.uniqueName;
+                this.accountUniqueName = this.pettyCashEntry.particular.uniqueName;
+                this.selectedLedgerStream$ = observableOf(this.pettyCashEntry as LedgerResponse);
+            }
         }
         this.vm.companyTaxesList$.pipe(take(1)).subscribe(taxes => {
             if (taxes) {
