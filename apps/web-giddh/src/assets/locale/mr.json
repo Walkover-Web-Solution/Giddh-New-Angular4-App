@@ -650,5 +650,11 @@
     "app_giddh_no_permissions": "आपल्याला हे पाहण्याची परवानगी नाही",
     "app_exchange_gain": "लाभ",
     "app_exchange_loss": "तोटा",
-    "app_vendor_name": "विक्रेता नाव"
+    "app_vendor_name": "विक्रेता नाव",
+    "app_amount_limit": {
+        "daily": "दररोज",
+        "weekly": "साप्ताहिक",
+        "monthly": "मासिक",
+        "unlimited": "अमर्यादित"
+    }
 }

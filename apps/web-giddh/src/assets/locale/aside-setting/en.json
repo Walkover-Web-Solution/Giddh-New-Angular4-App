@@ -98,7 +98,7 @@
                     "icon": "<i class='icon-integration1'></i>"
                 },
                 {
-                    "label": "linked Accounts",
+                    "label": "Linked Accounts",
                     "link": "/pages/settings/linked-accounts",
                     "icon": "<i class='icon-linked-account'></i>"
                 },
