@@ -47,7 +47,7 @@
                                             class="btn btn-danger" id="delete-ledger-mobile-view"
                                             (click)="performBulkAction('delete')"
                                             [matTooltip]="commonLocaleData?.app_delete" [matTooltipPosition]="'above'"><i
-                                                class="icon-trash"></i>
+                                                class="icon-trash font-16"></i>
                                         </button>
 
                                         <button mat-button
@@ -55,12 +55,12 @@
                                             class="btn btn-warning" id="generate-invoice-mobile-view"
                                             (click)="performBulkAction('generate')"
                                             [matTooltip]="commonLocaleData?.app_generate_voucher" [matTooltipPosition]="'above'"><i
-                                                class="icon-generate-invoice"></i>
+                                                class="icon-generate-invoice font-16"></i>
                                         </button>
                                     </div>
                                     <button mat-button
                                         [disabled]="currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2"
-                                        class="btn btn-success mr-0" id="attach-file-mobile-view"
+                                        class="btn btn-success mr-0 font-16" id="attach-file-mobile-view"
                                         (click)="performBulkAction('upload', BulkUploadfileInput)"
                                         [matTooltip]="localeData?.attach_file" [matTooltipPosition]="'above'"><i
                                             class="icon-file-path"></i>
@@ -118,7 +118,7 @@
                                         [disabled]="currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2"
                                         id="delete-ledger" (click)="performBulkAction('delete')"
                                         [matTooltip]="commonLocaleData?.app_delete" [matTooltipPosition]="'above'"><i
-                                            class="icon-trash"></i>
+                                            class="icon-trash font-16"></i>
                                     </button>
 
                                     <button mat-raised-button color="primary"
@@ -126,7 +126,7 @@
                                         id="generate-invoice" class="mr-l1"
                                         (click)="performBulkAction('generate')"
                                         [matTooltip]="commonLocaleData?.app_generate_voucher" [matTooltipPosition]="'above'"><i
-                                            class="icon-generate-invoice"></i>
+                                            class="icon-generate-invoice font-16"></i>
                                     </button>
 
                                     <button mat-raised-button
@@ -134,7 +134,7 @@
                                         class="btn btn-success mr-l1" id="attach-file"
                                         (click)="performBulkAction('upload', BulkUploadfileInput)"
                                         [matTooltip]="localeData?.attach_file" [matTooltipPosition]="'above'"><i
-                                            class="icon-file-path"></i>
+                                            class="icon-file-path font-16"></i>
                                     </button>
                                     <input type="file" #BulkUploadfileInput name="BulkUploadfileInput"
                                         id="BulkUploadfileInput" [options]="fileUploadOptions" ngFileSelect
@@ -317,23 +317,23 @@
                                     </div>
                                     <div class="ledger-book">
                                         <div class="left-col-new" (click)="$event.stopPropagation()">
-                                            <mat-grid-list cols="3" rowHeight="43px" class="ledger-table transaction-mapped-table">
-                                                <mat-grid-tile class="bold no-right-border">
+                                            <mat-grid-list cols="4" rowHeight="43px" class="ledger-table transaction-mapped-table">
+                                                <mat-grid-tile class="bold no-right-border" colspan="1">
                                                     {{commonLocaleData?.app_date}}
                                                 </mat-grid-tile>
-                                                <mat-grid-tile class="bold no-right-border">
+                                                <mat-grid-tile class="bold no-right-border" colspan="2">
                                                     {{commonLocaleData?.app_particular}}
                                                 </mat-grid-tile>
-                                                <mat-grid-tile class="bold text-right no-right-border">
+                                                <mat-grid-tile class="bold text-right no-right-border" colspan="1">
                                                     {{commonLocaleData?.app_amount}}
                                                 </mat-grid-tile>
                                             </mat-grid-list>
-                                            <mat-grid-list id="ledger-transaction-left-list" cols="3" rowHeight="50px">
+                                            <mat-grid-list id="ledger-transaction-left-list" cols="4" rowHeight="50px">
                                                 <ng-container *ngFor="let item of lc.bankTransactionsDebitData; trackBy: trackByTransactionId; let i = index">
-                                                    <ng-container *ngFor="let txn of item.transactions; trackBy: trackById">    
-                                                        <mat-grid-tile>
-                                                            <div class="ledger-row"
-                                                            [ngClass]="{'compound-entry': txn.id === lc.selectedBankTxnUniqueName}">
+                                                    <ng-container *ngFor="let txn of item.transactions; trackBy: trackById">
+                                                        <div class="ledger-row"
+                                                        [ngClass]="{'compound-entry': txn.id === lc.selectedBankTxnUniqueName}">   
+                                                        <mat-grid-tile colspan="1">
                                                                 <div class="d-flex align-items-center">
                                                                     <span class="pd-l05 checkbox-span">
                                                                         <mat-checkbox [color]="materialColorPalette"
@@ -345,9 +345,8 @@
                                                                         <giddh-datepicker name="bsdateledger" [(ngModel)]="item.entryDate" (dateSelected)="onChangeEntryDate(item)"></giddh-datepicker>
                                                                     </span>
                                                                 </div>
-                                                            </div>
                                                         </mat-grid-tile>
-                                                        <mat-grid-tile>
+                                                        <mat-grid-tile colspan="2" class="pl-0 pr-0">
                                                             <div class="w-100"
                                                                 (click)="txn.showDropdown = true; showBankLedgerPopup(txn, item);">
                                                                 <span
@@ -420,8 +419,8 @@
                                                                 </ul>
                                                             </div>
                                                         </mat-grid-tile>
-                                                        <mat-grid-tile class="no-right-border">
-                                                            <input matInput class="text-right" type="text"
+                                                        <mat-grid-tile class="no-right-border" colspan="1">
+                                                            <input matInput class="text-right form-control p-0" type="text"
                                                                 [id]="'enter-amount-dr-' + i"
                                                                 decimalDigitsDirective [DecimalPlaces]="2"
                                                                 [(ngModel)]="txn.amount"
@@ -430,6 +429,7 @@
                                                                 *ngIf="txn.type === 'DEBIT'"
                                                                 (click)="showBankLedgerPopup(txn, item);">
                                                         </mat-grid-tile>
+                                                        </div>
                                                         <div class="position-absolute entry-modal"
                                                             *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id && txn.type === 'DEBIT'">
                                                             <new-ledger-entry-panel #newLedPanel
@@ -457,21 +457,21 @@
                                             </mat-grid-list>
                                         </div>
                                         <div class="right-col-new" (click)="$event.stopPropagation()">
-                                            <mat-grid-list cols="3" rowHeight="43px" class="ledger-table transaction-mapped-table">
-                                                <mat-grid-tile class="bold no-right-border">
+                                            <mat-grid-list cols="4" rowHeight="43px" class="ledger-table transaction-mapped-table">
+                                                <mat-grid-tile class="bold no-right-border" colspan="1">
                                                     {{commonLocaleData?.app_date}} 
                                                 </mat-grid-tile>
-                                                <mat-grid-tile class="bold no-right-border">
+                                                <mat-grid-tile class="bold no-right-border" colspan="2">
                                                     {{commonLocaleData?.app_particular}}
                                                 </mat-grid-tile>
-                                                <mat-grid-tile class="bold text-right no-right-border">
+                                                <mat-grid-tile class="bold text-right no-right-border" colspan="1">
                                                     {{commonLocaleData?.app_amount}}
                                                 </mat-grid-tile>
                                             </mat-grid-list>
-                                            <mat-grid-list id="ledger-transaction-right-list" cols="3" rowHeight="50px">
+                                            <mat-grid-list id="ledger-transaction-right-list" cols="4" rowHeight="50px">
                                                 <ng-container *ngFor="let item of lc.bankTransactionsCreditData; trackBy: trackByTransactionId; let i = index">
                                                     <ng-container *ngFor="let txn of item.transactions; trackBy: trackById">    
-                                                        <mat-grid-tile>
+                                                        <mat-grid-tile colspan="1">
                                                             <div class="ledger-row"
                                                             [ngClass]="{'compound-entry': txn.id === lc.selectedBankTxnUniqueName}">
                                                                 <div class="d-flex align-items-center">
@@ -488,7 +488,7 @@
                                                                 </div>
                                                             </div>
                                                         </mat-grid-tile>
-                                                        <mat-grid-tile>
+                                                        <mat-grid-tile colspan="2" class="pl-0 pr-0">
                                                             <div class="w-100"
                                                                 (click)="txn.showDropdown = true; showBankLedgerPopup(txn, item);">
                                                                 <span
@@ -561,8 +561,8 @@
                                                                 </ul>
                                                             </div>
                                                         </mat-grid-tile>
-                                                        <mat-grid-tile class="no-right-border">
-                                                            <input matInput class="text-right" type="text"
+                                                        <mat-grid-tile class="no-right-border" colspan="1">
+                                                            <input matInput class="text-right form-control p-0" type="text"
                                                                 [id]="'enter-amount-cr-' + i"
                                                                 decimalDigitsDirective [DecimalPlaces]="2"
                                                                 [(ngModel)]="txn.amount"
@@ -745,28 +745,28 @@
                             [ngClass]="{'bd-rr': (lc.transactionData$ | async)?.debitTransactions?.length >= (lc.transactionData$ | async)?.creditTransactions?.length}">
 
                             <!-- region debit transaction header-->
-                            <mat-grid-list cols="3" rowHeight="50px">
-                                <mat-grid-tile class="bold">
+                            <mat-grid-list cols="4" rowHeight="50px">
+                                <mat-grid-tile class="bold" colspan="1">
                                     <span class="cp">{{commonLocaleData?.app_date}}</span>
                                 </mat-grid-tile>
-                                <mat-grid-tile class="bold">
+                                <mat-grid-tile class="bold" colspan="2">
                                     {{commonLocaleData?.app_particular}}
                                 </mat-grid-tile>
-                                <mat-grid-tile class="bold text-right no-right-border">
+                                <mat-grid-tile class="bold text-right no-right-border" colspan="1">
                                     {{commonLocaleData?.app_amount}}
                                 </mat-grid-tile>
                             </mat-grid-list>
                             <!-- endregion -->
 
-                            <mat-grid-list cols="3" rowHeight="50px" tabindex="-1"
+                            <mat-grid-list cols="4" rowHeight="50px" tabindex="-1"
                             *ngIf="ledgerTxnBalance?.forwardedBalance?.amount > 0 && ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'">
-                                <mat-grid-tile [attr.data-title]="commonLocaleData?.app_date">
+                                <mat-grid-tile [attr.data-title]="commonLocaleData?.app_date" colspan="1">
                                     <mat-checkbox [color]="materialColorPalette" id="select-entries-date-cr" [(ngModel)]="debitSelectAll" *ngIf="checkedTrxWhileHovering?.length > 0" (change)="selectAllEntries($event, 'debit')"></mat-checkbox>
                                 </mat-grid-tile>
-                                <mat-grid-tile [attr.data-title]="commonLocaleData?.app_particular">
+                                <mat-grid-tile [attr.data-title]="commonLocaleData?.app_particular" colspan="2">
                                     <span *ngIf="(lc.transactionData$ | async)?.page <= 1">{{localeData?.to_balance_bf}}</span>
                                 </mat-grid-tile>
-                                <mat-grid-tile [attr.data-title]="commonLocaleData?.app_amount">
+                                <mat-grid-tile [attr.data-title]="commonLocaleData?.app_amount" colspan="1">
                                     <div class="d-flex flex-column">
                                         <ng-container *ngIf="(lc.transactionData$ | async)?.page <= 1">
                                             <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'">
@@ -789,25 +789,25 @@
                                 </mat-grid-tile>
                             </mat-grid-list>
 
-                            <mat-grid-list cols="3" rowHeight="50px">
-                                <mat-grid-tile [attr.data-title]="commonLocaleData?.app_select_all">
+                            <mat-grid-list cols="4" rowHeight="50px">
+                                <mat-grid-tile [attr.data-title]="commonLocaleData?.app_select_all" colspan="1">
                                     <mat-checkbox [color]="materialColorPalette" [(ngModel)]="debitSelectAll" id="select-entries-all-cr"
                                         *ngIf="checkedTrxWhileHovering?.length > 0"
                                         (change)="selectAllEntries($event, 'debit')"></mat-checkbox>
                                 </mat-grid-tile>
-                                <mat-grid-tile>&nbsp;</mat-grid-tile>
-                                <mat-grid-tile class="no-right-border">&nbsp;</mat-grid-tile>
+                                <mat-grid-tile colspan="2">&nbsp;</mat-grid-tile>
+                                <mat-grid-tile class="no-right-border" colspan="1">&nbsp;</mat-grid-tile>
                             </mat-grid-list>
                             <!-- endregion -->
 
                             <!-- region debit transaction loop over transactions -->
-                            <mat-grid-list cols="3" rowHeight="50px" vr-item tabindex="-1" class="ledger-row"
+                            <mat-grid-list cols="4" rowHeight="50px" vr-item tabindex="-1" class="ledger-row"
                                 *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions; let i = index; trackBy:trackByTransactionUniqueName"
                                 (dblclick)="showUpdateLedgerModal(txn)" (keydown.enter)="showUpdateLedgerModal(txn)"
                                 [ngClass]="{'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
                                 [matTooltip]="txn.description" [matTooltipPosition]="'right'" (mouseover)="entryHovered(txn.entryUniqueName)"
                                 (mouseout)="selectedTrxWhileHovering = ''">
-                                <mat-grid-tile [attr.data-title]="commonLocaleData?.app_date">
+                                <mat-grid-tile [attr.data-title]="commonLocaleData?.app_date" colspan="1">
                                     <div class="d-flex align-items-center">
                                         <span class='float-left'>
                                             <mat-checkbox [color]="materialColorPalette" [id]="'select-entry-dr-' + i"
@@ -819,7 +819,7 @@
                                     </div>
                                 </mat-grid-tile>
 
-                                <mat-grid-tile
+                                <mat-grid-tile colspan="2"
                                     [attr.data-title]="commonLocaleData?.app_particular">
                                     <div class="d-flex align-items-center justify-content-between w-100">
 
@@ -843,7 +843,7 @@
                                     </div>
                                 </mat-grid-tile>
 
-                                <mat-grid-tile [ngClass]="{'multicurrency-amount':isLedgerAccountAllowsMultiCurrency}"
+                                <mat-grid-tile [ngClass]="{'multicurrency-amount':isLedgerAccountAllowsMultiCurrency}" colspan="1"
                                     class="text-right no-right-border"
                                     [attr.data-title]="commonLocaleData?.app_amount">
                                     <amount-field [amount]="txn.amount" [currencySymbol]="txn.currencySymbol"
@@ -863,8 +863,8 @@
                                 <ng-container *ngFor="let txn of lc.blankLedger.transactions; let i = index">
                                     <div class="width-100 no-left-border" *ngIf="txn.type === 'DEBIT'">
                                         <div class="width-100 ledger-main">
-                                            <mat-grid-list cols="3" rowHeight="50px" class="ledger-row">
-                                                <mat-grid-tile class="new-entry-date"
+                                            <mat-grid-list cols="4" rowHeight="50px" class="ledger-row">
+                                                <mat-grid-tile class="new-entry-date" colspan="1"
                                                     [attr.data-title]="commonLocaleData?.app_date">
                                                     <div class="d-flex align-items-center">
                                                         <span class="ledger-checkbox pull-left">
@@ -873,7 +873,7 @@
                                                         <giddh-datepicker name="ledgDate" [(ngModel)]="lc.blankLedger.entryDate" [placeholder]="lc.formatPlaceholder" (dateSelected)="getInvoiceListsForCreditNote(true)"></giddh-datepicker>
                                                     </div>
                                                 </mat-grid-tile>
-                                                <mat-grid-tile [attr.data-title]="commonLocaleData?.app_particular"
+                                                <mat-grid-tile [attr.data-title]="commonLocaleData?.app_particular" colspan="2"
                                                     class="select2-parent select2-ledger"
                                                     (mousedown)="showNewLedgerEntryPopup(txn);">
                                                     <div class="ledger-account-label d-flex">
@@ -939,9 +939,9 @@
                                                         <li>{{localeData?.create_account}}</li>
                                                     </ul>
                                                 </mat-grid-tile>
-                                                <mat-grid-tile [attr.data-title]="commonLocaleData?.app_amount"
+                                                <mat-grid-tile [attr.data-title]="commonLocaleData?.app_amount" colspan="1"
                                                     class="position-relative no-right-border">
-                                                    <input matInput class="text-right" type="text"
+                                                    <input matInput class="text-right form-control" type="text"
                                                         [id]="'enter-bank-amount-dr-' + i"
                                                         [prefix]="selectedPrefixForCurrency"
                                                         [suffix]="selectedSuffixForCurrency"
@@ -993,33 +993,33 @@
                             (ngInit)="initNavigator(navigator,$event?.nativeElement); navigator.nextVertical();"
                             [ngClass]="{'bd-rl': (lc.transactionData$ | async)?.debitTransactions?.length < (lc.transactionData$ | async)?.creditTransactions?.length}">
                             <!-- region credit transaction header-->
-                            <mat-grid-list cols="3" rowHeight="50px">
-                                <mat-grid-tile class="bold">
+                            <mat-grid-list cols="4" rowHeight="50px">
+                                <mat-grid-tile class="bold" colspan="1">
                                     <span class="cp">{{commonLocaleData?.app_date}}</span>
                                 </mat-grid-tile>
-                                <mat-grid-tile class="bold">
+                                <mat-grid-tile class="bold" colspan="2">
                                     {{commonLocaleData?.app_particular}}
                                 </mat-grid-tile>
-                                <mat-grid-tile class="bold text-right no-right-border">
+                                <mat-grid-tile class="bold text-right no-right-border" colspan="1">
                                     {{commonLocaleData?.app_amount}}
                                 </mat-grid-tile>
                             </mat-grid-list>
                             <!-- endregion -->
 
                             <!-- region credit transaction if forwardedBalance -->
-                            <mat-grid-list cols="3" rowHeight="50px" tabindex="-1" class="ledger-row" vr-item tabindex="-1"
+                            <mat-grid-list cols="4" rowHeight="50px" tabindex="-1" class="ledger-row" vr-item tabindex="-1"
                                 *ngIf="ledgerTxnBalance?.forwardedBalance?.amount > 0 && ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'">
-                                <mat-grid-tile
+                                <mat-grid-tile colspan="1"
                                     [attr.data-title]="commonLocaleData?.app_date">
                                     <mat-checkbox [color]="materialColorPalette" id="select-all-entries-dr" [(ngModel)]="creditSelectAll"
                                         *ngIf="checkedTrxWhileHovering?.length > 0"
                                         (change)="selectAllEntries($event,'credit')"></mat-checkbox>
                                 </mat-grid-tile>
-                                <mat-grid-tile [attr.data-title]="localeData?.bf_balance">
+                                <mat-grid-tile [attr.data-title]="localeData?.bf_balance" colspan="2">
                                     <span *ngIf="(lc.transactionData$ | async)?.page <= 1">
                                         {{localeData?.by_balance_bf}} </span>
                                 </mat-grid-tile>
-                                <mat-grid-tile [attr.data-title]="commonLocaleData?.app_amount"
+                                <mat-grid-tile [attr.data-title]="commonLocaleData?.app_amount" colspan="1"
                                     class="text-right no-right-border">
                                     <div class="d-flex flex-column">
                                         <ng-container *ngIf="(lc.transactionData$ | async)?.page <= 1">
@@ -1044,20 +1044,20 @@
                             <!-- endregion -->
 
                             <!-- region credit transaction no forwardedBalance -->
-                            <mat-grid-list cols="3" rowHeight="50px" class="ledger-row"
+                            <mat-grid-list cols="4" rowHeight="50px" class="ledger-row"
                                 *ngIf="ledgerTxnBalance?.forwardedBalance?.type !== 'CREDIT' || (ledgerTxnBalance?.forwardedBalance?.amount == 0)">
-                                <mat-grid-tile>
+                                <mat-grid-tile colspan="1">
                                     <mat-checkbox [color]="materialColorPalette" id="select-all-entries-credit"
                                         [(ngModel)]="creditSelectAll" *ngIf="checkedTrxWhileHovering?.length > 0"
                                         (change)="selectAllEntries($event,'credit')"></mat-checkbox>
                                 </mat-grid-tile>
-                                <mat-grid-tile>&nbsp;</mat-grid-tile>
-                                <mat-grid-tile class="no-right-border">&nbsp;</mat-grid-tile>
+                                <mat-grid-tile colspan="2">&nbsp;</mat-grid-tile>
+                                <mat-grid-tile class="no-right-border" colspan="1">&nbsp;</mat-grid-tile>
                             </mat-grid-list>
                             <!-- endregion -->
 
                             <!-- region credit transaction loop over transactions -->
-                            <mat-grid-list cols="3" rowHeight="50px" class="ledger-row"
+                            <mat-grid-list cols="4" rowHeight="50px" class="ledger-row"
                                 *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions; let i = index; trackBy:trackByTransactionUniqueName"
                                 (dblclick)="showUpdateLedgerModal(txn)" vr-item tabindex="-1"
                                 (keydown.enter)="showUpdateLedgerModal(txn)"
@@ -1066,7 +1066,7 @@
                                 (mouseover)="entryHovered(txn.entryUniqueName)"
                                 (mouseout)="selectedTrxWhileHovering = ''">
 
-                                <mat-grid-tile
+                                <mat-grid-tile colspan="1"
                                     [attr.data-title]="commonLocaleData?.app_date">
                                     <div class="d-flex align-items-center">
                                         <span class="ledger-checkbox pull-left">
@@ -1078,7 +1078,7 @@
                                         <span>{{ txn.entryDate }}</span>
                                     </div>
                                 </mat-grid-tile>
-                                <mat-grid-tile
+                                <mat-grid-tile colspan="2"
                                     [attr.data-title]="commonLocaleData?.app_particular">
                                     <div class="d-flex align-items-center justify-content-between w-100">
                                         <div class="text-ellipsis">
@@ -1099,7 +1099,7 @@
                                         </span>
                                     </div>
                                 </mat-grid-tile>
-                                <mat-grid-tile [ngClass]="{'multicurrency-amount':isLedgerAccountAllowsMultiCurrency}"
+                                <mat-grid-tile  colspan="1" [ngClass]="{'multicurrency-amount':isLedgerAccountAllowsMultiCurrency}"
                                     [attr.data-title]="commonLocaleData?.app_amount"
                                     class="position-relative text-right no-right-border">
                                     <amount-field [amount]="txn.amount" [currencySymbol]="txn.currencySymbol"
@@ -1120,8 +1120,8 @@
                                 <ng-container *ngFor="let txn of lc.blankLedger.transactions; let i = index">
                                     <div class="width-100" *ngIf="txn.type === 'CREDIT'">
                                         <div class="width-100 h-table ledger-main">
-                                            <mat-grid-list cols="3" rowHeight="50px" class="ledger-row">
-                                                <mat-grid-tile
+                                            <mat-grid-list cols="4" rowHeight="50px" class="ledger-row">
+                                                <mat-grid-tile colspan="1"
                                                     class="new-entry-date"
                                                     [attr.data-title]="commonLocaleData?.app_date">
                                                     <div class="d-flex align-items-center">
@@ -1132,7 +1132,7 @@
                                                         [placeholder]="lc.formatPlaceholder"></giddh-datepicker>
                                                     </div>
                                                 </mat-grid-tile>
-                                                <mat-grid-tile class="select2-parent select2-ledger"
+                                                <mat-grid-tile class="select2-parent select2-ledger" colspan="2"
                                                     [attr.data-title]="commonLocaleData?.app_particular"
                                                     (mousedown)="showNewLedgerEntryPopup(txn);">
                                                     <div class="ledger-account-label d-flex">
@@ -1197,9 +1197,9 @@
                                                         <li>{{localeData?.create_account}}</li>
                                                     </ul>
                                                 </mat-grid-tile>
-                                                <mat-grid-tile class="position-relative no-right-border"
+                                                <mat-grid-tile class="position-relative no-right-border" colspan="1"
                                                     [attr.data-title]="commonLocaleData?.app_amount">
-                                                    <input matInput class="text-right" type="text"
+                                                    <input matInput class="text-right form-control" type="text"
                                                         id="enter-bank-amount-cr"
                                                         [prefix]="selectedPrefixForCurrency"
                                                         [suffix]="selectedSuffixForCurrency"
