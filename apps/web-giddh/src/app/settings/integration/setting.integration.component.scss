@@ -202,6 +202,7 @@
     padding: 8px;
     color: $black;
     border-radius: 5px;
+    word-break: break-word;
 }
 .payment-updates {
     width: 90%;
@@ -243,6 +244,9 @@
 }
 .account-approval-status.pending-approval {
     color: $orange-new;
+    i::before {
+        color: $orange-new;
+    }
 }
 .connected-accounts {
     margin-left: 10px;

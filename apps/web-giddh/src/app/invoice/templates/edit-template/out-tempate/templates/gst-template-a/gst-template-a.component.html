@@ -560,11 +560,7 @@
                                             : "Rate"
                                     }}
                                 </th>
-                                <th
-                                    *ngIf="voucherType === 'sales'"
-                                    class="text-right"
-                                    [ngStyle]="{ 'background-color': inputTemplate.tableColor }"
-                                >
+                                <th class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor }">
                                     Total before Dis.
                                 </th>
                                 <th
@@ -676,9 +672,7 @@
                                     <span [innerHTML]="rupeeSymbol"></span>1000.00
                                     <p><span [innerHTML]="dollarSymbol"></span>14.28</p>
                                 </td>
-                                <td *ngIf="voucherType === 'sales'" class="text-right">
-                                    <span [innerHTML]="rupeeSymbol"></span>2000.00
-                                </td>
+                                <td class="text-right"><span [innerHTML]="rupeeSymbol"></span>2000.00</td>
                                 <td *ngIf="fieldsAndVisibility.table.discount?.display" class="text-right">
                                     <span [innerHTML]="rupeeSymbol"></span>300.00
                                 </td>
@@ -750,9 +744,7 @@
                                     <span [innerHTML]="rupeeSymbol"></span>300.00
                                     <p><span [innerHTML]="dollarSymbol"></span>4.28</p>
                                 </td>
-                                <td *ngIf="voucherType === 'sales'" class="text-right">
-                                    <span [innerHTML]="rupeeSymbol"></span>600.00
-                                </td>
+                                <td class="text-right"><span [innerHTML]="rupeeSymbol"></span>600.00</td>
                                 <td *ngIf="fieldsAndVisibility.table.discount?.display" class="text-right">
                                     <span [innerHTML]="rupeeSymbol"></span>500.00
                                 </td>
@@ -904,7 +896,6 @@
                                     [ngStyle]="{ 'background-color': inputTemplate.tableColor }"
                                 ></th>
                                 <th
-                                    *ngIf="voucherType === 'sales'"
                                     class="text-right"
                                     [ngStyle]="{ 'background-color': inputTemplate.tableColor }"
                                 ></th>

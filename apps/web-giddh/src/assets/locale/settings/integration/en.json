@@ -98,7 +98,7 @@
         "payment_updates": "Payment Updates",
         "limit_upto": "Limit Up To",
         "pending_self_approval": "Pending for self approval",
-        "approval_request_sent": "A request has been sent to your account, login to <a href='https://giddh.com/help/how-to-integrate-icici-bank-account-with-giddh'>ICICI Bank Portal</a> and accept it.",
+        "approval_request_sent": "A request has been sent to your account, login to <a href='https://cibnext.icicibank.com/corp/AuthenticationController?FORMSGROUP_ID__=AuthenticationFG&__START_TRAN_FLAG__=Y&FG_BUTTONS__=LOAD&ACTION.LOAD=Y&AuthenticationFG.LOGIN_FLAG=1&BANK_ID=ICI&ITM=nli_corp_primer_login_btn_desk' target='_blank'>ICICI Bank Portal</a> and accept it.",
         "approval_request_accepted": "Once accepted, you can link your ICICI bank account/s and make payments directly through GIDDH",
         "add_more_users": "+ Add More Users",
         "connect_icici_account": "Connect ICICI Account",
@@ -116,6 +116,7 @@
         "connected": "Connected",
         "used": "Used",
         "get_instant_overdraft": "Get Instant Overdraft",
-        "duration_error": "Please select duration for given amount"
+        "duration_error": "Please select duration for given amount",
+        "required_field_error": "Please fill all required fields"
     }
 }

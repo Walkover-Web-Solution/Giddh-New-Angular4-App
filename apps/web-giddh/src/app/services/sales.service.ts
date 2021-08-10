@@ -59,7 +59,7 @@ export class SalesService {
                 catchError((e) => this.errorHandler.HandleCatch<any, GenericRequestForGenerateSCD>(e, model)));
     }
 
-    public updateVoucher(model: GenericRequestForGenerateSCD): Observable<BaseResponse<any, GenericRequestForGenerateSCD>> {
+    public updateVoucher(model: any): Observable<BaseResponse<any, any>> {
         let accountUniqueName = model.voucher.accountDetails.uniqueName;
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
@@ -68,7 +68,7 @@ export class SalesService {
             .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model)
             .pipe(
                 map((res) => {
-                    let data: BaseResponse<any, GenericRequestForGenerateSCD> = res;
+                    let data: BaseResponse<any, any> = res;
                     data.request = model;
                     return data;
                 }),

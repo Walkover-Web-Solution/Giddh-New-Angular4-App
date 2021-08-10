@@ -114,7 +114,7 @@
                                                     [amount]="
                                                         enableVoucherAdjustmentMultiCurrency && isSalesInvoice
                                                             ? getConvertedBalanceDue()
-                                                            : invFormData.voucherDetails.balanceDue * exchangeRate
+                                                            : invFormData.voucherDetails.convertedBalanceDue
                                                     "
                                                     [currencySymbol]="baseCurrencySymbol"
                                                     [currencyCode]="companyCurrency"
@@ -864,7 +864,7 @@
                                                     adjustPaymentBalanceDueData === 0 &&
                                                     invFormData.voucherDetails.balanceDue === 0
                                                         ? getConvertedBalanceDue(true)
-                                                        : invFormData.voucherDetails.balanceDue * exchangeRate
+                                                        : invFormData.voucherDetails.convertedBalanceDue
                                                 "
                                                 [currencySymbol]="baseCurrencySymbol"
                                                 [currencyCode]="companyCurrency"
@@ -918,7 +918,7 @@
                                 <!-- endregion-->
 
                                 <!-- region email -->
-                                <div class="row mt-b1">
+                                <div class="row mt-1">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ commonLocaleData?.app_email_id }}</label>
                                     </div>
@@ -938,7 +938,7 @@
                                 <!-- endregion-->
 
                                 <!-- region mobile no -->
-                                <div class="row mt-b1">
+                                <div class="row mt-1">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ commonLocaleData?.app_mobile_number }}</label>
                                     </div>
@@ -959,7 +959,7 @@
                                 <!-- endregion-->
                                 <!-- warehouse selection -->
                                 <div
-                                    class="row mt-b1"
+                                    class="row mt-1"
                                     *ngIf="shouldShowWarehouse && warehouses && warehouses.length > 1"
                                 >
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
@@ -981,10 +981,7 @@
                                 </div>
                                 <!-- end warehouse field -->
 
-                                <div
-                                    class="row mb-1 delivery-from-field"
-                                    *ngIf="isPurchaseInvoice || currentVoucherFormDetails?.addressAllowed"
-                                >
+                                <div class="row mb-1 delivery-from-field" *ngIf="isPurchaseInvoice">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ localeData?.deliver_to }}<span class="red-text">*</span></label>
                                     </div>
@@ -1332,7 +1329,7 @@
                                     </div>
                                 </div>
                                 <div
-                                    class="row mt-b1"
+                                    class="row mt-1"
                                     *ngIf="isPurchaseInvoice && (!isUpdateMode || (isUpdateMode && poLinkUpdated))"
                                 >
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
@@ -1388,7 +1385,7 @@
                                 <!-- end Link purchase order -->
 
                                 <!-- region invoice no, invoice date, Expiry date -->
-                                <div class="row mt-b1">
+                                <div class="row mt-1">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label> {{ invoiceNoLabel }} </label>
                                     </div>
@@ -1553,7 +1550,7 @@
                                     </div>
                                 </div>
 
-                                <div class="row mt-b1" *ngIf="isMobileScreen">
+                                <div class="row mt-1" *ngIf="isMobileScreen">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ invoiceDateLabel }}</label>
                                     </div>
@@ -1591,7 +1588,7 @@
                                 </div>
 
                                 <div
-                                    class="row mt-b1"
+                                    class="row mt-1"
                                     *ngIf="
                                         isMobileScreen &&
                                         (currentVoucherFormDetails?.dueDate ||
@@ -1632,7 +1629,7 @@
                                 <!-- reverse charge transction start -->
                                 <!-- for purchase record start -->
                                 <div
-                                    class="row mt-b1"
+                                    class="row mt-1"
                                     *ngIf="isPurchaseInvoice || currentVoucherFormDetails?.rcmAllowed"
                                 >
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3" *ngIf="!isMobileView">
@@ -1673,7 +1670,7 @@
                                 <!-- For Tourist Scheme start -->
                                 <!-- for sales invoice start (ngModelChange)="touristSchemeApplicableToggle($event)"-->
                                 <ng-container *ngIf="companyCountryCode === 'AE'">
-                                    <div class="row mt-b1" *ngIf="isSalesInvoice || isCashInvoice">
+                                    <div class="row mt-1" *ngIf="isSalesInvoice || isCashInvoice">
                                         <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3" *ngIf="!isMobileView">
                                             <label></label>
                                         </div>
@@ -1696,7 +1693,7 @@
 
                                     <!-- endregion -->
                                     <div
-                                        class="row mt-b1"
+                                        class="row mt-1"
                                         *ngIf="(isSalesInvoice || isCashInvoice) && invFormData.touristSchemeApplicable"
                                     >
                                         <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
@@ -2019,22 +2016,9 @@
                                             </div>
                                         </div>
                                         <div class="differ-currency d-flex justify-content-end">
-                                            <span *ngIf="!transaction.isStockTxn && isMulticurrencyAccount">
+                                            <span *ngIf="isMulticurrencyAccount">
                                                 <amount-field
-                                                    [amount]="transaction.amount * exchangeRate || 0"
-                                                    [currencySymbol]="baseCurrencySymbol"
-                                                    [currencyCode]="companyCurrency"
-                                                >
-                                                </amount-field>
-                                            </span>
-                                            <span *ngIf="transaction.isStockTxn && isMulticurrencyAccount">
-                                                <amount-field
-                                                    [amount]="
-                                                        transaction.quantity *
-                                                        (transaction.rate * exchangeRate
-                                                            ? transaction.rate * exchangeRate
-                                                            : 0)
-                                                    "
+                                                    [amount]="transaction.convertedAmount"
                                                     [currencySymbol]="baseCurrencySymbol"
                                                     [currencyCode]="companyCurrency"
                                                 >
@@ -2284,7 +2268,7 @@
                                                                 </div>
                                                                 <div class="item-stock">
                                                                     {{ commonLocaleData?.app_stock }}:
-                                                                    {{ option.additional?.stock.uniqueName }}
+                                                                    {{ option.additional?.stock?.uniqueName }}
                                                                 </div>
                                                             </a>
                                                         </ng-container>
@@ -2494,7 +2478,9 @@
                                             name="transaction.stockUnit_{{ entryIdx }}"
                                             [(ngModel)]="transaction.stockUnit"
                                             (ngModelChange)="
-                                                onChangeUnit(transaction, $event); transaction.setAmount(entry)
+                                                onChangeUnit(transaction, $event);
+                                                transaction.setAmount(entry);
+                                                calculateWhenTrxAltered(entry, transaction)
                                             "
                                         >
                                             <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">
@@ -2567,23 +2553,9 @@
                                                 />
                                             </div>
                                             <div class="differ-currency" *ngIf="isMulticurrencyAccount">
-                                                <span *ngIf="!transaction.isStockTxn">
+                                                <span>
                                                     <amount-field
-                                                        [amount]="transaction.amount * exchangeRate || 0"
-                                                        [currencySymbol]="baseCurrencySymbol"
-                                                        [currencyCode]="companyCurrency"
-                                                    >
-                                                    </amount-field>
-                                                </span>
-
-                                                <span *ngIf="transaction.isStockTxn">
-                                                    <amount-field
-                                                        [amount]="
-                                                            transaction.quantity *
-                                                            (transaction.rate * exchangeRate
-                                                                ? transaction.rate * exchangeRate
-                                                                : 0)
-                                                        "
+                                                        [amount]="transaction.convertedAmount"
                                                         [currencySymbol]="baseCurrencySymbol"
                                                         [currencyCode]="companyCurrency"
                                                     >
@@ -2803,11 +2775,7 @@
                         <div class="row mr-0 ml-0 other-details-section">
                             <div class="col-md-6">
                                 <!-- region other details-->
-                                <div
-                                    *ngIf="
-                                        !this.currentVoucherFormDetails || this.currentVoucherFormDetails?.otherDetails
-                                    "
-                                >
+                                <div *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.otherDetails">
                                     <div class="collapse-pane clearfix">
                                         <div
                                             class="collapse-pane-heading"
@@ -3187,7 +3155,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="table-row" *ngIf="invFormData.voucherDetails.tcsTotal > 0">
+                                    <div class="table-row" *ngIf="isTcsPresent">
                                         <div class="table-cell">{{ commonLocaleData?.app_tcs }}</div>
                                         <div class="table-cell figure-cell">
                                             <span class="d-flex justify-content-end">
@@ -3209,7 +3177,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="table-row" *ngIf="invFormData.voucherDetails.tdsTotal > 0">
+                                    <div class="table-row" *ngIf="isTdsPresent">
                                         <div class="table-cell">{{ commonLocaleData?.app_tds }}</div>
                                         <div class="table-cell figure-cell">
                                             <span class="d-flex justify-content-end">
@@ -3672,21 +3640,7 @@
 
                                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                                         <amount-field
-                                                            *ngIf="!transaction.isStockTxn"
-                                                            [amount]="transaction.amount * exchangeRate || 0"
-                                                            [currencySymbol]="baseCurrencySymbol"
-                                                            [currencyCode]="companyCurrency"
-                                                        >
-                                                        </amount-field>
-
-                                                        <amount-field
-                                                            *ngIf="transaction.isStockTxn"
-                                                            [amount]="
-                                                                transaction.quantity *
-                                                                (transaction.rate * exchangeRate
-                                                                    ? transaction.rate * exchangeRate
-                                                                    : 0)
-                                                            "
+                                                            [amount]="transaction.convertedAmount"
                                                             [currencySymbol]="baseCurrencySymbol"
                                                             [currencyCode]="companyCurrency"
                                                         >
@@ -3884,7 +3838,7 @@
                                                                             <div class="item-stock">
                                                                                 {{ commonLocaleData?.app_stock }}:
                                                                                 {{
-                                                                                    option.additional?.stock.uniqueName
+                                                                                    option.additional?.stock?.uniqueName
                                                                                 }}
                                                                             </div>
                                                                         </a>
@@ -4148,7 +4102,8 @@
                                                                 [(ngModel)]="transaction.stockUnit"
                                                                 (ngModelChange)="
                                                                     onChangeUnit(transaction, $event);
-                                                                    transaction.setAmount(entry)
+                                                                    transaction.setAmount(entry);
+                                                                    calculateWhenTrxAltered(entry, transaction)
                                                                 "
                                                             >
                                                                 <option
@@ -4246,20 +4201,7 @@
                                                     </div>
                                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                                         <amount-field
-                                                            *ngIf="!transaction.isStockTxn"
-                                                            [amount]="transaction.amount * exchangeRate || 0"
-                                                            [currencySymbol]="baseCurrencySymbol"
-                                                            [currencyCode]="companyCurrency"
-                                                        >
-                                                        </amount-field>
-                                                        <amount-field
-                                                            *ngIf="transaction.isStockTxn"
-                                                            [amount]="
-                                                                transaction.quantity *
-                                                                (transaction.rate * exchangeRate
-                                                                    ? transaction.rate * exchangeRate
-                                                                    : 0)
-                                                            "
+                                                            [amount]="transaction.convertedAmount"
                                                             [currencySymbol]="baseCurrencySymbol"
                                                             [currencyCode]="companyCurrency"
                                                         >
@@ -4514,9 +4456,7 @@
                         </div>
 
                         <div class="other-detail-card">
-                            <div
-                                *ngIf="!this.currentVoucherFormDetails || this.currentVoucherFormDetails?.otherDetails"
-                            >
+                            <div *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.otherDetails">
                                 <div class="collapse-pane clearfix">
                                     <div
                                         class="collapse-pane-heading"
@@ -4827,7 +4767,7 @@
                                     </div>
                                 </div>
 
-                                <div class="table-row" *ngIf="invFormData.voucherDetails.tcsTotal > 0">
+                                <div class="table-row" *ngIf="isTcsPresent">
                                     <div class="table-cell">{{ commonLocaleData?.app_tcs }}</div>
                                     <div class="table-cell figure-cell">
                                         <span class="d-flex justify-content-end">
@@ -4849,7 +4789,7 @@
                                     </div>
                                 </div>
 
-                                <div class="table-row" *ngIf="invFormData.voucherDetails.tdsTotal > 0">
+                                <div class="table-row" *ngIf="isTdsPresent">
                                     <div class="table-cell">{{ commonLocaleData?.app_tds }}</div>
                                     <div class="table-cell figure-cell">
                                         <span class="d-flex justify-content-end">

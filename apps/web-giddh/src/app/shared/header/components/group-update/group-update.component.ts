@@ -22,7 +22,7 @@ import { SettingsDiscountActions } from 'apps/web-giddh/src/app/actions/settings
 import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/SettingsDiscount';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
-import { API_COUNT_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { API_COUNT_LIMIT, TCS_TDS_TAXES_TYPES } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
     selector: 'group-update',
@@ -193,9 +193,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                         if (activeGroupTaxHierarchy) {
                             // prepare drop down options
                             this.companyTaxDropDown = differenceBy(taxes.map(p => {
-                                return { label: p.name, value: p.uniqueName };
+                                return { label: p.name, value: p.uniqueName, additional: p };
                             }), flattenDeep(activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-                                return { label: p.name, value: p.uniqueName };
+                                return { label: p.name, value: p.uniqueName, additional: p };
                             }), 'value');
 
                             if (activeGroupTaxHierarchy.inheritedTaxes && activeGroupTaxHierarchy.inheritedTaxes.length) {
@@ -213,7 +213,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
 
                         } else {
                             this.companyTaxDropDown = taxes.map(p => {
-                                return { label: p.name, value: p.uniqueName };
+                                return { label: p.name, value: p.uniqueName, additional: p };
                             });
                             // set value in tax group form
                             setTimeout(() => {
@@ -225,6 +225,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                 } else {
                     this.companyTaxDropDown = arr;
                 }
+                this.filterTaxesForDebtorCreditor();
             }
         });
     }
@@ -482,7 +483,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public getAccountFromGroup(activeGroup: GroupResponse, result: boolean): boolean {
-        this.isDebtorCreditorGroups = this.isDebtorCreditorGroup(activeGroup);
+        this.isDebtorCreditorGroups = Boolean(this.isDebtorCreditorGroup(activeGroup));
         if (activeGroup.category === 'income' || activeGroup.category === 'expenses' || this.isDebtorCreditorGroups) {
             result = true;
         }
@@ -500,18 +501,26 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.destroyed$.complete();
     }
 
-    /**
+   /**
     * To get sub group belongs to mentioned group (currentliabilities , currentassets)
     *
-    * @param {*} item
+    * @param {GroupResponse} activeGroup Active group data
+    * @param {boolean} [returnIndividualStatus] True, if separate status for creditor or debtor is required
+    * @return {(boolean | {isCreditor: boolean, isDebtor: boolean})} Status of group
     * @memberof GroupUpdateComponent
     */
-    public isDebtorCreditorGroup(activeGroup: GroupResponse): boolean {
+   public isDebtorCreditorGroup(activeGroup: GroupResponse, returnIndividualStatus?: boolean): boolean | {isCreditor?: boolean, isDebtor?: boolean} {
         let isTaxableGroup: boolean = false;
         if (activeGroup && activeGroup.parentGroups) {
             isTaxableGroup = (activeGroup.uniqueName === 'sundrydebtors' || activeGroup.uniqueName === 'sundrycreditors') || activeGroup.parentGroups.some(groupName => groupName.uniqueName === 'sundrydebtors' || groupName.uniqueName === 'sundrycreditors');
         }
-
+        if (returnIndividualStatus) {
+            if (activeGroup.uniqueName === 'sundrydebtors' || activeGroup.parentGroups.some(groupName => groupName.uniqueName === 'sundrydebtors')) {
+                return {isDebtor: true};
+            } else if (activeGroup.uniqueName === 'sundrycreditors' || activeGroup.parentGroups.some(groupName => groupName.uniqueName === 'sundrycreditors')) {
+                return {isCreditor: true};
+            }
+        }
         return isTaxableGroup;
     }
 
@@ -683,4 +692,25 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
+    /**
+     * Filters taxes for Sundry debtors and creditors
+     *
+     * @private
+     * @memberof GroupUpdateComponent
+     */
+    private filterTaxesForDebtorCreditor(): void {
+        let activeGroup;
+        this.activeGroup$.pipe(take(1)).subscribe(group => activeGroup = group);
+        const {isDebtor, isCreditor}: any = this.isDebtorCreditorGroup(activeGroup, true);
+        if (isDebtor) {
+            // Only allow TDS receivable and TCS payable
+            this.companyTaxDropDown = this.companyTaxDropDown.filter(tax => ['tdsrc', 'tcspay'].indexOf(tax?.additional?.taxType) > -1);
+        } else if (isCreditor) {
+            // Only allow TDS payable and TCS receivable
+            this.companyTaxDropDown = this.companyTaxDropDown.filter(tax => ['tdspay', 'tcsrc'].indexOf(tax?.additional?.taxType) > -1);
+        } else {
+            // Only normal (non-other) taxes
+            this.companyTaxDropDown = this.companyTaxDropDown.filter(tax => TCS_TDS_TAXES_TYPES.indexOf(tax?.additional?.taxType) === -1);
+        }
+    }
 }

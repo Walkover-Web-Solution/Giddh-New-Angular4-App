@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ReplaySubject } from 'rxjs';
@@ -28,6 +28,8 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
 
     // take voucher type from parent component
     @Input() public voucherType: VoucherTypeEnum;
+    /** Emits when modal needs to be opened */
+    @Output() public modalOpened: EventEmitter<ModalDirective> = new EventEmitter<ModalDirective>();
 
     @ViewChild('mailModal', { static: true }) public mailModal: ModalDirective;
     @ViewChild('messageBox', { static: true }) public messageBox: ElementRef;
@@ -110,12 +112,14 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
                     event.stopPropagation();
                 }
                 this.openSmsDialog();
+                this.modalOpened.emit(this.mailModal);
                 break;
             case 4: // send email
                 if (event) {
                     event.stopPropagation();
                 }
                 this.openEmailDialog();
+                this.modalOpened.emit(this.mailModal);
                 break;
             default:
                 break;

@@ -1,10 +1,13 @@
+import { DOCUMENT } from '@angular/common';
 import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    Inject,
     Input,
     OnChanges,
     OnDestroy,
+    Renderer2,
     SimpleChanges,
 } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
@@ -33,13 +36,17 @@ export class GridRowComponent implements OnChanges, OnDestroy {
     public accountDetails: IFlattenAccountsResultItem;
     /** Minimum limit on which Trial balance viewport enables */
     public minimumViewportLimit = TRIAL_BALANCE_VIEWPORT_LIMIT;
+    /** True, when expand all button is toggled while search is enabled */
+    @Input() public isExpandToggledDuringSearch: boolean;
 
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
         private cd: ChangeDetectorRef,
-        private searchService: SearchService
+        private searchService: SearchService,
+        private renderer: Renderer2,
+        @Inject(DOCUMENT) private document: Document
     ) {
     }
 
@@ -99,5 +106,19 @@ export class GridRowComponent implements OnChanges, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Handles when SMS/E-mail modal is opened from the account detail popover
+     *
+     * @param {*} modalInstance Modal instance to be opened
+     * @memberof GridRowComponent
+     */
+    public handleModalOpened(modalInstance: any): void {
+        const parentNode = this.document.querySelector('.financial-report-account-detail-container');
+        /* Need to remove the element from the popover so that it could be attached to body as we show the account
+         modal within a popover which can't display the modal within it */
+        this.renderer.addClass(modalInstance._element.nativeElement, 'm-0')
+        this.renderer.removeChild(parentNode, modalInstance._element.nativeElement);
     }
 }

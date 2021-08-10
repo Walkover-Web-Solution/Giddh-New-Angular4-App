@@ -11,7 +11,8 @@
         [showLoader]="showLoader | async"
         [showLabels]="true"
         (seachChange)="searchChanged($event)"
-        (expandAll)="expandAllEvent($event)"
+        (expandAllChange)="expandAllEvent()"
+        [(expandAll)]="expandAll"
         [BsExportXLS]="true"
     >
     </financial-filter>

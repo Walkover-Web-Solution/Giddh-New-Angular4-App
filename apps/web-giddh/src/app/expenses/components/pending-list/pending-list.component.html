@@ -1,10 +1,9 @@
-<div class="container-fluid" *ngIf="!(getPettycashReportInprocess$ | async) && !isRowExpand">
+<div class="container-fluid" *ngIf="!isPettyCashPendingReportLoading && !isRowExpand">
     <div class="table-responsive">
         <table class="table basic table-bordered giddh-table on-mobile-view">
             <thead [hidden]="!expensesItems?.length">
                 <tr class="icon-pointer">
                     <th width="2%" data-title="#">#</th>
-
                     <th width="10%">
                         <div class="d-flex align-items-center">
                             <span class="pull-left">{{ commonLocaleData?.app_date }}</span>
@@ -14,7 +13,6 @@
                             ></ng-container>
                         </div>
                     </th>
-
                     <th
                         width="10%"
                         class="td-search-box"
@@ -34,7 +32,6 @@
                         >
                         </ng-container>
                     </th>
-
                     <th
                         width="10%"
                         class="td-search-box"
@@ -54,7 +51,6 @@
                         >
                         </ng-container>
                     </th>
-
                     <th width="20%" class="pr-2 amount-arrow">
                         <div class="d-flex align-items-center justify-content-end">
                             <span>{{ commonLocaleData?.app_amount }}</span>
@@ -64,7 +60,6 @@
                             ></ng-container>
                         </div>
                     </th>
-
                     <th
                         width="20%"
                         class="td-search-box"
@@ -84,13 +79,11 @@
                         >
                         </ng-container>
                     </th>
-
                     <th width="10%">{{ localeData?.file }}</th>
                     <th width="20%">{{ commonLocaleData?.app_description }}</th>
                     <th width="10%">{{ commonLocaleData?.app_action }}</th>
                 </tr>
             </thead>
-
             <tbody>
                 <tr
                     (click)="rowClicked(expenses)"
@@ -99,23 +92,18 @@
                 >
                     <ng-container id="rowcomys" (click)="rowClicked(expenses)">
                         <td data-title="#">{{ i + 1 }}</td>
-
                         <td [attr.data-title]="commonLocaleData?.app_date">{{ expenses.entryDate }}</td>
-
                         <td [attr.data-title]="localeData?.submitted_by">{{ expenses.createdBy.name }}</td>
-
                         <td [attr.data-title]="commonLocaleData?.app_account">
                             <i class="dot-icon dot-warning" *ngIf="expenses.entryType === 'sales'"></i>
                             <i class="dot-icon dot-success" *ngIf="expenses.entryType === 'deposit'"></i>
                             <i class="dot-icon dot-primary" *ngIf="expenses.entryType === 'expense'"></i>
                             {{ expenses.particularAccount.name }}
                         </td>
-
                         <td [attr.data-title]="commonLocaleData?.app_amount" class="text-right pr-2">
                             {{ expenses.currencySymbol }}
                             {{ expenses.amount | giddhCurrency }}
                         </td>
-
                         <td [attr.data-title]="localeData?.payment_receipt">
                             <span *ngIf="expenses.baseAccountCategory === 'OTHER'" class="font-12 text-gray">{{
                                 commonLocaleData?.app_ac
@@ -130,17 +118,14 @@
                             ></span>
                             {{ expenses.baseAccount.name }}
                         </td>
-
                         <td [attr.data-title]="localeData?.file">
                             <i *ngIf="expenses.fileNames" class="icon-image middle text-gray"></i>
                             {{ expenses.fileNames }}
                         </td>
-
                         <td [attr.data-title]="commonLocaleData?.app_description">
                             <span *ngIf="expenses.description">{{ expenses.description }}</span
                             ><span *ngIf="!expenses.description">-</span>
                         </td>
-
                         <td [attr.data-title]="commonLocaleData?.app_action">
                             <button
                                 type="button"
@@ -157,9 +142,9 @@
     </div>
 </div>
 
-<div *ngIf="(pettyCashReportsResponse$ | async)?.totalItems > 20" class="pagination-wrapper">
+<div *ngIf="pettyCashPendingReportResponse?.totalItems > 20" class="pagination-wrapper">
     <pagination
-        [totalItems]="(pettyCashReportsResponse$ | async)?.totalItems"
+        [totalItems]="pettyCashPendingReportResponse?.totalItems"
         [maxSize]="5"
         class="pagination-sm"
         [boundaryLinks]="true"
@@ -175,14 +160,11 @@
     ></pagination>
 </div>
 
-<div *ngIf="getPettycashReportInprocess$ | async">
+<div *ngIf="isPettyCashPendingReportLoading">
     <giddh-page-loader></giddh-page-loader>
 </div>
 
-<div
-    class="no-data"
-    *ngIf="(pettyCashReportsResponse$ | async)?.results?.length === 0 && !(getPettycashReportInprocess$ | async)"
->
+<div class="no-data" *ngIf="pettyCashPendingReportResponse?.results?.length === 0">
     <no-data></no-data>
 </div>
 
@@ -196,14 +178,12 @@
         (click)="sort('asc', col)"
         [ngClass]="{ 'active-text-color': pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc' }"
     ></div>
-
     <div
         class="icon-sort-asc"
         *ngIf="pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'"
         (click)="sort('desc', col)"
         [ngClass]="{ 'active-text-color': pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc' }"
     ></div>
-
     <div
         class="icon-sort-asc"
         *ngIf="pettycashRequest.sortBy === col && pettycashRequest.sort === 'desc'"
@@ -218,7 +198,6 @@
     <div [hidden]="show">
         <span> {{ title }}</span>
     </div>
-
     <div class="input-container" [hidden]="!show">
         <input type="text" [placeholder]="replaceTitle(title)" class="w100" #searchBox [formControl]="formControl" />
     </div>
@@ -232,6 +211,8 @@
         [approveEntryRequestInProcess]="approveEntryRequestInProcess"
         [localeData]="localeData"
         [commonLocaleData]="commonLocaleData"
+        [pettyCashEntry]="accountEntryPettyCash"
+        [entryAgainstObject]="entryAgainstObject"
         (approveEntry)="hideApproveConfirmPopup($event)"
     >
     </petty-cash-approve-confirm-dialog>
@@ -250,9 +231,7 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-
     <div class="modal-body"></div>
-
     <div class="modal-footer">
         <button class="btn btn-warning" (click)="hideFilterModal()">{{ commonLocaleData?.app_yes }}</button>
         <button class="btn btn-success" (click)="hideFilterModal()">{{ commonLocaleData?.app_cancel }}</button>

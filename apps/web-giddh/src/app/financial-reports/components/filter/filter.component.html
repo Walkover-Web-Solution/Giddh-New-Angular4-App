@@ -133,19 +133,19 @@
                         <div class="form-group pull-left">
                             <a
                                 class="cp expand-icon"
-                                (click)="emitExpand()"
+                                (click)="emitExpand(true)"
                                 data-placement="top"
                                 tooltip="{{ commonLocaleData?.app_expand_all }}"
-                                *ngIf="!expand"
+                                *ngIf="!expandAll"
                             >
                                 <span class="icon-expandIcon"></span>
                             </a>
                             <a
                                 class="cp expand-icon"
-                                (click)="emitExpand()"
+                                (click)="emitExpand(false)"
                                 data-placement="top"
                                 tooltip="{{ commonLocaleData?.app_collapse_all }}"
-                                *ngIf="expand"
+                                *ngIf="expandAll"
                             >
                                 <span class="icon-collapse"></span>
                             </a>
@@ -319,19 +319,19 @@
                 <div class="form-group pull-left d-flex">
                     <a
                         class="cp expand-icon"
-                        (click)="emitExpand()"
+                        (click)="emitExpand(true)"
                         data-placement="top"
                         tooltip="{{ commonLocaleData?.app_expand_all }}"
-                        *ngIf="!expand"
+                        *ngIf="!expandAll"
                     >
                         <span class="icon-expandIcon"></span>
                     </a>
                     <a
                         class="cp expand-icon"
-                        (click)="emitExpand()"
+                        (click)="emitExpand(false)"
                         data-placement="top"
                         tooltip="{{ commonLocaleData?.app_collapse_all }}"
-                        *ngIf="expand"
+                        *ngIf="expandAll"
                     >
                         <span class="icon-collapse"></span>
                     </a>

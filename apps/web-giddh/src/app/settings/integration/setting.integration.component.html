@@ -281,7 +281,12 @@
                                 {{ localeData?.payment?.connect_new_account }}
                             </button>
                             <span class="button-separator">|</span> <br />
-                            <a href="javascript:;" class="font-12">{{ localeData?.payment?.learn_connect }}</a>
+                            <a
+                                href="https://giddh.com/help/how-to-integrate-icici-bank-account-with-giddh"
+                                target="_blank"
+                                class="font-12"
+                                >{{ localeData?.payment?.learn_connect }}</a
+                            >
                         </div>
                         <div class="form-group mr-l1">
                             <p class="mb-4 mr-l05 font-12">
@@ -404,17 +409,17 @@
                                                     <br />
                                                     <span
                                                         class="account-approval-status pending-approval"
-                                                        *ngIf="payor?.registrationStatus !== 'SUCCESS'"
+                                                        *ngIf="!payor?.isConnected"
                                                         ><i class="icon-alert-2"></i>
                                                         {{ localeData?.payment?.pending_self_approval }}</span
                                                     >
                                                     <span
                                                         class="account-approval-status approved"
-                                                        *ngIf="payor?.registrationStatus === 'SUCCESS'"
+                                                        *ngIf="payor?.isConnected"
                                                         ><i class="icon-success"></i>
                                                         {{ localeData?.payment?.connected }}</span
                                                     >
-                                                    <span class="mr-l15 user-action-div">
+                                                    <span class="mr-l15 user-action-div" *ngIf="payor?.isConnected">
                                                         <a
                                                             href="javascript:;"
                                                             class="icon-edit-pencil"
@@ -433,7 +438,7 @@
                                                     </span>
                                                 </div>
                                             </div>
-                                            <div class="inline" *ngIf="payor?.registrationStatus !== 'SUCCESS'">
+                                            <div class="inline" *ngIf="!payor?.isConnected">
                                                 <div class="col-md-12">
                                                     <p
                                                         class="font-12"
@@ -453,13 +458,13 @@
                                     >
                                         {{ localeData?.payment?.add_more_users }}
                                     </button>
-                                    <a class="btn icici-button font-12 mt-2 pull-right mr-0" href="javascript:;"
+                                    <!-- <a class="btn icici-button font-12 mt-2 pull-right mr-0" href="javascript:;"
                                         ><span class="icon-icici-logo"
                                             ><span class="path1"></span><span class="path2"></span
                                             ><span class="path3"></span
                                         ></span>
                                         {{ localeData?.payment?.get_instant_overdraft }}</a
-                                    >
+                                    > -->
                                 </div>
                             </div>
                         </ng-container>

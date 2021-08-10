@@ -47,7 +47,7 @@ import { digitsOnly } from '../../../helpers';
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
-import { API_COUNT_LIMIT, EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
+import { API_COUNT_LIMIT, EMAIL_VALIDATION_REGEX, TCS_TDS_TAXES_TYPES } from 'apps/web-giddh/src/app/app.constant';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 import { INameUniqueName } from 'apps/web-giddh/src/app/models/api-models/Inventory';
@@ -263,16 +263,16 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(acc => {
             if (acc) {
                 this.resetBankDetailsForm();
-                if (acc && acc.parentGroups[0].uniqueName) {
-                    let col = acc.parentGroups[0].uniqueName;
+                if (acc && acc.parentGroups[0]?.uniqueName) {
+                    let col = acc.parentGroups[0]?.uniqueName;
                     this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                     this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
                     this.activeAccountGroup = acc.parentGroups.length > 0 ? [{
-                        label: acc.parentGroups[acc.parentGroups.length - 1].name,
-                        value: acc.parentGroups[acc.parentGroups.length - 1].uniqueName,
+                        label: acc.parentGroups[acc.parentGroups.length - 1]?.name,
+                        value: acc.parentGroups[acc.parentGroups.length - 1]?.uniqueName,
                         additional: acc.parentGroups[acc.parentGroups.length - 1],
                     }] : this.flatGroupsOptions;
-                    this.activeGroupUniqueName = acc.parentGroups.length > 0 ? acc.parentGroups[acc.parentGroups.length - 1].uniqueName : '';
+                    this.activeGroupUniqueName = acc.parentGroups.length > 0 ? acc.parentGroups[acc.parentGroups.length - 1]?.uniqueName : '';
                     this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(this.activeGroupUniqueName));
 
                     this.store.pipe(select(appStore => appStore.groupwithaccounts.activeGroupUniqueName), take(1)).subscribe(response => {
@@ -283,20 +283,20 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
 
                 let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
-                if (accountDetails.uniqueName) {
+                if (accountDetails?.uniqueName) {
                     this.accountInheritedDiscounts = [];
                     if (accountDetails && accountDetails.inheritedDiscounts) {
                         accountDetails.inheritedDiscounts.forEach(item => {
                             this.accountInheritedDiscounts.push(...item.applicableDiscounts);
                         });
                     }
-                    this._accountService.GetApplyDiscount(accountDetails.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    this._accountService.GetApplyDiscount(accountDetails?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                         this.selectedDiscounts = [];
                         this.forceClearDiscount$ = observableOf({ status: true });
                         if (response.status === 'success') {
                             if (response.body) {
-                                if (response.body[accountDetails.uniqueName]) {
-                                    let list = response.body[accountDetails.uniqueName];
+                                if (response.body[accountDetails?.uniqueName]) {
+                                    let list = response.body[accountDetails?.uniqueName];
                                     Object.keys(list).forEach(key => {
                                         let UniqueName = list[key]['discount']['uniqueName'];
                                         this.selectedDiscounts.push(UniqueName);
@@ -476,8 +476,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         let applicableTaxes = activeAccount.applicableTaxes.map(p => p.uniqueName);
 
                         // set isGstEnabledAcc or not
-                        if (activeAccount.parentGroups[0].uniqueName) {
-                            let col = activeAccount.parentGroups[0].uniqueName;
+                        if (activeAccount.parentGroups[0]?.uniqueName) {
+                            let col = activeAccount.parentGroups[0]?.uniqueName;
                             this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                             this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
                         }
@@ -492,20 +492,20 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                             } else {
                                 this.taxGroupForm.setValue({ taxes: applicableTaxes });
                             }
-                            return differenceBy(taxes.map(p => {
-                                return { label: p.name, value: p.uniqueName };
+                            const notInheritedTax = differenceBy(taxes.map(p => {
+                                return { label: p.name, value: p.uniqueName, additional: p };
                             }), flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-                                return { label: p.name, value: p.uniqueName };
+                                return { label: p.name, value: p.uniqueName, additional: p };
                             }), 'value');
-
+                            return this.filterTaxesForDebtorCreditor(notInheritedTax);
                         } else {
                             // set value in tax group form
                             this.taxGroupForm.setValue({ taxes: applicableTaxes });
 
-                            return taxes.map(p => {
-                                return { label: p.name, value: p.uniqueName };
+                            const formattedTax = taxes.map(p => {
+                                return { label: p.name, value: p.uniqueName, additional: p };
                             });
-
+                            return this.filterTaxesForDebtorCreditor(formattedTax);
                         }
                     }
                 }
@@ -1122,7 +1122,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         let grpObject = new AccountMoveRequest();
         grpObject.uniqueName = this.moveAccountForm.controls['moveto'].value;
 
-        this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc.uniqueName, this.activeGroupUniqueName));
+        this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc?.uniqueName, this.activeGroupUniqueName));
         this.moveAccountForm.reset();
     }
     public mergeAccounts() {
@@ -1741,6 +1741,27 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
             this.accounts = [...this.defaultAccountSuggestions];
         });
+    }
+
+    /**
+     * Filters taxes for Sundry debtors and creditors
+     *
+     * @private
+     * @param {Array<any>} [taxes] Company taxes
+     * @return {Array<any>} Filtered taxes
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    private filterTaxesForDebtorCreditor(taxes?: Array<any>): Array<any> {
+        if (this.activeGroupUniqueName === 'sundrydebtors' || this.activeParentGroup === 'sundrydebtors') {
+            // Only allow TDS receivable and TCS payable
+            return taxes.filter(tax => ['tdsrc', 'tcspay'].indexOf(tax?.additional?.taxType) > -1);
+        } else if (this.activeGroupUniqueName === 'sundrycreditors' || this.activeParentGroup === 'sundrycreditors') {
+            // Only allow TDS payable and TCS receivable
+            return taxes.filter(tax => ['tdspay', 'tcsrc'].indexOf(tax?.additional?.taxType) > -1);
+        } else {
+            // Only normal (non-other) taxes
+            return taxes.filter(tax => TCS_TDS_TAXES_TYPES.indexOf(tax?.additional?.taxType) === -1);
+        }
     }
 
 }

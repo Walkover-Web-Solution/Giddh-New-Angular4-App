@@ -36,12 +36,12 @@
                                                         <i
                                                             class="icon-branch-icon pull-right"
                                                             *ngIf="!option.isCompany"
-                                                            tooltip="{{ commonLocaleData?.app_branch }}"
+                                                            [tooltip]="commonLocaleData?.app_branch"
                                                         ></i>
                                                         <i
                                                             class="icon-company-profile pull-right"
                                                             *ngIf="option.isCompany"
-                                                            tooltip="{{ commonLocaleData?.app_company }}"
+                                                            [tooltip]="commonLocaleData?.app_company"
                                                         ></i>
                                                     </span>
                                                     <span class="entity-details">
@@ -76,7 +76,7 @@
                                 (click)="toggleExpand()"
                                 data-toggle="tooltip"
                                 data-placement="top"
-                                title="{{ commonLocaleData?.app_expand_all }}"
+                                [title]="commonLocaleData?.app_expand_all"
                                 *ngIf="!isAllExpanded"
                             >
                                 <span class="icon-expandIcon"></span>
@@ -86,7 +86,7 @@
                                 (click)="toggleExpand()"
                                 data-toggle="tooltip"
                                 data-placement="top"
-                                title="{{ commonLocaleData?.app_collapse_all }}"
+                                [title]="commonLocaleData?.app_collapse_all"
                                 *ngIf="isAllExpanded"
                             >
                                 <span class="icon-collapse"></span>
@@ -113,7 +113,7 @@
                             type="button"
                             class="btn btn-default export-btn mr-0"
                             (click)="exportDaybook()"
-                            *ngIf="(daybookData$ | async)?.entries?.length > 0"
+                            *ngIf="daybookData?.entries?.length > 0"
                         >
                             {{ commonLocaleData?.app_export }}
                         </button>
@@ -124,7 +124,7 @@
                         type="button"
                         class="btn btn-default mr-0"
                         (click)="exportDaybook()"
-                        *ngIf="(daybookData$ | async)?.entries?.length > 0"
+                        *ngIf="daybookData?.entries?.length > 0"
                     >
                         {{ commonLocaleData?.app_export }}
                     </button>
@@ -134,7 +134,7 @@
                             (click)="toggleExpand()"
                             data-toggle="tooltip"
                             data-placement="top"
-                            title="{{ commonLocaleData?.app_expand_all }}"
+                            [title]="commonLocaleData?.app_expand_all"
                             *ngIf="!isAllExpanded"
                         >
                             <span class="icon-expandIcon"></span>
@@ -144,7 +144,7 @@
                             (click)="toggleExpand()"
                             data-toggle="tooltip"
                             data-placement="top"
-                            title="{{ commonLocaleData?.app_collapse_all }}"
+                            [title]="commonLocaleData?.app_collapse_all"
                             *ngIf="isAllExpanded"
                         >
                             <span class="icon-collapse"></span>
@@ -161,14 +161,14 @@
 
         <div class="container-fluid">
             <div class="box clearfix mr-t15">
-                <div [hidden]="!(daybookData$ | async)?.entries?.length" class="text-center mr-b2 transaction-report">
+                <div [hidden]="!daybookData?.entries?.length" class="text-center mr-b2 transaction-report">
                     <p>{{ localeData?.transaction_report }}</p>
                     <p>{{ daybookQueryRequest.from }} - {{ daybookQueryRequest.to }}</p>
                 </div>
 
                 <div class="clearfix trial-balance table-responsive">
                     <table class="tb-head table-bordered giddh-table table basic on-mobile-view">
-                        <thead [hidden]="!(daybookData$ | async)?.entries?.length">
+                        <thead [hidden]="!daybookData?.entries?.length">
                             <tr>
                                 <th>{{ commonLocaleData?.app_date }}</th>
                                 <th>{{ commonLocaleData?.app_particular }}</th>
@@ -190,7 +190,7 @@
                         </thead>
 
                         <tbody
-                            *ngFor="let entry of (daybookData$ | async)?.entries"
+                            *ngFor="let entry of daybookData?.entries"
                             (click)="expandEntry(entry)"
                             class="daybook-table-tbody"
                         >
@@ -302,19 +302,19 @@
                     </table>
                 </div>
 
-                <div class="mr-t2 text-center" [hidden]="!(daybookData$ | async)?.entries?.length">
-                    <small class="grey" *ngIf="(daybookData$ | async)?.totalItems"
-                        >{{ (daybookData$ | async)?.totalItems }}
+                <div class="mr-t2 text-center" [hidden]="!daybookData?.entries?.length">
+                    <small class="grey" *ngIf="daybookData?.totalItems"
+                        >{{ daybookData?.totalItems }}
                         {{ commonLocaleData?.app_transactions }}
-                        | {{ (daybookData$ | async)?.totalPages }} {{ commonLocaleData?.app_pages }}
+                        | {{ daybookData?.totalPages }} {{ commonLocaleData?.app_pages }}
                     </small>
-                    <small class="grey" *ngIf="!(daybookData$ | async)?.totalItems"
+                    <small class="grey" *ngIf="!daybookData?.totalItems"
                         >0 {{ commonLocaleData?.app_transactions }} | 0 {{ commonLocaleData?.app_pages }}</small
                     >
                 </div>
 
                 <!-- pagination -->
-                <div class="mt-1" [hidden]="!(daybookData$ | async)?.entries?.length">
+                <div class="mt-1" [hidden]="!daybookData?.entries?.length">
                     <pagination
                         [totalItems]="daybookData?.totalItems"
                         [(ngModel)]="daybookData.page"
@@ -333,13 +333,7 @@
                 </div>
                 <!-- pagination -->
             </div>
-            <div class="no-data" *ngIf="!(daybookData$ | async)?.entries?.length">
-                <no-data></no-data>
-            </div>
-            <div class="no-data" *ngIf="!(daybookData$ | async)?.entries?.length">
-                <no-data></no-data>
-            </div>
-            <div class="no-data" *ngIf="!(daybookData$ | async)?.entries?.length">
+            <div class="no-data" *ngIf="!daybookData?.entries?.length">
                 <no-data></no-data>
             </div>
         </div>
