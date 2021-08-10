@@ -3,11 +3,9 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ActionPettycashRequest, ExpenseActionRequest, ExpenseResults, PettyCashResonse } from '../../../models/api-models/Expences';
 import { ToasterService } from '../../../services/toaster.service';
 import { ExpenseService } from '../../../services/expences.service';
-import { ExpencesAction } from '../../../actions/expences/expence.action';
 import { AppState } from '../../../store';
 import { select, Store } from '@ngrx/store';
 import { FormControl } from '@angular/forms';
-import { CommonPaginatedRequest } from '../../../models/api-models/Invoice';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
@@ -51,20 +49,14 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     public approveEntryModalRef: BsModalRef;
     public message: string;
     public actionPettyCashRequestBody: ExpenseActionRequest;
-
     @Output() public toggleDetailsMode: EventEmitter<boolean> = new EventEmitter();
     @Output() public selectedDetailedRowInput: EventEmitter<ExpenseResults> = new EventEmitter();
     @Input() public selectedRowItem: any;
     @Output() public refreshPendingItem: EventEmitter<boolean> = new EventEmitter();
     @ViewChild(UpdateLedgerEntryPanelComponent, { static: false }) public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
     @ViewChild('entryAgainstAccountDropDown', { static: false }) public entryAgainstAccountDropDown: ShSelectComponent;
-
     public selectedItem: ExpenseResults;
     public rejectReason = new FormControl();
-    public selectedPettycashEntry$: Observable<PettyCashResonse>;
-    public ispPettycashEntrySuccess$: Observable<boolean>;
-    public ispPettycashEntryInprocess$: Observable<boolean>;
-
     public actionPettycashRequest: ActionPettycashRequest = new ActionPettycashRequest();
     public imgAttached: boolean = false;
     public imgUploadInprogress: boolean = false;
@@ -79,14 +71,12 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     public signatureSrc: string = '';
     public zoomViewImageSrc: string = '';
     public asideMenuStateForOtherTaxes: string = 'out';
-
     public accountType: string;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public DownloadAttachedImgResponse: DownloadLedgerAttachmentResponse[] = [];
     public comment: string = '';
     public accountEntryPettyCash: PettyCashResonse;
     public companyTaxesList: TaxResponse[] = [];
-
     public debtorsAccountsOptions: IOption[] = [];
     public creditorsAccountsOptions: IOption[] = [];
     public cashAndBankAccountsOptions: IOption[] = [];
@@ -101,7 +91,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     public selectedEntryForApprove: ExpenseResults;
     /** unique name of any attached image   */
     public imgAttachedFileName = '';
-
     /** Stores the search results pagination details for debtor dropdown */
     public debtorAccountsSearchResultsPaginationData = {
         page: 0,
@@ -158,13 +147,14 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     private cashOrBankEntry: any;
     /** Stores the petty cash entry type */
     private pettyCashEntryType: string;
+    /** True if api call in progress */
+    public isPettyCashEntryLoading: boolean = false;
 
     constructor(
         private modalService: BsModalService,
-        private _toasty: ToasterService,
-        private _ledgerActions: LedgerActions,
+        private toasty: ToasterService,
+        private ledgerActions: LedgerActions,
         private store: Store<AppState>,
-        private _expenceActions: ExpencesAction,
         private expenseService: ExpenseService,
         private searchService: SearchService
     ) {
@@ -172,10 +162,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         this.uploadInput = new EventEmitter<UploadInput>();
         this.sessionId$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
         this.companyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
-        this.selectedPettycashEntry$ = this.store.pipe(select(p => p.expense.pettycashEntry), takeUntil(this.destroyed$));
-        this.ispPettycashEntrySuccess$ = this.store.pipe(select(p => p.expense.ispPettycashEntrySuccess), takeUntil(this.destroyed$));
-        this.ispPettycashEntryInprocess$ = this.store.pipe(select(p => p.expense.ispPettycashEntryInprocess), takeUntil(this.destroyed$));
-
     }
 
     public openModal(RejectionReason: TemplateRef<any>) {
@@ -183,19 +169,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
-
         this.fileUploadOptions = { concurrency: 1, allowedContentTypes: ['image/png', 'image/jpeg'] };
-
-        this.selectedPettycashEntry$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res?.uniqueName !== this.accountEntryPettyCash?.uniqueName) {
-                this.actionPettyCashRequestBody = null;
-                this.accountEntryPettyCash = res;
-                this.prepareApproveRequestObject(this.accountEntryPettyCash);
-                this.preFillData(res);
-            }
-        });
-
-        this.store.pipe(select(s => s.company && s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
+        this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
             this.companyTaxesList = res || [];
         });
         this.buildCreatorString();
@@ -236,6 +211,14 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                 this.cashOrBankEntry = false;
                 this.loadDefaultCreditorAccountsSuggestions();
                 break;
+
+            case 'Entry against Creditors':
+                this.entryAgainstObject.base = 'Creditor Name';
+                this.entryAgainstObject.against = 'Cash Expenses';
+                this.pettyCashEntryType = 'expense';
+                this.cashOrBankEntry = false;
+                this.loadDefaultCreditorAccountsSuggestions();
+                break;    
 
             case 'Cash Sales':
                 this.entryAgainstObject.base = 'Receipt Mode';
@@ -283,7 +266,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         if (this.entryAgainstObject.base && !this.entryAgainstObject.model) {
             let errorMessage = this.localeData?.entry_against_error;
             errorMessage = errorMessage.replace("[ENTRY_AGAINST]", this.entryAgainstObject.base);
-            this._toasty.errorToast(errorMessage);
+            this.toasty.errorToast(errorMessage);
             this.hideApproveConfirmPopup(false);
             return;
         }
@@ -322,11 +305,11 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
             this.approveEntryRequestInProcess = false;
             if (res.status === 'success') {
                 this.hideApproveConfirmPopup(false);
-                this._toasty.successToast(res.body);
+                this.toasty.successToast(res.body);
                 this.refreshPendingItem.emit(true);
                 this.toggleDetailsMode.emit(true);
             } else {
-                this._toasty.errorToast(res.message);
+                this.toasty.errorToast(res.message);
                 this.approveEntryRequestInProcess = false;
             }
         }, (error => {
@@ -341,24 +324,14 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    public getPettyCashPendingReports(SalesDetailedfilter: CommonPaginatedRequest) {
-        SalesDetailedfilter.status = 'pending';
-        this.store.dispatch(this._expenceActions.GetPettycashReportRequest(SalesDetailedfilter));
-    }
-
-    public getPettyCashRejectedReports(SalesDetailedfilter: CommonPaginatedRequest) {
-        SalesDetailedfilter.status = 'rejected';
-        this.store.dispatch(this._expenceActions.GetPettycashRejectedReportRequest(SalesDetailedfilter));
-    }
-
     public pettyCashAction(actionType: ActionPettycashRequest) {
         this.expenseService.actionPettycashReports(actionType, this.actionPettyCashRequestBody).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res.status === 'success') {
-                this._toasty.successToast(res.body);
+                this.toasty.successToast(res.body);
                 this.closeDetailsMode();
                 this.refreshPendingItem.emit(true);
             } else {
-                this._toasty.errorToast(res.body);
+                this.toasty.errorToast(res.body);
             }
             this.modalRef.hide();
         });
@@ -367,8 +340,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes['selectedRowItem'] && changes['selectedRowItem'].currentValue !== changes['selectedRowItem'].previousValue) {
             this.selectedItem = changes['selectedRowItem'].currentValue;
-            this.store.dispatch(this._expenceActions.getPettycashEntryRequest(this.selectedItem.uniqueName));
-            this.store.dispatch(this._ledgerActions.setAccountForEdit(this.selectedItem.baseAccount.uniqueName || null));
+            this.getPettyCashEntry(this.selectedItem.uniqueName);
+            this.store.dispatch(this.ledgerActions.setAccountForEdit(this.selectedItem.baseAccount.uniqueName || null));
             this.buildCreatorString();
         }
     }
@@ -413,9 +386,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                 this.DownloadAttachedImgResponse.push(output.file.response.body);
                 this.imgAttachedFileName = output.file.response.body.name;
                 this.imageURL.push(img);
-                this._toasty.successToast(this.localeData?.file_upload_success);
+                this.toasty.successToast(this.localeData?.file_upload_success);
             } else {
-                this._toasty.errorToast(output.file.response.message, output.file.response.code);
+                this.toasty.errorToast(output.file.response.message, output.file.response.code);
             }
             this.imgUploadInprogress = false;
             this.imgAttached = true;
@@ -906,5 +879,24 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             this.byCreator = "";
         }
+    }
+
+    /**
+     * Fetching petty cash entry details
+     *
+     * @param {string} uniqueName
+     * @memberof ExpenseDetailsComponent
+     */
+    private getPettyCashEntry(uniqueName: string): void {
+        this.isPettyCashEntryLoading = true;
+        this.expenseService.getPettycashEntry(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.uniqueName !== this.accountEntryPettyCash?.uniqueName) {
+                this.actionPettyCashRequestBody = null;
+                this.accountEntryPettyCash = response?.body;
+                this.prepareApproveRequestObject(this.accountEntryPettyCash);
+                this.preFillData(response?.body);
+            }
+            this.isPettyCashEntryLoading = false;
+        });
     }
 }

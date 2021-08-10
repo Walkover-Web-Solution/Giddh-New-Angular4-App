@@ -7,7 +7,6 @@ import { LoginActions } from './login.action';
 import { GroupWithAccountsAction } from './groupwithaccounts.actions';
 import { AccountsAction } from './accounts.actions';
 import { SidebarAction } from './inventory/sidebar.actions';
-import { DaybookActions } from './daybook/daybook.actions';
 import { CustomStockUnitAction } from './inventory/customStockUnit.actions';
 import { PermissionActions } from './permission/permission.action';
 import { InventoryAction } from './inventory/inventory.actions';
@@ -43,7 +42,6 @@ import { InvoiceReceiptActions } from './invoice/receipt/receipt.actions';
 import { GstReconcileActions } from './gst-reconcile/GstReconcile.actions';
 import { SubscriptionsActions } from './userSubscriptions/subscriptions.action';
 import { ProformaActions } from './proforma/proforma.actions';
-import { ExpencesAction } from './expences/expence.action';
 import { CommonActions } from './common.actions';
 import { ItemOnBoardingActions } from './item-on-boarding/item-on-boarding.action';
 import { WarehouseActions } from '../settings/warehouse/action/warehouse.action';
@@ -59,7 +57,6 @@ import { PurchaseOrderActions } from './purchase-order/purchase-order.action';
         EffectsModule.forRoot([
             HomeActions,
             GeneralActions,
-            ExpencesAction,
             CompanyActions,
             LoginActions,
             GroupWithAccountsAction,
@@ -79,7 +76,6 @@ import { PurchaseOrderActions } from './purchase-order/purchase-order.action';
             ManufacturingActions,
             TBPlBsActions,
             LedgerActions,
-            DaybookActions,
             InvoiceActions,
             SettingsIntegrationActions,
             SettingsProfileActions,

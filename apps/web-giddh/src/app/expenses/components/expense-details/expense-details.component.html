@@ -1,4 +1,4 @@
-<div *ngIf="ispPettycashEntrySuccess$ | async">
+<div *ngIf="!isPettyCashEntryLoading">
     <div class="clearfix p-15 pt-0">
         <div class="row">
             <div class="col-sm-6">
@@ -91,7 +91,7 @@
 
             </div>
         </div>
-        <div class="expense-ledger" *ngIf="ispPettycashEntrySuccess$ | async">
+        <div class="expense-ledger" *ngIf="accountEntryPettyCash">
             <update-ledger-entry-panel [isPettyCash]="true" [pettyCashEntry]="accountEntryPettyCash"
                 [pettyCashBaseAccountTypeString]="entryAgainstObject.base"
                 [pettyCashBaseAccountUniqueName]="this.accountEntryPettyCash.particular.uniqueName"
@@ -156,9 +156,15 @@
 
 <!-- region approve entry confirm -->
 <ng-template #ApproveConfirm>
-    <petty-cash-approve-confirm-dialog [selectedEntryForApprove]="selectedEntryForApprove"
-        [approveEntryRequestInProcess]="approveEntryRequestInProcess" [localeData]="localeData"
-        [commonLocaleData]="commonLocaleData" (approveEntry)="hideApproveConfirmPopup($event)">
+    <petty-cash-approve-confirm-dialog
+        [selectedEntryForApprove]="selectedEntryForApprove"
+        [approveEntryRequestInProcess]="approveEntryRequestInProcess"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        [pettyCashEntry]="accountEntryPettyCash"
+        [entryAgainstObject]="entryAgainstObject"
+        (approveEntry)="hideApproveConfirmPopup($event)"
+    >
     </petty-cash-approve-confirm-dialog>
 </ng-template>
 <!-- endregion -->
