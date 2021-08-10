@@ -12,6 +12,10 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
     @Input() public commonLocaleData: any = {};
     @Input() selectedEntryForApprove: any;
     @Input() approveEntryRequestInProcess: boolean;
+    /** This holds Entry object */
+    @Input() public pettyCashEntry: any = null;
+    /** This holds Entry against object */
+    @Input() public entryAgainstObject: any = null;
     @Output() approveEntry: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** This will hold creator name */
     public byCreator: string = '';
