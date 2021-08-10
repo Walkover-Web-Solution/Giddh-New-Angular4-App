@@ -17,13 +17,13 @@
         <div class="modal-body clearfix ledger-advance-search-field" id="export-body">
             <form [formGroup]="advanceSearchForm">
                 <div class="clearfix">
-                    <div class="row mb-2">
+                    <div class="row mb-2 ml-0 mr-0">
                         <div class="col-sm-5">
                             <label>{{commonLocaleData?.app_date_range}}</label>
                         </div>
                         <div class="col-sm-7">
                             <div class="input-group" (click)="showGiddhDatepicker($event)">
-                                <mat-form-field appearance="fill">
+                                <mat-form-field appearance="fill" class="w-100">
                                     <input matInput type="text"
                                         [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" required
                                         [placeholder]="commonLocaleData?.app_select_range"
@@ -35,7 +35,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row mb-2">
+                    <div class="row mb-2 mr-0 ml-0">
                         <div class="col-sm-5">
                             <label>{{localeData?.merge_accounts}}</label>
                             <p>
@@ -54,7 +54,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row mr-0 ml-0">
                         <div class="col-sm-5">
                             <label>{{localeData?.merge_group}}</label>
                             <p>
@@ -75,7 +75,7 @@
                 </div>
 
                 <div class="clearfix mt-2 pt-2 bd-rt mr-b1">
-                    <div class="row">
+                    <div class="row mr-0 ml-0">
                         <div class="col-md-5">
                             <label>{{commonLocaleData?.app_particulars}}</label>
                             <p>
@@ -111,7 +111,7 @@
                     </div>
                 </div>
                 <div class="clearfix mr-b1">
-                    <div class="row">
+                    <div class="row ml-0 mr-0">
                         <div class="col-md-5">
                             <label>{{commonLocaleData?.app_voucher_type}}</label>
                             <p>
@@ -144,7 +144,7 @@
                     </div>
                 </div>
                 <div class="clearfix mr-b1">
-                    <div class="row">
+                    <div class="row ml-0 mr-0">
                         <div class="col-sm-5">
                             <label>{{commonLocaleData?.app_amount}}</label>
                         </div>
@@ -171,7 +171,7 @@
                     </div>
                 </div>
                 <div class="clearfix mr-b1">
-                    <div class="row">
+                    <div class="row mr-0 ml-0">
                         <div class="col-sm-5">
                             <label>{{localeData?.show_cancelled_entries}}</label>
                         </div>
@@ -201,7 +201,7 @@
                 <ng-container *ngIf="advanceSearchForm.get('includeDescription').value">
                     <div class="clearfix mt-2">
                         <div class=" mr-b1 clearfix">
-                            <div class="row">
+                            <div class="row mr-0 ml-0">
                                 <div class="col-sm-5">
                                     <label>{{commonLocaleData?.app_inventory}}</label>
                                 </div>
@@ -277,7 +277,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mr-0 ml-0">
                             <div class="col-sm-5">
                                 <label>{{localeData?.cheque_details}}</label>
                             </div>
@@ -303,7 +303,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row ml-0 mr-0">
                             <div class="col-sm-5">
                                 <label>{{commonLocaleData?.app_description}}</label>
                             </div>
