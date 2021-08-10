@@ -1410,6 +1410,18 @@ input:-moz-placeholder {
     box-shadow: none;
 }
 
+.p-0{
+    padding: 0 !important;
+}
+
+.pl-0{
+    padding-left: 0 !important;
+}
+
+.pr-0{
+    padding-left: 0 !important;
+}
+
 .sidebar {
     background: $whisper;
 }
@@ -4603,7 +4615,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     position: absolute;
     right: 20px;
     top: 4px;
-    line-height: 48px;
+    line-height: 33px;
     color: $white;
     opacity: 1;
     font-weight: 100;
@@ -7959,6 +7971,8 @@ ul.dropdown-menu.action-dropdown {
 }
 
 /*material datepicker css starts*/
+ngx-daterangepicker-material{
+
 .recurring-form .mat-form-field {
     max-width: 170px;
 }
@@ -8045,6 +8059,7 @@ input.mat-input-element {
     display: flex !important;
     justify-content: center;
     align-items: center;
+}
 }
 /*material datepicker css end*/
 .master-custom-tabs.custom-tabs {
@@ -8495,6 +8510,7 @@ body.update-scroll-hidden{
         display: none;
     }
 }
+
 /* responsive  starts here*/
 
 @media (max-width: 1440px) {
