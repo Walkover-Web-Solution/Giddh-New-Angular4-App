@@ -426,16 +426,16 @@ export class ContactComponent implements OnInit, OnDestroy {
                 break;
 
             case 1: // go to ledger
-                this.goToRoute('ledger', `/${this.fromDate}/${this.toDate}`, account.uniqueName);
+                this.goToRoute('ledger', `/${this.fromDate}/${this.toDate}`, account?.uniqueName);
                 break;
 
             case 2: // go to sales or purchase
                 this.purchaseOrSales = this.activeTab === 'customer' ? 'sales' : 'purchase';
                 if (this.purchaseOrSales === 'purchase') {
-                    this.goToRoute('proforma-invoice/invoice/purchase', '', account.uniqueName);
+                    this.goToRoute('proforma-invoice/invoice/purchase', '', account?.uniqueName);
                 } else {
-                    let isCashInvoice = account.uniqueName === 'cash';
-                    this.goToRoute(`proforma-invoice/invoice/${isCashInvoice ? 'cash' : 'sales'}`, '', account.uniqueName);
+                    let isCashInvoice = account?.uniqueName === 'cash';
+                    this.goToRoute(`proforma-invoice/invoice/${isCashInvoice ? 'cash' : 'sales'}`, '', account?.uniqueName);
                 }
                 break;
             // case 3: // send sms
@@ -1268,9 +1268,9 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.selectedAccountsList.splice(indexOfEntry, 1);
         }
         // selected contacts list
-        let indexOfEntrySelected = this.selectedCheckedContacts.indexOf(element.uniqueName);
+        let indexOfEntrySelected = this.selectedCheckedContacts.indexOf(element?.uniqueName);
         if (indexOfEntrySelected === -1 && isChecked) {
-            this.selectedCheckedContacts.push(element.uniqueName);
+            this.selectedCheckedContacts.push(element?.uniqueName);
         } else if (indexOfEntrySelected > -1 && !this.allSelectionModel) {
             this.selectedCheckedContacts.splice(indexOfEntrySelected, 1);
         }
@@ -1322,7 +1322,7 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     public addNewFieldFilters(field: any): void {
         for (let key of field) {
-            if (key.uniqueName) {
+            if (key?.uniqueName) {
                 this.showFieldFilter[key.uniqueName] = false;
             }
         }

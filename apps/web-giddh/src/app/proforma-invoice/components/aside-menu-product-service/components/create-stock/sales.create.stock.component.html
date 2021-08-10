@@ -35,7 +35,7 @@
                                         type="button"
                                         class="btn btn-default"
                                         (click)="moveStock()"
-                                        [disabled]="addStockForm.get('parentGroup').value === activeGroup.uniqueName"
+                                        [disabled]="addStockForm.get('parentGroup').value === activeGroup?.uniqueName"
                                     >
                                         Move
                                     </button>

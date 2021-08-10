@@ -263,16 +263,16 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(acc => {
             if (acc) {
                 this.resetBankDetailsForm();
-                if (acc && acc.parentGroups[0].uniqueName) {
-                    let col = acc.parentGroups[0].uniqueName;
+                if (acc && acc.parentGroups[0]?.uniqueName) {
+                    let col = acc.parentGroups[0]?.uniqueName;
                     this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                     this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
                     this.activeAccountGroup = acc.parentGroups.length > 0 ? [{
-                        label: acc.parentGroups[acc.parentGroups.length - 1].name,
-                        value: acc.parentGroups[acc.parentGroups.length - 1].uniqueName,
+                        label: acc.parentGroups[acc.parentGroups.length - 1]?.name,
+                        value: acc.parentGroups[acc.parentGroups.length - 1]?.uniqueName,
                         additional: acc.parentGroups[acc.parentGroups.length - 1],
                     }] : this.flatGroupsOptions;
-                    this.activeGroupUniqueName = acc.parentGroups.length > 0 ? acc.parentGroups[acc.parentGroups.length - 1].uniqueName : '';
+                    this.activeGroupUniqueName = acc.parentGroups.length > 0 ? acc.parentGroups[acc.parentGroups.length - 1]?.uniqueName : '';
                     this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(this.activeGroupUniqueName));
 
                     this.store.pipe(select(appStore => appStore.groupwithaccounts.activeGroupUniqueName), take(1)).subscribe(response => {
@@ -283,20 +283,20 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
 
                 let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
-                if (accountDetails.uniqueName) {
+                if (accountDetails?.uniqueName) {
                     this.accountInheritedDiscounts = [];
                     if (accountDetails && accountDetails.inheritedDiscounts) {
                         accountDetails.inheritedDiscounts.forEach(item => {
                             this.accountInheritedDiscounts.push(...item.applicableDiscounts);
                         });
                     }
-                    this._accountService.GetApplyDiscount(accountDetails.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    this._accountService.GetApplyDiscount(accountDetails?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                         this.selectedDiscounts = [];
                         this.forceClearDiscount$ = observableOf({ status: true });
                         if (response.status === 'success') {
                             if (response.body) {
-                                if (response.body[accountDetails.uniqueName]) {
-                                    let list = response.body[accountDetails.uniqueName];
+                                if (response.body[accountDetails?.uniqueName]) {
+                                    let list = response.body[accountDetails?.uniqueName];
                                     Object.keys(list).forEach(key => {
                                         let UniqueName = list[key]['discount']['uniqueName'];
                                         this.selectedDiscounts.push(UniqueName);
@@ -476,8 +476,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         let applicableTaxes = activeAccount.applicableTaxes.map(p => p.uniqueName);
 
                         // set isGstEnabledAcc or not
-                        if (activeAccount.parentGroups[0].uniqueName) {
-                            let col = activeAccount.parentGroups[0].uniqueName;
+                        if (activeAccount.parentGroups[0]?.uniqueName) {
+                            let col = activeAccount.parentGroups[0]?.uniqueName;
                             this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                             this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
                         }
@@ -1122,7 +1122,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         let grpObject = new AccountMoveRequest();
         grpObject.uniqueName = this.moveAccountForm.controls['moveto'].value;
 
-        this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc.uniqueName, this.activeGroupUniqueName));
+        this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc?.uniqueName, this.activeGroupUniqueName));
         this.moveAccountForm.reset();
     }
     public mergeAccounts() {

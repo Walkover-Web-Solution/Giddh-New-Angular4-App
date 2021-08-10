@@ -74,7 +74,9 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
             this.store.dispatch(this.accountsAction.getAccountDetails(this.activeAccountDetails.uniqueName));
         }
 
-        this.shouldShowBankDetail(this.accountDetails.uniqueName);
+        if(this.accountDetails) {
+            this.shouldShowBankDetail(this.accountDetails.uniqueName);
+        }
 
         this.activeGroup$.subscribe((a) => {
             if (a) {
@@ -133,7 +135,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     public deleteAccount() {
         let activeGrpName = this.activeGroupUniqueName;
 
-        this.store.dispatch(this.accountsAction.deleteAccount(this.activeAccountDetails.uniqueName, activeGrpName));
+        this.store.dispatch(this.accountsAction.deleteAccount(this.activeAccountDetails?.uniqueName, activeGrpName));
         this.hideDeleteAccountModal();
     }
 
