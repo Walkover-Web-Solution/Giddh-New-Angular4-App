@@ -280,16 +280,25 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
                 this.forceClearFilterList$ = observableOf({ status: true });
             }
         } else {
-            this.filterList = [
-                { label: this.localeData?.filter_types?.amount_greater_than, value: 'amountGreaterThan' },
-                { label: this.localeData?.filter_types?.amount_less_than, value: 'amountSmallerThan' },
-                { label: this.localeData?.filter_types?.amount_equals, value: 'amountEquals' },
-                { label: this.localeData?.filter_types?.description_equals, value: 'descriptionEquals' },
-                { label: this.localeData?.filter_types?.add, value: 'add' },
-                { label: this.localeData?.filter_types?.update, value: 'update' },
-                { label: this.localeData?.filter_types?.delete, value: 'delete' }
-            ];
+            this.showAllFilters();
         }
+    }
+
+    /**
+     * This will show all filters
+     *
+     * @memberof SettingTriggerComponent
+     */
+    public showAllFilters(): void {
+        this.filterList = [
+            { label: this.localeData?.filter_types?.amount_greater_than, value: 'amountGreaterThan' },
+            { label: this.localeData?.filter_types?.amount_less_than, value: 'amountSmallerThan' },
+            { label: this.localeData?.filter_types?.amount_equals, value: 'amountEquals' },
+            { label: this.localeData?.filter_types?.description_equals, value: 'descriptionEquals' },
+            { label: this.localeData?.filter_types?.add, value: 'add' },
+            { label: this.localeData?.filter_types?.update, value: 'update' },
+            { label: this.localeData?.filter_types?.delete, value: 'delete' }
+        ];
     }
 
     public onSelectClosingBalance() {
@@ -567,6 +576,12 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
             url: '',
             description: ''
         };
+
+        this.showAllFilters();
+        
+        setTimeout(() => {
+            this.resetNewFormFields();
+        }, 100);
     }
 
     /**
