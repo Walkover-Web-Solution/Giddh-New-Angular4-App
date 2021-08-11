@@ -156,15 +156,16 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
             if(response?.status === "success" && response?.body) {
                 this.newVsOldInvoicesData = response?.body;
 
-                this.crdTotal = this.newVsOldInvoicesData.carriedSales?.reduce((p, c) => {
-                    return p + c.total;
-                }, 0);
-                this.invTotal = this.newVsOldInvoicesData.carriedSales?.reduce((p, c) => {
-                    return p + c.invoiceCount;
-                }, 0);
-                this.clientTotal = this.newVsOldInvoicesData.carriedSales?.reduce((p, c) => {
-                    return p + c.uniqueCount;
-                }, 0);
+                this.crdTotal = 0;
+                this.invTotal = 0;
+                this.clientTotal = 0;
+
+                this.newVsOldInvoicesData.carriedSales?.forEach((sale) => {
+                    this.crdTotal += sale.total;
+                    this.invTotal += sale.invoiceCount;
+                    this.clientTotal += sale.uniqueCount;
+                });
+
                 this.newSalesClientTotal = this.newVsOldInvoicesData?.newSales?.uniqueCount;
                 this.totalSalesClientTotal = this.newVsOldInvoicesData?.totalSales?.uniqueCount;
                 this.clientAllTotal = this.newVsOldInvoicesData?.totalSales?.uniqueCount;
