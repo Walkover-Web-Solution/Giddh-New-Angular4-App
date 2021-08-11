@@ -296,7 +296,7 @@
                                     <div class="col-sm-4" *ngIf="GSTIN_OR_TRN">
                                         <div class="form-group mr-b05">
                                             <label for="gstinNum" class="d-block">{{
-                                                formFields["taxName"].label
+                                                formFields["taxName"]?.label
                                             }}</label>
                                             <input
                                                 type="text"
@@ -813,9 +813,9 @@
                                             <!--template for move group typeahead-->
                                             <ng-template #optionTemplate let-model="option">
                                                 <a href="javascript:void(0)" class="list-item">
-                                                    <div class="item">{{ model.label }}</div>
+                                                    <div class="item">{{ model?.label }}</div>
                                                     <div class="item-unique">
-                                                        {{ model.value }}
+                                                        {{ model?.value }}
                                                     </div>
                                                 </a>
                                             </ng-template>
