@@ -1,18 +1,19 @@
 <div>
     <div class="modal-header">
-        <h3 class="modal-title bg" id="modal-title">{{commonLocaleData?.app_confirmation}} </h3>
+        <h3 class="modal-title bg" id="modal-title">{{ commonLocaleData?.app_confirmation }}</h3>
         <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</span>
     </div>
     <div class="modal-body clearfix" id="export-body">
         <form name="newRole" novalidate autocomplete="off">
             <div class="modal-wrap">
-                <h3>{{message}}</h3>
+                <h3>{{ message }}</h3>
             </div>
         </form>
     </div>
     <div class="modal-footer">
-        <button type="submit" class="btn btn-md btn-success"
-            (click)="onConfirmation()">{{commonLocaleData?.app_yes}}</button>
-        <button type="submit" class="btn btn-md btn-danger" (click)="onCancel()">{{commonLocaleData?.app_no}}</button>
+        <button type="submit" class="btn btn-md btn-success" (click)="onConfirmation()">
+            {{ commonLocaleData?.app_yes }}
+        </button>
+        <button type="submit" class="btn btn-md btn-danger" (click)="onCancel()">{{ commonLocaleData?.app_no }}</button>
     </div>
 </div>

@@ -54,17 +54,17 @@
     width: 100% !important;
 }
 
-.form-control{
+.form-control {
     width: 100% !important;
 }
-.linked-account{
+.linked-account {
     width: calc(100% - 42px);
 }
 .payment-text {
     color: $gray;
 }
 .bank-logo {
-    img{
+    img {
         max-width: 140px;
         margin-bottom: 10px;
         width: 100%;
@@ -202,6 +202,7 @@
     padding: 8px;
     color: $black;
     border-radius: 5px;
+    word-break: break-word;
 }
 .payment-updates {
     width: 90%;
@@ -243,6 +244,9 @@
 }
 .account-approval-status.pending-approval {
     color: $orange-new;
+    i::before {
+        color: $orange-new;
+    }
 }
 .connected-accounts {
     margin-left: 10px;
@@ -251,12 +255,12 @@
     background-color: $light-alice-blue;
     color: $midnight-blue;
 }
-.modal { 
+.modal {
     .account-modal {
         width: 500px !important;
     }
 }
-.modal { 
+.modal {
     .user-modal {
         width: 400px !important;
     }

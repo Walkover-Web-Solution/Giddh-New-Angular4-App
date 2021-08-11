@@ -1,7 +1,7 @@
 /** Settings integration tabs */
 export enum SettingsIntegrationTab {
-    Sms = 0,
-    Email,
+    //Sms = 0,
+    Email = 0,
     Collection,
     ECommerce,
     Payment
@@ -64,3 +64,5 @@ export enum SettingsAmountLimitDuration {
 
 /** Unlimited amount limit text */
 export const UNLIMITED_LIMIT = "UNLIMITED";
+/** Status for ICICI bank registered */
+export const ACCOUNT_REGISTERED_STATUS = "Registered";

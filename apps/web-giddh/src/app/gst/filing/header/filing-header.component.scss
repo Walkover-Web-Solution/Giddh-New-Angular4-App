@@ -42,26 +42,26 @@
     .list-inline {
         > li {
             margin-bottom: 10px;
-            .authenticate-btn{
+            .authenticate-btn {
                 margin-right: 0;
             }
         }
     }
 }
-@media screen and (max-width:575px) {
+@media screen and (max-width: 575px) {
     .btn-wrapper-filling-header {
         float: none;
     }
 }
-@media screen and (max-width:375px) {
-    .btn-wrapper-filling-header{
+@media screen and (max-width: 375px) {
+    .btn-wrapper-filling-header {
         display: flex !important;
         width: 100% !important;
         flex-direction: column;
-        .btn-group{
+        .btn-group {
             display: flex !important;
         }
-        .btn{
+        .btn {
             margin-right: 0;
             margin-bottom: 8px;
         }

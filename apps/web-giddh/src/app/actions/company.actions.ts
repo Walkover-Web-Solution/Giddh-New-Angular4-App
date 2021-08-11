@@ -307,7 +307,7 @@ export class CompanyActions {
     public CompanyTax$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CompanyActions.GET_TAX),
-            switchMap((action: CustomActions) => this._companyService.getComapnyTaxes()),
+            switchMap((action: CustomActions) => this._companyService.getCompanyTaxes()),
             map(response => {
                 return this.getTaxResponse(response);
             })));

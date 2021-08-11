@@ -2,25 +2,41 @@
     <div class="col-xs-12 col-sm-12">
         <div class="export-data-form">
             <div class="d-flex flex-wrap">
-                <div class="file-type-label mr-r15 linked-entities"
-                    *ngIf="currentCompanyBranches?.length > 1 && currentOrganizationType === 'COMPANY'">
+                <div
+                    class="file-type-label mr-r15 linked-entities"
+                    *ngIf="currentCompanyBranches?.length > 1 && currentOrganizationType === 'COMPANY'"
+                >
                     <label class="d-block">{{commonLocaleData?.app_entity}}</label>
                     <div class="form-group">
-                        <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName"
-                            [showClear]="false" [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)"
-                            [isFilterEnabled]="true" [placeholder]="commonLocaleData?.app_select_entity"
-                            [fixedValue]="currentBranch?.alias">
+                        <sh-select
+                            [options]="currentCompanyBranches"
+                            [(ngModel)]="currentBranch.uniqueName"
+                            [showClear]="false"
+                            [ItemHeight]="33"
+                            width="100%"
+                            (selected)="handleBranchChange($event)"
+                            [isFilterEnabled]="true"
+                            [placeholder]="commonLocaleData?.app_select_entity"
+                            [fixedValue]="currentBranch?.alias"
+                        >
                             <ng-template #optionTemplate let-option="option">
                                 <ng-container>
                                     <a href="javascript:void(0)" class="list-item d-flex">
                                         <span class="entity-icon">
-                                            <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany"
-                                                tooltip="{{commonLocaleData?.app_branch}}"></i>
-                                            <i class="icon-company-profile pull-right" *ngIf="option.isCompany"
-                                                tooltip="{{commonLocaleData?.app_company}}"></i>
+                                            <i
+                                                class="icon-branch-icon pull-right"
+                                                *ngIf="!option.isCompany"
+                                                tooltip="{{commonLocaleData?.app_branch}}"
+                                            ></i>
+                                            <i
+                                                class="icon-company-profile pull-right"
+                                                *ngIf="option.isCompany"
+                                                tooltip="{{commonLocaleData?.app_company}}"
+                                            ></i>
                                         </span>
                                         <span class="entity-details">
-                                            <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}
+                                            <div class="item giddh-limit single-line-clamp">
+                                                {{ option.label || '-' }}
                                             </div>
                                             <div class="item-unique giddh-limit single-line-clamp">
                                                 {{ option.name || '-' }}
@@ -34,20 +50,33 @@
                 </div>
                 <div class="mr-r15 file-type-label">
                     <label class="d-block">{{localeData?.file_type}}</label>
-                    <sh-select placeholder="Select" name="file-type" [(ngModel)]="fileType" [options]="fileTypes"
-                        [ItemHeight]="33"></sh-select>
+                    <sh-select
+                        placeholder="Select"
+                        name="file-type"
+                        [(ngModel)]="fileType"
+                        [options]="fileTypes"
+                        [ItemHeight]="33"
+                    ></sh-select>
                 </div>
                 <div class="mr-r15" *ngIf="mode === 'export' && fileType === '0'">
                     <label class="d-block">{{localeData?.data_range}}</label>
                     <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                         <i class="icon-calender calendar-addon"></i>
-                        <input type="text" name="selectedDateRange"
+                        <input
+                            type="text"
+                            name="selectedDateRange"
                             [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
-                            class="giddh-datepicker date-range-picker border-radius-2" />
+                            class="giddh-datepicker date-range-picker border-radius-2"
+                        />
                     </div>
                 </div>
-                <button class="btn btn-primary " *ngIf="mode === 'export'" (click)="save()"
-                    [ladda]="isExportInProcess$ | async" [disabled]="(!fileType || !from || !to)">
+                <button
+                    class="btn btn-primary"
+                    *ngIf="mode === 'export'"
+                    (click)="save()"
+                    [ladda]="isExportInProcess$ | async"
+                    [disabled]="(!fileType || !from || !to)"
+                >
                     {{commonLocaleData?.app_export}}
                 </button>
                 <div class="select-file-label mr-r15" *ngIf="mode === 'import'">
@@ -56,29 +85,35 @@
                     <div class="form-group input-upload">
                         <div class="input-file">
                             <label for="fileUpload" class="form-control text-ellipsis">
-                                <span class="text-success" *ngIf="selectedFile">
-                                    {{ selectedFile?.name }}
-                                </span>
-                                <span *ngIf="!selectedFile">
-                                    {{localeData?.browse_file}}
-                                </span></label>
-                            <input type="file" id="fileUpload" accept="application/json" class="d-none"
-                                (change)="fileSelected($event.target.files)" />
+                                <span class="text-success" *ngIf="selectedFile"> {{ selectedFile?.name }} </span>
+                                <span *ngIf="!selectedFile"> {{localeData?.browse_file}} </span></label
+                            >
+                            <input
+                                type="file"
+                                id="fileUpload"
+                                accept="application/json"
+                                class="d-none"
+                                (change)="fileSelected($event.target.files)"
+                            />
                         </div>
-
                     </div>
                 </div>
                 <div>
-                    <button class="btn btn-success" *ngIf="mode === 'import'" (click)="save()"
-                        [ladda]="isImportInProcess$ | async" [disabled]="(!fileType || !selectedFile)">
+                    <button
+                        class="btn btn-success"
+                        *ngIf="mode === 'import'"
+                        (click)="save()"
+                        [ladda]="isImportInProcess$ | async"
+                        [disabled]="(!fileType || !selectedFile)"
+                    >
                         {{commonLocaleData?.app_import}}
                     </button>
                 </div>
             </div>
             <div>
                 <label class="d-block">&nbsp;</label>
-                <button class="btn btn-default pull-right back-to-import"
-                    (click)="backButtonPressed()">{{commonLocaleData?.app_back}}
+                <button class="btn btn-default pull-right back-to-import" (click)="backButtonPressed()">
+                    {{commonLocaleData?.app_back}}
                 </button>
             </div>
         </div>
@@ -87,13 +122,23 @@
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
-            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption"
-                [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
-                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
-                (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOption"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
         </div>
     </div>
 </ng-template>

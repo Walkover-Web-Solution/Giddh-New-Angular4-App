@@ -98,7 +98,7 @@
         "payment_updates": "देय अद्यतने",
         "limit_upto": "पर्यंत मर्यादित करा",
         "pending_self_approval": "स्वत: ची मंजूरीसाठी प्रलंबित",
-        "approval_request_sent": "आपल्या खात्यात विनंती पाठविली गेली आहे, <a href='https://giddh.com/help/how-to-integrate-icici-bank-account-with-giddh'>आयसीआयसीआय बँक पोर्टल</a> वर लॉग इन करा आणि ते स्वीकारा.",
+        "approval_request_sent": "आपल्या खात्यात विनंती पाठविली गेली आहे, <a href='https://cibnext.icicibank.com/corp/AuthenticationController?FORMSGROUP_ID__=AuthenticationFG&__START_TRAN_FLAG__=Y&FG_BUTTONS__=LOAD&ACTION.LOAD=Y&AuthenticationFG.LOGIN_FLAG=1&BANK_ID=ICI&ITM=nli_corp_primer_login_btn_desk' target='_blank'>आयसीआयसीआय बँक पोर्टल</a> वर लॉग इन करा आणि ते स्वीकारा.",
         "approval_request_accepted": "एकदा ते मान्य झाल्यावर आपण आपल्या आयसीआयसीआय बँक खात्याचा दुवा जोडू शकता आणि थेट जीआयडीडीएचद्वारे देय देऊ शकता",
         "add_more_users": "+ अधिक वापरकर्ते जोडा",
         "connect_icici_account": "आयसीआयसीआय खाते कनेक्ट करा",
@@ -116,6 +116,7 @@
         "connected": "जोडलेले",
         "used": "वापरलेले",
         "get_instant_overdraft": "इन्स्टंट ओव्हरड्राफ्ट मिळवा",
-        "duration_error": "कृपया दिलेल्या रकमेचा कालावधी निवडा"
+        "duration_error": "कृपया दिलेल्या रकमेचा कालावधी निवडा",
+        "required_field_error": "कृपया सर्व आवश्यक फील्ड भरा"
 	}
 }

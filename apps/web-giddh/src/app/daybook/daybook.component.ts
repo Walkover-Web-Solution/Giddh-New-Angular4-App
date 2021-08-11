@@ -1,15 +1,13 @@
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { DaybookActions } from 'apps/web-giddh/src/app/actions/daybook/daybook.actions';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import * as moment from 'moment/moment';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { map, take, takeUntil } from 'rxjs/operators';
+import { Observable, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../actions/company.actions';
 import { StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
-import { DayBookResponseModel } from '../models/api-models/Daybook';
 import { DaybookQueryRequest } from '../models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../theme/ng2-daterangepicker/daterangepicker.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
@@ -23,6 +21,8 @@ import { LedgerVM } from '../ledger/ledger.vm';
 import { SalesOtherTaxesModal } from '../models/api-models/Sales';
 import { UpdateLedgerEntryPanelComponent } from '../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.component';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { DaybookService } from '../services/daybook.service';
+import { ToasterService } from '../services/toaster.service';
 
 @Component({
     selector: 'daybook',
@@ -48,7 +48,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public showLoader: boolean = false;
     public isAllExpanded: boolean = false;
     public daybookQueryRequest: DaybookQueryRequest;
-    public daybookData$: Observable<DayBookResponseModel>;
     public daybookExportRequestType: 'get' | 'post';
     /** Universal date observer */
     public universalDate$: Observable<any>;
@@ -125,13 +124,14 @@ export class DaybookComponent implements OnInit, OnDestroy {
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
-        private _companyActions: CompanyActions,
-        private _daybookActions: DaybookActions,
+        private companyActions: CompanyActions,
         private store: Store<AppState>,
         private generalService: GeneralService,
         private modalService: BsModalService,
         private settingsBranchAction: SettingsBranchActions,
-        private ledgerActions: LedgerActions
+        private ledgerActions: LedgerActions,
+        private daybookService: DaybookService,
+        private toasterService: ToasterService
     ) {
 
         this.daybookQueryRequest = new DaybookQueryRequest();
@@ -148,51 +148,20 @@ export class DaybookComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.lc = new LedgerVM();
-        // get company taxes
-        this.store.dispatch(this._companyActions.getTax());
-        this.store.pipe(select(s => s.company && s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
-            this.companyTaxesList = res || [];
-        });
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         let companyUniqueName = null;
         this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'daybook';
-        this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
+        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
 
-        this.store.pipe(select(state => state.daybook.showLoader), takeUntil(this.destroyed$)).subscribe(response => {
-            this.showLoader = response;
-        });
-
-        this.store.pipe(select(state => state.daybook.data), takeUntil(this.destroyed$)).subscribe((data) => {
-            if (data && data.entries) {
-                this.daybookQueryRequest.page = data.page;
-                data.entries.map(item => {
-                    item.isExpanded = this.isAllExpanded;
-                });
-
-                if (this.todaySelected) {
-                    this.daybookQueryRequest.from = moment(data.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.daybookQueryRequest.to = moment(data.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-
-                    this.selectedDateRange = { startDate: moment(data.fromDate, GIDDH_DATE_FORMAT), endDate: moment(data.toDate, GIDDH_DATE_FORMAT) };
-                    this.selectedDateRangeUi = moment(data.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(data.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
-                    this.fromDate = moment(data.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.toDate = moment(data.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                }
-
-                this.daybookData = data;
-                this.daybookData$ = observableOf(data);
-                this.checkIsStockEntryAvailable();
-            }
-            this.changeDetectorRef.detectChanges();
-        });
         this.store.pipe(
             select(appState => appState.session.activeCompany), take(1)
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
+        
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
@@ -237,6 +206,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 }
             }
         });
+
+        // get company taxes
+        this.getCompanyTaxes();
     }
 
     public selectedDate(value: any) {
@@ -246,7 +218,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
             this.daybookQueryRequest.from = from;
             this.daybookQueryRequest.to = to;
             this.daybookQueryRequest.page = 0;
-            this.go();
+            this.getDaybook();
         }
     }
 
@@ -281,7 +253,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
             this.daybookQueryRequest.page = 0;
             if (obj.action === 'search') {
                 this.advanceSearchModel.hide();
-                this.go(this.searchFilterData);
+                this.getDaybook(this.searchFilterData);
                 this.showAdvanceSearchIcon = true;
             } else if (obj.action === 'export') {
                 this.daybookExportRequestType = 'post';
@@ -292,17 +264,54 @@ export class DaybookComponent implements OnInit, OnDestroy {
         }
     }
 
-    public go(withFilters = null) {
-        this.store.dispatch(this._daybookActions.GetDaybook(withFilters, this.daybookQueryRequest));
+    /**
+     * Fetching the daybook records
+     *
+     * @param {*} [withFilters=null]
+     * @memberof DaybookComponent
+     */
+    public getDaybook(withFilters = null): void {
+        this.showLoader = true;
+        this.daybookService.GetDaybook(withFilters, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.entries?.length > 0) {
+                this.daybookQueryRequest.page = response?.body?.page;
+                response?.body?.entries.map(item => {
+                    item.isExpanded = this.isAllExpanded;
+                });
+
+                if (this.todaySelected) {
+                    this.daybookQueryRequest.from = moment(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.daybookQueryRequest.to = moment(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+
+                    this.selectedDateRange = { startDate: moment(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: moment(response?.body?.toDate, GIDDH_DATE_FORMAT) };
+                    this.selectedDateRangeUi = moment(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.fromDate = moment(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.toDate = moment(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                }
+
+                this.daybookData = response?.body;
+                this.checkIsStockEntryAvailable();
+            } else {
+                if(response?.message) {
+                    this.daybookData = { entries: [], totalItems: 0, page: 0 };
+                    this.toasterService.clearAllToaster();
+                    this.toasterService.errorToast(response?.message);
+                } else {
+                    this.daybookData = response?.body;
+                }
+            }
+            this.showLoader = false;
+            this.changeDetectorRef.detectChanges();
+        });
     }
 
     public toggleExpand() {
         this.isAllExpanded = !this.isAllExpanded;
-        if (this.daybookData$) {
-            this.daybookData$ = this.daybookData$.pipe(map(sc => {
-                sc.entries.map(e => e.isExpanded = this.isAllExpanded);
-                return sc;
-            }));
+        if (this.daybookData) {
+            this.daybookData.entries?.map(entry => {
+                entry.isExpanded = this.isAllExpanded;
+                return entry;
+            });
         }
         this.checkIsStockEntryAvailable();
     }
@@ -335,7 +344,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                         this.daybookQueryRequest.to = "";
                     }
                     this.daybookQueryRequest.page = 0;
-                    this.go();
+                    this.getDaybook();
                 });
             }
         });
@@ -344,7 +353,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public pageChanged(event: any): void {
         if (this.daybookQueryRequest.page !== event.page) {
             this.daybookQueryRequest.page = event.page;
-            this.go(this.searchFilterData);
+            this.getDaybook(this.searchFilterData);
         }
     }
 
@@ -360,9 +369,35 @@ export class DaybookComponent implements OnInit, OnDestroy {
             this.daybookQueryRequest.format = response.fileType;
             this.daybookQueryRequest.sort = response.order;
             if (this.daybookExportRequestType === 'post') {
-                this.store.dispatch(this._daybookActions.ExportDaybookPost(this.searchFilterData, this.daybookQueryRequest));
+                this.daybookService.ExportDaybookPost(this.searchFilterData, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response?.status === 'success') {
+                        if (response?.body?.type === "message") {
+                            this.toasterService.successToast(response?.body?.file);
+                        } else {
+                            let blob = this.generalService.base64ToBlob(response?.body?.file, response?.queryString?.requestType, 512);
+                            let type = response?.queryString?.requestType === 'application/pdf' ? '.pdf' : '.xls';
+                            saveAs(blob, 'response' + type);
+                        }
+                    } else {
+                        this.toasterService.clearAllToaster();
+                        this.toasterService.errorToast(response?.message);
+                    }
+                });
             } else if (this.daybookExportRequestType === 'get') {
-                this.store.dispatch(this._daybookActions.ExportDaybook(null, this.daybookQueryRequest));
+                this.daybookService.ExportDaybook(null, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response?.status === 'success') {
+                        if (response?.body?.type === "message") {
+                            this.toasterService.successToast(response?.body?.file);
+                        } else {
+                            let blob = this.generalService.base64ToBlob(response?.body?.file, response?.queryString?.requestType, 512);
+                            let type = response?.queryString?.requestType === 'application/pdf' ? '.pdf' : '.xls';
+                            saveAs(blob, 'response' + type);
+                        }
+                    } else {
+                        this.toasterService.clearAllToaster();
+                        this.toasterService.errorToast(response?.message);
+                    }
+                });
             }
         }
     }
@@ -403,21 +438,19 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @memberof DaybookComponent
      */
     public checkIsStockEntryAvailable(): any {
-        if (this.daybookData$) {
-            this.daybookData$.pipe(takeUntil(this.destroyed$)).subscribe(item => {
-                this.isEntryExpanded = item.entries.some(entry => {
-                    if (entry.isExpanded && entry.otherTransactions) {
-                        return entry.otherTransactions.some(otherTrasaction => {
-                            if (otherTrasaction && otherTrasaction.inventory) {
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        });
-                    } else {
-                        return false;
-                    };
-                });
+        if (this.daybookData) {
+            this.isEntryExpanded = this.daybookData.entries.some(entry => {
+                if (entry.isExpanded && entry.otherTransactions) {
+                    return entry.otherTransactions.some(otherTrasaction => {
+                        if (otherTrasaction && otherTrasaction.inventory) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    });
+                } else {
+                    return false;
+                };
             });
         }
     }
@@ -474,7 +507,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 this.daybookQueryRequest.from = this.fromDate;
                 this.daybookQueryRequest.to = this.toDate;
                 this.daybookQueryRequest.page = 0;
-                this.go(this.searchFilterData);
+                this.getDaybook(this.searchFilterData);
             }
         }
     }
@@ -487,7 +520,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity.label;
         this.daybookQueryRequest.branchUniqueName = selectedEntity.value;
-        this.go();
+        this.getDaybook();
     }
 
     /**
@@ -539,7 +572,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public hideUpdateLedgerModal(): void {
         this.updateLedgerModal.hide();
         document.querySelector('body').classList.remove('update-ledger-overlay');
-        this.go(this.searchFilterData);
+        this.getDaybook(this.searchFilterData);
     }
 
     /**
@@ -550,5 +583,17 @@ export class DaybookComponent implements OnInit, OnDestroy {
      */
     public calculateOtherTaxes(modal: SalesOtherTaxesModal): void {
         this.updateLedgerComponent.vm.calculateOtherTaxes(modal);
+    }
+
+    /**
+     * Fetching the company taxes list
+     *
+     * @private
+     * @memberof DaybookComponent
+     */
+    private getCompanyTaxes(): void {
+        this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
+            this.companyTaxesList = res || [];
+        });
     }
 }

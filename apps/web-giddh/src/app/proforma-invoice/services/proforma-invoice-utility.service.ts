@@ -86,7 +86,8 @@ export class ProformaInvoiceUtilityService {
                 entry.discounts = entry.discounts.filter(discount => (discount.name && discount.particular) || discount.discountValue);
                 entry.transactions?.forEach(transaction => {
                     if (transaction?.stock) {
-                        transaction.stock.rate = transaction.stock.rate?.amountForAccount;
+                        transaction.stock.rate.rateForAccount = transaction.stock.rate?.amountForAccount;
+                        delete transaction.stock.rate?.amountForAccount;
                     }
                 });
             });

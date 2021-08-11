@@ -501,8 +501,8 @@ span.close-modal.cp.pull-right {
     }
 }
 
-@media (min-width: 769px){
-    .table-responsive{
+@media (min-width: 769px) {
+    .table-responsive {
         max-height: calc(100vh - 295px);
         overflow-y: auto;
     }

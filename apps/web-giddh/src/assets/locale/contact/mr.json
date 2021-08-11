@@ -56,6 +56,7 @@
     "cashfree_details_required_message": "कृपया कॅशफ्री तपशील प्रविष्ट करा.",
     "select_bank": "बँक निवडा",
     "bal": "शिल्लक",
+    "bank_bal": "बँक शिल्लक",
     "account_number": "खाते #",
     "payment_status": "पैसे भरल्याची स्थिती",
     "payment_status_note": "सर्व देयकेची स्थिती लवकरच मेल केली जाईल.",

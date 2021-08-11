@@ -4,7 +4,7 @@
             <div class="col-9 col-md-6">
                 <div class="group-detail d-flex w-100 align-items-center">
                     <div class="group-thumbnail mr-r15">
-                        <img src="{{imgPath}}Login-Page-Image.png" alt="group-icon">
+                        <img src="{{ imgPath }}Login-Page-Image.png" alt="group-icon" />
                     </div>
                     <div class="group-name">
                         <h4>Group Dummy Name Furniture</h4>
@@ -15,25 +15,49 @@
             <div class="col-3 col-md-6 group-detail-right-btn">
                 <div class="more-add-button d-flex align-items-center justify-content-end w-100">
                     <div class="btn-group" dropdown>
-                        <button id="more-btn-inventory" *ngIf="!isMobileScreen" dropdownToggle type="button"
+                        <button
+                            id="more-btn-inventory"
+                            *ngIf="!isMobileScreen"
+                            dropdownToggle
+                            type="button"
                             class="btn btn-primary dropdown-toggle bdr-radius-50"
-                            aria-controls="more-inventory-dropdown">
+                            aria-controls="more-inventory-dropdown"
+                        >
                             More <span class="caret"></span>
                         </button>
                         <i class="icon-dots-three-vertical pd" *ngIf="isMobileScreen" dropdownToggle></i>
-                        <ul id="more-inventory-dropdown" *dropdownMenu class="dropdown-menu" role="menu"
-                            aria-labelledby="more-btn-inventory">
-                            <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);"
-                                    [routerLink]="['/pages/new-inventory/adjust-inventory']">Adjust Group</a></li>
+                        <ul
+                            id="more-inventory-dropdown"
+                            *dropdownMenu
+                            class="dropdown-menu"
+                            role="menu"
+                            aria-labelledby="more-btn-inventory"
+                        >
+                            <li role="menuitem">
+                                <a
+                                    class="dropdown-item"
+                                    href="javascript:void(0);"
+                                    [routerLink]="['/pages/new-inventory/adjust-inventory']"
+                                    >Adjust Group</a
+                                >
+                            </li>
                             <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);">Archive</a></li>
                             <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
                             <li class="divider dropdown-divider" *ngIf="isMobileScreen"></li>
-                            <li role="menuitem"><a class="dropdown-item text-primary" *ngIf="isMobileScreen"
-                                    href="javascript:void(0);">+ Add Inventory</a></li>
+                            <li role="menuitem">
+                                <a class="dropdown-item text-primary" *ngIf="isMobileScreen" href="javascript:void(0);"
+                                    >+ Add Inventory</a
+                                >
+                            </li>
                         </ul>
                     </div>
-                    <button class="btn btn-sky-blue bdr-radius-50" *ngIf="!isMobileScreen"
-                        [routerLink]="['/pages/new-inventory/create-new-inventory']">+ Add Inventory</button>
+                    <button
+                        class="btn btn-sky-blue bdr-radius-50"
+                        *ngIf="!isMobileScreen"
+                        [routerLink]="['/pages/new-inventory/create-new-inventory']"
+                    >
+                        + Add Inventory
+                    </button>
                     <i class="icon-undo pd cursor-pointer" tooltip="Back" [routerLink]="['/pages/new-inventory']"></i>
                 </div>
             </div>
@@ -50,7 +74,12 @@
                                 <label>Group Name <span class="red-text">*</span></label>
                             </div>
                             <div class="col-sm-6">
-                                <input id="group-name" class="form-control" type="text" placeholder="Enter Group Name">
+                                <input
+                                    id="group-name"
+                                    class="form-control"
+                                    type="text"
+                                    placeholder="Enter Group Name"
+                                />
                             </div>
                         </div>
                         <div class="row mr-b15">
@@ -58,32 +87,52 @@
                                 <label>Unique Name <span class="red-text">*</span></label>
                             </div>
                             <div class="col-sm-6">
-                                <input id="unique-name" class="form-control" type="text" placeholder="Unique Name">
+                                <input id="unique-name" class="form-control" type="text" placeholder="Unique Name" />
                             </div>
                         </div>
                         <div class="row mr-b15">
                             <div class="col-sm-6">
                                 <span class="p-0 mr-3" (click)="selectCode(true)">
-                                    <input id="group-hsn-code-option" class="radio-custom cp ml-0" type="radio"
-                                        name="selectCode" [value]="">
+                                    <input
+                                        id="group-hsn-code-option"
+                                        class="radio-custom cp ml-0"
+                                        type="radio"
+                                        name="selectCode"
+                                        [value]=""
+                                    />
                                     <label for="group-hsn-code-option" class="radio-custom-label">HSN</label>
                                 </span>
                                 <span class="p-0" (click)="selectCode(false)">
-                                    <input id="group-sac-code-option" class="radio-custom cp ml-0" type="radio"
-                                        name="selectCode" [value]="">
+                                    <input
+                                        id="group-sac-code-option"
+                                        class="radio-custom cp ml-0"
+                                        type="radio"
+                                        name="selectCode"
+                                        [value]=""
+                                    />
                                     <label for="group-sac-code-option" class="radio-custom-label">SAC</label>
                                 </span>
                             </div>
                             <div class="col-sm-6">
-                                <input *ngIf="isHSN" id="group-hsn-code" class="form-control" type="text"
-                                    placeholder="Enter HSN Code">
-                                <input *ngIf="!isHSN" id="group-sac-code" class="form-control" type="text"
-                                    placeholder="Enter SAC Code">
+                                <input
+                                    *ngIf="isHSN"
+                                    id="group-hsn-code"
+                                    class="form-control"
+                                    type="text"
+                                    placeholder="Enter HSN Code"
+                                />
+                                <input
+                                    *ngIf="!isHSN"
+                                    id="group-sac-code"
+                                    class="form-control"
+                                    type="text"
+                                    placeholder="Enter SAC Code"
+                                />
                                 <div>
-                                    <input id="usb-group" type="checkbox"><span class="font-14 ml-1">Is it
-                                        Sub-group?</span>
+                                    <input id="usb-group" type="checkbox" /><span class="font-14 ml-1"
+                                        >Is it Sub-group?</span
+                                    >
                                 </div>
-
                             </div>
                         </div>
                     </form>
@@ -93,10 +142,11 @@
                 <tabset class="custom-tabs about-group-tab">
                     <tab heading="Other">
                         <div class="other-tab-content d-flex">
-                            <input type="checkbox" id="out-of-stock">
-                            <span class="font-14 ml-1">Continue selling when out of stock? (Will be applicable on all
-                                the subsequent
-                                group/stock)</span>
+                            <input type="checkbox" id="out-of-stock" />
+                            <span class="font-14 ml-1"
+                                >Continue selling when out of stock? (Will be applicable on all the subsequent
+                                group/stock)</span
+                            >
                         </div>
                     </tab>
                 </tabset>
@@ -106,16 +156,21 @@
             <div class="d-flex">
                 <inventory-group-list-sidebar></inventory-group-list-sidebar>
                 <div class="right-side-content w-100 d-flex flex-column">
-                    <p class="font-14 mr-b15">Following is the list of items created in <strong>Group Dummy Name
-                            Furniture</strong>
+                    <p class="font-14 mr-b15">
+                        Following is the list of items created in <strong>Group Dummy Name Furniture</strong>
                         <i class="icon-info pd ml-1"></i>
                     </p>
                     <div class="d-flex mr-b15">
                         <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                             <i class="icon-calender calendar-addon bdr-radius-50"></i>
-                            <input type="text" id="select-date-group" name="selectedDateRange"
-                                [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
-                                class="giddh-datepicker date-range-picker bdr-radius-50" placeholder="Enter Date" />
+                            <input
+                                type="text"
+                                id="select-date-group"
+                                name="selectedDateRange"
+                                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                class="giddh-datepicker date-range-picker bdr-radius-50"
+                                placeholder="Enter Date"
+                            />
                         </div>
                     </div>
                     <!-- table for sub detail content of about group -->
@@ -133,8 +188,9 @@
                             <tr>
                                 <td data-title="Name">
                                     <div class="d-flex align-items-center">
-                                        <span class="image-thumbnail mr-2"><img
-                                                src="{{imgPath}}Login-Page-Image.png"></span>
+                                        <span class="image-thumbnail mr-2"
+                                            ><img src="{{ imgPath }}Login-Page-Image.png"
+                                        /></span>
                                         <span>Product Name 1 Dummy</span>
                                     </div>
                                 </td>
@@ -146,7 +202,9 @@
                             <tr>
                                 <td data-title="Name">
                                     <div class="d-flex align-items-center">
-                                        <span class="image-thumbnail mr-2"><img src="{{imgPath}}add-image.svg"></span>
+                                        <span class="image-thumbnail mr-2"
+                                            ><img src="{{ imgPath }}add-image.svg"
+                                        /></span>
                                         <span>Product Name 2 Dummy</span>
                                     </div>
                                 </td>
@@ -162,8 +220,6 @@
                     <stock-group-list></stock-group-list>
                 </div>
             </div>
-
-
         </tab>
     </tabset>
 </div>

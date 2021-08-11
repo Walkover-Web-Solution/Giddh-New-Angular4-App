@@ -1,64 +1,98 @@
-<div class="row pl-grid-row" [financial-accordion]="groupDetail"
+<div
+    class="row pl-grid-row"
+    [financial-accordion]="groupDetail"
     *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)"
-    [ngClass]="{'isHidden': !groupDetail.isVisible }">
-    <div class="col-4  group" [innerHTML]="groupDetail.groupName | uppercase | highlight:search"
-        [ngStyle]="{'padding-left': padding+'px'}"></div>
-    <div class="col-4  group text-right">
+    [ngClass]="{ 'isHidden': !groupDetail.isVisible }"
+>
+    <div
+        class="col-4 group"
+        [innerHTML]="groupDetail.groupName | uppercase | highlight: search"
+        [ngStyle]="{ 'padding-left': padding + 'px' }"
+    ></div>
+    <div class="col-4 group text-right">
         <span>
             <span class="d-inline-flex">
-                <amount-field [amount]="groupDetail.closingBalance.amount" [currencySymbol]="false"
-                    [currencyCode]="false">
+                <amount-field
+                    [amount]="groupDetail.closingBalance.amount"
+                    [currencySymbol]="false"
+                    [currencyCode]="false"
+                >
                 </amount-field>
             </span>
-            {{groupDetail.closingBalance | recType}}
-
+            {{ groupDetail.closingBalance | recType }}
         </span>
     </div>
-    <div class="col-4  group text-right">
+    <div class="col-4 group text-right">
         <span>
             <span class="d-inline-flex">
-                <amount-field [amount]="groupDetail.forwardedBalance.amount" [currencySymbol]="false"
-                    [currencyCode]="false">
+                <amount-field
+                    [amount]="groupDetail.forwardedBalance.amount"
+                    [currencySymbol]="false"
+                    [currencyCode]="false"
+                >
                 </amount-field>
             </span>
-            {{groupDetail.forwardedBalance | recType}}
+            {{ groupDetail.forwardedBalance | recType }}
         </span>
     </div>
 </div>
-<cdk-virtual-scroll-viewport *ngIf="(groupDetail?.isOpen || search) && (groupDetail?.accounts | accountsFilter)?.length >= minimumViewportLimit" [itemSize]="35" minBufferPx="500" maxBufferPx="1000" class="trial-balance-viewport">
-    <ng-container *cdkVirtualFor="let account of (groupDetail?.accounts | accountsFilter);trackBy: trackByFn">
-        <ng-container *ngTemplateOutlet="templateSection; context: { $implicit: account}"></ng-container>
+<cdk-virtual-scroll-viewport
+    *ngIf="
+        (groupDetail?.isOpen || (search && !isExpandToggledDuringSearch)) &&
+        (groupDetail?.accounts | accountsFilter: !groupDetail?.isOpen && search)?.length >= minimumViewportLimit
+    "
+    [itemSize]="35"
+    minBufferPx="500"
+    maxBufferPx="1000"
+    class="trial-balance-viewport"
+>
+    <ng-container *cdkVirtualFor="let account of groupDetail?.accounts | accountsFilter; trackBy: trackByFn">
+        <ng-container *ngTemplateOutlet="templateSection; context: { $implicit: account }"></ng-container>
     </ng-container>
 </cdk-virtual-scroll-viewport>
-<ng-container *ngIf="(groupDetail?.isOpen || search) && (groupDetail?.accounts | accountsFilter)?.length < minimumViewportLimit">
-    <ng-container *ngFor="let account of (groupDetail?.accounts | accountsFilter);trackBy: trackByFn">
-        <ng-container *ngTemplateOutlet="templateSection; context: { $implicit: account}"></ng-container>
+<ng-container
+    *ngIf="
+        (groupDetail?.isOpen || (search && !isExpandToggledDuringSearch)) &&
+        (groupDetail?.accounts | accountsFilter)?.length < minimumViewportLimit
+    "
+>
+    <ng-container *ngFor="let account of groupDetail?.accounts | accountsFilter; trackBy: trackByFn">
+        <ng-container *ngTemplateOutlet="templateSection; context: { $implicit: account }"></ng-container>
     </ng-container>
 </ng-container>
 <ng-content></ng-content>
 <ng-template #templateSection let-account>
-    <section class="row-2 account pl-grid-row" [ngClass]="{'isHidden': !account.isVisible }">
+    <section class="row-2 account pl-grid-row" [ngClass]="{ 'isHidden': !account.isVisible }">
         <div class="row" (dblclick)="entryClicked(account)">
-            <div class="col-4  account" [ngStyle]="{'padding-left': (padding+20)+'px'}"
-                [innerHTML]="account.name | lowercase  | highlight:search"></div>
-            <div class="col-4  account text-right">
+            <div
+                class="col-4 account"
+                [ngStyle]="{ 'padding-left': padding + 20 + 'px' }"
+                [innerHTML]="account.name | lowercase | highlight: search"
+            ></div>
+            <div class="col-4 account text-right">
                 <span>
                     <span class="d-inline-flex">
-                        <amount-field [amount]="account.closingBalance.amount" [currencySymbol]="false"
-                            [currencyCode]="false">
+                        <amount-field
+                            [amount]="account.closingBalance.amount"
+                            [currencySymbol]="false"
+                            [currencyCode]="false"
+                        >
                         </amount-field>
                     </span>
-                    {{account.closingBalance | recType}}
+                    {{ account.closingBalance | recType }}
                 </span>
             </div>
             <div class="col-4 account text-right">
                 <span>
                     <span class="d-inline-flex">
-                        <amount-field [amount]="account.openingBalance.amount" [currencySymbol]="false"
-                            [currencyCode]="false">
+                        <amount-field
+                            [amount]="account.openingBalance.amount"
+                            [currencySymbol]="false"
+                            [currencyCode]="false"
+                        >
                         </amount-field>
                     </span>
-                    {{account.openingBalance | recType}}
+                    {{ account.openingBalance | recType }}
                 </span>
             </div>
         </div>

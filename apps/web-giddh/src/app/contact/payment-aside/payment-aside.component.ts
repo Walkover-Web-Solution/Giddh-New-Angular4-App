@@ -409,7 +409,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public selectBank(event: IOption): void {
         let loadPayorList = false;
         if (event) {
-            loadPayorList = (this.requestObjectToGetOTP.uniqueName !== event.value);
+            loadPayorList = (this.requestObjectToGetOTP?.uniqueName !== event.value);
             this.selectedBankUniqueName = event.value;
             this.isBankSelectedForBulkPayment = true;
             this.selectedBankName = event.label;
@@ -560,6 +560,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.isPayClicked = false;
         this.receivedOtp = null;
         this.timerOn = false;
+        this.otpReceiverNameMessage = '';
         clearTimeout(this.countDownTimerRef);
     }
 
@@ -587,7 +588,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
 
         if (this.timerOn) {
             this.timerOn = false;
-            this.receivedOtp = null;
             return;
         }
     }
@@ -688,6 +688,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             return;
         }
         this.isPayorRequired = false;
+        this.selectedBankUrn = '';
+        this.requestObjectToGetOTP.urn = '';
         this.forceClear$ = of({ status: true });
         this.isPayorListInProgress = true;
         this.settingsIntegrationService.getBankAccountPayorsList(this.selectedBankUniqueName, this.totalSelectedAccountAmount).pipe(take(1)).subscribe(response => {
@@ -704,9 +706,10 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
 
                 this.isPayorRequired = true;
             } else {
-                if(response?.body?.message) {
+                this.payorsList = [];
+                if(response?.message) {
                     this._toaster.clearAllToaster();
-                    this._toaster.errorToast(response?.body?.message);
+                    this._toaster.errorToast(response?.message);
                 }
             }
             this.isPayorListInProgress = false;
