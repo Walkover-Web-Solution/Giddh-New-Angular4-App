@@ -1662,7 +1662,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.searchService.searchAccountV2(requestObject).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     let activeAccountUniqueName: string;
-                    this.activeAccount$.pipe(take(1)).subscribe(account => activeAccountUniqueName = account.uniqueName);
+                    this.activeAccount$.pipe(take(1)).subscribe(account => activeAccountUniqueName = account?.uniqueName);
                     data.body.results = data.body.results.filter(account => account.uniqueName !== activeAccountUniqueName);
                     const searchResults = data.body.results.map(result => {
                         return {
