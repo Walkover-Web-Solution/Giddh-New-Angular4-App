@@ -1941,7 +1941,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         this.vm.isAdvanceReceipt = this.isAdvanceReceipt;
                         this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
 
-                        if (this.vm.selectedLedger.voucher && this.vm.selectedLedger.voucher.shortCode === 'rcpt' && this.isAdvanceReceipt) {
+                        if (this.vm.selectedLedger.voucher && this.vm.selectedLedger.voucher?.shortCode === 'rcpt' && this.isAdvanceReceipt) {
                             this.vm.selectedLedger.voucher.shortCode = 'advance-receipt';
                         }
                         this.currentVoucherLabel = this.generalService.getCurrentVoucherLabel(this.vm.selectedLedger?.voucher?.shortCode, this.commonLocaleData);
