@@ -1,47 +1,83 @@
-<ng-container appTranslate [file]="'new-old-invoices'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+<ng-container
+    appTranslate
+    [file]="'new-old-invoices'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="container-fluid" *ngIf="monthOptions?.length > 0">
         <div class="top-bar clearfix">
             <div class="form-inline">
-                <form #carried="ngForm" (ngSubmit)="go(carried)">
+                <form #carried="ngForm" (ngSubmit)="getSalesBifurcation()">
                     <div class="pull-left d-flex align-start select-fields">
                         <div class="form-group mr-r1 max-width-500 d-initial">
-                            <label>{{localeData?.select_year_label}}</label>
-                            <sh-select [placeholder]="localeData?.select_year_placeholder" [multiple]='false'
-                                name="selectedYear" [(ngModel)]="selectedYear" #SelectYear="ngModel"
-                                [options]="yearOptions" [fixedValue]="selectedYear" required>
+                            <label>{{ localeData?.select_year_label }}</label>
+                            <sh-select
+                                [placeholder]="localeData?.select_year_placeholder"
+                                [multiple]="false"
+                                name="selectedYear"
+                                [(ngModel)]="selectedYear"
+                                #SelectYear="ngModel"
+                                [options]="yearOptions"
+                                [fixedValue]="selectedYear"
+                                required
+                            >
                             </sh-select>
                         </div>
                         <div class="form-group mr-r1 max-width-500 d-initial">
-                            <label>{{localeData?.select_type_label}}</label>
-                            <sh-select [placeholder]="localeData?.select_type_placeholder" [multiple]='false'
-                                name="selectedType" [(ngModel)]="selectedType" #SelectType="ngModel"
-                                [options]="GetTypeOptions" required (selected)="ChangingValue($event)"></sh-select>
+                            <label>{{ localeData?.select_type_label }}</label>
+                            <sh-select
+                                [placeholder]="localeData?.select_type_placeholder"
+                                [multiple]="false"
+                                name="selectedType"
+                                [(ngModel)]="selectedType"
+                                #SelectType="ngModel"
+                                [options]="GetTypeOptions"
+                                required
+                                (selected)="resetData()"
+                            ></sh-select>
                             <div class="height-25px" *ngIf="SelectType.invalid">
-                                <div class="text-danger">{{localeData?.invalid_type}}</div>
+                                <div class="text-danger">{{ localeData?.invalid_type }}</div>
                             </div>
                         </div>
-                        <div class="form-group mr-r1 max-width-500  d-initial flex-column"
-                            *ngIf="selectedType==='month'">
-                            <label>{{localeData?.select_month_label}}</label>
-                            <sh-select [placeholder]="localeData?.select_month_placeholder" [multiple]='false'
-                                name="selectedmonth" [(ngModel)]="selectedmonth" #SelectMonth="ngModel"
-                                [options]="monthOptions" required [customSorting]="customMonthSorting"></sh-select>
+                        <div
+                            class="form-group mr-r1 max-width-500 d-initial flex-column"
+                            *ngIf="selectedType === 'month'"
+                        >
+                            <label>{{ localeData?.select_month_label }}</label>
+                            <sh-select
+                                [placeholder]="localeData?.select_month_placeholder"
+                                [multiple]="false"
+                                name="selectedmonth"
+                                [(ngModel)]="selectedmonth"
+                                #SelectMonth="ngModel"
+                                [options]="monthOptions"
+                                required
+                                [customSorting]="customMonthSorting"
+                            ></sh-select>
                             <div class="height-25px" *ngIf="SelectMonth.invalid">
-                                <div class="text-danger">{{localeData?.invalid_month}}</div>
+                                <div class="text-danger">{{ localeData?.invalid_month }}</div>
                             </div>
                         </div>
 
-                        <div class="form-group mr-r1 max-width-500  d-initial flex-column"
-                            *ngIf="selectedType==='quater'">
-                            <label>{{localeData?.select_quarter_label}}</label>
-                            <sh-select [placeholder]="localeData?.select_quarter_placeholder" [multiple]='false'
-                                name="selectedQuater" [(ngModel)]="selectedQuater" #SelectQuater="ngModel"
-                                [options]="quaterOptions" required>
+                        <div
+                            class="form-group mr-r1 max-width-500 d-initial flex-column"
+                            *ngIf="selectedType === 'quater'"
+                        >
+                            <label>{{ localeData?.select_quarter_label }}</label>
+                            <sh-select
+                                [placeholder]="localeData?.select_quarter_placeholder"
+                                [multiple]="false"
+                                name="selectedQuater"
+                                [(ngModel)]="selectedQuater"
+                                #SelectQuater="ngModel"
+                                [options]="quaterOptions"
+                                required
+                            >
                             </sh-select>
                             <div class="height-25px" *ngIf="SelectQuater.invalid">
-                                <div class="text-danger">{{localeData?.invalid_quarter}}</div>
+                                <div class="text-danger">{{ localeData?.invalid_quarter }}</div>
                             </div>
                         </div>
                         <div class="btn-group">
@@ -49,7 +85,7 @@
                                 <label class="empty-label d-block">&nbsp;</label>
                                 <div>
                                     <button class="btn btn-success" type="submit" [disabled]="carried.invalid">
-                                        {{commonLocaleData?.app_go}}
+                                        {{ commonLocaleData?.app_go }}
                                     </button>
                                 </div>
                             </div>
@@ -59,93 +95,102 @@
             </div>
         </div>
         <ng-container *ngIf="!isLoading">
-            <div class="d-flex" *ngIf="selectedType==='month'">
+            <div class="d-flex" *ngIf="selectedType === 'month'">
                 <div class="div-table">
                     <div class="head-row">
-                        <div class="div-cell">{{localeData?.sales_from}}</div>
-                        <div class="div-cell align-end">{{localeData?.clients}}</div>
-                        <div class="div-cell align-end">{{commonLocaleData?.app_amount}}</div>
-                        <div class="div-cell align-end">{{localeData?.no_invoices}}</div>
+                        <div class="div-cell">{{ localeData?.sales_from }}</div>
+                        <div class="div-cell align-end">{{ localeData?.clients }}</div>
+                        <div class="div-cell align-end">{{ commonLocaleData?.app_amount }}</div>
+                        <div class="div-cell align-end">{{ localeData?.no_invoices }}</div>
                     </div>
                     <div class="div-row">
-                        <div class="div-cell">{{columnName }} {{reportYear}}</div>
+                        <div class="div-cell">{{ columnName }} {{ reportYear }}</div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.totalSales.uniqueCount | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.totalSales.uniqueCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.totalSales.uniqueCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.totalSales.total | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.totalSales.total"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.totalSales.total"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.totalSales.invoiceCount | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.totalSales.invoiceCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.totalSales.invoiceCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="d-flex" *ngIf="selectedType==='month'">
+            <div class="d-flex" *ngIf="selectedType === 'month'">
                 <div class="div-table bg-gray-color">
                     <div>
-                        <h3 class="h3-heading">{{bifurcationClients}} </h3>
+                        <h3 class="h3-heading">{{ bifurcationClients }}</h3>
                     </div>
                     <div class="div-row mr-t3 mr-b3">
-                        <div class="div-cell font-16 strong">{{localeData?.from_new_clients}}</div>
+                        <div class="div-cell font-16 strong">{{ localeData?.from_new_clients }}</div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.newSales.uniqueCount | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.newSales.uniqueCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.newSales.uniqueCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.newSales.total | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.newSales.total"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.newSales.total"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.newSales.invoiceCount | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.newSales.invoiceCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.newSales.invoiceCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                     </div>
                     <div class="div-row mr-t3 mr-b3">
-                        <div class="div-cell font-16 strong">{{localeData?.from_old_clients}}</div>
+                        <div class="div-cell font-16 strong">{{ localeData?.from_old_clients }}</div>
                         <div class="div-cell align-end">
-                            <!-- {{clientTotal | giddhCurrency}} -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="clientTotal" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{crdTotal | giddhCurrency}} -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="crdTotal" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{invTotal | giddhCurrency}} -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="invTotal" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
@@ -153,467 +198,547 @@
                         </div>
                     </div>
                     <div class="div-row">
-                        <div class="div-cell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.month}}</div>
+                        <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[0]?.month }}</div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.uniqueCount | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.uniqueCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[0]?.uniqueCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.total | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.total"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[0]?.total"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.invoiceCount | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.invoiceCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
-                                </amount-field>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="div-row">
-                        <div class="div-cell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.month}}</div>
-                        <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.uniqueCount | giddhCurrency}} -->
-                            <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.uniqueCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
-                                </amount-field>
-                            </span>
-                        </div>
-                        <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.total | giddhCurrency}} -->
-                            <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.total"
-                                    [currencySymbol]="false" [currencyCode]="false">
-                                </amount-field>
-                            </span>
-                        </div>
-                        <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.invoiceCount | giddhCurrency}} -->
-                            <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.invoiceCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[0]?.invoiceCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                     </div>
                     <div class="div-row">
-                        <div class="div-cell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.month}}</div>
+                        <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[1]?.month }}</div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.uniqueCount | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.uniqueCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[1]?.uniqueCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.total | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.total"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[1]?.total"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.invoiceCount | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.invoiceCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[1]?.invoiceCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                     </div>
                     <div class="div-row">
-                        <div class="div-cell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[3]?.month}}</div>
+                        <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[2]?.month }}</div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[3]?.uniqueCount | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[3]?.uniqueCount "
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[2]?.uniqueCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[3]?.total | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[3]?.total"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[2]?.total"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[3]?.invoiceCount | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[3]?.invoiceCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[2]?.invoiceCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="div-row">
+                        <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[3]?.month }}</div>
+                        <div class="div-cell align-end">
+                            <span class="d-inline-flex">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[3]?.uniqueCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
+                            </span>
+                        </div>
+                        <div class="div-cell align-end">
+                            <span class="d-inline-flex">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[3]?.total"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
+                            </span>
+                        </div>
+                        <div class="div-cell align-end">
+                            <span class="d-inline-flex">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[3]?.invoiceCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                     </div>
                     <div class="div-row">
                         <div class="div-cell">
-                            {{(NewVsOldInvoicesData$ | async)?.carriedSales[4]?.month}}
+                            {{ newVsOldInvoicesData?.carriedSales[4]?.month }}
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[4]?.uniqueCount | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[4]?.uniqueCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[4]?.uniqueCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[4]?.total | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[4]?.total"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[4]?.total"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[4]?.invoiceCount | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[4]?.invoiceCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
-                                </amount-field>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="d-flex mr-t3" *ngIf="selectedType==='month'">
-                <div class="div-table">
-                    <div class="head-row">
-                        <div class="div-cell">{{localeData?.sales_from}}</div>
-                        <div class="div-cell align-end">{{localeData?.clients}}</div>
-                        <div class="div-cell align-end">{{commonLocaleData?.app_amount}}</div>
-                        <div class="div-cell align-end">{{localeData?.no_invoices}}</div>
-                    </div>
-                    <div class="div-row">
-                        <div class="div-cell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.month}} {{reportYear}}
-                        </div>
-                        <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.uniqueCount | giddhCurrency}} -->
-                            <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.uniqueCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
-                                </amount-field>
-                            </span>
-                        </div>
-                        <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.total | giddhCurrency}} -->
-                            <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.total"
-                                    [currencySymbol]="false" [currencyCode]="false">
-                                </amount-field>
-                            </span>
-                        </div>
-                        <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.invoiceCount | giddhCurrency}} -->
-                            <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.invoiceCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[4]?.invoiceCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="d-flex mr-t3" *ngIf="selectedType==='month'">
+            <div class="d-flex mr-t3" *ngIf="selectedType === 'month'">
                 <div class="div-table">
                     <div class="head-row">
-                        <div class="div-cell">{{localeData?.sales_from}}</div>
-                        <div class="div-cell align-end">{{localeData?.clients}}</div>
-                        <div class="div-cell align-end">{{commonLocaleData?.app_amount}}</div>
-                        <div class="div-cell align-end">{{localeData?.no_invoices}}</div>
+                        <div class="div-cell">{{ localeData?.sales_from }}</div>
+                        <div class="div-cell align-end">{{ localeData?.clients }}</div>
+                        <div class="div-cell align-end">{{ commonLocaleData?.app_amount }}</div>
+                        <div class="div-cell align-end">{{ localeData?.no_invoices }}</div>
                     </div>
                     <div class="div-row">
-                        <div class="div-cell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.month}} {{reportYear}}
-                        </div>
+                        <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[0]?.month }} {{ reportYear }}</div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.uniqueCount | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.uniqueCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[0]?.uniqueCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.total | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.total"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[0]?.total"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.invoiceCount | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.invoiceCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[0]?.invoiceCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="d-flex" *ngIf="selectedType==='quater'">
+            <div class="d-flex mr-t3" *ngIf="selectedType === 'month'">
                 <div class="div-table">
                     <div class="head-row">
-                        <div class="div-cell">{{localeData?.sales_from}}</div>
-                        <div class="div-cell align-end">{{localeData?.clients}}</div>
-                        <div class="div-cell align-end">{{commonLocaleData?.app_amount}}</div>
-                        <div class="div-cell align-end">{{localeData?.no_invoices}}</div>
+                        <div class="div-cell">{{ localeData?.sales_from }}</div>
+                        <div class="div-cell align-end">{{ localeData?.clients }}</div>
+                        <div class="div-cell align-end">{{ commonLocaleData?.app_amount }}</div>
+                        <div class="div-cell align-end">{{ localeData?.no_invoices }}</div>
                     </div>
                     <div class="div-row">
-                        <div class="div-cell">{{columnName }} {{reportYear}}</div>
+                        <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[1]?.month }} {{ reportYear }}</div>
                         <div class="div-cell align-end">
-                            <!-- {{clientAllTotal | giddhCurrency}} -->
+                            <span class="d-inline-flex">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[1]?.uniqueCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
+                            </span>
+                        </div>
+                        <div class="div-cell align-end">
+                            <span class="d-inline-flex">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[1]?.total"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
+                            </span>
+                        </div>
+                        <div class="div-cell align-end">
+                            <span class="d-inline-flex">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[1]?.invoiceCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex" *ngIf="selectedType === 'quater'">
+                <div class="div-table">
+                    <div class="head-row">
+                        <div class="div-cell">{{ localeData?.sales_from }}</div>
+                        <div class="div-cell align-end">{{ localeData?.clients }}</div>
+                        <div class="div-cell align-end">{{ commonLocaleData?.app_amount }}</div>
+                        <div class="div-cell align-end">{{ localeData?.no_invoices }}</div>
+                    </div>
+                    <div class="div-row">
+                        <div class="div-cell">{{ columnName }} {{ reportYear }}</div>
+                        <div class="div-cell align-end">
                             <span class="d-inline-flex">
                                 <amount-field [amount]="clientAllTotal" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{totalAmount | giddhCurrency}} -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="totalAmount" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{invoiceCountAll | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="invoiceCountAll" [currencySymbol]="false"
-                                    [currencyCode]="false">
+                                <amount-field
+                                    [amount]="invoiceCountAll"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="d-flex" *ngIf="selectedType==='quater'">
+            <div class="d-flex" *ngIf="selectedType === 'quater'">
                 <div class="div-table bg-gray-color">
                     <div>
-                        <h3 class="h3-heading">{{bifurcationClients}} </h3>
+                        <h3 class="h3-heading">{{ bifurcationClients }}</h3>
                     </div>
                     <div class="div-row mr-t3 mr-b3">
-                        <div class="div-cell font-16 strong">{{localeData?.from_new_clients}}</div>
+                        <div class="div-cell font-16 strong">{{ localeData?.from_new_clients }}</div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.newSales.uniqueCount | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.newSales.uniqueCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.newSales.uniqueCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.newSales.total | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.newSales.total"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.newSales.total"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.newSales.invoiceCount | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.newSales.invoiceCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.newSales.invoiceCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                     </div>
                     <div class="div-row mr-t3 mr-b3">
-                        <div class="div-cell font-16 strong">{{localeData?.from_old_clients}}</div>
+                        <div class="div-cell font-16 strong">{{ localeData?.from_old_clients }}</div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.totalSales.uniqueCount | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.totalSales.uniqueCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.totalSales.uniqueCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.totalSales.total | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.totalSales.total"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.totalSales.total"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.totalSales.invoiceCount | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.totalSales.invoiceCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
-                                </amount-field>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="div-row">
-                        <div class="div-cell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.month}}</div>
-                        <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.uniqueCount | giddhCurrency}} -->
-                            <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.uniqueCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
-                                </amount-field>
-                            </span>
-                        </div>
-                        <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.total | giddhCurrency}} -->
-                            <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.total"
-                                    [currencySymbol]="false" [currencyCode]="false">
-                                </amount-field>
-                            </span>
-                        </div>
-                        <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.invoiceCount | giddhCurrency}} -->
-                            <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.invoiceCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.totalSales.invoiceCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                     </div>
                     <div class="div-row">
-                        <div class="div-cell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.month}}</div>
+                        <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[0]?.month }}</div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.uniqueCount | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.uniqueCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[0]?.uniqueCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.total | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.total"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[0]?.total"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.invoiceCount | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.invoiceCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[0]?.invoiceCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                     </div>
                     <div class="div-row">
-                        <div class="div-cell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.month}}</div>
+                        <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[1]?.month }}</div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.uniqueCount | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.uniqueCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[1]?.uniqueCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.total | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.total"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[1]?.total"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.invoiceCount | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[2]?.invoiceCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[1]?.invoiceCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="div-row">
+                        <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[2]?.month }}</div>
+                        <div class="div-cell align-end">
+                            <span class="d-inline-flex">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[2]?.uniqueCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
+                            </span>
+                        </div>
+                        <div class="div-cell align-end">
+                            <span class="d-inline-flex">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[2]?.total"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
+                            </span>
+                        </div>
+                        <div class="div-cell align-end">
+                            <span class="d-inline-flex">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[2]?.invoiceCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="d-flex mr-t3" *ngIf="selectedType==='quater'">
+            <div class="d-flex mr-t3" *ngIf="selectedType === 'quater'">
                 <div class="div-table">
                     <div class="head-row">
-                        <div class="div-cell">{{localeData?.sales_from}}</div>
-                        <div class="div-cell align-end">{{localeData?.clients}}</div>
-                        <div class="div-cell align-end">{{commonLocaleData?.app_amount}}</div>
-                        <div class="div-cell align-end">{{localeData?.no_invoices}}</div>
+                        <div class="div-cell">{{ localeData?.sales_from }}</div>
+                        <div class="div-cell align-end">{{ localeData?.clients }}</div>
+                        <div class="div-cell align-end">{{ commonLocaleData?.app_amount }}</div>
+                        <div class="div-cell align-end">{{ localeData?.no_invoices }}</div>
                     </div>
                     <div class="div-row">
-                        <div class="div-cell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.month}} {{reportYear}}
-                        </div>
+                        <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[0]?.month }} {{ reportYear }}</div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.uniqueCount | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.uniqueCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[0]?.uniqueCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.total | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.total"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[0]?.total"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.invoiceCount | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.invoiceCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[0]?.invoiceCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="d-flex mr-t3" *ngIf="selectedType==='quater'">
+            <div class="d-flex mr-t3" *ngIf="selectedType === 'quater'">
                 <div class="div-table">
                     <div class="head-row">
-                        <div class="div-cell">{{localeData?.sales_from}}</div>
-                        <div class="div-cell align-end">{{localeData?.clients}}</div>
-                        <div class="div-cell align-end">{{commonLocaleData?.app_amount}}</div>
-                        <div class="div-cell align-end">{{localeData?.no_invoices}}</div>
+                        <div class="div-cell">{{ localeData?.sales_from }}</div>
+                        <div class="div-cell align-end">{{ localeData?.clients }}</div>
+                        <div class="div-cell align-end">{{ commonLocaleData?.app_amount }}</div>
+                        <div class="div-cell align-end">{{ localeData?.no_invoices }}</div>
                     </div>
                     <div class="div-row">
-                        <div class="div-cell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.month}} {{reportYear}}
-                        </div>
+                        <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[1]?.month }} {{ reportYear }}</div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.uniqueCount | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.uniqueCount"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[1]?.uniqueCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.total | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.total"
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[1]?.total"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.invoiceCount | giddhCurrency}} -->
                             <span class="d-inline-flex">
-                                <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.invoiceCount "
-                                    [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.carriedSales[1]?.invoiceCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
