@@ -629,9 +629,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public selectedState(gstForm: FormGroup, event) {
-        if (gstForm && event.label) {
-            gstForm.get('stateCode')?.patchValue(event.value);
-            gstForm.get('state').get('code')?.patchValue(event.value);
+        if (gstForm && event?.label) {
+            gstForm.get('stateCode')?.patchValue(event?.value);
+            gstForm.get('state').get('code')?.patchValue(event?.value);
         }
 
     }
@@ -762,7 +762,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
 
             if (!isValid) {
-                this._toaster.errorToast('Invalid ' + this.formFields['taxName'].label);
+                this._toaster.errorToast('Invalid ' + this.formFields['taxName']?.label);
                 ele.classList.add('error-box');
                 this.isGstValid$ = observableOf(false);
             } else {
