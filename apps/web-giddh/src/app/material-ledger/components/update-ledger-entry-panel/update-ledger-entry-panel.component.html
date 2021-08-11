@@ -118,7 +118,10 @@
                                     "
                                 >
                                     <ng-container *ngIf="txn.type === 'DEBIT'">
-                                        <td class="col-3" [attr.data-title]="commonLocaleData?.app_date">
+                                        <td
+                                            class="col-3 d-flex align-items-center"
+                                            [attr.data-title]="commonLocaleData?.app_date"
+                                        >
                                             <giddh-datepicker
                                                 [showToggleIcon]="false"
                                                 [disabled]="
@@ -139,7 +142,13 @@
                                             [ngClass]="{
                                                 'other-account-entry': txn.particular.uniqueName === 'others'
                                             }"
-                                            class="col-5 position-relative select2-parent select2-ledger"
+                                            class="
+                                                col-5
+                                                position-relative
+                                                select2-parent select2-ledger
+                                                d-flex
+                                                align-items-center
+                                            "
                                         >
                                             <ng-template [ngIf]="!txn.isDiscount">
                                                 <div class="d-flex update-ledger-account">
@@ -286,7 +295,10 @@
                                             </span>
                                         </td>
 
-                                        <td class="col-4 text-right" [attr.data-title]="commonLocaleData?.app_amount">
+                                        <td
+                                            class="col-4 text-right d-flex align-items-center"
+                                            [attr.data-title]="commonLocaleData?.app_amount"
+                                        >
                                             <input
                                                 matInput
                                                 [disabled]="
@@ -406,7 +418,10 @@
                                     class="credit-blank-row row"
                                 >
                                     <ng-container *ngIf="txn.type == 'CREDIT'">
-                                        <td [attr.data-title]="commonLocaleData?.app_date" class="col-3">
+                                        <td
+                                            [attr.data-title]="commonLocaleData?.app_date"
+                                            class="col-3 d-flex align-items-center"
+                                        >
                                             <giddh-datepicker
                                                 [showToggleIcon]="false"
                                                 [disabled]="
@@ -423,7 +438,13 @@
                                         <td
                                             [attr.data-title]="commonLocaleData?.app_particular"
                                             [id]="'credit-id-' + i"
-                                            class="position-relative col-5 select2-parent select2-ledger"
+                                            class="
+                                                position-relative
+                                                col-5
+                                                select2-parent select2-ledger
+                                                d-flex
+                                                align-items-center
+                                            "
                                             [ngClass]="{
                                                 'other-account-entry': txn.particular.uniqueName === 'others'
                                             }"
@@ -576,7 +597,10 @@
                                             </span>
                                         </td>
 
-                                        <td [attr.data-title]="commonLocaleData?.app_amount" class="col-4 text-right">
+                                        <td
+                                            [attr.data-title]="commonLocaleData?.app_amount"
+                                            class="col-4 text-right d-flex align-items-center"
+                                        >
                                             <input
                                                 matInput
                                                 [disabled]="
@@ -1025,7 +1049,7 @@
                                                 currentOrganizationType === 'COMPANY' &&
                                                 branches?.length > 1
                                             "
-                                            (change)="toggleOtherTaxesAsideMenu(vm, asideMenuOtherTaxes)"
+                                            (change)="toggleOtherTaxesAsideMenu(asideMenuOtherTaxes)"
                                             >{{ localeData?.other_tax }}</mat-checkbox
                                         >
                                     </div>
@@ -1039,7 +1063,7 @@
                                                 (click)="
                                                     (currentOrganizationType === 'COMPANY' && branches?.length === 1) ||
                                                     currentOrganizationType === 'BRANCH'
-                                                        ? toggleOtherTaxesAsideMenu(vm, asideMenuOtherTaxes)
+                                                        ? toggleOtherTaxesAsideMenu(asideMenuOtherTaxes)
                                                         : ''
                                                 "
                                             >
@@ -1319,7 +1343,7 @@
                         <table class="width-100">
                             <tbody>
                                 <tr>
-                                    <td class="primary-color" (click)="getInvoiveLists(); toggleMoreDetail()">
+                                    <td class="primary-color" (click)="getInvoiceLists(); toggleMoreDetail()">
                                         <i
                                             class="cp collapse-icons"
                                             [ngClass]="{ 'icon-minus': showAdvanced, 'icon-plus': !showAdvanced }"
@@ -1406,11 +1430,7 @@
                                             <input
                                                 matInput
                                                 *ngIf="vm.selectedLedger.voucher?.shortCode !== 'sal'"
-                                                [disabled]="
-                                                    !isPettyCash &&
-                                                    currentOrganizationType === 'COMPANY' &&
-                                                    branches?.length > 1
-                                                "
+                                                [disabled]=""
                                                 id="update-ledger-invoice-number"
                                                 type="text"
                                                 [placeholder]="commonLocaleData?.app_invoice_no"
@@ -1627,7 +1647,7 @@
                                             <label class="default-color">{{ localeData?.assign_tag }}</label>
                                             <sh-select
                                                 id="update-ledger-assign-tag"
-                                                [options]="tags$ | async"
+                                                [options]="tags"
                                                 [isFilterEnabled]="true"
                                                 [class.disabled-ledger]="
                                                     !isPettyCash &&

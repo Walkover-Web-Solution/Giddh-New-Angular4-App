@@ -37,7 +37,7 @@ export class LedgerService {
     /**
      * get bank transactions for a account
      */
-    public GetBankTranscationsForLedger(getRequest: any): Observable<BaseResponse<any, any>> {
+    public GetBankTransactionsForLedger(getRequest: any): Observable<BaseResponse<any, any>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
         let url = this.config.apiUrl + LEDGER_API.GET_BANK_TRANSACTIONS;

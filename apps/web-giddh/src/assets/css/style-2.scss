@@ -1408,6 +1408,18 @@ input:-moz-placeholder {
     box-shadow: none;
 }
 
+.p-0 {
+    padding: 0 !important;
+}
+
+.pl-0 {
+    padding-left: 0 !important;
+}
+
+.pr-0 {
+    padding-left: 0 !important;
+}
+
 .sidebar {
     background: $whisper;
 }
@@ -4568,8 +4580,8 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .modal-header > .close {
     position: absolute;
     right: 20px;
-    top: 4px;
-    line-height: 48px;
+    top: 10px;
+    line-height: 33px;
     color: $white;
     opacity: 1;
     font-weight: 100;
@@ -7878,84 +7890,86 @@ ul.dropdown-menu.action-dropdown {
 }
 
 /*material datepicker css starts*/
-.recurring-form .mat-form-field {
-    max-width: 170px;
-}
-.collapse-pane .mat-form-field {
-    min-width: 100%;
-    max-width: 100%;
-}
-.mat-form-field {
-    min-width: 170px;
-    width: 100%;
-    display: inline-block;
-}
-.mat-form-field-suffix {
-    right: 0;
-    position: absolute !important;
-}
-.mat-form-field-appearance-fill .mat-form-field-flex {
-    height: 36px;
-    background-color: $white;
-    padding: 0;
-}
-.mat-form-field-appearance-fill .mat-form-field-underline::before {
-    display: none !important;
-    opacity: 0 !important;
-}
-.mat-form-field-appearance-fill .mat-form-field-infix {
-    padding: 0;
-    margin: 0;
-    border: 0;
-}
-.mat-form-field-appearance-fill .mat-form-field-flex {
-    padding: 0 !important;
-    display: flex !important;
-    align-items: center !important;
-}
-.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button,
-.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
-    width: 26px;
-    height: 26px;
-}
-.mat-form-field-appearance-fill:not(.mat-form-field-disabled)
-    .mat-form-field-flex:hover
-    ~ .mat-form-field-underline
-    .mat-form-field-ripple {
-    opacity: 0 !important;
-}
-input.mat-input-element {
-    margin-top: 0;
-    padding: 9px 6px;
-}
-.mat-form-field-wrapper {
-    padding-bottom: 0;
-}
-.mat-focused .mat-form-field-flex {
-    border: 1px solid $chetwode-blue !important;
-}
-.mat-form-field-underline {
-    display: none !important;
-}
-.mat-calendar-body-selected {
-    background-color: $midnight-blue;
-}
-.giddh-limit {
-    &.single-line-clamp {
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+ngx-daterangepicker-material {
+    .recurring-form .mat-form-field {
+        max-width: 170px;
     }
-}
-.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button,
-.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
-    width: 36px !important;
-    height: 36px !important;
-    margin-right: 0;
-    display: flex !important;
-    justify-content: center;
-    align-items: center;
+    .collapse-pane .mat-form-field {
+        min-width: 100%;
+        max-width: 100%;
+    }
+    .mat-form-field {
+        min-width: 170px;
+        width: 100%;
+        display: inline-block;
+    }
+    .mat-form-field-suffix {
+        right: 0;
+        position: absolute !important;
+    }
+    .mat-form-field-appearance-fill .mat-form-field-flex {
+        height: 36px;
+        background-color: $white;
+        padding: 0;
+    }
+    .mat-form-field-appearance-fill .mat-form-field-underline::before {
+        display: none !important;
+        opacity: 0 !important;
+    }
+    .mat-form-field-appearance-fill .mat-form-field-infix {
+        padding: 0;
+        margin: 0;
+        border: 0;
+    }
+    .mat-form-field-appearance-fill .mat-form-field-flex {
+        padding: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+    .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button,
+    .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
+        width: 26px;
+        height: 26px;
+    }
+    .mat-form-field-appearance-fill:not(.mat-form-field-disabled)
+        .mat-form-field-flex:hover
+        ~ .mat-form-field-underline
+        .mat-form-field-ripple {
+        opacity: 0 !important;
+    }
+    input.mat-input-element {
+        margin-top: 0;
+        padding: 9px 6px;
+    }
+    .mat-form-field-wrapper {
+        padding-bottom: 0;
+    }
+    .mat-focused .mat-form-field-flex {
+        border: 1px solid $chetwode-blue !important;
+    }
+    .mat-form-field-underline {
+        display: none !important;
+    }
+    .mat-calendar-body-selected {
+        background-color: $midnight-blue;
+    }
+    .giddh-limit {
+        &.single-line-clamp {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    }
+    .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button,
+    .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
+        width: 36px !important;
+        height: 36px !important;
+        margin-right: 0;
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+    }
 }
 /*material datepicker css end*/
 .master-custom-tabs.custom-tabs {
@@ -8376,6 +8390,7 @@ body.update-scroll-hidden {
         display: none;
     }
 }
+
 /* responsive  starts here*/
 
 @media (max-width: 1440px) {

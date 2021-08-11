@@ -24,7 +24,6 @@
 #ledger-transaction-left-list,
 #ledger-transaction-right-list {
     mat-grid-tile {
-        padding: 0 !important;
         .d-flex.align-item-center {
             align-items: stretch !important;
         }
@@ -34,7 +33,6 @@
             min-height: 49px;
             height: 49px;
             border: 0 !important;
-            padding: 1px !important;
         }
         mat-checkbox {
             min-height: 20px;
@@ -47,7 +45,7 @@
     border-bottom: 1px solid $gainsboro;
 }
 #ledger-transaction-right-list,
-#ledger-transaction-left-list{
+#ledger-transaction-left-list {
     border-bottom: 1px solid $gainsboro;
 }
 .form-control,
@@ -58,9 +56,9 @@ input {
     display: flex;
     justify-content: space-between;
 }
-.ledg-head mat-grid-list mat-grid-tile,
-.ledg-head mat-grid-list mat-grid-tile .select2-container {
-    padding: 8px 10px !important;
+.ledg-head .mat-grid-list .mat-grid-tile,
+.ledg-head .mat-grid-list .mat-grid-tile .select2-container {
+    padding: 8px 10px;
     border-bottom: 1px solid $gainsboro;
     border-right: 1px solid $gainsboro;
     font-size: 13px;
@@ -77,7 +75,7 @@ input {
         padding-bottom: 5px !important;
     }
 }
-.transaction-mapped-table mat-grid-tile {
+.transaction-mapped-table .mat-grid-tile {
     padding: 10px 15px !important;
     border-bottom: 1px solid $gainsboro !important;
 }
@@ -212,7 +210,6 @@ table.ledger-footer-1 td[class*="col-"] {
     border-bottom: none !important;
     span {
         position: relative;
-        right: 15px;
     }
 }
 .ledger-head mat-grid-tile:first-child {
@@ -331,12 +328,6 @@ table.ledger-footer-1 td[class*="col-"] {
     display: flex;
     justify-content: flex-end;
 }
-.d-flex {
-    display: flex;
-}
-.d-none {
-    display: none;
-}
 .date-step {
     padding: 0 !important;
     font-size: 13px;
@@ -372,10 +363,15 @@ sh-select:focus {
     color: $nobel;
     padding-left: 5px;
 }
-.ledger-book .left-col-new,
-.ledger-book .right-col-new {
-    background: $white;
-    padding: 0 0px 350px;
+.ledger-book {
+    .left-col-new {
+        background: $white;
+        padding: 0 0px 350px;
+    }
+    .right-col-new {
+        background: $white;
+        padding: 0 0px 350px;
+    }
 }
 .left-col-new mat-grid-list mat-grid-title:last-child,
 .left-col-new mat-grid-list mat-grid-title:last-child {
@@ -564,9 +560,6 @@ sh-select:focus {
 .ledger-account-label {
     align-items: center;
     flex: auto;
-    span {
-        padding-left: 10px;
-    }
     sh-select {
         width: 100%;
     }
@@ -616,6 +609,10 @@ sh-select:focus {
 
 .padding-ledger {
     padding: 1px 0 !important;
+}
+
+.mat-raised-button {
+    min-width: 36px;
 }
 
 /*mobile ledger view css*/
