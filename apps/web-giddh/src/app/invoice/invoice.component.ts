@@ -86,7 +86,11 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.activeTab = (params) ? params.voucherType : "";
                 }
             });
-        this.voucherApiVersion = this.generalService.voucherApiVersion;
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.voucherApiVersion = this.generalService.voucherApiVersion;
+            }
+        });
     }
 
     public voucherChanged(tab: string) {
