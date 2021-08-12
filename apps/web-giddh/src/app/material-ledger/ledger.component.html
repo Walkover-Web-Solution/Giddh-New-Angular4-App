@@ -752,7 +752,7 @@
                                                                 class="
                                                                     no-right-border
                                                                     position-relative
-                                                                    top-position-fix
+                                                                    top-position-fix-{{ i }}
                                                                 "
                                                                 colspan="1"
                                                             >
@@ -842,14 +842,14 @@
                                                     <ng-container
                                                         *ngFor="let txn of item.transactions; trackBy: trackById"
                                                     >
-                                                        <mat-grid-tile colspan="1">
-                                                            <div
-                                                                class="ledger-row"
-                                                                [ngClass]="{
-                                                                    'compound-entry':
-                                                                        txn.id === lc.selectedBankTxnUniqueName
-                                                                }"
-                                                            >
+                                                        <div
+                                                            class="ledger-row"
+                                                            [ngClass]="{
+                                                                'compound-entry':
+                                                                    txn.id === lc.selectedBankTxnUniqueName
+                                                            }"
+                                                        >
+                                                            <mat-grid-tile colspan="1">
                                                                 <div class="d-flex align-items-center">
                                                                     <span class="pd-l05 checkbox-span">
                                                                         <mat-checkbox
@@ -876,128 +876,148 @@
                                                                         ></giddh-datepicker>
                                                                     </span>
                                                                 </div>
-                                                            </div>
-                                                        </mat-grid-tile>
-                                                        <mat-grid-tile colspan="2" class="pl-0 pr-0">
-                                                            <div
-                                                                class="w-100"
-                                                                (click)="
-                                                                    txn.showDropdown = true;
-                                                                    showBankLedgerPopup(txn, item)
-                                                                "
-                                                            >
-                                                                <span
-                                                                    [ngClass]="{
-                                                                        'account-placeholder': true,
-                                                                        'account-placeholder-text':
-                                                                            txn.selectedAccount &&
-                                                                            txn.selectedAccount.name
-                                                                    }"
-                                                                    *ngIf="!txn.showDropdown"
-                                                                    >{{
-                                                                        txn.selectedAccount
-                                                                            ? txn.selectedAccount.name
-                                                                            : commonLocaleData?.app_select_accounts
-                                                                    }}</span
+                                                            </mat-grid-tile>
+                                                            <mat-grid-tile colspan="2" class="pl-0 pr-0">
+                                                                <div
+                                                                    class="w-100"
+                                                                    (click)="
+                                                                        txn.showDropdown = true;
+                                                                        showBankLedgerPopup(txn, item)
+                                                                    "
                                                                 >
-                                                                <sh-select
-                                                                    *ngIf="txn.showDropdown"
-                                                                    class="transaction-list-sh-select"
-                                                                    #creditShSelect
-                                                                    (viewInitEvent)="creditShSelect?.show()"
-                                                                    [options]="searchResults"
-                                                                    [(ngModel)]="txn.particular"
-                                                                    [disabled]="
-                                                                        currentOrganizationType === 'COMPANY' &&
-                                                                        currentCompanyBranches?.length > 2
-                                                                    "
-                                                                    (selected)="selectAccount($event, txn)"
-                                                                    [isPaginationEnabled]="true"
-                                                                    (scrollEnd)="handleScrollEnd()"
-                                                                    (dynamicSearchedQuery)="
-                                                                        onSearchQueryChanged($event)
-                                                                    "
-                                                                    [notFoundMsg]="noResultsFoundLabel"
-                                                                    [showSearchSuggestion]="
-                                                                        !(
+                                                                    <span
+                                                                        [ngClass]="{
+                                                                            'account-placeholder': true,
+                                                                            'account-placeholder-text':
+                                                                                txn.selectedAccount &&
+                                                                                txn.selectedAccount.name
+                                                                        }"
+                                                                        *ngIf="!txn.showDropdown"
+                                                                        >{{
+                                                                            txn.selectedAccount
+                                                                                ? txn.selectedAccount.name
+                                                                                : commonLocaleData?.app_select_accounts
+                                                                        }}</span
+                                                                    >
+                                                                    <sh-select
+                                                                        *ngIf="txn.showDropdown"
+                                                                        class="transaction-list-sh-select"
+                                                                        #creditShSelect
+                                                                        (viewInitEvent)="creditShSelect?.show()"
+                                                                        [options]="searchResults"
+                                                                        [(ngModel)]="txn.particular"
+                                                                        [disabled]="
                                                                             currentOrganizationType === 'COMPANY' &&
                                                                             currentCompanyBranches?.length > 2
-                                                                        )
-                                                                    "
-                                                                    [readonlyInput]="
-                                                                        currentOrganizationType === 'COMPANY' &&
-                                                                        currentCompanyBranches?.length > 2
-                                                                    "
-                                                                    [enableDynamicSearch]="true"
-                                                                    [placeholder]="
-                                                                        commonLocaleData?.app_select_accounts
-                                                                    "
-                                                                    [notFoundLink]="true"
-                                                                    (noResultsClicked)="toggleAsidePane()"
-                                                                    [multiple]="false"
-                                                                    [ItemHeight]="67"
-                                                                    [showClear]="false"
-                                                                    [useInBuiltFilterForFlattenAc]="true"
-                                                                >
-                                                                    <ng-template #optionTemplate let-option="option">
-                                                                        <ng-container *ngIf="!option.additional?.stock">
-                                                                            <a
-                                                                                href="javascript:void(0)"
-                                                                                class="list-item"
+                                                                        "
+                                                                        (selected)="selectAccount($event, txn)"
+                                                                        [isPaginationEnabled]="true"
+                                                                        (scrollEnd)="handleScrollEnd()"
+                                                                        (dynamicSearchedQuery)="
+                                                                            onSearchQueryChanged($event)
+                                                                        "
+                                                                        [notFoundMsg]="noResultsFoundLabel"
+                                                                        [showSearchSuggestion]="
+                                                                            !(
+                                                                                currentOrganizationType === 'COMPANY' &&
+                                                                                currentCompanyBranches?.length > 2
+                                                                            )
+                                                                        "
+                                                                        [readonlyInput]="
+                                                                            currentOrganizationType === 'COMPANY' &&
+                                                                            currentCompanyBranches?.length > 2
+                                                                        "
+                                                                        [enableDynamicSearch]="true"
+                                                                        [placeholder]="
+                                                                            commonLocaleData?.app_select_accounts
+                                                                        "
+                                                                        [notFoundLink]="true"
+                                                                        (noResultsClicked)="toggleAsidePane()"
+                                                                        [multiple]="false"
+                                                                        [ItemHeight]="67"
+                                                                        [showClear]="false"
+                                                                        [useInBuiltFilterForFlattenAc]="true"
+                                                                    >
+                                                                        <ng-template
+                                                                            #optionTemplate
+                                                                            let-option="option"
+                                                                        >
+                                                                            <ng-container
+                                                                                *ngIf="!option.additional?.stock"
                                                                             >
-                                                                                <div class="item">
-                                                                                    {{ option.label }}
-                                                                                </div>
-                                                                                <div class="item-unique">
-                                                                                    {{ option.additional?.uniqueName }}
-                                                                                </div>
-                                                                            </a>
-                                                                        </ng-container>
-                                                                        <ng-container *ngIf="option.additional?.stock">
-                                                                            <a
-                                                                                href="javascript:void(0)"
-                                                                                class="list-item"
+                                                                                <a
+                                                                                    href="javascript:void(0)"
+                                                                                    class="list-item"
+                                                                                >
+                                                                                    <div class="item">
+                                                                                        {{ option.label }}
+                                                                                    </div>
+                                                                                    <div class="item-unique">
+                                                                                        {{
+                                                                                            option.additional
+                                                                                                ?.uniqueName
+                                                                                        }}
+                                                                                    </div>
+                                                                                </a>
+                                                                            </ng-container>
+                                                                            <ng-container
+                                                                                *ngIf="option.additional?.stock"
                                                                             >
-                                                                                <div class="item">
-                                                                                    {{ option.label }}
-                                                                                </div>
-                                                                                <div class="item-unique">
-                                                                                    {{ option.additional?.uniqueName }}
-                                                                                </div>
-                                                                                <div class="item-stock">
-                                                                                    {{ commonLocaleData?.app_stock }}:
-                                                                                    {{ option.additional?.stock.name }}
-                                                                                </div>
-                                                                            </a>
-                                                                        </ng-container>
-                                                                    </ng-template>
-                                                                </sh-select>
-                                                                <ul
-                                                                    class="no-result-template"
-                                                                    *ngIf="lc.noAccountChosenForNewEntry"
-                                                                >
-                                                                    <li>{{ localeData?.create_account }}</li>
-                                                                </ul>
-                                                            </div>
-                                                        </mat-grid-tile>
-                                                        <mat-grid-tile
-                                                            class="no-right-border position-relative top-position-fix"
-                                                            colspan="1"
-                                                        >
-                                                            <input
-                                                                matInput
-                                                                class="text-right form-control p-0"
-                                                                type="text"
-                                                                [id]="'enter-amount-cr-' + i"
-                                                                decimalDigitsDirective
-                                                                [DecimalPlaces]="2"
-                                                                [(ngModel)]="txn.amount"
-                                                                (input)="needToReCalculate.next(true)"
-                                                                (click)="blankLedgerAmountClick()"
-                                                                *ngIf="txn.type === 'CREDIT'"
-                                                                (click)="showBankLedgerPopup(txn, item)"
-                                                            />
-                                                        </mat-grid-tile>
+                                                                                <a
+                                                                                    href="javascript:void(0)"
+                                                                                    class="list-item"
+                                                                                >
+                                                                                    <div class="item">
+                                                                                        {{ option.label }}
+                                                                                    </div>
+                                                                                    <div class="item-unique">
+                                                                                        {{
+                                                                                            option.additional
+                                                                                                ?.uniqueName
+                                                                                        }}
+                                                                                    </div>
+                                                                                    <div class="item-stock">
+                                                                                        {{
+                                                                                            commonLocaleData?.app_stock
+                                                                                        }}:
+                                                                                        {{
+                                                                                            option.additional?.stock
+                                                                                                .name
+                                                                                        }}
+                                                                                    </div>
+                                                                                </a>
+                                                                            </ng-container>
+                                                                        </ng-template>
+                                                                    </sh-select>
+                                                                    <ul
+                                                                        class="no-result-template"
+                                                                        *ngIf="lc.noAccountChosenForNewEntry"
+                                                                    >
+                                                                        <li>{{ localeData?.create_account }}</li>
+                                                                    </ul>
+                                                                </div>
+                                                            </mat-grid-tile>
+                                                            <mat-grid-tile
+                                                                class="no-right-border position-relative top-position-fix-{{
+                                                                    i
+                                                                }}"
+                                                                colspan="1"
+                                                            >
+                                                                <input
+                                                                    matInput
+                                                                    class="text-right form-control p-0"
+                                                                    type="text"
+                                                                    [id]="'enter-amount-cr-' + i"
+                                                                    decimalDigitsDirective
+                                                                    [DecimalPlaces]="2"
+                                                                    [(ngModel)]="txn.amount"
+                                                                    (input)="needToReCalculate.next(true)"
+                                                                    (click)="blankLedgerAmountClick()"
+                                                                    *ngIf="txn.type === 'CREDIT'"
+                                                                    (click)="showBankLedgerPopup(txn, item)"
+                                                                />
+                                                            </mat-grid-tile>
+                                                        </div>
                                                         <div
                                                             class="pos-abs entry-modal"
                                                             *ngIf="
