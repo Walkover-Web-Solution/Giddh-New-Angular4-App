@@ -36,5 +36,6 @@
 		"enter_url": "कृपया URL दर्ज करें।"
 	},
 	"delete_tax": "क्या आप वाकई [SELECTED_TAX] हटाना चाहते हैं?",
-	"update_trigger": "क्या आप वाकई [TRIGGER_NAME] को अपडेट करना चाहते हैं?"
+	"update_trigger": "क्या आप वाकई [TRIGGER_NAME] को अपडेट करना चाहते हैं?",
+    "validation": "मान्यकरण"
 }

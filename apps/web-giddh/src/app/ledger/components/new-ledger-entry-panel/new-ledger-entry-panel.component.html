@@ -437,7 +437,7 @@
                                 <td>
                                     <label class="default-color">{{localeData?.assign_tag}}</label>
                                     <sh-select [disabled]="isReadOnly" [class.disabled-ledger]="isReadOnly"
-                                        id="ledger-assign-tag" [options]="tags$ | async" [multiple]="true"
+                                        id="ledger-assign-tag" [options]="tags" [multiple]="true"
                                         [isFilterEnabled]="true" [placeholder]="commonLocaleData?.app_select_tag"
                                         [(ngModel)]="blankLedger.tagNames" [ItemHeight]="'auto'"></sh-select>
                                 </td>
