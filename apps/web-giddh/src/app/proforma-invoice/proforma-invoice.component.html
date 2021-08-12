@@ -3329,7 +3329,7 @@
                                             </li>
 
                                             <li role="menuitem"
-                                                (click)="doAction(4);triggerSubmitInvoiceForm(invoiceForm, false)">
+                                                (click)="doAction(4);triggerSubmitInvoiceForm(invoiceForm, false)" *ngIf="voucherApiVersion !== 2">
                                                 <a class="dropdown-item cp">{{localeData?.generate_recurring}}</a>
                                             </li>
                                         </ul>
@@ -3521,7 +3521,7 @@
             <div class="modal-content">
                 <advance-receipt-adjustment-component *ngIf="showAdvanceReceiptAdjust" #advanceReceiptComponent [adjustedVoucherType]="selectedVoucherType"
                     [isUpdateMode]="isUpdateMode" [depositAmount]="depositAmount" [invoiceFormDetails]="invFormData"
-                    [isVoucherModule]="true" [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
+                    [isVoucherModule]="true && voucherApiVersion !== 2" [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
                     (closeModelEvent)="closeAdvanceReceiptModal()" (submitClicked)="getAdvanceReceiptAdjustData($event)"
                     [voucherForAdjustment]="voucherForAdjustment">
                 </advance-receipt-adjustment-component>

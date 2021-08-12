@@ -233,6 +233,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public eInvoiceCancellationReasonOptions = [];
     /** True if user has voucher list permission */
     public hasVoucherListPermissions: boolean = true;
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private store: Store<AppState>,
@@ -298,7 +300,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.advanceSearchFilter.count = PAGINATION_LIMIT;
         this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a && a.accountUniqueName && a.purchaseRecordUniqueName) {
-                const apiCallObservable = this.generalService.voucherApiVersion === 2 ?
+                const apiCallObservable = this.voucherApiVersion === 2 ?
                     this._receiptServices.getVoucherDetailsV4(a.accountUniqueName, {
                         invoiceNumber: '',
                         voucherType: VoucherTypeEnum.purchase,
@@ -554,6 +556,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.store.pipe(select(state => state.receipt.hasVoucherListPermissions), takeUntil(this.destroyed$)).subscribe(response => {
             this.hasVoucherListPermissions = response;
         });
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -1344,7 +1347,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             }
 
             let grandTotalConversionRate = 0, balanceDueAmountConversionRate = 0;
-            if (this.generalService.voucherApiVersion === 2) {
+            if (this.voucherApiVersion === 2) {
                 grandTotalConversionRate = item.exchangeRate;
             } else if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
                 grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(2);
@@ -1469,14 +1472,24 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      */
     public getAllAdvanceReceipts(customerUniqueName: string, voucherDate: string): void {
         if (customerUniqueName && voucherDate) {
-            let requestObject = {
-                accountUniqueName: customerUniqueName,
-                invoiceDate: voucherDate
-            };
             this.isAccountHaveAdvanceReceipts = false;
-            this.salesService.getAllAdvanceReceiptVoucher(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            let apiCallObservable: Observable<any>;
+            if (this.voucherApiVersion !== 2) {
+                const requestObject = {
+                    accountUniqueName: customerUniqueName,
+                    invoiceDate: voucherDate
+                };
+                apiCallObservable = this.salesService.getAllAdvanceReceiptVoucher(requestObject);
+            } else {
+                const requestObject = {
+                    accountUniqueNames: [this.selectedVoucher, customerUniqueName],
+                    voucherType: this.selectedVoucher
+                }
+                apiCallObservable = this.salesService.getInvoiceList(requestObject, voucherDate);
+            }
+            apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res && res.status === 'success') {
-                    if (res.body && res.body.length) {
+                    if (res.body && (res.body.length || res.body.results?.length)) {
                         this.voucherForAdjustment = res.body;
                         this.isAccountHaveAdvanceReceipts = true;
                         this.showAdvanceReceiptAdjust = true;
@@ -1484,7 +1497,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         this.selectedPerformAdjustPaymentAction = false;
                     } else {
                         this.isAccountHaveAdvanceReceipts = false;
-                        this._toaster.warningToast(this.localeData?.no_advance_receipt);
+                        if (this.voucherApiVersion !== 2) {
+                            this._toaster.warningToast(this.localeData?.no_advance_receipt);
+                        } else {
+                            this._toaster.warningToast(this.commonLocaleData?.app_voucher_unavailable);
+                        }
                     }
                 }
             });

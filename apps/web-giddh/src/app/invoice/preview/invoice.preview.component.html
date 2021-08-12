@@ -1167,7 +1167,7 @@
                         [isUpdateMode]="isUpdateMode" [depositAmount]="depositAmount" [invoiceFormDetails]="invFormData"
                         [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
                         (closeModelEvent)="closeAdvanceReceiptModal()"
-                        (submitClicked)="getAdvanceReceiptAdjustData($event)" [isVoucherModule]="true"
+                        (submitClicked)="getAdvanceReceiptAdjustData($event)" [isVoucherModule]="true && voucherApiVersion !== 2"
                         [voucherForAdjustment]="voucherForAdjustment" [adjustedVoucherType]="selectedVoucher">
                     </advance-receipt-adjustment-component>
                 </div>

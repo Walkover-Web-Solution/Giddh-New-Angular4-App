@@ -658,5 +658,6 @@
         "weekly": "Weekly",
         "monthly": "Monthly",
         "unlimited": "Unlimited"
-    }
+    },
+    "app_voucher_unavailable": "There is no voucher for adjustment."
 }
