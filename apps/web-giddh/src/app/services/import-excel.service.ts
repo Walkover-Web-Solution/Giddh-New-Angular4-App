@@ -25,11 +25,11 @@ export class ImportExcelService {
             .replace(':companyUniqueName', companyUniqueName)
             .replace(':entity', entity)
             ;
-        if (model.data.branchUniqueName) {
-            url = url.concat(`&branchUniqueName=${encodeURIComponent(model.data.branchUniqueName)}`);
+        if (model.branchUniqueName) {
+            url = url.concat(`&branchUniqueName=${encodeURIComponent(model.branchUniqueName)}`);
         }
         const formData: FormData = new FormData();
-        formData.append('file', model.data.file, model.data.file.name);
+        formData.append('file', model.file, model.file.name);
         return this._http.post(url, formData, { headers: { 'Content-Type': 'multipart/form-data' } }).pipe(map((res) => {
             let data: BaseResponse<ImportExcelResponseData, string> = res;
             return data;
