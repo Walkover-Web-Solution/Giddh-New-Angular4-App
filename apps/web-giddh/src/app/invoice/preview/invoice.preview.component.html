@@ -1932,7 +1932,7 @@
                         [adjustedVoucherType]="selectedVoucher"
                         (closeModelEvent)="closeAdvanceReceiptModal()"
                         (submitClicked)="getAdvanceReceiptAdjustData($event)"
-                        [isVoucherModule]="true"
+                        [isVoucherModule]="true && voucherApiVersion !== 2"
                         [voucherForAdjustment]="voucherForAdjustment"
                     >
                     </advance-receipt-adjustment-component>
