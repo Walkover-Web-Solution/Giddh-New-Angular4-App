@@ -121,7 +121,7 @@
                                     (selectTab)="tabChanged('recurring', $event)"
                                     [active]="activeTab === 'recurring'"
                                     [id]="activeTab === 'recurring' ? 'giddh-page-heading' : ''"
-                                    *ngIf="voucherApiVersion !== 2"
+                                    [customClass]="voucherApiVersion === 2 ? 'd-none' : ''"
                                 >
                                     <div *ngIf="activeTab === 'recurring'">
                                         <app-recurring></app-recurring>
