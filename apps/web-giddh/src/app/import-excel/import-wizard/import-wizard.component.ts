@@ -74,7 +74,6 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
         this.activatedRoute.url.pipe(takeUntil(this.destroyed$)).subscribe(p => this.entity = p[0].path);
 
         const importStatusRequest: ImportExcelStatusPaginatedResponse = new ImportExcelStatusPaginatedResponse();
-        importStatusRequest.totalItems = 0;
 
         this.excelState = {
             requestState: ImportExcelRequestStates.Default,

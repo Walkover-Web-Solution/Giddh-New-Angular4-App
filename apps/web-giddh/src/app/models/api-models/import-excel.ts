@@ -84,6 +84,11 @@ export class ImportExcelStatusResponse {
 
 export class ImportExcelStatusPaginatedResponse extends CommonPaginatedRequest {
     public results: ImportExcelStatusResponse[];
+
+    constructor() {
+        super();
+        this.totalItems = 0;
+    }
 }
 
 export interface UploadExceltableResponse {

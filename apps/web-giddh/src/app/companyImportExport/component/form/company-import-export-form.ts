@@ -190,23 +190,11 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
 
             if(parseInt(this.fileType) === CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS) {
                 this.companyImportExportService.ImportRequest(this.selectedFile, this.currentBranch.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                    if (response?.status === 'success') {
-                        this.toaster.successToast(response?.body);
-                        this.backButtonPressed();
-                    } else {
-                        this.toaster.errorToast(response?.message);
-                    }
-                    this.isImportInProcess$ = of(false);
+                    this.handleImportEntriesResponse(response);
                 });
             } else {
                 this.companyImportExportService.ImportLedgersRequest(this.selectedFile).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                    if (response?.status === 'success') {
-                        this.toaster.successToast(response?.body);
-                        this.backButtonPressed();
-                    } else {
-                        this.toaster.errorToast(response?.message);
-                    }
-                    this.isImportInProcess$ = of(false);
+                    this.handleImportEntriesResponse(response);
                 });
             }
         }
@@ -278,5 +266,22 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
      */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity.label;
+    }
+
+    /**
+     * This will handle import entries response
+     *
+     * @private
+     * @param {*} response
+     * @memberof CompanyImportExportFormComponent
+     */
+    private handleImportEntriesResponse(response: any): void {
+        if (response?.status === 'success') {
+            this.toaster.successToast(response?.body);
+            this.backButtonPressed();
+        } else {
+            this.toaster.errorToast(response?.message);
+        }
+        this.isImportInProcess$ = of(false);
     }
 }
