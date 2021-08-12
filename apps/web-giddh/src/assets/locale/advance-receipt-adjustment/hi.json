@@ -9,7 +9,6 @@
     "tax_deducted": "कर कटौती?",
     "excess_amount": "अतिरिक्त राशि",
     "adjustment_note": "हम इस मॉड्यूल से समायोजन के लिए सभी वाउचर का समर्थन नहीं करते हैं। इस तक पहुंचने के लिए कृपया LEDGER पर जाएं।",
-    "voucher_unavailable": "समायोजन के लिए कोई वाउचर नहीं है।",
     "post_adj": "(समायोजन के बाद):",
     "voucher_label": "[VOUCHER_TYPE]",
     "exchange_gain_loss_label": "विनिमय [PROFIT_TYPE]: "
