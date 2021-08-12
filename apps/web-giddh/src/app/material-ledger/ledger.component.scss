@@ -15,6 +15,16 @@
             align-items: center;
         }
         .ledger-row {
+            &:nth-child(2) {
+                .top-position-fix {
+                    top: calc(1px) !important;
+                }
+            }
+            &:nth-child(3) {
+                .top-position-fix {
+                    top: calc(2px) !important;
+                }
+            }
             &:hover {
                 background-color: transparent;
             }
@@ -45,7 +55,7 @@
     border-bottom: 1px solid $gainsboro;
 }
 #ledger-transaction-right-list,
-#ledger-transaction-left-list{
+#ledger-transaction-left-list {
     border-bottom: 1px solid $gainsboro;
 }
 .form-control,
@@ -364,14 +374,14 @@ sh-select:focus {
     padding-left: 5px;
 }
 .ledger-book {
-	.left-col-new {
-		background: $white;
-		padding: 0 0px 350px;
-	}
-	.right-col-new {
-		background: $white;
-		padding: 0 0px 350px;
-	}
+    .left-col-new {
+        background: $white;
+        padding: 0 0px 350px;
+    }
+    .right-col-new {
+        background: $white;
+        padding: 0 0px 350px;
+    }
 }
 .left-col-new mat-grid-list mat-grid-title:last-child,
 .left-col-new mat-grid-list mat-grid-title:last-child {
@@ -611,7 +621,7 @@ sh-select:focus {
     padding: 1px 0 !important;
 }
 
-.mat-raised-button{
+.mat-raised-button {
     min-width: 36px;
 }
 
