@@ -92,3 +92,23 @@ export interface UploadExceltableResponse {
     failureCount: number;
     successCount: number;
 }
+
+export enum ImportExcelRequestStates {
+    Default,
+    UploadFileInProgress,
+    UploadFileError,
+    UploadFileSuccess,
+    ProcessImportInProgress,
+    ProcessImportSuccess,
+    ProcessImportError,
+    ImportStatusInProcess,
+    ImportStatusSuccess,
+    ImportStatusError
+}
+
+export interface ImportExcelState {
+    requestState: ImportExcelRequestStates;
+    importExcelData?: ImportExcelResponseData;
+    importResponse?: ImportExcelProcessResponseData;
+    importStatus: ImportExcelStatusPaginatedResponse;
+}

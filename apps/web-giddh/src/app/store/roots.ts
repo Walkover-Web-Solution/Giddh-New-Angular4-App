@@ -17,11 +17,9 @@ import * as fromSettings from './Settings/Settings.reducer';
 import * as fromSales from './Sales/sales.reducer';
 import * as fromInvoicePurchase from './invoice-purchase/invoice-purchase.reducer';
 import * as fromUserSession from './General/session.reducer';
-import * as fromImportExcel from './import-excel/import-excel.reducer';
 import * as fromInventoryInOut from './Inventory-in-out/inventory-in-out.reducer';
 import * as fromAgingReport from './AgingReport/aging-report.reducer';
 import * as fromInventoryBranchTransfer from './InventoryBranchTransfer/InventoryBranchTransfer.reducer';
-import * as fromCompanyImportExport from './CompanyImportExport/companyImportExport';
 import * as fromReceipt from './Invoice/Receipt/receipt.reducer';
 import * as fromEwaybill from './Invoice/ewaybill/eway-bill.reducer';
 import * as fromGstReconcile from './GstReconcile/GstReconcile.reducer';
@@ -56,11 +54,9 @@ export interface AppState {
     manufacturing: fromManufacturing.ManufacturingState;
     invoicePurchase: fromInvoicePurchase.InvoicePurchaseState;
     userLoggedInSessions: fromUserSession.SessionState;
-    importExcel: fromImportExcel.ImportExcelState;
     inventoryInOutState: fromInventoryInOut.InventoryInOutState;
     inventoryBranchTransfer: fromInventoryBranchTransfer.InventoryBranchTransferState;
     agingreport: fromAgingReport.AgingReportState;
-    companyImportExport: fromCompanyImportExport.CompanyImportExportState;
     gstReconcile: fromGstReconcile.GstReconcileState;
     receipt: fromReceipt.ReceiptState;
     ewaybillstate: fromEwaybill.EwayBillState;
@@ -96,10 +92,8 @@ export const reducers: ActionReducerMap<AppState> = {
     invoicePurchase: fromInvoicePurchase.InvoicePurchaseReducer,
     userLoggedInSessions: fromUserSession.SessionReducer,
     inventoryInOutState: fromInventoryInOut.InventoryInOutReducer,
-    importExcel: fromImportExcel.importExcelReducer,
     inventoryBranchTransfer: fromInventoryBranchTransfer.InventoryBranchTransferReducer,
     agingreport: fromAgingReport.agingReportReducer,
-    companyImportExport: fromCompanyImportExport.companyImportExportReducer,
     receipt: fromReceipt.Receiptreducer,
     ewaybillstate: fromEwaybill.EwayBillreducer,
     gstReconcile: fromGstReconcile.GstReconcileReducer,
