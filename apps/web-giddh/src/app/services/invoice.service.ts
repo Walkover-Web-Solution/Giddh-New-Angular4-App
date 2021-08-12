@@ -223,7 +223,11 @@ export class InvoiceService {
     public PerformActionOnInvoice(invoiceUniqueName: string, action: { action: string, amount?: number }): Observable<BaseResponse<string, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + INVOICE_API.ACTION_ON_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':invoiceUniqueName', invoiceUniqueName), action).pipe(
+        let url = this.config.apiUrl + INVOICE_API.ACTION_ON_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':invoiceUniqueName', invoiceUniqueName);
+        if (this._generalService.voucherApiVersion === 2) {
+            url = this._generalService.addVoucherVersion(url, this._generalService.voucherApiVersion);
+        }
+        return this._http.post(url, action).pipe(
             map((res) => {
                 let data: BaseResponse<string, string> = res;
                 data.request = invoiceUniqueName;
