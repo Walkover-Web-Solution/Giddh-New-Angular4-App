@@ -655,5 +655,6 @@
         "weekly": "साप्ताहिक",
         "monthly": "महीने के",
         "unlimited": "असीमित"
-    }
+    },
+    "app_voucher_unavailable": "समायोजन के लिए कोई वाउचर नहीं है।"
 }

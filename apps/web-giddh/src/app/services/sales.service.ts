@@ -113,9 +113,13 @@ export class SalesService {
     public getAllAdvanceReceiptVoucher(model: AdvanceReceiptRequest): Observable<BaseResponse<any, AdvanceReceiptRequest>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + ADVANCE_RECEIPTS_API.GET_ALL_ADVANCE_RECEIPTS
+        let contextPath = this.config.apiUrl + ADVANCE_RECEIPTS_API.GET_ALL_ADVANCE_RECEIPTS
             .replace(':companyUniqueName', this.companyUniqueName)
-            .replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName)).replace(':invoiceDate', model.invoiceDate))
+            .replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName)).replace(':invoiceDate', model.invoiceDate);
+        if (this._generalService.voucherApiVersion === 2) {
+            contextPath = this._generalService.addVoucherVersion(contextPath, this._generalService.voucherApiVersion);
+        }
+        return this._http.get(contextPath)
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, AdvanceReceiptRequest> = res;
@@ -181,10 +185,13 @@ export class SalesService {
      */
     public getInvoiceList(model: any, date: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
-        const contextPath = SALES_API_V2.GET_VOUCHER_INVOICE_LIST
+        let contextPath = SALES_API_V2.GET_VOUCHER_INVOICE_LIST
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':voucherDate', encodeURIComponent(date))
             .replace(':adjustmentRequest', String(true));
+        if (this._generalService.voucherApiVersion === 2) {
+            contextPath = this._generalService.addVoucherVersion(contextPath, this._generalService.voucherApiVersion);
+        }
         return this._http.post(this.config.apiUrl + contextPath, model
         ).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error, model)));
     }
