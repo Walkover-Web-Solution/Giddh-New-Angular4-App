@@ -31,8 +31,6 @@ import { SessionActions } from './session.action';
 import { InventoryReportActions } from './inventory/inventory.report.actions';
 import { InventoryEntryActions } from './inventory/inventory.entry.actions';
 import { InventoryUsersActions } from './inventory/inventory.users.actions';
-import { ImportExcelActions } from './import-excel/import-excel.actions';
-import { CompanyImportExportActions } from './company-import-export/company-import-export.actions';
 import { AgingReportActions } from './aging-report.actions';
 import { InvoiceReceiptActions } from './invoice/receipt/receipt.actions';
 import { GstReconcileActions } from './gst-reconcile/GstReconcile.actions';
@@ -83,11 +81,8 @@ import { PurchaseOrderActions } from './purchase-order/purchase-order.action';
             SettingsFinancialYearActions,
             SettingsPermissionActions,
             SessionActions,
-            ImportExcelActions,
             AgingReportActions,
-            CompanyImportExportActions,
             InvoiceReceiptActions,
-            CompanyImportExportActions,
             GstReconcileActions,
             SubscriptionsActions,
             ProformaActions,

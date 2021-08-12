@@ -5,14 +5,15 @@ import * as moment from 'moment';
 import { CompanyImportExportFileTypes } from '../../../models/interfaces/companyImportExport.interface';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
-import { CompanyImportExportActions } from '../../../actions/company-import-export/company-import-export.actions';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, of, ReplaySubject } from 'rxjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
+import { CompanyImportExportService } from '../../../services/companyImportExportService';
+import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
     selector: 'company-import-export-form-component',
@@ -32,9 +33,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
     public from: string = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
     public to: string = moment().format(GIDDH_DATE_FORMAT);
     public selectedFile: File = null;
-
     public isExportInProcess$: Observable<boolean>;
-    public isExportSuccess$: Observable<boolean>;
     public isImportInProcess$: Observable<boolean>;
     public isImportSuccess$: Observable<boolean>;
     /** Date format type */
@@ -74,17 +73,15 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
-        private _store: Store<AppState>,
-        private _companyImportExportActions: CompanyImportExportActions,
+        private store: Store<AppState>,
+        private companyImportExportService: CompanyImportExportService,
         private generalService: GeneralService,
         private modalService: BsModalService,
         private settingsBranchAction: SettingsBranchActions,
-        private changeDetectorRef: ChangeDetectorRef) {
-        this.isExportInProcess$ = this._store.pipe(select(s => s.companyImportExport.exportRequestInProcess), takeUntil(this.destroyed$));
-        this.isExportSuccess$ = this._store.pipe(select(s => s.companyImportExport.exportRequestSuccess), takeUntil(this.destroyed$));
-        this.isImportInProcess$ = this._store.pipe(select(s => s.companyImportExport.importRequestInProcess), takeUntil(this.destroyed$));
-        this.isImportSuccess$ = this._store.pipe(select(s => s.companyImportExport.importRequestSuccess), takeUntil(this.destroyed$));
-        this.universalDate$ = this._store.pipe(select(sessionStore => sessionStore.session.applicationDate), distinctUntilChanged(), takeUntil(this.destroyed$));
+        private changeDetectorRef: ChangeDetectorRef,
+        private toaster: ToasterService
+    ) {
+        this.universalDate$ = this.store.pipe(select(sessionStore => sessionStore.session.applicationDate), distinctUntilChanged(), takeUntil(this.destroyed$));
 
     }
 
@@ -95,17 +92,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
         ];
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
-        this.isExportSuccess$.subscribe(s => {
-            if (s) {
-                this.backButtonPressed();
-            }
-        });
 
-        this.isImportSuccess$.subscribe(s => {
-            if (s) {
-                this.backButtonPressed();
-            }
-        });
         this.universalDate$.subscribe((dateObj) => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
@@ -118,12 +105,12 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
             }
             this.changeDetectorRef.detectChanges();
         });
-        this._store.pipe(
-            select(state => state.session.activeCompany), take(1)
-        ).subscribe(activeCompany => {
+
+        this.store.pipe(select(state => state.session.activeCompany), take(1)).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
-        this.currentCompanyBranches$ = this._store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
@@ -144,7 +131,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
-                    this._store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
                 }
             }
         });
@@ -165,9 +152,51 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
 
     public save() {
         if (this.mode === 'export') {
-            this._store.dispatch(this._companyImportExportActions.ExportRequest(parseInt(this.fileType), this.from, this.to, this.currentBranch.uniqueName, this.currentBranch.name));
+            this.isExportInProcess$ = of(true);
+
+            if(parseInt(this.fileType) === CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS) {
+                this.companyImportExportService.ExportRequest(this.currentBranch.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response?.status === 'success') {
+                        let res = { body: response?.body };
+                        let blob = new Blob([JSON.stringify(res)], { type: 'application/json' });
+                        saveAs(blob, `${this.currentBranch.name}_Master_Except_Accounts_${this.from}_${this.to}_${this.activeCompany?.uniqueName}` + '.json');
+                        this.toaster.successToast(this.commonLocaleData?.app_messages?.data_exported);
+                        this.backButtonPressed();
+                    } else {
+                        this.toaster.errorToast(response.message);
+                    }
+                    this.isExportInProcess$ = of(false);
+                });
+            } else {
+                this.companyImportExportService.ExportLedgersRequest(this.from, this.to, this.currentBranch.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response?.status === 'success' && response?.body) {
+                        if (response?.body?.type === "message") {
+                            this.toaster.successToast(response?.body?.file);
+                        } else {
+                            let res = { body: response?.body?.file };
+                            let blob = new Blob([JSON.stringify(res)], { type: 'application/json' });
+                            saveAs(blob, `${this.currentBranch.name}_Accounting_Entries_${this.from}_${this.to}_${this.activeCompany?.uniqueName}` + '.json');
+                            this.toaster.successToast(this.commonLocaleData?.app_messages?.data_exported);
+                            this.backButtonPressed();
+                        }
+                    } else {
+                        this.toaster.errorToast(response?.message);
+                    }
+                    this.isExportInProcess$ = of(false);
+                });
+            }
         } else {
-            this._store.dispatch(this._companyImportExportActions.ImportRequest(parseInt(this.fileType), this.selectedFile, this.currentBranch.uniqueName));
+            this.isImportInProcess$ = of(true);
+
+            if(parseInt(this.fileType) === CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS) {
+                this.companyImportExportService.ImportRequest(this.selectedFile, this.currentBranch.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    this.handleImportEntriesResponse(response);
+                });
+            } else {
+                this.companyImportExportService.ImportLedgersRequest(this.selectedFile).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    this.handleImportEntriesResponse(response);
+                });
+            }
         }
     }
 
@@ -176,7 +205,6 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
-        this._store.dispatch(this._companyImportExportActions.ResetCompanyImportExportState());
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -238,5 +266,22 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
      */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity.label;
+    }
+
+    /**
+     * This will handle import entries response
+     *
+     * @private
+     * @param {*} response
+     * @memberof CompanyImportExportFormComponent
+     */
+    private handleImportEntriesResponse(response: any): void {
+        if (response?.status === 'success') {
+            this.toaster.successToast(response?.body);
+            this.backButtonPressed();
+        } else {
+            this.toaster.errorToast(response?.message);
+        }
+        this.isImportInProcess$ = of(false);
     }
 }

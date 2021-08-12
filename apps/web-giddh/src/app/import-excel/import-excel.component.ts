@@ -10,10 +10,12 @@ import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
     styleUrls: ['./import-excel.component.scss'],
     templateUrl: './import-excel.component.html'
 })
-
 export class ImportComponent implements OnInit {
 
-    constructor(private store: Store<AppState>, private _companyActions: CompanyActions) {
+    constructor(
+        private store: Store<AppState>, 
+        private companyActions: CompanyActions
+    ) {
 
     }
 
@@ -23,6 +25,6 @@ export class ImportComponent implements OnInit {
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'import';
-        this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
+        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 }
