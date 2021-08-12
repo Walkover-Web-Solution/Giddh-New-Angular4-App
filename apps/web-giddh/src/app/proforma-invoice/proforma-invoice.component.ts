@@ -4628,10 +4628,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public ngOnDestroy() {
-        if(this.callFromOutside && this.isSidebarExpanded) {
-            this.isSidebarExpanded = false;
-            this.generalService.expandSidebar();
-            document.querySelector('.nav-left-bar').classList.add('open');
+        if(this.callFromOutside) {
+            if(this.isSidebarExpanded) {
+                this.isSidebarExpanded = false;
+                this.generalService.expandSidebar();
+                document.querySelector('.nav-left-bar').classList.add('open');
+            }
             document.querySelector('body').classList.remove('setting-sidebar-open');
             document.querySelector('body').classList.remove('voucher-preview-edit');
         }
