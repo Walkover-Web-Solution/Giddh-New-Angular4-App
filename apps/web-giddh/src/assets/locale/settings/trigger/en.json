@@ -36,5 +36,6 @@
         "enter_url": "Please enter URL."
     },
     "delete_tax": "Are you sure you want to delete [SELECTED_TAX]?",
-    "update_trigger": "Are you sure want to update [TRIGGER_NAME]?"
+    "update_trigger": "Are you sure want to update [TRIGGER_NAME]?",
+    "validation": "Validation"
 }

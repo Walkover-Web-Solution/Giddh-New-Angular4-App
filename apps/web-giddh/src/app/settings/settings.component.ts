@@ -133,12 +133,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
                         this.permissionComp.getInitialData();
                     }
                 }, 0);
-            } else if (this.activeTab === "tag") {
-                setTimeout(() => {
-                    if (this.tagComp) {
-                        this.tagComp.getTags();
-                    }
-                }, 0);
             }
 
             if(this.activeTab === "taxes") {
@@ -232,12 +226,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
         if (!this.permissionTabDataFetched) {
             this.permissionTabDataFetched = true;
             this.permissionComp.getInitialData();
-        }
-    }
-
-    public tagsTabSelected(e) {
-        if (e.heading === 'Tags') {
-            this.tagComp.getTags();
         }
     }
 
