@@ -1400,15 +1400,15 @@
                                     <td
                                         class="pd-r1"
                                         *ngIf="
-                                            vm.selectedLedger.voucher.shortCode === 'sal' ||
-                                            vm.selectedLedger.voucher.shortCode === 'pur' ||
-                                            vm.selectedLedger.voucher.shortCode == 'pay'
+                                            vm.selectedLedger.voucher?.shortCode === 'sal' ||
+                                            vm.selectedLedger.voucher?.shortCode === 'pur' ||
+                                            vm.selectedLedger.voucher?.shortCode == 'pay'
                                         "
                                     >
                                         <div class="form-group">
                                             <label class="default-color">{{ commonLocaleData?.app_invoice_no }}</label>
                                             <input
-                                                *ngIf="vm.selectedLedger.voucher.shortCode === 'sal'"
+                                                *ngIf="vm.selectedLedger.voucher?.shortCode === 'sal'"
                                                 [disabled]="
                                                     !isPettyCash &&
                                                     currentOrganizationType === 'COMPANY' &&
@@ -1421,7 +1421,7 @@
                                                 [(ngModel)]="vm.selectedLedger.voucherNumber"
                                             />
                                             <input
-                                                *ngIf="vm.selectedLedger.voucher.shortCode !== 'sal'"
+                                                *ngIf="vm.selectedLedger.voucher?.shortCode !== 'sal'"
                                                 [disabled]="
                                                     !isPettyCash &&
                                                     currentOrganizationType === 'COMPANY' &&
@@ -1438,13 +1438,13 @@
                                     <td
                                         class="pd-r1"
                                         *ngIf="
-                                            vm.selectedLedger.voucher.shortCode == 'credit note' ||
-                                            vm.selectedLedger.voucher.shortCode == 'debit note'
+                                            vm.selectedLedger.voucher?.shortCode == 'credit note' ||
+                                            vm.selectedLedger.voucher?.shortCode == 'debit note'
                                         "
                                     >
                                         <div class="form-group">
                                             <label class="default-color">{{
-                                                vm.selectedLedger.voucher.shortCode ==
+                                                vm.selectedLedger.voucher?.shortCode ==
                                                 "debit
                                                 note"
                                                     ? localeData?.voucher_no
@@ -1498,8 +1498,8 @@
                                     </td>
                                     <td
                                         *ngIf="
-                                            (vm.selectedLedger.voucher.shortCode === 'credit note' ||
-                                                vm.selectedLedger.voucher.shortCode === 'debit note') &&
+                                            (vm.selectedLedger.voucher?.shortCode === 'credit note' ||
+                                                vm.selectedLedger.voucher?.shortCode === 'debit note') &&
                                             selectedInvoice
                                         "
                                         class="cp remove-invoice pd-r2 hidden-xs"
@@ -1529,10 +1529,10 @@
                                 <tr>
                                     <td
                                         *ngIf="
-                                            vm.selectedLedger.voucher.shortCode !== 'jr' &&
-                                            vm.selectedLedger.voucher.shortCode !== 'cntr' &&
-                                            vm.selectedLedger.voucher.shortCode !== 'rcpt' &&
-                                            vm.selectedLedger.voucher.shortCode !== 'advance-receipt'
+                                            vm.selectedLedger.voucher?.shortCode !== 'jr' &&
+                                            vm.selectedLedger.voucher?.shortCode !== 'cntr' &&
+                                            vm.selectedLedger.voucher?.shortCode !== 'rcpt' &&
+                                            vm.selectedLedger.voucher?.shortCode !== 'advance-receipt'
                                         "
                                         class="pd-r1 pb-1"
                                     >
@@ -1553,7 +1553,8 @@
                                     </td>
                                     <td
                                         *ngIf="
-                                            vm.selectedLedger.voucher.shortCode == 'advance-receipt' && isAdvanceReceipt
+                                            vm.selectedLedger.voucher?.shortCode == 'advance-receipt' &&
+                                            isAdvanceReceipt
                                         "
                                         class="pd-r1 pb-1"
                                     >
@@ -1572,7 +1573,7 @@
                                         />{{ localeData?.adjust_advance_receipt }}
                                     </td>
                                     <td
-                                        *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt' && !isAdvanceReceipt"
+                                        *ngIf="vm.selectedLedger.voucher?.shortCode == 'rcpt' && !isAdvanceReceipt"
                                         class="pd-r1 pb-1"
                                     >
                                         <input
@@ -1959,7 +1960,7 @@
                 <advance-receipt-adjustment-component
                     *ngIf="adjustPaymentModal.isShown"
                     #advanceReceiptComponent
-                    [adjustedVoucherType]="vm.selectedLedger.voucher.shortCode"
+                    [adjustedVoucherType]="vm.selectedLedger.voucher?.shortCode"
                     [invoiceFormDetails]="adjustVoucherConfiguration"
                     [isUpdateMode]="true"
                     [advanceReceiptAdjustmentUpdatedData]="vm.selectedLedger.voucherAdjustments"

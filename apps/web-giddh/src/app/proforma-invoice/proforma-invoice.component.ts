@@ -599,6 +599,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public isTcsPresent: boolean;
     /** True, if at least a single TDS type (payable or receivable) tax is present */
     public isTdsPresent: boolean;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -1474,6 +1476,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.onSearchQueryChanged(value[1]?.body?.name, 1, 'customer');
             }
         });
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     /**
@@ -2386,7 +2389,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 if (this.isCreditNote) {
                     updatedData['invoiceLinkingRequest'] = data.voucherDetails.invoiceLinkingRequest;
                 }
-                if (this.generalService.voucherApiVersion === 2) {
+                if (this.voucherApiVersion === 2) {
                     updatedData = this.proformaInvoiceUtilityService.getVoucherRequestObjectForInvoice(updatedData);
                 }
             }
@@ -2406,7 +2409,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             } else {
                 if (this.isPendingVoucherType) {
-                    if (this.generalService.voucherApiVersion === 2) {
+                    if (this.voucherApiVersion === 2) {
                         updatedData = this.proformaInvoiceUtilityService.getVoucherRequestObjectForInvoice(updatedData);
                     }
                     this.salesService.generatePendingVoucherGenericItem(updatedData).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
@@ -3238,7 +3241,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (item.value) {
             this.invFormData.voucherDetails.customerName = item.label;
             this.getAccountDetails(item.value);
-            if (this.invFormData.voucherDetails.customerUniquename && this.invFormData.voucherDetails.voucherDate) {
+            if (this.invFormData.voucherDetails.customerUniquename && this.invFormData.voucherDetails.voucherDate && this.voucherApiVersion !== 2) {
                 this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT))
             }
             this.isCustomerSelected = true;
@@ -3838,7 +3841,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     requestObject.voucherAdjustments = this.advanceReceiptAdjustmentData;
                 }
                 let updatedData = <GenericRequestForGenerateSCD>this.updateData(requestObject, requestObject.voucher);
-                if (this.generalService.voucherApiVersion === 2) {
+                if (this.voucherApiVersion === 2) {
                     updatedData = this.proformaInvoiceUtilityService.getVoucherRequestObjectForInvoice(updatedData);
                 }
                 this.salesService.updateVoucherV4(updatedData).pipe(takeUntil(this.destroyed$))
@@ -4283,7 +4286,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             } else if (this.isPurchaseInvoice) {
                 const accountUniqueName = (this.selectedItem) ? this.selectedItem.account?.uniqueName : this.accountUniqueName;
                 const purchaseRecordUniqueName = (this.selectedItem) ? this.selectedItem.uniqueName : this.invoiceNo;
-                if (this.generalService.voucherApiVersion === 2) {
+                if (this.voucherApiVersion === 2) {
                     this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.accountUniqueName, {
                         invoiceNumber: this.selectedItem?.voucherNumber,
                         voucherType: this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType),
@@ -4875,7 +4878,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (this.isMultiCurrencyModule() && this.isMulticurrencyAccount && selectedDate && !moment(selectedDate).isSame(moment(modelDate))) {
             this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, moment(selectedDate).format(GIDDH_DATE_FORMAT));
         }
-        if (selectedDate && modelDate && selectedDate !== modelDate && this.invFormData && this.invFormData.voucherDetails && this.invFormData.voucherDetails.voucherDate && this.invFormData.accountDetails && this.invFormData.accountDetails.uniqueName) {
+        if (selectedDate && modelDate && selectedDate !== modelDate && this.invFormData &&
+            this.invFormData.voucherDetails && this.invFormData.voucherDetails.voucherDate &&
+            this.invFormData.accountDetails && this.invFormData.accountDetails.uniqueName && this.voucherApiVersion !== 2) {
             this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, moment(selectedDate).format(GIDDH_DATE_FORMAT));
         }
         if (selectedDate && modelDate && selectedDate !== modelDate && (this.isCreditNote || this.isDebitNote)) {
@@ -5424,7 +5429,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     private createPurchaseRecord(request: PurchaseRecordRequest): void {
         // Create a new puchase record with voucher API for voucher version 2 else create a new purchase record with its own API
-        const apiCallObservable = this.generalService.voucherApiVersion === 2 ?
+        const apiCallObservable = this.voucherApiVersion === 2 ?
             this.salesService.generateGenericItem(request, true) : this.purchaseRecordService.generatePurchaseRecord(request);
         apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
             this.handleGenerateResponse(response, this.invoiceForm);
@@ -5443,7 +5448,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     private updatePurchaseRecord(request: PurchaseRecordRequest): void {
         // Update the puchase record with voucher API for voucher version 2 else merge the purchase record (PATCH method, UPDATE flow)
-        const apiCallObservable = this.generalService.voucherApiVersion === 2 ?
+        const apiCallObservable = this.voucherApiVersion === 2 ?
             this.salesService.updateVoucher(request) : this.purchaseRecordService.generatePurchaseRecord(request, 'PATCH');
         apiCallObservable.pipe(takeUntil(this.destroyed$))
             .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
@@ -7202,7 +7207,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     private initializeCurrentVoucherForm(): void {
-        if (this.generalService.voucherApiVersion === 2) {
+        if (this.voucherApiVersion === 2) {
             // Load the voucher form only for company that supports new voucher APIs
             this.currentVoucherFormDetails = this.proformaInvoiceUtilityService.prepareVoucherForm(this.invoiceType);
             this.getItemColumns();
