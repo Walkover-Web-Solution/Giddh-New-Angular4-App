@@ -16,6 +16,8 @@ import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { cloneDeep } from '../../lodash-optimized';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 import { GeneralService } from '../../services/general.service';
+import { SettingsIntegrationService } from '../../services/settings.integraion.service';
+import { IForceClear } from '../../models/api-models/Sales';
 
 @Component({
     selector: 'payment-aside',
@@ -52,9 +54,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public requestObjectToGetOTP: GetOTPRequest = {
         bankName: '',
         urn: '',
+        uniqueName: '',
         totalAmount: '',
         bankPaymentTransactions: []
-
     };
     /** Template reference for success payment model */
     @ViewChild('successTemplate', { static: true }) public successTemplate: TemplateRef<any>;
@@ -121,6 +123,14 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public isBankSelectedForBulkPayment: boolean = false;
     /** Get all bank inprogress */
     public isGetAllIntegratedBankInProgress$: Observable<boolean>;
+    /** This will hold payors list */
+    public payorsList: IOption[] = [];
+    /* This will clear the selected payor values */
+    public forceClear$: Observable<IForceClear> = of({ status: false });
+    /** True if payor list api call in progress */
+    public isPayorListInProgress: boolean = false;
+    /** True if payor is required */
+    public isPayorRequired: boolean = true;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -130,7 +140,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         private accountsAction: AccountsAction,
         private _companyService: CompanyService,
         private _toaster: ToasterService,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private settingsIntegrationService: SettingsIntegrationService
     ) {
         this.userDetails$ = this.store.pipe(select(p => p.session.user), takeUntil(this.destroyed$));
         this.userDetails$.pipe(take(1)).subscribe(p => this.user = p);
@@ -169,9 +180,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 }
             }
         });
-        if (this.companyUniqueName) {
-            this.store.dispatch(this._companyActions.getAllIntegratedBankInCompany(this.companyUniqueName));
-        }
 
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             this.companyCurrency = profile.baseCurrency || 'INR';
@@ -198,7 +206,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 bankList.forEach(item => {
                     if (item) {
                         item.bankName = item.bankName ? item.bankName : "";
-                        this.selectIntegratedBankList.push({ label: item.bankName, value: item.urn, additional: item });
+                        this.selectIntegratedBankList.push({ label: item.bankName, value: item.uniqueName, additional: item });
                     }
                 });
 
@@ -301,7 +309,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.timerOn = true
         this.startTimer(40);
         this.receivedOtp = null;
-        this._companyService.resendOtp(this.companyUniqueName, this.selectedBankUrn, this.paymentRequestId).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this._companyService.resendOtp(this.companyUniqueName, this.selectedBankUrn, this.paymentRequestId, this.selectedBankUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.status === 'success') {
 
                 this.isPayClicked = true;
@@ -325,7 +333,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.isRequestInProcess = true;
         bankTransferConfirmOtpRequest.requestId = this.paymentRequestId;
         bankTransferConfirmOtpRequest.otp = this.receivedOtp;
-        this._companyService.bulkVendorPaymentConfirm(this.companyUniqueName, this.selectedBankUrn, bankTransferConfirmOtpRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+        this._companyService.bulkVendorPaymentConfirm(this.companyUniqueName, this.selectedBankUrn, this.selectedBankUniqueName, bankTransferConfirmOtpRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && res.status === 'success') {
                 this.closePaymentModel(true);
                 this.openModalWithClass(this.successTemplate);
@@ -399,19 +407,39 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @memberof PaymentAsideComponent
      */
     public selectBank(event: IOption): void {
+        let loadPayorList = false;
         if (event) {
-            this.selectedBankUrn = event.value;
+            loadPayorList = (this.requestObjectToGetOTP.uniqueName !== event.value);
             this.selectedBankUniqueName = event.value;
             this.isBankSelectedForBulkPayment = true;
             this.selectedBankName = event.label;
             this.isPayClicked = false;
             this.paymentRequestId = '';
             this.otpReceiverNameMessage = '';
-            this.requestObjectToGetOTP.urn = event.value;
+            this.requestObjectToGetOTP.uniqueName = event.value;
             this.requestObjectToGetOTP.bankName = event.label;
             this.totalAvailableBalance = event.additional.effectiveBal;
         }
         this.getTotalAmount();
+
+        if(loadPayorList) {
+            this.selectedBankUrn = '';
+            this.requestObjectToGetOTP.urn = '';
+            this.getBankAccountPayorsList();
+        }
+    }
+
+    /**
+     * callback for select payor
+     *
+     * @param {IOption} event
+     * @memberof PaymentAsideComponent
+     */
+    public selectPayor(event: IOption): void {
+        if (event) {
+            this.selectedBankUrn = event.value;
+            this.requestObjectToGetOTP.urn = event.value;
+        }
     }
 
     /**
@@ -449,7 +477,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @memberof PaymentAsideComponent
      */
     public setBankName(event: any, selectBankEle: ShSelectComponent): void {
-        this.selectedBankUniqueName = '';
         selectBankEle.filter = event.target.value !== undefined ? event.target.value : selectBankEle.fixedValue;
         this.selectedBankName = event.target.value !== undefined ? event.target.value : selectBankEle.fixedValue;
     }
@@ -470,7 +497,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         }
         this.totalSelectedAccountAmount = Number(this.totalSelectedAccountAmount);
         if (selectedAccount && selectedAccount.length) {
-
             this.isValidData = selectedAccount.every(item => {
                 return item.closingBalanceAmount && item.remarks ? true : false;
             });
@@ -534,6 +560,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.isPayClicked = false;
         this.receivedOtp = null;
         this.timerOn = false;
+        this.otpReceiverNameMessage = '';
         clearTimeout(this.countDownTimerRef);
     }
 
@@ -561,7 +588,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
 
         if (this.timerOn) {
             this.timerOn = false;
-            this.receivedOtp = null;
             return;
         }
     }
@@ -649,5 +675,44 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * This will get the payors list for bank account based on amount limit
+     *
+     * @private
+     * @memberof PaymentAsideComponent
+     */
+    private getBankAccountPayorsList(): void {
+        if(!this.selectedBankUniqueName || !this.totalSelectedAccountAmount) {
+            return;
+        }
+        this.isPayorRequired = false;
+        this.selectedBankUrn = '';
+        this.requestObjectToGetOTP.urn = '';
+        this.forceClear$ = of({ status: true });
+        this.isPayorListInProgress = true;
+        this.settingsIntegrationService.getBankAccountPayorsList(this.selectedBankUniqueName, this.totalSelectedAccountAmount).pipe(take(1)).subscribe(response => {
+            if(response?.status === "success") {
+                this.payorsList = [];
+
+                response?.body?.forEach(payor => {
+                    this.payorsList.push({label: payor?.user?.name, value: payor?.urn});
+                });
+
+                if(this.payorsList?.length === 1) {
+                    this.selectPayor(this.payorsList[0]);
+                }
+
+                this.isPayorRequired = true;
+            } else {
+                this.payorsList = [];
+                if(response?.message) {
+                    this._toaster.clearAllToaster();
+                    this._toaster.errorToast(response?.message);
+                }
+            }
+            this.isPayorListInProgress = false;
+        });
     }
 }

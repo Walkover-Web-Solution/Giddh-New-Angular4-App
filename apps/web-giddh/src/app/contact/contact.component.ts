@@ -173,8 +173,6 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private createAccountIsSuccess$: Observable<boolean>;
-    /** Selected company */
-    private selectedCompany: any;
     public universalDate: any;
     /** model reference to open/close bulk payment model */
     public bulkPaymentModalRef: BsModalRef;
@@ -219,6 +217,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     public showNameSearch: boolean;
     /** True if today selected */
     public todaySelected: boolean = false;
+    /** Holds company name if bank accounts are loaded in case of vendor */
+    public bankAccountsLoadedForCompany: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -253,7 +253,11 @@ export class ContactComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
-                this.selectedCompany = activeCompany;
+                this.activeCompany = activeCompany;
+                if(this.activeTab === "vendor" && this.activeCompany?.uniqueName && this.bankAccountsLoadedForCompany !== this.activeCompany?.uniqueName) {
+                    this.bankAccountsLoadedForCompany = this.activeCompany?.uniqueName;
+                    this.store.dispatch(this._companyActions.getAllIntegratedBankInCompany(this.activeCompany?.uniqueName));
+                }
             }
         });
     }
@@ -339,16 +343,8 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.getAccounts(this.fromDate, this.toDate, null, 'true', PAGINATION_LIMIT, term, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             });
 
-        this.store.pipe(select(p => p.company && p.company.account), takeUntil(this.destroyed$)).subscribe(res => {
-            if (res && Array.isArray(res)) {
-                this.isICICIIntegrated = res.length > 0;
-            } else {
-                this.isICICIIntegrated = false;
-            }
-        });
-
-        if (this.selectedCompany && this.selectedCompany.countryV2) {
-            this.getOnboardingForm(this.selectedCompany.countryV2.alpha2CountryCode);
+        if (this.activeCompany && this.activeCompany.countryV2) {
+            this.getOnboardingForm(this.activeCompany.countryV2.alpha2CountryCode);
         }
 
         this.store.pipe(select(store => store.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
@@ -358,11 +354,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.giddhDecimalPlaces = 2;
             }
         });
-        this.store.pipe(
-            select(appState => appState.session.activeCompany), take(1)
-        ).subscribe(activeCompany => {
-            this.activeCompany = activeCompany;
-        });
+
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
@@ -417,6 +409,14 @@ export class ContactComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$)
         ).subscribe(searchedText => {
             this.searchStr$.next(searchedText);
+        });
+
+        this.store.pipe(select(state => state.company && state.company.integratedBankList), takeUntil(this.destroyed$)).subscribe(response => {
+            if(response?.length > 0) {
+                this.isICICIIntegrated = true;
+            } else {
+                this.isICICIIntegrated = false;
+            }
         });
     }
 
@@ -539,6 +539,10 @@ export class ContactComponent implements OnInit, OnDestroy {
             };
             this.showFieldFilter = showColumnObj;
             this.setTableColspan();
+        }
+
+        if(tabName === "vendor") {
+            this.store.dispatch(this._companyActions.getAllIntegratedBankInCompany(this.activeCompany?.uniqueName));
         }
     }
 

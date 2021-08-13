@@ -117,7 +117,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
 
     constructor(
         private store: Store<AppState>,
-        private _toaster: ToasterService,
+        private toaster: ToasterService,
         private fb: FormBuilder,
         private tallysyncService: TallySyncService,
         private generalService: GeneralService
@@ -163,7 +163,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
 
     public getReport() {
         if (this.filterForm.invalid) {
-            this._toaster.errorToast(this.localeData?.filter_criteria);
+            this.toaster.errorToast(this.localeData?.filter_criteria);
             return;
         }
         this.isLoading = true;
@@ -222,7 +222,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
                 let blobData = this.generalService.base64ToBlob(res.body, 'application/xlsx', 512);
                 return saveAs(blobData, `${row.company.name}-error-log.xlsx`);
             } else {
-                this._toaster.errorToast(res.message);
+                this.toaster.errorToast(res.message);
             }
         })
     }

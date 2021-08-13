@@ -42,12 +42,12 @@
                                     </tr>
                                 </thead>
                             </table>
-                            <div *ngIf="plData && plData.incArr">
+                            <div *ngIf="plData && plData.incArr && !hideData">
                                 <!--Grid-->
                                 <ng-template #groupDetails let-list let-padding="padding">
                                     <ng-container *ngFor="let grp of list" >
                                         <section class="row-1" *ngIf="grp.isVisible"
-                                            profit-loss-grid-row [expandAll]="expandAll" [groupDetail]="grp" [padding]="padding" [search]="search"
+                                            profit-loss-grid-row [isExpandToggledDuringSearch]="isExpandToggledDuringSearch" [expandAll]="expandAll" [groupDetail]="grp" [padding]="padding" [search]="search"
                                             [from]="from" [to]="to" [incomeStatement]="plData?.incomeStatment">
                                             <ng-container
                                                 *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 10  }">
@@ -78,7 +78,7 @@
                                 </section>
                                 <!--/Grid-->
                             </div>
-                            <div class="account clearfix row" *ngIf="plData && plData.incomeStatment">
+                            <div class="account clearfix row" *ngIf="plData && plData.incomeStatment && !hideData">
                                 <div class="col-8  group pd-1">
                                     <strong>{{localeData?.gross_profit}}</strong>
                                 </div>
@@ -96,11 +96,11 @@
                     </div>
                     <div class="expenses">
                         <div class="clearfix profit-loss table-responsive overflow-hidden">
-                            <div *ngIf="plData && plData.expArr">
+                            <div *ngIf="plData && plData.expArr && !hideData">
                                 <!--Grid-->
                                 <ng-template #groupDetails let-list let-padding="padding">
                                     <ng-container *ngFor="let grp of list">
-                                        <section class="row-1" *ngIf="grp.isVisible" profit-loss-grid-row [groupDetail]="grp"
+                                        <section class="row-1" *ngIf="grp.isVisible" profit-loss-grid-row [isExpandToggledDuringSearch]="isExpandToggledDuringSearch" [groupDetail]="grp"
                                             [padding]="padding" [search]="search" [padding]="padding" [from]="from"
                                             [to]="to">
                                             <ng-container
@@ -178,7 +178,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="account clearfix row" *ngIf="plData && plData?.incomeStatment">
+                    <div class="account clearfix row" *ngIf="plData && plData?.incomeStatment && !hideData">
                         <div class="col-8  group pd-1">
                             <strong>{{localeData?.income_before_taxes}}</strong>
                         </div>

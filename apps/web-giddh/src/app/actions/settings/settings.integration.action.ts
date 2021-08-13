@@ -80,12 +80,12 @@ export class SettingsIntegrationActions {
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.CREATE_PAYMENT_KEY_RESPONSE),
             map((response: CustomActions) => {
-                let data: BaseResponse<string, string> = response.payload;
+                let data: BaseResponse<string, string> | any = response.payload;
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.store.dispatch(this._companyAction.getAllRegistrations());
-                    this.toasty.successToast('Account created successfully', '');
+                    this.toasty.successToast(data.message || data?.body?.Message);
                 }
                 return { type: 'EmptyAction' };
             })));

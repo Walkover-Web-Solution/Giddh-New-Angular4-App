@@ -1,11 +1,10 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { ExpencesAction } from '../../../actions/expences/expence.action';
 import { ToasterService } from '../../../services/toaster.service';
 import { takeUntil } from 'rxjs/operators';
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { ActionPettycashRequest, ExpenseResults, PettyCashReportResponse } from '../../../models/api-models/Expences';
+import { ActionPettycashRequest, ExpenseResults, PettyCashReportResponse, PettyCashResonse } from '../../../models/api-models/Expences';
 import { ExpenseService } from '../../../services/expences.service';
 import { CommonPaginatedRequest } from '../../../models/api-models/Invoice';
 import { FormControl } from '@angular/forms';
@@ -18,18 +17,17 @@ import * as moment from 'moment/moment';
     templateUrl: './pending-list.component.html',
     styleUrls: ['./pending-list.component.scss'],
 })
-
 export class PendingListComponent implements OnInit, OnChanges {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /** Taking report as input */
+    @Input() public pettyCashPendingReportResponse: PettyCashReportResponse = null;
+    /** True if report loading in process */
+    @Input() public isPettyCashPendingReportLoading: boolean = false;
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public expensesItems: ExpenseResults[] = [];
-    public pettyCashReportsResponse$: Observable<PettyCashReportResponse>;
-    public pettyCashPendingReportResponse: PettyCashReportResponse = null;
-    public getPettycashReportInprocess$: Observable<boolean>;
-    public getPettycashReportSuccess$: Observable<boolean>;
     public universalDate$: Observable<any>;
     /** This will hold if today is selected in universal */
     public todaySelected: boolean = false;
@@ -37,7 +35,6 @@ export class PendingListComponent implements OnInit, OnChanges {
     public from: string;
     public to: string;
     public selectedEntryForApprove: ExpenseResults;
-
     public isRowExpand: boolean = false;
     public pettycashRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
     @Output() public selectedRowInput: EventEmitter<ExpenseResults> = new EventEmitter();
@@ -45,31 +42,38 @@ export class PendingListComponent implements OnInit, OnChanges {
     @Output() public isFilteredSelected: EventEmitter<boolean> = new EventEmitter();
     /** This will emit the from and to date returned by api */
     @Output() public reportDates: EventEmitter<any> = new EventEmitter();
+    /** This will emit the filter object to reload the report */
+    @Output() public reloadReportList: EventEmitter<any> = new EventEmitter();
     @Input() public isClearFilter: boolean = false;
-
     public showSubmittedBySearch: boolean = false;
     public submittedBySearchInput: FormControl = new FormControl();
-
     public showAccountSearch: boolean = false;
     public accountSearchInput: FormControl = new FormControl();
-
     public showPaymentReceiveSearch: boolean = false;
     public paymentReceiveSearchInput: FormControl = new FormControl();
-
     public approveEntryModalRef: BsModalRef;
     public filterModalRef: BsModalRef;
     public approveEntryRequestInProcess: boolean = false;
+    /** Entry against object */
+    public entryAgainstObject = {
+        base: '',
+        against: '',
+        dropDownOption: [],
+        model: '',
+        name: ''
+    };
+    /** Entry object */
+    public accountEntryPettyCash: any = { particular: { name: "" } };
 
-    constructor(private store: Store<AppState>,
-        private _expenceActions: ExpencesAction,
+    constructor(
+        private store: Store<AppState>,
         private expenseService: ExpenseService,
-        private _toasty: ToasterService,
-        private _cdRf: ChangeDetectorRef, private _modalService: BsModalService) {
+        private toasty: ToasterService,
+        private cdRf: ChangeDetectorRef,
+        private modalService: BsModalService
+    ) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         this.todaySelected$ = this.store.pipe(select(p => p.session.todaySelected), takeUntil(this.destroyed$));
-        this.pettyCashReportsResponse$ = this.store.pipe(select(p => p.expense.pettycashReport), takeUntil(this.destroyed$));
-        this.getPettycashReportInprocess$ = this.store.pipe(select(p => p.expense.getPettycashReportInprocess), takeUntil(this.destroyed$));
-        this.getPettycashReportSuccess$ = this.store.pipe(select(p => p.expense.getPettycashReportSuccess), takeUntil(this.destroyed$));
 
         observableCombineLatest([this.universalDate$, this.todaySelected$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             if (!Array.isArray(resp[0])) {
@@ -92,21 +96,13 @@ export class PendingListComponent implements OnInit, OnChanges {
     }
 
     public ngOnInit() {
-        this.pettyCashReportsResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res) {
-                this.pettyCashPendingReportResponse = res;
-                this.expensesItems = res.results;
-                this.reportDates.emit([res.fromDate, res.toDate]);
-
-                setTimeout(() => {
-                    this.detectChanges();
-                }, 500);
-            }
-        });
+        this.getReportResponse();
     }
 
     public showApproveConfirmPopup(ref: TemplateRef<any>, item: ExpenseResults) {
-        this.approveEntryModalRef = this._modalService.show(ref, { class: 'modal-md', backdrop: true, ignoreBackdropClick: true });
+        this.accountEntryPettyCash = { particular: { name: item?.baseAccount?.name } };
+        this.prepareEntryAgainstObject(item);
+        this.approveEntryModalRef = this.modalService.show(ref, { class: 'modal-md', backdrop: true, ignoreBackdropClick: true });
         this.selectedEntryForApprove = item;
     }
 
@@ -120,7 +116,7 @@ export class PendingListComponent implements OnInit, OnChanges {
     }
 
     public showFilterModal(ref: TemplateRef<any>) {
-        this.filterModalRef = this._modalService.show(ref, { class: 'modal-md' });
+        this.filterModalRef = this.modalService.show(ref, { class: 'modal-md' });
     }
 
     public hideFilterModal() {
@@ -129,7 +125,7 @@ export class PendingListComponent implements OnInit, OnChanges {
 
     public async approveEntry() {
         if (!this.selectedEntryForApprove.baseAccount.uniqueName) {
-            this._toasty.errorToast(this.localeData?.approve_entry_error);
+            this.toasty.errorToast(this.localeData?.approve_entry_error);
             this.hideApproveConfirmPopup(false);
             return;
         }
@@ -145,7 +141,7 @@ export class PendingListComponent implements OnInit, OnChanges {
             ledgerRequest = await this.expenseService.getPettycashEntry(this.selectedEntryForApprove.uniqueName).toPromise();
         } catch (e) {
             this.approveEntryRequestInProcess = false;
-            this._toasty.errorToast(e);
+            this.toasty.errorToast(e);
             this.hideApproveConfirmPopup(false);
             return;
         }
@@ -153,11 +149,11 @@ export class PendingListComponent implements OnInit, OnChanges {
         this.expenseService.actionPettycashReports(actionType, { ledgerRequest: ledgerRequest.body }).subscribe((res) => {
             this.approveEntryRequestInProcess = false;
             if (res.status === 'success') {
-                this._toasty.successToast(res.body);
+                this.toasty.successToast(res.body);
                 // if entry approved successfully then re get all entries with already sated filter params
                 this.getPettyCashPendingReports(this.pettycashRequest);
             } else {
-                this._toasty.errorToast(res.message);
+                this.toasty.errorToast(res.message);
             }
             this.hideApproveConfirmPopup(false);
         });
@@ -167,7 +163,7 @@ export class PendingListComponent implements OnInit, OnChanges {
         SalesDetailedfilter.status = 'pending';
         SalesDetailedfilter.sort = this.pettycashRequest.sort;
         SalesDetailedfilter.sortBy = this.pettycashRequest.sortBy;
-        this.store.dispatch(this._expenceActions.GetPettycashReportRequest(SalesDetailedfilter));
+        this.reloadReportList.emit(SalesDetailedfilter);
     }
 
     public rowClicked(item: ExpenseResults) {
@@ -182,11 +178,15 @@ export class PendingListComponent implements OnInit, OnChanges {
                 this.clearFilter();
             }
         }
+
+        if (changes['pettyCashPendingReportResponse'] && changes['pettyCashPendingReportResponse'].currentValue) {
+            this.getReportResponse();
+        }
     }
 
-    public sort(ord: 'asc' | 'desc' = 'asc', key: string) {
+    public sort(order: 'asc' | 'desc' = 'asc', key: string) {
         this.pettycashRequest.sortBy = key;
-        this.pettycashRequest.sort = ord;
+        this.pettycashRequest.sort = order;
         this.getPettyCashPendingReports(this.pettycashRequest);
     }
 
@@ -205,8 +205,8 @@ export class PendingListComponent implements OnInit, OnChanges {
     }
 
     detectChanges() {
-        if (!this._cdRf['destroyed']) {
-            this._cdRf.detectChanges();
+        if (!this.cdRf['destroyed']) {
+            this.cdRf.detectChanges();
         }
     }
 
@@ -278,5 +278,61 @@ export class PendingListComponent implements OnInit, OnChanges {
         } else {
             return title;
         }
+    }
+
+    /**
+     * Gets report response
+     *
+     * @private
+     * @memberof PendingListComponent
+     */
+    private getReportResponse(): void {
+        if (this.pettyCashPendingReportResponse) {
+            this.expensesItems = this.pettyCashPendingReportResponse.results;
+            this.reportDates.emit([this.pettyCashPendingReportResponse.fromDate, this.pettyCashPendingReportResponse.toDate]);
+
+            setTimeout(() => {
+                this.detectChanges();
+            }, 500);
+        }
+    }
+
+    /**
+     * Prepares the entry
+     *
+     * @private
+     * @param {PettyCashResonse} res Petty cash details
+     * @memberof PendingListComponent
+     */
+    private prepareEntryAgainstObject(res: ExpenseResults): void {
+        let cashOrBankEntry = res?.baseAccount ? this.isCashBankAccount(res.baseAccount) : false;
+        if (res?.entryType === 'sales') {
+            this.entryAgainstObject.base = cashOrBankEntry ? 'Receipt Mode' : 'Debtor Name';
+            this.entryAgainstObject.against = cashOrBankEntry ? 'Entry against Debtor' : 'Cash Sales';
+        } else if (res?.entryType === 'expense') {
+            this.entryAgainstObject.base = cashOrBankEntry ? 'Payment Mode' : 'Creditor Name';
+            this.entryAgainstObject.against = cashOrBankEntry ? 'Entry against Creditors' : 'Cash Expenses';
+        } else {
+            this.entryAgainstObject.base = 'Deposit To';
+            this.entryAgainstObject.against = null;
+        }
+
+        this.entryAgainstObject.model = res?.baseAccount?.uniqueName;
+        this.entryAgainstObject.name = res?.baseAccount?.name;
+    }
+
+    /**
+     * Returns true, if the account belongs to cash or bank account
+     *
+     * @private
+     * @param {*} particular
+     * @returns {boolean}
+     * @memberof PendingListComponent
+     */
+    private isCashBankAccount(particular: any): boolean {
+        if (particular) {
+            return particular.parentGroups.some(parent => parent.uniqueName === 'bankaccounts' || parent.uniqueName === 'cash');
+        }
+        return false;
     }
 }

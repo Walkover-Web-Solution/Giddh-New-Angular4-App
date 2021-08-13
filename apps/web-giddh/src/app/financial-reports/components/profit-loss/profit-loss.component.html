@@ -1,7 +1,7 @@
 <ng-container appTranslate [file]="'trial-profit-balance/profit-loss'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
     <financial-filter #filter [selectedCompany]="selectedCompany" (onPropertyChanged)="filterData($event)"
-        [showLoader]="showLoader | async" (seachChange)="searchChanged($event)" (expandAll)="expandAllEvent($event)"
+        [showLoader]="showLoader | async" (seachChange)="searchChanged($event)" (expandAllChange)="expandAllEvent()" [(expandAll)]="expandAll"
         [tbExportCsv]="false" [tbExportPdf]="false" [tbExportXLS]="false" [plBsExportXLS]="true" [showLabels]="true"></financial-filter>
     <div *ngIf="(showLoader | async)">
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>

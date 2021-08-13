@@ -48,7 +48,7 @@ export class InprogressComponent implements OnInit, OnDestroy {
     public isLoading: boolean = false;
 
     constructor(
-        private _toaster: ToasterService,
+        private toaster: ToasterService,
         private tallysyncService: TallySyncService,
         private generalService: GeneralService
     ) { }
@@ -156,7 +156,7 @@ export class InprogressComponent implements OnInit, OnDestroy {
                         `${row.company.name}-error-log.xlsx`
                     );
                 } else {
-                    this._toaster.errorToast(res.message);
+                    this.toaster.errorToast(res.message);
                 }
             });
     }
