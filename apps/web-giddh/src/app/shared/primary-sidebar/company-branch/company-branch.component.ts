@@ -64,6 +64,8 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
     public currentCompanyBranches: Array<any>;
     /** This holds current branch unique name */
     public currentBranchUniqueName: string = "";
+    /** This holds user's email */
+    public userEmail: string = "";
 
     constructor(
         private store: Store<AppState>,
@@ -88,6 +90,12 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
         this.isCompanyRefreshInProcess$ = this.store.pipe(select(state => state.session.isRefreshing), takeUntil(this.destroyed$));
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+
+        this.store.pipe(select(state => state.session.user), takeUntil(this.destroyed$)).subscribe(user => {
+            if(user?.user) {
+                this.userEmail = user?.user?.email;
+            }
+        });
 
         this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
             if (!companies || companies.length === 0) {
