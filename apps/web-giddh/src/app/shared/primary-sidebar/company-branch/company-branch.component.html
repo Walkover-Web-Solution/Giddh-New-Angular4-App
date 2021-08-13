@@ -184,6 +184,8 @@
         <div
             class="profile-name cursor-pointer d-flex align-items-center"
             [routerLink]="['/pages/user-details/mobile-number']"
+            [tooltip]="userEmail"
+            placement="top"
         >
             <span class="profile-alice">{{ companyInitials }}</span>
         </div>
