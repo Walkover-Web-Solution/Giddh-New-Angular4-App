@@ -40,10 +40,10 @@
                 <div class="col-xl-2 col-md-6 col-xs-12 form-group hide-lable-on-mobile" *ngIf="createRequest.type">
                     <label class="d-block">&nbsp;</label>
                     <button type="submit" class="btn btn-success" *ngIf="!(createRequest.discountUniqueName)"
-                        [ladda]="isDiscountCreateInProcess$ | async">{{commonLocaleData?.app_add}}
+                        [ladda]="isLoading$ | async">{{commonLocaleData?.app_add}}
                     </button>
                     <button type="submit" class="btn btn-success" *ngIf="createRequest.discountUniqueName"
-                        [ladda]="isDiscountUpdateInProcess$ | async">{{commonLocaleData?.app_update}}
+                        [ladda]="isLoading$ | async">{{commonLocaleData?.app_update}}
                     </button>
                 </div>
 
@@ -57,7 +57,7 @@
 
                     <table class="table table-bordered basic mr-b05  on-mobile-view">
 
-                        <thead [hidden]="!(discountList$ | async)?.length">
+                        <thead [hidden]="!discountList?.length">
                             <tr>
                                 <th [style.width.px]="'50'">#</th>
                                 <th>{{commonLocaleData?.app_name}}</th>
@@ -65,8 +65,8 @@
                             </tr>
                         </thead>
 
-                        <tbody *ngIf="!(isDiscountListInProcess$ | async)">
-                            <tr *ngFor="let discount of discountList$ | async; let i = index">
+                        <tbody *ngIf="!isLoading">
+                            <tr *ngFor="let discount of discountList; let i = index">
                                 <td data-title="#">{{ i + 1 }}</td>
                                 <td [attr.data-title]="commonLocaleData?.app_name"> {{ discount.name }}</td>
                                 <td [attr.data-title]="commonLocaleData?.app_action" class="icon-btn">
@@ -79,7 +79,7 @@
                                 </td>
                             </tr>
                         </tbody>
-                        <tbody *ngIf="(isDiscountListInProcess$ | async)">
+                        <tbody *ngIf="isLoading">
                             <tr>
                                 <td colspan="3" class="text-center empty-table">
                                     <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
@@ -88,7 +88,7 @@
                         </tbody>
 
                     </table>
-                    <div class="no-data" *ngIf="!(isDiscountListInProcess$ | async) && !(discountList$ | async).length">
+                    <div class="no-data" *ngIf="!isLoading && !discountList?.length">
                         <no-data [secondaryMessage]="' '" [secondaryMessageClass]="'p-0'"></no-data>
                     </div>
                 </div>

@@ -1,0 +1,140 @@
+<ng-container appTranslate [file]="'trial-profit-balance/trial-balance/grid'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
+    <!-- no data start -->
+    <div class="no-data" *ngIf="noData">
+        <h1>{{localeData?.no_data_found}}</h1>
+        <img src="/assets/images/no-data.png" [alt]="localeData?.no_data_found">
+    </div>
+    <!-- nodata end -->
+    <div *ngIf="!noData" class="tb-wrapper">
+        <div class=" clearfix">
+            <!-- start main content -->
+            <div class="mt-1 mr-b1 pull-right">
+                <div class="tbpl-list">
+                    <ul class="list-inline color-codes pull-right">
+                        <li>
+                            <span class="circle square liabilities"></span>
+                            <span>{{commonLocaleData?.app_liabilities}}</span>
+                        </li>
+                        <li>
+                            <span class="circle square  assets"></span>
+                            <span>{{commonLocaleData?.app_assets}}</span>
+                        </li>
+                        <li>
+                            <span class="circle square income"></span>
+                            <span>{{commonLocaleData?.app_income}}</span>
+                        </li>
+                        <li>
+                            <span class="circle square expenses"></span>
+                            <span>{{commonLocaleData?.app_expenses}}</span>
+                        </li>
+                    </ul>
+                </div>
+                <!-- end of column -->
+            </div>
+            <div class="table-container clearfix trial-balance">
+                <section class="tb-section">
+                    <div class="row">
+                        <div class="col-4 search-container" #searchContainer
+                            (clickOutside)="clickedOutside($event, searchContainer)">
+                            <span [ngStyle]="{'display': showClearSearch ? 'none' : 'flex'}" class="align-items-center">
+                                <span class="pd-r1"><strong>{{localeData?.particular}}</strong></span>
+                                <i class="icon-search" id="showSearch" (click)="toggleSearch()"></i>
+                            </span>
+                            <span [hidden]="!showClearSearch" class="show-clear-search">
+                                <input type="search" #searchInputEl class="form-control"
+                                    [placeholder]="commonLocaleData?.app_search" aria-describedby="sizing-addon3"
+                                    [formControl]="accountSearchControl">
+                            </span>
+                        </div>
+                        <div class="col-2 text-right table-th">
+                            <strong>{{localeData?.opening_balance}}</strong>
+                        </div>
+                        <div class="col-2 text-right table-th">
+                            <strong>{{commonLocaleData?.app_debit}}</strong>
+                        </div>
+                        <div class="col-2 text-right table-th">
+                            <strong>{{commonLocaleData?.app_credit}}</strong>
+                        </div>
+                        <div class="col-2 text-right table-th-closing"><strong>{{localeData?.closing_balance}}</strong>
+                        </div>
+                    </div>
+                </section>
+                <!--Start Grid-->
+                <div *ngIf="data$.groupDetails && !hideData">
+                    <ng-template #groupDetails let-list let-padding="padding" let-isSubGroup="isSubGroup">
+                        <ng-container *ngIf="!expandAll || isSubGroup || (expandAll && search)">
+                            <ng-container *ngFor="let grp of list; trackBy: trackByFn">
+                                <section class="row-1" *ngIf="grp.isVisible"
+                                    [ngClass]="!isSubGroup ? grp.category : ''" grid-row [isExpandToggledDuringSearch]="isExpandToggledDuringSearch" [groupDetail]="grp" [padding]="padding"
+                                    [search]="search" [from]="from" [to]="to" [expandAll]="expandAll">
+                                    <ng-container
+                                        *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 20, isSubGroup: true  }">
+                                    </ng-container>
+                                </section>
+                            </ng-container>
+                        </ng-container>
+                        <cdk-virtual-scroll-viewport *ngIf="expandAll && !isSubGroup && !search" [itemSize]="35" class="trial-balance-viewport">
+                            <ng-container *cdkVirtualFor="let grp of list; trackBy: trackByFn">
+                                <section class="row-1" *ngIf="grp.isVisible"
+                                    [ngClass]="!isSubGroup ? grp.category : ''" grid-row [isExpandToggledDuringSearch]="isExpandToggledDuringSearch" [groupDetail]="grp" [padding]="padding"
+                                    [search]="search" [from]="from" [to]="to" [expandAll]="expandAll">
+                                    <ng-container
+                                        *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 20, isSubGroup: true  }">
+                                    </ng-container>
+                                </section>
+                            </ng-container>
+                        </cdk-virtual-scroll-viewport>
+                    </ng-template>
+                    <ng-container
+                        *ngTemplateOutlet="groupDetails; context:{ $implicit: data$.groupDetails | financialSearch: search, padding: 8, tbfrom: from, tbto: to }">
+                    </ng-container>
+                </div>
+                <div>
+                    <div class="table-responsive">
+                        <table class="table basic mb-0 table-footer">
+                            <thead>
+                                <tr>
+                                    <th width="33.5%;">
+                                        <span>{{localeData?.grand_total}}</span>
+                                    </th>
+                                    <th width="16.6%;" class="text-right">
+                                        <span class="d-inline-flex">
+                                            <amount-field [amount]="data$.forwardedBalance?.amount"
+                                                [currencySymbol]="false" [currencyCode]="false">
+                                            </amount-field>
+                                        </span>
+                                    </th>
+                                    <th width="16.6%;" class="text-right">
+                                        <span class="d-inline-flex">
+                                            <amount-field [amount]="data$.debitTotal" [currencySymbol]="false"
+                                                [currencyCode]="false">
+                                            </amount-field>
+                                        </span>
+                                    </th>
+                                    <th width="16.6%;" class="text-right">
+                                        <span class="d-inline-flex">
+                                            <amount-field [amount]="data$.creditTotal" [currencySymbol]="false"
+                                                [currencyCode]="false">
+                                            </amount-field>
+                                        </span>
+                                    </th>
+                                    <th width="16.6%;" class="text-right">
+                                        <span>
+                                            <span class="d-inline-flex">
+                                                <amount-field [amount]="data$.closingBalance?.amount"
+                                                    [currencySymbol]="false" [currencyCode]="false">
+                                                </amount-field>
+                                            </span>
+                                        </span>
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- end main content -->
+        </div>
+    </div>
+</ng-container>

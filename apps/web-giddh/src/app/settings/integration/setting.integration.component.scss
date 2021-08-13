@@ -61,7 +61,13 @@
 .payment-text {
     color: $gray;
 }
-
+.bank-logo {
+    img{
+        max-width: 140px;
+        margin-bottom: 10px;
+        width: 100%;
+    }
+}
 /*responsive*/
 @media (max-width: 1359px) {
     .xs-pd-l15 {
@@ -157,5 +163,117 @@
     .amount-upto {
         flex: 0 0 20.666667% !important;
         max-width: 20.666667% !important;
+    }
+}
+.icici-button {
+    border: 1px solid $dark-orange;
+    color: $dark-orange;
+}
+.button-separator {
+    color: $very-light-gray;
+}
+.account-wrapper {
+    width: 65%;
+    border-bottom: 1px solid $cornflower-blue-light;
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+}
+.account-wrapper:last-child {
+    border: none !important;
+}
+.account-info-background {
+    background-color: $light-alice-blue;
+    padding-top: 9px;
+    padding-bottom: 9px;
+    margin-top: 3px;
+    margin-left: 1px;
+}
+.view-only-field {
+    background-color: $white;
+    padding: 8px;
+    border-radius: 5px;
+    color: $midnight-blue;
+}
+.disabled-field {
+    background-color: $gray-95;
+    padding: 8px;
+    color: $black;
+    border-radius: 5px;
+    word-break: break-word;
+}
+.payment-updates {
+    width: 90%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.account-number {
+    color: $midnight-blue;
+}
+.limit-upto {
+    margin-left: 7px;
+}
+.action-div {
+    position: relative;
+    margin-top: 9px;
+    vertical-align: top;
+    display: inline-block;
+    a {
+        color: $grey-chateau;
+    }
+}
+.user-action-div {
+    a {
+        color: $grey-chateau;
+    }
+}
+.account-approval-status {
+    margin-left: 13px;
+}
+.field-label {
+    color: $omiod;
+}
+.account-approval-status.approved {
+    color: $tree-green;
+    i::before {
+        color: $tree-green;
+    }
+}
+.account-approval-status.pending-approval {
+    color: $orange-new;
+    i::before {
+        color: $orange-new;
+    }
+}
+.connected-accounts {
+    margin-left: 10px;
+}
+.btn-light-blue {
+    background-color: $light-alice-blue;
+    color: $midnight-blue;
+}
+.modal { 
+    .account-modal {
+        width: 500px !important;
+    }
+}
+.modal { 
+    .user-modal {
+        width: 400px !important;
+    }
+}
+.payor-duration {
+    margin-top: 2px;
+}
+
+@media (max-width: 1600px) and (min-width: 1200px) {
+    .account-wrapper {
+        width: 80% !important;
+    }
+}
+
+@media (max-width: 1199px) {
+    .account-wrapper {
+        width: 100% !important;
     }
 }

@@ -4173,7 +4173,7 @@ input[type="checkbox"][disabled] {
     outline: 0;
 }
 
-.align-top > tbody > tr > td {
+.align-top > tbody > tr > td, .v-align-top {
     vertical-align: top;
 }
 
@@ -8456,6 +8456,9 @@ body.update-scroll-hidden {
 body.update-scroll-hidden{
     overflow-y: hidden;
 }
+.trial-balance-viewport {
+    height: 500px;
+}
 .e-waybill-tabs.custom-tabs .nav-tabs{
     position: static !important;
     padding-left: 15px !important;
@@ -8482,6 +8485,11 @@ body.update-scroll-hidden{
 .stock-group-parent > ul{
     height: calc(100vh - 320px);
     overflow: auto;
+}
+.financial-report-account-detail-container {
+    .popover-arrow {
+        display: none;
+    }
 }
 /* responsive  starts here*/
 
@@ -9786,6 +9794,9 @@ body.update-scroll-hidden{
     }
     body.unresponsive {
         padding-top: 0;
+    }
+    .account-wrapper {
+        width: 100% !important;
     }
 }
 

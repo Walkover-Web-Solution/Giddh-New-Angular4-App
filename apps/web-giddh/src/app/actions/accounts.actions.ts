@@ -221,7 +221,7 @@ export class AccountsAction {
                     setTimeout(() => {
                         this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm());
                     }, 1000);
-                    this.store.dispatch(this.getAccountDetails(resData.request.uniqueName));
+                    this.store.dispatch(this.getAccountDetails(resData.body.uniqueName));
                 }
                 return { type: 'EmptyAction' };
             })));

@@ -62,7 +62,7 @@ export const ROUTES = [
             { path: 'search', loadChildren: () => import('./search/search.module').then(module => module.SearchModule) },
             {
                 path: 'trial-balance-and-profit-loss',
-                loadChildren: () => import('./tb-pl-bs/tb-pl-bs.module').then(module => module.TBPlBsModule),
+                loadChildren: () => import('./financial-reports/financial-reports.module').then(module => module.FinancialReportsModule),
                 data: { preload: true }
             },
             { path: 'audit-logs', loadChildren: () => import('./audit-logs/audit-logs.module').then(module => module.AuditLogsModule) },

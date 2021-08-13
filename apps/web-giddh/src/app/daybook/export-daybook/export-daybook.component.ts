@@ -24,12 +24,12 @@ export class ExportDaybookComponent implements OnInit, OnDestroy {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private _permissionDataService: PermissionDataService) {
+    constructor(private permissionDataService: PermissionDataService) {
 
     }
 
     public ngOnInit() {
-        this._permissionDataService.getData.forEach(f => {
+        this.permissionDataService.getData.forEach(f => {
             if (f.name === 'LEDGER') {
                 let isAdmin = some(f.permissions, (prm) => prm.code === 'UPDT');
                 this.emailTypeSelected = isAdmin ? 'admin-detailed' : 'view-detailed';

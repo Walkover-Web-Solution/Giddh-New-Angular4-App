@@ -178,7 +178,7 @@ export class CompanyService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e, dateObj)));
     }
 
-    public getComapnyTaxes(): Observable<BaseResponse<TaxResponse[], string>> {
+    public getCompanyTaxes(): Observable<BaseResponse<TaxResponse[], string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
         if (this.companyUniqueName) {
@@ -372,13 +372,14 @@ export class CompanyService {
      * Bulk pay vendor API call
      *
      * @param {string} companyUniqueName  Company unique name
-     * @param {string} urn Selected bank urn number
+     * @param {string} urn selected payor urn number
+     * @param {string} bankAccountUniqueName Selected bank
      * @param {BulkPaymentConfirmRequest} requestObject Request object
      * @returns {Observable<BaseResponse<BulkPaymentResponse, BulkPaymentConfirmRequest>>}
      * @memberof CompanyService
      */
-    public bulkVendorPaymentConfirm(companyUniqueName: string, urn: string, requestObject: BulkPaymentConfirmRequest): Observable<BaseResponse<BulkPaymentResponse, BulkPaymentConfirmRequest>> {
-        return this._http.post(this.config.apiUrl + COMPANY_API.BULK_PAYMENT_CONFIRM.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)).replace(':urn', urn), requestObject).pipe(map((res) => {
+    public bulkVendorPaymentConfirm(companyUniqueName: string, urn: string, bankAccountUniqueName: string, requestObject: BulkPaymentConfirmRequest): Observable<BaseResponse<BulkPaymentResponse, BulkPaymentConfirmRequest>> {
+        return this._http.post(this.config.apiUrl + COMPANY_API.BULK_PAYMENT_CONFIRM.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)).replace(':urn', urn).replace(':uniqueName', encodeURIComponent(bankAccountUniqueName)), requestObject).pipe(map((res) => {
             return res;
         }), catchError((e) => this.errorHandler.HandleCatch<BulkPaymentResponse, BulkPaymentConfirmRequest>(e, BulkPaymentConfirmRequest)));
     }
@@ -388,11 +389,12 @@ export class CompanyService {
     *
     * @param {string} companyUniqueName Company unique name
     * @param {string} urn Urn number
+    * @param {string} uniqueName Account unique name
     * @returns
     * @memberof CompanyService
     */
-    public resendOtp(companyUniqueName: string, urn: string, requestId: string): Observable<BaseResponse<any, any>> {
-        let url = this.config.apiUrl + COMPANY_API.BULK_PAYMENT_RESEND_OTP.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)).replace(':urn', urn).replace(':requestId', requestId);
+    public resendOtp(companyUniqueName: string, urn: string, requestId: string, uniqueName: string): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + COMPANY_API.BULK_PAYMENT_RESEND_OTP.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)).replace(':uniqueName', encodeURIComponent(uniqueName)).replace(':urn', urn).replace(':requestId', requestId);
         return this._http.get(url).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             return data;

@@ -1019,7 +1019,7 @@
                                     <tr>
                                         <td class="pd-r1">
                                             <label class="default-color">{{localeData?.assign_tag}}</label>
-                                            <sh-select id="update-ledger-assign-tag" [options]="tags$ | async"
+                                            <sh-select id="update-ledger-assign-tag" [options]="tags"
                                                 [isFilterEnabled]="true"
                                                 [class.disabled-ledger]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                                                 [placeholder]="commonLocaleData?.app_select_tag" [showClear]="false"

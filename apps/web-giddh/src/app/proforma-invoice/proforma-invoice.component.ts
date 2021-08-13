@@ -36,7 +36,6 @@ import { SalesService } from '../services/sales.service';
 import { ToasterService } from '../services/toaster.service';
 import { GeneralActions } from '../actions/general/general.actions';
 import { InvoiceActions } from '../actions/invoice/invoice.actions';
-import { SettingsDiscountActions } from '../actions/settings/discount/settings.discount.action';
 import { InvoiceReceiptActions } from '../actions/invoice/receipt/receipt.actions';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import {
@@ -638,7 +637,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private _toasty: ToasterService,
         private _generalActions: GeneralActions,
         private generalService: GeneralService,
-        private _settingsDiscountAction: SettingsDiscountActions,
         public route: ActivatedRoute,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceActions: InvoiceActions,
@@ -759,7 +757,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.companyActions.getTax());
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
-        this.store.dispatch(this._settingsDiscountAction.GetDiscount());
         this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         this.store.dispatch(this.settingsBranchAction.resetAllBranches());
@@ -4093,12 +4090,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.startLoader(false);
                 return;
             }
-            if (!this.autoFillShipping) {
-                this.checkGstNumValidation(data.accountDetails.shippingDetails.gstNumber, this.localeData?.shipping_address);
-                if (!this.isValidGstinNumber) {
-                    this.startLoader(false);
-                    return;
-                }
+        }
+        if (data.accountDetails.shippingDetails.gstNumber && !this.autoFillShipping) {
+            this.checkGstNumValidation(data.accountDetails.shippingDetails.gstNumber, this.localeData?.shipping_address);
+            if (!this.isValidGstinNumber) {
+                this.startLoader(false);
+                return;
             }
         }
 
@@ -4637,10 +4634,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public ngOnDestroy() {
-        if(this.callFromOutside && this.isSidebarExpanded) {
-            this.isSidebarExpanded = false;
-            this.generalService.expandSidebar();
-            document.querySelector('.nav-left-bar').classList.add('open');
+        if(this.callFromOutside) {
+            if(this.isSidebarExpanded) {
+                this.isSidebarExpanded = false;
+                this.generalService.expandSidebar();
+                document.querySelector('.nav-left-bar').classList.add('open');
+            }
             document.querySelector('body').classList.remove('setting-sidebar-open');
             document.querySelector('body').classList.remove('voucher-preview-edit');
         }

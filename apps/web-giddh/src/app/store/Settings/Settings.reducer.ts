@@ -10,10 +10,7 @@ import { SETTINGS_FINANCIAL_YEAR_ACTIONS } from '../../actions/settings/financia
 import { IFinancialYearResponse, ILockFinancialYearRequest } from '../../services/settings.financial-year.service';
 import { CustomActions } from '../customActions';
 import { SETTINGS_BRANCH_ACTIONS } from '../../actions/settings/branch/settings.branch.const';
-import { SETTINGS_TAG_ACTIONS } from '../../actions/settings/tag/settings.tag.const';
-import { SETTINGS_TRIGGERS_ACTIONS } from '../../actions/settings/triggers/settings.triggers.const';
 import { CreateDiscountRequest, IDiscountList } from '../../models/api-models/SettingsDiscount';
-import { SETTINGS_DISCOUNT_ACTIONS } from '../../actions/settings/discount/settings.discount.const';
 import { AccountResponse } from '../../models/api-models/Account';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 import { SETTINGS_TAXES_ACTIONS } from "../../actions/settings/taxes/settings.taxes.const";
@@ -84,22 +81,16 @@ export interface SettingsState {
     financialYears: IFinancialYearResponse;
     usersWithCompanyPermissions: any;
     branches: any;
-    tags: any;
     parentCompany: CompanyResponse;
-    triggers: any;
     discount: DiscountState;
     refreshCompany: boolean;
     amazonState: AmazonState;
     isGmailIntegrated: boolean;
     profileRequest: boolean;
-    isPaymentAdditionSuccess: boolean;
-    isPaymentUpdationSuccess: boolean;
     taxes: Taxes;
     branchRemoved: boolean;
     financialYearLimits: any;
     freePlanSubscribed: boolean;
-    isGetAllTagsInProcess: boolean;
-    isGetAllTriggersInProcess: boolean;
 }
 
 export const initialState: SettingsState = {
@@ -114,23 +105,17 @@ export const initialState: SettingsState = {
     financialYears: null,
     usersWithCompanyPermissions: null,
     branches: null,
-    tags: null,
     parentCompany: null,
-    triggers: null,
     discount: discountInitialState,
     refreshCompany: false,
     amazonState: AmazonInititalState,
     isGmailIntegrated: false,
-    isPaymentAdditionSuccess: false,
-    isPaymentUpdationSuccess: false,
     taxes: null,
     branchRemoved: false,
     // Get profile API call in process
     getProfileInProgress: false,
     financialYearLimits: null,
-    freePlanSubscribed: false,
-    isGetAllTagsInProcess: false,
-    isGetAllTriggersInProcess: false
+    freePlanSubscribed: false
 };
 
 export function SettingsReducer(state = initialState, action: CustomActions): SettingsState {
@@ -177,14 +162,12 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             let crtpytres: BaseResponse<string, PaymentClass> = action.payload;
             if (crtpytres.status === 'success') {
                 newState.integration.paymentForm = crtpytres.request;
-                newState.isPaymentAdditionSuccess = true;
                 return Object.assign({}, state, newState);
             }
             return state;
         case SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_KEY_RESPONSE:
             let crtpytUpres: BaseResponse<string, PaymentClass> = action.payload;
             if (crtpytUpres.status === 'success') {
-                newState.isPaymentUpdationSuccess = true;
                 return Object.assign({}, state, newState);
             }
             return state;
@@ -419,34 +402,6 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             }
             return Object.assign({}, state, newState);
         }
-        case SETTINGS_TAG_ACTIONS.GET_ALL_TAGS: {
-            return {
-                ...state,
-                isGetAllTagsInProcess: true
-            };
-        }
-        case SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE: {
-            let response: BaseResponse<any, any> = action.payload;
-            return {
-                ...state,
-                isGetAllTagsInProcess: false, tags: response.status === 'success' ? response.body : null
-            };
-        }
-        case SETTINGS_TRIGGERS_ACTIONS.GET_TRIGGERS: {
-            return {
-                ...state,
-                isGetAllTriggersInProcess: true
-            };
-        }
-        case SETTINGS_TRIGGERS_ACTIONS.GET_TRIGGERS_RESPONSE: {
-            let response: BaseResponse<any, any> = action.payload;
-            if (response.status === 'success') {
-                newState.triggers = response.body;
-                newState.isGetAllTriggersInProcess = false;
-                return Object.assign({}, state, newState);
-            }
-            return state;
-        }
         case SETTINGS_INTEGRATION_ACTIONS.GET_CASHFREE_DETAILS_RESPONSE:
             let cashFreeRes: BaseResponse<any, any> = action.payload;
             if (cashFreeRes.status === 'success') {
@@ -516,106 +471,6 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 return Object.assign({}, state, newState);
             }
             return state;
-
-        //  region discount reducer
-        case SETTINGS_DISCOUNT_ACTIONS.GET_DISCOUNT: {
-            return Object.assign({}, state, {
-                discount: Object.assign({}, state.discount, { isDiscountListInProcess: true })
-            });
-        }
-        case SETTINGS_DISCOUNT_ACTIONS.GET_DISCOUNT_RESPONSE: {
-            return Object.assign({}, state, {
-                discount: Object.assign({}, state.discount, {
-                    isDiscountListInProcess: false,
-                    discountList: action.payload
-                })
-            });
-        }
-
-        case SETTINGS_DISCOUNT_ACTIONS.CREATE_DISCOUNT: {
-            return Object.assign({}, state, {
-                discount: Object.assign({}, state.discount, {
-                    isDiscountCreateInProcess: true,
-                    isDiscountCreateSuccess: false
-                })
-            });
-        }
-        case SETTINGS_DISCOUNT_ACTIONS.CREATE_DISCOUNT_RESPONSE: {
-            let response: BaseResponse<AccountResponse, CreateDiscountRequest> = action.payload;
-
-            if (response.status === 'error') {
-                return Object.assign({}, state, {
-                    discount: Object.assign({}, state.discount, {
-                        isDiscountCreateInProcess: false,
-                        isDiscountCreateSuccess: false,
-                    })
-                });
-            }
-
-            let discountList = cloneDeep(state.discount.discountList);
-            discountList.push(response.body);
-            return Object.assign({}, state, {
-                discount: Object.assign({}, state.discount, {
-                    isDiscountCreateInProcess: false,
-                    isDiscountCreateSuccess: true,
-                    discountList
-                })
-            });
-        }
-
-        case SETTINGS_DISCOUNT_ACTIONS.UPDATE_DISCOUNT: {
-            return Object.assign({}, state, {
-                discount: Object.assign({}, state.discount, {
-                    isDiscountUpdateInProcess: true,
-                    isDiscountUpdateSuccess: false
-                })
-            });
-        }
-        case SETTINGS_DISCOUNT_ACTIONS.UPDATE_DISCOUNT_RESPONSE: {
-            let response: BaseResponse<AccountResponse, CreateDiscountRequest> = action.payload;
-
-            if (response.status === 'error') {
-                return Object.assign({}, state, {
-                    discount: Object.assign({}, state.discount, {
-                        isDiscountUpdateInProcess: false,
-                        isDiscountUpdateSuccess: false,
-                    })
-                });
-            }
-
-            let discountList = cloneDeep(state.discount.discountList);
-            discountList = discountList.map(dis => {
-                if (dis.uniqueName === response.queryString) {
-                    dis = response.body;
-                }
-                return dis;
-            });
-            return Object.assign({}, state, {
-                discount: Object.assign({}, state.discount, {
-                    isDiscountUpdateInProcess: false,
-                    isDiscountUpdateSuccess: true,
-                    discountList
-                })
-            });
-        }
-
-        case SETTINGS_DISCOUNT_ACTIONS.DELETE_DISCOUNT: {
-            return Object.assign({}, state, {
-                discount: Object.assign({}, state.discount, {
-                    isDeleteDiscountInProcess: true,
-                    isDeleteDiscountSuccess: false
-                })
-            });
-        }
-        case SETTINGS_DISCOUNT_ACTIONS.DELETE_DISCOUNT_RESPONSE: {
-            return Object.assign({}, state, {
-                discount: Object.assign({}, state.discount, {
-                    isDeleteDiscountInProcess: false,
-                    isDeleteDiscountSuccess: true,
-                    discountList: state.discount.discountList.filter(d => d.uniqueName !== action.payload)
-                })
-            });
-        }
         case SETTINGS_INTEGRATION_ACTIONS.GET_AMAZON_SELLER_RESPONSE: {
             let AmazonSellerRes: BaseResponse<any, any> = action.payload;
             if (AmazonSellerRes.status === 'success') {
