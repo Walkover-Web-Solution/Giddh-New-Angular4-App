@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { Component, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, NgForm } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
@@ -158,6 +158,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public activeCompany: any;
     /** Holds image path */
     public imgPath: string = '';
+    
+    isLinear = true;
+    firstFormGroup: FormGroup;
+    secondFormGroup: FormGroup;
+    thirdFormGroup: FormGroup;
 
     constructor(
         private router: Router,
@@ -172,7 +177,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private generalService: GeneralService,
         private settingsIntegrationService: SettingsIntegrationService,
         private searchService: SearchService,
-        private salesService: SalesService
+        private salesService: SalesService,
+        private _formBuilder: FormBuilder
     ) {
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
@@ -291,6 +297,18 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.activeCompany = activeCompany;
             }
         });
+
+            
+    this.firstFormGroup = this._formBuilder.group({
+        firstCtrl: ['', Validators.required]
+    });
+    this.secondFormGroup = this._formBuilder.group({
+        secondCtrl: ['', Validators.required]
+    });
+    this.thirdFormGroup = this._formBuilder.group({
+        thirdCtrl: ['', Validators.required]
+    });
+    
     }
 
     public ngAfterViewInit() {

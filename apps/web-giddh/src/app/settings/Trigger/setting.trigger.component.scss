@@ -1,3 +1,5 @@
+@import "../../../assets/css/color.scss";
+
 @media (max-width: 768px) {
     .section-head {
         margin-top: 10px;
@@ -6,3 +8,46 @@
         border-right: none !important;
     }
 }
+
+.tab-integration .nav-tabs > li > a {
+    position: relative !important;
+}
+
+/* trigger material css */
+.tab-integration {
+    h3 {
+        position: absolute;
+        top: 0;
+        right: 0;
+        border: 1px solid;
+        border-radius: 50%;
+        font-size: 12px;
+        padding: 1px 4px;
+        color: $midnight-blue;
+        margin: 5px 5px 0 0;
+    }
+    i {
+        position: absolute;
+        bottom: 0;
+        margin: 0 0 5px 5px;
+        left: 0;
+        font-size: 10px;
+        font-weight: 800;
+    }
+    .icon-tick {
+        color: $success-green;
+    }
+    .icon-cross {
+        color: $red;
+    }
+}
+
+.mat-list-item {
+    height: 40px !important;
+}
+
+.mat-form-field {
+    margin-top: 10px;
+}
+
+/* trigger material css end */

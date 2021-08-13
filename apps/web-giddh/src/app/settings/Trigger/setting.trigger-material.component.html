@@ -1,0 +1,186 @@
+<ng-container
+    appTranslate
+    [file]="'settings/trigger'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <div class="clearfix">
+        <tabset class="tab-integration" id="tab-integration">
+            <tab>
+                <ng-template tabHeading>
+                    <span class="icon-chat2"></span> SMS
+                    <h3>1</h3>
+                    <i class="icon-tick"></i>
+                </ng-template>
+                Basic content
+            </tab>
+            <tab>
+                <ng-template tabHeading>
+                    <span class="icon-mail"></span> Email
+                    <h3>4</h3>
+                    <i class="icon-cross"></i>
+                </ng-template>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="row total-details-box opening-box border-none mr-0 ml-0 pl-0 pr-0">
+                            <div class="col-md-6">
+                                <mat-list class="pt-0">
+                                    <mat-list-item class="font-14">
+                                        <mat-icon matListIcon class="font-14">1.</mat-icon>
+                                        <p matLine>
+                                            <span> List text 1 </span>
+                                        </p>
+                                    </mat-list-item>
+                                    <mat-list-item class="font-14">
+                                        <mat-icon matListIcon class="font-14">2.</mat-icon>
+                                        <p matLine>
+                                            <span> List text 2 </span>
+                                        </p>
+                                    </mat-list-item>
+                                    <mat-list-item class="font-14">
+                                        <mat-icon matListIcon class="font-14">3.</mat-icon>
+                                        <p matLine>
+                                            <span> List text 3 </span>
+                                        </p>
+                                    </mat-list-item>
+                                </mat-list>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <div class="btn-group desktop-view-btn" dropdown [autoClose]="true">
+                                    <button
+                                        id="ddl-newinv"
+                                        dropdownToggle
+                                        type="button"
+                                        class="btn btn-sky-blue dropdown-toggle dropdown-btn-new"
+                                        aria-controls="dropdown-ddl-newinv"
+                                    >
+                                        New Email
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul
+                                        id="dropdown-ddl-newinv"
+                                        *dropdownMenu
+                                        class="dropdown-menu"
+                                        role="menu"
+                                        aria-labelledby="ddl-newinv"
+                                    >
+                                        <li role="menuitem">
+                                            <a class="dropdown-item" href="javascript: void 0">Gmail</a>
+                                        </li>
+                                        <li role="menuitem">
+                                            <a class="dropdown-item" href="javascript: void 0">Msg-91</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Will show on clicking the Gmail button from above new Email button -->
+                        <div class="row mr-t2 total-details-box sales-purchase border-none mr-0 ml-0 pl-0 pr-0">
+                            <div class="col-md-12">
+                                <h4 class="font-16"><span class="number-total">Suggested by Giddh</span></h4>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-list class="pt-0">
+                                    <mat-list-item class="font-14">
+                                        <mat-icon matListIcon class="font-14">1.</mat-icon>
+                                        <p matLine>
+                                            <span> List text 1 </span>
+                                        </p>
+                                    </mat-list-item>
+                                    <mat-list-item class="font-14">
+                                        <mat-icon matListIcon class="font-14">2.</mat-icon>
+                                        <p matLine>
+                                            <span> List text 2 </span>
+                                        </p>
+                                    </mat-list-item>
+                                    <mat-list-item class="font-14">
+                                        <mat-icon matListIcon class="font-14">3.</mat-icon>
+                                        <p matLine>
+                                            <span> List text 3 </span>
+                                        </p>
+                                    </mat-list-item>
+                                </mat-list>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <button mat-button class="btn btn-sky-blue">Activate</button>
+                            </div>
+                        </div>
+                        <!-- end of gmail content-->
+                    </div>
+                </div>
+                <!-- will show on clicking activate button from above row-->
+                <div class="row mr-t3">
+                    <div class="col-md-6">
+                        <h4 class="font-16">MSG-91 Validation</h4>
+                        <form #msgform="ngForm">
+                            <mat-stepper orientation="vertical" [linear]="isLinear" #stepper>
+                                <mat-step [stepControl]="firstFormGroup">
+                                    <form [formGroup]="firstFormGroup">
+                                        <ng-template matStepLabel
+                                            >Please enter your Email or Contact number</ng-template
+                                        >
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Email / Contact number</mat-label>
+                                            <input
+                                                matInput
+                                                placeholder="Enter here"
+                                                formControlName="firstCtrl"
+                                                required
+                                            />
+                                        </mat-form-field>
+                                        <div>
+                                            <button mat-button matStepperNext class="btn btn-success">Next</button>
+                                        </div>
+                                    </form>
+                                </mat-step>
+                                <mat-step>
+                                    <form [formGroup]="secondFormGroup">
+                                        <ng-template matStepLabel>Please enter OTP</ng-template>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>OTP</mat-label>
+                                            <input
+                                                matInput
+                                                placeholder="Enter here"
+                                                formControlName="secondCtrl"
+                                                required
+                                            />
+                                        </mat-form-field>
+                                        <div>
+                                            <button mat-button matStepperPrevious class="btn btn-default">Back</button>
+                                            <button mat-button matStepperNext class="btn btn-success">
+                                                {{ commonLocaleData?.verify }}
+                                            </button>
+                                        </div>
+                                    </form>
+                                </mat-step>
+                                <mat-step>
+                                    <ng-template matStepLabel>Activate</ng-template>
+                                    <div class="mr-t1">
+                                        <button mat-button matStepperPrevious class="btn btn-default">Done</button>
+                                        <button mat-button (click)="stepper.reset()" class="btn btn-danger">
+                                            Delete
+                                        </button>
+                                    </div>
+                                </mat-step>
+                            </mat-stepper>
+                        </form>
+                    </div>
+                </div>
+                <!-- end of activate button content -->
+            </tab>
+            <tab>
+                <ng-template tabHeading> <span class="icon-ecomm"></span> RCS </ng-template>
+                Basic content 2
+            </tab>
+            <tab>
+                <ng-template tabHeading> <span class="icon-chat2"></span> WhatsApp </ng-template>
+                Basic content 3
+            </tab>
+            <tab>
+                <ng-template tabHeading> <span class="icon-chat2"></span> Voice </ng-template>
+                Basic content 4
+            </tab>
+        </tabset>
+    </div>
+</ng-container>

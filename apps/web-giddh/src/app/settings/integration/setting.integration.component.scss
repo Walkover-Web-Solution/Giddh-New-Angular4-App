@@ -71,6 +71,21 @@
     }
 }
 
+/* integration material css */
+.mat-form-field {
+    margin-top: 10px;
+}
+
+.no-account {
+    padding-top: 15px;
+    a {
+        color: $midnight-blue;
+        font-size: 14px;
+        text-decoration: underline;
+    }
+}
+/* integration material end*/
+
 /*responsive*/
 @media (max-width: 1359px) {
     .xs-pd-l15 {

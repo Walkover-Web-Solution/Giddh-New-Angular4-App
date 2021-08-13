@@ -13,7 +13,7 @@ import { SearchService } from '../../services/search.service';
 import { GroupService } from '../../services/group.service';
 import { API_COUNT_LIMIT } from '../../app.constant';
 import { cloneDeep, each } from '../../lodash-optimized';
-import { NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { SettingsTriggersService } from '../../services/settings.triggers.service';
 
 @Component({
@@ -102,12 +102,17 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
+    isLinear = true;
+    firstFormGroup: FormGroup;
+    secondFormGroup: FormGroup;
+
     constructor(
         private groupService: GroupService,
         private store: Store<AppState>,
         private searchService: SearchService,
         private toaster: ToasterService,
-        private settingsTriggersService: SettingsTriggersService
+        private settingsTriggersService: SettingsTriggersService,
+        private _formBuilder: FormBuilder
     ) {
 
     }
@@ -134,6 +139,13 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
                 });
                 this.groups = cloneDeep(groupsRes);
             }
+        });
+
+        this.firstFormGroup = this._formBuilder.group({
+            firstCtrl: ['', Validators.required]
+        });
+        this.secondFormGroup = this._formBuilder.group({
+            secondCtrl: ['', Validators.required]
         });
     }
 
