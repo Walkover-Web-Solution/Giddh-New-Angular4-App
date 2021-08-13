@@ -793,7 +793,6 @@
                                                                     currentOrganizationType === 'COMPANY' &&
                                                                     currentCompanyBranches?.length > 2
                                                                 "
-                                                                (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                                 (changeTransactionType)="toggleTransactionType($event)"
                                                                 [showTaxationDiscountBox]="
                                                                     lc.currentBlankTxn.showTaxationDiscountBox
@@ -1043,7 +1042,6 @@
                                                                     currentOrganizationType === 'COMPANY' &&
                                                                     currentCompanyBranches?.length > 2
                                                                 "
-                                                                (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                                 (changeTransactionType)="toggleTransactionType($event)"
                                                                 [showTaxationDiscountBox]="
                                                                     lc.currentBlankTxn.showTaxationDiscountBox
@@ -1672,7 +1670,6 @@
                                                 [needToReCalculate]="needToReCalculate"
                                                 [tcsOrTds]="tcsOrTds"
                                                 [baseCurrencyDetails]="baseCurrencyDetails"
-                                                (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                 [foreignCurrencyDetails]="foreignCurrencyDetails"
                                                 [giddhBalanceDecimalPlaces]="giddhBalanceDecimalPlaces"
                                                 [selectedCurrency]="selectedCurrency"
@@ -2068,7 +2065,6 @@
                                                 [tcsOrTds]="tcsOrTds"
                                                 [baseCurrencyDetails]="baseCurrencyDetails"
                                                 [foreignCurrencyDetails]="foreignCurrencyDetails"
-                                                (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                 [selectedCurrency]="selectedCurrency"
                                                 [giddhBalanceDecimalPlaces]="giddhBalanceDecimalPlaces"
                                                 [selectedPrefixForCurrency]="selectedPrefixForCurrency"
@@ -2548,7 +2544,6 @@
                     </section>
                 </div>
             </div>
-            <div class="show-if-ledger-open" *ngIf="isMoreDetailsOpened"></div>
             <!-- modal sections -->
             <div *ngIf="isShowLedgerColumnarReportTable">
                 <div class="back-btn text-right pr-1 mt-1 mr-b1">
