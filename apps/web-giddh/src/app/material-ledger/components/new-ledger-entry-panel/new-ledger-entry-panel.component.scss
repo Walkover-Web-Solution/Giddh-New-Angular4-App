@@ -115,6 +115,10 @@ span.eligible-ITC {
     border: 1px solid $black;
     padding: 2px;
 }
+
+.mat-expansion-panel-header.mat-expanded {
+    background-color: #f4f5f8 !important;
+}
 @media only screen and (max-width: 767px) {
     .ledger-panel .btn {
         margin-bottom: 13px;
