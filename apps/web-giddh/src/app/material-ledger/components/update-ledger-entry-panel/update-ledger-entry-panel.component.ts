@@ -58,6 +58,7 @@ import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-m
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../../theme/new-confirm-modal/confirm-modal.component';
 import { SettingsTagService } from '../../../services/settings.tag.service';
+import { MatAccordion } from '@angular/material/expansion';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';
@@ -82,6 +83,8 @@ const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make ad
 })
 
 export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
+    /** Instance of mat accordion */
+    @ViewChild(MatAccordion) accordion: MatAccordion;
     public vm: UpdateLedgerVm;
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -151,7 +154,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     /** Emits the active ledger account data */
     public activeAccountSubject: Subject<any> = new Subject();
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public showAdvanced: boolean;
     public baseCurrency: string = null;
     public isChangeAcc: boolean = false;
     public firstBaseAccountSelected: string;
@@ -339,7 +341,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
             }
         });
-        this.showAdvanced = false;
         this.vm.selectedLedger = new LedgerResponse();
         this.vm.selectedLedger.otherTaxModal = new SalesOtherTaxesModal();
 
@@ -1704,15 +1705,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         }
         this.adjustmentDialogRef.close();
-    }
-
-    /**
-     * Toggles the more detail section
-     *
-     * @memberof UpdateLedgerEntryPanelComponent
-     */
-    public toggleMoreDetail(): void {
-        this.showAdvanced = !this.showAdvanced;
     }
 
     /**
