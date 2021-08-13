@@ -1,7 +1,6 @@
 import { select, Store } from '@ngrx/store';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppState } from '../../store';
-import { ImportExcelActions } from '../../actions/import-excel/import-excel.actions';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { takeUntil } from 'rxjs/operators';
@@ -14,12 +13,10 @@ import { ReplaySubject } from 'rxjs';
 })
 
 export class ImportTypeSelectComponent implements OnInit, OnDestroy {
-
     /** True if current organization is branch */
     public isBranch: boolean;
     /** Current branches */
     public branches: Array<any>;
-
     /** Subject to unsubscribe from subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
@@ -29,14 +26,12 @@ export class ImportTypeSelectComponent implements OnInit, OnDestroy {
 
     constructor(
         private store: Store<AppState>,
-        private _importExcelActions: ImportExcelActions,
         private generalService: GeneralService
     ) {
         this.isBranch = this.generalService.currentOrganizationType === OrganizationType.Branch;
     }
 
     public ngOnInit() {
-        this.store.dispatch(this._importExcelActions.resetImportExcelState());
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response || [];
