@@ -148,7 +148,9 @@
                 class="textarea form-control" [placeholder]="localeData?.reason_placeholder"></textarea>
         </div>
 
-        <input type="submit" class="btn btn-success" [disabled]="!rejectReason.value" (click)="submitReject()">
+        <button type="submit" class="btn btn-success" [disabled]="!rejectReason.value" (click)="submitReject()">
+            {{ commonLocaleData?.app_submit }}
+        </button>
     </div>
 </ng-template>
 <!-- modal end -->

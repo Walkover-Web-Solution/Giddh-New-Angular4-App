@@ -48,7 +48,7 @@
                                 <app-expense-details [selectedRowItem]="selectedRowItem" [localeData]="localeData"
                                     [commonLocaleData]="commonLocaleData"
                                     (toggleDetailsMode)="closeDetailedMode($event);"
-                                    (refreshPendingItem)="refreshPendingItem($event);"></app-expense-details>
+                                    (previewNextItem)="previewNextItem($event)"></app-expense-details>
                             </div>
                         </div>
                     </ng-container>
