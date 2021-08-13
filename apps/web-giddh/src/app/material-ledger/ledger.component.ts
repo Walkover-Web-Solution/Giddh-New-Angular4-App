@@ -204,8 +204,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public noResultsFoundLabel = SearchResultText.NewSearch;
     /** This will hold if it's default load */
     public isDefaultLoad: boolean = true;
-    /** This is used to show hide bottom spacing when more detail is opened while CREATE/UPDATE ledger */
-    public isMoreDetailsOpened: boolean = false;
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** Stores the branch list of a company */
@@ -746,7 +744,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.toaster.showSnackBar("success", this.localeData?.entry_created, this.commonLocaleData?.app_success);
                 this.lc.showNewLedgerPanel = false;
                 this.lc.showBankLedgerPanel = false;
-                this.isMoreDetailsOpened = false;
                 this.getTransactionData();
                 this.resetBlankTransaction();
                 this.resetPreviousSearchResults();
@@ -1057,7 +1054,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         };
         this.shouldShowRcmTaxableAmount = false;
         this.shouldShowItcSection = false;
-        this.isMoreDetailsOpened = false;
         if (this.isLedgerAccountAllowsMultiCurrency) {
             this.getCurrencyRate('blankLedger');
         }
@@ -1124,7 +1120,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             }
         }
-        this.isMoreDetailsOpened = false;
         this.lc.showNewLedgerPanel = false;
     }
 
@@ -1154,7 +1149,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.toggleAsidePane();
                 }
 
-                this.isMoreDetailsOpened = false;
                 this.entryManipulated();
                 this.updateLedgerComponentInstance = null;
             }
@@ -2085,16 +2079,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
             this.selectedDate(value);
         }
-    }
-
-    /**
-     * Handler for more detail open in CREATE ledger
-     *
-     * @param {boolean} isOpened True, if more detail is opened while creating new ledger entry
-     * @memberof LedgerComponent
-     */
-    public handleOpenMoreDetail(isOpened: boolean): void {
-        this.isMoreDetailsOpened = isOpened;
     }
 
     /**
