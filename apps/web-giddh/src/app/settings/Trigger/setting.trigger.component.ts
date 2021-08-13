@@ -102,7 +102,9 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
+    isLinear = true;
     firstFormGroup: FormGroup;
+    secondFormGroup: FormGroup;
 
     constructor(
         private groupService: GroupService,
@@ -154,6 +156,9 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
 
         this.firstFormGroup = this._formBuilder.group({
             firstCtrl: ['', Validators.required]
+        });
+        this.secondFormGroup = this._formBuilder.group({
+            secondCtrl: ['', Validators.required]
         });
     }
 

@@ -159,6 +159,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     /** Holds image path */
     public imgPath: string = '';
 
+    isLinear = true;
     firstFormGroup: FormGroup;
     secondFormGroup: FormGroup;
     thirdFormGroup: FormGroup;
