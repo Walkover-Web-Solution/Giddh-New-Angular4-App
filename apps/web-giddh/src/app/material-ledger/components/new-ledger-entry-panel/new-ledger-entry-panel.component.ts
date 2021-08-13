@@ -69,6 +69,7 @@ import { SettingsTagService } from '../../../services/settings.tag.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../../theme/new-confirm-modal/confirm-modal.component';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
+import { MatAccordion } from '@angular/material/expansion';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -98,6 +99,8 @@ const NEW_LEDGER_ENTRIES = [
 })
 
 export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
+    /** Instance of mat accordion */
+    @ViewChild(MatAccordion) accordion: MatAccordion;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -138,8 +141,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Output() public clickUnpaidInvoiceList: EventEmitter<any> = new EventEmitter();
     /** Emit event for getting invoice list for credit note linking */
     @Output() public getInvoiceListsForCreditNote: EventEmitter<any> = new EventEmitter();
-    /** Emits when more detail is opened */
-    @Output() public moreDetailOpen: EventEmitter<any> = new EventEmitter();
     /** Emits when other taxes are saved */
     @Output() public saveOtherTax: EventEmitter<any> = new EventEmitter();
     @ViewChild('entryContent', { static: true }) public entryContent: ElementRef;
@@ -154,7 +155,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public sessionKey$: Observable<string>;
     public companyName$: Observable<string>;
     public voucherTypeList: Observable<IOption[]>;
-    public showAdvanced: boolean;
     public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
     public isFileUploading: boolean = false;
     public isLedgerCreateInProcess$: Observable<boolean>;
@@ -286,7 +286,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             subVoucher: SubVoucher.AdvanceReceipt
         }]);
 
-        this.showAdvanced = false;
         this.uploadInput = new EventEmitter<UploadInput>();
         this.fileUploadOptions = { concurrency: 0 };
         this.currentTxn.advanceReceiptAmount = this.currentTxn.amount;
@@ -1399,16 +1398,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.isAdjustVoucherSelected = false;
         }
         this.adjustmentDialogRef.close();
-    }
-
-    /**
-     * Toggles the more detail section
-     *
-     * @memberof NewLedgerEntryPanelComponent
-     */
-    public toggleMoreDetail(): void {
-        this.showAdvanced = !this.showAdvanced;
-        this.moreDetailOpen.emit(this.showAdvanced);
     }
 
     /**
