@@ -51,8 +51,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     public actionPettyCashRequestBody: ExpenseActionRequest;
     @Output() public toggleDetailsMode: EventEmitter<boolean> = new EventEmitter();
     @Output() public selectedDetailedRowInput: EventEmitter<ExpenseResults> = new EventEmitter();
+    /** This will emit true if we need to show next record in preview */
+    @Output() public previewNextItem: EventEmitter<boolean> = new EventEmitter();
     @Input() public selectedRowItem: any;
-    @Output() public refreshPendingItem: EventEmitter<boolean> = new EventEmitter();
     @ViewChild(UpdateLedgerEntryPanelComponent, { static: false }) public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
     @ViewChild('entryAgainstAccountDropDown', { static: false }) public entryAgainstAccountDropDown: ShSelectComponent;
     public selectedItem: ExpenseResults;
@@ -305,9 +306,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
             this.approveEntryRequestInProcess = false;
             if (res.status === 'success') {
                 this.hideApproveConfirmPopup(false);
-                this.toasty.successToast(res.body);
-                this.refreshPendingItem.emit(true);
-                this.toggleDetailsMode.emit(true);
+                this.processNextRecord(res);
             } else {
                 this.toasty.errorToast(res.message);
                 this.approveEntryRequestInProcess = false;
@@ -327,11 +326,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     public pettyCashAction(actionType: ActionPettycashRequest) {
         this.expenseService.actionPettycashReports(actionType, this.actionPettyCashRequestBody).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res.status === 'success') {
-                this.toasty.successToast(res.body);
-                this.closeDetailsMode();
-                this.refreshPendingItem.emit(true);
+                this.processNextRecord(res);
             } else {
-                this.toasty.errorToast(res.body);
+                this.toasty.errorToast(res.body ?? res.message);
             }
             this.modalRef.hide();
         });
@@ -898,5 +895,18 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
             }
             this.isPettyCashEntryLoading = false;
         });
+    }
+
+    /**
+     * This will emit true to show next record in preview mode
+     *
+     * @private
+     * @param {*} response
+     * @memberof ExpenseDetailsComponent
+     */
+    private processNextRecord(response: any): void {
+        this.toasty.successToast(response?.body);
+        this.rejectReason.setValue("");
+        this.previewNextItem.emit(true);
     }
 }
