@@ -210,17 +210,17 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
         return tempFYIndex;
     }
 
-    public expandAllEvent(event: boolean) {
-        this.cd.checkNoChanges();
-        this.expandAll = !this.expandAll;
+    public expandAllEvent() {
         setTimeout(() => {
-            this.expandAll = event;
             this.cd.detectChanges();
         }, 1);
     }
 
     public searchChanged(event: string) {
         this.search = event;
+        if (!this.search) {
+            this.expandAll = false;
+        }
         this.cd.detectChanges();
     }
 }

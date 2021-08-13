@@ -178,7 +178,7 @@ export class CompanyService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e, dateObj)));
     }
 
-    public getComapnyTaxes(): Observable<BaseResponse<TaxResponse[], string>> {
+    public getCompanyTaxes(): Observable<BaseResponse<TaxResponse[], string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
         if (this.companyUniqueName) {

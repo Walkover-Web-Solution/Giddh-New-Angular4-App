@@ -36,5 +36,6 @@
 		"enter_url": "कृपया URL प्रविष्ट करा."
 	},
 	"delete_tax": "आपली खात्री आहे की आपण [SELECTED_TAX] हटवू इच्छिता?",
-	"update_trigger": "आपली खात्री आहे की [TRIGGER_NAME] अद्यतनित करू इच्छिता?"
+	"update_trigger": "आपली खात्री आहे की [TRIGGER_NAME] अद्यतनित करू इच्छिता?",
+    "validation": "प्रमाणीकरण"
 }

@@ -2,7 +2,7 @@
     (commonLocaleData)="commonLocaleData = $event">
     <financial-filter #filter [selectedCompany]="selectedCompany" [showLoader]="showLoader | async" [showLabels]="true"
         (seachChange)="searchChanged($event)" (onPropertyChanged)="filterData($event)"
-        (expandAll)="expandAllEvent($event)" [tbExportCsv]="true"
+        (expandAllChange)="expandAllEvent()" [(expandAll)]="expandAll" [tbExportCsv]="true"
         [tbExportPdf]="true" [tbExportXLS]="true"></financial-filter>
     <div *ngIf="(showLoader | async)">
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>

@@ -67,9 +67,9 @@
                         </div>
                     </div>
                     <div class="form-group" *ngIf="!(showLoader)">
-                        <div class="form-group pull-left mr-r15 d-inline-flex relative" *ngIf="(tags$ | async)?.length">
+                        <div class="form-group pull-left mr-r15 d-inline-flex relative" *ngIf="tags?.length">
                             <i class="glyphicon glyphicon-triangle-bottom"></i>
-                            <sh-select [options]="tags$ | async" name="selectedTag" formControlName="tagName"
+                            <sh-select [options]="tags" name="selectedTag" formControlName="tagName"
                                 [isFilterEnabled]="true" (selected)="onTagSelected($event)"
                                 [placeholder]="commonLocaleData?.app_select_tag" [ItemHeight]="35"
                                 [notFoundLink]="false" (noResultsClicked)="toggleTagsModal()"
@@ -78,12 +78,12 @@
                         </div>
                         <!-- Filter by Tag -->
                         <div class="form-group pull-left">
-                            <a class="cp expand-icon" (click)="emitExpand()" data-placement="top"
-                                tooltip="{{commonLocaleData?.app_expand_all}}" *ngIf="!expand">
+                            <a class="cp expand-icon" (click)="emitExpand(true)" data-placement="top"
+                                tooltip="{{commonLocaleData?.app_expand_all}}" *ngIf="!expandAll">
                                 <span class="icon-expandIcon"></span>
                             </a>
-                            <a class="cp expand-icon" (click)="emitExpand()" data-placement="top"
-                                tooltip="{{commonLocaleData?.app_collapse_all}}" *ngIf="expand">
+                            <a class="cp expand-icon" (click)="emitExpand(false)" data-placement="top"
+                                tooltip="{{commonLocaleData?.app_collapse_all}}" *ngIf="expandAll">
                                 <span class="icon-collapse"></span>
                             </a>
                         </div>
@@ -177,9 +177,9 @@
                 </div>
             </div>
             <div class="form-group" *ngIf="!(showLoader)">
-                <div class="form-group pull-left mr-r15 d-inline-flex relative" *ngIf="(tags$ | async)?.length">
+                <div class="form-group pull-left mr-r15 d-inline-flex relative" *ngIf="tags?.length">
                     <i class="glyphicon glyphicon-triangle-bottom"></i>
-                    <sh-select [options]="tags$ | async" name="selectedTag" formControlName="tagName"
+                    <sh-select [options]="tags" name="selectedTag" formControlName="tagName"
                         [isFilterEnabled]="true" (selected)="onTagSelected($event)"
                         [placeholder]="commonLocaleData?.app_select_tag" [ItemHeight]="35" [notFoundLink]="false"
                         (noResultsClicked)="toggleTagsModal()" [showNotFoundLinkAsDefault]="false" [width]="'170px'">
@@ -187,12 +187,12 @@
                 </div>
                 <!-- Filter by Tag -->
                 <div class="form-group pull-left d-flex">
-                    <a class="cp expand-icon" (click)="emitExpand()" data-placement="top"
-                        tooltip="{{commonLocaleData?.app_expand_all}}" *ngIf="!expand">
+                    <a class="cp expand-icon" (click)="emitExpand(true)" data-placement="top"
+                        tooltip="{{commonLocaleData?.app_expand_all}}" *ngIf="!expandAll">
                         <span class="icon-expandIcon"></span>
                     </a>
-                    <a class="cp expand-icon" (click)="emitExpand()" data-placement="top"
-                        tooltip="{{commonLocaleData?.app_collapse_all}}" *ngIf="expand">
+                    <a class="cp expand-icon" (click)="emitExpand(false)" data-placement="top"
+                        tooltip="{{commonLocaleData?.app_collapse_all}}" *ngIf="expandAll">
                         <span class="icon-collapse"></span>
                     </a>
                     <a (click)="refreshData()" class="refresh-btn cp mr-l15" tooltip="{{localeData?.reload_data}}">

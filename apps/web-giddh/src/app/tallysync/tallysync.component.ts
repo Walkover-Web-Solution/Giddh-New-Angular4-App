@@ -18,12 +18,12 @@ export class TallysyncComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     public localeData: any = {};
 
-    constructor(private _activatedRoute: ActivatedRoute) {
+    constructor(private activatedRoute: ActivatedRoute) {
 
     }
 
     public ngOnInit() {
-        this._activatedRoute.queryParams.pipe(takeUntil(this.destroyed$), delay(700)).subscribe(a => {
+        this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$), delay(700)).subscribe(a => {
             if (a.tab && a.tabIndex) {
                 if (this.staticTabs && this.staticTabs.tabs) {
                     this.staticTabs.tabs[a.tabIndex].active = true;

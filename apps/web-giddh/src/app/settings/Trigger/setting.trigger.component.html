@@ -145,7 +145,7 @@
                         </tbody>
                         <tbody *ngIf="isLoading">
                             <tr>
-                                <td colspan="11" class="text-center empty-table">
+                                <td colspan="10" class="text-center empty-table">
                                     <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
                                 </td>
                             </tr>
@@ -160,7 +160,13 @@
 
     </div>
     <!-- Trigger Confirmation Model model -->
-    <div bsModal #triggerConfirmationModel="bs-modal" class="modal fade" role="dialog">
+    <div
+        bsModal
+        #triggerConfirmationModel="bs-modal"
+        class="modal fade"
+        role="dialog"
+        [config]="{ ignoreBackdropClick: true }"
+    >
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <delete-tax-confirmation-model [message]="confirmationMessage" [commonLocaleData]="commonLocaleData"
