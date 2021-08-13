@@ -2779,9 +2779,15 @@ mat-dialog-container .modal-header {
         }
     }
 }
-.password-label {
+.password-label,
+.clearance-date {
     .mat-form-field-appearance-fill .mat-form-field-flex {
         background-color: $white !important;
+    }
+    giddh-datepicker {
+        .mat-form-field {
+            width: 100% !important;
+        }
     }
 }
 .ledg-head {
