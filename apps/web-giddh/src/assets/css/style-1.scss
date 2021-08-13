@@ -2769,6 +2769,11 @@ mat-dialog-container .modal-header {
         }
     }
 }
+.password-label {
+    .mat-form-field-appearance-fill .mat-form-field-flex {
+        background-color: $white !important;
+    }
+}
 .ledg-head {
     .ledger-row {
         .mat-input-element {

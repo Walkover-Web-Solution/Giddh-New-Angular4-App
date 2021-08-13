@@ -4580,7 +4580,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .modal-header > .close {
     position: absolute;
     right: 20px;
-    top: 10px;
+    top: 5px;
     line-height: 33px;
     color: $white;
     opacity: 1;
@@ -9867,6 +9867,12 @@ body.update-scroll-hidden {
     }
     .edit-modal.modal-small {
         display: none;
+    }
+    .mat-dialog-container {
+        .modal-dialog {
+            margin: 0px auto;
+            padding: 0px;
+        }
     }
     .modal-dialog {
         max-width: 650px !important;
