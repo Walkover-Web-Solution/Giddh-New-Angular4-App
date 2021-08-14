@@ -2853,7 +2853,14 @@ mat-dialog-container .modal-header {
     padding-left: 0px !important;
 }
 .ledg-head mat-grid-list mat-grid-tile.new-entry-date .mat-grid-tile-content {
-    padding-left: 10px !important;
+    padding-left: 2px !important;
+}
+.ledg-head
+    mat-grid-list
+    mat-grid-tile.new-entry-ledger.select2-parent.select2-ledger
+    .ledger-account-label
+    input.form-control.focused {
+    padding-left: 1px !important;
 }
 .ledger-advance-search-field {
     .mat-form-field-suffix {
@@ -2888,5 +2895,11 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
 }
 .mat-snack-bar-container.info {
     background-color: $info-toast !important;
+}
+.mat-expansion-panel {
+    overflow: visible !important;
+}
+.mat-form-field-appearance-fill .mat-form-field-flex {
+    background: none !important;
 }
 /* material css for ledger end*/

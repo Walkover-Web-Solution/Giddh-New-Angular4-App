@@ -13,8 +13,11 @@
     padding-top: 0px !important;
 }
 
-@media (max-width: 599px){
+@media (max-width: 599px) {
     .mat-form-field {
         width: 65% !important;
     }
+}
+.share-link {
+    margin-left: 5px;
 }
