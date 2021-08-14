@@ -79,9 +79,9 @@
                         <div class="modal-wrap clearfix">
                             <div class="clearfix">
                                 <span>{{ commonLocaleData?.app_or | titlecase }}</span>
-                                <button class="btn-link btn" (click)="getMagicLink()">
+                                <a class="btn-link share-link" href="javascript:;" (click)="getMagicLink()">
                                     {{ localeData?.get_shareable_link }}
-                                </button>
+                                </a>
                                 <span class="success" *ngIf="isCopied">{{ localeData?.copied }}</span>
                             </div>
                             <div class="input-group d-flex justify-content-between">
