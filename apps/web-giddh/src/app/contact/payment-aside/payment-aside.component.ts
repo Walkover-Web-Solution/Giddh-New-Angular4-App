@@ -409,7 +409,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public selectBank(event: IOption): void {
         let loadPayorList = false;
         if (event) {
-            loadPayorList = (this.requestObjectToGetOTP.uniqueName !== event.value);
+            loadPayorList = (this.requestObjectToGetOTP?.uniqueName !== event.value);
             this.selectedBankUniqueName = event.value;
             this.isBankSelectedForBulkPayment = true;
             this.selectedBankName = event.label;
