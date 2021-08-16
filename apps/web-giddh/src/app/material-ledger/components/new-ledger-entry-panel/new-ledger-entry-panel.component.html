@@ -898,10 +898,11 @@
             </div>
             <div class="col-12 col-md-12 pd-t1">
                 <button
-                    mat-button
+                    mat-raised-button
+                    color="warn"
                     id="ledger-reset-button"
                     [hidden]="isBankTransaction"
-                    class="btn btn-danger pull-left btn-sm"
+                    class="pull-left"
                     (click)="resetPanel()"
                 >
                     {{ commonLocaleData?.app_reset }}
@@ -929,9 +930,10 @@
                     </button>
 
                     <button
-                        mat-button
+                        mat-raised-button
+                        color="primary"
                         id="saveLedger"
-                        class="btn btn-success btn-sm mr-0 mr-l2"
+                        class="mr-0 mr-l2"
                         [disabled]="isFileUploading || isReadOnly"
                         [ladda]="isLedgerCreateInProcess$ | async"
                         (click)="saveLedger()"
