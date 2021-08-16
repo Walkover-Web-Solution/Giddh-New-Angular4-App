@@ -23,6 +23,11 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
     constructor() {
     }
 
+    /**
+     * Initializes the component
+     *
+     * @memberof ApprovePettyCashEntryConfirmDialogComponent
+     */
     public ngOnInit(): void {
         this.buildCreatorString();
     }

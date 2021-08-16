@@ -1,143 +1,142 @@
 <div class="container-fluid" *ngIf="!isPettyCashPendingReportLoading && !isRowExpand">
     <div class="table-responsive">
-        <table class="table basic table-bordered giddh-table on-mobile-view">
-            <thead [hidden]="!expensesItems?.length">
-                <tr class="icon-pointer">
-                    <th width="2%" data-title="#">#</th>
-                    <th width="10%">
-                        <div class="d-flex align-items-center">
-                            <span class="pull-left">{{ commonLocaleData?.app_date }}</span>
-                            <ng-container
-                                class="d-inline-block"
-                                *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'entry_date' }"
-                            ></ng-container>
-                        </div>
-                    </th>
-                    <th
-                        width="10%"
-                        class="td-search-box"
-                        #submittedBySearchContainer
-                        (clickOutside)="clickedOutside($event, submittedBySearchContainer, 'submittedBy')"
+        <table
+            mat-table
+            class="w-100 mat-mobile-view"
+            [dataSource]="expensesItems"
+            matSort
+            (matSortChange)="sortChange($event)"
+            [matSortActive]="pettycashRequest.sortBy"
+            [matSortDirection]="pettycashRequest.sort"
+        >
+            <ng-container matColumnDef="s_no">
+                <mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef>#</mat-header-cell>
+                <mat-cell *matCellDef="let expenses">
+                    <span class="responsive-label" [hidden]="!expensesItems?.length">#</span>
+                    {{ expenses.index + 1 }}
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="entry_date">
+                <mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef mat-sort-header>{{
+                    commonLocaleData?.app_date
+                }}</mat-header-cell>
+                <mat-cell *matCellDef="let expenses">
+                    <span class="responsive-label" [hidden]="!expensesItems?.length">{{
+                        commonLocaleData?.app_date
+                    }}</span>
+                    {{ expenses.entryDate }}
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="submitted_by">
+                <mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef
+                    >{{ localeData?.submitted_by }}
+                </mat-header-cell>
+                <mat-cell *matCellDef="let expenses">
+                    <span class="responsive-label" [hidden]="!expensesItems?.length">{{
+                        localeData?.submitted_by
+                    }}</span>
+                    {{ expenses.createdBy.name }}
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="account">
+                <mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef>{{
+                    commonLocaleData?.app_account
+                }}</mat-header-cell>
+                <mat-cell *matCellDef="let expenses">
+                    <span class="responsive-label" [hidden]="!expensesItems?.length">{{
+                        commonLocaleData?.app_account
+                    }}</span>
+                    <i class="dot-icon dot-warning" *ngIf="expenses.entryType === 'sales'"></i>
+                    <i class="dot-icon dot-success" *ngIf="expenses.entryType === 'deposit'"></i>
+                    <i class="dot-icon dot-primary" *ngIf="expenses.entryType === 'expense'"></i>
+                    {{ expenses.particularAccount.name }}
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="amount">
+                <mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef mat-sort-header>{{
+                    commonLocaleData?.app_amount
+                }}</mat-header-cell>
+                <mat-cell *matCellDef="let expenses">
+                    <span class="responsive-label" [hidden]="!expensesItems?.length">{{
+                        commonLocaleData?.app_amount
+                    }}</span>
+                    {{ expenses.currencySymbol }}
+                    {{ expenses.amount | giddhCurrency }}
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="receipt">
+                <mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef>{{
+                    localeData?.payment_receipt
+                }}</mat-header-cell>
+                <mat-cell *matCellDef="let expenses">
+                    <span class="responsive-label" [hidden]="!expensesItems?.length">{{
+                        localeData?.payment_receipt
+                    }}</span>
+                    <span *ngIf="expenses.baseAccountCategory === 'OTHER'" class="font-12 text-gray mr-r05">{{
+                        commonLocaleData?.app_ac
+                    }}</span>
+                    <span
+                        *ngIf="expenses.baseAccountCategory === 'BANK'"
+                        class="font-12 text-gray icon-atm-card"
+                    ></span>
+                    <span
+                        *ngIf="expenses.baseAccountCategory === 'CASH'"
+                        class="font-12 text-gray icon-cash mr-r05"
+                    ></span>
+                    {{ expenses.baseAccount.name }}
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="file">
+                <mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef
+                    >{{ localeData?.file }}
+                </mat-header-cell>
+                <mat-cell *matCellDef="let expenses">
+                    <span class="responsive-label" [hidden]="!expensesItems?.length">{{ localeData?.file }}</span>
+                    <i *ngIf="expenses.fileNames" class="icon-image middle text-gray"></i>
+                    {{ expenses.fileNames }}
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="description">
+                <mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef>{{
+                    commonLocaleData?.app_description
+                }}</mat-header-cell>
+                <mat-cell *matCellDef="let expenses">
+                    <span class="responsive-label" [hidden]="!expensesItems?.length">{{
+                        commonLocaleData?.app_description
+                    }}</span>
+                    <span *ngIf="expenses.description">{{ expenses.description }}</span
+                    ><span *ngIf="!expenses.description">-</span>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="action">
+                <mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef>{{
+                    commonLocaleData?.app_action
+                }}</mat-header-cell>
+                <mat-cell *matCellDef="let expenses">
+                    <button
+                        mat-raised-button
+                        color="primary"
+                        (click)="showApproveConfirmPopup(approveConfirm, expenses); $event.stopPropagation()"
                     >
-                        <ng-container
-                            *ngTemplateOutlet="
-                                searchTemplate;
-                                context: {
-                                    $implicit: showSubmittedBySearch,
-                                    title: localeData?.submitted_by,
-                                    fieldName: 'submittedBy',
-                                    formControl: submittedBySearchInput
-                                }
-                            "
-                        >
-                        </ng-container>
-                    </th>
-                    <th
-                        width="10%"
-                        class="td-search-box"
-                        #accountSearchContainer
-                        (clickOutside)="clickedOutside($event, accountSearchContainer, 'account')"
-                    >
-                        <ng-container
-                            *ngTemplateOutlet="
-                                searchTemplate;
-                                context: {
-                                    $implicit: showAccountSearch,
-                                    title: commonLocaleData?.app_account,
-                                    fieldName: 'account',
-                                    formControl: accountSearchInput
-                                }
-                            "
-                        >
-                        </ng-container>
-                    </th>
-                    <th width="20%" class="pr-2 amount-arrow">
-                        <div class="d-flex align-items-center justify-content-end">
-                            <span>{{ commonLocaleData?.app_amount }}</span>
-                            <ng-container
-                                class="d-inline-block"
-                                *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'amount' }"
-                            ></ng-container>
-                        </div>
-                    </th>
-                    <th
-                        width="20%"
-                        class="td-search-box"
-                        #paymentReceiptSearchContainer
-                        (clickOutside)="clickedOutside($event, paymentReceiptSearchContainer, 'payment/receive')"
-                    >
-                        <ng-container
-                            *ngTemplateOutlet="
-                                searchTemplate;
-                                context: {
-                                    $implicit: showPaymentReceiveSearch,
-                                    title: localeData?.payment_receipt,
-                                    fieldName: 'payment/receive',
-                                    formControl: paymentReceiveSearchInput
-                                }
-                            "
-                        >
-                        </ng-container>
-                    </th>
-                    <th width="10%">{{ localeData?.file }}</th>
-                    <th width="20%">{{ commonLocaleData?.app_description }}</th>
-                    <th width="10%">{{ commonLocaleData?.app_action }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr
-                    (click)="rowClicked(expenses)"
-                    class="cursor-pointer"
-                    *ngFor="let expenses of expensesItems; let i = index"
-                >
-                    <ng-container id="rowcomys" (click)="rowClicked(expenses)">
-                        <td data-title="#">{{ i + 1 }}</td>
-                        <td [attr.data-title]="commonLocaleData?.app_date">{{ expenses.entryDate }}</td>
-                        <td [attr.data-title]="localeData?.submitted_by">{{ expenses.createdBy.name }}</td>
-                        <td [attr.data-title]="commonLocaleData?.app_account">
-                            <i class="dot-icon dot-warning" *ngIf="expenses.entryType === 'sales'"></i>
-                            <i class="dot-icon dot-success" *ngIf="expenses.entryType === 'deposit'"></i>
-                            <i class="dot-icon dot-primary" *ngIf="expenses.entryType === 'expense'"></i>
-                            {{ expenses.particularAccount.name }}
-                        </td>
-                        <td [attr.data-title]="commonLocaleData?.app_amount" class="text-right pr-2">
-                            {{ expenses.currencySymbol }}
-                            {{ expenses.amount | giddhCurrency }}
-                        </td>
-                        <td [attr.data-title]="localeData?.payment_receipt">
-                            <span *ngIf="expenses.baseAccountCategory === 'OTHER'" class="font-12 text-gray">{{
-                                commonLocaleData?.app_ac
-                            }}</span>
-                            <span
-                                *ngIf="expenses.baseAccountCategory === 'BANK'"
-                                class="font-12 text-gray icon-atm-card"
-                            ></span>
-                            <span
-                                *ngIf="expenses.baseAccountCategory === 'CASH'"
-                                class="font-12 text-gray icon-cash"
-                            ></span>
-                            {{ expenses.baseAccount.name }}
-                        </td>
-                        <td [attr.data-title]="localeData?.file">
-                            <i *ngIf="expenses.fileNames" class="icon-image middle text-gray"></i>
-                            {{ expenses.fileNames }}
-                        </td>
-                        <td [attr.data-title]="commonLocaleData?.app_description">
-                            <span *ngIf="expenses.description">{{ expenses.description }}</span
-                            ><span *ngIf="!expenses.description">-</span>
-                        </td>
-                        <td [attr.data-title]="commonLocaleData?.app_action">
-                            <button
-                                type="button"
-                                (click)="showApproveConfirmPopup(ApproveConfirm, expenses); $event.stopPropagation()"
-                                class="btn btn-success-outline"
-                            >
-                                {{ localeData?.approve }}
-                            </button>
-                        </td>
-                    </ng-container>
-                </tr>
-            </tbody>
+                        {{ localeData?.approve }}
+                    </button>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="pendingTableColumns; sticky: true"></mat-header-row>
+            <mat-row
+                class="cp"
+                *matRowDef="let expenses; columns: pendingTableColumns"
+                (click)="editExpense(expenses)"
+            ></mat-row>
         </table>
     </div>
 </div>
@@ -168,44 +167,7 @@
     <no-data></no-data>
 </div>
 
-<!--loading-->
-
-<!-- region sorting template -->
-<ng-template #sortingTemplate let-col>
-    <div
-        class="icon-sort-asc"
-        *ngIf="pettycashRequest.sortBy !== col"
-        (click)="sort('asc', col)"
-        [ngClass]="{ 'active-text-color': pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc' }"
-    ></div>
-    <div
-        class="icon-sort-asc"
-        *ngIf="pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'"
-        (click)="sort('desc', col)"
-        [ngClass]="{ 'active-text-color': pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc' }"
-    ></div>
-    <div
-        class="icon-sort-asc"
-        *ngIf="pettycashRequest.sortBy === col && pettycashRequest.sort === 'desc'"
-        (click)="sort('asc', col)"
-        [ngClass]="{ 'active-text-color': pettycashRequest.sortBy === col && pettycashRequest.sort === 'desc' }"
-    ></div>
-</ng-template>
-<!-- endregion -->
-
-<!-- region search template -->
-<ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
-    <div [hidden]="show">
-        <span> {{ title }}</span>
-    </div>
-    <div class="input-container" [hidden]="!show">
-        <input type="text" [placeholder]="replaceTitle(title)" class="w100" #searchBox [formControl]="formControl" />
-    </div>
-</ng-template>
-<!-- endregion -->
-
-<!-- region approve entry confirm -->
-<ng-template #ApproveConfirm>
+<ng-template #approveConfirm>
     <petty-cash-approve-confirm-dialog
         [selectedEntryForApprove]="selectedEntryForApprove"
         [approveEntryRequestInProcess]="approveEntryRequestInProcess"
@@ -216,24 +178,4 @@
         (approveEntry)="hideApproveConfirmPopup($event)"
     >
     </petty-cash-approve-confirm-dialog>
-</ng-template>
-<!-- endregion -->
-
-<ng-template #filterModal>
-    <div class="modal-header">
-        <h3 class="modal-title pull-left">{{ commonLocaleData?.app_filter }}</h3>
-        <button
-            type="button"
-            class="close pull-right"
-            [attr.aria-label]="commonLocaleData?.app_close"
-            (click)="hideFilterModal()"
-        >
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="modal-body"></div>
-    <div class="modal-footer">
-        <button class="btn btn-warning" (click)="hideFilterModal()">{{ commonLocaleData?.app_yes }}</button>
-        <button class="btn btn-success" (click)="hideFilterModal()">{{ commonLocaleData?.app_cancel }}</button>
-    </div>
 </ng-template>

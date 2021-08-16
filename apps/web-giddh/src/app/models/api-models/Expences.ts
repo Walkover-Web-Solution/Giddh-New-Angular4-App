@@ -37,6 +37,7 @@ export class ExpenseResults {
     status: string;
     statusMessage?: any;
     entryType?: string;
+    index?: number;
 }
 
 export class CreatedBy {
