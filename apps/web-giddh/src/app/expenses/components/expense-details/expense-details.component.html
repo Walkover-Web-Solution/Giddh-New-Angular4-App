@@ -5,13 +5,24 @@
                 <p class="bold mr-b05">{{ selectedItem?.entryDate }} | {{ selectedItem.baseAccount.name }}</p>
             </div>
             <div class="col-sm-6 text-right xs-left">
-                <button type="button" class="mr-b05 btn btn-success" (click)="showApproveConfirmPopup(ApproveConfirm)">
+                <button
+                    mat-raised-button
+                    color="primary"
+                    type="button"
+                    (click)="showApproveConfirmPopup(approveConfirm)"
+                >
                     {{ localeData?.approve }}
                 </button>
-                <button type="button" class="mr-b05 btn btn-danger" (click)="openModal(RejectionReason)">
+                <button
+                    mat-raised-button
+                    color="accent"
+                    type="button"
+                    class="mr-l1"
+                    (click)="openModal(rejectionReason)"
+                >
                     {{ localeData?.reject }}
                 </button>
-                <span class="close-modal cp pull-right" (click)="closeDetailsMode()">
+                <span class="close-modal cp pull-right mr-l1" (click)="closeDetailsMode()">
                     <img src="assets/images/multiply.svg" />
                 </span>
             </div>
@@ -55,13 +66,16 @@
     <div class="petty-cash">
         <div class="bg-white p-15 pb-0">
             <div class="form-group mb-2">
-                <label>{{ commonLocaleData?.app_description }}</label>
-                <textarea
-                    name="comment"
-                    class="textarea form-control"
-                    [(ngModel)]="comment"
-                    [placeholder]="localeData?.description_placeholder"
-                ></textarea>
+                <mat-form-field appearance="fill" class="w-100">
+                    <label>{{ commonLocaleData?.app_description }}</label>
+                    <textarea
+                        matInput
+                        name="comment"
+                        class="textarea form-control mat-field-border mt-2"
+                        [(ngModel)]="comment"
+                        [placeholder]="localeData?.description_placeholder"
+                    ></textarea>
+                </mat-form-field>
             </div>
 
             <div class="row">
@@ -117,26 +131,26 @@
                 [pettyCashEntry]="accountEntryPettyCash"
                 [pettyCashBaseAccountTypeString]="entryAgainstObject.base"
                 [pettyCashBaseAccountUniqueName]="this.accountEntryPettyCash.particular.uniqueName"
-                (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane($event)"
+                (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane()"
             ></update-ledger-entry-panel>
         </div>
     </div>
 </div>
 <!-- modal start -->
-<ng-template #RejectionReason>
+<ng-template #rejectionReason>
     <div class="modal-header">
-        <h3 class="modal-title pull-left">{{ localeData?.rejection_reason }}</h3>
+        <h3 mat-dialog-title class="modal-title pull-left">{{ localeData?.rejection_reason }}</h3>
         <button
+            mat-button
             type="button"
             class="close pull-right"
             [attr.aria-label]="commonLocaleData?.app_close"
-            (click)="modalRef.hide()"
+            (click)="modalRef?.close()"
         >
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-
-    <div class="modal-body">
+    <div class="modal-body petty-cash-reject-modal">
         <div class="clearfix modal-top">
             <p class="font-12 text-gray mr-b1">
                 <span>{{ selectedItem?.entryDate }} </span> |
@@ -170,18 +184,20 @@
             </div>
         </div>
         <div class="form-group">
-            <label for="rejectReason">{{ localeData?.reason_label }}</label> <sup>*</sup>
-            <textarea
-                name="rejectReason"
-                required
-                id="rejectReason"
-                [formControl]="rejectReason"
-                class="textarea form-control"
-                [placeholder]="localeData?.reason_placeholder"
-            ></textarea>
+            <mat-form-field appearance="fill" class="w-100">
+                <label for="rejectReason">{{ localeData?.reason_label }}</label> <sup>*</sup>
+                <textarea
+                    matInput
+                    name="rejectReason"
+                    id="rejectReason"
+                    [formControl]="rejectReason"
+                    class="textarea form-control mat-field-border mt-2"
+                    [placeholder]="localeData?.reason_placeholder"
+                ></textarea>
+            </mat-form-field>
         </div>
 
-        <button type="submit" class="btn btn-success" [disabled]="!rejectReason.value" (click)="submitReject()">
+        <button mat-raised-button color="primary" [disabled]="!rejectReason.value" (click)="submitReject()">
             {{ commonLocaleData?.app_submit }}
         </button>
     </div>
@@ -189,7 +205,7 @@
 <!-- modal end -->
 
 <!-- region approve entry confirm -->
-<ng-template #ApproveConfirm>
+<ng-template #approveConfirm>
     <petty-cash-approve-confirm-dialog
         [selectedEntryForApprove]="selectedEntryForApprove"
         [approveEntryRequestInProcess]="approveEntryRequestInProcess"
@@ -212,8 +228,8 @@
     [otherTaxesModal]="updateLedgerComponentInstance.vm.selectedLedger.otherTaxModal"
     [@slideInOut]="asideMenuStateForOtherTaxes"
     [commonLocaleData]="commonLocaleData"
-    (closeModal)="toggleOtherTaxesAsidePane(null)"
-    (applyTaxes)="updateLedgerComponentInstance.vm.calculateOtherTaxes($event); toggleOtherTaxesAsidePane(null)"
+    (closeModal)="toggleOtherTaxesAsidePane()"
+    (applyTaxes)="updateLedgerComponentInstance.vm.calculateOtherTaxes($event); toggleOtherTaxesAsidePane()"
 >
 </app-aside-menu-sales-other-taxes>
 <!-- endregion -->

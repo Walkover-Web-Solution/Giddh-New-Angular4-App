@@ -1,6 +1,6 @@
 <div class="modal-header">
-    <h3 class="modal-title pull-left">{{ localeData?.approve }}</h3>
-    <button type="button" class="close pull-right" aria-label="Close" (click)="approveEntry.emit(false)">
+    <h3 mat-dialog-title class="modal-title pull-left">{{ localeData?.approve }}</h3>
+    <button mat-button type="button" class="close pull-right" aria-label="Close" (click)="approveEntry.emit(false)">
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
@@ -53,8 +53,16 @@
         </div>
 
         <div>
-            <button class="btn btn-warning" (click)="approveEntry.emit(false)">{{ commonLocaleData?.app_no }}</button>
-            <button class="btn btn-success" (click)="approveEntry.emit(true)" [ladda]="approveEntryRequestInProcess">
+            <button mat-raised-button color="accent" (click)="approveEntry.emit(false)">
+                {{ commonLocaleData?.app_no }}
+            </button>
+            <button
+                mat-raised-button
+                color="primary"
+                class="mr-l1"
+                (click)="approveEntry.emit(true)"
+                [ladda]="approveEntryRequestInProcess"
+            >
                 {{ commonLocaleData?.app_yes }}
             </button>
         </div>
