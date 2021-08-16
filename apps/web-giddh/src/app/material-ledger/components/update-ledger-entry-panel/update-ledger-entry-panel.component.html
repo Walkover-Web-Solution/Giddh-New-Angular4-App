@@ -1339,318 +1339,324 @@
                         </div>
                     </div>
 
-                    <mat-accordion multi>
-                        <mat-expansion-panel>
-                            <mat-expansion-panel-header>
-                                <mat-panel-title (click)="getInvoiceLists()">{{
-                                    localeData?.more_details
-                                }}</mat-panel-title>
-                            </mat-expansion-panel-header>
-                            <div class="pd-1 mr-b05 mr-t05 advanced">
-                                <table class="xs-table-block">
-                                    <tr>
-                                        <td class="select2-parent pd-r1">
-                                            <div class="form-group">
-                                                <label class="default-color">{{
-                                                    commonLocaleData?.app_voucher_type
-                                                }}</label>
-                                                <sh-select
-                                                    id="update-ledger-voucher-type-default"
-                                                    [options]="vm.voucherTypeList"
-                                                    [isFilterEnabled]="true"
-                                                    [(ngModel)]="vm.selectedLedger.voucher.shortCode"
-                                                    [showClear]="false"
-                                                    [class.disabled-ledger]="
-                                                        !isPettyCash &&
-                                                        currentOrganizationType === 'COMPANY' &&
-                                                        branches?.length > 1
-                                                    "
-                                                    (selected)="getInvoiceListsData($event)"
-                                                    [ItemHeight]="'auto'"
-                                                    [disabled]="
-                                                        !isPettyCash &&
-                                                        currentOrganizationType === 'COMPANY' &&
-                                                        branches?.length > 1
-                                                    "
-                                                    [width]="'161px'"
-                                                >
-                                                </sh-select>
-                                            </div>
-                                        </td>
+                    <div class="col-md-6 pd-t1">
+                        <mat-accordion multi>
+                            <mat-expansion-panel>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title (click)="getInvoiceLists()">{{
+                                        localeData?.more_details
+                                    }}</mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <div class="pd-1 mr-b05 mr-t05 advanced">
+                                    <table class="xs-table-block">
+                                        <tr>
+                                            <td class="select2-parent pd-r1">
+                                                <div class="form-group">
+                                                    <label class="default-color">{{
+                                                        commonLocaleData?.app_voucher_type
+                                                    }}</label>
+                                                    <sh-select
+                                                        id="update-ledger-voucher-type-default"
+                                                        [options]="vm.voucherTypeList"
+                                                        [isFilterEnabled]="true"
+                                                        [(ngModel)]="vm.selectedLedger.voucher.shortCode"
+                                                        [showClear]="false"
+                                                        [class.disabled-ledger]="
+                                                            !isPettyCash &&
+                                                            currentOrganizationType === 'COMPANY' &&
+                                                            branches?.length > 1
+                                                        "
+                                                        (selected)="getInvoiceListsData($event)"
+                                                        [ItemHeight]="'auto'"
+                                                        [disabled]="
+                                                            !isPettyCash &&
+                                                            currentOrganizationType === 'COMPANY' &&
+                                                            branches?.length > 1
+                                                        "
+                                                        [width]="'161px'"
+                                                    >
+                                                    </sh-select>
+                                                </div>
+                                            </td>
 
-                                        <td
-                                            class="pd-r1"
-                                            *ngIf="
-                                                vm.selectedLedger.voucher?.shortCode === 'sal' ||
-                                                vm.selectedLedger.voucher?.shortCode === 'pur' ||
-                                                vm.selectedLedger.voucher?.shortCode == 'pay'
-                                            "
-                                        >
-                                            <div class="form-group">
-                                                <label class="default-color">{{
-                                                    commonLocaleData?.app_invoice_no
-                                                }}</label>
-                                                <input
-                                                    matInput
-                                                    *ngIf="vm.selectedLedger.voucher?.shortCode === 'sal'"
-                                                    [disabled]="
-                                                        !isPettyCash &&
-                                                        currentOrganizationType === 'COMPANY' &&
-                                                        branches?.length > 1
-                                                    "
-                                                    id="update-ledger-invoice-number"
-                                                    type="text"
-                                                    [placeholder]="commonLocaleData?.app_invoice_no"
-                                                    class="form-control mat-field-border pd-0"
-                                                    [(ngModel)]="vm.selectedLedger.voucherNumber"
-                                                />
-                                                <input
-                                                    matInput
-                                                    *ngIf="vm.selectedLedger.voucher?.shortCode !== 'sal'"
-                                                    [disabled]=""
-                                                    id="update-ledger-invoice-number"
-                                                    type="text"
-                                                    [placeholder]="commonLocaleData?.app_invoice_no"
-                                                    class="form-control mat-field-border pd-0"
-                                                    [(ngModel)]="vm.selectedLedger.invoiceNumberAgainstVoucher"
-                                                />
-                                            </div>
-                                        </td>
-                                        <td
-                                            class="pd-r1"
-                                            *ngIf="
-                                                vm.selectedLedger.voucher?.shortCode == 'credit note' ||
-                                                vm.selectedLedger.voucher?.shortCode == 'debit note'
-                                            "
-                                        >
-                                            <div class="form-group">
-                                                <label class="default-color">{{
-                                                    vm.selectedLedger.voucher?.shortCode == "debit note"
-                                                        ? localeData?.voucher_no
-                                                        : commonLocaleData?.app_invoice_no
-                                                }}</label>
-                                                <sh-select
-                                                    id="update-ledger-invoice-voucher-number"
-                                                    [options]="invoiceList"
-                                                    [placeholder]="commonLocaleData?.app_select_accounts"
-                                                    [(ngModel)]="selectedInvoice"
-                                                    [notFoundLink]="false"
-                                                    [forceClearReactive]="forceClear$ | async"
-                                                    [class.disabled-ledger]="
-                                                        !isPettyCash &&
-                                                        currentOrganizationType === 'COMPANY' &&
-                                                        branches?.length > 1
-                                                    "
-                                                    (selected)="creditNoteInvoiceSelected($event)"
-                                                    [multiple]="false"
-                                                    [disabled]="
-                                                        !isPettyCash &&
-                                                        currentOrganizationType === 'COMPANY' &&
-                                                        branches?.length > 1
-                                                    "
-                                                    [ItemHeight]="67"
-                                                    [showClear]="false"
-                                                >
-                                                    <ng-template #optionTemplate let-option="option">
-                                                        <a href="javascript:void(0)" class="list-item sh-template">
-                                                            <div class="item">{{ option.label }}</div>
-                                                            <div class="item-unique">
-                                                                ({{ localeData?.dated }}:
-                                                                {{ option.additional?.voucherDate }})
-                                                            </div>
-                                                            <div class="item-unique">
-                                                                ({{ commonLocaleData?.app_due }}:
-                                                                <span class="d-inline-flex">
-                                                                    <amount-field
-                                                                        [amount]="
-                                                                            option.additional?.balanceDue
-                                                                                ?.amountForAccount
-                                                                        "
-                                                                    >
-                                                                    </amount-field>
-                                                                </span>
-                                                            </div>
-                                                        </a>
-                                                    </ng-template>
-                                                </sh-select>
-                                            </div>
-                                        </td>
-                                        <td
-                                            *ngIf="
-                                                (vm.selectedLedger.voucher?.shortCode === 'credit note' ||
-                                                    vm.selectedLedger.voucher?.shortCode === 'debit note') &&
-                                                selectedInvoice
-                                            "
-                                            class="cp remove-invoice pd-r2 hidden-xs"
-                                            (click)="removeSelectedInvoice()"
-                                        >
-                                            <span class="“remove-invoice-icon”">×</span>
-                                            <span class="remove-invoice-label">{{ commonLocaleData?.app_remove }}</span>
-                                        </td>
-                                        <td class="pd-r1">
-                                            <div class="form-group">
-                                                <label class="default-color">{{ localeData?.voucher_no }}</label>
-                                                <input
-                                                    matInput
-                                                    id="update-ledger-voucher-no"
-                                                    type="text"
-                                                    [placeholder]="localeData?.voucher_no"
-                                                    class="form-control mat-field-border pd-0"
-                                                    [ngModel]="vm.selectedLedger.voucherNo"
-                                                    [disabled]="true"
-                                                    [style.width.px]="80"
-                                                />
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-
-                                <table>
-                                    <tr>
-                                        <td
-                                            *ngIf="
-                                                vm.selectedLedger.voucher?.shortCode !== 'jr' &&
-                                                vm.selectedLedger.voucher?.shortCode !== 'cntr' &&
-                                                vm.selectedLedger.voucher?.shortCode !== 'rcpt' &&
-                                                vm.selectedLedger.voucher?.shortCode !== 'advance-receipt'
-                                            "
-                                            class="pd-r1 pb-1"
-                                        >
-                                            <mat-checkbox
-                                                [color]="materialColorPalette"
-                                                [disabled]="
-                                                    !isPettyCash &&
-                                                    currentOrganizationType === 'COMPANY' &&
-                                                    branches?.length > 1
+                                            <td
+                                                class="pd-r1"
+                                                *ngIf="
+                                                    vm.selectedLedger.voucher?.shortCode === 'sal' ||
+                                                    vm.selectedLedger.voucher?.shortCode === 'pur' ||
+                                                    vm.selectedLedger.voucher?.shortCode == 'pay'
                                                 "
-                                                id="update-ledger-sale"
-                                                name="advanceReceipt"
-                                                [(ngModel)]="isAdjustVoucherSelected"
-                                                (click)="checkForGeneratedVoucher($event)"
-                                                (change)="handleVoucherAdjustment()"
-                                                >{{
-                                                    localeData?.adjust_voucher
-                                                        | replace: "[VOUCHER_TYPE]":currentVoucherLabel
-                                                }}</mat-checkbox
                                             >
-                                        </td>
-                                        <td
-                                            *ngIf="
-                                                vm.selectedLedger.voucher?.shortCode == 'advance-receipt' &&
-                                                isAdvanceReceipt
-                                            "
-                                            class="pd-r1 pb-1"
-                                        >
-                                            <mat-checkbox
-                                                [color]="materialColorPalette"
-                                                [disabled]="
-                                                    !isPettyCash &&
-                                                    currentOrganizationType === 'COMPANY' &&
-                                                    branches?.length > 1
-                                                "
-                                                id="update-ledger-advance-receipt"
-                                                name="advanceReceipt"
-                                                [(ngModel)]="isAdjustAdvanceReceiptSelected"
-                                                (click)="checkForGeneratedVoucher($event)"
-                                                (change)="handleVoucherAdjustment()"
-                                                >{{ localeData?.adjust_advance_receipt }}
-                                            </mat-checkbox>
-                                        </td>
-                                        <td
-                                            *ngIf="vm.selectedLedger.voucher?.shortCode == 'rcpt' && !isAdvanceReceipt"
-                                            class="pd-r1 pb-1"
-                                        >
-                                            <mat-checkbox
-                                                [color]="materialColorPalette"
-                                                [disabled]="
-                                                    !isPettyCash &&
-                                                    currentOrganizationType === 'COMPANY' &&
-                                                    branches?.length > 1
-                                                "
-                                                id="update-ledger-adjust-receipt"
-                                                name="advanceReceipt"
-                                                [(ngModel)]="isAdjustReceiptSelected"
-                                                (click)="checkForGeneratedVoucher($event)"
-                                                (change)="handleVoucherAdjustment()"
-                                                >{{ localeData?.adjust_receipt }}
-                                            </mat-checkbox>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <table class="xs-table-block">
-                                    <tbody>
-                                        <tr>
-                                            <td class="pd-r1">
-                                                <label class="default-color">{{
-                                                    commonLocaleData?.app_cheque_number
-                                                }}</label>
-                                                <input
-                                                    matInput
-                                                    [disabled]="
-                                                        !isPettyCash &&
-                                                        currentOrganizationType === 'COMPANY' &&
-                                                        branches?.length > 1
-                                                    "
-                                                    type="text"
-                                                    id="update-ledger-cheque-number"
-                                                    [placeholder]="localeData?.cheque_number_placeholder"
-                                                    class="form-control mat-field-border pd-0"
-                                                    [(ngModel)]="vm.selectedLedger.chequeNumber"
-                                                />
+                                                <div class="form-group">
+                                                    <label class="default-color">{{
+                                                        commonLocaleData?.app_invoice_no
+                                                    }}</label>
+                                                    <input
+                                                        matInput
+                                                        *ngIf="vm.selectedLedger.voucher?.shortCode === 'sal'"
+                                                        [disabled]="
+                                                            !isPettyCash &&
+                                                            currentOrganizationType === 'COMPANY' &&
+                                                            branches?.length > 1
+                                                        "
+                                                        id="update-ledger-invoice-number"
+                                                        type="text"
+                                                        [placeholder]="commonLocaleData?.app_invoice_no"
+                                                        class="form-control mat-field-border pd-0"
+                                                        [(ngModel)]="vm.selectedLedger.voucherNumber"
+                                                    />
+                                                    <input
+                                                        matInput
+                                                        *ngIf="vm.selectedLedger.voucher?.shortCode !== 'sal'"
+                                                        [disabled]=""
+                                                        id="update-ledger-invoice-number"
+                                                        type="text"
+                                                        [placeholder]="commonLocaleData?.app_invoice_no"
+                                                        class="form-control mat-field-border pd-0"
+                                                        [(ngModel)]="vm.selectedLedger.invoiceNumberAgainstVoucher"
+                                                    />
+                                                </div>
                                             </td>
-                                            <td>
-                                                <label class="default-color">{{
-                                                    commonLocaleData?.app_cheque_clearance_date
-                                                }}</label>
-                                                <giddh-datepicker
-                                                    [showToggleIcon]="false"
-                                                    class="db"
-                                                    [cssClass]="'mat-field-border bdr form-control pd-0'"
-                                                    [disabled]="
-                                                        !isPettyCash &&
-                                                        currentOrganizationType === 'COMPANY' &&
-                                                        branches?.length > 1
-                                                    "
-                                                    id="update-ledger-cheque-clearance"
-                                                    [(ngModel)]="vm.selectedLedger.chequeClearanceDate"
-                                                ></giddh-datepicker>
+                                            <td
+                                                class="pd-r1"
+                                                *ngIf="
+                                                    vm.selectedLedger.voucher?.shortCode == 'credit note' ||
+                                                    vm.selectedLedger.voucher?.shortCode == 'debit note'
+                                                "
+                                            >
+                                                <div class="form-group">
+                                                    <label class="default-color">{{
+                                                        vm.selectedLedger.voucher?.shortCode == "debit note"
+                                                            ? localeData?.voucher_no
+                                                            : commonLocaleData?.app_invoice_no
+                                                    }}</label>
+                                                    <sh-select
+                                                        id="update-ledger-invoice-voucher-number"
+                                                        [options]="invoiceList"
+                                                        [placeholder]="commonLocaleData?.app_select_accounts"
+                                                        [(ngModel)]="selectedInvoice"
+                                                        [notFoundLink]="false"
+                                                        [forceClearReactive]="forceClear$ | async"
+                                                        [class.disabled-ledger]="
+                                                            !isPettyCash &&
+                                                            currentOrganizationType === 'COMPANY' &&
+                                                            branches?.length > 1
+                                                        "
+                                                        (selected)="creditNoteInvoiceSelected($event)"
+                                                        [multiple]="false"
+                                                        [disabled]="
+                                                            !isPettyCash &&
+                                                            currentOrganizationType === 'COMPANY' &&
+                                                            branches?.length > 1
+                                                        "
+                                                        [ItemHeight]="67"
+                                                        [showClear]="false"
+                                                    >
+                                                        <ng-template #optionTemplate let-option="option">
+                                                            <a href="javascript:void(0)" class="list-item sh-template">
+                                                                <div class="item">{{ option.label }}</div>
+                                                                <div class="item-unique">
+                                                                    ({{ localeData?.dated }}:
+                                                                    {{ option.additional?.voucherDate }})
+                                                                </div>
+                                                                <div class="item-unique">
+                                                                    ({{ commonLocaleData?.app_due }}:
+                                                                    <span class="d-inline-flex">
+                                                                        <amount-field
+                                                                            [amount]="
+                                                                                option.additional?.balanceDue
+                                                                                    ?.amountForAccount
+                                                                            "
+                                                                        >
+                                                                        </amount-field>
+                                                                    </span>
+                                                                </div>
+                                                            </a>
+                                                        </ng-template>
+                                                    </sh-select>
+                                                </div>
+                                            </td>
+                                            <td
+                                                *ngIf="
+                                                    (vm.selectedLedger.voucher?.shortCode === 'credit note' ||
+                                                        vm.selectedLedger.voucher?.shortCode === 'debit note') &&
+                                                    selectedInvoice
+                                                "
+                                                class="cp remove-invoice pd-r2 hidden-xs"
+                                                (click)="removeSelectedInvoice()"
+                                            >
+                                                <span class="“remove-invoice-icon”">×</span>
+                                                <span class="remove-invoice-label">{{
+                                                    commonLocaleData?.app_remove
+                                                }}</span>
+                                            </td>
+                                            <td class="pd-r1">
+                                                <div class="form-group">
+                                                    <label class="default-color">{{ localeData?.voucher_no }}</label>
+                                                    <input
+                                                        matInput
+                                                        id="update-ledger-voucher-no"
+                                                        type="text"
+                                                        [placeholder]="localeData?.voucher_no"
+                                                        class="form-control mat-field-border pd-0"
+                                                        [ngModel]="vm.selectedLedger.voucherNo"
+                                                        [disabled]="true"
+                                                        [style.width.px]="80"
+                                                    />
+                                                </div>
                                             </td>
                                         </tr>
-                                    </tbody>
-                                </table>
-                                <table class="mr-t1">
-                                    <tbody>
+                                    </table>
+
+                                    <table>
                                         <tr>
-                                            <td class="pd-r1">
-                                                <label class="default-color">{{ localeData?.assign_tag }}</label>
-                                                <sh-select
-                                                    id="update-ledger-assign-tag"
-                                                    [options]="tags"
-                                                    [isFilterEnabled]="true"
-                                                    [class.disabled-ledger]="
-                                                        !isPettyCash &&
-                                                        currentOrganizationType === 'COMPANY' &&
-                                                        branches?.length > 1
-                                                    "
-                                                    [placeholder]="commonLocaleData?.app_select_tag"
-                                                    [showClear]="false"
-                                                    [multiple]="true"
+                                            <td
+                                                *ngIf="
+                                                    vm.selectedLedger.voucher?.shortCode !== 'jr' &&
+                                                    vm.selectedLedger.voucher?.shortCode !== 'cntr' &&
+                                                    vm.selectedLedger.voucher?.shortCode !== 'rcpt' &&
+                                                    vm.selectedLedger.voucher?.shortCode !== 'advance-receipt'
+                                                "
+                                                class="pd-r1 pb-1"
+                                            >
+                                                <mat-checkbox
+                                                    [color]="materialColorPalette"
                                                     [disabled]="
                                                         !isPettyCash &&
                                                         currentOrganizationType === 'COMPANY' &&
                                                         branches?.length > 1
                                                     "
-                                                    name="tagNames"
-                                                    [(ngModel)]="vm.selectedLedger.tagNames"
-                                                    [ItemHeight]="'auto'"
-                                                ></sh-select>
+                                                    id="update-ledger-sale"
+                                                    name="advanceReceipt"
+                                                    [(ngModel)]="isAdjustVoucherSelected"
+                                                    (click)="checkForGeneratedVoucher($event)"
+                                                    (change)="handleVoucherAdjustment()"
+                                                    >{{
+                                                        localeData?.adjust_voucher
+                                                            | replace: "[VOUCHER_TYPE]":currentVoucherLabel
+                                                    }}</mat-checkbox
+                                                >
+                                            </td>
+                                            <td
+                                                *ngIf="
+                                                    vm.selectedLedger.voucher?.shortCode == 'advance-receipt' &&
+                                                    isAdvanceReceipt
+                                                "
+                                                class="pd-r1 pb-1"
+                                            >
+                                                <mat-checkbox
+                                                    [color]="materialColorPalette"
+                                                    [disabled]="
+                                                        !isPettyCash &&
+                                                        currentOrganizationType === 'COMPANY' &&
+                                                        branches?.length > 1
+                                                    "
+                                                    id="update-ledger-advance-receipt"
+                                                    name="advanceReceipt"
+                                                    [(ngModel)]="isAdjustAdvanceReceiptSelected"
+                                                    (click)="checkForGeneratedVoucher($event)"
+                                                    (change)="handleVoucherAdjustment()"
+                                                    >{{ localeData?.adjust_advance_receipt }}
+                                                </mat-checkbox>
+                                            </td>
+                                            <td
+                                                *ngIf="
+                                                    vm.selectedLedger.voucher?.shortCode == 'rcpt' && !isAdvanceReceipt
+                                                "
+                                                class="pd-r1 pb-1"
+                                            >
+                                                <mat-checkbox
+                                                    [color]="materialColorPalette"
+                                                    [disabled]="
+                                                        !isPettyCash &&
+                                                        currentOrganizationType === 'COMPANY' &&
+                                                        branches?.length > 1
+                                                    "
+                                                    id="update-ledger-adjust-receipt"
+                                                    name="advanceReceipt"
+                                                    [(ngModel)]="isAdjustReceiptSelected"
+                                                    (click)="checkForGeneratedVoucher($event)"
+                                                    (change)="handleVoucherAdjustment()"
+                                                    >{{ localeData?.adjust_receipt }}
+                                                </mat-checkbox>
                                             </td>
                                         </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </mat-expansion-panel>
-                    </mat-accordion>
+                                    </table>
+                                    <table class="xs-table-block">
+                                        <tbody>
+                                            <tr>
+                                                <td class="pd-r1">
+                                                    <label class="default-color">{{
+                                                        commonLocaleData?.app_cheque_number
+                                                    }}</label>
+                                                    <input
+                                                        matInput
+                                                        [disabled]="
+                                                            !isPettyCash &&
+                                                            currentOrganizationType === 'COMPANY' &&
+                                                            branches?.length > 1
+                                                        "
+                                                        type="text"
+                                                        id="update-ledger-cheque-number"
+                                                        [placeholder]="localeData?.cheque_number_placeholder"
+                                                        class="form-control mat-field-border pd-0"
+                                                        [(ngModel)]="vm.selectedLedger.chequeNumber"
+                                                    />
+                                                </td>
+                                                <td>
+                                                    <label class="default-color">{{
+                                                        commonLocaleData?.app_cheque_clearance_date
+                                                    }}</label>
+                                                    <giddh-datepicker
+                                                        [showToggleIcon]="false"
+                                                        class="db"
+                                                        [cssClass]="'mat-field-border bdr form-control pd-0'"
+                                                        [disabled]="
+                                                            !isPettyCash &&
+                                                            currentOrganizationType === 'COMPANY' &&
+                                                            branches?.length > 1
+                                                        "
+                                                        id="update-ledger-cheque-clearance"
+                                                        [(ngModel)]="vm.selectedLedger.chequeClearanceDate"
+                                                    ></giddh-datepicker>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <table class="mr-t1">
+                                        <tbody>
+                                            <tr>
+                                                <td class="pd-r1">
+                                                    <label class="default-color">{{ localeData?.assign_tag }}</label>
+                                                    <sh-select
+                                                        id="update-ledger-assign-tag"
+                                                        [options]="tags"
+                                                        [isFilterEnabled]="true"
+                                                        [class.disabled-ledger]="
+                                                            !isPettyCash &&
+                                                            currentOrganizationType === 'COMPANY' &&
+                                                            branches?.length > 1
+                                                        "
+                                                        [placeholder]="commonLocaleData?.app_select_tag"
+                                                        [showClear]="false"
+                                                        [multiple]="true"
+                                                        [disabled]="
+                                                            !isPettyCash &&
+                                                            currentOrganizationType === 'COMPANY' &&
+                                                            branches?.length > 1
+                                                        "
+                                                        name="tagNames"
+                                                        [(ngModel)]="vm.selectedLedger.tagNames"
+                                                        [ItemHeight]="'auto'"
+                                                    ></sh-select>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </div>
 
                     <div class="col-md-6 font-14 pt-1 remove-border-left-onmo">
                         <table class="width-100">
