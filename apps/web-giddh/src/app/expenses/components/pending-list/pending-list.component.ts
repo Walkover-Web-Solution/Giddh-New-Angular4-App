@@ -1,16 +1,17 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { ToasterService } from '../../../services/toaster.service';
 import { takeUntil } from 'rxjs/operators';
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { ActionPettycashRequest, ExpenseResults, PettyCashReportResponse, PettyCashResonse } from '../../../models/api-models/Expences';
+import { ActionPettycashRequest, ExpenseResults, PettyCashReportResponse } from '../../../models/api-models/Expences';
 import { ExpenseService } from '../../../services/expences.service';
 import { CommonPaginatedRequest } from '../../../models/api-models/Invoice';
 import { FormControl } from '@angular/forms';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import * as moment from 'moment/moment';
+import { MatSort } from '@angular/material/sort';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-pending-list',
@@ -18,6 +19,11 @@ import * as moment from 'moment/moment';
     styleUrls: ['./pending-list.component.scss'],
 })
 export class PendingListComponent implements OnInit, OnChanges {
+    /** Instance of approve confirm dialog */
+    @ViewChild("approveConfirm") public approveConfirm;
+    /** Instance of sort header */
+    @ViewChild(MatSort) sortBy: MatSort;
+    @Input() public isClearFilter: boolean = false;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -26,6 +32,13 @@ export class PendingListComponent implements OnInit, OnChanges {
     @Input() public pettyCashPendingReportResponse: PettyCashReportResponse = null;
     /** True if report loading in process */
     @Input() public isPettyCashPendingReportLoading: boolean = false;
+    @Output() public selectedRowInput: EventEmitter<ExpenseResults> = new EventEmitter();
+    @Output() public selectedRowToggle: EventEmitter<boolean> = new EventEmitter();
+    @Output() public isFilteredSelected: EventEmitter<boolean> = new EventEmitter();
+    /** This will emit the from and to date returned by api */
+    @Output() public reportDates: EventEmitter<any> = new EventEmitter();
+    /** This will emit the filter object to reload the report */
+    @Output() public reloadReportList: EventEmitter<any> = new EventEmitter();
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public expensesItems: ExpenseResults[] = [];
     public universalDate$: Observable<any>;
@@ -37,22 +50,13 @@ export class PendingListComponent implements OnInit, OnChanges {
     public selectedEntryForApprove: ExpenseResults;
     public isRowExpand: boolean = false;
     public pettycashRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
-    @Output() public selectedRowInput: EventEmitter<ExpenseResults> = new EventEmitter();
-    @Output() public selectedRowToggle: EventEmitter<boolean> = new EventEmitter();
-    @Output() public isFilteredSelected: EventEmitter<boolean> = new EventEmitter();
-    /** This will emit the from and to date returned by api */
-    @Output() public reportDates: EventEmitter<any> = new EventEmitter();
-    /** This will emit the filter object to reload the report */
-    @Output() public reloadReportList: EventEmitter<any> = new EventEmitter();
-    @Input() public isClearFilter: boolean = false;
     public showSubmittedBySearch: boolean = false;
     public submittedBySearchInput: FormControl = new FormControl();
     public showAccountSearch: boolean = false;
     public accountSearchInput: FormControl = new FormControl();
     public showPaymentReceiveSearch: boolean = false;
     public paymentReceiveSearchInput: FormControl = new FormControl();
-    public approveEntryModalRef: BsModalRef;
-    public filterModalRef: BsModalRef;
+    public approveEntryModalRef: any;
     public approveEntryRequestInProcess: boolean = false;
     /** Entry against object */
     public entryAgainstObject = {
@@ -64,16 +68,18 @@ export class PendingListComponent implements OnInit, OnChanges {
     };
     /** Entry object */
     public accountEntryPettyCash: any = { particular: { name: "" } };
+    /** Table columns for pending report */
+    public pendingTableColumns: string[] = ['s_no', 'entry_date', 'submitted_by', 'account', 'amount', 'receipt', 'file', 'description', 'action'];
 
     constructor(
         private store: Store<AppState>,
         private expenseService: ExpenseService,
-        private toasty: ToasterService,
-        private cdRf: ChangeDetectorRef,
-        private modalService: BsModalService
+        private toaster: ToasterService,
+        private cdRef: ChangeDetectorRef,
+        public dialog: MatDialog
     ) {
-        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
-        this.todaySelected$ = this.store.pipe(select(p => p.session.todaySelected), takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
+        this.todaySelected$ = this.store.pipe(select(state => state.session.todaySelected), takeUntil(this.destroyed$));
 
         observableCombineLatest([this.universalDate$, this.todaySelected$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             if (!Array.isArray(resp[0])) {
@@ -95,37 +101,53 @@ export class PendingListComponent implements OnInit, OnChanges {
         });
     }
 
-    public ngOnInit() {
+    /**
+     * Initializes the component
+     *
+     * @memberof PendingListComponent
+     */
+    public ngOnInit(): void {
         this.getReportResponse();
     }
 
-    public showApproveConfirmPopup(ref: TemplateRef<any>, item: ExpenseResults) {
+    /**
+     * Shows approve confirm dialog
+     *
+     * @param {TemplateRef<any>} ref
+     * @param {ExpenseResults} item
+     * @memberof PendingListComponent
+     */
+    public showApproveConfirmPopup(ref: TemplateRef<any>, item: ExpenseResults): void {
         this.accountEntryPettyCash = { particular: { name: item?.baseAccount?.name } };
         this.prepareEntryAgainstObject(item);
-        this.approveEntryModalRef = this.modalService.show(ref, { class: 'modal-md', backdrop: true, ignoreBackdropClick: true });
+        this.approveEntryModalRef = this.dialog.open(ref, { disableClose: true });
         this.selectedEntryForApprove = item;
     }
 
-    public hideApproveConfirmPopup(isApproved) {
+    /**
+     * Hides approve confirm dialog
+     *
+     * @param {boolean} isApproved
+     * @memberof PendingListComponent
+     */
+    public hideApproveConfirmPopup(isApproved: boolean): void {
         if (!isApproved) {
-            this.approveEntryModalRef.hide();
+            this.approveEntryModalRef.close();
             this.selectedEntryForApprove = null;
         } else {
             this.approveEntry();
         }
     }
 
-    public showFilterModal(ref: TemplateRef<any>) {
-        this.filterModalRef = this.modalService.show(ref, { class: 'modal-md' });
-    }
-
-    public hideFilterModal() {
-        this.filterModalRef.hide();
-    }
-
+    /**
+     * Approves the entry
+     *
+     * @returns
+     * @memberof PendingListComponent
+     */
     public async approveEntry() {
         if (!this.selectedEntryForApprove.baseAccount.uniqueName) {
-            this.toasty.errorToast(this.localeData?.approve_entry_error);
+            this.toaster.showSnackBar("error", this.localeData?.approve_entry_error);
             this.hideApproveConfirmPopup(false);
             return;
         }
@@ -141,7 +163,7 @@ export class PendingListComponent implements OnInit, OnChanges {
             ledgerRequest = await this.expenseService.getPettycashEntry(this.selectedEntryForApprove.uniqueName).toPromise();
         } catch (e) {
             this.approveEntryRequestInProcess = false;
-            this.toasty.errorToast(e);
+            this.toaster.showSnackBar("error", e);
             this.hideApproveConfirmPopup(false);
             return;
         }
@@ -149,29 +171,47 @@ export class PendingListComponent implements OnInit, OnChanges {
         this.expenseService.actionPettycashReports(actionType, { ledgerRequest: ledgerRequest.body }).subscribe((res) => {
             this.approveEntryRequestInProcess = false;
             if (res.status === 'success') {
-                this.toasty.successToast(res.body);
+                this.toaster.showSnackBar("success", res.body);
                 // if entry approved successfully then re get all entries with already sated filter params
                 this.getPettyCashPendingReports(this.pettycashRequest);
             } else {
-                this.toasty.errorToast(res.message);
+                this.toaster.showSnackBar("error", res.message);
             }
             this.hideApproveConfirmPopup(false);
         });
     }
 
-    public getPettyCashPendingReports(SalesDetailedfilter: CommonPaginatedRequest) {
-        SalesDetailedfilter.status = 'pending';
-        SalesDetailedfilter.sort = this.pettycashRequest.sort;
-        SalesDetailedfilter.sortBy = this.pettycashRequest.sortBy;
-        this.reloadReportList.emit(SalesDetailedfilter);
+    /**
+     * Emits the filter to reload report
+     *
+     * @param {CommonPaginatedRequest} salesDetailedfilter
+     * @memberof PendingListComponent
+     */
+    public getPettyCashPendingReports(salesDetailedfilter: CommonPaginatedRequest): void {
+        salesDetailedfilter.status = 'pending';
+        salesDetailedfilter.sort = this.pettycashRequest.sort;
+        salesDetailedfilter.sortBy = this.pettycashRequest.sortBy;
+        this.reloadReportList.emit(salesDetailedfilter);
     }
 
-    public rowClicked(item: ExpenseResults) {
+    /**
+     * Shows item's preview on click of item and opens in edit mode
+     *
+     * @param {ExpenseResults} item
+     * @memberof PendingListComponent
+     */
+    public editExpense(item: ExpenseResults): void {
         this.isRowExpand = true;
         this.selectedRowInput.emit(item);
         this.selectedRowToggle.emit(true);
     }
 
+    /**
+     * Updates the variables if data updated from parent
+     *
+     * @param {SimpleChanges} changes
+     * @memberof PendingListComponent
+     */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes['isClearFilter']) {
             if (changes['isClearFilter'].currentValue) {
@@ -184,99 +224,41 @@ export class PendingListComponent implements OnInit, OnChanges {
         }
     }
 
-    public sort(order: 'asc' | 'desc' = 'asc', key: string) {
-        this.pettycashRequest.sortBy = key;
-        this.pettycashRequest.sort = order;
-        this.getPettyCashPendingReports(this.pettycashRequest);
-    }
-
-    public clearFilter() {
+    /**
+     * It will clear filters
+     *
+     * @memberof PendingListComponent
+     */
+    public clearFilter(): void {
         this.pettycashRequest.sort = '';
         this.pettycashRequest.sortBy = '';
         this.pettycashRequest.page = 1;
     }
 
-    public pageChanged(ev: any): void {
-        if (ev.page === this.pettycashRequest.page) {
+    /**
+     * Callback for page change event
+     *
+     * @param {*} event
+     * @returns {void}
+     * @memberof PendingListComponent
+     */
+    public pageChanged(event: any): void {
+        if (event.page === this.pettycashRequest.page) {
             return;
         }
-        this.pettycashRequest.page = ev.page;
+        this.pettycashRequest.page = event.page;
         this.getPettyCashPendingReports(this.pettycashRequest);
     }
 
-    detectChanges() {
-        if (!this.cdRf['destroyed']) {
-            this.cdRf.detectChanges();
-        }
-    }
-
-    public toggleSearch(fieldName: string, el: any) {
-        if (fieldName === 'submittedBy') {
-            this.showSubmittedBySearch = true;
-            this.showPaymentReceiveSearch = false;
-            this.showAccountSearch = false;
-        } else if (fieldName === 'payment/receive') {
-            this.showSubmittedBySearch = false;
-            this.showPaymentReceiveSearch = true;
-            this.showAccountSearch = false;
-        } else if (fieldName === 'account') {
-            this.showSubmittedBySearch = false;
-            this.showPaymentReceiveSearch = false;
-            this.showAccountSearch = true;
-        }
-
-        setTimeout(() => {
-            el.focus();
-        }, 200);
-    }
-
-    public clickedOutside(event, el, fieldName: string) {
-        if (fieldName === 'submittedBy') {
-            if (this.submittedBySearchInput.value !== null && this.submittedBySearchInput.value !== '') {
-                return;
-            }
-        } else if (fieldName === 'payment/receive') {
-            if (this.paymentReceiveSearchInput.value !== null && this.paymentReceiveSearchInput.value !== '') {
-                return;
-            }
-        } else if (fieldName === 'account') {
-            if (this.accountSearchInput.value !== null && this.accountSearchInput.value !== '') {
-                return;
-            }
-        }
-
-        if (this.childOf(event.target, el)) {
-            return;
-        } else {
-            if (fieldName === 'submittedBy') {
-                this.showSubmittedBySearch = false;
-            } else if (fieldName === 'payment/receive') {
-                this.showPaymentReceiveSearch = false;
-            } else if (fieldName === 'account') {
-                this.showAccountSearch = false;
-            }
-        }
-    }
-
-    /* tslint:disable */
-    public childOf(c, p) {
-        while ((c = c.parentNode) && c !== p) {
-        }
-        return !!c;
-    }
-
     /**
-     * This will replace the search field title
+     * Call's detect changes method
      *
-     * @param {string} title
-     * @returns {string}
+     * @private
      * @memberof PendingListComponent
      */
-    public replaceTitle(title: string): string {
-        if (this.localeData && this.localeData?.search_field) {
-            return this.localeData?.search_field.replace("[FIELD]", title);
-        } else {
-            return title;
+    private detectChanges(): void {
+        if (!this.cdRef['destroyed']) {
+            this.cdRef.detectChanges();
         }
     }
 
@@ -288,7 +270,10 @@ export class PendingListComponent implements OnInit, OnChanges {
      */
     private getReportResponse(): void {
         if (this.pettyCashPendingReportResponse) {
-            this.expensesItems = this.pettyCashPendingReportResponse.results;
+            this.expensesItems = this.pettyCashPendingReportResponse.results?.map((expense, index) => {
+                expense.index = index;
+                return expense;
+            });
             this.reportDates.emit([this.pettyCashPendingReportResponse.fromDate, this.pettyCashPendingReportResponse.toDate]);
 
             setTimeout(() => {
@@ -334,5 +319,17 @@ export class PendingListComponent implements OnInit, OnChanges {
             return particular.parentGroups.some(parent => parent.uniqueName === 'bankaccounts' || parent.uniqueName === 'cash');
         }
         return false;
+    }
+
+    /**
+     * Callback for sorting change
+     *
+     * @param {*} event
+     * @memberof PendingListComponent
+     */
+    public sortChange(event: any): void {
+        this.pettycashRequest.sortBy = event?.active;
+        this.pettycashRequest.sort = event?.direction;
+        this.getPettyCashPendingReports(this.pettycashRequest);
     }
 }

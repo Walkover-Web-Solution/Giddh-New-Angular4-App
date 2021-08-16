@@ -7,15 +7,15 @@
 }
 .main-expense-details {
     width: 90%;
-    height: calc(100vh - 230px);
     overflow-y: auto;
+    padding-top: 10px;
 }
 .main-edit-expense {
     display: flex;
 }
 .input-calender {
     width: 225px;
-    top: 55px;
+    top: 10px;
 }
 .input-calender > span {
     background: none;
@@ -36,10 +36,6 @@
     justify-content: center;
     color: $gray;
 }
-.expense-head {
-    padding-top: 55px;
-}
-
 @media only screen and (max-width: 767px) {
     .left-expense {
         width: 100%;
@@ -52,6 +48,9 @@
     }
     .input-calender {
         top: 15px;
+    }
+    .main-expense-details {
+        width: 100%;
     }
 }
 .clear-filter-div {

@@ -7,42 +7,42 @@
     <div class="relative">
         <hamburger-menu [pageHeading]="isMobileScreen ? getPageHeading() : ''"></hamburger-menu>
         <div class="clearfix petty-cash">
-            <tabset class="custom-tabs" #tabset>
-                <div class="container-fluid mr-b15" *ngIf="!isSelectedRow">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="d-flex">
-                                <div class="clearfix mr-1">
-                                    <div
-                                        class="input-group input-calender custom-datepicker"
-                                        (click)="showGiddhDatepicker($event)"
-                                    >
-                                        <i class="icon-calender calendar-addon"></i>
-                                        <input
-                                            type="text"
-                                            name="selectedDateRange"
-                                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                            class="giddh-datepicker date-range-picker"
-                                        />
+            <mat-tab-group
+                animationDuration="0ms"
+                [selectedIndex]="selectedTabIndex"
+                (selectedTabChange)="tabChanged($event)"
+            >
+                <mat-tab [label]="localeData?.pending">
+                    <div class="container-fluid mr-b15" *ngIf="!isSelectedRow">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="d-flex">
+                                    <div class="clearfix mr-1">
+                                        <div
+                                            class="input-group input-calender custom-datepicker"
+                                            (click)="showGiddhDatepicker($event)"
+                                        >
+                                            <i class="icon-calender calendar-addon"></i>
+                                            <input
+                                                type="text"
+                                                name="selectedDateRange"
+                                                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                                class="giddh-datepicker date-range-picker"
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="d-inline-block clear-filter-div" *ngIf="isFilterSelected">
-                                    <a
-                                        href="javascript:void(0)"
-                                        (click)="clearFilter()"
-                                        class="btn btn-default d-flex align-items-center ml-1"
-                                        ><i class="icon-cross mr-1"></i> {{ commonLocaleData?.app_clear_filter }}</a
-                                    >
+                                    <div class="d-inline-block clear-filter-div" *ngIf="isFilterSelected">
+                                        <a
+                                            href="javascript:void(0)"
+                                            (click)="clearFilter()"
+                                            class="btn btn-default d-flex align-items-center ml-1"
+                                            ><i class="icon-cross mr-1"></i> {{ commonLocaleData?.app_clear_filter }}</a
+                                        >
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <tab
-                    [heading]="localeData?.pending"
-                    (selectTab)="tabChanged('pending', $event)"
-                    [id]="currentSelectedTab === 'pending' ? 'giddh-page-heading' : ''"
-                >
                     <div class="expense-head">
                         <ng-container *ngIf="currentSelectedTab === 'pending'">
                             <app-pending-list
@@ -82,12 +82,38 @@
                             </div>
                         </ng-container>
                     </div>
-                </tab>
-                <tab
-                    [heading]="localeData?.rejected"
-                    (selectTab)="tabChanged('rejected', $event)"
-                    [id]="currentSelectedTab === 'rejected' ? 'giddh-page-heading' : ''"
-                >
+                </mat-tab>
+                <mat-tab [label]="localeData?.rejected">
+                    <div class="container-fluid mr-b15" *ngIf="!isSelectedRow">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="d-flex">
+                                    <div class="clearfix mr-1">
+                                        <div
+                                            class="input-group input-calender custom-datepicker"
+                                            (click)="showGiddhDatepicker($event)"
+                                        >
+                                            <i class="icon-calender calendar-addon"></i>
+                                            <input
+                                                type="text"
+                                                name="selectedDateRange"
+                                                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                                class="giddh-datepicker date-range-picker"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="d-inline-block clear-filter-div" *ngIf="isFilterSelected">
+                                        <a
+                                            href="javascript:void(0)"
+                                            (click)="clearFilter()"
+                                            class="btn btn-default d-flex align-items-center ml-1"
+                                            ><i class="icon-cross mr-1"></i> {{ commonLocaleData?.app_clear_filter }}</a
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="expense-head">
                         <ng-container *ngIf="currentSelectedTab === 'rejected'">
                             <app-rejected-list
@@ -104,8 +130,8 @@
                             ></app-rejected-list>
                         </ng-container>
                     </div>
-                </tab>
-            </tabset>
+                </mat-tab>
+            </mat-tab-group>
         </div>
     </div>
 
