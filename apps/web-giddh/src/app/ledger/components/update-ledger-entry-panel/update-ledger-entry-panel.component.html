@@ -36,7 +36,7 @@
         <!-- endregion -->
 
         <!-- region main body -->
-        <div class="modal-body" [hidden]="isChangeAcc">
+        <div class="modal-body pl-0 pr-0" [hidden]="isChangeAcc">
 
             <!-- region transactions -->
             <div class="ledg-head entry-popup">
@@ -676,7 +676,7 @@
                                 class="text-right table-amount last-table-amount">
                                 <div class="text-right">
 
-                                    <div *ngIf="!vm.selectedLedger.isOtherTaxesApplicable" class="other-tax">
+                                    <div *ngIf="!vm.selectedLedger.isOtherTaxesApplicable" class="other-tax align-items-center">
                                         <input type="checkbox" id="update-ledger-other-tax"
                                             [(ngModel)]="vm.selectedLedger.isOtherTaxesApplicable"
                                             *ngIf="!vm.selectedLedger.isOtherTaxesApplicable"
