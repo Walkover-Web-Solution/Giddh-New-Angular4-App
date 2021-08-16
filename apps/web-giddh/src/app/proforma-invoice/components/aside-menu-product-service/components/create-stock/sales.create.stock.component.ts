@@ -298,15 +298,15 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
                     customField2Heading: a.customField2Heading,
                     customField2Value: a.customField2Value,
                     sacNumber: a.sacNumber,
-                    parentGroup: a.stockGroup.uniqueName
+                    parentGroup: a.stockGroup?.uniqueName
                 });
-                this.groupUniqueName = a.stockGroup.uniqueName;
+                this.groupUniqueName = a.stockGroup?.uniqueName;
                 if (a.customField1Value) { this.customField1 = true; }
                 if (a.customField2Value) { this.customField2 = true; }
                 if (!this.activeGroup) {
-                    this.activeGroup = { uniqueName: a.stockGroup.uniqueName };
+                    this.activeGroup = { uniqueName: a.stockGroup?.uniqueName };
                 } else {
-                    this.activeGroup.uniqueName = a.stockGroup.uniqueName;
+                    this.activeGroup.uniqueName = a.stockGroup?.uniqueName;
                 }
                 this.calCulateRate();
 
@@ -838,7 +838,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
                 hsnNumber: '',
                 sacNumber: ''
             };
-            formObj.parentGroup = stockRequest.uniqueName;
+            formObj.parentGroup = stockRequest?.uniqueName;
             this.store.dispatch(this.inventoryAction.addNewGroup(stockRequest));
         } else {
             if (typeof (formObj.parentGroup) === 'object') {
@@ -1086,7 +1086,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
      * moveStock
      */
     public moveStock() {
-        if (this.addStockForm.get('parentGroup').value !== this.activeGroup.uniqueName) {
+        if (this.addStockForm.get('parentGroup').value !== this.activeGroup?.uniqueName) {
             this.store.dispatch(this.inventoryAction.MoveStock(this.activeGroup, this.stockUniqueName, this.addStockForm.get('parentGroup').value));
         }
     }

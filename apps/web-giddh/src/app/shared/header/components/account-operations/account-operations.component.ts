@@ -153,8 +153,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                         let applicableTaxes = activeAccount.applicableTaxes.map(p => p.uniqueName);
 
                         // set isGstEnabledAcc or not
-                        if (activeAccount.parentGroups[0].uniqueName) {
-                            let col = activeAccount.parentGroups[0].uniqueName;
+                        if (activeAccount.parentGroups[0]?.uniqueName) {
+                            let col = activeAccount.parentGroups[0]?.uniqueName;
                             this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                             this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
                         }
@@ -219,8 +219,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         };
 
         this.activeAccount$.subscribe(a => {
-            if (a && a.parentGroups[0].uniqueName) {
-                let col = a.parentGroups[0].uniqueName;
+            if (a && a.parentGroups[0]?.uniqueName) {
+                let col = a.parentGroups[0]?.uniqueName;
                 this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                 this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
             }
@@ -468,7 +468,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             this.store.dispatch(this.accountsAction.getTaxHierarchy(activeAccount.uniqueName));
         } else {
             this.store.dispatch(this.companyActions.getTax());
-            this.store.dispatch(this.groupWithAccountsAction.getTaxHierarchy(activeGroup.uniqueName));
+            this.store.dispatch(this.groupWithAccountsAction.getTaxHierarchy(activeGroup?.uniqueName));
         }
 
     }
@@ -641,7 +641,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     public customMoveGroupFilter(term: string, item: IOption): boolean {
-        return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1);
+        return (item?.label?.toLocaleLowerCase()?.indexOf(term) > -1 || item?.value?.toLocaleLowerCase()?.indexOf(term) > -1);
     }
 
     public exportGroupLedger() {

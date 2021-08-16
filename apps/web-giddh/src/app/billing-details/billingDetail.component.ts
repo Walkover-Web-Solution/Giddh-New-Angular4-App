@@ -338,7 +338,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     ngAfterViewInit(): void {
-        let s = document.createElement('script');
         let that = this;
 
         this.options = {
