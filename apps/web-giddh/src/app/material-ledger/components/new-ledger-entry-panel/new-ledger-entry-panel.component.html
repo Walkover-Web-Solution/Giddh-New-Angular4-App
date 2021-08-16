@@ -356,7 +356,7 @@
                 <div class="text-right mr-b1" *ngIf="currentTxn.selectedAccount && showTaxationDiscountBox">
                     <ng-container *ngIf="isTcsTdsApplicable">
                         <mat-checkbox
-                            [color]="materialColorPalette"
+                            color="primary"
                             [disabled]="isReadOnly"
                             id="ledger-other-tax"
                             [(ngModel)]="blankLedger.isOtherTaxesApplicable"
@@ -575,7 +575,7 @@
                                         class="pd-r1 pt-2 hidden-xs"
                                     >
                                         <mat-checkbox
-                                            [color]="materialColorPalette"
+                                            color="primary"
                                             [disabled]="isReadOnly"
                                             id="ledger-adjust-sale"
                                             name="adjustSales"
@@ -589,7 +589,7 @@
                                         class="pd-r1 pt-2 hidden-xs"
                                     >
                                         <mat-checkbox
-                                            [color]="materialColorPalette"
+                                            color="primary"
                                             [disabled]="isReadOnly"
                                             id="ledger-adjust-receipt"
                                             name="adjustReceipt"
@@ -603,7 +603,7 @@
                                         class="pd-r1 pt-2 hidden-xs"
                                     >
                                         <mat-checkbox
-                                            [color]="materialColorPalette"
+                                            color="primary"
                                             [disabled]="isReadOnly"
                                             id="ledger-adjust-advance-receipt"
                                             name="adjustAdvanceReceipt"
@@ -771,7 +771,7 @@
                 <div class="mr-r1 form-group pull-left cp">
                     <label class="pull-left cp font-16">
                         <mat-checkbox
-                            [color]="materialColorPalette"
+                            color="primary"
                             id="ledger-generate-voucher"
                             class="pull-left"
                             name="generateInvoice"
@@ -966,7 +966,7 @@
 <ng-template #rcmEntryCheckbox>
     <div *ngIf="currentTxn?.shouldShowRcmEntry" class="rcm-entry pd-b1 mt-b1">
         <mat-checkbox
-            [color]="materialColorPalette"
+            color="primary"
             [disabled]="isReadOnly"
             id="tourist-scheme-1"
             [ngModel]="isRcmEntry"
@@ -982,7 +982,7 @@
             <div class="d-flex align-items-center">
                 <span class="pull-left">
                     <mat-checkbox
-                        [color]="materialColorPalette"
+                        color="primary"
                         [disabled]="isReadOnly"
                         id="tourist-scheme"
                         name="touristSchemeApplicable"

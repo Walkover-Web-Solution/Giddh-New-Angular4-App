@@ -703,7 +703,7 @@
                 <!-- reverse charge transction start -->
                 <div *ngIf="shouldShowRcmEntry" class="pd-b1 mt-b1 tourist-scheme-wrapper">
                     <mat-checkbox
-                        [color]="materialColorPalette"
+                        color="primary"
                         id="tourist-scheme-1"
                         [ngModel]="isRcmEntry"
                         (change)="toggleRcmCheckbox($event)"
@@ -1040,7 +1040,7 @@
                                 <div class="text-right">
                                     <div *ngIf="!vm.selectedLedger.isOtherTaxesApplicable" class="other-tax">
                                         <mat-checkbox
-                                            [color]="materialColorPalette"
+                                            color="primary"
                                             id="update-ledger-other-tax"
                                             [(ngModel)]="vm.selectedLedger.isOtherTaxesApplicable"
                                             *ngIf="!vm.selectedLedger.isOtherTaxesApplicable"
@@ -1520,7 +1520,7 @@
                                                 class="pd-r1 pb-1"
                                             >
                                                 <mat-checkbox
-                                                    [color]="materialColorPalette"
+                                                    color="primary"
                                                     [disabled]="
                                                         !isPettyCash &&
                                                         currentOrganizationType === 'COMPANY' &&
@@ -1545,7 +1545,7 @@
                                                 class="pd-r1 pb-1"
                                             >
                                                 <mat-checkbox
-                                                    [color]="materialColorPalette"
+                                                    color="primary"
                                                     [disabled]="
                                                         !isPettyCash &&
                                                         currentOrganizationType === 'COMPANY' &&
@@ -1566,7 +1566,7 @@
                                                 class="pd-r1 pb-1"
                                             >
                                                 <mat-checkbox
-                                                    [color]="materialColorPalette"
+                                                    color="primary"
                                                     [disabled]="
                                                         !isPettyCash &&
                                                         currentOrganizationType === 'COMPANY' &&
@@ -1687,7 +1687,7 @@
                                 <div class="mr-r1 form-group pull-left cp">
                                     <label class="pull-left cp font-16 d-flex align-items-center">
                                         <mat-checkbox
-                                            [color]="materialColorPalette"
+                                            color="primary"
                                             id="update-ledger-generate-voucher"
                                             class="pull-left"
                                             name="generateInvoice"
@@ -1882,7 +1882,7 @@
                 <div class="d-flex align-items-center">
                     <span class="pull-left">
                         <mat-checkbox
-                            [color]="materialColorPalette"
+                            color="primary"
                             [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                             id="tourist-scheme"
                             name="touristSchemeApplicable"

@@ -19,7 +19,6 @@ import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { difference, orderBy } from '../../../lodash-optimized';
-import { MATERIAL_COLOR_PALETTE } from '../../ledger.vm';
 
 export const TAX_CONTROL_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -80,8 +79,6 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
     public sum: number = 0;
     public formattedTotal: string;
     private selectedTaxes: UpdateLedgerTaxData[] = [];
-    /** Color paletter for material */
-    public materialColorPalette: string = MATERIAL_COLOR_PALETTE;
 
     constructor() {
 

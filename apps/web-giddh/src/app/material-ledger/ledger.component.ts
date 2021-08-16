@@ -36,7 +36,7 @@ import { BorderConfiguration, IOption } from '../theme/ng-virtual-select/sh-opti
 import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
 import { NewLedgerEntryPanelComponent } from './components/new-ledger-entry-panel/new-ledger-entry-panel.component';
 import { UpdateLedgerEntryPanelComponent } from './components/update-ledger-entry-panel/update-ledger-entry-panel.component';
-import { BlankLedgerVM, LedgerVM, MATERIAL_COLOR_PALETTE, TransactionVM } from './ledger.vm';
+import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { download } from "@giddh-workspaces/utils";
 import { SearchService } from '../services/search.service';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
@@ -81,9 +81,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public isLedgerCreateSuccess$: Observable<boolean>;
     public needToReCalculate: BehaviorSubject<boolean> = new BehaviorSubject(false);
     @ViewChild('newLedPanel', { static: false }) public newLedgerComponent: NewLedgerEntryPanelComponent;
+    @ViewChild('updateLedgerModal', { static: false }) public updateLedgerModal: any;
     /** datepicker element reference  */
     @ViewChild('datepickerTemplate', { static: false }) public datepickerTemplate: ElementRef;
-    public showUpdateLedgerForm: boolean = false;
     public isTransactionRequestInProcess$: Observable<boolean>;
     public ledgerBulkActionSuccess$: Observable<boolean>;
     public searchTermStream: Subject<string> = new Subject();
@@ -127,6 +127,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public companyTaxesList: TaxResponse[] = [];
     public selectedTxnAccUniqueName: string = '';
     public tcsOrTds: 'tcs' | 'tds' = 'tcs';
+    public asideMenuStateForOtherTaxes: string = 'out';
     public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay'];
     public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
     public isLedgerAccountAllowsMultiCurrency: boolean = false;
@@ -226,8 +227,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** True if user has ledger permission */
     public hasLedgerPermission: boolean = true;
-    /** Color paletter for material */
-    public materialColorPalette: string = MATERIAL_COLOR_PALETTE;
+    /** Dialog Ref for update ledger */
+    public updateLedgerModalDialogRef: any;
+    /** Instance of update ledger component */
+    public updateLedgerComponentRef: any;
 
     constructor(
         private store: Store<AppState>,
@@ -1129,35 +1132,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (transactions) {
             this.store.dispatch(this.ledgerActions.setAccountForEdit(this.lc.accountUnq));
         }
-        this.showUpdateLedgerForm = true;
         this.store.dispatch(this.ledgerActions.setTxnForEdit(txn.entryUniqueName));
         this.lc.selectedTxnUniqueName = txn.entryUniqueName;
 
-        let dialogRef = this.dialog.open(UpdateLedgerEntryPanelComponent, {
-            data: {
-                tcsOrTds: this.tcsOrTds,
-                defaultSuggestions: [...this.defaultSuggestions],
-                page: this.defaultResultsPaginationData.page,
-                totalPages: this.defaultResultsPaginationData.totalPages,
-                activeCompany: this.activeCompany
-            }
-        });
-
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            if (response) {
-                if (response[0] === "showQuickAccountModalFromUpdateLedger") {
-                    this.toggleAsidePane();
-                }
-
-                this.entryManipulated();
-                this.updateLedgerComponentInstance = null;
-            }
-        });
+        this.loadUpdateLedgerComponent();
     }
 
     public hideUpdateLedgerModal() {
-        this.showUpdateLedgerForm = false;
-        this.loaderService.show();
+        this.updateLedgerModalDialogRef?.close();
     }
 
     /**
@@ -1333,6 +1315,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.ledgerActions.ResetLedger());
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    public loadUpdateLedgerComponent() {
+        this.updateLedgerModalDialogRef = this.dialog.open(this.updateLedgerModal);
+
+        this.updateLedgerModalDialogRef.afterClosed().pipe(take(1)).subscribe(() => {
+            this.hideUpdateLedgerModal();
+            this.entryManipulated();
+        });
     }
 
     /**
@@ -1713,7 +1704,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public toggleBodyClass() {
-        if (this.asideMenuState === 'in') {
+        if (this.asideMenuState === 'in' || this.asideMenuStateForOtherTaxes === 'in') {
             document.querySelector('body').classList.add('fixed');
         } else {
             document.querySelector('body').classList.remove('fixed');
@@ -1729,6 +1720,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
+    }
+
+    public toggleOtherTaxesAsidePane(modal): void {
+        this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
+        this.toggleBodyClass();
+    }
+
+    public calculateOtherTaxes(modal: SalesOtherTaxesModal): void {
+        if (this.updateLedgerComponentInstance) {
+            this.updateLedgerComponentInstance.vm.calculateOtherTaxes(modal);
+        }
     }
 
     /**
