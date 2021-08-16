@@ -1493,7 +1493,7 @@
                             class="box balance-detail mr-t2 mr-b2 clearfix text-center">
                             <div class="row">
                                 <div class="col-md-6 col-sm-6 col-12 text-right">{{localeData?.balance_bank}}
-                                    <h3 class="font-20 primary-color">
+                                    <h3 class="font-20 primary-color d-flex justify-content-end">
                                         <amount-field [amount]="reconcileClosingBalanceForBank?.amount"
                                             [currencySymbol]="false" [currencyCode]="false">
                                         </amount-field>
@@ -1501,7 +1501,7 @@
                                     </h3>
                                 </div>
                                 <div class="col-md-6 col-sm-6 col-12 text-left">{{localeData?.pending_cheque}}
-                                    <h3 class="font-20 primary-color">
+                                    <h3 class="font-20 primary-color d-flex">
                                         <amount-field [amount]="closingBalanceBeforeReconcile?.amount"
                                             [currencySymbol]="false" [currencyCode]="false">
                                         </amount-field>
