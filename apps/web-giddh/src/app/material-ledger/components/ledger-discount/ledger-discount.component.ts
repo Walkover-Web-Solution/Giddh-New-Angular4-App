@@ -1,9 +1,8 @@
 import { takeUntil } from 'rxjs/operators';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
-import { IDiscountList, LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
+import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
-import { MATERIAL_COLOR_PALETTE } from '../../ledger.vm';
 import { SettingsDiscountService } from '../../../services/settings.discount.service';
 
 @Component({
@@ -35,8 +34,6 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public maskInput: string;
     @Input() public prefixInput: string;
     @Input() public suffixInput: string;
-    /** Color paletter for material */
-    public materialColorPalette: string = MATERIAL_COLOR_PALETTE;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** List of discounts */	

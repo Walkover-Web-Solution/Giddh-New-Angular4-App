@@ -64,21 +64,21 @@
                                 >
                                     <div *ngIf="visibleTransactionTypeMobile && checkedTrxWhileHovering?.length > 0">
                                         <mat-checkbox
-                                            [color]="materialColorPalette"
+                                            color="primary"
                                             *ngIf="visibleTransactionTypeMobile === 'all'"
                                             id="select-all-entries"
                                             [(ngModel)]="debitCreditSelectAll"
                                             (change)="selectAllEntries($event, visibleTransactionTypeMobile)"
                                         ></mat-checkbox>
                                         <mat-checkbox
-                                            [color]="materialColorPalette"
+                                            color="primary"
                                             *ngIf="visibleTransactionTypeMobile === 'credit'"
                                             id="select-all-entries-cr"
                                             [(ngModel)]="creditSelectAll"
                                             (change)="selectAllEntries($event, visibleTransactionTypeMobile)"
                                         ></mat-checkbox>
                                         <mat-checkbox
-                                            [color]="materialColorPalette"
+                                            color="primary"
                                             *ngIf="visibleTransactionTypeMobile === 'debit'"
                                             id="select-all-entries-dr"
                                             [(ngModel)]="debitSelectAll"
@@ -418,7 +418,7 @@
                                     <span class="mr-r15 d-inline-block font-14">{{ baseCurrencyDetails?.code }}</span>
                                     <div class="toggle d-inline-block currency-toggler" data-key="disabled">
                                         <mat-slide-toggle
-                                            [color]="materialColorPalette"
+                                            color="primary"
                                             [(ngModel)]="currencyTogglerModel"
                                             (change)="toggleCurrency($event)"
                                         ></mat-slide-toggle>
@@ -496,7 +496,7 @@
                         <span class="mr-r15 d-inline-block font-14">{{ baseCurrencyDetails?.code }}</span>
                         <div class="toggle d-inline-block currency-toggler" data-key="disabled">
                             <mat-slide-toggle
-                                [color]="materialColorPalette"
+                                color="primary"
                                 [(ngModel)]="currencyTogglerModel"
                                 (change)="toggleCurrency($event)"
                             ></mat-slide-toggle>
@@ -605,7 +605,7 @@
                                                                 <div class="d-flex align-items-center">
                                                                     <span class="pd-l05 checkbox-span">
                                                                         <mat-checkbox
-                                                                            [color]="materialColorPalette"
+                                                                            color="primary"
                                                                             [id]="
                                                                                 'transaction-mapped-select-entry-dr-' +
                                                                                 i
@@ -855,7 +855,7 @@
                                                                 <div class="d-flex align-items-center">
                                                                     <span class="pd-l05 checkbox-span">
                                                                         <mat-checkbox
-                                                                            [color]="materialColorPalette"
+                                                                            color="primary"
                                                                             [id]="
                                                                                 'transaction-mapped-select-entry-cr-' +
                                                                                 i
@@ -1194,7 +1194,7 @@
                                                 >
                                                     <span class="pull-left account-holder-checkbox">
                                                         <mat-checkbox
-                                                            [color]="materialColorPalette"
+                                                            color="primary"
                                                             [id]="'mobile-view-select-entry-cr-' + i"
                                                             [ngClass]="{
                                                                 'd-none':
@@ -1358,7 +1358,7 @@
                             >
                                 <mat-grid-tile [attr.data-title]="commonLocaleData?.app_date" colspan="1">
                                     <mat-checkbox
-                                        [color]="materialColorPalette"
+                                        color="primary"
                                         id="select-entries-date-cr"
                                         [(ngModel)]="debitSelectAll"
                                         *ngIf="checkedTrxWhileHovering?.length > 0"
@@ -1400,7 +1400,7 @@
                             <mat-grid-list cols="4" rowHeight="50px">
                                 <mat-grid-tile [attr.data-title]="commonLocaleData?.app_select_all" colspan="1">
                                     <mat-checkbox
-                                        [color]="materialColorPalette"
+                                        color="primary"
                                         [(ngModel)]="debitSelectAll"
                                         id="select-entries-all-cr"
                                         *ngIf="checkedTrxWhileHovering?.length > 0"
@@ -1438,7 +1438,7 @@
                                     <div class="d-flex align-items-center">
                                         <span class="float-left">
                                             <mat-checkbox
-                                                [color]="materialColorPalette"
+                                                color="primary"
                                                 [id]="'select-entry-dr-' + i"
                                                 [ngClass]="{
                                                     'd-none':
@@ -1744,7 +1744,7 @@
                             >
                                 <mat-grid-tile colspan="1" [attr.data-title]="commonLocaleData?.app_date">
                                     <mat-checkbox
-                                        [color]="materialColorPalette"
+                                        color="primary"
                                         id="select-all-entries-dr"
                                         [(ngModel)]="creditSelectAll"
                                         *ngIf="checkedTrxWhileHovering?.length > 0"
@@ -1800,7 +1800,7 @@
                             >
                                 <mat-grid-tile colspan="1">
                                     <mat-checkbox
-                                        [color]="materialColorPalette"
+                                        color="primary"
                                         id="select-all-entries-credit"
                                         [(ngModel)]="creditSelectAll"
                                         *ngIf="checkedTrxWhileHovering?.length > 0"
@@ -1838,7 +1838,7 @@
                                     <div class="d-flex align-items-center">
                                         <span class="ledger-checkbox pull-left">
                                             <mat-checkbox
-                                                [color]="materialColorPalette"
+                                                color="primary"
                                                 [id]="'select-entry-cr-' + i"
                                                 [ngClass]="{
                                                     'd-none':
@@ -2572,6 +2572,20 @@
             >
             </ledger-aside-pane>
             <!-- aside menu section -->
+            <!-- update ladger entry popup -->
+            <ng-template #updateLedgerModal>
+                <update-ledger-entry-panel
+                    [defaultSuggestions]="defaultSuggestions"
+                    [tcsOrTds]="tcsOrTds"
+                    [searchResultsPaginationPage]="defaultResultsPaginationData.page"
+                    [searchResultsPaginationTotalPages]="defaultResultsPaginationData.totalPages"
+                    [activeCompany]="activeCompany"
+                    (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane($event)"
+                    (closeUpdateLedgerModal)="hideUpdateLedgerModal()"
+                    (showQuickAccountModalFromUpdateLedger)="toggleAsidePane()"
+                ></update-ledger-entry-panel>
+            </ng-template>
+            <!-- update ladger entry popup -->
             <!-- endregion -->
             <ng-template #datepickerTemplate>
                 <div class="datepicker-modal">
