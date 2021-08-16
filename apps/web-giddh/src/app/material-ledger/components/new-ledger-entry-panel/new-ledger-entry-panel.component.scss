@@ -175,7 +175,33 @@ span.eligible-ITC {
 .sh-template {
     border-bottom: 1px solid $gainsboro;
 }
-
+#new-ledger-enter-amount,
+#new-ledger-enter-amount-advance-receipt,
+#ledger-total-amount {
+    padding-right: 10px !important;
+    width: 95%;
+}
+#ledger-cheque-number {
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+    width: 93%;
+}
+#ledger-description {
+    width: 98.6%;
+}
+#ledger-quantity {
+    padding-right: 6px !important;
+    width: 83%;
+    height: 34px;
+}
+#ledger-price {
+    padding-right: 6px !important;
+    width: 90%;
+}
+#ledger-invoice-number {
+    width: 173px !important;
+    padding-left: 6px !important;
+}
 /* Rotate animation for spinner in uploading file */
 .more-details td,
 .ledger-panel td {
@@ -202,29 +228,4 @@ span.eligible-ITC {
         -webkit-transform: rotate(360deg);
         transform: rotate(360deg);
     }
-}
-#new-ledger-enter-amount,#new-ledger-enter-amount-advance-receipt,#ledger-total-amount {
-    padding-right: 10px !important;
-    width: 95%;
-}
-#ledger-cheque-number {
-    padding-left: 5px !important;
-    padding-right: 5px !important;
-    width: 93%;
-}
-#ledger-description {
-    width: 98.6%;
-}
-#ledger-quantity {
-    padding-right: 6px !important;
-    width: 83%;
-    height: 34px;
-}
-#ledger-price {
-    padding-right: 6px !important;
-    width: 90%;
-}
-#ledger-invoice-number {
-    width: 173px !important;
-    padding-left: 6px !important;
 }

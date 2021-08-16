@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div>
+    <div id="entryModal">
         <!-- region header -->
         <div class="modal-header" *ngIf="!isPettyCash">
             <span
@@ -1341,7 +1341,7 @@
 
                     <div class="col-md-6 pd-t1">
                         <mat-accordion multi>
-                            <mat-expansion-panel>
+                            <mat-expansion-panel class="mr-t1 overflow-visible">
                                 <mat-expansion-panel-header>
                                     <mat-panel-title (click)="getInvoiceLists()">{{
                                         localeData?.more_details
