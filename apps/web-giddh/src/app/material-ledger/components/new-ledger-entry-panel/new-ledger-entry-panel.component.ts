@@ -63,7 +63,7 @@ import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
-import { AVAILABLE_ITC_LIST, BlankLedgerVM, MATERIAL_COLOR_PALETTE, TransactionVM } from '../../ledger.vm';
+import { AVAILABLE_ITC_LIST, BlankLedgerVM, TransactionVM } from '../../ledger.vm';
 import { LedgerDiscountComponent } from '../ledger-discount/ledger-discount.component';
 import { SettingsTagService } from '../../../services/settings.tag.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -231,8 +231,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     private isExchangeRateSwapped: boolean = false;
     /** True if entry value is calculated inclusively */
     private isInclusiveEntry: boolean = false;
-    /** Color paletter for material */
-    public materialColorPalette: string = MATERIAL_COLOR_PALETTE;
     /** Dialog reference for adjustment modal */
     public adjustmentDialogRef: any;
     /** True if datepicker is open */

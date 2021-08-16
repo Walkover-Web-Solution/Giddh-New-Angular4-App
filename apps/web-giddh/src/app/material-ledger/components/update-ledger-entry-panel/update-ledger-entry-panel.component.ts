@@ -5,10 +5,11 @@ import {
     ChangeDetectorRef,
     Component, ElementRef,
     EventEmitter,
-    Inject,
+    Input,
     OnChanges,
     OnDestroy,
     OnInit,
+    Output,
     SimpleChanges,
     TemplateRef,
     ViewChild
@@ -47,7 +48,7 @@ import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
-import { AVAILABLE_ITC_LIST, MATERIAL_COLOR_PALETTE } from '../../ledger.vm';
+import { AVAILABLE_ITC_LIST } from '../../ledger.vm';
 import { UpdateLedgerDiscountComponent } from '../update-ledger-discount/update-ledger-discount.component';
 import { UpdateLedgerVm } from './update-ledger.vm';
 import { SearchService } from '../../../services/search.service';
@@ -55,7 +56,7 @@ import { WarehouseActions } from '../../../settings/warehouse/action/warehouse.a
 import { OrganizationType } from '../../../models/user-login-state';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../../theme/new-confirm-modal/confirm-modal.component';
 import { SettingsTagService } from '../../../services/settings.tag.service';
 import { MatAccordion } from '@angular/material/expansion';
@@ -90,12 +91,19 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    public isPettyCash: boolean = false;
-    public pettyCashEntry: any;
-    public pettyCashBaseAccountTypeString: string;
-    public pettyCashBaseAccountUniqueName: string;
-    /** Stores the active company details */
-    public activeCompany: any;
+    @Output() public closeUpdateLedgerModal: EventEmitter<boolean> = new EventEmitter();	
+    @Output() public showQuickAccountModalFromUpdateLedger: EventEmitter<boolean> = new EventEmitter();	
+    @Output() public toggleOtherTaxesAsideMenu: EventEmitter<UpdateLedgerVm> = new EventEmitter();	
+    /** Emits when more detail is opened */	
+    @Output() public moreDetailOpen: EventEmitter<any> = new EventEmitter();	
+    @Input() isPettyCash: boolean = false;	
+    @Input() pettyCashEntry: any;	
+    @Input() pettyCashBaseAccountTypeString: string;	
+    @Input() pettyCashBaseAccountUniqueName: string;	
+    /** Stores the active company details */	
+    @Input() activeCompany: any;
+    @Input() searchResultsPaginationPage: any;
+    @Input() searchResultsPaginationTotalPages: any;
     /** fileinput element ref for clear value after remove attachment **/
     @ViewChild('fileInputUpdate', { static: false }) public fileInputElement: ElementRef;
     @ViewChild('discount', { static: false }) public discountComponent: UpdateLedgerDiscountComponent;
@@ -251,8 +259,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public condition2: boolean = false;
     /** Stores the multi-lingual label of current voucher */
     public currentVoucherLabel: string;
-    /** Color paletter for material */
-    public materialColorPalette: string = MATERIAL_COLOR_PALETTE;
     public asideMenuStateForOtherTaxes: string = 'out';
     public companyTaxesList: TaxResponse[] = [];
     public otherTaxDialogRef: any;
@@ -273,9 +279,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         private toaster: ToasterService,
         private warehouseActions: WarehouseActions,
         private changeDetectorRef: ChangeDetectorRef,
-        public dialog: MatDialog,
-        @Inject(MAT_DIALOG_DATA) public inputData,
-        public dialogRef: MatDialogRef<any>
+        public dialog: MatDialog
     ) {
 
         this.vm = new UpdateLedgerVm();
@@ -290,15 +294,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.isDeleteTrxEntrySuccess$ = this.store.pipe(select(p => p.ledger.isDeleteTrxEntrySuccessfull), takeUntil(this.destroyed$));
         this.isTxnUpdateInProcess$ = this.store.pipe(select(p => p.ledger.isTxnUpdateInProcess), takeUntil(this.destroyed$));
         this.isTxnUpdateSuccess$ = this.store.pipe(select(p => p.ledger.isTxnUpdateSuccess), takeUntil(this.destroyed$));
+        this.closeUpdateLedgerModal.pipe(takeUntil(this.destroyed$));
         this.vm.currencyList$ = this.store.pipe(select(s => s.session.currencies), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        this.tcsOrTds = this.inputData?.tcsOrTds || this.tcsOrTds;
-        this.defaultSuggestions = this.inputData?.defaultSuggestions || this.defaultSuggestions;
-        this.searchResultsPaginationData.page = this.inputData?.page || this.searchResultsPaginationData.page;
-        this.searchResultsPaginationData.totalPages = this.inputData?.totalPages || this.searchResultsPaginationData.totalPages;
-        this.activeCompany = this.inputData?.activeCompany;
+        if(this.searchResultsPaginationPage) {
+            this.searchResultsPaginationData.page = this.searchResultsPaginationPage;
+        }
+        if(this.searchResultsPaginationTotalPages) {
+            this.searchResultsPaginationData.totalPages = this.searchResultsPaginationTotalPages;
+        }
 
         this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {	
             if (response?.status === "success" && response?.body?.length > 0) {	
@@ -323,7 +329,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             if (response === true) {
                 this.store.dispatch(this.ledgerAction.refreshLedger(false));
                 this.entryAccountUniqueName = "";
-                this.dialogRef.close();
+                this.closeUpdateLedgerModal.emit();
             }
         });
 
@@ -395,7 +401,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.isDeleteTrxEntrySuccess$.subscribe(del => {
             if (del) {
                 this.store.dispatch(this.ledgerAction.resetDeleteTrxEntryModal());
-                this.dialogRef.close();
+                this.closeUpdateLedgerModal.emit(true);
                 this.baseAccountChanged = false;
             }
         });
@@ -953,7 +959,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public showQuickAccountModal() {
-        this.dialogRef.close(["showQuickAccountModalFromUpdateLedger", true]);
+        this.showQuickAccountModalFromUpdateLedger.emit(true);
     }
 
     public changeBaseAccount(acc) {
@@ -2138,20 +2144,5 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.availableItcList[1].label = this.localeData?.import_services;
             this.availableItcList[2].label = this.localeData?.others;
         }
-    }
-
-    public toggleOtherTaxesAsideMenu(templateRef: TemplateRef<any>): void {
-        this.vm.companyTaxesList$.pipe(take(1)).subscribe(taxes => this.companyTaxesList = taxes);
-        this.asideMenuStateForOtherTaxes = 'in';
-        this.otherTaxDialogRef = this.dialog.open(templateRef);
-    }
-
-    public calculateOtherTaxes(modal: SalesOtherTaxesModal) {
-        this.vm.calculateOtherTaxes(modal);
-    }
-    
-    public toggleOtherTaxesAsidePane(): void {
-        this.asideMenuStateForOtherTaxes = 'out';
-        this.otherTaxDialogRef.close();
     }
 }
