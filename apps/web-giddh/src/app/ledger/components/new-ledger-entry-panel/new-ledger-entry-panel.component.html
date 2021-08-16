@@ -489,7 +489,7 @@
 
                 <div class="mr-r1 form-group pull-left cp">
 
-                    <label class="pull-left cp font-16">
+                    <label class="pull-left cp font-16 d-flex align-items-center">
                         <input id="ledger-generate-voucher" class="pull-left" type="checkbox" name="generateInvoice"
                             [disabled]="((isAdvanceReceipt || isAdjustReceiptSelected || isAdjustVoucherSelected || blankLedger.voucherType === 'credit note' || blankLedger.voucherType === 'debit note') && blankLedger.generateInvoice) || isReadOnly ? 'disabled' : null"
                             [(ngModel)]="blankLedger.generateInvoice">
