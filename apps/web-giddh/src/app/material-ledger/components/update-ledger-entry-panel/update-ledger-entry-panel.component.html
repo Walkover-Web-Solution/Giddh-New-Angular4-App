@@ -1915,19 +1915,6 @@
         </div>
     </ng-template>
     <!-- Tourist scheme template block end-->
-    <ng-template #asideMenuOtherTaxes>
-        <app-aside-menu-sales-other-taxes
-            *ngIf="asideMenuStateForOtherTaxes === 'in'"
-            [class]="asideMenuStateForOtherTaxes"
-            [taxes]="companyTaxesList"
-            [otherTaxesModal]="vm.selectedLedger.otherTaxModal"
-            [commonLocaleData]="commonLocaleData"
-            [@slideInOut]="asideMenuStateForOtherTaxes"
-            (closeModal)="toggleOtherTaxesAsidePane()"
-            (applyTaxes)="calculateOtherTaxes($event); toggleOtherTaxesAsidePane()"
-        >
-        </app-aside-menu-sales-other-taxes>
-    </ng-template>
 
     <!--Advance receipt adjusted remove confirmation modal -->
     <ng-template #advanceReceiptRemoveConfirmationModal>

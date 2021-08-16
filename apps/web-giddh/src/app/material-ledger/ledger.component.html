@@ -2572,6 +2572,18 @@
             >
             </ledger-aside-pane>
             <!-- aside menu section -->
+            <div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
+            <app-aside-menu-sales-other-taxes
+                *ngIf="asideMenuStateForOtherTaxes === 'in'"
+                [class]="asideMenuStateForOtherTaxes"
+                [taxes]="companyTaxesList"
+                [otherTaxesModal]="updateLedgerModalVm?.selectedLedger?.otherTaxModal"
+                [commonLocaleData]="commonLocaleData"
+                [@slideInOut]="asideMenuStateForOtherTaxes"
+                (closeModal)="toggleOtherTaxesAsidePane(null)"
+                (applyTaxes)="calculateOtherTaxes($event); toggleOtherTaxesAsidePane(null)"
+            >
+            </app-aside-menu-sales-other-taxes>
             <!-- update ladger entry popup -->
             <ng-template #updateLedgerModal>
                 <update-ledger-entry-panel

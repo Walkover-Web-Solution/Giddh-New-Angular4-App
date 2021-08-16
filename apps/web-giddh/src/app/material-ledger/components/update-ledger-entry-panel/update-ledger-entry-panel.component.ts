@@ -85,7 +85,7 @@ const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make ad
 
 export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
     /** Instance of mat accordion */
-    @ViewChild(MatAccordion) accordion: MatAccordion;
+    @ViewChild(MatAccordion) public accordion: MatAccordion;
     public vm: UpdateLedgerVm;
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -96,14 +96,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @Output() public toggleOtherTaxesAsideMenu: EventEmitter<UpdateLedgerVm> = new EventEmitter();	
     /** Emits when more detail is opened */	
     @Output() public moreDetailOpen: EventEmitter<any> = new EventEmitter();	
-    @Input() isPettyCash: boolean = false;	
-    @Input() pettyCashEntry: any;	
-    @Input() pettyCashBaseAccountTypeString: string;	
-    @Input() pettyCashBaseAccountUniqueName: string;	
+    @Input() public isPettyCash: boolean = false;	
+    @Input() public pettyCashEntry: any;	
+    @Input() public pettyCashBaseAccountTypeString: string;	
+    @Input() public pettyCashBaseAccountUniqueName: string;	
     /** Stores the active company details */	
-    @Input() activeCompany: any;
-    @Input() searchResultsPaginationPage: any;
-    @Input() searchResultsPaginationTotalPages: any;
+    @Input() public activeCompany: any;
+    @Input() public searchResultsPaginationPage: any;
+    @Input() public searchResultsPaginationTotalPages: any;
     /** fileinput element ref for clear value after remove attachment **/
     @ViewChild('fileInputUpdate', { static: false }) public fileInputElement: ElementRef;
     @ViewChild('discount', { static: false }) public discountComponent: UpdateLedgerDiscountComponent;
