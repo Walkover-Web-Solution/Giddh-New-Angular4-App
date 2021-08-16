@@ -28,7 +28,10 @@
     padding: 2px;
     top: 0 !important;
 }
-
+.mat-switch {
+    margin-left: 16px;
+    margin-top: 9px;
+}
 @media (min-width: 1200px) {
     .container {
         width: 100%;
@@ -88,8 +91,4 @@
         padding-right: 15px !important;
         margin-bottom: 15px;
     }
-}
-.mat-switch {
-    margin-left: 16px;
-    margin-top: 9px;
 }

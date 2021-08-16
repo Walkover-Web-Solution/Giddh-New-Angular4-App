@@ -175,34 +175,6 @@ span.eligible-ITC {
 .sh-template {
     border-bottom: 1px solid $gainsboro;
 }
-
-/* Rotate animation for spinner in uploading file */
-.more-details td,
-.ledger-panel td {
-    padding: 0;
-    border-top: none;
-}
-.rotate {
-    -webkit-animation: spin 4s linear infinite;
-    -moz-animation: spin 4s linear infinite;
-    animation: spin 4s linear infinite;
-}
-@-moz-keyframes spin {
-    100% {
-        -moz-transform: rotate(360deg);
-    }
-}
-@-webkit-keyframes spin {
-    100% {
-        -webkit-transform: rotate(360deg);
-    }
-}
-@keyframes spin {
-    100% {
-        -webkit-transform: rotate(360deg);
-        transform: rotate(360deg);
-    }
-}
 #new-ledger-enter-amount,
 #new-ledger-enter-amount-advance-receipt,
 #ledger-total-amount {
@@ -229,4 +201,31 @@ span.eligible-ITC {
 #ledger-invoice-number {
     width: 173px !important;
     padding-left: 6px !important;
+}
+/* Rotate animation for spinner in uploading file */
+.more-details td,
+.ledger-panel td {
+    padding: 0;
+    border-top: none;
+}
+.rotate {
+    -webkit-animation: spin 4s linear infinite;
+    -moz-animation: spin 4s linear infinite;
+    animation: spin 4s linear infinite;
+}
+@-moz-keyframes spin {
+    100% {
+        -moz-transform: rotate(360deg);
+    }
+}
+@-webkit-keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+@keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
