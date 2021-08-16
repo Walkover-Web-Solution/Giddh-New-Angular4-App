@@ -434,14 +434,21 @@
                             <tbody>
                                 <tr class="total-col row">
                                     <td colspan="12" class="col-12  col-sm-12 text-right min-h-32">
-                                        <span *ngIf="vm.entryTotal.drTotal > vm.entryTotal.crTotal">{{localeData?.c_f}}:
+                                        <span 
+                                            *ngIf="vm.entryTotal.drTotal > vm.entryTotal.crTotal"
+                                            class="d-flex justify-content-end"
+                                            >{{localeData?.c_f}}:
                                             {{localeData?.dr}}
-                                            <span class="primary-color pd-2"
+                                            <span 
+                                                class="primary-color pd-l1"
                                                 [tooltip]="vm.ledgerUnderStandingObj.balanceText.dr"
-                                                [placement]="'top'">
-                                                <amount-field [amount]="vm.compoundTotal"
+                                                [placement]="'top'"
+                                            >
+                                                <amount-field 
+                                                    [amount]="vm.compoundTotal"
                                                     [currencySymbol]="vm?.baseCurrencyDetails?.symbol"
-                                                    [currencyCode]="vm?.baseCurrencyDetails?.code">
+                                                    [currencyCode]="vm?.baseCurrencyDetails?.code"
+                                                >
                                                 </amount-field>
                                             </span>
                                         </span>
