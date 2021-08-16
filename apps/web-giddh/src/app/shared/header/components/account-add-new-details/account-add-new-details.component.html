@@ -180,7 +180,7 @@
                                     </div>
                                     <div class="col-sm-4" *ngIf="GSTIN_OR_TRN">
                                         <div class="form-group mr-b05">
-                                            <label for="gstinNum" class="d-block">{{formFields['taxName'].label}}
+                                            <label for="gstinNum" class="d-block">{{formFields['taxName']?.label}}
                                             </label>
                                             <input type="text" class="form-control" autocomplete="false" #gstNumberField
                                                 (keyup)="getStateCode(gst, states, $event);"
