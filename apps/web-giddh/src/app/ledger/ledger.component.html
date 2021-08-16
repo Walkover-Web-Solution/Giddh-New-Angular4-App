@@ -2488,7 +2488,7 @@
                             <div class="row">
                                 <div class="col-md-6 col-sm-6 col-12 text-right">
                                     {{ localeData?.balance_bank }}
-                                    <h3 class="font-20 primary-color">
+                                    <h3 class="font-20 primary-color d-flex justify-content-end">
                                         <span class="d-inline-flex">
                                             <amount-field
                                                 [amount]="reconcileClosingBalanceForBank?.amount"
@@ -2502,7 +2502,7 @@
                                 </div>
                                 <div class="col-md-6 col-sm-6 col-12 text-left">
                                     {{ localeData?.pending_cheque }}
-                                    <h3 class="font-20 primary-color">
+                                    <h3 class="font-20 primary-color d-flex justify-content-end">
                                         <span class="d-inline-flex">
                                             <amount-field
                                                 [amount]="closingBalanceBeforeReconcile?.amount"
