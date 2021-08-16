@@ -30,9 +30,6 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
         if (this.generalService.currentOrganizationType === OrganizationType.Branch && request && request.urlWithParams) {
             request = this.addBranchUniqueName(request);
         }
-        if (this.generalService.voucherApiVersion === 2) {
-            request = this.addVoucherApiVersion(request);
-        }
         if (this.isOnline) {
             return next.handle(request);
         } else {
@@ -60,24 +57,6 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
         if (!request.params.has('branchUniqueName') && !request.url.includes('branchUniqueName') && !request.url.includes('.json')) {
             request = request.clone({
                 params: request.params.append('branchUniqueName', encodeURIComponent(this.generalService.currentBranchUniqueName))
-            });
-        }
-        return request;
-    }
-
-    /**
-     * Adds voucher API version in every API call for companies
-     * which should work on new voucher logic
-     *
-     * @private
-     * @param {HttpRequest<any>} request Current request
-     * @returns {HttpRequest<any>} Http request to carry out API call
-     * @memberof GiddhHttpInterceptor
-     */
-    private addVoucherApiVersion(request: HttpRequest<any>): HttpRequest<any> {
-        if (!request.url.includes('.json')) {
-            request = request.clone({
-                params: request.params.append('voucherVersion', encodeURIComponent(this.generalService.voucherApiVersion))
             });
         }
         return request;

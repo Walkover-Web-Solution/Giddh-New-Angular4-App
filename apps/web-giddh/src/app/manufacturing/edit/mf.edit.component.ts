@@ -339,7 +339,6 @@ export class MfEditComponent implements OnInit, OnDestroy {
             } else {
                 manufacturingObj.otherExpenses = [objToPush];
             }
-
             this.manufacturingDetails = manufacturingObj;
 
             this.otherExpenses = {};

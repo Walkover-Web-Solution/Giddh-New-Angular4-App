@@ -6,10 +6,10 @@ import { concat, includes, startsWith } from 'apps/web-giddh/src/app/lodash-opti
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
 import { ReplaySubject, fromEvent } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { SELECT_ALL_RECORDS } from '../../app.constant';
 
 const FLATTEN_SEARCH_TERM = 'flatten';
 
-// noinspection TsLint
 @Component({
     selector: 'sh-select',
     templateUrl: './sh-select.component.html',
@@ -49,10 +49,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Input() public doNotReset: boolean = false;
     @Input() public defaultValue: string = "";
     @Input() public readonlyInput: boolean;
-    @Input() public showCheckbox: boolean = false;
     /* This is used to set the value */
     @Input() public fixedValue: string = "";
-
     /** True when pagination should be enabled */
     @Input() public isPaginationEnabled: boolean;
     /** True if the compoonent should be used as dynamic search component instead of static search */
@@ -65,6 +63,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Input() public isRequired: boolean = false;
     /** True, if selected values should not be reset when options change */
     @Input() public doNotResetSelectedValues: boolean = false;
+    /** True if select all option is checked */
+    @Input() public isSelectAllChecked: boolean = false;
 
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
@@ -96,6 +96,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     public _selectedValues: IOption[] = [];
     public _options: IOption[] = [];
     public defaultValueUpdated: boolean = false;
+    /** Holds string for select all records */
+    public selectAllRecords: string = SELECT_ALL_RECORDS;
     /** Keys. **/
 
     private KEYS: any = {
@@ -435,6 +437,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
             this.onClear.emit(newValue);
         }
+
+        this.updateRows((this._options ?? []));
 
         this.selectedValues = [];
         if (hide) {

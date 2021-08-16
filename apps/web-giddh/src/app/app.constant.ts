@@ -298,9 +298,6 @@ export const SUPPORT_TEAM_NUMBERS = [
     "+918889500350", "+918889378604"
 ];
 
-/** Email Validation Regex */
-export const EMAIL_VALIDATION_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
 /** Settings integration tabs */
 export const SETTING_INTEGRATION_TABS = {
     // SMS: { LABEL: 'sms', VALUE: 0 },
@@ -309,6 +306,8 @@ export const SETTING_INTEGRATION_TABS = {
     E_COMMERCE: { LABEL: 'ecommerce', VALUE: 2 },
     PAYMENT: { LABEL: 'payment', VALUE: 3 }
 };
+/** Email Validation Regex */
+export const EMAIL_VALIDATION_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 /** E-invoice statuses */
 export enum EInvoiceStatus {
@@ -326,3 +325,135 @@ export const ENTRY_DESCRIPTION_LENGTH = 300;
 export const EMAIL_REGEX_PATTERN = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 /** This will hold error status code for permission error from API */
 export const UNAUTHORISED = 401;
+export const SELECT_ALL_RECORDS = "selectallrecords";
+/** This will hide the filing feature of GST module  */
+export const SHOW_GST_FILING = false;
+/** Stores the voucher wise form values to toggle fields in voucher module */
+export const GIDDH_VOUCHER_FORM = [
+    {
+        type: "sales",
+        advanceReceiptAllowed: false,
+        rcmAllowed: false,
+        depositAllowed: true,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: true,
+        attachmentAllowed: false
+    },
+    {
+        type: "cash",
+        advanceReceiptAllowed: false,
+        rcmAllowed: false,
+        depositAllowed: true,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: true,
+        attachmentAllowed: false
+    },
+    {
+        type: "estimate",
+        advanceReceiptAllowed: false,
+        rcmAllowed: false,
+        depositAllowed: false,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: true,
+        attachmentAllowed: false
+    },
+    {
+        type: "proformas",
+        advanceReceiptAllowed: false,
+        rcmAllowed: false,
+        depositAllowed: false,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: true,
+        attachmentAllowed: false
+    },
+    {
+        type: "purchase",
+        advanceReceiptAllowed: false,
+        rcmAllowed: true,
+        depositAllowed: true,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: true,
+        attachmentAllowed: true
+    },
+    {
+        type: "credit note",
+        advanceReceiptAllowed: false,
+        rcmAllowed: false,
+        depositAllowed: false,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: false,
+        attachmentAllowed: false
+    },
+    {
+        type: "debit note",
+        advanceReceiptAllowed: false,
+        rcmAllowed: false,
+        depositAllowed: false,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: false,
+        attachmentAllowed: false
+    },
+    {
+        type: "payment",
+        advanceReceiptAllowed: false,
+        rcmAllowed: false,
+        depositAllowed: false,
+        taxesAllowed: false,
+        quantityAllowed: false,
+        rateAllowed: false,
+        discountAllowed: false,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: false,
+        attachmentAllowed: false
+    },
+    {
+        type: "receipt",
+        advanceReceiptAllowed: true,
+        rcmAllowed: false,
+        depositAllowed: false,
+        taxesAllowed: false,
+        quantityAllowed: false,
+        rateAllowed: false,
+        discountAllowed: false,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: false,
+        attachmentAllowed: false
+    }
+];

@@ -8,10 +8,10 @@
     padding-top: 0 !important;
     .company-branch-block {
         background-color: $solitude-light;
-        ul.branch-connection{
+        ul.branch-connection {
             padding: 14px 0;
         }
-        #button-company-branch{
+        #button-company-branch {
             list-style: none;
         }
         .branch-connection {
@@ -56,7 +56,7 @@
                 position: relative;
                 right: 5px;
             }
-            .icon-cross{
+            .icon-cross {
                 display: flex;
                 font-size: 12px;
                 color: $omiod;
@@ -71,11 +71,11 @@
             font-family: "opensans-semibold";
             color: $omiod;
             .company-alice {
-                width: 26px;
-                height: 26px;
-                min-width: 26px;
+                width: 30px;
+                height: 30px;
+                min-width: 30px;
                 border: 1px solid $omiod;
-                padding: 5px;
+                padding: 15px;
                 border-radius: 50px;
                 display: inline-flex;
                 justify-content: center;
@@ -132,7 +132,7 @@
                 display: none;
             }
         }
-        .company-branch-nav{
+        .company-branch-nav {
             height: calc(100vh - 110px);
             box-shadow: none;
             border: none;
@@ -261,8 +261,8 @@
                     display: flex;
                     align-items: flex-start;
                     flex-direction: column;
-                    p{
-                        span.text-gray{
+                    p {
+                        span.text-gray {
                             display: flex;
                         }
                     }
@@ -283,10 +283,10 @@
                             color: $cornflower !important;
                             background-color: transparent;
                         }
-                        &:first-child{
-                            span{
+                        &:first-child {
+                            span {
                                 padding: 10px 0;
-                                &.item-name{
+                                &.item-name {
                                     padding: 0;
                                 }
                             }
@@ -337,6 +337,7 @@
                         }
                         li {
                             padding: 0;
+                            margin-bottom: 0 !important;
                             a {
                                 color: $trout;
                                 align-items: center;
@@ -347,27 +348,18 @@
                                 padding: 10px 0 10px 50px;
 
                                 i {
-                                    font-size: 20px;
+                                    font-size: 22px;
                                     margin-right: 10px;
                                 }
                                 &.active {
-                                    @include highlight-color(
-                                        $cornflower,
-                                        $white
-                                    );
+                                    @include highlight-color($cornflower, $white);
                                 }
                             }
                             &:hover {
                                 a {
-                                    @include highlight-color(
-                                        $link-water,
-                                        $night-rider
-                                    );
+                                    @include highlight-color($link-water, $night-rider);
                                     &.active {
-                                        @include highlight-color(
-                                            $cornflower,
-                                            $white
-                                        );
+                                        @include highlight-color($cornflower, $white);
                                     }
                                 }
                             }
@@ -395,7 +387,7 @@
         }
     }
     &.sidebar-collapse {
-        .company-branch-nav{
+        .company-branch-nav {
             display: none !important;
         }
         .company-full-name {
@@ -409,12 +401,12 @@
                 .outer-span {
                     display: none;
                 }
-                &.padding-14{
+                &.padding-14 {
                     padding: 14px 10px !important;
                 }
             }
-            &.padding-14{
-                .branch-connection{
+            &.padding-14 {
+                .branch-connection {
                     padding: 14px 10px !important;
                 }
             }
@@ -429,12 +421,12 @@
                 }
             }
             .company-name {
-                .icon-down-new{
+                .icon-down-new {
                     right: 5px;
                     transform: rotate(-90deg);
                     display: none;
                 }
-                .icon-cross{
+                .icon-cross {
                     display: none;
                 }
             }
@@ -475,7 +467,7 @@
                     width: 36px;
                 }
             }
-            .company-branch-nav{
+            .company-branch-nav {
                 display: block;
             }
         }
@@ -538,12 +530,12 @@
                     overflow: hidden;
                     white-space: nowrap;
                     position: relative;
-                    span{
-                        i.icon-go{
+                    span {
+                        i.icon-go {
                             display: none;
                         }
                     }
-                    &:after{
+                    &:after {
                         position: absolute;
                         content: "";
                         background-color: $white;
@@ -633,13 +625,13 @@
                 position: relative;
                 .account-collapse {
                     display: block;
-                    ul{
-                        li{
+                    ul {
+                        li {
                             overflow: hidden;
                             white-space: nowrap;
                             position: relative;
-                            }
                         }
+                    }
                 }
                 .account-dropdown {
                     display: none !important;
@@ -675,7 +667,7 @@
                         }
                     }
                 }
-                &:after{
+                &:after {
                     position: absolute;
                     content: "";
                     background-color: $white;

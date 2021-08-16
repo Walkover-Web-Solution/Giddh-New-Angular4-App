@@ -45,7 +45,6 @@ export class WarehouseActions {
      * @private
      * @memberof WarehouseActions
      */
-    //@Effect()
     public createWarehouse$ = createEffect(() => this.action$.pipe(
         ofType(WarehouseActions.CREATE_WAREHOUSE),
         switchMap((action: CustomActions) => this.settingsWarehouseService.createWarehouse(action.payload)),
@@ -65,7 +64,6 @@ export class WarehouseActions {
      * @private
      * @memberof WarehouseActions
      */
-    //@Effect()
     public getAllWarehouse$ = createEffect(() => this.action$.pipe(
         ofType(WarehouseActions.GET_ALL_WAREHOUSE),
         switchMap((action: CustomActions) => this.settingsWarehouseService.fetchAllWarehouse(action.payload)),

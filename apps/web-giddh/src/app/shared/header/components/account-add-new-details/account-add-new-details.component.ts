@@ -82,6 +82,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     @Input() public isCustomerCreation: boolean;
     /** True if bank category account is selected */
     @Input() public isBankAccount: boolean = true;
+    /** True if account creation is from command k */
+    @Input() public fromCommandK: boolean = false;
     @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
     @Output() public isGroupSelected: EventEmitter<IOption> = new EventEmitter();
     @ViewChild('autoFocus', { static: true }) public autoFocus: ElementRef;
@@ -267,6 +269,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
         this.getCurrency();
         this.isStateRequired = this.checkActiveGroupCountry();
+
+        if(this.fromCommandK && this.activeGroupUniqueName) {
+            this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
+        }
     }
 
     public ngAfterViewInit() {
@@ -623,9 +629,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public selectedState(gstForm: FormGroup, event) {
-        if (gstForm && event.label) {
-            gstForm.get('stateCode')?.patchValue(event.value);
-            gstForm.get('state').get('code')?.patchValue(event.value);
+        if (gstForm && event?.label) {
+            gstForm.get('stateCode')?.patchValue(event?.value);
+            gstForm.get('state').get('code')?.patchValue(event?.value);
         }
 
     }
@@ -634,7 +640,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (event) {
             this.activeGroupUniqueName = event.value;
             this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
-
             this.isParentDebtorCreditor(this.activeGroupUniqueName);
 
             let parent = event.additional;
@@ -655,32 +660,30 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.isShowBankDetails(activeParentgroup);
             this.isDebtorCreditor = true;
 
-            if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
-                this.staticTabs.tabs[0].active = true;
-            }
+            setTimeout(() => {
+                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
+                    this.staticTabs.tabs[0].active = true;
+                    this.changeDetectorRef.detectChanges();
+                }
+            }, 50);
 
-            if (accountAddress.controls.length === 0) {
+            if (accountAddress.controls.length === 0 || !accountAddress.length) {
                 this.addBlankGstForm();
             }
-            if (!accountAddress.length) {
-                this.addBlankGstForm();
-            }
-
-        } else if (activeParentgroup === 'bankaccounts') {
-            this.isBankAccount = true;
-            this.isDebtorCreditor = false;
-            this.showBankDetail = false;
-            this.addAccountForm.get('addresses').reset();
         } else {
             this.isBankAccount = false;
             this.isDebtorCreditor = false;
             this.showBankDetail = false;
             this.addAccountForm.get('addresses').reset();
 
-            if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
-                this.staticTabs.tabs[0].active = false;
-            }
+            setTimeout(() => {
+                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
+                    this.staticTabs.tabs[1].active = true;
+                    this.changeDetectorRef.detectChanges();
+                }
+            }, 50);
         }
+        this.changeDetectorRef.detectChanges();
     }
 
     public getCountry() {
@@ -726,8 +729,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     // Timeout is used as value were not updated in form
                     this.setCountryByCompany(this.activeCompany);
                 }, 500);
-            } else {
-                this.store.dispatch(this.commonActions.GetCurrency());
             }
         });
     }
@@ -761,7 +762,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
 
             if (!isValid) {
-                this._toaster.errorToast('Invalid ' + this.formFields['taxName'].label);
+                this._toaster.errorToast('Invalid ' + this.formFields['taxName']?.label);
                 ele.classList.add('error-box');
                 this.isGstValid$ = observableOf(false);
             } else {
@@ -866,7 +867,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             i++;
         }
         this.addAccountForm.controls['addresses'].updateValueAndValidity();
-        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -967,7 +967,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             customField.push(this.initialCustomFieldDetailsForm(obj));
         }
     }
-
 
     /**
      * To initialize custom field form
@@ -1171,6 +1170,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     } else {
                         this.GSTIN_OR_TRN = '';
                     }
+
+                    this.changeDetectorRef.detectChanges();
                 }
             });
         }

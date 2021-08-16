@@ -198,7 +198,7 @@ table {
     text-transform: lowercase;
 }
 
-.icon-pointer .icon-sort-asc{
+.icon-pointer .icon-sort-asc {
     line-height: 20px;
     width: 15px;
     color: $wild-blue-yonder;
@@ -281,9 +281,9 @@ td.border-right-none {
     border-right: none !important;
 }
 
-.inventory-stock-table{
+.inventory-stock-table {
     td {
-        &:first-child{
+        &:first-child {
             white-space: inherit;
         }
     }
@@ -316,7 +316,7 @@ td.border-right-none {
 
 button.btn.btn-filter {
     background: $whisper;
-    border: 1px solid $whisper;
+    border: 1px solid $gainsboro;
     font-size: 14px;
     color: $midnight-blue;
     display: inline-flex;
@@ -498,6 +498,45 @@ button.btn.btn-filter {
         flex-direction: column;
         .btn-group {
             justify-content: flex-end;
+        }
+    }
+}
+
+@media (min-width: 769px) and (max-width: 860px) {
+    .right-inventory {
+        display: flex;
+        flex-direction: column;
+        .btn-group {
+            justify-content: flex-end;
+        }
+        .transfer-btn {
+            margin-top: 15px;
+            margin-bottom: 15px;
+            margin-right: 0;
+        }
+    }
+}
+
+@media (max-width: 1409px) {
+    .head-report {
+        max-width: 300px;
+    }
+}
+
+@media (min-width: 1020px) and (max-width: 1299px) {
+    .head-report {
+        max-width: 200px;
+    }
+    .right-inventory {
+        display: flex;
+        flex-direction: column;
+        .btn-group {
+            justify-content: flex-end;
+        }
+        .transfer-btn {
+            margin-top: 0;
+            margin-bottom: 0;
+            margin-right: 8px;
         }
     }
 }

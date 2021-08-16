@@ -6,7 +6,7 @@ import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GenericRequestForGenerateSCD } from '../models/api-models/Sales';
-import { SALES_API_V2, SALES_API_V4, VOUCHER_API } from './apiurls/sales.api';
+import { SALES_API_V2, SALES_API_V4 } from './apiurls/sales.api';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { AdvanceReceiptRequest, VoucherAdjustments } from '../models/api-models/AdvanceReceiptsAdjust';
@@ -38,40 +38,29 @@ export class SalesService {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
         let url;
-        if (this._generalService.voucherApiVersion === 2) {
-            url = `http://giddh-accounting-ms-test.ap-south-1.elasticbeanstalk.com/${VOUCHER_API.GENERATE_SALES}`;
-            return this._http.post(url
-                .replace(':companyUniqueName', this.companyUniqueName)
-                , model)
-                .pipe(
-                    map((res) => {
-                        let data: BaseResponse<any, GenericRequestForGenerateSCD> = res;
-                        data.request = model;
-                        return data;
-                    }),
-                    catchError((e) => this.errorHandler.HandleCatch<any, GenericRequestForGenerateSCD>(e, model)));
+        if (isVoucherV4) {
+            url = this.config.apiUrl + SALES_API_V4.GENERATE_GENERIC_ITEMS;
         } else {
-            if (isVoucherV4) {
-                url = this.config.apiUrl + SALES_API_V4.GENERATE_GENERIC_ITEMS;
-            } else {
-                url = this.config.apiUrl + SALES_API_V2.GENERATE_GENERIC_ITEMS;
-            }
-            return this._http.post(url
-                .replace(':companyUniqueName', this.companyUniqueName)
-                .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
-                , model)
-                .pipe(
-                    map((res) => {
-                        let data: BaseResponse<any, GenericRequestForGenerateSCD> = res;
-                        data.request = model;
-                        return data;
-                    }),
-                    catchError((e) => this.errorHandler.HandleCatch<any, GenericRequestForGenerateSCD>(e, model)));
+            url = this.config.apiUrl + SALES_API_V2.GENERATE_GENERIC_ITEMS;
         }
+        if (this._generalService.voucherApiVersion === 2) {
+            url = this._generalService.addVoucherVersion(url, this._generalService.voucherApiVersion);
+        }
+        return this._http.post(url
+            .replace(':companyUniqueName', this.companyUniqueName)
+            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
+            , model)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, GenericRequestForGenerateSCD> = res;
+                    data.request = model;
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, GenericRequestForGenerateSCD>(e, model)));
     }
 
-    public updateVoucher(model: GenericRequestForGenerateSCD): Observable<BaseResponse<any, GenericRequestForGenerateSCD>> {
-        let accountUniqueName = model.voucher.accountDetails.uniqueName;
+    public updateVoucher(model: any): Observable<BaseResponse<any, any>> {
+        let accountUniqueName = model.voucher?.accountDetails?.uniqueName;
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.put(this.config.apiUrl + SALES_API_V2.UPDATE_VOUCHER
@@ -79,7 +68,7 @@ export class SalesService {
             .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model)
             .pipe(
                 map((res) => {
-                    let data: BaseResponse<any, GenericRequestForGenerateSCD> = res;
+                    let data: BaseResponse<any, any> = res;
                     data.request = model;
                     return data;
                 }),
@@ -90,9 +79,13 @@ export class SalesService {
         let accountUniqueName = model.account.uniqueName;
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.put(this.config.apiUrl + SALES_API_V4.UPDATE_VOUCHER
+        let url = this.config.apiUrl + SALES_API_V4.UPDATE_VOUCHER
             .replace(':companyUniqueName', this.companyUniqueName)
-            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model)
+            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+        if (this._generalService.voucherApiVersion === 2) {
+            url = this._generalService.addVoucherVersion(url, this._generalService.voucherApiVersion);
+        }
+        return this._http.put(url, model)
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, GenericRequestForGenerateSCD> = res;
@@ -120,9 +113,13 @@ export class SalesService {
     public getAllAdvanceReceiptVoucher(model: AdvanceReceiptRequest): Observable<BaseResponse<any, AdvanceReceiptRequest>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + ADVANCE_RECEIPTS_API.GET_ALL_ADVANCE_RECEIPTS
+        let contextPath = this.config.apiUrl + ADVANCE_RECEIPTS_API.GET_ALL_ADVANCE_RECEIPTS
             .replace(':companyUniqueName', this.companyUniqueName)
-            .replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName)).replace(':invoiceDate', model.invoiceDate))
+            .replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName)).replace(':invoiceDate', model.invoiceDate);
+        if (this._generalService.voucherApiVersion === 2) {
+            contextPath = this._generalService.addVoucherVersion(contextPath, this._generalService.voucherApiVersion);
+        }
+        return this._http.get(contextPath)
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, AdvanceReceiptRequest> = res;
@@ -160,12 +157,14 @@ export class SalesService {
     */
     public generatePendingVoucherGenericItem(model: any): Observable<BaseResponse<any, any>> {
         let accountUniqueName = model.account.uniqueName;
-        let url;
-        url = this.config.apiUrl + SALES_API_V4.GENERATE_GENERIC_ITEMS + '-pending-vouchers';
+        let url = `${this.config.apiUrl}${SALES_API_V4.GENERATE_GENERIC_ITEMS}-pending-vouchers`;
+        url = url.replace(':companyUniqueName', this.companyUniqueName)
+            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
         this.companyUniqueName = this._generalService.companyUniqueName;
+        if (this._generalService.voucherApiVersion === 2) {
+            url = this._generalService.addVoucherVersion(url, this._generalService.voucherApiVersion);
+        }
         return this._http.post(url
-            .replace(':companyUniqueName', this.companyUniqueName)
-            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
             , model)
             .pipe(
                 map((res) => {
@@ -186,10 +185,13 @@ export class SalesService {
      */
     public getInvoiceList(model: any, date: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
-        const contextPath = SALES_API_V2.GET_VOUCHER_INVOICE_LIST
+        let contextPath = SALES_API_V2.GET_VOUCHER_INVOICE_LIST
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':voucherDate', encodeURIComponent(date))
             .replace(':adjustmentRequest', String(true));
+        if (this._generalService.voucherApiVersion === 2) {
+            contextPath = this._generalService.addVoucherVersion(contextPath, this._generalService.voucherApiVersion);
+        }
         return this._http.post(this.config.apiUrl + contextPath, model
         ).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error, model)));
     }

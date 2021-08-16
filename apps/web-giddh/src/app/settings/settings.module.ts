@@ -34,9 +34,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CreateAddressComponent } from './create-address/create-address.component';
 import { CreateBranchComponent } from './branch/create-branch/create-branch.component';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
-import { BeneficiaryComponent } from './integration/beneficiary/beneficiary.component';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
+import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
+import { SettingIntegrationPaymentModule } from './integration/payment/setting.integration.payment.module';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -66,8 +67,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         PersonalInformationComponent,
         AddressSettingsComponent,
         OtherSettingsComponent,
-        CreateBranchComponent,
-        BeneficiaryComponent
+        CreateBranchComponent
     ],
     imports: [
         SharedModule,
@@ -83,7 +83,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ShSelectModule,
         SalesShSelectModule,
         TaxSidebarModule,
-        NoDataModule
+        ReplacePipeModule,
+        NoDataModule,
+        SettingIntegrationPaymentModule
     ],
     providers: [
         {

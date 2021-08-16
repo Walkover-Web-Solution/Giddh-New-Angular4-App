@@ -1,10 +1,18 @@
-<account-as-voucher [saveEntryOnCtrlA]="saveEntryInVoucher" [openDatePicker]="openDatePicker"
-    [openCreateAccountPopup]="openCreateAccountPopupInVoucher" [hidden]="gridType !== 'voucher'"></account-as-voucher>
+<account-as-voucher
+    [saveEntryOnCtrlA]="saveEntryInVoucher"
+    [openDatePicker]="openDatePicker"
+    [openCreateAccountPopup]="openCreateAccountPopupInVoucher"
+    [hidden]="gridType !== 'voucher'"
+></account-as-voucher>
 
-<account-as-invoice [saveEntryOnCtrlA]="saveEntryInInvoice" [openDatePicker]="openDatePicker"
-    [openCreateAccountPopup]="openCreateAccountPopupInInvoice" [hidden]="gridType !== 'invoice'"></account-as-invoice>
+<account-as-invoice
+    [saveEntryOnCtrlA]="saveEntryInInvoice"
+    [openDatePicker]="openDatePicker"
+    [openCreateAccountPopup]="openCreateAccountPopupInInvoice"
+    [hidden]="gridType !== 'invoice'"
+></account-as-invoice>
 
-<input type="hidden" [attr.data-gridType]="gridType" id="get-grid-type">
+<input type="hidden" [attr.data-gridType]="gridType" id="get-grid-type" />
 
 <div class="sidebar-menu col-xs-2 col-sm-2 p-0">
     <accounting-sidebar></accounting-sidebar>

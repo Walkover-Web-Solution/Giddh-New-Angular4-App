@@ -179,12 +179,12 @@ tfoot td .table-sec.form-group {
     padding: 5px 0;
 }
 /* new branch transfer list css  */
-.branch-transfer-report{
+.branch-transfer-report {
     padding-top: 55px;
     .input-group {
         width: 230px;
     }
-} 
+}
 .branch-transfer-report .input-wrapper {
     display: block !important;
     width: 100% !important;
@@ -288,7 +288,7 @@ tfoot td .table-sec.form-group {
 }
 .trash-icon-delete a {
     color: $nobel;
-    border: 1px solid $nobel;
+    border: 1px solid $gainsboro;
     border-radius: 50%;
     text-align: center;
     width: 20px;
@@ -396,6 +396,11 @@ tfoot td .table-sec.form-group {
 .placeholder-for-table {
     color: $very-light-gray;
 }
+.transportation-details {
+    max-width: 1160px;
+    width: 100%;
+    margin-bottom: 20px !important;
+}
 .input-group {
     sh-select.branch-dropdown {
         width: 100%;
@@ -447,12 +452,38 @@ tfoot td .table-sec.form-group {
     .mobile-none {
         display: none;
     }
+    .table-delivery {
+        table {
+            width: 100% !important;
+            tr,
+            td {
+                white-space: nowrap !important;
+            }
+            .min-wid-product {
+                min-width: 80px;
+            }
+            .min-wid-rate {
+                min-width: 40px;
+            }
+            .min-wid-amt {
+                min-width: 40px;
+            }
+            .min-wid-qty {
+                min-width: 20px;
+            }
+        }
+
+        .basic > tbody > tr td:last-child,
+        .basic > thead > tr th:last-child {
+            border-right: 1px solid $gainsboro-light !important;
+        }
+    }
 }
 @media (max-width: 767px) {
     .date-advance-search {
         margin-top: 5px;
     }
-    .branch-transfer-report{
+    .branch-transfer-report {
         padding-top: 10px;
     }
 }
@@ -466,7 +497,33 @@ tfoot td .table-sec.form-group {
             }
         }
     }
-    .custom-datepicker{
+    .custom-datepicker {
+        margin-top: 10px;
+    }
+    .table-delivery {
+        width: 100%;
+        overflow-x: auto;
+    }
+}
+@media (max-width: 767px) {
+    .date-advance-search {
+        margin-top: 5px;
+    }
+    .branch-transfer-report {
+        padding-top: 10px;
+    }
+}
+@media (max-width: 575px) {
+    .branch-transfer-flex {
+        width: 100%;
+        .input-group.linked-entities {
+            width: 100%;
+            sh-select {
+                margin-right: 0;
+            }
+        }
+    }
+    .custom-datepicker {
         margin-top: 10px;
     }
 }

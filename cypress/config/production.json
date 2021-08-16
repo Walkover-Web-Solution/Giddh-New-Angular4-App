@@ -1,6 +1,6 @@
 {
     "baseUrl": "https://giddh.com/login",
-    "pageLoadTimeout": 30000,
+    "pageLoadTimeout": 80000,
     "env": {
         "url": "https://giddh.com/login",
         "dashBoardUrl": "https://app.giddh.com/pages/home",

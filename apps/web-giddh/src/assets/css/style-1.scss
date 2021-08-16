@@ -251,9 +251,8 @@ aside-menu-account .container-fluid {
 .pd {
     padding: 5px;
 }
-
 .pd-1 {
-    padding: 10px;
+    padding: 10px !important;
 }
 
 .pd-15 {
@@ -287,7 +286,6 @@ aside-menu-account .container-fluid {
 .pd-r05 {
     padding-right: 5px;
 }
-
 .pd-t1 {
     padding-top: 10px;
 }
@@ -366,6 +364,21 @@ aside-menu-account .container-fluid {
 
 .pd-l5 {
     padding-left: 50px;
+}
+
+.pd-r15 {
+    padding-right: 15px;
+}
+
+.pd-l15 {
+    padding-left: 15px;
+}
+
+.pd-t15 {
+    padding-top: 15px;
+}
+.pd-b15 {
+    padding-bottom: 15px;
 }
 
 .mr {
@@ -486,6 +499,26 @@ aside-menu-account .container-fluid {
     margin-right: 50px;
 }
 
+.mr-t15 {
+    margin-top: 15px;
+}
+
+.mr-b15 {
+    margin-bottom: 15px;
+}
+
+.mr-l15 {
+    margin-left: 15px;
+}
+
+.mr-r15 {
+    margin-right: 15px !important;
+}
+
+.border-bottom {
+    border-bottom-color: $gainsboro;
+}
+
 .bdr {
     border: 1px solid $gainsboro;
     border-radius: 5px;
@@ -552,7 +585,7 @@ aside-menu-account .container-fluid {
     overflow: hidden;
 }
 
-.overflow-x-auto{
+.overflow-x-auto {
     overflow-x: auto;
 }
 
@@ -614,55 +647,55 @@ aside-menu-account .container-fluid {
     opacity: 1;
 }
 
-.total-details-box{
+.total-details-box {
     border: 1px solid $gainsboro;
     border-radius: 5px;
     padding: 14px 30px;
     width: 100%;
-    h5{
+    h5 {
         font-size: 12px;
         color: $omiod;
-        .number-total{
+        .number-total {
             font-size: 16px;
             font-weight: 800;
             color: $black;
         }
     }
 }
-.count-box{
+.count-box {
     background: $white;
 }
-.opening-box{
+.opening-box {
     background: $fog-green;
-    h5{
-        .number-total{
+    h5 {
+        .number-total {
             color: $success-green;
         }
     }
 }
-.sales-purchase{
+.sales-purchase {
     background: $light-orange;
-    h5{
-        .number-total{
+    h5 {
+        .number-total {
             color: $dull-yellow;
         }
     }
 }
-.payment-receipt{
+.payment-receipt {
     background: $pale-blue;
-    h5{
-        .number-total{
+    h5 {
+        .number-total {
             color: $chetwode-blue;
         }
     }
 }
-.closing-box{
+.closing-box {
     background: $gray-95;
 }
-.due-box{
+.due-box {
     background: $light-red;
-    h5{
-        .number-total{
+    h5 {
+        .number-total {
             color: $red;
         }
     }
@@ -1031,8 +1064,8 @@ aside-menu-account .container-fluid {
     color: $silver !important;
 }
 
-.new-icon-img{
-    img{
+.new-icon-img {
+    img {
         border: 1px solid $gainsboro;
         background: $white;
         padding: 5px;
@@ -1217,7 +1250,7 @@ aside-menu-account .container-fluid {
     display: none;
 }
 
-.profitLoss.table-container > div > section {
+.profit-loss.table-container > div > section {
     border-left: 1px solid $whisper-color;
 }
 
@@ -1225,19 +1258,23 @@ aside-menu-account .container-fluid {
     border-left: 7px solid $whisper-color;
 }
 
-.table-container > div > section.assets {
+.table-container > div > section.assets,
+.table-container > div > .cdk-virtual-scroll-viewport section.assets {
     border-left: 7px solid $bus-yellow;
 }
 
-.table-container > div > section.liabilities {
+.table-container > div > section.liabilities,
+.table-container > div > .cdk-virtual-scroll-viewport section.liabilities {
     border-left: 7px solid $cactus;
 }
 
-.table-container > div > section.income {
+.table-container > div > section.income,
+.table-container > div > .cdk-virtual-scroll-viewport section.income {
     border-left: 7px solid $cornflower-blue-dark;
 }
 
-.table-container > div > section.expenses {
+.table-container > div > section.expenses,
+.table-container > div > .cdk-virtual-scroll-viewport section.expenses {
     border-left: 7px solid $flamingo;
 }
 
@@ -1883,16 +1920,16 @@ ul.pills li {
     box-shadow: none;
 }
 
-.tourist-scheme-wrapper{
-    .popover{
+.tourist-scheme-wrapper {
+    .popover {
         left: 50% !important;
         transform: translate(-50%, -50%) !important;
     }
 }
 
-.purchase-invoice-rcm{
+.purchase-invoice-rcm {
     left: 50% !important;
-    top:50% !important;
+    top: 50% !important;
     transform: translate(-50%, -50%) !important;
     position: fixed !important;
 }
@@ -1937,7 +1974,7 @@ ul.pills li {
 }
 
 .popover {
-    z-index: 1000;
+    z-index: 100;
 }
 
 .dashboard-reconnect-block {
@@ -2174,10 +2211,10 @@ ul.pills li {
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-    li{
+    li {
         margin-bottom: 10px;
-        &:last-child{
-            margin-bottom:0;
+        &:last-child {
+            margin-bottom: 0;
         }
     }
 }
@@ -2241,27 +2278,18 @@ ul.pills li {
     height: 34px;
 }
 
-.select2-parent
-    .select2-container--default
-    .select2-selection--single
-    .select2-selection__rendered {
+.select2-parent .select2-container--default .select2-selection--single .select2-selection__rendered {
     line-height: 32px;
     color: $dark-gray;
     font-size: 14px;
     padding-left: 0;
 }
 
-.select2-parent
-    .select2-container--default
-    .select2-selection--single
-    .select2-selection__arrow {
+.select2-parent .select2-container--default .select2-selection--single .select2-selection__arrow {
     height: 32px;
 }
 
-.select2-parent
-    .select2-container--default
-    .select2-results
-    > .select2-results__options {
+.select2-parent .select2-container--default .select2-results > .select2-results__options {
     font-size: 14px;
 }
 
@@ -2325,11 +2353,7 @@ strong {
     font-weight: 500;
 }
 
-.select2-parent
-    .select2-container--default
-    .select2-selection--single
-    .select2-selection__arrow
-    b {
+.select2-parent .select2-container--default .select2-selection--single .select2-selection__arrow b {
     border-color: $matterhorn transparent transparent transparent !important;
     border-width: 6px 5px 0 5px;
     margin-left: -8px;
@@ -2394,14 +2418,8 @@ bs-datepicker-container {
     text-align: right;
 }
 
-perfect-scrollbar.ps-show-active
-    > .ps.ps--active-y
-    > .ps-overlay:not(.ps-at-top)
-    .ps-indicator-top,
-perfect-scrollbar.ps-show-active
-    > .ps.ps--active-y
-    > .ps-overlay:not(.ps-at-bottom)
-    .ps-indicator-bottom {
+perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-top) .ps-indicator-top,
+perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bottom) .ps-indicator-bottom {
     opacity: 0;
 }
 
@@ -2634,12 +2652,17 @@ form#groupDetailForm {
     bs-daterangepicker-container,
     bs-datepicker-container {
         overflow-y: auto;
-        height: 300px;
+        height: auto;
         box-shadow: 0 0 10px 0 $wistful;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
     }
+
     .no-data {
         font-size: 26px;
     }
+
     #setting-tab .nav > li > a:hover {
         color: inherit !important;
     }
@@ -2697,7 +2720,7 @@ form#groupDetailForm {
     .aside-pane {
         max-width: 370px;
     }
-    .advance-icon{
+    .advance-icon {
         font-size: 16px !important;
     }
 }

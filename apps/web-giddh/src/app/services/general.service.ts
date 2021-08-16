@@ -844,7 +844,7 @@ export class GeneralService {
      *
      * @param {string} voucherCode Voucher code
      * @param {*} commonLocaleData Global context of multi-lingual keys
-     * @return {*} {string} Multi-lingual current voucher label
+     * @return {string} Multi-lingual current voucher label
      * @memberof GeneralService
      */
      public getCurrentVoucherLabel(voucherCode: string, commonLocaleData: any): string {
@@ -881,18 +881,18 @@ export class GeneralService {
      * @memberof CompanyBranchComponent
      */
     public sortBranches(branchA: any, branchB: any): any {
-        var regexA = /[^a-zA-Z]/g;
-        var regexN = /[^0-9]/g;
+        let regexA = /[^a-zA-Z]/g;
+        let regexN = /[^0-9]/g;
 
-        var branchAInt = parseInt(branchA?.alias, 10);
-        var branchBInt = parseInt(branchB?.alias, 10);
+        let branchAInt = parseInt(branchA?.alias, 10);
+        let branchBInt = parseInt(branchB?.alias, 10);
 
         if (isNaN(branchAInt) && isNaN(branchBInt)) {
-            var branchAOutput = branchA?.alias?.toLowerCase()?.replace(regexA, "");
-            var branchBOutput = branchB?.alias?.toLowerCase()?.replace(regexA, "");
+            let branchAOutput = branchA?.alias?.toLowerCase()?.replace(regexA, "");
+            let branchBOutput = branchB?.alias?.toLowerCase()?.replace(regexA, "");
             if (branchAOutput === branchBOutput) {
-                var branchANumeric = parseInt(branchA?.alias?.toLowerCase()?.replace(regexN, ""), 10);
-                var branchBNumeric = parseInt(branchB?.alias?.toLowerCase()?.replace(regexN, ""), 10);
+                let branchANumeric = parseInt(branchA?.alias?.toLowerCase()?.replace(regexN, ""), 10);
+                let branchBNumeric = parseInt(branchB?.alias?.toLowerCase()?.replace(regexN, ""), 10);
                 return branchANumeric === branchBNumeric ? 0 : branchANumeric > branchBNumeric ? 1 : -1;
             } else {
                 return branchAOutput > branchBOutput ? 1 : -1;
@@ -912,8 +912,11 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public expandSidebar(): void {
-        document.querySelector('.primary-sidebar')?.classList?.remove('sidebar-collapse');
-        document.querySelector('.nav-left-bar')?.classList?.remove('width-60');
+        const isAccountModalOpened = document.querySelector('.create-acc-form');
+        if (!isAccountModalOpened) {
+            document.querySelector('.primary-sidebar')?.classList?.remove('sidebar-collapse');
+            document.querySelector('.nav-left-bar')?.classList?.remove('width-60');
+        }
     }
 
     /**
@@ -924,5 +927,17 @@ export class GeneralService {
     public collapseSidebar(): void {
         document.querySelector('.primary-sidebar')?.classList?.add('sidebar-collapse');
         document.querySelector('.nav-left-bar')?.classList?.add('width-60');
+    }
+
+    /**
+     * Adds voucher version to request's URL
+     *
+     * @param {string} url API URL
+     * @param {number} voucherVersion Company voucher version
+     * @memberof GeneralService
+     */
+    public addVoucherVersion(url: string, voucherVersion: number): string {
+        const delimiter = url.includes('?') ? '&' : '?';
+        return url.concat(`${delimiter}voucherVersion=${voucherVersion}`);
     }
 }

@@ -109,7 +109,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, OnDestroy {
                 this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
                     if (activeCompany) {
                         this.sortAssociatedCompanies();
-                        
+
                         this.seletedUserPlans = this.activeCompany.subscription;
 
                         if (this.seletedUserPlans?.startedAt) {
@@ -463,6 +463,13 @@ export class SubscriptionsComponent implements OnInit, OnChanges, OnDestroy {
         return text;
     }
 
+
+    /**
+     * This will return subscribed plan text
+     *
+     * @returns {string}
+     * @memberof SubscriptionsComponent
+     */
     public getPlanSubscribedText(): string {
         let text = this.localeData?.subscription?.plan_subscribed_on;
         text = text?.replace("[PLAN_NAME]", this.seletedUserPlans?.planDetails?.name)?.replace("[PLAN_STARTED_AT]", this.seletedUserPlans?.startedAt);

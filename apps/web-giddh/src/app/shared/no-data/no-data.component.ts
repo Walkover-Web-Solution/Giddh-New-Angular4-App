@@ -27,7 +27,7 @@ export class NoDataComponent implements OnInit {
      *
      * @memberof NoDataComponent
      */
-    ngOnInit(): void {
+    public ngOnInit(): void {
         if (!this.primaryMessage) {
             this.primaryMessage = this.localeService.translate("app_no_entries_found");
         }

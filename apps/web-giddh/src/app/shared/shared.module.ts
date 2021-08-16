@@ -59,7 +59,6 @@ import { RevisionHistoryComponent } from './revision-history/revision-history.co
 import { PurchaseOrderPreviewModalComponent } from './purchase-order-preview/purchase-order-preview.component';
 import { PurchaseSendEmailModalComponent } from './purchase-send-email/purchase-send-email.component';
 import { GiddhDaterangepickerComponent } from '../theme/giddh-daterangepicker/giddh-daterangepicker.component';
-import { GiddhPageLoaderComponent } from './giddh-page-loader/giddh-page-loader.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { CompanyBranchComponent } from './primary-sidebar/company-branch/company-branch.component';
@@ -75,6 +74,7 @@ import { DatepickerWrapperModule } from './datepicker-wrapper/datepicker.wrapper
 import { ValidateSectionPermissionDirectiveModule } from './validate-section-permission/validate-section-permission.module';
 import { HamburgerMenuModule } from './header/components/hamburger-menu/hamburger-menu.module';
 import { GenericAsideMenuAccountComponent } from './generic-aside-menu-account/generic.aside.menu.account.component';
+import { GiddhPageLoaderModule } from './giddh-page-loader/giddh-page-loader.module';
 registerLocaleData(localeEn);
 registerLocaleData(localeHi);
 registerLocaleData(localeMr);
@@ -140,9 +140,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         PurchaseOrderPreviewModalComponent,
         PurchaseSendEmailModalComponent,
         GiddhDaterangepickerComponent,
-        GiddhPageLoaderComponent,
-        PrimarySidebarComponent,
         CompanyBranchComponent,
+        PrimarySidebarComponent,
         GenericAsideMenuAccountComponent
     ],
     imports: [
@@ -189,7 +188,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         ConfirmationModalModule,
         DatepickerWrapperModule,
         HamburgerMenuModule,
-        ValidateSectionPermissionDirectiveModule
+        ValidateSectionPermissionDirectiveModule,
+        GiddhPageLoaderModule
     ],
     exports: [
         CommonModule,
@@ -233,7 +233,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         RevisionHistoryComponent,
         PurchaseOrderPreviewModalComponent,
         PurchaseSendEmailModalComponent,
-        GiddhPageLoaderComponent,
         CurrencyModule,
         PrimarySidebarComponent,
         TranslateDirectiveModule,
@@ -245,7 +244,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         CompanyBranchComponent,
         HamburgerMenuModule,
         ValidateSectionPermissionDirectiveModule,
-        GenericAsideMenuAccountComponent
+        GenericAsideMenuAccountComponent,
+        GiddhPageLoaderModule
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,

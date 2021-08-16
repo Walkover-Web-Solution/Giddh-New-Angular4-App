@@ -14,7 +14,7 @@ module.exports = {
             'ApiUrl': JSON.stringify('https://apitest.giddh.com/'),
             'APP_FOLDER': JSON.stringify(''),
             'PRODUCTION_ENV': JSON.stringify(false),
-            'STAGING_ENV': JSON.stringify(true),
+            'STAGING_ENV': JSON.stringify(false),
             'TEST_ENV': JSON.stringify(false),
             'LOCAL_ENV': JSON.stringify(false),
             'enableVoucherAdjustmentMultiCurrency': JSON.stringify(''),

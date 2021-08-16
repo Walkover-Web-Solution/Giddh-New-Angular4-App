@@ -41,6 +41,7 @@
 
 @media screen and (max-width: 768px) {
     .table-responsive {
+        margin-bottom: 50px;
         .giddh-table.on-mobile-view {
             tr {
                 td {
@@ -52,8 +53,8 @@
     }
 }
 
-@media (min-width: 769px){
-    .table-responsive{
+@media (min-width: 769px) {
+    .table-responsive {
         max-height: calc(100vh - 200px);
         overflow-y: auto;
     }

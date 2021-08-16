@@ -1,22 +1,52 @@
-<div id="getGroupModal" class="full-screen-modal get-group-modal manage-group-acc" #myModel keyboardShortcut="esc"
-    (onShortcutPress)="closePopupEvent()" (click)="keyupInitialized = true" appTranslate [file]="'accounts'"
-    (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event"
-    (translationComplete)="translationComplete($event)">
+<div
+    id="getGroupModal"
+    class="full-screen-modal get-group-modal manage-group-acc"
+    #myModel
+    keyboardShortcut="esc"
+    (onShortcutPress)="closePopupEvent()"
+    (click)="keyupInitialized = true"
+    appTranslate
+    [file]="'accounts'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
     <!-- start header -->
     <div class="modal-header" #header>
-        <span aria-hidden="true" class="close" [style.line-height.px]="64" [style.height.px]="64" data-dismiss="modal"
-            (click)="closePopupEvent()">×</span>
+        <span
+            aria-hidden="true"
+            class="close"
+            [style.line-height.px]="64"
+            [style.height.px]="64"
+            data-dismiss="modal"
+            (click)="closePopupEvent()"
+            >×</span
+        >
         <span class="row mr-0 ml-0">
-            <h3 class="modal-title bg pd-t05">{{localeData?.page_heading}}</h3>
+            <h3 class="modal-title bg pd-t05">{{ localeData?.page_heading }}</h3>
         </span>
         <div class="pull-right mr-r3 search-bar-wrapper">
             <div class="form-inline">
                 <div class="form-group search-bar">
-                    <input type="text" name="grpSrch" #grpSrch id="grpSrch" [(ngModel)]="searchString"
-                        (keyup)="searchGroups(grpSrch.value)" class="form-control"
-                        [placeholder]="localeData?.search_accounts" trial-accordion="search" [style.width.px]="260" />
-                    <a href="javascript:void(0);" class="pos-abs btn-link" (click)="resetGroupSearchString()"
-                        *ngIf="grpSrch.value">{{commonLocaleData?.app_clear}}</a>
+                    <input
+                        type="text"
+                        name="grpSrch"
+                        #grpSrch
+                        id="grpSrch"
+                        [(ngModel)]="searchString"
+                        (keyup)="searchGroups(grpSrch.value)"
+                        class="form-control"
+                        [placeholder]="localeData?.search_accounts"
+                        financial-accordion="search"
+                        [style.width.px]="260"
+                    />
+                    <a
+                        href="javascript:void(0);"
+                        class="pos-abs btn-link"
+                        (click)="resetGroupSearchString()"
+                        *ngIf="grpSrch.value"
+                        >{{ commonLocaleData?.app_clear }}</a
+                    >
                 </div>
             </div>
             <!-- form-inline -->
@@ -26,103 +56,186 @@
 
     <div class="modal-body p-0">
         <tabset class="custom-tabs master-custom-tabs">
-            <tab heading="{{localeData?.master}}" id="tab1">
+            <tab heading="{{ localeData?.master }}" id="tab1">
                 <div class="clearfix">
-                    <div class="grp-col p-0"
-                        [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))+'px'}">
-                        <div class="search-loading" *ngIf="(searchLoad | async)">
+                    <div
+                        class="grp-col p-0"
+                        [ngStyle]="{
+                            'height':
+                                (myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0) + 'px'
+                        }"
+                    >
+                        <div class="search-loading" *ngIf="searchLoad | async">
                             <div class="vertical-center">
-                                <span class="spinner small"></span> {{commonLocaleData?.app_loading}}
+                                <span class="spinner small"></span> {{ commonLocaleData?.app_loading }}
                             </div>
                         </div>
-                        <div class="search-loading no-result"
-                            *ngIf="!(searchLoad | async) && !(groupList$ | async)?.length">
+                        <div
+                            class="search-loading no-result"
+                            *ngIf="!(searchLoad | async) && !(groupList$ | async)?.length"
+                        >
                             <div class="vertical-center">
-                                <h1>{{localeData?.no_result_found}}</h1>
+                                <h1>{{ localeData?.no_result_found }}</h1>
                             </div>
                         </div>
                         <div>
-                            <perfect-scrollbar #perfectdirective class="scroll-container" fxFlex="auto"
-                                [config]="config" [scrollIndicators]="true">
-                                <div *ngIf="!(searchLoad | async)"
-                                    [ngStyle]="{'width':groupsidebar?.mc?.columns?.length * 255 + 'px'}"
-                                    class="wrap-account-sidebar">
-                                    <groups-account-sidebar (columnsChanged)="currentColumns = $event" #groupsidebar
-                                        [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))+'px'}"
-                                        [height]="((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))"
-                                        [groups]="(groupList$ | async)"
+                            <perfect-scrollbar
+                                #perfectdirective
+                                class="scroll-container"
+                                fxFlex="auto"
+                                [config]="config"
+                                [scrollIndicators]="true"
+                            >
+                                <div
+                                    *ngIf="!(searchLoad | async)"
+                                    [ngStyle]="{ 'width': groupsidebar?.mc?.columns?.length * 255 + 'px' }"
+                                    class="wrap-account-sidebar"
+                                >
+                                    <groups-account-sidebar
+                                        (columnsChanged)="currentColumns = $event"
+                                        #groupsidebar
+                                        [ngStyle]="{
+                                            'height':
+                                                (myModelRect ? myModelRect.height : 0) -
+                                                (headerRect ? headerRect.height : 0) +
+                                                'px'
+                                        }"
+                                        [height]="
+                                            (myModelRect ? myModelRect.height : 0) -
+                                            (headerRect ? headerRect.height : 0)
+                                        "
+                                        [groups]="groupList$ | async"
                                         (breadcrumbPathChanged)="breadcrumbPathChanged($event)"
                                         (resetSearchString)="resetGroupSearchString(false)"
-                                        (ScrollToRight)="ScrollToRight()" [isSearchingGroups]="!(grpSrch.value === '')"
-                                        [localeData]="localeData"></groups-account-sidebar>
+                                        (ScrollToRight)="ScrollToRight()"
+                                        [isSearchingGroups]="!(grpSrch.value === '')"
+                                        [localeData]="localeData"
+                                    ></groups-account-sidebar>
                                 </div>
                             </perfect-scrollbar>
                         </div>
                     </div>
                     <!-- middle body -->
                     <div class="form-box form-bg height-in-vh">
-                        <account-operations [columnsRef]="currentColumns"
-                            [height]="((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))"
-                            [breadcrumbPath]="breadcrumbPath" [breadcrumbUniquePath]="breadcrumbUniquePath"
-                            [localeData]="localeData" [commonLocaleData]="commonLocaleData" #form
-                            *ngIf="localeData?.page_heading">
+                        <account-operations
+                            [columnsRef]="currentColumns"
+                            [height]="(myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0)"
+                            [breadcrumbPath]="breadcrumbPath"
+                            [breadcrumbUniquePath]="breadcrumbUniquePath"
+                            [localeData]="localeData"
+                            [commonLocaleData]="commonLocaleData"
+                            #form
+                            *ngIf="localeData?.page_heading"
+                        >
                         </account-operations>
                     </div>
                 </div>
             </tab>
             <!--           new -->
-            <tab heading="{{commonLocaleData?.app_custom}}">
+            <tab heading="{{ commonLocaleData?.app_custom }}">
                 <div class="custom-filed-list-wrapper" *ngIf="!isGetCustomInProgress">
                     <ng-container>
                         <form [formGroup]="customFieldForm">
                             <ng-container formArrayName="customField">
                                 <ng-container
-                                    *ngFor="let item of customFieldForm.get('customField')['controls']; let index=index;let first = first; let last = last">
+                                    *ngFor="
+                                        let item of customFieldForm.get('customField')['controls'];
+                                        let index = index;
+                                        let first = first;
+                                        let last = last
+                                    "
+                                >
                                     <div class="row mr-b15" [formGroupName]="index">
                                         <div class="col-lg-3 col-sm-3 col-xs-12">
-                                            <label *ngIf="first || isMobileScreen">{{localeData?.name}}</label>
-                                            <input type="text" class="form-control"
-                                                [placeholder]="localeData?.name_placeholder" [maxlength]="50"
-                                                (blur)="checkValidation('name', index)" formControlName="key" name="key"
+                                            <label *ngIf="first || isMobileScreen">{{ localeData?.name }}</label>
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                [placeholder]="localeData?.name_placeholder"
+                                                [maxlength]="50"
+                                                (blur)="checkValidation('name', index)"
+                                                formControlName="key"
+                                                name="key"
                                                 autocomplete="off"
-                                                [attr.disabled]="item.get('uniqueName').value && isEnabledIndex!==index ?'': null">
+                                                [attr.disabled]="
+                                                    item.get('uniqueName').value && isEnabledIndex !== index ? '' : null
+                                                "
+                                            />
                                         </div>
                                         <div class="col-lg-3 col-sm-3 col-xs-12">
-                                            <label *ngIf="first || isMobileScreen">{{localeData?.type}}</label>
-                                            <sh-select [placeholder]="localeData?.field_type_placeholder"
-                                                [options]="dataTypeList" formControlName="dataType" name="dataType"
+                                            <label *ngIf="first || isMobileScreen">{{ localeData?.type }}</label>
+                                            <sh-select
+                                                [placeholder]="localeData?.field_type_placeholder"
+                                                [options]="dataTypeList"
+                                                formControlName="dataType"
+                                                name="dataType"
                                                 (selected)="customFieldTypeSelected($event, index)"
-                                                [disabled]="item.get('uniqueName').value && isEnabledIndex!==index">
+                                                [disabled]="item.get('uniqueName').value && isEnabledIndex !== index"
+                                            >
                                             </sh-select>
                                         </div>
                                         <div class="col-lg-3 col-sm-3 col-xs-12">
-                                            <label *ngIf="first || isMobileScreen">{{localeData?.length}}</label>
+                                            <label *ngIf="first || isMobileScreen">{{ localeData?.length }}</label>
                                             <input
-                                                *ngIf="item.get('dataType').value ==='BOOLEAN' || item.get('dataType').value ==='NUMERIC' || !item.get('dataType').value"
-                                                type="number" [max]="30" [maxLength]='2' class="form-control"
-                                                formControlName="valueLength" name="valueLength"
-                                                [attr.disabled]="(item.get('uniqueName').value &&  isEnabledIndex!==index) || item.get('dataType').value ==='BOOLEAN' ?'': null"
-                                                (blur)="checkValidation('length', index);" autocomplete="off" />
-                                            <input *ngIf="item.get('dataType').value ==='STRING'" type="text"
-                                                class="form-control" [max]="150" [maxLength]='3'
-                                                formControlName="valueLength" name="valueLength"
-                                                [attr.disabled]="(item.get('uniqueName').value &&  isEnabledIndex!==index) || item.get('dataType').value ==='BOOLEAN' ?'': null"
-                                                (blur)="checkValidation('length', index);" autocomplete="off" />
+                                                *ngIf="
+                                                    item.get('dataType').value === 'BOOLEAN' ||
+                                                    item.get('dataType').value === 'NUMERIC' ||
+                                                    !item.get('dataType').value
+                                                "
+                                                type="number"
+                                                [max]="30"
+                                                [maxLength]="2"
+                                                class="form-control"
+                                                formControlName="valueLength"
+                                                name="valueLength"
+                                                [attr.disabled]="
+                                                    (item.get('uniqueName').value && isEnabledIndex !== index) ||
+                                                    item.get('dataType').value === 'BOOLEAN'
+                                                        ? ''
+                                                        : null
+                                                "
+                                                (blur)="checkValidation('length', index)"
+                                                autocomplete="off"
+                                            />
+                                            <input
+                                                *ngIf="item.get('dataType').value === 'STRING'"
+                                                type="text"
+                                                class="form-control"
+                                                [max]="150"
+                                                [maxLength]="3"
+                                                formControlName="valueLength"
+                                                name="valueLength"
+                                                [attr.disabled]="
+                                                    (item.get('uniqueName').value && isEnabledIndex !== index) ||
+                                                    item.get('dataType').value === 'BOOLEAN'
+                                                        ? ''
+                                                        : null
+                                                "
+                                                (blur)="checkValidation('length', index)"
+                                                autocomplete="off"
+                                            />
                                         </div>
                                         <div class="col-lg-3 col-sm-3 col-xs-12 edit-close-btn">
                                             <label *ngIf="first || isMobileScreen" class="d-block">&nbsp;</label>
-                                            <button *ngIf="item.get('uniqueName').value"
+                                            <button
+                                                *ngIf="item.get('uniqueName').value"
                                                 class="btn btn-defualt close-button"
-                                                (click)="openModal(template, index );">
+                                                (click)="openModal(template, index)"
+                                            >
                                                 <i class="icon-trash"></i>
                                             </button>
-                                            <button *ngIf="!item.get('uniqueName').value"
-                                                class="btn btn-defualt close-button"
-                                                (click)="removeCustomFieldRow(index, false)">
+                                            <button
+                                                *ngIf="!item.get('uniqueName').value"
+                                                class="btn btn-default close-button"
+                                                (click)="removeCustomFieldRow(index, false)"
+                                            >
                                                 <i class="icon-trash"></i>
                                             </button>
-                                            <button *ngIf="item.get('uniqueName').value" class="btn btn-defualt"
-                                                (click)="editCustomfield(index)">
+                                            <button
+                                                *ngIf="item.get('uniqueName').value"
+                                                class="btn btn-default"
+                                                (click)="editCustomfield(index)"
+                                            >
                                                 <i class="icon-edit"></i>
                                             </button>
                                         </div>
@@ -131,24 +244,35 @@
                             </ng-container>
                             <div class="row">
                                 <div class="col-lg-3 col-sm-3 col-xs-12">
-                                    <a href="javascript:void(0)" (click)="addNewCustomFieldRow()"
-                                        class="btn btn-link pl-0">{{localeData?.add_new_row}}</a>
+                                    <a
+                                        href="javascript:void(0)"
+                                        (click)="addNewCustomFieldRow()"
+                                        class="btn btn-link pl-0"
+                                        >{{ localeData?.add_new_row }}</a
+                                    >
                                 </div>
                                 <div class="col-lg-3 col-sm-3 col-xs-12" *ngIf="updateModeLength">
                                     <label *ngIf="isMobileScreen" class="d-block">&nbsp;</label>
-                                    <button type="submit" class="btn btn-primary"
+                                    <button
+                                        type="submit"
+                                        class="btn btn-primary"
                                         [disabled]="customFieldForm.invalid || !isCustomFormValid"
                                         [ladda]="isSaveCustomInProgress"
-                                        (click)="submitCustomFields(customFieldForm.value, 'update')">
-                                        {{commonLocaleData?.app_update}}
+                                        (click)="submitCustomFields(customFieldForm.value, 'update')"
+                                    >
+                                        {{ commonLocaleData?.app_update }}
                                     </button>
                                 </div>
                                 <div class="col-lg-3 col-sm-3 col-xs-12" *ngIf="!updateModeLength">
                                     <label *ngIf="isMobileScreen" class="d-block">&nbsp;</label>
-                                    <button type="submit" class="btn btn-primary" [disabled]="customFieldForm.invalid"
+                                    <button
+                                        type="submit"
+                                        class="btn btn-primary"
+                                        [disabled]="customFieldForm.invalid"
                                         [ladda]="isSaveCustomInProgress"
-                                        (click)="submitCustomFields(customFieldForm.value, 'create')">
-                                        {{commonLocaleData?.app_save}}
+                                        (click)="submitCustomFields(customFieldForm.value, 'create')"
+                                    >
+                                        {{ commonLocaleData?.app_save }}
                                     </button>
                                 </div>
                             </div>
@@ -157,32 +281,36 @@
                 </div>
                 <div class="search-loading" *ngIf="isGetCustomInProgress">
                     <div class="vertical-center">
-                        <span class="spinner small"></span> {{commonLocaleData?.app_loading}}
+                        <span class="spinner small"></span> {{ commonLocaleData?.app_loading }}
                     </div>
                 </div>
             </tab>
-
         </tabset>
-
     </div>
     <!-- end modal body -->
 
     <ng-template #template>
         <div class="modal-header">
-            <h4 class="modal-title pull-left">{{localeData?.delete_custom_field_title}}</h4>
-            <button type="button" class="close pull-right" [attr.aria-label]="commonLocaleData?.app_close"
-                (click)="modalRef.hide()">
+            <h4 class="modal-title pull-left">{{ localeData?.delete_custom_field_title }}</h4>
+            <button
+                type="button"
+                class="close pull-right"
+                [attr.aria-label]="commonLocaleData?.app_close"
+                (click)="modalRef.hide()"
+            >
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
         <div class="modal-body">
-            <p>{{localeData?.delete_custom_field_alert}}</p>
+            <p>{{ localeData?.delete_custom_field_alert }}</p>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-success"
-                (click)="removeCustomFieldRow(selectedRowIndex, true)">{{commonLocaleData?.app_yes}}</button>
-            <button class="btn btn-danger"
-                (click)="modalRef.hide();selectedRowIndex = null">{{commonLocaleData?.app_no}}</button>
+            <button class="btn btn-success" (click)="removeCustomFieldRow(selectedRowIndex, true)">
+                {{ commonLocaleData?.app_yes }}
+            </button>
+            <button class="btn btn-danger" (click)="modalRef.hide(); selectedRowIndex = null">
+                {{ commonLocaleData?.app_no }}
+            </button>
         </div>
     </ng-template>
 </div>

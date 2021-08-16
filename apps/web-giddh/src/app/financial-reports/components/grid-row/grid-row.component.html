@@ -1,0 +1,138 @@
+<div
+    class="row row-2 tb-pl-bs-grid-row"
+    [financial-accordion]="groupDetail"
+    [hidden]="!groupDetail.isVisible"
+    *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)"
+>
+    <div
+        class="col-4 group"
+        [ngStyle]="{ 'padding-left': padding + 'px' }"
+        [innerHTML]="groupDetail.groupName | uppercase | highlight: search"
+    ></div>
+    <div class="col-2 group text-right">
+        <span class="d-inline-flex">
+            <amount-field
+                [amount]="groupDetail.forwardedBalance?.amount"
+                [currencySymbol]="false"
+                [currencyCode]="false"
+            >
+            </amount-field> </span
+        >{{ groupDetail.forwardedBalance | recType }}
+    </div>
+    <div class="col-2 group text-right">
+        <span class="d-inline-flex">
+            <amount-field [amount]="groupDetail.debitTotal" [currencySymbol]="false" [currencyCode]="false">
+            </amount-field>
+        </span>
+    </div>
+    <div class="col-2 group text-right">
+        <span class="d-inline-flex">
+            <amount-field [amount]="groupDetail.creditTotal" [currencySymbol]="false" [currencyCode]="false">
+            </amount-field>
+        </span>
+    </div>
+    <div class="col-2 group text-right">
+        <span class="d-inline-flex">
+            <amount-field [amount]="groupDetail.closingBalance?.amount" [currencySymbol]="false" [currencyCode]="false">
+            </amount-field>
+        </span>
+        {{ groupDetail.closingBalance | recType }}
+    </div>
+</div>
+<cdk-virtual-scroll-viewport
+    *ngIf="
+        (groupDetail?.isOpen || (search && !isExpandToggledDuringSearch)) &&
+        (groupDetail?.accounts | accountsFilter: !groupDetail?.isOpen && search)?.length >= minimumViewportLimit
+    "
+    [itemSize]="35"
+    minBufferPx="500"
+    maxBufferPx="1000"
+    class="trial-balance-viewport"
+>
+    <ng-container *cdkVirtualFor="let account of groupDetail?.accounts | accountsFilter; trackBy: trackByFn">
+        <ng-container *ngTemplateOutlet="templateSection; context: { $implicit: account }"></ng-container>
+    </ng-container>
+</cdk-virtual-scroll-viewport>
+<ng-container
+    *ngIf="
+        (groupDetail?.isOpen || (search && !isExpandToggledDuringSearch)) &&
+        (groupDetail?.accounts | accountsFilter)?.length < minimumViewportLimit
+    "
+>
+    <ng-container *ngFor="let account of groupDetail?.accounts | accountsFilter; trackBy: trackByFn">
+        <ng-container *ngTemplateOutlet="templateSection; context: { $implicit: account }"></ng-container>
+    </ng-container>
+</ng-container>
+<ng-content></ng-content>
+<ng-template #templateSection let-account>
+    <section
+        class="row-2 account overflow-visible"
+        *ngIf="account.isVisible"
+        (dblclick)="accountInfo(account, $event)"
+        (clickOutside)="hideModal(); accountDetailPopup?.hide()"
+        [exclude]="'.row-item'"
+    >
+        <div class="row row-item">
+            <div class="col-4 account no-select" [ngStyle]="{ 'padding-left': padding + 20 + 'px' }">
+                <div
+                    class="p-0 bd-r-right-none"
+                    [innerHTML]="account.name | lowercase | highlight: search"
+                    [popover]="accountDetailModalTemplate"
+                    #accountDetailPopup="bs-popover"
+                    triggers=""
+                    container="body"
+                    containerClass="financial-report-account-detail-container"
+                    placement="bottom"
+                    [isOpen]="modalUniqueName && modalUniqueName === account.uniqueName"
+                ></div>
+                <ng-template #accountDetailModalTemplate>
+                    <span
+                        account-detail-modal-component
+                        *ngIf="modalUniqueName && modalUniqueName === account.uniqueName"
+                        [shouldShowGenerateInvoice]="false"
+                        [accountUniqueName]="account.uniqueName"
+                        [isModalOpen]="account.uniqueName === modalUniqueName"
+                        [accInfo]="accountDetails"
+                        [from]="from"
+                        [to]="to"
+                        (modalOpened)="handleModalOpened($event)"
+                    >
+                    </span>
+                </ng-template>
+            </div>
+            <div class="col-2 account text-right">
+                <span class="d-inline-flex">
+                    <amount-field
+                        [amount]="account.openingBalance?.amount"
+                        [currencySymbol]="false"
+                        [currencyCode]="false"
+                    >
+                    </amount-field>
+                </span>
+            </div>
+            <div class="col-2 account text-right">
+                <span class="d-inline-flex">
+                    <amount-field [amount]="account.debitTotal" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
+            <div class="col-2 account text-right">
+                <span class="d-inline-flex">
+                    <amount-field [amount]="account.creditTotal" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
+            <div class="col-2 account text-right">
+                <span class="d-inline-flex">
+                    <amount-field
+                        [amount]="account.closingBalance?.amount"
+                        [currencySymbol]="false"
+                        [currencyCode]="false"
+                    >
+                    </amount-field>
+                </span>
+                {{ account.closingBalance | recType }}
+            </div>
+        </div>
+    </section>
+</ng-template>

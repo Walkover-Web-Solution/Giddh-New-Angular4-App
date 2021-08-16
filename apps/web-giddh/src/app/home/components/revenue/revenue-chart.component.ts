@@ -70,7 +70,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.getRevenueGraphTypes();
-        
+
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;

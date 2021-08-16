@@ -1,7 +1,7 @@
 /** Settings integration tabs */
 export enum SettingsIntegrationTab {
-    Sms = 0,
-    Email,
+    //Sms = 0,
+    Email = 0,
     Collection,
     ECommerce,
     Payment
@@ -54,3 +54,15 @@ export interface SettingsAsideConfiguration {
     };
     linkedEntities?: Array<any>;
 }
+
+/** Amount Limit Duration options for integration of bank account */
+export enum SettingsAmountLimitDuration {
+    Daily = 'DAILY',
+    Weekly = 'WEEKLY',
+    Monthly = 'MONTHLY'
+}
+
+/** Unlimited amount limit text */
+export const UNLIMITED_LIMIT = "UNLIMITED";
+/** Status for ICICI bank registered */
+export const ACCOUNT_REGISTERED_STATUS = "Registered";

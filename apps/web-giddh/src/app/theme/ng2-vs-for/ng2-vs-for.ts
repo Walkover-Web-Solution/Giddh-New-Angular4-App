@@ -207,10 +207,7 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
 
     public ngAfterViewInit() {
         this.view = this._viewContainer.createEmbeddedView(this._templateRef);
-        console.log(this._element.nativeElement);
         this.parent = nextElementSibling(this._element.nativeElement);
-
-        console.log(this.parent);
 
         this.initPlaceholders();
         this.vsForHorizontal = false;

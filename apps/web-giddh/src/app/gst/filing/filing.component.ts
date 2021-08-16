@@ -13,6 +13,7 @@ import { GstReport } from '../constants/gst.constant';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { SHOW_GST_FILING } from '../../app.constant';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -65,6 +66,8 @@ export class FilingComponent implements OnInit, OnDestroy {
     public getCurrentPeriod$: Observable<any> = of(null);
     /** True, if month filter is selected */
     public isMonthSelected: boolean = true;
+    /** True, if GST filing needs to be shown */
+    public showGstFiling: boolean = SHOW_GST_FILING;
 
     constructor(
         private _route: Router,
@@ -113,7 +116,6 @@ export class FilingComponent implements OnInit, OnDestroy {
                 this.selectedGst = params['return_type'];
                 this.loadGstReport(this.activeCompanyGstNumber);
             }
-
             let tab = Number(params['tab']);
             if (tab > -1) {
                 this.selectTabFromUrl(tab);

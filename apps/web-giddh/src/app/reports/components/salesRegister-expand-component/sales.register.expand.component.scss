@@ -75,6 +75,7 @@
 }
 
 .custom-detail h4 {
+    color: $gray;
     margin-top: 7px;
     font-size: 14px !important;
     font-family: "opensans-regular" !important;
@@ -213,6 +214,9 @@ table th {
 .table-middle th .d-flex {
     align-items: center;
 }
+.expand-collapse-btn {
+    margin-bottom: 0 !important;
+}
 .expand-collapse-btn a {
     display: flex;
     width: 36px;
@@ -226,7 +230,7 @@ table th {
     color: $midnight-blue;
     border: 1px solid $gainsboro;
     border-radius: 5px;
-    &:hover{
+    &:hover {
         background: $chetwode-blue;
         color: $white;
     }
@@ -242,7 +246,7 @@ table th {
         font-size: 20px;
         position: relative;
         padding: 7px;
-        &:hover{
+        &:hover {
             background: $chetwode-blue;
             color: $white;
             border-color: $chetwode-blue;
@@ -332,8 +336,8 @@ table th {
     }
 }
 
-@media (min-width: 769px){
-    .table-responsive{
+@media (min-width: 769px) {
+    .table-responsive {
         max-height: calc(100vh - 275px);
         overflow-y: auto;
     }

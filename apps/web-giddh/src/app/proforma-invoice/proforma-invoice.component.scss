@@ -441,8 +441,8 @@ textarea:focus {
                 }
                 &:nth-child(3) {
                     white-space: normal;
-                    width: 90px;
-                    min-width: 90px;
+                    width: 100px;
+                    min-width: 100px;
                 }
                 &:last-child {
                     //border-right: none !important;
@@ -465,7 +465,7 @@ textarea:focus {
                 }
                 &:nth-child(3) {
                     white-space: normal;
-                    width: 90px;
+                    width: 100px;
                 }
                 &.error-box.item-tax {
                     border: 2px solid $red !important;
@@ -506,7 +506,7 @@ textarea:focus {
     z-index: 97;
 }
 
-.search-arrow-image.for_purchase_invoice {
+.search-arrow-image.for-purchase-invoice {
     top: 230px;
 }
 
@@ -579,7 +579,7 @@ textarea:focus {
 }
 
 .modal-invoice-footer .btn {
-    background: $dark-gray;
+    background: $dim-gray;
     font-size: 12px;
     border-radius: 90px;
     padding: 1px 6px;
@@ -661,8 +661,7 @@ input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
     padding-left: 0 !important;
 }
 
-.billing-address
-    input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
+.billing-address input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
     background: transparent !important;
     padding-left: 0 !important;
 }
@@ -725,11 +724,6 @@ input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
     // max-width: 150px;
 }
 
-.item-discount,
-.item-tax {
-    height: 1px;
-}
-
 .sales-invoice-table table.basic td {
     vertical-align: top !important;
 }
@@ -741,7 +735,7 @@ input[type="text"] {
 }
 
 a.copy-invoice {
-    color: $primary;
+    color: $cornflower-blue;
     margin-left: 10px;
 }
 
@@ -986,7 +980,7 @@ section.static-invoice-table {
 //   padding-top: 10px;
 //   padding-bottom: 10px;
 // }
-.mt-b1 {
+.mt-1 {
     margin-top: 10px;
 }
 
@@ -1355,7 +1349,8 @@ section.new-table {
     min-width: 40px;
 }
 
-table.table.table-custom-invoice.basic {
+table.table.table-custom-invoice.basic,
+.other-details-section {
     max-width: 1025px;
     width: 100%;
 }
@@ -1541,7 +1536,7 @@ label.sales-country-label {
     transform: translateY(-40px);
     width: 20px;
     height: 20px;
-    border: 1px solid $nobel;
+    border: 1px solid $gainsboro;
     border-radius: 50%;
     text-align: center;
 }
@@ -1699,8 +1694,8 @@ span.eligible-ITC {
     .form-inline .wrap-billing-address .form-group.deliver-same-address {
         display: flex !important;
     }
-    .pro-invoice-heading{
-        margin-left: 0px;
+    .pro-invoice-heading {
+        margin-left: 0;
     }
 }
 @media (max-width: 1199px) {
@@ -1743,12 +1738,21 @@ span.eligible-ITC {
         left: 0px;
     }
 
+    .pending-sales-balance-due {
+        position: relative;
+        right: 35px;
+    }
     .customer-invoice-form::before {
         top: 130px;
     }
     .customer-invoice-form-purchase::before {
         top: 132px;
     }
+
+    .hsn-code-dropdown {
+        left: 0px;
+    }
+
     .show-on-small-screen {
         padding: 0 15px;
         display: block;
@@ -1772,7 +1776,7 @@ span.eligible-ITC {
         border-bottom: none;
         margin-bottom: 0;
     }
-    .showInMobile {
+    .show-in-mobile {
         background: $white;
         border-top: 1px solid $gainsboro;
         padding-right: 15px;

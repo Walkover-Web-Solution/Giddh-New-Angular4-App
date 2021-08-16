@@ -1,65 +1,119 @@
-<ng-container appTranslate [file]="'accounts'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+<ng-container
+    appTranslate
+    [file]="'accounts'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
     <form name="addAccountForm" class="create-acc-form" [formGroup]="addAccountForm">
         <div>
             <div class="upper-form">
-                <div class="row ">
+                <div class="row">
                     <div class="col-sm-4">
                         <div class="ng-select-wrap select-list select-group disable-select-group">
-                            <label>{{localeData?.select_group_label}}<span class="red-text">*</span> </label>
-                            <ng-select [placeholder]="localeData?.select_group_label" [disabled]="true"
-                                [filterPlaceholder]="localeData?.select_group_label" (selected)="selectGroup($event)"
-                                formControlName="activeGroupUniqueName" [options]="activeAccountGroup" class="wd100">
+                            <label>{{ localeData?.select_group_label }}<span class="red-text">*</span> </label>
+                            <ng-select
+                                [placeholder]="localeData?.select_group_label"
+                                [disabled]="true"
+                                [filterPlaceholder]="localeData?.select_group_label"
+                                (selected)="selectGroup($event)"
+                                formControlName="activeGroupUniqueName"
+                                [options]="activeAccountGroup"
+                                class="wd100"
+                            >
                                 <ng-template #optionTemplate let-option="option">
-                                    <div class="account-list-item">{{option?.label}}</div>
-                                    <div class="account-list-item font-12">{{option?.value}}</div>
+                                    <div class="account-list-item">{{ option?.label }}</div>
+                                    <div class="account-list-item font-12">{{ option?.value }}</div>
                                 </ng-template>
                             </ng-select>
                         </div>
                     </div>
                     <div class="col-sm-8">
                         <div class="form-group">
-                            <label>{{localeData?.account_name}} <sup class="text-danger">*</sup> </label>
-                            <input type="text" class="form-control" #autoFocusUpdate formControlName="name"
-                                name="accountName" [placeholder]="localeData?.account_name">
+                            <label>{{ localeData?.account_name }} <sup class="text-danger">*</sup> </label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                #autoFocusUpdate
+                                formControlName="name"
+                                name="accountName"
+                                [placeholder]="localeData?.account_name"
+                            />
                         </div>
                     </div>
                 </div>
-                <div class="row ">
+                <div class="row">
                     <div class="col-sm-4">
                         <div class="form-group" formGroupName="country">
-                            <label>{{commonLocaleData?.app_country}} <sup class="text-danger">*</sup> </label>
-                            <sh-select [options]="countrySource" [isFilterEnabled]="true"
-                                (viewInitEvent)="onViewReady($event)" formControlName="countryCode"
-                                [defaultValue]="accountCountryName" (selected)="selectCountry($event)"
-                                [useInBuiltFilterForIOptionTypeItems]="true" [isRequired]="true"></sh-select>
+                            <label>{{ commonLocaleData?.app_country }} <sup class="text-danger">*</sup> </label>
+                            <sh-select
+                                [options]="countrySource"
+                                [isFilterEnabled]="true"
+                                (viewInitEvent)="onViewReady($event)"
+                                formControlName="countryCode"
+                                [defaultValue]="accountCountryName"
+                                (selected)="selectCountry($event)"
+                                [useInBuiltFilterForIOptionTypeItems]="true"
+                                [isRequired]="true"
+                            ></sh-select>
                         </div>
                     </div>
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label>{{localeData?.currency}}</label>
-                            <sh-select [options]="currencySource$ | async" defaultValue="{{selectedCurrency}}"
-                                formControlName="currency" [isFilterEnabled]="true"></sh-select>
+                            <label>{{ localeData?.currency }}</label>
+                            <sh-select
+                                [options]="currencySource$ | async"
+                                defaultValue="{{ selectedCurrency }}"
+                                formControlName="currency"
+                                [isFilterEnabled]="true"
+                            ></sh-select>
                         </div>
                     </div>
                     <div class="col-sm-4">
                         <div class="cr-dr-account">
-                            <label>{{localeData?.opening_balance}}</label>
-                            <div [ngClass]="{'input-group': addAccountForm.get('openingBalance').value > 0}">
-                                <input type="text" min="0" class="form-control text-right" decimalDigitsDirective
+                            <label>{{ localeData?.opening_balance }}</label>
+                            <div [ngClass]="{ 'input-group': addAccountForm.get('openingBalance').value > 0 }">
+                                <input
+                                    type="text"
+                                    min="0"
+                                    class="form-control text-right"
+                                    decimalDigitsDirective
                                     formControlName="openingBalance"
-                                    [placeholder]="commonLocaleData?.app_numbers?.zero+''+commonLocaleData?.app_numbers?.zero+'.'+commonLocaleData?.app_numbers?.zero+''+commonLocaleData?.app_numbers?.zero" />
-                                <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
-                 {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT' && addAccountForm.get('openingBalance').value > 0,
-                  'cp': addAccountForm.get('openingBalance').value > 0}"
-                                    *ngIf="addAccountForm.get('openingBalance').value > 0">
-                                    {{commonLocaleData?.app_dr?.toUpperCase()}}
+                                    [placeholder]="
+                                        commonLocaleData?.app_numbers?.zero +
+                                        '' +
+                                        commonLocaleData?.app_numbers?.zero +
+                                        '.' +
+                                        commonLocaleData?.app_numbers?.zero +
+                                        '' +
+                                        commonLocaleData?.app_numbers?.zero
+                                    "
+                                />
+                                <div
+                                    class="input-group-addon"
+                                    (click)="openingBalanceTypeChnaged('DEBIT')"
+                                    [ngClass]="{
+                                        'active-toggle-btn':
+                                            addAccountForm.get('openingBalanceType').value === 'DEBIT' &&
+                                            addAccountForm.get('openingBalance').value > 0,
+                                        'cp': addAccountForm.get('openingBalance').value > 0
+                                    }"
+                                    *ngIf="addAccountForm.get('openingBalance').value > 0"
+                                >
+                                    {{ commonLocaleData?.app_dr?.toUpperCase() }}
                                 </div>
-                                <div class="input-group-addon" (click)="openingBalanceTypeChnaged('CREDIT')" [ngClass]="
-                 {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'CREDIT' && addAccountForm.get('openingBalance').value > 0,
-                  'cp': addAccountForm.get('openingBalance').value > 0}"
-                                    *ngIf="addAccountForm.get('openingBalance').value > 0">
-                                    {{commonLocaleData?.app_cr?.toUpperCase()}}
+                                <div
+                                    class="input-group-addon"
+                                    (click)="openingBalanceTypeChnaged('CREDIT')"
+                                    [ngClass]="{
+                                        'active-toggle-btn':
+                                            addAccountForm.get('openingBalanceType').value === 'CREDIT' &&
+                                            addAccountForm.get('openingBalance').value > 0,
+                                        'cp': addAccountForm.get('openingBalance').value > 0
+                                    }"
+                                    *ngIf="addAccountForm.get('openingBalance').value > 0"
+                                >
+                                    {{ commonLocaleData?.app_cr?.toUpperCase() }}
                                 </div>
                             </div>
                         </div>
@@ -67,23 +121,45 @@
                 </div>
                 <div class="row" *ngIf="addAccountForm.get('country').value.countryCode !== companyCountry">
                     <div class="form-group col-xs-12 col-sm-4">
-                        <label for="">{{localeData?.foreign_opening_balance}}</label>
-                        <div [ngClass]="{'input-group': addAccountForm.get('foreignOpeningBalance').value > 0}">
-                            <input type="text" min="0" class="form-control text-right"
+                        <label for="">{{ localeData?.foreign_opening_balance }}</label>
+                        <div [ngClass]="{ 'input-group': addAccountForm.get('foreignOpeningBalance').value > 0 }">
+                            <input
+                                type="text"
+                                min="0"
+                                class="form-control text-right"
                                 formControlName="foreignOpeningBalance"
-                                [placeholder]="commonLocaleData?.app_numbers?.zero+''+commonLocaleData?.app_numbers?.zero+'.'+commonLocaleData?.app_numbers?.zero+''+commonLocaleData?.app_numbers?.zero"
-                                decimalDigitsDirective />
-                            <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
-                 {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT',
-                  'cp': addAccountForm.get('openingBalance').value > 0}"
-                                *ngIf="addAccountForm.get('foreignOpeningBalance').value > 0">
-                                {{commonLocaleData?.app_dr?.toUpperCase()}}
+                                [placeholder]="
+                                    commonLocaleData?.app_numbers?.zero +
+                                    '' +
+                                    commonLocaleData?.app_numbers?.zero +
+                                    '.' +
+                                    commonLocaleData?.app_numbers?.zero +
+                                    '' +
+                                    commonLocaleData?.app_numbers?.zero
+                                "
+                                decimalDigitsDirective
+                            />
+                            <div
+                                class="input-group-addon"
+                                (click)="openingBalanceTypeChnaged('DEBIT')"
+                                [ngClass]="{
+                                    'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT',
+                                    'cp': addAccountForm.get('openingBalance').value > 0
+                                }"
+                                *ngIf="addAccountForm.get('foreignOpeningBalance').value > 0"
+                            >
+                                {{ commonLocaleData?.app_dr?.toUpperCase() }}
                             </div>
-                            <div class="input-group-addon" (click)="openingBalanceTypeChnaged('CREDIT')" [ngClass]="
-                 {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'CREDIT',
-                  'cp': addAccountForm.get('openingBalance').value > 0}"
-                                *ngIf="addAccountForm.get('foreignOpeningBalance').value > 0">
-                                {{commonLocaleData?.app_cr?.toUpperCase()}}
+                            <div
+                                class="input-group-addon"
+                                (click)="openingBalanceTypeChnaged('CREDIT')"
+                                [ngClass]="{
+                                    'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'CREDIT',
+                                    'cp': addAccountForm.get('openingBalance').value > 0
+                                }"
+                                *ngIf="addAccountForm.get('foreignOpeningBalance').value > 0"
+                            >
+                                {{ commonLocaleData?.app_cr?.toUpperCase() }}
                             </div>
                         </div>
                     </div>
@@ -94,24 +170,48 @@
                             <div class="input-group d-flex">
                                 <div class="d-flex">
                                     <span class="mr-r15">
-                                        <input type="radio" class="radio-custom radio-theme" name="hsnOrSac"
-                                            id="hsnCodeType" formControlName="hsnOrSac" value="hsn">
-                                        <label for="hsnCodeType"
-                                            class="radio-custom-label">{{commonLocaleData?.app_hsn}}</label>
+                                        <input
+                                            type="radio"
+                                            class="radio-custom radio-theme"
+                                            name="hsnOrSac"
+                                            id="hsnCodeType"
+                                            formControlName="hsnOrSac"
+                                            value="hsn"
+                                        />
+                                        <label for="hsnCodeType" class="radio-custom-label">{{
+                                            commonLocaleData?.app_hsn
+                                        }}</label>
                                     </span>
                                     <span>
-                                        <input type="radio" class="radio-custom radio-theme" name="hsnOrSac"
-                                            id="sacCodeType" formControlName="hsnOrSac" value="sac">
-                                        <label for="sacCodeType"
-                                            class="ml-1 radio-custom-label">{{commonLocaleData?.app_sac}}</label>
+                                        <input
+                                            type="radio"
+                                            class="radio-custom radio-theme"
+                                            name="hsnOrSac"
+                                            id="sacCodeType"
+                                            formControlName="hsnOrSac"
+                                            value="sac"
+                                        />
+                                        <label for="sacCodeType" class="ml-1 radio-custom-label">{{
+                                            commonLocaleData?.app_sac
+                                        }}</label>
                                     </span>
                                 </div>
-                                <input type="text" class="form-control ml-4 bd-rr" maxlength="10" decimalDigitsDirective
+                                <input
+                                    type="text"
+                                    class="form-control ml-4 bd-rr"
+                                    maxlength="10"
+                                    decimalDigitsDirective
                                     formControlName="hsnNumber"
-                                    *ngIf="addAccountForm.get('hsnOrSac').value === 'hsn'" />
-                                <input type="text" class="form-control ml-4 bd-rr" maxlength="10"
-                                    formControlName="sacNumber" decimalDigitsDirective
-                                    *ngIf="addAccountForm.get('hsnOrSac').value === 'sac'" />
+                                    *ngIf="addAccountForm.get('hsnOrSac').value === 'hsn'"
+                                />
+                                <input
+                                    type="text"
+                                    class="form-control ml-4 bd-rr"
+                                    maxlength="10"
+                                    formControlName="sacNumber"
+                                    decimalDigitsDirective
+                                    *ngIf="addAccountForm.get('hsnOrSac').value === 'sac'"
+                                />
                             </div>
                         </div>
                     </div>
@@ -119,121 +219,198 @@
             </div>
         </div>
 
-        <tabset #staticTabs class="custom-tabs " id="asidePaneFormTabs">
+        <tabset #staticTabs class="custom-tabs" id="asidePaneFormTabs">
             <ng-container>
-                <tab [heading]="localeData?.tabs?.address" class="gstin-address"
-                    [active]="isDebtorCreditor || isBankAccount" [disabled]="!isDebtorCreditor && !isBankAccount"
-                    (selectTab)="tabChanged('address')">
+                <tab
+                    [heading]="localeData?.tabs?.address"
+                    class="gstin-address"
+                    [active]="isDebtorCreditor || isBankAccount"
+                    [disabled]="!isDebtorCreditor && !isBankAccount"
+                    (selectTab)="tabChanged('address')"
+                >
                     <ng-container>
                         <div class="gstin-form" formArrayName="addresses">
                             <ng-container
-                                *ngFor="let gst of addAccountForm.get('addresses')['controls'] | slice: 0:gstDetailsLength;let i = index;let f = first; let l = last"
-                                [formGroupName]="i">
+                                *ngFor="
+                                    let gst of addAccountForm.get('addresses')['controls'] | slice: 0:gstDetailsLength;
+                                    let i = index;
+                                    let f = first;
+                                    let l = last
+                                "
+                                [formGroupName]="i"
+                            >
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="add-address-default">
-                                            <h3>{{commonLocaleData?.app_address}} {{i+1}}</h3>
+                                            <h3>{{ commonLocaleData?.app_address }} {{ i + 1 }}</h3>
                                             <div class="inputRadio">
-                                                <input type="checkbox" name="defaultGst_{{i}}"
+                                                <input
+                                                    type="checkbox"
+                                                    name="defaultGst_{{ i }}"
                                                     formControlName="isDefault"
                                                     (change)="isDefaultAddressSelected(gst.get('isDefault').value, i)"
-                                                    [tooltip]="localeData?.address_tooltip" placement="left">
+                                                    [tooltip]="localeData?.address_tooltip"
+                                                    placement="left"
+                                                />
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label>{{commonLocaleData?.app_street}}</label>
-                                            <textarea name="gstAddr_{{i}}" formControlName="address" rows="4" cols="5"
-                                                class="form-control"></textarea>
+                                            <label>{{ commonLocaleData?.app_street }}</label>
+                                            <textarea
+                                                name="gstAddr_{{ i }}"
+                                                formControlName="address"
+                                                rows="4"
+                                                cols="5"
+                                                class="form-control"
+                                            ></textarea>
                                         </div>
-
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label>{{commonLocaleData?.app_state}} <sup class="text-danger"
-                                                    *ngIf="isStateRequired">*</sup> </label>
+                                            <label
+                                                >{{ commonLocaleData?.app_state }}
+                                                <sup class="text-danger" *ngIf="isStateRequired">*</sup>
+                                            </label>
                                             <div>
-                                                <sh-select #states [options]="statesSource$ | async"
+                                                <sh-select
+                                                    #states
+                                                    [options]="statesSource$ | async"
                                                     [isFilterEnabled]="true"
-                                                    [defaultValue]="gst.value.state.code ? gst.value.state.code + ' - ' + gst.value.state.name: ''"
+                                                    [defaultValue]="
+                                                        gst.value.state.code
+                                                            ? gst.value.state.code + ' - ' + gst.value.state.name
+                                                            : ''
+                                                    "
                                                     (selected)="selectedState(gst, $event)"
                                                     [forceClearReactive]="forceClear$ | async"
-                                                    formControlName="stateCode" class="wd100"
-                                                    [useInBuiltFilterForIOptionTypeItems]="true">
+                                                    formControlName="stateCode"
+                                                    class="wd100"
+                                                    [useInBuiltFilterForIOptionTypeItems]="true"
+                                                >
                                                 </sh-select>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-sm-4" *ngIf="GSTIN_OR_TRN">
                                         <div class="form-group mr-b05">
-                                            <label for="gstinNum"
-                                                class="d-block">{{formFields['taxName'].label}}</label>
-                                            <input type="text" class="form-control" autocomplete="false" #gstNumberField
-                                                (blur)="checkGstNumValidation(gstNumberField);getStateCode(gst, states);"
-                                                name="gstNumber" formControlName="gstNumber"
-                                                [placeholder]="taxNamePlaceholder" />
+                                            <label for="gstinNum" class="d-block">{{
+                                                formFields["taxName"]?.label
+                                            }}</label>
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                autocomplete="false"
+                                                #gstNumberField
+                                                (blur)="
+                                                    checkGstNumValidation(gstNumberField); getStateCode(gst, states)
+                                                "
+                                                name="gstNumber"
+                                                formControlName="gstNumber"
+                                                [placeholder]="taxNamePlaceholder"
+                                            />
                                         </div>
                                     </div>
                                     <!-- static code added for the pincode -->
                                     <div class="col-sm-4">
                                         <div class="form-group mr-b05">
-                                            <label for="pinCodeNum"
-                                                class="d-block">{{commonLocaleData?.app_pin_code}}</label>
-                                            <input type="number" class="form-control" autocomplete="false"
-                                                name="pinCodeNum" formControlName="pincode"
+                                            <label for="pinCodeNum" class="d-block">{{
+                                                commonLocaleData?.app_pin_code
+                                            }}</label>
+                                            <input
+                                                type="number"
+                                                class="form-control"
+                                                autocomplete="false"
+                                                name="pinCodeNum"
+                                                formControlName="pincode"
                                                 [placeholder]="commonLocaleData?.app_enter_pin_code"
-                                                decimalDigitsDirective [preventDecimal]="true" />
+                                                decimalDigitsDirective
+                                                [preventDecimal]="true"
+                                            />
                                         </div>
                                     </div>
                                     <!-- end -->
-                                    <ng-container *ngIf="companyCountry ==='IN'">
+                                    <ng-container *ngIf="companyCountry === 'IN'">
                                         <div class="col-sm-4">
                                             <div class="form-group">
-                                                <label>{{localeData?.party_type}}<span class="red-text">*</span></label>
+                                                <label
+                                                    >{{ localeData?.party_type }}<span class="red-text">*</span></label
+                                                >
                                                 <div class="position-relative">
-                                                    <sh-select [options]="partyTypeSource" formControlName="partyType"
-                                                        [isFilterEnabled]="true"></sh-select>
+                                                    <sh-select
+                                                        [options]="partyTypeSource"
+                                                        formControlName="partyType"
+                                                        [isFilterEnabled]="true"
+                                                    ></sh-select>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="col-sm-4"
-                                            *ngIf="gst.get('gstNumber').value && (isGstValid$ | async)">
+                                        <div
+                                            class="col-sm-4"
+                                            *ngIf="gst.get('gstNumber').value && (isGstValid$ | async)"
+                                        >
                                             <div class="form-group">
                                                 <label class="d-block">&nbsp;</label>
                                                 <label>
-                                                    <input type="checkbox" name="isComposite"
-                                                        formControlName="isComposite"><label>&nbsp;
-                                                        {{localeData?.is_composite}}
-                                                    </label></label>
-
+                                                    <input
+                                                        type="checkbox"
+                                                        name="isComposite"
+                                                        formControlName="isComposite"
+                                                    /><label
+                                                        >&nbsp;
+                                                        {{ localeData?.is_composite }}
+                                                    </label></label
+                                                >
                                             </div>
                                         </div>
                                     </ng-container>
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <span class="text-right">
-                                                <a href="javascript:void(0);" *ngIf="!f"
-                                                    (click)="removeGstDetailsForm(i)" class="grey-color btn btn-danger">
-                                                    <i class="icon-cross"> </i> {{commonLocaleData?.app_remove}}
+                                                <a
+                                                    href="javascript:void(0);"
+                                                    *ngIf="!f"
+                                                    (click)="removeGstDetailsForm(i)"
+                                                    class="grey-color btn btn-danger"
+                                                >
+                                                    <i class="icon-cross"> </i> {{ commonLocaleData?.app_remove }}
                                                 </a>
                                             </span>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row"
-                                    *ngIf="l && (addAccountForm.get('addresses')['controls'].length > 3) && !(moreGstDetailsVisible)">
-                                    <a href="javascript:void(0);" class="text-left col-6 cursor-pointer"
-                                        (click)="showMoreGst()">{{commonLocaleData?.app_show_all}}
-                                        ({{addAccountForm.get('addresses')['controls'].length}})</a>
-                                    <a href="javascript:void(0);" class="text-left col-6 cursor-pointer"
-                                        (click)="showLessGst()">{{commonLocaleData?.app_show_less}}</a>
+                                <div
+                                    class="row"
+                                    *ngIf="
+                                        l &&
+                                        addAccountForm.get('addresses')['controls'].length > 3 &&
+                                        !moreGstDetailsVisible
+                                    "
+                                >
+                                    <a
+                                        href="javascript:void(0);"
+                                        class="text-left col-6 cursor-pointer"
+                                        (click)="showMoreGst()"
+                                        >{{ commonLocaleData?.app_show_all }} ({{
+                                            addAccountForm.get("addresses")["controls"].length
+                                        }})</a
+                                    >
+                                    <a
+                                        href="javascript:void(0);"
+                                        class="text-left col-6 cursor-pointer"
+                                        (click)="showLessGst()"
+                                        >{{ commonLocaleData?.app_show_less }}</a
+                                    >
                                 </div>
                                 <div *ngIf="l">
-                                    <a class="text-right btn btn-primary add-address-btn" href="javascript:void(0);"
-                                        (click)="addGstDetailsForm(gst.get('gstNumber').value)">
-                                        <i class="icon-plus"></i> {{localeData?.add_address}}
+                                    <a
+                                        class="text-right btn btn-primary add-address-btn"
+                                        href="javascript:void(0);"
+                                        (click)="addGstDetailsForm(gst.get('gstNumber').value)"
+                                    >
+                                        <i class="icon-plus"></i> {{ localeData?.add_address }}
                                     </a>
                                 </div>
                             </ng-container>
@@ -242,30 +419,54 @@
                 </tab>
             </ng-container>
 
-            <tab [heading]="localeData?.tabs?.contact" class="contact-form-wrap" [active]="!isDebtorCreditor"
-                (selectTab)="tabChanged('contacts')">
+            <tab
+                [heading]="localeData?.tabs?.contact"
+                class="contact-form-wrap"
+                [active]="!isDebtorCreditor"
+                (selectTab)="tabChanged('contacts')"
+            >
                 <div class="contact-form">
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>{{localeData?.attention_to}}</label>
-                                <input type="text" class="form-control" formControlName="attentionTo"
-                                    name="attention" />
+                                <label>{{ localeData?.attention_to }}</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    formControlName="attentionTo"
+                                    name="attention"
+                                />
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>{{commonLocaleData?.app_mobile_number}}</label>
+                                <label>{{ commonLocaleData?.app_mobile_number }}</label>
                                 <div class="d-flex mobileNumberWidth">
-                                    <sh-select [placeholder]="commonLocaleData?.app_country_code"
-                                        [options]="countryPhoneCode" formControlName="mobileCode"
-                                        class="contact-number-select"></sh-select>
-                                    <input type="text" pattern="[0-9]*" class="form-control pull-right"
-                                        [placeholder]="localeData?.mobile_no_placeholder" formControlName="mobileNo"
-                                        id="contactNo" autocomplete="off" (blur)="isValidMobileNumber(mobileNoEl)"
-                                        #mobileNoEl />
-                                    <small class="clearfix error-msg"
-                                        *ngIf="addAccountForm.get('mobileNo').value && !addAccountForm.get('mobileCode').value">{{localeData?.phone_code_error}}</small>
+                                    <sh-select
+                                        [placeholder]="commonLocaleData?.app_country_code"
+                                        [options]="countryPhoneCode"
+                                        formControlName="mobileCode"
+                                        class="contact-number-select"
+                                    ></sh-select>
+                                    <input
+                                        type="text"
+                                        pattern="[0-9]*"
+                                        class="form-control pull-right"
+                                        [placeholder]="localeData?.mobile_no_placeholder"
+                                        formControlName="mobileNo"
+                                        id="contactNo"
+                                        autocomplete="off"
+                                        (blur)="isValidMobileNumber(mobileNoEl)"
+                                        #mobileNoEl
+                                    />
+                                    <small
+                                        class="clearfix error-msg"
+                                        *ngIf="
+                                            addAccountForm.get('mobileNo').value &&
+                                            !addAccountForm.get('mobileCode').value
+                                        "
+                                        >{{ localeData?.phone_code_error }}</small
+                                    >
                                 </div>
                             </div>
                         </div>
@@ -274,165 +475,281 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>{{commonLocaleData?.app_email_id}}</label>
+                                <label>{{ commonLocaleData?.app_email_id }}</label>
                                 <input type="email" class="form-control" formControlName="email" name="emailId" />
-                                <span class="error-msg"
-                                    *ngIf="addAccountForm.get('email').dirty && addAccountForm.get('email').errors">{{localeData?.email_id_error}}</span>
+                                <span
+                                    class="error-msg"
+                                    *ngIf="addAccountForm.get('email').dirty && addAccountForm.get('email').errors"
+                                    >{{ localeData?.email_id_error }}</span
+                                >
                             </div>
                         </div>
                     </div>
                 </div>
             </tab>
 
-
             <!-- bank details visible when sundry credtiors selected , right now is hide -->
-            <tab [heading]="localeData?.tabs?.bank_details" class="bank-details-form" *ngIf="showBankDetail"
-                (selectTab)="tabChanged('bank')">
+            <tab
+                [heading]="localeData?.tabs?.bank_details"
+                class="bank-details-form"
+                *ngIf="showBankDetail"
+                (selectTab)="tabChanged('bank')"
+            >
                 <div *ngIf="showBankDetail">
                     <div formArrayName="accountBankDetails">
-                        <div class="row"
-                            *ngFor="let bank of addAccountForm.get('accountBankDetails')['controls'];let i = index;let f = first; let l = last"
-                            [formGroupName]="i">
-                            <div class="form-group col-sm-6"
-                                [ngClass]="{'col-sm-5': selectedCountryCode !=='AE', 'col-sm-6': selectedCountryCode ==='AE' }"
-                                *ngIf="selectedCountryCode ==='AE'">
-                                <label for="">{{localeData?.beneficiary_name_label}}</label>
-                                <input type="text" class="form-control"
+                        <div
+                            class="row"
+                            *ngFor="
+                                let bank of addAccountForm.get('accountBankDetails')['controls'];
+                                let i = index;
+                                let f = first;
+                                let l = last
+                            "
+                            [formGroupName]="i"
+                        >
+                            <div
+                                class="form-group col-sm-6"
+                                [ngClass]="{
+                                    'col-sm-5': selectedCountryCode !== 'AE',
+                                    'col-sm-6': selectedCountryCode === 'AE'
+                                }"
+                                *ngIf="selectedCountryCode === 'AE'"
+                            >
+                                <label for="">{{ localeData?.beneficiary_name_label }}</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
                                     [placeholder]="localeData?.beneficiary_name_placeholder"
-                                    name="beneficiaryName_{{i}}" formControlName="beneficiaryName" />
+                                    name="beneficiaryName_{{ i }}"
+                                    formControlName="beneficiaryName"
+                                />
                             </div>
-                            <div class="form-group  col-sm-6"
-                                [ngClass]="{'col-sm-5': selectedCountryCode !=='AE', 'col-sm-6': selectedCountryCode ==='AE' }">
-                                <label>{{localeData?.bank_name_label}}</label>
-                                <input type="text" class="form-control"
-                                    [placeholder]="localeData?.bank_name_placeholder" name="bankName_{{i}}"
-                                    formControlName="bankName" />
+                            <div
+                                class="form-group col-sm-6"
+                                [ngClass]="{
+                                    'col-sm-5': selectedCountryCode !== 'AE',
+                                    'col-sm-6': selectedCountryCode === 'AE'
+                                }"
+                            >
+                                <label>{{ localeData?.bank_name_label }}</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    [placeholder]="localeData?.bank_name_placeholder"
+                                    name="bankName_{{ i }}"
+                                    formControlName="bankName"
+                                />
                             </div>
-                            <div class="form-group col-sm-4" *ngIf="selectedCountryCode ==='AE'">
+                            <div class="form-group col-sm-4" *ngIf="selectedCountryCode === 'AE'">
                                 <div>
-                                    <label>{{localeData?.branch_name_label}}</label>
-                                    <input type="text" class="form-control"
-                                        [placeholder]="localeData?.branch_name_placeholder" name="branchName_{{i}}"
-                                        formControlName="branchName" />
+                                    <label>{{ localeData?.branch_name_label }}</label>
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        [placeholder]="localeData?.branch_name_placeholder"
+                                        name="branchName_{{ i }}"
+                                        formControlName="branchName"
+                                    />
                                 </div>
                             </div>
                             <div class="form-group col-sm-4">
                                 <div>
-                                    <label
-                                        *ngIf="selectedCountryCode==='IN' ">{{commonLocaleData?.app_account_number}}</label>
-                                    <label *ngIf="selectedCountryCode !=='IN' ">{{commonLocaleData?.app_iban}}</label>
-                                    <input type="text" class="form-control" #bankaccount
+                                    <label *ngIf="selectedCountryCode === 'IN'">{{
+                                        commonLocaleData?.app_account_number
+                                    }}</label>
+                                    <label *ngIf="selectedCountryCode !== 'IN'">{{ commonLocaleData?.app_iban }}</label>
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        #bankaccount
                                         [placeholder]="commonLocaleData?.app_account_number_placeholder"
-                                        [maxlength]="bankIbanNumberMaxLength" [minlength]="bankIbanNumberMinLength"
-                                        name="accountNum_{{i}}"
-                                        (blur)="showBankDetailsValidation(bankaccount,'bankAccountNo')"
+                                        [maxlength]="bankIbanNumberMaxLength"
+                                        [minlength]="bankIbanNumberMinLength"
+                                        name="accountNum_{{ i }}"
+                                        (blur)="showBankDetailsValidation(bankaccount, 'bankAccountNo')"
                                         (keyup)="bankDetailsValidator(bankaccount, 'bankAccountNo')"
-                                        formControlName="bankAccountNo" />
+                                        formControlName="bankAccountNo"
+                                    />
                                 </div>
                             </div>
-                            <div class="form-group col-sm-4" *ngIf="selectedCountryCode ==='AE'">
-                                <label>{{commonLocaleData?.app_swift_code_label}}</label>
-                                <input type="text" class="form-control"
-                                    [placeholder]="commonLocaleData?.app_swift_code_placeholder" maxlength="11"
-                                    minlength="8" #swiftcode name="swiftCode_{{i}}"
-                                    (blur)="showBankDetailsValidation(swiftcode,'swiftCode')"
+                            <div class="form-group col-sm-4" *ngIf="selectedCountryCode === 'AE'">
+                                <label>{{ commonLocaleData?.app_swift_code_label }}</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    [placeholder]="commonLocaleData?.app_swift_code_placeholder"
+                                    maxlength="11"
+                                    minlength="8"
+                                    #swiftcode
+                                    name="swiftCode_{{ i }}"
+                                    (blur)="showBankDetailsValidation(swiftcode, 'swiftCode')"
                                     (keyup)="bankDetailsValidator(swiftcode, 'swiftCode')"
-                                    formControlName="swiftCode" />
+                                    formControlName="swiftCode"
+                                />
                             </div>
-                            <div *ngIf="selectedCountryCode!=='AE'" class="form-group col-sm-3">
-                                <label>{{commonLocaleData?.app_ifsc_code_label}}</label>
-                                <input type="text" class="form-control"
-                                    [placeholder]="commonLocaleData?.app_ifsc_code_placeholder" name="ifsc_{{i}}"
-                                    formControlName="ifsc" />
+                            <div *ngIf="selectedCountryCode !== 'AE'" class="form-group col-sm-3">
+                                <label>{{ commonLocaleData?.app_ifsc_code_label }}</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    [placeholder]="commonLocaleData?.app_ifsc_code_placeholder"
+                                    name="ifsc_{{ i }}"
+                                    formControlName="ifsc"
+                                />
                             </div>
                         </div>
                     </div>
                 </div>
             </tab>
 
-            <tab [heading]="localeData?.tabs?.others" class="other-form-wrap " (selectTab)="tabChanged('others')">
-
-                <div class="other-form ">
-                    <div class="row ">
-                        <div class="col-sm-6 ">
-                            <div class="form-group ">
-                                <label>{{localeData?.account_uniquename}}</label>
-                                <input type="text" class="form-control" [control]="addAccountForm.get('uniqueName')"
-                                    textCaseChangeDirective UniqueNameDirective formControlName="uniqueName"
-                                    name="accUnqname" />
+            <tab [heading]="localeData?.tabs?.others" class="other-form-wrap" (selectTab)="tabChanged('others')">
+                <div class="other-form">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>{{ localeData?.account_uniquename }}</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    [control]="addAccountForm.get('uniqueName')"
+                                    textCaseChangeDirective
+                                    UniqueNameDirective
+                                    formControlName="uniqueName"
+                                    name="accUnqname"
+                                />
                             </div>
                         </div>
 
                         <div class="form-group col-sm-6">
-                            <label>{{localeData?.balance_for_trigger}}</label>
-                            <div class="input-group"
-                                [ngClass]="{'input-group': addAccountForm.get('closingBalanceTriggerAmount').value > 0}">
-                                <input type="number" min="0" class="form-control text-right"
+                            <label>{{ localeData?.balance_for_trigger }}</label>
+                            <div
+                                class="input-group"
+                                [ngClass]="{
+                                    'input-group': addAccountForm.get('closingBalanceTriggerAmount').value > 0
+                                }"
+                            >
+                                <input
+                                    type="number"
+                                    min="0"
+                                    class="form-control text-right"
                                     formControlName="closingBalanceTriggerAmount"
-                                    [placeholder]="commonLocaleData?.app_numbers?.zero+''+commonLocaleData?.app_numbers?.zero+'.'+commonLocaleData?.app_numbers?.zero+''+commonLocaleData?.app_numbers?.zero" />
-                                <div class="input-group-addon" (click)="closingBalanceTypeChanged('DEBIT')" [ngClass]="
-                {'active-toggle-btn': addAccountForm.get('closingBalanceTriggerAmountType').value === 'DEBIT',
-                'cp': addAccountForm.get('closingBalanceTriggerAmount').value > 0}"
-                                    *ngIf="addAccountForm.get('closingBalanceTriggerAmount').value > 0">
-                                    {{commonLocaleData?.app_dr?.toUpperCase()}}
+                                    [placeholder]="
+                                        commonLocaleData?.app_numbers?.zero +
+                                        '' +
+                                        commonLocaleData?.app_numbers?.zero +
+                                        '.' +
+                                        commonLocaleData?.app_numbers?.zero +
+                                        '' +
+                                        commonLocaleData?.app_numbers?.zero
+                                    "
+                                />
+                                <div
+                                    class="input-group-addon"
+                                    (click)="closingBalanceTypeChanged('DEBIT')"
+                                    [ngClass]="{
+                                        'active-toggle-btn':
+                                            addAccountForm.get('closingBalanceTriggerAmountType').value === 'DEBIT',
+                                        'cp': addAccountForm.get('closingBalanceTriggerAmount').value > 0
+                                    }"
+                                    *ngIf="addAccountForm.get('closingBalanceTriggerAmount').value > 0"
+                                >
+                                    {{ commonLocaleData?.app_dr?.toUpperCase() }}
                                 </div>
-                                <div class="input-group-addon" (click)="closingBalanceTypeChanged('CREDIT')" [ngClass]="
-                {'active-toggle-btn': addAccountForm.get('closingBalanceTriggerAmountType').value === 'CREDIT',
-                'cp': addAccountForm.get('closingBalanceTriggerAmount').value > 0}"
-                                    *ngIf="addAccountForm.get('closingBalanceTriggerAmount').value > 0">
-                                    {{commonLocaleData?.app_cr?.toUpperCase()}}
+                                <div
+                                    class="input-group-addon"
+                                    (click)="closingBalanceTypeChanged('CREDIT')"
+                                    [ngClass]="{
+                                        'active-toggle-btn':
+                                            addAccountForm.get('closingBalanceTriggerAmountType').value === 'CREDIT',
+                                        'cp': addAccountForm.get('closingBalanceTriggerAmount').value > 0
+                                    }"
+                                    *ngIf="addAccountForm.get('closingBalanceTriggerAmount').value > 0"
+                                >
+                                    {{ commonLocaleData?.app_cr?.toUpperCase() }}
                                 </div>
                             </div>
                         </div>
-
                     </div>
 
-                    <div class="row ">
-                        <div class="col-sm-12 ">
-                            <div class="form-group ">
-                                <label>{{localeData?.description_label}}</label>
-                                <textarea rows="3 " cols="4" name="description" formControlName="description"
-                                    class="form-control "></textarea>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>{{ localeData?.description_label }}</label>
+                                <textarea
+                                    rows="3 "
+                                    cols="4"
+                                    name="description"
+                                    formControlName="description"
+                                    class="form-control"
+                                ></textarea>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </tab>
             <tab *ngIf="isDebtorCreditor" [heading]="localeData?.tabs?.custom" (selectTab)="tabChanged('custom')">
                 <ng-container formArrayName="customFields">
                     <ng-container
-                        *ngFor="let item of companyCustomFields; let index = index;let first = first; let last = last"
-                        [formGroupName]="index">
+                        *ngFor="let item of companyCustomFields; let index = index; let first = first; let last = last"
+                        [formGroupName]="index"
+                    >
                         <ng-container
-                            *ngFor="let customFieldsItem of addAccountForm.get('customFields')['controls']; let index = index;">
-                            <div class="row mr-b15"
-                                *ngIf="item.uniqueName === customFieldsItem.get('uniqueName').value">
+                            *ngFor="
+                                let customFieldsItem of addAccountForm.get('customFields')['controls'];
+                                let index = index
+                            "
+                        >
+                            <div
+                                class="row mr-b15"
+                                *ngIf="item.uniqueName === customFieldsItem.get('uniqueName').value"
+                            >
                                 <div class="col-lg-8">
                                     <div class="name-of-field">
-                                        <label>{{item.key}} </label>
-                                        <input *ngIf="item.dataType==='STRING'" type="text" name="values{{index}}"
-                                            formControlName="value" class="form-control" [maxLength]="item.valueLength">
-                                        <input *ngIf="item.dataType==='NUMERIC'" type="text" name="values{{index}}"
-                                            formControlName="value" class="form-control" [maxLength]="item.valueLength"
-                                            decimalDigitsDirective>
-                                        <div *ngIf="item.dataType==='BOOLEAN'" class="clearfix">
+                                        <label>{{ item.key }} </label>
+                                        <input
+                                            *ngIf="item.dataType === 'STRING'"
+                                            type="text"
+                                            name="values{{ index }}"
+                                            formControlName="value"
+                                            class="form-control"
+                                            [maxLength]="item.valueLength"
+                                        />
+                                        <input
+                                            *ngIf="item.dataType === 'NUMERIC'"
+                                            type="text"
+                                            name="values{{ index }}"
+                                            formControlName="value"
+                                            class="form-control"
+                                            [maxLength]="item.valueLength"
+                                            decimalDigitsDirective
+                                        />
+                                        <div *ngIf="item.dataType === 'BOOLEAN'" class="clearfix">
                                             <span class="d-inline-block">
-                                                <input id="yes{{index}}" class="radio-custom cp ml-0" type="radio"
-                                                    [checked]="customFieldsItem.get('value').value==='true'"
+                                                <input
+                                                    id="yes{{ index }}"
+                                                    class="radio-custom cp ml-0"
+                                                    type="radio"
+                                                    [checked]="customFieldsItem.get('value').value === 'true'"
                                                     (change)="selectedBooleanCustomField('true', index)"
-                                                    name="booleanType{{index}}">
-                                                <label for="yes{{index}}"
-                                                    class="radio-custom-label">{{commonLocaleData?.app_yes?.toUpperCase()}}</label>
+                                                    name="booleanType{{ index }}"
+                                                />
+                                                <label for="yes{{ index }}" class="radio-custom-label">{{
+                                                    commonLocaleData?.app_yes?.toUpperCase()
+                                                }}</label>
                                             </span>
 
                                             <span class="d-inline-block">
-                                                <input id="no{{index}}" class="radio-custom cp ml-0" type="radio"
-                                                    [checked]="customFieldsItem.get('value').value==='false'"
+                                                <input
+                                                    id="no{{ index }}"
+                                                    class="radio-custom cp ml-0"
+                                                    type="radio"
+                                                    [checked]="customFieldsItem.get('value').value === 'false'"
                                                     (change)="selectedBooleanCustomField('false', index)"
-                                                    name="booleanType{{index}}">
-                                                <label for="no{{index}}"
-                                                    class="radio-custom-label">{{commonLocaleData?.app_no?.toUpperCase()}}</label>
+                                                    name="booleanType{{ index }}"
+                                                />
+                                                <label for="no{{ index }}" class="radio-custom-label">{{
+                                                    commonLocaleData?.app_no?.toUpperCase()
+                                                }}</label>
                                             </span>
                                         </div>
                                     </div>
@@ -442,18 +759,25 @@
                     </ng-container>
                 </ng-container>
             </tab>
-
         </tabset>
         <div class="row" *ngIf="!isOtherSelectedTab">
             <div class="col-sm-12 mr-t3">
                 <div class="button-group">
-                    <button type="button" *ngIf="showDeleteButton" class="btn btn-danger "
-                        (click)="deleteClicked.emit(true)">
-                        {{commonLocaleData?.app_delete}}
+                    <button
+                        type="button"
+                        *ngIf="showDeleteButton"
+                        class="btn btn-danger"
+                        (click)="deleteClicked.emit(true)"
+                    >
+                        {{ commonLocaleData?.app_delete }}
                     </button>
-                    <button (click)="submit()" class="btn btn-primary update-btn-zindex"
+                    <button
+                        (click)="submit()"
+                        class="btn btn-primary update-btn-zindex"
                         [ladda]="createAccountInProcess$ | async"
-                        [disabled]="addAccountForm.invalid || !(isGstValid$ | async)">{{commonLocaleData?.app_update}}
+                        [disabled]="addAccountForm.invalid || !(isGstValid$ | async)"
+                    >
+                        {{ commonLocaleData?.app_update }}
                     </button>
                 </div>
             </div>
@@ -461,34 +785,50 @@
     </form>
     <div class="form" *ngIf="isOtherSelectedTab">
         <div>
-            <div *ngIf="(activeAccount$ | async)" class="form-group">
-                <form name="moveAccountForm" class="clearfix move-to-group " novalidate (submit)="moveAccount()"
-                    [formGroup]="moveAccountForm">
+            <div *ngIf="activeAccount$ | async" class="form-group">
+                <form
+                    name="moveAccountForm"
+                    class="clearfix move-to-group"
+                    novalidate
+                    (submit)="moveAccount()"
+                    [formGroup]="moveAccountForm"
+                >
                     <div class="row">
-                        <div class=" col-sm-12 ">
-                            <div class="form-group ">
-                                <label>{{localeData?.move_to_group}}</label>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>{{ localeData?.move_to_group }}</label>
                                 <div>
                                     <span>
-                                        <sh-select formControlName="moveto" [placeholder]="localeData?.group_name_label"
-                                            [options]="flatGroupsOptions" [customFilter]="customMoveGroupFilter"
-                                            class="pull-left width-select" [enableDynamicSearch]="true"
-                                            [isPaginationEnabled]="true" (scrollEnd)="handleGroupScrollEnd()"
-                                            (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)">
+                                        <sh-select
+                                            formControlName="moveto"
+                                            [placeholder]="localeData?.group_name_label"
+                                            [options]="flatGroupsOptions"
+                                            [customFilter]="customMoveGroupFilter"
+                                            class="pull-left width-select"
+                                            [enableDynamicSearch]="true"
+                                            [isPaginationEnabled]="true"
+                                            (scrollEnd)="handleGroupScrollEnd()"
+                                            (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
+                                        >
                                             <!--template for move group typeahead-->
                                             <ng-template #optionTemplate let-model="option">
                                                 <a href="javascript:void(0)" class="list-item">
-                                                    <div class="item">{{ model.label }}</div>
+                                                    <div class="item">{{ model?.label }}</div>
                                                     <div class="item-unique">
-                                                        {{ model.value }}
+                                                        {{ model?.value }}
                                                     </div>
                                                 </a>
                                             </ng-template>
                                         </sh-select>
                                     </span>
                                     <span class="pull-right">
-                                        <button type="submit" class="btn btn-primary merge-btn mr-0"
-                                            [disabled]="moveAccountForm.invalid">{{localeData?.move}}</button>
+                                        <button
+                                            type="submit"
+                                            class="btn btn-primary merge-btn mr-0"
+                                            [disabled]="moveAccountForm.invalid"
+                                        >
+                                            {{ localeData?.move }}
+                                        </button>
                                     </span>
                                 </div>
                             </div>
@@ -496,33 +836,51 @@
                     </div>
                 </form>
             </div>
-            <div class="row ">
-                <div class="col-sm-12 ">
-                    <div class="form-group ">
-                        <label>{{localeData?.select_account_merge}} <span class="primary-color">{{(activeAccount$ |
-                                async)?.name}}</span></label>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label
+                            >{{ localeData?.select_account_merge }}
+                            <span class="primary-color">{{ (activeAccount$ | async)?.name }}</span></label
+                        >
                         <div class="clearfix" #accountSelect2>
                             <span>
-                                <sh-select class="pull-left width-select" [options]="accounts" [isFilterEnabled]="true"
-                                    (viewInitEvent)="loadAccountData()" [multiple]="true" [enableDynamicSearch]="true"
-                                    [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()"
+                                <sh-select
+                                    class="pull-left width-select"
+                                    [options]="accounts"
+                                    [isFilterEnabled]="true"
+                                    (viewInitEvent)="loadAccountData()"
+                                    [multiple]="true"
+                                    [enableDynamicSearch]="true"
+                                    [isPaginationEnabled]="true"
+                                    (scrollEnd)="handleScrollEnd()"
                                     (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
                                     [(ngModel)]="selectedaccountForMerge"
-                                    [placeholder]="commonLocaleData?.app_select_accounts"></sh-select>
+                                    [placeholder]="commonLocaleData?.app_select_accounts"
+                                ></sh-select>
                             </span>
                             <span class="pull-right">
-                                <button type="submit" class="btn btn-primary merge-btn mr-0"
-                                    (click)="mergeAccounts()">{{localeData?.merge}}</button>
+                                <button type="submit" class="btn btn-primary merge-btn mr-0" (click)="mergeAccounts()">
+                                    {{ localeData?.merge }}
+                                </button>
                             </span>
                         </div>
-                        <small class="clearfix">{{localeData?.merge_account_note}}</small>
+                        <small class="clearfix">{{ localeData?.merge_account_note }}</small>
 
-                        <ul class="accmerge mr-t1"
-                            *ngIf="(activeAccount$ | async)?.mergedAccounts.split(',').length > 0 && (activeAccount$ | async)?.mergedAccounts.split(',')[0] !== ''">
+                        <ul
+                            class="accmerge mr-t1"
+                            *ngIf="
+                                (activeAccount$ | async)?.mergedAccounts.split(',').length > 0 &&
+                                (activeAccount$ | async)?.mergedAccounts.split(',')[0] !== ''
+                            "
+                        >
                             <li *ngFor="let merged of (activeAccount$ | async)?.mergedAccounts.split(',')">
-                                <a href="javascript:void(0);" [ngClass]="{'isActive': setAccountForMove === merged}"
-                                    (click)="setAccountForMoveFunc(merged)">
-                                    {{merged}}
+                                <a
+                                    href="javascript:void(0);"
+                                    [ngClass]="{ 'isActive': setAccountForMove === merged }"
+                                    (click)="setAccountForMoveFunc(merged)"
+                                >
+                                    {{ merged }}
                                     <span class="" (click)="showDeleteMergedAccountModal(merged)">×</span>
                                 </a>
                             </li>
@@ -530,22 +888,32 @@
                     </div>
                 </div>
             </div>
-
         </div>
         <div class="form" *ngIf="isDebtorCreditor && isOtherSelectedTab">
             <div class="mr-b2 select-box">
-                <div class="form-group ">
-                    <label>{{localeData?.default_discounts}} <span class="primary-color"></span></label>
+                <div class="form-group">
+                    <label>{{ localeData?.default_discounts }} <span class="primary-color"></span></label>
                     <div class="clearfix">
                         <span>
-                            <sh-select class="pull-left calc-width" [options]="discountList" [isFilterEnabled]="true"
-                                [forceClearReactive]="forceClearDiscount$ | async" [multiple]="true"
-                                [(ngModel)]="selectedDiscounts" (selected)="discountSelected()"
-                                [placeholder]="localeData?.select_discounts"></sh-select>
+                            <sh-select
+                                class="pull-left calc-width"
+                                [options]="discountList"
+                                [isFilterEnabled]="true"
+                                [forceClearReactive]="forceClearDiscount$ | async"
+                                [multiple]="true"
+                                [(ngModel)]="selectedDiscounts"
+                                (selected)="discountSelected()"
+                                [placeholder]="localeData?.select_discounts"
+                            ></sh-select>
                         </span>
                         <span class="pull-right">
-                            <button class="btn btn-primary merge-btn mr-0" [disabled]="(isDiscountSaveDisable$ | async)"
-                                (click)="applyDiscounts()">{{commonLocaleData?.app_apply}}</button>
+                            <button
+                                class="btn btn-primary merge-btn mr-0"
+                                [disabled]="isDiscountSaveDisable$ | async"
+                                (click)="applyDiscounts()"
+                            >
+                                {{ commonLocaleData?.app_apply }}
+                            </button>
                         </span>
                     </div>
                 </div>
@@ -553,47 +921,61 @@
             <div class="edit-tax-section">
                 <div class="form-group">
                     <div class="tax-label">
-                        <label>{{localeData?.all_inherited_discounts}}</label>
+                        <label>{{ localeData?.all_inherited_discounts }}</label>
                     </div>
                     <div *ngFor="let item of (activeAccount$ | async)?.inheritedDiscounts">
                         <ng-template #popTemplate>
                             <div class="popover-content">
-                                <label>{{localeData?.discounts_inherited_from}}:</label>
+                                <label>{{ localeData?.discounts_inherited_from }}:</label>
                                 <ul>
-                                    <li>{{item.name}}</li>
+                                    <li>{{ item.name }}</li>
                                 </ul>
                             </div>
                         </ng-template>
-                        <span class="tax-bullet" *ngFor="let inAppDiscount of item.applicableDiscounts"
-                            [popover]="popTemplate" placement="right" triggers="mouseenter:mouseleave">{{
-                            inAppDiscount.name }}
+                        <span
+                            class="tax-bullet"
+                            *ngFor="let inAppDiscount of item.applicableDiscounts"
+                            [popover]="popTemplate"
+                            placement="right"
+                            triggers="mouseenter:mouseleave"
+                            >{{ inAppDiscount.name }}
                         </span>
                     </div>
                     <p *ngIf="!(activeAccount$ | async)?.inheritedDiscounts.length">
-                        {{localeData?.no_inherited_discounts}}</p>
+                        {{ localeData?.no_inherited_discounts }}
+                    </p>
                 </div>
             </div>
         </div>
 
         <!-- taxes container -->
-        <ng-container *ngIf="(isTaxableAccount$ | async)">
+        <ng-container *ngIf="isTaxableAccount$ | async">
             <div class="row" *ngIf="selectedTab === 'others'">
                 <div class="col-sm-12">
                     <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax()">
                         <div class="tax-label">
-                            <label>{{commonLocaleData?.app_default_taxes}}</label>
+                            <label>{{ commonLocaleData?.app_default_taxes }}</label>
                         </div>
                         <div class="form-group">
                             <div class="clearfix">
                                 <span class="calc-width pull-left">
-                                    <sh-select [options]="companyTaxDropDown$ | async"
+                                    <sh-select
+                                        [options]="companyTaxDropDown$ | async"
                                         [placeholder]="localeData?.all_applicable_taxes_placeholder"
-                                        (selected)="taxesSelected($event)" [multiple]="true" formControlName="taxes">
+                                        (selected)="taxesSelected($event)"
+                                        [multiple]="true"
+                                        formControlName="taxes"
+                                    >
                                     </sh-select>
                                 </span>
                                 <span class="pull-right">
-                                    <button [disabled]="(isTaxesSaveDisable$ | async)" type="submit"
-                                        class="btn btn-success save-btn mr-0">{{commonLocaleData?.app_save}}</button>
+                                    <button
+                                        [disabled]="isTaxesSaveDisable$ | async"
+                                        type="submit"
+                                        class="btn btn-success save-btn mr-0"
+                                    >
+                                        {{ commonLocaleData?.app_save }}
+                                    </button>
                                 </span>
                             </div>
                         </div>
@@ -602,26 +984,30 @@
                     <div class="edit-tax-section">
                         <div class="form-group">
                             <div class="tax-label">
-                                <label>{{localeData?.all_inherited_taxes}}</label>
+                                <label>{{ localeData?.all_inherited_taxes }}</label>
                             </div>
                             <div *ngFor="let inTax of (activeAccountTaxHierarchy$ | async)?.inheritedTaxes">
                                 <ng-template #popTemplate>
                                     <div>
                                         <div class="popover-content">
-                                            <label>{{localeData?.tax_inherited}}:</label>
+                                            <label>{{ localeData?.tax_inherited }}:</label>
                                             <ul>
-                                                <li>{{inTax.name}}</li>
+                                                <li>{{ inTax.name }}</li>
                                             </ul>
                                         </div>
                                     </div>
                                 </ng-template>
-                                <span class="tax-bullet" *ngFor="let inAppTax of inTax.applicableTaxes"
-                                    [popover]="popTemplate" placement="right" triggers="mouseenter:mouseleave">{{
-                                    inAppTax.name }}
+                                <span
+                                    class="tax-bullet"
+                                    *ngFor="let inAppTax of inTax.applicableTaxes"
+                                    [popover]="popTemplate"
+                                    placement="right"
+                                    triggers="mouseenter:mouseleave"
+                                    >{{ inAppTax.name }}
                                 </span>
                             </div>
                             <p *ngIf="!(activeAccountTaxHierarchy$ | async)?.inheritedTaxes.length">
-                                {{localeData?.no_inherited_taxes}}
+                                {{ localeData?.no_inherited_taxes }}
                             </p>
                         </div>
                     </div>
@@ -631,13 +1017,21 @@
         <div class="row" *ngIf="isOtherSelectedTab">
             <div class="col-sm-12 mr-t3">
                 <div class="button-group">
-                    <button type="button" *ngIf="showDeleteButton" class="btn btn-danger "
-                        (click)="deleteClicked.emit(true)">
-                        {{commonLocaleData?.app_delete}}
+                    <button
+                        type="button"
+                        *ngIf="showDeleteButton"
+                        class="btn btn-danger"
+                        (click)="deleteClicked.emit(true)"
+                    >
+                        {{ commonLocaleData?.app_delete }}
                     </button>
-                    <button (click)="submit()" class="btn btn-primary update-btn-zindex"
+                    <button
+                        (click)="submit()"
+                        class="btn btn-primary update-btn-zindex"
                         [ladda]="createAccountInProcess$ | async"
-                        [disabled]="addAccountForm.invalid || !(isGstValid$ | async)">{{commonLocaleData?.app_update}}
+                        [disabled]="addAccountForm.invalid || !(isGstValid$ | async)"
+                    >
+                        {{ commonLocaleData?.app_update }}
                     </button>
                 </div>
             </div>
@@ -646,9 +1040,12 @@
         <div bsModal #deleteMergedAccountModal="bs-modal" class="modal fade" role="dialog">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
-                    <confirm-modal [title]="localeData?.delete_merged_account_title"
-                        [body]='deleteMergedAccountModalBody' (cancelCallBack)="hideDeleteMergedAccountModal()"
-                        (successCallBack)="deleteMergedAccount()">
+                    <confirm-modal
+                        [title]="localeData?.delete_merged_account_title"
+                        [body]="deleteMergedAccountModalBody"
+                        (cancelCallBack)="hideDeleteMergedAccountModal()"
+                        (successCallBack)="deleteMergedAccount()"
+                    >
                     </confirm-modal>
                 </div>
             </div>
@@ -657,8 +1054,12 @@
         <div bsModal #moveMergedAccountModal="bs-modal" class="modal fade" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <confirm-modal [title]="localeData?.move_merged_account_title" [body]='moveMergedAccountModalBody'
-                        (cancelCallBack)="hideMoveMergedAccountModal()" (successCallBack)="moveMergeAccountTo()">
+                    <confirm-modal
+                        [title]="localeData?.move_merged_account_title"
+                        [body]="moveMergedAccountModalBody"
+                        (cancelCallBack)="hideMoveMergedAccountModal()"
+                        (successCallBack)="moveMergeAccountTo()"
+                    >
                     </confirm-modal>
                 </div>
             </div>

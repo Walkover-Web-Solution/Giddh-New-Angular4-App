@@ -1,185 +1,217 @@
 <div class="aside-pane">
-
     <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
 
     <div class="form-header">
-        <h3 *ngIf="selectedService === 'TAXPRO' || 'VAYANA' && (!gstAuthenticated && !gspSessionOtpAuthorized)">{{localeData?.aside_menu?.choose_provider}}</h3>
-        <h3 *ngIf="gstAuthenticated && !pointsAcceptedSubmitted">{{localeData?.aside_menu?.gst_return_note}}:</h3>
-        <h3 *ngIf="gstAuthenticated && pointsAcceptedSubmitted">{{localeData?.aside_menu?.submit_gst_returns}}:</h3>
-        <h3 *ngIf="selectedService === 'RECONCILE'">{{localeData?.aside_menu?.gst_reconcile}}</h3>
+        <h3 *ngIf="selectedService === 'TAXPRO' || ('VAYANA' && !gstAuthenticated && !gspSessionOtpAuthorized)">
+            {{ localeData?.aside_menu?.choose_provider }}
+        </h3>
+        <h3 *ngIf="gstAuthenticated && !pointsAcceptedSubmitted">{{ localeData?.aside_menu?.gst_return_note }}:</h3>
+        <h3 *ngIf="gstAuthenticated && pointsAcceptedSubmitted">{{ localeData?.aside_menu?.submit_gst_returns }}:</h3>
+        <h3 *ngIf="selectedService === 'RECONCILE'">{{ localeData?.aside_menu?.gst_reconcile }}</h3>
     </div>
 
     <div class="aside-body">
         <div class="aside-pane-form">
             <div class="form-body white-bg clearfix margin-child-label">
-
                 <div class="clearfix">
-
                     <!-- region not gst authenticated and before otp verified -->
                     <div *ngIf="!gstAuthenticated && !gspSessionOtpAuthorized">
                         <!-- Choose Provider -->
-                        <div class="form-group" *ngIf="selectedService === 'TAXPRO' || selectedService === 'VAYANA' ">
-
+                        <div class="form-group" *ngIf="selectedService === 'TAXPRO' || selectedService === 'VAYANA'">
                             <div class="row">
                                 <div class="col-6">
-
                                     <div class="form-group">
+                                        <label for="tax_pro_otp">{{ localeData?.aside_menu?.select_platform }}</label>
 
-                                        <label for="tax_pro_otp">{{localeData?.aside_menu?.select_platform}}</label>
-
-                                        <select class="form-control" (click)="changeProvider()"
-                                            [(ngModel)]="selectedService" [disabled]="otpSentSuccessFully">
-                                            <option value="VAYANA">{{localeData?.aside_menu?.giddh_provider1}}</option>
-                                            <option value="TAXPRO">{{localeData?.aside_menu?.giddh_provider2}}</option>
+                                        <select
+                                            class="form-control"
+                                            (click)="changeProvider()"
+                                            [(ngModel)]="selectedService"
+                                            [disabled]="otpSentSuccessFully"
+                                        >
+                                            <option value="VAYANA">
+                                                {{ localeData?.aside_menu?.giddh_provider1 }}
+                                            </option>
+                                            <option value="TAXPRO">
+                                                {{ localeData?.aside_menu?.giddh_provider2 }}
+                                            </option>
                                         </select>
-
                                     </div>
-
                                 </div>
                             </div>
-
                         </div>
 
                         <!-- TAX PRO || VYANA-->
                         <form class="form-group" *ngIf="selectedService === 'TAXPRO' || selectedService === 'VAYANA'">
-
                             <div class="row">
-
                                 <div class="col-6">
-
                                     <div class="form-group">
-                                        <label for="tax_pro_username">{{localeData?.aside_menu?.username}}:</label>
-                                        <input autocomplete="off" type="text" name="username" class="form-control"
-                                            id="tax_pro_username" [(ngModel)]="taxProForm.userName" required
-                                            [disabled]="otpSentSuccessFully">
+                                        <label for="tax_pro_username">{{ localeData?.aside_menu?.username }}:</label>
+                                        <input
+                                            autocomplete="off"
+                                            type="text"
+                                            name="username"
+                                            class="form-control"
+                                            id="tax_pro_username"
+                                            [(ngModel)]="taxProForm.userName"
+                                            required
+                                            [disabled]="otpSentSuccessFully"
+                                        />
                                     </div>
-
                                 </div>
 
                                 <div class="col-6">
-
                                     <div class="form-group">
-                                        <label for="tax_pro_gst_number">{{commonLocaleData?.app_gstin}}:</label>
-                                        <input autocomplete="off" type="text" name="gstin" class="form-control"
-                                            id="tax_pro_gst_number" [(ngModel)]="taxProForm.gstin" required
-                                            [disabled]="otpSentSuccessFully">
+                                        <label for="tax_pro_gst_number">{{ commonLocaleData?.app_gstin }}:</label>
+                                        <input
+                                            autocomplete="off"
+                                            type="text"
+                                            name="gstin"
+                                            class="form-control"
+                                            id="tax_pro_gst_number"
+                                            [(ngModel)]="taxProForm.gstin"
+                                            required
+                                            [disabled]="otpSentSuccessFully"
+                                        />
                                     </div>
-
                                 </div>
 
                                 <div class="col-12" *ngIf="otpSentSuccessFully">
-
                                     <div class="d-flex">
-
                                         <div>
-                                            <label for="tax_pro_otp">{{localeData?.aside_menu?.enter_otp}}:</label>
-                                            <input autocomplete="off" type="text" name="otp" class="form-control"
-                                                id="tax_pro_otp" [(ngModel)]="taxProForm.otp">
+                                            <label for="tax_pro_otp">{{ localeData?.aside_menu?.enter_otp }}:</label>
+                                            <input
+                                                autocomplete="off"
+                                                type="text"
+                                                name="otp"
+                                                class="form-control"
+                                                id="tax_pro_otp"
+                                                [(ngModel)]="taxProForm.otp"
+                                            />
                                         </div>
 
                                         <div class="align-self-end">
-                                            <a class="btn btn-link" (click)="resendOtp()"
-                                                href="javascript:void 0">{{localeData?.aside_menu?.resend_otp}}</a>
+                                            <a class="btn btn-link" (click)="resendOtp()" href="javascript:void 0">{{
+                                                localeData?.aside_menu?.resend_otp
+                                            }}</a>
                                         </div>
-
                                     </div>
                                 </div>
-
                             </div>
 
                             <div class="row">
-
                                 <div class="col-12 mr-t1">
-                                    <button class="btn btn-success"
+                                    <button
+                                        class="btn btn-success"
                                         [ladda]="saveGspSessionInProcess || authorizeGspSessionOtpInProcess"
-                                        (click)="save()" [disabled]="(!taxProForm.gstin || !taxProForm.userName)">{{
-                                        !otpSentSuccessFully ? localeData?.aside_menu?.get_otp : localeData?.aside_menu?.verify_otp}}
+                                        (click)="save()"
+                                        [disabled]="!taxProForm.gstin || !taxProForm.userName"
+                                    >
+                                        {{
+                                            !otpSentSuccessFully
+                                                ? localeData?.aside_menu?.get_otp
+                                                : localeData?.aside_menu?.verify_otp
+                                        }}
                                     </button>
-                                    <button class="btn btn-default"
-                                        (click)="toggleCancelModel();resetLocalFlags()">{{commonLocaleData?.app_cancel}}</button>
+                                    <button class="btn btn-default" (click)="toggleCancelModel(); resetLocalFlags()">
+                                        {{ commonLocaleData?.app_cancel }}
+                                    </button>
                                 </div>
-
                             </div>
-
                         </form>
 
                         <!--reconcile-->
                         <form class="form-group" #reconcileFormVM="ngForm" *ngIf="selectedService === 'RECONCILE'">
                             <div class="row">
-
                                 <ng-container>
-
                                     <ng-container *ngIf="!(reconcileOtpSuccess$ | async)">
-
                                         <div class="col-6">
-
                                             <div class="form-group">
-                                                <label for="tax_pro_username">{{localeData?.aside_menu?.username}}:</label>
-                                                <input autocomplete="off" type="text" name="username"
-                                                    class="form-control" id="reconcile_username"
-                                                    [(ngModel)]="reconcileForm.uid">
+                                                <label for="tax_pro_username"
+                                                    >{{ localeData?.aside_menu?.username }}:</label
+                                                >
+                                                <input
+                                                    autocomplete="off"
+                                                    type="text"
+                                                    name="username"
+                                                    class="form-control"
+                                                    id="reconcile_username"
+                                                    [(ngModel)]="reconcileForm.uid"
+                                                />
                                             </div>
-
                                         </div>
                                     </ng-container>
 
-                                    <ng-container *ngIf="(reconcileOtpSuccess$ | async)">
-
-                                        <div class="col-6" *ngIf="(reconcileOtpSuccess$ | async)">
+                                    <ng-container *ngIf="reconcileOtpSuccess$ | async">
+                                        <div class="col-6" *ngIf="reconcileOtpSuccess$ | async">
                                             <div class="form-group">
-                                                <label for="reconcile_otp">{{localeData?.aside_menu?.otp}}:</label>
-                                                <input autocomplete="off" type="text" name="otp" class="form-control"
-                                                    id="reconcile_otp" [(ngModel)]="reconcileForm.otp">
+                                                <label for="reconcile_otp">{{ localeData?.aside_menu?.otp }}:</label>
+                                                <input
+                                                    autocomplete="off"
+                                                    type="text"
+                                                    name="otp"
+                                                    class="form-control"
+                                                    id="reconcile_otp"
+                                                    [(ngModel)]="reconcileForm.otp"
+                                                />
                                             </div>
                                         </div>
-
                                     </ng-container>
 
                                     <ng-container>
-
                                         <div class="col-6" *ngIf="activeCompanyGstNumber">
                                             <div class="form-group">
-                                                <label for="reconcile_otp">{{localeData?.gstn}}:</label>
-                                                <input autocomplete="off" type="text" name="otp" class="form-control"
-                                                    id="reconcile_gstn" [value]="(companyGst$ | async)"
-                                                    [disabled]="true">
+                                                <label for="reconcile_otp">{{ localeData?.gstn }}:</label>
+                                                <input
+                                                    autocomplete="off"
+                                                    type="text"
+                                                    name="otp"
+                                                    class="form-control"
+                                                    id="reconcile_gstn"
+                                                    [value]="companyGst$ | async"
+                                                    [disabled]="true"
+                                                />
                                             </div>
                                         </div>
-
                                     </ng-container>
                                 </ng-container>
 
                                 <ng-container>
-
                                     <div class="col-12">
                                         <span>
-                                            {{localeData?.aside_menu?.gst_no}} {{ (companyGst$ | async) }} {{localeData?.aside_menu?.verified_successfully}}
+                                            {{ localeData?.aside_menu?.gst_no }} {{ companyGst$ | async }}
+                                            {{ localeData?.aside_menu?.verified_successfully }}
                                         </span>
                                     </div>
-
                                 </ng-container>
                             </div>
 
                             <div class="row">
-
                                 <div class="col-12 mr-t1">
-
-                                    <button class="btn btn-success" (click)="generateReconcileOtp(reconcileForm)"
-                                        *ngIf="!(reconcileOtpSuccess$ | async)" [ladda]="reconcileOtpInProcess$ | async"
-                                        [disabled]="!reconcileForm.uid">{{commonLocaleData?.app_submit}}
+                                    <button
+                                        class="btn btn-success"
+                                        (click)="generateReconcileOtp(reconcileForm)"
+                                        *ngIf="!(reconcileOtpSuccess$ | async)"
+                                        [ladda]="reconcileOtpInProcess$ | async"
+                                        [disabled]="!reconcileForm.uid"
+                                    >
+                                        {{ commonLocaleData?.app_submit }}
                                     </button>
 
-                                    <button class="btn btn-success" (click)="sendReconcileOtp(reconcileForm)"
-                                        *ngIf="(reconcileOtpSuccess$ | async)"
+                                    <button
+                                        class="btn btn-success"
+                                        (click)="sendReconcileOtp(reconcileForm)"
+                                        *ngIf="reconcileOtpSuccess$ | async"
                                         [ladda]="reconcileOtpVerifyInProcess$ | async"
-                                        [disabled]="!reconcileForm.otp">{{commonLocaleData?.app_submit}}
+                                        [disabled]="!reconcileForm.otp"
+                                    >
+                                        {{ commonLocaleData?.app_submit }}
                                     </button>
 
-                                    <button class="btn btn-default"
-                                        (click)="toggleCancelModel();resetLocalFlags()">{{commonLocaleData?.app_cancel}}</button>
-
+                                    <button class="btn btn-default" (click)="toggleCancelModel(); resetLocalFlags()">
+                                        {{ commonLocaleData?.app_cancel }}
+                                    </button>
                                 </div>
-
                             </div>
                         </form>
                         <!--reconcile-->
@@ -189,173 +221,160 @@
                     <!-- region gst authenticated -->
 
                     <div *ngIf="gstAuthenticated">
-
                         <span class="d-flex auth-state">
-                            <p>{{ getGstAuthenticatedText()}}</p>
+                            <p>{{ getGstAuthenticatedText() }}</p>
                         </span>
 
                         <!-- region note point before submitting -->
                         <div *ngIf="!pointsAcceptedSubmitted">
                             <div class="container w-100">
-
                                 <div class="row mt-1">
-
                                     <div class="col-lg-12 col-md-12 col-sm-12 mb-2">
-
                                         <ul>
-
-                                            <li>{{localeData?.aside_menu?.gst_file_note1}}</li>
-                                            <li class="pd-t1">{{localeData?.aside_menu?.gst_file_note2}}</li>
-                                            <li class="pd-t1">{{localeData?.aside_menu?.gst_file_note3}}</li>
-
+                                            <li>{{ localeData?.aside_menu?.gst_file_note1 }}</li>
+                                            <li class="pd-t1">{{ localeData?.aside_menu?.gst_file_note2 }}</li>
+                                            <li class="pd-t1">{{ localeData?.aside_menu?.gst_file_note3 }}</li>
                                         </ul>
                                     </div>
-
                                 </div>
 
-                                <hr>
+                                <hr />
 
                                 <div class="row mt-2">
-
                                     <div class="col-md-12 col-lg-12 col-sm-12 d-flex">
                                         <span class="mr-1">
                                             <input type="checkbox" [(ngModel)]="pointsAccepted" id="pointsAccepted" />
                                         </span>
                                         <label for="pointsAccepted">
                                             <em>
-                                                {{localeData?.aside_menu?.points_accepted_note}}
+                                                {{ localeData?.aside_menu?.points_accepted_note }}
                                             </em>
                                         </label>
                                     </div>
-
                                 </div>
-                                <hr>
-
+                                <hr />
                             </div>
 
                             <div>
-
-                                <button class="btn btn-default" [disabled]="!pointsAccepted"
-                                    (click)="pointsAcceptedSubmitted = true">{{commonLocaleData?.app_next}}
+                                <button
+                                    class="btn btn-default"
+                                    [disabled]="!pointsAccepted"
+                                    (click)="pointsAcceptedSubmitted = true"
+                                >
+                                    {{ commonLocaleData?.app_next }}
                                 </button>
-
                             </div>
                         </div>
                         <!-- endregion -->
 
                         <!-- region submit gst -->
                         <div *ngIf="pointsAcceptedSubmitted">
-
                             <div class="gst-body padd15">
-
                                 <div class="row">
-
                                     <div class="col-lg-6 col-md-6 col-sm-6">
                                         <label class="text-muted">
-                                            {{localeData?.aside_menu?.gstn_username}}
+                                            {{ localeData?.aside_menu?.gstn_username }}
                                         </label>
                                     </div>
 
                                     <div class="col-lg-6 col-md-6 col-sm-6">
-
-                                        <span>{{taxProForm.userName}}</span>
-                                    </div>
-
-                                </div>
-
-                                <div class="row mt-1">
-
-                                    <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
-                                        <label class="text-muted">
-                                            {{commonLocaleData?.app_gstin}}
-                                        </label>
-                                    </div>
-
-                                    <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
-                                        <span>{{taxProForm.gstin}}</span>
-
+                                        <span>{{ taxProForm.userName }}</span>
                                     </div>
                                 </div>
 
                                 <div class="row mt-1">
-
                                     <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
                                         <label class="text-muted">
-                                            {{localeData?.aside_menu?.filing_period}}
+                                            {{ commonLocaleData?.app_gstin }}
                                         </label>
                                     </div>
 
                                     <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
+                                        <span>{{ taxProForm.gstin }}</span>
+                                    </div>
+                                </div>
 
+                                <div class="row mt-1">
+                                    <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
+                                        <label class="text-muted">
+                                            {{ localeData?.aside_menu?.filing_period }}
+                                        </label>
+                                    </div>
+
+                                    <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
                                         <span>{{ getCurrentPeriod?.from }}</span> -
                                         <span>{{ getCurrentPeriod?.to }}</span>
-
                                     </div>
                                 </div>
 
                                 <div class="row mt-1">
-
                                     <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
                                         <label class="text-muted">
-                                            {{localeData?.aside_menu?.gst_return_type}}
+                                            {{ localeData?.aside_menu?.gst_return_type }}
                                         </label>
                                     </div>
 
                                     <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
-                                        <span *ngIf="returnType === GstReport.Gstr2">{{localeData?.gstr2_label}}</span>
-                                        <span *ngIf="returnType === GstReport.Gstr1">{{localeData?.gstr1_label}}</span>
-                                        <span *ngIf="returnType === GstReport.Gstr3b">{{localeData?.gstr_3b_label}}</span>
+                                        <span *ngIf="returnType === GstReport.Gstr2">{{
+                                            localeData?.gstr2_label
+                                        }}</span>
+                                        <span *ngIf="returnType === GstReport.Gstr1">{{
+                                            localeData?.gstr1_label
+                                        }}</span>
+                                        <span *ngIf="returnType === GstReport.Gstr3b">{{
+                                            localeData?.gstr_3b_label
+                                        }}</span>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="padd15 white-bg">
-
                                 <div class="row mt-1">
-
                                     <div class="col-lg-6 col-md-6 col-xs-6 col-sm-6">
                                         <label [innerHTML]="localeData?.type_submit"></label>
                                     </div>
 
                                     <div class="col-lg-6 col-md-6 col-xs-6 col-sm-6">
-                                        <input type="text" class="form-control" [(ngModel)]="submitGstForm.txtVal">
+                                        <input type="text" class="form-control" [(ngModel)]="submitGstForm.txtVal" />
                                     </div>
-
                                 </div>
 
                                 <div class="row mt-2">
-
                                     <div class="col-xs-12 col-md-12 col-lg-12 col-sm-12 d-flex">
                                         <span class="mr-1">
-                                            <input type="checkbox" [(ngModel)]="submitGstForm.isAccepted"
-                                                id="submitGstFormIsAccepted" />
+                                            <input
+                                                type="checkbox"
+                                                [(ngModel)]="submitGstForm.isAccepted"
+                                                id="submitGstFormIsAccepted"
+                                            />
                                         </span>
                                         <label for="submitGstFormIsAccepted">
                                             <em>
-                                                {{localeData?.aside_menu?.gst_form_acceptance}}
+                                                {{ localeData?.aside_menu?.gst_form_acceptance }}
                                             </em>
                                         </label>
                                     </div>
-
                                 </div>
                             </div>
 
                             <div class="mt-1">
-
-                                <button class="btn btn-success" [ladda]="gstReturnInProcess" (click)="submitGstReturn()"
-                                    [disabled]="!submitGstForm.isAccepted">{{commonLocaleData?.app_proceed}}
+                                <button
+                                    class="btn btn-success"
+                                    [ladda]="gstReturnInProcess"
+                                    (click)="submitGstReturn()"
+                                    [disabled]="!submitGstForm.isAccepted"
+                                >
+                                    {{ commonLocaleData?.app_proceed }}
                                 </button>
-                                <button class="btn btn-default" (click)="toggleCancelModel()">{{commonLocaleData?.app_cancel}}</button>
-
+                                <button class="btn btn-default" (click)="toggleCancelModel()">
+                                    {{ commonLocaleData?.app_cancel }}
+                                </button>
                             </div>
                         </div>
                         <!-- endregion -->
-
                     </div>
                     <!-- endregion -->
-
                 </div>
-
             </div>
         </div>
     </div>

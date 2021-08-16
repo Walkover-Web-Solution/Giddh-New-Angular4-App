@@ -129,6 +129,7 @@ label {
     margin-top: -20px;
     padding-top: 20px;
 }
+
 // my css
 
 @media (min-width: 768px) {
@@ -150,5 +151,10 @@ label {
         table {
             margin-top: 0;
         }
+    }
+}
+@media (max-width: 767px) {
+    .custom-tabs::ng-deep .nav-tabs {
+        position: fixed !important;
     }
 }

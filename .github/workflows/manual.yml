@@ -134,63 +134,127 @@ jobs:
           LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
           LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
           RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
+#   notify-success:
+#     if: ${{ success() }}
+#     needs: release
+#     name: Slack Notification Success
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Slack Notification Success TEST
+#         if: ${{ github.event.inputs.environment == 'test' }}
+#         uses: rtCamp/action-slack-notify@v2
+#         env:
+#           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+#           SLACK_CHANNEL: ${{ secrets.SLACK_UI_BUILDS_CHANNEL_ID }}
+#           SLACK_COLOR: "#4CAF50" # or a specific color like 'green' or '#ff00ff'
+#           SLACK_MESSAGE: "${{ github.event.inputs.note }}. Build download URL: Windows - https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh+Setup+${{ github.event.inputs.version }}.exe | Mac - https://s3-ap-south-1.amazonaws.com/giddh-app-builds-test/giddh-${{ github.event.inputs.version }}.dmg"
+#           SLACK_FOOTER: ''
+#           SLACK_TITLE: Giddh Desktop build for testing
+#           SLACK_USERNAME: Giddh Desktop build
+#           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+#       - name: Slack Notification Success PROD
+#         if: ${{ github.event.inputs.environment == 'prod' }}
+#         uses: rtCamp/action-slack-notify@v2
+#         env:
+#           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+#           SLACK_CHANNEL: ${{ secrets.SLACK_ELECTRON_BUILDS_CHANNEL_ID }}
+#           SLACK_COLOR: "#4CAF50" # or a specific color like 'green' or '#ff00ff'
+#           SLACK_MESSAGE: "${{ github.event.inputs.note }}. Build download URL: Mac - https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-${{ github.event.inputs.version }}.dmg"
+#           SLACK_FOOTER: ''
+#           SLACK_TITLE: Giddh Desktop build deployment to PROD
+#           SLACK_USERNAME: Giddh Desktop build
+#           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+#   notify-failure:
+#     if: ${{ failure() }}
+#     needs: release
+#     name: Slack Notification Failure
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Slack Notification Failure TEST
+#         if: ${{ github.event.inputs.environment == 'test' }}
+#         uses: rtCamp/action-slack-notify@v2
+#         env:
+#           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+#           SLACK_CHANNEL: ${{ secrets.SLACK_UI_BUILDS_CHANNEL_ID }}
+#           SLACK_COLOR: "#e53935" # or a specific color like 'red' or '#ff00ff'
+#           SLACK_MESSAGE: "Build failed"
+#           SLACK_FOOTER: ''
+#           SLACK_TITLE: Giddh Desktop build for testing
+#           SLACK_USERNAME: Giddh Desktop build
+#           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+#       - name: Slack Notification Failure PROD
+#         if: ${{ github.event.inputs.environment == 'prod' }}
+#         uses: rtCamp/action-slack-notify@v2
+#         env:
+#           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+#           SLACK_CHANNEL: ${{ secrets.SLACK_ELECTRON_BUILDS_CHANNEL_ID }}
+#           SLACK_COLOR: "#e53935" # or a specific color like 'red' or '#ff00ff'
+#           SLACK_MESSAGE: "Build failed"
+#           SLACK_FOOTER: ''
+#           SLACK_TITLE: Giddh Desktop build deployment to PROD
+#           SLACK_USERNAME: Giddh Desktop build
+#           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
   notify-success:
     if: ${{ success() }}
     needs: release
-    name: Slack Notification Success
+    name: Email Notification Success
     runs-on: ubuntu-latest
     steps:
-      - name: Slack Notification Success TEST
+      - name: Email Notification Success TEST
         if: ${{ github.event.inputs.environment == 'test' }}
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: ${{ secrets.SLACK_UI_BUILDS_CHANNEL_ID }}
-          SLACK_COLOR: "#4CAF50" # or a specific color like 'green' or '#ff00ff'
-          SLACK_MESSAGE: "${{ github.event.inputs.note }}. Build download URL: Windows - https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh+Setup+${{ github.event.inputs.version }}.exe | Mac - https://s3-ap-south-1.amazonaws.com/giddh-app-builds-test/giddh-${{ github.event.inputs.version }}.dmg"
-          SLACK_FOOTER: ''
-          SLACK_TITLE: Giddh Desktop build for testing
-          SLACK_USERNAME: Giddh Desktop build
-          SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
-      - name: Slack Notification Success PROD
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{secrets.GIDDH_BUILDS_USERNAME}}
+          password: ${{secrets.GIDDH_BUILDS_PASSWORD}}
+          subject: ${{ github.actor }} - ${{ github.workflow }} job ${{ job.status }}
+          to: ${{ secrets.GIDDH_BUILDS_RECIPIENTS }}
+          bcc: $ {{ secrets.GIDDH_BUILDS_BCC_RECIPIENTS }}
+          from: Giddh Builds
+          body: Job in workflow ${{ github.workflow }} ${{ env.BUILD_ENV }} of ${{ github.repository }} has ${{ job.status }}. ${{ github.event.inputs.note }}. Build download URL:- Windows - https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh+Setup+${{ github.event.inputs.version }}.exe | Mac - https://s3-ap-south-1.amazonaws.com/giddh-app-builds-test/giddh-${{ github.event.inputs.version }}.dmg, Commit - https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App/commit/${{ github.sha }}
+      - name: Email Notification Success PROD
         if: ${{ github.event.inputs.environment == 'prod' }}
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: ${{ secrets.SLACK_ELECTRON_BUILDS_CHANNEL_ID }}
-          SLACK_COLOR: "#4CAF50" # or a specific color like 'green' or '#ff00ff'
-          SLACK_MESSAGE: "${{ github.event.inputs.note }}. Build download URL: Mac - https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-${{ github.event.inputs.version }}.dmg"
-          SLACK_FOOTER: ''
-          SLACK_TITLE: Giddh Desktop build deployment to PROD
-          SLACK_USERNAME: Giddh Desktop build
-          SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{secrets.GIDDH_BUILDS_USERNAME}}
+          password: ${{secrets.GIDDH_BUILDS_PASSWORD}}
+          subject: ${{ github.actor }} - ${{ github.workflow }} job ${{ job.status }}
+          to: ${{ secrets.GIDDH_BUILDS_RECIPIENTS }}
+          bcc: $ {{ secrets.GIDDH_BUILDS_BCC_RECIPIENTS }}
+          from: Giddh Builds
+          body: Job in workflow ${{ github.workflow }} ${{ env.BUILD_ENV }} of ${{ github.repository }} has ${{ job.status }}. ${{ github.event.inputs.note }}. Build download URL:- Mac - https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-${{ github.event.inputs.version }}.dmg, Commit - https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App/commit/${{ github.sha }}
   notify-failure:
     if: ${{ failure() }}
     needs: release
-    name: Slack Notification Failure
+    name: Email Notification Failure
     runs-on: ubuntu-latest
     steps:
-      - name: Slack Notification Failure TEST
+      - name: Email Notification Failure TEST
         if: ${{ github.event.inputs.environment == 'test' }}
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: ${{ secrets.SLACK_UI_BUILDS_CHANNEL_ID }}
-          SLACK_COLOR: "#e53935" # or a specific color like 'red' or '#ff00ff'
-          SLACK_MESSAGE: "Build failed"
-          SLACK_FOOTER: ''
-          SLACK_TITLE: Giddh Desktop build for testing
-          SLACK_USERNAME: Giddh Desktop build
-          SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
-      - name: Slack Notification Failure PROD
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{secrets.GIDDH_BUILDS_USERNAME}}
+          password: ${{secrets.GIDDH_BUILDS_PASSWORD}}
+          subject: ${{ github.actor }} - ${{ github.workflow }} job ${{ job.status }}
+          to: ${{ secrets.GIDDH_BUILDS_RECIPIENTS }}
+          bcc: $ {{ secrets.GIDDH_BUILDS_BCC_RECIPIENTS }}
+          from: Giddh Builds
+          body: Job in workflow ${{ github.workflow }} ${{ env.BUILD_ENV }} of ${{ github.repository }} has ${{ job.status }}. Commit - https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App/commit/${{ github.sha }}
+      - name: Email Notification Failure PROD
         if: ${{ github.event.inputs.environment == 'prod' }}
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: ${{ secrets.SLACK_ELECTRON_BUILDS_CHANNEL_ID }}
-          SLACK_COLOR: "#e53935" # or a specific color like 'red' or '#ff00ff'
-          SLACK_MESSAGE: "Build failed"
-          SLACK_FOOTER: ''
-          SLACK_TITLE: Giddh Desktop build deployment to PROD
-          SLACK_USERNAME: Giddh Desktop build
-          SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{secrets.GIDDH_BUILDS_USERNAME}}
+          password: ${{secrets.GIDDH_BUILDS_PASSWORD}}
+          subject: ${{ github.actor }} - ${{ github.workflow }} job ${{ job.status }}
+          to: ${{ secrets.GIDDH_BUILDS_RECIPIENTS }}
+          bcc: $ {{ secrets.GIDDH_BUILDS_BCC_RECIPIENTS }}
+          from: Giddh Builds
+          body: Job in workflow ${{ github.workflow }} ${{ env.BUILD_ENV }} of ${{ github.repository }} has ${{ job.status }}. Commit - https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App/commit/${{ github.sha }}

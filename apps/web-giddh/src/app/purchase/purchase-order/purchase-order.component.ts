@@ -804,7 +804,7 @@ export class PurchaseOrderComponent implements OnDestroy {
             text = this.localeData?.delayed_by_days;
             text = text?.replace("[DAYS]", String(this.formatNumber(dueDays)));
         }
-        
+
         return text;
     }
 }

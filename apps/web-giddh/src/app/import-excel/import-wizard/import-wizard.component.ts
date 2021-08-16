@@ -1,13 +1,10 @@
-import { select, Store } from '@ngrx/store';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AppState } from '../../store';
-import { ImportExcelActions } from '../../actions/import-excel/import-excel.actions';
-import { ImportExcelRequestStates, ImportExcelState } from '../../store/import-excel/import-excel.reducer';
-import { ImportExcelRequestData, ImportExcelResponseData, UploadExceltableResponse } from '../../models/api-models/import-excel';
+import { ImportExcelRequestData, ImportExcelRequestStates, ImportExcelResponseData, ImportExcelState, ImportExcelStatusPaginatedResponse, UploadExceltableResponse } from '../../models/api-models/import-excel';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ImportExcelService } from '../../services/import-excel.service';
 
 @Component({
     selector: 'import-wizard',
@@ -37,12 +34,11 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
 
     constructor(
-        private store: Store<AppState>,
-        private _router: Router,
-        private _activatedRoute: ActivatedRoute,
-        private _importActions: ImportExcelActions,
-        private _cdRef: ChangeDetectorRef,
-        private _toaster: ToasterService
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
+        private importExcelService: ImportExcelService,
+        private cdRef: ChangeDetectorRef,
+        private toaster: ToasterService
     ) {
     }
 
@@ -58,7 +54,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
         if (excelState.requestState === ImportExcelRequestStates.ProcessImportSuccess) {
             // if rows grater then 400 rows show report page
             if (this.excelState.importResponse.message) {
-                this._toaster.successToast(this.excelState.importResponse.message);
+                this.toaster.successToast(this.excelState.importResponse.message);
                 this.showReport();
             } else {
                 // go to import success page
@@ -75,9 +71,14 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this._activatedRoute.url.pipe(takeUntil(this.destroyed$)).subscribe(p => this.entity = p[0].path);
-        this.store.pipe(select(p => p.importExcel), takeUntil(this.destroyed$))
-            .subscribe(this.dataChanged);
+        this.activatedRoute.url.pipe(takeUntil(this.destroyed$)).subscribe(p => this.entity = p[0].path);
+
+        const importStatusRequest: ImportExcelStatusPaginatedResponse = new ImportExcelStatusPaginatedResponse();
+
+        this.excelState = {
+            requestState: ImportExcelRequestStates.Default,
+            importStatus: importStatusRequest
+        };
     }
 
     public ngOnDestroy() {
@@ -86,18 +87,33 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
     }
 
     public onFileUpload(data: any) {
+        this.isUploadInProgress = true;
         this.currentBranch = data.branchUniqueName;
-        this.store.dispatch(this._importActions.uploadFileRequest(this.entity, data));
+        this.excelState.requestState = ImportExcelRequestStates.UploadFileInProgress;
+        this.importExcelService.uploadFile(this.entity, data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.isUploadInProgress = false;
+
+            if (response?.status === "success") {
+                this.excelState.requestState = ImportExcelRequestStates.UploadFileSuccess;
+                this.excelState.importExcelData = { ...response.body, isHeaderProvided: true };
+                this.dataChanged(this.excelState);
+            } else {
+                this.excelState.requestState = ImportExcelRequestStates.UploadFileError;
+                this.excelState.importExcelData = null;
+                this.dataChanged(this.excelState);
+                this.toaster.errorToast(response?.message);
+            }
+        });
     }
 
     public onContinueUpload(e) {
-        this._router.navigate(['/pages/import/select']);
+        this.router.navigate(['/pages/import/select']);
     }
 
     public onNext(importData: ImportExcelResponseData) {
         this.mappedData = importData;
-        if (!this._cdRef['destroyed']) {
-            this._cdRef.detectChanges();
+        if (!this.cdRef['destroyed']) {
+            this.cdRef.detectChanges();
         }
     }
 
@@ -111,13 +127,27 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
     }
 
     public showReport() {
-        this._router.navigate(['/pages', 'import', 'report', 'import-report']);
+        this.router.navigate(['/pages', 'import', 'report', 'import-report']);
     }
 
     public onSubmit(data: ImportExcelRequestData) {
         if (this.currentBranch) {
             data.branchUniqueName = this.currentBranch;
         }
-        this.store.dispatch(this._importActions.processImportRequest(this.entity, data));
+        this.excelState.requestState = ImportExcelRequestStates.ProcessImportInProgress;
+        this.importExcelService.processImport(this.entity, data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === 'error') {
+                this.toaster.errorToast(response.message);
+                this.excelState.importResponse = null;
+                this.excelState.requestState = ImportExcelRequestStates.ProcessImportError;
+            } else {
+                if (typeof response?.body === 'string') {
+                    this.toaster.successToast(response?.body);
+                }
+                this.excelState.importResponse = response?.body;
+                this.excelState.requestState = ImportExcelRequestStates.ProcessImportSuccess;
+            }
+            this.dataChanged(this.excelState);
+        });
     }
 }

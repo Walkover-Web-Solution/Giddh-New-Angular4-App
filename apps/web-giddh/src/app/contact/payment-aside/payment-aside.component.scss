@@ -159,13 +159,14 @@ form label {
         .amount-remark-section {
             padding: 15px;
             width: 100%;
+            padding-top: 0px;
             .form-group {
                 margin-bottom: 0;
             }
             .remark-block {
                 width: 100%;
                 textarea {
-                    min-height: 36px;
+                    min-height: 80px;
                 }
             }
         }
@@ -190,9 +191,7 @@ form label {
     }
 }
 @media (max-width: 767px) {
-    .selected-bank-details 
-    .bank-details-wrapper 
-    .readonly-bank-details {
+    .selected-bank-details .bank-details-wrapper .readonly-bank-details {
         max-width: 100% !important;
     }
 

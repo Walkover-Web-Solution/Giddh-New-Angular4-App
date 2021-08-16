@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { ExpencesAction } from '../../../actions/expences/expence.action';
 import { ToasterService } from '../../../services/toaster.service';
 import { takeUntil } from 'rxjs/operators';
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
@@ -16,21 +15,19 @@ import * as moment from 'moment/moment';
     templateUrl: './rejected-list.component.html',
     styleUrls: ['./rejected-list.component.scss'],
 })
-
 export class RejectedListComponent implements OnInit, OnChanges {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /** Taking report as input */
+    @Input() public pettyCashRejectedReportResponse: PettyCashReportResponse = null;
+    /** True if report loading in process */
+    @Input() public isPettyCashRejectedReportLoading: boolean = false;
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public pettycashRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
-
     public RejectedItems: ExpenseResults[] = [];
-    public totalRejectedResponse: PettyCashReportResponse;
     public expensesItems$: Observable<ExpenseResults[]>;
-    public pettycashRejectedReportResponse$: Observable<PettyCashReportResponse>;
-    public getPettycashRejectedReportInprocess$: Observable<boolean>;
-    public getPettycashRejectedReportSuccess$: Observable<boolean>;
     public universalDate$: Observable<any>;
     public todaySelected: boolean = false;
     public todaySelected$: Observable<boolean> = observableOf(false);
@@ -39,17 +36,19 @@ export class RejectedListComponent implements OnInit, OnChanges {
     @Output() public isFilteredSelected: EventEmitter<boolean> = new EventEmitter();
     /** This will emit the from and to date returned by api */
     @Output() public reportDates: EventEmitter<any> = new EventEmitter();
+    /** This will emit the filter object to reload the report */
+    @Output() public reloadPendingReportList: EventEmitter<any> = new EventEmitter();
+    /** This will emit the filter object to reload the report */
+    @Output() public reloadReportList: EventEmitter<any> = new EventEmitter();
 
-    constructor(private store: Store<AppState>,
-        private _expenceActions: ExpencesAction,
-        private _toasty: ToasterService,
-        private _cdRf: ChangeDetectorRef,
-        private expenseService: ExpenseService) {
+    constructor(
+        private store: Store<AppState>,
+        private toasty: ToasterService,
+        private cdRf: ChangeDetectorRef,
+        private expenseService: ExpenseService
+    ) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         this.todaySelected$ = this.store.pipe(select(p => p.session.todaySelected), takeUntil(this.destroyed$));
-        this.pettycashRejectedReportResponse$ = this.store.pipe(select(p => p.expense.pettycashRejectedReport), takeUntil(this.destroyed$));
-        this.getPettycashRejectedReportInprocess$ = this.store.pipe(select(p => p.expense.getPettycashRejectedReportInprocess), takeUntil(this.destroyed$));
-        this.getPettycashRejectedReportSuccess$ = this.store.pipe(select(p => p.expense.getPettycashRejectedReportSuccess), takeUntil(this.destroyed$));
 
         observableCombineLatest([this.universalDate$, this.todaySelected$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             if (!Array.isArray(resp[0])) {
@@ -72,25 +71,14 @@ export class RejectedListComponent implements OnInit, OnChanges {
     }
 
     public ngOnInit() {
-        this.pettycashRejectedReportResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res) {
-                this.totalRejectedResponse = res;
-                this.RejectedItems = res.results;
-                this.reportDates.emit([res.fromDate, res.toDate]);
-                setTimeout(() => {
-                    this.detectChanges();
-                }, 400);
-            }
-        });
-
+        this.getReportResponse();
     }
 
     public getPettyCashRejectedReports(SalesDetailedfilter: CommonPaginatedRequest) {
         SalesDetailedfilter.status = 'rejected';
         SalesDetailedfilter.sort = this.pettycashRequest.sort;
         SalesDetailedfilter.sortBy = this.pettycashRequest.sortBy;
-        this.store.dispatch(this._expenceActions.GetPettycashRejectedReportRequest(SalesDetailedfilter));
-
+        this.reloadReportList.emit(SalesDetailedfilter);
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -98,6 +86,10 @@ export class RejectedListComponent implements OnInit, OnChanges {
             if (changes['isClearFilter'].currentValue) {
                 this.clearFilter();
             }
+        }
+
+        if(changes['pettyCashRejectedReportResponse'] && changes['pettyCashRejectedReportResponse'].currentValue) {
+            this.getReportResponse();
         }
     }
 
@@ -112,36 +104,28 @@ export class RejectedListComponent implements OnInit, OnChanges {
         this.actionPettycashRequest.uniqueName = item.uniqueName;
         this.expenseService.actionPettycashReports(this.actionPettycashRequest, {}).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res.status === 'success') {
-                this._toasty.successToast(res.body);
+                this.toasty.successToast(res.body);
                 this.getPettyCashRejectedReports(this.pettycashRequest);
                 this.getPettyCashPendingReports(this.pettycashRequest);
             } else {
-                this._toasty.successToast(res.message);
+                this.toasty.successToast(res.message);
             }
         });
     }
 
     public getPettyCashPendingReports(SalesDetailedfilter: CommonPaginatedRequest) {
         SalesDetailedfilter.status = 'pending';
-        this.store.dispatch(this._expenceActions.GetPettycashReportRequest(SalesDetailedfilter));
+        this.reloadPendingReportList.emit(SalesDetailedfilter);
     }
 
     public deleteActionClicked(item: ExpenseResults) {
         this.actionPettycashRequest.actionType = 'delete';
         this.actionPettycashRequest.uniqueName = item.uniqueName;
-        this.expenseService.actionPettycashReports(this.actionPettycashRequest, {}).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res.status === 'success') {
-                this._toasty.successToast(res.body);
-                this.getPettyCashRejectedReports(this.pettycashRequest);
-            } else {
-                this._toasty.successToast(res.message);
-            }
-        });
     }
 
-    public sort(ord: 'asc' | 'desc' = 'asc', key: string) {
+    public sort(order: 'asc' | 'desc' = 'asc', key: string) {
         this.pettycashRequest.sortBy = key;
-        this.pettycashRequest.sort = ord;
+        this.pettycashRequest.sort = order;
         this.getPettyCashRejectedReports(this.pettycashRequest);
     }
 
@@ -154,8 +138,8 @@ export class RejectedListComponent implements OnInit, OnChanges {
     }
 
     detectChanges() {
-        if (!this._cdRf['destroyed']) {
-            this._cdRf.detectChanges();
+        if (!this.cdRf['destroyed']) {
+            this.cdRf.detectChanges();
         }
     }
 
@@ -182,5 +166,37 @@ export class RejectedListComponent implements OnInit, OnChanges {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Gets report response
+     *
+     * @private
+     * @memberof RejectedListComponent
+     */
+    private getReportResponse(): void {
+        if (this.pettyCashRejectedReportResponse) {
+            this.RejectedItems = this.pettyCashRejectedReportResponse.results;
+            this.reportDates.emit([this.pettyCashRejectedReportResponse.fromDate, this.pettyCashRejectedReportResponse.toDate]);
+            setTimeout(() => {
+                this.detectChanges();
+            }, 400);
+        }
+    }
+
+    /**
+     * Deleting the confirmed entry
+     *
+     * @memberof RejectedListComponent
+     */
+    public deleteEntry(): void {
+        this.expenseService.actionPettycashReports(this.actionPettycashRequest, {}).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            if (res.status === 'success') {
+                this.toasty.successToast(res.body);
+                this.getPettyCashRejectedReports(this.pettycashRequest);
+            } else {
+                this.toasty.successToast(res.message);
+            }
+        });
     }
 }

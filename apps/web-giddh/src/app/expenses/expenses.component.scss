@@ -6,7 +6,7 @@
     position: relative;
 }
 .main-expense-details {
-    width: 100%;
+    width: 90%;
     height: calc(100vh - 230px);
     overflow-y: auto;
 }
@@ -36,7 +36,7 @@
     justify-content: center;
     color: $gray;
 }
-.expense-head{
+.expense-head {
     padding-top: 55px;
 }
 @media only screen and (max-width: 767px) {
@@ -46,7 +46,7 @@
     .main-edit-expense {
         display: block;
     }
-    .expense-head{
+    .expense-head {
         padding-top: 20px;
     }
     .input-calender {

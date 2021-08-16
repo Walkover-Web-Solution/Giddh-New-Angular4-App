@@ -1,69 +1,80 @@
 <div class="list-filter">
     <div class="pull-right">
-        <div class="btn-toolbar">
-        </div>
+        <div class="btn-toolbar"></div>
     </div>
 
     <!-- region gstr1 -->
     <div class="list-style row" *ngIf="selectedGst === GstReport.Gstr1">
-
         <div class="wrap-GSTR-1-title col-lg-6 col-sm-8 col-12 xs-mb-1">
             <a href="javascript:void(0);" [routerLink]="['/gstfiling']" class="ember-view">
-                <img src="{{imgPath}}back.svg" class="icon icon-sm text-middle" />
+                <img src="{{ imgPath }}back.svg" class="icon icon-sm text-middle" />
             </a>
-            <img src="{{imgPath}}cart.svg" class="icon gstr-icon text-middle" />
+            <img src="{{ imgPath }}cart.svg" class="icon gstr-icon text-middle" />
 
             <div class="text-middle nav-top">
-                <div class="text-middle head"> {{localeData?.gstr1_label}}
+                <div class="text-middle head">
+                    {{ localeData?.gstr1_label }}
 
                     <ng-container *ngIf="isMonthSelected">
-                        ({{moment(currentPeriod.from, giddhDateFormat).format('MMMM YYYY')}})
+                        ({{ moment(currentPeriod.from, giddhDateFormat).format("MMMM YYYY") }})
                     </ng-container>
                     <ng-container *ngIf="!isMonthSelected">
-                        ({{moment(currentPeriod.from, giddhDateFormat).format('DD MMM YYYY')}} -
-                        {{moment(currentPeriod.to, giddhDateFormat).format('DD MMM YYYY')}})
+                        ({{ moment(currentPeriod.from, giddhDateFormat).format("DD MMM YYYY") }} -
+                        {{ moment(currentPeriod.to, giddhDateFormat).format("DD MMM YYYY") }})
                     </ng-container>
                 </div>
-                <div class="font-xs text-muted text-middle normal">{{localeData?.outward_supplies_details}}</div>
+                <div class="font-xs text-muted text-middle normal">{{ localeData?.outward_supplies_details }}</div>
             </div>
         </div>
-
-
 
         <div class="col-lg-6 col-sm-4 col-12">
             <ul class="list-inline list-middle download-drop-down">
                 <li>
                     <div class="btn-group" dropdown #dropdown="bs-dropdown">
-                        <button dropdownToggle type="button" class="btn dropdown-toggle btn-sky-blue mr-0"><i
-                                class="icon-download"></i> {{commonLocaleData?.app_download}}
+                        <button dropdownToggle type="button" class="btn dropdown-toggle btn-sky-blue mr-0">
+                            <i class="icon-download"></i> {{ commonLocaleData?.app_download }}
                         </button>
-                        <ul id="dropdown-menu_gstr1" *dropdownMenu class="dropdown-menu dropdown-menu-right mt-3"
-                            role="menu" aria-labelledby="button-triggers-manual">
-                            <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)"
-                                    (click)="onDownloadSheetGSTR('main')">{{localeData?.filing?.download_sheet}}</a></li>
-                            <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)"
-                                    (click)="onDownloadSheetGSTR('error')">{{localeData?.filing?.download_error_sheet}}</a></li>
+                        <ul
+                            id="dropdown-menu_gstr1"
+                            *dropdownMenu
+                            class="dropdown-menu dropdown-menu-right mt-3"
+                            role="menu"
+                            aria-labelledby="button-triggers-manual"
+                        >
+                            <li role="menuitem">
+                                <a
+                                    class="dropdown-item"
+                                    href="javascript:void(0)"
+                                    (click)="onDownloadSheetGSTR('main')"
+                                    >{{ localeData?.filing?.download_sheet }}</a
+                                >
+                            </li>
+                            <li role="menuitem">
+                                <a
+                                    class="dropdown-item"
+                                    href="javascript:void(0)"
+                                    (click)="onDownloadSheetGSTR('error')"
+                                    >{{ localeData?.filing?.download_error_sheet }}</a
+                                >
+                            </li>
                         </ul>
                     </div>
                 </li>
 
                 <li>
-
-                    <div *ngIf="showTaxPro && isCompany">
-
-                        <button class="btn btn-primary authenticate-btn pull-right"
-                            [ngClass]="{'btn-success': gstAuthenticated }"
-                            (click)="toggleSettingAsidePane($event, 'VAYANA')">{{ gstAuthenticated ? localeData?.filing?.authenticated :
-                                localeData?.filing?.authenticate}}
+                    <div *ngIf="showTaxPro && isCompany && showGstFiling">
+                        <button
+                            class="btn btn-primary authenticate-btn pull-right"
+                            [ngClass]="{ 'btn-success': gstAuthenticated }"
+                            (click)="toggleSettingAsidePane($event, 'VAYANA')"
+                        >
+                            {{
+                                gstAuthenticated ? localeData?.filing?.authenticated : localeData?.filing?.authenticate
+                            }}
                         </button>
-
                     </div>
-
                 </li>
-
             </ul>
-
-
         </div>
     </div>
     <!-- endregion -->
@@ -71,71 +82,101 @@
     <!-- region gstr2 -->
     <div class="list-style" *ngIf="selectedGst === GstReport.Gstr2">
         <a href="javascript:void(0);" id="ember1210" class="ember-view" [routerLink]="['/gstfiling']">
-            <img src="{{imgPath}}back.svg" class="icon icon-sm text-middle" />
+            <img src="{{ imgPath }}back.svg" class="icon icon-sm text-middle" />
         </a>
-        <img src="{{imgPath}}bag.svg" class="icon gstr-icon text-middle" />
+        <img src="{{ imgPath }}bag.svg" class="icon gstr-icon text-middle" />
 
         <div class="text-middle nav-top">
-            <div class="text-middle"> {{localeData?.gstr2_label}}
+            <div class="text-middle">
+                {{ localeData?.gstr2_label }}
 
                 <ng-container *ngIf="isMonthSelected">
-                    ({{moment(currentPeriod.from, giddhDateFormat).format('MMMM YYYY')}})
+                    ({{ moment(currentPeriod.from, giddhDateFormat).format("MMMM YYYY") }})
                 </ng-container>
                 <ng-container *ngIf="!isMonthSelected">
-                    ({{moment(currentPeriod.from, giddhDateFormat).format('DD MMM YYYY')}} -
-                    {{moment(currentPeriod.to, giddhDateFormat).format('DD MMM YYYY')}})
+                    ({{ moment(currentPeriod.from, giddhDateFormat).format("DD MMM YYYY") }} -
+                    {{ moment(currentPeriod.to, giddhDateFormat).format("DD MMM YYYY") }})
                 </ng-container>
-
             </div>
-            <div class="font-xs text-muted text-middle normal">{{localeData?.inward_supplies_details}}</div>
+            <div class="font-xs text-muted text-middle normal">{{ localeData?.inward_supplies_details }}</div>
         </div>
 
         <div class="pull-right btn-wrapper-filling-header">
-
             <div class="btn-group d-inline-block" dropdown #dropdown="bs-dropdown">
-                <button dropdownToggle type="button" class="btn dropdown-toggle btn-sky-blue"><i
-                        class="icon-download"></i>
-                    {{commonLocaleData?.app_download}}
+                <button dropdownToggle type="button" class="btn dropdown-toggle btn-sky-blue">
+                    <i class="icon-download"></i>
+                    {{ commonLocaleData?.app_download }}
                 </button>
-                <ul id="dropdown-menu" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
-                    aria-labelledby="button-triggers-manual">
-                    <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)"
-                            (click)="onDownloadSheetGSTR('main')">{{localeData?.filing?.download_sheet}}</a></li>
-                    <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)"
-                            (click)="onDownloadSheetGSTR('error')">{{localeData?.filing?.download_error_sheet}}</a></li>
+                <ul
+                    id="dropdown-menu"
+                    *dropdownMenu
+                    class="dropdown-menu dropdown-menu-right"
+                    role="menu"
+                    aria-labelledby="button-triggers-manual"
+                >
+                    <li role="menuitem">
+                        <a class="dropdown-item" href="javascript:void(0)" (click)="onDownloadSheetGSTR('main')">{{
+                            localeData?.filing?.download_sheet
+                        }}</a>
+                    </li>
+                    <li role="menuitem">
+                        <a class="dropdown-item" href="javascript:void(0)" (click)="onDownloadSheetGSTR('error')">{{
+                            localeData?.filing?.download_error_sheet
+                        }}</a>
+                    </li>
                 </ul>
             </div>
 
-
-            <button class="btn btn-primary pull-right" [ngClass]="{'btn-success': gstAuthenticated }"
-                (click)="toggleSettingAsidePane($event, 'VAYANA')" *ngIf="showTaxPro && isCompany">
-                {{ gstAuthenticated ? localeData?.filing?.authenticated :
-                    localeData?.filing?.authenticate}}
+            <button
+                class="btn btn-primary pull-right"
+                [ngClass]="{ 'btn-success': gstAuthenticated }"
+                (click)="toggleSettingAsidePane($event, 'VAYANA')"
+                *ngIf="showTaxPro && isCompany && showGstFiling"
+            >
+                {{ gstAuthenticated ? localeData?.filing?.authenticated : localeData?.filing?.authenticate }}
             </button>
-            <button class="btn btn-primary pull-right" [disabled]="!gstAuthenticated" (click)="pullFromGstIn($event)"
-                *ngIf="showTaxPro">{{localeData?.filing?.pull_from_gstn}}
+            <button
+                class="btn btn-primary pull-right"
+                [disabled]="!gstAuthenticated"
+                (click)="pullFromGstIn($event)"
+                *ngIf="showTaxPro && showGstFiling"
+            >
+                {{ localeData?.filing?.pull_from_gstn }}
             </button>
         </div>
-
     </div>
     <!-- endregion -->
-
 </div>
 
 <div class="aside-overlay" *ngIf="GstAsidePaneState === 'in'" (click)="toggleSettingAsidePane($event)"></div>
-<gst-aside-menu [selectedService]="selectedService" [returnType]="selectedGst" [class]="GstAsidePaneState"
-    [@slideInOut]="GstAsidePaneState" (closeAsideEvent)="toggleSettingAsidePane($event)" (fileGst)="fileGstReturnV2()"
-    (cancelConfirmationEvent)="cancelConfirmationModel.show()" (fileGstComplete)="closeAsidePane()" [localeData]="localeData" [commonLocaleData]="commonLocaleData"></gst-aside-menu>
-
+<gst-aside-menu
+    [selectedService]="selectedService"
+    [returnType]="selectedGst"
+    [class]="GstAsidePaneState"
+    [@slideInOut]="GstAsidePaneState"
+    (closeAsideEvent)="toggleSettingAsidePane($event)"
+    (fileGst)="fileGstReturnV2()"
+    (cancelConfirmationEvent)="cancelConfirmationModel.show()"
+    (fileGstComplete)="closeAsidePane()"
+    [localeData]="localeData"
+    [commonLocaleData]="commonLocaleData"
+></gst-aside-menu>
 
 <!-- region cancel confirmation modal -->
-<div bsModal #cancelConfirmationModel="bs-modal" class="modal z-index-for-aside fade" role="dialog"
-    [config]="{ ignoreBackdropClick: true }">
+<div
+    bsModal
+    #cancelConfirmationModel="bs-modal"
+    class="modal z-index-for-aside fade"
+    role="dialog"
+    [config]="{ ignoreBackdropClick: true }"
+>
     <div class="modal-dialog modal-md second">
         <div class="modal-content">
-            <confirm-modal [body]="localeData?.filing?.cancel_title"
-                (successCallBack)="cancelConfirmationModel.hide();toggleSettingAsidePane(null);"
-                (cancelCallBack)="cancelConfirmationModel.hide()"></confirm-modal>
+            <confirm-modal
+                [body]="localeData?.filing?.cancel_title"
+                (successCallBack)="cancelConfirmationModel.hide(); toggleSettingAsidePane(null)"
+                (cancelCallBack)="cancelConfirmationModel.hide()"
+            ></confirm-modal>
         </div>
     </div>
 </div>

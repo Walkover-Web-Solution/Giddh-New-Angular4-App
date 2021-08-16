@@ -204,6 +204,7 @@ table.ledger-footer-1 td[class*="col-"] {
     font-family: " opensans-semibold ";
     text-transform: capitalize;
 }
+
 .ledger-footer-1 {
     position: absolute;
     bottom: 0;
@@ -259,7 +260,7 @@ table.ledger-footer-1 td[class*="col-"] {
     text-align: center;
 }
 .pagination > li > a:hover {
-    color: $cinnabar-orange;
+    color: $midnight-blue;
 }
 .ledger-panel label {
     font-weight: 400;
@@ -360,6 +361,7 @@ table.ledger-footer-1 td[class*="col-"] {
         padding-left: 7px !important;
     }
 }
+
 input[type="date"]::-webkit-inner-spin-button,
 input[type="date"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -378,7 +380,7 @@ sh-select:focus {
     outline: 1px $cinnabar-orange solid;
 }
 .notfound-option.active {
-    background: $lavender !important;
+    background: $lavender-light !important;
     padding: 2px 5px !important;
 }
 .amount-total {
@@ -441,7 +443,6 @@ sh-select:focus {
 .left-col-new table.width-100.h-table#blank-ledger-container .no-left-border {
     border-left: none !important;
 }
-
 .ledger-book .ledger-footer-1 .total-col .border-top {
     border-top: 1px solid $gainsboro !important;
 }
@@ -807,6 +808,9 @@ sh-select:focus {
         line-height: normal;
     }
 }
+.show-if-ledger-open {
+    height: 300px;
+}
 @media only screen and (max-width: 1540px) {
     .modal-ledger {
         width: 85%;
@@ -821,6 +825,10 @@ sh-select:focus {
     }
     .show-if-update-ledger-open {
         height: 230px;
+    }
+    .debit-credit-amount {
+        display: flex !important;
+        flex-direction: column !important;
     }
 }
 
@@ -893,6 +901,9 @@ sh-select:focus {
     .download-invoice-ledger {
         position: absolute !important;
     }
+    .download-invoice-ledger {
+        position: absolute !important;
+    }
 }
 @media only screen and (max-width: 991px) {
     .stat-block {
@@ -907,7 +918,7 @@ sh-select:focus {
         margin-bottom: 0;
     }
     .amount-total {
-        background: $whisper-color;
+        background: $whisper-light;
     }
     .page-count {
         width: 100% !important;
@@ -1176,7 +1187,6 @@ sh-select:focus {
         }
     }
 }
-
 @media (min-width: 768px) and (max-width: 991px) {
     .ledger-datepicker {
         img {

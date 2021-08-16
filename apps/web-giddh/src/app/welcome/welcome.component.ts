@@ -174,6 +174,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     /** Item details to be pre-filled in welcome form */
     @Input() itemDetails: any;
+    /** True if API is in progress */
+    @Input() isApiInProgress: boolean;
 
     /** States dropdown instance */
     @ViewChild('states', { static: true }) statesDropdown: ShSelectComponent;
@@ -236,7 +238,11 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.isOnBoardingInProgress = this.itemOnBoardingDetails && this.itemOnBoardingDetails.isOnBoardingInProgress;
                 this.isItemUpdateInProgress = this.itemOnBoardingDetails && this.itemOnBoardingDetails.isItemUpdateInProgress;
             });
-
+        this.store.pipe(select(state => state.warehouse), takeUntil(this.destroyed$)).subscribe((warehouseDetails: any) => {
+            if (warehouseDetails) {
+                this.isApiInProgress = false;
+            }
+        });
         this.store.pipe(select(appState => appState.session.isCompanyCreationInProcess), takeUntil(this.destroyed$)).subscribe(data => {
             this.isCreateCompanyInProgress = data;
         });
@@ -420,6 +426,9 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         }
         if (isWelcomeFormValid) {
+            if (this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
+                this.isApiInProgress = true;
+            }
             this.nextButtonClicked.emit({
                 welcomeForm,
                 otherData: {

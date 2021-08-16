@@ -1,5 +1,4 @@
 <div class="aside-pane">
-
     <div class="form-header" *ngIf="!hideFirstScreen">
         <h3>Create</h3>
     </div>
@@ -7,7 +6,7 @@
     <button id="close" (click)="closeAsidePane()" *ngIf="!hideFirstScreen"><i class="icon-cross"></i></button>
     <button id="back" (click)="backButtonPressed()" *ngIf="hideFirstScreen">Back</button>
 
-    <div class="aside-body flexy-child vertical-align-middle aside-panel-ledger " *ngIf="!hideFirstScreen" vr-item>
+    <div class="aside-body flexy-child vertical-align-middle aside-panel-ledger" *ngIf="!hideFirstScreen" vr-item>
         <div class="pb-3 text-center">
             <button class="btn btn-lg btn-primary" (click)="toggleStockPane()">Create Stock</button>
         </div>
@@ -22,14 +21,17 @@
         </div>
     </div>
 
-    <div class="aside-body flexy-child-1 " *ngIf="isAddStockOpen">
-        <inventory-add-stock [autoFocusInChild]="autoFocusOnChild" [addStock]="true"
-            (closeAsideEvent)="closeAsidePane($event)"></inventory-add-stock>
+    <div class="aside-body flexy-child-1" *ngIf="isAddStockOpen">
+        <inventory-add-stock
+            [autoFocusInChild]="autoFocusOnChild"
+            [addStock]="true"
+            (closeAsideEvent)="closeAsidePane($event)"
+        ></inventory-add-stock>
     </div>
-    <div class="aside-body flexy-child-1 " *ngIf="isAddGroupOpen">
+    <div class="aside-body flexy-child-1" *ngIf="isAddGroupOpen">
         <inventory-add-group [addGroup]="true" (closeAsideEvent)="closeAsidePane($event)"></inventory-add-group>
     </div>
-    <div class="aside-body flexy-child-1 " *ngIf="isAddUnitOpen">
+    <div class="aside-body flexy-child-1" *ngIf="isAddUnitOpen">
         <inventory-custom-stock [isAsideClose]="asideClose" (closeAsideEvent)="closeAsidePane($event)">
         </inventory-custom-stock>
     </div>

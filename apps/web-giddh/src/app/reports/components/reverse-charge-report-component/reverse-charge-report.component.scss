@@ -69,7 +69,6 @@
     }
 }
 @media screen and (max-width: 575px) {
-
     .input-grp-date-range-picker {
         .input-group.flex-nowrap {
             flex-wrap: wrap !important;
@@ -107,7 +106,7 @@
     }
 }
 
-@media (min-width: 769px){
+@media (min-width: 769px) {
     .table-responsive {
         max-height: calc(100vh - 250px);
         overflow-y: auto;

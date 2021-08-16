@@ -6,7 +6,7 @@ export const environment: Environment = {
     production: true,
     showDevModule: true,
     AppUrl: 'http://localhost:4200/',
-    ApiUrl: 'https://apitest.giddh.com/',
+    ApiUrl: 'https://api.giddh.com/',
     isElectron: true,
     isCordova: false,
     APP_FOLDER: '',

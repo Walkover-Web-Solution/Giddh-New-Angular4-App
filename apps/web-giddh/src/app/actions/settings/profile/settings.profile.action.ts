@@ -12,7 +12,6 @@ import { SETTINGS_PROFILE_ACTIONS } from './settings.profile.const';
 import { SettingsProfileService } from '../../../services/settings.profile.service';
 import { CustomActions } from '../../../store/customActions';
 import { LocaleService } from '../../../services/locale.service';
-import { GeneralService } from '../../../services/general.service';
 
 @Injectable()
 export class SettingsProfileActions {
@@ -136,8 +135,7 @@ export class SettingsProfileActions {
         private localeService: LocaleService,
         private store: Store<AppState>,
         private settingsProfileService: SettingsProfileService,
-        private companyActions: CompanyActions,
-        private generalService: GeneralService) {
+        private companyActions: CompanyActions) {
     }
 
     public GetProfileInfo(): CustomActions {

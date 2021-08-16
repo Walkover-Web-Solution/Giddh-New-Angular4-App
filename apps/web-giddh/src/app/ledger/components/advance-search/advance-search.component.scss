@@ -28,12 +28,12 @@
     padding: 2px;
     top: 0 !important;
 }
-.input-group{
-    input{
+.input-group {
+    input {
         border-top-right-radius: 0px !important;
         border-bottom-right-radius: 0px !important;
     }
-    .input-group-addon{
+    .input-group-addon {
         border-top-left-radius: 0px !important;
         border-bottom-left-radius: 0px !important;
     }
@@ -54,7 +54,7 @@
         margin-bottom: 20px;
     }
     .amount-total {
-        background: $whisper-light;
+        background: $whisper-color;
     }
     .page-count {
         width: 100%;

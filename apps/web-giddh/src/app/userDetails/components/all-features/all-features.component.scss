@@ -1,11 +1,11 @@
 @import "../../../../assets/css/color.scss";
-.modal-header{
+.modal-header {
     padding-left: 20px;
     padding-right: 20px;
 }
-.all-features-list  {
+.all-features-list {
     margin-bottom: 30px;
-    li{
+    li {
         list-style-type: none;
         color: $gray;
         font-size: 12px;
@@ -13,17 +13,17 @@
         line-height: 20px;
         display: flex;
         align-items: center;
-        span{
+        span {
             margin-left: 15px;
         }
-        i.icon-tick{
+        i.icon-tick {
             font-size: 8px;
             float: left;
             margin-right: 0;
             margin-left: 6px;
         }
-        i.icon-back-arrow{
-            transform: rotate( 180deg);
+        i.icon-back-arrow {
+            transform: rotate(180deg);
             display: none;
             font-size: 12px;
             float: left;
@@ -31,23 +31,23 @@
         }
     }
 }
-.money-back-gurantee{
+.money-back-guarantee {
     font-size: 12px;
     background-color: $floral-white;
     color: $cascade;
     padding-left: 20px;
     padding-right: 20px;
 }
-.all-feature-modal{
-    p{
+.all-feature-modal {
+    p {
         color: $midnight-blue;
         margin-bottom: 10px;
-        i{
+        i {
             font-size: 21px;
             color: $midnight-blue;
         }
     }
-    [class*='col-']{
+    [class*="col-"] {
         padding: 0 10px;
     }
 }

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, On
 import { VirtualScrollComponent } from './virtual-scroll';
 import { IOption } from './sh-options.interface';
 import { isEqual } from '../../lodash-optimized';
+import { SELECT_ALL_RECORDS } from '../../app.constant';
 
 @Component({
     selector: 'sh-select-menu',
@@ -23,14 +24,14 @@ export class ShSelectMenuComponent implements OnChanges {
     @Input() public dropdownMinHeight: number;
     @Input() public showNotFoundLinkAsDefault: boolean;
     @Input() public noResultLinkTemplate: TemplateRef<any>;
-    @Input() public showCheckbox: boolean = false;
     /** True if field is required */
     @Input() public isRequired: boolean = false;
     /** This will hold searched text */
     @Input() public filter: string = '';
-
     /** True when pagination should be enabled */
     @Input() isPaginationEnabled: boolean;
+    /** True if select all option is checked */
+    @Input() isSelectAllChecked: boolean = false;
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
 
@@ -43,6 +44,8 @@ export class ShSelectMenuComponent implements OnChanges {
     public _rows: IOption[];
     /** This will hold existing data */
     public existingData: IOption[];
+    /** Holds string for select all records */
+    public selectAllRecords: string = SELECT_ALL_RECORDS;
 
     @Input() set rows(val: IOption[]) {
         this._rows = val;
@@ -61,27 +64,25 @@ export class ShSelectMenuComponent implements OnChanges {
         if (changes['isRequired'] && changes['isRequired'].currentValue !== changes['isRequired'].previousValue) {
             this.autoSelectIfSingleValueAvailable();
         }
+
+        if(changes['isSelectAllChecked']) {
+            this.isSelectAllChecked = changes['isSelectAllChecked'].previousValue;
+        }
     }
 
     public toggleSelected(row) {
-        if (this.showCheckbox) {
-            if (row.value === "selectall") {
-                let isSelectAllChecked = this.selectedValues.indexOf(row);
-
-                this._rows.forEach(key => {
-                    if (isSelectAllChecked === -1) {
-                        if (this.selectedValues.indexOf(key) === -1) {
-                            this.noToggleClick.emit(key);
-                        }
-                    } else {
-                        if (this.selectedValues.indexOf(key) !== -1) {
-                            this.noToggleClick.emit(key);
-                        }
+        if (row.value === this.selectAllRecords) {
+            this._rows.forEach(key => {
+                if (this.isSelectAllChecked) {
+                    if (this.selectedValues.indexOf(key) !== -1) {
+                        this.noToggleClick.emit(key);
                     }
-                });
-            } else {
-                this.noToggleClick.emit(row);
-            }
+                } else {
+                    if (this.selectedValues.indexOf(key) === -1) {
+                        this.noToggleClick.emit(key);
+                    }
+                }
+            });
         } else {
             if (!row?.disabled) {
                 this.noToggleClick.emit(row);

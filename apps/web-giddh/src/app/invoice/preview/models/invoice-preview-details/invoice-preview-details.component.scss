@@ -240,7 +240,6 @@
     .image-collapsed {
         max-height: 130px;
         overflow: hidden;
-
         img {
             height: auto;
         }
@@ -255,9 +254,9 @@
         // border: 2px dashed #d9d9d9;
         // padding: 10px;
         margin-top: 50px;
-        h5{
+        h5 {
             background-color: $alice-blue-light;
-            strong{
+            strong {
                 color: $midnight-blue;
             }
         }
@@ -433,7 +432,7 @@ span.close-modal.cp.pull-right {
         }
     }
     .invoice-edit-body {
-        padding-bottom: 140px;
+        padding-bottom: 90px;
     }
 }
 
@@ -707,7 +706,6 @@ p {
     background: $nobel;
     border-radius: 20px;
 }
-
 #default body {
     box-sizing: border-box;
     font-size: 12px;
@@ -1104,7 +1102,6 @@ strong {
 }
 
 /*responsive*/
-
 @media (max-width: 1199px) {
     .invoice-search-box input {
         max-width: 180px;
@@ -1180,10 +1177,7 @@ strong {
         height: 12px;
         top: 3px;
     }
-    .invoice-sidebar
-        li.activeItem
-        .invoice-number-date
-        span.invoice-date:before {
+    .invoice-sidebar li.activeItem .invoice-number-date span.invoice-date:before {
         background-color: $gray-95;
     }
     .invoice-preview-sidebar {
@@ -1211,7 +1205,6 @@ strong {
         }
     }
 }
-
 @media (max-width: 991px) {
     .invoice-preview-sidebar {
         display: none;

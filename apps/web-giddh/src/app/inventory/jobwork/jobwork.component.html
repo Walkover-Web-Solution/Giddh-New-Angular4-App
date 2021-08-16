@@ -11,63 +11,74 @@
             <section class="h100">
                 <div class="fb-1-container">
                     <div class="d-flex job-work-content">
-
                         <div class="d-flex form-inline">
                             <h2 class="mr-2 report-info d-inline-block bold text-capitalize font-20">
-                                <span *ngIf="type==='stock'" class="report-info">{{nameStockOrPerson}}</span>&nbsp;<span
-                                    *ngIf="type==='stock'">(Transaction Log)</span>
+                                <span *ngIf="type === 'stock'" class="report-info">{{ nameStockOrPerson }}</span
+                                >&nbsp;<span *ngIf="type === 'stock'">(Transaction Log)</span>
 
-                                <span *ngIf="type==='person'"
-                                    class="report-info"><span>{{nameStockOrPerson}}</span></span>
+                                <span *ngIf="type === 'person'" class="report-info"
+                                    ><span>{{ nameStockOrPerson }}</span></span
+                                >
                             </h2>
                             <div class="form-group margin-datepicker">
-                                <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
+                                <input
+                                    type="text"
+                                    name="daterangeInput"
+                                    daterangepicker
+                                    [options]="datePickerOptions"
                                     class="form-control date-range-picker"
-                                    (applyDaterangepicker)="dateSelected($event)" />
+                                    (applyDaterangepicker)="dateSelected($event)"
+                                />
                             </div>
 
                             <div class="form-group">
                                 <div class="advance-icon align-items-center" tooltip="Advance Search">
                                     <span class="icon-advance-filter" (click)="onOpenAdvanceSearch()"></span>
                                 </div>
-
                             </div>
-
-
-
                         </div>
                         <div class="clear-filter" *ngIf="isFilterCorrect" (click)="resetFilter()">
-                            <button class="btn btn-filter">
-                                <span class="icon-cross"></span> Clear Filter
-                            </button>
+                            <button class="btn btn-filter"><span class="icon-cross"></span> Clear Filter</button>
                         </div>
                         <div class="">
                             <div class="pull-right">
-                                <div class="btn-group " dropdown placement="bottom right">
-                                    <button id="buttonalignment" dropdownToggle type="button"
+                                <div class="btn-group" dropdown placement="bottom right">
+                                    <button
+                                        id="buttonalignment"
+                                        dropdownToggle
+                                        type="button"
                                         class="btn-link mr-b05 cp mr-1 dropdown-toggle"
-                                        aria-controls="dropdown-alignment">
+                                        aria-controls="dropdown-alignment"
+                                    >
                                         <i class="icon-download"></i> Download
                                     </button>
-                                    <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right"
-                                        role="menu" aria-labelledby="button-alignment">
-                                        <li role="menuitem" (click)="downloadJobworkReport('csv')"><a
-                                                class="dropdown-item">Download CSV</a>
+                                    <ul
+                                        id="dropdown-alignment"
+                                        *dropdownMenu
+                                        class="dropdown-menu dropdown-menu-right"
+                                        role="menu"
+                                        aria-labelledby="button-alignment"
+                                    >
+                                        <li role="menuitem" (click)="downloadJobworkReport('csv')">
+                                            <a class="dropdown-item">Download CSV</a>
                                         </li>
-                                        <li role="menuitem" (click)="downloadJobworkReport('xls')"><a
-                                                class="dropdown-item">Download XLS</a>
+                                        <li role="menuitem" (click)="downloadJobworkReport('xls')">
+                                            <a class="dropdown-item">Download XLS</a>
                                         </li>
                                     </ul>
                                 </div>
 
-                                <button class="btn btn-sky-blue mr-0" data-toggle="tooltip" tooltip="Alt+i"
-                                    (click)="toggleTransferAsidePane()">Create
-                                    New
+                                <button
+                                    class="btn btn-sky-blue mr-0"
+                                    data-toggle="tooltip"
+                                    tooltip="Alt+i"
+                                    (click)="toggleTransferAsidePane()"
+                                >
+                                    Create New
                                 </button>
                             </div>
                         </div>
                     </div>
-
                 </div>
 
                 <section class="mr-t15">
@@ -77,73 +88,121 @@
                                 <tr>
                                     <th class="bd-rr" width="120">
                                         <div class="d-flex">
-                                            <div class=""> Date</div>
+                                            <div class="">Date</div>
                                             <div class="icon-pointer">
                                                 <!-- default -->
-                                                <div class="icon-sort-asc text-right "
+                                                <div
+                                                    class="icon-sort-asc text-right"
                                                     *ngIf="filter.sortBy !== 'entry_date'"
                                                     (click)="sortButtonClicked('asc', 'entry_date')"
-                                                    [ngClass]="{'active-text-color': filter.sortBy === 'entry_date' && filter.sort === 'asc'}">
-                                                </div>
+                                                    [ngClass]="{
+                                                        'active-text-color':
+                                                            filter.sortBy === 'entry_date' && filter.sort === 'asc'
+                                                    }"
+                                                ></div>
                                                 <!-- after sort click -->
-                                                <div class="icon-sort-asc text-right"
+                                                <div
+                                                    class="icon-sort-asc text-right"
                                                     *ngIf="filter.sortBy === 'entry_date' && filter.sort === 'desc'"
                                                     (click)="sortButtonClicked('asc', 'entry_date')"
-                                                    [ngClass]="{'active-text-color': filter.sortBy === 'entry_date' && filter.sort === 'desc'}">
-                                                </div>
-                                                <div class="icon-sort-asc text-right "
+                                                    [ngClass]="{
+                                                        'active-text-color':
+                                                            filter.sortBy === 'entry_date' && filter.sort === 'desc'
+                                                    }"
+                                                ></div>
+                                                <div
+                                                    class="icon-sort-asc text-right"
                                                     *ngIf="filter.sortBy === 'entry_date' && filter.sort === 'asc'"
                                                     (click)="sortButtonClicked('desc', 'entry_date')"
-                                                    [ngClass]="{'active-text-color': filter.sortBy === 'entry_date' && filter.sort === 'asc'}">
-                                                </div>
+                                                    [ngClass]="{
+                                                        'active-text-color':
+                                                            filter.sortBy === 'entry_date' && filter.sort === 'asc'
+                                                    }"
+                                                ></div>
                                             </div>
                                         </div>
                                     </th>
-                                    <th class="bd-rr td-search-box" *ngIf="type ==='person'" width="15%"
-                                        (clickOutside)="clickedOutside($event,null, 'product')">
+                                    <th
+                                        class="bd-rr td-search-box"
+                                        *ngIf="type === 'person'"
+                                        width="15%"
+                                        (clickOutside)="clickedOutside($event, null, 'product')"
+                                    >
                                         <div [hidden]="showProductSearch">
                                             <span>Product Name</span>
                                         </div>
                                     </th>
-                                    <th class="bd-rr bd-rb" *ngIf="type ==='stock'" width="15%">
+                                    <th class="bd-rr bd-rb" *ngIf="type === 'stock'" width="15%">
                                         <div class="btn-group btn-group-voucher-type" dropdown placement="bottom right">
-                                            <button id="button-alignment" dropdownToggle type="button"
-                                                class="btn-link btn cp p-0 dropdown-toggle c-3 p-0"
-                                                aria-controls="dropdown-alignment">Voucher Type
-                                                <i class="fa fa-ellipsis-v pull-right text-light-2"
-                                                    aria-hidden="true"></i>
+                                            <button
+                                                id="button-alignment"
+                                                dropdownToggle
+                                                type="button"
+                                                class="btn-link btn cp p-0 dropdown-toggle c-3"
+                                                aria-controls="dropdown-alignment"
+                                            >
+                                                Voucher Type
+                                                <i
+                                                    class="fa fa-ellipsis-v pull-right text-light-2"
+                                                    aria-hidden="true"
+                                                ></i>
                                             </button>
-                                            <ul id="dropdown-alignment" *dropdownMenu
-                                                class="dropdown-menu  dropdown-menu-right voucher-type" role="menu"
-                                                aria-labelledby="button-alignment">
+                                            <ul
+                                                id="dropdown-alignment"
+                                                *dropdownMenu
+                                                class="dropdown-menu dropdown-menu-right voucher-type"
+                                                role="menu"
+                                                aria-labelledby="button-alignment"
+                                            >
                                                 <li role="menuitem dropdown-item" *ngFor="let item of VOUCHER_TYPES">
-                                                    <label><input type="checkbox" [(ngModel)]="item.checked"
-                                                            (click)="filterByCheck(item.value, $event.target.checked)" />
-                                                        {{item.label}}</label>
+                                                    <label
+                                                        ><input
+                                                            type="checkbox"
+                                                            [(ngModel)]="item.checked"
+                                                            (click)="filterByCheck(item.value, $event.target.checked)"
+                                                        />
+                                                        {{ item.label }}</label
+                                                    >
                                                 </li>
                                             </ul>
                                         </div>
                                     </th>
-                                    <th class="bd-rr bd-rb td-search-box" width="15%"
-                                        (clickOutside)="clickedOutside($event,null, 'sender')">
+                                    <th
+                                        class="bd-rr bd-rb td-search-box"
+                                        width="15%"
+                                        (clickOutside)="clickedOutside($event, null, 'sender')"
+                                    >
                                         <div [hidden]="showSenderSearch">
                                             <span>Sender's Name</span>
                                             <i class="icon-search" (click)="showSearchBox('sender')"></i>
                                         </div>
                                         <div class="input-container" [hidden]="!showSenderSearch">
-                                            <input type="text" #senderName placeholder="Sender's Name" class="w100"
-                                                [formControl]="senderUniqueNameInput" />
+                                            <input
+                                                type="text"
+                                                #senderName
+                                                placeholder="Sender's Name"
+                                                class="w100"
+                                                [formControl]="senderUniqueNameInput"
+                                            />
                                         </div>
                                     </th>
-                                    <th class="bd-rr bd-rb td-search-box" width="15%"
-                                        (clickOutside)="clickedOutside($event,null, 'receiver')">
+                                    <th
+                                        class="bd-rr bd-rb td-search-box"
+                                        width="15%"
+                                        (clickOutside)="clickedOutside($event, null, 'receiver')"
+                                    >
                                         <div [hidden]="showReceiverSearch">
                                             <span>Receiver's Name</span>
                                             <i class="icon-search" (click)="showSearchBox('receiver')"></i>
                                         </div>
                                         <div class="input-container" [hidden]="!showReceiverSearch">
-                                            <input type="text" #receiverName placeholder="Receiver's Name" class="w100"
-                                                [formControl]="receiverUniqueNameInput" />
+                                            <input
+                                                type="text"
+                                                #receiverName
+                                                placeholder="Receiver's Name"
+                                                class="w100"
+                                                [formControl]="receiverUniqueNameInput"
+                                            />
                                         </div>
                                     </th>
                                     <th class="bd-rr bd-rb">Description</th>
@@ -152,56 +211,78 @@
                                             <div class="flex-fill mr-1">Trading Qty</div>
                                             <div class="icon-pointer">
                                                 <!-- default -->
-                                                <div class="icon-sort-asc text-right "
+                                                <div
+                                                    class="icon-sort-asc text-right"
                                                     *ngIf="filter.sortBy !== 'QUANTITY'"
                                                     (click)="sortButtonClicked('asc', 'QUANTITY')"
-                                                    [ngClass]="{'active-text-color': filter.sortBy === 'QUANTITY' && filter.sort === 'asc'}">
-                                                </div>
+                                                    [ngClass]="{
+                                                        'active-text-color':
+                                                            filter.sortBy === 'QUANTITY' && filter.sort === 'asc'
+                                                    }"
+                                                ></div>
                                                 <!-- after sort click -->
-                                                <div class="icon-sort-asc text-right"
+                                                <div
+                                                    class="icon-sort-asc text-right"
                                                     *ngIf="filter.sortBy === 'QUANTITY' && filter.sort === 'desc'"
                                                     (click)="sortButtonClicked('asc', 'QUANTITY')"
-                                                    [ngClass]="{'active-text-color': filter.sortBy === 'QUANTITY' && filter.sort === 'desc'}">
-                                                </div>
-                                                <div class="icon-sort-asc text-right "
+                                                    [ngClass]="{
+                                                        'active-text-color':
+                                                            filter.sortBy === 'QUANTITY' && filter.sort === 'desc'
+                                                    }"
+                                                ></div>
+                                                <div
+                                                    class="icon-sort-asc text-right"
                                                     *ngIf="filter.sortBy === 'QUANTITY' && filter.sort === 'asc'"
                                                     (click)="sortButtonClicked('desc', 'QUANTITY')"
-                                                    [ngClass]="{'active-text-color': filter.sortBy === 'QUANTITY' && filter.sort === 'asc'}">
-                                                </div>
+                                                    [ngClass]="{
+                                                        'active-text-color':
+                                                            filter.sortBy === 'QUANTITY' && filter.sort === 'asc'
+                                                    }"
+                                                ></div>
                                             </div>
                                         </div>
                                     </th>
                                 </tr>
                             </thead>
 
-                            <tbody *ngIf="inventoryReport && inventoryReport.transactions.length>0">
+                            <tbody *ngIf="inventoryReport && inventoryReport.transactions.length > 0">
                                 <tr *ngFor="let txn of inventoryReport.transactions; let idx = index">
-                                    <td class="bd-rr">{{txn.date}}</td>
-                                    <td class="bd-rr" *ngIf="type ==='person'">{{txn.stock.name}}</td>
-                                    <td class="bd-rr" *ngIf="type ==='stock'">
+                                    <td class="bd-rr">{{ txn.date }}</td>
+                                    <td class="bd-rr" *ngIf="type === 'person'">{{ txn.stock.name }}</td>
+                                    <td class="bd-rr" *ngIf="type === 'stock'">
                                         <!-- in case of stock type -->
-                                        <span
-                                            class="{{txn.jobWorkTransactionType}}">{{txn.jobWorkTransactionType}}</span>
+                                        <span class="{{ txn.jobWorkTransactionType }}">{{
+                                            txn.jobWorkTransactionType
+                                        }}</span>
                                     </td>
-                                    <td class="bd-rr">{{txn.sender.name}}</td>
-                                    <td class="bd-rr">{{txn.receiver.name}}</td>
-                                    <td class="bd-rr" (click)='updateDescriptionIdx = idx'>
-                                        <ng-container *ngIf='updateDescriptionIdx != idx'>
-                                            <div class="stock-description">{{txn.description}}</div>
+                                    <td class="bd-rr">{{ txn.sender.name }}</td>
+                                    <td class="bd-rr">{{ txn.receiver.name }}</td>
+                                    <td class="bd-rr" (click)="updateDescriptionIdx = idx">
+                                        <ng-container *ngIf="updateDescriptionIdx != idx">
+                                            <div class="stock-description">{{ txn.description }}</div>
                                         </ng-container>
-                                        <ng-container *ngIf='updateDescriptionIdx === idx'>
-                                            <input type="text" class='form-control' maxlength='100' autofocus="true"
-                                                placeholder="Enter Description" [(ngModel)]='txn.description'
-                                                (blur)='updateDescription(txn)' />
+                                        <ng-container *ngIf="updateDescriptionIdx === idx">
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                maxlength="100"
+                                                autofocus="true"
+                                                placeholder="Enter Description"
+                                                [(ngModel)]="txn.description"
+                                                (blur)="updateDescription(txn)"
+                                            />
                                         </ng-container>
                                     </td>
-                                    <td class="text-right bd-rr">{{txn.quantity}}<span
-                                            class="unit-badge">{{txn.stockUnit.code}}</span>
+                                    <td class="text-right bd-rr">
+                                        {{ txn.quantity }}<span class="unit-badge">{{ txn.stockUnit.code }}</span>
                                     </td>
                                 </tr>
                             </tbody>
                             <tbody
-                                *ngIf="inventoryReport && inventoryReport.transactions.length<=0 || !inventoryReport">
+                                *ngIf="
+                                    (inventoryReport && inventoryReport.transactions.length <= 0) || !inventoryReport
+                                "
+                            >
                                 <tr>
                                     <td colspan="7" class="text-center empty-table">
                                         <img src="assets/images/search-data-not-found.svg" />
@@ -213,10 +294,16 @@
                                 <tr>
                                     <td colspan="7">
                                         <div class="text-center">
-                                            <pagination [maxSize]="6" [totalItems]="inventoryReport.totalItems"
-                                                [(ngModel)]="inventoryReport.page" [itemsPerPage]="6"
-                                                (pageChanged)="applyFilters($event.page)" class="pagination-sm"
-                                                [boundaryLinks]="true" [rotate]="false"></pagination>
+                                            <pagination
+                                                [maxSize]="6"
+                                                [totalItems]="inventoryReport.totalItems"
+                                                [(ngModel)]="inventoryReport.page"
+                                                [itemsPerPage]="6"
+                                                (pageChanged)="applyFilters($event.page)"
+                                                class="pagination-sm"
+                                                [boundaryLinks]="true"
+                                                [rotate]="false"
+                                            ></pagination>
                                         </div>
                                     </td>
                                 </tr>
@@ -229,11 +316,13 @@
     </section>
 </div>
 
-
 <!-- aside inwards/outwards/transfer pane -->
 <div class="aside-overlay" *ngIf="asideTransferPaneState === 'in'"></div>
-<aside-transfer-pane [class]="asideTransferPaneState" [@slideInOut]="asideTransferPaneState"
-    (closeAsideEvent)="toggleTransferAsidePane()"></aside-transfer-pane>
+<aside-transfer-pane
+    [class]="asideTransferPaneState"
+    [@slideInOut]="asideTransferPaneState"
+    (closeAsideEvent)="toggleTransferAsidePane()"
+></aside-transfer-pane>
 <!-- aside inwards/outwards/transfer pane -->
 
 <!-- Advance search popup -->
@@ -242,36 +331,52 @@
         <div class="modal-content">
             <div class="modal-header theme-bg clearfix">
                 <h3 class="modal-title bg" id="modal-title">Advance Search</h3>
-                <span aria-hidden="true" class="close" data-dismiss="modal"
-                    (click)="advanceSearchAction('cancel')">×</span>
+                <span aria-hidden="true" class="close" data-dismiss="modal" (click)="advanceSearchAction('cancel')"
+                    >×</span
+                >
             </div>
             <div class="modal-body clearfix">
                 <form action="" [formGroup]="advanceSearchForm">
-
                     <div class="row mr-t2">
                         <div class="col-md-4">Trading Qty.</div>
                         <div class="col-md-4">
-                            <sh-select name="entity" (onClear)="clearShSelect('comparisionFilter')"
-                                [options]="COMPARISON_FILTER" (selected)="compareChanged($event)"
-                                [placeholder]="'Select'" #comparisionFilter [multiple]="false">
+                            <sh-select
+                                name="entity"
+                                (onClear)="clearShSelect('comparisionFilter')"
+                                [options]="COMPARISON_FILTER"
+                                (selected)="compareChanged($event)"
+                                [placeholder]="'Select'"
+                                #comparisionFilter
+                                [multiple]="false"
+                            >
                             </sh-select>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" (keyup)="checkFilters()" class="form-control" placeholder="Quantity"
-                                maxlength="10" formControlName="filterAmount">
-                            <small *ngIf="advanceSearchForm.controls['filterAmount'].invalid" class="text-danger">input
-                                number
-                                only
+                            <input
+                                type="text"
+                                (keyup)="checkFilters()"
+                                class="form-control"
+                                placeholder="Quantity"
+                                maxlength="10"
+                                formControlName="filterAmount"
+                            />
+                            <small *ngIf="advanceSearchForm.controls['filterAmount'].invalid" class="text-danger"
+                                >input number only
                             </small>
                         </div>
                     </div>
                     <div class="row mr-t4 mr-b3">
                         <div class="col-12 text-right">
-                            <button class="btn btn-success" type="button"
+                            <button
+                                class="btn btn-success"
+                                type="button"
                                 [disabled]="!isFilterCorrect && !filter.quantity"
-                                (click)="advanceSearchAction('search')">Search
+                                (click)="advanceSearchAction('search')"
+                            >
+                                Search
                             </button>
-                            <button class="btn btn-danger" type="button" (click)="advanceSearchAction('clear')">Clear
+                            <button class="btn btn-danger" type="button" (click)="advanceSearchAction('clear')">
+                                Clear
                             </button>
                         </div>
                     </div>

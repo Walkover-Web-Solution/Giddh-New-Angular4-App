@@ -356,7 +356,7 @@
                 {
                     "label": "खोज",
                     "link": "/pages/search",
-                    "icon": "icon-search-new",
+                    "icon": "icon-search",
                     "description": "समूह का चयन करें और समय अवधि खोजें"
                 }
             ]

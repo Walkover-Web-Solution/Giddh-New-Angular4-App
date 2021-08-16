@@ -411,7 +411,7 @@ export function InvoiceTemplateReducer(state = initialState, action: CustomActio
         case INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT_RESPONSE: {
             let nextState = _.cloneDeep(state);
             let res: BaseResponse<any, string> = action.payload;
-            if (res.status === 'success') {
+            if (res?.status === 'success') {
                 let uniqName = res.queryString.templateUniqueName;
                 let indx = nextState.customCreatedTemplates.findIndex((template) => template.uniqueName === uniqName);
                 if (indx > -1) {

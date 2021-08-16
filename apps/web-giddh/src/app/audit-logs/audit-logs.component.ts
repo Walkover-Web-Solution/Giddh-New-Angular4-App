@@ -69,7 +69,7 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isNewVersion = false;
-                if (response.version && response.version && String(response.version).toLocaleLowerCase() === 'new') {
+                if (response.version && String(response.version).toLocaleLowerCase() === 'new') {
                     this.isNewVersion = true;
                 }
             } else {

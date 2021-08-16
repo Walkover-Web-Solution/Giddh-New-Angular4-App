@@ -29,11 +29,11 @@ import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccounts
 import { CompanyService } from '../services/companyService.service';
 import { ContactService } from '../services/contact.service';
 import { GeneralService } from '../services/general.service';
+import { GroupService } from '../services/group.service';
 import { ToasterService } from '../services/toaster.service';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { AppState } from '../store';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../shared/helpers/defaultDateFormat';
-import { GroupService } from '../services/group.service';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../models/user-login-state';
 import { GiddhCurrencyPipe } from '../shared/helpers/pipes/currencyPipe/currencyType.pipe';
@@ -173,8 +173,6 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private createAccountIsSuccess$: Observable<boolean>;
-    /** Selected company */
-    private selectedCompany: any;
     public universalDate: any;
     /** model reference to open/close bulk payment model */
     public bulkPaymentModalRef: BsModalRef;
@@ -219,6 +217,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     public showNameSearch: boolean;
     /** True if today selected */
     public todaySelected: boolean = false;
+    /** Holds company name if bank accounts are loaded in case of vendor */
+    public bankAccountsLoadedForCompany: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -251,7 +251,11 @@ export class ContactComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
-                this.selectedCompany = activeCompany;
+                this.activeCompany = activeCompany;
+                if(this.activeTab === "vendor" && this.activeCompany?.uniqueName && this.bankAccountsLoadedForCompany !== this.activeCompany?.uniqueName) {
+                    this.bankAccountsLoadedForCompany = this.activeCompany?.uniqueName;
+                    this.store.dispatch(this._companyActions.getAllIntegratedBankInCompany(this.activeCompany?.uniqueName));
+                }
             }
         });
     }
@@ -337,16 +341,8 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.getAccounts(this.fromDate, this.toDate, null, 'true', PAGINATION_LIMIT, term, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             });
 
-        this.store.pipe(select(p => p.company && p.company.account), takeUntil(this.destroyed$)).subscribe(res => {
-            if (res && Array.isArray(res)) {
-                this.isICICIIntegrated = res.length > 0;
-            } else {
-                this.isICICIIntegrated = false;
-            }
-        });
-
-        if (this.selectedCompany && this.selectedCompany.countryV2) {
-            this.getOnboardingForm(this.selectedCompany.countryV2.alpha2CountryCode);
+        if (this.activeCompany && this.activeCompany.countryV2) {
+            this.getOnboardingForm(this.activeCompany.countryV2.alpha2CountryCode);
         }
 
         this.store.pipe(select(store => store.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
@@ -356,11 +352,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.giddhDecimalPlaces = 2;
             }
         });
-        this.store.pipe(
-            select(appState => appState.session.activeCompany), take(1)
-        ).subscribe(activeCompany => {
-            this.activeCompany = activeCompany;
-        });
+
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
@@ -416,6 +408,14 @@ export class ContactComponent implements OnInit, OnDestroy {
         ).subscribe(searchedText => {
             this.searchStr$.next(searchedText);
         });
+
+        this.store.pipe(select(state => state.company && state.company.integratedBankList), takeUntil(this.destroyed$)).subscribe(response => {
+            if(response?.length > 0) {
+                this.isICICIIntegrated = true;
+            } else {
+                this.isICICIIntegrated = false;
+            }
+        });
     }
 
     public performActions(type: number, account: any, event?: any) {
@@ -426,16 +426,16 @@ export class ContactComponent implements OnInit, OnDestroy {
                 break;
 
             case 1: // go to ledger
-                this.goToRoute('ledger', `/${this.fromDate}/${this.toDate}`, account.uniqueName);
+                this.goToRoute('ledger', `/${this.fromDate}/${this.toDate}`, account?.uniqueName);
                 break;
 
             case 2: // go to sales or purchase
                 this.purchaseOrSales = this.activeTab === 'customer' ? 'sales' : 'purchase';
                 if (this.purchaseOrSales === 'purchase') {
-                    this.goToRoute('proforma-invoice/invoice/purchase', '', account.uniqueName);
+                    this.goToRoute('proforma-invoice/invoice/purchase', '', account?.uniqueName);
                 } else {
-                    let isCashInvoice = account.uniqueName === 'cash';
-                    this.goToRoute(`proforma-invoice/invoice/${isCashInvoice ? 'cash' : 'sales'}`, '', account.uniqueName);
+                    let isCashInvoice = account?.uniqueName === 'cash';
+                    this.goToRoute(`proforma-invoice/invoice/${isCashInvoice ? 'cash' : 'sales'}`, '', account?.uniqueName);
                 }
                 break;
             // case 3: // send sms
@@ -537,6 +537,10 @@ export class ContactComponent implements OnInit, OnDestroy {
             };
             this.showFieldFilter = showColumnObj;
             this.setTableColspan();
+        }
+
+        if(tabName === "vendor") {
+            this.store.dispatch(this._companyActions.getAllIntegratedBankInCompany(this.activeCompany?.uniqueName));
         }
     }
 
@@ -922,7 +926,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.advanceSearchRequestModal.creditTotal = request.amount;
             this.setAmountType(category, request.amountType);
         }
-
         switch (request.amountType) {
             case 'GreaterThan':
                 this.advanceSearchRequestModal[category + 'GreaterThan'] = true;
@@ -1188,7 +1191,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         if (event) {
             this.clearSelectedContacts(false);
         }
-
         this.isBulkPaymentShow = false;
         this.selectedAccForPayment = null;
 
@@ -1218,7 +1220,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         * @memberof ContactComponent
         */
     public selectAllColumns(event: boolean): void {
-
         Object.keys(this.showFieldFilter).forEach(key => this.showFieldFilter[key] = event);
         this.setTableColspan();
         if (window.localStorage) {
@@ -1267,9 +1268,9 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.selectedAccountsList.splice(indexOfEntry, 1);
         }
         // selected contacts list
-        let indexOfEntrySelected = this.selectedCheckedContacts.indexOf(element.uniqueName);
+        let indexOfEntrySelected = this.selectedCheckedContacts.indexOf(element?.uniqueName);
         if (indexOfEntrySelected === -1 && isChecked) {
-            this.selectedCheckedContacts.push(element.uniqueName);
+            this.selectedCheckedContacts.push(element?.uniqueName);
         } else if (indexOfEntrySelected > -1 && !this.allSelectionModel) {
             this.selectedCheckedContacts.splice(indexOfEntrySelected, 1);
         }
@@ -1293,7 +1294,6 @@ export class ContactComponent implements OnInit, OnDestroy {
 
         this.getAccounts(this.fromDate, this.toDate, this.checkboxInfo.selectedPage, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
     }
-
 
     /**
     * API call to get custom field data
@@ -1322,7 +1322,7 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     public addNewFieldFilters(field: any): void {
         for (let key of field) {
-            if (key.uniqueName) {
+            if (key?.uniqueName) {
                 this.showFieldFilter[key.uniqueName] = false;
             }
         }
@@ -1369,35 +1369,35 @@ export class ContactComponent implements OnInit, OnDestroy {
 
             this.dataVariables = [
                 {
-                    name: this.localeData?.data_variables.opening_balance,
+                    name: this.localeData?.data_variables?.opening_balance,
                     value: '%s_OB',
                 },
                 {
-                    name: this.localeData?.data_variables.closing_balance,
+                    name: this.localeData?.data_variables?.closing_balance,
                     value: '%s_CB',
                 },
                 {
-                    name: this.localeData?.data_variables.credit_total,
+                    name: this.localeData?.data_variables?.credit_total,
                     value: '%s_CT',
                 },
                 {
-                    name: this.localeData?.data_variables.debit_total,
+                    name: this.localeData?.data_variables?.debit_total,
                     value: '%s_DT',
                 },
                 {
-                    name: this.localeData?.data_variables.from_date,
+                    name: this.localeData?.data_variables?.from_date,
                     value: '%s_FD',
                 },
                 {
-                    name: this.localeData?.data_variables.to_date,
+                    name: this.localeData?.data_variables?.to_date,
                     value: '%s_TD',
                 },
                 {
-                    name: this.localeData?.data_variables.magic_link,
+                    name: this.localeData?.data_variables?.magic_link,
                     value: '%s_ML',
                 },
                 {
-                    name: this.localeData?.data_variables.account_name,
+                    name: this.localeData?.data_variables?.account_name,
                     value: '%s_AN',
                 }
             ];

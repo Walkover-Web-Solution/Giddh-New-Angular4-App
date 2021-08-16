@@ -30,6 +30,7 @@ import HeaderPage from "./pageObjects/HeaderPage";
 import DashboardPage from "./pageObjects/DashboardPage";
 import GlobalSearchPage from "./pageObjects/GlobalSearchPage";
 import TrialBalancePage from "./pageObjects/TrialBalancePage";
+import PLAndBSPage from "./pageObjects/PLAndBSPage";
 import LedgerPage from "./pageObjects/LedgerPage";
 import SignUpPage from "./pageObjects/SignUpPage";
 import CreateNewCompanyPage from "./pageObjects/CreateNewCompanyPage";
@@ -39,6 +40,7 @@ const headerPage = new HeaderPage()
 const ledgerPage = new LedgerPage()
 const globalSearchPage = new GlobalSearchPage()
 const trialBalancePage = new TrialBalancePage()
+const plAndBSPage = new PLAndBSPage();
 const createNewCompanyPage = new CreateNewCompanyPage();
 
 
@@ -76,6 +78,7 @@ Cypress.Commands.add("globalSearch", (elementPath, searchValue, expectedText) =>
             // headerPage.clickGiddhLogoIcon().type('{ctrl}g')
             globalSearchPage.typeGlobalSearch(searchValue)
             globalSearchPage.selectFirstValueAfterSearch().then(($btn) => {
+                cy.wait(2000)
                 $btn.click();
                 cy.wait(5000)
                 cy.get(elementPath, { timeout: 50000 }).should('be.visible')
@@ -103,9 +106,6 @@ Cypress.Commands.add("createLedger", (accountName, accountElementPath, amount) =
     cy.xpath('//input[@id=\'giddh-datepicker\']').scrollIntoView({ easing: 'linear' }).should('be.visible')
     cy.xpath('//div[@id=\'select-menu-0\']/a/div[1]').scrollIntoView({ offset: { top: 500, left: 0 } })
     cy.get('body').type('{pageup}')
-    cy.scrollTo(10, 10);
-    cy.scrollTo('top')
-    cy.get('.ledger-section').scrollTo('top')
     cy.xpath('//div[@id=\'select-menu-0\']/a/div[1]').scrollIntoView({ easing: 'linear' }).should('be.visible').then(() => {
         cy.wait(1000)
         cy.get(accountElementPath).click({ force: true })
@@ -207,59 +207,6 @@ Cypress.Commands.add("SignUp", (email, password) => {
         cy.wait(1500)
         createNewCompanyPage.submitButton().then(() => {
             cy.xpath('//div[@id=\'toast-container\']', { timeout: 5000 }).should('be.visible')
-        })
-    })
-})
-
-Cypress.Commands.add("deleteAllLedgersAPI", (accountUniqueName) => {
-    let allDebitEntryUniqueName = [];
-    let allCreditEntryUniqueName = [];
-    cy.getAllLedger(accountUniqueName).then((response) => {
-        expect(response.status).to.eq(200)
-        const respBody = response.body;
-        allDebitEntryUniqueName = respBody.body.debitTransactions;
-        allCreditEntryUniqueName = respBody.body.creditTransactions
-        // cy.log(respBody.body.debitTransactions)
-        allDebitEntryUniqueName.forEach((item) => {
-            cy.log(item.particular.name)
-            if (!item.particular.name.toLowerCase().includes("gst")) {
-                cy.log(item.entryUniqueName)
-                cy.deleteLedger(accountUniqueName, item.entryUniqueName).then((deleteResponse) => {
-                    expect(deleteResponse.status).to.eq(200)
-                })
-            }
-        })
-        allCreditEntryUniqueName.forEach((item1) => {
-            cy.log(item1.particular.name)
-            if (!item1.particular.name.toLowerCase().includes("gst")) {
-                cy.log(item1.entryUniqueName)
-                cy.deleteLedger(accountUniqueName, item1.entryUniqueName).then((deleteResponse) => {
-                    expect(deleteResponse.status).to.eq(200)
-                })
-            }
-        })
-    })
-})
-
-
-Cypress.Commands.add("searchOnTrialBalance", (accountUniqueName, expectedAmount) => {
-    trialBalancePage.refreshIcon().click({ force: true })
-    cy.wait(3000)
-    trialBalancePage.searchIcon().click({ force: true }).then(() => {
-        trialBalancePage.typeSearchValue(accountUniqueName)
-    }).then(() => {
-        trialBalancePage.searchAccountName().then((elementText) => {
-            cy.wait(5000).then(() => {
-                const text = elementText.text();
-                expect(text).to.eq(accountUniqueName)
-            })
-            trialBalancePage.searchAccountAmount().then((elementText) => {
-                cy.wait(5000).then(() => {
-                    const text = elementText.text();
-                    expect(text).to.eq(expectedAmount)
-                })
-            })
-
         })
     })
 })

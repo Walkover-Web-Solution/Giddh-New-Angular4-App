@@ -7,7 +7,6 @@
     margin-top: 15px;
     padding-top: 20px;
     li {
-        border-bottom: none;
         display: flex;
         width: 100%;
         justify-content: space-between;
@@ -65,35 +64,35 @@
     }
 }
 
-.input-share-width{
-    width:45%;
+.input-share-width {
+    width: 45%;
 }
 
-.input-group-btn{
+.input-group-btn {
     width: 53%;
 }
 
-.selected-permission{
+.selected-permission {
     width: 60% !important;
 }
 
-.btn-share{
+.btn-share {
     width: 36% !important;
 }
 
 .share-grp.account-share-modal {
-	.add-mailer {
-		.input-group {
-			input {
-				min-width: 100% !important;
-				max-width: 100% !important;
-			}
-		}
-	}
+    .add-mailer {
+        .input-group {
+            input {
+                min-width: 100% !important;
+                max-width: 100% !important;
+            }
+        }
+    }
 }
 
-@media (min-width: 576px){
-#share-modal select {
-    max-width: 100%;
-}
+@media (min-width: 576px) {
+    #share-modal select {
+        max-width: 100%;
+    }
 }

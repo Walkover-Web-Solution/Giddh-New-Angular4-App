@@ -78,3 +78,9 @@ a.dropdown-item:hover {
     justify-content: center;
     align-items: center;
 }
+
+@media (max-width: 1500px) {
+    .dashboard-container {
+        margin-bottom: 40px;
+    }
+}

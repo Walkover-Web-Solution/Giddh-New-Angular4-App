@@ -78,8 +78,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public currentBranch: any = { name: '', uniqueName: '' };
     /** Stores the current company */
     public activeCompany: any;
-    /** Observable if loading in process */
-    public getAgingReportRequestInProcess$: Observable<boolean>;
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
     /** Stores the datepicker modal reference */
@@ -101,6 +99,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     /** True, if name search field is to be shown in the filters */
     public showNameSearch: boolean;
 
+    /** Observable if loading in process */
+    public getAgingReportRequestInProcess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
@@ -143,7 +143,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     public getDueReport() {
-        this.store.dispatch(this.agingReportActions.GetDueReport(this.agingAdvanceSearchModal, this.dueAmountReportRequest, this.currentBranch.uniqueName));
+        this.store.dispatch(this.agingReportActions.GetDueReport(this.agingAdvanceSearchModal, this.dueAmountReportRequest, this.currentBranch?.uniqueName));
     }
 
     public detectChanges() {
@@ -161,7 +161,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                 this.dueAmountReportRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
                 this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-
                 this.getDueReport();
             }
         });
@@ -208,7 +207,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                     isCompany: true
                 });
                 let currentBranchUniqueName;
-                if (!this.currentBranch.uniqueName) {
+                if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded

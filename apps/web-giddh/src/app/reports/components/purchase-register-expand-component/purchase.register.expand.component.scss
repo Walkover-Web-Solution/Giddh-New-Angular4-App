@@ -47,7 +47,7 @@
     background-color: $white;
     z-index: 1000;
     width: 257px;
-    border: 1px solid $gainsboro;
+    border: 1px solid $pink-swan;
     border-radius: 4px;
     box-shadow: 0 7px 24px $black-russian;
 }
@@ -213,6 +213,9 @@ table th {
 .table-middle th .d-flex {
     align-items: center;
 }
+.expand-collapse-btn {
+    margin-bottom: 0 !important;
+}
 .expand-collapse-btn a {
     display: flex;
     width: 36px;
@@ -238,7 +241,7 @@ table th {
         font-size: 20px;
         position: relative;
         padding: 7px;
-        &:hover{
+        &:hover {
             background: $chetwode-blue;
             color: $white;
             border-color: $chetwode-blue;
@@ -324,8 +327,8 @@ table th {
     }
 }
 
-@media (min-width: 769px){
-    .table-responsive{
+@media (min-width: 769px) {
+    .table-responsive {
         max-height: calc(100vh - 275px);
         overflow-y: auto;
     }

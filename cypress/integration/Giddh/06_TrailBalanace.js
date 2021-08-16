@@ -1,38 +1,72 @@
-import GlobalSearchPage from "../../support/pageObjects/GlobalSearchPage";
+// import GlobalSearchPage from "../../support/pageObjects/GlobalSearchPage";
 
-describe('This is TrialBalance Search Test', () => {
+// describe('This is TrialBalance Search Test', () => {
 
-    let testData = "";
-    let entryUniqueName = "";
-    before(() => {
-        cy.fixture('example.json')
-            .then((data) => {
-                // "this" is still the test context object
-                testData = data
-            })
+//     let testData = "";
+//     let entryUniqueName = "";
+//     before(() => {
+//         cy.fixture('example.json')
+//             .then((data) => {
+//                 // "this" is still the test context object
+//                 testData = data
+//             })
+//     });
 
-    });
+//     before(() => {
+//         let allAccountName = ['cash', 'uitest', "invoiceaccount"];
+//         allAccountName.forEach((accName) => {
+//             cy.deleteAllLedgersAPI(accName)
+//         })
+//         cy.viewport(1366, 768)
+//         cy.loginWithEmail(testData.Email, testData.Password);
+//     })
 
-    before(() => {
-        cy.deleteAllLedgersAPI('uitest').then(() => {
-            cy.viewport(1366, 768)
-            cy.loginWithEmail(testData.Email, testData.Password);
-        })
-    })
+//     afterEach(()=>{
+//         let allAccountName = ['cash', 'uitest', 'invoiceaccount','vendoraccount'];
+//         allAccountName.forEach((accName) => {
+//             cy.deleteAllLedgersAPI(accName)
+//         })
+//     })
 
-    it('Verify Trial Balance using Global Search', () => {
-        cy.createLedgerAPI('uitest').then((response) => {
-            if (response.status === 201) {
-                cy.globalSearch('.active.nav-item > .nav-link > span', 'trial balance', 'Trial Balance')
+//     beforeEach(()=>{
+//         let allAccountName = ['cash', 'uitest', 'invoiceaccount','vendoraccount'];
+//         allAccountName.forEach((accName) => {
+//             cy.deleteAllLedgersAPI(accName)
+//         })
+//     })
 
-            }
-            cy.searchOnTrialBalance('uitest', '199.99  Dr. ')
-            // allEntryUniqueName.forEach((item)=>{
-            //     console.log(item.entryUniqueName)
-            //     cy.log(item.entryUniqueName)
-            // })
-        })
+//     it('Verify Trial Balance Amount after Create Entry', () => {
+//         cy.createLedgerAPI('uitest').then((response) => {
+//             if (response.status === 201){
+//                 cy.globalSearch('.active.nav-item > .nav-link > span', 'trial balance', 'Trial Balance')
+//             }
+//             cy.searchOnTrialBalance('uitest', '199.99')
+//         })
+//     });
 
-    });
+//     xit('Verify Profit & Loss Amount after Create Entry', () => {
+//         cy.createLedgerAPI('uitest').then((response) => {
+//             if (response.status === 201){
+//                 cy.globalSearch('.active.nav-item > .nav-link > span', 'trial balance', 'Trial Balance')
 
-})
+//             }
+//             cy.wait(2000)
+//             cy.navigateToTrialBalanceOptions('Profit & Loss');
+//             cy.searchOnPLAndBS('.profit-loss > .clearfix > .col-4 > strong', 'Sales', '169')
+//         })
+//     });
+
+
+//     it('Verify Balance Sheet Amount after Create Entry', () => {
+//         cy.createLedgerAPI('uitest').then((response) => {
+//             if (response.status === 201){
+//                 cy.globalSearch('.active.nav-item > .nav-link > span', 'trial balance', 'Trial Balance')
+
+//             }
+//             cy.wait(2000)
+//             cy.navigateToTrialBalanceOptions('Balance Sheet');
+//             cy.searchOnPLAndBS(':nth-child(3) > :nth-child(2) > strong', 'uitest', '199')
+//         })
+//     });
+
+// })

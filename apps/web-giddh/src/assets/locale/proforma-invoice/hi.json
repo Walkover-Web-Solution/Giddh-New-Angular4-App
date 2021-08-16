@@ -9,7 +9,6 @@
         "estimate": "अनुमान"
     },
     "customer_name": "ग्राहक का नाम",
-    "vendor_name": "विक्रेता का नाम",
     "balance_due": "शेष राशि",
     "copy_previous_invoices": "पिछला चालान [INVOICE_TYPE] कॉपी करें",
     "customer_details": "उपभोक्ता विवरण",

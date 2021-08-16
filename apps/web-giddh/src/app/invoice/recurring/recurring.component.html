@@ -1,31 +1,49 @@
-<ng-container appTranslate [file]="'invoice/recurring'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+<ng-container
+    appTranslate
+    [file]="'invoice/recurring'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
     <div validateSectionPermission [hasPermission]="hasRecurringVoucherListPermissions">
         <div class="recurring-container">
-            <form #recurringForm="ngForm" novalidate class="form-inline input-grp-date-range-picker position-relative"
-                (ngSubmit)="submit()">
-
+            <form
+                #recurringForm="ngForm"
+                novalidate
+                class="form-inline input-grp-date-range-picker position-relative"
+                (ngSubmit)="submit()"
+            >
                 <div class="d-flex search-icon-block mr-b15" *ngIf="isMobileScreen">
                     <div (click)="openModal(template)">
                         <i class="icon-search"></i>
                     </div>
                     <ng-template #template>
                         <div class="modal-header">
-                            <h4 class="modal-title bg pull-left">{{localeData?.search_here}}</h4>
-                            <button type="button" class="close pull-right" [attr.aria-label]="commonLocaleData?.app_close"
-                                (click)="modalRef.hide()">
+                            <h4 class="modal-title bg pull-left">{{ localeData?.search_here }}</h4>
+                            <button
+                                type="button"
+                                class="close pull-right"
+                                [attr.aria-label]="commonLocaleData?.app_close"
+                                (click)="modalRef.hide()"
+                            >
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
                             <div class="form-view">
                                 <div class="form-group">
-                                    <label class="d-block">{{localeData?.invoice_type}}</label>
+                                    <label class="d-block">{{ localeData?.invoice_type }}</label>
                                     <div class="ng-select-wrap">
-                                        <sh-select name="invoiceType" [placeholder]="commonLocaleData?.app_select_account"
-                                            [(ngModel)]="filter.status" [options]="invoiceTypeOptions"
-                                            [notFoundLink]="false" [multiple]="false" [ItemHeight]="33"
-                                            [useInBuiltFilterForIOptionTypeItems]="true">
+                                        <sh-select
+                                            name="invoiceType"
+                                            [placeholder]="commonLocaleData?.app_select_account"
+                                            [(ngModel)]="filter.status"
+                                            [options]="invoiceTypeOptions"
+                                            [notFoundLink]="false"
+                                            [multiple]="false"
+                                            [ItemHeight]="33"
+                                            [useInBuiltFilterForIOptionTypeItems]="true"
+                                        >
                                             <ng-template #optionTemplate let-option="option">
                                                 <a href="javascript:void(0)" class="list-item">
                                                     <div class="item">{{ option.label }}</div>
@@ -35,12 +53,18 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="d-block">{{localeData?.interval}}</label>
+                                    <label class="d-block">{{ localeData?.interval }}</label>
                                     <div class="ng-select-wrap">
-                                        <sh-select name="interval" [placeholder]="commonLocaleData?.app_select_account"
-                                            [options]="intervalOptions" [notFoundLink]="false" [multiple]="false"
-                                            [(ngModel)]="filter.duration" [ItemHeight]="33"
-                                            [useInBuiltFilterForIOptionTypeItems]="true">
+                                        <sh-select
+                                            name="interval"
+                                            [placeholder]="commonLocaleData?.app_select_account"
+                                            [options]="intervalOptions"
+                                            [notFoundLink]="false"
+                                            [multiple]="false"
+                                            [(ngModel)]="filter.duration"
+                                            [ItemHeight]="33"
+                                            [useInBuiltFilterForIOptionTypeItems]="true"
+                                        >
                                             <ng-template #optionTemplate let-option="option">
                                                 <a href="javascript:void(0)" class="list-item">
                                                     <div class="item">{{ option.label }}</div>
@@ -50,52 +74,77 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="d-block">{{localeData?.last_invoice_date}}</label>
+                                    <label class="d-block">{{ localeData?.last_invoice_date }}</label>
                                     <div>
-                                        <giddh-datepicker name="lastInvoiceDate" [(ngModel)]="filter.lastInvoiceDate"
-                                            [placeholder]="commonLocaleData?.app_select_date"></giddh-datepicker>
+                                        <giddh-datepicker
+                                            name="lastInvoiceDate"
+                                            [(ngModel)]="filter.lastInvoiceDate"
+                                            [placeholder]="commonLocaleData?.app_select_date"
+                                        ></giddh-datepicker>
                                     </div>
                                 </div>
                                 <div class="form-group search-invoice-filed">
                                     <div class="search-invoice-no">
-                                        <label class="d-block">{{localeData?.search_invoice_no}}</label>
+                                        <label class="d-block">{{ localeData?.search_invoice_no }}</label>
                                         <div class="input-group">
-                                            <input type="text" [placeholder]="localeData?.search_invoice_no" class="w100"
-                                                [formControl]="invoiceNumberInput" #invoiceSearch class="form-control" />
+                                            <input
+                                                type="text"
+                                                [placeholder]="localeData?.search_invoice_no"
+                                                class="w100"
+                                                [formControl]="invoiceNumberInput"
+                                                #invoiceSearch
+                                                class="form-control"
+                                            />
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group search-invoice-filed">
                                     <div class="search-customer-no">
                                         <div class="input-container">
-                                            <label class="d-block">{{localeData?.search_customer_name}}</label>
-                                            <input type="text" [placeholder]="localeData?.search_customer_name" class="w100"
-                                                name="customerName" [formControl]="customerNameInput" #customerSearch
-                                                class="form-control" />
+                                            <label class="d-block">{{ localeData?.search_customer_name }}</label>
+                                            <input
+                                                type="text"
+                                                [placeholder]="localeData?.search_customer_name"
+                                                class="w100"
+                                                name="customerName"
+                                                [formControl]="customerNameInput"
+                                                #customerSearch
+                                                class="form-control"
+                                            />
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <button class="btn btn-success btn-sm">{{commonLocaleData?.app_search}}</button>
+                                    <button class="btn btn-success btn-sm">{{ commonLocaleData?.app_search }}</button>
                                     <a class="cp" href="javascript:;">
-                                        <i aria-hidden="true" class="icon-refresh"
-                                            [tooltip]="commonLocaleData?.app_reset_filter" *ngIf="showResetFilterButton"
-                                            (click)="resetFilter()"></i>
+                                        <i
+                                            aria-hidden="true"
+                                            class="icon-refresh"
+                                            [tooltip]="commonLocaleData?.app_reset_filter"
+                                            *ngIf="showResetFilterButton"
+                                            (click)="resetFilter()"
+                                        ></i>
                                     </a>
                                 </div>
                             </div>
                         </div>
                     </ng-template>
-
                 </div>
                 <div class="recurring-form-wrapper">
                     <div class="recurring-form" *ngIf="!isMobileScreen">
                         <div class="form-group mr-r1">
-                            <label class="d-block mr-r15">{{localeData?.invoice_type}}</label>
+                            <label class="d-block mr-r15">{{ localeData?.invoice_type }}</label>
                             <div class="ng-select-wrap input-group">
-                                <sh-select name="invoiceType" [placeholder]="commonLocaleData?.app_select_account"
-                                    [(ngModel)]="filter.status" [options]="invoiceTypeOptions" [notFoundLink]="false"
-                                    [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true">
+                                <sh-select
+                                    name="invoiceType"
+                                    [placeholder]="commonLocaleData?.app_select_account"
+                                    [(ngModel)]="filter.status"
+                                    [options]="invoiceTypeOptions"
+                                    [notFoundLink]="false"
+                                    [multiple]="false"
+                                    [ItemHeight]="33"
+                                    [useInBuiltFilterForIOptionTypeItems]="true"
+                                >
                                     <ng-template #optionTemplate let-option="option">
                                         <a href="javascript:void(0)" class="list-item">
                                             <div class="item">{{ option.label }}</div>
@@ -105,12 +154,18 @@
                             </div>
                         </div>
                         <div class="form-group mr-r1">
-                            <label class="d-block mr-r15">{{localeData?.interval}}</label>
+                            <label class="d-block mr-r15">{{ localeData?.interval }}</label>
                             <div class="ng-select-wrap input-group">
-                                <sh-select name="interval" [placeholder]="commonLocaleData?.app_select_account"
-                                    [options]="intervalOptions" [notFoundLink]="false" [multiple]="false"
-                                    [(ngModel)]="filter.duration" [ItemHeight]="33"
-                                    [useInBuiltFilterForIOptionTypeItems]="true">
+                                <sh-select
+                                    name="interval"
+                                    [placeholder]="commonLocaleData?.app_select_account"
+                                    [options]="intervalOptions"
+                                    [notFoundLink]="false"
+                                    [multiple]="false"
+                                    [(ngModel)]="filter.duration"
+                                    [ItemHeight]="33"
+                                    [useInBuiltFilterForIOptionTypeItems]="true"
+                                >
                                     <ng-template #optionTemplate let-option="option">
                                         <a href="javascript:void(0)" class="list-item">
                                             <div class="item">{{ option.label }}</div>
@@ -121,220 +176,278 @@
                         </div>
 
                         <div class="form-group mr-r1">
-                            <label class="d-block mr-r15">{{localeData?.last_invoice_date}}</label>
+                            <label class="d-block mr-r15">{{ localeData?.last_invoice_date }}</label>
                             <div class="input-group">
-                                <giddh-datepicker name="lastInvoiceDate" [(ngModel)]="filter.lastInvoiceDate"
-                                    [placeholder]="commonLocaleData?.app_select_date"></giddh-datepicker>
+                                <giddh-datepicker
+                                    name="lastInvoiceDate"
+                                    [(ngModel)]="filter.lastInvoiceDate"
+                                    [placeholder]="commonLocaleData?.app_select_date"
+                                ></giddh-datepicker>
                             </div>
                         </div>
 
                         <div class="form-group mr-r1" *ngIf="isMobileScreen">
                             <div class="search-invoice-no">
-                                <label class="d-block">{{localeData?.search_invoice_no}}</label>
+                                <label class="d-block">{{ localeData?.search_invoice_no }}</label>
                                 <div class="input-group">
-                                    <input type="text" [placeholder]="localeData?.search_invoice_no" class="w100"
-                                        [formControl]="invoiceNumberInput" #invoiceSearch class="form-control" />
+                                    <input
+                                        type="text"
+                                        [placeholder]="localeData?.search_invoice_no"
+                                        class="w100"
+                                        [formControl]="invoiceNumberInput"
+                                        #invoiceSearch
+                                        class="form-control"
+                                    />
                                 </div>
                             </div>
                         </div>
                         <div class="form-group mr-r1" *ngIf="isMobileScreen">
                             <div class="search-customer-no">
                                 <div class="input-container">
-                                    <label class="d-block">{{localeData?.search_customer_name}}</label>
-                                    <input type="text" [placeholder]="localeData?.search_customer_name" class="w100"
-                                        name="customerName" [formControl]="customerNameInput" #customerSearch
-                                        class="form-control" />
+                                    <label class="d-block">{{ localeData?.search_customer_name }}</label>
+                                    <input
+                                        type="text"
+                                        [placeholder]="localeData?.search_customer_name"
+                                        class="w100"
+                                        name="customerName"
+                                        [formControl]="customerNameInput"
+                                        #customerSearch
+                                        class="form-control"
+                                    />
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-group mr-r1">
                             <label class="d-block">&nbsp;</label>
-                            <button class="btn btn-success btn-sm">{{commonLocaleData?.app_search}}</button>
+                            <button class="btn btn-success btn-sm">{{ commonLocaleData?.app_search }}</button>
                             <a class="cp" href="javascript:;">
-                                <i aria-hidden="true" class="icon-refresh" [tooltip]="commonLocaleData?.app_reset_filter"
-                                    *ngIf="showResetFilterButton" (click)="resetFilter()"></i>
+                                <i
+                                    aria-hidden="true"
+                                    class="icon-refresh"
+                                    [tooltip]="commonLocaleData?.app_reset_filter"
+                                    *ngIf="showResetFilterButton"
+                                    (click)="resetFilter()"
+                                ></i>
                             </a>
                         </div>
                     </div>
                     <div class="d-flex mb-2">
                         <div class="more-dropdown" *ngIf="selectedItems?.length < 0">
-                            <div class="btn-group d-inline-block mr-b1" dropdown triggers="mouseover" #dp="bs-dropdown"
-                                (mouseleave)="dp.hide()">
-
-                                <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
-                                    aria-controls="dropdown-basic">
-                                    {{commonLocaleData?.app_more}}
+                            <div
+                                class="btn-group d-inline-block mr-b1"
+                                dropdown
+                                triggers="mouseover"
+                                #dp="bs-dropdown"
+                                (mouseleave)="dp.hide()"
+                            >
+                                <button
+                                    dropdownToggle
+                                    type="button"
+                                    class="btn more-btn-dropdown dropdown-toggle"
+                                    aria-controls="dropdown-basic"
+                                >
+                                    {{ commonLocaleData?.app_more }}
                                     <span class="caret"></span>
                                 </button>
 
                                 <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-
                                     <li role="menuitem">
-                                        <a class="dropdown-item cp" href="javascript:void(0)">{{localeData?.bulk_note}}</a>
+                                        <a class="dropdown-item cp" href="javascript:void(0)">{{
+                                            localeData?.bulk_note
+                                        }}</a>
                                     </li>
 
                                     <li role="menuitem">
-                                        <a class="dropdown-item cp"
-                                            href="javascript:void(0)">{{commonLocaleData?.app_send_email}}</a>
+                                        <a class="dropdown-item cp" href="javascript:void(0)">{{
+                                            commonLocaleData?.app_send_email
+                                        }}</a>
                                     </li>
 
                                     <li role="menuitem">
-                                        <a class="dropdown-item cp"
-                                            href="javascript:void(0)">{{commonLocaleData?.app_print}}</a>
+                                        <a class="dropdown-item cp" href="javascript:void(0)">{{
+                                            commonLocaleData?.app_print
+                                        }}</a>
                                     </li>
 
                                     <li role="menuitem">
-                                        <a class="dropdown-item cp"
-                                            href="javascript:void(0)">{{commonLocaleData?.app_export_pdf}}</a>
+                                        <a class="dropdown-item cp" href="javascript:void(0)">{{
+                                            commonLocaleData?.app_export_pdf
+                                        }}</a>
                                     </li>
 
                                     <li role="menuitem" *ngIf="!isMobileScreen">
-                                        <a class="dropdown-item cp"
-                                            href="javascript:void(0)">{{localeData?.generate_eway_bill}}</a>
+                                        <a class="dropdown-item cp" href="javascript:void(0)">{{
+                                            localeData?.generate_eway_bill
+                                        }}</a>
                                     </li>
 
                                     <li role="menuitem">
-                                        <a class="dropdown-item cp"
-                                            href="javascript:void(0)">{{commonLocaleData?.app_create_credit_note}}</a>
+                                        <a class="dropdown-item cp" href="javascript:void(0)">{{
+                                            commonLocaleData?.app_create_credit_note
+                                        }}</a>
                                     </li>
 
                                     <li role="menuitem">
-                                        <a class="dropdown-item cp"
-                                            href="javascript:void(0)">{{commonLocaleData?.app_delete}}</a>
+                                        <a class="dropdown-item cp" href="javascript:void(0)">{{
+                                            commonLocaleData?.app_delete
+                                        }}</a>
                                     </li>
-
                                 </ul>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </form>
 
-
-            <div class="table-responsive" [hidden]="!(recurringData$ | async)?.totalItems">
+            <div
+                class="table-responsive"
+                [hidden]="!(recurringData$ | async)?.totalItems && !filter?.voucherNumber && !filter?.customerName"
+            >
                 <table class="table basic giddh-table table-bordered on-mobile-view">
-
                     <thead class="thead-background1">
                         <tr>
-
                             <th width="4%">
-                                <div class="check-image d-flex justify-content-center">
-                                    #
-                                </div>
+                                <div class="check-image d-flex justify-content-center">#</div>
                             </th>
 
-                            <th width="20%" class="td-search-box" #searchInvoiceContainer
-                                (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
-
+                            <th
+                                width="20%"
+                                class="td-search-box"
+                                #searchInvoiceContainer
+                                (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')"
+                            >
                                 <div [hidden]="showInvoiceNumberSearch">
-                                    <i class="icon-search"
-                                        (click)="showInvoiceNumberSearch = true;showCustomerNameSearch = false;"></i>
-                                    <span> {{commonLocaleData?.app_invoice_number}}</span>
+                                    <i
+                                        class="icon-search"
+                                        (click)="showInvoiceNumberSearch = true; showCustomerNameSearch = false"
+                                    ></i>
+                                    <span> {{ commonLocaleData?.app_invoice_number }}</span>
                                 </div>
 
                                 <div class="input-container" [hidden]="!showInvoiceNumberSearch">
-                                    <input type="text" [placeholder]="localeData?.search_invoice_no" class="w100"
-                                        [formControl]="invoiceNumberInput" #invoiceSearch />
+                                    <input
+                                        type="text"
+                                        [placeholder]="localeData?.search_invoice_no"
+                                        class="w100"
+                                        [formControl]="invoiceNumberInput"
+                                        #invoiceSearch
+                                    />
                                 </div>
-
                             </th>
 
-                            <th width="20%" class="td-search-box" #searchCustomerContainer
-                                (clickOutside)="clickedOutside($event, searchCustomerContainer, 'customerName')">
-
-                                <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showCustomerNameSearch, title: commonLocaleData?.app_customer_name, fieldName: 'customerName',
-                    formControl: customerNameInput}"></ng-container>
-
+                            <th
+                                width="20%"
+                                class="td-search-box"
+                                #searchCustomerContainer
+                                (clickOutside)="clickedOutside($event, searchCustomerContainer, 'customerName')"
+                            >
+                                <ng-container
+                                    *ngTemplateOutlet="
+                                        searchTemplate;
+                                        context: {
+                                            $implicit: showCustomerNameSearch,
+                                            title: commonLocaleData?.app_customer_name,
+                                            fieldName: 'customerName',
+                                            formControl: customerNameInput
+                                        }
+                                    "
+                                ></ng-container>
                             </th>
 
                             <th>
                                 <div class="d-flex">
-                                    <div class="">{{localeData?.interval}}</div>
+                                    <div class="">{{ localeData?.interval }}</div>
 
                                     <div class="icon-pointer">
-                                        <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'duration'}">
+                                        <ng-container *ngTemplateOutlet="sortTemplate; context: { column: 'duration' }">
                                         </ng-container>
-
                                     </div>
                                 </div>
                             </th>
                             <th>
                                 <div class="d-flex">
-                                    <div class=""> {{localeData?.last_invoice_date}}</div>
+                                    <div>{{ localeData?.last_invoice_date }}</div>
                                     <div class="icon-pointer">
-                                        <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'lastinvoicedate'}">
+                                        <ng-container
+                                            *ngTemplateOutlet="sortTemplate; context: { column: 'lastinvoicedate' }"
+                                        >
                                         </ng-container>
                                     </div>
                                 </div>
                             </th>
                             <th>
                                 <div class="d-flex">
-                                    <div class=""> {{localeData?.next_invoice_date}}</div>
+                                    <div>{{ localeData?.next_invoice_date }}</div>
                                     <div class="icon-pointer">
-                                        <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'nextcrondate'}">
+                                        <ng-container
+                                            *ngTemplateOutlet="sortTemplate; context: { column: 'nextcrondate' }"
+                                        >
                                         </ng-container>
-
-
                                     </div>
                                 </div>
                             </th>
                             <th>
                                 <div class="d-flex">
-                                    <div class="">{{commonLocaleData?.app_status}}</div>
+                                    <div>{{ commonLocaleData?.app_status }}</div>
                                     <div class="icon-pointer">
-                                        <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'status'}">
+                                        <ng-container *ngTemplateOutlet="sortTemplate; context: { column: 'status' }">
                                         </ng-container>
-
-
-
                                     </div>
                                 </div>
                             </th>
                             <th>
                                 <div class="d-flex text-right">
-                                    <div class="flex-fill">{{localeData?.invoice_amount}}</div>
+                                    <div class="flex-fill">{{ localeData?.invoice_amount }}</div>
                                     <div class="icon-pointer">
-                                        <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'vouchertotal'}">
+                                        <ng-container
+                                            *ngTemplateOutlet="sortTemplate; context: { column: 'vouchertotal' }"
+                                        >
                                         </ng-container>
-
-
                                     </div>
                                 </div>
                             </th>
                         </tr>
                     </thead>
 
-
-
-                    <tbody *ngIf="!isLoading && (recurringData$ | async)?.totalItems > 0"
+                    <tbody
+                        *ngIf="!isLoading && (recurringData$ | async)?.totalItems > 0"
                         (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
-                        (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''">
-
-                        <tr *ngFor="let col of recurringVoucherDetails;let i = index"
-                            (mouseover)="hoveredItemForAction = col.uniqueName">
-
+                        (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
+                    >
+                        <tr
+                            *ngFor="let col of recurringVoucherDetails; let i = index"
+                            (mouseover)="hoveredItemForAction = col.uniqueName"
+                        >
                             <td width="4%" data-title="#">
-                                <div class="justify-content-sm d-flex justify-content-center">{{ i + 1}}</div>
+                                <div class="justify-content-sm d-flex justify-content-center">{{ i + 1 }}</div>
                             </td>
 
                             <td width="20%" [attr.data-title]="commonLocaleData?.app_invoice_number">
-                                <a *ngIf="!isMobileScreen" class="cp btn-link-2"
-                                    (click)="col.status !== 'inactive' && openUpdatePanel(col)">{{ col.voucherNumber || '-'
-                                    }}</a>
-                                <a *ngIf="isMobileScreen" class="cp btn-link-2">{{ col.voucherNumber || '-' }}</a>
+                                <a
+                                    *ngIf="!isMobileScreen"
+                                    class="cp btn-link-2"
+                                    (click)="col.status !== 'inactive' && openUpdatePanel(col)"
+                                    >{{ col.voucherNumber || "-" }}</a
+                                >
+                                <a *ngIf="isMobileScreen" class="cp btn-link-2">{{ col.voucherNumber || "-" }}</a>
                             </td>
-                            <td width="20%" [attr.data-title]="commonLocaleData?.app_customer_name">{{ col.customerName ||
-                                '-' }}</td>
-                            <td [attr.data-title]="localeData?.interval">{{ col.duration || '-' }}</td>
-                            <td [attr.data-title]="localeData?.last_invoice_date">{{ col.lastInvoiceDate || '-' }}</td>
-                            <td [attr.data-title]="localeData?.next_invoice_date">{{ col.nextCronDate || '-' }}</td>
-                            <td [attr.data-title]="commonLocaleData?.app_status">{{ col.status || '-' | titlecase }}</td>
-                            <td [attr.data-title]="localeData?.invoice_amount" class=" text-right">
+                            <td width="20%" [attr.data-title]="commonLocaleData?.app_customer_name">
+                                {{ col.customerName || "-" }}
+                            </td>
+                            <td [attr.data-title]="localeData?.interval">{{ col.duration || "-" }}</td>
+                            <td [attr.data-title]="localeData?.last_invoice_date">{{ col.lastInvoiceDate || "-" }}</td>
+                            <td [attr.data-title]="localeData?.next_invoice_date">{{ col.nextCronDate || "-" }}</td>
+                            <td [attr.data-title]="commonLocaleData?.app_status">
+                                {{ col.status || "-" | titlecase }}
+                            </td>
+                            <td [attr.data-title]="localeData?.invoice_amount" class="text-right">
                                 <span class="d-inline-flex">
-                                    <amount-field [amount]="col.voucherTotal" [currencySymbol]="false"
-                                        [currencyCode]="false">
+                                    <amount-field
+                                        [amount]="col.voucherTotal"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    >
                                     </amount-field>
                                 </span>
                             </td>
@@ -352,10 +465,19 @@
 
             <div class="pagination-wrapper" *ngIf="(recurringData$ | async)?.totalItems > 20" [hidden]="isLoading">
                 <div class="text-center">
-                    <pagination [maxSize]="5" [totalItems]="(recurringData$ | async)?.totalItems" [itemsPerPage]="20"
-                        (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true" [rotate]="false"
-                        [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous"
-                        [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last">
+                    <pagination
+                        [maxSize]="5"
+                        [totalItems]="(recurringData$ | async)?.totalItems"
+                        [itemsPerPage]="20"
+                        (pageChanged)="pageChanged($event)"
+                        class="pagination-sm"
+                        [boundaryLinks]="true"
+                        [rotate]="false"
+                        [firstText]="commonLocaleData?.app_first"
+                        [previousText]="commonLocaleData?.app_previous"
+                        [nextText]="commonLocaleData?.app_next"
+                        [lastText]="commonLocaleData?.app_last"
+                    >
                     </pagination>
                 </div>
             </div>
@@ -366,41 +488,58 @@
         </div>
 
         <div class="aside-overlay" *ngIf="asideMenuStateForRecurringEntry === 'in'"></div>
-        <app-aside-recurring-entry *ngIf="asideMenuStateForRecurringEntry === 'in'" [invoice]="selectedInvoice" [class]="asideMenuStateForRecurringEntry"
-            [@slideInOut]="asideMenuStateForRecurringEntry" [mode]="'update'" [isCompany]="isCompany"
-            (closeAsideEvent)="toggleRecurringAsidePane('out')">
+        <app-aside-recurring-entry
+            *ngIf="asideMenuStateForRecurringEntry === 'in'"
+            [invoice]="selectedInvoice"
+            [class]="asideMenuStateForRecurringEntry"
+            [@slideInOut]="asideMenuStateForRecurringEntry"
+            [mode]="'update'"
+            [isCompany]="isCompany"
+            (closeAsideEvent)="toggleRecurringAsidePane('out')"
+        >
         </app-aside-recurring-entry>
 
         <!-- region search template -->
         <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
-
             <div [hidden]="show">
-                <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
+                <i class="icon-search" (click)="toggleSearch(fieldName, searchBox)"></i>
                 <span> {{ title }}</span>
             </div>
 
             <div class="input-container" [hidden]="!show">
-                <input type="text" [placeholder]="getSearchFieldText(title)" class="w100" #searchBox
-                    [formControl]="formControl" />
+                <input
+                    type="text"
+                    [placeholder]="getSearchFieldText(title)"
+                    class="w100"
+                    #searchBox
+                    [formControl]="formControl"
+                />
             </div>
-
         </ng-template>
         <!-- endregion -->
 
         <!-- region sort icon template -->
         <ng-template #sortTemplate let-column="column">
-
-            <div class="icon-sort-asc " *ngIf="filter.sortBy !== column" (click)="sortButtonClicked('asc', column)"
-                [ngClass]="{'active-text-color': filter.sortBy === column && filter.sort === 'asc'}"></div>
-
-            <div class="icon-sort-asc " *ngIf="filter.sortBy === column && filter.sort === 'asc'"
-                (click)="sortButtonClicked('desc', column)"
-                [ngClass]="{'active-text-color': filter.sortBy === column && filter.sort === 'asc'}"></div>
-
-            <div class="icon-sort-asc " *ngIf="filter.sortBy === column && filter.sort === 'desc'"
+            <div
+                class="icon-sort-asc"
+                *ngIf="filter.sortBy !== column"
                 (click)="sortButtonClicked('asc', column)"
-                [ngClass]="{'active-text-color': filter.sortBy === column && filter.sort === 'desc'}"></div>
+                [ngClass]="{ 'active-text-color': filter.sortBy === column && filter.sort === 'asc' }"
+            ></div>
 
+            <div
+                class="icon-sort-asc"
+                *ngIf="filter.sortBy === column && filter.sort === 'asc'"
+                (click)="sortButtonClicked('desc', column)"
+                [ngClass]="{ 'active-text-color': filter.sortBy === column && filter.sort === 'asc' }"
+            ></div>
+
+            <div
+                class="icon-sort-asc"
+                *ngIf="filter.sortBy === column && filter.sort === 'desc'"
+                (click)="sortButtonClicked('asc', column)"
+                [ngClass]="{ 'active-text-color': filter.sortBy === column && filter.sort === 'desc' }"
+            ></div>
         </ng-template>
         <!-- endregion -->
     </div>

@@ -2,12 +2,21 @@
     <div class="col-xs-12 col-sm-12 bg-wrap">
         <div>
             <div class="clearfix pd-t2">
-                <span class="btn label isActive">{{requestObj.voucherType}}</span>
-                <div class="pull-right text-right mr-b1" (clickOutside)="showFromDatePicker = false;">
-                    <input type="text" onReturn #dateField name="entryDate" [(ngModel)]="journalDate"
-                        (blur)="dateEntered();" [placeholder]="giddhDateFormat"
-                        class="form-control text-right voucher-date-field" (focus)="onDateFieldFocus()" bsDatepicker
-                        [bsConfig]="bsConfig" />
+                <span class="btn label isActive">{{ requestObj.voucherType }}</span>
+                <div class="pull-right text-right mr-b1" (clickOutside)="showFromDatePicker = false">
+                    <input
+                        type="text"
+                        onReturn
+                        #dateField
+                        name="entryDate"
+                        [(ngModel)]="journalDate"
+                        (blur)="dateEntered()"
+                        [placeholder]="giddhDateFormat"
+                        class="form-control text-right voucher-date-field"
+                        (focus)="onDateFieldFocus()"
+                        bsDatepicker
+                        [bsConfig]="bsConfig"
+                    />
                     {{ displayDay }}
                 </div>
             </div>
@@ -16,7 +25,7 @@
                     <table class="table entry-table">
                         <thead>
                             <tr>
-                                <th> &nbsp;</th>
+                                <th>&nbsp;</th>
                                 <th>Particulars</th>
                                 <th [style.min-width.px]="140" [style.width.px]="140" class="text-right">Debit</th>
                                 <th [style.min-width.px]="140" [style.width.px]="140" class="text-right">Credit</th>
@@ -24,76 +33,154 @@
                         </thead>
                         <br />
                         <tbody (clickOutside)="hideListItems()">
-                            <tr *ngFor="let transaction of requestObj.transactions;let i=index;let l=last"
-                                [ngClass]="{'active-row': (isSelectedRow && selectedIdx === i) || (!selectedIdx && !isSelectedRow && i == 0)}">
-                                <td [style.width.px]="40"><input onReturn type="text"
+                            <tr
+                                *ngFor="let transaction of requestObj.transactions; let i = index; let l = last"
+                                [ngClass]="{
+                                    'active-row':
+                                        (isSelectedRow && selectedIdx === i) ||
+                                        (!selectedIdx && !isSelectedRow && i == 0)
+                                }"
+                            >
+                                <td [style.width.px]="40">
+                                    <input
+                                        onReturn
+                                        type="text"
                                         class="form-control text-capitalize byTo"
-                                        [disabled]="i === 0 && !isFirstRowDeleted" (ngModel)="transaction.type"
+                                        [disabled]="i === 0 && !isFirstRowDeleted"
+                                        (ngModel)="(transaction.type)"
                                         (ngModelChange)="selectEntryType(transaction, $event, i)"
-                                        (focus)="selectRow(true,i);hideListItems()"
-                                        [ngClass]="{'focus': isSelectedRow && selectedIdx === i}"
-                                        value="{{ transaction.type | lowercase }}" maxlength="2" /></td>
-                                <td><input onReturn id="first_element_{{i}}" type="text"
-                                        class="form-control from-or-to-acc" #particular [required]="transaction.amount"
+                                        (focus)="selectRow(true, i); hideListItems()"
+                                        [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
+                                        value="{{ transaction.type | lowercase }}"
+                                        maxlength="2"
+                                    />
+                                </td>
+                                <td>
+                                    <input
+                                        onReturn
+                                        id="first_element_{{ i }}"
+                                        type="text"
+                                        class="form-control from-or-to-acc"
+                                        #particular
+                                        [required]="transaction.amount"
                                         [(ngModel)]="transaction.selectedAccount.account"
-                                        (keyup)="searchAccount($event?.target?.value);"
-                                        (focus)="onAccountFocus($event, transaction.type === 'by' ? amountField1 : amountField2, transaction.type, i);"
-                                        (blur)="onAccountBlur($event);"
-                                        [ngClass]="{'focus': isSelectedRow && selectedIdx === i}"
+                                        (keyup)="searchAccount($event?.target?.value)"
+                                        (focus)="
+                                            onAccountFocus(
+                                                $event,
+                                                transaction.type === 'by' ? amountField1 : amountField2,
+                                                transaction.type,
+                                                i
+                                            )
+                                        "
+                                        (blur)="onAccountBlur($event)"
+                                        [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
                                         (keydown)="detectKey($event)"
                                         (keydown.Tab)="validateAccount(transaction, $event, i)"
-                                        (keydown.arrowDown)="openCreateAccountPopupIfRequired($event)">
+                                        (keydown.arrowDown)="openCreateAccountPopupIfRequired($event)"
+                                    />
                                     <table *ngIf="requestObj.voucherType !== 'Contra'">
                                         <tbody>
                                             <ng-container *ngIf="transaction.inventory && transaction.inventory.length">
-                                                <tr *ngFor="let inventory of transaction.inventory;let idx=index;let l=last"
-                                                    [ngClass]="{'active-row': isSelectedRow && selectedStockIdx === idx && selectedIdx === i}">
-                                                    <td [style.width.px]="250"><input onReturn
+                                                <tr
+                                                    *ngFor="
+                                                        let inventory of transaction.inventory;
+                                                        let idx = index;
+                                                        let l = last
+                                                    "
+                                                    [ngClass]="{
+                                                        'active-row':
+                                                            isSelectedRow &&
+                                                            selectedStockIdx === idx &&
+                                                            selectedIdx === i
+                                                    }"
+                                                >
+                                                    <td [style.width.px]="250">
+                                                        <input
+                                                            onReturn
                                                             (keydown)="detectKey($event)"
-                                                            (keydown.Tab)="addNewEntry(transaction.amount,transaction, i)"
-                                                            (keyup)="searchStock($event?.target?.value);" type="text"
-                                                            placeholder="Type to search stock - {{requestObj.voucherType}}"
+                                                            (keydown.Tab)="
+                                                                addNewEntry(transaction.amount, transaction, i)
+                                                            "
+                                                            (keyup)="searchStock($event?.target?.value)"
+                                                            type="text"
+                                                            placeholder="Type to search stock - {{
+                                                                requestObj.voucherType
+                                                            }}"
                                                             class="form-control stock-field"
                                                             [(ngModel)]="inventory.stock.name"
-                                                            [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}"
-                                                            (focus)="onStockFocus($event,idx, i);"
-                                                            (blur)="onStockBlur(qty);" /></td>
+                                                            [ngClass]="{
+                                                                'focus': isSelectedRow && selectedStockIdx === idx
+                                                            }"
+                                                            (focus)="onStockFocus($event, idx, i)"
+                                                            (blur)="onStockBlur(qty)"
+                                                        />
+                                                    </td>
                                                     <td>
-                                                        <input onReturn [disabled]="!inventory.stock.name" type="text"
-                                                            #qty placeholder="Quantity" class="form-control text-right"
+                                                        <input
+                                                            onReturn
+                                                            [disabled]="!inventory.stock.name"
+                                                            type="text"
+                                                            #qty
+                                                            placeholder="Quantity"
+                                                            class="form-control text-right"
                                                             [(ngModel)]="inventory.quantity"
                                                             (ngModelChange)="changeQuantity(idx, inventory.quantity)"
-                                                            [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}"
-                                                            decimalDigitsDirective [DecimalPlaces]="2"
-                                                            (focus)="selectedIdx = i" />
+                                                            [ngClass]="{
+                                                                'focus': isSelectedRow && selectedStockIdx === idx
+                                                            }"
+                                                            decimalDigitsDirective
+                                                            [DecimalPlaces]="2"
+                                                            (focus)="selectedIdx = i"
+                                                        />
                                                     </td>
                                                     <td>
-
-                                                        <input onReturn type="text" [disabled]="!inventory.stock.name"
-                                                            placeholder="Rate" class="form-control text-right"
+                                                        <input
+                                                            onReturn
+                                                            type="text"
+                                                            [disabled]="!inventory.stock.name"
+                                                            placeholder="Rate"
+                                                            class="form-control text-right"
                                                             [(ngModel)]="inventory.unit.rate"
                                                             (ngModelChange)="changePrice(idx, inventory.unit.rate)"
-                                                            (focus)="selectedStockIdx = idx;selectedIdx = i;"
-                                                            [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}"
-                                                            decimalDigitsDirective [DecimalPlaces]="2" />
+                                                            (focus)="selectedStockIdx = idx; selectedIdx = i"
+                                                            [ngClass]="{
+                                                                'focus': isSelectedRow && selectedStockIdx === idx
+                                                            }"
+                                                            decimalDigitsDirective
+                                                            [DecimalPlaces]="2"
+                                                        />
                                                     </td>
                                                     <td>
-                                                        <input type="text" placeholder="Unit"
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Unit"
                                                             class="form-control text-left"
-                                                            [(ngModel)]="inventory.unit.stockUnitCode" [readonly]="true"
-                                                            (focus)="selectedStockIdx = idx; selectedIdx = i;"
-                                                            [disabled]="!inventory.stock.name" />
+                                                            [(ngModel)]="inventory.unit.stockUnitCode"
+                                                            [readonly]="true"
+                                                            (focus)="selectedStockIdx = idx; selectedIdx = i"
+                                                            [disabled]="!inventory.stock.name"
+                                                        />
                                                     </td>
                                                     <td>
-                                                        <input onReturn type="text" [disabled]="!inventory.stock.name"
-                                                            placeholder="Total" class="form-control text-right"
-                                                            #toAmountField [(ngModel)]="inventory.amount"
-                                                            (focus)="selectedStockIdx = idx;selectedIdx = i;"
-                                                            [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}"
+                                                        <input
+                                                            onReturn
+                                                            type="text"
+                                                            [disabled]="!inventory.stock.name"
+                                                            placeholder="Total"
+                                                            class="form-control text-right"
+                                                            #toAmountField
+                                                            [(ngModel)]="inventory.amount"
+                                                            (focus)="selectedStockIdx = idx; selectedIdx = i"
+                                                            [ngClass]="{
+                                                                'focus': isSelectedRow && selectedStockIdx === idx
+                                                            }"
                                                             (ngModelChange)="amountChanged(idx)"
                                                             (keydown.Tab)="validateAndAddNewStock(idx)"
                                                             (keyup.Enter)="validateAndAddNewStock(idx)"
-                                                            decimalDigitsDirective [DecimalPlaces]="2" />
+                                                            decimalDigitsDirective
+                                                            [DecimalPlaces]="2"
+                                                        />
                                                     </td>
                                                 </tr>
                                             </ng-container>
@@ -101,30 +188,48 @@
                                     </table>
                                 </td>
                                 <td>
-                                    <input onReturn
+                                    <input
+                                        onReturn
                                         [disabled]="!transaction.selectedAccount.name || transaction.type !== 'by'"
-                                        [hidden]="transaction.type !== 'by'" type="text"
-                                        class="form-control text-right debit-credit" #byAmountField
-                                        decimalDigitsDirective #amountField1 [DecimalPlaces]="2"
-                                        [(ngModel)]="transaction.amount" (focus)="selectRow(true,i);hideListItems()"
-                                        (keydown.Enter)="addNewEntry(transaction.amount,transaction, i)"
-                                        (blur)="addNewEntry(transaction.amount,transaction, i);"
-                                        [ngClass]="{'focus': isSelectedRow && selectedIdx === i}"
-                                        [disabled]="transaction.stocks && transaction.stocks.length && transaction.amount"
-                                        (ngModelChange)="calModAmt(transaction.amount, transaction, i)" />
+                                        [hidden]="transaction.type !== 'by'"
+                                        type="text"
+                                        class="form-control text-right debit-credit"
+                                        #byAmountField
+                                        decimalDigitsDirective
+                                        #amountField1
+                                        [DecimalPlaces]="2"
+                                        [(ngModel)]="transaction.amount"
+                                        (focus)="selectRow(true, i); hideListItems()"
+                                        (keydown.Enter)="addNewEntry(transaction.amount, transaction, i)"
+                                        (blur)="addNewEntry(transaction.amount, transaction, i)"
+                                        [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
+                                        [disabled]="
+                                            transaction.stocks && transaction.stocks.length && transaction.amount
+                                        "
+                                        (ngModelChange)="calModAmt(transaction.amount, transaction, i)"
+                                    />
                                 </td>
                                 <td>
-                                    <input onReturn
+                                    <input
+                                        onReturn
                                         [disabled]="!transaction.selectedAccount.name || transaction.type !== 'to'"
-                                        [hidden]="transaction.type !== 'to'" type="text"
-                                        class="form-control text-right debit-credit" #toAmountField
-                                        decimalDigitsDirective #amountField2 [DecimalPlaces]="2"
-                                        [(ngModel)]="transaction.amount" (focus)="selectRow(true,i);hideListItems()"
-                                        (keydown.Enter)="addNewEntry(transaction.amount,transaction, i)"
-                                        (blur)="addNewEntry(transaction.amount,transaction, i);"
-                                        [ngClass]="{'focus': isSelectedRow && selectedIdx === i}"
-                                        [disabled]="transaction.stocks && transaction.stocks.length  && transaction.amount"
-                                        (ngModelChange)="calModAmt(transaction.amount, transaction, i)" />
+                                        [hidden]="transaction.type !== 'to'"
+                                        type="text"
+                                        class="form-control text-right debit-credit"
+                                        #toAmountField
+                                        decimalDigitsDirective
+                                        #amountField2
+                                        [DecimalPlaces]="2"
+                                        [(ngModel)]="transaction.amount"
+                                        (focus)="selectRow(true, i); hideListItems()"
+                                        (keydown.Enter)="addNewEntry(transaction.amount, transaction, i)"
+                                        (blur)="addNewEntry(transaction.amount, transaction, i)"
+                                        [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
+                                        [disabled]="
+                                            transaction.stocks && transaction.stocks.length && transaction.amount
+                                        "
+                                        (ngModelChange)="calModAmt(transaction.amount, transaction, i)"
+                                    />
                                 </td>
                             </tr>
                         </tbody>
@@ -136,9 +241,18 @@
                 <div class="col-xs-4 col-sm-4">
                     <div class="form-group">
                         <label>Narration:</label>
-                        <textarea #narrationBox onReturn id="narration" class="form-control" name="narration"
-                            (keyup.enter)="openConfirmBox(submitButton)" (keydown.tab)="openConfirmBox(submitButton)"
-                            [(ngModel)]="requestObj.description" resize="false" rows="6"></textarea>
+                        <textarea
+                            #narrationBox
+                            onReturn
+                            id="narration"
+                            class="form-control"
+                            name="narration"
+                            (keyup.enter)="openConfirmBox(submitButton)"
+                            (keydown.tab)="openConfirmBox(submitButton)"
+                            [(ngModel)]="requestObj.description"
+                            resize="false"
+                            rows="6"
+                        ></textarea>
                     </div>
                 </div>
 
@@ -146,19 +260,34 @@
                     <div class="">
                         <h1>Accept?</h1>
                         <div class="pd-t2">
-                            <button class="btn btn-primary" #submitButton (keyup)="keyUpOnSubmitButton($event)"
-                                (click)="saveEntry();">Yes</button>
-                            <button class="btn btn-default" #resetButton (keyup)="keyUpOnResetButton($event)"
-                                (click)="acceptCancel()">No</button>
+                            <button
+                                class="btn btn-primary"
+                                #submitButton
+                                (keyup)="keyUpOnSubmitButton($event)"
+                                (click)="saveEntry()"
+                            >
+                                Yes
+                            </button>
+                            <button
+                                class="btn btn-default"
+                                #resetButton
+                                (keyup)="keyUpOnResetButton($event)"
+                                (click)="acceptCancel()"
+                            >
+                                No
+                            </button>
                             <br />
-                            <button class="btn btn-link mr-t1" (click)="refreshEntry();">Reset</button>
-
+                            <button class="btn btn-link mr-t1" (click)="refreshEntry()">Reset</button>
                         </div>
                     </div>
                 </div>
                 <div class="total-box text-right pull-right">
-                    <span><strong>{{totalDebitAmount | number: '1.2-2' }}</strong></span>
-                    <span><strong>{{totalCreditAmount | number: '1.2-2' }}</strong></span>
+                    <span
+                        ><strong>{{ totalDebitAmount | number: "1.2-2" }}</strong></span
+                    >
+                    <span
+                        ><strong>{{ totalCreditAmount | number: "1.2-2" }}</strong></span
+                    >
                 </div>
             </div>
         </div>
@@ -167,13 +296,22 @@
     <div class="sidebar-list form-control" [hidden]="!showLedgerAccountList">
         <h3 class="pd-1 bd-rb primary-color" *ngIf="selectedField === 'account'">List of Ledger Accounts</h3>
         <h3 class="pd-1 bd-rb primary-color" *ngIf="selectedField === 'stock'">List of Stock Items</h3>
-        <accounting-virtual-list [keydownUpInput]="keyUpDownEvent" [filterText]="filterByText" [options]="inputForList"
-            [showList]="showLedgerAccountList" [isFilterEnabled]="true" (selected)="onItemSelected($event)"
-            [(ngModel)]="currentSelectedValue" [placeholder]="'Select Option'"
-            [notFoundLink]="selectedField === 'account'" (noResultsClicked)="showQuickAccountModal()" [multiple]="false"
-            [ItemHeight]="33" (noOptionsFound)="onNoAccountFound($event)"></accounting-virtual-list>
+        <accounting-virtual-list
+            [keydownUpInput]="keyUpDownEvent"
+            [filterText]="filterByText"
+            [options]="inputForList"
+            [showList]="showLedgerAccountList"
+            [isFilterEnabled]="true"
+            (selected)="onItemSelected($event)"
+            [(ngModel)]="currentSelectedValue"
+            [placeholder]="'Select Option'"
+            [notFoundLink]="selectedField === 'account'"
+            (noResultsClicked)="showQuickAccountModal()"
+            [multiple]="false"
+            [ItemHeight]="33"
+            (noOptionsFound)="onNoAccountFound($event)"
+        ></accounting-virtual-list>
     </div>
-
 </div>
 
 <!--quick account popup -->
@@ -189,24 +327,43 @@
 <div bsModal #chequeEntryModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
     <div class="modal-dialog modal-sm modal-voucher">
         <div class="modal-content">
-            <form autocomplete="off" novalidate name="chequeDetailForm" [formGroup]="chequeDetailForm"
-                class="new-account-form" (submit)="onSubmitChequeDetail()">
+            <form
+                autocomplete="off"
+                novalidate
+                name="chequeDetailForm"
+                [formGroup]="chequeDetailForm"
+                class="new-account-form"
+                (submit)="onSubmitChequeDetail()"
+            >
                 <div class="modal-header">
                     <h3 class="modal-title">Cheque details (if any)</h3>
                 </div>
                 <div class="modal-body">
                     <div class="clearfix mr-t1">
                         <label>Cheque Number:</label>
-                        <input #chequeNumberInput class="form-control" required formControlName="chequeNumber"
-                            name="account" type="text" placeholder="Cheque Number"
-                            (keydown)="onCheckNumberFieldKeyDown($event, 'chqNumber')">
+                        <input
+                            #chequeNumberInput
+                            class="form-control"
+                            required
+                            formControlName="chequeNumber"
+                            name="account"
+                            type="text"
+                            placeholder="Cheque Number"
+                            (keydown)="onCheckNumberFieldKeyDown($event, 'chqNumber')"
+                        />
                     </div>
                     <div class="clearfix mr-t1">
                         <label>Cheque Clearance Date:</label>
-                        <input #chequeClearanceDateInput [textMask]="{mask: dateMask, guide: true}" class="form-control"
-                            formControlName="chequeClearanceDate" name="account" type="text"
+                        <input
+                            #chequeClearanceDateInput
+                            [textMask]="{ mask: dateMask, guide: true }"
+                            class="form-control"
+                            formControlName="chequeClearanceDate"
+                            name="account"
+                            type="text"
                             placeholder="Cheque Clearance Date"
-                            (keydown)="onCheckNumberFieldKeyDown($event, 'chqDate')">
+                            (keydown)="onCheckNumberFieldKeyDown($event, 'chqDate')"
+                        />
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -220,7 +377,11 @@
 </div>
 
 <div class="aside-overlay" (click)="closeCreateStock($event)" *ngIf="asideMenuStateForProductService === 'in'"></div>
-<aside-inventory-stock-group *ngIf="asideMenuStateForProductService === 'in'" [autoFocus]="autoFocusStockGroupField"
-    (closeAsideEvent)="closeCreateStock()" [class]="asideMenuStateForProductService"
-    [@slideInOut]="asideMenuStateForProductService">
+<aside-inventory-stock-group
+    *ngIf="asideMenuStateForProductService === 'in'"
+    [autoFocus]="autoFocusStockGroupField"
+    (closeAsideEvent)="closeCreateStock()"
+    [class]="asideMenuStateForProductService"
+    [@slideInOut]="asideMenuStateForProductService"
+>
 </aside-inventory-stock-group>

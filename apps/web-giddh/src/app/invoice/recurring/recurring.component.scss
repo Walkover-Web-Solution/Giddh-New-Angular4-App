@@ -100,10 +100,10 @@
 .btn-link-2 {
     color: $nero;
 }
+
 .search-invoice-filed {
     display: none;
 }
-
 .more-dropdown {
     height: 30px !important;
     .dropdown-menu {
@@ -125,7 +125,6 @@
         }
     }
 }
-
 @media (max-width: 1191px) and (min-width: 1024px) {
     .recurring-form-wrapper {
         display: flex;
@@ -223,8 +222,8 @@
     }
 }
 
-@media (min-width: 769px){
-    .table-responsive{
+@media (min-width: 769px) {
+    .table-responsive {
         max-height: calc(100vh - 275px);
         overflow-y: auto;
     }

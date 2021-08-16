@@ -360,7 +360,7 @@
                 {
                     "label": "Search",
                     "link": "/pages/search",
-                    "icon": "icon-search-new",
+                    "icon": "icon-search",
                     "description": "Select group and search for a time span"
                 }
             ]

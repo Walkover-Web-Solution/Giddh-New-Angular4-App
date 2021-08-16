@@ -16,8 +16,6 @@ export class CommonActions {
     public static GET_COUNTRY_RESPONSE = "GetCountryResponse";
     public static GET_ALL_COUNTRY = 'GetAllCountry';
     public static GET_ALL_COUNTRY_RESPONSE = "GetAllCountryResponse";
-    public static GET_CURRENCY = 'GetCurrency';
-    public static GET_CURRENCY_RESPONSE = "GetCurrencyResponse";
     public static GET_CALLING_CODES = 'GetCallingCodes';
     public static GET_CALLING_CODES_RESPONSE = "GetCallingCodesResponse";
     public static GET_ONBOARDING_FORM = 'GetOnboardingForm';
@@ -43,12 +41,6 @@ export class CommonActions {
             ofType(CommonActions.GET_ALL_COUNTRY),
             switchMap((action: CustomActions) => this._commonService.GetCountry(action.payload)),
             map(response => this.GetAllCountryResponse(response))));
-
-    public getCurrency$: Observable<Action> = createEffect(() => this.action$
-        .pipe(
-            ofType(CommonActions.GET_CURRENCY),
-            switchMap((action: CustomActions) => this._commonService.GetCurrency()),
-            map(response => this.GetCurrencyResponse(response))));
 
     public getCallingCodes$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -88,20 +80,6 @@ export class CommonActions {
     public GetCountryResponse(value: BaseResponse<CountryResponse, CountryRequest>): CustomActions {
         return {
             type: CommonActions.GET_COUNTRY_RESPONSE,
-            payload: value
-        };
-    }
-
-    public GetCurrency(): CustomActions {
-        return {
-            type: CommonActions.GET_CURRENCY,
-            payload: null
-        };
-    }
-
-    public GetCurrencyResponse(value: BaseResponse<CurrencyResponse, any>): CustomActions {
-        return {
-            type: CommonActions.GET_CURRENCY_RESPONSE,
             payload: value
         };
     }
@@ -160,7 +138,7 @@ export class CommonActions {
             payload: value
         };
     }
-    
+
     public resetOnboardingForm(): CustomActions {
         return {
             type: CommonActions.RESET_ONBOARDING_FORM_RESPONSE

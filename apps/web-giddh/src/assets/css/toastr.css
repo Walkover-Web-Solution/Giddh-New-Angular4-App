@@ -28,7 +28,7 @@
     content: "";
     width: 26px;
     height: 26px;
-    background-color: rgba(256,256,256,0.2);
+    background-color: rgba(256, 256, 256, 0.2);
     top: 5px;
     right: -6px;
     border-radius: 50%;
@@ -200,6 +200,7 @@ button.toast-close-button {
 .toast {
     background-color: #030303;
     pointer-events: auto;
+    animation: none !important;
 }
 .toast-success {
     background-color: #51a351;

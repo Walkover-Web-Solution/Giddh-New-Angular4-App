@@ -1,3 +1,7 @@
 {
-    "projectId": "1gmg5r"
+    "projectId": "1gmg5r",
+    "retries": {
+        "runMode": 2,
+        "openMode": 0
+    }
 }

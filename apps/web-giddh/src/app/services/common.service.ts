@@ -27,15 +27,6 @@ export class CommonService {
             }));
     }
 
-    public GetCurrency(): Observable<BaseResponse<any, any>> {
-        let url = this.config.apiUrl + COMMON_API.CURRENCY;
-        return this._http.get(url).pipe(
-            map((res) => {
-                let data: BaseResponse<CurrencyResponse, any> = res;
-                return data;
-            }));
-    }
-
     public GetCallingCodes(): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + COMMON_API.CALLING_CODES;
         return this._http.get(url).pipe(

@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
+import { GIDDH_VOUCHER_FORM } from '../../app.constant';
 import {
     ConfirmationModalButton,
     ConfirmationModalConfiguration,
 } from '../../common/confirmation-modal/confirmation-modal.interface';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
+import { VoucherForm } from '../../models/api-models/Voucher';
 
 @Injectable({
     providedIn: 'any'
@@ -80,9 +82,14 @@ export class ProformaInvoiceUtilityService {
         }
         if (data?.entries?.length) {
             // TODO: Remove this once the API issue is resolved
-            data.entries.forEach(element => {
-                element.description = '';
-                element.discounts = element.discounts.filter(discount => (discount.name && discount.particular) || discount.discountValue);
+            data.entries.forEach(entry => {
+                entry.discounts = entry.discounts.filter(discount => (discount.name && discount.particular) || discount.discountValue);
+                entry.transactions?.forEach(transaction => {
+                    if (transaction?.stock) {
+                        transaction.stock.rate.rateForAccount = transaction.stock.rate?.amountForAccount;
+                        delete transaction.stock.rate?.amountForAccount;
+                    }
+                });
             });
         }
         return data;
@@ -100,5 +107,21 @@ export class ProformaInvoiceUtilityService {
             return VoucherTypeEnum.sales;
         }
         return voucher;
+    }
+
+    /**
+     * Prepares the voucher form based on current voucher type
+     *
+     * @param {VoucherTypeEnum} voucherType Current voucher type
+     * @param {*} [formConfiguration] If form configuration are loaded from the API
+     * @return {VoucherForm} Voucher form configuration for current voucher
+     * @memberof ProformaInvoiceUtilityService
+     */
+    public prepareVoucherForm(voucherType: VoucherTypeEnum, formConfiguration?: any): VoucherForm {
+        if (formConfiguration) {
+            return formConfiguration.find(form => form.type === voucherType);
+        } else {
+            return GIDDH_VOUCHER_FORM.find(form => form.type === voucherType);
+        }
     }
 }

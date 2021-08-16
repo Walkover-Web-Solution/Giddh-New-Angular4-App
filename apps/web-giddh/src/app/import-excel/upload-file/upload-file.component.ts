@@ -47,13 +47,13 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
-        private _toaster: ToasterService,
+        private toasterService: ToasterService,
         private activatedRoute: ActivatedRoute,
         private settingsBranchAction: SettingsBranchActions,
         private store: Store<AppState>,
         private generalService: GeneralService
     ) {
-        
+
     }
 
     public onFileChange(file: FileList) {
@@ -62,7 +62,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         let isValidFileType = validExts.some(s => type === s);
 
         if (!isValidFileType) {
-            this._toaster.errorToast(this.localeData?.invalid_file_type);
+            this.toasterService.errorToast(this.localeData?.invalid_file_type);
             this.selectedFileName = '';
             this.file = null;
             return;

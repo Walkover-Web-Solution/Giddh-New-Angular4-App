@@ -55,6 +55,7 @@ export class AuditLogsActions {
                     })));
             })));
 
+
     constructor(private action$: Actions,
         private _toasty: ToasterService,
         private logService: LogsService) {

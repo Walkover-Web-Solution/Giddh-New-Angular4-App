@@ -1,47 +1,93 @@
 <div class="audit-form-wrap mr-t15">
     <div class="clearfix form-field">
-        <label>{{commonLocaleData?.app_entity}} <sup class="text-danger">*</sup></label>
-        <sh-select [options]="auditLogFormVM.entities" #selectEntity [isFilterEnabled]="true"
-            [placeholder]="commonLocaleData?.app_select_option" (selected)="selectedEntityType($event)"
-            [(ngModel)]="auditLogFormVM.selectedEntity" [forceClearReactive]="forceClearEntity$ | async"></sh-select>
+        <label>{{ commonLocaleData?.app_entity }} <sup class="text-danger">*</sup></label>
+        <sh-select
+            [options]="auditLogFormVM.entities"
+            #selectEntity
+            [isFilterEnabled]="true"
+            [placeholder]="commonLocaleData?.app_select_option"
+            (selected)="selectedEntityType($event)"
+            [(ngModel)]="auditLogFormVM.selectedEntity"
+            [forceClearReactive]="forceClearEntity$ | async"
+        ></sh-select>
     </div>
     <div class="clearfix form-field">
-        <label>{{localeData?.operation}}</label>
-        <sh-select [options]="auditLogFormVM.filters" [placeholder]="commonLocaleData?.app_select_option"
-            (click)="prepareOperationFormData(selectEntity)" [(ngModel)]="auditLogFormVM.selectedOperation"
-            [forceClearReactive]="forceClearOperations$ | async"></sh-select>
+        <label>{{ localeData?.operation }}</label>
+        <sh-select
+            [options]="auditLogFormVM.filters"
+            [placeholder]="commonLocaleData?.app_select_option"
+            (click)="prepareOperationFormData(selectEntity)"
+            [(ngModel)]="auditLogFormVM.selectedOperation"
+            [forceClearReactive]="forceClearOperations$ | async"
+        ></sh-select>
     </div>
-    <div class="clearfix form-field"
-        *ngIf="!auditLogFormVM.selectedEntity || auditLogFormVM.selectedEntity ==='ACCOUNT' || auditLogFormVM.selectedEntity ==='ENTRY' || auditLogFormVM.selectedEntity ==='LEDGER'">
-        <label>{{commonLocaleData?.app_account}}</label>
-        <sh-select [options]="auditLogFormVM.accounts$ | async" [isFilterEnabled]="true"
-            [placeholder]="commonLocaleData?.app_select_option" [enableDynamicSearch]="true"
-            [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()"
+    <div
+        class="clearfix form-field"
+        *ngIf="
+            !auditLogFormVM.selectedEntity ||
+            auditLogFormVM.selectedEntity === 'ACCOUNT' ||
+            auditLogFormVM.selectedEntity === 'ENTRY' ||
+            auditLogFormVM.selectedEntity === 'LEDGER'
+        "
+    >
+        <label>{{ commonLocaleData?.app_account }}</label>
+        <sh-select
+            [options]="auditLogFormVM.accounts$ | async"
+            [isFilterEnabled]="true"
+            [placeholder]="commonLocaleData?.app_select_option"
+            [enableDynamicSearch]="true"
+            [isPaginationEnabled]="true"
+            (scrollEnd)="handleScrollEnd()"
             (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
-            [(ngModel)]="auditLogFormVM.selectedAccountUniqueName" [forceClearReactive]="forceClearAccount$ | async">
+            [(ngModel)]="auditLogFormVM.selectedAccountUniqueName"
+            [forceClearReactive]="forceClearAccount$ | async"
+        >
         </sh-select>
     </div>
-    <div class="clearfix form-field"
-        *ngIf="!auditLogFormVM.selectedEntity || auditLogFormVM.selectedEntity ==='ACCOUNT' || auditLogFormVM.selectedEntity ==='GROUP'">
-        <label>{{commonLocaleData?.app_group}}</label>
-        <sh-select [options]="auditLogFormVM.groups$ | async" [isFilterEnabled]="true"
-            [placeholder]="commonLocaleData?.app_select_option" [enableDynamicSearch]="true"
-            [isPaginationEnabled]="true" (scrollEnd)="handleGroupScrollEnd()"
+    <div
+        class="clearfix form-field"
+        *ngIf="
+            !auditLogFormVM.selectedEntity ||
+            auditLogFormVM.selectedEntity === 'ACCOUNT' ||
+            auditLogFormVM.selectedEntity === 'GROUP'
+        "
+    >
+        <label>{{ commonLocaleData?.app_group }}</label>
+        <sh-select
+            [options]="auditLogFormVM.groups$ | async"
+            [isFilterEnabled]="true"
+            [placeholder]="commonLocaleData?.app_select_option"
+            [enableDynamicSearch]="true"
+            [isPaginationEnabled]="true"
+            (scrollEnd)="handleGroupScrollEnd()"
             (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
-            [(ngModel)]="auditLogFormVM.selectedGroupUniqueName" [forceClearReactive]="forceClearGroup$ | async">
+            [(ngModel)]="auditLogFormVM.selectedGroupUniqueName"
+            [forceClearReactive]="forceClearGroup$ | async"
+        >
         </sh-select>
     </div>
     <div class="clearfix form-field">
-        <label>{{localeData?.user}}</label>
-        <sh-select [options]="auditLogFormVM.users$ | async" [customFilter]="customUserFilter" [isFilterEnabled]="true"
-            [placeholder]="commonLocaleData?.app_select_option" [(ngModel)]="auditLogFormVM.selectedUserUniqueName"
-            [forceClearReactive]="forceClearUser$ | async"></sh-select>
+        <label>{{ localeData?.user }}</label>
+        <sh-select
+            [options]="auditLogFormVM.users$ | async"
+            [customFilter]="customUserFilter"
+            [isFilterEnabled]="true"
+            [placeholder]="commonLocaleData?.app_select_option"
+            [(ngModel)]="auditLogFormVM.selectedUserUniqueName"
+            [forceClearReactive]="forceClearUser$ | async"
+        ></sh-select>
     </div>
     <div class="d-flex">
         <div class="form-btn-field">
             <label class="d-block">&nbsp;</label>
-            <button class='btn btn-success mr-0' [ladda]="auditLogFormVM.getLogsInprocess$ | async"
-                [disabled]="!auditLogFormVM.selectedEntity" (click)='getLogFilters()'>{{localeData?.get_logs}}</button>
+            <button
+                class="btn btn-success mr-0"
+                [ladda]="auditLogFormVM.getLogsInprocess$ | async"
+                [disabled]="!auditLogFormVM.selectedEntity"
+                (click)="getLogFilters()"
+            >
+                {{ localeData?.get_logs }}
+            </button>
         </div>
     </div>
 </div>

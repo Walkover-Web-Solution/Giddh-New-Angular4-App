@@ -28,7 +28,6 @@ import { NeedsAuthentication } from '../decorators/needsAuthentication';
 import { TallySyncService } from "../services/tally-sync.service";
 import { SharedModule } from '../shared/shared.module';
 
-
 const _ROUTES: Routes = [
     {
         path: '',

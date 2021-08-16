@@ -80,15 +80,7 @@
         "select_otp": "Select OTP",
         "approver_name": "Approver Name",
         "select_otp_tooltip": "The OTP will reach the person selected in Approver Name",
-        "open_new_current_account": "Open a new current account",
-        "otp_types": {
-            "bank_otp": "Bank OTP",
-            "giddh_otp": "GIDDH OTP"
-        },
-        "amount_limit_types": {
-            "bank_limit": "Max limit as per Bank",
-            "custom": "Custom"
-        },
+        "open_new_current_account": "Open A New ICICI Current Account",
         "row_delete_error": "At least 1 row is required",
         "beneficiary_validation_successful": "Beneficiary has been validated successfully.",
         "beneficiary_validation_error": "There is some issue in beneficiary validation. Please try again.",
@@ -98,6 +90,33 @@
         "beneficiary_nick_name": "Beneficiary Nick Name",
         "beneficiary_account_no": "Beneficiary Account No.",
         "ifsc": "IFSC",
-        "add_beneficiary": "Add Beneficiary"
+        "add_beneficiary": "Add Beneficiary",
+        "connect_new_account": "+ Connect New Account",
+        "learn_connect": "Learn, how to connect",
+        "connected_accounts": "Connected Accounts",
+        "linked_account": "Linked Account",
+        "payment_updates": "Payment Updates",
+        "limit_upto": "Limit Up To",
+        "pending_self_approval": "Pending for self approval",
+        "approval_request_sent": "A request has been sent to your account, login to <a href='https://cibnext.icicibank.com/corp/AuthenticationController?FORMSGROUP_ID__=AuthenticationFG&__START_TRAN_FLAG__=Y&FG_BUTTONS__=LOAD&ACTION.LOAD=Y&AuthenticationFG.LOGIN_FLAG=1&BANK_ID=ICI&ITM=nli_corp_primer_login_btn_desk' target='_blank'>ICICI Bank Portal</a> and accept it.",
+        "approval_request_accepted": "Once accepted, you can link your ICICI bank account/s and make payments directly through GIDDH",
+        "add_more_users": "+ Add More Users",
+        "connect_icici_account": "Connect ICICI Account",
+        "icici_login_id": "ICICI Login ID",
+        "link_account_label": "Link Account",
+        "link_account_placeholder": "Select Account",
+        "select_receipients": "Select Receipients",
+        "connect": "Connect",
+        "edit_account": "Edit Account",
+        "add_user": "Add User",
+        "enter_amount": "Enter Amount",
+        "edit_user": "Edit User",
+        "duration": "Duration",
+        "delete_login": "Do you really want to delete the login id [LOGIN_ID] ?",
+        "connected": "Connected",
+        "used": "Used",
+        "get_instant_overdraft": "Get Instant Overdraft",
+        "duration_error": "Please select duration for given amount",
+        "required_field_error": "Please fill all required fields"
     }
 }

@@ -648,5 +648,13 @@
     "app_dashboard": "डैशबोर्ड",
     "app_giddh_no_permissions": "आपको इसे देखने की अनुमति नहीं है",
     "app_exchange_gain": "लाभ",
-    "app_exchange_loss": "हानि"
+    "app_exchange_loss": "हानि",
+    "app_vendor_name": "विक्रेता का नाम",
+    "app_amount_limit": {
+        "daily": "दैनिक",
+        "weekly": "साप्ताहिक",
+        "monthly": "महीने के",
+        "unlimited": "असीमित"
+    },
+    "app_voucher_unavailable": "समायोजन के लिए कोई वाउचर नहीं है।"
 }

@@ -58,9 +58,12 @@ export class PurchaseRecordService {
      */
     public downloadAttachedFile(requestObject: any): Observable<BaseResponse<PurchaseRecordAttachmentResponse, any>> {
         const { accountUniqueName, purchaseRecordUniqueName } = requestObject;
-        const contextPath: string =
+        let contextPath: string =
             `${this.config.apiUrl}${PURCHASE_RECORD_API.DOWNLOAD_ATTACHMENT.replace(':companyUniqueName', this._generalService.companyUniqueName)
                 .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))}`;
+        if (this._generalService.voucherApiVersion === 2) {
+            contextPath = this._generalService.addVoucherVersion(contextPath, this._generalService.voucherApiVersion);
+        }
         return this._http.get(contextPath, { uniqueName: purchaseRecordUniqueName }).pipe(
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
     }

@@ -211,14 +211,14 @@ ul.select-action-dropdown {
     align-items: center;
     justify-content: center;
 }
-.advance-icon{
+.advance-icon {
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 14px;
     border-radius: 5px;
     align-items: center;
-    justify-content: center; 
+    justify-content: center;
 }
 .search-icon-block {
     display: none;
@@ -276,7 +276,6 @@ span.icon-advance-filter {
 .select-all-proformas-on-mobile-view {
     display: none;
 }
-
 .btn-wrapper-more {
     height: 30px;
 }
@@ -350,10 +349,10 @@ span.icon-advance-filter {
         display: block;
         flex-direction: column;
     }
-    .clear-filter{
+    .clear-filter {
         margin-top: 10px;
     }
-    .form-inline{
+    .form-inline {
         align-items: flex-start;
     }
 }
@@ -388,31 +387,31 @@ span.icon-advance-filter {
     .date-advance-search .btn-wrapper {
         display: none;
     }
-    .d-sm-none{
+    .d-sm-none {
         display: none !important;
     }
 }
 
-@media (min-width: 769px){
-    .table-responsive{
+@media (min-width: 769px) {
+    .table-responsive {
         max-height: calc(100vh - 245px);
         overflow-y: auto;
     }
 }
-@media (max-width: 599px){
-    .dropdown-toggle.more-btn-dropdown{
+@media (max-width: 599px) {
+    .dropdown-toggle.more-btn-dropdown {
         width: auto !important;
     }
-    .advance-icon{
+    .advance-icon {
         height: 36px;
     }
 }
 
-@media (max-width: 428px){
-    .date-advance-search{
-        .more-filter{
+@media (max-width: 428px) {
+    .date-advance-search {
+        .more-filter {
             flex-direction: column;
-            .d-md-none{
+            .d-md-none {
                 justify-content: space-between;
                 width: 100%;
                 flex-direction: row !important;
@@ -421,30 +420,30 @@ span.icon-advance-filter {
     }
 }
 
-@media (max-width: 620px) and (min-width: 576px){
-    .d-md-none{
+@media (max-width: 620px) and (min-width: 576px) {
+    .d-md-none {
         flex-direction: column-reverse;
-        .btn-wrapper-more{
+        .btn-wrapper-more {
             margin-top: 10px;
         }
     }
 
-    .form-inline{
+    .form-inline {
         align-items: flex-start;
     }
 
-    .dropdown-toggle.more-btn-dropdown{
+    .dropdown-toggle.more-btn-dropdown {
         width: auto;
     }
 
-    .flex-column{
-        .d-flex{
+    .flex-column {
+        .d-flex {
             flex-direction: column-reverse;
-            .btn-wrapper-more{
+            .btn-wrapper-more {
                 margin-top: 10px;
                 margin-left: auto;
-                .btn{
-                    margin-right:0;
+                .btn {
+                    margin-right: 0;
                 }
             }
         }

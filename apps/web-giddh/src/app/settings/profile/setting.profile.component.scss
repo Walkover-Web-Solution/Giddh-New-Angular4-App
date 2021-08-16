@@ -45,7 +45,13 @@
         font-size: 12px;
     }
 }
-
+@media (max-width: 767px) {
+    .branch-vector {
+        img {
+            width: 150px;
+        }
+    }
+}
 @media (min-width: 992px) and (max-width: 1359px) {
     .profile-form {
         flex: 0 0 100% !important;
@@ -148,7 +154,7 @@
     background-color: $alice-blue-light;
 }
 
-.phone-code-caret{
+.phone-code-caret {
     width: 85px;
     margin-right: 28px;
 }

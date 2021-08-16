@@ -394,13 +394,11 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
             distinctUntilChanged(),
             takeUntil(this.destroyed$)
         ).subscribe(s => {
-            if (s) {
-                this.isFilterCorrect = true;
-                this.stockReportRequest.accountName = s;
-                this.getStockReport(true);
-                if (s === '') {
-                    this.showAccountSearch = false;
-                }
+            this.isFilterCorrect = true;
+            this.stockReportRequest.accountName = s;
+            this.getStockReport(true);
+            if (s === '') {
+                this.showAccountSearch = false;
             }
         });
 

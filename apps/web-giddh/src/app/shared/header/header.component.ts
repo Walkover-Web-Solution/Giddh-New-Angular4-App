@@ -31,6 +31,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DEFAULT_AC, NAVIGATION_ITEM_LIST, reassignNavigationalArray } from '../../models/defaultMenus';
 import { userLoginStateEnum, OrganizationType } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
+import { environment } from 'apps/web-giddh/src/environments/environment';
 import { CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { CommonService } from '../../services/common.service';
@@ -63,10 +64,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public asideHelpSupportMenuState: string = 'out';
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideSettingMenuState: string = 'out';
-
-    public asideInventorySidebarMenuState: string = 'out';
     /*This will check if page has not tabs*/
     public pageHasTabs: boolean = false;
+
+    public asideInventorySidebarMenuState: string = 'out';
 
     @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
 
@@ -390,6 +391,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 } else {
                     this.activeCompanyForDb.name = selectedCmp.name;
                     this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
+                    this.selectedCompanyCountry = selectedCmp.country;
                 }
             }
         });
@@ -486,7 +488,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.getElectronMacAppVersion();
 
         this.store.dispatch(this.companyActions.GetApplicationDate());
-
         this.user$.pipe(take(1)).subscribe((u) => {
             if (u) {
                 let userEmail = u.email;
@@ -678,6 +679,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
     }
 
+
     public ngAfterViewInit() {
         if (window['Headway'] === undefined) {
             /* TO SHOW NOTIFICATIONS */
@@ -709,7 +711,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         this.session$.subscribe((s) => {
             if (s === userLoginStateEnum.notLoggedIn) {
-                this.router.navigate(['/login']);
+                if (isElectron) {
+                    this.router.navigate(['/login']);
+                } else {
+                    window.location.href = (environment.production) ? `https://stage.giddh.com/login/?action=logout` : `https://test.giddh.com/login/?action=logout`;
+                }
             } else if (s === userLoginStateEnum.newUserLoggedIn) {
                 this.zone.run(() => {
                     this.router.navigate(['/new-user']);
@@ -1755,27 +1761,27 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.currentPageUrl?.indexOf('pages/invoice/ewaybill') > -1);
     }
 
-    /**
+   /**
+    * Opens the GST side menu in responsive mode
+    *
+    * @memberof HeaderComponent
+    */
+   public openGstSideMenu(): void {
+        this.isGstSideMenuOpened = !this.isGstSideMenuOpened;
+        this.store.dispatch(this._generalActions.openGstSideMenu(this.isGstSideMenuOpened));
+    }
+
+     /**
      * This toggle's settings sidebar
      *
      * @param {boolean} isMobileSidebar
      * @memberof HeaderComponent
      */
-    public toggleSidebar(isMobileSidebar: boolean): void {
+      public toggleSidebar(isMobileSidebar: boolean): void {
         if(this.asideSettingMenuState === "in") {
             this.toggleSidebarPane(false, isMobileSidebar);
         } else {
             this.toggleSidebarPane(true, isMobileSidebar);
         }
-    }
-
-    /**
-    * Opens the GST side menu in responsive mode
-    *
-    * @memberof HeaderComponent
-    */
-     public openGstSideMenu(): void {
-        this.isGstSideMenuOpened = !this.isGstSideMenuOpened;
-        this.store.dispatch(this._generalActions.openGstSideMenu(this.isGstSideMenuOpened));
     }
 }

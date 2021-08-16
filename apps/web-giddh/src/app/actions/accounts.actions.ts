@@ -221,7 +221,7 @@ export class AccountsAction {
                     setTimeout(() => {
                         this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm());
                     }, 1000);
-                    this.store.dispatch(this.getAccountDetails(resData.request.uniqueName));
+                    this.store.dispatch(this.getAccountDetails(resData.body.uniqueName));
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -531,16 +531,14 @@ export class AccountsAction {
                 };
             })));
 
-    @Effect()
-    public ApplyAccountDiscountsV2$: Observable<Action> = this.action$
+    public ApplyAccountDiscountsV2$: Observable<Action> = createEffect(() => this.action$
         .pipe(ofType(AccountsAction.APPLY_ACCOUNT_DISCOUNTS_V2),
             switchMap((action: CustomActions) => this._accountService.applyDiscounts(action.payload)),
             map(response => {
                 return this.applyAccountDiscountResponseV2(response);
-            }));
+            })));
 
-    @Effect()
-    public ApplyAccountDiscountResponseV2$: Observable<Action> = this.action$
+    public ApplyAccountDiscountResponseV2$: Observable<Action> = createEffect(() => this.action$
         .pipe(ofType(AccountsAction.APPLY_ACCOUNT_DISCOUNT_RESPONSE_V2),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
@@ -549,7 +547,7 @@ export class AccountsAction {
                     this._toasty.successToast(this.localeService.translate("app_messages.discount_linked"), action.payload.status);
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
     constructor(private action$: Actions,
         private _accountService: AccountService,

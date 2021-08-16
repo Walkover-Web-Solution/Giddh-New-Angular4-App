@@ -31,7 +31,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceReceiptFilter, ReceiptItem, ReciptResponse } from 'apps/web-giddh/src/app/models/api-models/recipt';
 import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
 import { CompanyResponse, ValidateInvoice } from 'apps/web-giddh/src/app/models/api-models/Company';
-import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdvanceSearch.component';
 import { ToasterService } from '../../services/toaster.service';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
@@ -221,6 +220,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public gstEInvoiceEnable: boolean;
     /** True if selected items needs to be updated */
     public updateSelectedItems: boolean = false;
+    /** This will hold comparision filters */
     public comparisionFilters: any[] = [];
     /** Stores the E-invoice cancellation reason */
     public eInvoiceCancel: { cancellationReason: string, cancellationRemarks?: string } = {
@@ -231,6 +231,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public eInvoiceCancellationReasonOptions = [];
     /** True if user has voucher list permission */
     public hasVoucherListPermissions: boolean = true;
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private store: Store<AppState>,
@@ -238,7 +240,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         private _invoiceService: InvoiceService,
         private _toaster: ToasterService,
         private _activatedRoute: ActivatedRoute,
-        private companyActions: CompanyActions,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private cdr: ChangeDetectorRef,
         private _breakPointObservar: BreakpointObserver,
@@ -296,7 +297,14 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.advanceSearchFilter.count = PAGINATION_LIMIT;
         this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a && a.accountUniqueName && a.purchaseRecordUniqueName) {
-                this._receiptServices.GetPurchaseRecordDetails(a.accountUniqueName, a.purchaseRecordUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
+                const apiCallObservable = this.voucherApiVersion === 2 ?
+                    this._receiptServices.getVoucherDetailsV4(a.accountUniqueName, {
+                        invoiceNumber: '',
+                        voucherType: VoucherTypeEnum.purchase,
+                        uniqueName: a.purchaseRecordUniqueName
+                    }) :
+                    this._receiptServices.GetPurchaseRecordDetails(a.accountUniqueName, a.purchaseRecordUniqueName);
+                apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
                     if (res && res.body) {
                         if (res.body.date) {
                             this.invoiceSearchRequest.from = res.body.date;
@@ -545,6 +553,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.store.pipe(select(state => state.receipt.hasVoucherListPermissions), takeUntil(this.destroyed$)).subscribe(response => {
             this.hasVoucherListPermissions = response;
         });
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -1134,7 +1143,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             request.to = this.invoiceSearchRequest.to;
         }
         this.lastListingFilters = request;
-
         if (this.invoiceSearchRequest && this.invoiceSearchRequest.q) {
             request.q = this.invoiceSearchRequest.q;
         }
@@ -1336,14 +1344,15 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             }
 
             let grandTotalConversionRate = 0, balanceDueAmountConversionRate = 0;
-            if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
+            if (this.voucherApiVersion === 2) {
+                grandTotalConversionRate = item.exchangeRate;
+            } else if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
                 grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(2);
             }
             if (balanceDueAmountForCompany && balanceDueAmountForAccount) {
                 balanceDueAmountConversionRate = +((balanceDueAmountForCompany / balanceDueAmountForAccount) || 0).toFixed(2);
                 item.exchangeRate = balanceDueAmountConversionRate;
             }
-
             let text = this.localeData?.currency_conversion;
             let grandTotalTooltipText = text?.replace("[BASE_CURRENCY]", this.baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
             let balanceDueTooltipText;
@@ -1460,14 +1469,24 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      */
     public getAllAdvanceReceipts(customerUniqueName: string, voucherDate: string): void {
         if (customerUniqueName && voucherDate) {
-            let requestObject = {
-                accountUniqueName: customerUniqueName,
-                invoiceDate: voucherDate
-            };
             this.isAccountHaveAdvanceReceipts = false;
-            this.salesService.getAllAdvanceReceiptVoucher(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            let apiCallObservable: Observable<any>;
+            if (this.voucherApiVersion !== 2) {
+                const requestObject = {
+                    accountUniqueName: customerUniqueName,
+                    invoiceDate: voucherDate
+                };
+                apiCallObservable = this.salesService.getAllAdvanceReceiptVoucher(requestObject);
+            } else {
+                const requestObject = {
+                    accountUniqueNames: [this.selectedVoucher, customerUniqueName],
+                    voucherType: this.selectedVoucher
+                }
+                apiCallObservable = this.salesService.getInvoiceList(requestObject, voucherDate);
+            }
+            apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res && res.status === 'success') {
-                    if (res.body && res.body.length) {
+                    if (res.body && (res.body.length || res.body.results?.length)) {
                         this.voucherForAdjustment = res.body;
                         this.isAccountHaveAdvanceReceipts = true;
                         this.showAdvanceReceiptAdjust = true;
@@ -1475,7 +1494,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         this.selectedPerformAdjustPaymentAction = false;
                     } else {
                         this.isAccountHaveAdvanceReceipts = false;
-                        this._toaster.warningToast(this.localeData?.no_advance_receipt);
+                        if (this.voucherApiVersion !== 2) {
+                            this._toaster.warningToast(this.localeData?.no_advance_receipt);
+                        } else {
+                            this._toaster.warningToast(this.commonLocaleData?.app_voucher_unavailable);
+                        }
                     }
                 }
             });
@@ -1501,7 +1524,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             });
         }
     }
-
     /**
      * This will give the updated account uniquename
      *
@@ -1707,7 +1729,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof InvoicePreviewComponent
      */
     public translationComplete(event: any): void {
-        if(event) {
+        if (event) {
             this.comparisionFilters = [
                 { label: this.commonLocaleData?.app_comparision_filters?.greater_than, value: 'greaterThan' },
                 { label: this.commonLocaleData?.app_comparision_filters?.less_than, value: 'lessThan' },

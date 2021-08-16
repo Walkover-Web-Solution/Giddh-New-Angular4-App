@@ -11,28 +11,28 @@ import { GstReconcileActions } from '../../../../actions/gst-reconcile/GstReconc
 import { Observable, ReplaySubject } from 'rxjs';
 
 @Component({
-    selector: 'reconcile',
-    templateUrl: './reconcilation.component.html',
-    styleUrls: ['reconcilation.component.scss'],
-    providers: [
-        {
-            provide: BsDropdownConfig, useValue: { autoClose: true },
-        },
-        {
-            provide: AlertConfig, useValue: {}
-        }
-    ],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in <=> out', animate('400ms ease-in-out')),
-        ])
-    ]
+	selector: 'reconcile',
+	templateUrl: './reconcilation.component.html',
+	styleUrls: ['./reconcilation.component.scss'],
+	providers: [
+		{
+			provide: BsDropdownConfig, useValue: { autoClose: true },
+		},
+		{
+			provide: AlertConfig, useValue: {}
+		}
+	],
+	animations: [
+		trigger('slideInOut', [
+			state('in', style({
+				transform: 'translate3d(0, 0, 0)'
+			})),
+			state('out', style({
+				transform: 'translate3d(100%, 0, 0)'
+			})),
+			transition('in <=> out', animate('400ms ease-in-out')),
+		])
+	]
 })
 export class ReconcileComponent implements OnInit, OnDestroy {
     @Input() public data: GstReconcileInvoiceDetails = null;

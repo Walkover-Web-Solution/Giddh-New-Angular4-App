@@ -69,6 +69,7 @@
         border-right: 1px solid $gainsboro !important;
     }
     td.raw-material {
+        background-color: $gray-95;
         line-height: 2;
         color: $matterhorn;
     }
@@ -83,12 +84,11 @@
 .regular-font {
     font-family: "opensans-regular";
 }
-
 .material-head {
     min-width: 20% !important;
     max-width: 20% !important;
     th:first-child {
-        min-width: 220px !important;
+        min-width: 110px !important;
     }
     th:nth-child(2),
     th:last-child {
@@ -107,17 +107,23 @@
     }
     .nested-div {
         div {
-            &:first-child {
-                min-width: 50% !important;
-                max-width: 300px !important;
-            }
-            min-width: 26%;
+            min-width: 34%;
             max-width: 50%;
         }
     }
 }
-.mf-report-head{
+.regular-font {
+    font-family: "opensans-regular";
+}
+.row-gray-background th {
+    background-color: $medium-gray;
+}
+.mf-report-head {
     margin-top: 55px;
+}
+
+.table-responsive {
+    margin-bottom: 60px;
 }
 
 @media (min-width: 1441px) and (max-width: 1920px) {
@@ -208,7 +214,7 @@
             max-width: 100%;
         }
     }
-    .mf-report-head{
+    .mf-report-head {
         margin-top: 15px;
     }
 }

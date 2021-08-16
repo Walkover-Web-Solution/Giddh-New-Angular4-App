@@ -30,7 +30,7 @@
             align-items: center;
         }
         .icon-pointer {
-            margin-left: 6px;
+            margin-left: 0px;
             cursor: pointer;
         }
     }
@@ -66,7 +66,7 @@
             white-space: normal !important;
         }
     }
-    tbody > tr > td:first-child{
+    tbody > tr > td:first-child {
         color: $black-pearl;
     }
     thead > tr > th:first-child,
@@ -75,7 +75,7 @@
         white-space: normal !important;
         word-break: inherit;
     }
-    tbody > tr > td.no-wrap{
+    tbody > tr > td.no-wrap {
         white-space: nowrap !important;
     }
     thead > tr > th:last-child,
@@ -114,7 +114,7 @@
         }
         div i {
             margin-top: 1px;
-            color: #757bb9;
+            color: $midnight-blue;
             padding-right: 8px;
             cursor: pointer;
             display: flex;
