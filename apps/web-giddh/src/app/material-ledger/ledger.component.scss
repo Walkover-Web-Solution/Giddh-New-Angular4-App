@@ -747,6 +747,49 @@ sh-select:focus {
         width: 100%;
     }
 }
+.icon-upload {
+    font-size: 16px;
+}
+.account-placeholder {
+    color: $nobel;
+    padding-left: 12px;
+    font-size: 14px;
+    min-height: 49px;
+    display: flex;
+    padding-top: 14px;
+    border-bottom: 1px solid $white;
+}
+.account-placeholder-text {
+    color: $black !important;
+}
+.capitalize {
+    text-transform: capitalize;
+}
+a#reload-bank-transaction i.icon-refresh {
+    font-size: 18px !important;
+}
+input#ledger-search {
+    width: 81%;
+    font-size: 14px !important;
+    padding: 7px !important;
+    height: 20px;
+    border: 1px solid $gainsboro;
+    padding-left: 27px !important;
+    border-radius: 5px !important;
+}
+.mat-grid-tile.select2-ledger {
+    overflow: visible !important;
+}
+.no-right-border {
+    border-right: none !important;
+}
+.mat-checkbox {
+    margin-right: 8px;
+}
+.blue-heading {
+    color: $jacksons-purple;
+}
+
 /*responsive*/
 .modal-ledger {
     width: 70%;
@@ -1171,46 +1214,4 @@ sh-select:focus {
             padding-top: 5px;
         }
     }
-}
-.icon-upload {
-    font-size: 16px;
-}
-.account-placeholder {
-    color: $nobel;
-    padding-left: 12px;
-    font-size: 14px;
-    min-height: 49px;
-    display: flex;
-    padding-top: 14px;
-    border-bottom: 1px solid $white;
-}
-.account-placeholder-text {
-    color: $black !important;
-}
-.capitalize {
-    text-transform: capitalize;
-}
-a#reload-bank-transaction i.icon-refresh {
-    font-size: 18px !important;
-}
-input#ledger-search {
-    width: 81%;
-    font-size: 14px !important;
-    padding: 7px !important;
-    height: 20px;
-    border: 1px solid $gainsboro;
-    padding-left: 27px !important;
-    border-radius: 5px !important;
-}
-.mat-grid-tile.select2-ledger {
-    overflow: visible !important;
-}
-.no-right-border {
-    border-right: none !important;
-}
-.mat-checkbox {
-    margin-right: 8px;
-}
-.blue-heading {
-    color: $jacksons-purple;
 }
