@@ -2750,7 +2750,8 @@ mat-dialog-container .modal-header {
 .xs-table-block,
 .advance-search,
 #share-modal,
-#exportModal {
+#exportModal,
+.other-details-section {
     .mat-form-field {
         .mat-form-field-wrapper {
             padding-bottom: 0 !important;
@@ -2766,6 +2767,16 @@ mat-dialog-container .modal-header {
             .mat-form-field-underline {
                 display: none !important;
             }
+        }
+    }
+}
+.other-details-section {
+    .mat-form-field {
+        input {
+            border: 1px solid $gainsboro !important;
+            height: 24px;
+            border-radius: 5px;
+            padding: 6px;
         }
     }
 }
@@ -2895,9 +2906,6 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
 }
 .mat-snack-bar-container.info {
     background-color: $info-toast !important;
-}
-.mat-expansion-panel {
-    overflow: visible !important;
 }
 .mat-form-field-appearance-fill .mat-form-field-flex {
     background: none !important;
