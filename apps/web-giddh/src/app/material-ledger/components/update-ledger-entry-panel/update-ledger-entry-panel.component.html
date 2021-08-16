@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div id="entryModal">
+    <div>
         <!-- region header -->
         <div class="modal-header" *ngIf="!isPettyCash">
             <span
@@ -1049,7 +1049,7 @@
                                                 currentOrganizationType === 'COMPANY' &&
                                                 branches?.length > 1
                                             "
-                                            (change)="toggleOtherTaxesAsideMenu(asideMenuOtherTaxes)"
+                                            (change)="toggleOtherTaxesAsideMenu.emit(vm)"
                                             >{{ localeData?.other_tax }}</mat-checkbox
                                         >
                                     </div>
@@ -1063,7 +1063,7 @@
                                                 (click)="
                                                     (currentOrganizationType === 'COMPANY' && branches?.length === 1) ||
                                                     currentOrganizationType === 'BRANCH'
-                                                        ? toggleOtherTaxesAsideMenu(asideMenuOtherTaxes)
+                                                        ? toggleOtherTaxesAsideMenu.emit(vm)
                                                         : ''
                                                 "
                                             >
