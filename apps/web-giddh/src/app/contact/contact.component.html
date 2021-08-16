@@ -758,7 +758,7 @@
 
                             </td>
                             <ng-container *ngFor="let item of account?.customFields">
-                                <td *ngIf="item.key && showFieldFilter[item.uniqueName]" class="word-wrap"
+                                <td *ngIf="item.key && showFieldFilter[item?.uniqueName]" class="word-wrap"
                                     [attr.data-title]="item.key">
                                     {{item.value || '-' }}</td>
                             </ng-container>

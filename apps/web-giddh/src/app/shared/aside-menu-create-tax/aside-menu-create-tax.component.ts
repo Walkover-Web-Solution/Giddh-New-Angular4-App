@@ -126,11 +126,11 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     }
 
     public customAccountFilter(term: string, item: IOption) {
-        return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1);
+        return (item?.label?.toLocaleLowerCase()?.indexOf(term) > -1 || item?.value?.toLocaleLowerCase()?.indexOf(term) > -1);
     }
 
     public customDateSorting(a: IOption, b: IOption) {
-        return (parseInt(a.label) - parseInt(b.label));
+        return (parseInt(a?.label) - parseInt(b?.label));
     }
 
     public genUniqueName() {
@@ -199,10 +199,10 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
                     }
 
                     if (res.taxes[key].value === this.newTaxObj.taxType) {
-                        this.selectedTax = res.taxes[key].label;
+                        this.selectedTax = res.taxes[key]?.label;
                     }
 
-                    this.taxList.push({ label: res.taxes[key].label, value: res.taxes[key].value });
+                    this.taxList.push({ label: res.taxes[key]?.label, value: res.taxes[key].value });
                 });
                 this.taxListSource$ = observableOf(this.taxList);
             } else {
