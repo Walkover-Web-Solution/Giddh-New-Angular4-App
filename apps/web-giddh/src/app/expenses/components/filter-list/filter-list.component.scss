@@ -4,33 +4,32 @@
     width: 100%;
 }
 
-.filter-list .inner-filter-list li {
-    border-bottom: 1px solid $gainsboro;
-    padding: 15px;
-    display: flex;
+.filter-list .inner-filter-list .mat-list-item {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    height: auto !important;
 }
 
-.filter-list .inner-filter-list li:hover {
+.filter-list .inner-filter-list .mat-list-item:hover {
     background: $whisper-light;
     transition: 0.5s all ease;
 }
 
-.filter-list .inner-filter-list li .left-item {
+.filter-list .inner-filter-list .mat-list-item .left-item {
     width: 100%;
 }
 
-.filter-list .inner-filter-list li .right-item {
+.filter-list .inner-filter-list .mat-list-item .right-item {
     width: 160px;
     text-align: right;
 }
 
-.filter-list .inner-filter-list li .right-item i {
+.filter-list .inner-filter-list .mat-list-item .right-item i {
     color: $nobel;
     margin-left: 5px;
 }
 
 .filter-list .inner-filter-list {
-    height: calc(100vh - 230px);
     overflow-y: auto;
 }
 

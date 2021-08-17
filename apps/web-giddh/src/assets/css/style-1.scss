@@ -2911,4 +2911,46 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
 .overflow-visible {
     overflow: visible !important;
 }
+.mat-header-cell {
+    color: $midnight-blue !important;
+    font-family: "opensans-semibold";
+    font-size: 14px !important;
+}
+.mat-form-field-appearance-fill .mat-form-field-underline::before,
+.mat-form-field-appearance-fill .mat-form-field-underline .mat-form-field-ripple {
+    background-color: transparent !important;
+}
+.main-expense-details .mat-form-field-appearance-fill .mat-form-field-flex,
+.petty-cash-reject-modal .mat-form-field-appearance-fill .mat-form-field-flex,
+.petty-cash-reject-modal .mat-form-field-wrapper {
+    padding: 0px !important;
+}
+.expense-head .mat-raised-button {
+    padding: 0 16px !important;
+}
+.responsive-label {
+    display: none;
+}
+@media (max-width: 767px) {
+    .mat-mobile-view {
+        .responsive-label {
+            display: inline-block;
+            color: $midnight-blue !important;
+            font-family: "opensans-semibold";
+            font-size: 14px !important;
+            min-width: 130px;
+        }
+        .mat-header-row {
+            display: none;
+        }
+        .mat-row {
+            flex-direction: column;
+            align-items: start;
+            padding: 8px 2px;
+        }
+        .mat-cell {
+            padding-left: 0px !important;
+        }
+    }
+}
 /* material css for ledger end*/
