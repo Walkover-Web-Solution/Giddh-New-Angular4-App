@@ -739,7 +739,7 @@
                                         id="update-ledger-quantity"
                                         type="text"
                                         name=""
-                                        class="form-control text-right mat-field-border pd-0"
+                                        class="form-control text-right mat-field-border"
                                         [(ngModel)]="vm.stockTrxEntry.inventory.quantity"
                                         decimalDigitsDirective
                                         [DecimalPlaces]="4"
@@ -758,7 +758,7 @@
                                             currentOrganizationType === 'COMPANY' &&
                                             branches?.length > 1
                                         "
-                                        class="form-control text-right p-0"
+                                        class="form-control text-right"
                                         [(ngModel)]="vm.stockTrxEntry.inventory.unit.code"
                                         (change)="vm.unitChanged($event.target.value)"
                                     >
@@ -793,7 +793,7 @@
                                         [suffix]="vm.selectedSuffixForCurrency"
                                         [rawInputValue]="vm.stockTrxEntry.inventory.rate"
                                         [(ngModel)]="vm.stockTrxEntry.inventory.rate"
-                                        class="form-control text-right mat-field-border pd-0"
+                                        class="form-control text-right mat-field-border"
                                     />
                                     <p class="mb-0 amount-total pr-1" *ngIf="vm.isMultiCurrencyAvailable">
                                         <span>
@@ -820,7 +820,7 @@
                             </ng-template>
 
                             <div class="icon-box" *ngIf="vm.showNewEntryPanel && vm.stockTrxEntry">
-                                <label class="font-20">=</label>
+                                <label class="font-18 mr-t05">=</label>
                             </div>
 
                             <div
@@ -837,7 +837,7 @@
                                     *ngIf="isAdvanceReceipt"
                                     type="text"
                                     name="advanceAmount"
-                                    class="form-control text-right mat-field-border pd-0"
+                                    class="form-control text-right mat-field-border"
                                     [mask]="vm.inputMaskFormat"
                                     [rawInputValue]="vm.advanceReceiptAmount"
                                     [prefix]="vm.selectedPrefixForCurrency"
@@ -854,7 +854,7 @@
                                     *ngIf="!isAdvanceReceipt"
                                     type="text"
                                     name="amount"
-                                    class="form-control text-right mat-field-border pd-0"
+                                    class="form-control text-right mat-field-border"
                                     [mask]="vm.inputMaskFormat"
                                     [rawInputValue]="vm.totalAmount"
                                     [prefix]="vm.selectedPrefixForCurrency"
@@ -878,7 +878,7 @@
                                 *ngIf="vm.showNewEntryPanel && !shouldShowAdvanceReceiptMandatoryFields"
                                 class="icon-box"
                             >
-                                <label class="icon-minus font-12"></label>
+                                <label class="icon-minus"></label>
                             </div>
 
                             <div
@@ -924,7 +924,7 @@
                                     (vm.companyTaxesList$ | async)?.length
                                 "
                             >
-                                <label class="icon-plus font-12"></label>
+                                <label class="icon-plus"></label>
                             </div>
 
                             <div
@@ -934,7 +934,7 @@
                                     !(vm.companyTaxesList$ | async)?.length
                                 "
                             >
-                                <label class="font-20">=</label>
+                                <label class="font-18 mr-t05">=</label>
                             </div>
 
                             <div
@@ -997,7 +997,7 @@
                                     (vm.companyTaxesList$ | async)?.length
                                 "
                             >
-                                <label class="font-20">=</label>
+                                <label class="font-18 mr-t05">=</label>
                             </div>
 
                             <div
@@ -1014,7 +1014,7 @@
                                     type="text"
                                     id="update-ledger-total-amount"
                                     name=""
-                                    class="form-control text-right mat-field-border pd-0"
+                                    class="form-control text-right mat-field-border"
                                     [(ngModel)]="vm.grandTotal"
                                     [mask]="vm.inputMaskFormat"
                                     [prefix]="vm.selectedPrefixForCurrency"
@@ -1038,7 +1038,10 @@
                                 class="text-right table-amount last-table-amount"
                             >
                                 <div class="text-right">
-                                    <div *ngIf="!vm.selectedLedger.isOtherTaxesApplicable" class="other-tax">
+                                    <div
+                                        *ngIf="!vm.selectedLedger.isOtherTaxesApplicable"
+                                        class="other-tax align-items-center"
+                                    >
                                         <mat-checkbox
                                             color="primary"
                                             id="update-ledger-other-tax"
@@ -1074,7 +1077,7 @@
                                         <input
                                             matInput
                                             id="update-ledger-other-tax-disabled"
-                                            class="text-right form-control mat-field-border pd-0"
+                                            class="text-right form-control mat-field-border"
                                             disabled="disabled"
                                             [mask]="vm.inputMaskFormat"
                                             [prefix]="vm.selectedPrefixForCurrency"
@@ -1138,7 +1141,7 @@
                                     id="update-ledger-taxable-amount"
                                     type="text"
                                     name="taxable-amount"
-                                    class="form-control text-right mat-field-border pd-0"
+                                    class="form-control text-right mat-field-border"
                                     [prefix]="vm.selectedPrefixForCurrency"
                                     [suffix]="vm.selectedSuffixForCurrency"
                                     [mask]="vm.inputMaskFormat"
@@ -1256,7 +1259,7 @@
                                                 matInput
                                                 id="update-ledger-adjust-voucher"
                                                 type="text"
-                                                class="form-control mr-b1 mat-field-border pd-0"
+                                                class="form-control mr-b1 mat-field-border"
                                                 [(ngModel)]="item.voucherNumber"
                                                 disabled
                                             />
@@ -1276,7 +1279,7 @@
                                                 matInput
                                                 id="update-ledger-inclusive-tax-edit-mode"
                                                 type="text"
-                                                class="form-control mr-b1 mat-field-border pd-0"
+                                                class="form-control mr-b1 mat-field-border"
                                                 *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode"
                                                 [mask]="vm.inputMaskFormat"
                                                 [prefix]="item.accountCurrency?.symbol"
@@ -1293,7 +1296,7 @@
                                                 "
                                                 id="update-ledger-inclusive-tax"
                                                 type="text"
-                                                class="form-control mr-b1 mat-field-border pd-0"
+                                                class="form-control mr-b1 mat-field-border"
                                                 decimalDigitsDirective
                                                 [mask]="vm.inputMaskFormat"
                                                 [prefix]="item.accountCurrency?.symbol"
@@ -1313,7 +1316,7 @@
                                                 matInput
                                                 type="text"
                                                 id="update-ledger-voucher-tax"
-                                                class="form-control mr-b1 mat-field-border pd-0"
+                                                class="form-control mr-b1 mat-field-border"
                                                 decimalDigitsDirective
                                                 [mask]="vm.inputMaskFormat"
                                                 [prefix]="item.accountCurrency?.symbol"
@@ -1341,7 +1344,7 @@
 
                     <div class="col-md-6 pd-t1">
                         <mat-accordion multi>
-                            <mat-expansion-panel class="mr-t1 overflow-visible">
+                            <mat-expansion-panel class="overflow-visible">
                                 <mat-expansion-panel-header>
                                     <mat-panel-title (click)="getInvoiceLists()">{{
                                         localeData?.more_details
@@ -1402,7 +1405,7 @@
                                                         id="update-ledger-invoice-number"
                                                         type="text"
                                                         [placeholder]="commonLocaleData?.app_invoice_no"
-                                                        class="form-control mat-field-border pd-0"
+                                                        class="form-control mat-field-border"
                                                         [(ngModel)]="vm.selectedLedger.voucherNumber"
                                                     />
                                                     <input
@@ -1412,7 +1415,7 @@
                                                         id="update-ledger-invoice-number"
                                                         type="text"
                                                         [placeholder]="commonLocaleData?.app_invoice_no"
-                                                        class="form-control mat-field-border pd-0"
+                                                        class="form-control mat-field-border"
                                                         [(ngModel)]="vm.selectedLedger.invoiceNumberAgainstVoucher"
                                                     />
                                                 </div>
@@ -1498,10 +1501,9 @@
                                                         id="update-ledger-voucher-no"
                                                         type="text"
                                                         [placeholder]="localeData?.voucher_no"
-                                                        class="form-control mat-field-border pd-0"
+                                                        class="form-control mat-field-border"
                                                         [ngModel]="vm.selectedLedger.voucherNo"
                                                         [disabled]="true"
-                                                        [style.width.px]="80"
                                                     />
                                                 </div>
                                             </td>
@@ -1599,7 +1601,7 @@
                                                         type="text"
                                                         id="update-ledger-cheque-number"
                                                         [placeholder]="localeData?.cheque_number_placeholder"
-                                                        class="form-control mat-field-border pd-0"
+                                                        class="form-control mat-field-border"
                                                         [(ngModel)]="vm.selectedLedger.chequeNumber"
                                                     />
                                                 </td>
