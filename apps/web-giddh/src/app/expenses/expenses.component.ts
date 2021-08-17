@@ -444,4 +444,34 @@ export class ExpensesComponent implements OnInit, OnDestroy {
             this.selectedDateRangeUi = moment(event[0], GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(event[1], GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
         }
     }
+
+    /**
+     * This will show the next item from the list in preview. If current item is the last item, 
+     * then it will show the first item from the list, if all items are processed, it will exit the preview mode
+     * 
+     * @param {*} event
+     * @memberof ExpensesComponent
+     */
+    public previewNextItem(event: any): void {
+        if(event) {
+            let nextItemIndex;
+            this.pettyCashPendingReportResponse?.results?.forEach((item, index) => { 
+                if(item?.uniqueName === this.selectedRowItem?.uniqueName) {
+                    nextItemIndex = index + 1;
+                }
+            });
+            
+            if(this.pettyCashPendingReportResponse?.results?.length > 1) {
+                if(nextItemIndex && this.pettyCashPendingReportResponse?.results[nextItemIndex]) {
+                    this.selectedRowItem = this.pettyCashPendingReportResponse?.results[nextItemIndex];
+                } else {
+                    this.selectedRowItem = this.pettyCashPendingReportResponse?.results[0];
+                }
+            } else {
+                this.closeDetailedMode(true);
+            }
+
+            this.refreshPendingItem(true);
+        }
+    }
 }
