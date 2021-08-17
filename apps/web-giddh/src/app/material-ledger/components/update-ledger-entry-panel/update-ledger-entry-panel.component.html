@@ -1661,11 +1661,11 @@
                     </div>
 
                     <div class="col-md-6 font-14 pt-1 remove-border-left-onmo">
-                        <table class="width-100">
+                        <table class="width-100" *ngIf="vm.isMultiCurrencyAvailable">
                             <tbody>
                                 <tr>
                                     <td class="text-right">
-                                        <span class="primary-color" *ngIf="vm.isMultiCurrencyAvailable">
+                                        <span class="primary-color">
                                             {{
                                                 localeData?.total_in_currency
                                                     | replace: "[CURRENCY]":vm.baseCurrencyDetails?.code
