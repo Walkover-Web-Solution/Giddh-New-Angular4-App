@@ -630,11 +630,13 @@
                             <tbody>
                                 <tr class="total-col row">
                                     <td colspan="12" class="col-12 col-sm-12 text-right min-h-32">
-                                        <span *ngIf="vm.entryTotal.drTotal > vm.entryTotal.crTotal"
+                                        <span
+                                            *ngIf="vm.entryTotal.drTotal > vm.entryTotal.crTotal"
+                                            class="d-flex justify-content-end"
                                             >{{ localeData?.c_f }}:
                                             {{ localeData?.dr }}
                                             <span
-                                                class="primary-color pd-2"
+                                                class="primary-color pd-l1"
                                                 [tooltip]="vm.ledgerUnderStandingObj.balanceText.dr"
                                                 [placement]="'top'"
                                             >
@@ -1518,7 +1520,6 @@
                                                 class="form-control"
                                                 [ngModel]="vm.selectedLedger.voucherNo"
                                                 [disabled]="true"
-                                                [style.width.px]="80"
                                             />
                                         </div>
                                     </td>

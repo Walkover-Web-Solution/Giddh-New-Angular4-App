@@ -8235,6 +8235,15 @@ body.update-scroll-hidden {
 .menu_open .sales-register {
     width: calc(100% - 240px) !important;
 }
+.nav-left-bar {
+    &.width-60 {
+        .sidebar-collapse {
+            .sub-menu {
+                display: none !important;
+            }
+        }
+    }
+}
 .on-setting-page,
 .on-user-page {
     aside-setting {
