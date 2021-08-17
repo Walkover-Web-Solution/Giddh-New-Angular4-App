@@ -1,0 +1,67 @@
+@import "../../../../assets/css/color.scss";
+
+.or-line::before {
+    content: " ";
+    border-bottom: 1px solid $gainsboro;
+    display: inline-block;
+    width: 57px;
+    margin-right: 13px;
+}
+
+.or-line::after {
+    content: "";
+    border-bottom: 1px solid $gainsboro;
+    display: inline-block;
+    width: 57px;
+    margin-left: 13px;
+}
+
+.or-line {
+    display: flex;
+    align-items: center;
+    color: $gainsboro;
+    margin-bottom: 10px;
+}
+.discount-item {
+    input[type="checkbox"] {
+        height: 19px;
+    }
+}
+.my-dropdown-menu {
+    padding: 10px;
+}
+.percent-label,
+.value-label {
+    width: 50px;
+}
+.percent-wrapper {
+    .form-control {
+        width: 110px;
+        padding-right: 20px !important;
+    }
+    .fa-percent {
+        top: 9px;
+        right: 6px;
+        color: $gray;
+    }
+}
+.value-box {
+    .form-control {
+        width: 120px;
+        padding-right: 10px !important;
+    }
+}
+.discount-list {
+    list-style: none;
+    overflow: auto;
+    max-height: 100px;
+    .discount-item {
+        padding: 5px;
+        margin-bottom: 5px;
+    }
+}
+.adjust {
+    .mat-input-element {
+        box-sizing: border-box !important;
+    }
+}

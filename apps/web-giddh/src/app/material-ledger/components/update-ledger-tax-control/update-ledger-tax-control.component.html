@@ -1,0 +1,58 @@
+<span
+    class="position-relative custom-dropdown-ledger"
+    [ngClass]="{ 'open': showTaxPopup }"
+    [attachOutsideOnClick]="true"
+    (clickOutside)="toggleTaxPopup(false)"
+>
+    <label *ngIf="showHeading"
+        >{{ customHeading ? customHeading : commonLocaleData?.app_tax }}
+        <sup class="mandatory-asterisk" *ngIf="isMandatory">*</sup></label
+    >
+    <a id="tax" class="clearfix">
+        <div class="multi-select adjust">
+            <input
+                #taxInputElement
+                matInput
+                type="text"
+                id="update-ledger-tax"
+                readonly
+                [mask]="maskInput"
+                [rawInputValue]="formattedTotal"
+                [prefix]="prefixInput"
+                [suffix]="suffixInput"
+                name="formattedTotal"
+                class="form-control cursor-pointer text-right mat-field-border pd-0"
+                [(ngModel)]="formattedTotal"
+                (focus)="handleInputFocus()"
+            />
+            <span class="caret"></span>
+        </div>
+    </a>
+    <div class="position-relative">
+        <ul
+            class="dropdown-menu pd update-ledger-tax-dropdown"
+            [ngStyle]="{ 'display': showTaxPopup ? 'block' : 'none' }"
+            (click)="$event.stopPropagation()"
+        >
+            <li *ngFor="let tax of taxRenderData; trackBy: trackByFn; let i = index">
+                <label
+                    class="checkbox d-flex align-items-center width-100 p-0 m-0 bd-rb px-1 py-1 mr-b05"
+                    (click)="$event.stopPropagation()"
+                    [ngClass]="{ 'disabled-label': tax.isDisabled }"
+                >
+                    <mat-checkbox
+                        color="primary"
+                        class="pull-left"
+                        [id]="'update-ledger-tax-checkbox-' + i"
+                        [(ngModel)]="tax.isChecked"
+                        [disabled]="tax.isDisabled"
+                        (change)="change()"
+                        (click)="$event.stopPropagation()"
+                    ></mat-checkbox>
+                    <span class="pull-left text-ellipsis">{{ tax.name }}</span>
+                </label>
+            </li>
+        </ul>
+    </div>
+    <div tabindex="0" (focus)="onFocusLastDiv($event)"></div>
+</span>

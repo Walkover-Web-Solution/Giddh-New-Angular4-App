@@ -837,7 +837,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.isBankTransactionLoading = true;
 
             let getRequest = { accountUniqueName: this.trxRequest.accountUniqueName, from: this.trxRequest.from, count: this.bankTransactionsResponse.countPerPage, page: this.bankTransactionsResponse.page }
-            this._ledgerService.GetBankTranscationsForLedger(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            this._ledgerService.GetBankTransactionsForLedger(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 this.isBankTransactionLoading = false;
                 if (res.status === 'success') {
                     if (res.body) {

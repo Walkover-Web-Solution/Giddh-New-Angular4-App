@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { APP_DEFAULT_TITLE, DEFAULT_TOASTER_OPTIONS, DEFAULT_TOASTER_OPTIONS_WITH_HTML } from '../app.constant';
 import { ToastrService } from 'ngx-toastr';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackBarComponent } from '../theme/snackbar/snackbar.component';
 
 @Injectable()
 export class ToasterService {
 
-    constructor(private _toaster: ToastrService) {
+    constructor(private _toaster: ToastrService, private snackBar: MatSnackBar) {
 
     }
 
@@ -43,5 +45,23 @@ export class ToasterService {
 
     public clearAllToaster(): void {
         this._toaster.clear();
+    }
+
+    /**
+     * This will show snack bar for alert messages
+     *
+     * @param {string} type
+     * @param {string} message
+     * @param {string} [title=APP_DEFAULT_TITLE]
+     * @memberof ToasterService
+     */
+    public showSnackBar(type: string, message: string, title: string = APP_DEFAULT_TITLE): void {
+        this.snackBar.openFromComponent(SnackBarComponent, {
+            data: { title: title, message: message },
+            horizontalPosition: "center",
+            verticalPosition: "top",
+            panelClass: type,
+            duration: 3000
+        });
     }
 }

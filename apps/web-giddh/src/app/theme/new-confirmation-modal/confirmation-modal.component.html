@@ -1,0 +1,25 @@
+<div class="custom-confirmation-modal">
+    <div class="modal-header">
+        <span class="close"><span class="icon-cross" (click)="sendResponse('Close')"></span></span>
+        <h3 mat-dialog-title [ngClass]="inputData?.configuration?.headerCssClass">
+            {{ inputData?.configuration?.headerText }}
+        </h3>
+    </div>
+    <div class="modal-body">
+        <p
+            [ngClass]="inputData?.configuration?.messageCssClass"
+            [innerHTML]="inputData?.configuration?.messageText"
+        ></p>
+        <p [ngClass]="inputData?.configuration?.footerCssClass">{{ inputData?.configuration?.footerText }}</p>
+        <div>
+            <button
+                mat-button
+                *ngFor="let button of inputData?.configuration?.buttons"
+                (click)="sendResponse(button?.text)"
+                [ngClass]="button?.cssClass"
+            >
+                {{ button?.text }}
+            </button>
+        </div>
+    </div>
+</div>

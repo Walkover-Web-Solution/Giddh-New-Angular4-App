@@ -141,7 +141,7 @@ a:active {
 }
 
 textarea {
-    resize: none;
+    resize: none !important;
 }
 
 /*top menus bar*/
@@ -406,7 +406,7 @@ aside-menu-account .container-fluid {
 }
 
 .mr-t05 {
-    margin-top: 5px;
+    margin-top: 5px !important;
 }
 
 .mr-b05 {
@@ -430,7 +430,7 @@ aside-menu-account .container-fluid {
 }
 
 .mr-l1 {
-    margin-left: 10px;
+    margin-left: 10px !important;
 }
 
 .mr-r1 {
@@ -438,7 +438,7 @@ aside-menu-account .container-fluid {
 }
 
 .mr-t2 {
-    margin-top: 20px;
+    margin-top: 20px !important;
 }
 
 .mr-b2 {
@@ -446,7 +446,7 @@ aside-menu-account .container-fluid {
 }
 
 .mr-l2 {
-    margin-left: 20px;
+    margin-left: 20px !important;
 }
 
 .mr-r2 {
@@ -520,7 +520,7 @@ aside-menu-account .container-fluid {
 }
 
 .bdr {
-    border: 1px solid $gainsboro;
+    border: 1px solid $gainsboro !important;
     border-radius: 5px;
 }
 
@@ -2166,10 +2166,12 @@ ul.pills li {
     padding-bottom: 350px;
 }
 
-#entryModal .modal-body {
-    padding: 15px 20px 15px;
-    display: flex;
-    flex-direction: column;
+#entryModal {
+    .modal-body {
+        padding: 15px 20px 15px;
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 .advanced label {
@@ -2734,3 +2736,179 @@ form#groupDetailForm {
         max-width: 280px;
     }
 }
+/* material css for ledger */
+.mat-dialog-container {
+    padding: 0px !important;
+}
+.mat-dialog-title {
+    margin-bottom: 0px !important;
+}
+mat-dialog-container .modal-header {
+    padding: 11px !important;
+}
+.mat-radio-button {
+    margin-right: 16px;
+}
+.ledg-head,
+#import-statement-modal,
+.xs-table-block,
+.advance-search,
+#share-modal,
+#exportModal,
+.other-details-section {
+    .mat-form-field {
+        .mat-form-field-wrapper {
+            padding-bottom: 0 !important;
+            .mat-form-field-flex {
+                padding: 0 !important;
+                align-items: center;
+                .mat-form-field-infix {
+                    padding: 0 !important;
+                    border-top: 0 !important;
+                    width: 100% !important;
+                }
+            }
+            .mat-form-field-underline {
+                display: none !important;
+            }
+        }
+    }
+}
+.other-details-section {
+    .mat-form-field {
+        input {
+            border: 1px solid $gainsboro !important;
+            height: 24px;
+            border-radius: 5px;
+            padding: 6px;
+        }
+    }
+}
+.password-label,
+.clearance-date {
+    .mat-form-field-appearance-fill .mat-form-field-flex {
+        background-color: $white !important;
+    }
+    giddh-datepicker {
+        .mat-form-field {
+            width: 100% !important;
+        }
+    }
+}
+.ledg-head {
+    .ledger-row {
+        .mat-input-element {
+            min-height: 38px;
+            height: 38px;
+        }
+    }
+    .mat-form-field-appearance-fill {
+        .mat-form-field-flex {
+            background: $white !important;
+        }
+    }
+    .ledger-book {
+        .left-col-new,
+        .right-col-new {
+            .mat-grid-list {
+                .mat-grid-tile {
+                    .mat-grid-tile-content {
+                        position: relative !important;
+                        width: 100%;
+                        justify-content: flex-start !important;
+                    }
+                    &:nth-child(3) {
+                        .mat-grid-tile-content {
+                            justify-content: flex-end !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.mat-raised-button {
+    padding: 0 !important;
+}
+
+.ledger-head {
+    .mat-grid-tile-content {
+        justify-content: space-between !important;
+        padding: 0 10px;
+    }
+}
+
+#eledgerwrap .alert .mat-close {
+    position: absolute;
+    top: 10px;
+    right: 0px;
+    opacity: 0.8;
+}
+
+.advance-search-by-date {
+    .input-wrapper {
+        .mat-form-field {
+            .mat-form-field-wrapper {
+                .mat-form-field-flex {
+                    .mat-form-field-infix {
+                        border: 1px solid $gainsboro !important;
+                        border-radius: 20px;
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
+.mat-field-border {
+    border: 1px solid $gainsboro !important;
+}
+.mat-grid-tile.select2-parent.select2-ledger .mat-grid-tile-content {
+    padding-left: 0px !important;
+}
+.ledg-head .mat-grid-list .mat-grid-tile.new-entry-date .mat-grid-tile-content {
+    padding-left: 2px !important;
+}
+.ledg-head
+    .mat-grid-list
+    .mat-grid-tile.new-entry-ledger.select2-parent.select2-ledger
+    .ledger-account-label
+    input.form-control.focused {
+    padding-left: 1px !important;
+}
+.ledger-advance-search-field {
+    .mat-form-field-suffix {
+        right: 10px !important;
+        position: absolute;
+    }
+    input.mat-input-element {
+        box-sizing: border-box !important;
+    }
+}
+update-ledger-entry-panel .ledger-main .mat-form-field {
+    min-width: auto !important;
+}
+.mat-snack-bar-container {
+    color: $white !important;
+    font-size: 13px;
+}
+.mat-snack-bar-container.error {
+    background-color: $red-toast !important;
+}
+.mat-snack-bar-container.success {
+    background-color: $green-toast !important;
+}
+.mat-snack-bar-container.warning {
+    background-color: $warning-toast !important;
+}
+.mat-snack-bar-container.info {
+    background-color: $info-toast !important;
+}
+.mat-form-field-appearance-fill .mat-form-field-flex {
+    background: none !important;
+}
+.overflow-visible {
+    overflow: visible !important;
+}
+/* material css for ledger end*/
