@@ -60,6 +60,8 @@
         margin-bottom: 5px;
     }
 }
-#update-ledger-discount {
-    width: 82%;
+.adjust {
+    .mat-input-element {
+        box-sizing: border-box !important;
+    }
 }

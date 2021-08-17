@@ -21,6 +21,13 @@
     max-height: 102px;
     min-height: 80px;
 }
-#update-ledger-tax {
-    width: 82%;
+.checkbox {
+    .text-ellipsis {
+        margin-left: -20px;
+    }
+}
+.clearfix {
+    .mat-input-element {
+        box-sizing: border-box !important;
+    }
 }

@@ -31,7 +31,7 @@
             </div>
             <div class="setting-items">
                 <ul class="mb-3" *ngFor="let section of filteredSettingsPageTabs">
-                    <li *ngFor="let tab of section" routerLinkActive>
+                    <li *ngFor="let tab of section" routerLinkActive="active-link">
                         <a class="d-block clearfix" [routerLink]="[tab.link]">
                             <span [innerHTML]="tab.icon"></span>
                             <span>{{ tab.label }}</span>

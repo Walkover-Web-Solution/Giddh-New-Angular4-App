@@ -59,7 +59,7 @@
         <!-- endregion -->
 
         <!-- region main body -->
-        <div class="modal-body" [hidden]="isChangeAcc">
+        <div class="modal-body pl-0 pr-0" [hidden]="isChangeAcc">
             <!-- region transactions -->
             <div class="ledg-head entry-popup">
                 <table class="w-100 ledger-head mr-t1 hidden-xs">
@@ -630,11 +630,13 @@
                             <tbody>
                                 <tr class="total-col row">
                                     <td colspan="12" class="col-12 col-sm-12 text-right min-h-32">
-                                        <span *ngIf="vm.entryTotal.drTotal > vm.entryTotal.crTotal"
+                                        <span
+                                            *ngIf="vm.entryTotal.drTotal > vm.entryTotal.crTotal"
+                                            class="d-flex justify-content-end"
                                             >{{ localeData?.c_f }}:
                                             {{ localeData?.dr }}
                                             <span
-                                                class="primary-color pd-2"
+                                                class="primary-color pd-l1"
                                                 [tooltip]="vm.ledgerUnderStandingObj.balanceText.dr"
                                                 [placement]="'top'"
                                             >
@@ -1039,7 +1041,10 @@
                                 class="text-right table-amount last-table-amount"
                             >
                                 <div class="text-right">
-                                    <div *ngIf="!vm.selectedLedger.isOtherTaxesApplicable" class="other-tax">
+                                    <div
+                                        *ngIf="!vm.selectedLedger.isOtherTaxesApplicable"
+                                        class="other-tax align-items-center"
+                                    >
                                         <input
                                             type="checkbox"
                                             id="update-ledger-other-tax"
@@ -1518,7 +1523,6 @@
                                                 class="form-control"
                                                 [ngModel]="vm.selectedLedger.voucherNo"
                                                 [disabled]="true"
-                                                [style.width.px]="80"
                                             />
                                         </div>
                                     </td>

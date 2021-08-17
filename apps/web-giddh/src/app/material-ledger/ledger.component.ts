@@ -129,7 +129,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public tcsOrTds: 'tcs' | 'tds' = 'tcs';
     public asideMenuStateForOtherTaxes: string = 'out';
     public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay'];
-    public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
+    @ViewChild(UpdateLedgerEntryPanelComponent, { static: false }) public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
     public isLedgerAccountAllowsMultiCurrency: boolean = false;
     public baseCurrencyDetails: ICurrencyResponse;
     public foreignCurrencyDetails: ICurrencyResponse;
@@ -231,6 +231,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public updateLedgerModalDialogRef: any;
     /** Instance of update ledger component */
     public updateLedgerComponentRef: any;
+    /** Object of update ledger modal VM */
+    public updateLedgerModalVm: any;
 
     constructor(
         private store: Store<AppState>,
@@ -1722,9 +1724,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.toggleBodyClass();
     }
 
-    public toggleOtherTaxesAsidePane(modal): void {
+    public toggleOtherTaxesAsidePane(updateLedgerModalVm: any): void {
+        this.updateLedgerModalVm = updateLedgerModalVm;
         this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
+        this.cdRf.detectChanges();
     }
 
     public calculateOtherTaxes(modal: SalesOtherTaxesModal): void {
