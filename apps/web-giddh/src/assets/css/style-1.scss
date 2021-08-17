@@ -406,7 +406,7 @@ aside-menu-account .container-fluid {
 }
 
 .mr-t05 {
-    margin-top: 5px;
+    margin-top: 5px !important;
 }
 
 .mr-b05 {
@@ -2164,10 +2164,12 @@ ul.pills li {
     padding-bottom: 350px;
 }
 
-#entryModal .modal-body {
-    padding: 15px 20px 15px;
-    display: flex;
-    flex-direction: column;
+#entryModal {
+    .modal-body {
+        padding: 15px 20px 15px;
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 .expense-ledger {
@@ -2873,29 +2875,23 @@ mat-dialog-container .modal-header {
 .mat-grid-tile.select2-parent.select2-ledger .mat-grid-tile-content {
     padding-left: 0px !important;
 }
-.ledg-head mat-grid-list mat-grid-tile.new-entry-date .mat-grid-tile-content {
+.ledg-head .mat-grid-list .mat-grid-tile.new-entry-date .mat-grid-tile-content {
     padding-left: 2px !important;
 }
 .ledg-head
-    mat-grid-list
-    mat-grid-tile.new-entry-ledger.select2-parent.select2-ledger
+    .mat-grid-list
+    .mat-grid-tile.new-entry-ledger.select2-parent.select2-ledger
     .ledger-account-label
     input.form-control.focused {
     padding-left: 1px !important;
 }
 .ledger-advance-search-field {
     .mat-form-field-suffix {
-        right: 30px !important;
+        right: 10px !important;
+        position: absolute;
     }
     input.mat-input-element {
-        padding-left: 8px !important;
-        width: 96%;
-    }
-    input.mat-input-element {
-        &.date-field,
-        &.description-field {
-            width: 98% !important;
-        }
+        box-sizing: border-box !important;
     }
 }
 update-ledger-entry-panel .ledger-main .mat-form-field {

@@ -20,7 +20,7 @@
                 <mat-menu #menu="matMenu">
                     <button mat-menu-item>
                         <a
-                            class="dropdown-item"
+                            class="dropdown-item p-0"
                             id="share-ledger"
                             href="javascript:void(0)"
                             (click)="showShareLedgerModal()"
@@ -29,7 +29,7 @@
                     </button>
                     <button mat-menu-item disabled>
                         <a
-                            class="dropdown-item"
+                            class="dropdown-item p-0"
                             id="export-ledger-mobile-view"
                             href="javascript:void(0)"
                             (click)="showExportLedgerModal()"
@@ -774,44 +774,52 @@
                                                                 />
                                                             </mat-grid-tile>
                                                         </div>
-                                                        <div
-                                                            class="position-absolute entry-modal"
-                                                            *ngIf="
-                                                                lc.showBankLedgerPanel &&
-                                                                lc.currentBlankTxn?.id === txn.id &&
-                                                                txn.type === 'DEBIT'
-                                                            "
-                                                        >
-                                                            <new-ledger-entry-panel
-                                                                #newLedPanel
-                                                                [trxRequest]="advanceSearchRequest"
-                                                                [isBankTransaction]="true"
-                                                                [blankLedger]="item"
-                                                                [currentTxn]="lc.currentBlankTxn"
-                                                                [needToReCalculate]="needToReCalculate"
-                                                                [isReadOnly]="
-                                                                    currentOrganizationType === 'COMPANY' &&
-                                                                    currentCompanyBranches?.length > 2
+                                                        <div class="entry-modal-height">
+                                                            <div
+                                                                class="position-absolute entry-modal top-position-fix-{{
+                                                                    i
+                                                                }}"
+                                                                *ngIf="
+                                                                    lc.showBankLedgerPanel &&
+                                                                    lc.currentBlankTxn?.id === txn.id &&
+                                                                    txn.type === 'DEBIT'
                                                                 "
-                                                                (changeTransactionType)="toggleTransactionType($event)"
-                                                                [showTaxationDiscountBox]="
-                                                                    lc.currentBlankTxn.showTaxationDiscountBox
-                                                                "
-                                                                (saveBlankLedger)="saveBankTransaction()"
-                                                                (clickedOutsideEvent)="hideBankLedgerPopup($event)"
-                                                                (clickUnpaidInvoiceList)="
-                                                                    clickUnpaidInvoiceList($event)
-                                                                "
-                                                                [invoiceList]="invoiceList"
-                                                                (getInvoiceListsForCreditNote)="
-                                                                    getInvoiceListsForCreditNote($event)
-                                                                "
-                                                                [isTouristSchemeApplicable]="isTouristSchemeApplicable"
-                                                                (saveOtherTax)="saveOtherTax(item, $event)"
-                                                                [localeData]="localeData"
-                                                                [commonLocaleData]="commonLocaleData"
                                                             >
-                                                            </new-ledger-entry-panel>
+                                                                <new-ledger-entry-panel
+                                                                    #newLedPanel
+                                                                    [trxRequest]="advanceSearchRequest"
+                                                                    [isBankTransaction]="true"
+                                                                    [blankLedger]="item"
+                                                                    [currentTxn]="lc.currentBlankTxn"
+                                                                    [needToReCalculate]="needToReCalculate"
+                                                                    [isReadOnly]="
+                                                                        currentOrganizationType === 'COMPANY' &&
+                                                                        currentCompanyBranches?.length > 2
+                                                                    "
+                                                                    (changeTransactionType)="
+                                                                        toggleTransactionType($event)
+                                                                    "
+                                                                    [showTaxationDiscountBox]="
+                                                                        lc.currentBlankTxn.showTaxationDiscountBox
+                                                                    "
+                                                                    (saveBlankLedger)="saveBankTransaction()"
+                                                                    (clickedOutsideEvent)="hideBankLedgerPopup($event)"
+                                                                    (clickUnpaidInvoiceList)="
+                                                                        clickUnpaidInvoiceList($event)
+                                                                    "
+                                                                    [invoiceList]="invoiceList"
+                                                                    (getInvoiceListsForCreditNote)="
+                                                                        getInvoiceListsForCreditNote($event)
+                                                                    "
+                                                                    [isTouristSchemeApplicable]="
+                                                                        isTouristSchemeApplicable
+                                                                    "
+                                                                    (saveOtherTax)="saveOtherTax(item, $event)"
+                                                                    [localeData]="localeData"
+                                                                    [commonLocaleData]="commonLocaleData"
+                                                                >
+                                                                </new-ledger-entry-panel>
+                                                            </div>
                                                         </div>
                                                     </ng-container>
                                                 </ng-container>
@@ -1023,43 +1031,49 @@
                                                                 />
                                                             </mat-grid-tile>
                                                         </div>
-                                                        <div
-                                                            class="pos-abs entry-modal"
-                                                            *ngIf="
-                                                                lc.showBankLedgerPanel &&
-                                                                lc.currentBlankTxn?.id === txn.id &&
-                                                                txn.type === 'CREDIT'
-                                                            "
-                                                        >
-                                                            <new-ledger-entry-panel
-                                                                #newLedPanel
-                                                                [trxRequest]="advanceSearchRequest"
-                                                                [isBankTransaction]="true"
-                                                                [blankLedger]="item"
-                                                                [currentTxn]="lc.currentBlankTxn"
-                                                                [needToReCalculate]="needToReCalculate"
-                                                                [isReadOnly]="
-                                                                    currentOrganizationType === 'COMPANY' &&
-                                                                    currentCompanyBranches?.length > 2
+                                                        <div class="entry-modal-height">
+                                                            <div
+                                                                class="position-absolute entry-modal top-position-fix-{{
+                                                                    i
+                                                                }}"
+                                                                *ngIf="
+                                                                    lc.showBankLedgerPanel &&
+                                                                    lc.currentBlankTxn?.id === txn.id &&
+                                                                    txn.type === 'CREDIT'
                                                                 "
-                                                                (changeTransactionType)="toggleTransactionType($event)"
-                                                                [showTaxationDiscountBox]="
-                                                                    lc.currentBlankTxn.showTaxationDiscountBox
-                                                                "
-                                                                (saveBlankLedger)="saveBankTransaction()"
-                                                                (clickedOutsideEvent)="hideBankLedgerPopup($event)"
-                                                                (clickUnpaidInvoiceList)="
-                                                                    clickUnpaidInvoiceList($event)
-                                                                "
-                                                                (getInvoiceListsForCreditNote)="
-                                                                    getInvoiceListsForCreditNote($event)
-                                                                "
-                                                                [invoiceList]="invoiceList"
-                                                                (saveOtherTax)="saveOtherTax(item, $event)"
-                                                                [localeData]="localeData"
-                                                                [commonLocaleData]="commonLocaleData"
                                                             >
-                                                            </new-ledger-entry-panel>
+                                                                <new-ledger-entry-panel
+                                                                    #newLedPanel
+                                                                    [trxRequest]="advanceSearchRequest"
+                                                                    [isBankTransaction]="true"
+                                                                    [blankLedger]="item"
+                                                                    [currentTxn]="lc.currentBlankTxn"
+                                                                    [needToReCalculate]="needToReCalculate"
+                                                                    [isReadOnly]="
+                                                                        currentOrganizationType === 'COMPANY' &&
+                                                                        currentCompanyBranches?.length > 2
+                                                                    "
+                                                                    (changeTransactionType)="
+                                                                        toggleTransactionType($event)
+                                                                    "
+                                                                    [showTaxationDiscountBox]="
+                                                                        lc.currentBlankTxn.showTaxationDiscountBox
+                                                                    "
+                                                                    (saveBlankLedger)="saveBankTransaction()"
+                                                                    (clickedOutsideEvent)="hideBankLedgerPopup($event)"
+                                                                    (clickUnpaidInvoiceList)="
+                                                                        clickUnpaidInvoiceList($event)
+                                                                    "
+                                                                    (getInvoiceListsForCreditNote)="
+                                                                        getInvoiceListsForCreditNote($event)
+                                                                    "
+                                                                    [invoiceList]="invoiceList"
+                                                                    (saveOtherTax)="saveOtherTax(item, $event)"
+                                                                    [localeData]="localeData"
+                                                                    [commonLocaleData]="commonLocaleData"
+                                                                >
+                                                                </new-ledger-entry-panel>
+                                                            </div>
                                                         </div>
                                                     </ng-container>
                                                 </ng-container>
@@ -1182,7 +1196,7 @@
                                         >
                                             <mat-grid-tile>
                                                 <div
-                                                    class="pd-l15 pd-r15 relative"
+                                                    class="pd-l15 pd-r15 relative w-100 text-center"
                                                     [ngClass]="{
                                                         'compound-entry':
                                                             transactions.entryUniqueName === lc.selectedTxnUniqueName ||
@@ -2547,7 +2561,7 @@
             <!-- modal sections -->
             <div *ngIf="isShowLedgerColumnarReportTable">
                 <div class="back-btn text-right pr-1 mt-1 mr-b1">
-                    <button mat-button class="btn btn-default" (click)="isShowLedgerColumnarReportTable = false">
+                    <button mat-button class="btn btn-default bdr" (click)="isShowLedgerColumnarReportTable = false">
                         {{ commonLocaleData?.app_back }}
                     </button>
                 </div>
