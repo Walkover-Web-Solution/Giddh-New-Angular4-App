@@ -7493,6 +7493,15 @@ span#HW_badge_cont:nth-child(3) {
                 }
             }
         }
+        .active-link {
+            a {
+                span {
+                    i {
+                        color: $white;
+                    }
+                }
+            }
+        }
     }
 }
 
