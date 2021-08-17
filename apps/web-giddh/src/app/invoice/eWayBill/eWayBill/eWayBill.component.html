@@ -1,17 +1,33 @@
-<ng-container appTranslate [file]="'invoice/ewaybill'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
-    <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState === 'in'">
-        <tax-sidebar (navigateEvent)="handleNavigation()" (clickOutside)="isMobileScreen ? asideGstSidebarMenuState = 'out' : ''" [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
+<ng-container
+    appTranslate
+    [file]="'invoice/ewaybill'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <div
+        class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
+        *ngIf="asideGstSidebarMenuState === 'in'"
+    >
+        <tax-sidebar
+            (navigateEvent)="handleNavigation()"
+            (clickOutside)="isMobileScreen ? (asideGstSidebarMenuState = 'out') : ''"
+            [exclude]="'#primary-new-header'"
+            class="gst-sidebar"
+        ></tax-sidebar>
     </div>
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="clearfix pd-t15 pd-b15">
         <div class="col-xs-12 col-sm-12">
             <div class="d-inline-block pull-left mr-2 middle eway-bill-date">
                 <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                    <i><img src="assets/images/custom-calender.svg"></i>
-                    <input type="text" name="selectedDateRange"
-                        [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
-                        class="giddh-datepicker date-range-picker" />
+                    <i><img src="assets/images/custom-calender.svg" /></i>
+                    <input
+                        type="text"
+                        name="selectedDateRange"
+                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                        class="giddh-datepicker date-range-picker"
+                    />
                 </div>
             </div>
         </div>
@@ -24,151 +40,249 @@
                     <div class="col-md-12">
                         <div class="table-responsive">
                             <table class="table basic table-bordered giddh-table on-mobile-view">
-                                <thead class="thead-background1" (clickOutside)="clickedOutside();" [hidden]="!EwaybillLists?.results?.length && !EwayBillfilterRequest?.searchTerm">
+                                <thead
+                                    class="thead-background1"
+                                    (clickOutside)="clickedOutside()"
+                                    [hidden]="!EwaybillLists?.results?.length && !EwayBillfilterRequest?.searchTerm"
+                                >
                                     <tr>
                                         <th width="50px">#</th>
                                         <th class="nowrap">
                                             <div class="d-flex">
-                                                <div class="flex-fill">{{commonLocaleData?.app_date}}</div>
+                                                <div class="flex-fill">{{ commonLocaleData?.app_date }}</div>
                                                 <div class="icon-pointer">
-
-                                                    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                                                        (click)="sortbyApi('invoiceDate', 'asc')"></div>
-                                                    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                                                        (click)="sortbyApi('invoiceDate', 'desc')"></div>
+                                                    <div
+                                                        class="
+                                                            glyphicon glyphicon-triangle-top
+                                                            text-light-2
+                                                            d-block
+                                                            font-xxs
+                                                        "
+                                                        (click)="sortbyApi('invoiceDate', 'asc')"
+                                                    ></div>
+                                                    <div
+                                                        class="
+                                                            glyphicon glyphicon-triangle-bottom
+                                                            text-light-2
+                                                            d-block
+                                                            font-xxs
+                                                        "
+                                                        (click)="sortbyApi('invoiceDate', 'desc')"
+                                                    ></div>
                                                 </div>
                                             </div>
                                         </th>
 
                                         <th class="td-search-box nowrap" #searchInvoiceContainer>
-
                                             <div [hidden]="showSearchInvoiceNo">
-                                                <span> {{commonLocaleData?.app_invoice_no}}</span>
+                                                <span> {{ commonLocaleData?.app_invoice_no }}</span>
                                                 <i class="icon-search" (click)="toggleSearch('invoiceNumber')"></i>
                                             </div>
 
-
                                             <div class="input-container" [hidden]="!showSearchInvoiceNo">
-                                                <input type="text" [placeholder]="localeData?.search_eway" class="w100"
-                                                    #invoiceSearch [formControl]="voucherNumberInput" />
+                                                <input
+                                                    type="text"
+                                                    [placeholder]="localeData?.search_eway"
+                                                    class="w100"
+                                                    #invoiceSearch
+                                                    [formControl]="voucherNumberInput"
+                                                />
                                             </div>
                                         </th>
 
                                         <th class="td-search-box nowrap" #searchCustomerContainer>
                                             <div [hidden]="showSearchCustomer">
-                                                <span>{{commonLocaleData?.app_customer_name}}</span>
+                                                <span>{{ commonLocaleData?.app_customer_name }}</span>
                                                 <i class="icon-search" (click)="toggleSearch('customerUniqueName')"></i>
                                             </div>
 
                                             <div class="input-container" [hidden]="!showSearchCustomer">
-                                                <input type="text" [placeholder]="localeData?.search_particular"
-                                                    #customerSearch class="w100" [formControl]="customerNameInput" />
-
-                                            </div>
-
-                                        </th>
-
-                                        <th class="nowrap">
-                                            <div class="d-flex">
-                                                <div class="flex-fill">{{commonLocaleData?.app_customer_gstin}}</div>
+                                                <input
+                                                    type="text"
+                                                    [placeholder]="localeData?.search_particular"
+                                                    #customerSearch
+                                                    class="w100"
+                                                    [formControl]="customerNameInput"
+                                                />
                                             </div>
                                         </th>
 
                                         <th class="nowrap">
-
                                             <div class="d-flex">
-                                                <div class="flex-fill">{{localeData?.ewaybill_no}}</div>
+                                                <div class="flex-fill">{{ commonLocaleData?.app_customer_gstin }}</div>
+                                            </div>
+                                        </th>
+
+                                        <th class="nowrap">
+                                            <div class="d-flex">
+                                                <div class="flex-fill">{{ localeData?.ewaybill_no }}</div>
                                                 <div class="icon-pointer">
-
-                                                    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                                                        (click)="sortbyApi('ewbNo', 'asc')"></div>
-                                                    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                                                        (click)="sortbyApi('ewbNo', 'desc')"></div>
-                                                </div>
-                                            </div>
-
-                                        </th>
-
-                                        <th class="nowrap">
-                                            <div class="d-flex">
-                                                <div class="flex-fill">{{localeData?.ewaybill_date}}</div>
-                                                <div class="icon-pointer">
-                                                    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                                                        (click)="sortbyApi('billingDate', 'asc')"></div>
-                                                    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                                                        (click)="sortbyApi('billingDate', 'desc')"></div>
-                                                </div>
-                                            </div>
-                                        </th>
-
-                                        <th class="nowrap">
-
-                                            <div class="d-flex">
-                                                <div class="flex-fill text-right">{{commonLocaleData?.app_total}}</div>
-                                                <div class="icon-pointer">
-                                                    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                                                        (click)="sortbyApi('totalValue', 'asc')"></div>
-                                                    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                                                        (click)="sortbyApi('totalValue', 'desc')"></div>
+                                                    <div
+                                                        class="
+                                                            glyphicon glyphicon-triangle-top
+                                                            text-light-2
+                                                            d-block
+                                                            font-xxs
+                                                        "
+                                                        (click)="sortbyApi('ewbNo', 'asc')"
+                                                    ></div>
+                                                    <div
+                                                        class="
+                                                            glyphicon glyphicon-triangle-bottom
+                                                            text-light-2
+                                                            d-block
+                                                            font-xxs
+                                                        "
+                                                        (click)="sortbyApi('ewbNo', 'desc')"
+                                                    ></div>
                                                 </div>
                                             </div>
                                         </th>
-                                        <th class="nowrap">{{commonLocaleData?.app_action}}</th>
+
+                                        <th class="nowrap">
+                                            <div class="d-flex">
+                                                <div class="flex-fill">{{ localeData?.ewaybill_date }}</div>
+                                                <div class="icon-pointer">
+                                                    <div
+                                                        class="
+                                                            glyphicon glyphicon-triangle-top
+                                                            text-light-2
+                                                            d-block
+                                                            font-xxs
+                                                        "
+                                                        (click)="sortbyApi('billingDate', 'asc')"
+                                                    ></div>
+                                                    <div
+                                                        class="
+                                                            glyphicon glyphicon-triangle-bottom
+                                                            text-light-2
+                                                            d-block
+                                                            font-xxs
+                                                        "
+                                                        (click)="sortbyApi('billingDate', 'desc')"
+                                                    ></div>
+                                                </div>
+                                            </div>
+                                        </th>
+
+                                        <th class="nowrap">
+                                            <div class="d-flex">
+                                                <div class="flex-fill text-right">
+                                                    {{ commonLocaleData?.app_total }}
+                                                </div>
+                                                <div class="icon-pointer">
+                                                    <div
+                                                        class="
+                                                            glyphicon glyphicon-triangle-top
+                                                            text-light-2
+                                                            d-block
+                                                            font-xxs
+                                                        "
+                                                        (click)="sortbyApi('totalValue', 'asc')"
+                                                    ></div>
+                                                    <div
+                                                        class="
+                                                            glyphicon glyphicon-triangle-bottom
+                                                            text-light-2
+                                                            d-block
+                                                            font-xxs
+                                                        "
+                                                        (click)="sortbyApi('totalValue', 'desc')"
+                                                    ></div>
+                                                </div>
+                                            </div>
+                                        </th>
+                                        <th class="nowrap">{{ commonLocaleData?.app_action }}</th>
                                     </tr>
                                 </thead>
                                 <tbody *ngIf="!isLoading">
-                                    <tr *ngFor="let item of EwaybillLists?.results let i = index">
+                                    <tr *ngFor="let item of EwaybillLists?.results; let i = index">
                                         <td data-title="#">{{ i + 1 }}</td>
                                         <td [attr.data-title]="commonLocaleData?.app_date" class="nowrap">
-                                            {{item?.invoiceDate}}</td>
-                                        <td [attr.data-title]="commonLocaleData?.app_invoice_no"
-                                            class="nowrap download-arrow"><a href="javascript:;"
-                                                class="d-inline-block">{{item?.docNumber}}</a>
-                                            <a (click)="onSelectEwayDownload(item)"
-                                                [tooltip]="localeData?.download_eway_bill"> <i
-                                                    class="icon-download1 cursor-pointer pull-right"></i></a>
+                                            {{ item?.invoiceDate }}
+                                        </td>
+                                        <td
+                                            [attr.data-title]="commonLocaleData?.app_invoice_no"
+                                            class="nowrap download-arrow"
+                                        >
+                                            <a href="javascript:;" class="d-inline-block">{{ item?.docNumber }}</a>
+                                            <a
+                                                (click)="onSelectEwayDownload(item)"
+                                                [tooltip]="localeData?.download_eway_bill"
+                                            >
+                                                <i class="icon-download1 cursor-pointer pull-right"></i
+                                            ></a>
                                         </td>
                                         <td [attr.data-title]="commonLocaleData?.app_customer_name">
-                                            {{item?.customerName}}</td>
+                                            {{ item?.customerName }}
+                                        </td>
                                         <td [attr.data-title]="commonLocaleData?.app_customer_gstin">
-                                            {{item?.customerGstin}}</td>
+                                            {{ item?.customerGstin }}
+                                        </td>
                                         <td [attr.data-title]="localeData?.ewaybill_no">
                                             <div>
-                                                {{item?.ewbNo}}
-                                                <br>
-                                                <small *ngIf="item?.isManuallyGenerated"
-                                                    class="cp btn-link text-green">{{localeData?.manually_generated}}</small>
+                                                {{ item?.ewbNo }}
+                                                <br />
+                                                <small
+                                                    *ngIf="item?.isManuallyGenerated"
+                                                    class="cp btn-link text-green"
+                                                    >{{ localeData?.manually_generated }}</small
+                                                >
                                             </div>
                                         </td>
                                         <td [attr.data-title]="localeData?.ewaybill_date" class="nowrap">
-                                            {{item?.ewayBillDate}}</td>
-                                        <td [attr.data-title]="commonLocaleData?.app_total"
-                                            class="nowrap text-right pr-1">
+                                            {{ item?.ewayBillDate }}
+                                        </td>
+                                        <td
+                                            [attr.data-title]="commonLocaleData?.app_total"
+                                            class="nowrap text-right pr-1"
+                                        >
                                             <i class="icon-rupees font-11"></i>
                                             <span class="d-inline-flex">
-                                                <amount-field [amount]="item?.totalValue" [currencySymbol]="false"
-                                                    [currencyCode]="false">
+                                                <amount-field
+                                                    [amount]="item?.totalValue"
+                                                    [currencySymbol]="false"
+                                                    [currencyCode]="false"
+                                                >
                                                 </amount-field>
                                             </span>
                                         </td>
                                         <td [attr.data-title]="commonLocaleData?.app_action" class="nowrap">
                                             <div class="btn-group pull-left" dropdown>
-                                                <a href="javascript:void(0)" class="dropdown-toggle" id="button-basic"
-                                                    dropdownToggle>{{commonLocaleData?.app_actions}} <i
-                                                        class="caret"></i></a>
-                                                <ul id="dropdown-basic" *dropdownMenu
-                                                    class="dropdown-menu dropdown-left" role="menu"
-                                                    aria-labelledby="button-basic">
-                                                    <li role="menuitem"><a class="dropdown-item"
+                                                <a
+                                                    href="javascript:void(0)"
+                                                    class="dropdown-toggle"
+                                                    id="button-basic"
+                                                    dropdownToggle
+                                                    >{{ commonLocaleData?.app_actions }} <i class="caret"></i
+                                                ></a>
+                                                <ul
+                                                    id="dropdown-basic"
+                                                    *dropdownMenu
+                                                    class="dropdown-menu dropdown-left"
+                                                    role="menu"
+                                                    aria-labelledby="button-basic"
+                                                >
+                                                    <li role="menuitem">
+                                                        <a
+                                                            class="dropdown-item"
                                                             href="javascript:void(0)"
-                                                            (click)="openModal(item, template)">{{localeData?.add_vehicle_details}}</a>
+                                                            (click)="openModal(item, template)"
+                                                            >{{ localeData?.add_vehicle_details }}</a
+                                                        >
                                                     </li>
-                                                    <li role="menuitem"><a class="dropdown-item"
+                                                    <li role="menuitem">
+                                                        <a
+                                                            class="dropdown-item"
                                                             href="javascript:void(0)"
-                                                            (click)="onSelectEwayDetailedDownload(item)">{{localeData?.download_detailed_eway}}</a>
+                                                            (click)="onSelectEwayDetailedDownload(item)"
+                                                            >{{ localeData?.download_detailed_eway }}</a
+                                                        >
                                                     </li>
-                                                    <li role="menuitem"><a class="dropdown-item"
-                                                            (click)="openModal(item, cancel)">{{commonLocaleData?.app_cancel}}</a>
+                                                    <li role="menuitem">
+                                                        <a class="dropdown-item" (click)="openModal(item, cancel)">{{
+                                                            commonLocaleData?.app_cancel
+                                                        }}</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -182,18 +296,20 @@
                                         </td>
                                     </tr>
                                 </tbody>
-
                             </table>
-                            <div class="no-data"
-                                *ngIf="!isLoading && EwaybillLists?.results?.length === 0 && !(isGetAllEwaybillRequestInProcess$ | async)">
+                            <div
+                                class="no-data"
+                                *ngIf="
+                                    !isLoading &&
+                                    EwaybillLists?.results?.length === 0 &&
+                                    !(isGetAllEwaybillRequestInProcess$ | async)
+                                "
+                            >
                                 <no-data></no-data>
                             </div>
                         </div>
                     </div>
-
                 </div>
-
-
             </tab>
         </tabset>
     </div>
@@ -201,193 +317,267 @@
     <form #updateVehicleForm="ngForm" autocomplete="off" name="updateEwayVehicleform">
         <ng-template #template>
             <div class="modal-header">
-                <h3 class="modal-title pull-left">{{localeData?.add_vehicle}}</h3>
+                <h3 class="modal-title pull-left">{{ localeData?.add_vehicle }}</h3>
                 <button type="button" class="close pull-right" (click)="closeModel()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
 
             <div class="modal-body pb-4">
-
-                <div class="row d-flex e-way-body ">
+                <div class="row d-flex e-way-body">
                     <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
-                        <label>{{commonLocaleData?.app_transportation_mode}}</label>
+                        <label>{{ commonLocaleData?.app_transportation_mode }}</label>
                     </div>
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mr-t15">
-
-                        <ul class="list-icon-group ">
+                        <ul class="list-icon-group">
                             <li>
-                                <input id="transMode1" type="radio" name="transMode"
-                                    [(ngModel)]="updateEwayVehicleform.transMode" value="1">
-                                <label for="transMode1"><img src="assets/icon/4.svg " />
-                                    {{commonLocaleData?.app_road}}</label>
+                                <input
+                                    id="transMode1"
+                                    type="radio"
+                                    name="transMode"
+                                    [(ngModel)]="updateEwayVehicleform.transMode"
+                                    value="1"
+                                />
+                                <label for="transMode1"
+                                    ><img src="assets/icon/4.svg " /> {{ commonLocaleData?.app_road }}</label
+                                >
                             </li>
                             <li>
-                                <input id="transMode2" type="radio" [(ngModel)]="updateEwayVehicleform.transMode"
-                                    name="transMode" value="2">
-                                <label for="transMode2"><img src="assets/icon/3.svg " />
-                                    {{commonLocaleData?.app_rail}}</label>
+                                <input
+                                    id="transMode2"
+                                    type="radio"
+                                    [(ngModel)]="updateEwayVehicleform.transMode"
+                                    name="transMode"
+                                    value="2"
+                                />
+                                <label for="transMode2"
+                                    ><img src="assets/icon/3.svg " /> {{ commonLocaleData?.app_rail }}</label
+                                >
                             </li>
                             <li>
-                                <input id="transMode3" type="radio" [(ngModel)]="updateEwayVehicleform.transMode"
-                                    name="transMode" value="3">
-                                <label for="transMode3"><img src="assets/icon/1.svg " />
-                                    {{commonLocaleData?.app_air}}</label>
+                                <input
+                                    id="transMode3"
+                                    type="radio"
+                                    [(ngModel)]="updateEwayVehicleform.transMode"
+                                    name="transMode"
+                                    value="3"
+                                />
+                                <label for="transMode3"
+                                    ><img src="assets/icon/1.svg " /> {{ commonLocaleData?.app_air }}</label
+                                >
                             </li>
                             <li>
-                                <input id="transMode4" type="radio" [(ngModel)]="updateEwayVehicleform.transMode"
-                                    name="transMode" value="4">
-                                <label for="transMode4"><img src="assets/icon/2.svg " />
-                                    {{commonLocaleData?.app_ship}}</label>
+                                <input
+                                    id="transMode4"
+                                    type="radio"
+                                    [(ngModel)]="updateEwayVehicleform.transMode"
+                                    name="transMode"
+                                    value="4"
+                                />
+                                <label for="transMode4"
+                                    ><img src="assets/icon/2.svg " /> {{ commonLocaleData?.app_ship }}</label
+                                >
                             </li>
-
                         </ul>
-
                     </div>
                 </div>
                 <div>
-
-                    <div class="row d-flex e-way-body ">
+                    <div class="row d-flex e-way-body">
                         <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
-                            <label>{{localeData?.vehicle_type_required}}</label>
+                            <label>{{ localeData?.vehicle_type_required }}</label>
                         </div>
 
-                        <div class="col-md-8 col-lg-8 col-sm-12 mr-t15 ">
+                        <div class="col-md-8 col-lg-8 col-sm-12 mr-t15">
                             <span class="p-0 mr-3">
-                                <input id="regular" class="radio-custom cp ml-0" type="radio" name="vehicleType"
-                                    required [(ngModel)]="updateEwayVehicleform.vehicleType" value="R">
-                                <label for="regular" class="radio-custom-label">{{localeData?.regular}}</label>
+                                <input
+                                    id="regular"
+                                    class="radio-custom cp ml-0"
+                                    type="radio"
+                                    name="vehicleType"
+                                    required
+                                    [(ngModel)]="updateEwayVehicleform.vehicleType"
+                                    value="R"
+                                />
+                                <label for="regular" class="radio-custom-label">{{ localeData?.regular }}</label>
                             </span>
 
                             <span class="p-0 mr-3">
-                                <input id="dimensionalCargo" class="radio-custom cp ml-0" type="radio"
-                                    name="vehicleType" required value="O"
-                                    [(ngModel)]="updateEwayVehicleform.vehicleType">
-                                <label for="dimensionalCargo"
-                                    class="radio-custom-label">{{localeData?.over_dimensional_cargo}}</label>
+                                <input
+                                    id="dimensionalCargo"
+                                    class="radio-custom cp ml-0"
+                                    type="radio"
+                                    name="vehicleType"
+                                    required
+                                    value="O"
+                                    [(ngModel)]="updateEwayVehicleform.vehicleType"
+                                />
+                                <label for="dimensionalCargo" class="radio-custom-label">{{
+                                    localeData?.over_dimensional_cargo
+                                }}</label>
                             </span>
-
                         </div>
                     </div>
 
-                    <div class="row d-flex e-way-body ">
+                    <div class="row d-flex e-way-body">
                         <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
-                            <label class="pd-t07">{{localeData?.vehicle_no_label}}</label>
+                            <label class="pd-t07">{{ localeData?.vehicle_no_label }}</label>
                         </div>
 
-                        <div class="col-md-8 col-lg-6 col-sm-12 mr-t15 ">
-
-                            <input type="text" name="vehicleNo" required
+                        <div class="col-md-8 col-lg-6 col-sm-12 mr-t15">
+                            <input
+                                type="text"
+                                name="vehicleNo"
+                                required
                                 [placeholder]="localeData?.vehicle_no_placeholder"
-                                [(ngModel)]="updateEwayVehicleform.vehicleNo" maxlength="15" minlength="7"
-                                class="form-control input " />
-
+                                [(ngModel)]="updateEwayVehicleform.vehicleNo"
+                                maxlength="15"
+                                minlength="7"
+                                class="form-control input"
+                            />
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
-                            <label class="pd-t07">{{localeData?.from_place_label}}</label>
+                            <label class="pd-t07">{{ localeData?.from_place_label }}</label>
                         </div>
                         <div class="col-md-8 col-lg-6 col-sm-12 mr-t15" id="form-place">
-                            <sh-select [options]="searchResults" name="fromPlace" required [isRequired]="true"
-                                maxlength="50" [(ngModel)]="updateEwayVehicleform.fromPlace" autocomplete="off"
-                                (dynamicSearchedQuery)="onSearchQueryChanged($event)" [enableDynamicSearch]="true"
-                                [placeholder]="localeData?.from_place_placeholder" [showClear]="false"
-                                [multiple]="false" [ItemHeight]="67">
+                            <sh-select
+                                [options]="searchResults"
+                                name="fromPlace"
+                                required
+                                [isRequired]="true"
+                                maxlength="50"
+                                [(ngModel)]="updateEwayVehicleform.fromPlace"
+                                autocomplete="off"
+                                (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                                [enableDynamicSearch]="true"
+                                [placeholder]="localeData?.from_place_placeholder"
+                                [showClear]="false"
+                                [multiple]="false"
+                                [ItemHeight]="67"
+                            >
                             </sh-select>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
-                            <label class="pd-t07">{{localeData?.from_state_label}}</label>
+                            <label class="pd-t07">{{ localeData?.from_state_label }}</label>
                         </div>
-                        <div class="col-md-8 col-lg-6 col-sm-12 mr-t15 ">
-                            <sales-sh-select [placeholder]="localeData?.from_state_placeholder" [multiple]="false"
-                                [isFilterEnabled]="true" class="select-bdr-bottom" name="fromState" required
-                                [isRequired]="true" [(ngModel)]="updateEwayVehicleform.fromState"
-                                [options]="statesSource$ | async">
+                        <div class="col-md-8 col-lg-6 col-sm-12 mr-t15">
+                            <sales-sh-select
+                                [placeholder]="localeData?.from_state_placeholder"
+                                [multiple]="false"
+                                [isFilterEnabled]="true"
+                                class="select-bdr-bottom"
+                                name="fromState"
+                                required
+                                [isRequired]="true"
+                                [(ngModel)]="updateEwayVehicleform.fromState"
+                                [options]="statesSource$ | async"
+                            >
                             </sales-sh-select>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
-                            <label class="pd-t07">{{localeData?.reason_label}}</label>
+                            <label class="pd-t07">{{ localeData?.reason_label }}</label>
                         </div>
-                        <div class="col-md-8 col-lg-6 col-sm-12 mr-t15 ">
-                            <sh-select class="input" [options]="ewayUpdateVehicleReasonList" required
-                                [isRequired]="true" [placeholder]="localeData?.reason_placeholder"
-                                [isFilterEnabled]="true" name="reasonCode"
-                                [(ngModel)]="updateEwayVehicleform.reasonCode" [ItemHeight]="33"></sh-select>
-
+                        <div class="col-md-8 col-lg-6 col-sm-12 mr-t15">
+                            <sh-select
+                                class="input"
+                                [options]="ewayUpdateVehicleReasonList"
+                                required
+                                [isRequired]="true"
+                                [placeholder]="localeData?.reason_placeholder"
+                                [isFilterEnabled]="true"
+                                name="reasonCode"
+                                [(ngModel)]="updateEwayVehicleform.reasonCode"
+                                [ItemHeight]="33"
+                            ></sh-select>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
-                            <label class="pd-t07">{{localeData?.remark_label}}</label>
+                            <label class="pd-t07">{{ localeData?.remark_label }}</label>
                         </div>
-                        <div class="col-md-8 col-lg-6 col-sm-12 mr-t15 ">
-                            <textarea name="reasonRem" class="form-control" required
+                        <div class="col-md-8 col-lg-6 col-sm-12 mr-t15">
+                            <textarea
+                                name="reasonRem"
+                                class="form-control"
+                                required
                                 [(ngModel)]="updateEwayVehicleform.reasonRem"
-                                [placeholder]="localeData?.remark_placeholder"></textarea>
-
+                                [placeholder]="localeData?.remark_placeholder"
+                            ></textarea>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
-                            <label class="pd-t07">{{localeData?.transporter_doc_no_required_label}}</label>
+                            <label class="pd-t07">{{ localeData?.transporter_doc_no_required_label }}</label>
                         </div>
-                        <div class="col-md-8 col-lg-6 col-sm-12 mr-t15 ">
-                            <input type="text" [placeholder]="localeData?.transporter_doc_no_required_placeholder"
-                                required name="transDocNo" [(ngModel)]="updateEwayVehicleform.transDocNo"
-                                class="form-control input" />
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
-                            <label class="pd-t07">{{localeData?.transporter_doc_date_required_label}}</label>
-                        </div>
-                        <div class="col-md-8 col-lg-6 col-sm-12 mr-t15 ">
-                            <input [placeholder]="localeData?.transporter_doc_date_required_placeholder"
-                                name="transDocDate" required type="text" placement="top"
-                                [bsConfig]="{dateInputFormat: 'DD/MM/YYYY', adaptivePosition: true}"
-                                [(ngModel)]="updateEwayVehicleform.transDocDate" class="form-control pd-r3"
-                                bsDatepicker />
+                        <div class="col-md-8 col-lg-6 col-sm-12 mr-t15">
+                            <input
+                                type="text"
+                                [placeholder]="localeData?.transporter_doc_no_required_placeholder"
+                                required
+                                name="transDocNo"
+                                [(ngModel)]="updateEwayVehicleform.transDocNo"
+                                class="form-control input"
+                            />
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
-
+                            <label class="pd-t07">{{ localeData?.transporter_doc_date_required_label }}</label>
                         </div>
-                        <div class="col-md-8 col-lg-6 col-sm-12 mr-t15 ">
-                            <button type="submit" [disabled]="updateVehicleForm.invalid"
+                        <div class="col-md-8 col-lg-6 col-sm-12 mr-t15">
+                            <input
+                                [placeholder]="localeData?.transporter_doc_date_required_placeholder"
+                                name="transDocDate"
+                                required
+                                type="text"
+                                placement="top"
+                                [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', adaptivePosition: true }"
+                                [(ngModel)]="updateEwayVehicleform.transDocDate"
+                                class="form-control pd-r3"
+                                bsDatepicker
+                            />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right"></div>
+                        <div class="col-md-8 col-lg-6 col-sm-12 mr-t15">
+                            <button
+                                type="submit"
+                                [disabled]="updateVehicleForm.invalid"
                                 [ladda]="updateEwayvehicleProcess$ | async"
                                 (click)="updateEwayTransport(updateVehicleForm)"
-                                class="btn btn-success mr-2">{{commonLocaleData?.app_save}}
+                                class="btn btn-success mr-2"
+                            >
+                                {{ commonLocaleData?.app_save }}
                             </button>
-                            <button type="submit" class="btn btn-danger mr-2"
-                                (click)="closeModel()">{{commonLocaleData?.app_cancel}}</button>
+                            <button type="submit" class="btn btn-danger mr-2" (click)="closeModel()">
+                                {{ commonLocaleData?.app_cancel }}
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
-
         </ng-template>
     </form>
-
 
     <!-- Reasons for cancellation -->
     <form #cancelEwayForm="ngForm" autocomplete="off">
         <ng-template #cancel>
             <div class="modal-header">
-                <h3 class="modal-title pull-left">{{localeData?.reasons_for_cancellation}}</h3>
+                <h3 class="modal-title pull-left">{{ localeData?.reasons_for_cancellation }}</h3>
                 <button type="button" class="close pull-right" (click)="closeModel()">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -396,136 +586,166 @@
             <div class="modal-body pb-4">
                 <div class="row">
                     <div class="col-md-3 col-lg-3 col-sm-12 mr-t15 text-right">
-                        <label class="pd-t07">{{localeData?.reason_label}}</label>
+                        <label class="pd-t07">{{ localeData?.reason_label }}</label>
                     </div>
                     <div class="col-md-8 col-lg-7 col-sm-12 mr-t15">
-                        <sh-select class="input" [options]="ewayCancelReason" required [isRequired]="true"
-                            [placeholder]="localeData?.reason_placeholder" [isFilterEnabled]="true" name="cancelRsnCode"
-                            [(ngModel)]="cancelEwayRequest.cancelRsnCode" [ItemHeight]="33"></sh-select>
+                        <sh-select
+                            class="input"
+                            [options]="ewayCancelReason"
+                            required
+                            [isRequired]="true"
+                            [placeholder]="localeData?.reason_placeholder"
+                            [isFilterEnabled]="true"
+                            name="cancelRsnCode"
+                            [(ngModel)]="cancelEwayRequest.cancelRsnCode"
+                            [ItemHeight]="33"
+                        ></sh-select>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-3 col-lg-3 col-sm-12 mr-t15 text-right">
-                        <label class="pd-t07">{{commonLocaleData?.app_remark}}</label>
+                        <label class="pd-t07">{{ commonLocaleData?.app_remark }}</label>
                     </div>
                     <div class="col-md-8 col-lg-7 col-sm-12 mr-t15">
-                        <textarea name="cancelRmrk" class="form-control" [(ngModel)]="cancelEwayRequest.cancelRmrk"
-                            [placeholder]="localeData?.remark_placeholder"></textarea>
+                        <textarea
+                            name="cancelRmrk"
+                            class="form-control"
+                            [(ngModel)]="cancelEwayRequest.cancelRmrk"
+                            [placeholder]="localeData?.remark_placeholder"
+                        ></textarea>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-md-3 col-lg-3 col-sm-12 mr-t15 text-right">
-
-                    </div>
+                    <div class="col-md-3 col-lg-3 col-sm-12 mr-t15 text-right"></div>
                     <div class="col-md-8 col-lg-7 col-sm-12 mr-t15">
-                        <button type="submit" (click)="cancelEwayBill(cancelEwayForm)"
-                            [disabled]="cancelEwayForm.invalid" [ladda]="cancelEwayInProcess$ | async"
-                            class="btn btn-success mr-2">{{commonLocaleData?.app_confirm}}
+                        <button
+                            type="submit"
+                            (click)="cancelEwayBill(cancelEwayForm)"
+                            [disabled]="cancelEwayForm.invalid"
+                            [ladda]="cancelEwayInProcess$ | async"
+                            class="btn btn-success mr-2"
+                        >
+                            {{ commonLocaleData?.app_confirm }}
                         </button>
-                        <button type="submit" class="btn btn-danger mr-2"
-                            (click)="closeModel()">{{commonLocaleData?.app_cancel}}</button>
+                        <button type="submit" class="btn btn-danger mr-2" (click)="closeModel()">
+                            {{ commonLocaleData?.app_cancel }}
+                        </button>
                     </div>
                 </div>
             </div>
-
         </ng-template>
     </form>
 
-
     <ng-template #consolidateModal>
         <div class="modal-header">
-            <h3 class="modal-title pull-left">{{localeData?.consolidated_details_heading}}</h3>
-            <button type="button" class="close pull-right" [attr.aria-label]="commonLocaleData?.app_close"
-                (click)="closeModel()">
+            <h3 class="modal-title pull-left">{{ localeData?.consolidated_details_heading }}</h3>
+            <button
+                type="button"
+                class="close pull-right"
+                [attr.aria-label]="commonLocaleData?.app_close"
+                (click)="closeModel()"
+            >
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
         <div class="modal-body">
-            <h4 class="font-22 mb-2">{{commonLocaleData?.app_numbers?.one}}.
-                {{localeData?.consolidated_ewaybill_details}}</h4>
+            <h4 class="font-22 mb-2">
+                {{ commonLocaleData?.app_numbers?.one }}. {{ localeData?.consolidated_ewaybill_details }}
+            </h4>
             <div class="table-responsive">
                 <table class="table custom basic">
                     <tbody>
                         <tr>
-                            <td>{{localeData?.consolidated_ewaybill_details}}</td>
+                            <td>{{ localeData?.consolidated_ewaybill_details }}</td>
                             <th>12345678</th>
                         </tr>
                         <tr>
-                            <td>{{commonLocaleData?.app_date}}</td>
+                            <td>{{ commonLocaleData?.app_date }}</td>
                             <th>24/04/2019</th>
                         </tr>
                         <tr>
-                            <td>{{commonLocaleData?.app_transporter_id}}</td>
+                            <td>{{ commonLocaleData?.app_transporter_id }}</td>
                             <th>29BHK534534KJH43</th>
                         </tr>
 
                         <tr>
-                            <td>{{commonLocaleData?.app_vehicle_no}}</td>
+                            <td>{{ commonLocaleData?.app_vehicle_no }}</td>
                             <th>MH87786</th>
                         </tr>
                         <tr>
-                            <td>{{commonLocaleData?.app_from}}</td>
+                            <td>{{ commonLocaleData?.app_from }}</td>
                             <th>ABC-HJK7865765JG4</th>
                         </tr>
 
                         <tr>
-                            <td>{{commonLocaleData?.app_mode}}</td>
-                            <th>{{commonLocaleData?.app_road}}</th>
+                            <td>{{ commonLocaleData?.app_mode }}</td>
+                            <th>{{ commonLocaleData?.app_road }}</th>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-
-            <h4 class="font-22 mb-2">{{commonLocaleData?.app_numbers?.two}}. {{localeData?.item_details}}</h4>
+            <h4 class="font-22 mb-2">{{ commonLocaleData?.app_numbers?.two }}. {{ localeData?.item_details }}</h4>
             <div class="table-responsive">
                 <table class="table basic table-bordered">
                     <thead class="thead-background1">
                         <tr>
                             <th>#</th>
-                            <th>{{localeData?.ewaybill_no_date}}</th>
-                            <th>{{localeData?.ewaybill_by}}</th>
-                            <th>{{localeData?.document_no_date}}</th>
-                            <th>{{commonLocaleData?.app_value}}</th>
-                            <th>{{commonLocaleData?.app_to}}</th>
-                            <th>{{localeData?.valid_till_date}}</th>
+                            <th>{{ localeData?.ewaybill_no_date }}</th>
+                            <th>{{ localeData?.ewaybill_by }}</th>
+                            <th>{{ localeData?.document_no_date }}</th>
+                            <th>{{ commonLocaleData?.app_value }}</th>
+                            <th>{{ commonLocaleData?.app_to }}</th>
+                            <th>{{ localeData?.valid_till_date }}</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of EwaybillLists?.results">
-                            <td>{{item?.invoiceDate}}</td>
-                            <td>{{item?.docNumber}}</td>
-                            <td>{{item?.customerName}}</td>
-                            <td>{{item?.customerGstin}}</td>
-                            <td>{{item?.ewbNo}}
-                                <br>
-                                <small href=".."
-                                    class="cp btn-link text-green">{{localeData?.manually_generated}}</small>
+                            <td>{{ item?.invoiceDate }}</td>
+                            <td>{{ item?.docNumber }}</td>
+                            <td>{{ item?.customerName }}</td>
+                            <td>{{ item?.customerGstin }}</td>
+                            <td>
+                                {{ item?.ewbNo }}
+                                <br />
+                                <small href=".." class="cp btn-link text-green">{{
+                                    localeData?.manually_generated
+                                }}</small>
                             </td>
-                            <td>{{item?.ewayBillDate}}</td>
-                            <td><i class="icon-rupees font-11"></i> {{item?.totalValue}}</td>
-                            <td><a href="../../../../../../../src/app/invoice/eWayBill"
-                                    class="btn-link">{{commonLocaleData?.app_action}}</a></td>
+                            <td>{{ item?.ewayBillDate }}</td>
+                            <td><i class="icon-rupees font-11"></i> {{ item?.totalValue }}</td>
+                            <td>
+                                <a href="../../../../../../../src/app/invoice/eWayBill" class="btn-link">{{
+                                    commonLocaleData?.app_action
+                                }}</a>
+                            </td>
                         </tr>
-
                     </tbody>
                 </table>
             </div>
-
-
         </div>
     </ng-template>
     <ng-template #datepickerTemplate>
         <div class="datepicker-modal">
             <div class="modal-body">
-                <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
-                    [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption"
-                    [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
-                    [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
-                    (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
-                    [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
-                    [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+                <app-datepicker-wrapper
+                    [inputStartDate]="selectedDateRange?.startDate"
+                    [inputEndDate]="selectedDateRange?.endDate"
+                    [alwaysShowCalendars]="true"
+                    [ranges]="datePickerOption"
+                    [selectedRangeLabel]="selectedRangeLabel"
+                    [showCustomRangeLabel]="true"
+                    [showClearButton]="false"
+                    [showCancel]="true"
+                    [linkedCalendars]="true"
+                    [showDropdowns]="true"
+                    (rangeClicked)="dateSelectedCallback($event)"
+                    (datesUpdated)="dateSelectedCallback($event)"
+                    [keepCalendarOpeningWithRange]="false"
+                    [showRangeLabelOnInput]="false"
+                    [dateFieldPosition]="dateFieldPosition"
+                ></app-datepicker-wrapper>
             </div>
         </div>
     </ng-template>

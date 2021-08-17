@@ -1,151 +1,265 @@
-<ng-container appTranslate [file]="'create-company'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'create-company'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <div id="main" class="welcome-outer">
         <giddh-loader></giddh-loader>
         <layout-main [sideMenu]="false">
-
             <div class="welcome-header">
-                <h2>{{localeData?.welcome_to_giddh}} </h2>
+                <h2>{{ localeData?.welcome_to_giddh }}</h2>
             </div>
             <hr />
 
-            <div class="welcome-container ">
-                <p class="welcome-title">{{localeData?.setup_profile}}</p>
-                <form name="form" #welcomeForm="ngForm" novalidate="" class="clearfix welcome-form horizontal-form"
-                    autocomplete="off">
-                    <div class=" clearfix row">
+            <div class="welcome-container">
+                <p class="welcome-title">{{ localeData?.setup_profile }}</p>
+                <form
+                    name="form"
+                    #welcomeForm="ngForm"
+                    novalidate=""
+                    class="clearfix welcome-form horizontal-form"
+                    autocomplete="off"
+                >
+                    <div class="clearfix row">
                         <div class="col-12 mr-b2">
-                            <ng-container *ngIf="!itemOnBoardingDetails?.isOnBoardingInProgress else onBoardingItemName">
-                                <label for="name" class="mr-t3" *ngIf="!isBranch">{{commonLocaleData?.app_company_name}}<sup
-                                        class="text-danger">*</sup></label>
+                            <ng-container
+                                *ngIf="!itemOnBoardingDetails?.isOnBoardingInProgress; else onBoardingItemName"
+                            >
+                                <label for="name" class="mr-t3" *ngIf="!isBranch"
+                                    >{{ commonLocaleData?.app_company_name }}<sup class="text-danger">*</sup></label
+                                >
                                 <!-- Need to show when creat branch  -->
-                                <label for="name" class="mr-t3" *ngIf="isBranch">{{commonLocaleData?.app_branch_name}}<sup
-                                        class="text-danger">*</sup></label>
+                                <label for="name" class="mr-t3" *ngIf="isBranch"
+                                    >{{ commonLocaleData?.app_branch_name }}<sup class="text-danger">*</sup></label
+                                >
                             </ng-container>
                             <ng-template #onBoardingItemName>
-                                <label for="name" class="mr-t3" *ngIf="!isBranch">{{getOnboardingTypeNameText()}}<sup class="text-danger">*</sup></label>
+                                <label for="name" class="mr-t3" *ngIf="!isBranch"
+                                    >{{ getOnboardingTypeNameText() }}<sup class="text-danger">*</sup></label
+                                >
                             </ng-template>
-                            <input name="name" id="name" type="text" required
+                            <input
+                                name="name"
+                                id="name"
+                                type="text"
+                                required
                                 (input)="handleNameChange($event?.target?.value)"
                                 (blur)="validateName($event?.target?.value)"
-                                [disabled]="(createNewCompanyPreparedObj.name && !isItemUpdateInProgress) ? 'disabled' : null"
-                                placeholder="Name" [(ngModel)]="createNewCompanyPreparedObj.name" class="form-control bold">
-                            <span class="name-error" *ngIf="welcomeForm?.form?.controls['name']?.errors?.maxlength">{{localeData?.max_character_limit_error}}</span>
+                                [disabled]="
+                                    createNewCompanyPreparedObj.name && !isItemUpdateInProgress ? 'disabled' : null
+                                "
+                                placeholder="Name"
+                                [(ngModel)]="createNewCompanyPreparedObj.name"
+                                class="form-control bold"
+                            />
+                            <span class="name-error" *ngIf="welcomeForm?.form?.controls['name']?.errors?.maxlength">{{
+                                localeData?.max_character_limit_error
+                            }}</span>
                         </div>
-                        <div class="col-6 mr-b2 ">
+                        <div class="col-6 mr-b2">
                             <span>
-                                <label for="country" class="d-block">{{commonLocaleData?.app_country}}<sup class="text-danger">*</sup></label>
+                                <label for="country" class="d-block"
+                                    >{{ commonLocaleData?.app_country }}<sup class="text-danger">*</sup></label
+                                >
                                 <div class="custom-select position-relative">
-                                    <sh-select id="country" [options]="countrySource$ | async" required [isRequired]="true"
+                                    <sh-select
+                                        id="country"
+                                        [options]="countrySource$ | async"
+                                        required
+                                        [isRequired]="true"
                                         [isFilterEnabled]="true"
-                                        [disabled]="(createNewCompanyPreparedObj.country) ? 'disabled' : null"
-                                        name="country" [(ngModel)]="createNewCompanyPreparedObj.country"
-                                        class="pull-left  select-caret w-100" [defaultValue]="selectedCountry">
+                                        [disabled]="createNewCompanyPreparedObj.country ? 'disabled' : null"
+                                        name="country"
+                                        [(ngModel)]="createNewCompanyPreparedObj.country"
+                                        class="pull-left select-caret w-100"
+                                        [defaultValue]="selectedCountry"
+                                    >
                                     </sh-select>
                                 </div>
                             </span>
-
                         </div>
-                        <div class="col-6 mr-b2 ">
-                            <label for="">{{commonLocaleData?.app_currency}}<sup class="text-danger">*</sup></label>
+                        <div class="col-6 mr-b2">
+                            <label for="">{{ commonLocaleData?.app_currency }}<sup class="text-danger">*</sup></label>
                             <div class="custom-select select-caret position-relative">
-                                <sh-select name="baseCurrency" [options]="currencySource$ | async" required
+                                <sh-select
+                                    name="baseCurrency"
+                                    [options]="currencySource$ | async"
+                                    required
                                     [isRequired]="true"
-                                    [disabled]="(createNewCompanyPreparedObj.baseCurrency) ? 'disabled' : null"
-                                    [isFilterEnabled]="true" [(ngModel)]="createNewCompanyPreparedObj.baseCurrency"
-                                    [defaultValue]="createNewCompanyPreparedObj.baseCurrency"></sh-select>
+                                    [disabled]="createNewCompanyPreparedObj.baseCurrency ? 'disabled' : null"
+                                    [isFilterEnabled]="true"
+                                    [(ngModel)]="createNewCompanyPreparedObj.baseCurrency"
+                                    [defaultValue]="createNewCompanyPreparedObj.baseCurrency"
+                                ></sh-select>
                             </div>
                         </div>
                         <div *ngIf="!isBranch" class="col-12 mr-b2">
                             <span>
-                                <label for="contactNo" class="d-block">{{commonLocaleData?.app_mobile_number}}<sup class="text-danger">*</sup></label>
+                                <label for="contactNo" class="d-block"
+                                    >{{ commonLocaleData?.app_mobile_number }}<sup class="text-danger">*</sup></label
+                                >
                                 <div class="d-flex">
-                                    <sh-select class="pull-left select-caret select-caret-contact"
+                                    <sh-select
+                                        class="pull-left select-caret select-caret-contact"
                                         (blur)="isContactNumberValid()"
-                                        [disabled]="(createNewCompanyPreparedObj.phoneCode && !isItemUpdateInProgress) ? 'disabled' : null"
-                                        name="phoneCode" [placeholder]="commonLocaleData?.app_country_code" [options]="callingCodesSource$ | async"
+                                        [disabled]="
+                                            createNewCompanyPreparedObj.phoneCode && !isItemUpdateInProgress
+                                                ? 'disabled'
+                                                : null
+                                        "
+                                        name="phoneCode"
+                                        [placeholder]="commonLocaleData?.app_country_code"
+                                        [options]="callingCodesSource$ | async"
                                         [(ngModel)]="createNewCompanyPreparedObj.phoneCode"
-                                        [defaultValue]="createNewCompanyPreparedObj.phoneCode"></sh-select>
-                                    <input type="number" class="form-control pull-right  select-caret" required
+                                        [defaultValue]="createNewCompanyPreparedObj.phoneCode"
+                                    ></sh-select>
+                                    <input
+                                        type="number"
+                                        class="form-control pull-right select-caret"
+                                        required
                                         (blur)="isContactNumberValid()"
-                                        [disabled]="(createNewCompanyPreparedObj.contactNo && !isItemUpdateInProgress) ? 'disabled' : null"
-                                        [placeholder]="localeData?.mobile_no_placeholder" id="contactNo" autocomplete="off"
-                                        [(ngModel)]="createNewCompanyPreparedObj.contactNo" name="contactNo" #mobileNoEl />
+                                        [disabled]="
+                                            createNewCompanyPreparedObj.contactNo && !isItemUpdateInProgress
+                                                ? 'disabled'
+                                                : null
+                                        "
+                                        [placeholder]="localeData?.mobile_no_placeholder"
+                                        id="contactNo"
+                                        autocomplete="off"
+                                        [(ngModel)]="createNewCompanyPreparedObj.contactNo"
+                                        name="contactNo"
+                                        #mobileNoEl
+                                    />
                                 </div>
                             </span>
                         </div>
 
                         <div class="col-12 mr-b2 select-box" *ngIf="businessTypeList?.length && !isWarehouse">
                             <div class="position-relative">
-                                <label for="businessType">{{localeData?.select_business_type}}</label>
+                                <label for="businessType">{{ localeData?.select_business_type }}</label>
                                 <div class="custom-select position-relative">
-                                    <sh-select [placeholder]="localeData?.select_business_type" name="businessType" id="businessType"
-                                        (onClear)="onClearBusinessType()" autocomplete="false" [readonlyInput]="true"
-                                        [disabled]="(companyProfileObj.businessType && isOnBoardingInProgress) ? 'disabled' : null"
+                                    <sh-select
+                                        [placeholder]="localeData?.select_business_type"
+                                        name="businessType"
+                                        id="businessType"
+                                        (onClear)="onClearBusinessType()"
+                                        autocomplete="false"
+                                        [readonlyInput]="true"
+                                        [disabled]="
+                                            companyProfileObj.businessType && isOnBoardingInProgress ? 'disabled' : null
+                                        "
                                         (selected)="selectedbusinessType($event)"
-                                        [(ngModel)]="companyProfileObj.businessType" [options]="businessTypeList"
-                                        [ItemHeight]="33" [defaultValue]="companyProfileObj.businessType">
+                                        [(ngModel)]="companyProfileObj.businessType"
+                                        [options]="businessTypeList"
+                                        [ItemHeight]="33"
+                                        [defaultValue]="companyProfileObj.businessType"
+                                    >
                                     </sh-select>
                                 </div>
                             </div>
                         </div>
                         <div class="col-12 mr-b2 select-box" *ngIf="!isWarehouse">
                             <div class="position-relative">
-                                <label for="businessNature">{{localeData?.select_business_nature}}</label>
-                                <div class="custom-select  position-relative">
-                                    <sh-select [placeholder]="localeData?.select_business_nature" name="businessNature"
-                                        [readonlyInput]="true" (onClear)="onClearBusinessNature()" autocomplete="false"
-                                        id="businessNature" [(ngModel)]="companyProfileObj.businessNature"
-                                        [options]="businessNatureList" [isFilterEnabled]="true" [ItemHeight]="33"
-                                        [defaultValue]="companyProfileObj.businessNature">
+                                <label for="businessNature">{{ localeData?.select_business_nature }}</label>
+                                <div class="custom-select position-relative">
+                                    <sh-select
+                                        [placeholder]="localeData?.select_business_nature"
+                                        name="businessNature"
+                                        [readonlyInput]="true"
+                                        (onClear)="onClearBusinessNature()"
+                                        autocomplete="false"
+                                        id="businessNature"
+                                        [(ngModel)]="companyProfileObj.businessNature"
+                                        [options]="businessNatureList"
+                                        [isFilterEnabled]="true"
+                                        [ItemHeight]="33"
+                                        [defaultValue]="companyProfileObj.businessNature"
+                                    >
                                     </sh-select>
                                 </div>
                             </div>
                         </div>
                         <ng-container *ngIf="selectedBusinesstype === 'Registered' || isWarehouse">
-                            <div class="col-12 mr-b2 select-box"
-                                *ngIf="formFields['taxName'] !== undefined && !isWarehouse">
+                            <div
+                                class="col-12 mr-b2 select-box"
+                                *ngIf="formFields['taxName'] !== undefined && !isWarehouse"
+                            >
                                 <div class="clearfix">
-
-                                    <label for="gstinNum" class="d-block">{{formFields['taxName'].label}}<sup
-                                            class="text-danger">*</sup></label>
-                                    <input type="text" [ngClass]="{'gstin-width' : isBranch || isOnBoardingInProgress}"
-                                        class="form-control" autocomplete="false" required #gstNumberField
-                                        (change)="handleGstChange(gstNumberField, states)" name="gstNumber"
+                                    <label for="gstinNum" class="d-block"
+                                        >{{ formFields["taxName"].label }}<sup class="text-danger">*</sup></label
+                                    >
+                                    <input
+                                        type="text"
+                                        [ngClass]="{ 'gstin-width': isBranch || isOnBoardingInProgress }"
+                                        class="form-control"
+                                        autocomplete="false"
+                                        required
+                                        #gstNumberField
+                                        (change)="handleGstChange(gstNumberField, states)"
+                                        name="gstNumber"
                                         [(ngModel)]="companyProfileObj.taxNumber"
-                                        [placeholder]="getEnterTaxText()" />
+                                        [placeholder]="getEnterTaxText()"
+                                    />
 
-                                    <span class="same-as-head" *ngIf="isBranch || isOnBoardingInProgress"> <input
-                                            type="checkbox" name="isTaxNumberSameAsHeadQuarter"
-                                            [(ngModel)]="isTaxNumberSameAsHeadQuarter" value="1"
-                                            (change)="sameAsHeadQuarter(gstNumberField, states);"> {{localeData?.same_as_company}}</span>
-
+                                    <span class="same-as-head" *ngIf="isBranch || isOnBoardingInProgress">
+                                        <input
+                                            type="checkbox"
+                                            name="isTaxNumberSameAsHeadQuarter"
+                                            [(ngModel)]="isTaxNumberSameAsHeadQuarter"
+                                            value="1"
+                                            (change)="sameAsHeadQuarter(gstNumberField, states)"
+                                        />
+                                        {{ localeData?.same_as_company }}</span
+                                    >
                                 </div>
                             </div>
                             <div class="col-12 mr-b2 select-box">
                                 <div>
-                                    <label>{{commonLocaleData?.app_state}}<sup class="text-danger">*</sup></label><br>
+                                    <label>{{ commonLocaleData?.app_state }}<sup class="text-danger">*</sup></label
+                                    ><br />
                                     <div>
-                                        <sh-select #states [options]="statesSource$ | async" required [isRequired]="true"
-                                            [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" name="state"
-                                            [(ngModel)]="companyProfileObj.state" class="width-100"
-                                            [defaultValue]="companyProfileObj.selectedState"></sh-select>
+                                        <sh-select
+                                            #states
+                                            [options]="statesSource$ | async"
+                                            required
+                                            [isRequired]="true"
+                                            [isFilterEnabled]="true"
+                                            [forceClearReactive]="forceClear$ | async"
+                                            name="state"
+                                            [(ngModel)]="companyProfileObj.state"
+                                            class="width-100"
+                                            [defaultValue]="companyProfileObj.selectedState"
+                                        ></sh-select>
                                     </div>
                                 </div>
                             </div>
-                            <div *ngIf="!(isOnBoardingInProgress && isWarehouse) && !isBranch"
-                                class="col-12 mr-b2 select-box">
+                            <div
+                                *ngIf="!(isOnBoardingInProgress && isWarehouse) && !isBranch"
+                                class="col-12 mr-b2 select-box"
+                            >
                                 <div class="">
-                                    <label for="taxes-dd">{{localeData?.applicable_tax}}</label>
+                                    <label for="taxes-dd">{{ localeData?.applicable_tax }}</label>
                                     <div class="btn-group btn-block select-caret invoice-btn" dropdown>
-                                        <button dropdownToggle type="button"
-                                            class="form-control text-left btn-block dropdown-toggle"> {{localeData?.select_taxes}} <span
-                                                class="select-drop pull-right mr-t1"></span></button>
+                                        <button
+                                            dropdownToggle
+                                            type="button"
+                                            class="form-control text-left btn-block dropdown-toggle"
+                                        >
+                                            {{ localeData?.select_taxes }}
+                                            <span class="select-drop pull-right mr-t1"></span>
+                                        </button>
                                         <ul class="dropdown-menu dropdown-menu-2 width-100" role="menu">
-                                            <li *ngIf="taxesList.length==0">{{commonLocaleData?.app_no_result_found}}</li>
+                                            <li *ngIf="taxesList.length == 0">
+                                                {{ commonLocaleData?.app_no_result_found }}
+                                            </li>
                                             <li *ngFor="let tax of taxesList">
-                                                <input type="checkbox" (click)="selectApplicableTaxes(tax, $event)"
-                                                    [checked]="tax.isSelected" /> {{tax.label}}
+                                                <input
+                                                    type="checkbox"
+                                                    (click)="selectApplicableTaxes(tax, $event)"
+                                                    [checked]="tax.isSelected"
+                                                />
+                                                {{ tax.label }}
                                             </li>
                                         </ul>
                                     </div>
@@ -153,8 +267,8 @@
                                         <ul class="list-inline custom-multi-select">
                                             <li *ngFor="let tax of selectedTaxes">
                                                 <a class="grey-color">
-                                                    {{currentTaxList[tax].name}} <span class="pd-l05"
-                                                        (click)="removeTax(tax)">×</span>
+                                                    {{ currentTaxList[tax].name }}
+                                                    <span class="pd-l05" (click)="removeTax(tax)">×</span>
                                                 </a>
                                             </li>
                                         </ul>
@@ -168,43 +282,73 @@
                                 <!-- static pincode start -->
                                 <div *ngIf="!isWarehouse" class="mr-b2 select-box">
                                     <div>
-                                        <label for="pinCodeNum">{{commonLocaleData?.app_pin_code}}</label>
+                                        <label for="pinCodeNum">{{ commonLocaleData?.app_pin_code }}</label>
                                         <div>
-                                            <input type="text" class="form-control" autocomplete="false"
-                                                [placeholder]="commonLocaleData?.app_pin_code" autocomplete="false" name="pinCodeNum"
-                                                decimalDigitsDirective [preventDecimal]="true"
-                                                [(ngModel)]="companyProfileObj.pincode" />
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                autocomplete="false"
+                                                [placeholder]="commonLocaleData?.app_pin_code"
+                                                autocomplete="false"
+                                                name="pinCodeNum"
+                                                decimalDigitsDirective
+                                                [preventDecimal]="true"
+                                                [(ngModel)]="companyProfileObj.pincode"
+                                            />
                                         </div>
                                     </div>
                                 </div>
                                 <!-- static pincode end -->
                                 <ng-container
-                                    *ngIf="!itemOnBoardingDetails?.isOnBoardingInProgress else onBoardingItemAddress">
-                                    <label for="address" class="d-block">{{isBranch ? localeData?.branch_address : localeData?.company_address}} <sup
-                                            *ngIf="selectedBusinesstype === 'Registered'"
-                                            class="text-danger">*</sup></label>
+                                    *ngIf="!itemOnBoardingDetails?.isOnBoardingInProgress; else onBoardingItemAddress"
+                                >
+                                    <label for="address" class="d-block"
+                                        >{{ isBranch ? localeData?.branch_address : localeData?.company_address }}
+                                        <sup *ngIf="selectedBusinesstype === 'Registered'" class="text-danger"
+                                            >*</sup
+                                        ></label
+                                    >
                                 </ng-container>
                                 <ng-template #onBoardingItemAddress>
-                                    <label for="address" class="d-block">{{getOnboardingTypeAddressText()}}
-                                        <sup class="text-danger">*</sup></label>
+                                    <label for="address" class="d-block"
+                                        >{{ getOnboardingTypeAddressText() }} <sup class="text-danger">*</sup></label
+                                    >
                                 </ng-template>
-                                <textarea #address [required]="selectedBusinesstype === 'Registered' || isWarehouse"
-                                    (focus)="isWarehouse ? removeAddressFieldError() : ''" [placeholder]="commonLocaleData?.app_address"
-                                    class="form-control mr-t1 min-height-100" name="address" id="address"
-                                    [(ngModel)]="companyProfileObj.address"></textarea>
+                                <textarea
+                                    #address
+                                    [required]="selectedBusinesstype === 'Registered' || isWarehouse"
+                                    (focus)="isWarehouse ? removeAddressFieldError() : ''"
+                                    [placeholder]="commonLocaleData?.app_address"
+                                    class="form-control mr-t1 min-height-100"
+                                    name="address"
+                                    id="address"
+                                    [(ngModel)]="companyProfileObj.address"
+                                ></textarea>
                             </div>
                         </div>
-                        <div class="col-12 ">
-                            <p class="change-preference ">{{localeData?.onboarding_note}}</p><br />
-                            <p class="taxation-not-supported" *ngIf="!formFields['taxName']">{{localeData?.tax_reports_note}}</p>
+                        <div class="col-12">
+                            <p class="change-preference">{{ localeData?.onboarding_note }}</p>
+                            <br />
+                            <p class="taxation-not-supported" *ngIf="!formFields['taxName']">
+                                {{ localeData?.tax_reports_note }}
+                            </p>
                         </div>
                         <div class="col-12 d-flex mr-t5">
-                            <button class="btn btn-primary" (click)="back(isBranch)">{{commonLocaleData?.app_back}}</button>
-                            <button type="submit" class="btn btn-sky-blue" (click)="submit(welcomeForm)"
-                                [disabled]="welcomeForm.invalid || !isGstValid || isCreateCompanyInProgress">
-                                {{itemOnBoardingDetails?.isOnBoardingInProgress ?
-                                itemOnBoardingDetails?.isItemUpdateInProgress ? getUpdateOnboardingTypeText() : getCreateOnboardingTypeText() :
-                                commonLocaleData?.app_submit
+                            <button class="btn btn-primary" (click)="back(isBranch)">
+                                {{ commonLocaleData?.app_back }}
+                            </button>
+                            <button
+                                type="submit"
+                                class="btn btn-sky-blue"
+                                (click)="submit(welcomeForm)"
+                                [disabled]="welcomeForm.invalid || !isGstValid || isCreateCompanyInProgress"
+                            >
+                                {{
+                                    itemOnBoardingDetails?.isOnBoardingInProgress
+                                        ? itemOnBoardingDetails?.isItemUpdateInProgress
+                                            ? getUpdateOnboardingTypeText()
+                                            : getCreateOnboardingTypeText()
+                                        : commonLocaleData?.app_submit
                                 }}
                             </button>
                         </div>

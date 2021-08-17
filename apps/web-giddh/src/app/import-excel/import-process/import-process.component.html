@@ -2,23 +2,24 @@
 <div class="review-data">
     <div class="text-right">
         <div class="action-btn">
-            <button class="btn btn-default" (click)="onBack.emit()">{{commonLocaleData?.app_back}}</button>
-            <button class="btn btn-success" [disabled]="!importDisable" [ladda]="isLoading"
-                (click)="save()">{{commonLocaleData?.app_import}}</button>
+            <button class="btn btn-default" (click)="onBack.emit()">{{ commonLocaleData?.app_back }}</button>
+            <button class="btn btn-success" [disabled]="!importDisable" [ladda]="isLoading" (click)="save()">
+                {{ commonLocaleData?.app_import }}
+            </button>
         </div>
     </div>
     <div class="data-overview" [perfectScrollbar]="config">
-
         <table class="table basic table-bordered mr-t1">
             <thead>
                 <tr>
-                    <th *ngFor="let col of userHeader">{{col}}</th>
+                    <th *ngFor="let col of userHeader">{{ col }}</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let item of importData.data.items">
                     <td *ngFor="let row of item.row">
-                        <div class="text-ellipsis" container="body" [tooltip]="row.columnValue">{{row.columnValue}}
+                        <div class="text-ellipsis" container="body" [tooltip]="row.columnValue">
+                            {{ row.columnValue }}
                         </div>
                     </td>
                 </tr>

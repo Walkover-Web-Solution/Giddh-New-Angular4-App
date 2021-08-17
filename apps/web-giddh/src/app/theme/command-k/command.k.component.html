@@ -1,5 +1,9 @@
-<ng-container appTranslate [file]="'command-k'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'command-k'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <section>
         <section #wrapper [class.isVisible]="isOpen" class="universal-data-list-wrapper">
             <!-- header -->
@@ -12,14 +16,28 @@
                 <div #mainEle tabindex="0" class="universal-list-items">
                     <ng-container *ngIf="isOpen">
                         <ng-container>
-                            <commandk-virtual-scroll [items]="searchedItems" [childHeight]="ItemHeight"
+                            <commandk-virtual-scroll
+                                [items]="searchedItems"
+                                [childHeight]="ItemHeight"
                                 (highLightedItemEmitter)="handleHighLightedItemEvent($event)"
-                                [style.max-height.px]="(searchedItems?.length !== 0) ? ItemHeight * (searchedItems && (searchedItems.length < visibleItems ) ? searchedItems.length : visibleItems) : ItemHeight"
-                                (scroll)="onScroll($event)">
-                                <div class="item" *ngFor="let r of searchedItems; let i = index; trackBy: trackByFn"
-                                    (mouseover)="highlightItem(i)" (mouseout)="unhighlightItem()"
+                                [style.max-height.px]="
+                                    searchedItems?.length !== 0
+                                        ? ItemHeight *
+                                          (searchedItems && searchedItems.length < visibleItems
+                                              ? searchedItems.length
+                                              : visibleItems)
+                                        : ItemHeight
+                                "
+                                (scroll)="onScroll($event)"
+                            >
+                                <div
+                                    class="item"
+                                    *ngFor="let r of searchedItems; let i = index; trackBy: trackByFn"
+                                    (mouseover)="highlightItem(i)"
+                                    (mouseout)="unhighlightItem()"
                                     (click)="itemSelected(r)"
-                                    [ngClass]="{'selected': r.loop === highlightedItem, 'active': r.isSelected }">
+                                    [ngClass]="{ 'selected': r.loop === highlightedItem, 'active': r.isSelected }"
+                                >
                                     <a href="javascript:void(0)" class="d-flex flex-row align-items-center">
                                         <div class="item-icon">
                                             <ng-container [ngSwitch]="r.type">
@@ -38,29 +56,38 @@
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div class="width-65">
                                                     <p
-                                                        id="{{ (r.type.toLowerCase()) + '-' + (r.type === 'MENU' ? getPageUniqueName(r.route) : r.uniqueName) }}">
-                                                        {{r.name}}</p>
+                                                        id="{{
+                                                            r.type.toLowerCase() +
+                                                                '-' +
+                                                                (r.type === 'MENU'
+                                                                    ? getPageUniqueName(r.route)
+                                                                    : r.uniqueName)
+                                                        }}"
+                                                    >
+                                                        {{ r.name }}
+                                                    </p>
                                                     <ng-container [ngSwitch]="r.type">
                                                         <ng-container *ngSwitchCase="'MENU'">
-                                                            <small>{{localeData?.menu}}</small>
+                                                            <small>{{ localeData?.menu }}</small>
                                                         </ng-container>
                                                     </ng-container>
                                                     <ng-container *ngIf="r.parentGroups">
                                                         <p class="small-para-details">
                                                             <small>
                                                                 <span
-                                                                    *ngFor="let item of r.parentGroups; let idx = index">
+                                                                    *ngFor="let item of r.parentGroups; let idx = index"
+                                                                >
                                                                     <ng-container *ngIf="idx > 0">
                                                                         <span>&nbsp;❯&nbsp;</span>
                                                                     </ng-container>
-                                                                    {{item.name}}
+                                                                    {{ item.name }}
                                                                 </span>
                                                             </small>
                                                         </p>
                                                     </ng-container>
                                                 </div>
                                                 <ng-container *ngIf="r.type === 'ACCOUNT'">
-                                                    <span class="command-hover-text">{{r.uniqueName}}</span>
+                                                    <span class="command-hover-text">{{ r.uniqueName }}</span>
                                                 </ng-container>
                                             </div>
                                         </div>
@@ -77,11 +104,15 @@
                 <div #mainEle>
                     <div class="p-2">
                         <span>
-                            <div class="jumper-results" [ngClass]="{'text-center': showChannelCreateBtn}">
-                                <p class="block text-center mr-b2">{{localeData?.no_records_found}}</p>
+                            <div class="jumper-results" [ngClass]="{ 'text-center': showChannelCreateBtn }">
+                                <p class="block text-center mr-b2">{{ localeData?.no_records_found }}</p>
                                 <ng-container *ngIf="showChannelCreateBtn">
-                                    <button class="btn btn-primary mr-r2" (click)="triggerAddManage('group')">{{commonLocaleData?.app_create_group}}</button>
-                                    <button class="btn btn-primary" (click)="triggerAddManage('account')">{{commonLocaleData?.app_create_ac}}</button>
+                                    <button class="btn btn-primary mr-r2" (click)="triggerAddManage('group')">
+                                        {{ commonLocaleData?.app_create_group }}
+                                    </button>
+                                    <button class="btn btn-primary" (click)="triggerAddManage('account')">
+                                        {{ commonLocaleData?.app_create_ac }}
+                                    </button>
                                 </ng-container>
                             </div>
                         </span>
@@ -100,16 +131,23 @@
                 <span *ngFor="let item of listOfSelectedGroups; let idx = index">
                     <div class="vR">
                         <div class="vN">
-                            <div class="vT">{{item.name}}</div>
+                            <div class="vT">{{ item.name }}</div>
                             <ng-container>
                                 <span>&nbsp;❯&nbsp;</span>
                             </ng-container>
                         </div>
                     </div>
                 </span>
-                <input class="search-element" #searchEle type="text" [placeholder]="commonLocaleData?.app_search" (focus)="handleFocus()"
-                    (keydown)="handleKeydown($event)" (keyup)="initSearch($event, $event.target.value)"
-                    (paste)="onPasteInSearch()" />
+                <input
+                    class="search-element"
+                    #searchEle
+                    type="text"
+                    [placeholder]="commonLocaleData?.app_search"
+                    (focus)="handleFocus()"
+                    (keydown)="handleKeydown($event)"
+                    (keyup)="initSearch($event, $event.target.value)"
+                    (paste)="onPasteInSearch()"
+                />
             </div>
             <i class="icon-cross close-navigation" (click)="close()"></i>
         </div>
