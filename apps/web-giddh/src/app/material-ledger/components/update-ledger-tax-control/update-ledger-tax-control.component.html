@@ -36,7 +36,7 @@
         >
             <li *ngFor="let tax of taxRenderData; trackBy: trackByFn; let i = index">
                 <label
-                    class="checkbox overflow-hidden width-100 p-0 m-0 bd-rb px-1 py-1 mr-b05"
+                    class="checkbox d-flex align-items-center width-100 p-0 m-0 bd-rb px-1 py-1 mr-b05"
                     (click)="$event.stopPropagation()"
                     [ngClass]="{ 'disabled-label': tax.isDisabled }"
                 >
@@ -49,7 +49,7 @@
                         (change)="change()"
                         (click)="$event.stopPropagation()"
                     ></mat-checkbox>
-                    <span class="pull-left mr-l1 text-ellipsis">{{ tax.name }}</span>
+                    <span class="pull-left text-ellipsis">{{ tax.name }}</span>
                 </label>
             </li>
         </ul>

@@ -16,8 +16,9 @@
         }
         .ledger-row {
             $columns: 50;
+            display: flex;
 
-            @for $i from 1 through $columns {
+            @for $i from 0 through $columns {
                 .top-position-fix-#{$i} {
                     top: $i + px !important;
                 }
@@ -26,11 +27,19 @@
                 background-color: transparent;
             }
         }
+        .entry-modal-height {
+            $columns: 50;
+            @for $i from 0 through $columns {
+                .top-position-fix-#{$i} {
+                    margin-top: $i + px !important;
+                }
+            }
+        }
     }
 }
 #ledger-transaction-left-list,
 #ledger-transaction-right-list {
-    mat-grid-tile {
+    .mat-grid-tile {
         .d-flex.align-item-center {
             align-items: stretch !important;
         }
@@ -47,8 +56,8 @@
         }
     }
 }
-#ledger-transaction-left-list mat-grid-tile,
-#ledger-transaction-right-list mat-grid-tile {
+#ledger-transaction-left-list .mat-grid-tile,
+#ledger-transaction-right-list .mat-grid-tile {
     border-bottom: 1px solid $gainsboro;
 }
 #ledger-transaction-right-list,
@@ -209,7 +218,7 @@ table.ledger-footer-1 td[class*="col-"] {
     right: 0;
 }
 
-.ledger-head mat-grid-list mat-grid-tile {
+.ledger-head .mat-grid-list .mat-grid-tile {
     color: $jacksons-purple;
     padding-top: 5px !important;
     padding-bottom: 10px !important;
@@ -219,7 +228,7 @@ table.ledger-footer-1 td[class*="col-"] {
         position: relative;
     }
 }
-.ledger-head mat-grid-tile:first-child {
+.ledger-head .mat-grid-tile:first-child {
     span {
         position: relative;
         right: 0px !important;
@@ -380,12 +389,12 @@ sh-select:focus {
         padding: 0 0px 350px;
     }
 }
-.left-col-new mat-grid-list mat-grid-title:last-child,
-.left-col-new mat-grid-list mat-grid-title:last-child {
+.left-col-new .mat-grid-list .mat-grid-title:last-child,
+.left-col-new .mat-grid-list .mat-grid-title:last-child {
     border-right: 0px !important;
 }
-.left-col-new mat-grid-list mat-grid-title:first-child,
-.left-col-new mat-grid-list mat-grid-title:first-child {
+.left-col-new .mat-grid-list .mat-grid-title:first-child,
+.left-col-new .mat-grid-list .mat-grid-title:first-child {
     border-left: 1px solid $gainsboro !important;
 }
 .custom-tabs {
@@ -658,6 +667,9 @@ sh-select:focus {
             }
         }
     }
+    .account-holder-name {
+        white-space: normal;
+    }
 }
 
 .debit-credit-amount {
@@ -929,8 +941,8 @@ input#ledger-search {
     .stat-block {
         padding-left: 20px;
     }
-    .ledg-head mat-grid-list mat-grid-title,
-    .ledg-head mat-grid-list mat-grid-title .select2-container {
+    .ledg-head .mat-grid-list .mat-grid-title,
+    .ledg-head .mat-grid-list .mat-grid-title .select2-container {
         border-bottom: none;
         border-right: none;
     }
@@ -997,8 +1009,8 @@ input#ledger-search {
         font-size: 12px !important;
         padding: 6px;
     }
-    .left-col-new .width-100.h-table mat-grid-list mat-grid-title:first-child,
-    .left-col-new .width-100.h-table mat-grid-list mat-grid-title:first-child {
+    .left-col-new .width-100.h-table .mat-grid-list .mat-grid-title:first-child,
+    .left-col-new .width-100.h-table .mat-grid-list .mat-grid-title:first-child {
         border-left: 0px solid $gainsboro !important;
     }
     .ledg-head.some.transactions-page {
@@ -1105,28 +1117,31 @@ input#ledger-search {
     }
     .search-ledger-wrapper {
         width: 100% !important;
-        margin-top: 7px;
+        margin-top: 40px;
     }
     .download-invoice-ledger {
-        top: 8px;
+        top: 0px;
+        right: 0;
+        margin: 0 10px;
+        padding: 0;
         i {
             top: 0;
             color: $gray;
         }
     }
-    .ledger-head mat-grid-list mat-grid-tile.active {
+    .ledger-head .mat-grid-list .mat-grid-tile.active {
         display: block !important;
         width: 100%;
     }
     .hidden-xs {
         display: none !important;
     }
-    .ledger-head mat-grid-tile {
+    .ledger-head .mat-grid-tile {
         padding-top: 0;
     }
 }
 
-.ledger-row mat-grid-tile:nth-child(3) {
+.ledger-row .mat-grid-tile:nth-child(3) {
     justify-content: flex-end !important;
 }
 @media (max-width: 767px) {
@@ -1134,7 +1149,7 @@ input#ledger-search {
         width: 100%;
     }
     .ledger-head {
-        mat-grid-tile {
+        .mat-grid-tile {
             padding: 0 0 10px !important;
         }
     }

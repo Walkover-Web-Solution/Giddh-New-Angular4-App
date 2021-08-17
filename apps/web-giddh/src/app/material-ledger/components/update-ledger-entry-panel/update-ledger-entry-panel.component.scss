@@ -46,6 +46,10 @@ table.width-100 {
     font-size: 24px;
 }
 
+#entryModal {
+    max-height: 100vh !important;
+}
+
 ng-select > div i.fa.fa-caret-down::before {
     color: $white;
     font-size: 20px;
@@ -91,7 +95,6 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 
 .other-tax {
     justify-content: flex-end;
-    display: flex;
     padding-top: 25px;
     display: flex;
     padding-left: 8px;
@@ -139,14 +142,12 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 }
 
 .icon-box {
-    text-align: center;
     display: flex;
-    -webkit-box-align: end;
-    align-items: flex-end;
-    padding: 8px 12px 14px;
-    .font-20,
-    .font-12 {
-        padding-left: 2px !important;
+    align-items: center;
+    padding: 10px 10px 0 10px;
+    font-size: 12px;
+    label {
+        margin-top: 10px;
     }
 }
 
@@ -286,9 +287,7 @@ span.eligible-ITC {
 .table-amount[disabled] {
     pointer-events: none;
 }
-#update-ledger-assign-tag.disabled-ledger::ng-deep
-    .sh-select-disabled
-    .bg-white {
+#update-ledger-assign-tag.disabled-ledger::ng-deep .sh-select-disabled .bg-white {
     background-color: $whisper-light !important;
 }
 #update-ledger-assign-tag.disabled-ledger::ng-deep input,
@@ -492,35 +491,9 @@ p.edit-message {
         transform: rotate(360deg);
     }
 }
-#update-ledger-quantity {
-    padding-right: 6px !important;
-    width: 91%;
-    height: 34px;
-    margin-top: 2px;
-}
-#update-ledger-unit {
-    margin-top: 2px;
-    padding-top: 7px !important;
-}
-#update-ledger-price, #update-ledger-amount, #update-ledger-other-tax-disabled {
-    padding-right: 6px !important;
-    width: 98% !important;
-}
-#update-ledger-total-amount {
-    padding-right: 6px !important;
-    width: 95% !important;
-}
-#update-ledger-voucher-no {
-    padding-left: 3px !important;
-}
-#update-ledger-cheque-number {
-    padding-left: 5px !important;
-}
-#update-ledger-adjust-voucher, #update-ledger-inclusive-tax-edit-mode {
-    padding-left: 5px !important;
-    width: 98%;
-}
-#update-ledger-invoice-number {
-    width: 173px !important;
-    padding-left: 6px !important;
+.mat-expansion-panel,
+.total-detail-table {
+    .mat-input-element {
+        box-sizing: border-box !important;
+    }
 }
