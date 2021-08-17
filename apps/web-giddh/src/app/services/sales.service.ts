@@ -60,7 +60,7 @@ export class SalesService {
     }
 
     public updateVoucher(model: any): Observable<BaseResponse<any, any>> {
-        let accountUniqueName = model.voucher.accountDetails.uniqueName;
+        let accountUniqueName = model.voucher?.accountDetails?.uniqueName;
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.put(this.config.apiUrl + SALES_API_V2.UPDATE_VOUCHER
