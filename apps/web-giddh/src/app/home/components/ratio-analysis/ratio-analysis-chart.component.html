@@ -1,8 +1,14 @@
-<div id="live" appTranslate [file]="'home/ratio-analysis'" [requireCommonData]="false"
-    (localeData)="localeData = $event" (translationComplete)="translationComplete($event)">
+<div
+    id="live"
+    appTranslate
+    [file]="'home/ratio-analysis'"
+    [requireCommonData]="false"
+    (localeData)="localeData = $event"
+    (translationComplete)="translationComplete($event)"
+>
     <div class="card">
         <div class="panel-heading">
-            <strong>{{localeData?.chart_title}}</strong>
+            <strong>{{ localeData?.chart_title }}</strong>
             <div class="pull-right dashboard-filter">
                 <i class="icon-refresh mr-l1" (click)="hardRefresh()"></i>
             </div>
@@ -15,30 +21,50 @@
             <div class="chart-div" google-chart chart="chartData" *ngIf="!requestInFlight">
                 <div class="row">
                     <div class="col-md-3 col-sm-12 col-xs-12 text-center ratio-chart-block">
-                        <highcharts-chart *ngIf="currentRatioChartOptions" [Highcharts]="currentRatioChart"
-                            [options]="currentRatioChartOptions"></highcharts-chart>
-                        <h1 class="mr-b1">{{localeData?.current_ratio}}</h1>
-                        <small>{{localeData?.current_assets}} /<br /> {{localeData?.current_liabilities}}</small>
+                        <highcharts-chart
+                            *ngIf="currentRatioChartOptions"
+                            [Highcharts]="currentRatioChart"
+                            [options]="currentRatioChartOptions"
+                        ></highcharts-chart>
+                        <h1 class="mr-b1">{{ localeData?.current_ratio }}</h1>
+                        <small
+                            >{{ localeData?.current_assets }} /<br />
+                            {{ localeData?.current_liabilities }}</small
+                        >
                     </div>
                     <div class="col-md-3 col-sm-12 col-xs-12 text-center ratio-chart-block">
                         <highcharts-chart *ngIf="debtOptions" [Highcharts]="debtChart" [options]="debtOptions">
                         </highcharts-chart>
-                        <h1 class="mr-b1">{{localeData?.debt_equity_ratio}}</h1>
-                        <small>{{localeData?.current_liability}} +<br /> {{localeData?.noncurrent_liability}} /<br />
-                            {{localeData?.shareholders_fund}}</small>
+                        <h1 class="mr-b1">{{ localeData?.debt_equity_ratio }}</h1>
+                        <small
+                            >{{ localeData?.current_liability }} +<br />
+                            {{ localeData?.noncurrent_liability }} /<br />
+                            {{ localeData?.shareholders_fund }}</small
+                        >
                     </div>
                     <div class="col-md-3 col-sm-12 col-xs-12 text-center ratio-chart-block">
-                        <highcharts-chart *ngIf="proprietaryOption" [Highcharts]="proprietaryChart"
-                            [options]="proprietaryOption"></highcharts-chart>
-                        <h1 class="mr-b1">{{localeData?.proprietary_ratio}}</h1>
-                        <small>{{localeData?.shareholders_fund}} /<br /> {{localeData?.total_assets}}</small>
+                        <highcharts-chart
+                            *ngIf="proprietaryOption"
+                            [Highcharts]="proprietaryChart"
+                            [options]="proprietaryOption"
+                        ></highcharts-chart>
+                        <h1 class="mr-b1">{{ localeData?.proprietary_ratio }}</h1>
+                        <small
+                            >{{ localeData?.shareholders_fund }} /<br />
+                            {{ localeData?.total_assets }}</small
+                        >
                     </div>
                     <div class="col-md-3 col-sm-12 col-xs-12 text-center ratio-chart-block">
-                        <highcharts-chart *ngIf="fixedAssetOption" [Highcharts]="fixedAssetChart"
-                            [options]="fixedAssetOption"></highcharts-chart>
-                        <h1 class="mr-b1">{{localeData?.fixed_assets_ratio}}</h1>
-                        <small>{{localeData?.fixed_assets}}/<br />{{localeData?.noncurrent_liability}} + <br />
-                            {{localeData?.shareholders_fund}}</small>
+                        <highcharts-chart
+                            *ngIf="fixedAssetOption"
+                            [Highcharts]="fixedAssetChart"
+                            [options]="fixedAssetOption"
+                        ></highcharts-chart>
+                        <h1 class="mr-b1">{{ localeData?.fixed_assets_ratio }}</h1>
+                        <small
+                            >{{ localeData?.fixed_assets }}/<br />{{ localeData?.noncurrent_liability }} + <br />
+                            {{ localeData?.shareholders_fund }}</small
+                        >
                     </div>
                 </div>
             </div>
