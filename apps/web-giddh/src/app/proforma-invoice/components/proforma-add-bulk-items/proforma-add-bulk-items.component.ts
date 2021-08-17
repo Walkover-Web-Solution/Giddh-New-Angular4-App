@@ -87,7 +87,7 @@ export class ProformaAddBulkItemsComponent implements OnDestroy {
             return {
                 rate: 0,
                 stockUnitCode: '',
-                uniqueName: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
+                uniqueName: result.stock ? `${result.uniqueName}#${result.stock?.uniqueName}` : result.uniqueName,
                 name: result.stock ? `${result.name} (${result.stock.name})` : result.name,
                 additional: result
             };

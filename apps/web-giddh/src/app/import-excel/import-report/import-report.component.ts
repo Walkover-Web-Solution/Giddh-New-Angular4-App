@@ -2,10 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
-import { ImportExcelActions } from '../../actions/import-excel/import-excel.actions';
 import { ImportExcelStatusPaginatedResponse, ImportExcelStatusResponse } from '../../models/api-models/import-excel';
 import { ReplaySubject } from 'rxjs';
-import { ImportExcelRequestStates } from '../../store/import-excel/import-excel.reducer';
 import { take, takeUntil } from 'rxjs/operators';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
 import { PageChangedEvent } from 'ngx-bootstrap/pagination';
@@ -13,6 +11,7 @@ import { saveAs } from 'file-saver';
 import * as moment from 'moment';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { GeneralService } from '../../services/general.service';
+import { ImportExcelService } from '../../services/import-excel.service';
 
 @Component({
     selector: 'import-report',
@@ -22,7 +21,6 @@ import { GeneralService } from '../../services/general.service';
 
 export class ImportReportComponent implements OnInit, OnDestroy {
     public importStatusResponse: ImportExcelStatusPaginatedResponse;
-    public importRequestStatus: ImportExcelRequestStates;
     public importPaginatedRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
     /** Stores the current company */
     public activeCompany: any;
@@ -31,35 +29,23 @@ export class ImportReportComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True if api call in progress */
+    public isLoading: boolean = true;
 
     constructor(
-        private _router: Router,
+        private router: Router,
         private store: Store<AppState>,
-        private _importActions: ImportExcelActions,
-        private generalService: GeneralService) {
-        this.store.pipe(select(s => s.importExcel.importStatus), takeUntil(this.destroyed$)).subscribe(s => {
-            if (s && s.results) {
-                s.results = s.results.map(res => {
-                    res.processDate = moment.utc(res.processDate, 'YYYY-MM-DD hh:mm:ss a').local().format(GIDDH_DATE_FORMAT + ' hh:mm:ss a');
-                    return res;
-                })
-            }
-            this.importStatusResponse = s;
-        });
-
-        this.store.pipe(select(s => s.importExcel.requestState), takeUntil(this.destroyed$)).subscribe(s => {
-            this.importRequestStatus = s;
-        });
-
+        private generalService: GeneralService,
+        private importExcelService: ImportExcelService
+    ) {
         this.importPaginatedRequest.page = 1;
         this.importPaginatedRequest.count = 10;
     }
 
     public ngOnInit() {
         this.getStatus();
-        this.store.pipe(
-            select(state => state.session.activeCompany), take(1)
-        ).subscribe(activeCompany => {
+
+        this.store.pipe(select(state => state.session.activeCompany), take(1)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
             }
@@ -67,7 +53,7 @@ export class ImportReportComponent implements OnInit, OnDestroy {
     }
 
     public importFiles() {
-        this._router.navigate(['pages', 'import']);
+        this.router.navigate(['pages', 'import']);
     }
 
     public pageChanged(event: PageChangedEvent) {
@@ -75,8 +61,24 @@ export class ImportReportComponent implements OnInit, OnDestroy {
         this.getStatus();
     }
 
-    public getStatus() {
-        this.store.dispatch(this._importActions.ImportStatusRequest(this.importPaginatedRequest));
+    /**
+     * Fetching import status
+     *
+     * @memberof ImportReportComponent
+     */
+    public getStatus(): void {
+        this.isLoading = true;
+        this.importExcelService.importStatus(this.importPaginatedRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if(response?.status === "success" && response?.body) {
+                response.body.results = response?.body?.results.map(res => {
+                    res.processDate = moment.utc(res.processDate, 'YYYY-MM-DD hh:mm:ss a').local().format(GIDDH_DATE_FORMAT + ' hh:mm:ss a');
+                    return res;
+                });
+
+                this.importStatusResponse = response.body;
+            }
+            this.isLoading = false;
+        });
     }
 
     public downloadItem(item: ImportExcelStatusResponse) {
@@ -84,12 +86,7 @@ export class ImportReportComponent implements OnInit, OnDestroy {
         return saveAs(blob, item.fileName);
     }
 
-    private resetStoreData() {
-        this.store.dispatch(this._importActions.resetImportExcelState());
-    }
-
     public ngOnDestroy() {
-        this.resetStoreData();
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
