@@ -1320,7 +1320,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public loadUpdateLedgerComponent() {
-        this.updateLedgerModalDialogRef = this.dialog.open(this.updateLedgerModal);
+        this.updateLedgerModalDialogRef = this.dialog.open(this.updateLedgerModal, {
+            width: '70%',
+            height: '650px'
+        });
 
         this.updateLedgerModalDialogRef.afterClosed().pipe(take(1)).subscribe(() => {
             this.hideUpdateLedgerModal();
