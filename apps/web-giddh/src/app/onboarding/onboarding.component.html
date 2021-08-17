@@ -1,29 +1,43 @@
-<ng-container appTranslate [file]="'onboarding'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'onboarding'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div id="main" class="welcome-container clearfix">
         <div>
             <div class="row mt-2 mr-0 ml-0">
                 <div class="col-xs-12 col-md-5 col-sm-6">
-                    <h1 class="border-btm">{{localeData?.try_things}}</h1>
+                    <h1 class="border-btm">{{ localeData?.try_things }}</h1>
                     <ul class="manage-invoice">
                         <li>
-                            <a [routerLink]="['/pages','proforma-invoice','invoice','sales']"> <img
-                                    src="{{imgPath}}create-invoice.svg" alt=""
-                                    class="mr-r1">{{localeData?.create_send_invoice}}</a>
+                            <a [routerLink]="['/pages', 'proforma-invoice', 'invoice', 'sales']">
+                                <img src="{{ imgPath }}create-invoice.svg" alt="" class="mr-r1" />{{
+                                    localeData?.create_send_invoice
+                                }}</a
+                            >
                         </li>
                         <li>
-                            <a [routerLink]="['/pages','contact', 'customer']"> <img src="{{imgPath}}add-customer.svg"
-                                    alt="" class="mr-r1">{{localeData?.add_customer}}</a>
+                            <a [routerLink]="['/pages', 'contact', 'customer']">
+                                <img src="{{ imgPath }}add-customer.svg" alt="" class="mr-r1" />{{
+                                    localeData?.add_customer
+                                }}</a
+                            >
                         </li>
                         <li>
-                            <a [routerLink]="['/pages','settings', 'taxes']"> <img src="{{imgPath}}updateGST.svg" alt=""
-                                    class="mr-r1">{{localeData?.update_taxes}}</a>
+                            <a [routerLink]="['/pages', 'settings', 'taxes']">
+                                <img src="{{ imgPath }}updateGST.svg" alt="" class="mr-r1" />{{
+                                    localeData?.update_taxes
+                                }}</a
+                            >
                         </li>
                         <li>
-                            <a href="javascript:void 0" (click)="selectConfigureBank()"> <img
-                                    src="{{imgPath}}configure-bank-account.svg" alt=""
-                                    class="mr-r1">{{localeData?.configure_bank_account}}</a>
+                            <a href="javascript:void 0" (click)="selectConfigureBank()">
+                                <img src="{{ imgPath }}configure-bank-account.svg" alt="" class="mr-r1" />{{
+                                    localeData?.configure_bank_account
+                                }}</a
+                            >
                         </li>
                     </ul>
                     <!-- <h1 class="border-btm mr-t5">{{localeData?.have_data_tally}}</h1>
@@ -38,21 +52,22 @@
                     </a> -->
 
                     <div class="mt-2 right-section">
-                        <h1 class="border-btm">{{localeData?.ask_question}}</h1>
-                        <span>{{localeData?.request_demo}}</span>
-                        <button class="btn btn-success mr-t1"
-                            (click)="scheduleNow()">{{commonLocaleData?.app_schedule_now}}</button>
-                        <br>
+                        <h1 class="border-btm">{{ localeData?.ask_question }}</h1>
+                        <span>{{ localeData?.request_demo }}</span>
+                        <button class="btn btn-success mr-t1" (click)="scheduleNow()">
+                            {{ commonLocaleData?.app_schedule_now }}
+                        </button>
+                        <br />
                         <div class="row">
                             <div class="col-xs-12 col-sm-6">
-                                <span class="mr-t3">{{localeData?.call}}</span>
-                                <a class="text-dark" href="tel:{{supportTeamNumber}}">{{supportTeamNumber}}</a>
-                                <span class="mr-t3 mr-b1">{{localeData?.visit}}</span>
+                                <span class="mr-t3">{{ localeData?.call }}</span>
+                                <a class="text-dark" href="tel:{{ supportTeamNumber }}">{{ supportTeamNumber }}</a>
+                                <span class="mr-t3 mr-b1">{{ localeData?.visit }}</span>
                                 <a href="https://giddh.com/help" target="_blank" class="text-dark">giddh.com/help</a>
                             </div>
                             <div class="col-sm-6 schedule-img">
                                 <div class="">
-                                    <img src="assets/images/Schedule.png" alt="">
+                                    <img src="assets/images/Schedule.png" alt="" />
                                 </div>
                             </div>
                         </div>
@@ -60,57 +75,69 @@
                 </div>
                 <div class="col-xs-12 col-md-5 col-sm-6">
                     <div class="right-section">
-                        <h1 class="border-btm">{{commonLocaleData?.app_select_inventory_type}}</h1>
-                        <span>{{commonLocaleData?.app_inventory_type}}</span>
+                        <h1 class="border-btm">{{ commonLocaleData?.app_select_inventory_type }}</h1>
+                        <span>{{ commonLocaleData?.app_inventory_type }}</span>
                         <div class="pd-b1 clearfix">
                             <span class="p-0 mr-r3 d-inline-block">
-                                <input id="product" class="radio-custom cp ml-0" type="radio"
+                                <input
+                                    id="product"
+                                    class="radio-custom cp ml-0"
+                                    type="radio"
                                     [checked]="CompanySettingsObj?.companyInventorySettings?.manageInventory"
-                                    (change)="updateInventorySetting(true)" name="inventoryType">
-                                <label for="product"
-                                    class="radio-custom-label">{{commonLocaleData?.app_product}}</label>
+                                    (change)="updateInventorySetting(true)"
+                                    name="inventoryType"
+                                />
+                                <label for="product" class="radio-custom-label">{{
+                                    commonLocaleData?.app_product
+                                }}</label>
                             </span>
                             <span class="p-0 mr-r3 d-inline-block">
-                                <input id="service" class="radio-custom cp ml-0" type="radio"
+                                <input
+                                    id="service"
+                                    class="radio-custom cp ml-0"
+                                    type="radio"
                                     [checked]="!CompanySettingsObj?.companyInventorySettings?.manageInventory"
-                                    (change)="updateInventorySetting(false)" name="inventoryType">
-                                <label for="service"
-                                    class="radio-custom-label">{{commonLocaleData?.app_service}}</label>
+                                    (change)="updateInventorySetting(false)"
+                                    name="inventoryType"
+                                />
+                                <label for="service" class="radio-custom-label">{{
+                                    commonLocaleData?.app_service
+                                }}</label>
                             </span>
                         </div>
-                        <br><br><br>
+                        <br /><br /><br />
                         <div class="import-data">
-                            <h1 class="border-btm">{{localeData?.import_data}}</h1>
-                            <span>{{localeData?.data_available}}</span>
+                            <h1 class="border-btm">{{ localeData?.import_data }}</h1>
+                            <span>{{ localeData?.data_available }}</span>
                             <div class="import-data-blocks">
                                 <div class="d-inline-flex">
-                                    <a [routerLink]="['/pages','import','account']"> <img
-                                            src="assets/images/new/acc-import.svg">
-                                        <p>{{commonLocaleData?.app_import_type?.accounts}}</p>
+                                    <a [routerLink]="['/pages', 'import', 'account']">
+                                        <img src="assets/images/new/acc-import.svg" />
+                                        <p>{{ commonLocaleData?.app_import_type?.accounts }}</p>
                                     </a>
                                 </div>
                                 <div class="d-inline-flex">
-                                    <a [routerLink]="['/pages','import','group']"> <img
-                                            src="assets/images/new/group-import.svg">
-                                        <p>{{commonLocaleData?.app_import_type?.groups}}</p>
+                                    <a [routerLink]="['/pages', 'import', 'group']">
+                                        <img src="assets/images/new/group-import.svg" />
+                                        <p>{{ commonLocaleData?.app_import_type?.groups }}</p>
                                     </a>
                                 </div>
                                 <div class="d-inline-flex">
-                                    <a [routerLink]="['/pages','import','stock']"> <img
-                                            src="assets/images/new/Inventory-13.svg">
-                                        <p>{{commonLocaleData?.app_import_type?.inventory}}</p>
+                                    <a [routerLink]="['/pages', 'import', 'stock']">
+                                        <img src="assets/images/new/Inventory-13.svg" />
+                                        <p>{{ commonLocaleData?.app_import_type?.inventory }}</p>
                                     </a>
                                 </div>
                                 <div class="d-inline-flex">
-                                    <a [routerLink]="['/pages','import','entries']"><img
-                                            src="assets/images/new/entries-import.svg">
-                                        <p>{{commonLocaleData?.app_import_type?.entries}}</p>
+                                    <a [routerLink]="['/pages', 'import', 'entries']"
+                                        ><img src="assets/images/new/entries-import.svg" />
+                                        <p>{{ commonLocaleData?.app_import_type?.entries }}</p>
                                     </a>
                                 </div>
                                 <div class="d-inline-flex">
-                                    <a [routerLink]="['/pages','import','trial-balance']"><img
-                                            src="assets/images/new/tb-import.svg">
-                                        <p>{{commonLocaleData?.app_import_type?.trial_balance}}</p>
+                                    <a [routerLink]="['/pages', 'import', 'trial-balance']"
+                                        ><img src="assets/images/new/tb-import.svg" />
+                                        <p>{{ commonLocaleData?.app_import_type?.trial_balance }}</p>
                                     </a>
                                 </div>
                             </div>

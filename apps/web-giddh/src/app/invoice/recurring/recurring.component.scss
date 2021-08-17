@@ -91,7 +91,7 @@
         margin-bottom: 10px !important;
     }
 }
-.icon-sort-asc{
+.icon-sort-asc {
     color: $wild-blue-yonder;
 }
 .table-bordered .d-flex {
@@ -229,8 +229,8 @@
     }
 }
 
-@media (min-width: 769px){
-    .table-responsive{
+@media (min-width: 769px) {
+    .table-responsive {
         max-height: calc(100vh - 275px);
         overflow-y: auto;
     }
