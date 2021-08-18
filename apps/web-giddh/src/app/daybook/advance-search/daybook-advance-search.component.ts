@@ -368,6 +368,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         if (!val) {
             this.advanceSearchForm.get('description')?.patchValue(null);
         }
+        this.showOtherDetails = !this.showOtherDetails;
     }
 
     public ngOnDestroy() {

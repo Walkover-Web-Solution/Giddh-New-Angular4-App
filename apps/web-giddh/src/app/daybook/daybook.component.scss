@@ -179,7 +179,9 @@ button.btn.btn-filter {
 .trial-balance.table-container > div > section {
     border-left: 0;
 }
-
+.daybook-other-transactions {
+    min-height: 0;
+}
 @media (max-width: 1100px) {
     .company-date-picker {
         flex-direction: column;
