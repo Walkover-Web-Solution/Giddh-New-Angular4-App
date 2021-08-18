@@ -393,7 +393,7 @@ button.btn.btn-filter span.icon-cross {
         height: 36px;
         min-width: 100%;
         padding: 11px;
-        padding-right: 40px;
+        padding-left: 40px;
         color: $nero;
         border: none;
         background-color: $gray-95;
@@ -645,36 +645,32 @@ button.btn.btn-filter span.icon-cross {
     }
 }
 
-.td-search-box div {
-    display: flex;
-}
-
-.td-search-box div span {
-    flex: 1 1 auto;
-}
-
-.td-search-box div i {
-    padding-right: 8px;
-    cursor: pointer;
-}
-
 .td-search-box {
+    div {
+        display: flex;
+        span {
+            flex: 1 1 auto;
+        }
+        i {
+            cursor: pointer;
+        }
+    }
     padding: 0px !important;
     position: relative;
-}
-.td-search-box .input-container {
-    position: relative;
-}
-.td-search-box .input-container input {
-    min-height: 36px;
-    width: 100%;
-    border: 0px;
-}
-
-.td-search-box .input-container i {
-    position: absolute;
-    right: 0px;
-    top: 9px;
+    .input-container {
+        position: relative;
+        input {
+            min-height: 36px;
+            width: 100%;
+            border: 0px;
+            border-radius: 5px;
+        }
+        i {
+            position: absolute;
+            left: 5px;
+            top: 9px;
+        }
+    }
 }
 
 .negative-balance {
