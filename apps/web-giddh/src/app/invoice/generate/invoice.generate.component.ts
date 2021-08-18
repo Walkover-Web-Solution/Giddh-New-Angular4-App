@@ -167,12 +167,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
 
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
-                this.activeCompany = activeCompany;
-            }
-        });
-
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response || [];
