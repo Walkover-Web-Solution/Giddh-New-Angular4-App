@@ -1,33 +1,56 @@
 <div class="menu white-bg" *ngIf="isOpen && _rows">
     <!--virtual-->
-    <virtual-scroll #v [items]="_rows" (update)="viewPortItems = $event"
-        [childHeight]="viewPortItems?.length === 0?41:undefined" [selectedValues]="selectedValues"
-        [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight"
-        [isPaginationEnabled]="isPaginationEnabled" [noResultLinkEnabled]="noResultLinkEnabled"
-        (scrollEnd)="scrollEnd.emit()">
-
-        <div id="noresult"
-            *ngIf="viewPortItems?.length === 0 || (viewPortItems?.length === 1 && viewPortItems[0].value === 'createnewitem')"
-            class="item" [style.height.px]="noResultLinkEnabled ? NoFoundMsgHeight : (NoFoundMsgHeight - 20)">
-            <a href="javascript:void(0);">{{notFoundMsg}}</a>
+    <virtual-scroll
+        #v
+        [items]="_rows"
+        (update)="viewPortItems = $event"
+        [childHeight]="viewPortItems?.length === 0 ? 41 : undefined"
+        [selectedValues]="selectedValues"
+        [NoFoundMsgHeight]="NoFoundMsgHeight"
+        [NoFoundLinkHeight]="NoFoundLinkHeight"
+        [isPaginationEnabled]="isPaginationEnabled"
+        [noResultLinkEnabled]="noResultLinkEnabled"
+        (scrollEnd)="scrollEnd.emit()"
+    >
+        <div
+            id="noresult"
+            *ngIf="
+                viewPortItems?.length === 0 ||
+                (viewPortItems?.length === 1 && viewPortItems[0].value === 'createnewitem')
+            "
+            class="item"
+            [style.height.px]="noResultLinkEnabled ? NoFoundMsgHeight : NoFoundMsgHeight - 20"
+        >
+            <a href="javascript:void(0);">{{ notFoundMsg }}</a>
         </div>
 
-        <div class="item" *ngFor="let row of viewPortItems" [class.selected]="selectedValues?.indexOf(row) !== -1"
-            [class.hilighted]="row.isHilighted" (mousedown)="toggleSelected(row)" [style.height.px]="ItemHeight">
-            <ng-template [ngTemplateOutletContext]="{option: row}" [ngTemplateOutlet]="optionTemplate"></ng-template>
+        <div
+            class="item"
+            *ngFor="let row of viewPortItems"
+            [class.selected]="selectedValues?.indexOf(row) !== -1"
+            [class.hilighted]="row.isHilighted"
+            (mousedown)="toggleSelected(row)"
+            [style.height.px]="ItemHeight"
+        >
+            <ng-template [ngTemplateOutletContext]="{ option: row }" [ngTemplateOutlet]="optionTemplate"></ng-template>
             <ng-container *ngIf="!optionTemplate">
                 <a href="javascript:void(0)" class="list-item">
-                    <div class="item">{{row.label}}</div>
+                    <div class="item">{{ row.label }}</div>
                 </a>
             </ng-container>
         </div>
 
-        <div class="item no-result-link" *ngIf="viewPortItems?.length === 0 && noResultLinkEnabled"
-            [style.height.px]="NoFoundLinkHeight">
-            <a class="btn-link" href="javascript:void(0)"
-                (mousedown)="$event.stopPropagation();noResultClicked.emit()">{{notFoundLinkText}}</a>
+        <div
+            class="item no-result-link"
+            *ngIf="viewPortItems?.length === 0 && noResultLinkEnabled"
+            [style.height.px]="NoFoundLinkHeight"
+        >
+            <a
+                class="btn-link"
+                href="javascript:void(0)"
+                (mousedown)="$event.stopPropagation(); noResultClicked.emit()"
+                >{{ notFoundLinkText }}</a
+            >
         </div>
-
     </virtual-scroll>
-
 </div>

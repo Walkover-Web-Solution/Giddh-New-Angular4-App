@@ -1,46 +1,50 @@
 <div class="gstr-transactions-summary">
-    <h4 class="clearfix gstr-summary-title">{{localeData?.filing?.document_issued}}</h4>
-    <p class="text-muted half pd-t05">{{localeData?.filing?.document_issued_description}}</p>
+    <h4 class="clearfix gstr-summary-title">{{ localeData?.filing?.document_issued }}</h4>
+    <p class="text-muted half pd-t05">{{ localeData?.filing?.document_issued_description }}</p>
 
     <div>
         <div *ngIf="doc_issuesVM && doc_issuesVM.length">
-
             <table class="table table-striped transactions-table on-mobile-view">
                 <thead>
                     <tr class="text-uppercase">
                         <th width="20px"></th>
                         <th width="80px">#</th>
-                        <th width="35%">{{localeData?.filing?.document_nature}}</th>
-                        <th> {{localeData?.filing?.s_no_from}}</th>
-                        <th> {{localeData?.filing?.s_no_to}}</th>
-                        <th> {{localeData?.filing?.total_number}}</th>
-                        <th> {{localeData?.filing?.total_cancelled}}</th>
-                        <th> {{localeData?.filing?.net_issued}}</th>
+                        <th width="35%">{{ localeData?.filing?.document_nature }}</th>
+                        <th>{{ localeData?.filing?.s_no_from }}</th>
+                        <th>{{ localeData?.filing?.s_no_to }}</th>
+                        <th>{{ localeData?.filing?.total_number }}</th>
+                        <th>{{ localeData?.filing?.total_cancelled }}</th>
+                        <th>{{ localeData?.filing?.net_issued }}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of doc_issuesVM;">
+                    <tr *ngFor="let item of doc_issuesVM">
                         <td></td>
-                        <td data-title="#">{{item.num}}</td>
-                        <td [attr.data-title]="localeData?.filing?.document_nature"> {{item.doc ? item.doc : '-' }} </td>
-                        <td [attr.data-title]="localeData?.filing?.s_no_from">{{item.from ? item.from : '-'}}</td>
-                        <td [attr.data-title]="localeData?.filing?.s_no_to">{{item.to ? item.to : '-'}}</td>
-                        <td [attr.data-title]="localeData?.filing?.total_number" class="text-center">{{item.totnum ? item.totnum : '-'}}</td>
-                        <td [attr.data-title]="localeData?.filing?.total_cancelled" class="text-center">{{item.cancel ? item.cancel : '-'}}</td>
-                        <td [attr.data-title]="localeData?.filing?.net_issued" class="text-center">{{item.net_issues ? item.net_issues : '-'}}</td>
+                        <td data-title="#">{{ item.num }}</td>
+                        <td [attr.data-title]="localeData?.filing?.document_nature">{{ item.doc ? item.doc : "-" }}</td>
+                        <td [attr.data-title]="localeData?.filing?.s_no_from">{{ item.from ? item.from : "-" }}</td>
+                        <td [attr.data-title]="localeData?.filing?.s_no_to">{{ item.to ? item.to : "-" }}</td>
+                        <td [attr.data-title]="localeData?.filing?.total_number" class="text-center">
+                            {{ item.totnum ? item.totnum : "-" }}
+                        </td>
+                        <td [attr.data-title]="localeData?.filing?.total_cancelled" class="text-center">
+                            {{ item.cancel ? item.cancel : "-" }}
+                        </td>
+                        <td [attr.data-title]="localeData?.filing?.net_issued" class="text-center">
+                            {{ item.net_issues ? item.net_issues : "-" }}
+                        </td>
                     </tr>
                 </tbody>
             </table>
-
-
         </div>
 
-        <div *ngIf="!(doc_issuesVM.length)">
+        <div *ngIf="!doc_issuesVM.length">
             <div class="filings-empty-state">
-                <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" />
-                <div class="empty-msg"><span> {{localeData?.filing?.no_result_found}} </span></div>
+                <img src="{{ imgPath }}nofound.svg" [style.max-width.px]="110" />
+                <div class="empty-msg">
+                    <span> {{ localeData?.filing?.no_result_found }} </span>
+                </div>
             </div>
         </div>
-
     </div>
 </div>
