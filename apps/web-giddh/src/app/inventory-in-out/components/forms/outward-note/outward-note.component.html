@@ -2,15 +2,23 @@
     <div>
         <h3 class="">
             <span>Outward Note</span>
-            <span class="pull-right font-14">Multiple
-                <a href="javascript:void(0)" [ngClass]="{'text-link': mode === 'receiver' }"
-                    (click)="modeChanged('receiver')">Receivers</a>
+            <span class="pull-right font-14"
+                >Multiple
+                <a
+                    href="javascript:void(0)"
+                    [ngClass]="{ 'text-link': mode === 'receiver' }"
+                    (click)="modeChanged('receiver')"
+                    >Receivers</a
+                >
                 /
-                <a href="javascript:void(0)" [ngClass]="{'text-link': mode === 'product' }"
-                    (click)="modeChanged('product')">Products</a>
+                <a
+                    href="javascript:void(0)"
+                    [ngClass]="{ 'text-link': mode === 'product' }"
+                    (click)="modeChanged('product')"
+                    >Products</a
+                >
             </span>
         </h3>
-
     </div>
 </div>
 
@@ -20,31 +28,52 @@
             <div class="row">
                 <div class="col-xs-6 form-group">
                     <label>Date <sup>*</sup></label>
-                    <input name="dateRange" formControlName="inventoryEntryDate" type="text" autocomplete="off"
-                        class="form-control" bsDatepicker [minDate]="today"
-                        [bsConfig]=" {dateInputFormat: giddhDateFormat}" />
+                    <input
+                        name="dateRange"
+                        formControlName="inventoryEntryDate"
+                        type="text"
+                        autocomplete="off"
+                        class="form-control"
+                        bsDatepicker
+                        [minDate]="today"
+                        [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                    />
                     <span
-                        *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)">
-                        <span *ngIf="inventoryEntryDate?.errors && inventoryEntryDate?.errors['required']"
-                            class="text-danger">Please select Date.</span>
+                        *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)"
+                    >
+                        <span
+                            *ngIf="inventoryEntryDate?.errors && inventoryEntryDate?.errors['required']"
+                            class="text-danger"
+                            >Please select Date.</span
+                        >
                     </span>
                 </div>
 
                 <div class="col-xs-6 form-group" *ngIf="mode === 'receiver'">
                     <label class="mr-b1">Product Name <sup>*</sup></label>
-                    <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'"
-                        formControlName="stock" (selected)="stockChanged($event)" [isRequired]="true"></sh-select>
+                    <sh-select
+                        [options]="stockListOptions"
+                        [multiple]="false"
+                        [placeholder]="'Select Product'"
+                        formControlName="stock"
+                        (selected)="stockChanged($event)"
+                        [isRequired]="true"
+                    ></sh-select>
                 </div>
 
                 <div class="col-xs-6 form-group" *ngIf="mode === 'product'">
                     <label class="mr-b1">Receiver <sup>*</sup></label>
-                    <sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Receiver'"
-                        formControlName="inventoryUser" (selected)="userChanged($event)" [isRequired]="true">
+                    <sh-select
+                        [options]="userListOptions"
+                        [multiple]="false"
+                        [placeholder]="'Select Receiver'"
+                        formControlName="inventoryUser"
+                        (selected)="userChanged($event)"
+                        [isRequired]="true"
+                    >
                     </sh-select>
                 </div>
-
             </div>
-
 
             <div class="row">
                 <div class="col-xs-4" *ngIf="mode === 'receiver'">
@@ -63,38 +92,60 @@
                 </div>
             </div>
 
-            <div class="row" formArrayName="transactions"
-                *ngFor="let item of transactions.controls; let i = index;let first = first;let last = last">
+            <div
+                class="row"
+                formArrayName="transactions"
+                *ngFor="let item of transactions.controls; let i = index; let first = first; let last = last"
+            >
                 <div [formGroupName]="i">
-
                     <div class="col-xs-4 form-group" *ngIf="mode === 'receiver'">
-                        <sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Receiver'"
-                            (selected)="userChanged($event,i)" formControlName="inventoryUser" [ItemHeight]="'33'">
+                        <sh-select
+                            [options]="userListOptions"
+                            [multiple]="false"
+                            [placeholder]="'Select Receiver'"
+                            (selected)="userChanged($event, i)"
+                            formControlName="inventoryUser"
+                            [ItemHeight]="'33'"
+                        >
                         </sh-select>
                     </div>
 
                     <div class="col-xs-4 form-group" *ngIf="mode === 'product'">
-                        <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'"
-                            (selected)="stockChanged($event,i)" [ItemHeight]="'33'" formControlName="stock"
-                            [isRequired]="true"></sh-select>
+                        <sh-select
+                            [options]="stockListOptions"
+                            [multiple]="false"
+                            [placeholder]="'Select Product'"
+                            (selected)="stockChanged($event, i)"
+                            [ItemHeight]="'33'"
+                            formControlName="stock"
+                            [isRequired]="true"
+                        ></sh-select>
                     </div>
 
                     <div class="col-xs-4 form-group">
-                        <sh-select [options]="stockUnitsOptions" [placeholder]="'Choose unit'"
-                            formControlName="stockUnit" [multiple]="false" [ItemHeight]="33" [isRequired]="true">
+                        <sh-select
+                            [options]="stockUnitsOptions"
+                            [placeholder]="'Choose unit'"
+                            formControlName="stockUnit"
+                            [multiple]="false"
+                            [ItemHeight]="33"
+                            [isRequired]="true"
+                        >
                         </sh-select>
                     </div>
 
                     <div class="col-xs-4 form-group">
                         <div class="row">
                             <div class="col-xs-10">
-                                <input name="" type="text" formControlName="quantity" class="form-control">
+                                <input name="" type="text" formControlName="quantity" class="form-control" />
                             </div>
 
-
                             <div class="pull-right mr-t05 unit-add">
-                                <button class="btn-link" (click)="addTransactionItem(transactions.controls[i])"
-                                    *ngIf="last">
+                                <button
+                                    class="btn-link"
+                                    (click)="addTransactionItem(transactions.controls[i])"
+                                    *ngIf="last"
+                                >
                                     <i class="icon-plus add-row"></i>
                                 </button>
                                 <button class="btn-link" (click)="deleteTransactionItem(i)" *ngIf="!last">
@@ -113,15 +164,14 @@
                 </div>
             </div>
 
-
             <div class="row">
                 <div class="col-xs-12 text-left mr-t1">
                     <button class="btn btn-default" (click)="onCancel.emit($event)">Cancel</button>
-                    <button class="btn btn-success" [ladda]="isLoading" [disabled]="form.invalid"
-                        (click)="save()">Save</button>
+                    <button class="btn btn-success" [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">
+                        Save
+                    </button>
                 </div>
             </div>
-
         </form>
     </div>
 </div>

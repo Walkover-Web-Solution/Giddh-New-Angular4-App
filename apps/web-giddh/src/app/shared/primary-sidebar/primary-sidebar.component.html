@@ -1,27 +1,55 @@
-<ng-container appTranslate [file]="'all-items'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+<ng-container
+    appTranslate
+    [file]="'all-items'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
     <div class="primary-sidebar py-3 position-relative">
-        <div class="company-branch-block pd-l2 pd-r2 position-relative" [ngClass]="{'padding-14': !currentBranch && (currentCompanyBranches$ | async)?.length > 1}" dropdown [autoClose]="false">
-            <ul class="list-style-none branch-connection dropdown-toggle" id="button-company-branch" dropdownToggle
-            aria-controls="dropdown-basic-company-branch" (click)="openCompanyBranchDropdown()">
+        <div
+            class="company-branch-block pd-l2 pd-r2 position-relative"
+            [ngClass]="{ 'padding-14': !currentBranch && (currentCompanyBranches$ | async)?.length > 1 }"
+            dropdown
+            [autoClose]="false"
+        >
+            <ul
+                class="list-style-none branch-connection dropdown-toggle"
+                id="button-company-branch"
+                dropdownToggle
+                aria-controls="dropdown-basic-company-branch"
+                (click)="openCompanyBranchDropdown()"
+            >
                 <span class="outer-span" *ngIf="(currentCompanyBranches$ | async)?.length > 1">
                     <span class="inner-span"></span>
                 </span>
-                <li class="company-name position-relative" dropdown #companyDetailsDropDownWeb="bs-dropdown"
-                    [autoClose]="false" [attachOutsideOnClick]="true" (clickOutside)="companyDetailsDropDownWeb.hide()"
-                    [exclude]="'.company-name'">
-                    <h3 class="font-16 d-flex flex-column cursor-pointer" [checkPermission]="['MENU', 'MANAGE']"
-                        dropdownToggle>
+                <li
+                    class="company-name position-relative"
+                    dropdown
+                    #companyDetailsDropDownWeb="bs-dropdown"
+                    [autoClose]="false"
+                    [attachOutsideOnClick]="true"
+                    (clickOutside)="companyDetailsDropDownWeb.hide()"
+                    [exclude]="'.company-name'"
+                >
+                    <h3
+                        class="font-16 d-flex flex-column cursor-pointer"
+                        [checkPermission]="['MENU', 'MANAGE']"
+                        dropdownToggle
+                    >
                         <div class="d-flex flex-column">
                             <div class="d-flex align-items-center">
-                                <span class="company-alice mr-r05 text-uppercase">{{companyInitials}}</span>
+                                <span class="company-alice mr-r05 text-uppercase">{{ companyInitials }}</span>
                                 <span class="d-flex justify-content-between w-100 company-full-name flex-column">
-                                    <span class="company-ellipsis">{{selectedCompanyDetails?.name}}</span>
-                                    <span class="branch-ellipsis"
-                                        *ngIf="currentBranch && (currentCompanyBranches$ | async)?.length > 1"><span>{{currentBranch?.alias}}</span>
+                                    <span class="company-ellipsis">{{ selectedCompanyDetails?.name }}</span>
+                                    <span
+                                        class="branch-ellipsis"
+                                        *ngIf="currentBranch && (currentCompanyBranches$ | async)?.length > 1"
+                                        ><span>{{ currentBranch?.alias }}</span>
                                     </span>
-                                    <i class="icon-branch-connect"
-                                        *ngIf="currentBranch && (currentCompanyBranches$ | async)?.length > 1"></i>
+                                    <i
+                                        class="icon-branch-connect"
+                                        *ngIf="currentBranch && (currentCompanyBranches$ | async)?.length > 1"
+                                    ></i>
                                 </span>
                                 <span class="d-flex">
                                     <i class="icon-down-new" *ngIf="!showCompanyBranchSwitch"></i>
@@ -33,7 +61,11 @@
                 </li>
             </ul>
             <div class="dropdown-menu company-branch-nav" *ngIf="showCompanyBranchSwitch">
-                <company-branch [localeData]="localeData" [commonLocaleData]="commonLocaleData" (createNewCompany)="createNewCompany()"></company-branch>
+                <company-branch
+                    [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData"
+                    (createNewCompany)="createNewCompany()"
+                ></company-branch>
             </div>
         </div>
         <div>
@@ -45,11 +77,16 @@
                                 <i class="icon-search"></i>
                             </span>
                         </div>
-                        <input (click)="showNavigationModal()" type="text" class="form-control"
-                            [placeholder]="commonLocaleData?.app_search" [attr.aria-label]="commonLocaleData?.app_search"
-                            aria-describedby="addon-wrapping">
+                        <input
+                            (click)="showNavigationModal()"
+                            type="text"
+                            class="form-control"
+                            [placeholder]="commonLocaleData?.app_search"
+                            [attr.aria-label]="commonLocaleData?.app_search"
+                            aria-describedby="addon-wrapping"
+                        />
                         <span class="input-group-append" (click)="showNavigationModal()">
-                            {{commonLocaleData?.app_cmd_g}}
+                            {{ commonLocaleData?.app_cmd_g }}
                         </span>
                     </div>
                 </div>
@@ -57,86 +94,154 @@
             <div class="wrap-menus mr-t2">
                 <div class="account-block mr-b2 pd-l2 pd-r2">
                     <div class="account-collapse">
-                        <p class="font-12 d-flex justify-content-between">{{localeData?.accounts}} <i
-                                class="icon-add-new cursor-pointer" (click)="showManageGroupsModal()"></i> </p>
+                        <p class="font-12 d-flex justify-content-between">
+                            {{ localeData?.accounts }}
+                            <i class="icon-add-new cursor-pointer" (click)="showManageGroupsModal()"></i>
+                        </p>
                         <ul class="left-fixed-header list-style-none font-14 lh33 mr-t05">
                             <li *ngFor="let acc of accountItemsFromIndexDB">
-                                <a href="javascript:void(0);" routerLink="ledger/{{acc.uniqueName}}"
+                                <a
+                                    href="javascript:void(0);"
+                                    routerLink="ledger/{{ acc.uniqueName }}"
                                     [routerLinkActive]="['active']"
                                     [class.active]="isLedgerAccSelected && selectedLedgerName === acc.uniqueName"
-                                    (click)="analyzeAccounts($event, acc); companyDetailsDropDownWeb.hide();">{{acc.name}}
-                                    {{commonLocaleData?.app_ac}}</a>
+                                    (click)="analyzeAccounts($event, acc); companyDetailsDropDownWeb.hide()"
+                                    >{{ acc.name }} {{ commonLocaleData?.app_ac }}</a
+                                >
                             </li>
-                            <li><a (click)="showNavigationModal()"
-                                    class="show-more cursor-pointer">{{localeData?.show_more}}</a></li>
+                            <li>
+                                <a (click)="showNavigationModal()" class="show-more cursor-pointer">{{
+                                    localeData?.show_more
+                                }}</a>
+                            </li>
                         </ul>
                     </div>
-                    <div class="account-dropdown btn-group" dropdown #accountDropdown="bs-dropdown"
-                        [attr.container]="!isOpen ? 'body' : ''">
-                        <a href="javascript:void(0);" id="button-basic-01" dropdownToggle type="button"
-                            class="dropdown-toggle" aria-controls="dropdown-basic-01">
+                    <div
+                        class="account-dropdown btn-group"
+                        dropdown
+                        #accountDropdown="bs-dropdown"
+                        [attr.container]="!isOpen ? 'body' : ''"
+                    >
+                        <a
+                            href="javascript:void(0);"
+                            id="button-basic-01"
+                            dropdownToggle
+                            type="button"
+                            class="dropdown-toggle"
+                            aria-controls="dropdown-basic-01"
+                        >
                             <span [tooltip]="localeData?.accounts"><i class="icon-accounts-new"></i> </span>
                             <i class="icon-right mr-l1 font-14"></i>
                         </a>
-                        <ul id="dropdown-basic-01" *dropdownMenu
-                            class="dropdown-menu account-dropdown-collapse list-style-none sub-menu" role="menu"
-                            aria-labelledby="button-basic-01">
+                        <ul
+                            id="dropdown-basic-01"
+                            *dropdownMenu
+                            class="dropdown-menu account-dropdown-collapse list-style-none sub-menu"
+                            role="menu"
+                            aria-labelledby="button-basic-01"
+                        >
                             <li *ngFor="let acc of accountItemsFromIndexDB">
-                                <a href="javascript:void(0);" routerLink="ledger/{{acc.uniqueName}}"
-                                    (click)="analyzeAccounts($event, acc); accountDropdown?.hide();">{{acc.name}}
-                                    {{commonLocaleData?.app_ac}}</a>
+                                <a
+                                    href="javascript:void(0);"
+                                    routerLink="ledger/{{ acc.uniqueName }}"
+                                    (click)="analyzeAccounts($event, acc); accountDropdown?.hide()"
+                                    >{{ acc.name }} {{ commonLocaleData?.app_ac }}</a
+                                >
                             </li>
-                            <li><a (click)="showNavigationModal()"
-                                    class="show-more cursor-pointer">{{localeData?.show_more}}</a></li>
+                            <li>
+                                <a (click)="showNavigationModal()" class="show-more cursor-pointer">{{
+                                    localeData?.show_more
+                                }}</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
                 <div class="menu-block">
                     <div class="menu-item-wrapper font-14">
-                        <div class="menu-item  pd-l2 pd-r2">
+                        <div class="menu-item pd-l2 pd-r2">
                             <p class="font-12">
-                                <span [routerLink]="['/pages/giddh-all-items']"
-                                    class="d-inline-flex align-items-center cursor-pointer">
-                                    {{localeData?.menu}}
-                                    <i class="icon-down-new mr-l05"></i> </span>
+                                <span
+                                    [routerLink]="['/pages/giddh-all-items']"
+                                    class="d-inline-flex align-items-center cursor-pointer"
+                                >
+                                    {{ localeData?.menu }}
+                                    <i class="icon-down-new mr-l05"></i>
+                                </span>
                                 <span class="text-gray cursor-pointer" [routerLink]="['/pages/giddh-all-items']">
                                     <i class="icon-go font-18"></i>
                                 </span>
                             </p>
                         </div>
                         <ul class="list-style-none giddh-primary-items">
-                            <li class="main-item btn-group" *ngFor="let menu of allItems; trackBy: trackItems;index as itemIndex" dropdown #dropdown="bs-dropdown" [autoClose]="isOpen ? false : true"
-                                [attr.container]="!isOpen ? 'body' : ''" (click)="openActiveItem(itemIndex)">
-                                <a href="javascript:void(0);" tooltip="{{menu?.label}}" *ngIf="menu?.items?.length"
-                                    id="button-basic-02" dropdownToggle type="button" class="dropdown-toggle"
-                                    aria-controls="dropdown-basic-02" [class.active]="menu?.isActive">
-                                    <span><i [ngClass]="menu?.icon"></i>
-                                        <span class="item-name">{{menu?.label}}</span>
+                            <li
+                                class="main-item btn-group"
+                                *ngFor="let menu of allItems; trackBy: trackItems; index as itemIndex"
+                                dropdown
+                                #dropdown="bs-dropdown"
+                                [autoClose]="isOpen ? false : true"
+                                [attr.container]="!isOpen ? 'body' : ''"
+                                (click)="openActiveItem(itemIndex)"
+                            >
+                                <a
+                                    href="javascript:void(0);"
+                                    tooltip="{{ menu?.label }}"
+                                    *ngIf="menu?.items?.length"
+                                    id="button-basic-02"
+                                    dropdownToggle
+                                    type="button"
+                                    class="dropdown-toggle"
+                                    aria-controls="dropdown-basic-02"
+                                    [class.active]="menu?.isActive"
+                                >
+                                    <span
+                                        ><i [ngClass]="menu?.icon"></i>
+                                        <span class="item-name">{{ menu?.label }}</span>
                                     </span>
                                     <i class="icon-right mr-l1 font-14"></i>
                                 </a>
-                                <a href="javascript:void(0);" *ngIf="menu?.items?.length === 0 && menu?.link"
-                                    [routerLink]="[menu?.link]" [queryParams]="menu?.additional" id="button-basic-02"
-                                    dropdownToggle type="button" class="dropdown-toggle" aria-controls="dropdown-basic-02">
-                                    <span><i [ngClass]="menu?.icon"></i>
-                                        <span class="item-name">{{menu?.label}}</span>
+                                <a
+                                    href="javascript:void(0);"
+                                    *ngIf="menu?.items?.length === 0 && menu?.link"
+                                    [routerLink]="[menu?.link]"
+                                    [queryParams]="menu?.additional"
+                                    id="button-basic-02"
+                                    dropdownToggle
+                                    type="button"
+                                    class="dropdown-toggle"
+                                    aria-controls="dropdown-basic-02"
+                                >
+                                    <span
+                                        ><i [ngClass]="menu?.icon"></i>
+                                        <span class="item-name">{{ menu?.label }}</span>
                                     </span>
                                 </a>
                                 <ng-container *ngIf="menu?.items?.length">
-                                    <ul id="dropdown-basic-02" *dropdownMenu
-                                        class="dropdown-menu list-style-none pd-l2 sub-menu" role="menu"
-                                        aria-labelledby="button-basic-02">
+                                    <ul
+                                        id="dropdown-basic-02"
+                                        *dropdownMenu
+                                        class="dropdown-menu list-style-none pd-l2 sub-menu"
+                                        role="menu"
+                                        aria-labelledby="button-basic-02"
+                                    >
                                         <li *ngFor="let item of menu?.items; trackBy: trackItems">
-                                            <a *ngIf="item?.link" href="javascript:void(0);"
+                                            <a
+                                                *ngIf="item?.link"
+                                                href="javascript:void(0);"
                                                 [class.active]="rla?.isActive || isRouteWithParamsActive(item?.link)"
-                                                [routerLink]="[item?.link]" routerLinkActive #rla="routerLinkActive"
-                                                [routerLinkActiveOptions]="{exact: true}"
-                                                [queryParams]="item?.additional"><i [ngClass]="item.icon"></i>
-                                                {{item?.label}}
+                                                [routerLink]="[item?.link]"
+                                                routerLinkActive
+                                                #rla="routerLinkActive"
+                                                [routerLinkActiveOptions]="{ exact: true }"
+                                                [queryParams]="item?.additional"
+                                                ><i [ngClass]="item.icon"></i>
+                                                {{ item?.label }}
                                             </a>
-                                            <a *ngIf="!item?.link" href="javascript:void(0);"
-                                                (click)="handleItemClick(item)"><i [ngClass]="item.icon"></i>
-                                                {{item?.label}}
+                                            <a
+                                                *ngIf="!item?.link"
+                                                href="javascript:void(0);"
+                                                (click)="handleItemClick(item)"
+                                                ><i [ngClass]="item.icon"></i>
+                                                {{ item?.label }}
                                             </a>
                                         </li>
                                     </ul>
@@ -147,32 +252,44 @@
                 </div>
             </div>
         </div>
-
     </div>
     <!--CMD + G modal  -->
     <ng-template #navigationModal>
-
         <div class="modal-body" #mdl>
-            <command-k (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)"
-                (groupEmitter)="makeGroupEntryInDB($event)" (selectedItemEmitter)="onItemSelected($event)"
-                [parentEle]="mdl" [isOpen]="true" [setParentWidth]="true" (closeEmitter)="modelRef.hide()"></command-k>
+            <command-k
+                (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)"
+                (groupEmitter)="makeGroupEntryInDB($event)"
+                (selectedItemEmitter)="onItemSelected($event)"
+                [parentEle]="mdl"
+                [isOpen]="true"
+                [setParentWidth]="true"
+                (closeEmitter)="modelRef.hide()"
+            ></command-k>
 
             <div class="shortcuts">
-                <strong>↑</strong> <strong>↓</strong>&nbsp; {{localeData?.to_navigate}} <strong class="mr-l1"
-                    [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp; {{localeData?.to_select}} <strong
-                    class="mr-l1"
-                    [attr.aria-label]="commonLocaleData?.app_escape">{{commonLocaleData?.app_esc}}</strong>&nbsp;
-                {{localeData?.to_dismiss}}
+                <strong>↑</strong> <strong>↓</strong>&nbsp; {{ localeData?.to_navigate }}
+                <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp;
+                {{ localeData?.to_select }}
+                <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_escape">{{
+                    commonLocaleData?.app_esc
+                }}</strong
+                >&nbsp;
+                {{ localeData?.to_dismiss }}
             </div>
         </div>
     </ng-template>
 </ng-container>
 <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
 <div *ngIf="accountAsideMenuState === 'in'">
-    <generic-aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
+    <generic-aside-menu-account
+        [class]="accountAsideMenuState"
+        [@slideInOut]="accountAsideMenuState"
         (closeAsideEvent)="toggleAccountAsidePane($event)"
-        [selectedGrpUniqueName]="selectedGroupForCreateAccount" [createAccountFromCommandK]="true"
-        [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}"
-        (addEvent)="addNewAccount($event)" *ngIf="accountAsideMenuState === 'in'">
+        [selectedGrpUniqueName]="selectedGroupForCreateAccount"
+        [createAccountFromCommandK]="true"
+        [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' }"
+        (addEvent)="addNewAccount($event)"
+        *ngIf="accountAsideMenuState === 'in'"
+    >
     </generic-aside-menu-account>
 </div>

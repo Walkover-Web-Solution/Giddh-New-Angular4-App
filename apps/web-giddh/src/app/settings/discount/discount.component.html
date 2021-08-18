@@ -1,8 +1,13 @@
-<ng-container appTranslate [file]="'settings/discount'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+<ng-container
+    appTranslate
+    [file]="'settings/discount'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
     <div class="box clearfix">
         <div class="row">
-            <h1 class="section-head pt-0 col-sm-12">{{localeData?.tab_heading}}</h1>
+            <h1 class="section-head pt-0 col-sm-12">{{ localeData?.tab_heading }}</h1>
         </div>
 
         <form #discountForm="ngForm" novalidate (submit)="submit()" class="discount-form-setting-tab">
@@ -10,65 +15,93 @@
                 <div class="form-group col-xl-2 col-md-6 col-xs-12">
                     <div class="discount-type">
                         <label class="d-block">&nbsp;</label>
-                        <sh-select [options]="discountTypeList" [isFilterEnabled]="false" name="type"
-                            [(ngModel)]="createRequest.type" [placeholder]="localeData?.discount_type_placeholder"
-                            [ItemHeight]="33"></sh-select>
+                        <sh-select
+                            [options]="discountTypeList"
+                            [isFilterEnabled]="false"
+                            name="type"
+                            [(ngModel)]="createRequest.type"
+                            [placeholder]="localeData?.discount_type_placeholder"
+                            [ItemHeight]="33"
+                        ></sh-select>
                     </div>
                 </div>
                 <div class="form-group col-xl-2 col-md-6 col-xs-12" *ngIf="createRequest.type">
-                    <label>{{commonLocaleData?.app_name}}</label>
-                    <input type="text" [(ngModel)]="createRequest.name" name="name"
-                        [placeholder]="commonLocaleData?.app_name" class="form-control" />
+                    <label>{{ commonLocaleData?.app_name }}</label>
+                    <input
+                        type="text"
+                        [(ngModel)]="createRequest.name"
+                        name="name"
+                        [placeholder]="commonLocaleData?.app_name"
+                        class="form-control"
+                    />
                 </div>
 
                 <div class="form-group col-xl-2 col-md-6 col-xs-12" *ngIf="createRequest.type">
-                    <label>{{commonLocaleData?.app_value}}</label>
-                    <input type="text" [(ngModel)]="createRequest.discountValue" name="value"
-                        [placeholder]="commonLocaleData?.app_value" class="form-control" />
+                    <label>{{ commonLocaleData?.app_value }}</label>
+                    <input
+                        type="text"
+                        [(ngModel)]="createRequest.discountValue"
+                        name="value"
+                        [placeholder]="commonLocaleData?.app_value"
+                        class="form-control"
+                    />
                 </div>
 
                 <div class="form-group col-xl-2 col-md-6 col-xs-12" *ngIf="createRequest.type">
-                    <label>{{localeData?.linked_accounts_label}}</label>
-                    <sh-select [isFilterEnabled]="true" [notFoundLink]="true" name="account"
+                    <label>{{ localeData?.linked_accounts_label }}</label>
+                    <sh-select
+                        [isFilterEnabled]="true"
+                        [notFoundLink]="true"
+                        name="account"
                         [(ngModel)]="createRequest.accountUniqueName"
-                        [placeholder]="localeData?.linked_accounts_placeholder" [showNotFoundLinkAsDefault]="true"
-                        [options]="accounts" [ItemHeight]="'max-content'"
-                        (noResultsClicked)="toggleAccountAsidePane($event)" class="select-linked-accounts">
+                        [placeholder]="localeData?.linked_accounts_placeholder"
+                        [showNotFoundLinkAsDefault]="true"
+                        [options]="accounts"
+                        [ItemHeight]="'max-content'"
+                        (noResultsClicked)="toggleAccountAsidePane($event)"
+                        class="select-linked-accounts"
+                    >
                     </sh-select>
                 </div>
 
                 <div class="col-xl-2 col-md-6 col-xs-12 form-group hide-lable-on-mobile" *ngIf="createRequest.type">
                     <label class="d-block">&nbsp;</label>
-                    <button type="submit" class="btn btn-success" *ngIf="!(createRequest.discountUniqueName)"
-                        [ladda]="isLoading$ | async">{{commonLocaleData?.app_add}}
+                    <button
+                        type="submit"
+                        class="btn btn-success"
+                        *ngIf="!createRequest.discountUniqueName"
+                        [ladda]="isLoading$ | async"
+                    >
+                        {{ commonLocaleData?.app_add }}
                     </button>
-                    <button type="submit" class="btn btn-success" *ngIf="createRequest.discountUniqueName"
-                        [ladda]="isLoading$ | async">{{commonLocaleData?.app_update}}
+                    <button
+                        type="submit"
+                        class="btn btn-success"
+                        *ngIf="createRequest.discountUniqueName"
+                        [ladda]="isLoading$ | async"
+                    >
+                        {{ commonLocaleData?.app_update }}
                     </button>
                 </div>
-
             </div>
         </form>
 
         <div>
             <div class="row">
-
                 <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
-
-                    <table class="table table-bordered basic mr-b05  on-mobile-view">
-
+                    <table class="table table-bordered basic mr-b05 on-mobile-view">
                         <thead [hidden]="!discountList?.length">
                             <tr>
                                 <th [style.width.px]="'50'">#</th>
-                                <th>{{commonLocaleData?.app_name}}</th>
-                                <th>{{commonLocaleData?.app_action}}</th>
+                                <th>{{ commonLocaleData?.app_name }}</th>
+                                <th>{{ commonLocaleData?.app_action }}</th>
                             </tr>
                         </thead>
 
                         <tbody *ngIf="!isLoading">
                             <tr *ngFor="let discount of discountList; let i = index">
                                 <td data-title="#">{{ i + 1 }}</td>
-                                <td [attr.data-title]="commonLocaleData?.app_name"> {{ discount.name }}</td>
+                                <td [attr.data-title]="commonLocaleData?.app_name">{{ discount.name }}</td>
                                 <td [attr.data-title]="commonLocaleData?.app_action" class="icon-btn">
                                     <span (click)="edit(discount)" class="btn btn-xs">
                                         <i class="icon-edit-pencil"></i>
@@ -86,7 +119,6 @@
                                 </td>
                             </tr>
                         </tbody>
-
                     </table>
                     <div class="no-data" *ngIf="!isLoading && !discountList?.length">
                         <no-data [secondaryMessage]="' '" [secondaryMessageClass]="'p-0'"></no-data>
@@ -94,22 +126,28 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <!-- open account aside -->
     <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
-    <aside-menu-account *ngIf="accountAsideMenuState === 'in'" [class]="accountAsideMenuState"
-        [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"
-        [activeGroupUniqueName]="'discount'" [commonLocaleData]="commonLocaleData"></aside-menu-account>
-
+    <aside-menu-account
+        *ngIf="accountAsideMenuState === 'in'"
+        [class]="accountAsideMenuState"
+        [@slideInOut]="accountAsideMenuState"
+        (closeAsideEvent)="toggleAccountAsidePane($event)"
+        [activeGroupUniqueName]="'discount'"
+        [commonLocaleData]="commonLocaleData"
+    ></aside-menu-account>
 
     <!--delete discount confirmation model -->
     <div bsModal #discountConfirmationModel="bs-modal" class="modal fade" role="dialog">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
-                <confirm-modal [body]="localeData?.delete_discount" (successCallBack)="delete()"
-                    (cancelCallBack)="hideDeleteDiscountModal()"></confirm-modal>
+                <confirm-modal
+                    [body]="localeData?.delete_discount"
+                    (successCallBack)="delete()"
+                    (cancelCallBack)="hideDeleteDiscountModal()"
+                ></confirm-modal>
             </div>
         </div>
     </div>

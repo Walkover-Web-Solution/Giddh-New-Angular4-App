@@ -7,24 +7,35 @@
     <div class="aside-pane">
         <div class="aside-body flexy-child" *ngIf="!hideFirstStep">
             <div class="pb-3 text-center">
-                <button class="btn btn-lg btn-primary"
-                    (click)="toggleStockPane()">{{commonLocaleData?.app_add_product}}</button>
+                <button class="btn btn-lg btn-primary" (click)="toggleStockPane()">
+                    {{commonLocaleData?.app_add_product}}
+                </button>
             </div>
             <div class="pb-3 text-center">
-                <button class="btn btn-lg btn-primary"
-                    (click)="toggleServicePane()">{{commonLocaleData?.app_add_service}}</button>
+                <button class="btn btn-lg btn-primary" (click)="toggleServicePane()">
+                    {{commonLocaleData?.app_add_service}}
+                </button>
             </div>
         </div>
 
-        <div class="aside-body flexy-child-1 " *ngIf="isAddStockOpen">
-            <sales-create-stock [autoFocusInChild]="autoFocusInChild" (closeAsideEvent)="closeAsidePane($event)"></sales-create-stock>
+        <div class="aside-body flexy-child-1" *ngIf="isAddStockOpen">
+            <sales-create-stock
+                [autoFocusInChild]="autoFocusInChild"
+                (closeAsideEvent)="closeAsidePane($event)"
+            ></sales-create-stock>
         </div>
         <div class="aside-body flexy-child-1" *ngIf="isAddServiceOpen">
-            <generic-aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
-                (closeAsideEvent)="closeAsidePane($event)" [selectedGroupUniqueName]="selectedVoucherType"
-                [isDebtorCreditor]="false" [isBankAccount]="false"
-                [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}" *ngIf="accountAsideMenuState === 'in'"
-                (addEvent)="addNewServiceAccount($event)"></generic-aside-menu-account>
+            <generic-aside-menu-account
+                [class]="accountAsideMenuState"
+                [@slideInOut]="accountAsideMenuState"
+                (closeAsideEvent)="closeAsidePane($event)"
+                [selectedGroupUniqueName]="selectedVoucherType"
+                [isDebtorCreditor]="false"
+                [isBankAccount]="false"
+                [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}"
+                *ngIf="accountAsideMenuState === 'in'"
+                (addEvent)="addNewServiceAccount($event)"
+            ></generic-aside-menu-account>
         </div>
     </div>
 </div>
