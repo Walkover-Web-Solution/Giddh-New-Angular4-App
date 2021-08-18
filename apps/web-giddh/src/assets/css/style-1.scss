@@ -2913,7 +2913,9 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
 .mat-snack-bar-container.info {
     background-color: $info-toast !important;
 }
-.mat-form-field-appearance-fill .mat-form-field-flex {
+.mat-form-field-appearance-fill .mat-form-field-flex,
+.mat-form-field-ripple,
+.mat-form-field-appearance-fill .mat-form-field-underline::before {
     background: none !important;
 }
 .overflow-visible {
@@ -2961,4 +2963,26 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
         }
     }
 }
+.daybook-advance-search .mat-form-field-appearance-fill .mat-form-field-flex {
+    padding: 1px 0px 0px 0px !important;
+}
+.daybook-advance-search .mat-form-field-appearance-fill .mat-form-field-infix {
+    padding: 0;
+    border-top: 0px;
+}
+.daybook-advance-search .mat-form-field-appearance-fill .mat-form-field-infix input.mat-input-element {
+    padding-left: 10px !important;
+    width: 96% !important;
+}
+.daybook-advance-search giddh-datepicker .mat-form-field {
+    width: 100%;
+}
+.daybook-advance-search .mat-form-field .mat-form-field-wrapper {
+    padding-bottom: 0px;
+}
+.export-daybook .mat-raised-button {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+
 /* material css for ledger end*/
