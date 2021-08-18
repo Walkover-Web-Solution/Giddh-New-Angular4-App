@@ -2,60 +2,84 @@
     <table class="table basic giddh-table on-mobile-view">
         <thead>
             <tr class="register-table-th">
-                <th>{{salesRegisterTotal.particular }}</th>
+                <th>{{ salesRegisterTotal.particular }}</th>
                 <th class="text-right">
                     <span class="d-inline-flex">
-                        <amount-field [amount]="salesRegisterTotal.sales" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field
+                            [amount]="salesRegisterTotal.sales"
+                            [currencySymbol]="false"
+                            [currencyCode]="false"
+                        >
                         </amount-field>
                     </span>
                 </th>
                 <th *ngIf="salesRegisterTotal.returns" class="text-right">
                     <span class="d-inline-flex">
-                        <amount-field [amount]="salesRegisterTotal.returns" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field
+                            [amount]="salesRegisterTotal.returns"
+                            [currencySymbol]="false"
+                            [currencyCode]="false"
+                        >
                         </amount-field>
                     </span>
                 </th>
                 <th *ngIf="salesRegisterTotal.taxTotal" class="text-right">
                     <span class="d-inline-flex">
-                        <amount-field [amount]="salesRegisterTotal.taxTotal" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field
+                            [amount]="salesRegisterTotal.taxTotal"
+                            [currencySymbol]="false"
+                            [currencyCode]="false"
+                        >
                         </amount-field>
                     </span>
                 </th>
                 <th *ngIf="salesRegisterTotal.discountTotal" class="text-right">
                     <span class="d-inline-flex">
-                        <amount-field [amount]="salesRegisterTotal.discountTotal" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field
+                            [amount]="salesRegisterTotal.discountTotal"
+                            [currencySymbol]="false"
+                            [currencyCode]="false"
+                        >
                         </amount-field>
                     </span>
                 </th>
                 <th *ngIf="isTcsTdsApplicable && salesRegisterTotal.tcsTotal" class="text-right">
                     <span class="d-inline-flex">
-                        <amount-field [amount]="salesRegisterTotal.tcsTotal" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field
+                            [amount]="salesRegisterTotal.tcsTotal"
+                            [currencySymbol]="false"
+                            [currencyCode]="false"
+                        >
                         </amount-field>
                     </span>
                 </th>
                 <th *ngIf="isTcsTdsApplicable && salesRegisterTotal.tdsTotal" class="text-right">
                     <span class="d-inline-flex">
-                        <amount-field [amount]="salesRegisterTotal.tdsTotal" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field
+                            [amount]="salesRegisterTotal.tdsTotal"
+                            [currencySymbol]="false"
+                            [currencyCode]="false"
+                        >
                         </amount-field>
                     </span>
                 </th>
                 <th *ngIf="salesRegisterTotal.netSales" class="text-right">
                     <span class="d-inline-flex">
-                        <amount-field [amount]="salesRegisterTotal.netSales" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field
+                            [amount]="salesRegisterTotal.netSales"
+                            [currencySymbol]="false"
+                            [currencyCode]="false"
+                        >
                         </amount-field>
                     </span>
                 </th>
                 <th *ngIf="salesRegisterTotal.cumulative" class="text-right">
                     <span class="d-inline-flex">
-                        <amount-field [amount]="salesRegisterTotal.cumulative" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field
+                            [amount]="salesRegisterTotal.cumulative"
+                            [currencySymbol]="false"
+                            [currencyCode]="false"
+                        >
                         </amount-field>
                     </span>
                 </th>
@@ -63,132 +87,147 @@
             <tr class="register-sales-purchase">
                 <th>
                     <div class="d-flex align-items-center">
-                        {{commonLocaleData?.app_particular}}
+                        {{ commonLocaleData?.app_particular }}
                     </div>
                 </th>
                 <th class="width-200px">
                     <div class="d-flex">
-                        <div class="flex-fill text-right ">
-                            {{commonLocaleData?.app_sales}}
+                        <div class="flex-fill text-right">
+                            {{ commonLocaleData?.app_sales }}
                         </div>
                     </div>
                 </th>
                 <th *ngIf="salesRegisterTotal.returns" class="width-200px">
                     <div class="d-flex">
                         <div class="flex-fill text-right">
-                            {{commonLocaleData?.app_return}}
+                            {{ commonLocaleData?.app_return }}
                         </div>
                     </div>
                 </th>
                 <th *ngIf="salesRegisterTotal.taxTotal" class="width-200px">
                     <div class="d-flex">
                         <div class="flex-fill text-right">
-                            {{commonLocaleData?.app_tax}}
+                            {{ commonLocaleData?.app_tax }}
                         </div>
                     </div>
                 </th>
                 <th *ngIf="salesRegisterTotal.discountTotal" class="width-200px">
                     <div class="d-flex">
-                        <div class="flex-fill text-right ">
-                            {{commonLocaleData?.app_discount}}
+                        <div class="flex-fill text-right">
+                            {{ commonLocaleData?.app_discount }}
                         </div>
                     </div>
                 </th>
                 <th *ngIf="isTcsTdsApplicable && salesRegisterTotal.tcsTotal" class="width-200px">
                     <div class="d-flex">
-                        <div class="flex-fill text-right ">
-                            {{commonLocaleData?.app_tcs}}
+                        <div class="flex-fill text-right">
+                            {{ commonLocaleData?.app_tcs }}
                         </div>
                     </div>
                 </th>
                 <th *ngIf="isTcsTdsApplicable && salesRegisterTotal.tdsTotal" class="width-200px">
                     <div class="d-flex">
-                        <div class="flex-fill text-right ">
-                            {{commonLocaleData?.app_tds}}
+                        <div class="flex-fill text-right">
+                            {{ commonLocaleData?.app_tds }}
                         </div>
                     </div>
                 </th>
                 <th *ngIf="salesRegisterTotal.netSales" class="width-200px">
                     <div class="d-flex">
-                        <div class="flex-fill text-right ">
-                            {{commonLocaleData?.app_net_sales}}
+                        <div class="flex-fill text-right">
+                            {{ commonLocaleData?.app_net_sales }}
                         </div>
                     </div>
                 </th>
                 <th *ngIf="salesRegisterTotal.cumulative" class="width-200px">
                     <div class="d-flex">
-                        <div class="flex-fill text-right ">
-                            {{commonLocaleData?.app_cumulative}}
+                        <div class="flex-fill text-right">
+                            {{ commonLocaleData?.app_cumulative }}
                         </div>
                     </div>
                 </th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let item of reportRespone" [ngClass]="{'bgChange': item.reportType === 'combined'}">
-                <td [attr.data-title]="commonLocaleData?.app_particular"><a
-                        [class.cursor-pointer]="item.reportType !== 'combined'"
-                        (click)="GotoDetailedSales(item)">{{item.particular}}</a></td>
+            <tr *ngFor="let item of reportRespone" [ngClass]="{ 'bgChange': item.reportType === 'combined' }">
+                <td [attr.data-title]="commonLocaleData?.app_particular">
+                    <a [class.cursor-pointer]="item.reportType !== 'combined'" (click)="GotoDetailedSales(item)">{{
+                        item.particular
+                    }}</a>
+                </td>
                 <td [attr.data-title]="commonLocaleData?.app_sales" class="text-right">
                     <span class="d-inline-flex">
-                        <amount-field [amount]="item.sales" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field [amount]="item.sales" [currencySymbol]="false" [currencyCode]="false">
                         </amount-field>
                     </span>
                 </td>
-                <td [attr.data-title]="commonLocaleData?.app_return" *ngIf="salesRegisterTotal.returns"
-                    class="text-right">
+                <td
+                    [attr.data-title]="commonLocaleData?.app_return"
+                    *ngIf="salesRegisterTotal.returns"
+                    class="text-right"
+                >
                     <span class="d-inline-flex">
-                        <amount-field [amount]="item.returns" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field [amount]="item.returns" [currencySymbol]="false" [currencyCode]="false">
                         </amount-field>
                     </span>
                 </td>
-                <td [attr.data-title]="commonLocaleData?.app_tax" *ngIf="salesRegisterTotal.taxTotal"
-                    class="text-right">
+                <td
+                    [attr.data-title]="commonLocaleData?.app_tax"
+                    *ngIf="salesRegisterTotal.taxTotal"
+                    class="text-right"
+                >
                     <span class="d-inline-flex">
-                        <amount-field [amount]="item.taxTotal" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field [amount]="item.taxTotal" [currencySymbol]="false" [currencyCode]="false">
                         </amount-field>
                     </span>
                 </td>
-                <td [attr.data-title]="commonLocaleData?.app_discount" *ngIf="salesRegisterTotal.discountTotal"
-                    class="text-right">
+                <td
+                    [attr.data-title]="commonLocaleData?.app_discount"
+                    *ngIf="salesRegisterTotal.discountTotal"
+                    class="text-right"
+                >
                     <span class="d-inline-flex">
-                        <amount-field [amount]="item.discountTotal" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field [amount]="item.discountTotal" [currencySymbol]="false" [currencyCode]="false">
                         </amount-field>
                     </span>
                 </td>
-                <td [attr.data-title]="commonLocaleData?.app_tcs"
-                    *ngIf="isTcsTdsApplicable && salesRegisterTotal.tcsTotal" class="text-right">
+                <td
+                    [attr.data-title]="commonLocaleData?.app_tcs"
+                    *ngIf="isTcsTdsApplicable && salesRegisterTotal.tcsTotal"
+                    class="text-right"
+                >
                     <span class="d-inline-flex">
-                        <amount-field [amount]="item.tcsTotal" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field [amount]="item.tcsTotal" [currencySymbol]="false" [currencyCode]="false">
                         </amount-field>
                     </span>
                 </td>
-                <td [attr.data-title]="commonLocaleData?.app_tds"
-                    *ngIf="isTcsTdsApplicable && salesRegisterTotal.tdsTotal" class="text-right">
+                <td
+                    [attr.data-title]="commonLocaleData?.app_tds"
+                    *ngIf="isTcsTdsApplicable && salesRegisterTotal.tdsTotal"
+                    class="text-right"
+                >
                     <span class="d-inline-flex">
-                        <amount-field [amount]="item.tdsTotal" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field [amount]="item.tdsTotal" [currencySymbol]="false" [currencyCode]="false">
                         </amount-field>
                     </span>
                 </td>
-                <td [attr.data-title]="commonLocaleData?.app_net_sales" *ngIf="salesRegisterTotal.netSales"
-                    class="text-right">
+                <td
+                    [attr.data-title]="commonLocaleData?.app_net_sales"
+                    *ngIf="salesRegisterTotal.netSales"
+                    class="text-right"
+                >
                     <span class="d-inline-flex">
-                        <amount-field [amount]="item.netSales" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field [amount]="item.netSales" [currencySymbol]="false" [currencyCode]="false">
                         </amount-field>
                     </span>
                 </td>
-                <td [attr.data-title]="commonLocaleData?.app_cumulative" *ngIf="salesRegisterTotal.cumulative"
-                    class="text-right">
+                <td
+                    [attr.data-title]="commonLocaleData?.app_cumulative"
+                    *ngIf="salesRegisterTotal.cumulative"
+                    class="text-right"
+                >
                     <span class="d-inline-flex">
-                        <amount-field [amount]="item.cumulative" [currencySymbol]="false"
-                                [currencyCode]="false">
+                        <amount-field [amount]="item.cumulative" [currencySymbol]="false" [currencyCode]="false">
                         </amount-field>
                     </span>
                 </td>
