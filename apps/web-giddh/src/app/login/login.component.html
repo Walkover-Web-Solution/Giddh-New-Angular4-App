@@ -1,11 +1,18 @@
 <giddh-loader></giddh-loader>
-<div class="flex-container"
-    *ngIf="!((isLoginWithPasswordInProcess$ | async) || (isLoginWithEmailInProcess$ | async) || (isLoginWithGoogleInProcess$ | async))">
+<div
+    class="flex-container"
+    *ngIf="
+        !(
+            (isLoginWithPasswordInProcess$ | async) ||
+            (isLoginWithEmailInProcess$ | async) ||
+            (isLoginWithGoogleInProcess$ | async)
+        )
+    "
+>
     <div class="login-box">
         <div class="row mx-0">
             <div class="col-md-6 col-lg-6 col-sm-12 col-12 px-0">
-                <div class="login-left">
-                </div>
+                <div class="login-left"></div>
             </div>
             <div class="col-md-6 col-lg-6 col-sm-12 col-12 px-0">
                 <div class="login-right d-flex align-items-center">
@@ -14,102 +21,185 @@
                             <!-- dynamic content inserted -->
                             <div class="logo-login">
                                 <a href="https://giddh.com">
-                                    <img src="./assets/images/giddh-white-logo.svg" alt="" width="141px">
+                                    <img src="./assets/images/giddh-white-logo.svg" alt="" width="141px" />
                                 </a>
                             </div>
                             <div class="accounting-space bg-white">
                                 <section id="full-view">
                                     <h4 class="mb-4">Login to your secure accounting space</h4>
-                                    <form class="position-relative mt-2 mb-3" id="login-with-pwd"
+                                    <form
+                                        class="position-relative mt-2 mb-3"
+                                        id="login-with-pwd"
                                         [formGroup]="loginWithPasswdForm"
                                         (ngSubmit)="loginWithPasswd(loginWithPasswdForm)"
                                         *ngIf="loginUsing === 'userName'"
-                                        [hidden]="isLoginWithPasswordSuccessNotVerified$ | async">
+                                        [hidden]="isLoginWithPasswordSuccessNotVerified$ | async"
+                                    >
                                         <div class="clearfix">
-                                            <input class="form-control mr-b1" formControlName="uniqueKey" type="text"
-                                                placeholder="Email Id" autocomplete="new-email" />
-                                            <input class="form-control" type="password" formControlName="password"
-                                                placeholder="Password" autocomplete="new-password" />
-                                            <button class="btn btn-success btn-lg btn-block mr-t1" type="submit"
-                                                [disabled]="!loginWithPasswdForm.controls['uniqueKey'].value || !loginWithPasswdForm.controls['password'].value">
+                                            <input
+                                                class="form-control mr-b1"
+                                                formControlName="uniqueKey"
+                                                type="text"
+                                                placeholder="Email Id"
+                                                autocomplete="new-email"
+                                            />
+                                            <input
+                                                class="form-control"
+                                                type="password"
+                                                formControlName="password"
+                                                placeholder="Password"
+                                                autocomplete="new-password"
+                                            />
+                                            <button
+                                                class="btn btn-success btn-lg btn-block mr-t1"
+                                                type="submit"
+                                                [disabled]="
+                                                    !loginWithPasswdForm.controls['uniqueKey'].value ||
+                                                    !loginWithPasswdForm.controls['password'].value
+                                                "
+                                            >
                                                 Login
                                             </button>
                                         </div>
-                                        <a href="javascript:void(0)" class="pull-right btn-link font-14 forget-pw"
-                                            (click)="showForgotPasswordModal()">Forgot
-                                            password?</a>
+                                        <a
+                                            href="javascript:void(0)"
+                                            class="pull-right btn-link font-14 forget-pw"
+                                            (click)="showForgotPasswordModal()"
+                                            >Forgot password?</a
+                                        >
                                     </form>
-                                    <form class="mt-2 mb-2" *ngIf="isLoginWithPasswordSuccessNotVerified$ | async"
-                                        id="signupVerifyForm" [formGroup]="signupVerifyForm" autocomplete="off">
+                                    <form
+                                        class="mt-2 mb-2"
+                                        *ngIf="isLoginWithPasswordSuccessNotVerified$ | async"
+                                        id="signupVerifyForm"
+                                        [formGroup]="signupVerifyForm"
+                                        autocomplete="off"
+                                    >
                                         <div class="clearfix">
-
-                                            <input class="form-control mr-b1" formControlName="verificationCode"
-                                                type="text" placeholder="Enter verification code here" required>
+                                            <input
+                                                class="form-control mr-b1"
+                                                formControlName="verificationCode"
+                                                type="text"
+                                                placeholder="Enter verification code here"
+                                                required
+                                            />
                                             <div class="clearfix mr-b2">
                                                 <button
                                                     [disabled]="!signupVerifyForm.controls['verificationCode'].valid"
                                                     class="btn btn-success btn-block btn-lg"
-                                                    (click)="VerifyEmail(loginWithPasswdForm.controls['uniqueKey'].value,signupVerifyForm.controls['verificationCode'].value)">
+                                                    (click)="
+                                                        VerifyEmail(
+                                                            loginWithPasswdForm.controls['uniqueKey'].value,
+                                                            signupVerifyForm.controls['verificationCode'].value
+                                                        )
+                                                    "
+                                                >
                                                     Verify Email
                                                 </button>
-                                                <a class="btn btn-link cp pull-right"
-                                                    (click)="LoginWithEmail(loginWithPasswdForm.controls['uniqueKey'].value)">Resend
-                                                    code</a>
+                                                <a
+                                                    class="btn btn-link cp pull-right"
+                                                    (click)="
+                                                        LoginWithEmail(loginWithPasswdForm.controls['uniqueKey'].value)
+                                                    "
+                                                    >Resend code</a
+                                                >
                                             </div>
                                         </div>
                                     </form>
 
-
                                     <div class="mb-3" *ngIf="loginUsing === 'forgot'">
-                                        <form class="" id="forgotPassword" name="forgotPassword" novalidate
-                                            [formGroup]="forgotPasswordForm" *ngIf="forgotStep === 1"
-                                            [hidden]="!showForgotPassword">
+                                        <form
+                                            class=""
+                                            id="forgotPassword"
+                                            name="forgotPassword"
+                                            novalidate
+                                            [formGroup]="forgotPasswordForm"
+                                            *ngIf="forgotStep === 1"
+                                            [hidden]="!showForgotPassword"
+                                        >
                                             <div class="clearfix form-group">
-                                                <input class="form-control" formControlName="userId" type="text"
-                                                    placeholder="Email Id" required />
+                                                <input
+                                                    class="form-control"
+                                                    formControlName="userId"
+                                                    type="text"
+                                                    placeholder="Email Id"
+                                                    required
+                                                />
                                             </div>
-                                            <button class="btn btn-block btn-success btn-lg mr-t1" type="submit"
+                                            <button
+                                                class="btn btn-block btn-success btn-lg mr-t1"
+                                                type="submit"
                                                 (click)="forgotPassword(forgotPasswordForm.controls['userId'].value)"
-                                                [disabled]="!forgotPasswordForm.controls['userId'].value">Reset Password
+                                                [disabled]="!forgotPasswordForm.controls['userId'].value"
+                                            >
+                                                Reset Password
                                             </button>
                                         </form>
-                                        <form class="" id="resetPassword" name="resetPassword" novalidate
-                                            [formGroup]="resetPasswordForm" *ngIf="forgotStep === 2"
-                                            [hidden]="!showForgotPassword">
+                                        <form
+                                            class=""
+                                            id="resetPassword"
+                                            name="resetPassword"
+                                            novalidate
+                                            [formGroup]="resetPasswordForm"
+                                            *ngIf="forgotStep === 2"
+                                            [hidden]="!showForgotPassword"
+                                        >
                                             <div class="row">
                                                 <div class="clearfix form-group col-12">
                                                     <div>
-                                                        <input class="form-control" formControlName="verificationCode"
-                                                            type="text" placeholder="Verification Code" required
-                                                            autocomplete="new-verification" />
-                                                        <input class="form-control mr-t1" formControlName="newPassword"
-                                                            type="password" placeholder="New Password" required
-                                                            autocomplete="new-password" />
+                                                        <input
+                                                            class="form-control"
+                                                            formControlName="verificationCode"
+                                                            type="text"
+                                                            placeholder="Verification Code"
+                                                            required
+                                                            autocomplete="new-verification"
+                                                        />
+                                                        <input
+                                                            class="form-control mr-t1"
+                                                            formControlName="newPassword"
+                                                            type="password"
+                                                            placeholder="New Password"
+                                                            required
+                                                            autocomplete="new-password"
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>
-                                            <button class="btn btn-block btn-success btn-lg mr-t1" type="submit"
+                                            <button
+                                                class="btn btn-block btn-success btn-lg mr-t1"
+                                                type="submit"
                                                 (click)="resetPassword(resetPasswordForm)"
-                                                [disabled]="!resetPasswordForm.controls['verificationCode'].value || !resetPasswordForm.controls['newPassword'].value">
+                                                [disabled]="
+                                                    !resetPasswordForm.controls['verificationCode'].value ||
+                                                    !resetPasswordForm.controls['newPassword'].value
+                                                "
+                                            >
                                                 Submit
                                             </button>
                                         </form>
                                     </div>
 
                                     <ul class="social-login">
-                                        <li class="google-ico"><a href="javascript:void(0);"
-                                                (click)="signInWithProviders('google')">
+                                        <li class="google-ico">
+                                            <a href="javascript:void(0);" (click)="signInWithProviders('google')">
                                                 <i class="ico-google">
                                                     <img src="./assets/images/new/google_ico.svg" />
                                                 </i>
-                                                <span>Login with Google</span></a></li>
-
-
+                                                <span>Login with Google</span></a
+                                            >
+                                        </li>
                                     </ul>
-                                    <p class="login-with" *ngIf="loginUsing !== 'userName'">Login with <a
-                                            href="javascript:;" class="bold"
-                                            (click)="loginUsing = 'userName';resetForgotPasswordProcess()">
-                                            email and password</a></p>
+                                    <p class="login-with" *ngIf="loginUsing !== 'userName'">
+                                        Login with
+                                        <a
+                                            href="javascript:;"
+                                            class="bold"
+                                            (click)="loginUsing = 'userName'; resetForgotPasswordProcess()"
+                                        >
+                                            email and password</a
+                                        >
+                                    </p>
 
                                     <div class="d-flex align-items-center account mt-1">
                                         <p class="mb-0 mr-2 bold text-light-2">Don't have an account?</p>
@@ -117,7 +207,6 @@
                                     </div>
                                 </section>
                                 <!-- end of full view -->
-
                             </div>
                         </div>
                     </div>
@@ -128,12 +217,18 @@
 </div>
 
 <!--email varify modal  -->
-<div class="modal fade" tabindex="-1" bsModal #emailVerifyModal="bs-modal" role="dialog" aria-hidden="true"
-    [config]="modalConfig">
+<div
+    class="modal fade"
+    tabindex="-1"
+    bsModal
+    #emailVerifyModal="bs-modal"
+    role="dialog"
+    aria-hidden="true"
+    [config]="modalConfig"
+>
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="border-radius-0">
-
                 <div class="modal-header">
                     <h3>Sign Up with Giddh</h3>
                     <span aria-hidden="true" class="close" data-dismiss="modal" (click)="hideEmailModal()">×</span>
@@ -141,30 +236,49 @@
                 <div class="modal-body clearfix">
                     <form class="col-12" name="verifyEmailForm" novalidate [formGroup]="emailVerifyForm">
                         <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clearfix form-group form-group-lg">
-
-                            <input class="form-control mr-t1" formControlName="email" type="email"
-                                placeholder="Enter your email address" required>
-                            <button [disabled]="!emailVerifyForm.controls['email'].valid"
+                            <input
+                                class="form-control mr-t1"
+                                formControlName="email"
+                                type="email"
+                                placeholder="Enter your email address"
+                                required
+                            />
+                            <button
+                                [disabled]="!emailVerifyForm.controls['email'].valid"
                                 [ladda]="isLoginWithEmailInProcess$ | async"
                                 class="btn sharp btn-block btn-success btn-lg mr-t1"
-                                (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)">Submit
+                                (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)"
+                            >
+                                Submit
                             </button>
-
                         </div>
                         <div *ngIf="isLoginWithEmailSubmited$ | async" class="clearfix form-group form-group-lg">
-
-                            <input class="form-control mr-t1" formControlName="token" type="text"
-                                placeholder="Enter verification code here" required>
+                            <input
+                                class="form-control mr-t1"
+                                formControlName="token"
+                                type="text"
+                                placeholder="Enter verification code here"
+                                required
+                            />
                             <small>We have sent a verification code to your registered email.</small>
-                            <button [disabled]="!emailVerifyForm.controls['token'].valid"
+                            <button
+                                [disabled]="!emailVerifyForm.controls['token'].valid"
                                 class="btn sharp btn-block btn-success btn-lg mr-t1"
                                 [ladda]="isVerifyEmailInProcess$ | async"
-                                (click)="VerifyEmail(emailVerifyForm.controls['email'].value,emailVerifyForm.controls['token'].value)">
+                                (click)="
+                                    VerifyEmail(
+                                        emailVerifyForm.controls['email'].value,
+                                        emailVerifyForm.controls['token'].value
+                                    )
+                                "
+                            >
                                 Last step to go
                             </button>
-                            <a class="btn btn-link cp pull-right"
-                                (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)">Resend
-                                code</a>
+                            <a
+                                class="btn btn-link cp pull-right"
+                                (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)"
+                                >Resend code</a
+                            >
                         </div>
                     </form>
                 </div>
@@ -175,8 +289,15 @@
 <!--email varify modal  -->
 
 <!--mobile varify form  -->
-<div class="modal fade" tabindex="-1" bsModal #mobileVerifyModal="bs-modal" role="dialog" aria-hidden="true"
-    [config]="modalConfig">
+<div
+    class="modal fade"
+    tabindex="-1"
+    bsModal
+    #mobileVerifyModal="bs-modal"
+    role="dialog"
+    aria-hidden="true"
+    [config]="modalConfig"
+>
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="border-radius-0">
@@ -185,30 +306,60 @@
                     <span aria-hidden="true" class="close" data-dismiss="modal" (click)="hideMobileModal()">×</span>
                 </div>
                 <div class="modal-body clearfix">
-                    <form class="col-12" id="verifyMobile" name="verifyEmailForm" novalidate
-                        [formGroup]="mobileVerifyForm">
+                    <form
+                        class="col-12"
+                        id="verifyMobile"
+                        name="verifyEmailForm"
+                        novalidate
+                        [formGroup]="mobileVerifyForm"
+                    >
                         <div class="clearfix form-group-lg" *ngIf="!(isLoginWithMobileSubmited$ | async)">
-                            <sh-select [options]="countryCodeList" class="form-inline"
-                                (selected)="setCountryCode($event)" [placeholder]="'CC'" formControlName="country">
+                            <sh-select
+                                [options]="countryCodeList"
+                                class="form-inline"
+                                (selected)="setCountryCode($event)"
+                                [placeholder]="'CC'"
+                                formControlName="country"
+                            >
                             </sh-select>
-                            <input class="form-control input-width-mobile" formControlName="mobileNumber" type="text"
-                                placeholder="Enter your Mobile No" required />
+                            <input
+                                class="form-control input-width-mobile"
+                                formControlName="mobileNumber"
+                                type="text"
+                                placeholder="Enter your Mobile No"
+                                required
+                            />
                         </div>
-                        <button *ngIf="!(isLoginWithMobileSubmited$ | async)"
+                        <button
+                            *ngIf="!(isLoginWithMobileSubmited$ | async)"
                             class="btn sharp btn-block btn-success btn-lg mr-t1"
-                            (click)="getOtp(mobileVerifyForm.controls['mobileNumber'].value,mobileVerifyForm.controls['country'].value)"
+                            (click)="
+                                getOtp(
+                                    mobileVerifyForm.controls['mobileNumber'].value,
+                                    mobileVerifyForm.controls['country'].value
+                                )
+                            "
                             [ladda]="isLoginWithMobileInProcess$ | async"
-                            [disabled]="!mobileVerifyForm.controls['mobileNumber'].valid">{{
-                            !(isLoginWithMobileInProcess$ |
-                            async) ? 'Get Otp' : 'Resend' }}
+                            [disabled]="!mobileVerifyForm.controls['mobileNumber'].valid"
+                        >
+                            {{ !(isLoginWithMobileInProcess$ | async) ? "Get Otp" : "Resend" }}
                         </button>
-                        <div class="clearfix form-group form-group-lg" *ngIf="(isLoginWithMobileSubmited$ | async)">
-                            <hr class="mrtb10">
-                            <input class="form-control square" placeholder="Enter OTP" formControlName="otp">
-                            <button type="login" class="btn sharp btn-block btn-success btn-lg mr-t1"
+                        <div class="clearfix form-group form-group-lg" *ngIf="isLoginWithMobileSubmited$ | async">
+                            <hr class="mrtb10" />
+                            <input class="form-control square" placeholder="Enter OTP" formControlName="otp" />
+                            <button
+                                type="login"
+                                class="btn sharp btn-block btn-success btn-lg mr-t1"
                                 [ladda]="isVerifyMobileInProcess$ | async"
-                                (click)="VerifyCode(mobileVerifyForm.controls['mobileNumber'].value,mobileVerifyForm.controls['otp'].value)"
-                                [disabled]="!mobileVerifyForm.controls['otp'].valid">Login
+                                (click)="
+                                    VerifyCode(
+                                        mobileVerifyForm.controls['mobileNumber'].value,
+                                        mobileVerifyForm.controls['otp'].value
+                                    )
+                                "
+                                [disabled]="!mobileVerifyForm.controls['otp'].valid"
+                            >
+                                Login
                             </button>
                         </div>
                     </form>
@@ -220,25 +371,39 @@
 <!--mobile verify form  -->
 
 <!-- two way auth popup -->
-<div class="modal fade" tabindex="-1" bsModal #twoWayAuthModal="bs-modal" role="dialog" aria-hidden="true"
-    [config]="modalConfig" (onHidden)="onHiddenAuthModal($event)">
+<div
+    class="modal fade"
+    tabindex="-1"
+    bsModal
+    #twoWayAuthModal="bs-modal"
+    role="dialog"
+    aria-hidden="true"
+    [config]="modalConfig"
+    (onHidden)="onHiddenAuthModal($event)"
+>
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="border-radius-0">
                 <div class="modal-header">
                     <h3>Sign Up with Giddh</h3>
-                    <span aria-hidden="true" class="close" data-dismiss="modal"
-                        (click)="resetTwoWayAuthModal()">×</span>
+                    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="resetTwoWayAuthModal()"
+                        >×</span
+                    >
                 </div>
                 <div class="modal-body clearfix">
                     <form class="col-12" id="authModal" name="verifyEmailForm" novalidate [formGroup]="twoWayOthForm">
                         <div class="clearfix form-group form-group-lg">
-                            <hr class="mrtb10">
-                            <input class="form-control square" placeholder="Enter OTP" formControlName="otp">
+                            <hr class="mrtb10" />
+                            <input class="form-control square" placeholder="Enter OTP" formControlName="otp" />
                             <small>We have sent an OTP to your registered mobile number.</small>
-                            <button type="login" class="btn sharp btn-block btn-success btn-lg mr-t1"
-                                [ladda]="isTwoWayAuthInProcess$ | async" (click)="verifyTwoWayCode()"
-                                [disabled]="twoWayOthForm.get('otp').invalid">Submit
+                            <button
+                                type="login"
+                                class="btn sharp btn-block btn-success btn-lg mr-t1"
+                                [ladda]="isTwoWayAuthInProcess$ | async"
+                                (click)="verifyTwoWayCode()"
+                                [disabled]="twoWayOthForm.get('otp').invalid"
+                            >
+                                Submit
                             </button>
                         </div>
                     </form>
@@ -250,6 +415,11 @@
 <!-- two way auth popup -->
 
 <div
-    *ngIf="(isLoginWithPasswordInProcess$ | async) || (isLoginWithEmailInProcess$ | async) || (isLoginWithGoogleInProcess$ | async)">
+    *ngIf="
+        (isLoginWithPasswordInProcess$ | async) ||
+        (isLoginWithEmailInProcess$ | async) ||
+        (isLoginWithGoogleInProcess$ | async)
+    "
+>
     <giddh-page-loader></giddh-page-loader>
 </div>

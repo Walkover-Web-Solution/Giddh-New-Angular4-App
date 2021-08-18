@@ -4,84 +4,151 @@
             <div class="col-md-12">
                 <div class="filter-row back-button">
                     <a href="javascript:void(0)" (click)="goBack()">
-                        <svg style="top: 3px;position: relative;" version="1.1" id="Layer_1"
-                            xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 512 512" xml:space="preserve"
-                            class="icon icon-sm text-top">
+                        <svg
+                            style="top: 3px; position: relative"
+                            version="1.1"
+                            id="Layer_1"
+                            xmlns="http://www.w3.org/2000/svg"
+                            x="0"
+                            y="0"
+                            viewBox="0 0 512 512"
+                            xml:space="preserve"
+                            class="icon icon-sm text-top"
+                        >
                             <path
-                                d="M367.5 433.7L189.8 256 367.5 78.3l22.6-22.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-223 223c-6 6-9.4 14.1-9.4 22.6 0 8.5 3.4 16.6 9.4 22.6l223 223c6.2 6.2 14.4 9.4 22.6 9.4s16.4-3.1 22.6-9.4c12.5-12.5 12.5-32.8 0-45.3l-22.5-22.6z">
-                            </path>
-                        </svg> {{commonLocaleData?.app_back}}
+                                d="M367.5 433.7L189.8 256 367.5 78.3l22.6-22.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-223 223c-6 6-9.4 14.1-9.4 22.6 0 8.5 3.4 16.6 9.4 22.6l223 223c6.2 6.2 14.4 9.4 22.6 9.4s16.4-3.1 22.6-9.4c12.5-12.5 12.5-32.8 0-45.3l-22.5-22.6z"
+                            ></path>
+                        </svg>
+                        {{ commonLocaleData?.app_back }}
                     </a>
                 </div>
                 <div class="filter-row">
-                    <div class="name">{{localeData?.filing?.transaction_type}}:</div>
+                    <div class="name">{{ localeData?.filing?.transaction_type }}:</div>
                     <div class="btn-group filter d-inline-block" dropdown *ngIf="selectedGst === GstReport.Gstr1">
-                        <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
-                            aria-controls="dropdown-basic">
-                            {{selectedFilter?.entityType}} <span class="caret"></span>
+                        <button
+                            id="button-basic"
+                            dropdownToggle
+                            type="button"
+                            class="btn btn-primary dropdown-toggle"
+                            aria-controls="dropdown-basic"
+                        >
+                            {{ selectedFilter?.entityType }} <span class="caret"></span>
                         </button>
                         <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                            <li *ngFor="let entity of gstr1entityType"><a class="dropdown-item"
+                            <li *ngFor="let entity of gstr1entityType">
+                                <a
+                                    class="dropdown-item"
                                     href="javascript:void(0)"
-                                    (click)="viewFilteredTxn('entityType', entity.value)">{{entity.label}}</a>
+                                    (click)="viewFilteredTxn('entityType', entity.value)"
+                                    >{{ entity.label }}</a
+                                >
                             </li>
                         </ul>
                     </div>
                     <div class="btn-group filter d-inline-block" dropdown *ngIf="selectedGst === GstReport.Gstr2">
-                        <button id="button-basic2" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
-                            aria-controls="dropdown-basic">
-                            {{selectedFilter?.entityType}} <span class="caret"></span>
+                        <button
+                            id="button-basic2"
+                            dropdownToggle
+                            type="button"
+                            class="btn btn-primary dropdown-toggle"
+                            aria-controls="dropdown-basic"
+                        >
+                            {{ selectedFilter?.entityType }} <span class="caret"></span>
                         </button>
                         <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic2">
-                            <li *ngFor="let entity of gstr2entityType"><a class="dropdown-item"
+                            <li *ngFor="let entity of gstr2entityType">
+                                <a
+                                    class="dropdown-item"
                                     href="javascript:void(0)"
-                                    (click)="viewFilteredTxn('entityType', entity.value)">{{entity.label}}</a>
+                                    (click)="viewFilteredTxn('entityType', entity.value)"
+                                    >{{ entity.label }}</a
+                                >
                             </li>
                         </ul>
                     </div>
                 </div>
-                <div class="filter-row"
-                    *ngIf="(filterParam.entityType !== 'invoices' && filterParam.entityType !== 'advance-receipt') && selectedGst === GstReport.Gstr1">
-                    <div class="name">{{getFilterTypeText()}}:</div>
+                <div
+                    class="filter-row"
+                    *ngIf="
+                        filterParam.entityType !== 'invoices' &&
+                        filterParam.entityType !== 'advance-receipt' &&
+                        selectedGst === GstReport.Gstr1
+                    "
+                >
+                    <div class="name">{{ getFilterTypeText() }}:</div>
                     <div class="btn-group filter d-inline-block" dropdown>
-                        <button id="button-basic3" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
-                            aria-controls="dropdown-basic">
-                            {{selectedFilter?.type}} <span class="caret"></span>
+                        <button
+                            id="button-basic3"
+                            dropdownToggle
+                            type="button"
+                            class="btn btn-primary dropdown-toggle"
+                            aria-controls="dropdown-basic"
+                        >
+                            {{ selectedFilter?.type }} <span class="caret"></span>
                         </button>
                         <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic3">
-                            <li *ngFor="let type of otherEntityType"><a class="dropdown-item" href="javascript:void(0)"
-                                    (click)="viewFilteredTxn('type', type.value)">{{type.label}}</a>
+                            <li *ngFor="let type of otherEntityType">
+                                <a
+                                    class="dropdown-item"
+                                    href="javascript:void(0)"
+                                    (click)="viewFilteredTxn('type', type.value)"
+                                    >{{ type.label }}</a
+                                >
                             </li>
                         </ul>
                     </div>
                 </div>
-                <div class="filter-row"
-                    *ngIf="filterParam.entityType === 'invoices' && selectedGst === GstReport.Gstr1">
-                    <div class="name">{{getFilterTypeText()}}:</div>
+                <div
+                    class="filter-row"
+                    *ngIf="filterParam.entityType === 'invoices' && selectedGst === GstReport.Gstr1"
+                >
+                    <div class="name">{{ getFilterTypeText() }}:</div>
                     <div class="btn-group filter d-inline-block" dropdown>
-                        <button id="button-basic4" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
-                            aria-controls="dropdown-basic">
-                            {{selectedFilter?.type}} <span class="caret"></span>
+                        <button
+                            id="button-basic4"
+                            dropdownToggle
+                            type="button"
+                            class="btn btn-primary dropdown-toggle"
+                            aria-controls="dropdown-basic"
+                        >
+                            {{ selectedFilter?.type }} <span class="caret"></span>
                         </button>
                         <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic4">
-                            <li *ngFor="let type of invoiceType"><a class="dropdown-item" href="javascript:void(0)"
-                                    (click)="viewFilteredTxn('type', type.value)">{{type.label}}</a>
+                            <li *ngFor="let type of invoiceType">
+                                <a
+                                    class="dropdown-item"
+                                    href="javascript:void(0)"
+                                    (click)="viewFilteredTxn('type', type.value)"
+                                    >{{ type.label }}</a
+                                >
                             </li>
                         </ul>
                     </div>
                 </div>
-                <div class="filter-row"
-                    *ngIf="filterParam.entityType === 'billsAndExpenses' && selectedGst == GstReport.Gstr2">
-                    <div class="name">{{getFilterTypeText()}}:</div>
+                <div
+                    class="filter-row"
+                    *ngIf="filterParam.entityType === 'billsAndExpenses' && selectedGst == GstReport.Gstr2"
+                >
+                    <div class="name">{{ getFilterTypeText() }}:</div>
 
                     <div class="btn-group filter d-inline-block" dropdown>
-                        <button id="button-basic5" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
-                            aria-controls="dropdown-basic">
-                            {{selectedFilter?.type}} <span class="caret"></span>
+                        <button
+                            id="button-basic5"
+                            dropdownToggle
+                            type="button"
+                            class="btn btn-primary dropdown-toggle"
+                            aria-controls="dropdown-basic"
+                        >
+                            {{ selectedFilter?.type }} <span class="caret"></span>
                         </button>
                         <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic5">
-                            <li *ngFor="let type of gstr2InvoiceType"><a class="dropdown-item" href="javascript:void(0)"
-                                    (click)="viewFilteredTxn('type', type.value)">{{type.label}}</a>
+                            <li *ngFor="let type of gstr2InvoiceType">
+                                <a
+                                    class="dropdown-item"
+                                    href="javascript:void(0)"
+                                    (click)="viewFilteredTxn('type', type.value)"
+                                    >{{ type.label }}</a
+                                >
                             </li>
                         </ul>
                     </div>
@@ -91,161 +158,174 @@
     </div>
     <div>
         <div class="table-responsive">
-            <table class="transactions-table table-striped  table zi-table table-hover"
-                *ngIf="!(viewTransactionInProgress$ | async) && (viewTransaction$ | async) && (viewTransaction$ | async)?.totalItems">
+            <table
+                class="transactions-table table-striped table zi-table table-hover"
+                *ngIf="
+                    !(viewTransactionInProgress$ | async) &&
+                    (viewTransaction$ | async) &&
+                    (viewTransaction$ | async)?.totalItems
+                "
+            >
                 <thead>
                     <tr>
                         <th class="text-left">
                             <div class="relative">
-                                <div class="pull-left over-flow"> {{localeData?.filing?.invoice_date}}
-                                </div>
+                                <div class="pull-left over-flow">{{ localeData?.filing?.invoice_date }}</div>
                             </div>
                         </th>
                         <th class="text-left">
                             <div class="relative">
-                                <div class="pull-left over-flow"> {{localeData?.filing?.invoice_no}}
-                                </div>
+                                <div class="pull-left over-flow">{{ localeData?.filing?.invoice_no }}</div>
                             </div>
                         </th>
                         <th class="text-left">
                             <div class="relative">
-                                <div class="pull-left over-flow"> {{commonLocaleData?.app_customer_gstin}}
-                                </div>
+                                <div class="pull-left over-flow">{{ commonLocaleData?.app_customer_gstin }}</div>
                             </div>
                         </th>
                         <th class="text-left">
                             <div class="relative">
-                                <div class="pull-left over-flow"> {{commonLocaleData?.app_customer_name}}
-                                </div>
+                                <div class="pull-left over-flow">{{ commonLocaleData?.app_customer_name }}</div>
                             </div>
                         </th>
                         <th class="text-left">
                             <div class="relative">
-                                <div class="pull-left over-flow"> {{commonLocaleData?.app_status}}
-                                </div>
+                                <div class="pull-left over-flow">{{ commonLocaleData?.app_status }}</div>
                             </div>
                         </th>
                         <th class="text-left">
                             <div class="relative">
-                                <div class="pull-left over-flow"> {{localeData?.filing?.gstn_action}}
-                                </div>
+                                <div class="pull-left over-flow">{{ localeData?.filing?.gstn_action }}</div>
                             </div>
                         </th>
                         <th class="text-left">
                             <div class="relative">
-                                <div class="pull-left over-flow"> {{localeData?.filing?.place_supply}}
-                                </div>
+                                <div class="pull-left over-flow">{{ localeData?.filing?.place_supply }}</div>
                             </div>
                         </th>
                         <th class="text-left">
                             <div class="relative">
-                                <div class=" over-flow"> {{commonLocaleData?.app_reverse_charge}}
-                                </div>
+                                <div class="over-flow">{{ commonLocaleData?.app_reverse_charge }}</div>
                             </div>
                         </th>
                         <th class="text-right">
                             <div class="relative">
-                                <div class=" over-flow"> {{localeData?.filing?.taxable_amount}}
-                                </div>
+                                <div class="over-flow">{{ localeData?.filing?.taxable_amount }}</div>
                             </div>
                         </th>
                         <th class="text-right">
                             <div class="relative">
-                                <div class=" over-flow"> {{localeData?.filing?.igst}}
-                                </div>
+                                <div class="over-flow">{{ localeData?.filing?.igst }}</div>
                             </div>
                         </th>
                         <th class="text-right">
                             <div class="relative">
-                                <div class=" over-flow"> {{localeData?.filing?.cgst}}
-                                </div>
+                                <div class="over-flow">{{ localeData?.filing?.cgst }}</div>
                             </div>
                         </th>
                         <th class="text-right">
                             <div class="relative">
-                                <div class=" over-flow"> {{localeData?.filing?.sgst}}
-                                </div>
+                                <div class="over-flow">{{ localeData?.filing?.sgst }}</div>
                             </div>
                         </th>
                         <th class="text-right">
                             <div class="relative">
-                                <div class=" over-flow"> {{commonLocaleData?.app_cess}}
-                                </div>
+                                <div class="over-flow">{{ commonLocaleData?.app_cess }}</div>
                             </div>
                         </th>
                         <th class="text-right">
                             <div class="relative">
-                                <div class=" over-flow"> {{commonLocaleData?.app_total_amount}}
-                                </div>
+                                <div class="over-flow">{{ commonLocaleData?.app_total_amount }}</div>
                             </div>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr class="cursor-pointer" *ngFor="let item of (viewTransaction$ | async).results">
-                        <td>{{item.voucherDate ? item.voucherDate : '-'}}</td>
-                        <td class="btn-link" *ngIf="(item.voucherType !== 'purchase')" (click)="onSelectInvoice(item)">
-                            {{item.voucherNumber ? item.voucherNumber : '-'}}
+                        <td>{{ item.voucherDate ? item.voucherDate : "-" }}</td>
+                        <td class="btn-link" *ngIf="item.voucherType !== 'purchase'" (click)="onSelectInvoice(item)">
+                            {{ item.voucherNumber ? item.voucherNumber : "-" }}
 
-                            <span *ngIf="isMobileScreen" class="d-inline-flex text-decoration-none btn-link"><i class="icon-download-circle font-16 ml-2"></i></span>
+                            <span *ngIf="isMobileScreen" class="d-inline-flex text-decoration-none btn-link"
+                                ><i class="icon-download-circle font-16 ml-2"></i
+                            ></span>
                         </td>
                         <td *ngIf="item.voucherType === 'purchase'">
-                            {{item.voucherNumber ? item.voucherNumber : '-'}}</td>
+                            {{ item.voucherNumber ? item.voucherNumber : "-" }}
+                        </td>
                         <td>
-                            {{item.accountGstin ? item.accountGstin : '-'}}
+                            {{ item.accountGstin ? item.accountGstin : "-" }}
                         </td>
-                        <td>{{item.accountName ? item.accountName : '-'}}</td>
-                        <td>{{item.status ? item.status : '-'}}</td>
-                        <td>{{item.actionOnGstin ? item.actionOnGstin : '-'}}</td>
+                        <td>{{ item.accountName ? item.accountName : "-" }}</td>
+                        <td>{{ item.status ? item.status : "-" }}</td>
+                        <td>{{ item.actionOnGstin ? item.actionOnGstin : "-" }}</td>
                         <td>
-                            {{item.pos ? item.pos : '-'}}
+                            {{ item.pos ? item.pos : "-" }}
                         </td>
-                        <td>{{item.reverseCharge ? item.reverseCharge : '-'}}</td>
+                        <td>{{ item.reverseCharge ? item.reverseCharge : "-" }}</td>
                         <td class="text-right">
                             <span class="d-inline-flex align-items-center">
                                 <i class="icon-rupees font-11"></i>
-                                <amount-field [amount]="item?.taxableAmount" [currencySymbol]="false"
-                                    [currencyCode]="false">
+                                <amount-field
+                                    [amount]="item?.taxableAmount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </td>
                         <td class="text-right">
                             <span class="d-inline-flex align-items-center">
                                 <i class="icon-rupees font-11"></i>
-                                <amount-field [amount]="item?.igstAmount" [currencySymbol]="false"
-                                    [currencyCode]="false">
+                                <amount-field
+                                    [amount]="item?.igstAmount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </td>
                         <td class="text-right">
                             <span class="d-inline-flex align-items-center">
                                 <i class="icon-rupees font-11"></i>
-                                <amount-field [amount]="item?.cgstAmount" [currencySymbol]="false"
-                                    [currencyCode]="false">
+                                <amount-field
+                                    [amount]="item?.cgstAmount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </td>
                         <td class="text-right">
                             <span class="d-inline-flex align-items-center">
                                 <i class="icon-rupees font-11"></i>
-                                <amount-field [amount]="item?.sgstAmount" [currencySymbol]="false"
-                                    [currencyCode]="false">
+                                <amount-field
+                                    [amount]="item?.sgstAmount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </td>
                         <td class="text-right">
                             <span class="d-inline-flex align-items-center">
                                 <i class="icon-rupees font-11"></i>
-                                <amount-field [amount]="item?.cessAmount" [currencySymbol]="false"
-                                    [currencyCode]="false">
+                                <amount-field
+                                    [amount]="item?.cessAmount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </td>
                         <td class="text-right">
                             <span class="d-inline-flex align-items-center">
                                 <i class="icon-rupees font-11"></i>
-                                <amount-field [amount]="item?.totalAmount" [currencySymbol]="false"
-                                    [currencyCode]="false">
+                                <amount-field
+                                    [amount]="item?.totalAmount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </td>
@@ -255,37 +335,50 @@
         </div>
         <!-- pagination -->
         <div class="text-center" *ngIf="(viewTransaction$ | async)?.totalPages > 1">
-            <pagination [maxSize]="6" [totalItems]="(viewTransaction$ | async)?.totalItems"
-                [itemsPerPage]="(viewTransaction$ | async)?.count" (pageChanged)="pageChanged($event)"
-                class="pagination-sm" [boundaryLinks]="true" [rotate]="false" [firstText]="commonLocaleData?.app_first"
-                [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next"
-                [lastText]="commonLocaleData?.app_last">
+            <pagination
+                [maxSize]="6"
+                [totalItems]="(viewTransaction$ | async)?.totalItems"
+                [itemsPerPage]="(viewTransaction$ | async)?.count"
+                (pageChanged)="pageChanged($event)"
+                class="pagination-sm"
+                [boundaryLinks]="true"
+                [rotate]="false"
+                [firstText]="commonLocaleData?.app_first"
+                [previousText]="commonLocaleData?.app_previous"
+                [nextText]="commonLocaleData?.app_next"
+                [lastText]="commonLocaleData?.app_last"
+            >
             </pagination>
         </div>
         <!-- no records -->
-        <div class="filings-empty-state"
-            *ngIf="!(viewTransactionInProgress$ | async) && !(viewTransaction$ | async)?.results?.length">
-            <img src="{{imgPath}}nofound.svg" [style.max-width.px]="150" />
-            <div class="empty-msg"><span> {{commonLocaleData?.app_no_records_found}} </span></div>
+        <div
+            class="filings-empty-state"
+            *ngIf="!(viewTransactionInProgress$ | async) && !(viewTransaction$ | async)?.results?.length"
+        >
+            <img src="{{ imgPath }}nofound.svg" [style.max-width.px]="150" />
+            <div class="empty-msg">
+                <span> {{ commonLocaleData?.app_no_records_found }} </span>
+            </div>
         </div>
     </div>
 </div>
 
 <!-- loader -->
-<div class="filings-empty-state" *ngIf="(viewTransactionInProgress$ | async)">
+<div class="filings-empty-state" *ngIf="viewTransactionInProgress$ | async">
     <div class="spinner2">
         <div class="cube1"></div>
         <div class="cube2"></div>
     </div>
-    <div class="empty-msg"><span> {{localeData?.filing?.loading_data}} </span></div>
+    <div class="empty-msg">
+        <span> {{ localeData?.filing?.loading_data }} </span>
+    </div>
 </div>
 
 <!-- Download or Send Invoice on mail -->
 <div bsModal #downloadOrSendMailModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <div element-view-container-ref #downloadOrSendMailComponent=elementviewcontainerref>
-            </div>
+            <div element-view-container-ref #downloadOrSendMailComponent="elementviewcontainerref"></div>
         </div>
     </div>
 </div>

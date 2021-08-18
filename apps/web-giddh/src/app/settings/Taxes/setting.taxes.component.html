@@ -1,155 +1,224 @@
-<ng-container appTranslate [file]="'settings/taxes'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
-    <div class="box clearfix" [keyboardShortcut]="'alt+c'" (onShortcutPress)="selectedTax = null;toggleTaxAsidePane()">
+<ng-container
+    appTranslate
+    [file]="'settings/taxes'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <div class="box clearfix" [keyboardShortcut]="'alt+c'" (onShortcutPress)="selectedTax = null; toggleTaxAsidePane()">
         <div class="d-flex justify-content-between">
-            <h1 class="section-head m-0 pl-0 pb-0 pr-0">{{localeData?.added_taxes}}</h1>
-            <button class="btn btn-sky-blue mr-0" [tooltip]="localeData?.create_new_tax"
-                (click)="selectedTax = null;toggleTaxAsidePane($event)">
-                <i class="icon icon-plus font-12"></i> {{localeData?.new_tax}}
+            <h1 class="section-head m-0 pl-0 pb-0 pr-0">{{ localeData?.added_taxes }}</h1>
+            <button
+                class="btn btn-sky-blue mr-0"
+                [tooltip]="localeData?.create_new_tax"
+                (click)="selectedTax = null; toggleTaxAsidePane($event)"
+            >
+                <i class="icon icon-plus font-12"></i> {{ localeData?.new_tax }}
             </button>
         </div>
 
         <div class="col-sm-12 pd-t15 tax-table-wrapper">
             <div class="row">
                 <div class="table-responsive">
-                    <table class="table table-bordered  basic mr-b05 on-mobile-view">
-
+                    <table class="table table-bordered basic mr-b05 on-mobile-view">
                         <thead [hidden]="!availableTaxes?.length">
                             <tr>
                                 <th>#</th>
-                                <th>{{localeData?.tax}}</th>
-                                <th>{{commonLocaleData?.app_name}}</th>
-                                <th>{{localeData?.linked_account}}</th>
-                                <th>{{localeData?.applied_from}}</th>
-                                <th>{{localeData?.tax_percentage}}</th>
-                                <th>{{localeData?.file_date}}</th>
-                                <th>{{localeData?.duration}}</th>
-                                <th>{{commonLocaleData?.app_type}}</th>
-                                <th class="text-center">{{commonLocaleData?.app_action}}</th>
+                                <th>{{ localeData?.tax }}</th>
+                                <th>{{ commonLocaleData?.app_name }}</th>
+                                <th>{{ localeData?.linked_account }}</th>
+                                <th>{{ localeData?.applied_from }}</th>
+                                <th>{{ localeData?.tax_percentage }}</th>
+                                <th>{{ localeData?.file_date }}</th>
+                                <th>{{ localeData?.duration }}</th>
+                                <th>{{ commonLocaleData?.app_type }}</th>
+                                <th class="text-center">{{ commonLocaleData?.app_action }}</th>
                             </tr>
                         </thead>
 
                         <tbody *ngIf="!isLoading && availableTaxes.length">
-
                             <tr *ngFor="let tax of availableTaxes; let i = index">
-
-                                <td data-title="#">{{i + 1}}</td>
-                                <td *ngIf="!taxToEdit[i]" [attr.data-title]="localeData?.tax">{{tax.taxNumber}}</td>
-                                <td *ngIf="taxToEdit[i]" [attr.data-title]="localeData?.tax">{{tax.taxNumber}}</td>
-                                <td *ngIf="!taxToEdit[i]" [attr.data-title]="commonLocaleData?.app_name">{{tax.name}}
+                                <td data-title="#">{{ i + 1 }}</td>
+                                <td *ngIf="!taxToEdit[i]" [attr.data-title]="localeData?.tax">{{ tax.taxNumber }}</td>
+                                <td *ngIf="taxToEdit[i]" [attr.data-title]="localeData?.tax">{{ tax.taxNumber }}</td>
+                                <td *ngIf="!taxToEdit[i]" [attr.data-title]="commonLocaleData?.app_name">
+                                    {{ tax.name }}
                                 </td>
-                                <td *ngIf="taxToEdit[i]" [attr.data-title]="commonLocaleData?.app_name">{{tax.name}}
+                                <td *ngIf="taxToEdit[i]" [attr.data-title]="commonLocaleData?.app_name">
+                                    {{ tax.name }}
                                 </td>
                                 <td *ngIf="!tax.accounts[0] && !taxToEdit[i]">--</td>
-                                <td *ngIf="tax.accounts[0] && !taxToEdit[i]"
-                                    [attr.data-title]="localeData?.linked_account">
-                                    <p *ngFor="let acc of tax.accounts;">
-                                        {{acc.name}}
+                                <td
+                                    *ngIf="tax.accounts[0] && !taxToEdit[i]"
+                                    [attr.data-title]="localeData?.linked_account"
+                                >
+                                    <p *ngFor="let acc of tax.accounts">
+                                        {{ acc.name }}
                                     </p>
                                 </td>
 
-                                <td *ngIf="tax.accounts[0] && taxToEdit[i]"
-                                    [attr.data-title]="localeData?.linked_account">
+                                <td
+                                    *ngIf="tax.accounts[0] && taxToEdit[i]"
+                                    [attr.data-title]="localeData?.linked_account"
+                                >
                                     <p *ngFor="let acc of availableTaxes[i].accounts; let ind = index">
-                                        <input [disabled]="true" class="form-control" type="text" [(ngModel)]="acc.name"
-                                            name="acc_0_name{{i}}_{{ind}}">
+                                        <input
+                                            [disabled]="true"
+                                            class="form-control"
+                                            type="text"
+                                            [(ngModel)]="acc.name"
+                                            name="acc_0_name{{ i }}_{{ ind }}"
+                                        />
                                     </p>
                                 </td>
 
                                 <td *ngIf="!tax.taxDetail || !tax.taxDetail.length">--</td>
-                                <td *ngIf="tax.taxDetail && tax.taxDetail.length && !taxToEdit[i]"
-                                    [attr.data-title]="localeData?.applied_from">
+                                <td
+                                    *ngIf="tax.taxDetail && tax.taxDetail.length && !taxToEdit[i]"
+                                    [attr.data-title]="localeData?.applied_from"
+                                >
                                     <div *ngFor="let t of tax.taxDetail">
-                                        {{moment(t.date).format(giddhDateFormat)}}
+                                        {{ moment(t.date).format(giddhDateFormat) }}
                                     </div>
                                 </td>
 
-                                <td *ngIf="tax.taxDetail && tax.taxDetail.length && taxToEdit[i]"
-                                    [attr.data-title]="localeData?.applied_from">
+                                <td
+                                    *ngIf="tax.taxDetail && tax.taxDetail.length && taxToEdit[i]"
+                                    [attr.data-title]="localeData?.applied_from"
+                                >
                                     <div *ngFor="let t of tax.taxDetail; let j = index; let last = last" class="mr-b1">
                                         <div class="input-group">
-                                            <input type="text" [ngModel]="moment(t.date).format(giddhDateFormat)"
-                                                name="tax_date_{{i}}_{{j}}" (focus)="showDatePickerInTable = true;"
-                                                class="form-control" required />
+                                            <input
+                                                type="text"
+                                                [ngModel]="moment(t.date).format(giddhDateFormat)"
+                                                name="tax_date_{{ i }}_{{ j }}"
+                                                (focus)="showDatePickerInTable = true"
+                                                class="form-control"
+                                                required
+                                            />
                                             <span class="input-group-btn">
-                                                <button type="button" class="btn btn-default"
-                                                    (click)="showDatePickerInTable = !showDatePickerInTable">
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-default"
+                                                    (click)="showDatePickerInTable = !showDatePickerInTable"
+                                                >
                                                     <i class="icon-calender"></i>
                                                 </button>
                                             </span>
                                         </div>
 
                                         <div *ngIf="showDatePickerInTable && taxToEdit[i]" class="tax-datepicker">
-                                            <datepicker name="tableDate{{i}}_{{j}}" [(ngModel)]="t.date"
-                                                (selectionDone)="showDatePickerInTable=!showDatePickerInTable"
-                                                [showWeeks]="false"></datepicker>
+                                            <datepicker
+                                                name="tableDate{{ i }}_{{ j }}"
+                                                [(ngModel)]="t.date"
+                                                (selectionDone)="showDatePickerInTable = !showDatePickerInTable"
+                                                [showWeeks]="false"
+                                            ></datepicker>
                                         </div>
                                     </div>
                                 </td>
 
                                 <td *ngIf="!tax.taxDetail || !tax.taxDetail.length">--</td>
 
-                                <td *ngIf="tax.taxDetail && tax.taxDetail.length && !taxToEdit[i]"
-                                    [attr.data-title]="localeData?.tax_percentage">
+                                <td
+                                    *ngIf="tax.taxDetail && tax.taxDetail.length && !taxToEdit[i]"
+                                    [attr.data-title]="localeData?.tax_percentage"
+                                >
                                     <div *ngFor="let t of tax.taxDetail">
-                                        {{t.taxValue}}
+                                        {{ t.taxValue }}
                                     </div>
                                 </td>
 
                                 <td *ngIf="tax.taxDetail && tax.taxDetail.length && taxToEdit[i]">
-                                    <div class="input-group mr-b1"
-                                        *ngFor="let t of tax.taxDetail; let j = index; let last = last">
-                                        <input type="text" class="form-control" [(ngModel)]="t.taxValue"
-                                            name="tax_taxValue_{{i}}_{{j}}">
-                                        <span *ngIf="!last" (click)="removeDateAndPercentage(i, j)"
-                                            class="input-group-addon cursor-pointer">
+                                    <div
+                                        class="input-group mr-b1"
+                                        *ngFor="let t of tax.taxDetail; let j = index; let last = last"
+                                    >
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            [(ngModel)]="t.taxValue"
+                                            name="tax_taxValue_{{ i }}_{{ j }}"
+                                        />
+                                        <span
+                                            *ngIf="!last"
+                                            (click)="removeDateAndPercentage(i, j)"
+                                            class="input-group-addon cursor-pointer"
+                                        >
                                             <i class="fa fa-minus cursor-pointer" aria-hidden="true"></i>
                                         </span>
-                                        <span *ngIf="last" (click)="addMoreDateAndPercentage(i)"
-                                            class="input-group-addon cursor-pointer">
+                                        <span
+                                            *ngIf="last"
+                                            (click)="addMoreDateAndPercentage(i)"
+                                            class="input-group-addon cursor-pointer"
+                                        >
                                             <i class="icon-plus cursor-pointer" aria-hidden="true"></i>
                                         </span>
                                     </div>
                                 </td>
 
-                                <td *ngIf="!taxToEdit[i]" [attr.data-title]="localeData?.file_date">{{tax.taxFileDate}}
+                                <td *ngIf="!taxToEdit[i]" [attr.data-title]="localeData?.file_date">
+                                    {{ tax.taxFileDate }}
                                 </td>
 
                                 <td *ngIf="taxToEdit[i]">
                                     <div class="custom-select position-relative">
-                                        <sh-select [options]="days" [isFilterEnabled]="false"
-                                            [(ngModel)]="availableTaxes[i].taxFileDate" name="tfd{{i}}"
-                                            [placeholder]="commonLocaleData?.app_select" [ItemHeight]="33"></sh-select>
+                                        <sh-select
+                                            [options]="days"
+                                            [isFilterEnabled]="false"
+                                            [(ngModel)]="availableTaxes[i].taxFileDate"
+                                            name="tfd{{ i }}"
+                                            [placeholder]="commonLocaleData?.app_select"
+                                            [ItemHeight]="33"
+                                        ></sh-select>
                                     </div>
                                 </td>
 
                                 <td [attr.data-title]="localeData?.duration">
                                     <div class="custom-select position-relative">
-                                        <sh-select [options]="duration" [disabled]="true" [isFilterEnabled]="false"
-                                            [(ngModel)]="availableTaxes[i].duration" name="duration{{i}}"
-                                            [placeholder]="commonLocaleData?.app_select" [ItemHeight]="33"></sh-select>
+                                        <sh-select
+                                            [options]="duration"
+                                            [disabled]="true"
+                                            [isFilterEnabled]="false"
+                                            [(ngModel)]="availableTaxes[i].duration"
+                                            name="duration{{ i }}"
+                                            [placeholder]="commonLocaleData?.app_select"
+                                            [ItemHeight]="33"
+                                        ></sh-select>
                                     </div>
                                 </td>
 
-                                <td [attr.data-title]="commonLocaleData?.app_type">{{tax.taxType ? tax.taxType :
-                                    commonLocaleData?.app_tax_types?.others}}</td>
+                                <td [attr.data-title]="commonLocaleData?.app_type">
+                                    {{ tax.taxType ? tax.taxType : commonLocaleData?.app_tax_types?.others }}
+                                </td>
 
                                 <td class="text-center ico-btn" [attr.data-title]="commonLocaleData?.app_action">
-
                                     <div class="d-flex">
-                                        <button (click)="selectedTax = tax;toggleTaxAsidePane()" type="button"
-                                            class="btn btn-xs">
-                                            <i class="icon-edit-pencil" aria-hidden="true"
-                                                [tooltip]="commonLocaleData?.app_edit"></i>
+                                        <button
+                                            (click)="selectedTax = tax; toggleTaxAsidePane()"
+                                            type="button"
+                                            class="btn btn-xs"
+                                        >
+                                            <i
+                                                class="icon-edit-pencil"
+                                                aria-hidden="true"
+                                                [tooltip]="commonLocaleData?.app_edit"
+                                            ></i>
                                         </button>
 
-                                        <button *ngIf="!taxToEdit[i]" type="button" class="btn btn-xs"
-                                            (click)="deleteTax(tax);">
-                                            <i class="fa fa-trash" aria-hidden="true"
-                                                [tooltip]="commonLocaleData?.app_delete"></i>
+                                        <button
+                                            *ngIf="!taxToEdit[i]"
+                                            type="button"
+                                            class="btn btn-xs"
+                                            (click)="deleteTax(tax)"
+                                        >
+                                            <i
+                                                class="fa fa-trash"
+                                                aria-hidden="true"
+                                                [tooltip]="commonLocaleData?.app_delete"
+                                            ></i>
                                         </button>
                                     </div>
-
                                 </td>
                             </tr>
                         </tbody>
@@ -164,25 +233,38 @@
                 </div>
             </div>
             <div class="no-data" *ngIf="!isLoading && !availableTaxes.length">
-                <no-data [primaryMessage]="commonLocaleData?.app_no_entries_found" [secondaryMessage]="' '" [secondaryMessage]="' '" [secondaryMessageClass]="'p-0'"></no-data>
+                <no-data
+                    [primaryMessage]="commonLocaleData?.app_no_entries_found"
+                    [secondaryMessage]="' '"
+                    [secondaryMessage]="' '"
+                    [secondaryMessageClass]="'p-0'"
+                ></no-data>
             </div>
         </div>
     </div>
 
     <!-- region open tax aside -->
     <div class="aside-overlay" *ngIf="taxAsideMenuState === 'in'"></div>
-    <aside-menu-create-tax-component [class]="taxAsideMenuState" [tax]="selectedTax" *ngIf="taxAsideMenuState === 'in'"
-        [@slideInOut]="taxAsideMenuState" [localeData]="localeData" [commonLocaleData]="commonLocaleData"
-        (closeEvent)="toggleTaxAsidePane()"></aside-menu-create-tax-component>
+    <aside-menu-create-tax-component
+        [class]="taxAsideMenuState"
+        [tax]="selectedTax"
+        *ngIf="taxAsideMenuState === 'in'"
+        [@slideInOut]="taxAsideMenuState"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        (closeEvent)="toggleTaxAsidePane()"
+    ></aside-menu-create-tax-component>
     <!-- endregion -->
-
 
     <!-- region delete Tax confirmation model -->
     <div bsModal #taxConfirmationModel="bs-modal" class="modal fade" role="dialog">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
-                <delete-tax-confirmation-model [message]="confirmationMessage" [commonLocaleData]="commonLocaleData"
-                    (userConfirmationEvent)="userConfirmation($event)">
+                <delete-tax-confirmation-model
+                    [message]="confirmationMessage"
+                    [commonLocaleData]="commonLocaleData"
+                    (userConfirmationEvent)="userConfirmation($event)"
+                >
                 </delete-tax-confirmation-model>
             </div>
         </div>
