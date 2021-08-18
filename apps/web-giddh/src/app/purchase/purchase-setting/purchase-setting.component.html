@@ -1,53 +1,104 @@
-<ng-container appTranslate [file]="'purchase-order/settings'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'purchase-order/settings'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <section id="setting-tab-wrapper" class="setting-tab-data">
         <div id="invoice-setting" class="invoice-control">
             <tabset class="tab-integration purchase-setting-tab">
                 <tab>
                     <ng-template tabHeading>
-                        <span class="icon-mail"></span> {{localeData?.integration}}
+                        <span class="icon-mail"></span> {{ localeData?.integration }}
                     </ng-template>
                     <div class="single-tab-block">
                         <div class="box clearfix mb-2">
-                            <h4 class="clearfix bd-rb">{{localeData?.integration}}<span>
-                                    {{localeData?.settings_note}}</span></h4>
+                            <h4 class="clearfix bd-rb">
+                                {{ localeData?.integration }}<span> {{ localeData?.settings_note }}</span>
+                            </h4>
                             <div class="clearfix">
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
-                                        <label>{{localeData?.from_email}}</label></div>
+                                        <label>{{ localeData?.from_email }}</label>
+                                    </div>
                                     <div class="col-sm-12 col-md-12 col-lg-9">
                                         <div class="row">
                                             <div class="col-md-5 col-sm-12 col-xs-12">
                                                 <div class="form-group mb-0">
-                                                    <div class="relative" [ngClass]="{'input-group': true}">
-                                                        <input type="email" class="form-control"
-                                                            [placeholder]="localeData?.enter_email" name="email"
+                                                    <div class="relative" [ngClass]="{ 'input-group': true }">
+                                                        <input
+                                                            type="email"
+                                                            class="form-control"
+                                                            [placeholder]="localeData?.enter_email"
+                                                            name="email"
                                                             [(ngModel)]="invoiceSettings.purchaseBillSettings.email"
-                                                            [disabled]="invoiceSettings.purchaseBillSettings.emailVerified" />
-                                                        <span class="input-group-addon"
-                                                            *ngIf="!invoiceSettings.purchaseBillSettings.emailVerified"><i
+                                                            [disabled]="
+                                                                invoiceSettings.purchaseBillSettings.emailVerified
+                                                            "
+                                                        />
+                                                        <span
+                                                            class="input-group-addon"
+                                                            *ngIf="!invoiceSettings.purchaseBillSettings.emailVerified"
+                                                            ><i
                                                                 class="fa fa-exclamation-circle"
-                                                                [tooltip]="localeData?.unverified"></i></span>
-                                                        <span class="input-group-addon verify-tick-icon"
-                                                            *ngIf="invoiceSettings.purchaseBillSettings.emailVerified"><i
-                                                                class="icon-tick"
-                                                                [tooltip]="localeData?.verified"></i></span>
+                                                                [tooltip]="localeData?.unverified"
+                                                            ></i
+                                                        ></span>
+                                                        <span
+                                                            class="input-group-addon verify-tick-icon"
+                                                            *ngIf="invoiceSettings.purchaseBillSettings.emailVerified"
+                                                            ><i class="icon-tick" [tooltip]="localeData?.verified"></i
+                                                        ></span>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-6 col-sm-12 row pl-0">
                                                 <div
-                                                    class="btn-wrapper d-flex align-items-center justify-content-center">
-                                                    <button class="btn btn-success mr-r15"
-                                                        (click)="verifyEmail(invoiceSettings.purchaseBillSettings.email)"
-                                                        [disabled]="!isEmailChanged && (!invoiceSettings.purchaseBillSettings.email || invoiceSettings.purchaseBillSettings.email.length < 4 || invoiceSettings.purchaseBillSettings.emailVerified)"
-                                                        *ngIf="!invoiceSettings.purchaseBillSettings.emailVerified">{{localeData?.verify}}</button>
-                                                    <span *ngIf="invoiceSettings.purchaseBillSettings.emailVerified"
-                                                        class="verified-text">{{localeData?.verified}}</span>
-                                                    <span class="delete-verified-icon"
-                                                        [ngClass]="{'delete-icon-opacity' : !invoiceSettings.purchaseBillSettings.email || invoiceSettings.purchaseBillSettings.email.length < 4, 'cursor-pointer': !(!invoiceSettings.purchaseBillSettings.email || invoiceSettings.purchaseBillSettings.email.length < 4)}"
-                                                        (click)="!(!invoiceSettings.purchaseBillSettings.email || invoiceSettings.purchaseBillSettings.email.length < 4) ? deleteEmail(invoiceSettings.purchaseBillSettings.email) : ''"><i
-                                                            class="icon-trash"></i></span>
+                                                    class="btn-wrapper d-flex align-items-center justify-content-center"
+                                                >
+                                                    <button
+                                                        class="btn btn-success mr-r15"
+                                                        (click)="
+                                                            verifyEmail(invoiceSettings.purchaseBillSettings.email)
+                                                        "
+                                                        [disabled]="
+                                                            !isEmailChanged &&
+                                                            (!invoiceSettings.purchaseBillSettings.email ||
+                                                                invoiceSettings.purchaseBillSettings.email.length < 4 ||
+                                                                invoiceSettings.purchaseBillSettings.emailVerified)
+                                                        "
+                                                        *ngIf="!invoiceSettings.purchaseBillSettings.emailVerified"
+                                                    >
+                                                        {{ localeData?.verify }}
+                                                    </button>
+                                                    <span
+                                                        *ngIf="invoiceSettings.purchaseBillSettings.emailVerified"
+                                                        class="verified-text"
+                                                        >{{ localeData?.verified }}</span
+                                                    >
+                                                    <span
+                                                        class="delete-verified-icon"
+                                                        [ngClass]="{
+                                                            'delete-icon-opacity':
+                                                                !invoiceSettings.purchaseBillSettings.email ||
+                                                                invoiceSettings.purchaseBillSettings.email.length < 4,
+                                                            'cursor-pointer': !(
+                                                                !invoiceSettings.purchaseBillSettings.email ||
+                                                                invoiceSettings.purchaseBillSettings.email.length < 4
+                                                            )
+                                                        }"
+                                                        (click)="
+                                                            !(
+                                                                !invoiceSettings.purchaseBillSettings.email ||
+                                                                invoiceSettings.purchaseBillSettings.email.length < 4
+                                                            )
+                                                                ? deleteEmail(
+                                                                      invoiceSettings.purchaseBillSettings.email
+                                                                  )
+                                                                : ''
+                                                        "
+                                                        ><i class="icon-trash"></i
+                                                    ></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -55,21 +106,28 @@
                                 </div>
                             </div>
 
-                            <div class="clearfix  pd-t1">
-
+                            <div class="clearfix pd-t1">
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12 col-lg-3">
-                                        <input type="checkbox" class="show-on-mobile" name="sendThroughGmail"
+                                        <input
+                                            type="checkbox"
+                                            class="show-on-mobile"
+                                            name="sendThroughGmail"
                                             [(ngModel)]="invoiceSettings.purchaseBillSettings.sendThroughGmail"
-                                            [disabled]="!isGmailIntegrated" />
-                                        <label>{{localeData?.send_email_gmail}}</label>
+                                            [disabled]="!isGmailIntegrated"
+                                        />
+                                        <label>{{ localeData?.send_email_gmail }}</label>
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-9 form-group d-flex align-items-center">
-                                        <input type="checkbox" class="hide-on-mobile" name="sendThroughGmail"
+                                        <input
+                                            type="checkbox"
+                                            class="hide-on-mobile"
+                                            name="sendThroughGmail"
                                             [(ngModel)]="invoiceSettings.purchaseBillSettings.sendThroughGmail"
-                                            [disabled]="!isGmailIntegrated" />
+                                            [disabled]="!isGmailIntegrated"
+                                        />
                                         <span class="ml-1 integrated-email" *ngIf="!isGmailIntegrated">
-                                            <a [href]="gmailAuthCodeUrl$ | async">{{localeData?.integrate_gmail}}</a>
+                                            <a [href]="gmailAuthCodeUrl$ | async">{{ localeData?.integrate_gmail }}</a>
                                         </span>
                                     </div>
                                 </div>
@@ -80,40 +138,61 @@
                 </tab>
                 <tab>
                     <ng-template tabHeading>
-                        <span class="icon-sales-order"></span> {{localeData?.pur_order}}
+                        <span class="icon-sales-order"></span> {{ localeData?.pur_order }}
                     </ng-template>
                     <div class="sales-order-tab single-tab-block">
                         <div class="box clearfix mb-2">
-                            <h4 class="clearfix bd-rb">{{localeData?.purchase_order}}</h4>
+                            <h4 class="clearfix bd-rb">{{ localeData?.purchase_order }}</h4>
                             <div class="clearfix">
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
-                                        <label>{{localeData?.default_expiry_days}}</label></div>
+                                        <label>{{ localeData?.default_expiry_days }}</label>
+                                    </div>
                                     <div class="col-sm-12 col-md-12 col-lg-9">
                                         <div class="default-expiry row">
                                             <div class="col-md-5">
                                                 <div class="form-group">
-                                                    <div class="expiry-days" [ngClass]="{'input-group': true}">
-                                                        <input type="tel" class="form-control" maxlength="3"
-                                                            placeholder="00" decimalDigitsDirective name="poDuePeriod"
-                                                            [(ngModel)]="invoiceSettings.purchaseBillSettings.poDuePeriod" />
-                                                        <span class="mr-l05"> {{commonLocaleData?.app_days}} </span>
+                                                    <div class="expiry-days" [ngClass]="{ 'input-group': true }">
+                                                        <input
+                                                            type="tel"
+                                                            class="form-control"
+                                                            maxlength="3"
+                                                            placeholder="00"
+                                                            decimalDigitsDirective
+                                                            name="poDuePeriod"
+                                                            [(ngModel)]="
+                                                                invoiceSettings.purchaseBillSettings.poDuePeriod
+                                                            "
+                                                        />
+                                                        <span class="mr-l05"> {{ commonLocaleData?.app_days }} </span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="clearfix  pd-t1">
+                                <div class="clearfix pd-t1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <input type="checkbox" class="show-on-mobile" name="changePOStatusOnExpiry"
-                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.changePOStatusOnExpiry" />
-                                            <label>{{localeData?.auto_change_status}}</label>
+                                            <input
+                                                type="checkbox"
+                                                class="show-on-mobile"
+                                                name="changePOStatusOnExpiry"
+                                                [(ngModel)]="
+                                                    invoiceSettings.purchaseBillSettings.changePOStatusOnExpiry
+                                                "
+                                            />
+                                            <label>{{ localeData?.auto_change_status }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9 form-group">
-                                            <input type="checkbox" class="hide-on-mobile" name="changePOStatusOnExpiry"
-                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.changePOStatusOnExpiry" />
+                                            <input
+                                                type="checkbox"
+                                                class="hide-on-mobile"
+                                                name="changePOStatusOnExpiry"
+                                                [(ngModel)]="
+                                                    invoiceSettings.purchaseBillSettings.changePOStatusOnExpiry
+                                                "
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -143,28 +222,47 @@
                                 <div class="clearfix pd-t1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <input type="checkbox" class="show-on-mobile" name="useCustomPONumber"
-                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.useCustomPONumber" />
-                                            <label>{{localeData?.custom_po_number}}</label>
+                                            <input
+                                                type="checkbox"
+                                                class="show-on-mobile"
+                                                name="useCustomPONumber"
+                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.useCustomPONumber"
+                                            />
+                                            <label>{{ localeData?.custom_po_number }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9">
                                             <div class="form-group clearfix">
-                                                <input type="checkbox" class="hide-on-mobile" name="useCustomPONumber"
-                                                    [(ngModel)]="invoiceSettings.purchaseBillSettings.useCustomPONumber" />
-                                                <div class=" d-inline-flex custom-estimation"
-                                                    *ngIf="invoiceSettings.purchaseBillSettings.useCustomPONumber">
+                                                <input
+                                                    type="checkbox"
+                                                    class="hide-on-mobile"
+                                                    name="useCustomPONumber"
+                                                    [(ngModel)]="invoiceSettings.purchaseBillSettings.useCustomPONumber"
+                                                />
+                                                <div
+                                                    class="d-inline-flex custom-estimation"
+                                                    *ngIf="invoiceSettings.purchaseBillSettings.useCustomPONumber"
+                                                >
                                                     <div class="d-inline-flex position-relative">
-                                                        <label>{{localeData?.initial_number}}</label>
-                                                        <input type="text"
+                                                        <label>{{ localeData?.initial_number }}</label>
+                                                        <input
+                                                            type="text"
                                                             class="form-control text-right initial-number"
                                                             name="initialNumber"
-                                                            [(ngModel)]="invoiceSettings.purchaseBillSettings.initialPONumber">
+                                                            [(ngModel)]="
+                                                                invoiceSettings.purchaseBillSettings.initialPONumber
+                                                            "
+                                                        />
                                                     </div>
                                                     <div class="d-inline-flex position-relative">
-                                                        <label class="r-0">{{commonLocaleData?.app_prefix}}</label>
-                                                        <input type="text" class="form-control text-right"
+                                                        <label class="r-0">{{ commonLocaleData?.app_prefix }}</label>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control text-right"
                                                             name="prefixNumber"
-                                                            [(ngModel)]="invoiceSettings.purchaseBillSettings.poNumberPrefix">
+                                                            [(ngModel)]="
+                                                                invoiceSettings.purchaseBillSettings.poNumberPrefix
+                                                            "
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>
@@ -178,39 +276,55 @@
                 </tab>
                 <tab>
                     <ng-template tabHeading>
-                        <span class="icon-invoice-icon"></span>{{localeData?.pur_bill}}
+                        <span class="icon-invoice-icon"></span>{{ localeData?.pur_bill }}
                     </ng-template>
                     <div class="single-tab-block">
                         <div class="box clearfix mb-2">
-                            <h4 class="clearfix bd-rb">{{localeData?.purchase_bill}}</h4>
+                            <h4 class="clearfix bd-rb">{{ localeData?.purchase_bill }}</h4>
                             <div class="clearfix">
                                 <div class="clearfix">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <label>{{localeData?.bill_lock_date}}</label>
+                                            <label>{{ localeData?.bill_lock_date }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9">
                                             <div class="form-group mb-0 bill-lock-date">
-                                                <input type="text" class="form-control invoice-lock-date"
-                                                    name="lockDate" bsDatepicker #dp="bsDatepicker"
+                                                <input
+                                                    type="text"
+                                                    class="form-control invoice-lock-date"
+                                                    name="lockDate"
+                                                    bsDatepicker
+                                                    #dp="bsDatepicker"
                                                     [(ngModel)]="invoiceSettings.purchaseBillSettings.lockDate"
-                                                    [bsConfig]="{ adaptivePosition: true, dateInputFormat: giddhDateFormat}">
+                                                    [bsConfig]="{
+                                                        adaptivePosition: true,
+                                                        dateInputFormat: giddhDateFormat
+                                                    }"
+                                                />
                                                 <span class="icon-calender" (click)="dp.toggle()"></span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="clearfix  pd-t1">
+                                <div class="clearfix pd-t1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <input type="checkbox" class="show-on-mobile" name="enableNarration"
-                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.enableNarration" />
-                                            <label>{{localeData?.show_narration_ledger}}</label>
+                                            <input
+                                                type="checkbox"
+                                                class="show-on-mobile"
+                                                name="enableNarration"
+                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.enableNarration"
+                                            />
+                                            <label>{{ localeData?.show_narration_ledger }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9 form-group">
-                                            <input type="checkbox" class="hide-on-mobile" name="enableNarration"
-                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.enableNarration" />
+                                            <input
+                                                type="checkbox"
+                                                class="hide-on-mobile"
+                                                name="enableNarration"
+                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.enableNarration"
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -224,9 +338,12 @@
     </section>
     <ng-template #buttonsSection>
         <div class="btn-group mr-t2" role="group" aria-label="Basic example">
-            <button type="button" class="btn btn-success mr-r1"
-                (click)="updateForm()">{{commonLocaleData?.app_save}}</button>
-            <button type="button" class="btn btn-cancel" (click)="resetForm()">{{commonLocaleData?.app_cancel}}</button>
+            <button type="button" class="btn btn-success mr-r1" (click)="updateForm()">
+                {{ commonLocaleData?.app_save }}
+            </button>
+            <button type="button" class="btn btn-cancel" (click)="resetForm()">
+                {{ commonLocaleData?.app_cancel }}
+            </button>
         </div>
     </ng-template>
 </ng-container>

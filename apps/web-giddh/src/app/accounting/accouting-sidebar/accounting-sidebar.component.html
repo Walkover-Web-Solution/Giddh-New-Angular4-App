@@ -1,15 +1,25 @@
 <ul class="menu-list">
-    <li><a class="cp" (click)="setSelectedPage('Contra', 'voucher', 'purchases')"
-            [ngClass]="{ 'active-parent': selectedVoucher === 'Contra'}">{{commonLocaleData?.app_keys?.f4}}:
-            {{commonLocaleData?.app_voucher_types?.contra}}</a></li>
+    <li>
+        <a
+            class="cp"
+            (click)="setSelectedPage('Contra', 'voucher', 'purchases')"
+            [ngClass]="{ 'active-parent': selectedVoucher === 'Contra' }"
+            >{{ commonLocaleData?.app_keys?.f4 }}: {{ commonLocaleData?.app_voucher_types?.contra }}</a
+        >
+    </li>
 
     <!--
     <li><a class="cp" (click)="setSelectedPage('Payment', 'voucher', 'purchases')"
             [ngClass]="{ 'active-parent': selectedVoucher === 'Payment'}">F5: Payment</a></li> -->
 
-    <li><a class="cp" (click)="setSelectedPage('Receipt', 'voucher', 'purchases')"
-            [ngClass]="{ 'active-parent': selectedVoucher === 'Receipt'}">{{commonLocaleData?.app_keys?.f6}}:
-            {{commonLocaleData?.app_voucher_types?.receipt}}</a></li>
+    <li>
+        <a
+            class="cp"
+            (click)="setSelectedPage('Receipt', 'voucher', 'purchases')"
+            [ngClass]="{ 'active-parent': selectedVoucher === 'Receipt' }"
+            >{{ commonLocaleData?.app_keys?.f6 }}: {{ commonLocaleData?.app_voucher_types?.receipt }}</a
+        >
+    </li>
 
     <!--    "isHidden" class  if user is not able to access the module
     <li><a class="cp" (click)="setSelectedPage('Journal', 'voucher', null)"
@@ -56,5 +66,4 @@
             [ngClass]="{ 'active-child': selectedVoucher === 'Debit note' && selectedGrid === 'invoice'}"
             [hidden]="selectedVoucher !== 'Debit note'"><span class="dblUnderlined">I:</span>As Invoice</a></li>
     -->
-
 </ul>
