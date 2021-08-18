@@ -1,5 +1,9 @@
-<ng-container appTranslate [file]="'home/revenue'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'home/revenue'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <div id="pie-chart" class="card" *ngIf="!graphExpanded">
         <div class="card-body">
             <div class="row">
@@ -8,30 +12,48 @@
                         <div class="panel-heading pl-0 pt-0 clearfix">
                             <div class="panel-heading-inner-content w-100">
                                 <div class="btn-group gst-dropdown cursor-pointer pull-left" dropdown>
-                                    <span id="button-basic" dropdownToggle class="dropdown-toggle"
-                                        aria-controls="dropdown-basic">
+                                    <span
+                                        id="button-basic"
+                                        dropdownToggle
+                                        class="dropdown-toggle"
+                                        aria-controls="dropdown-basic"
+                                    >
                                         <span *ngIf="activeGraphType !== undefined">
-                                            <strong>{{activeGraphType['uniqueName']}}</strong> </span> <span
-                                            class="icon-arrow-down mr-l1"></span>
+                                            <strong>{{ activeGraphType["uniqueName"] }}</strong>
+                                        </span>
+                                        <span class="icon-arrow-down mr-l1"></span>
                                     </span>
-                                    <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
-                                        aria-labelledby="button-basic">
-                                        <li role="menuitem" *ngFor="let gtype of revenueGraphTypes;"><a
-                                                class="dropdown-item"
-                                                (click)="changeGraphType(gtype);">{{gtype.uniqueName}}</a></li>
+                                    <ul
+                                        id="dropdown-basic"
+                                        *dropdownMenu
+                                        class="dropdown-menu"
+                                        role="menu"
+                                        aria-labelledby="button-basic"
+                                    >
+                                        <li role="menuitem" *ngFor="let gtype of revenueGraphTypes">
+                                            <a class="dropdown-item" (click)="changeGraphType(gtype)">{{
+                                                gtype.uniqueName
+                                            }}</a>
+                                        </li>
                                     </ul>
                                 </div>
 
                                 <div class="refresh-btn">
                                     <i class="icon-refresh pull-right pd-l15" (click)="refreshChart()"></i>
-                                    <span class="this-week pull-right"><span class="icon-collapse-icon mr-l1"
-                                            [tooltip]="commonLocaleData?.app_expand" (click)="showLineChart()"></span>
+                                    <span class="this-week pull-right"
+                                        ><span
+                                            class="icon-collapse-icon mr-l1"
+                                            [tooltip]="commonLocaleData?.app_expand"
+                                            (click)="showLineChart()"
+                                        ></span>
                                     </span>
                                     <ul class="dashboard-option pull-right">
-                                        <li class="secondary-dark-bg"> <span></span> {{commonLocaleData?.app_last_week}}
+                                        <li class="secondary-dark-bg">
+                                            <span></span> {{ commonLocaleData?.app_last_week }}
                                         </li>
-                                        <li class="secondary-light-bg"> <span></span>
-                                            {{commonLocaleData?.app_this_week}}</li>
+                                        <li class="secondary-light-bg">
+                                            <span></span> {{ commonLocaleData?.app_this_week }}
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -43,8 +65,11 @@
                             <div class="chart-div" google-chart chart="myChartObject">
                                 <perfect-scrollbar [scrollIndicators]="true">
                                     <div id="leftIncomeChart">
-                                        <highcharts-chart *ngIf="chartOptions" [Highcharts]="revenueChart"
-                                            [options]="chartOptions"></highcharts-chart>
+                                        <highcharts-chart
+                                            *ngIf="chartOptions"
+                                            [Highcharts]="revenueChart"
+                                            [options]="chartOptions"
+                                        ></highcharts-chart>
                                     </div>
                                 </perfect-scrollbar>
                             </div>
@@ -54,49 +79,66 @@
                 <div class="col-lg-3 col-md-12">
                     <div class="total-sale-detail" *ngIf="activeGraphType !== undefined">
                         <div class="single-sale-detail">
-                            <p>{{commonLocaleData?.app_total}} {{activeGraphType['uniqueName']}}
-                                ({{commonLocaleData?.app_this_week}})</p>
+                            <p>
+                                {{ commonLocaleData?.app_total }} {{ activeGraphType["uniqueName"] }} ({{
+                                    commonLocaleData?.app_this_week
+                                }})
+                            </p>
                             <h3>
                                 <span class="d-inline-flex">
-                                    <amount-field [amount]="summaryData.totalCurrent" [currencySymbol]="activeCompany.baseCurrencySymbol"
-                                        [currencyCode]="activeCompany.baseCurrency">
-                                    </amount-field>
-                                </span>
-                            </h3>
-
-                        </div>
-                        <div class="single-sale-detail">
-                            <p>{{commonLocaleData?.app_total}} {{activeGraphType['uniqueName']}}
-                                ({{commonLocaleData?.app_last_week}})</p>
-                            <h3>
-                                <span class="d-inline-flex">
-                                    <amount-field [amount]="summaryData.totalLast" [currencySymbol]="activeCompany.baseCurrencySymbol"
-                                        [currencyCode]="activeCompany.baseCurrency">
+                                    <amount-field
+                                        [amount]="summaryData.totalCurrent"
+                                        [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                        [currencyCode]="activeCompany.baseCurrency"
+                                    >
                                     </amount-field>
                                 </span>
                             </h3>
                         </div>
                         <div class="single-sale-detail">
-                            <p>{{localeData?.highest}} {{activeGraphType['displayName']}}</p>
+                            <p>
+                                {{ commonLocaleData?.app_total }} {{ activeGraphType["uniqueName"] }} ({{
+                                    commonLocaleData?.app_last_week
+                                }})
+                            </p>
                             <h3>
                                 <span class="d-inline-flex">
-                                    <amount-field [amount]="summaryData.highest" [currencySymbol]="activeCompany.baseCurrencySymbol"
-                                        [currencyCode]="activeCompany.baseCurrency">
+                                    <amount-field
+                                        [amount]="summaryData.totalLast"
+                                        [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                        [currencyCode]="activeCompany.baseCurrency"
+                                    >
                                     </amount-field>
                                 </span>
                             </h3>
-                            <span>{{summaryData.highestLabel}}</span>
                         </div>
                         <div class="single-sale-detail">
-                            <p>{{localeData?.lowest}} {{activeGraphType['displayName']}}</p>
+                            <p>{{ localeData?.highest }} {{ activeGraphType["displayName"] }}</p>
                             <h3>
                                 <span class="d-inline-flex">
-                                    <amount-field [amount]="summaryData.lowest" [currencySymbol]="activeCompany.baseCurrencySymbol"
-                                        [currencyCode]="activeCompany.baseCurrency">
+                                    <amount-field
+                                        [amount]="summaryData.highest"
+                                        [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                        [currencyCode]="activeCompany.baseCurrency"
+                                    >
                                     </amount-field>
                                 </span>
                             </h3>
-                            <span>{{summaryData.lowestLabel}}</span>
+                            <span>{{ summaryData.highestLabel }}</span>
+                        </div>
+                        <div class="single-sale-detail">
+                            <p>{{ localeData?.lowest }} {{ activeGraphType["displayName"] }}</p>
+                            <h3>
+                                <span class="d-inline-flex">
+                                    <amount-field
+                                        [amount]="summaryData.lowest"
+                                        [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                        [currencyCode]="activeCompany.baseCurrency"
+                                    >
+                                    </amount-field>
+                                </span>
+                            </h3>
+                            <span>{{ summaryData.lowestLabel }}</span>
                         </div>
                     </div>
                 </div>
@@ -110,25 +152,37 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="date-range-block">
-                                <label>{{localeData?.date_range}}</label>
+                                <label>{{ localeData?.date_range }}</label>
                                 <div class="date-range-input">
                                     <span class="icon-calender" (click)="dp1.toggle()"></span>
-                                    <input type="text" readonly placeholder="{{localeData?.select_dates}}"
-                                        class="form-control" #dp1="bsDaterangepicker"
+                                    <input
+                                        type="text"
+                                        readonly
+                                        placeholder="{{ localeData?.select_dates }}"
+                                        class="form-control"
+                                        #dp1="bsDaterangepicker"
                                         [bsValue]="previousDateRangePickerValue"
-                                        (bsValueChange)="setPreviousDate($event)" bsDaterangepicker>
+                                        (bsValueChange)="setPreviousDate($event)"
+                                        bsDaterangepicker
+                                    />
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="date-range-block">
-                                <label>{{localeData?.compare_to}}</label>
+                                <label>{{ localeData?.compare_to }}</label>
                                 <div class="date-range-input">
                                     <span class="icon-calender" (click)="dp2.toggle()"></span>
-                                    <input type="text" readonly placeholder="{{localeData?.select_dates}}"
-                                        class="form-control" #dp2="bsDaterangepicker"
-                                        [bsValue]="currentDateRangePickerValue" (bsValueChange)="setCurrentDate($event)"
-                                        bsDaterangepicker>
+                                    <input
+                                        type="text"
+                                        readonly
+                                        placeholder="{{ localeData?.select_dates }}"
+                                        class="form-control"
+                                        #dp2="bsDaterangepicker"
+                                        [bsValue]="currentDateRangePickerValue"
+                                        (bsValueChange)="setCurrentDate($event)"
+                                        bsDaterangepicker
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -139,7 +193,7 @@
                         <div class="collapse-close" (click)="showColumnChart()">
                             <span class="icon-collapse-icon" [tooltip]="commonLocaleData?.app_collapse"></span>
                         </div>
-                        <h1>{{commonLocaleData?.app_total}} {{activeGraphType['displayName']}}</h1>
+                        <h1>{{ commonLocaleData?.app_total }} {{ activeGraphType["displayName"] }}</h1>
                     </div>
                 </div>
             </div>
@@ -149,41 +203,56 @@
                 <div class="clearfix top-dates">
                     <div class="pull-left about-date">
                         <div class="active-date">
-                            <span></span>{{this.getPreviousWeekStartEndDate[0] | date}} -
-                            {{this.getPreviousWeekStartEndDate[1] | date}}
+                            <span></span>{{ this.getPreviousWeekStartEndDate[0] | date }} -
+                            {{ this.getPreviousWeekStartEndDate[1] | date }}
                         </div>
                         <div class="in-active-date">
-                            <span></span>{{this.getCurrentWeekStartEndDate[0] | date}} -
-                            {{this.getCurrentWeekStartEndDate[1] | date}}
+                            <span></span>{{ this.getCurrentWeekStartEndDate[0] | date }} -
+                            {{ this.getCurrentWeekStartEndDate[1] | date }}
                         </div>
                         <div class="pull-right revenue-tabs">
                             <div class="total-sales-tabs">
-                                <a [ngClass]="{'active-graph': graphParams.interval == 'daily'}"
-                                    (click)="updateChartFrequency('daily')">{{localeData?.daily}}</a>|<a
-                                    [ngClass]="{'active-graph': graphParams.interval == 'weekly'}"
-                                    (click)="updateChartFrequency('weekly')">{{localeData?.weekly}}</a>|<a
-                                    [ngClass]="{'active-graph': graphParams.interval == 'monthly'}"
-                                    (click)="updateChartFrequency('monthly')">{{localeData?.monthly}}</a>
-
+                                <a
+                                    [ngClass]="{ 'active-graph': graphParams.interval == 'daily' }"
+                                    (click)="updateChartFrequency('daily')"
+                                    >{{ localeData?.daily }}</a
+                                >|<a
+                                    [ngClass]="{ 'active-graph': graphParams.interval == 'weekly' }"
+                                    (click)="updateChartFrequency('weekly')"
+                                    >{{ localeData?.weekly }}</a
+                                >|<a
+                                    [ngClass]="{ 'active-graph': graphParams.interval == 'monthly' }"
+                                    (click)="updateChartFrequency('monthly')"
+                                    >{{ localeData?.monthly }}</a
+                                >
                             </div>
                         </div>
                     </div>
                 </div>
                 <div id="incomeChart">
                     <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="requestInFlight"></giddh-page-loader>
-                    <highcharts-chart *ngIf="!requestInFlight && chartOptions" [Highcharts]="revenueChart"
-                        [options]="chartOptions"></highcharts-chart>
+                    <highcharts-chart
+                        *ngIf="!requestInFlight && chartOptions"
+                        [Highcharts]="revenueChart"
+                        [options]="chartOptions"
+                    ></highcharts-chart>
                 </div>
                 <div class="total-sale-data clearfix">
                     <div class="row">
                         <div class="col-sm-3 single-sale-data">
                             <div>
-                                <p>{{commonLocaleData?.app_total}} {{activeGraphType['displayName']}}
-                                    ({{getCurrentWeekStartEndDate[1] | date}})</p>
+                                <p>
+                                    {{ commonLocaleData?.app_total }} {{ activeGraphType["displayName"] }} ({{
+                                        getCurrentWeekStartEndDate[1] | date
+                                    }})
+                                </p>
                                 <h3>
                                     <span class="d-inline-flex">
-                                        <amount-field [amount]="summaryData.totalCurrent" [currencySymbol]="activeCompany.baseCurrencySymbol"
-                                            [currencyCode]="activeCompany.baseCurrency">
+                                        <amount-field
+                                            [amount]="summaryData.totalCurrent"
+                                            [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                            [currencyCode]="activeCompany.baseCurrency"
+                                        >
                                         </amount-field>
                                     </span>
                                 </h3>
@@ -191,12 +260,18 @@
                         </div>
                         <div class="col-sm-3 single-sale-data">
                             <div>
-                                <p>{{commonLocaleData?.app_total}} {{activeGraphType['displayName']}}
-                                    ({{getPreviousWeekStartEndDate[1] | date}})</p>
+                                <p>
+                                    {{ commonLocaleData?.app_total }} {{ activeGraphType["displayName"] }} ({{
+                                        getPreviousWeekStartEndDate[1] | date
+                                    }})
+                                </p>
                                 <h3>
                                     <span class="d-inline-flex">
-                                        <amount-field [amount]="summaryData.totalLast" [currencySymbol]="activeCompany.baseCurrencySymbol"
-                                            [currencyCode]="activeCompany.baseCurrency">
+                                        <amount-field
+                                            [amount]="summaryData.totalLast"
+                                            [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                            [currencyCode]="activeCompany.baseCurrency"
+                                        >
                                         </amount-field>
                                     </span>
                                 </h3>
@@ -204,28 +279,34 @@
                         </div>
                         <div class="col-sm-3 single-sale-data">
                             <div>
-                                <p>{{localeData?.highest}} {{activeGraphType['displayName']}}</p>
+                                <p>{{ localeData?.highest }} {{ activeGraphType["displayName"] }}</p>
                                 <h3>
                                     <span class="d-inline-flex">
-                                        <amount-field [amount]="summaryData.highest" [currencySymbol]="activeCompany.baseCurrencySymbol"
-                                            [currencyCode]="activeCompany.baseCurrency">
+                                        <amount-field
+                                            [amount]="summaryData.highest"
+                                            [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                            [currencyCode]="activeCompany.baseCurrency"
+                                        >
                                         </amount-field>
                                     </span>
                                 </h3>
-                                <span class="date-wise-sale">{{summaryData.highestLabel}}</span>
+                                <span class="date-wise-sale">{{ summaryData.highestLabel }}</span>
                             </div>
                         </div>
                         <div class="col-sm-3 single-sale-data">
                             <div>
-                                <p>{{localeData?.lowest}} {{activeGraphType['displayName']}}</p>
+                                <p>{{ localeData?.lowest }} {{ activeGraphType["displayName"] }}</p>
                                 <h3>
                                     <span class="d-inline-flex">
-                                        <amount-field [amount]="summaryData.lowest" [currencySymbol]="activeCompany.baseCurrencySymbol"
-                                            [currencyCode]="activeCompany.baseCurrency">
+                                        <amount-field
+                                            [amount]="summaryData.lowest"
+                                            [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                            [currencyCode]="activeCompany.baseCurrency"
+                                        >
                                         </amount-field>
                                     </span>
                                 </h3>
-                                <span class="date-wise-sale">{{summaryData.lowestLabel}}</span>
+                                <span class="date-wise-sale">{{ summaryData.lowestLabel }}</span>
                             </div>
                         </div>
                     </div>

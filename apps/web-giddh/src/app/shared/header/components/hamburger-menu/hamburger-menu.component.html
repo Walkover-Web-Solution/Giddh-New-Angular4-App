@@ -1,10 +1,15 @@
-<ul class="nav navbar-nav hamburger-menu-icon" [ngClass]="{'page-has-heading': pageHeading?.trim()}">
-    <li class="hamburger-menu cp" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
-        <button class="btn mr-0" id="hamburger-menu"
+<ul class="nav navbar-nav hamburger-menu-icon" [ngClass]="{ 'page-has-heading': pageHeading?.trim() }">
+    <li class="hamburger-menu cp" (click)="sideBarStateChange((sideMenu.isopen = !sideMenu.isopen))">
+        <button
+            class="btn mr-0"
+            id="hamburger-menu"
             [tooltip]="sideMenu.isopen ? commonLocaleData?.app_collapse : commonLocaleData?.app_expand"
-            placement="right">
+            placement="right"
+        >
             <i class="icon-bar"></i>
         </button>
-        <h4 class="inline text-capitalize" id="giddh-page-heading-link" *ngIf="pageHeading?.trim() && isMobileView"><span>{{pageHeading}}</span></h4>
+        <h4 class="inline text-capitalize" id="giddh-page-heading-link" *ngIf="pageHeading?.trim() && isMobileView">
+            <span>{{ pageHeading }}</span>
+        </h4>
     </li>
 </ul>

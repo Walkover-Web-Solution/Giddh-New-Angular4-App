@@ -76,8 +76,8 @@
 .linked-entities {
     width: 200px;
 }
-.mobile-view{
-    display:none !important;
+.mobile-view {
+    display: none !important;
 }
 
 .expand-collapse-btn a {
@@ -91,13 +91,13 @@
     align-items: center;
     font-size: 18px;
     color: $midnight-blue;
-    &:hover{
+    &:hover {
         background: $chetwode-blue;
         color: $white;
     }
 }
 
-.export-btn{
+.export-btn {
     height: 36px;
 }
 
@@ -128,7 +128,7 @@ button.btn.btn-filter {
     .expand-collapse-btn.form-group {
         display: none !important;
     }
-    .export-btn{
+    .export-btn {
         display: none !important;
     }
     .expand-btn-hide-desktop {
@@ -137,13 +137,13 @@ button.btn.btn-filter {
     .linked-entities {
         margin-bottom: 0 !important;
     }
-    .desktop-view{
-        display:none !important;
+    .desktop-view {
+        display: none !important;
     }
-    .mobile-view{
-        display:inline-block !important;
+    .mobile-view {
+        display: inline-block !important;
     }
-    .advance-icon{
+    .advance-icon {
         margin-right: 0 !important;
     }
 }
@@ -166,8 +166,8 @@ button.btn.btn-filter {
         vertical-align: middle;
     }
 }
-@media (min-width: 769px){
-    .table-responsive{
+@media (min-width: 769px) {
+    .table-responsive {
         max-height: calc(100vh - 340px);
         overflow-y: auto;
     }
@@ -183,25 +183,25 @@ button.btn.btn-filter {
     border-left: 0;
 }
 
-@media (max-width: 1100px){
-    .company-date-picker{
+@media (max-width: 1100px) {
+    .company-date-picker {
         flex-direction: column;
     }
-    .linked-entities{
+    .linked-entities {
         padding-bottom: 10px;
     }
 }
 
-@media (max-width: 475px){
-    .clear-filter-responsive{
+@media (max-width: 475px) {
+    .clear-filter-responsive {
         display: block !important;
-        width:100%;
-        .btn{
-            width:100%;
+        width: 100%;
+        .btn {
+            width: 100%;
         }
     }
 
-    .clear-filter.form-group{
+    .clear-filter.form-group {
         display: none;
     }
 }
