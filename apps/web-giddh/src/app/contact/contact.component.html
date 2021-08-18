@@ -488,8 +488,7 @@
                     [localeData]="localeData"
                     [commonLocaleData]="commonLocaleData"
                     (creteNewCustomerEvent)="openAddAndManage('customer')"
-                >
-                </aging-report>
+                ></aging-report>
             </tab>
             <!-- endregion -->
         </tabset>
@@ -814,7 +813,7 @@
                                             [(ngModel)]="account.isSelected"
                                             [ngClass]="{
                                                 'checkbox-visible': selectedCheckedContacts.length || isMobileScreen,
-                                                'position-absolute': !selectedCheckedContacts.length
+                                                'pos-abs': !selectedCheckedContacts.length
                                             }"
                                         />
                                     </span>
@@ -893,11 +892,11 @@
                                                                     </a>
                                                                 </li>
 
-                                                                <!-- <li class="li-link">
+                                                                <!--<li class="li-link">
                                                                     <a href="javascript: void 0"
                                                                         (click)="performActions(3, account, $event )">{{commonLocaleData?.app_send_sms}}
                                                                     </a>
-                                                                </li> -->
+                                                                </li>-->
 
                                                                 <li class="li-link">
                                                                     <a
@@ -1171,7 +1170,7 @@
                                             [(ngModel)]="account.isSelected"
                                             [ngClass]="{
                                                 'checkbox-visible': selectedCheckedContacts.length || isMobileScreen,
-                                                'position-absolute': !selectedCheckedContacts.length
+                                                'pos-abs': !selectedCheckedContacts.length
                                             }"
                                         />
                                     </span>
@@ -1251,11 +1250,11 @@
                                                                     </a>
                                                                 </li>
 
-                                                                <!-- <li class="li-link">
+                                                                <!--<li class="li-link">
                                                                     <a href="javascript: void 0"
                                                                         (click)="performActions(3, account, $event )">{{commonLocaleData?.app_send_sms}}
                                                                     </a>
-                                                                </li> -->
+                                                                </li>-->
 
                                                                 <li class="li-link">
                                                                     <a

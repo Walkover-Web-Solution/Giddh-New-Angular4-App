@@ -484,7 +484,6 @@
                                                         [(ngModel)]="txn.particular.uniqueName"
                                                         [ItemHeight]="67"
                                                         [defaultValue]="txn.particular.name"
-                                                        [fixedValue]="txn.particular.name"
                                                         [placeholder]="localeData?.by_select_accounts"
                                                     >
                                                         <ng-template #optionTemplate let-option="option">
@@ -666,8 +665,7 @@
                                             >
                                             </amount-field>
                                         </span>
-
-                                        <p class="mb-0 amount-total" *ngIf="vm.isMultiCurrencyAvailable">
+                                        <p class="mb-0 pr-1 amount-total" *ngIf="vm.isMultiCurrencyAvailable">
                                             <ng-container
                                                 *ngTemplateOutlet="
                                                     totalWithCurrencySymbol;
@@ -679,7 +677,8 @@
                                                                 : vm.convertedEntryTotal.drTotal
                                                     }
                                                 "
-                                            ></ng-container>
+                                            >
+                                            </ng-container>
                                         </p>
                                     </td>
                                 </tr>

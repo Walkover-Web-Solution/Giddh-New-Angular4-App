@@ -1,7 +1,7 @@
 class CreateNewCompanyPage {
 
     companyName(companyName) {
-        return cy.get('#name', { timeout: 80000 }).clear().type(companyName);
+        return cy.get('#name').clear().type(companyName);
     }
 
     country() {

@@ -121,6 +121,7 @@
                         </div>
                     </div>
                 </form>
+
                 <div class="table-responsive" [hidden]="!ledgersData?.results?.length">
                     <table class="table basic giddh-table pending-table on-mobile-view">
                         <thead class="thead-background1">
@@ -245,6 +246,7 @@
                                         <i class="fa fa-info-circle" placement="right" [tooltip]="item.errMsg"></i>
                                     </div>
                                 </td>
+
                                 <td
                                     *ngIf="
                                         !item.isSelected &&

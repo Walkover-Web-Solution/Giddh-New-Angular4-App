@@ -1,7 +1,7 @@
 class LedgerPage {
 
     clickAccount() {
-        return cy.xpath('//div[@class=\'ng-star-inserted\']//input[@placeholder=\'To Select Accounts\']', { timeout: 40000 })
+        return cy.xpath('//div[@class=\'ng-star-inserted\']//input[@placeholder=\'To Select Accounts\']')
     }
 
     inputAccount() {
