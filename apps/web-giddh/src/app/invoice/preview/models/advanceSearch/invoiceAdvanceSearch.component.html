@@ -1,320 +1,332 @@
 <div>
-
     <div class="modal-header theme-bg pd-2 pd-l2 pd-r2 clearfix">
-        <h3 class="modal-title bg" id="modal-title">{{commonLocaleData?.app_advance_search}} </h3>
+        <h3 class="modal-title bg" id="modal-title">{{ commonLocaleData?.app_advance_search }}</h3>
         <i class="icon-cross text-right close-modal" aria-hidden="true" (click)="onCancel()"></i>
     </div>
 
     <div class="modal-body pd-l2 pd-r2 clearfix" id="export-body">
-
         <form name="newRole" novalidate class="" autocomplete="off">
-
             <!--region invoice-->
             <div class="modal-wrap mr-b2" *ngIf="type === 'invoice'">
-
                 <div class="row">
-
                     <div class="col-md-4 col-sm-12">
-                        <label>{{localeData?.invoice_date_range}}</label>
+                        <label>{{ localeData?.invoice_date_range }}</label>
                     </div>
 
                     <div class="col-md-8 col-sm-12">
                         <div class="row">
-
                             <div class="col-md-6 col-sm-6 col-12 mr-b1">
-                                <sh-select [placeholder]="commonLocaleData?.app_select_action" [options]="dateOptions"
-                                    [ItemHeight]="33" (selected)="dateChanged($event, 'invoice')"></sh-select>
+                                <sh-select
+                                    [placeholder]="commonLocaleData?.app_select_action"
+                                    [options]="dateOptions"
+                                    [ItemHeight]="33"
+                                    (selected)="dateChanged($event, 'invoice')"
+                                ></sh-select>
                             </div>
 
                             <div class="col-md-6 col-sm-6 col-12">
-                                <giddh-datepicker name="invoiceDateRange" [(ngModel)]="request.invoiceDate" [placeholder]="commonLocaleData?.app_select_date">
+                                <giddh-datepicker
+                                    name="invoiceDateRange"
+                                    [(ngModel)]="request.invoiceDate"
+                                    [placeholder]="commonLocaleData?.app_select_date"
+                                >
                                 </giddh-datepicker>
                             </div>
-
                         </div>
                     </div>
-
                 </div>
 
                 <div class="row mt-2 mb-2">
-
                     <div class="col-md-4 col-sm-12">
-                        <label>{{localeData?.invoice_total_amount}}</label>
+                        <label>{{ localeData?.invoice_total_amount }}</label>
                     </div>
 
                     <div class="col-md-8 col-sm-12">
-
                         <div class="total-amount row mr-0 ml-0">
-
                             <div class="col-md-8 col-sm-6 col-6 pl-0 pr-0">
-                                <sh-select [placeholder]="commonLocaleData?.app_select" name="entryTotalBy"
-                                    [options]="filtersForEntryTotal" [ItemHeight]="33"
-                                    (selected)="invoiceTotalRangeChanged($event)"></sh-select>
+                                <sh-select
+                                    [placeholder]="commonLocaleData?.app_select"
+                                    name="entryTotalBy"
+                                    [options]="filtersForEntryTotal"
+                                    [ItemHeight]="33"
+                                    (selected)="invoiceTotalRangeChanged($event)"
+                                ></sh-select>
                             </div>
 
                             <div class="col-md-4 col-sm-6 col-6 pr-0">
-                                <input class="form-control" type="tel" placeholder="00" name="total"
-                                    [(ngModel)]="request.total">
-
+                                <input
+                                    class="form-control"
+                                    type="tel"
+                                    placeholder="00"
+                                    name="total"
+                                    [(ngModel)]="request.total"
+                                />
                             </div>
-
                         </div>
-
                     </div>
                 </div>
 
-                <hr>
+                <hr />
 
                 <div class="row mt-2">
-
                     <div class="col-md-4 col-sm-12">
-                        <label>{{localeData?.due_date_range}}</label>
+                        <label>{{ localeData?.due_date_range }}</label>
                     </div>
 
                     <div class="col-md-8 col-sm-12">
-
                         <div class="row mr-0 ml-0">
-
                             <div class="col-md-4 col-sm-6 col-6 pl-0 pr-0">
-                                <sh-select [placeholder]="commonLocaleData?.app_select_action" [options]="dateOptions"
-                                    [ItemHeight]="33" (selected)="dateChanged($event, 'due')"></sh-select>
+                                <sh-select
+                                    [placeholder]="commonLocaleData?.app_select_action"
+                                    [options]="dateOptions"
+                                    [ItemHeight]="33"
+                                    (selected)="dateChanged($event, 'due')"
+                                ></sh-select>
                             </div>
 
                             <div class="col-md-8 col-sm-6 col-6 pr-0">
                                 <giddh-datepicker name="invoiceDateRange" [(ngModel)]="request.dueDate">
                                 </giddh-datepicker>
                             </div>
-
                         </div>
                     </div>
                 </div>
 
                 <div class="row mt-2">
-
                     <div class="col-md-4 col-sm-12">
-                        <label>{{commonLocaleData?.app_due_amount}}</label>
+                        <label>{{ commonLocaleData?.app_due_amount }}</label>
                     </div>
 
                     <div class="col-md-8 col-sm-12">
-
                         <div class="due-amount row mr-0 ml-0">
-
                             <div class="col-md-8 col-sm-6 col-6 pl-0 pr-0">
-                                <sh-select [placeholder]="commonLocaleData?.app_select" name="entryTotalBy"
-                                    [options]="filtersForEntryTotal" [ItemHeight]="33"
-                                    (selected)="dueTotalRangeChanged($event)"></sh-select>
+                                <sh-select
+                                    [placeholder]="commonLocaleData?.app_select"
+                                    name="entryTotalBy"
+                                    [options]="filtersForEntryTotal"
+                                    [ItemHeight]="33"
+                                    (selected)="dueTotalRangeChanged($event)"
+                                ></sh-select>
                             </div>
 
                             <div class="col-md-4 col-sm-6 col-6 pr-0">
-                                <input class="form-control" type="tel" placeholder="00" name="balanceDue"
-                                    [(ngModel)]="request.balanceDue">
+                                <input
+                                    class="form-control"
+                                    type="tel"
+                                    placeholder="00"
+                                    name="balanceDue"
+                                    [(ngModel)]="request.balanceDue"
+                                />
                             </div>
-
                         </div>
                     </div>
-
                 </div>
                 <div class="row mt-2">
-
                     <div class="col-md-4 col-sm-12">
-                        <label>{{commonLocaleData?.app_status}}</label>
+                        <label>{{ commonLocaleData?.app_status }}</label>
                     </div>
 
                     <div class="col-md-8 col-sm-12">
-
                         <div class="status-description row mr-0 ml-0">
-
                             <div class="col-md-8 col-sm-12 pl-0 pr-0">
-                                <sh-select [placeholder]="commonLocaleData?.app_select_action" [multiple]="true"
-                                    [options]="statusDropdownOptions" name="balanceStatus"
-                                    [(ngModel)]="request.balanceStatus" [ItemHeight]="33"></sh-select>
+                                <sh-select
+                                    [placeholder]="commonLocaleData?.app_select_action"
+                                    [multiple]="true"
+                                    [options]="statusDropdownOptions"
+                                    name="balanceStatus"
+                                    [(ngModel)]="request.balanceStatus"
+                                    [ItemHeight]="33"
+                                ></sh-select>
                             </div>
 
-                            <div class="col-sm-4 col-md-4 pr-0">
-                            </div>
-
+                            <div class="col-sm-4 col-md-4 pr-0"></div>
                         </div>
                     </div>
                 </div>
                 <div *ngIf="isEInvoiceEnabled" class="row mt-2">
-
                     <div class="col-md-4 col-sm-12">
-                        <label>{{localeData?.e_invoice_status}}</label>
+                        <label>{{ localeData?.e_invoice_status }}</label>
                     </div>
 
                     <div class="col-md-8 col-sm-12">
-
                         <div class="status-description row mr-0 ml-0">
-
                             <div class="col-md-8 col-sm-12 pl-0 pr-0 pl-0">
-                                <sh-select [placeholder]="commonLocaleData?.app_select_action" [multiple]="true"
-                                    [options]="eInvoiceStatusDropdownOptions" name="balanceStatus"
-                                    [(ngModel)]="request.status" [ItemHeight]="33"></sh-select>
+                                <sh-select
+                                    [placeholder]="commonLocaleData?.app_select_action"
+                                    [multiple]="true"
+                                    [options]="eInvoiceStatusDropdownOptions"
+                                    name="balanceStatus"
+                                    [(ngModel)]="request.status"
+                                    [ItemHeight]="33"
+                                ></sh-select>
                             </div>
 
-                            <div class="col-sm-4 col-md-4 pr-0">
-                            </div>
-
+                            <div class="col-sm-4 col-md-4 pr-0"></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="row mt-2">
-
                     <div class="col-md-4 col-sm-12">
-                        <label>{{commonLocaleData?.app_description}}</label>
+                        <label>{{ commonLocaleData?.app_description }}</label>
                     </div>
 
                     <div class="col-md-8 col-sm-12">
-
                         <div class="status-description row mr-0 ml-0">
-
                             <div class="col-md-8 col-sm-12 pl-0 pr-0">
-                                <textarea class="form-control" name="description"
-                                    [(ngModel)]="request.description"></textarea>
+                                <textarea
+                                    class="form-control"
+                                    name="description"
+                                    [(ngModel)]="request.description"
+                                ></textarea>
                             </div>
 
-                            <div class="col-sm-4 col-md-4 pr-0">
-                            </div>
-
+                            <div class="col-sm-4 col-md-4 pr-0"></div>
                         </div>
                     </div>
                 </div>
-
             </div>
             <!--endregion-->
 
             <!--region drcr || receipt-->
             <div class="modal-wrap mr-b2" *ngIf="type === 'drcr' || type === 'receipt'">
-
                 <div class="row">
-
                     <div class="col-sm-4 col-md-4">
-                        <label>{{commonLocaleData?.app_date_range}}</label>
+                        <label>{{ commonLocaleData?.app_date_range }}</label>
                     </div>
 
                     <div class="col-sm-8 col-md-8">
-
                         <div class="row mr-0 ml-0">
-
                             <div class="col-sm-4 col-md-4 pl-0 pr-0">
-                                <sh-select [placeholder]="commonLocaleData?.app_select_action" [options]="dateOptions"
-                                    [ItemHeight]="33" (selected)="dateChanged($event, 'invoice')"></sh-select>
+                                <sh-select
+                                    [placeholder]="commonLocaleData?.app_select_action"
+                                    [options]="dateOptions"
+                                    [ItemHeight]="33"
+                                    (selected)="dateChanged($event, 'invoice')"
+                                ></sh-select>
                             </div>
 
                             <div class="col-sm-8 col-md-8 pr-0">
-                                <input type="text" name="invoiceDate" bsDatepicker class="form-control w-100"
-                                    [(ngModel)]="request.invoiceDate" [bsConfig]="{dateInputFormat: giddhDateFormat}" />
+                                <input
+                                    type="text"
+                                    name="invoiceDate"
+                                    bsDatepicker
+                                    class="form-control w-100"
+                                    [(ngModel)]="request.invoiceDate"
+                                    [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                />
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
 
                 <div class="row mt-2 mb-2">
-
                     <div class="col-sm-4 col-md-4">
-                        <label>{{localeData?.invoice_total_amount}}</label>
+                        <label>{{ localeData?.invoice_total_amount }}</label>
                     </div>
 
                     <div class="col-sm-8 col-md-8">
-
                         <div class="total-amount row mr-0 ml-0">
-
                             <div class="col-md-6 col-sm-6 col-6 pl-0 pr-0">
-                                <sh-select [placeholder]="commonLocaleData?.app_select_range"
-                                    [options]="filtersForEntryTotal" [ItemHeight]="33"
-                                    (selected)="invoiceTotalRangeChanged($event)"></sh-select>
+                                <sh-select
+                                    [placeholder]="commonLocaleData?.app_select_range"
+                                    [options]="filtersForEntryTotal"
+                                    [ItemHeight]="33"
+                                    (selected)="invoiceTotalRangeChanged($event)"
+                                ></sh-select>
                             </div>
 
                             <div class="col-md-6 col-sm-6 col-6 pr-0">
-                                <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.total"
-                                    type="tel">
+                                <input
+                                    class="form-control"
+                                    placeholder="00"
+                                    name="total"
+                                    [(ngModel)]="request.total"
+                                    type="tel"
+                                />
                             </div>
                         </div>
                     </div>
                 </div>
                 <div *ngIf="type === 'drcr' && isEInvoiceEnabled" class="row mt-2">
-
                     <div class="col-md-4 col-sm-12">
-                        <label>{{localeData?.e_invoice_status}}</label>
+                        <label>{{ localeData?.e_invoice_status }}</label>
                     </div>
 
                     <div class="col-md-8 col-sm-12">
-
                         <div class="status-description row mr-0 ml-0">
-
                             <div class="col-md-8 col-sm-12 pl-0 pr-0 pl-0">
-                                <sh-select [placeholder]="commonLocaleData?.app_select_action" [multiple]="true"
-                                    [options]="eInvoiceStatusDropdownOptions" name="balanceStatus"
-                                    [(ngModel)]="request.status" [ItemHeight]="33"></sh-select>
+                                <sh-select
+                                    [placeholder]="commonLocaleData?.app_select_action"
+                                    [multiple]="true"
+                                    [options]="eInvoiceStatusDropdownOptions"
+                                    name="balanceStatus"
+                                    [(ngModel)]="request.status"
+                                    [ItemHeight]="33"
+                                ></sh-select>
                             </div>
 
-                            <div class="col-sm-4 col-md-4 pr-0">
-                            </div>
-
+                            <div class="col-sm-4 col-md-4 pr-0"></div>
                         </div>
                     </div>
                 </div>
             </div>
 
-
             <!--endregion-->
 
             <!-- region proforma || estimates-->
             <div class="modal-wrap mr-b2" *ngIf="type === 'proforma'">
-
                 <div class="row">
-
                     <div class="col-md-4 col-sm-12">
-                        <label>{{localeData?.expiry_date}}</label>
+                        <label>{{ localeData?.expiry_date }}</label>
                     </div>
 
                     <div class="col-md-8 col-sm-12">
-
                         <div>
-
                             <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                                 <i class="icon-calender calendar-addon"></i>
-                                <input type="text" name="selectedDateRange"
-                                    [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
-                                    class="giddh-datepicker date-range-picker border-radius-2" />
+                                <input
+                                    type="text"
+                                    name="selectedDateRange"
+                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                    class="giddh-datepicker date-range-picker border-radius-2"
+                                />
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
 
                 <div class="row mt-2 mb-2">
-
                     <div class="col-md-4 col-sm-12">
-                        <label>{{localeData?.total_amt}}</label>
+                        <label>{{ localeData?.total_amt }}</label>
                     </div>
 
                     <div class="col-md-8 col-sm-12">
                         <div class="total-amount row mr-0 ml-0">
                             <div class="col-md-8 col-sm-6 col-6 pl-0 pr-0">
-                                <sh-select [placeholder]="commonLocaleData?.app_select_range" name="amountFieldSelector"
-                                    [options]="filtersForAmount" [(ngModel)]="request.amountFieldSelector"
-                                    [ItemHeight]="33" (selected)="amountRangeChanged($event)">
+                                <sh-select
+                                    [placeholder]="commonLocaleData?.app_select_range"
+                                    name="amountFieldSelector"
+                                    [options]="filtersForAmount"
+                                    [(ngModel)]="request.amountFieldSelector"
+                                    [ItemHeight]="33"
+                                    (selected)="amountRangeChanged($event)"
+                                >
                                 </sh-select>
                             </div>
 
                             <div class="col-md-4 col-sm-6 col-6 pr-0">
-                                <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.amount"
-                                    type="tel">
-
+                                <input
+                                    class="form-control"
+                                    placeholder="00"
+                                    name="total"
+                                    [(ngModel)]="request.amount"
+                                    type="tel"
+                                />
                             </div>
-
                         </div>
-
                     </div>
                 </div>
-
             </div>
             <!-- endregion -->
 
@@ -322,50 +334,83 @@
             <div class="modal-wrap mr-b2" *ngIf="type === 'purchase'">
                 <div class="row">
                     <div class="col-sm-3 col-12">
-                        <label>{{commonLocaleData?.app_date_range}}</label>
+                        <label>{{ commonLocaleData?.app_date_range }}</label>
                     </div>
                     <div class="col-sm-9 col-12">
                         <div class="row">
                             <div class="col-sm-5 col-12">
-                                <sh-select class="select-action mr-b15" [placeholder]="commonLocaleData?.app_select_action" [options]="dateOptions" [ItemHeight]="33"
-                                    (selected)="dateChanged($event, 'invoice')"></sh-select>
+                                <sh-select
+                                    class="select-action mr-b15"
+                                    [placeholder]="commonLocaleData?.app_select_action"
+                                    [options]="dateOptions"
+                                    [ItemHeight]="33"
+                                    (selected)="dateChanged($event, 'invoice')"
+                                ></sh-select>
                             </div>
                             <div class="col-sm-7 col-12">
-                                <input type="text" name="invoiceDate" bsDatepicker class="form-control w-100 mr-b15"
-                                    [(ngModel)]="request.invoiceDate" [bsConfig]="{dateInputFormat: giddhDateFormat}" />
+                                <input
+                                    type="text"
+                                    name="invoiceDate"
+                                    bsDatepicker
+                                    class="form-control w-100 mr-b15"
+                                    [(ngModel)]="request.invoiceDate"
+                                    [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                />
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row mt-2 mb-2">
                     <div class="col-sm-3 col-12">
-                        <label>{{localeData?.invoice_total_amount}}</label>
+                        <label>{{ localeData?.invoice_total_amount }}</label>
                     </div>
                     <div class="col-sm-9 col-12">
                         <div class="status-description row">
                             <div class="col-md-5 col-sm-12">
-                                <sh-select class="mr-b15" [placeholder]="commonLocaleData?.app_select_range" [options]="filtersForEntryTotal" [ItemHeight]="33"
-                                    (selected)="invoiceTotalRangeChanged($event)"></sh-select>
+                                <sh-select
+                                    class="mr-b15"
+                                    [placeholder]="commonLocaleData?.app_select_range"
+                                    [options]="filtersForEntryTotal"
+                                    [ItemHeight]="33"
+                                    (selected)="invoiceTotalRangeChanged($event)"
+                                ></sh-select>
                             </div>
                             <div class="col-md-7 col-sm-12">
-                                <input class="form-control mr-b15" placeholder="00" name="total" [(ngModel)]="request.total" type="tel">
+                                <input
+                                    class="form-control mr-b15"
+                                    placeholder="00"
+                                    name="total"
+                                    [(ngModel)]="request.total"
+                                    type="tel"
+                                />
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row mt-2">
                     <div class="col-sm-3 col-12">
-                        <label>{{localeData?.due_date_range}}</label>
+                        <label>{{ localeData?.due_date_range }}</label>
                     </div>
                     <div class="col-sm-9 col-12">
                         <div class="status-description row">
                             <div class="col-sm-5 col-12">
-                                <sh-select class="mr-b15" [placeholder]="commonLocaleData?.app_select_action" [options]="dateOptions" [ItemHeight]="33"
-                                    (selected)="dateChanged($event, 'due')"></sh-select>
+                                <sh-select
+                                    class="mr-b15"
+                                    [placeholder]="commonLocaleData?.app_select_action"
+                                    [options]="dateOptions"
+                                    [ItemHeight]="33"
+                                    (selected)="dateChanged($event, 'due')"
+                                ></sh-select>
                             </div>
                             <div class="col-sm-7 col-12">
-                                <input type="text" bsDatepicker class="form-control w-100 mr-b15" name="dueDate"
-                                    [bsConfig]="{dateInputFormat: giddhDateFormat}" [(ngModel)]="request.dueDate" />
+                                <input
+                                    type="text"
+                                    bsDatepicker
+                                    class="form-control w-100 mr-b15"
+                                    name="dueDate"
+                                    [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                    [(ngModel)]="request.dueDate"
+                                />
                             </div>
                         </div>
                     </div>
@@ -373,10 +418,12 @@
             </div>
 
             <div class="pull-right">
-                <button type="submit" class="btn btn-md btn-success mr-r1"
-                    (click)="save()">{{commonLocaleData?.app_search}}</button>
-                <button type="submit" class="btn btn-md btn-cancel"
-                    (click)="onCancel()">{{commonLocaleData?.app_cancel}}</button>
+                <button type="submit" class="btn btn-md btn-success mr-r1" (click)="save()">
+                    {{ commonLocaleData?.app_search }}
+                </button>
+                <button type="submit" class="btn btn-md btn-cancel" (click)="onCancel()">
+                    {{ commonLocaleData?.app_cancel }}
+                </button>
             </div>
         </form>
     </div>
@@ -384,13 +431,23 @@
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
-            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions"
-                [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
-                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
-                (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOptions"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
         </div>
     </div>
 </ng-template>

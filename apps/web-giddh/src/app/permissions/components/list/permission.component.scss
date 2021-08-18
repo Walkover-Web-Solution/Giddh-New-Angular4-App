@@ -145,21 +145,13 @@
     border-color: $black;
 }
 
-#single-role
-    tbody
-    tr
-    td:nth-child(1n + 2)
-    input[type="checkbox"]:checked:after {
+#single-role tbody tr td:nth-child(1n + 2) input[type="checkbox"]:checked:after {
     background: $white-smoke;
     border-color: $white-smoke;
     content: "";
 }
 
-#single-role
-    tbody
-    tr
-    td:nth-child(1n + 2)
-    input[type="checkbox"]:checked:before {
+#single-role tbody tr td:nth-child(1n + 2) input[type="checkbox"]:checked:before {
     content: "\f00c";
     font-family: FontAwesome;
     border: none;
