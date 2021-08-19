@@ -309,7 +309,7 @@
                                                 [id]="'update-ledger-amount-dr-' + i"
                                                 type="text"
                                                 [(ngModel)]="txn.amount"
-                                                class="form-control text-right pd-0"
+                                                class="form-control text-right"
                                                 name="{{ txn[i] }}.amount"
                                                 [mask]="vm.inputMaskFormat"
                                                 [rawInputValue]="txn.amount"
@@ -609,7 +609,7 @@
                                                     branches?.length > 1
                                                 "
                                                 [id]="'update-ledger-amount-cr-' + i"
-                                                class="form-control text-right pd-0"
+                                                class="form-control text-right"
                                                 type="text"
                                                 [(ngModel)]="txn.amount"
                                                 [mask]="vm.inputMaskFormat"
@@ -1612,7 +1612,7 @@
                                                     <giddh-datepicker
                                                         [showToggleIcon]="false"
                                                         class="db"
-                                                        [cssClass]="'mat-field-border bdr form-control pd-0'"
+                                                        [cssClass]="'mat-field-border bdr form-control'"
                                                         [disabled]="
                                                             !isPettyCash &&
                                                             currentOrganizationType === 'COMPANY' &&
@@ -1658,18 +1658,60 @@
                                 </div>
                             </mat-expansion-panel>
                         </mat-accordion>
-                    </div>
 
-                    <div class="col-md-6 font-14 pt-1 remove-border-left-onmo">
-                        <table class="width-100" *ngIf="vm.isMultiCurrencyAvailable">
-                            <tbody>
-                                <tr>
-                                    <td class="text-right">
-                                        <span class="primary-color">
-                                            {{
-                                                localeData?.total_in_currency
-                                                    | replace: "[CURRENCY]":vm.baseCurrencyDetails?.code
-                                            }}:
+                        <div class="font-14 pt-1 remove-border-left-onmo">
+                            <table class="width-100" *ngIf="vm.isMultiCurrencyAvailable">
+                                <tbody>
+                                    <tr>
+                                        <td class="text-right">
+                                            <span class="primary-color">
+                                                {{
+                                                    localeData?.total_in_currency
+                                                        | replace: "[CURRENCY]":vm.baseCurrencyDetails?.code
+                                                }}:
+                                                <span class="d-inline-flex">
+                                                    <amount-field
+                                                        [amount]="vm.compoundTotal"
+                                                        [currencySymbol]="vm.baseCurrencyDetails?.symbol"
+                                                        [currencyCode]="vm.baseCurrencyDetails?.code"
+                                                    >
+                                                    </amount-field>
+                                                </span>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="row">
+                                <div class="col-12 col-sm-12 clearfix mr-t1">
+                                    <div class="mr-r1 form-group pull-left cp">
+                                        <label class="pull-left cp font-16 d-flex align-items-center">
+                                            <mat-checkbox
+                                                color="primary"
+                                                id="update-ledger-generate-voucher"
+                                                class="pull-left"
+                                                name="generateInvoice"
+                                                [(ngModel)]="vm.selectedLedger.generateInvoice"
+                                                [disabled]="
+                                                    vm.isInvoiceGeneratedAlready ||
+                                                    (!isPettyCash &&
+                                                        currentOrganizationType === 'COMPANY' &&
+                                                        branches?.length > 1) ||
+                                                    (isAdvanceReceipt && vm.selectedLedger.generateInvoice)
+                                                        ? 'disabled'
+                                                        : null
+                                                "
+                                            >
+                                                {{ commonLocaleData?.app_generate_voucher }}</mat-checkbox
+                                            >
+                                        </label>
+                                    </div>
+
+                                    <div class="pull-right">
+                                        <span class="primary-color" *ngIf="!vm.isMultiCurrencyAvailable">
+                                            {{ localeData?.compound_total }}:
+
                                             <span class="d-inline-flex">
                                                 <amount-field
                                                     [amount]="vm.compoundTotal"
@@ -1679,176 +1721,139 @@
                                                 </amount-field>
                                             </span>
                                         </span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
 
-                        <div class="row">
-                            <div class="col-12 col-sm-12 clearfix mr-t1">
-                                <div class="mr-r1 form-group pull-left cp">
-                                    <label class="pull-left cp font-16 d-flex align-items-center">
-                                        <mat-checkbox
-                                            color="primary"
-                                            id="update-ledger-generate-voucher"
-                                            class="pull-left"
-                                            name="generateInvoice"
-                                            [(ngModel)]="vm.selectedLedger.generateInvoice"
-                                            [disabled]="
-                                                vm.isInvoiceGeneratedAlready ||
-                                                (!isPettyCash &&
-                                                    currentOrganizationType === 'COMPANY' &&
-                                                    branches?.length > 1) ||
-                                                (isAdvanceReceipt && vm.selectedLedger.generateInvoice)
-                                                    ? 'disabled'
-                                                    : null
-                                            "
-                                        >
-                                            {{ commonLocaleData?.app_generate_voucher }}</mat-checkbox
-                                        >
-                                    </label>
-                                </div>
-
-                                <div class="pull-right">
-                                    <span class="primary-color" *ngIf="!vm.isMultiCurrencyAvailable">
-                                        {{ localeData?.compound_total }}:
-
-                                        <span class="d-inline-flex">
-                                            <amount-field
-                                                [amount]="vm.compoundTotal"
-                                                [currencySymbol]="vm.baseCurrencyDetails?.symbol"
-                                                [currencyCode]="vm.baseCurrencyDetails?.code"
-                                            >
-                                            </amount-field>
-                                        </span>
-                                    </span>
-
-                                    <span *ngIf="vm.isMultiCurrencyAvailable" class="primary-color">
-                                        {{
-                                            localeData?.total_in_currency
-                                                | replace: "[CURRENCY]":vm.foreignCurrencyDetails?.code
-                                        }}:
-
-                                        <span class="d-inline-flex">
-                                            <amount-field
-                                                [amount]="vm.convertedCompoundTotal"
-                                                [currencySymbol]="vm.foreignCurrencyDetails?.symbol"
-                                                [currencyCode]="vm.foreignCurrencyDetails?.code"
-                                            >
-                                            </amount-field>
-                                        </span>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="d-flex w-100 mb-2 justify-content-between">
-                                <div class="w-100 d-flex pd-l15" *ngIf="vm.isMultiCurrencyAvailable">
-                                    <ul class="list-inline d-flex font-14 currency-convertor">
-                                        <li>
-                                            {{ commonLocaleData?.app_numbers?.one }}
+                                        <span *ngIf="vm.isMultiCurrencyAvailable" class="primary-color">
                                             {{
-                                                vm.selectedCurrencyForDisplay === 0
-                                                    ? vm.baseCurrencyDetails?.code
-                                                    : vm.foreignCurrencyDetails?.code
-                                            }}
-                                        </li>
+                                                localeData?.total_in_currency
+                                                    | replace: "[CURRENCY]":vm.foreignCurrencyDetails?.code
+                                            }}:
 
-                                        <li>
-                                            <a href="javascript:void(0)" class="text-light">
-                                                <i class="icon-switch-icon"></i>
-                                            </a>
-                                        </li>
+                                            <span class="d-inline-flex">
+                                                <amount-field
+                                                    [amount]="vm.convertedCompoundTotal"
+                                                    [currencySymbol]="vm.foreignCurrencyDetails?.symbol"
+                                                    [currencyCode]="vm.foreignCurrencyDetails?.code"
+                                                >
+                                                </amount-field>
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="d-flex w-100 mb-2 justify-content-between">
+                                    <div class="w-100 d-flex pd-l15" *ngIf="vm.isMultiCurrencyAvailable">
+                                        <ul class="list-inline d-flex font-14 currency-convertor">
+                                            <li>
+                                                {{ commonLocaleData?.app_numbers?.one }}
+                                                {{
+                                                    vm.selectedCurrencyForDisplay === 0
+                                                        ? vm.baseCurrencyDetails?.code
+                                                        : vm.foreignCurrencyDetails?.code
+                                                }}
+                                            </li>
 
-                                        <li>
+                                            <li>
+                                                <a href="javascript:void(0)" class="text-light">
+                                                    <i class="icon-switch-icon"></i>
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <input
+                                                    matInput
+                                                    type="text"
+                                                    id="update-ledger-price-input"
+                                                    class="price-input mat-field-border"
+                                                    [(ngModel)]="vm.selectedLedger.exchangeRate"
+                                                    [disabled]="
+                                                        !isPettyCash &&
+                                                        currentOrganizationType === 'COMPANY' &&
+                                                        branches?.length > 1
+                                                    "
+                                                    (blur)="exchangeRateChanged()"
+                                                />
+                                                {{
+                                                    vm.selectedCurrencyForDisplay === 0
+                                                        ? vm.foreignCurrencyDetails?.code
+                                                        : vm.baseCurrencyDetails?.code
+                                                }}
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="d-flex justify-content-end w-100 pd-r15" *ngIf="!isPettyCash">
+                                        <div
+                                            class="file_attached pull-right text-right"
+                                            *ngIf="vm.selectedLedger?.attachedFile?.length > 0"
+                                        >
+                                            <span>{{ vm.selectedLedger?.attachedFileName }}</span>
+                                            <label
+                                                class="remove cp pl-1 text-danger"
+                                                (click)="showDeleteAttachedFileModal()"
+                                                >({{ commonLocaleData?.app_remove | lowercase }})</label
+                                            >
+                                        </div>
+
+                                        <label class="upload-div" [ngClass]="{ hide: vm.selectedLedger.attachedFile }">
                                             <input
-                                                matInput
-                                                type="text"
-                                                id="update-ledger-price-input"
-                                                class="price-input mat-field-border pd-0"
-                                                [(ngModel)]="vm.selectedLedger.exchangeRate"
                                                 [disabled]="
                                                     !isPettyCash &&
                                                     currentOrganizationType === 'COMPANY' &&
                                                     branches?.length > 1
                                                 "
-                                                (blur)="exchangeRateChanged()"
+                                                type="file"
+                                                name="invoiceFile"
+                                                #fileInputUpdate
+                                                id="invoiceFile"
+                                                ngFileSelect
+                                                [uploadInput]="uploadInput"
+                                                [options]="fileUploadOptions"
+                                                (uploadOutput)="onUploadOutputUpdate($event)"
                                             />
-                                            {{
-                                                vm.selectedCurrencyForDisplay === 0
-                                                    ? vm.foreignCurrencyDetails?.code
-                                                    : vm.baseCurrencyDetails?.code
-                                            }}
-                                        </li>
-                                    </ul>
+                                            <label for="invoiceFile" class="cp font-16">
+                                                <i
+                                                    [ngClass]="
+                                                        !isFileUploading ? 'icon-file-path' : 'fa fa-spinner rotate'
+                                                    "
+                                                ></i>
+                                                {{ localeData?.attach_file }}</label
+                                            >
+                                        </label>
+                                    </div>
                                 </div>
 
-                                <div class="d-flex justify-content-end w-100 pd-r15" *ngIf="!isPettyCash">
+                                <div
+                                    class="col-12 col-sm-12 pd-t1 d-flex align-items-center xs-d-block"
+                                    *ngIf="!isPettyCash"
+                                >
                                     <div
-                                        class="file_attached pull-right text-right"
-                                        *ngIf="vm.selectedLedger?.attachedFile?.length > 0"
-                                    >
-                                        <span>{{ vm.selectedLedger?.attachedFileName }}</span>
-                                        <label
-                                            class="remove cp pl-1 text-danger"
-                                            (click)="showDeleteAttachedFileModal()"
-                                            >({{ commonLocaleData?.app_remove | lowercase }})</label
-                                        >
-                                    </div>
-
-                                    <label class="upload-div" [ngClass]="{ hide: vm.selectedLedger.attachedFile }">
-                                        <input
-                                            [disabled]="
+                                        *ngIf="
+                                            !(
                                                 !isPettyCash &&
                                                 currentOrganizationType === 'COMPANY' &&
                                                 branches?.length > 1
-                                            "
-                                            type="file"
-                                            name="invoiceFile"
-                                            #fileInputUpdate
-                                            id="invoiceFile"
-                                            ngFileSelect
-                                            [uploadInput]="uploadInput"
-                                            [options]="fileUploadOptions"
-                                            (uploadOutput)="onUploadOutputUpdate($event)"
-                                        />
-                                        <label for="invoiceFile" class="cp font-16">
-                                            <i
-                                                [ngClass]="!isFileUploading ? 'icon-file-path' : 'fa fa-spinner rotate'"
-                                            ></i>
-                                            {{ localeData?.attach_file }}</label
+                                            )
+                                        "
+                                        class="d-flex"
+                                    >
+                                        <button
+                                            mat-raised-button
+                                            class="btn btn-danger"
+                                            id="update-ledger-delete-button"
+                                            (click)="showDeleteEntryModal()"
                                         >
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div
-                                class="col-12 col-sm-12 pd-t1 d-flex align-items-center xs-d-block"
-                                *ngIf="!isPettyCash"
-                            >
-                                <div
-                                    *ngIf="
-                                        !(!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1)
-                                    "
-                                    class="d-flex"
-                                >
-                                    <button
-                                        mat-raised-button
-                                        color="warn"
-                                        id="update-ledger-delete-button"
-                                        (click)="showDeleteEntryModal()"
-                                    >
-                                        {{ commonLocaleData?.app_delete }}
-                                    </button>
-                                    <button
-                                        mat-raised-button
-                                        class="mr-l1"
-                                        color="primary"
-                                        id="update-ledger-update-button"
-                                        [disabled]="isFileUploading"
-                                        [ladda]="isTxnUpdateInProcess$ | async"
-                                        (click)="saveLedgerTransaction()"
-                                    >
-                                        {{ commonLocaleData?.app_update }}
-                                    </button>
+                                            {{ commonLocaleData?.app_delete }}
+                                        </button>
+                                        <button
+                                            mat-raised-button
+                                            class="btn btn-success mr-l1"
+                                            id="update-ledger-update-button"
+                                            [disabled]="isFileUploading"
+                                            [ladda]="isTxnUpdateInProcess$ | async"
+                                            (click)="saveLedgerTransaction()"
+                                        >
+                                            {{ commonLocaleData?.app_update }}
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1910,7 +1915,7 @@
                         #passportNumber
                         (blur)="allowAlphanumericChar(passportNumber)"
                         (keypress)="allowAlphanumericChar(passportNumber)"
-                        class="form-control width-115 ml-1 mat-field-border pd-0"
+                        class="form-control width-115 ml-1 mat-field-border"
                         [(ngModel)]="vm.selectedLedger.passportNumber"
                     />
                 </div>

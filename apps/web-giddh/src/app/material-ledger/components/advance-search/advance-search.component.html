@@ -230,7 +230,7 @@
                                                 decimalDigitsDirective
                                                 [DecimalPlaces]="2"
                                                 formControlName="amount"
-                                                class="form-control mat-field-border pd-0"
+                                                class="form-control mat-field-border"
                                             />
                                         </mat-form-field>
                                     </div>
@@ -343,7 +343,7 @@
                                                     <input
                                                         matInput
                                                         type="text"
-                                                        class="form-control mat-field-border pd-0"
+                                                        class="form-control mat-field-border"
                                                         decimalDigitsDirective
                                                         [DecimalPlaces]="4"
                                                         formControlName="quantity"
@@ -375,7 +375,7 @@
                                                         type="text"
                                                         decimalDigitsDirective
                                                         [DecimalPlaces]="3"
-                                                        class="form-control mat-field-border pd-0"
+                                                        class="form-control mat-field-border"
                                                         formControlName="itemValue"
                                                         [placeholder]="commonLocaleData?.app_value"
                                                     />
@@ -400,7 +400,7 @@
                                                     type="text"
                                                     [placeholder]="commonLocaleData?.app_cheque_number"
                                                     formControlName="chequeNumber"
-                                                    class="form-control mat-field-border pd-0"
+                                                    class="form-control mat-field-border"
                                                 />
                                             </mat-form-field>
                                         </div>
@@ -409,7 +409,7 @@
                                         <div class="form-group">
                                             <giddh-datepicker
                                                 class="w-100"
-                                                [cssClass]="'mat-field-border bdr form-control pd-0'"
+                                                [cssClass]="'mat-field-border bdr form-control'"
                                                 [placeholder]="commonLocaleData?.app_clearance_date"
                                                 name="from"
                                                 formControlName="dateOnCheque"
@@ -431,7 +431,7 @@
                                             type="text"
                                             formControlName="description"
                                             [placeholder]="commonLocaleData?.app_description"
-                                            class="form-control mat-field-border pd-0 description-field"
+                                            class="form-control mat-field-border description-field"
                                         />
                                     </mat-form-field>
                                 </div>
@@ -440,7 +440,7 @@
                     </div>
                 </ng-container>
                 <div class="text-right mb-3 mt-2">
-                    <button mat-button class="btn btn-success m-0" type="button" (click)="onSearch()">
+                    <button mat-button class="btn btn-success" type="button" (click)="onSearch()">
                         {{ commonLocaleData?.app_search }}
                     </button>
                 </div>

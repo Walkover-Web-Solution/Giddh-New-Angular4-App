@@ -27,7 +27,7 @@
                                                 id="ledger-quantity"
                                                 type="text"
                                                 name="inventory_quantity"
-                                                class="form-control text-right mat-field-border pd-0"
+                                                class="form-control text-right mat-field-border"
                                                 [disabled]="
                                                     shouldShowAdvanceReceiptMandatoryFields || isReadOnly
                                                         ? 'disabled'
@@ -80,7 +80,7 @@
                                 (ngModelChange)="changePrice($event)"
                                 name="unitPrice"
                                 (keyup)="isInclusiveEntry = false"
-                                class="form-control text-right mat-field-border pd-0"
+                                class="form-control text-right mat-field-border"
                             />
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
@@ -113,7 +113,7 @@
                                 *ngIf="!isAdvanceReceipt"
                                 type="text"
                                 name="amount"
-                                class="form-control text-right mat-field-border pd-0"
+                                class="form-control text-right mat-field-border"
                                 [prefix]="selectedPrefixForCurrency"
                                 [suffix]="selectedSuffixForCurrency"
                                 [mask]="inputMaskFormat"
@@ -129,7 +129,7 @@
                                 *ngIf="isAdvanceReceipt"
                                 type="text"
                                 name="advanceAmount"
-                                class="form-control text-right mat-field-border pd-0"
+                                class="form-control text-right mat-field-border"
                                 [prefix]="selectedPrefixForCurrency"
                                 [suffix]="selectedSuffixForCurrency"
                                 disabled
@@ -317,7 +317,7 @@
                                 [suffix]="selectedSuffixForCurrency"
                                 [mask]="inputMaskFormat"
                                 name="totalAmount"
-                                class="form-control text-right mat-field-border pd-0"
+                                class="form-control text-right mat-field-border"
                                 [(ngModel)]="currentTxn.total"
                                 (blur)="calculateAmount()"
                                 [disabled]="isAdvanceReceipt ? 'disabled' : null"
@@ -383,7 +383,7 @@
                                     <input
                                         matInput
                                         id="ledger-other-tax-disabled"
-                                        class="text-right form-control mr-l1 mat-field-border pd-0"
+                                        class="text-right form-control mr-l1 mat-field-border"
                                         disabled="disabled"
                                         [(ngModel)]="blankLedger.otherTaxesSum"
                                         name="entry.otherTaxesSum"
@@ -495,7 +495,7 @@
                                             id="ledger-invoice-number"
                                             type="text"
                                             [placeholder]="commonLocaleData?.app_invoice_no"
-                                            class="form-control mat-field-border pd-0"
+                                            class="form-control mat-field-border"
                                             [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher"
                                         />
                                     </td>
@@ -645,7 +645,7 @@
                                                 id="ledger-cheque-number"
                                                 type="text"
                                                 [placeholder]="localeData?.cheque_number_placeholder"
-                                                class="form-control mat-field-border pd-0"
+                                                class="form-control mat-field-border"
                                                 [(ngModel)]="blankLedger.chequeNumber"
                                             />
                                         </td>
@@ -656,7 +656,7 @@
                                             <giddh-datepicker
                                                 class="db"
                                                 [showToggleIcon]="false"
-                                                [cssClass]="'mat-field-border bdr form-control pd-0'"
+                                                [cssClass]="'mat-field-border bdr form-control'"
                                                 [disabled]="isReadOnly"
                                                 id="cheque-clearance-date"
                                                 (datepickerState)="datepickerState($event)"

@@ -1840,19 +1840,19 @@ input[type="checkbox"]:checked:after {
 }
 
 .btn-success-outline {
-    border: 1px solid $light-sea-green;
-    color: $light-sea-green;
+    border: 1px solid $light-sea-green !important;
+    color: $light-sea-green !important;
 }
 
 .btn-success-outline:hover {
     color: $white;
-    background: $light-sea-green;
+    background: $light-sea-green !important;
 }
 
 .btn-success {
-    background: $light-sea-green;
+    background: $light-sea-green !important;
     color: $white;
-    border: 1px solid $light-sea-green;
+    border: 1px solid $light-sea-green !important;
 }
 
 .btn-success:hover,
@@ -1862,20 +1862,22 @@ input[type="checkbox"]:checked:after {
 .btn-success:not(:disabled):not(.disabled):active,
 .btn-success:not(:disabled):not(.disabled).active,
 .show > .btn-success.dropdown-toggle {
-    background: $teal;
-    color: $white;
-    border: 1px solid $teal;
+    background: $teal !important;
+    color: $white !important;
+    border: 1px solid $teal !important;
     box-shadow: none;
 }
 
 .btn-success:disabled,
 .btn-success:disabled:hover {
-    color: rgba(255, 255, 255, 0.51);
-    border: 1px solid $success-green-disable;
-    background: $success-green-disable;
+    color: rgba(255, 255, 255, 0.51) !important;
+    border: 1px solid $success-green-disable !important;
+    background: $success-green-disable !important;
 }
 .btn-warning {
     color: $white !important;
+    background-color: #ffc107 !important;
+    border-color: #ffc107 !important;
 }
 .btn-warning:not(:disabled):not(.disabled):active:focus,
 .btn-warning:not(:disabled):not(.disabled).active:focus,
@@ -1888,20 +1890,19 @@ input[type="checkbox"]:checked:after {
 }
 
 .btn-danger {
-    background: $whisper;
-    color: $red;
-    border-color: $whisper;
+    background: $whisper !important;
+    color: $red !important;
+    border-color: $whisper !important;
 }
 
 .btn-danger:hover,
 .btn-danger:active,
 .btn-danger:focus,
 .btn-danger:active:focus {
-    background: $gainsboro;
-    color: $red;
-    border-color: $gainsboro;
-    outline: none;
-    box-shadow: none;
+    background: $gainsboro !important;
+    color: $red !important;
+    border-color: $gainsboro !important;
+    outline: none !important;
 }
 
 .btn-danger:disabled,
@@ -1909,9 +1910,9 @@ input[type="checkbox"]:checked:after {
 .btn-danger:active:focus,
 .btn-danger:active:hover,
 .btn-danger:focus {
-    background: $whisper;
-    color: $red;
-    border-color: $whisper;
+    background: $whisper !important;
+    color: $red !important;
+    border-color: $whisper !important;
     opacity: 0.5;
 }
 
@@ -2695,10 +2696,6 @@ a.btn.btn-xs.btn-link.pull-right {
     -webkit-border-radius: 0px;
     border-radius: 0px;
     margin-left: 10px;
-}
-
-#share-modal .input-group .input-group-btn:last-child > .btn {
-    margin-left: 15px;
 }
 
 .input-group-btn.sticky:last-child > .btn {
@@ -4579,9 +4576,10 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 .modal-header > .close {
     position: absolute;
-    right: 20px;
-    top: 5px;
-    line-height: 33px;
+    right: 0;
+    top: 0;
+    margin: 11px;
+    line-height: 0px;
     color: $white;
     opacity: 1;
     font-weight: 100;
@@ -8408,6 +8406,12 @@ body.update-scroll-hidden {
         display: none;
     }
 }
+.cdk-overlay-pane {
+    height: auto !important;
+    .mat-dialog-container {
+        overflow: visible !important;
+    }
+}
 
 /* responsive  starts here*/
 
@@ -10113,9 +10117,7 @@ mat-year-view table tr td.mat-calendar-body-label {
     display: none !important;
 }
 /** Angular material datepicker **/
-.pd-0 {
-    padding: 0px !important;
-}
+
 input[type="checkbox"].cdk-visually-hidden::before,
 input[type="checkbox"].cdk-visually-hidden::after {
     height: 1px !important;
