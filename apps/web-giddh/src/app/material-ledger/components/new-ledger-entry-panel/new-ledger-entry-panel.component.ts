@@ -1003,13 +1003,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public clickedOutside(event: any): void {
-        let classList = event.path.map(m => {
-            return m.classList;
-        });
-
         if(this.isDatepickerOpen) {
             return;
         }
+        
+        let classList = event.path.map(m => {
+            return m.classList;
+        });
 
         if (classList && classList instanceof Array) {
             const shouldNotClose = classList.some((className: DOMTokenList) => {
@@ -1265,6 +1265,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public toggleRcmCheckbox(event: any): void {
+        event.preventDefault();
+
         this.rcmConfiguration = this.generalService.getRcmConfiguration(event?.checked, this.commonLocaleData);
 
         let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
@@ -1293,6 +1295,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.calculateTotal();
         }
         this.currentTxn['subVoucher'] = this.isRcmEntry ? SubVoucher.ReverseCharge : '';
+        this.cdRef.detectChanges();
     }
 
     /**

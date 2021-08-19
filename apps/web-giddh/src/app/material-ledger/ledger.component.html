@@ -1557,6 +1557,7 @@
                                                             [(ngModel)]="lc.blankLedger.entryDate"
                                                             [placeholder]="lc.formatPlaceholder"
                                                             (dateSelected)="getInvoiceListsForCreditNote(true)"
+                                                            (datepickerState)="datepickerState($event)"
                                                         ></giddh-datepicker>
                                                     </div>
                                                 </mat-grid-tile>
@@ -1948,6 +1949,7 @@
                                                         <span class="ledger-checkbox pull-left"> </span>
                                                         <giddh-datepicker
                                                             name="bsdateledger"
+                                                            (datepickerState)="datepickerState($event)"
                                                             [(ngModel)]="lc.blankLedger.entryDate"
                                                             [placeholder]="lc.formatPlaceholder"
                                                         ></giddh-datepicker>
