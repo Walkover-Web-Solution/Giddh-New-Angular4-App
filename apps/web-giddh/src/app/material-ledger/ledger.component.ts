@@ -1136,7 +1136,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public showUpdateLedgerModal(txn: ITransactionItem) {
-        console.log("showUpdateLedgerModal");
         let transactions: TransactionsResponse = null;
         this.store.pipe(select(t => t.ledger.transactionsResponse), take(1)).subscribe(trx => transactions = trx);
         if (transactions) {
@@ -1329,7 +1328,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public loadUpdateLedgerComponent() {
-        console.log("loadUpdateLedgerComponent");
         this.updateLedgerModalDialogRef = this.dialog.open(this.updateLedgerModal, {
             width: '70%',
             height: '650px'
