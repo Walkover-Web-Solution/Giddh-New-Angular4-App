@@ -21,6 +21,7 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 import { cloneDeep } from '../../../lodash-optimized';
 import { SearchService } from '../../../services/search.service';
 import { MatDialog } from '@angular/material/dialog';
+import { CompanyActions } from '../../../actions/company.actions';
 
 @Component({
     selector: 'app-expense-details',
@@ -160,7 +161,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         private store: Store<AppState>,
         private expenseService: ExpenseService,
         private searchService: SearchService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private companyActions: CompanyActions
     ) {
         this.files = [];
         this.uploadInput = new EventEmitter<UploadInput>();
@@ -174,6 +176,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public ngOnInit(): void {
+        // get company taxes
+        this.store.dispatch(this.companyActions.getTax());
         this.fileUploadOptions = { concurrency: 1, allowedContentTypes: ['image/png', 'image/jpeg'] };
         this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
             this.companyTaxesList = res || [];
