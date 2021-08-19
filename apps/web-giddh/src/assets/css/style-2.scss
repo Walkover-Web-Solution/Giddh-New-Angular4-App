@@ -9816,6 +9816,12 @@ body.update-scroll-hidden {
         width: auto;
         max-width: 300px;
     }
+    .d-sm-inline {
+        display: inline-block !important;
+    }
+    .daybook-icon-advance-filter {
+        padding-right: 5px;
+    }
 }
 @media (min-width: 768px) {
     .invoice-modal-content .modal-dialog {

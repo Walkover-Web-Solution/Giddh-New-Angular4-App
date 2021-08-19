@@ -3,7 +3,7 @@ import { Store, select } from '@ngrx/store';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import * as moment from 'moment/moment';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Observable, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../actions/company.actions';
@@ -11,7 +11,6 @@ import { StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
 import { DaybookQueryRequest } from '../models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../theme/ng2-daterangepicker/daterangepicker.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
-import { DaybookAdvanceSearchModelComponent } from './advance-search/daybook-advance-search.component';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
 import { GeneralService } from '../services/general.service';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
@@ -23,6 +22,7 @@ import { UpdateLedgerEntryPanelComponent } from '../ledger/components/update-led
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { DaybookService } from '../services/daybook.service';
 import { ToasterService } from '../services/toaster.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'daybook',
@@ -53,13 +53,11 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
     /** True, If advance search applied */
     public showAdvanceSearchIcon: boolean = false;
-    @ViewChild('advanceSearchModel', { static: true }) public advanceSearchModel: ModalDirective;
-    @ViewChild('exportDaybookModal', { static: true }) public exportDaybookModal: ModalDirective;
+    @ViewChild('advanceSearchModal', { static: true }) public advanceSearchModal: any;
+    @ViewChild('exportDaybookModal', { static: true }) public exportDaybookModal: any;
     @ViewChild('dateRangePickerCmp', { read: DaterangePickerComponent, static: false }) public dateRangePickerCmp: DaterangePickerComponent;
-    /** Daybook advance search component reference */
-    @ViewChild('daybookAdvanceSearch', { static: false }) public daybookAdvanceSearchModelComponent: DaybookAdvanceSearchModelComponent;
     /** Update ledger modal reference */
-    @ViewChild('updateLedgerModal', { static: false }) public updateLedgerModal: ModalDirective;
+    @ViewChild('updateLedgerModal', { static: false }) public updateLedgerModal: any;
     /** Update ledger component reference */
     @ViewChild(UpdateLedgerEntryPanelComponent, { static: false }) public updateLedgerComponent: UpdateLedgerEntryPanelComponent;
     /** True, if entry expanded (at least one entry) */
@@ -100,11 +98,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public daybookData: any = {};
     /** This will hold if today is selected in universal */
     public todaySelected: boolean = false;
-    /** Set to true the first time advance search modal is opened, done
-     * to prevent the API call only when the advance search filter is opened
-     * by user and not when the user visits the page
-     */
-    public isAdvanceSearchOpened: boolean = false;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -121,6 +114,14 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public companyTaxesList: TaxResponse[] = [];
     /** True if initial api got called */
     public initialApiCalled: boolean = false;
+    /** Table columns for daybook report */
+    public tableColumns: string[] = ['entry_date', 'particular', 'voucher_name', 'voucher_no', 'debit_amount', 'credit_amount'];
+    /** Table columns for daybook report in expanded mode */
+    public tableAllColumns: string[] = ['entry_date', 'particular', 'voucher_name', 'voucher_no', 'debit_amount', 'credit_amount', 'product_service', 'quantity', 'unit', 'rate', 'hsn_sac', 'sku', 'warehouse'];
+    /** Sub Table columns for daybook report in expanded mode */
+    public tableExpandedColumns: string[] = ['expanded_entry_date', 'expanded_particular', 'expanded_voucher_name', 'expanded_voucher_no', 'expanded_debit_amount', 'expanded_credit_amount', 'expanded_product_service', 'expanded_quantity', 'expanded_unit', 'expanded_rate', 'expanded_hsn_sac', 'expanded_sku', 'expanded_warehouse'];
+    /** Instance of modal */
+    public modalDialogRef: any;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -131,18 +132,12 @@ export class DaybookComponent implements OnInit, OnDestroy {
         private settingsBranchAction: SettingsBranchActions,
         private ledgerActions: LedgerActions,
         private daybookService: DaybookService,
-        private toasterService: ToasterService
+        private toasterService: ToasterService,
+        private dialog: MatDialog
     ) {
 
         this.daybookQueryRequest = new DaybookQueryRequest();
         this.showAdvanceSearchIcon = false;
-        if (this.daybookAdvanceSearchModelComponent) {
-            this.daybookAdvanceSearchModelComponent.advanceSearchForm.reset();
-            this.daybookAdvanceSearchModelComponent.resetShselectForceClear();
-            this.daybookAdvanceSearchModelComponent.initializeDaybookAdvanceSearchForm();
-            this.searchFilterData = null;
-        }
-
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -161,7 +156,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
-        
+
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
@@ -223,18 +218,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
     }
 
     public onOpenAdvanceSearch() {
-        if (!this.isAdvanceSearchOpened) {
-            this.isAdvanceSearchOpened = true;
-        }
-        if (!this.showAdvanceSearchIcon && this.daybookAdvanceSearchModelComponent) {
-            // Reset the advance search form if filters are not already applied and the user
-            // clicks on advance search
-            this.daybookAdvanceSearchModelComponent.advanceSearchForm.reset();
-            this.daybookAdvanceSearchModelComponent.resetShselectForceClear();
-            this.daybookAdvanceSearchModelComponent.initializeDaybookAdvanceSearchForm();
-            this.searchFilterData = null;
-        }
-        this.advanceSearchModel.show();
+        this.modalDialogRef = this.dialog.open(this.advanceSearchModal, {
+            maxWidth: '1000px'
+        });
     }
 
     /**
@@ -252,15 +238,14 @@ export class DaybookComponent implements OnInit, OnDestroy {
             this.daybookQueryRequest.to = (obj.toDate) ? obj.toDate : this.todaySelected ? '' : this.daybookQueryRequest.to;
             this.daybookQueryRequest.page = 0;
             if (obj.action === 'search') {
-                this.advanceSearchModel.hide();
+                this.modalDialogRef.close();
                 this.getDaybook(this.searchFilterData);
                 this.showAdvanceSearchIcon = true;
             } else if (obj.action === 'export') {
-                this.daybookExportRequestType = 'post';
-                this.exportDaybookModal.show();
+                this.exportDaybook();
             }
         } else {
-            this.advanceSearchModel.hide();
+            this.modalDialogRef.close();
         }
     }
 
@@ -292,7 +277,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 this.daybookData = response?.body;
                 this.checkIsStockEntryAvailable();
             } else {
-                if(response?.message) {
+                if (response?.message) {
                     this.daybookData = { entries: [], totalItems: 0, page: 0 };
                     this.toasterService.clearAllToaster();
                     this.toasterService.errorToast(response?.message);
@@ -318,12 +303,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
 
     public initialRequest() {
         this.showAdvanceSearchIcon = false;
-        if (this.daybookAdvanceSearchModelComponent) {
-            this.daybookAdvanceSearchModelComponent.advanceSearchForm.reset();
-            this.daybookAdvanceSearchModelComponent.resetShselectForceClear();
-            this.daybookAdvanceSearchModelComponent.initializeDaybookAdvanceSearchForm();
-            this.searchFilterData = null;
-        }
 
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
@@ -359,11 +338,13 @@ export class DaybookComponent implements OnInit, OnDestroy {
 
     public exportDaybook() {
         this.daybookExportRequestType = 'post';
-        this.exportDaybookModal.show();
+        this.modalDialogRef = this.dialog.open(this.exportDaybookModal, {
+            width: '630px'
+        });
     }
 
     public hideExportDaybookModal(response: any) {
-        this.exportDaybookModal.hide();
+        this.modalDialogRef.close();
         if (response !== 'close') {
             this.daybookQueryRequest.type = response.type;
             this.daybookQueryRequest.format = response.fileType;
@@ -413,23 +394,25 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @param {*} entry Transaction object
      * @memberof DaybookComponent
      */
-    public expandEntry(entry): any {
-        let isInventory: boolean = false;
-        entry.isExpanded = !entry.isExpanded;
-        if (entry && entry.otherTransactions) {
-            isInventory = entry.otherTransactions.some(otherTrasaction => {
-                if (otherTrasaction && otherTrasaction.inventory) {
-                    return true;
-                } else {
-                    return false;
-                }
-            });
-        }
-        if (isInventory && entry.isExpanded) {
-            this.isEntryExpanded = true;
-        } else if (isInventory && !entry.isExpanded) {
-            this.checkIsStockEntryAvailable();
-        }
+    public expandEntry(entry: any): any {
+        setTimeout(() => {
+            let isInventory: boolean = false;
+            entry.isExpanded = !entry.isExpanded;
+            if (entry && entry.otherTransactions) {
+                isInventory = entry.otherTransactions.some(otherTrasaction => {
+                    if (otherTrasaction && otherTrasaction.inventory) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
+            }
+            if (isInventory && entry.isExpanded) {
+                this.isEntryExpanded = true;
+            } else if (isInventory && !entry.isExpanded) {
+                this.checkIsStockEntryAvailable();
+            }
+        });
     }
 
     /**
@@ -533,12 +516,16 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.ledgerActions.setAccountForEdit(txn?.otherTransactions[0]?.particular?.uniqueName));
         this.store.dispatch(this.ledgerActions.setTxnForEdit(txn.uniqueName));
         this.lc.selectedTxnUniqueName = txn.uniqueName;
-        this.updateLedgerModal.show();
-        document.querySelector('body').classList.add('update-ledger-overlay');
+        this.modalDialogRef = this.dialog.open(this.updateLedgerModal, {
+            width: '70%',
+            height: '650px'
+        });
 
-        setTimeout(() => {
-            this.updateLedgerComponent.loadDefaultSearchSuggestions();
-        }, 20);
+        this.modalDialogRef.afterOpened().pipe(take(1)).subscribe(response => {
+            this.updateLedgerComponent?.loadDefaultSearchSuggestions();
+        });
+
+        document.querySelector('body').classList.add('update-ledger-overlay');
     }
 
     /**
