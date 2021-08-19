@@ -705,8 +705,8 @@
                     <mat-checkbox
                         color="primary"
                         id="tourist-scheme-1"
-                        [ngModel]="isRcmEntry"
-                        (change)="toggleRcmCheckbox($event)"
+                        [(ngModel)]="isRcmEntry"
+                        (click)="toggleRcmCheckbox($event)"
                         [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                         ><span [innerHTML]="localeData?.transaction_available_rc"></span
                     ></mat-checkbox>
