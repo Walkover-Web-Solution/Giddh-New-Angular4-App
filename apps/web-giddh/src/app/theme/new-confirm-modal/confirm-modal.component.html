@@ -1,14 +1,16 @@
 <div>
     <div class="modal-header">
-        <h3 class="modal-title">{{inputData?.title}}</h3>
+        <h3 class="modal-title">{{ inputData?.title }}</h3>
         <span aria-hidden="true" class="close" (click)="sendResponse(null)">×</span>
     </div>
     <div class="modal-body">
-        {{inputData?.body}}
-        <p class="text-gray font-14 mr-t05" *ngIf="inputData?.permanentlyDeleteMessage">{{inputData?.permanentlyDeleteMessage}}</p>
+        {{ inputData?.body }}
+        <p class="text-gray font-14 mr-t05" *ngIf="inputData?.permanentlyDeleteMessage">
+            {{ inputData?.permanentlyDeleteMessage }}
+        </p>
     </div>
     <div class="modal-footer">
-        <button mat-button class="btn btn-success" (click)="sendResponse(true)">{{inputData?.ok}}</button>
-        <button mat-button class="btn btn-danger" (click)="sendResponse(false)">{{inputData?.cancel}}</button>
+        <button mat-button class="btn btn-success mr-r1" (click)="sendResponse(true)">{{ inputData?.ok }}</button>
+        <button mat-button class="btn btn-danger" (click)="sendResponse(false)">{{ inputData?.cancel }}</button>
     </div>
 </div>
