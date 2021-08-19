@@ -970,8 +970,8 @@
             color="primary"
             [disabled]="isReadOnly"
             id="tourist-scheme-1"
-            [ngModel]="isRcmEntry"
-            (change)="!isReadOnly ? toggleRcmCheckbox($event) : ''"
+            [(ngModel)]="isRcmEntry"
+            (click)="!isReadOnly ? toggleRcmCheckbox($event) : ''"
             ><span [innerHTML]="localeData?.transaction_available_rc"></span
         ></mat-checkbox>
         <span class="text-light font-12"> ({{ localeData?.tax_compulsory }})</span>
