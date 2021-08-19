@@ -116,8 +116,11 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public initialApiCalled: boolean = false;
     /** Table columns for daybook report */
     public tableColumns: string[] = ['entry_date', 'particular', 'voucher_name', 'voucher_no', 'debit_amount', 'credit_amount'];
+    /** Table columns for daybook report in expanded mode */
     public tableAllColumns: string[] = ['entry_date', 'particular', 'voucher_name', 'voucher_no', 'debit_amount', 'credit_amount', 'product_service', 'quantity', 'unit', 'rate', 'hsn_sac', 'sku', 'warehouse'];
+    /** Sub Table columns for daybook report in expanded mode */
     public tableExpandedColumns: string[] = ['expanded_entry_date', 'expanded_particular', 'expanded_voucher_name', 'expanded_voucher_no', 'expanded_debit_amount', 'expanded_credit_amount', 'expanded_product_service', 'expanded_quantity', 'expanded_unit', 'expanded_rate', 'expanded_hsn_sac', 'expanded_sku', 'expanded_warehouse'];
+    /** Instance of modal */
     public modalDialogRef: any;
 
     constructor(
@@ -153,7 +156,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
-        
+
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
@@ -215,7 +218,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
     }
 
     public onOpenAdvanceSearch() {
-        this.modalDialogRef = this.dialog.open(this.advanceSearchModal);
+        this.modalDialogRef = this.dialog.open(this.advanceSearchModal, {
+            maxWidth: '1000px'
+        });
     }
 
     /**
@@ -272,7 +277,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 this.daybookData = response?.body;
                 this.checkIsStockEntryAvailable();
             } else {
-                if(response?.message) {
+                if (response?.message) {
                     this.daybookData = { entries: [], totalItems: 0, page: 0 };
                     this.toasterService.clearAllToaster();
                     this.toasterService.errorToast(response?.message);

@@ -60,15 +60,14 @@
                                         <sh-select
                                             [options]="accounts$ | async"
                                             name="particulars"
+                                            formControlName="particulars"
                                             (onClear)="onDDClear('particulars')"
-                                            [forceClearReactive]="forceClearParticulars$ | async"
                                             (selected)="onDDElementSelect('particulars', $event)"
                                             [isFilterEnabled]="true"
                                             [multiple]="true"
                                             [placeholder]="commonLocaleData?.app_select_accounts"
                                             [enableDynamicSearch]="true"
                                             [isPaginationEnabled]="true"
-                                            [doNotResetSelectedValues]="true"
                                             (scrollEnd)="handleScrollEnd()"
                                             (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
                                             [ItemHeight]="33"
@@ -114,9 +113,9 @@
                                     <div class="form-group">
                                         <sh-select
                                             [options]="voucherTypeList | async"
-                                            name="particulars"
+                                            name="vouchers"
+                                            formControlName="vouchers"
                                             (onClear)="onDDClear('vouchers')"
-                                            [forceClearReactive]="forceClear$ | async"
                                             (selected)="onDDElementSelect('vouchers', $event)"
                                             [isFilterEnabled]="true"
                                             [multiple]="true"
@@ -143,9 +142,9 @@
                                             [showClear]="false"
                                             [width]="'100%'"
                                             (selected)="onRangeSelect('amount', $event)"
-                                            [forceClearReactive]="forceClearRange$ | async"
                                             [options]="comparisonFilterDropDown$ | async"
-                                            name="particulars"
+                                            name="amountRange"
+                                            formControlName="amountRange"
                                             [placeholder]="commonLocaleData?.app_select_range"
                                             [ItemHeight]="33"
                                         >
@@ -222,6 +221,7 @@
                                                 <sh-select
                                                     [options]="stockListDropDown$ | async"
                                                     name="inventory"
+                                                    formControlName="inventories"
                                                     (onClear)="onDDClear('inventory')"
                                                     (selected)="onDDElementSelect('inventory', $event)"
                                                     [isFilterEnabled]="true"
@@ -230,7 +230,6 @@
                                                     [ItemHeight]="33"
                                                     [enableDynamicSearch]="true"
                                                     [isPaginationEnabled]="true"
-                                                    [doNotResetSelectedValues]="true"
                                                     (scrollEnd)="handleStockScrollEnd()"
                                                     (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"
                                                 >
@@ -246,7 +245,8 @@
                                                     [width]="'100%'"
                                                     (selected)="onRangeSelect('inventoryQty', $event)"
                                                     [options]="comparisonFilterDropDown$ | async"
-                                                    name="particulars"
+                                                    name="inventoryQuantity"
+                                                    formControlName="inventoryQuantity"
                                                     [placeholder]="commonLocaleData?.app_select_range"
                                                     [ItemHeight]="33"
                                                 ></sh-select>
@@ -277,7 +277,8 @@
                                                     [width]="'100%'"
                                                     (selected)="onRangeSelect('inventoryVal', $event)"
                                                     [options]="comparisonFilterDropDown$ | async"
-                                                    name="particulars"
+                                                    name="inventoryValue"
+                                                    formControlName="inventoryValue"
                                                     [placeholder]="commonLocaleData?.app_select_range"
                                                     [ItemHeight]="33"
                                                 ></sh-select>
