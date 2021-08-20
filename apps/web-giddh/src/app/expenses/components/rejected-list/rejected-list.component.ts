@@ -144,7 +144,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
                 this.getPettyCashRejectedReports(this.pettycashRequest);
                 this.getPettyCashPendingReports(this.pettycashRequest);
             } else {
-                this.toaster.showSnackBar("success", res.message);
+                this.toaster.showSnackBar("error", res.message);
             }
         });
     }
@@ -239,7 +239,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
                 this.toaster.showSnackBar("success", res.body);
                 this.getPettyCashRejectedReports(this.pettycashRequest);
             } else {
-                this.toaster.showSnackBar("success", res.message);
+                this.toaster.showSnackBar("error", res.message);
             }
         });
     }
