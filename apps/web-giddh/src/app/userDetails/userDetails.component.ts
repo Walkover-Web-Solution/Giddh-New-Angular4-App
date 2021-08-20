@@ -111,7 +111,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public ngOnInit() {
         document.querySelector('body').classList.add('setting-sidebar-open');
-        
+
         this.breakPointObservar.observe([
             '(max-width:767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -325,8 +325,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         stateDetailsRequest.lastState = `pages/user-details/${tabName}`;
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
-
-    /**
+     /**
      * This will return page heading based on active tab
      *
      * @param {boolean} event

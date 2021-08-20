@@ -876,7 +876,7 @@ export class GeneralService {
      *
      * @param {string} voucherCode Voucher code
      * @param {*} commonLocaleData Global context of multi-lingual keys
-     * @return {*} {string} Multi-lingual current voucher label
+     * @return {string} Multi-lingual current voucher label
      * @memberof GeneralService
      */
      public getCurrentVoucherLabel(voucherCode: string, commonLocaleData: any): string {

@@ -215,8 +215,10 @@
                                                                 ></i>
                                                             </span>
                                                             <span class="entity-details">
-                                                                <div class="item">{{ option.label || "-" }}</div>
-                                                                <div class="item-unique">
+                                                                <div class="item giddh-limit single-line-clamp">
+                                                                    {{ option.label || "-" }}
+                                                                </div>
+                                                                <div class="item-unique giddh-limit single-line-clamp">
                                                                     {{ option.name || "-" }}
                                                                 </div>
                                                             </span>
@@ -243,7 +245,7 @@
                         </section>
 
                         <section *ngIf="addressConfiguration.type === 'editBranch'" class="clearfix margin-child-label">
-                            <div class="form_bg clearfix">
+                            <div class="clearfix">
                                 <div class="row">
                                     <!-- DO NOT REMOVE THIS HIDDEN FIELD -->
                                     <div hidden class="form-group col-12">
@@ -365,7 +367,7 @@
                             *ngIf="addressConfiguration.type === 'editWarehouse'"
                             class="clearfix margin-child-label"
                         >
-                            <div class="form_bg clearfix">
+                            <div class="clearfix">
                                 <div class="row">
                                     <div class="form-group col-12">
                                         <label>{{ commonLocaleData?.app_name }} <sup>*</sup></label>

@@ -220,8 +220,8 @@
                 <td colspan="4" class="text-center top-aging-table-top">
                     <aging-dropdown
                         [options]="agingDropDownoptions"
-                        [localeData]="localeData"
                         *ngIf="setDueRangeOpen$ | async"
+                        [localeData]="localeData"
                         [commonLocaleData]="commonLocaleData"
                     ></aging-dropdown>
                 </td>
@@ -247,8 +247,7 @@
                         ></ng-container>
                         <ng-container
                             *ngTemplateOutlet="!showNameSearch ? sortingTemplate : ''; context: { $implicit: 'name' }"
-                        >
-                        </ng-container>
+                        ></ng-container>
                     </div>
                 </th>
                 <th>

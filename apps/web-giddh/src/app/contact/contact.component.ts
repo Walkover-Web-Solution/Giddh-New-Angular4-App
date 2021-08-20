@@ -233,9 +233,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         private _groupWithAccountsAction: GroupWithAccountsAction,
         private _cdRef: ChangeDetectorRef, private _generalService: GeneralService,
         private _route: ActivatedRoute, private _generalAction: GeneralActions,
-        private _router: Router,
-        private breakPointObservar: BreakpointObserver,
-        private modalService: BsModalService,
+        private breakPointObservar: BreakpointObserver, private modalService: BsModalService,
         private settingsProfileActions: SettingsProfileActions, private groupService: GroupService,
         private settingsBranchAction: SettingsBranchActions,
         public currencyPipe: GiddhCurrencyPipe) {
@@ -306,11 +304,11 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if(dateObj) {
                 this.universalDate = cloneDeep(dateObj);
-                
+
                 setTimeout(() => {
                     this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
                         this.todaySelected = response;
-            
+
                         if (this.universalDate && !this.todaySelected) {
                             this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
                             this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
@@ -321,7 +319,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                             this.fromDate = "";
                             this.toDate = "";
                         }
-                        
+
                         this.getAccounts(this.fromDate, this.toDate, null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                     });
                 }, 100);

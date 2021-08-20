@@ -64,20 +64,20 @@ export class BulkExportModal implements OnInit, OnDestroy {
             { label: this.localeData?.invoice_copy_options?.customer, value: 'CUSTOMER' },
             { label: this.localeData?.invoice_copy_options?.transport, value: 'TRANSPORT' }
         ];
-        this.getEmail();
+        this.getRecipientEmail();
     }
-    
+
     /**
      * Get company email
-     * @returns updated recipient value to company email
+     *
+     * @memberof BulkExportModal
      */
-    public getEmail(): any {
+    public getRecipientEmail(): void {
         this.store.pipe(select(appState => appState.session.user), take(1)).subscribe(result => {
             if (result && result.user) {
                 this.recipients = result.user.email;
             }
         });
-        return this.recipients;
     }
 
     /**

@@ -8195,7 +8195,13 @@ input.mat-input-element {
         }
     }
 }
-
+body.update-scroll-hidden {
+    overflow-y: hidden;
+}
+.e-waybill-tabs.custom-tabs .nav-tabs {
+    position: static !important;
+    padding-left: 15px !important;
+}
 .e-waybill-tabs.custom-tabs .nav-tabs {
     position: static !important;
     padding-left: 15px !important;
@@ -8218,13 +8224,49 @@ body.update-scroll-hidden {
         }
     }
 }
-.nav-left-bar {
-    &.width-60 {
-        .sidebar-collapse {
-            .sub-menu {
-                display: none !important;
+.on-setting-page,
+.on-user-page {
+    aside-setting {
+        .aside-pane {
+            .back-to-main-slider {
+                display: block !important;
+                padding: 0 12px;
+            }
+            h4 {
+                display: none;
             }
         }
+        &::after {
+            display: none;
+        }
+    }
+}
+.on-setting-page,
+.on-user-page {
+    aside-setting {
+        .aside-pane {
+            .back-to-main-slider {
+                display: block !important;
+                padding: 0 12px;
+            }
+            h4 {
+                display: none;
+            }
+        }
+        &::after {
+            display: none;
+        }
+    }
+}
+.on-setting-page.aside-setting,
+.on-user-page.aside-setting {
+    #content-wrapper {
+        padding-right: 240px;
+    }
+}
+.gst-sidebar-open.on-setting-page.aside-setting {
+    #content-wrapper {
+        padding-right: 0;
     }
 }
 .company-branch-dropdown {
@@ -8303,22 +8345,8 @@ body.update-scroll-hidden {
         }
     }
 }
-.on-setting-page,
-.on-user-page {
-    aside-setting {
-        .aside-pane {
-            .back-to-main-slider {
-                display: block !important;
-                padding: 0 12px;
-            }
-            h4 {
-                display: none;
-            }
-        }
-        &::after {
-            display: none;
-        }
-    }
+.manage-account-popup.full-screen-modal {
+    z-index: 999991;
 }
 .on-setting-page.aside-setting,
 .on-user-page.aside-setting {
@@ -8339,6 +8367,21 @@ body.update-scroll-hidden {
 }
 .trial-balance-viewport {
     height: 500px;
+}
+.e-waybill-tabs.custom-tabs .nav-tabs {
+    position: static !important;
+    padding-left: 15px !important;
+}
+.sales-register {
+    width: calc(100% - 60px) !important;
+}
+.menu_open .sales-register {
+    width: calc(100% - 240px) !important;
+}
+.wrap-billing-address.clearfix {
+    .bottom-border-only {
+        padding-left: 0 !important;
+    }
 }
 .gst-sidebar-open {
     .daterangepicker.show-calendar {
@@ -8424,7 +8467,7 @@ body.update-scroll-hidden {
         }
         .menu_open {
             #content-wrapper {
-                padding-left: 240px;
+                padding-left: 300px;
             }
             .plan-wrapper {
                 padding-left: 60px;
@@ -8490,7 +8533,7 @@ body.update-scroll-hidden {
             left: 60px !important;
         }
         #content-wrapper {
-            padding-left: 300px;
+            padding-left: 300px !important;
         }
     }
 }
@@ -8653,9 +8696,11 @@ body.update-scroll-hidden {
     .card-invoice-table .multi-select input.form-control {
         background-position: 98% !important;
     }
-    .single-card-row .my-dropdown-menu.pd {
-        left: auto !important;
-        right: 0 !important;
+    .bulk-create-table sh-select input,
+    .bulk-create-table .mat-form-field-wrapper input,
+    .bulk-create-table .mat-form-field-appearance-fill .mat-form-field-flex {
+        border: 1px solid $gainsboro !important;
+        padding: 0 11px !important;
     }
 }
 
@@ -8689,6 +8734,7 @@ body.update-scroll-hidden {
         width: 100% !important;
         padding-right: 0 !important;
     }
+
     .bulk-create-table sh-select input,
     .bulk-create-table .mat-form-field-wrapper input,
     .bulk-create-table .mat-form-field-appearance-fill .mat-form-field-flex {
@@ -8866,10 +8912,14 @@ body.update-scroll-hidden {
     .mobile-setting-sidebar {
         overflow-y: hidden;
     }
+    .gst-sidebar-open {
+        #content-wrapper {
+            padding-left: 0 !important;
+        }
+    }
     .customer-aging .nav.nav-tabs {
         display: flex !important;
     }
-
     .setting-sidebar-open {
         #content-wrapper {
             padding-left: 0 !important;
@@ -8884,9 +8934,9 @@ body.update-scroll-hidden {
                 display: none !important;
             }
         }
-        #content-wrapper {
-            padding-left: 0;
-        }
+    }
+    .gst-sidebar-open .gst-menu-icon {
+        display: inline-flex !important;
     }
     .setting-sidebar {
         display: block;
@@ -9584,6 +9634,15 @@ body.update-scroll-hidden {
 }
 
 @media (max-width: 360px) {
+    .on-setting-page {
+        .hamburger-menu-icon.page-has-heading {
+            li {
+                h4 {
+                    min-width: 150px !important;
+                }
+            }
+        }
+    }
     .pagination-sm > li > a,
     .pagination-sm > li > span {
         padding: 5px 8px;
@@ -9791,8 +9850,8 @@ body.update-scroll-hidden {
         display: none;
     }
     .modal-dialog {
-        max-width: 600px !important;
-        margin: 56px auto;
+        max-width: 650px !important;
+        margin: 30px auto;
         padding: 0 10px;
     }
     .modal-dialog.modal-xl {

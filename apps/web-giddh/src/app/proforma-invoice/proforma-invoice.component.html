@@ -9,7 +9,9 @@
     <div [ngStyle]="{ 'display': !showLoader ? 'block' : 'none' }">
         <!-- region page change menu -->
         <div class="d-flex border-bottom mobile-view-padding">
-            <hamburger-menu></hamburger-menu>
+            <hamburger-menu
+                [pageHeading]="(isCashInvoice ? localeData?.invoice_types?.cash : getInvoiceType()) | titlecase"
+            ></hamburger-menu>
             <div class="form-group mr-b05 clearfix pro-invoice-heading">
                 <div class="clearfix">
                     <div class="btn-group proforma-sales-time" dropdown>
@@ -196,6 +198,14 @@
                                                                 invoiceType !== 'sales' &&
                                                                 invoiceType !== 'cash' &&
                                                                 invoiceType !== 'purchase'
+                                                            "
+                                                            [fixedValue]="
+                                                                isUpdateMode &&
+                                                                invoiceType !== 'sales' &&
+                                                                invoiceType !== 'cash' &&
+                                                                invoiceType !== 'purchase'
+                                                                    ? invFormData.voucherDetails.customerName
+                                                                    : ''
                                                             "
                                                         >
                                                             <ng-template #optionTemplate let-option="option">
