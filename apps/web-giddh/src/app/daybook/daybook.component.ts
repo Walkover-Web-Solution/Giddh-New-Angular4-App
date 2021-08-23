@@ -16,9 +16,9 @@ import { GeneralService } from '../services/general.service';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../models/user-login-state';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
-import { LedgerVM } from '../ledger/ledger.vm';
+import { LedgerVM } from '../material-ledger/ledger.vm';
 import { SalesOtherTaxesModal } from '../models/api-models/Sales';
-import { UpdateLedgerEntryPanelComponent } from '../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.component';
+import { UpdateLedgerEntryPanelComponent } from '../material-ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.component';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { DaybookService } from '../services/daybook.service';
 import { ToasterService } from '../services/toaster.service';
@@ -230,7 +230,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @param obj contains search params
      */
     public closeAdvanceSearchPopup(obj) {
-        this.searchFilterData = null;
         if (!obj.cancle) {
             this.searchFilterData = cloneDeep(obj.dataToSend);
             if (this.dateRangePickerCmp) {
@@ -304,6 +303,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
     }
 
     public initialRequest() {
+        this.searchFilterData = null;
         this.showAdvanceSearchIcon = false;
 
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
@@ -581,6 +581,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @memberof DaybookComponent
      */
     private getCompanyTaxes(): void {
+        this.store.dispatch(this.companyActions.getTax());
         this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
             this.companyTaxesList = res || [];
         });

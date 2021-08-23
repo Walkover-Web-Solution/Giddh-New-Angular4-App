@@ -27,6 +27,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
     declarations: [DaybookComponent, ExportDaybookComponent, DaybookAdvanceSearchModelComponent],
@@ -55,7 +56,8 @@ import { MatRadioModule } from '@angular/material/radio';
         MatTableModule,
         MatDialogModule,
         MatCheckboxModule,
-        MatRadioModule
+        MatRadioModule,
+        MatExpansionModule
     ],
     entryComponents: [
         PaginationComponent
