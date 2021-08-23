@@ -60,8 +60,7 @@ export class ToasterService {
             data: { title: title, message: message },
             horizontalPosition: "center",
             verticalPosition: "top",
-            panelClass: type,
-            duration: 3000
+            panelClass: type
         });
     }
 }

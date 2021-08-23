@@ -101,6 +101,8 @@ const NEW_LEDGER_ENTRIES = [
 export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
     /** Instance of mat accordion */
     @ViewChild(MatAccordion) accordion: MatAccordion;
+    /** Instance of RCM checkbox */
+    @ViewChild("rcmCheckbox") public rcmCheckbox: ElementRef;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -1259,15 +1261,33 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     /**
+     * This will reset the state of checkbox and ngModel to make sure we update it based on user confirmation later
+     *
+     * @param {*} event
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public changeRcmCheckboxState(event: any): void {
+        this.isRcmEntry = !this.isRcmEntry;
+        this.toggleRcmCheckbox(event, 'checkbox');
+    }
+
+    /**
      * Toggle the RCM checkbox based on user confirmation
      *
      * @param {*} event Click event
      * @memberof NewLedgerEntryPanelComponent
      */
-    public toggleRcmCheckbox(event: any): void {
-        event.preventDefault();
+    public toggleRcmCheckbox(event: any, element: string): void {
+        let isChecked; 
+        
+        if(element === "checkbox") {
+            isChecked = event?.checked;
+            this.rcmCheckbox['checked'] = !isChecked;
+        } else {
+            isChecked = !event?._checked;
+        }
 
-        this.rcmConfiguration = this.generalService.getRcmConfiguration(event?.checked, this.commonLocaleData);
+        this.rcmConfiguration = this.generalService.getRcmConfiguration(isChecked, this.commonLocaleData);
 
         let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
             width: '630px',
@@ -1292,6 +1312,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (action === this.commonLocaleData?.app_yes) {
             // Toggle the state of RCM as user accepted the terms of RCM modal
             this.isRcmEntry = !this.isRcmEntry;
+            this.rcmCheckbox['checked'] = this.isRcmEntry;
             this.calculateTotal();
         }
         this.currentTxn['subVoucher'] = this.isRcmEntry ? SubVoucher.ReverseCharge : '';
