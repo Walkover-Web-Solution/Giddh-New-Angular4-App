@@ -25,7 +25,9 @@ import { InventoryService } from '../../../services/inventory.service';
 export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges {
     @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
     public bsRangeValue: string[];
+    /** Taking advance search params as input */
     @Input() public advanceSearchRequest: AdvanceSearchRequest;
+    /** Output emitter for close modal event */
     @Output() public closeModelEvent: EventEmitter<{ advanceSearchData, isClose }> = new EventEmitter(null);
     public advanceSearchObject: ILedgerAdvanceSearchRequest = null;
     public advanceSearchForm: FormGroup;
@@ -145,6 +147,12 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         this.loadDefaultGroupsSuggestions();
     }
 
+    /**
+     * Lifecycle hook which updates input data if data has updated
+     *
+     * @param {SimpleChanges} changes
+     * @memberof AdvanceSearchModelComponent
+     */
     public ngOnChanges(changes: SimpleChanges): void {
         if (!this.advanceSearchForm) {
             this.setAdvanceSearchForm();
