@@ -1281,7 +1281,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.searchText = "";
         this.isAdvanceSearchImplemented = false;
         this.trxRequest.page = 0;
+        let accountUniqueName = this.advanceSearchRequest.accountUniqueName;
         this.advanceSearchRequest = new AdvanceSearchRequest();
+        this.advanceSearchRequest.accountUniqueName = accountUniqueName;
         this.search("");
         this.getTransactionData();
     }

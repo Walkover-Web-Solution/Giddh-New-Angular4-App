@@ -1,3 +1,6 @@
-<span class="pull-right" (click)="dismiss()">x</span>
-<div class="snack-message-title">{{ data?.title }}</div>
-<div class="snack-message-content" [innerHTML]="data?.message"></div>
+<div class="snack-container cp" (mouseenter)="resetTimeout()" (mouseleave)="createTimeout()">
+    <button class="toast-close-button pull-right" (click)="dismiss()">×</button>
+    <div class="snack-message-title">{{ data?.title }}</div>
+    <div class="snack-message-content" [innerHTML]="data?.message"></div>
+    <div class="snack-progress-bar" *ngIf="showProgressBar" [style.width]="snackProgressBarWidthPercentage + '%'"></div>
+</div>
