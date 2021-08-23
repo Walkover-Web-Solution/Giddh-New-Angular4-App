@@ -1557,6 +1557,7 @@
                                                             [(ngModel)]="lc.blankLedger.entryDate"
                                                             [placeholder]="lc.formatPlaceholder"
                                                             (dateSelected)="getInvoiceListsForCreditNote(true)"
+                                                            (datepickerState)="datepickerState($event)"
                                                         ></giddh-datepicker>
                                                     </div>
                                                 </mat-grid-tile>
@@ -1948,6 +1949,7 @@
                                                         <span class="ledger-checkbox pull-left"> </span>
                                                         <giddh-datepicker
                                                             name="bsdateledger"
+                                                            (datepickerState)="datepickerState($event)"
                                                             [(ngModel)]="lc.blankLedger.entryDate"
                                                             [placeholder]="lc.formatPlaceholder"
                                                         ></giddh-datepicker>
@@ -2138,7 +2140,7 @@
                                     </tr>
                                     <tr class="total-col">
                                         <td colspan="12" class="col-xs-12 text-right white h32 border-top pd-r1">
-                                            <div class="d-flex flex-column">
+                                            <div class="d-flex flex-column align-items-end">
                                                 <span class="bd-rt padding-ledger">
                                                     <amount-field
                                                         [amount]="lc.reckoningDebitTotal"
@@ -2187,7 +2189,7 @@
                                     </tr>
                                     <tr class="total-col">
                                         <td colspan="12" class="col-xs-12 text-right white h32 border-top pd-r1">
-                                            <div class="d-flex flex-column">
+                                            <div class="d-flex flex-column align-items-end">
                                                 <span class="bd-rt padding-ledger">
                                                     <amount-field
                                                         [amount]="lc.reckoningCreditTotal"

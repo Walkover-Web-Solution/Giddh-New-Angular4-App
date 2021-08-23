@@ -1496,9 +1496,9 @@ header .navbar {
 }
 
 .btn-primary {
-    background: $white;
-    border-color: $gainsboro;
-    color: $midnight-express;
+    background: $white !important;
+    border-color: $gainsboro !important;
+    color: $midnight-express !important;
 }
 
 .btn-primary:hover,
@@ -1511,9 +1511,9 @@ header .navbar {
 .btn-primary:active:hover,
 .open > .dropdown-toggle.btn-primary:focus,
 .btn-primary:not(:disabled):not(.disabled):active {
-    background: $chetwode-blue;
-    color: $white;
-    border-color: $chetwode-blue;
+    background: $chetwode-blue !important;
+    color: $white !important;
+    border-color: $chetwode-blue !important;
 }
 
 .btn-primary.disabled.focus,
@@ -1525,9 +1525,9 @@ header .navbar {
 fieldset[disabled] .btn-primary.focus,
 fieldset[disabled] .btn-primary:focus,
 fieldset[disabled] .btn-primary:hover {
-    background: $chetwode-blue;
-    color: $white;
-    border-color: $midnight-blue;
+    background: $chetwode-blue !important;
+    color: $white !important;
+    border-color: $midnight-blue !important;
 }
 
 .btn {
@@ -1545,9 +1545,9 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .btn-default {
-    background: $white;
-    border-color: $gainsboro;
-    color: $midnight-express;
+    background: $white !important;
+    border-color: $gainsboro !important;
+    color: $midnight-express !important;
 }
 
 .btn-default:hover,
@@ -4575,17 +4575,14 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 }
 
 .modal-header > .close {
-    position: absolute;
-    right: 0;
-    top: 0;
-    margin: 11px;
-    line-height: 0px;
     color: $white;
     opacity: 1;
     font-weight: 100;
     text-shadow: none;
     font-size: 30px;
     cursor: pointer;
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
 /**new modal design**/
@@ -6699,7 +6696,7 @@ ul.dropdown-menu p.lead.pd {
     color: $white;
     box-shadow: 0px 4px 4px -3px $wistful;
     border-radius: 0px;
-    border-color: $chetwode-blue;
+    border-color: $chetwode-blue !important;
 }
 
 .aside-panel-ledger button.btn.btn-lg.btn-primary {
@@ -8408,9 +8405,6 @@ body.update-scroll-hidden {
 }
 .cdk-overlay-pane {
     height: auto !important;
-    .mat-dialog-container {
-        overflow: visible !important;
-    }
 }
 
 /* responsive  starts here*/
@@ -9819,6 +9813,12 @@ body.update-scroll-hidden {
     #share-modal select {
         width: auto;
         max-width: 300px;
+    }
+    .d-sm-inline {
+        display: inline-block !important;
+    }
+    .daybook-icon-advance-filter {
+        padding-right: 5px;
     }
 }
 @media (min-width: 768px) {

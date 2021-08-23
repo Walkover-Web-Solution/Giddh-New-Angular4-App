@@ -7,7 +7,7 @@
 >
     <div id="entryModal">
         <!-- region header -->
-        <div class="modal-header" *ngIf="!isPettyCash">
+        <div class="modal-header align-items-center flex-row-reverse" *ngIf="!isPettyCash">
             <span
                 aria-hidden="true"
                 class="close hover-orange"
@@ -705,8 +705,8 @@
                     <mat-checkbox
                         color="primary"
                         id="tourist-scheme-1"
-                        [ngModel]="isRcmEntry"
-                        (change)="toggleRcmCheckbox($event)"
+                        [(ngModel)]="isRcmEntry"
+                        (click)="toggleRcmCheckbox($event)"
                         [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                         ><span [innerHTML]="localeData?.transaction_available_rc"></span
                     ></mat-checkbox>
@@ -1188,157 +1188,165 @@
                         </div>
 
                         <!-- Advance receipts adjusted Invoice -->
-                        <div
-                            class="clearfix adjust-receipt font-14"
-                            *ngIf="
-                                vm.selectedLedger?.voucherAdjustments?.adjustments?.length &&
-                                (isAdjustVoucherSelected || isAdjustAdvanceReceiptSelected || isAdjustReceiptSelected)
-                            "
-                        >
-                            <p class="bold">
-                                {{ localeData?.adjusted_amount_full }}
-                                <a
-                                    href="javascript:void(0)"
-                                    *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode"
-                                    (click)="openAdjustInvoiceEditMode(); $event.stopPropagation()"
-                                >
+                        <div class="row mr-0 ml-0">
+                            <div
+                                class="clearfix col-md-12 adjust-receipt font-14"
+                                *ngIf="
+                                    vm.selectedLedger?.voucherAdjustments?.adjustments?.length &&
+                                    (isAdjustVoucherSelected ||
+                                        isAdjustAdvanceReceiptSelected ||
+                                        isAdjustReceiptSelected)
+                                "
+                            >
+                                <p class="bold">
+                                    {{ localeData?.adjusted_amount_full }}
+                                    <a
+                                        href="javascript:void(0)"
+                                        *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode"
+                                        (click)="openAdjustInvoiceEditMode(); $event.stopPropagation()"
+                                    >
+                                        <i
+                                            class="edit-adjustment icon-edit11 font-10"
+                                            *ngIf="
+                                                (currentOrganizationType === 'COMPANY' && branches?.length === 1) ||
+                                                currentOrganizationType === 'BRANCH'
+                                            "
+                                        ></i>
+                                    </a>
                                     <i
-                                        class="edit-adjustment icon-edit11 font-10"
-                                        *ngIf="
-                                            (currentOrganizationType === 'COMPANY' && branches?.length === 1) ||
-                                            currentOrganizationType === 'BRANCH'
-                                        "
+                                        class="icon-info"
+                                        [popover]="adjustmentPopOverTemplate"
+                                        [outsideClick]="true"
+                                        containerClass="adjustment-popover"
+                                        placement="bottom right"
                                     ></i>
-                                </a>
-                                <i
-                                    class="icon-info"
-                                    [popover]="adjustmentPopOverTemplate"
-                                    [outsideClick]="true"
-                                    containerClass="adjustment-popover"
-                                    placement="bottom right"
-                                ></i>
-                            </p>
-                            <ng-template #adjustmentPopOverTemplate>
-                                <div class="adjusted-info">
-                                    <p class="mr-b1">
-                                        <strong>{{ localeData?.adjustment }}</strong>
-                                    </p>
-                                    <p class="info-text">
-                                        {{
-                                            localeData?.adjustment_notes
-                                                | replace: "[VOUCHER_NUMBER]":vm.selectedLedger?.voucherNumber
-                                        }}
-                                    </p>
-                                </div>
-                            </ng-template>
-                            <p class="font-12 text-light mr-b1">
-                                <span>
-                                    <amount-field
-                                        [amount]="vm.selectedLedger?.voucherAdjustments?.totalAdjustmentAmount"
-                                        [currencySymbol]="vm.baseCurrencyDetails?.symbol"
-                                        [currencyCode]="vm.baseCurrencyDetails?.code"
-                                    >
-                                    </amount-field>
-                                </span>
-                            </p>
-                            <div class="clearfix adjustment-field">
-                                <div
-                                    class="row"
-                                    *ngFor="
-                                        let item of vm.selectedLedger?.voucherAdjustments?.adjustments;
-                                        let entryIdx = index
-                                    "
-                                >
-                                    <div class="col-md-5 col-sm-5 pd-r05">
-                                        <div class="form-group">
-                                            <label
-                                                >{{ localeData?.adjustment_vouchers }}
-                                                <span class="text-danger">*</span>
-                                            </label>
-                                            <input
-                                                matInput
-                                                id="update-ledger-adjust-voucher"
-                                                type="text"
-                                                class="form-control mr-b1 mat-field-border"
-                                                [(ngModel)]="item.voucherNumber"
-                                                disabled
-                                            />
-                                        </div>
+                                </p>
+                                <ng-template #adjustmentPopOverTemplate>
+                                    <div class="adjusted-info">
+                                        <p class="mr-b1">
+                                            <strong>{{ localeData?.adjustment }}</strong>
+                                        </p>
+                                        <p class="info-text">
+                                            {{
+                                                localeData?.adjustment_notes
+                                                    | replace: "[VOUCHER_NUMBER]":vm.selectedLedger?.voucherNumber
+                                            }}
+                                        </p>
                                     </div>
-                                    <div class="col-md-5 col-sm-5 pd-l05 pd-r05">
-                                        <div class="form-group">
-                                            <label
-                                                >{{ commonLocaleData?.app_amount }}<span class="text-danger">*</span>
-                                                <span
-                                                    *ngIf="item.voucherType === 'receipt' && isAdvanceReceipt"
-                                                    class="text-light font-12 mr-l05"
-                                                    >({{ commonLocaleData?.app_inclusive_tax }})</span
-                                                ></label
-                                            >
-                                            <input
-                                                matInput
-                                                id="update-ledger-inclusive-tax-edit-mode"
-                                                type="text"
-                                                class="form-control mr-b1 mat-field-border"
-                                                *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode"
-                                                [mask]="vm.inputMaskFormat"
-                                                [prefix]="item.accountCurrency?.symbol"
-                                                decimalDigitsDirective
-                                                [(ngModel)]="item.adjustmentAmount.amountForAccount"
-                                                disabled
-                                            />
-                                            <input
-                                                matInput
-                                                [disabled]="
-                                                    !isPettyCash &&
-                                                    currentOrganizationType === 'COMPANY' &&
-                                                    branches?.length > 1
-                                                "
-                                                id="update-ledger-inclusive-tax"
-                                                type="text"
-                                                class="form-control mr-b1 mat-field-border"
-                                                decimalDigitsDirective
-                                                [mask]="vm.inputMaskFormat"
-                                                [prefix]="item.accountCurrency?.symbol"
-                                                (blur)="adjustedInvoiceAmountChange()"
-                                                *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode"
-                                                [(ngModel)]="item.adjustmentAmount.amountForAccount"
-                                            />
-                                        </div>
-                                    </div>
+                                </ng-template>
+                                <p class="font-12 text-light mr-b1">
+                                    <span>
+                                        <amount-field
+                                            [amount]="vm.selectedLedger?.voucherAdjustments?.totalAdjustmentAmount"
+                                            [currencySymbol]="vm.baseCurrencyDetails?.symbol"
+                                            [currencyCode]="vm.baseCurrencyDetails?.code"
+                                        >
+                                        </amount-field>
+                                    </span>
+                                </p>
+                                <div class="clearfix adjustment-field">
                                     <div
-                                        *ngIf="item.voucherType === 'receipt' && item.subVoucher === 'ADVANCE_RECEIPT'"
-                                        class="col-sm-2 pd-l05"
+                                        class="row"
+                                        *ngFor="
+                                            let item of vm.selectedLedger?.voucherAdjustments?.adjustments;
+                                            let entryIdx = index
+                                        "
                                     >
-                                        <div class="form-group">
-                                            <label>{{ commonLocaleData?.app_tax }}</label>
-                                            <input
-                                                matInput
-                                                type="text"
-                                                id="update-ledger-voucher-tax"
-                                                class="form-control mr-b1 mat-field-border"
-                                                decimalDigitsDirective
-                                                [mask]="vm.inputMaskFormat"
-                                                [prefix]="item.accountCurrency?.symbol"
-                                                [(ngModel)]="item.calculatedTaxAmount"
-                                                disabled
-                                            />
+                                        <div class="col-md-5 col-sm-5 pd-r05">
+                                            <div class="form-group">
+                                                <label
+                                                    >{{ localeData?.adjustment_vouchers }}
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <input
+                                                    matInput
+                                                    id="update-ledger-adjust-voucher"
+                                                    type="text"
+                                                    class="form-control mr-b1 mat-field-border"
+                                                    [(ngModel)]="item.voucherNumber"
+                                                    disabled
+                                                />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5 col-sm-5 pd-l05 pd-r05">
+                                            <div class="form-group">
+                                                <label
+                                                    >{{ commonLocaleData?.app_amount
+                                                    }}<span class="text-danger">*</span>
+                                                    <span
+                                                        *ngIf="item.voucherType === 'receipt' && isAdvanceReceipt"
+                                                        class="text-light font-12 mr-l05"
+                                                        class="text-light font-12 mr-l05"
+                                                        >({{ commonLocaleData?.app_inclusive_tax }})</span
+                                                    ></label
+                                                >
+                                                <input
+                                                    matInput
+                                                    id="update-ledger-inclusive-tax-edit-mode"
+                                                    type="text"
+                                                    class="form-control mr-b1 mat-field-border"
+                                                    *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode"
+                                                    [mask]="vm.inputMaskFormat"
+                                                    [prefix]="item.accountCurrency?.symbol"
+                                                    decimalDigitsDirective
+                                                    [(ngModel)]="item.adjustmentAmount.amountForAccount"
+                                                    disabled
+                                                />
+                                                <input
+                                                    matInput
+                                                    [disabled]="
+                                                        !isPettyCash &&
+                                                        currentOrganizationType === 'COMPANY' &&
+                                                        branches?.length > 1
+                                                    "
+                                                    id="update-ledger-inclusive-tax"
+                                                    type="text"
+                                                    class="form-control mr-b1 mat-field-border"
+                                                    decimalDigitsDirective
+                                                    [mask]="vm.inputMaskFormat"
+                                                    [prefix]="item.accountCurrency?.symbol"
+                                                    (blur)="adjustedInvoiceAmountChange()"
+                                                    *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode"
+                                                    [(ngModel)]="item.adjustmentAmount.amountForAccount"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div
+                                            *ngIf="
+                                                item.voucherType === 'receipt' && item.subVoucher === 'ADVANCE_RECEIPT'
+                                            "
+                                            class="col-sm-2 pd-l05"
+                                        >
+                                            <div class="form-group">
+                                                <label>{{ commonLocaleData?.app_tax }}</label>
+                                                <input
+                                                    matInput
+                                                    type="text"
+                                                    id="update-ledger-voucher-tax"
+                                                    class="form-control mr-b1 mat-field-border"
+                                                    decimalDigitsDirective
+                                                    [mask]="vm.inputMaskFormat"
+                                                    [prefix]="item.accountCurrency?.symbol"
+                                                    [(ngModel)]="item.calculatedTaxAmount"
+                                                    disabled
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <p *ngIf="isAdjustedAmountExcess" class="font-12 text-light">
+                                    {{ localeData?.excess_amount }}:
+                                    <span class="d-inline-flex">
+                                        <amount-field
+                                            [amount]="adjustedExcessAmount"
+                                            [currencySymbol]="vm.baseCurrencyDetails?.symbol"
+                                            [currencyCode]="vm.baseCurrencyDetails?.code"
+                                        >
+                                        </amount-field>
+                                    </span>
+                                    <i class="icon-info pointer" [matTooltip]="localeData?.adjustment_amount_error"></i>
+                                </p>
                             </div>
-                            <p *ngIf="isAdjustedAmountExcess" class="font-12 text-light">
-                                {{ localeData?.excess_amount }}:
-                                <span class="d-inline-flex">
-                                    <amount-field
-                                        [amount]="adjustedExcessAmount"
-                                        [currencySymbol]="vm.baseCurrencyDetails?.symbol"
-                                        [currencyCode]="vm.baseCurrencyDetails?.code"
-                                    >
-                                    </amount-field>
-                                </span>
-                                <i class="icon-info pointer" [matTooltip]="localeData?.adjustment_amount_error"></i>
-                            </p>
                         </div>
                     </div>
 
@@ -1845,7 +1853,7 @@
                                         </button>
                                         <button
                                             mat-raised-button
-                                            class="btn btn-success mr-l1"
+                                            class="btn btn-success"
                                             id="update-ledger-update-button"
                                             [disabled]="isFileUploading"
                                             [ladda]="isTxnUpdateInProcess$ | async"

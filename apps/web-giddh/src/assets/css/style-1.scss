@@ -2836,7 +2836,8 @@ mat-dialog-container .modal-header {
     }
 }
 
-.mat-button {
+.mat-button,
+.mat-raised-button {
     margin-right: 15px !important;
     height: 36px;
 }
@@ -2845,6 +2846,7 @@ mat-dialog-container .modal-header {
     .mat-grid-tile-content {
         justify-content: space-between !important;
         padding: 0 10px;
+        font-weight: 600;
     }
 }
 
@@ -2892,7 +2894,7 @@ mat-dialog-container .modal-header {
         position: absolute;
     }
 }
-input.mat-input-element {
+.mat-input-element {
     box-sizing: border-box !important;
 }
 update-ledger-entry-panel .ledger-main .mat-form-field {
@@ -2914,7 +2916,9 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
 .mat-snack-bar-container.info {
     background-color: $info-toast !important;
 }
-.mat-form-field-appearance-fill .mat-form-field-flex {
+.mat-form-field-appearance-fill .mat-form-field-flex,
+.mat-form-field-ripple,
+.mat-form-field-appearance-fill .mat-form-field-underline::before {
     background: none !important;
 }
 .overflow-visible {
@@ -2948,6 +2952,7 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
             font-family: "opensans-semibold";
             font-size: 14px !important;
             min-width: 130px;
+            text-align: left;
         }
         .mat-header-row {
             display: none;
@@ -2961,5 +2966,40 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
             padding-left: 0px !important;
         }
     }
+}
+.daybook-advance-search {
+    .mat-form-field-appearance-fill {
+        .mat-form-field-flex {
+            padding: 1px 0px 0px 0px !important;
+        }
+        .mat-form-field-infix {
+            padding: 0;
+            border-top: 0px;
+
+            input.mat-input-element {
+                padding-left: 10px !important;
+                width: 96% !important;
+            }
+        }
+    }
+    giddh-datepicker {
+        .mat-form-field {
+            width: 100%;
+        }
+    }
+    .mat-form-field {
+        .mat-form-field-wrapper {
+            padding-bottom: 0px;
+        }
+    }
+}
+.export-daybook {
+    .mat-raised-button {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+}
+.mat-dialog-container {
+    height: auto !important;
 }
 /* material css for ledger end*/

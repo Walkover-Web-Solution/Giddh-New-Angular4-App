@@ -10,17 +10,23 @@
     >
         <i class="icon-cross"></i>
     </button>
-    <button mat-button id="back" (click)="backButtonPressed()" *ngIf="hideFirstScreen">
+    <button
+        mat-button
+        id="back"
+        (click)="backButtonPressed()"
+        *ngIf="hideFirstScreen"
+        class="d-flex align-items-center"
+    >
         {{ commonLocaleData?.app_back }}
     </button>
     <div class="aside-body flexy-child vertical-align-middle aside-panel-ledger" *ngIf="!hideFirstScreen">
         <div class="pd-1 text-center">
-            <button mat-button class="btn btn-lg btn-primary" (click)="toggleAccountPane()">
+            <button mat-raised-button class="btn btn-lg btn-primary bdr" (click)="toggleAccountPane()">
                 {{ localeData?.add_account }}
             </button>
         </div>
         <div class="pd-1 text-center">
-            <button mat-button class="btn btn-lg btn-primary" (click)="toggleStockPane()">
+            <button mat-raised-button class="btn btn-lg btn-primary bdr" (click)="toggleStockPane()">
                 {{ localeData?.add_stock }}
             </button>
         </div>

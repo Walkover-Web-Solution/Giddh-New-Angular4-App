@@ -60,9 +60,8 @@
                                 </tbody>
                             </table>
                         </td>
-                        <td class="text-center table-plus" *ngIf="currentTxn?.selectedAccount?.stock">
-                            <label class="d-block">&nbsp;</label>
-                            <label class="font-20 pd-t04">x</label>
+                        <td class="icon-box" *ngIf="currentTxn?.selectedAccount?.stock">
+                            <label class="icon-cross"></label>
                         </td>
                         <td class="item-padding text-right price" *ngIf="currentTxn?.selectedAccount?.stock">
                             <label class="font-12">{{ localeData?.price }}</label>
@@ -96,9 +95,8 @@
                             </p>
                         </td>
 
-                        <td class="text-center equal-2" *ngIf="currentTxn?.selectedAccount?.stock">
-                            <label class="d-block">&nbsp;</label>
-                            <label class="font-20">=</label>
+                        <td class="icon-box" *ngIf="currentTxn?.selectedAccount?.stock">
+                            <label class="font-18 mr-t05">=</label>
                         </td>
 
                         <td
@@ -157,10 +155,9 @@
                                 currentTxn?.selectedAccount &&
                                 !shouldShowAdvanceReceiptMandatoryFields
                             "
-                            class="text-center table-minus"
+                            class="icon-box"
                         >
-                            <label class="d-block">&nbsp;</label>
-                            <label class="font-20">-</label>
+                            <label class="icon-minus"></label>
                         </td>
                         <!--discount-->
                         <td
@@ -200,25 +197,23 @@
                         </td>
 
                         <td
-                            class="text-center equal-2"
+                            class="icon-box"
                             *ngIf="
                                 (currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) &&
                                 (companyTaxesList$ | async)?.length
                             "
                         >
-                            <label class="d-block">&nbsp;</label>
-                            <label class="font-20">+</label>
+                            <label class="icon-plus"></label>
                         </td>
 
                         <td
-                            class="text-center equal-2"
+                            class="icon-box"
                             *ngIf="
                                 (currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) &&
                                 !(companyTaxesList$ | async)?.length
                             "
                         >
-                            <label class="d-block">&nbsp;</label>
-                            <label class="font-20">=</label>
+                            <label class="font-18 mr-t05">=</label>
                         </td>
 
                         <td
@@ -291,14 +286,13 @@
                         </td>
 
                         <td
-                            class="text-center equal-2"
+                            class="icon-box"
                             *ngIf="
                                 (currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) &&
                                 (companyTaxesList$ | async)?.length
                             "
                         >
-                            <label class="d-block">&nbsp;</label>
-                            <label class="font-20">=</label>
+                            <label class="font-18 mr-t05">=</label>
                         </td>
 
                         <td
@@ -898,10 +892,9 @@
             <div class="col-12 col-md-12 pd-t1">
                 <button
                     mat-raised-button
-                    color="warn"
                     id="ledger-reset-button"
                     [hidden]="isBankTransaction"
-                    class="pull-left"
+                    class="btn btn-danger float-left"
                     (click)="resetPanel()"
                 >
                     {{ commonLocaleData?.app_reset }}
@@ -909,7 +902,7 @@
 
                 <div class="pull-right xs-d-block">
                     <button
-                        mat-button
+                        mat-raised-button
                         id="ledger-add-button-dr"
                         [hidden]="isBankTransaction"
                         class="btn btn-default btn-sm"
@@ -919,10 +912,10 @@
                     </button>
 
                     <button
-                        mat-button
+                        mat-raised-button
                         id="ledger-add-button-cr"
                         [hidden]="isBankTransaction"
-                        class="btn btn-default btn-sm mr-l2"
+                        class="btn btn-default btn-sm"
                         (click)="addToDrOrCr('CREDIT', $event)"
                     >
                         {{ localeData?.add_to_cr }}
@@ -930,9 +923,8 @@
 
                     <button
                         mat-raised-button
-                        color="primary"
+                        class="btn btn-success"
                         id="saveLedger"
-                        class="mr-0 mr-l2"
                         [disabled]="isFileUploading || isReadOnly"
                         [ladda]="isLedgerCreateInProcess$ | async"
                         (click)="saveLedger()"
@@ -970,8 +962,8 @@
             color="primary"
             [disabled]="isReadOnly"
             id="tourist-scheme-1"
-            [ngModel]="isRcmEntry"
-            (change)="!isReadOnly ? toggleRcmCheckbox($event) : ''"
+            [(ngModel)]="isRcmEntry"
+            (click)="!isReadOnly ? toggleRcmCheckbox($event) : ''"
             ><span [innerHTML]="localeData?.transaction_available_rc"></span
         ></mat-checkbox>
         <span class="text-light font-12"> ({{ localeData?.tax_compulsory }})</span>

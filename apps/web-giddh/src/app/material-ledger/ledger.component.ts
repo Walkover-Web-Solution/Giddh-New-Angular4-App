@@ -233,6 +233,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public updateLedgerComponentRef: any;
     /** Object of update ledger modal VM */
     public updateLedgerModalVm: any;
+    /** True if datepicker is open */
+    public isDatepickerOpen: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -1107,6 +1109,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public hideNewLedgerEntryPopup(event?) {
         this.selectedTrxWhileHovering = '';
+
+        if(this.isDatepickerOpen) {
+            return;
+        }
+
         if (event && event.path) {
             let classList = event.path.map(m => {
                 return m.classList;
@@ -1274,6 +1281,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.searchText = "";
         this.isAdvanceSearchImplemented = false;
         this.trxRequest.page = 0;
+        this.advanceSearchRequest = new AdvanceSearchRequest();
         this.search("");
         this.getTransactionData();
     }
@@ -1521,6 +1529,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 ...debitTrx.filter(f => f.isChecked).map(dt => dt.entryUniqueName),
                 ...creditTrx.filter(f => f.isChecked).map(ct => ct.entryUniqueName),
             ]);
+
         if (!this.entryUniqueNamesForBulkAction || !this.entryUniqueNamesForBulkAction.length) {
             this.toaster.showSnackBar("error", this.localeData?.select_one_entry, this.commonLocaleData?.app_error);
             return;
@@ -1632,10 +1641,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            this.entryUniqueNamesForBulkAction = [];
-
             if (response) {
                 this.onConfirmationBulkActionConfirmation();
+            } else {
+                this.entryUniqueNamesForBulkAction = [];
             }
         });
     }
@@ -2317,5 +2326,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public trackById(index: number, transaction: any): string {
         return transaction?.id;
+    }
+
+    /**
+     * This maintains state of datepicker (open/closed)
+     *
+     * @param {*} event
+     * @memberof LedgerComponent
+     */
+    public datepickerState(event: any): void {
+        this.isDatepickerOpen = event;
     }
 }
