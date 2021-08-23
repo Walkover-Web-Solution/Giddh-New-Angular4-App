@@ -2989,4 +2989,28 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
 .mat-dialog-container {
     height: auto !important;
 }
+.mat-snack-bar-container {
+    padding: 0px !important;
+
+    &.error {
+        .snack-container {
+            background-image: url("../images/failure.svg");
+        }
+    }
+    &.success {
+        .snack-container {
+            background-image: url("../images/success.svg");
+        }
+    }
+    &.warning {
+        .snack-container {
+            background-image: url("../images/exclamation-white.svg");
+        }
+    }
+    &.info {
+        .snack-container {
+            background-image: url("../images/info-white.svg");
+        }
+    }
+}
 /* material css for ledger end*/

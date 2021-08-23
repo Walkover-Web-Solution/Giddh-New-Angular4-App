@@ -967,13 +967,19 @@
 <ng-template #rcmEntryCheckbox>
     <div *ngIf="currentTxn?.shouldShowRcmEntry" class="rcm-entry pd-b1 mt-b1">
         <mat-checkbox
+            #rcmCheckbox
             color="primary"
             [disabled]="isReadOnly"
             id="tourist-scheme-1"
             [(ngModel)]="isRcmEntry"
-            (click)="!isReadOnly ? toggleRcmCheckbox($event) : ''"
-            ><span [innerHTML]="localeData?.transaction_available_rc"></span
-        ></mat-checkbox>
+            (change)="changeRcmCheckboxState($event)"
+        >
+        </mat-checkbox>
+        <label
+            for="tourist-scheme-1"
+            (click)="!isReadOnly ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''"
+            [innerHTML]="localeData?.transaction_available_rc"
+        ></label>
         <span class="text-light font-12"> ({{ localeData?.tax_compulsory }})</span>
     </div>
 </ng-template>
