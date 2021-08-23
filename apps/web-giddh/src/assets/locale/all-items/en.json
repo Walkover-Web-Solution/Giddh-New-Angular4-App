@@ -127,7 +127,10 @@
                     "link": "/pages/invoice/ewaybill",
                     "icon": "icon-eway-bill-new",
                     "description": "Generate directly from Giddh after",
-                    "hide": "sidebar"
+                    "hide": "sidebar",
+                    "additional": {
+                        "countrySpecific": ["IN"]
+                    }
                 },
                 {
                     "label": "GSTR1",
@@ -137,7 +140,8 @@
                     "alwaysPresent": true,
                     "additional": {
                         "isGstMenu": true,
-                        "type": "gstr1"
+                        "type": "gstr1",
+                        "countrySpecific": ["IN"]
                     }
                 },
                 {
@@ -148,7 +152,8 @@
                     "alwaysPresent": true,
                     "additional": {
                         "isGstMenu": true,
-                        "type": "gstr2"
+                        "type": "gstr2",
+                        "countrySpecific": ["IN"]
                     }
                 },
                 {
@@ -159,7 +164,8 @@
                     "alwaysPresent": true,
                     "additional": {
                         "isGstMenu": true,
-                        "type": "gstr3b"
+                        "type": "gstr3b",
+                        "countrySpecific": ["IN"]
                     }
                 },
                 {
@@ -175,7 +181,10 @@
                     "link": "/pages/vat-report",
                     "icon": "icon-vat1",
                     "description": "File & review VAT",
-                    "hide": "sidebar"
+                    "hide": "sidebar",
+                    "additional": {
+                        "countrySpecific": ["AE"]
+                    }
                 },
                 {
                     "label": "Setting",
