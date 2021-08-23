@@ -17,32 +17,36 @@
         width: 100%;
     }
 
-    .toast-close-button {
+    .snack-close-button {
         position: absolute;
         right: 10px;
         top: -2px;
         float: right;
         font-size: 25px;
-        color: #ffffff;
+        color: $white;
         opacity: 1;
         font-weight: normal;
+
+        i {
+            font-size: 15px;
+        }
     }
-    .toast-close-button:after {
+    .snack-close-button:after {
         position: absolute;
         content: "";
         width: 26px;
         height: 26px;
         background-color: rgba(256, 256, 256, 0.2);
-        top: 6px;
-        right: -6px;
+        top: 8px;
+        right: -5px;
         border-radius: 50%;
         text-align: center;
         align-items: center;
         display: flex;
     }
-    .toast-close-button:hover,
-    .toast-close-button:focus {
-        color: #ffffff;
+    .snack-close-button:hover,
+    .snack-close-button:focus {
+        color: $white;
         text-decoration: none;
         cursor: pointer;
         opacity: 0.4;
@@ -50,7 +54,7 @@
     /*Additional properties for button version
      iOS requires the button element instead of an anchor tag.
      If you want the anchor version, it requires `href="#"`.*/
-    button.toast-close-button {
+    button.snack-close-button {
         padding: 0;
         cursor: pointer;
         background: transparent;
