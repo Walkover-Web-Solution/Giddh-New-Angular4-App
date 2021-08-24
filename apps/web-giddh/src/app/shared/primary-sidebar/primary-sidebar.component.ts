@@ -9,10 +9,10 @@ import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../actions/company.actions';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
-import { SalesActions } from '../../actions/sales/sales.action';
 import { slice } from '../../lodash-optimized';
-import { AccountResponse, AddAccountRequest } from '../../models/api-models/Account';
 import { CompanyResponse, Organization } from '../../models/api-models/Company';
+import { SalesActions } from '../../actions/sales/sales.action';
+import { AccountResponse, AddAccountRequest } from '../../models/api-models/Account';
 import { CompAidataModel } from '../../models/db';
 import { DEFAULT_AC } from '../../models/defaultMenus';
 import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
@@ -232,7 +232,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 this.currentCompanyBranches = response;
                 if (this.generalService.currentBranchUniqueName) {
                     this.currentBranch = response.find(branch => (this.generalService.currentBranchUniqueName === branch.uniqueName)) || {};
-                    
                     if (!this.activeCompanyForDb) {
                         this.activeCompanyForDb = new CompAidataModel();
                     }
@@ -252,7 +251,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             let orderedCompanies = _.orderBy(companies, 'name');
             this.companyList = orderedCompanies;
         });
-        
         this.updateIndexDbSuccess$.subscribe(res => {
             if (res) {
                 if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
@@ -306,7 +304,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(account => {
                 if(account && !this.isItemAdded) {
                     this.isItemAdded = true;
-
                     // save data to db
                     let item: any = {};
                     item.time = +new Date();

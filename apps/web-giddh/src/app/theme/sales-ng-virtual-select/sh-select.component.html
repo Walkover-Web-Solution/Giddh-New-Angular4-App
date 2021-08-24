@@ -79,7 +79,7 @@
                         (input)="openListIfNotOpened($event)"
                         (click)="selectText($event)"
                         type="text"
-                        value="{{ selectedValues[0].label }}"
+                        value="{{ selectedValues[0].label || filter }}"
                         class="form-control selected-val cp"
                         [attr.style]="borderConfiguration?.style"
                     />

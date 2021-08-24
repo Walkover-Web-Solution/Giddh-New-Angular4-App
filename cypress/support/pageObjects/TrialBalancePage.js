@@ -1,7 +1,7 @@
 class TrialBalancePage {
 
-    searchIcon(timeOut) {
-        return cy.xpath('//i[@class=\'icon-search2\']', { timeout: 40000 })
+    getTrailBalanceText(timeOut) {
+        cy.get('.nav-item.active > .nav-link > span', { timeout: timeOut })
     }
 
     typeSearchValue(searchValue) {
