@@ -316,7 +316,7 @@ export class LoginActions {
             ofType(LoginActions.LogOut),
             map((action: CustomActions) => {
                 if (PRODUCTION_ENV && !(isElectron || isCordova)) {
-                    window.location.href = 'https://stage.giddh.com/login/';
+                    window.location.href = 'https://beta.giddh.com/login/';
                 } else if (isCordova) {
                     this.zone.run(() => {
                         this._generalService.invokeEvent.next('logoutCordova');
