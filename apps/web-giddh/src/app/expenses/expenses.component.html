@@ -1,7 +1,11 @@
-<ng-container appTranslate [file]="'expenses'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'expenses'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <div class="relative">
-        <hamburger-menu [pageHeading]="isMobileScreen ? getPageHeading(): ''"></hamburger-menu>
+        <hamburger-menu [pageHeading]="isMobileScreen ? getPageHeading() : ''"></hamburger-menu>
         <div class="clearfix petty-cash">
             <tabset class="custom-tabs" #tabset>
                 <div class="container-fluid mr-b15" *ngIf="!isSelectedRow">
@@ -9,110 +13,122 @@
                         <div class="col-sm-6">
                             <div class="d-flex">
                                 <div class="clearfix mr-1">
-                                    <div class="input-group input-calender custom-datepicker"
-                                        (click)="showGiddhDatepicker($event)">
+                                    <div
+                                        class="input-group input-calender custom-datepicker"
+                                        (click)="showGiddhDatepicker($event)"
+                                    >
                                         <i class="icon-calender calendar-addon"></i>
-                                        <input type="text" name="selectedDateRange"
-                                            [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
-                                            class="giddh-datepicker date-range-picker" />
+                                        <input
+                                            type="text"
+                                            name="selectedDateRange"
+                                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                            class="giddh-datepicker date-range-picker"
+                                        />
                                     </div>
                                 </div>
                                 <div class="d-inline-block clear-filter-div" *ngIf="isFilterSelected">
-                                    <a href="javascript:void(0)" (click)="clearFilter()"
-                                        class="btn btn-default d-flex align-items-center ml-1"><i
-                                            class=" icon-cross mr-1"></i>
-                                        {{commonLocaleData?.app_clear_filter}}</a>
+                                    <a
+                                        href="javascript:void(0)"
+                                        (click)="clearFilter()"
+                                        class="btn btn-default d-flex align-items-center ml-1"
+                                        ><i class="icon-cross mr-1"></i> {{ commonLocaleData?.app_clear_filter }}</a
+                                    >
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <tab [heading]="localeData?.pending" (selectTab)="tabChanged('pending', $event);"
-                    [id]="(currentSelectedTab === 'pending') ? 'giddh-page-heading': ''">
+                <tab
+                    [heading]="localeData?.pending"
+                    (selectTab)="tabChanged('pending', $event)"
+                    [id]="currentSelectedTab === 'pending' ? 'giddh-page-heading' : ''"
+                >
                     <div class="expense-head">
-                    <ng-container *ngIf="currentSelectedTab === 'pending'">
-                        <app-pending-list #pendingListComponent *ngIf="!isSelectedRow" [isClearFilter]="isClearFilter"
-                            [localeData]="localeData" [commonLocaleData]="commonLocaleData"
-                            (isFilteredSelected)="isFilteredSelected($event);"
-                            (selectedRowToggle)="selectedRowToggle($event);"
-                            (selectedRowInput)="selectedRowInput($event);"
-                            (reportDates)="reportDates($event)"></app-pending-list>
-                        <div class="main-edit-expense" *ngIf="isSelectedRow">
-                            <div class="left-expense">
-                                <app-filter-list *ngIf="localeData?.pending" [selectedRowItem]="selectedRowItem"
-                                    [localeData]="localeData" [commonLocaleData]="commonLocaleData"
-                                    (selectedDetailedRowInput)="selectedDetailedRowInput($event);"></app-filter-list>
+                        <ng-container *ngIf="currentSelectedTab === 'pending'">
+                            <app-pending-list
+                                #pendingListComponent
+                                *ngIf="!isSelectedRow"
+                                [isClearFilter]="isClearFilter"
+                                [localeData]="localeData"
+                                [commonLocaleData]="commonLocaleData"
+                                [pettyCashPendingReportResponse]="pettyCashPendingReportResponse"
+                                [isPettyCashPendingReportLoading]="isPettyCashPendingReportLoading"
+                                (isFilteredSelected)="isFilteredSelected($event)"
+                                (selectedRowToggle)="selectedRowToggle($event)"
+                                (selectedRowInput)="selectedRowInput($event)"
+                                (reportDates)="reportDates($event)"
+                                (reloadReportList)="getPettyCashPendingReports($event)"
+                            ></app-pending-list>
+                            <div class="main-edit-expense" *ngIf="isSelectedRow">
+                                <div class="left-expense">
+                                    <app-filter-list
+                                        *ngIf="localeData?.pending"
+                                        [selectedRowItem]="selectedRowItem"
+                                        [localeData]="localeData"
+                                        [commonLocaleData]="commonLocaleData"
+                                        [expensesDetailedItems]="pettyCashPendingReportResponse?.results"
+                                        (selectedDetailedRowInput)="selectedDetailedRowInput($event)"
+                                    ></app-filter-list>
+                                </div>
+                                <div class="main-expense-details pd-l15 pd-r15">
+                                    <app-expense-details
+                                        [selectedRowItem]="selectedRowItem"
+                                        [localeData]="localeData"
+                                        [commonLocaleData]="commonLocaleData"
+                                        (toggleDetailsMode)="closeDetailedMode($event)"
+                                        (previewNextItem)="previewNextItem($event)"
+                                    ></app-expense-details>
+                                </div>
                             </div>
-                            <div class="main-expense-details ">
-                                <app-expense-details [selectedRowItem]="selectedRowItem" [localeData]="localeData"
-                                    [commonLocaleData]="commonLocaleData"
-                                    (toggleDetailsMode)="closeDetailedMode($event);"
-                                    (refreshPendingItem)="refreshPendingItem($event);"></app-expense-details>
-                            </div>
-                        </div>
-                    </ng-container>
-                </div>
+                        </ng-container>
+                    </div>
                 </tab>
-                <tab [heading]="localeData?.rejected" (selectTab)="tabChanged('rejected', $event);"
-                    [id]="(currentSelectedTab === 'rejected') ? 'giddh-page-heading': ''">
+                <tab
+                    [heading]="localeData?.rejected"
+                    (selectTab)="tabChanged('rejected', $event)"
+                    [id]="currentSelectedTab === 'rejected' ? 'giddh-page-heading' : ''"
+                >
                     <div class="expense-head">
-                    <ng-container *ngIf="currentSelectedTab === 'rejected'">
-                        <app-rejected-list #rejectedListComponent (isFilteredSelected)="isFilteredSelected($event);"
-                            [isClearFilter]="isClearFilter" [localeData]="localeData"
-                            [commonLocaleData]="commonLocaleData" (reportDates)="reportDates($event)"></app-rejected-list>
-                    </ng-container>
-                </div>
+                        <ng-container *ngIf="currentSelectedTab === 'rejected'">
+                            <app-rejected-list
+                                #rejectedListComponent
+                                (isFilteredSelected)="isFilteredSelected($event)"
+                                [isClearFilter]="isClearFilter"
+                                [localeData]="localeData"
+                                [commonLocaleData]="commonLocaleData"
+                                [pettyCashRejectedReportResponse]="pettyCashRejectedReportResponse"
+                                [isPettyCashRejectedReportLoading]="isPettyCashRejectedReportLoading"
+                                (reportDates)="reportDates($event)"
+                                (reloadReportList)="getPettyCashRejectedReports($event)"
+                                (reloadPendingReportList)="getPettyCashPendingReports($event)"
+                            ></app-rejected-list>
+                        </ng-container>
+                    </div>
                 </tab>
             </tabset>
         </div>
     </div>
 
-    <ng-template #filterModal>
-        <div class="modal-header ">
-            <h3 class="modal-title pull-left ">{{localeData?.filter_data}}</h3>
-            <button type="button " class="close pull-right " aria-label="Close " (click)="modalRef.hide() ">
-                <span aria-hidden="true ">&times;</span>
-            </button>
-        </div>
-
-        <div class="modal-body ">
-            <div class="row ">
-                <div class="col-sm-5 ">
-                    <label class="pd-t05 ">{{commonLocaleData?.app_total_amount}}</label>
-                </div>
-                <div class="col-sm-7 d-flex ">
-                    <div class="select-style mb-2 ">
-                        <select name=" ">
-                            <option value=" " selected disabled>{{commonLocaleData?.app_select_range}}</option>
-                            <option value=" ">{{commonLocaleData?.app_comparision_filters?.equals}}</option>
-                            <option value=" ">{{commonLocaleData?.app_comparision_filters?.greater_than}}</option>
-                            <option value=" ">{{commonLocaleData?.app_comparision_filters?.less_than}}</option>
-                            <option value=" ">{{commonLocaleData?.app_comparision_filters?.exclude}}</option>
-                        </select>
-                    </div>
-                    <div class="form-group ml-1 ">
-                        <input type="text " placeholder="1500 " value="1500 " class="form-control ">
-                    </div>
-                </div>
-            </div>
-            <div class="row mb-2 ">
-                <div class="col-sm-5 ">
-                </div>
-                <div class="col-sm-7 ">
-                </div>
-            </div>
-        </div>
-    </ng-template>
     <ng-template #datepickerTemplate>
         <div class="datepicker-modal">
             <div class="modal-body">
-                <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
-                    [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption"
-                    [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
-                    [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
-                    (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
-                    [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
-                    [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+                <app-datepicker-wrapper
+                    [inputStartDate]="selectedDateRange?.startDate"
+                    [inputEndDate]="selectedDateRange?.endDate"
+                    [alwaysShowCalendars]="true"
+                    [ranges]="datePickerOption"
+                    [selectedRangeLabel]="selectedRangeLabel"
+                    [showCustomRangeLabel]="true"
+                    [showClearButton]="false"
+                    [showCancel]="true"
+                    [linkedCalendars]="true"
+                    [showDropdowns]="true"
+                    (rangeClicked)="dateSelectedCallback($event)"
+                    (datesUpdated)="dateSelectedCallback($event)"
+                    [keepCalendarOpeningWithRange]="false"
+                    [showRangeLabelOnInput]="false"
+                    [dateFieldPosition]="dateFieldPosition"
+                ></app-datepicker-wrapper>
             </div>
         </div>
     </ng-template>

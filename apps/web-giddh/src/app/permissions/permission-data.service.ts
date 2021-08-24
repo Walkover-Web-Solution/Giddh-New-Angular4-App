@@ -39,7 +39,7 @@ export class PermissionDataService {
                     }
                     companyEntityIndx = companyEntityIndx !== -1 ? companyEntityIndx : 0;
                     this.isUserSuperAdmin = superAdminIndx !== -1 ? true : false;
-                    this.getData = response.userEntityRoles[companyEntityIndx].role.scopes;
+                    this.getData = response.userEntityRoles[companyEntityIndx].role?.scopes;
                 }
             });
         }))).subscribe();

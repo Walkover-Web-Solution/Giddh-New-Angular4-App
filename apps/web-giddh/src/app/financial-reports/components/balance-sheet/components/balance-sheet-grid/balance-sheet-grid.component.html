@@ -1,9 +1,13 @@
-<ng-container appTranslate [file]="'trial-profit-balance/balance-sheet/grid'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'trial-profit-balance/balance-sheet/grid'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <!-- no data start -->
     <div class="no-data" *ngIf="noData">
-        <h1>{{localeData?.no_data_found}}</h1>
-        <img src="/assets/images/no-data.png" [alt]="localeData?.no_data_found">
+        <h1>{{ localeData?.no_data_found }}</h1>
+        <img src="/assets/images/no-data.png" [alt]="localeData?.no_data_found" />
     </div>
     <!-- nodata end -->
     <div>
@@ -18,31 +22,62 @@
                                 <thead>
                                     <tr>
                                         <th class="p-0" width="33.33%">
-                                            <div #searchContainer
-                                                (clickOutside)="clickedOutside($event, searchContainer)">
-                                                <div [ngStyle]="{'display': showClearSearch ? 'none' : 'flex'}"
-                                                    class="d-flex align-items-center">
-                                                    <span class="mr-l15 mr-1">{{localeData?.particular}}</span>
+                                            <div
+                                                #searchContainer
+                                                (clickOutside)="clickedOutside($event, searchContainer)"
+                                            >
+                                                <div
+                                                    [ngStyle]="{ 'display': showClearSearch ? 'none' : 'flex' }"
+                                                    class="d-flex align-items-center"
+                                                >
+                                                    <span class="mr-l15 mr-1">{{ localeData?.particular }}</span>
                                                     <i class="icon-search" (click)="toggleSearch()"></i>
                                                 </div>
                                                 <div [hidden]="!showClearSearch">
-                                                    <input type="search" #searchInputEl class="form-control"
+                                                    <input
+                                                        type="search"
+                                                        #searchInputEl
+                                                        class="form-control"
                                                         [placeholder]="commonLocaleData?.app_search"
-                                                        aria-describedby="sizing-addon3" id="w-398px"
-                                                        [formControl]="bsSearchControl">
+                                                        aria-describedby="sizing-addon3"
+                                                        id="w-398px"
+                                                        [formControl]="bsSearchControl"
+                                                    />
                                                 </div>
                                             </div>
                                         </th>
-                                        <th class="text-right" width="33.33%">{{commonLocaleData?.app_as_of}}
+                                        <th class="text-right" width="33.33%">
+                                            {{ commonLocaleData?.app_as_of }}
                                             <span
-                                                *ngIf="bsData && bsData.dates && bsData.dates.to && bsData.dates.to!=='Invalid date'">
-                                                {{ moment(bsData?.dates?.to, giddhDateFormat).toString() | date:'dd MMMM yyyy' }}</span>
+                                                *ngIf="
+                                                    bsData &&
+                                                    bsData.dates &&
+                                                    bsData.dates.to &&
+                                                    bsData.dates.to !== 'Invalid date'
+                                                "
+                                            >
+                                                {{
+                                                    moment(bsData?.dates?.to, giddhDateFormat).toString()
+                                                        | date: "dd MMMM yyyy"
+                                                }}</span
+                                            >
                                         </th>
-                                        <th class="text-right" width="33.33%">{{commonLocaleData?.app_as_of}}
+                                        <th class="text-right" width="33.33%">
+                                            {{ commonLocaleData?.app_as_of }}
                                             <span
-                                                *ngIf="bsData && bsData.dates && bsData.dates.from && bsData.dates.from!=='Invalid date'">
-                                                {{ moment(bsData?.dates?.from, giddhDateFormat).add(-1,
-                                                'days').toString() | date:'dd MMMM yyyy' }}</span>
+                                                *ngIf="
+                                                    bsData &&
+                                                    bsData.dates &&
+                                                    bsData.dates.from &&
+                                                    bsData.dates.from !== 'Invalid date'
+                                                "
+                                            >
+                                                {{
+                                                    moment(bsData?.dates?.from, giddhDateFormat)
+                                                        .add(-1, "days")
+                                                        .toString() | date: "dd MMMM yyyy"
+                                                }}</span
+                                            >
                                         </th>
                                     </tr>
                                 </thead>
@@ -50,43 +85,66 @@
                             <!--Grid-->
                             <div class="m-10">
                                 <div class="">
-                                    <strong class="font-16">{{localeData?.equity_liabilities}}</strong>
+                                    <strong class="font-16">{{ localeData?.equity_liabilities }}</strong>
                                 </div>
                             </div>
                             <ng-template #groupDetails let-list let-padding="padding">
                                 <ng-container *ngFor="let grp of list">
-                                    <section class="row-1" *ngIf="grp.isVisible"
-                                        balance-sheet-grid-row [isExpandToggledDuringSearch]="isExpandToggledDuringSearch" [groupDetail]="grp" [padding]="padding"
-                                        [search]="search" [from]="from" [to]="to" [expandAll]="expandAll">
+                                    <section
+                                        class="row-1"
+                                        *ngIf="grp.isVisible"
+                                        balance-sheet-grid-row
+                                        [isExpandToggledDuringSearch]="isExpandToggledDuringSearch"
+                                        [groupDetail]="grp"
+                                        [padding]="padding"
+                                        [search]="search"
+                                        [from]="from"
+                                        [to]="to"
+                                        [expandAll]="expandAll"
+                                    >
                                         <ng-container
-                                            *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 20  }">
+                                            *ngTemplateOutlet="
+                                                groupDetails;
+                                                context: { $implicit: grp.childGroups, padding: padding + 20 }
+                                            "
+                                        >
                                         </ng-container>
                                     </section>
                                 </ng-container>
                             </ng-template>
 
                             <ng-container
-                                *ngTemplateOutlet="groupDetails; context:{ $implicit:  bsData?.liabilities| financialSearch: search, padding: 10 }">
+                                *ngTemplateOutlet="
+                                    groupDetails;
+                                    context: { $implicit: bsData?.liabilities | financialSearch: search, padding: 10 }
+                                "
+                            >
                             </ng-container>
                             <!--/Grid-->
                             <div class="top-bar row clearfix">
-                                <div class="col-4  group">
-                                    <strong>{{localeData?.total_liabilities}}</strong>
+                                <div class="col-4 group">
+                                    <strong>{{ localeData?.total_liabilities }}</strong>
                                 </div>
-                                <div class="col-4  group text-right">
+                                <div class="col-4 group text-right">
                                     <strong>
                                         <span class="d-inline-flex">
-                                            <amount-field [amount]="bsData?.liabTotal" [currencySymbol]="false"
-                                                [currencyCode]="false">
+                                            <amount-field
+                                                [amount]="bsData?.liabTotal"
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            >
                                             </amount-field>
                                         </span>
                                     </strong>
                                 </div>
-                                <div class="col-4  group text-right">
+                                <div class="col-4 group text-right">
                                     <strong>
                                         <span class="d-inline-flex">
-                                            <amount-field [amount]="bsData?.liabTotalEnd" [currencySymbol]="false"
-                                                [currencyCode]="false">
+                                            <amount-field
+                                                [amount]="bsData?.liabTotalEnd"
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            >
                                             </amount-field>
                                         </span>
                                     </strong>
@@ -100,45 +158,67 @@
                             <!--Grid-->
                             <div class="m-10">
                                 <div class="">
-                                    <strong class="font-16">{{localeData?.ii_assets}}</strong>
+                                    <strong class="font-16">{{ localeData?.ii_assets }}</strong>
                                 </div>
                             </div>
                             <ng-template #groupDetails let-list let-padding="padding">
                                 <ng-container *ngFor="let grp of list">
-                                    <section class="row-1" *ngIf="grp.isVisible" balance-sheet-grid-row [isExpandToggledDuringSearch]="isExpandToggledDuringSearch"
-                                        [groupDetail]="grp" [padding]="padding" [search]="search"
-                                        [from]="from" [to]="to">
+                                    <section
+                                        class="row-1"
+                                        *ngIf="grp.isVisible"
+                                        balance-sheet-grid-row
+                                        [isExpandToggledDuringSearch]="isExpandToggledDuringSearch"
+                                        [groupDetail]="grp"
+                                        [padding]="padding"
+                                        [search]="search"
+                                        [from]="from"
+                                        [to]="to"
+                                    >
                                         <ng-container
-                                            *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 20  }">
+                                            *ngTemplateOutlet="
+                                                groupDetails;
+                                                context: { $implicit: grp.childGroups, padding: padding + 20 }
+                                            "
+                                        >
                                         </ng-container>
                                     </section>
                                 </ng-container>
                             </ng-template>
                             <ng-container
-                                *ngTemplateOutlet="groupDetails; context:{ $implicit:  bsData?.assets| financialSearch: search, padding: 10 }">
+                                *ngTemplateOutlet="
+                                    groupDetails;
+                                    context: { $implicit: bsData?.assets | financialSearch: search, padding: 10 }
+                                "
+                            >
                             </ng-container>
                             <!--/Grid-->
                         </div>
                     </div>
 
                     <div class="top-bar row clearfix">
-                        <div class="col-4  group">
-                            <strong>{{localeData?.total_assets}}</strong>
+                        <div class="col-4 group">
+                            <strong>{{ localeData?.total_assets }}</strong>
                         </div>
-                        <div class="col-4  group text-right">
+                        <div class="col-4 group text-right">
                             <strong>
                                 <span class="d-inline-flex">
-                                    <amount-field [amount]="bsData?.assetTotal" [currencySymbol]="false"
-                                        [currencyCode]="false">
+                                    <amount-field
+                                        [amount]="bsData?.assetTotal"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    >
                                     </amount-field>
                                 </span>
                             </strong>
                         </div>
-                        <div class="col-4  group text-right">
+                        <div class="col-4 group text-right">
                             <strong>
                                 <span class="d-inline-flex">
-                                    <amount-field [amount]="bsData?.assetTotalEnd" [currencySymbol]="false"
-                                        [currencyCode]="false">
+                                    <amount-field
+                                        [amount]="bsData?.assetTotalEnd"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    >
                                     </amount-field>
                                 </span>
                             </strong>

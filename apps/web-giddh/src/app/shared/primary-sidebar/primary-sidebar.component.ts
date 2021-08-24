@@ -232,7 +232,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 this.currentCompanyBranches = response;
                 if (this.generalService.currentBranchUniqueName) {
                     this.currentBranch = response.find(branch => (this.generalService.currentBranchUniqueName === branch.uniqueName)) || {};
-
                     if (!this.activeCompanyForDb) {
                         this.activeCompanyForDb = new CompAidataModel();
                     }
@@ -252,7 +251,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             let orderedCompanies = _.orderBy(companies, 'name');
             this.companyList = orderedCompanies;
         });
-
         this.updateIndexDbSuccess$.subscribe(res => {
             if (res) {
                 if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
@@ -506,7 +504,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public handleItemClick(item: AllItem): void {
-        if (item.label === this.commonLocaleData?.app_master) {
+        if (item?.label === this.commonLocaleData?.app_master) {
             this.store.dispatch(this.groupWithAction.OpenAddAndManageFromOutside(''));
         }
     }

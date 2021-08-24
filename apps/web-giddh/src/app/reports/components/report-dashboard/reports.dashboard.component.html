@@ -1,55 +1,87 @@
-<ng-container appTranslate [file]="'reports'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'reports'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="container-fluid pd-t2 pd-b2">
         <div class="row mb-2">
             <div class="col-lg-2 col-md-6 col-xs-4">
                 <div class="form-group mb-0">
-                    <input type="text" class="form-control" [placeholder]="localeData?.search_report">
+                    <input type="text" class="form-control" [placeholder]="localeData?.search_report" />
                 </div>
             </div>
         </div>
         <div class="clearfix reports-main">
             <div class="row">
                 <div class="col-md-4 col-sm-4 mb-2">
-                    <p>{{localeData?.business_overview}}</p>
-                    <p><a [routerLink]="['/pages/reports/cash-flow-statement']">{{localeData?.cash_flow_statement}}</a>
+                    <p>{{ localeData?.business_overview }}</p>
+                    <p>
+                        <a [routerLink]="['/pages/reports/cash-flow-statement']">{{
+                            localeData?.cash_flow_statement
+                        }}</a>
                     </p>
                 </div>
                 <div class="col-md-4 col-sm-4 mb-2">
-                    <p>{{localeData?.transactions_overview}}</p>
-                    <p><a href="javascript:void(0)"
-                            [routerLink]="['/pages/reports/purchase-register']">{{localeData?.purchase_register}}</a>
+                    <p>{{ localeData?.transactions_overview }}</p>
+                    <p>
+                        <a href="javascript:void(0)" [routerLink]="['/pages/reports/purchase-register']">{{
+                            localeData?.purchase_register
+                        }}</a>
                     </p>
                 </div>
                 <div class="col-md-4 col-sm-4 mb-2">
-                    <p>{{localeData?.receivables_payables}}</p>
-                    <p><a href="javascript:void(0)"
-                            [routerLink]="['/pages/contact/aging-report']">{{localeData?.aging_report}}</a></p>
+                    <p>{{ localeData?.receivables_payables }}</p>
+                    <p>
+                        <a href="javascript:void(0)" [routerLink]="['/pages/contact/aging-report']">{{
+                            localeData?.aging_report
+                        }}</a>
+                    </p>
                 </div>
             </div>
             <div class="row mt-2">
                 <div class="col-md-4 col-sm-4 mb-2">
-                    <p>{{localeData?.custom_report}}</p>
-                    <p><a class="coming-soon-report">{{localeData?.custom_graphical_report}}</a></p>
-                    <p><a href="javascript:void(0)"
-                            [routerLink]="['/pages/reports/monthly-columnar-report']">{{localeData?.monthly_columnar_report}}</a>
+                    <p>{{ localeData?.custom_report }}</p>
+                    <p>
+                        <a class="coming-soon-report">{{ localeData?.custom_graphical_report }}</a>
+                    </p>
+                    <p>
+                        <a href="javascript:void(0)" [routerLink]="['/pages/reports/monthly-columnar-report']">{{
+                            localeData?.monthly_columnar_report
+                        }}</a>
                     </p>
                 </div>
                 <div class="col-md-4 col-sm-4 mb-2">
-                    <p>{{localeData?.sales}}</p>
-                    <p><a [routerLink]="['/pages/reports/sales-register']">{{localeData?.sales_register}}</a></p>
-                    <p><a class="coming-soon-report">{{localeData?.item_wise_sales}}</a></p>
-                    <p><a class="coming-soon-report">{{localeData?.customer_wise_sales}}</a></p>
+                    <p>{{ localeData?.sales }}</p>
+                    <p>
+                        <a [routerLink]="['/pages/reports/sales-register']">{{ localeData?.sales_register }}</a>
+                    </p>
+                    <p>
+                        <a class="coming-soon-report">{{ localeData?.item_wise_sales }}</a>
+                    </p>
+                    <p>
+                        <a class="coming-soon-report">{{ localeData?.customer_wise_sales }}</a>
+                    </p>
                 </div>
                 <div class="col-md-4 col-sm-4 mb-2">
-                    <p>{{localeData?.others}}</p>
-                    <p><a href="javascript:void(0)"
-                            [routerLink]="['/pages/reports/reverse-charge']">{{localeData?.reverse_charge}}</a></p>
-                    <p><a class="coming-soon-report">{{localeData?.input_tax_rebate}}</a></p>
-                    <p><a href="javascript:void(0)"
-                            [routerLink]="['/pages/reports/receipt']">{{localeData?.receipt_beta}}</a></p>
-                    <p><a class="coming-soon-report">{{localeData?.tax_on_advance_receipt}}</a></p>
+                    <p>{{ localeData?.others }}</p>
+                    <p>
+                        <a href="javascript:void(0)" [routerLink]="['/pages/reports/reverse-charge']">{{
+                            localeData?.reverse_charge
+                        }}</a>
+                    </p>
+                    <p>
+                        <a class="coming-soon-report">{{ localeData?.input_tax_rebate }}</a>
+                    </p>
+                    <p>
+                        <a href="javascript:void(0)" [routerLink]="['/pages/reports/receipt']">{{
+                            localeData?.receipt_beta
+                        }}</a>
+                    </p>
+                    <p>
+                        <a class="coming-soon-report">{{ localeData?.tax_on_advance_receipt }}</a>
+                    </p>
                 </div>
             </div>
         </div>

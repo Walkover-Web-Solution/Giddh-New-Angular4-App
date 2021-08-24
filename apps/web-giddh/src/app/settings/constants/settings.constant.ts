@@ -1,7 +1,7 @@
 /** Settings integration tabs */
 export enum SettingsIntegrationTab {
-    Sms = 0,
-    Email,
+    //Sms = 0,
+    Email = 0,
     Collection,
     ECommerce,
     Payment

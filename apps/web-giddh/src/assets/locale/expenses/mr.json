@@ -28,5 +28,6 @@
     "approve_entry_error": "कृपया प्रवेश मंजूर करण्यासाठी प्रथम बेस खाते निवडा ...",
     "reason_of_rejection": "नकार कारण",
     "search_field": "शोधा [FIELD]",
-    "by_creator": "[CREATOR_NAME] द्वारा"
+    "by_creator": "[CREATOR_NAME] द्वारा",
+    "delete_transaction": "तुम्हाला खात्री आहे की तुम्ही व्यवहार हटवू इच्छिता?"
 }

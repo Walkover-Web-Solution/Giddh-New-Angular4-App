@@ -6,7 +6,6 @@ import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from '../../../../shared/helpers/defaultDateFormat';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { AppState } from '../../../../store';
-import { SettingsTagActions } from '../../../../actions/settings/tag/settings.tag.actions';
 import { select, Store } from '@ngrx/store';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 import { orderBy } from '../../../../lodash-optimized';
@@ -15,6 +14,7 @@ import { ReceiptItem } from "../../../../models/api-models/recipt";
 import { INameUniqueName } from "../../../../models/api-models/Inventory";
 import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
 import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
+import { SettingsTagService } from 'apps/web-giddh/src/app/services/settings.tag.service';
 
 @Component({
     selector: 'invoice-payment-model',
@@ -65,7 +65,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
         private store: Store<AppState>,
-        private _settingsTagActions: SettingsTagActions,
+        private settingsTagService: SettingsTagService,
         private _ledgerService: LedgerService,
         private salesService: SalesService,
         private searchService: SearchService
@@ -99,17 +99,15 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     };
 
     public ngOnInit() {
-        this.store.dispatch(this._settingsTagActions.GetALLTags());
-        
-        this.store.pipe(select(s => s.settings.tags), takeUntil(this.destroyed$)).subscribe((tags => {
-            if (tags && tags.length) {
+        this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.length > 0) {
                 let arr: IOption[] = [];
-                tags.forEach(tag => {
+                response?.body.forEach(tag => {
                     arr.push({ value: tag.name, label: tag.name });
                 });
                 this.tags = orderBy(arr, 'name');
             }
-        }));
+        });
 
         this.isActionSuccess$.subscribe(a => {
             if (a) {

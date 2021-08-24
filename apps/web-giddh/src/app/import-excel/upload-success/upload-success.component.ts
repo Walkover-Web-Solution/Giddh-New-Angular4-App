@@ -1,9 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, Output, OnInit } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { UploadExceltableResponse } from 'apps/web-giddh/src/app/models/api-models/import-excel';
-import { AppState } from '../../store';
-import { Store } from '@ngrx/store';
-import { ImportExcelActions } from '../../actions/import-excel/import-excel.actions';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
@@ -30,7 +27,10 @@ export class UploadSuccessComponent implements OnInit, OnDestroy {
     public importedCountMessage: string = "";
     public failedReportMessage: string = "";
 
-    constructor(private store: Store<AppState>, private _importActions: ImportExcelActions, private _activateRoute: ActivatedRoute, private generalService: GeneralService) {
+    constructor(
+        private activateRoute: ActivatedRoute, 
+        private generalService: GeneralService
+    ) {
 
     }
 
@@ -38,7 +38,7 @@ export class UploadSuccessComponent implements OnInit, OnDestroy {
         if (this.UploadExceltableResponse) {
             this.isAre = Number(this.UploadExceltableResponse.successCount) > 1 ? this.localeData?.are : this.localeData?.is;
         }
-        this._activateRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+        this.activateRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 if (res.type) {
                     if (res.type === 'trial-balance' || res.type === 'entries') {
@@ -74,12 +74,7 @@ export class UploadSuccessComponent implements OnInit, OnDestroy {
         }
     }
 
-    private resetStoreData() {
-        this.store.dispatch(this._importActions.resetImportExcelState());
-    }
-
     public ngOnDestroy(): void {
-        this.resetStoreData();
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

@@ -1,20 +1,20 @@
-import TrialBalancePage from "../../support/pageObjects/TrialBalancePage";
-import GlobalSearchPage from "../../support/pageObjects/GlobalSearchPage";
+// import TrialBalancePage from "../../support/pageObjects/TrialBalancePage";
+// import GlobalSearchPage from "../../support/pageObjects/GlobalSearchPage";
 
 describe('This is Global Search Test', function () {
 
-    const globalSearchPage = new GlobalSearchPage()
+//     const globalSearchPage = new GlobalSearchPage()
 
-    let testData = "";
-    let entryUniqueName = "";
+//     let testData = "";
+//     let entryUniqueName = "";
 
-    before(() => {
-        cy.fixture('example.json')
-            .then((data) => {
-                // "this" is still the test context object
-                testData = data
-            })
-    });
+//     before(() => {
+//         cy.fixture('example.json')
+//             .then((data) => {
+//                 // "this" is still the test context object
+//                 testData = data
+//             })
+//     });
 
     // before(() => {
     //     cy.loginWithEmail(testData.Email, testData.Password);
