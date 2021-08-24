@@ -1053,7 +1053,7 @@
                                             *ngIf="modalUniqueName === item.uniqueName"
                                             account-detail-modal-component
                                             [voucherType]="selectedVoucher"
-                                            [accountUniqueName]="item.account.uniqueName"
+                                            [accountUniqueName]="item?.account?.uniqueName"
                                             [from]="invoiceSearchRequest.from"
                                             [to]="invoiceSearchRequest.to"
                                             [isModalOpen]="modalUniqueName === item.uniqueName"
@@ -1334,7 +1334,7 @@
                                         *ngIf="modalUniqueName === item.uniqueName"
                                         account-detail-modal-component
                                         [voucherType]="selectedVoucher"
-                                        [accountUniqueName]="item.account.uniqueName"
+                                        [accountUniqueName]="item?.account?.uniqueName"
                                         [from]="invoiceSearchRequest.from"
                                         [to]="invoiceSearchRequest.to"
                                         [isModalOpen]="modalUniqueName === item.uniqueName"
@@ -1572,7 +1572,7 @@
                                             <div
                                                 *ngIf="modalUniqueName === item.uniqueName"
                                                 account-detail-modal-component
-                                                [accountUniqueName]="item.account.uniqueName"
+                                                [accountUniqueName]="item?.account?.uniqueName"
                                                 [voucherType]="selectedVoucher"
                                                 [from]="invoiceSearchRequest.from"
                                                 [to]="invoiceSearchRequest.to"

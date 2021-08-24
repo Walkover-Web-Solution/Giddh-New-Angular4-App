@@ -133,7 +133,9 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, OnCha
 
     public ngOnChanges(changes: SimpleChanges): void {
         if ('options' in changes && changes.options.currentValue && changes.options.currentValue !== changes.options.previousValue) {
-            this.render();
+            if(!changes.options.firstChange) {
+                this.render();
+            }
             this.attachEvents();
         }
     }
