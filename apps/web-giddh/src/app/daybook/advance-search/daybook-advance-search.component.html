@@ -160,7 +160,7 @@
                                                 decimalDigitsDirective
                                                 [mask]="inputMaskFormat"
                                                 formControlName="amount"
-                                                class="form-control mat-field-border pd-0"
+                                                class="form-control mat-field-border p-0"
                                             />
                                         </mat-form-field>
                                     </div>
@@ -258,7 +258,7 @@
                                                         <input
                                                             matInput
                                                             type="text"
-                                                            class="form-control mat-field-border pd-0"
+                                                            class="form-control mat-field-border p-0"
                                                             decimalDigitsDirective
                                                             [DecimalPlaces]="4"
                                                             formControlName="quantity"
@@ -292,7 +292,7 @@
                                                             type="text"
                                                             decimalDigitsDirective
                                                             [DecimalPlaces]="3"
-                                                            class="form-control mat-field-border pd-0"
+                                                            class="form-control mat-field-border p-0"
                                                             formControlName="itemValue"
                                                             [mask]="inputMaskFormat"
                                                             [placeholder]="commonLocaleData?.app_value"
@@ -318,7 +318,7 @@
                                                         type="text"
                                                         [placeholder]="localeData?.cheque_number"
                                                         formControlName="chequeNumber"
-                                                        class="form-control mat-field-border pd-0"
+                                                        class="form-control mat-field-border p-0"
                                                     />
                                                 </mat-form-field>
                                             </div>
@@ -328,7 +328,7 @@
                                                 <giddh-datepicker
                                                     [placeholder]="localeData?.clearance_date"
                                                     name="from"
-                                                    [cssClass]="'mat-field-border bdr form-control pd-0 w-100'"
+                                                    [cssClass]="'mat-field-border bdr form-control p-0 w-100'"
                                                     formControlName="dateOnCheque"
                                                     [showToggleIcon]="false"
                                                 >
@@ -343,7 +343,7 @@
                 </mat-accordion>
 
                 <div class="col-xs-12 col-sm-12 text-right">
-                    <button mat-raised-button color="primary" type="button" (click)="emitAdvanceSearchParams()">
+                    <button mat-raised-button class="btn btn-success" type="button" (click)="emitAdvanceSearchParams()">
                         {{ commonLocaleData?.app_search }}
                     </button>
                 </div>
