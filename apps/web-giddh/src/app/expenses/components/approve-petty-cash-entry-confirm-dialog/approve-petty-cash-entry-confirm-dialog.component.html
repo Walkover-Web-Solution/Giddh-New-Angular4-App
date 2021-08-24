@@ -53,13 +53,12 @@
         </div>
 
         <div>
-            <button mat-raised-button color="accent" (click)="approveEntry.emit(false)">
+            <button mat-raised-button class="btn btn-warning" (click)="approveEntry.emit(false)">
                 {{ commonLocaleData?.app_no }}
             </button>
             <button
                 mat-raised-button
-                color="primary"
-                class="mr-l1"
+                class="btn btn-success"
                 (click)="approveEntry.emit(true)"
                 [ladda]="approveEntryRequestInProcess"
             >

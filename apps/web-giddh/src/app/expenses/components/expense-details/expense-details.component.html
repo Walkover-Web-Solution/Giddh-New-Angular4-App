@@ -7,7 +7,7 @@
             <div class="col-sm-6 text-right xs-left">
                 <button
                     mat-raised-button
-                    color="primary"
+                    class="mr-b05 btn btn-success"
                     type="button"
                     (click)="showApproveConfirmPopup(approveConfirm)"
                 >
@@ -15,9 +15,8 @@
                 </button>
                 <button
                     mat-raised-button
-                    color="accent"
+                    class="mr-b05 btn btn-danger"
                     type="button"
-                    class="mr-l1"
                     (click)="openModal(rejectionReason)"
                 >
                     {{ localeData?.reject }}
@@ -199,7 +198,7 @@
             </mat-form-field>
         </div>
 
-        <button mat-raised-button color="primary" [disabled]="!rejectReason.value" (click)="submitReject()">
+        <button mat-raised-button class="btn btn-success" [disabled]="!rejectReason.value" (click)="submitReject()">
             {{ commonLocaleData?.app_submit }}
         </button>
     </div>
