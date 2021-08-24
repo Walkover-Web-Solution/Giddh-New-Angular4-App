@@ -8365,6 +8365,9 @@ body.update-scroll-hidden {
 body.update-scroll-hidden {
     overflow-y: hidden;
 }
+.trial-balance-viewport {
+    height: 500px;
+}
 .e-waybill-tabs.custom-tabs .nav-tabs {
     position: static !important;
     padding-left: 15px !important;
@@ -8387,9 +8390,6 @@ body.update-scroll-hidden {
 }
 .transactions-table.table-striped {
     white-space: nowrap;
-}
-.trial-balance-viewport {
-    height: 500px;
 }
 .stock-group-parent > ul {
     height: calc(100vh - 320px);
@@ -8696,9 +8696,11 @@ body.update-scroll-hidden {
     .card-invoice-table .multi-select input.form-control {
         background-position: 98% !important;
     }
-    .single-card-row .my-dropdown-menu.pd {
-        left: auto !important;
-        right: 0 !important;
+    .bulk-create-table sh-select input,
+    .bulk-create-table .mat-form-field-wrapper input,
+    .bulk-create-table .mat-form-field-appearance-fill .mat-form-field-flex {
+        border: 1px solid $gainsboro !important;
+        padding: 0 11px !important;
     }
 }
 
