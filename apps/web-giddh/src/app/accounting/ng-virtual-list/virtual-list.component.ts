@@ -232,7 +232,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
         this.clearFilter();
 
         if (!this.multiple) {
-            if (this._selectedValues[0] && this._selectedValues[0].value === item.value) {
+            if (this._selectedValues[0] && this._selectedValues[0].value === item?.value) {
                 callChanges = false;
             }
         }
@@ -280,7 +280,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
         // this.focusFilter();
         this.onShow.emit();
         if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-            let item = this.rows.find(p => p.value === (this._selectedValues.length > 0 ? this._selectedValues[0] : (this.rows.length > 0 ? this.rows[0].value : null)));
+            let item = this.rows.find(p => p?.value === (this._selectedValues.length > 0 ? this._selectedValues[0] : (this.rows.length > 0 ? this.rows[0].value : null)));
             if (item !== null) {
                 this.menuEle.virtualScrollElm.scrollInto(item);
             }
@@ -448,14 +448,14 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
 
     public clearSingleSelection(event, option: IOption) {
         event.stopPropagation();
-        this.selectedValues = this.selectedValues.filter(f => f.value !== option.value).map(p => p.value);
+        this.selectedValues = this.selectedValues.filter(f => f?.value !== option?.value).map(p => p?.value);
         this.onChange();
     }
 
     public onChange() {
         if (this.multiple) {
             let newValues: string[];
-            newValues = this._selectedValues.map(p => p.value);
+            newValues = this._selectedValues.map(p => p?.value);
             this.propagateChange(newValues);
             this.selected.emit(this._selectedValues);
         } else {
@@ -471,7 +471,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
                 };
             }
             this.filter = newValue.label;
-            this.propagateChange(newValue.value);
+            this.propagateChange(newValue?.value);
             this.selected.emit(newValue);
         }
     }
