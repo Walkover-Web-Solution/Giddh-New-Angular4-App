@@ -66,6 +66,7 @@
                                             [isFilterEnabled]="true"
                                             [multiple]="true"
                                             [placeholder]="commonLocaleData?.app_select_accounts"
+                                            [doNotResetSelectedValues]="true"
                                             [enableDynamicSearch]="true"
                                             [isPaginationEnabled]="true"
                                             (scrollEnd)="handleScrollEnd()"
@@ -169,179 +170,180 @@
                     </div>
                 </div>
 
-                <div class="col-xs-12 col-sm-12">
-                    <div class="form-group toggle-btn mr-b05">
-                        <label class="cp" (click)="toggleOtherDetails()">
-                            <i
-                                class="cp collapse-icons"
-                                aria-hidden="true"
-                                [ngClass]="{ 'icon-minus': showOtherDetails, 'icon-plus': !showOtherDetails }"
-                            ></i
-                            >{{ commonLocaleData?.app_other_details }}
-                        </label>
-                    </div>
-                </div>
+                <mat-accordion class="w-100 m-10" multi>
+                    <mat-expansion-panel
+                        [expanded]="advanceSearchForm.get('includeDescription').value"
+                        (afterCollapse)="toggleOtherDetails()"
+                        (afterExpand)="toggleOtherDetails()"
+                        class="mr-t1 overflow-visible"
+                    >
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>{{ commonLocaleData?.app_other_details }}</mat-panel-title>
+                        </mat-expansion-panel-header>
 
-                <!-- other details container -->
-                <ng-container *ngIf="advanceSearchForm.get('includeDescription').value">
-                    <div class="col-xs-12 col-sm-12 mr-t2">
-                        <div class="mr-b1 clearfix">
+                        <div class="col-xs-12 col-sm-12 mr-t2">
+                            <div class="mr-b1 clearfix">
+                                <div class="row">
+                                    <div class="col-sm-5 col-xs-12">
+                                        <label>{{ commonLocaleData?.app_inventory }}</label>
+                                    </div>
+                                    <div class="col-sm-7 col-xs-12" formGroupName="inventory">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="checkbox square-switch">
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        id="includeInventory"
+                                                        formControlName="includeInventory"
+                                                    >
+                                                        <span
+                                                            class="pull-left"
+                                                            *ngIf="
+                                                                advanceSearchForm.get('inventory.includeInventory')
+                                                                    .value
+                                                            "
+                                                            >{{ commonLocaleData?.app_include }}</span
+                                                        >
+                                                        <span
+                                                            class="pull-right"
+                                                            *ngIf="
+                                                                !advanceSearchForm.get('inventory.includeInventory')
+                                                                    .value
+                                                            "
+                                                            >{{ commonLocaleData?.app_exclude }}</span
+                                                        >
+                                                    </mat-checkbox>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <sh-select
+                                                        [options]="stockListDropDown$ | async"
+                                                        name="inventory"
+                                                        formControlName="inventories"
+                                                        (onClear)="onDDClear('inventory')"
+                                                        (selected)="onDDElementSelect('inventory', $event)"
+                                                        [isFilterEnabled]="true"
+                                                        [multiple]="true"
+                                                        [placeholder]="commonLocaleData?.app_select_accounts"
+                                                        [ItemHeight]="33"
+                                                        [doNotResetSelectedValues]="true"
+                                                        [enableDynamicSearch]="true"
+                                                        [isPaginationEnabled]="true"
+                                                        (scrollEnd)="handleStockScrollEnd()"
+                                                        (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"
+                                                    >
+                                                    </sh-select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <sh-select
+                                                        [showClear]="false"
+                                                        [width]="'100%'"
+                                                        (selected)="onRangeSelect('inventoryQty', $event)"
+                                                        [options]="comparisonFilterDropDown$ | async"
+                                                        name="inventoryQuantity"
+                                                        formControlName="inventoryQuantity"
+                                                        [placeholder]="commonLocaleData?.app_select_range"
+                                                        [ItemHeight]="33"
+                                                    ></sh-select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <mat-form-field appearance="fill" class="w-100">
+                                                        <input
+                                                            matInput
+                                                            type="text"
+                                                            class="form-control mat-field-border pd-0"
+                                                            decimalDigitsDirective
+                                                            [DecimalPlaces]="4"
+                                                            formControlName="quantity"
+                                                            [mask]="inputMaskFormat"
+                                                            [placeholder]="commonLocaleData?.app_quantity"
+                                                        />
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <sh-select
+                                                        [showClear]="false"
+                                                        [width]="'100%'"
+                                                        (selected)="onRangeSelect('inventoryVal', $event)"
+                                                        [options]="comparisonFilterDropDown$ | async"
+                                                        name="inventoryValue"
+                                                        formControlName="inventoryValue"
+                                                        [placeholder]="commonLocaleData?.app_select_range"
+                                                        [ItemHeight]="33"
+                                                    ></sh-select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <mat-form-field appearance="fill" class="w-100">
+                                                        <input
+                                                            matInput
+                                                            type="text"
+                                                            decimalDigitsDirective
+                                                            [DecimalPlaces]="3"
+                                                            class="form-control mat-field-border pd-0"
+                                                            formControlName="itemValue"
+                                                            [mask]="inputMaskFormat"
+                                                            [placeholder]="commonLocaleData?.app_value"
+                                                        />
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-sm-5 col-xs-12">
-                                    <label>{{ commonLocaleData?.app_inventory }}</label>
+                                    <label>{{ localeData?.cheque_details }}</label>
                                 </div>
-                                <div class="col-sm-7 col-xs-12" formGroupName="inventory">
+                                <div class="col-sm-7 col-xs-12">
                                     <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="checkbox square-switch">
-                                                <mat-checkbox
-                                                    color="primary"
-                                                    id="includeInventory"
-                                                    formControlName="includeInventory"
-                                                >
-                                                    <span
-                                                        class="pull-left"
-                                                        *ngIf="
-                                                            advanceSearchForm.get('inventory.includeInventory').value
-                                                        "
-                                                        >{{ commonLocaleData?.app_include }}</span
-                                                    >
-                                                    <span
-                                                        class="pull-right"
-                                                        *ngIf="
-                                                            !advanceSearchForm.get('inventory.includeInventory').value
-                                                        "
-                                                        >{{ commonLocaleData?.app_exclude }}</span
-                                                    >
-                                                </mat-checkbox>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <sh-select
-                                                    [options]="stockListDropDown$ | async"
-                                                    name="inventory"
-                                                    formControlName="inventories"
-                                                    (onClear)="onDDClear('inventory')"
-                                                    (selected)="onDDElementSelect('inventory', $event)"
-                                                    [isFilterEnabled]="true"
-                                                    [multiple]="true"
-                                                    [placeholder]="commonLocaleData?.app_select_accounts"
-                                                    [ItemHeight]="33"
-                                                    [enableDynamicSearch]="true"
-                                                    [isPaginationEnabled]="true"
-                                                    (scrollEnd)="handleStockScrollEnd()"
-                                                    (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"
-                                                >
-                                                </sh-select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <sh-select
-                                                    [showClear]="false"
-                                                    [width]="'100%'"
-                                                    (selected)="onRangeSelect('inventoryQty', $event)"
-                                                    [options]="comparisonFilterDropDown$ | async"
-                                                    name="inventoryQuantity"
-                                                    formControlName="inventoryQuantity"
-                                                    [placeholder]="commonLocaleData?.app_select_range"
-                                                    [ItemHeight]="33"
-                                                ></sh-select>
-                                            </div>
-                                        </div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <mat-form-field appearance="fill" class="w-100">
                                                     <input
                                                         matInput
                                                         type="text"
+                                                        [placeholder]="localeData?.cheque_number"
+                                                        formControlName="chequeNumber"
                                                         class="form-control mat-field-border pd-0"
-                                                        decimalDigitsDirective
-                                                        [DecimalPlaces]="4"
-                                                        formControlName="quantity"
-                                                        [mask]="inputMaskFormat"
-                                                        [placeholder]="commonLocaleData?.app_quantity"
                                                     />
                                                 </mat-form-field>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <sh-select
-                                                    [showClear]="false"
-                                                    [width]="'100%'"
-                                                    (selected)="onRangeSelect('inventoryVal', $event)"
-                                                    [options]="comparisonFilterDropDown$ | async"
-                                                    name="inventoryValue"
-                                                    formControlName="inventoryValue"
-                                                    [placeholder]="commonLocaleData?.app_select_range"
-                                                    [ItemHeight]="33"
-                                                ></sh-select>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <mat-form-field appearance="fill" class="w-100">
-                                                    <input
-                                                        matInput
-                                                        type="text"
-                                                        decimalDigitsDirective
-                                                        [DecimalPlaces]="3"
-                                                        class="form-control mat-field-border pd-0"
-                                                        formControlName="itemValue"
-                                                        [mask]="inputMaskFormat"
-                                                        [placeholder]="commonLocaleData?.app_value"
-                                                    />
-                                                </mat-form-field>
+                                                <giddh-datepicker
+                                                    [placeholder]="localeData?.clearance_date"
+                                                    name="from"
+                                                    [cssClass]="'mat-field-border bdr form-control pd-0 w-100'"
+                                                    formControlName="dateOnCheque"
+                                                    [showToggleIcon]="false"
+                                                >
+                                                </giddh-datepicker>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-5 col-xs-12">
-                                <label>{{ localeData?.cheque_details }}</label>
-                            </div>
-                            <div class="col-sm-7 col-xs-12">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <mat-form-field appearance="fill" class="w-100">
-                                                <input
-                                                    matInput
-                                                    type="text"
-                                                    [placeholder]="localeData?.cheque_number"
-                                                    formControlName="chequeNumber"
-                                                    class="form-control mat-field-border pd-0"
-                                                />
-                                            </mat-form-field>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <giddh-datepicker
-                                                [placeholder]="localeData?.clearance_date"
-                                                name="from"
-                                                [cssClass]="'mat-field-border bdr form-control pd-0 w-100'"
-                                                formControlName="dateOnCheque"
-                                                [showToggleIcon]="false"
-                                            >
-                                            </giddh-datepicker>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </ng-container>
+                    </mat-expansion-panel>
+                </mat-accordion>
+
                 <div class="col-xs-12 col-sm-12 text-right">
-                    <button mat-raised-button color="primary" type="button" (click)="go()">
+                    <button mat-raised-button color="primary" type="button" (click)="emitAdvanceSearchParams()">
                         {{ commonLocaleData?.app_search }}
                     </button>
                 </div>

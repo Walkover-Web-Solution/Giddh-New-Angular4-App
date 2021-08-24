@@ -2600,7 +2600,7 @@
                 (applyTaxes)="calculateOtherTaxes($event); toggleOtherTaxesAsidePane(null)"
             >
             </app-aside-menu-sales-other-taxes>
-            <!-- update ladger entry popup -->
+            <!-- update ledger entry popup -->
             <ng-template #updateLedgerModal>
                 <update-ledger-entry-panel
                     [defaultSuggestions]="defaultSuggestions"
@@ -2613,7 +2613,13 @@
                     (showQuickAccountModalFromUpdateLedger)="toggleAsidePane()"
                 ></update-ledger-entry-panel>
             </ng-template>
-            <!-- update ladger entry popup -->
+            <!-- update ledger entry popup -->
+            <ng-template #advanceSearchModal>
+                <advance-search-model
+                    [advanceSearchRequest]="advanceSearchRequest"
+                    (closeModelEvent)="closeAdvanceSearchPopup($event)"
+                ></advance-search-model>
+            </ng-template>
             <!-- endregion -->
             <ng-template #datepickerTemplate>
                 <div class="datepicker-modal">
