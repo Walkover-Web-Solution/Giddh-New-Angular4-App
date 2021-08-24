@@ -41,7 +41,7 @@ input.form-control.date-range-picker {
     }
 }
 .modal-header {
-    .close {
+    > .close {
         top: 10px !important;
     }
 }
