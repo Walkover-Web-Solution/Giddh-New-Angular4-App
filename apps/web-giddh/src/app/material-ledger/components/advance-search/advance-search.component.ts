@@ -34,7 +34,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     @Output() public closeModelEvent: EventEmitter<{ advanceSearchData, isClose }> = new EventEmitter(null);
     public advanceSearchObject: ILedgerAdvanceSearchRequest = null;
     public advanceSearchForm: FormGroup;
-    public showOtherDetails: boolean = false;
     public showChequeDatePicker: boolean = false;
     public accounts$: Observable<IOption[]>;
     public groups$: Observable<IOption[]>;
@@ -224,7 +223,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         this.bsRangeValue.push(t._d);
         this.advanceSearchRequest.dataToSend = new AdvanceSearchModel();
         this.advanceSearchRequest.page = 1;
-        this.showOtherDetails = false;
         this.setAdvanceSearchForm();
     }
 
@@ -499,7 +497,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @memberof AdvanceSearchModelComponent
      */
     public toggleOtherDetails() {
-        this.showOtherDetails = !this.showOtherDetails;
         let val: boolean = !this.advanceSearchForm.get('includeDescription').value;
         this.advanceSearchForm.get('includeDescription')?.patchValue(val);
         if (!val) {
