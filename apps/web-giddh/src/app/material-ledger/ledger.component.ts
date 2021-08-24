@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, NgZone, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, NgZone, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
@@ -239,6 +239,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public isDatepickerOpen: boolean = false;
     /** Instance of advance search modal dialog */
     public advanceSearchDialogRef: any;
+    /** Last touched transaction (for ipad and tablet) */
+    public touchedTransaction: any;
 
     constructor(
         private store: Store<AppState>,
@@ -2334,5 +2336,23 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public datepickerState(event: any): void {
         this.isDatepickerOpen = event;
+    }
+
+    /**
+     * This will keep the track of touch event and will check if double clicked on any transaction, it will open the update ledger modal
+     *
+     * @param {ITransactionItem} txn
+     * @memberof LedgerComponent
+     */
+    public showUpdateLedgerModalIpad(txn: ITransactionItem): void {
+        if(this.touchedTransaction?.entryUniqueName === txn?.entryUniqueName) {
+            this.showUpdateLedgerModal(txn);
+        } else {
+            this.touchedTransaction = txn;
+        }
+
+        setTimeout(() => {
+            this.touchedTransaction = {};
+        }, 200);
     }
 }
