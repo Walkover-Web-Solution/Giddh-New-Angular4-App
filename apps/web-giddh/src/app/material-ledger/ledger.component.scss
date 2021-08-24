@@ -169,9 +169,15 @@ table.ledger-footer-1 td[class*="col-"] {
             top: -8px;
             z-index: 1;
         }
+        .mat-form-field {
+            .mat-icon-button {
+                top: -22px;
+                left: -34px;
+            }
+        }
     }
 }
-.ledger-head-top i.icon-search.pos-abs {
+.ledger-head-top i.icon-search.position-absolute {
     background-color: $chetwode-blue;
     color: $white;
     width: 32px;
@@ -197,7 +203,7 @@ table.ledger-footer-1 td[class*="col-"] {
 }
 .icomoon-ico {
     margin-left: 0;
-    margin-right: 8px;
+    margin-right: 8px !important;
 }
 .account_Name {
     color: rgba(0, 0, 0, 0.8);
@@ -512,7 +518,7 @@ sh-select:focus {
 .advance-search-filter {
     justify-content: center;
     align-items: center;
-    margin-right: 7px;
+    margin-right: 8px;
     border-radius: 5px;
     background-color: $white;
     border: 1px solid $gainsboro;
@@ -564,10 +570,12 @@ sh-select:focus {
     .btn-success,
     .btn-warning {
         font-size: 16px;
-        width: 36px;
-        padding: 0px;
-        height: 36px;
+        width: 36px !important;
+        padding: 0px !important;
+        height: 36px !important;
         border-radius: 50%;
+        min-width: 36px !important;
+        margin-right: 8px !important;
     }
 }
 .transaction-in-short {
@@ -590,7 +598,7 @@ sh-select:focus {
     background-size: 17px !important;
     background-position: 15px 9px !important;
     background-repeat: no-repeat !important;
-    padding-left: 46px !important;
+    padding-left: 42px !important;
     position: relative;
     z-index: 99;
     cursor: default;
@@ -598,8 +606,9 @@ sh-select:focus {
     font-size: 14px;
     padding-right: 10px !important;
     height: 32px;
-    min-width: 165px !important;
+    min-width: 180px !important;
     border-radius: 30px;
+    box-sizing: content-box !important;
     &:focus {
         border-color: $chetwode-blue;
     }
@@ -774,20 +783,12 @@ sh-select:focus {
 .account-placeholder-text {
     color: $black !important;
 }
-.capitalize {
-    text-transform: capitalize;
-}
 a#reload-bank-transaction i.icon-refresh {
     font-size: 18px !important;
 }
 input#ledger-search {
-    width: 81%;
-    font-size: 14px !important;
-    padding: 7px !important;
-    height: 20px;
     border: 1px solid $gainsboro;
     padding-left: 27px !important;
-    border-radius: 5px !important;
 }
 .mat-grid-tile.select2-ledger {
     overflow: visible !important;
