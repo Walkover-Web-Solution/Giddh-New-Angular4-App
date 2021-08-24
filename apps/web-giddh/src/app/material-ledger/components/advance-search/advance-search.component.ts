@@ -14,6 +14,7 @@ import { IOption } from '../../../theme/ng-select/option.interface';
 import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { SearchService } from '../../../services/search.service';
 import { InventoryService } from '../../../services/inventory.service';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
     selector: 'advance-search-model',
@@ -23,6 +24,8 @@ import { InventoryService } from '../../../services/inventory.service';
 })
 
 export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges {
+    /** Instance of mat accordion */
+    @ViewChild(MatAccordion) accordion: MatAccordion;
     @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
     public bsRangeValue: string[];
     /** Taking advance search params as input */
