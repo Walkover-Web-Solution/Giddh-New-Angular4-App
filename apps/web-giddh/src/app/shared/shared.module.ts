@@ -111,7 +111,6 @@ export function provideConfig() {
         PurchaseSendEmailModalComponent,
         PrimarySidebarComponent,
         CompanyBranchComponent,
-        PrimarySidebarComponent,
         GenericAsideMenuAccountComponent
     ],
     imports: [

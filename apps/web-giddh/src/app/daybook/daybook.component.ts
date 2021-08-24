@@ -156,7 +156,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
-
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {

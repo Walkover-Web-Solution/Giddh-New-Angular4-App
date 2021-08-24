@@ -64,7 +64,7 @@
         <div *ngIf="discountAccountsDetails?.length > 1">
             <ul class="discount-list">
                 <ng-container *ngFor="let discount of discountAccountsDetails; trackBy: trackByFn; let idx = index">
-                    <li *ngIf="idx > 0" class="custom-item">
+                    <li *ngIf="idx > 0" class="custom-item pd mr-b05">
                         <label class="checkbox overflow-hidden width-100 p-0 m-0" (click)="$event.stopPropagation()">
                             <input
                                 id="{{ 'discount-checkbox-' + idx }}"

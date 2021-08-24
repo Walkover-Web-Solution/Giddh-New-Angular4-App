@@ -84,7 +84,7 @@ export class GstTemplateEComponent implements OnInit, OnDestroy, OnChanges {
                     this.columnsVisibled++;
                 }
                 if (this.columnsVisibled && this.voucherType === 'sales') {
-                    this.columnsVisibled++;
+					this.columnsVisibled++;
                 }
             }
         }

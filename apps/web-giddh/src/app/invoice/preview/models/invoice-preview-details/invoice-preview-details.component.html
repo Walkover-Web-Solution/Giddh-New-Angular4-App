@@ -491,14 +491,14 @@
 
                         <div class="payment-log col-md-12" *ngIf="only4ProformaEstimates">
                             <div class="payment-log-div">
-                                <div *ngIf="moreLogsDisplayed" class="less-more-details">
+                                <div class="less-more-details" *ngIf="moreLogsDisplayed">
                                     <a href="javascript:;" (click)="filterVoucherVersions(false)">{{
                                         localeData?.less_details
                                     }}</a>
                                 </div>
                                 <div
-                                    *ngIf="filteredVoucherVersions.length && !moreLogsDisplayed"
                                     class="less-more-details"
+                                    *ngIf="filteredVoucherVersions.length && !moreLogsDisplayed"
                                 >
                                     <a href="javascript:;" (click)="filterVoucherVersions(true)">{{
                                         localeData?.more_details

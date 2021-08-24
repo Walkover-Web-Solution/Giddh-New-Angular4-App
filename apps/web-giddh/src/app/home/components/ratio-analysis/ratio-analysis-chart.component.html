@@ -20,7 +20,7 @@
             </div>
             <div class="chart-div" google-chart chart="chartData" *ngIf="!requestInFlight">
                 <div class="row">
-                    <div class="col-md-3 col-sm-12 col-12 text-center ratio-chart-block">
+                    <div class="col-md-3 col-sm-12 col-xs-12 text-center ratio-chart-block">
                         <highcharts-chart
                             *ngIf="currentRatioChartOptions"
                             [Highcharts]="currentRatioChart"
@@ -37,12 +37,12 @@
                         </highcharts-chart>
                         <h1 class="mr-b1">{{ localeData?.debt_equity_ratio }}</h1>
                         <small
-                            >{{ localeData?.current_liability }} + <br />
+                            >{{ localeData?.current_liability }} +<br />
                             {{ localeData?.noncurrent_liability }} /<br />
                             {{ localeData?.shareholders_fund }}</small
                         >
                     </div>
-                    <div class="col-md-3 col-sm-12 col-12 text-center ratio-chart-block">
+                    <div class="col-md-3 col-sm-12 col-xs-12 text-center ratio-chart-block">
                         <highcharts-chart
                             *ngIf="proprietaryOption"
                             [Highcharts]="proprietaryChart"
@@ -54,7 +54,7 @@
                             {{ localeData?.total_assets }}</small
                         >
                     </div>
-                    <div class="col-md-3 col-sm-12 col-12 text-center ratio-chart-block">
+                    <div class="col-md-3 col-sm-12 col-xs-12 text-center ratio-chart-block">
                         <highcharts-chart
                             *ngIf="fixedAssetOption"
                             [Highcharts]="fixedAssetChart"

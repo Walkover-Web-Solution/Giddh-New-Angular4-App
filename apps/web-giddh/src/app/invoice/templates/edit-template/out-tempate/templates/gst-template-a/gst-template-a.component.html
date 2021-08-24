@@ -615,7 +615,10 @@
                                             : "CESS"
                                     }}
                                 </th>
-                                <th class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor }">
+                                <th
+                                    class="text-right word-break"
+                                    [ngStyle]="{ 'background-color': inputTemplate.tableColor }"
+                                >
                                     {{
                                         fieldsAndVisibility.table.total?.label?.length > 0
                                             ? fieldsAndVisibility.table.total?.label
