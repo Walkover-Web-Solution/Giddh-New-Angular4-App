@@ -7,7 +7,7 @@
 >
     <div id="entryModal">
         <!-- region header -->
-        <div class="modal-header" *ngIf="!isPettyCash">
+        <div class="modal-header flex-row-reverse" *ngIf="!isPettyCash">
             <span
                 aria-hidden="true"
                 class="close hover-orange"
@@ -59,7 +59,7 @@
         <!-- endregion -->
 
         <!-- region main body -->
-        <div class="modal-body pl-0 pr-0" [hidden]="isChangeAcc">
+        <div class="modal-body" [hidden]="isChangeAcc">
             <!-- region transactions -->
             <div class="ledg-head entry-popup">
                 <table class="w-100 ledger-head mr-t1 hidden-xs">
