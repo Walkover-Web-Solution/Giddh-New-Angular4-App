@@ -699,7 +699,7 @@
 
             <div class="invoice-edit-body">
                 <proforma-invoice-component
-                    [accountUniqueName]="selectedItem.account.uniqueName"
+                    [accountUniqueName]="selectedItem?.account?.uniqueName"
                     [selectedItem]="selectedItem"
                     [invoiceNo]="voucherType !== 'purchase' ? selectedItem?.voucherNumber : selectedItem?.uniqueName"
                     [invoiceType]="voucherType"

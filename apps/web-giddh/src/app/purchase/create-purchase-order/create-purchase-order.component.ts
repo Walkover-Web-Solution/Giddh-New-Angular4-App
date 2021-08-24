@@ -1888,11 +1888,13 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         if (this.activeIndex === entryIdx) {
             this.activeIndex = null;
         }
-        for (let index = entryIdx + 1; index < this.purchaseOrder.entries.length; index++) {
-            const viewRef: any = this.container.get(index);
-            viewRef.context.entryIdx -= 1;
-        }
         if (this.container) {
+            for (let index = entryIdx + 1; index < this.purchaseOrder.entries.length; index++) {
+                const viewRef: any = this.container.get(index);
+                if(viewRef) {
+                    viewRef.context.entryIdx -= 1;
+                }
+            }
             this.container.remove(entryIdx);
         }
         this.purchaseOrder.entries.splice(entryIdx, 1);
