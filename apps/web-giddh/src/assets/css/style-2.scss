@@ -467,7 +467,6 @@ input {
 }
 
 .approve-modal .modal-top {
-    background: $alice-blue-light;
     padding: 15px 15px 0;
 }
 
@@ -1876,8 +1875,8 @@ input[type="checkbox"]:checked:after {
 }
 .btn-warning {
     color: $white !important;
-    background-color: #ffc107 !important;
-    border-color: #ffc107 !important;
+    background-color: $warning !important;
+    border-color: $warning !important;
 }
 .btn-warning:not(:disabled):not(.disabled):active:focus,
 .btn-warning:not(:disabled):not(.disabled).active:focus,

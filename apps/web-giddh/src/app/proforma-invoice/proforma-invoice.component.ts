@@ -3327,13 +3327,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (this.activeIndx === entryIdx) {
             this.activeIndx = null;
         }
-        for (let index = entryIdx + 1; index < this.invFormData.entries.length; index++) {
-            const viewRef: any = this.container.get(index);
-            if (viewRef) {
-                viewRef.context.entryIdx -= 1;
-            }
-        }
         if (this.container) {
+            for (let index = entryIdx + 1; index < this.invFormData.entries.length; index++) {
+                const viewRef: any = this.container.get(index);
+                if (viewRef) {
+                    viewRef.context.entryIdx -= 1;
+                }
+            }
             this.container.remove(entryIdx);
         }
         this.invFormData.entries.splice(entryIdx, 1);

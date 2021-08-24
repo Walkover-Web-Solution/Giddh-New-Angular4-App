@@ -126,7 +126,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
             val = [val];
         }
         if (val.length > 0 && this.rows) {
-            this._selectedValues = this.rows.filter((f: any) => val.findIndex(p => p === f.label || p === f.value) !== -1);
+            this._selectedValues = this.rows.filter((f: any) => val.findIndex(p => p === f?.label || p === f?.value) !== -1);
         } else {
             this._selectedValues = val;
         }
@@ -168,7 +168,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
         filteredArr = this.getFilteredArrOfIOptionItems(array, term, action);
 
         startsWithArr = filteredArr.filter(function (item) {
-            if (startsWith(item.label.toLocaleLowerCase(), term) || startsWith(item.value.toLocaleLowerCase(), term)) {
+            if (startsWith(item?.label?.toLocaleLowerCase(), term) || startsWith(item?.value?.toLocaleLowerCase(), term)) {
                 return item;
             } else {
                 includesArr.push(item);
@@ -189,7 +189,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
             });
         } else {
             return array.filter((item: IOption) => {
-                return includes(item.label.toLocaleLowerCase(), term) || includes(item.value.toLocaleLowerCase(), term);
+                return includes(item?.label?.toLocaleLowerCase(), term) || includes(item?.value?.toLocaleLowerCase(), term);
             });
         }
     }
@@ -275,7 +275,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
         this.isOpen = true;
         this.onShow.emit();
         if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-            let item = this.rows.find(p => p.value === (this._selectedValues.length > 0 ? this._selectedValues[0] : (this.rows.length > 0 ? this.rows[0].value : null)));
+            let item = this.rows.find(p => p?.value === (this._selectedValues.length > 0 ? this._selectedValues[0] : (this.rows.length > 0 ? this.rows[0].value : null)));
             if (item !== null) {
                 this.menuEle.virtualScrollElm.scrollInto(item);
             }
@@ -437,7 +437,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
 
     public clearSingleSelection(event, option: IOption) {
         event.stopPropagation();
-        this.selectedValues = this.selectedValues.filter(f => f.value !== option.value).map(p => p.value);
+        this.selectedValues = this.selectedValues.filter(f => f?.value !== option?.value).map(p => p?.value);
         this.clearSingleItem.emit(this.selectedValues);
         this.onChange();
     }
@@ -445,7 +445,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
     public onChange() {
         if (this.multiple) {
             let newValues: string[];
-            newValues = this._selectedValues.map(p => p.value);
+            newValues = this._selectedValues.map(p => p?.value);
             this.propagateChange(newValues);
             this.selected.emit(this._selectedValues);
         } else {
@@ -467,17 +467,17 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
     }
 
     public selectText(ev) {
-        ev.target.setSelectionRange(0, ev.target.value.length);
+        ev.target.setSelectionRange(0, ev?.target?.value?.length);
     }
 
     public openListIfNotOpened(ev) {
         if (!this.isOpen) {
-            this.filter = ev.target.value;
+            this.filter = ev?.target?.value;
             this.show(ev);
             setTimeout(() => {
                 (this.inputFilter?.nativeElement as any)['focus'].apply(this.inputFilter?.nativeElement);
                 if (this.enableDynamicSearch) {
-                    this.dynamicSearchedQuery.emit(ev.target.value?.trim());
+                    this.dynamicSearchedQuery.emit(ev?.target?.value?.trim());
                 }
             }, 10);
         }
