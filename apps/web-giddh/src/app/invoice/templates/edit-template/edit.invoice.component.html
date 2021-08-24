@@ -41,7 +41,7 @@
             <ng-container *ngFor="let template of customCreatedTemplates; let i = index">
                 <div class="template-grid" *ngIf="template.type === 'invoice' && voucherType === 'sales'">
                     <div class="template-info text-center">
-                        <h3 class="primary-color">{{ template.name }}</h3>
+                        <h3 class="primary-color text-ellipsis">{{ template.name }}</h3>
 
                         <span *ngIf="template.isDefault" class="badge btn-sky-blue mr-t2"
                             ><i class="icon-favorite-selected"></i> Default Template</span
@@ -80,7 +80,7 @@
                 <ng-container *ngIf="voucherType === 'credit note' || voucherType === 'debit note'">
                     <div class="template-grid" *ngIf="template.type === 'voucher'">
                         <div class="template-info text-center">
-                            <h3 class="primary-color">{{ template.name }}</h3>
+                            <h3 class="primary-color text-ellipsis">{{ template.name }}</h3>
 
                             <span *ngIf="template.isDefaultForVoucher" class="badge btn-sky-blue mr-t2"
                                 ><i class="icon-favorite-selected"></i> Default Template</span
