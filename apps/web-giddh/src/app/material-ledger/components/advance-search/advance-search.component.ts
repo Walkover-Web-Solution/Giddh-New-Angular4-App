@@ -14,6 +14,7 @@ import { IOption } from '../../../theme/ng-select/option.interface';
 import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { SearchService } from '../../../services/search.service';
 import { InventoryService } from '../../../services/inventory.service';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
     selector: 'advance-search-model',
@@ -23,6 +24,8 @@ import { InventoryService } from '../../../services/inventory.service';
 })
 
 export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges {
+    /** Instance of mat accordion */
+    @ViewChild(MatAccordion) accordion: MatAccordion;
     @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
     public bsRangeValue: string[];
     /** Taking advance search params as input */
@@ -31,7 +34,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     @Output() public closeModelEvent: EventEmitter<{ advanceSearchData, isClose }> = new EventEmitter(null);
     public advanceSearchObject: ILedgerAdvanceSearchRequest = null;
     public advanceSearchForm: FormGroup;
-    public showOtherDetails: boolean = false;
     public showChequeDatePicker: boolean = false;
     public accounts$: Observable<IOption[]>;
     public groups$: Observable<IOption[]>;
@@ -221,7 +223,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         this.bsRangeValue.push(t._d);
         this.advanceSearchRequest.dataToSend = new AdvanceSearchModel();
         this.advanceSearchRequest.page = 1;
-        this.showOtherDetails = false;
         this.setAdvanceSearchForm();
     }
 
@@ -496,7 +497,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @memberof AdvanceSearchModelComponent
      */
     public toggleOtherDetails() {
-        this.showOtherDetails = !this.showOtherDetails;
         let val: boolean = !this.advanceSearchForm.get('includeDescription').value;
         this.advanceSearchForm.get('includeDescription')?.patchValue(val);
         if (!val) {
