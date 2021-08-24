@@ -8,7 +8,6 @@ import { SettingProfileComponent } from './profile/setting.profile.component';
 import { SettingIntegrationComponent } from './integration/setting.integration.component';
 import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
 import { Component, OnInit, Output, ViewChild, OnDestroy, EventEmitter } from '@angular/core';
-import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
 import { Store, select } from '@ngrx/store';
@@ -29,7 +28,6 @@ import { LocaleService } from '../services/locale.service';
     styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit, OnDestroy {
-    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
     /* Event emitter for close sidebar popup event */
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @ViewChild('integrationComponent', { static: false }) public integrationComponent: SettingIntegrationComponent;
@@ -169,25 +167,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
             }
             this.activeLocale = response?.value;
         });
-    }
-
-    /**
-     * Selects next tab on `TAB` key Press and previous tab on `SHIFT+TAB` key press.
-     * @param key Key that was pressed.
-     */
-    public selectTabByShortcut(key: string) {
-        const selectedId = this.staticTabs.tabs.findIndex(p => p.active);
-        if (key === 'alt+right' && selectedId < this.staticTabs.tabs.length) {
-            this.staticTabs.tabs[selectedId + 1].active = true;
-        } else if (selectedId > 0 && this.staticTabs.tabs.length) {
-            this.staticTabs.tabs[selectedId - 1].active = true;
-        }
-    }
-
-    public selectTab(id: number) {
-        if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs.length) {
-            this.staticTabs.tabs[id].active = true;
-        }
     }
 
     public assignChildtabForIntegration(childTab: string): number {
