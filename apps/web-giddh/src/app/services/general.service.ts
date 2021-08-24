@@ -756,14 +756,14 @@ export class GeneralService {
     /**
      * Returns the visible menu items to be shown for menu panel (as per permission)
      *
-     * @param {string} module
-     * @param {Array<any>} apiItems
-     * @param {Array<AllItems>} itemList
-     * @param {*} countryCode
+     * @param {string} module name
+     * @param {Array<any>} apiItems List of permissible items obtained from API
+     * @param {Array<AllItems>} itemList List of all the items of menu
+     * @param {string} countryCode
      * @returns {Array<AllItems>}
      * @memberof GeneralService
      */
-    public getVisibleMenuItems(module: string, apiItems: Array<any>, itemList: Array<AllItems>, countryCode: any = ""): Array<AllItems> {
+    public getVisibleMenuItems(module: string, apiItems: Array<any>, itemList: Array<AllItems>, countryCode: string = ""): Array<AllItems> {
         const visibleMenuItems = cloneDeep(itemList);
         itemList?.forEach((menuItem, menuIndex) => {
             visibleMenuItems[menuIndex].items = [];
