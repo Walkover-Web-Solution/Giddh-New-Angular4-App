@@ -101,7 +101,6 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         private breakPointObservar: BreakpointObserver,
         private router: Router
     ) {
-
     }
 
     /**
@@ -142,7 +141,6 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
                 setTimeout(() => {
                     this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
                         this.todaySelected = response;
-
                         if (this.universalDate && !this.todaySelected) {
                             this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
                             this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
