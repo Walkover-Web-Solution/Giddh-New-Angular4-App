@@ -14,6 +14,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../services/general.service';
 import { SearchService } from '../../services/search.service';
 import { InventoryService } from '../../services/inventory.service';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
     selector: 'daybook-advance-search-model',
@@ -22,6 +23,8 @@ import { InventoryService } from '../../services/inventory.service';
 
 })
 export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, OnDestroy {
+    /** Instance of mat accordion */
+    @ViewChild(MatAccordion) accordion: MatAccordion;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -34,7 +37,6 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     @ViewChild('dateRangePickerDir', { read: DaterangePickerComponent, static: true }) public dateRangePickerDir: DaterangePickerComponent;
     public advanceSearchObject: DayBookRequestModel = null;
     public advanceSearchForm: FormGroup;
-    public showOtherDetails: boolean = false;
     public showChequeDatePicker: boolean = false;
     public accounts$: Observable<IOption[]>;
     public groups$: Observable<IOption[]>;
@@ -162,6 +164,10 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                 if(dataToSend?.particulars) {
                     this.advanceSearchForm.get('particulars')?.patchValue(dataToSend?.particulars);
                 }
+
+                if(dataToSend?.inventory) {
+                    this.advanceSearchForm.get('inventory')?.patchValue(dataToSend?.inventory);
+                }
             }, 500);
         }
     }
@@ -206,25 +212,29 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     }
 
     /**
-     * go
+     * This will emit advance seach params
+     *
+     * @memberof DaybookAdvanceSearchModelComponent
      */
-    public go(exportFileAs = null) {
+    public emitAdvanceSearchParams(): void {
         let dataToSend = _.cloneDeep(this.advanceSearchForm.value) as DayBookRequestModel;
         if (dataToSend.dateOnCheque) {
-            dataToSend.dateOnCheque = moment(dataToSend.dateOnCheque).format(GIDDH_DATE_FORMAT);
+            if(typeof dataToSend.dateOnCheque === "object") {
+                dataToSend.dateOnCheque = moment(dataToSend.dateOnCheque).format(GIDDH_DATE_FORMAT);
+            } else {
+                dataToSend.dateOnCheque = moment(dataToSend.dateOnCheque, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+            }
         }
         let fromDate = this.fromDate;
         let toDate = this.toDate;
         this.closeModelEvent.emit({
-            action: exportFileAs ? 'export' : 'search',
-            exportAs: exportFileAs,
+            action: 'search',
+            exportAs: null,
             dataToSend,
             fromDate,
             toDate,
             cancle: false
         });
-
-        exportFileAs = null;
     }
 
     /**
@@ -386,7 +396,6 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         if (!val) {
             this.advanceSearchForm.get('description')?.patchValue(null);
         }
-        this.showOtherDetails = !this.showOtherDetails;
     }
 
     public ngOnDestroy() {

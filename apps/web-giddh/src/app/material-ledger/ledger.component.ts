@@ -82,6 +82,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public needToReCalculate: BehaviorSubject<boolean> = new BehaviorSubject(false);
     @ViewChild('newLedPanel', { static: false }) public newLedgerComponent: NewLedgerEntryPanelComponent;
     @ViewChild('updateLedgerModal', { static: false }) public updateLedgerModal: any;
+    /** Instance of advance search modal */
+    @ViewChild('advanceSearchModal', { static: false }) public advanceSearchModal: any;
     /** datepicker element reference  */
     @ViewChild('datepickerTemplate', { static: false }) public datepickerTemplate: ElementRef;
     public isTransactionRequestInProcess$: Observable<boolean>;
@@ -235,6 +237,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public updateLedgerModalVm: any;
     /** True if datepicker is open */
     public isDatepickerOpen: boolean = false;
+    /** Instance of advance search modal dialog */
+    public advanceSearchDialogRef: any;
 
     constructor(
         private store: Store<AppState>,
@@ -1463,17 +1467,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
             });
         }
 
-        let dialogRef = this.dialog.open(AdvanceSearchModelComponent, {
-            width: '980px',
-            data: {
-                advanceSearchRequest: this.advanceSearchRequest
-            }
-        });
-
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            if (response) {
-                this.closeAdvanceSearchPopup(response);
-            }
+        this.advanceSearchDialogRef = this.dialog.open(this.advanceSearchModal, {
+            width: '980px'
         });
     }
 
@@ -1485,6 +1480,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * closeAdvanceSearchPopup
      */
     public closeAdvanceSearchPopup(event) {
+        this.advanceSearchDialogRef?.close();
         if (!event.isClose) {
             this.getAdvanceSearchTxn();
             if (event.advanceSearchData) {

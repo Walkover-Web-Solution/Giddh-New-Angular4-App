@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, forwardRef, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, forwardRef, OnDestroy } from '@angular/core';
 import * as _moment from 'moment';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
@@ -25,11 +25,9 @@ const moment = _moment;
     ]
 })
 
-export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, OnChanges, OnDestroy {
+export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, OnDestroy {
     /** Taking placeholder as input */
     @Input() public placeholder: any = "";
-    /** Taking ngModel as input */
-    @Input() public ngModel: any;
     /** Min date */
     @Input() public minDate: Date;
     /** Taking any css class as input to be applied on date input field */
@@ -66,22 +64,6 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
                 this.adapter.setLocale(response?.value);
             }
         });
-    }
-
-    /**
-     * Updates the value on value change event
-     *
-     * @param {SimpleChanges} changes
-     * @memberof GiddhDatepickerComponent
-     */
-    public ngOnChanges(changes: SimpleChanges): void {
-        if ('ngModel' in changes) {
-            if (changes.ngModel.currentValue) {
-                this.calendarDate = moment(changes.ngModel.currentValue, GIDDH_DATE_FORMAT).toDate();
-            } else {
-                this.calendarDate = "";
-            }
-        }
     }
 
     /**
@@ -158,6 +140,7 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     public writeValue(value: any): void {
         if (value && value !== this.innerValue) {
             this.innerValue = value;
+            this.calendarDate = moment(value, GIDDH_DATE_FORMAT).toDate();
         }
     }
 
