@@ -35,9 +35,13 @@ input.form-control.date-range-picker {
     padding: 2px;
     top: 0px !important;
 }
-.giddh-datepicker.date-range-picker {
-    padding-left: 45px !important;
+.giddh-datepicker {
+    &.date-range-picker {
+        padding-left: 45px !important;
+    }
 }
-.modal-header > .close {
-    top: 10px !important;
+.modal-header {
+    .close {
+        top: 10px !important;
+    }
 }
