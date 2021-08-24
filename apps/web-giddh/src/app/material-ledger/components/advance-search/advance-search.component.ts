@@ -158,7 +158,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             this.setAdvanceSearchForm();
         }
 
-        if ('advanceSearchRequest' in changes && changes.advanceSearchRequest.currentValue && changes.advanceSearchRequest.currentValue !== changes.advanceSearchRequest.previousValue && changes.advanceSearchRequest.currentValue.dataToSend.bsRangeValue) {
+        if ('advanceSearchRequest' in changes && changes.advanceSearchRequest.currentValue && changes.advanceSearchRequest.currentValue !== changes.advanceSearchRequest.previousValue && changes.advanceSearchRequest.currentValue.dataToSend?.bsRangeValue) {
             this.fromDate = moment((changes.advanceSearchRequest.currentValue as AdvanceSearchRequest).dataToSend.bsRangeValue[0], GIDDH_DATE_FORMAT).toDate();
             this.toDate = moment((changes.advanceSearchRequest.currentValue as AdvanceSearchRequest).dataToSend.bsRangeValue[1], GIDDH_DATE_FORMAT).toDate();
             this.selectedDateRange = { startDate: changes.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[0], endDate: changes.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[1] };
