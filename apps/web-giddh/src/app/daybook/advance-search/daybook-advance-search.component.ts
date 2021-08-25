@@ -225,8 +225,8 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                 dataToSend.dateOnCheque = moment(dataToSend.dateOnCheque, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             }
         }
-        let fromDate = this.fromDate;
-        let toDate = this.toDate;
+        let fromDate = this.fromDate ? this.fromDate : this.selectedDateRange?.startDate ? this.selectedDateRange.startDate.format(GIDDH_DATE_FORMAT) : "";
+        let toDate = this.toDate ? this.toDate : this.selectedDateRange?.endDate ? this.selectedDateRange.endDate.format(GIDDH_DATE_FORMAT) : "";
         this.closeModelEvent.emit({
             action: 'search',
             exportAs: null,
