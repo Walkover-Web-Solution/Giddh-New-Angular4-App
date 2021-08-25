@@ -8696,9 +8696,11 @@ body.update-scroll-hidden {
     .card-invoice-table .multi-select input.form-control {
         background-position: 98% !important;
     }
-    .single-card-row .my-dropdown-menu.pd {
-        left: auto !important;
-        right: 0 !important;
+    .bulk-create-table sh-select input,
+    .bulk-create-table .mat-form-field-wrapper input,
+    .bulk-create-table .mat-form-field-appearance-fill .mat-form-field-flex {
+        border: 1px solid $gainsboro !important;
+        padding: 0 11px !important;
     }
 }
 
