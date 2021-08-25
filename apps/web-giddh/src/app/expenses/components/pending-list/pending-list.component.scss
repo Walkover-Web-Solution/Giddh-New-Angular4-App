@@ -26,18 +26,15 @@
         color: $wild-blue-yonder !important;
     }
 }
-
 .icon-sort-asc {
     display: inline-block;
     cursor: pointer;
     float: left;
     margin-left: 6px;
 }
-
 .icon-sort-asc.active-text-color {
     color: $wild-blue-yonder !important;
 }
-
 .td-search-box {
     div {
         display: flex;

@@ -200,6 +200,16 @@ export class RejectedListComponent implements OnInit, OnChanges {
     }
 
     /**
+     * Releases memory
+     *
+     * @memberof RejectedListComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
+
+    /**
      * Gets report response
      *
      * @private

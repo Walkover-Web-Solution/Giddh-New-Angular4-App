@@ -245,11 +245,9 @@ span.eligible-ITC {
         }
     }
 }
-
 #update-ledger-select-account {
     width: 30%;
 }
-
 .edit-adjustment {
     padding: 0 5px 0;
 }
@@ -274,6 +272,9 @@ span.eligible-ITC {
 .ledger-head .row {
     margin: 0;
 }
+.show-if-ledger-open {
+    height: 300px;
+}
 .dropdown-container[disabled],
 .table-amount[disabled] {
     pointer-events: none;
@@ -292,9 +293,6 @@ span.eligible-ITC {
     input[type="checkbox"] {
         opacity: 0;
     }
-}
-.show-if-ledger-open {
-    height: 300px;
 }
 p.edit-message {
     background-color: $whisper-light;

@@ -574,7 +574,7 @@ aside-menu-account .container-fluid {
 }
 
 .white-bg {
-    background: $white;
+    background: $white !important;
 }
 
 .min-width-100 {
@@ -590,7 +590,7 @@ aside-menu-account .container-fluid {
 }
 
 .resize-none {
-    resize: none;
+    resize: none !important;
 }
 
 .list-style-none {
@@ -905,9 +905,13 @@ aside-menu-account .container-fluid {
 
 /*ledger style*/
 
-.ledg-head a i {
-    font-size: 24px;
-    line-height: 34px;
+.ledg-head {
+    a {
+        i {
+            font-size: 24px;
+            line-height: 34px;
+        }
+    }
 }
 
 #eledgerwrap .alert-danger {
@@ -2166,7 +2170,7 @@ ul.pills li {
 
 #entryModal {
     .modal-body {
-        padding: 15px 20px 15px;
+        padding: 15px 20px;
         display: flex;
         flex-direction: column;
     }
@@ -2690,16 +2694,20 @@ form#groupDetailForm {
     font-size: 12px !important;
 }
 
+.tooltip-inner {
+    background: $black !important;
+}
+
 /**
 * aside pane styles
 */
 
 .aside-pane {
-    background-color: #f4f5f8;
+    background-color: $solitude;
     position: relative;
     z-index: 5;
     height: 100vh;
-    color: #000000;
+    color: $black;
 }
 .aside-pane {
     max-width: 760px;
@@ -2836,14 +2844,17 @@ mat-dialog-container .modal-header {
     }
 }
 
+.mat-button,
 .mat-raised-button {
-    padding: 0 !important;
+    margin-right: 15px !important;
+    height: 36px;
 }
 
 .ledger-head {
     .mat-grid-tile-content {
         justify-content: space-between !important;
         padding: 0 10px;
+        font-weight: 600;
     }
 }
 
@@ -2890,9 +2901,9 @@ mat-dialog-container .modal-header {
         right: 10px !important;
         position: absolute;
     }
-    input.mat-input-element {
-        box-sizing: border-box !important;
-    }
+}
+.mat-input-element {
+    box-sizing: border-box !important;
 }
 update-ledger-entry-panel .ledger-main .mat-form-field {
     min-width: auto !important;
@@ -3021,6 +3032,11 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
         .snack-container {
             background-image: url("../images/info-white.svg");
         }
+    }
+}
+.disable-ripple {
+    .mat-radio-ripple {
+        display: none;
     }
 }
 /* material css for ledger end*/

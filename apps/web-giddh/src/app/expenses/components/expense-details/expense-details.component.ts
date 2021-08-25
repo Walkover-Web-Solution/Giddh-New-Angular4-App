@@ -148,7 +148,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will hold creator name */
     public byCreator: string = '';
-
     /** True if account belongs to cash/bank account */
     private cashOrBankEntry: any;
     /** Stores the petty cash entry type */

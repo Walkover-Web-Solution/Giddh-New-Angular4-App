@@ -333,10 +333,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
-    public selectAccount(e: IOption, txn: TransactionVM) {
+    public selectAccount(e: IOption, txn: TransactionVM, clearAccount?: boolean) {
         this.keydownClassAdded = false;
         this.selectedTxnAccUniqueName = '';
-        if (!e.value) {
+        if (!e.value || clearAccount) {
             // if there's no selected account set selectedAccount to null
             txn.selectedAccount = null;
             this.lc.currentBlankTxn = null;
@@ -349,6 +349,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             txn.discounts = [
                 this.lc.staticDefaultDiscount()
             ];
+            txn.particular = undefined;
             return;
         }
         let requestObject;

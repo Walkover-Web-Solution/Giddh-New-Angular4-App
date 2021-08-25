@@ -53,7 +53,7 @@
                 <!-- region ledger table-->
                 <div class="ledg-head transactions-page mr-t15 position-relative">
                     <!-- region ledger header -->
-                    <div class="clearfix row mr-b15">
+                    <div class="clearfix row mr-b15" [ngClass]="{ 'mr-b5': currentCompanyBranches?.length > 2 }">
                         <!-- region currency toggle -->
                         <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 search-ledger-wrapper">
                             <div class="d-flex search-ledger-field">
@@ -416,6 +416,7 @@
                                         foreignCurrencyDetails?.code
                                     }}</span>
                                 </div>
+
                                 <div class="d-flex">
                                     <a
                                         href="javascript:void(0)"
@@ -1197,7 +1198,7 @@
                                             <div class="pull-right">
                                                 {{ localeData?.cf_balance }}
                                                 <span
-                                                    class="pd-l15 digit-blue d-inline-fle"
+                                                    class="pd-l15 digit-blue d-inline-flex"
                                                     *ngIf="eLedgType == 'DEBIT'"
                                                 >
                                                     <amount-field
@@ -1629,7 +1630,6 @@
                                                 [currencyCode]="txn.currencyCode"
                                             >
                                             </amount-field>
-
                                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                                 <amount-field
                                                     [amount]="txn.convertedAmount"
@@ -2435,7 +2435,7 @@
                         <!-- endregion -->
 
                         <!-- region pagination -->
-                        <div class="text-center mr-t2 page-count pa">
+                        <div class="text-center mr-t2 page-count position-absolute">
                             <span class="grey ng-binding"
                                 >{{ (lc.transactionData$ | async)?.totalItems }} {{ localeData?.transactions }},
                             </span>
@@ -2662,7 +2662,7 @@
                                     <br />
 
                                     <div class="d-flex debit-credit-amount">
-                                        <h1 class="mr-t05 font16 grey-text-color d-flex flex-column">
+                                        <h1 class="mr-t05 font-16 grey-text-color d-flex flex-column">
                                             {{ commonLocaleData?.app_debit }}
                                             <span class="digit-blue mt-1 d-inline-flex">
                                                 <amount-field
@@ -2685,7 +2685,7 @@
                                             </span>
                                         </h1>
 
-                                        <h1 class="mr-t05 font16 grey-text-color d-flex flex-column">
+                                        <h1 class="mr-t05 font-16 grey-text-color d-flex flex-column">
                                             {{ commonLocaleData?.app_credit }}
                                             <span class="digit-blue d-flex mt-1">
                                                 <amount-field
@@ -2736,11 +2736,11 @@
                                                             ? localeData?.dr
                                                             : localeData?.cr
                                                         : ""
-                                                }}</span
-                                            >
+                                                }}
+                                            </span>
                                         </h3>
                                         <h3
-                                            class="digit-blue d-inline-flex"
+                                            class="digit-blue d-flex"
                                             container="body"
                                             *ngIf="isLedgerAccountAllowsMultiCurrency"
                                         >
@@ -2860,7 +2860,7 @@
 
             <!-- Advance search popup -->
             <div bsModal #advanceSearchModel="bs-modal" tabindex="-1" class="modal fade" role="dialog">
-                <div class="modal-dialog modal-xl advanceSearchModal">
+                <div class="modal-dialog modal-xl advance-search-modal">
                     <div class="modal-content">
                         <advance-search-model
                             *ngIf="isAdvanceSearchOpened"

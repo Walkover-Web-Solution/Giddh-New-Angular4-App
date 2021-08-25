@@ -84,7 +84,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public selectedRangeLabel: any = "";
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
-
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** Stores the branch list of a company */
@@ -93,29 +92,28 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public currentBranch: any = { name: '', uniqueName: '' };
     /** Stores the current company */
     public activeCompany: any;
-
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private searchFilterData: any = null;
     /** This will hold the daybook api response */
     public daybookData: any = {};
     /** This will hold if today is selected in universal */
     public todaySelected: boolean = false;
-    /** Stores the current organization type */
-    public currentOrganizationType: OrganizationType;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
     // aside menu properties
     public asideMenuStateForOtherTaxes: string = 'out';
     // aside menu properties
     public asideMenuState: string = 'out';
-    /** True if initial api got called */
-    public initialApiCalled: boolean = false;
     /** Ledger object */
     public lc: LedgerVM;
     /** Company taxes list */
     public companyTaxesList: TaxResponse[] = [];
+    /** True if initial api got called */
+    public initialApiCalled: boolean = false;
     /** Table columns for daybook report */
     public tableColumns: string[] = ['entry_date', 'particular', 'voucher_name', 'voucher_no', 'debit_amount', 'credit_amount'];
     /** Table columns for daybook report in expanded mode */
@@ -158,7 +156,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
-
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
@@ -280,8 +277,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
             } else {
                 if (response?.message) {
                     this.daybookData = { entries: [], totalItems: 0, page: 0 };
-                    this.toasterService.clearAllToaster();
-                    this.toasterService.errorToast(response?.message);
+                    this.toasterService.showSnackBar("error", response?.message);
                 } else {
                     this.daybookData = response?.body;
                 }
@@ -355,30 +351,28 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 this.daybookService.ExportDaybookPost(this.searchFilterData, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === 'success') {
                         if (response?.body?.type === "message") {
-                            this.toasterService.successToast(response?.body?.file);
+                            this.toasterService.showSnackBar("success", response?.body?.file);
                         } else {
                             let blob = this.generalService.base64ToBlob(response?.body?.file, response?.queryString?.requestType, 512);
                             let type = response?.queryString?.requestType === 'application/pdf' ? '.pdf' : '.xls';
                             saveAs(blob, 'response' + type);
                         }
                     } else {
-                        this.toasterService.clearAllToaster();
-                        this.toasterService.errorToast(response?.message);
+                        this.toasterService.showSnackBar("error", response?.message);
                     }
                 });
             } else if (this.daybookExportRequestType === 'get') {
                 this.daybookService.ExportDaybook(null, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === 'success') {
                         if (response?.body?.type === "message") {
-                            this.toasterService.successToast(response?.body?.file);
+                            this.toasterService.showSnackBar("success", response?.body?.file);
                         } else {
                             let blob = this.generalService.base64ToBlob(response?.body?.file, response?.queryString?.requestType, 512);
                             let type = response?.queryString?.requestType === 'application/pdf' ? '.pdf' : '.xls';
                             saveAs(blob, 'response' + type);
                         }
                     } else {
-                        this.toasterService.clearAllToaster();
-                        this.toasterService.errorToast(response?.message);
+                        this.toasterService.showSnackBar("error", response?.message);
                     }
                 });
             }

@@ -224,6 +224,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
                 this.pettycashRequest.sortBy = this.rejectedTabSortOptions.sortBy;
             }
             this.getPettyCashRejectedReports(this.pettycashRequest);
+
             setTimeout(() => {
                 if (this.currentSelectedTab == "pending" && this.pendingListComponent && this.pendingListComponent.pettycashRequest && this.pendingTabSortOptions) {
                     this.pendingListComponent.pettycashRequest.sort = this.pendingTabSortOptions.sort;
@@ -452,21 +453,21 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will show the next item from the list in preview. If current item is the last item, 
+     * This will show the next item from the list in preview. If current item is the last item,
      * then it will show the first item from the list, if all items are processed, it will exit the preview mode
-     * 
+     *
      * @param {*} event
      * @memberof ExpensesComponent
      */
     public previewNextItem(event: any): void {
         if(event) {
             let nextItemIndex;
-            this.pettyCashPendingReportResponse?.results?.forEach((item, index) => { 
+            this.pettyCashPendingReportResponse?.results?.forEach((item, index) => {
                 if(item?.uniqueName === this.selectedRowItem?.uniqueName) {
                     nextItemIndex = index + 1;
                 }
             });
-            
+
             if(this.pettyCashPendingReportResponse?.results?.length > 1) {
                 if(nextItemIndex && this.pettyCashPendingReportResponse?.results[nextItemIndex]) {
                     this.selectedRowItem = this.pettyCashPendingReportResponse?.results[nextItemIndex];

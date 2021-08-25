@@ -19,7 +19,7 @@ export class FilterListComponent implements OnInit, OnChanges {
     public selectedItem: ExpenseResults;
 
     constructor() {
-        
+
     }
 
     /**
