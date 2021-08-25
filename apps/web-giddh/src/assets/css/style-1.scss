@@ -1942,10 +1942,8 @@ ul.pills li {
     text-decoration: underline;
 }
 
-@media only screen and (max-width: 1440px) and (orientation: landscape) {
-    .pop-panel {
-        max-width: 480px;
-    }
+.tbpl-list .list-inline {
+    line-height: normal;
 }
 
 .email-type li label input {
