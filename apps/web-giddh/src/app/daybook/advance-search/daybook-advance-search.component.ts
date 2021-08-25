@@ -101,6 +101,8 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     };
     /** Stores the value of stocks */
     public stocks: IOption[];
+    /** True if other details should be expanded by default */
+    public isExpanded: boolean = false;
 
     constructor(
         private inventoryService: InventoryService,
@@ -449,6 +451,12 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
 
         if (this.searchFilterData) {
             this.advanceSearchForm?.patchValue(this.searchFilterData);
+
+            if(this.advanceSearchForm.get("includeDescription").value) {
+                this.isExpanded = true;
+            } else {
+                this.isExpanded = false;
+            }
         }
     }
 
