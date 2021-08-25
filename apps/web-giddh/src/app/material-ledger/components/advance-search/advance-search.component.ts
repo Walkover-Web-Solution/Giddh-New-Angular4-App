@@ -128,6 +128,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     public isDefaultStocksLoading: boolean = true;
     /** True if default groups api call in progress */
     public isDefaultGroupsLoading: boolean = true;
+    /** True if other details should be expanded by default */
+    public isExpanded: boolean = false;
 
     constructor(
         private groupService: GroupService,
@@ -270,6 +272,12 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
 
         if (this.advanceSearchRequest) {
             this.advanceSearchForm?.patchValue(this.advanceSearchRequest.dataToSend);
+
+            if(this.advanceSearchForm.get('includeDescription').value) {
+                this.isExpanded = true;
+            } else {
+                this.isExpanded = false;
+            }
         }
     }
 
