@@ -4,8 +4,12 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div id="exportModal">
-        <div class="modal-header">
+    <div
+        id="exportModal"
+        (click)="disableRippleEffect ? (disableRippleEffect = false) : ''"
+        [ngClass]="{ 'disable-ripple': disableRippleEffect }"
+    >
+        <div class="modal-header flex-row-reverse">
             <span
                 aria-hidden="true"
                 class="close"
@@ -16,7 +20,7 @@
             >
             <h3 class="unbold" mat-dialog-title>{{ localeData?.page_heading }}</h3>
         </div>
-        <div class="modal-body mr-b4" id="export-body">
+        <div class="modal-body" id="export-body">
             <form name="addShareEmailForm" novalidate autocomplete="off">
                 <div class="pd-b2 clearfix export-type">
                     <label class="w125">{{ commonLocaleData?.app_type }}:</label>

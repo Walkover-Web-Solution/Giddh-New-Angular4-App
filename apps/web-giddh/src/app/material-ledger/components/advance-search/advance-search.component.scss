@@ -12,6 +12,7 @@
 .modal-header {
     display: flex;
     justify-content: space-between;
+    padding: 16px !important;
 }
 .modal-header .close {
     color: $white;

@@ -189,7 +189,6 @@ table.ledger-footer-1 td[class*="col-"] {
     background: $white;
     color: $gray;
     font-size: 18px;
-    margin: 0px 0 0;
     box-shadow: 0px 2px 6px $black-russian;
 }
 .ledger-stat .row {
@@ -302,7 +301,7 @@ table.ledger-footer-1 td[class*="col-"] {
     width: 100%;
     margin-bottom: 16px;
     background: $white;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 6px $black-russian;
 }
 .Width600 {
     position: absolute;
@@ -353,7 +352,6 @@ table.ledger-footer-1 td[class*="col-"] {
 .d-none {
     display: none;
 }
-
 .date-step {
     padding: 0 !important;
     font-size: 13px;
@@ -371,7 +369,6 @@ input[type="date"]::-webkit-outer-spin-button {
 ::-webkit-calendar-picker-indicator {
     display: none;
 }
-
 .focus-unset.ledger-main .form-control:focus {
     border: unset !important;
 }
@@ -526,6 +523,7 @@ sh-select:focus {
     padding: 5px;
     width: 36px;
     height: 36px;
+    color: $gray;
     img {
         width: 18px;
     }
@@ -550,17 +548,17 @@ sh-select:focus {
     margin-right: 0;
 }
 .clear-filter-btn {
-    color: $midnight-blue;
+    border-radius: 5px;
+    border: 1px solid $gainsboro;
+    color: $gray;
     font-size: 14px;
-    border: 1px solid $midnight-blue;
-    border-radius: 20px;
-    padding: 0;
     background-color: $white;
-    width: 35px;
-    height: 35px;
+    width: 36px;
+    height: 36px;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 3px;
 }
 .clear-filter-btn i {
     font-size: 18px;
@@ -750,6 +748,11 @@ sh-select:focus {
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
+
+.list-item {
+    border-bottom: 1px solid $gainsboro;
+}
+
 .ledger-row {
     .text-ellipsis {
         min-width: 160px;
@@ -757,11 +760,6 @@ sh-select:focus {
         width: 100%;
     }
 }
-
-.list-item {
-    border-bottom: 1px solid $gainsboro;
-}
-
 /*responsive*/
 .modal-ledger {
     width: 70%;
@@ -869,7 +867,7 @@ sh-select:focus {
         margin-top: 10px;
         margin-bottom: 0;
     }
-    .date-range-option {
+    .date-range-options {
         margin-bottom: 10px;
         text-align: left !important;
         z-index: 1;
@@ -898,6 +896,10 @@ sh-select:focus {
     .debit-credit-amount {
         display: flex !important;
         flex-direction: column;
+        align-items: flex-start;
+    }
+    .download-invoice-ledger {
+        position: absolute !important;
     }
     .download-invoice-ledger {
         position: absolute !important;
@@ -909,8 +911,8 @@ sh-select:focus {
     }
     .ledg-head table td[class*="col-"],
     .ledg-head table td .select2-container {
-        border-bottom: 0px solid $gainsboro;
-        border-right: 0px solid $gainsboro;
+        border-bottom: none;
+        border-right: none;
     }
     .ledger-state-box {
         margin-bottom: 0;
@@ -919,17 +921,17 @@ sh-select:focus {
         background: $whisper-light;
     }
     .page-count {
-        width: 100%;
+        width: 100% !important;
         left: 0;
         bottom: 0;
-        position: relative;
-        box-shadow: 0px 2px 6px #0000001a;
+        position: inherit !important;
+        box-shadow: none !important;
         margin-top: 0;
         padding-top: 20px;
         padding-bottom: 20px;
     }
     .ledger-stat {
-        margin: 15px -15px;
+        margin: 15px -15px !important;
     }
     .ledger-book {
         margin-bottom: 16px;

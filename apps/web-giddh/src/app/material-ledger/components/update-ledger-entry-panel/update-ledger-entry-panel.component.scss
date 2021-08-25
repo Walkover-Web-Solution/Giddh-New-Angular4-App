@@ -46,10 +46,6 @@ table.width-100 {
     font-size: 24px;
 }
 
-#entryModal {
-    max-height: 100vh !important;
-}
-
 ng-select > div i.fa.fa-caret-down::before {
     color: $white;
     font-size: 20px;
@@ -204,13 +200,6 @@ span.eligible-ITC {
 
 .pd-l05 {
     padding-left: 5px;
-}
-
-.adjustment-field {
-    max-height: 160px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    min-height: 160px;
 }
 
 .ledger-bottom {

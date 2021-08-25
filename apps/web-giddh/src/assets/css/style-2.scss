@@ -467,7 +467,6 @@ input {
 }
 
 .approve-modal .modal-top {
-    background: $alice-blue-light;
     padding: 15px 15px 0;
 }
 
@@ -496,7 +495,7 @@ input {
     font-size: 13px;
     color: $chetwode-blue !important;
     display: block;
-    padding: 7px 10px !important;
+    padding: 7px 10px;
     display: block;
     width: 100%;
     text-align: left;
@@ -1496,9 +1495,9 @@ header .navbar {
 }
 
 .btn-primary {
-    background: $white;
-    border-color: $gainsboro;
-    color: $midnight-express;
+    background: $white !important;
+    border-color: $gainsboro !important;
+    color: $midnight-express !important;
 }
 
 .btn-primary:hover,
@@ -1511,9 +1510,9 @@ header .navbar {
 .btn-primary:active:hover,
 .open > .dropdown-toggle.btn-primary:focus,
 .btn-primary:not(:disabled):not(.disabled):active {
-    background: $chetwode-blue;
-    color: $white;
-    border-color: $chetwode-blue;
+    background: $chetwode-blue !important;
+    color: $white !important;
+    border-color: $chetwode-blue !important;
 }
 
 .btn-primary.disabled.focus,
@@ -1525,9 +1524,9 @@ header .navbar {
 fieldset[disabled] .btn-primary.focus,
 fieldset[disabled] .btn-primary:focus,
 fieldset[disabled] .btn-primary:hover {
-    background: $chetwode-blue;
-    color: $white;
-    border-color: $midnight-blue;
+    background: $chetwode-blue !important;
+    color: $white !important;
+    border-color: $midnight-blue !important;
 }
 
 .btn {
@@ -1545,9 +1544,9 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .btn-default {
-    background: $white;
-    border-color: $gainsboro;
-    color: $midnight-express;
+    background: $white !important;
+    border-color: $gainsboro !important;
+    color: $midnight-express !important;
 }
 
 .btn-default:hover,
@@ -1840,19 +1839,19 @@ input[type="checkbox"]:checked:after {
 }
 
 .btn-success-outline {
-    border: 1px solid $light-sea-green;
-    color: $light-sea-green;
+    border: 1px solid $light-sea-green !important;
+    color: $light-sea-green !important;
 }
 
 .btn-success-outline:hover {
     color: $white;
-    background: $light-sea-green;
+    background: $light-sea-green !important;
 }
 
 .btn-success {
-    background: $light-sea-green;
+    background: $light-sea-green !important;
     color: $white;
-    border: 1px solid $light-sea-green;
+    border: 1px solid $light-sea-green !important;
 }
 
 .btn-success:hover,
@@ -1862,20 +1861,22 @@ input[type="checkbox"]:checked:after {
 .btn-success:not(:disabled):not(.disabled):active,
 .btn-success:not(:disabled):not(.disabled).active,
 .show > .btn-success.dropdown-toggle {
-    background: $teal;
-    color: $white;
-    border: 1px solid $teal;
+    background: $teal !important;
+    color: $white !important;
+    border: 1px solid $teal !important;
     box-shadow: none;
 }
 
 .btn-success:disabled,
 .btn-success:disabled:hover {
-    color: rgba(255, 255, 255, 0.51);
-    border: 1px solid $success-green-disable;
-    background: $success-green-disable;
+    color: rgba(255, 255, 255, 0.51) !important;
+    border: 1px solid $success-green-disable !important;
+    background: $success-green-disable !important;
 }
 .btn-warning {
     color: $white !important;
+    background-color: $warning !important;
+    border-color: $warning !important;
 }
 .btn-warning:not(:disabled):not(.disabled):active:focus,
 .btn-warning:not(:disabled):not(.disabled).active:focus,
@@ -1888,20 +1889,19 @@ input[type="checkbox"]:checked:after {
 }
 
 .btn-danger {
-    background: $whisper;
-    color: $red;
-    border-color: $whisper;
+    background: $whisper !important;
+    color: $red !important;
+    border-color: $whisper !important;
 }
 
 .btn-danger:hover,
 .btn-danger:active,
 .btn-danger:focus,
 .btn-danger:active:focus {
-    background: $gainsboro;
-    color: $red;
-    border-color: $gainsboro;
-    outline: none;
-    box-shadow: none;
+    background: $gainsboro !important;
+    color: $red !important;
+    border-color: $gainsboro !important;
+    outline: none !important;
 }
 
 .btn-danger:disabled,
@@ -1909,9 +1909,9 @@ input[type="checkbox"]:checked:after {
 .btn-danger:active:focus,
 .btn-danger:active:hover,
 .btn-danger:focus {
-    background: $whisper;
-    color: $red;
-    border-color: $whisper;
+    background: $whisper !important;
+    color: $red !important;
+    border-color: $whisper !important;
     opacity: 0.5;
 }
 
@@ -2695,10 +2695,6 @@ a.btn.btn-xs.btn-link.pull-right {
     -webkit-border-radius: 0px;
     border-radius: 0px;
     margin-left: 10px;
-}
-
-#share-modal .input-group .input-group-btn:last-child > .btn {
-    margin-left: 15px;
 }
 
 .input-group-btn.sticky:last-child > .btn {
@@ -4578,16 +4574,14 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 }
 
 .modal-header > .close {
-    position: absolute;
-    right: 20px;
-    top: 5px;
-    line-height: 33px;
     color: $white;
     opacity: 1;
     font-weight: 100;
     text-shadow: none;
     font-size: 30px;
     cursor: pointer;
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
 /**new modal design**/
@@ -6701,7 +6695,7 @@ ul.dropdown-menu p.lead.pd {
     color: $white;
     box-shadow: 0px 4px 4px -3px $wistful;
     border-radius: 0px;
-    border-color: $chetwode-blue;
+    border-color: $chetwode-blue !important;
 }
 
 .aside-panel-ledger button.btn.btn-lg.btn-primary {
@@ -6799,6 +6793,7 @@ ul.dropdown-menu p.lead.pd {
     height: 36px !important;
     border-right: none !important;
     color: $nobel !important;
+    cursor: pointer;
 }
 
 .date-advance-search .input-group input.form-control {
@@ -7515,6 +7510,15 @@ span#HW_badge_cont:nth-child(3) {
                 }
             }
         }
+        .active-link {
+            a {
+                span {
+                    i {
+                        color: $white;
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -7552,11 +7556,15 @@ span#HW_badge_cont:nth-child(3) {
     padding-right: 0;
     padding-left: 60px !important;
 }
+
 .setting-sidebar-open .desktop-header {
     padding-left: 0;
 }
 .setting-sidebar-open .desktop-header.menu_open {
     padding-right: 240px !important;
+}
+.gst-sidebar-open .menu_open {
+    padding-left: 300px !important;
 }
 .desktop-header.menu_open {
     padding-left: 60px !important;
@@ -7885,7 +7893,8 @@ ul.dropdown-menu.action-dropdown {
 }
 
 /*material datepicker css starts*/
-ngx-daterangepicker-material {
+ngx-daterangepicker-material,
+giddh-datepicker {
     .recurring-form .mat-form-field {
         max-width: 170px;
     }
@@ -7964,6 +7973,19 @@ ngx-daterangepicker-material {
         display: flex !important;
         justify-content: center;
         align-items: center;
+    }
+}
+
+.cdk-overlay-container,
+.cdk-global-overlay-wrapper {
+    z-index: 99999;
+}
+
+giddh-datepicker {
+    .mat-form-field-appearance-fill .mat-form-field-flex {
+        border-radius: 2px !important;
+        border: 1px solid $gainsboro !important;
+        border-radius: 5px !important;
     }
 }
 /*material datepicker css end*/
@@ -8187,7 +8209,7 @@ ngx-daterangepicker-material {
         left: 60px !important;
     }
     #content-wrapper {
-        padding-left: 300px !important;
+        padding-left: 300px;
     }
     .nav-left-bar {
         display: block;
@@ -8224,14 +8246,11 @@ body.update-scroll-hidden {
     position: static !important;
     padding-left: 15px !important;
 }
-
-body.update-scroll-hidden {
-    overflow-y: hidden;
+.sales-register {
+    width: calc(100% - 60px) !important;
 }
-.wrap-billing-address.clearfix {
-    .bottom-border-only {
-        padding-left: 0 !important;
-    }
+.menu_open .sales-register {
+    width: calc(100% - 240px) !important;
 }
 .nav-left-bar {
     &.width-60 {
@@ -8363,9 +8382,6 @@ body.update-scroll-hidden {
         }
     }
 }
-.manage-account-popup.full-screen-modal {
-    z-index: 999991;
-}
 .on-setting-page.aside-setting,
 .on-user-page.aside-setting {
     #content-wrapper {
@@ -8380,26 +8396,8 @@ body.update-scroll-hidden {
 .manage-account-popup.full-screen-modal {
     z-index: 999991;
 }
-body.update-scroll-hidden {
-    overflow-y: hidden;
-}
 .trial-balance-viewport {
     height: 500px;
-}
-.e-waybill-tabs.custom-tabs .nav-tabs {
-    position: static !important;
-    padding-left: 15px !important;
-}
-.sales-register {
-    width: calc(100% - 60px) !important;
-}
-.menu_open .sales-register {
-    width: calc(100% - 240px) !important;
-}
-.wrap-billing-address.clearfix {
-    .bottom-border-only {
-        padding-left: 0 !important;
-    }
 }
 .gst-sidebar-open {
     .daterangepicker.show-calendar {
@@ -8417,6 +8415,9 @@ body.update-scroll-hidden {
     .popover-arrow {
         display: none;
     }
+}
+.cdk-overlay-pane {
+    height: auto !important;
 }
 
 /* responsive  starts here*/
@@ -8474,29 +8475,6 @@ body.update-scroll-hidden {
         height: 90px !important;
         font-size: 14px;
     }
-    .gst-sidebar-open {
-        .gst-sidebar {
-            left: -250px !important;
-        }
-        #content-wrapper {
-            padding-left: 0;
-        }
-        .plan-wrapper {
-            padding-left: 0;
-        }
-        .menu_open {
-            #content-wrapper {
-                padding-left: 300px;
-            }
-            .plan-wrapper {
-                padding-left: 60px;
-            }
-        }
-    }
-    .e-waybill-tabs.custom-tabs .nav-tabs {
-        position: static !important;
-        padding-left: 15px !important;
-    }
     .groups-buttons {
         height: auto;
     }
@@ -8552,7 +8530,7 @@ body.update-scroll-hidden {
             left: 60px !important;
         }
         #content-wrapper {
-            padding-left: 300px !important;
+            padding-left: 300px;
         }
     }
 }
@@ -8753,7 +8731,6 @@ body.update-scroll-hidden {
         width: 100% !important;
         padding-right: 0 !important;
     }
-
     .bulk-create-table sh-select input,
     .bulk-create-table .mat-form-field-wrapper input,
     .bulk-create-table .mat-form-field-appearance-fill .mat-form-field-flex {
@@ -8931,11 +8908,6 @@ body.update-scroll-hidden {
     .mobile-setting-sidebar {
         overflow-y: hidden;
     }
-    .gst-sidebar-open {
-        #content-wrapper {
-            padding-left: 0 !important;
-        }
-    }
     .customer-aging .nav.nav-tabs {
         display: flex !important;
     }
@@ -8953,9 +8925,6 @@ body.update-scroll-hidden {
                 display: none !important;
             }
         }
-    }
-    .gst-sidebar-open .gst-menu-icon {
-        display: inline-flex !important;
     }
     .setting-sidebar {
         display: block;
@@ -9882,7 +9851,7 @@ body.update-scroll-hidden {
     }
     .modal-dialog {
         max-width: 650px !important;
-        margin: 30px auto;
+        margin: 56px auto;
         padding: 0 10px;
     }
     .modal-dialog.modal-xl {
@@ -9891,6 +9860,7 @@ body.update-scroll-hidden {
     .receipt-note-modal {
         max-width: 100% !important;
     }
+
     .po-preview-modal {
         max-width: 100% !important;
         width: 900px !important;
@@ -10162,9 +10132,7 @@ mat-year-view table tr td.mat-calendar-body-label {
     display: none !important;
 }
 /** Angular material datepicker **/
-.pd-0 {
-    padding: 0px !important;
-}
+
 input[type="checkbox"].cdk-visually-hidden::before,
 input[type="checkbox"].cdk-visually-hidden::after {
     height: 1px !important;

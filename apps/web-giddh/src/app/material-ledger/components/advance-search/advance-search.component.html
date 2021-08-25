@@ -233,7 +233,7 @@
                                                 decimalDigitsDirective
                                                 [DecimalPlaces]="2"
                                                 formControlName="amount"
-                                                class="form-control mat-field-border pd-0"
+                                                class="form-control mat-field-border"
                                             />
                                         </mat-form-field>
                                     </div>
@@ -263,12 +263,12 @@
                 <mat-accordion class="w-100 m-10" multi>
                     <mat-expansion-panel
                         [expanded]="advanceSearchForm.get('includeDescription').value"
-                        (afterCollapse)="toggleOtherDetails()"
-                        (afterExpand)="toggleOtherDetails()"
                         class="mr-t1 overflow-visible"
                     >
                         <mat-expansion-panel-header>
-                            <mat-panel-title>{{ commonLocaleData?.app_other_details }}</mat-panel-title>
+                            <mat-panel-title (click)="toggleOtherDetails()">{{
+                                commonLocaleData?.app_other_details
+                            }}</mat-panel-title>
                         </mat-expansion-panel-header>
 
                         <div class="clearfix mt-2">
@@ -443,7 +443,7 @@
                     </mat-expansion-panel>
                 </mat-accordion>
                 <div class="text-right mb-3 mt-2">
-                    <button mat-button class="btn btn-success m-0" type="button" (click)="onSearch()">
+                    <button mat-button class="btn btn-success" type="button" (click)="onSearch()">
                         {{ commonLocaleData?.app_search }}
                     </button>
                 </div>

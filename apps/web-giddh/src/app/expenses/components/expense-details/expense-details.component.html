@@ -124,14 +124,16 @@
                 </div>
             </div>
         </div>
-        <div class="expense-ledger" *ngIf="accountEntryPettyCash">
-            <update-ledger-entry-panel
-                [isPettyCash]="true"
-                [pettyCashEntry]="accountEntryPettyCash"
-                [pettyCashBaseAccountTypeString]="entryAgainstObject.base"
-                [pettyCashBaseAccountUniqueName]="this.accountEntryPettyCash.particular.uniqueName"
-                (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane()"
-            ></update-ledger-entry-panel>
+        <div class="expense-ledger row" *ngIf="accountEntryPettyCash">
+            <div class="col-md-12 pl-0 pr-0">
+                <update-ledger-entry-panel
+                    [isPettyCash]="true"
+                    [pettyCashEntry]="accountEntryPettyCash"
+                    [pettyCashBaseAccountTypeString]="entryAgainstObject.base"
+                    [pettyCashBaseAccountUniqueName]="this.accountEntryPettyCash.particular.uniqueName"
+                    (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane()"
+                ></update-ledger-entry-panel>
+            </div>
         </div>
     </div>
 </div>

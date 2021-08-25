@@ -88,7 +88,7 @@
                                     </div>
                                     <div class="d-flex mr-l15">
                                         <button
-                                            mat-button
+                                            mat-raised-button
                                             [disabled]="
                                                 currentOrganizationType === 'COMPANY' &&
                                                 currentCompanyBranches?.length > 2
@@ -103,7 +103,7 @@
                                         </button>
 
                                         <button
-                                            mat-button
+                                            mat-raised-button
                                             [disabled]="
                                                 currentOrganizationType === 'COMPANY' &&
                                                 currentCompanyBranches?.length > 2
@@ -118,7 +118,7 @@
                                         </button>
                                     </div>
                                     <button
-                                        mat-button
+                                        mat-raised-button
                                         [disabled]="
                                             currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
                                         "
@@ -166,10 +166,11 @@
                                                 matSuffix
                                                 mat-icon-button
                                                 (click)="searchText = ''; search(searchText)"
+                                                class="position-absolute"
                                             >
-                                                <i aria-hidden="true" class="icon-cross"></i>
+                                                <i aria-hidden="true" class="icon-cross font-12"></i>
                                             </button>
-                                            <span matPrefix><i class="icon-search pos-abs"></i></span>
+                                            <span matPrefix><i class="icon-search position-absolute"></i></span>
                                         </mat-form-field>
                                     </span>
                                     <a
@@ -223,6 +224,7 @@
                                     href="javascript:;"
                                     (click)="resetAdvanceSearch()"
                                     [matTooltip]="commonLocaleData?.app_reset_advance_search"
+                                    [matTooltipPosition]="'above'"
                                 >
                                     <i aria-hidden="true" class="icon-refresh"></i>
                                 </a>
@@ -232,10 +234,10 @@
                                 >
                                     <button
                                         mat-raised-button
-                                        color="warn"
                                         [disabled]="
                                             currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
                                         "
+                                        class="btn btn-danger"
                                         id="delete-ledger"
                                         (click)="performBulkAction('delete')"
                                         [matTooltip]="commonLocaleData?.app_delete"
@@ -246,12 +248,11 @@
 
                                     <button
                                         mat-raised-button
-                                        color="primary"
                                         [disabled]="
                                             currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
                                         "
                                         id="generate-invoice"
-                                        class="mr-l1"
+                                        class="btn btn-warning"
                                         (click)="performBulkAction('generate')"
                                         [matTooltip]="commonLocaleData?.app_generate_voucher"
                                         [matTooltipPosition]="'above'"
@@ -264,7 +265,7 @@
                                         [disabled]="
                                             currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
                                         "
-                                        class="btn btn-success mr-l1"
+                                        class="btn btn-success"
                                         id="attach-file"
                                         (click)="performBulkAction('upload', BulkUploadfileInput)"
                                         [matTooltip]="localeData?.attach_file"
@@ -1445,7 +1446,7 @@
                                     'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked
                                 }"
                                 [matTooltip]="txn.description"
-                                [matTooltipPosition]="'right'"
+                                [matTooltipPosition]="'above'"
                                 (mouseover)="entryHovered(txn.entryUniqueName)"
                                 (mouseout)="selectedTrxWhileHovering = ''"
                             >
@@ -1595,6 +1596,7 @@
                                                             (onShow)="isSelectOpen = true"
                                                             (onHide)="onSelectHide()"
                                                             (selected)="selectAccount($event, txn)"
+                                                            (onClear)="selectAccount($event, txn, true)"
                                                             (keydown)="keydownPressed($event)"
                                                             [placeholder]="localeData?.to_select_accounts"
                                                             [notFoundLink]="true"
@@ -1847,7 +1849,7 @@
                                     'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked
                                 }"
                                 [matTooltip]="txn.description"
-                                [matTooltipPosition]="'right'"
+                                [matTooltipPosition]="'above'"
                                 (mouseover)="entryHovered(txn.entryUniqueName)"
                                 (mouseout)="selectedTrxWhileHovering = ''"
                             >
@@ -1887,7 +1889,7 @@
                                             *ngIf="txn.attachedFileUniqueName"
                                             (click)="downloadAttachedFile(txn.attachedFileUniqueName, $event)"
                                             [matTooltip]="localeData?.download_file + ' : ' + txn.attachedFileName"
-                                            [matTooltipPosition]="'right'"
+                                            [matTooltipPosition]="'left'"
                                         >
                                             <i class="icon-download-circle pull-left"></i>
                                         </span>
@@ -1906,7 +1908,7 @@
                                                 ' : ' +
                                                 txn.voucherNumber
                                             "
-                                            [matTooltipPosition]="'right'"
+                                            [matTooltipPosition]="'left'"
                                         >
                                             <i class="icon-download-circle pull-left"></i>
                                         </span>
@@ -1989,6 +1991,7 @@
                                                             (onHide)="onSelectHide()"
                                                             [(ngModel)]="txn.particular"
                                                             (selected)="selectAccount($event, txn)"
+                                                            (onClear)="selectAccount($event, txn, true)"
                                                             [showClear]="false"
                                                             [placeholder]="localeData?.by_select_accounts"
                                                             (keydown)="keydownPressed($event)"
@@ -2142,7 +2145,7 @@
                                     </tr>
                                     <tr class="total-col">
                                         <td colspan="12" class="col-xs-12 text-right white h32 border-top pd-r1">
-                                            <div class="d-flex flex-column">
+                                            <div class="d-flex flex-column align-items-end">
                                                 <span class="bd-rt padding-ledger">
                                                     <amount-field
                                                         [amount]="lc.reckoningDebitTotal"
@@ -2191,7 +2194,7 @@
                                     </tr>
                                     <tr class="total-col">
                                         <td colspan="12" class="col-xs-12 text-right white h32 border-top pd-r1">
-                                            <div class="d-flex flex-column">
+                                            <div class="d-flex flex-column align-items-end">
                                                 <span class="bd-rt padding-ledger">
                                                     <amount-field
                                                         [amount]="lc.reckoningCreditTotal"
@@ -2400,7 +2403,7 @@
                                                 >
                                                 </amount-field>
                                                 &nbsp;
-                                                <span class="capitalize">{{ commonLocaleData?.app_cr }}</span>
+                                                <span class="text-capitalize">{{ commonLocaleData?.app_cr }}</span>
                                             </h3>
                                             <h3
                                                 class="digit-blue sub-total font-12 d-inline-flex"
@@ -2416,7 +2419,7 @@
                                                 >
                                                 </amount-field>
                                                 &nbsp;
-                                                <span class="capitalize">{{ commonLocaleData?.app_cr }}</span>
+                                                <span class="text-capitalize">{{ commonLocaleData?.app_cr }}</span>
                                             </h3>
                                         </div>
                                     </div>
@@ -2432,7 +2435,7 @@
                                                 >
                                                 </amount-field>
                                                 &nbsp;
-                                                <span class="capitalize">{{ commonLocaleData?.app_dr }}</span>
+                                                <span class="text-capitalize">{{ commonLocaleData?.app_dr }}</span>
                                             </h3>
                                             <h3
                                                 class="digit-blue sub-total font-12 d-inline-flex"
@@ -2448,7 +2451,7 @@
                                                 >
                                                 </amount-field>
                                                 &nbsp;
-                                                <span class="capitalize">{{ commonLocaleData?.app_dr }}</span>
+                                                <span class="text-capitalize">{{ commonLocaleData?.app_dr }}</span>
                                             </h3>
                                         </div>
                                     </div>
