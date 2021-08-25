@@ -4,7 +4,7 @@
             <div class="col-sm-6">
                 <p class="bold mr-b05">{{ selectedItem?.entryDate }} | {{ selectedItem.baseAccount.name }}</p>
             </div>
-            <div class="col-sm-6 text-right xs-left">
+            <div class="col-sm-6 text-right xs-left d-flex justify-content-end align-items-center">
                 <button
                     mat-raised-button
                     class="mr-b05 btn btn-success"
@@ -21,7 +21,7 @@
                 >
                     {{ localeData?.reject }}
                 </button>
-                <span class="close-modal cp pull-right mr-l1" (click)="closeDetailsMode()">
+                <span class="mr-b05 close-modal cp pull-right mr-l1" (click)="closeDetailsMode()">
                     <img src="assets/images/multiply.svg" />
                 </span>
             </div>

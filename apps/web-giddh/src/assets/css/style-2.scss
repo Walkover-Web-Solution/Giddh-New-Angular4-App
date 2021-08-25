@@ -55,12 +55,13 @@ $custom-typography: mat-typography-config(
     .text-left-sm {
         text-align: left !important;
     }
-    .on-mobile-view tbody tr {
+    .on-mobile-view tbody tr,
+    .on-mobile-view tbody mat-row {
         box-shadow: 0 0px 5px rgba(0, 0, 0, 0.1);
         background: $white;
         border-bottom: none;
         cursor: pointer;
-        display: block;
+        display: block !important;
         padding: 5px 0 10px 0px;
         margin: 10px auto 22px;
         width: 100%;
@@ -79,9 +80,10 @@ $custom-typography: mat-typography-config(
     .on-mobile-view table thead {
         display: none;
     }
-    .on-mobile-view tbody > tr > td {
+    .on-mobile-view tbody > tr > td,
+    .on-mobile-view tbody > mat-row > td {
         border: 0 !important;
-        display: block;
+        display: block !important;
         padding: 5px 10px 5px 50% !important;
         position: relative;
         text-align: left !important;
@@ -90,6 +92,8 @@ $custom-typography: mat-typography-config(
         word-wrap: inherit !important;
         max-width: 100%;
         white-space: inherit;
+        margin-bottom: 14px;
+        width: 100%;
     }
     .on-mobile-view tbody td:after {
         content: "";
@@ -118,7 +122,8 @@ $custom-typography: mat-typography-config(
         width: 40%;
         text-align: left;
     }
-    .on-mobile-view .table-bordered > tfoot > tr > td {
+    .on-mobile-view .table-bordered > tfoot > tr > td,
+    .on-mobile-view .table-bordered > tfoot > mat-row > td {
         border: none;
     }
     .on-mobile-view th {
@@ -1844,13 +1849,13 @@ input[type="checkbox"]:checked:after {
 }
 
 .btn-success-outline:hover {
-    color: $white;
+    color: $white !important;
     background: $light-sea-green !important;
 }
 
 .btn-success {
     background: $light-sea-green !important;
-    color: $white;
+    color: $white !important;
     border: 1px solid $light-sea-green !important;
 }
 
@@ -9831,9 +9836,6 @@ body.update-scroll-hidden {
     }
     .d-sm-inline {
         display: inline-block !important;
-    }
-    .daybook-icon-advance-filter {
-        padding-right: 5px;
     }
 }
 @media (min-width: 768px) {
