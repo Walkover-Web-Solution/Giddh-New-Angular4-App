@@ -2763,7 +2763,8 @@ mat-dialog-container .modal-header {
 .advance-search,
 #share-modal,
 #exportModal,
-.other-details-section {
+.other-details-section,
+.daybook-advance-search {
     .mat-form-field {
         .mat-form-field-wrapper {
             padding-bottom: 0 !important;
@@ -2797,10 +2798,10 @@ mat-dialog-container .modal-header {
     .mat-form-field-appearance-fill .mat-form-field-flex {
         background-color: $white !important;
     }
-    giddh-datepicker {
-        .mat-form-field {
-            width: 100% !important;
-        }
+}
+giddh-datepicker {
+    .mat-form-field {
+        width: 100% !important;
     }
 }
 .ledg-head {
@@ -2855,6 +2856,12 @@ mat-dialog-container .modal-header {
     top: 10px;
     right: 0px;
     opacity: 0.8;
+}
+
+.petty-cash {
+    .mat-tab-body.mat-tab-body-active {
+        z-index: 999 !important;
+    }
 }
 
 .advance-search-by-date {
@@ -2929,69 +2936,57 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
     font-family: "opensans-semibold";
     font-size: 14px !important;
 }
-.mat-form-field-appearance-fill .mat-form-field-underline::before,
-.mat-form-field-appearance-fill .mat-form-field-underline .mat-form-field-ripple {
-    background-color: transparent !important;
+.mat-header-cell.text-right {
+    .mat-sort-header-container {
+        justify-content: flex-end !important;
+    }
 }
-.main-expense-details .mat-form-field-appearance-fill .mat-form-field-flex,
-.petty-cash-reject-modal .mat-form-field-appearance-fill .mat-form-field-flex,
-.petty-cash-reject-modal .mat-form-field-wrapper {
-    padding: 0px !important;
+.mat-header-cell,
+.mat-cell {
+    font-weight: 400;
+    padding: 14px 10px !important;
+    text-transform: capitalize;
+    display: table-cell !important;
+}
+.mat-table tbody mat-header-row:hover td {
+    background: $light-alice-blue;
+}
+table.mat-table {
+    border-spacing: 2px !important;
+}
+th.mat-header-cell:first-of-type,
+td.mat-cell:first-of-type,
+td.mat-footer-cell:first-of-type {
+    border-left: none;
+    white-space: normal !important;
+    word-break: inherit;
+}
+th.mat-header-cell,
+td.mat-cell,
+td.mat-footer-cell {
+    vertical-align: middle !important;
+    word-break: break-word;
+    white-space: nowrap;
+    border-bottom-width: 0 !important;
+}
+mat-header-row,
+mat-row {
+    display: table-row !important;
+    vertical-align: inherit;
+    border-color: inherit;
+}
+mat-row,
+mat-header-row,
+mat-footer-row {
+    &:after {
+        display: none !important;
+    }
 }
 .expense-head .mat-raised-button {
     padding: 0 16px !important;
 }
 .responsive-label {
     display: none;
-}
-@media (max-width: 767px) {
-    .mat-mobile-view {
-        .responsive-label {
-            display: inline-block;
-            color: $midnight-blue !important;
-            font-family: "opensans-semibold";
-            font-size: 14px !important;
-            min-width: 130px;
-            text-align: left;
-        }
-        .mat-header-row {
-            display: none;
-        }
-        .mat-row {
-            flex-direction: column;
-            align-items: start;
-            padding: 8px 2px;
-        }
-        .mat-cell {
-            padding-left: 0px !important;
-        }
-    }
-}
-.daybook-advance-search {
-    .mat-form-field-appearance-fill {
-        .mat-form-field-flex {
-            padding: 1px 0px 0px 0px !important;
-        }
-        .mat-form-field-infix {
-            padding: 0;
-            border-top: 0px;
-
-            input.mat-input-element {
-                padding-left: 10px !important;
-                width: 96% !important;
-            }
-        }
-    }
-    giddh-datepicker {
-        .mat-form-field {
-            width: 100%;
-        }
-    }
-    .mat-form-field {
-        .mat-form-field-wrapper {
-            padding-bottom: 0px;
-        }
-    }
 }
 .export-daybook {
     .mat-raised-button {
@@ -3025,5 +3020,51 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
             background-image: url("../images/info-white.svg");
         }
     }
+}
+.other-tax {
+    .mat-checkbox-layout {
+        .mat-checkbox-label {
+            font-size: 14px !important;
+        }
+    }
+}
+.petty-cash {
+    .mat-tab-group {
+        .mat-tab-header {
+            background: $alice-blue-light !important;
+            .mat-tab-label-container {
+                padding-left: 15px !important;
+                .mat-tab-list {
+                    .mat-tab-label {
+                        padding: 0 35px 0 0 !important;
+                        opacity: 1 !important;
+                        min-width: auto !important;
+                        height: 44px !important;
+                        color: $night-rider !important;
+                        .mat-tab-label-content {
+                            margin-bottom: 5px !important;
+                        }
+                        &:focus {
+                            font-weight: 800 !important;
+                            color: $nero !important;
+                        }
+                        &.active {
+                            font-weight: 800 !important;
+                            color: $nero !important;
+                        }
+                    }
+                    .mat-ink-bar {
+                        background-color: $vivid-blue !important;
+                        height: 4px !important;
+                        width: 60px !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.mr-0 {
+    margin-right: 0 !important;
 }
 /* material css for ledger end*/
