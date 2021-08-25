@@ -100,12 +100,10 @@
                             <i class="dot-icon dot-primary" *ngIf="expenses.entryType === 'expense'"></i>
                             {{ expenses.particularAccount.name }}
                         </td>
-
                         <td [attr.data-title]="commonLocaleData?.app_amount" class="text-right pr-2">
                             {{ expenses.currencySymbol }}
                             {{ expenses.amount | giddhCurrency }}
                         </td>
-
                         <td [attr.data-title]="localeData?.payment_receipt">
                             <span *ngIf="expenses.baseAccountCategory === 'OTHER'" class="font-12 text-gray">{{
                                 commonLocaleData?.app_ac
