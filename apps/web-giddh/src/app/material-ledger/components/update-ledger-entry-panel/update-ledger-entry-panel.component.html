@@ -703,13 +703,19 @@
                 <!-- reverse charge transction start -->
                 <div *ngIf="shouldShowRcmEntry" class="pd-b1 mt-b1 tourist-scheme-wrapper">
                     <mat-checkbox
+                        #rcmCheckbox
                         color="primary"
                         id="tourist-scheme-1"
                         [(ngModel)]="isRcmEntry"
-                        (click)="toggleRcmCheckbox($event)"
                         [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
-                        ><span [innerHTML]="localeData?.transaction_available_rc"></span
-                    ></mat-checkbox>
+                        (change)="changeRcmCheckboxState($event)"
+                    >
+                    </mat-checkbox>
+                    <label
+                        for="tourist-scheme-1"
+                        (click)="!isReadOnly ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''"
+                        [innerHTML]="localeData?.transaction_available_rc"
+                    ></label>
                     <span class="text-light font-12"> ({{ localeData?.tax_compulsory }})</span>
                 </div>
                 <!-- reverse charge transction end  -->
