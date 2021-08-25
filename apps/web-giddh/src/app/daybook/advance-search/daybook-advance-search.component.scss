@@ -5,7 +5,6 @@ input {
 input.form-control.date-range-picker {
     text-align: left;
     border: 1px solid $gainsboro;
-    padding-left: 5px !important;
 }
 .square-switch {
     width: 110px;
@@ -24,7 +23,6 @@ input.form-control.date-range-picker {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    height: 42px !important;
     border-right: 1px solid $gainsboro !important;
     cursor: pointer;
 }
