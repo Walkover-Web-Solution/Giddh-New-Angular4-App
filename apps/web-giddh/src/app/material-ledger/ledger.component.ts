@@ -33,7 +33,6 @@ import { WarehouseActions } from '../settings/warehouse/action/warehouse.action'
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { AppState } from '../store';
 import { BorderConfiguration, IOption } from '../theme/ng-virtual-select/sh-options.interface';
-import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
 import { NewLedgerEntryPanelComponent } from './components/new-ledger-entry-panel/new-ledger-entry-panel.component';
 import { UpdateLedgerEntryPanelComponent } from './components/update-ledger-entry-panel/update-ledger-entry-panel.component';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
@@ -239,6 +238,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public isDatepickerOpen: boolean = false;
     /** Instance of advance search modal dialog */
     public advanceSearchDialogRef: any;
+    /** Last touched transaction (for ipad and tablet) */
+    public touchedTransaction: any;
 
     constructor(
         private store: Store<AppState>,
@@ -332,10 +333,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
-    public selectAccount(e: IOption, txn: TransactionVM) {
+    public selectAccount(e: IOption, txn: TransactionVM, clearAccount?: boolean) {
         this.keydownClassAdded = false;
         this.selectedTxnAccUniqueName = '';
-        if (!e.value) {
+        if (!e.value || clearAccount) {
             // if there's no selected account set selectedAccount to null
             txn.selectedAccount = null;
             this.lc.currentBlankTxn = null;
@@ -348,6 +349,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             txn.discounts = [
                 this.lc.staticDefaultDiscount()
             ];
+            txn.particular = undefined;
             return;
         }
         let requestObject;
@@ -2334,5 +2336,23 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public datepickerState(event: any): void {
         this.isDatepickerOpen = event;
+    }
+
+    /**
+     * This will keep the track of touch event and will check if double clicked on any transaction, it will open the update ledger modal
+     *
+     * @param {ITransactionItem} txn
+     * @memberof LedgerComponent
+     */
+    public showUpdateLedgerModalIpad(txn: ITransactionItem): void {
+        if(this.touchedTransaction?.entryUniqueName === txn?.entryUniqueName) {
+            this.showUpdateLedgerModal(txn);
+        } else {
+            this.touchedTransaction = txn;
+        }
+
+        setTimeout(() => {
+            this.touchedTransaction = {};
+        }, 200);
     }
 }

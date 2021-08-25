@@ -101,6 +101,8 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     };
     /** Stores the value of stocks */
     public stocks: IOption[];
+    /** True if other details should be expanded by default */
+    public isExpanded: boolean = false;
 
     constructor(
         private inventoryService: InventoryService,
@@ -225,8 +227,8 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                 dataToSend.dateOnCheque = moment(dataToSend.dateOnCheque, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             }
         }
-        let fromDate = this.fromDate;
-        let toDate = this.toDate;
+        let fromDate = this.fromDate ? this.fromDate : this.selectedDateRange?.startDate ? this.selectedDateRange.startDate.format(GIDDH_DATE_FORMAT) : "";
+        let toDate = this.toDate ? this.toDate : this.selectedDateRange?.endDate ? this.selectedDateRange.endDate.format(GIDDH_DATE_FORMAT) : "";
         this.closeModelEvent.emit({
             action: 'search',
             exportAs: null,
@@ -449,6 +451,12 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
 
         if (this.searchFilterData) {
             this.advanceSearchForm?.patchValue(this.searchFilterData);
+
+            if(this.advanceSearchForm.get("includeDescription").value) {
+                this.isExpanded = true;
+            } else {
+                this.isExpanded = false;
+            }
         }
     }
 

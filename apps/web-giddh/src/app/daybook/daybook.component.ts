@@ -156,7 +156,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
-
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
@@ -278,8 +277,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
             } else {
                 if (response?.message) {
                     this.daybookData = { entries: [], totalItems: 0, page: 0 };
-                    this.toasterService.clearAllToaster();
-                    this.toasterService.errorToast(response?.message);
+                    this.toasterService.showSnackBar("error", response?.message);
                 } else {
                     this.daybookData = response?.body;
                 }
@@ -353,30 +351,28 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 this.daybookService.ExportDaybookPost(this.searchFilterData, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === 'success') {
                         if (response?.body?.type === "message") {
-                            this.toasterService.successToast(response?.body?.file);
+                            this.toasterService.showSnackBar("success", response?.body?.file);
                         } else {
                             let blob = this.generalService.base64ToBlob(response?.body?.file, response?.queryString?.requestType, 512);
                             let type = response?.queryString?.requestType === 'application/pdf' ? '.pdf' : '.xls';
                             saveAs(blob, 'response' + type);
                         }
                     } else {
-                        this.toasterService.clearAllToaster();
-                        this.toasterService.errorToast(response?.message);
+                        this.toasterService.showSnackBar("error", response?.message);
                     }
                 });
             } else if (this.daybookExportRequestType === 'get') {
                 this.daybookService.ExportDaybook(null, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === 'success') {
                         if (response?.body?.type === "message") {
-                            this.toasterService.successToast(response?.body?.file);
+                            this.toasterService.showSnackBar("success", response?.body?.file);
                         } else {
                             let blob = this.generalService.base64ToBlob(response?.body?.file, response?.queryString?.requestType, 512);
                             let type = response?.queryString?.requestType === 'application/pdf' ? '.pdf' : '.xls';
                             saveAs(blob, 'response' + type);
                         }
                     } else {
-                        this.toasterService.clearAllToaster();
-                        this.toasterService.errorToast(response?.message);
+                        this.toasterService.showSnackBar("error", response?.message);
                     }
                 });
             }

@@ -224,6 +224,7 @@
                                     href="javascript:;"
                                     (click)="resetAdvanceSearch()"
                                     [matTooltip]="commonLocaleData?.app_reset_advance_search"
+                                    [matTooltipPosition]="'above'"
                                 >
                                     <i aria-hidden="true" class="icon-refresh"></i>
                                 </a>
@@ -1438,13 +1439,14 @@
                                     let i = index;
                                     trackBy: trackByTransactionUniqueName
                                 "
+                                (touchend)="showUpdateLedgerModalIpad(txn)"
                                 (dblclick)="showUpdateLedgerModal(txn)"
                                 (keydown.enter)="showUpdateLedgerModal(txn)"
                                 [ngClass]="{
                                     'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked
                                 }"
                                 [matTooltip]="txn.description"
-                                [matTooltipPosition]="'right'"
+                                [matTooltipPosition]="'above'"
                                 (mouseover)="entryHovered(txn.entryUniqueName)"
                                 (mouseout)="selectedTrxWhileHovering = ''"
                             >
@@ -1594,6 +1596,7 @@
                                                             (onShow)="isSelectOpen = true"
                                                             (onHide)="onSelectHide()"
                                                             (selected)="selectAccount($event, txn)"
+                                                            (onClear)="selectAccount($event, txn, true)"
                                                             (keydown)="keydownPressed($event)"
                                                             [placeholder]="localeData?.to_select_accounts"
                                                             [notFoundLink]="true"
@@ -1837,6 +1840,7 @@
                                     let i = index;
                                     trackBy: trackByTransactionUniqueName
                                 "
+                                (touchend)="showUpdateLedgerModalIpad(txn)"
                                 (dblclick)="showUpdateLedgerModal(txn)"
                                 vr-item
                                 tabindex="-1"
@@ -1845,7 +1849,7 @@
                                     'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked
                                 }"
                                 [matTooltip]="txn.description"
-                                [matTooltipPosition]="'right'"
+                                [matTooltipPosition]="'above'"
                                 (mouseover)="entryHovered(txn.entryUniqueName)"
                                 (mouseout)="selectedTrxWhileHovering = ''"
                             >
@@ -1885,7 +1889,7 @@
                                             *ngIf="txn.attachedFileUniqueName"
                                             (click)="downloadAttachedFile(txn.attachedFileUniqueName, $event)"
                                             [matTooltip]="localeData?.download_file + ' : ' + txn.attachedFileName"
-                                            [matTooltipPosition]="'right'"
+                                            [matTooltipPosition]="'left'"
                                         >
                                             <i class="icon-download-circle pull-left"></i>
                                         </span>
@@ -1904,7 +1908,7 @@
                                                 ' : ' +
                                                 txn.voucherNumber
                                             "
-                                            [matTooltipPosition]="'right'"
+                                            [matTooltipPosition]="'left'"
                                         >
                                             <i class="icon-download-circle pull-left"></i>
                                         </span>
@@ -1987,6 +1991,7 @@
                                                             (onHide)="onSelectHide()"
                                                             [(ngModel)]="txn.particular"
                                                             (selected)="selectAccount($event, txn)"
+                                                            (onClear)="selectAccount($event, txn, true)"
                                                             [showClear]="false"
                                                             [placeholder]="localeData?.by_select_accounts"
                                                             (keydown)="keydownPressed($event)"

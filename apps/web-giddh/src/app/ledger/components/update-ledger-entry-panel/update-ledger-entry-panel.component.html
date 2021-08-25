@@ -609,7 +609,7 @@
                                                 (click)="addBlankTrx('CREDIT', txn, $event)"
                                                 (blur)="onTxnAmountChange(txn)"
                                             />
-                                            <p class="mb-0 amount-total pr-1" *ngIf="vm.isMultiCurrencyAvailable">
+                                            <p class="mb-0 amount-total" *ngIf="vm.isMultiCurrencyAvailable">
                                                 <ng-container
                                                     *ngTemplateOutlet="
                                                         totalWithCurrencySymbol;
@@ -1096,9 +1096,7 @@
                         </div>
 
                         <div class="clearfix pd-1 text-right bd-rb pr-0">
-                            <span class="in-words font-14">
-                                {{ vm.grandTotal | myNumberToWordsPipe | lowercase }}
-                            </span>
+                            <span class="in-words font-14">{{ vm.grandTotal | myNumberToWordsPipe | lowercase }}</span>
                         </div>
                     </ng-container>
                 </div>

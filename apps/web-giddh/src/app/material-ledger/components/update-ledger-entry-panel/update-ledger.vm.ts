@@ -278,7 +278,7 @@ export class UpdateLedgerVm {
 
         this.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
 
-        if (modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
+        if (modal?.appliedOtherTax && modal?.appliedOtherTax?.uniqueName) {
             const amount = (this.isAdvanceReceipt) ? this.advanceReceiptAmount : this.totalAmount;
             if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
                 taxableValue = Number(amount) - this.discountTrxTotal;
@@ -287,7 +287,7 @@ export class UpdateLedgerVm {
                 taxableValue = (rawAmount + this.taxTrxTotal);
             }
 
-            let tax = companyTaxes.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
+            let tax = companyTaxes.find(ct => ct.uniqueName === modal?.appliedOtherTax?.uniqueName);
             if (tax && tax.taxDetail[0]) {
                 this.selectedLedger.otherTaxType = ['tcsrc', 'tcspay'].includes(tax.taxType) ? 'tcs' : 'tds';
                 totalTaxes += tax.taxDetail[0].taxValue;

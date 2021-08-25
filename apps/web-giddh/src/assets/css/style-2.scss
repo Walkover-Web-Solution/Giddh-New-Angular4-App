@@ -472,7 +472,6 @@ input {
 }
 
 .approve-modal .modal-top {
-    background: $alice-blue-light;
     padding: 15px 15px 0;
 }
 
@@ -1881,8 +1880,8 @@ input[type="checkbox"]:checked:after {
 }
 .btn-warning {
     color: $white !important;
-    background-color: #ffc107 !important;
-    border-color: #ffc107 !important;
+    background-color: $warning !important;
+    border-color: $warning !important;
 }
 .btn-warning:not(:disabled):not(.disabled):active:focus,
 .btn-warning:not(:disabled):not(.disabled).active:focus,
@@ -7899,7 +7898,8 @@ ul.dropdown-menu.action-dropdown {
 }
 
 /*material datepicker css starts*/
-ngx-daterangepicker-material {
+ngx-daterangepicker-material,
+giddh-datepicker {
     .recurring-form .mat-form-field {
         max-width: 170px;
     }
@@ -7978,6 +7978,19 @@ ngx-daterangepicker-material {
         display: flex !important;
         justify-content: center;
         align-items: center;
+    }
+}
+
+.cdk-overlay-container,
+.cdk-global-overlay-wrapper {
+    z-index: 99999;
+}
+
+giddh-datepicker {
+    .mat-form-field-appearance-fill .mat-form-field-flex {
+        border-radius: 2px !important;
+        border: 1px solid $gainsboro !important;
+        border-radius: 5px !important;
     }
 }
 /*material datepicker css end*/
@@ -8685,9 +8698,11 @@ body.update-scroll-hidden {
     .card-invoice-table .multi-select input.form-control {
         background-position: 98% !important;
     }
-    .single-card-row .my-dropdown-menu.pd {
-        left: auto !important;
-        right: 0 !important;
+    .bulk-create-table sh-select input,
+    .bulk-create-table .mat-form-field-wrapper input,
+    .bulk-create-table .mat-form-field-appearance-fill .mat-form-field-flex {
+        border: 1px solid $gainsboro !important;
+        padding: 0 11px !important;
     }
 }
 

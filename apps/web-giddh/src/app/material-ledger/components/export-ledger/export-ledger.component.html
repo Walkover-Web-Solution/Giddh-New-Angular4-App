@@ -4,7 +4,11 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div id="exportModal">
+    <div
+        id="exportModal"
+        (click)="disableRippleEffect ? (disableRippleEffect = false) : ''"
+        [ngClass]="{ 'disable-ripple': disableRippleEffect }"
+    >
         <div class="modal-header flex-row-reverse">
             <span
                 aria-hidden="true"

@@ -1946,10 +1946,8 @@ ul.pills li {
     text-decoration: underline;
 }
 
-@media only screen and (max-width: 1440px) and (orientation: landscape) {
-    .pop-panel {
-        max-width: 480px;
-    }
+.tbpl-list .list-inline {
+    line-height: normal;
 }
 
 .email-type li label input {
@@ -3066,5 +3064,10 @@ mat-footer-row {
 
 .mr-0 {
     margin-right: 0 !important;
+}
+.disable-ripple {
+    .mat-radio-ripple {
+        display: none;
+    }
 }
 /* material css for ledger end*/
