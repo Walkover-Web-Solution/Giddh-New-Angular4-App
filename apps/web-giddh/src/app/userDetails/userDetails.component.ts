@@ -111,7 +111,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public ngOnInit() {
         document.querySelector('body').classList.add('setting-sidebar-open');
-        
+
         this.breakPointObservar.observe([
             '(max-width:767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
