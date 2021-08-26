@@ -142,6 +142,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     align-items: center;
     padding: 10px 10px 0 10px;
     font-size: 12px;
+    height: 60px;
     label {
         margin-top: 10px;
     }
@@ -158,8 +159,6 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 }
 
 .download-invoice-ledger > i {
-    top: 18px;
-    position: relative;
     background-color: $white;
     padding-left: 5px;
 }
@@ -484,5 +483,11 @@ p.edit-message {
 .total-detail-table {
     .mat-input-element {
         box-sizing: border-box !important;
+    }
+}
+
+@media (max-width: 1075px) {
+    .icon-box {
+        padding: 10px 0px 0 0px;
     }
 }

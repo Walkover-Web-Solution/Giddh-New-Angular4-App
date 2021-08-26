@@ -755,9 +755,8 @@ sh-select:focus {
 
 .ledger-row {
     .text-ellipsis {
-        min-width: 160px;
+        width: 160px;
         max-width: 400px;
-        width: 100%;
     }
 }
 /*responsive*/
