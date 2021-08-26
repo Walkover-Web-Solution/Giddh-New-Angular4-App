@@ -9,6 +9,7 @@
     width: 90%;
     overflow-y: auto;
     padding-top: 10px;
+    max-height: calc(100vh - 135px);
 }
 .main-edit-expense {
     display: flex;
