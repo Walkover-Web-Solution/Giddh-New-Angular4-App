@@ -900,9 +900,6 @@ sh-select:focus {
     .download-invoice-ledger {
         position: absolute !important;
     }
-    .download-invoice-ledger {
-        position: absolute !important;
-    }
 }
 @media only screen and (max-width: 991px) {
     .stat-block {
@@ -1088,6 +1085,7 @@ sh-select:focus {
     }
     .download-invoice-ledger {
         top: 8px;
+        right: 10px;
         i {
             top: 0;
             color: $gray;
@@ -1149,6 +1147,9 @@ sh-select:focus {
         .transactions-page {
             margin-top: 5px !important;
         }
+    }
+    .search-ledger-wrapper {
+        margin-top: 40px;
     }
 }
 @media (max-width: 575px) {
