@@ -755,9 +755,8 @@ sh-select:focus {
 
 .ledger-row {
     .text-ellipsis {
-        min-width: 160px;
+        width: 160px;
         max-width: 400px;
-        width: 100%;
     }
 }
 /*responsive*/
@@ -897,9 +896,6 @@ sh-select:focus {
         display: flex !important;
         flex-direction: column;
         align-items: flex-start;
-    }
-    .download-invoice-ledger {
-        position: absolute !important;
     }
     .download-invoice-ledger {
         position: absolute !important;
@@ -1089,6 +1085,7 @@ sh-select:focus {
     }
     .download-invoice-ledger {
         top: 8px;
+        right: 10px;
         i {
             top: 0;
             color: $gray;
@@ -1150,6 +1147,9 @@ sh-select:focus {
         .transactions-page {
             margin-top: 5px !important;
         }
+    }
+    .search-ledger-wrapper {
+        margin-top: 40px;
     }
 }
 @media (max-width: 575px) {

@@ -2246,8 +2246,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .download-invoice-ledger {
-    padding-right: 6px;
-    padding-left: 0;
+    padding-left: 15px;
     align-items: center;
     font-size: 15px;
 }
@@ -7997,7 +7996,8 @@ giddh-datepicker {
     }
 }
 
-.left-col-new {
+.left-col-new,
+.right-col-new {
     giddh-datepicker {
         .mat-form-field-appearance-fill .mat-form-field-flex {
             border: none !important;
@@ -9096,11 +9096,6 @@ body.update-scroll-hidden {
 
     #setting-tab > .tab-container > .tab-content {
         padding-top: 15px !important;
-    }
-}
-@media (max-width: 1199px) {
-    .ledger-book .left-col-new .entry-modal {
-        width: 100%;
     }
 }
 
