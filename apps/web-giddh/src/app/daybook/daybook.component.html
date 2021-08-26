@@ -514,6 +514,7 @@
                         <mat-row
                             *matRowDef="let entry; columns: isEntryExpanded ? tableAllColumns : tableColumns"
                             (click)="expandEntry(entry)"
+                            (touchend)="showUpdateLedgerModalIpad(entry)"
                             (dblclick)="showUpdateLedgerModal(entry)"
                             (keydown.enter)="showUpdateLedgerModal(entry)"
                         ></mat-row>
