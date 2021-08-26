@@ -122,6 +122,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public tableExpandedColumns: string[] = ['expanded_entry_date', 'expanded_particular', 'expanded_voucher_name', 'expanded_voucher_no', 'expanded_debit_amount', 'expanded_credit_amount', 'expanded_product_service', 'expanded_quantity', 'expanded_unit', 'expanded_rate', 'expanded_hsn_sac', 'expanded_sku', 'expanded_warehouse'];
     /** Instance of modal */
     public modalDialogRef: any;
+    /** Last touched transaction (for ipad and tablet) */
+    public touchedTransaction: any;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -514,7 +516,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.lc.selectedTxnUniqueName = txn.uniqueName;
         this.modalDialogRef = this.dialog.open(this.updateLedgerModal, {
             width: '70%',
-            height: '650px'
+            height: '650px',
+            disableClose: true
         });
 
         this.modalDialogRef.afterOpened().pipe(take(1)).subscribe(response => {
@@ -579,5 +582,23 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
             this.companyTaxesList = res || [];
         });
+    }
+    
+    /**
+     * This will keep the track of touch event and will check if double clicked on any transaction, it will open the update ledger modal
+     *
+     * @param {any} txn
+     * @memberof DaybookComponent
+     */
+    public showUpdateLedgerModalIpad(txn: any): void {
+        if (this.touchedTransaction?.uniqueName === txn?.uniqueName) {
+            this.showUpdateLedgerModal(txn);
+        } else {
+            this.touchedTransaction = txn;
+        }
+
+        setTimeout(() => {
+            this.touchedTransaction = {};
+        }, 200);
     }
 }
