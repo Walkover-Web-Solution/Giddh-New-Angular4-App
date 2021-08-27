@@ -2144,7 +2144,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         }
 
                         this.vm.reInitilizeDiscount(resp[0]);
-                        if (this.generalService.currentOrganizationType === OrganizationType.Branch || (this.branches && this.branches.length === 1)) {
+                        if (this.isPettyCash || this.generalService.currentOrganizationType === OrganizationType.Branch || (this.branches && this.branches.length === 1)) {
                             this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
                             this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
                         }
