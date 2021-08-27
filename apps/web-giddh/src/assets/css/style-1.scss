@@ -2574,6 +2574,35 @@ form#groupDetailForm {
         flex-direction: column;
         margin: 0 !important;
     }
+    .expense-ledger {
+        update-ledger-entry-panel {
+            .modal-body {
+                .entry-popup {
+                    .ledger-head {
+                        display: none !important;
+                    }
+                    .custom-tabs {
+                        margin-left: -15px;
+                        margin-right: -15px;
+                        .nav.nav-tabs {
+                            position: relative !important;
+                            width: 100% !important;
+                            top: 0 !important;
+                            margin: 0 !important;
+                            left: 0 !important;
+                            right: 0 !important;
+                        }
+                    }
+                }
+                .ledger-bottom {
+                    .accordion-expansion {
+                        flex: 0 0 100% !important;
+                        max-width: 100% !important;
+                    }
+                }
+            }
+        }
+    }
 }
 @media screen and (max-width: 768px) {
     .table-container.trial-balance {
@@ -2904,6 +2933,17 @@ giddh-datepicker {
 update-ledger-entry-panel .ledger-main .mat-form-field {
     min-width: auto !important;
 }
+
+.expense-ledger {
+    update-ledger-entry-panel {
+        #entryModal {
+            .modal-body {
+                padding: 15px 0px !important;
+            }
+        }
+    }
+}
+
 .mat-snack-bar-container {
     color: $white !important;
     font-size: 13px;
@@ -2945,7 +2985,7 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
     text-transform: capitalize;
     display: table-cell !important;
 }
-.mat-table tbody mat-header-row:hover td {
+.mat-table tbody .mat-header-row:hover td {
     background: $light-alice-blue;
 }
 table.mat-table {
@@ -2964,17 +3004,18 @@ td.mat-footer-cell {
     vertical-align: middle !important;
     word-break: break-word;
     white-space: nowrap;
-    border-bottom-width: 0 !important;
+    border-bottom-width: 1px;
+    border-bottom-color: $gainsboro !important;
 }
-mat-header-row,
-mat-row {
+.mat-header-row,
+.mat-row {
     display: table-row !important;
     vertical-align: inherit;
     border-color: inherit;
 }
-mat-row,
-mat-header-row,
-mat-footer-row {
+.mat-row,
+.mat-header-row,
+.mat-footer-row {
     &:after {
         display: none !important;
     }
@@ -3055,6 +3096,15 @@ mat-footer-row {
                         height: 4px !important;
                         width: 60px !important;
                     }
+                }
+            }
+        }
+    }
+    .bg-white {
+        .form-group {
+            .mat-form-field {
+                .mat-form-field-flex {
+                    padding: 0 !important;
                 }
             }
         }
