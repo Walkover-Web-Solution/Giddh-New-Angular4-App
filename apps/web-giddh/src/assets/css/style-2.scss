@@ -2246,8 +2246,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .download-invoice-ledger {
-    padding-right: 6px;
-    padding-left: 0;
+    padding-left: 15px;
     align-items: center;
     font-size: 15px;
 }
@@ -7986,13 +7985,25 @@ giddh-datepicker {
     z-index: 9992;
 }
 
+.cdk-overlay-connected-position-bounding-box {
+    z-index: 9992;
+}
+
 giddh-datepicker {
     .mat-form-field-appearance-fill .mat-form-field-flex {
-        border-radius: 2px !important;
         border: 1px solid $gainsboro !important;
         border-radius: 5px !important;
     }
 }
+
+.left-col-new, .right-col-new {
+    giddh-datepicker {
+        .mat-form-field-appearance-fill .mat-form-field-flex {
+            border: none !important;
+        }
+    }
+}
+
 /*material datepicker css end*/
 .master-custom-tabs.custom-tabs {
     .nav-tabs {
@@ -9084,11 +9095,6 @@ body.update-scroll-hidden {
 
     #setting-tab > .tab-container > .tab-content {
         padding-top: 15px !important;
-    }
-}
-@media (max-width: 1199px) {
-    .ledger-book .left-col-new .entry-modal {
-        width: 100%;
     }
 }
 

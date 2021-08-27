@@ -146,7 +146,14 @@
                                             [ngClass]="{
                                                 'other-account-entry': txn.particular.uniqueName === 'others'
                                             }"
-                                            class="col-5 position-relative select2-parent select2-ledger"
+                                            class="
+                                                col-5
+                                                position-relative
+                                                select2-parent select2-ledger
+                                                d-flex
+                                                justify-content-between
+                                                align-items-center
+                                            "
                                         >
                                             <ng-template [ngIf]="!txn.isDiscount">
                                                 <div class="d-flex update-ledger-account">
@@ -438,7 +445,14 @@
                                         <td
                                             [attr.data-title]="commonLocaleData?.app_particular"
                                             id="{{ 'credit-id-' + i }}"
-                                            class="position-relative col-5 select2-parent select2-ledger"
+                                            class="
+                                                position-relative
+                                                col-5
+                                                select2-parent select2-ledger
+                                                d-flex
+                                                justify-content-between
+                                                align-items-center
+                                            "
                                             [ngClass]="{
                                                 'other-account-entry': txn.particular.uniqueName === 'others'
                                             }"

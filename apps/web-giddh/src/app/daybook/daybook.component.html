@@ -38,12 +38,14 @@
                                                             *ngIf="!option.isCompany"
                                                             [matTooltip]="commonLocaleData?.app_branch"
                                                             [matTooltipPosition]="'above'"
+                                                            matTooltipClass="tooltip-black"
                                                         ></i>
                                                         <i
                                                             class="icon-company-profile pull-right"
                                                             *ngIf="option.isCompany"
                                                             [matTooltip]="commonLocaleData?.app_company"
                                                             [matTooltipPosition]="'above'"
+                                                            matTooltipClass="tooltip-black"
                                                         ></i>
                                                     </span>
                                                     <span class="entity-details">
@@ -80,6 +82,7 @@
                                 [matTooltip]="commonLocaleData?.app_expand_all"
                                 [matTooltipPosition]="'above'"
                                 *ngIf="!isAllExpanded"
+                                matTooltipClass="tooltip-black"
                             >
                                 <span class="icon-expandIcon"></span>
                             </a>
@@ -89,6 +92,7 @@
                                 [matTooltip]="commonLocaleData?.app_collapse_all"
                                 [matTooltipPosition]="'above'"
                                 *ngIf="isAllExpanded"
+                                matTooltipClass="tooltip-black"
                             >
                                 <span class="icon-collapse"></span>
                             </a>
@@ -105,6 +109,7 @@
                                 class="advance-icon align-items-center btn btn-primary"
                                 [matTooltip]="commonLocaleData?.app_advance_search"
                                 [matTooltipPosition]="'above'"
+                                matTooltipClass="tooltip-black"
                                 (click)="onOpenAdvanceSearch()"
                                 mat-raised-button
                             >
@@ -139,6 +144,7 @@
                             (click)="toggleExpand()"
                             [matTooltip]="commonLocaleData?.app_expand_all"
                             [matTooltipPosition]="'above'"
+                            matTooltipClass="tooltip-black"
                             *ngIf="!isAllExpanded"
                         >
                             <span class="icon-expandIcon"></span>
@@ -148,6 +154,7 @@
                             (click)="toggleExpand()"
                             [matTooltip]="commonLocaleData?.app_collapse_all"
                             [matTooltipPosition]="'above'"
+                            matTooltipClass="tooltip-black"
                             *ngIf="isAllExpanded"
                         >
                             <span class="icon-collapse"></span>
@@ -172,7 +179,7 @@
                 <div class="clearfix trial-balance table-responsive">
                     <table
                         mat-table
-                        class="w-100 on-mobile-view"
+                        class="w-100 on-mobile-view tb-head"
                         [dataSource]="daybookData?.entries"
                         multiTemplateDataRows
                     >
@@ -180,7 +187,12 @@
                             <th mat-header-cell [hidden]="!daybookData?.entries?.length" *matHeaderCellDef>
                                 {{ commonLocaleData?.app_date }}
                             </th>
-                            <td mat-cell *matCellDef="let entry">
+                            <td
+                                mat-cell
+                                *matCellDef="let entry"
+                                class="no-wrap"
+                                [attr.data-title]="commonLocaleData?.app_date"
+                            >
                                 <span class="responsive-label" [hidden]="!daybookData?.entries?.length">{{
                                     commonLocaleData?.app_date
                                 }}</span>
@@ -191,7 +203,7 @@
                             <th mat-header-cell [hidden]="!daybookData?.entries?.length" *matHeaderCellDef>
                                 {{ commonLocaleData?.app_particular }}
                             </th>
-                            <td mat-cell *matCellDef="let entry">
+                            <td mat-cell *matCellDef="let entry" [attr.data-title]="commonLocaleData?.app_particular">
                                 <span class="responsive-label" [hidden]="!daybookData?.entries?.length">{{
                                     commonLocaleData?.app_particular
                                 }}</span>
@@ -202,7 +214,7 @@
                             <th mat-header-cell [hidden]="!daybookData?.entries?.length" *matHeaderCellDef>
                                 {{ localeData?.voucher_name }}
                             </th>
-                            <td mat-cell *matCellDef="let entry">
+                            <td mat-cell *matCellDef="let entry" [attr.data-title]="localeData?.voucher_name">
                                 <span class="responsive-label" [hidden]="!daybookData?.entries?.length">{{
                                     localeData?.voucher_name
                                 }}</span>
@@ -218,7 +230,12 @@
                             >
                                 {{ localeData?.voucher_no }}
                             </th>
-                            <td mat-cell *matCellDef="let entry" class="text-right">
+                            <td
+                                mat-cell
+                                *matCellDef="let entry"
+                                class="text-right"
+                                [attr.data-title]="localeData?.voucher_no"
+                            >
                                 <span class="responsive-label" [hidden]="!daybookData?.entries?.length">{{
                                     localeData?.voucher_no
                                 }}</span>
@@ -234,7 +251,12 @@
                             >
                                 {{ localeData?.debit_amount }}
                             </th>
-                            <td mat-cell *matCellDef="let entry" class="text-right">
+                            <td
+                                mat-cell
+                                *matCellDef="let entry"
+                                class="text-right"
+                                [attr.data-title]="localeData?.debit_amount"
+                            >
                                 <span class="responsive-label" [hidden]="!daybookData?.entries?.length">{{
                                     localeData?.debit_amount
                                 }}</span>
@@ -514,6 +536,7 @@
                         <mat-row
                             *matRowDef="let entry; columns: isEntryExpanded ? tableAllColumns : tableColumns"
                             (click)="expandEntry(entry)"
+                            (touchend)="showUpdateLedgerModalIpad(entry)"
                             (dblclick)="showUpdateLedgerModal(entry)"
                             (keydown.enter)="showUpdateLedgerModal(entry)"
                         ></mat-row>

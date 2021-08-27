@@ -98,6 +98,7 @@
                                             (click)="performBulkAction('delete')"
                                             [matTooltip]="commonLocaleData?.app_delete"
                                             [matTooltipPosition]="'above'"
+                                            matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-trash font-16"></i>
                                         </button>
@@ -113,6 +114,7 @@
                                             (click)="performBulkAction('generate')"
                                             [matTooltip]="commonLocaleData?.app_generate_voucher"
                                             [matTooltipPosition]="'above'"
+                                            matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-generate-invoice font-16"></i>
                                         </button>
@@ -127,6 +129,7 @@
                                         (click)="performBulkAction('upload', BulkUploadfileInput)"
                                         [matTooltip]="localeData?.attach_file"
                                         [matTooltipPosition]="'above'"
+                                        matTooltipClass="tooltip-black"
                                     >
                                         <i class="icon-file-path"></i>
                                     </button>
@@ -180,6 +183,7 @@
                                         (click)="resetAdvanceSearch()"
                                         [matTooltip]="commonLocaleData?.app_reset_advance_search"
                                         [matTooltipPosition]="'above'"
+                                        matTooltipClass="tooltip-black"
                                     >
                                         <i aria-hidden="true" class="icon-refresh"></i>
                                     </a>
@@ -213,6 +217,7 @@
                                     class="advance-icon d-flex advance-search-filter pointer"
                                     [matTooltip]="commonLocaleData?.app_advance_search"
                                     [matTooltipPosition]="'above'"
+                                    matTooltipClass="tooltip-black"
                                     [ngStyle]="{ 'margin-left': checkedTrxWhileHovering?.length === 0 ? '7px' : '0px' }"
                                 >
                                     <span class="icon-advance-filter"></span>
@@ -225,6 +230,7 @@
                                     (click)="resetAdvanceSearch()"
                                     [matTooltip]="commonLocaleData?.app_reset_advance_search"
                                     [matTooltipPosition]="'above'"
+                                    matTooltipClass="tooltip-black"
                                 >
                                     <i aria-hidden="true" class="icon-refresh"></i>
                                 </a>
@@ -242,6 +248,7 @@
                                         (click)="performBulkAction('delete')"
                                         [matTooltip]="commonLocaleData?.app_delete"
                                         [matTooltipPosition]="'above'"
+                                        matTooltipClass="tooltip-black"
                                     >
                                         <i class="icon-trash font-16"></i>
                                     </button>
@@ -256,6 +263,7 @@
                                         (click)="performBulkAction('generate')"
                                         [matTooltip]="commonLocaleData?.app_generate_voucher"
                                         [matTooltipPosition]="'above'"
+                                        matTooltipClass="tooltip-black"
                                     >
                                         <i class="icon-generate-invoice font-16"></i>
                                     </button>
@@ -270,6 +278,7 @@
                                         (click)="performBulkAction('upload', BulkUploadfileInput)"
                                         [matTooltip]="localeData?.attach_file"
                                         [matTooltipPosition]="'above'"
+                                        matTooltipClass="tooltip-black"
                                     >
                                         <i class="icon-file-path font-16"></i>
                                     </button>
@@ -316,11 +325,13 @@
                                                             class="icon-branch-icon pull-right"
                                                             *ngIf="!option.isCompany"
                                                             [matTooltip]="commonLocaleData?.app_branch"
+                                                            matTooltipClass="tooltip-black"
                                                         ></i>
                                                         <i
                                                             class="icon-company-profile pull-right"
                                                             *ngIf="option.isCompany"
                                                             [matTooltip]="commonLocaleData?.app_company"
+                                                            matTooltipClass="tooltip-black"
                                                         ></i>
                                                     </span>
                                                     <span class="entity-details">
@@ -394,11 +405,13 @@
                                                                 class="icon-branch-icon pull-right"
                                                                 *ngIf="!option.isCompany"
                                                                 [matTooltip]="commonLocaleData?.app_branch"
+                                                                matTooltipClass="tooltip-black"
                                                             ></i>
                                                             <i
                                                                 class="icon-company-profile pull-right"
                                                                 *ngIf="option.isCompany"
                                                                 [matTooltip]="commonLocaleData?.app_company"
+                                                                matTooltipClass="tooltip-black"
                                                             ></i>
                                                         </span>
                                                         <span class="entity-details">
@@ -437,6 +450,7 @@
                                         class="icomoon-ico d-flex align-items-center"
                                         [matTooltip]="localeData?.import_statement"
                                         [matTooltipPosition]="'above'"
+                                        matTooltipClass="tooltip-black"
                                         (click)="showUploadBankStatementModal()"
                                     >
                                         <i class="icon-upload lh-0"></i>
@@ -448,6 +462,7 @@
                                         class="icomoon-ico d-flex align-items-center"
                                         [matTooltip]="localeData?.share_ledger"
                                         [matTooltipPosition]="'above'"
+                                        matTooltipClass="tooltip-black"
                                         (click)="showShareLedgerModal()"
                                     >
                                         <i class="icon-ledger-path lh-0"></i>
@@ -459,6 +474,7 @@
                                         href="javascript:void(0)"
                                         [matTooltip]="commonLocaleData?.app_export"
                                         [matTooltipPosition]="'above'"
+                                        matTooltipClass="tooltip-black"
                                         (click)="showExportLedgerModal()"
                                     >
                                         <i class="icon-ledger-union-5 lh-0"></i>
@@ -470,6 +486,7 @@
                                         href="javascript:void(0)"
                                         [matTooltip]="localeData?.delete_bank_transactions"
                                         [matTooltipPosition]="'above'"
+                                        matTooltipClass="tooltip-black"
                                         (click)="showBulkDeleteBankTransactionsConfirmationModal()"
                                         *ngIf="entryUniqueNamesForBulkAction?.length > 0"
                                     >
@@ -482,6 +499,7 @@
                                         href="javascript:void(0)"
                                         [matTooltip]="localeData?.reload_bank_transactions"
                                         [matTooltipPosition]="'above'"
+                                        matTooltipClass="tooltip-black"
                                         (click)="getBankTransactions()"
                                     >
                                         <i class="icon-refresh lh-0 font-18"></i>
@@ -1185,7 +1203,7 @@
                         <ng-container *ngIf="allTransactionDates && allTransactionDates.length > 0">
                             <ng-container *ngFor="let transactionDate of allTransactionDates">
                                 <div class="border-none pt-0 pb-0">
-                                    <div class="transaction-date pd-l15 pd-r15 pd-t05">
+                                    <div class="transaction-date pd-l15 pd-r15 pd-t2 bold">
                                         {{ transactionDate }}
                                     </div>
                                     <mat-grid-list cols="2" rowHeight="50px">
@@ -1240,7 +1258,7 @@
                                                             class="text-gray mr-r05"
                                                             >{{ localeData?.to }}</span
                                                         >
-                                                        <span>{{
+                                                        <span class="mr-r1">{{
                                                             transactions?.inventory
                                                                 ? transactions?.particular?.name +
                                                                   " (" +
@@ -1447,6 +1465,7 @@
                                 }"
                                 [matTooltip]="txn.description"
                                 [matTooltipPosition]="'above'"
+                                matTooltipClass="tooltip-black"
                                 (mouseover)="entryHovered(txn.entryUniqueName)"
                                 (mouseout)="selectedTrxWhileHovering = ''"
                             >
@@ -1488,6 +1507,7 @@
                                             (click)="downloadAttachedFile(txn.attachedFileUniqueName, $event)"
                                             [matTooltip]="localeData?.download_file + ' : ' + txn.attachedFileName"
                                             [matTooltipPosition]="'right'"
+                                            matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-download-circle pull-left"></i>
                                         </span>
@@ -1507,6 +1527,7 @@
                                                 txn.voucherNumber
                                             "
                                             [matTooltipPosition]="'right'"
+                                            matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-download-circle pull-left"></i>
                                         </span>
@@ -1850,6 +1871,7 @@
                                 }"
                                 [matTooltip]="txn.description"
                                 [matTooltipPosition]="'above'"
+                                matTooltipClass="tooltip-black"
                                 (mouseover)="entryHovered(txn.entryUniqueName)"
                                 (mouseout)="selectedTrxWhileHovering = ''"
                             >
@@ -1889,7 +1911,8 @@
                                             *ngIf="txn.attachedFileUniqueName"
                                             (click)="downloadAttachedFile(txn.attachedFileUniqueName, $event)"
                                             [matTooltip]="localeData?.download_file + ' : ' + txn.attachedFileName"
-                                            [matTooltipPosition]="'left'"
+                                            [matTooltipPosition]="'right'"
+                                            matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-download-circle pull-left"></i>
                                         </span>
@@ -1908,7 +1931,8 @@
                                                 ' : ' +
                                                 txn.voucherNumber
                                             "
-                                            [matTooltipPosition]="'left'"
+                                            [matTooltipPosition]="'right'"
+                                            matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-download-circle pull-left"></i>
                                         </span>
@@ -2127,7 +2151,8 @@
                                             <span
                                                 *ngIf="ledgerTxnBalance?.closingBalance?.type === 'CREDIT'"
                                                 [matTooltip]="lc.ledgerUnderStandingObj.balanceText.cr"
-                                                [matTooltipPosition]="'left'"
+                                                [matTooltipPosition]="'right'"
+                                                matTooltipClass="tooltip-black"
                                             >
                                                 {{ localeData?.to_balance_cf }}:
                                                 <span class="digit-blue">
@@ -2177,7 +2202,8 @@
                                             <span
                                                 *ngIf="ledgerTxnBalance?.closingBalance?.type === 'DEBIT'"
                                                 [matTooltip]="lc.ledgerUnderStandingObj.balanceText.dr"
-                                                [matTooltipPosition]="'left'"
+                                                [matTooltipPosition]="'right'"
+                                                matTooltipClass="tooltip-black"
                                             >
                                                 <!-- By -->
                                                 {{ localeData?.by_balance_cf }}:
@@ -2541,6 +2567,7 @@
                                                         ? lc.ledgerUnderStandingObj.balanceText.dr
                                                         : lc.ledgerUnderStandingObj.balanceText.cr
                                                 "
+                                                matTooltipClass="tooltip-black"
                                             >
                                                 <amount-field
                                                     [amount]="ledgerTxnBalance?.convertedClosingBalance?.amount"
