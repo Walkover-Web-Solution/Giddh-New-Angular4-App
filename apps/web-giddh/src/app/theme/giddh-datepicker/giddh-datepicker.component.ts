@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, forwardRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, forwardRef, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import * as _moment from 'moment';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
@@ -49,7 +49,11 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     private onTouchedCallback: () => void = noop;
     private onChangeCallback: (_: any) => void = noop;
 
-    constructor(private adapter: DateAdapter<any>, private store: Store<AppState>) {
+    constructor(
+        private adapter: DateAdapter<any>, 
+        private store: Store<AppState>,
+        private changeDetectorRef: ChangeDetectorRef
+    ) {
 
     }
 
@@ -138,9 +142,10 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
      * @memberof GiddhDatepickerComponent
      */
     public writeValue(value: any): void {
-        if (value && value !== this.innerValue) {
+        if (value) {
             this.innerValue = value;
             this.calendarDate = moment(value, GIDDH_DATE_FORMAT).toDate();
+            this.changeDetectorRef.detectChanges();
         }
     }
 
