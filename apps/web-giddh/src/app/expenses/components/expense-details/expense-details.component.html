@@ -1,5 +1,5 @@
 <div *ngIf="!isPettyCashEntryLoading">
-    <div class="clearfix p-15 pt-0">
+    <div>
         <div class="row">
             <div class="col-sm-6">
                 <p class="bold mr-b05">{{ selectedItem?.entryDate }} | {{ selectedItem.baseAccount.name }}</p>
@@ -25,114 +25,122 @@
                     <img src="assets/images/multiply.svg" />
                 </span>
             </div>
-        </div>
-
-        <div class="upload-file" *ngIf="!isImageZoomView">
-            <ul>
-                <ng-container *ngFor="let item of imageURL; let i = index">
-                    <li>
-                        <div class="upload-img">
-                            <img [src]="item" (click)="clickZoomImageView(i)" id="signatureImage" />
-                        </div>
-                    </li>
-                </ng-container>
-                <li>
-                    <div class="upload-img add-img">
-                        <label for="signatureImg-edit"><i class="icon-add"></i></label>
-                        <input
-                            type="file"
-                            accept="image/png, image/jpeg"
-                            id="signatureImg-edit"
-                            ngFileSelect
-                            (uploadOutput)="onUploadFileOutput($event)"
-                            [options]="fileUploadOptions"
-                            [uploadInput]="uploadInput"
-                        />
-                    </div>
-                </li>
-            </ul>
-        </div>
-
-        <!-- img zoom pls uncomment this code -->
-        <div class="clearfix img-zoom" *ngIf="isImageZoomView">
-            <img [src]="zoomViewImageSrc" alt="" />
-            <a class="img-close pointer" (click)="hideZoomImageView()">
-                <i class="icon-cross"></i>
-            </a>
-        </div>
-    </div>
-
-    <div class="petty-cash">
-        <div class="bg-white p-15 pb-0">
-            <div class="form-group mb-2">
-                <mat-form-field appearance="fill" class="w-100">
-                    <label>{{ commonLocaleData?.app_description }}</label>
-                    <textarea
-                        matInput
-                        name="comment"
-                        class="textarea form-control mat-field-border mt-2"
-                        [(ngModel)]="comment"
-                        [placeholder]="localeData?.description_placeholder"
-                    ></textarea>
-                </mat-form-field>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-8">
-                    <div class="d-inline-block mr-2">
-                        <label> {{ entryAgainstObject.base }}<span class="text-danger">*</span> </label>
-                        <div class="clearfix">
-                            <sh-select
-                                class="text-left multi-select"
-                                name="depositAccountUniqueName"
-                                #entryAgainstAccountDropDown
-                                [options]="entryAgainstObject.dropDownOption"
-                                [(ngModel)]="entryAgainstObject.model"
-                                (selected)="onSelectEntryAgainstAccount($event)"
-                                [placeholder]="commonLocaleData?.app_select_account"
-                                [notFoundLink]="false"
-                                [enableDynamicSearch]="true"
-                                [isPaginationEnabled]="true"
-                                (scrollEnd)="handleAccountScrollEnd()"
-                                (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
-                                [defaultValue]="entryAgainstObject.name"
-                                [fixedValue]="entryAgainstObject.name"
-                                [forceClearReactive]="forceClear$ | async"
-                                [multiple]="false"
-                                [ItemHeight]="33"
-                                [useInBuiltFilterForIOptionTypeItems]="true"
-                            >
-                                <ng-template #optionTemplate1 let-option="option">
-                                    <a href="javascript:void(0)" class="list-item">
-                                        <div class="item">{{ option.label }}</div>
-                                        <div class="item-unique">{{ option.value }}</div>
-                                    </a>
-                                </ng-template>
-                            </sh-select>
-                        </div>
-                    </div>
+            <div class="col-sm-12">
+                <div class="upload-file" *ngIf="!isImageZoomView">
+                    <ul>
+                        <ng-container *ngFor="let item of imageURL; let i = index">
+                            <li>
+                                <div class="upload-img">
+                                    <img [src]="item" (click)="clickZoomImageView(i)" id="signatureImage" />
+                                </div>
+                            </li>
+                        </ng-container>
+                        <li>
+                            <div class="upload-img add-img">
+                                <label for="signatureImg-edit"><i class="icon-add"></i></label>
+                                <input
+                                    type="file"
+                                    accept="image/png, image/jpeg"
+                                    id="signatureImg-edit"
+                                    ngFileSelect
+                                    (uploadOutput)="onUploadFileOutput($event)"
+                                    [options]="fileUploadOptions"
+                                    [uploadInput]="uploadInput"
+                                />
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-
-                <div
-                    class="col-sm-4 text-right xs-left"
-                    (click)="toggleEntryAgainst()"
-                    *ngIf="entryAgainstObject.against"
-                >
-                    <a href="javascript:void(0)" class="d-inline-block pt-3">
-                        {{ entryAgainstObject.against }}
+                <!-- img zoom pls uncomment this code -->
+                <div class="clearfix img-zoom" *ngIf="isImageZoomView">
+                    <img [src]="zoomViewImageSrc" alt="" />
+                    <a class="img-close pointer" (click)="hideZoomImageView()">
+                        <i class="icon-cross"></i>
                     </a>
                 </div>
             </div>
-        </div>
-        <div class="expense-ledger row" *ngIf="accountEntryPettyCash">
-            <div class="col-md-12 pl-0 pr-0">
-                <update-ledger-entry-panel
-                    [isPettyCash]="true"
-                    [pettyCashEntry]="accountEntryPettyCash"
-                    [pettyCashBaseAccountTypeString]="entryAgainstObject.base"
-                    [pettyCashBaseAccountUniqueName]="this.accountEntryPettyCash.particular.uniqueName"
-                    (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane()"
-                ></update-ledger-entry-panel>
+            <div class="col-sm-12">
+                <div class="petty-cash">
+                    <div class="bg-white pd-b1">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group mb-2">
+                                    <mat-form-field appearance="fill" class="w-100">
+                                        <label>{{ commonLocaleData?.app_description }}</label>
+                                        <textarea
+                                            matInput
+                                            name="comment"
+                                            class="textarea form-control mat-field-border mt-2"
+                                            [(ngModel)]="comment"
+                                            [placeholder]="localeData?.description_placeholder"
+                                        ></textarea>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div class="d-inline-block mr-2">
+                                    <label class="font-14">
+                                        {{ entryAgainstObject.base }}<span class="text-danger">*</span>
+                                    </label>
+                                    <div class="clearfix">
+                                        <sh-select
+                                            class="text-left multi-select"
+                                            name="depositAccountUniqueName"
+                                            #entryAgainstAccountDropDown
+                                            [options]="entryAgainstObject.dropDownOption"
+                                            [(ngModel)]="entryAgainstObject.model"
+                                            (selected)="onSelectEntryAgainstAccount($event)"
+                                            [placeholder]="commonLocaleData?.app_select_account"
+                                            [notFoundLink]="false"
+                                            [enableDynamicSearch]="true"
+                                            [isPaginationEnabled]="true"
+                                            (scrollEnd)="handleAccountScrollEnd()"
+                                            (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
+                                            [defaultValue]="entryAgainstObject.name"
+                                            [fixedValue]="entryAgainstObject.name"
+                                            [forceClearReactive]="forceClear$ | async"
+                                            [multiple]="false"
+                                            [ItemHeight]="33"
+                                            [useInBuiltFilterForIOptionTypeItems]="true"
+                                        >
+                                            <ng-template #optionTemplate1 let-option="option">
+                                                <a href="javascript:void(0)" class="list-item">
+                                                    <div class="item">{{ option.label }}</div>
+                                                    <div class="item-unique">{{ option.value }}</div>
+                                                </a>
+                                            </ng-template>
+                                        </sh-select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div
+                                class="col-sm-4 text-right"
+                                (click)="toggleEntryAgainst()"
+                                *ngIf="entryAgainstObject.against"
+                            >
+                                <a href="javascript:void(0)" class="d-inline-block pt-3 font-14">
+                                    {{ entryAgainstObject.against }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="expense-ledger" *ngIf="accountEntryPettyCash">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <update-ledger-entry-panel
+                                    [isPettyCash]="true"
+                                    [pettyCashEntry]="accountEntryPettyCash"
+                                    [pettyCashBaseAccountTypeString]="entryAgainstObject.base"
+                                    [pettyCashBaseAccountUniqueName]="this.accountEntryPettyCash.particular.uniqueName"
+                                    (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane()"
+                                ></update-ledger-entry-panel>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -523,32 +523,31 @@
                                                 {{ details?.inventory?.warehouse?.name }}
                                             </td>
                                         </ng-container>
-                                        <mat-header-row [hidden]="true" *matHeaderRowDef="tableExpandedColumns">
-                                        </mat-header-row>
-                                        <mat-row *matRowDef="let entry; columns: tableExpandedColumns"></mat-row>
+                                        <tr mat-header-row [hidden]="true" *matHeaderRowDef="tableExpandedColumns"></tr>
+                                        <tr mat-row *matRowDef="let entry; columns: tableExpandedColumns"></tr>
                                     </table>
                                 </div>
                             </td>
                         </ng-container>
 
-                        <mat-header-row *matHeaderRowDef="isEntryExpanded ? tableAllColumns : tableColumns">
-                        </mat-header-row>
-                        <mat-row
+                        <tr mat-header-row *matHeaderRowDef="isEntryExpanded ? tableAllColumns : tableColumns"></tr>
+                        <tr
+                            mat-row
                             *matRowDef="let entry; columns: isEntryExpanded ? tableAllColumns : tableColumns"
                             (click)="expandEntry(entry)"
                             (touchend)="showUpdateLedgerModalIpad(entry)"
                             (dblclick)="showUpdateLedgerModal(entry)"
                             (keydown.enter)="showUpdateLedgerModal(entry)"
-                        ></mat-row>
-                        <mat-row
+                        ></tr>
+                        <tr
+                            mat-row
                             *matRowDef="let entry; columns: ['expandedDetail']"
                             [ngClass]="{
                                 'daybook-other-transactions': true,
                                 'border-none':
                                     !entry.isExpanded || (entry.isExpanded && entry.otherTransactions?.length === 1)
                             }"
-                        >
-                        </mat-row>
+                        ></tr>
                     </table>
                 </div>
 

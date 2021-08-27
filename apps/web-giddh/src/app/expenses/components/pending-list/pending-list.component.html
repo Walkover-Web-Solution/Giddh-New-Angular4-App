@@ -143,12 +143,13 @@
                 </td>
             </ng-container>
 
-            <mat-header-row *matHeaderRowDef="pendingTableColumns; sticky: true"></mat-header-row>
-            <mat-row
+            <tr mat-header-row *matHeaderRowDef="pendingTableColumns; sticky: true"></tr>
+            <tr
+                mat-row
                 class="cp"
                 *matRowDef="let expenses; columns: pendingTableColumns"
                 (click)="editExpense(expenses)"
-            ></mat-row>
+            ></tr>
         </table>
     </div>
 </div>

@@ -2,7 +2,7 @@
     <div class="table-responsive">
         <table
             mat-table
-            class="w-100 mat-mobile-view"
+            class="w-100 on-mobile-view"
             [dataSource]="rejectedItems"
             matSort
             (matSortChange)="sortChange($event)"
@@ -10,42 +10,42 @@
             [matSortDirection]="pettycashRequest.sort"
         >
             <ng-container matColumnDef="s_no">
-                <mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef>#</mat-header-cell>
-                <mat-cell *matCellDef="let rejected">
+                <th mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef>#</th>
+                <td mat-cell *matCellDef="let rejected" data-title="#">
                     <span class="responsive-label" [hidden]="!rejectedItems?.length">#</span>
                     {{ rejected.index + 1 }}
-                </mat-cell>
+                </td>
             </ng-container>
 
             <ng-container matColumnDef="entry_date">
-                <mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef mat-sort-header>{{
-                    commonLocaleData?.app_date
-                }}</mat-header-cell>
-                <mat-cell *matCellDef="let rejected">
+                <th mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef mat-sort-header>
+                    {{ commonLocaleData?.app_date }}
+                </th>
+                <td mat-cell *matCellDef="let rejected" [attr.data-title]="commonLocaleData?.app_date">
                     <span class="responsive-label" [hidden]="!rejectedItems?.length">{{
                         commonLocaleData?.app_date
                     }}</span>
                     {{ rejected.entryDate }}
-                </mat-cell>
+                </td>
             </ng-container>
 
             <ng-container matColumnDef="submitted_by">
-                <mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef
-                    >{{ localeData?.submitted_by }}
-                </mat-header-cell>
-                <mat-cell *matCellDef="let rejected">
+                <th mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef>
+                    {{ localeData?.submitted_by }}
+                </th>
+                <td mat-cell *matCellDef="let rejected" [attr.data-title]="localeData?.submitted_by">
                     <span class="responsive-label" [hidden]="!rejectedItems?.length">{{
                         localeData?.submitted_by
                     }}</span>
                     {{ rejected.createdBy.name }}
-                </mat-cell>
+                </td>
             </ng-container>
 
             <ng-container matColumnDef="account">
-                <mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef>{{
-                    commonLocaleData?.app_account
-                }}</mat-header-cell>
-                <mat-cell *matCellDef="let rejected">
+                <th mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef>
+                    {{ commonLocaleData?.app_account }}
+                </th>
+                <td mat-cell *matCellDef="let rejected" [attr.data-title]="commonLocaleData?.app_account">
                     <span class="responsive-label" [hidden]="!rejectedItems?.length">{{
                         commonLocaleData?.app_account
                     }}</span>
@@ -53,27 +53,38 @@
                     <i class="dot-icon dot-success" *ngIf="rejected.entryType === 'deposit'"></i>
                     <i class="dot-icon dot-primary" *ngIf="rejected.entryType === 'expense'"></i
                     >{{ rejected.particularAccount.name }}
-                </mat-cell>
+                </td>
             </ng-container>
 
             <ng-container matColumnDef="amount">
-                <mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef mat-sort-header>{{
-                    commonLocaleData?.app_amount
-                }}</mat-header-cell>
-                <mat-cell *matCellDef="let rejected">
+                <th
+                    mat-header-cell
+                    [hidden]="!rejectedItems?.length"
+                    *matHeaderCellDef
+                    mat-sort-header
+                    class="text-right"
+                >
+                    {{ commonLocaleData?.app_amount }}
+                </th>
+                <td
+                    mat-cell
+                    *matCellDef="let rejected"
+                    [attr.data-title]="commonLocaleData?.app_amount"
+                    class="text-right"
+                >
                     <span class="responsive-label" [hidden]="!rejectedItems?.length">{{
                         commonLocaleData?.app_amount
                     }}</span>
                     {{ rejected.currencySymbol }}
                     {{ rejected.amount | giddhCurrency }}
-                </mat-cell>
+                </td>
             </ng-container>
 
             <ng-container matColumnDef="receipt">
-                <mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef>{{
-                    localeData?.payment_receipt
-                }}</mat-header-cell>
-                <mat-cell *matCellDef="let rejected">
+                <th mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef>
+                    {{ localeData?.payment_receipt }}
+                </th>
+                <td mat-cell *matCellDef="let rejected" [attr.data-title]="localeData?.payment_receipt">
                     <span class="responsive-label" [hidden]="!rejectedItems?.length">{{
                         localeData?.payment_receipt
                     }}</span>
@@ -89,53 +100,53 @@
                         class="font-12 text-gray icon-cash mr-r05"
                     ></span>
                     {{ rejected.baseAccount.name ? rejected.baseAccount.name : "-" }}
-                </mat-cell>
+                </td>
             </ng-container>
 
             <ng-container matColumnDef="file">
-                <mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef
-                    >{{ localeData?.file }}
-                </mat-header-cell>
-                <mat-cell *matCellDef="let rejected">
+                <th mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef>{{ localeData?.file }}</th>
+                <td mat-cell *matCellDef="let rejected" [attr.data-title]="localeData?.file">
                     <span class="responsive-label" [hidden]="!rejectedItems?.length">{{ localeData?.file }}</span>
                     <i *ngIf="rejected.fileNames" class="icon-image middle text-gray"></i>
                     {{ rejected.fileNames ? rejected.fileNames : "-" }}
-                </mat-cell>
+                </td>
             </ng-container>
 
             <ng-container matColumnDef="reason_rejection">
-                <mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef>{{
-                    localeData?.reason_of_rejection
-                }}</mat-header-cell>
-                <mat-cell *matCellDef="let rejected">
+                <th mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef>
+                    {{ localeData?.reason_of_rejection }}
+                </th>
+                <td mat-cell *matCellDef="let rejected" [attr.data-title]="localeData?.reason_of_rejection">
                     <span class="responsive-label" [hidden]="!rejectedItems?.length">{{
                         localeData?.reason_of_rejection
                     }}</span>
                     {{ rejected.statusMessage ? rejected.statusMessage : "-" }}
-                </mat-cell>
+                </td>
             </ng-container>
 
             <ng-container matColumnDef="action">
-                <mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef>{{
-                    commonLocaleData?.app_action
-                }}</mat-header-cell>
-                <mat-cell *matCellDef="let rejected">
-                    <a (click)="revertActionClicked(rejected)" mat-mini-fab color="primary">
-                        <i class="icon-Revert"></i>
-                    </a>
-                    <a
-                        class="mr-l1"
-                        (click)="deleteActionClicked(rejected, deleteEntryModal)"
-                        mat-mini-fab
-                        color="warn"
-                    >
-                        <i class="icon-trash"></i>
-                    </a>
-                </mat-cell>
+                <th mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef>
+                    {{ commonLocaleData?.app_action }}
+                </th>
+                <td
+                    mat-cell
+                    *matCellDef="let rejected"
+                    [attr.data-title]="commonLocaleData?.app_action"
+                    class="action-btns"
+                >
+                    <div class="d-flex align-items-center">
+                        <a (click)="revertActionClicked(rejected)" class="btn-icon">
+                            <i class="icon-Revert"></i>
+                        </a>
+                        <a (click)="deleteActionClicked(rejected, deleteEntryModal)" class="btn-icon">
+                            <i class="icon-trash"></i>
+                        </a>
+                    </div>
+                </td>
             </ng-container>
 
-            <mat-header-row *matHeaderRowDef="rejectedTableColumns; sticky: true"></mat-header-row>
-            <mat-row *matRowDef="let rejected; columns: rejectedTableColumns"></mat-row>
+            <tr mat-header-row *matHeaderRowDef="rejectedTableColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let rejected; columns: rejectedTableColumns"></tr>
         </table>
     </div>
 </div>
