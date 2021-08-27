@@ -148,6 +148,7 @@
                                                 select2-parent select2-ledger
                                                 d-flex
                                                 align-items-center
+                                                justify-content-between
                                             "
                                         >
                                             <ng-template [ngIf]="!txn.isDiscount">
@@ -259,6 +260,7 @@
                                                 [matTooltip]="
                                                     localeData?.download_file + ':' + vm.selectedLedger.attachedFileName
                                                 "
+                                                matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-download-circle pull-left"></i>
                                             </span>
@@ -290,13 +292,14 @@
                                                         $event
                                                     )
                                                 "
+                                                matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-download-circle pull-left"></i>
                                             </span>
                                         </td>
 
                                         <td
-                                            class="col-4 text-right d-flex align-items-center"
+                                            class="col-4 text-right d-flex align-items-center flex-column"
                                             [attr.data-title]="commonLocaleData?.app_amount"
                                         >
                                             <input
@@ -319,7 +322,7 @@
                                                 (blur)="onTxnAmountChange(txn)"
                                             />
 
-                                            <p class="mb-0 amount-total pr-1" *ngIf="vm.isMultiCurrencyAvailable">
+                                            <p class="mb-0 w-100 amount-total pr-1" *ngIf="vm.isMultiCurrencyAvailable">
                                                 <ng-container
                                                     *ngTemplateOutlet="
                                                         totalWithCurrencySymbol;
@@ -345,6 +348,7 @@
                                             class="pd-1"
                                             [matTooltip]="vm.ledgerUnderStandingObj.balanceText.cr"
                                             [matTooltipPosition]="'above'"
+                                            matTooltipClass="tooltip-black"
                                         >
                                             {{ localeData?.c_f }}: {{ localeData?.cr | uppercase }}
                                             <span class="d-inline-flex">
@@ -444,6 +448,7 @@
                                                 select2-parent select2-ledger
                                                 d-flex
                                                 align-items-center
+                                                justify-content-between
                                             "
                                             [ngClass]="{
                                                 'other-account-entry': txn.particular.uniqueName === 'others'
@@ -560,6 +565,7 @@
                                                     ' : ' +
                                                     vm.selectedLedger.attachedFileName
                                                 "
+                                                matTooltipClass="tooltip-black"
                                                 (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)"
                                             >
                                                 <i class="icon-download-circle pull-left"></i>
@@ -583,6 +589,7 @@
                                                     ' : ' +
                                                     vm.selectedLedger.voucherNumber
                                                 "
+                                                matTooltipClass="tooltip-black"
                                                 (click)="
                                                     downloadInvoice(
                                                         vm.selectedLedger.voucherNumber,
@@ -599,7 +606,7 @@
 
                                         <td
                                             [attr.data-title]="commonLocaleData?.app_amount"
-                                            class="col-4 text-right d-flex align-items-center"
+                                            class="col-4 text-right d-flex align-items-center flex-column"
                                         >
                                             <input
                                                 matInput
@@ -619,7 +626,7 @@
                                                 (click)="addBlankTrx('CREDIT', txn, $event)"
                                                 (blur)="onTxnAmountChange(txn)"
                                             />
-                                            <p class="mb-0 amount-total pr-1" *ngIf="vm.isMultiCurrencyAvailable">
+                                            <p class="mb-0 w-100 amount-total pr-1" *ngIf="vm.isMultiCurrencyAvailable">
                                                 <ng-container
                                                     *ngTemplateOutlet="
                                                         totalWithCurrencySymbol;
@@ -647,6 +654,7 @@
                                                 class="primary-color pr-1 pl-1 d-inline-flex"
                                                 [matTooltip]="vm.ledgerUnderStandingObj.balanceText.dr"
                                                 [matTooltipPosition]="'above'"
+                                                matTooltipClass="tooltip-black"
                                             >
                                                 <amount-field
                                                     [amount]="vm.compoundTotal"
@@ -709,6 +717,7 @@
                         [(ngModel)]="isRcmEntry"
                         [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                         (change)="changeRcmCheckboxState($event)"
+                        class="mr-r1"
                     >
                     </mat-checkbox>
                     <label

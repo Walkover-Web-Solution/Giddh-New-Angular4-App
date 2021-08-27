@@ -111,6 +111,7 @@ span.eligible-ITC {
     align-items: center;
     padding: 10px 10px 0 10px;
     font-size: 12px;
+    height: 60px;
     label {
         margin-top: 10px;
     }
@@ -193,5 +194,22 @@ span.eligible-ITC {
     100% {
         -webkit-transform: rotate(360deg);
         transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 1075px) {
+    .icon-box {
+        padding: 10px 0px 0 0px;
+    }
+
+    .more-details {
+        .cheque-no-clear {
+            .default-color {
+                white-space: nowrap;
+            }
+            giddh-datepicker {
+                min-width: auto !important;
+            }
+        }
     }
 }

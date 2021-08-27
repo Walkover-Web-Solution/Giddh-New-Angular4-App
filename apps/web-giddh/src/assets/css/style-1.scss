@@ -1881,18 +1881,7 @@ ul.pills li {
 }
 
 /* tax section on manage groups and accounts*/
-
-.download-invoice-ledger {
-    position: absolute;
-    right: 0;
-    top: 0px;
-    height: 20px;
-    padding: 0 15px;
-    cursor: pointer;
-}
-
 .download-invoice-ledger > i {
-    top: 10px;
     color: $gray;
 }
 
@@ -3078,6 +3067,20 @@ mat-footer-row {
 .disable-ripple {
     .mat-radio-ripple {
         display: none;
+    }
+}
+
+.tooltip-black {
+    background: $black !important;
+    color: $white;
+    font-size: 12px !important;
+}
+
+@media (max-width: 1075px) {
+    .mat-button,
+    .mat-raised-button {
+        padding: 7px 10px !important;
+        line-height: normal !important;
     }
 }
 /* material css for ledger end*/

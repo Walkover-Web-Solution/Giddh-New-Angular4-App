@@ -622,7 +622,6 @@ sh-select:focus {
 }
 
 .download-invoice-ledger {
-    padding-left: 6px;
     position: unset !important;
     align-items: center;
 }
@@ -678,6 +677,9 @@ sh-select:focus {
     }
     .account-holder-name {
         white-space: normal;
+    }
+    .mat-grid-list {
+        border-top: 1px solid $gainsboro;
     }
 }
 
@@ -1118,7 +1120,14 @@ input#ledger-search {
     }
     .search-ledger-wrapper {
         width: 100% !important;
-        margin-top: 40px;
+        margin-top: 7px;
+        .single-search-box {
+            .full-width-input {
+                .mat-form-field {
+                    width: 100%;
+                }
+            }
+        }
     }
     .download-invoice-ledger {
         top: 0px;
@@ -1186,6 +1195,9 @@ input#ledger-search {
         .transactions-page {
             margin-top: 5px !important;
         }
+    }
+    .search-ledger-wrapper {
+        margin-top: 40px;
     }
 }
 @media (max-width: 575px) {
