@@ -324,11 +324,11 @@
                                     (clickOutside)="modalUniqueName = ''"
                                     [attr.data-title]="commonLocaleData?.app_account"
                                 >
-                                    {{ item.account.name }}
+                                    {{ item?.account?.name }}
                                     <div
                                         *ngIf="modalUniqueName === item.uniqueName"
                                         account-detail-modal-component
-                                        [accountUniqueName]="item.account.uniqueName"
+                                        [accountUniqueName]="item?.account?.uniqueName"
                                         [from]="ledgerSearchRequest.from"
                                         [to]="ledgerSearchRequest.to"
                                         [isModalOpen]="modalUniqueName === item.uniqueName"
