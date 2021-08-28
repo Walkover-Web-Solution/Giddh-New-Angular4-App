@@ -1586,9 +1586,9 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 #actionPane .btn-default {
-    background: $whisper;
-    color: $night-rider;
-    border-color: $whisper;
+    background: $whisper !important;
+    color: $night-rider !important;
+    border-color: $whisper !important;
     border-radius: 5px !important;
 }
 
@@ -1845,6 +1845,12 @@ input[type="checkbox"]:checked:after {
 
 .lh-0 {
     line-height: 0 !important;
+}
+
+.btn-success-green {
+    background-color: $success-green !important;
+    color: $white !important;
+    border: 1px solid $success-green !important;
 }
 
 .btn-success-outline {
@@ -5726,10 +5732,10 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine .transactions-list .filter-band .btn,
 .tax-engine .transactions-list .filter-band .btn:focus,
 .tax-engine .transactions-list .filter-band .btn:hover {
-    color: $primary;
-    border-color: $primary;
-    background-color: transparent;
-    box-shadow: none;
+    color: $primary !important;
+    border-color: $primary !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
 }
 
 .tax-engine .transactions-list .filter-band .btn {
@@ -5741,7 +5747,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine .transactions-list .filter-band .btn .caret,
 .tax-engine .transactions-list .filter-band .btn:focus .caret,
 .tax-engine .transactions-list .filter-band .btn:hover .caret {
-    border-top-color: $primary;
+    border-top-color: $primary !important;
 }
 
 .tax-engine .caret {
