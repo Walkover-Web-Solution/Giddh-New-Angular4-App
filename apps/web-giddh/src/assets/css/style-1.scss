@@ -2809,16 +2809,6 @@ mat-dialog-container .modal-header {
         }
     }
 }
-.other-details-section {
-    .mat-form-field {
-        input {
-            border: 1px solid $gainsboro !important;
-            height: 24px;
-            border-radius: 5px;
-            padding: 6px;
-        }
-    }
-}
 .password-label,
 .clearance-date {
     .mat-form-field-appearance-fill .mat-form-field-flex {
@@ -2828,6 +2818,15 @@ mat-dialog-container .modal-header {
 giddh-datepicker {
     .mat-form-field {
         width: 100% !important;
+    }
+}
+.other-details-section,
+.collapse-pane {
+    giddh-datepicker {
+        .mat-form-field {
+            width: 100% !important;
+            min-width: 100% !important;
+        }
     }
 }
 .ledg-head {
