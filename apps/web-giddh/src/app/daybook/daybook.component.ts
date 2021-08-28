@@ -119,7 +119,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
     /** Table columns for daybook report in expanded mode */
     public tableAllColumns: string[] = ['entry_date', 'particular', 'voucher_name', 'voucher_no', 'debit_amount', 'credit_amount', 'product_service', 'quantity', 'unit', 'rate', 'hsn_sac', 'sku', 'warehouse'];
     /** Sub Table columns for daybook report in expanded mode */
-    public tableExpandedColumns: string[] = ['expanded_entry_date', 'expanded_particular', 'expanded_voucher_name', 'expanded_voucher_no', 'expanded_debit_amount', 'expanded_credit_amount', 'expanded_product_service', 'expanded_quantity', 'expanded_unit', 'expanded_rate', 'expanded_hsn_sac', 'expanded_sku', 'expanded_warehouse'];
+    public tableExpandedColumns: string[] = ['expanded_entry_date', 'expanded_particular', 'expanded_voucher_name', 'expanded_voucher_no', 'expanded_debit_amount', 'expanded_credit_amount'];
+    /** Sub Table all columns for daybook report in expanded mode */
+    public tableExpandedAllColumns: string[] = ['expanded_entry_date', 'expanded_particular', 'expanded_voucher_name', 'expanded_voucher_no', 'expanded_debit_amount', 'expanded_credit_amount', 'expanded_product_service', 'expanded_quantity', 'expanded_unit', 'expanded_rate', 'expanded_hsn_sac', 'expanded_sku', 'expanded_warehouse'];
     /** Instance of modal */
     public modalDialogRef: any;
     /** Last touched transaction (for ipad and tablet) */

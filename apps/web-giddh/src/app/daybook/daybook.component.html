@@ -170,7 +170,7 @@
         </div>
 
         <div class="container-fluid">
-            <div class="box clearfix mr-t15">
+            <div class="box clearfix mr-t15 daybook-table">
                 <div [hidden]="!daybookData?.entries?.length" class="text-center mr-b2 transaction-report">
                     <p>{{ localeData?.transaction_report }}</p>
                     <p>{{ daybookQueryRequest.from }} - {{ daybookQueryRequest.to }}</p>
@@ -193,9 +193,6 @@
                                 class="no-wrap"
                                 [attr.data-title]="commonLocaleData?.app_date"
                             >
-                                <span class="responsive-label" [hidden]="!daybookData?.entries?.length">{{
-                                    commonLocaleData?.app_date
-                                }}</span>
                                 {{ entry.entryDate }}
                             </td>
                         </ng-container>
@@ -204,9 +201,6 @@
                                 {{ commonLocaleData?.app_particular }}
                             </th>
                             <td mat-cell *matCellDef="let entry" [attr.data-title]="commonLocaleData?.app_particular">
-                                <span class="responsive-label" [hidden]="!daybookData?.entries?.length">{{
-                                    commonLocaleData?.app_particular
-                                }}</span>
                                 {{ entry.particular.name }}
                             </td>
                         </ng-container>
@@ -215,9 +209,6 @@
                                 {{ localeData?.voucher_name }}
                             </th>
                             <td mat-cell *matCellDef="let entry" [attr.data-title]="localeData?.voucher_name">
-                                <span class="responsive-label" [hidden]="!daybookData?.entries?.length">{{
-                                    localeData?.voucher_name
-                                }}</span>
                                 {{ entry.voucherName }}
                             </td>
                         </ng-container>
@@ -236,9 +227,6 @@
                                 class="text-right"
                                 [attr.data-title]="localeData?.voucher_no"
                             >
-                                <span class="responsive-label" [hidden]="!daybookData?.entries?.length">{{
-                                    localeData?.voucher_no
-                                }}</span>
                                 {{ entry.voucherNo }}
                             </td>
                         </ng-container>
@@ -257,9 +245,6 @@
                                 class="text-right"
                                 [attr.data-title]="localeData?.debit_amount"
                             >
-                                <span class="responsive-label" [hidden]="!daybookData?.entries?.length">{{
-                                    localeData?.debit_amount
-                                }}</span>
                                 <span class="d-flex justify-content-end">
                                     <amount-field
                                         [amount]="entry.debitAmount || 0"
@@ -285,9 +270,6 @@
                                 class="text-right"
                                 [attr.data-title]="localeData?.credit_amount"
                             >
-                                <span class="responsive-label" [hidden]="!daybookData?.entries?.length">{{
-                                    localeData?.credit_amount
-                                }}</span>
                                 <span class="d-flex justify-content-end">
                                     <amount-field
                                         [amount]="entry.creditAmount || 0"
@@ -302,11 +284,7 @@
                             <th mat-header-cell [hidden]="!daybookData?.entries?.length" *matHeaderCellDef>
                                 {{ localeData?.product_service }}
                             </th>
-                            <td mat-cell *matCellDef="let entry">
-                                <span class="responsive-label" [hidden]="!daybookData?.entries?.length">{{
-                                    localeData?.product_service
-                                }}</span>
-                            </td>
+                            <td mat-cell *matCellDef="let entry" [attr.data-title]="localeData?.product_service"></td>
                         </ng-container>
                         <ng-container *ngIf="isEntryExpanded" matColumnDef="quantity">
                             <th
@@ -317,21 +295,18 @@
                             >
                                 {{ localeData?.qty }}
                             </th>
-                            <td mat-cell *matCellDef="let entry" class="text-right">
-                                <span class="responsive-label" [hidden]="!daybookData?.entries?.length">{{
-                                    localeData?.qty
-                                }}</span>
-                            </td>
+                            <td
+                                mat-cell
+                                *matCellDef="let entry"
+                                class="text-right"
+                                [attr.data-title]="localeData?.qty"
+                            ></td>
                         </ng-container>
                         <ng-container *ngIf="isEntryExpanded" matColumnDef="unit">
                             <th mat-header-cell [hidden]="!daybookData?.entries?.length" *matHeaderCellDef>
                                 {{ commonLocaleData?.app_unit }}
                             </th>
-                            <td mat-cell *matCellDef="let entry">
-                                <span class="responsive-label" [hidden]="!daybookData?.entries?.length">{{
-                                    commonLocaleData?.app_unit
-                                }}</span>
-                            </td>
+                            <td mat-cell *matCellDef="let entry" [attr.data-title]="commonLocaleData?.app_unit"></td>
                         </ng-container>
                         <ng-container *ngIf="isEntryExpanded" matColumnDef="rate">
                             <th
@@ -342,47 +317,40 @@
                             >
                                 {{ commonLocaleData?.app_rate }}
                             </th>
-                            <td mat-cell *matCellDef="let entry" class="text-right">
-                                <span class="responsive-label" [hidden]="!daybookData?.entries?.length">{{
-                                    commonLocaleData?.app_rate
-                                }}</span>
-                            </td>
+                            <td
+                                mat-cell
+                                *matCellDef="let entry"
+                                class="text-right"
+                                [attr.data-title]="commonLocaleData?.app_rate"
+                            ></td>
                         </ng-container>
                         <ng-container *ngIf="isEntryExpanded" matColumnDef="hsn_sac">
                             <th mat-header-cell [hidden]="!daybookData?.entries?.length" *matHeaderCellDef>
                                 {{ commonLocaleData?.app_hsn_sac }}
                             </th>
-                            <td mat-cell *matCellDef="let entry">
-                                <span class="responsive-label" [hidden]="!daybookData?.entries?.length">{{
-                                    commonLocaleData?.app_hsn_sac
-                                }}</span>
-                            </td>
+                            <td mat-cell *matCellDef="let entry" [attr.data-title]="commonLocaleData?.app_hsn_sac"></td>
                         </ng-container>
                         <ng-container *ngIf="isEntryExpanded" matColumnDef="sku">
                             <th mat-header-cell [hidden]="!daybookData?.entries?.length" *matHeaderCellDef>
                                 {{ commonLocaleData?.app_sku }}
                             </th>
-                            <td mat-cell *matCellDef="let entry">
-                                <span class="responsive-label" [hidden]="!daybookData?.entries?.length">{{
-                                    commonLocaleData?.app_sku
-                                }}</span>
-                            </td>
+                            <td mat-cell *matCellDef="let entry" [attr.data-title]="commonLocaleData?.app_sku"></td>
                         </ng-container>
                         <ng-container *ngIf="isEntryExpanded" matColumnDef="warehouse">
                             <th mat-header-cell [hidden]="!daybookData?.entries?.length" *matHeaderCellDef>
                                 {{ commonLocaleData?.app_warehouse }}
                             </th>
-                            <td mat-cell *matCellDef="let entry">
-                                <span class="responsive-label" [hidden]="!daybookData?.entries?.length">{{
-                                    commonLocaleData?.app_warehouse
-                                }}</span>
-                            </td>
+                            <td
+                                mat-cell
+                                *matCellDef="let entry"
+                                [attr.data-title]="commonLocaleData?.app_warehouse"
+                            ></td>
                         </ng-container>
 
                         <ng-container matColumnDef="expandedDetail">
                             <td
                                 mat-cell
-                                class="p-0 w-100"
+                                class="p-0 w-100 child-td"
                                 *matCellDef="let entry"
                                 [hidden]="!entry.isExpanded"
                                 [attr.colspan]="isEntryExpanded ? tableAllColumns?.length : tableColumns?.length"
@@ -400,9 +368,6 @@
                                                 *matCellDef="let details"
                                                 [attr.data-title]="commonLocaleData?.app_particular"
                                             >
-                                                <span class="responsive-label">{{
-                                                    commonLocaleData?.app_particular
-                                                }}</span>
                                                 {{ details.particular.name }}
                                             </td>
                                         </ng-container>
@@ -422,7 +387,6 @@
                                                 class="text-right"
                                                 [attr.data-title]="localeData?.debit_amount"
                                             >
-                                                <span class="responsive-label">{{ localeData?.debit_amount }}</span>
                                                 <span *ngIf="details.type === 'DEBIT'">
                                                     <span class="d-flex justify-content-end">
                                                         <amount-field
@@ -444,7 +408,6 @@
                                                 class="text-right"
                                                 [attr.data-title]="localeData?.credit_amount"
                                             >
-                                                <span class="responsive-label">{{ localeData?.credit_amount }}</span>
                                                 <span *ngIf="details.type === 'CREDIT'">
                                                     <span class="d-flex justify-content-end">
                                                         <amount-field
@@ -458,17 +421,24 @@
                                                 <span *ngIf="details.type !== 'CREDIT'">-</span>
                                             </td>
                                         </ng-container>
-                                        <ng-container matColumnDef="expanded_product_service">
+                                        <ng-container *ngIf="isEntryExpanded" matColumnDef="expanded_product_service">
                                             <th mat-header-cell [hidden]="true" *matHeaderCellDef></th>
-                                            <td mat-cell *matCellDef="let details">
-                                                <span class="responsive-label">{{ localeData?.product_service }}</span>
+                                            <td
+                                                mat-cell
+                                                *matCellDef="let details"
+                                                [attr.data-title]="localeData?.product_service"
+                                            >
                                                 {{ details?.inventory?.stock?.name }}
                                             </td>
                                         </ng-container>
-                                        <ng-container matColumnDef="expanded_quantity">
+                                        <ng-container *ngIf="isEntryExpanded" matColumnDef="expanded_quantity">
                                             <th mat-header-cell [hidden]="true" *matHeaderCellDef></th>
-                                            <td mat-cell *matCellDef="let details" class="text-right">
-                                                <span class="responsive-label">{{ localeData?.qty }}</span>
+                                            <td
+                                                mat-cell
+                                                *matCellDef="let details"
+                                                class="text-right"
+                                                [attr.data-title]="localeData?.qty"
+                                            >
                                                 {{
                                                     details.inventory
                                                         ? (details.inventory.quantity | giddhCurrency)
@@ -476,17 +446,24 @@
                                                 }}
                                             </td>
                                         </ng-container>
-                                        <ng-container matColumnDef="expanded_unit">
+                                        <ng-container *ngIf="isEntryExpanded" matColumnDef="expanded_unit">
                                             <th mat-header-cell [hidden]="true" *matHeaderCellDef></th>
-                                            <td mat-cell *matCellDef="let details">
-                                                <span class="responsive-label">{{ commonLocaleData?.app_unit }}</span>
+                                            <td
+                                                mat-cell
+                                                *matCellDef="let details"
+                                                [attr.data-title]="commonLocaleData?.app_unit"
+                                            >
                                                 {{ details?.inventory?.unit?.name }}
                                             </td>
                                         </ng-container>
-                                        <ng-container matColumnDef="expanded_rate">
+                                        <ng-container *ngIf="isEntryExpanded" matColumnDef="expanded_rate">
                                             <th mat-header-cell [hidden]="true" *matHeaderCellDef></th>
-                                            <td mat-cell *matCellDef="let details" class="text-right">
-                                                <span class="responsive-label">{{ commonLocaleData?.app_rate }}</span>
+                                            <td
+                                                mat-cell
+                                                *matCellDef="let details"
+                                                class="text-right"
+                                                [attr.data-title]="commonLocaleData?.app_rate"
+                                            >
                                                 <span class="d-flex justify-content-end" *ngIf="details.inventory">
                                                     <amount-field
                                                         [amount]="details.inventory.rate"
@@ -498,39 +475,62 @@
                                                 <span *ngIf="!details.inventory" class="text-right">-</span>
                                             </td>
                                         </ng-container>
-                                        <ng-container matColumnDef="expanded_hsn_sac">
+                                        <ng-container *ngIf="isEntryExpanded" matColumnDef="expanded_hsn_sac">
                                             <th mat-header-cell [hidden]="true" *matHeaderCellDef></th>
-                                            <td mat-cell *matCellDef="let details">
-                                                <span class="responsive-label">{{
-                                                    commonLocaleData?.app_hsn_sac
-                                                }}</span>
+                                            <td
+                                                mat-cell
+                                                *matCellDef="let details"
+                                                [attr.data-title]="commonLocaleData?.app_hsn_sac"
+                                            >
                                                 {{ details?.inventory?.hsnNumber || details?.inventory?.sacNumber }}
                                             </td>
                                         </ng-container>
-                                        <ng-container matColumnDef="expanded_sku">
+                                        <ng-container *ngIf="isEntryExpanded" matColumnDef="expanded_sku">
                                             <th mat-header-cell [hidden]="true" *matHeaderCellDef></th>
-                                            <td mat-cell *matCellDef="let details">
-                                                <span class="responsive-label">{{ commonLocaleData?.app_sku }}</span>
+                                            <td
+                                                mat-cell
+                                                *matCellDef="let details"
+                                                [attr.data-title]="commonLocaleData?.app_sku"
+                                            >
                                                 {{ details?.inventory?.skuCode }}
                                             </td>
                                         </ng-container>
-                                        <ng-container matColumnDef="expanded_warehouse">
+                                        <ng-container *ngIf="isEntryExpanded" matColumnDef="expanded_warehouse">
                                             <th mat-header-cell [hidden]="true" *matHeaderCellDef></th>
-                                            <td mat-cell *matCellDef="let details" class="warehouse-name">
-                                                <span class="responsive-label">{{
-                                                    commonLocaleData?.app_warehouse
-                                                }}</span>
+                                            <td
+                                                mat-cell
+                                                *matCellDef="let details"
+                                                class="warehouse-name"
+                                                [attr.data-title]="commonLocaleData?.app_warehouse"
+                                            >
                                                 {{ details?.inventory?.warehouse?.name }}
                                             </td>
                                         </ng-container>
-                                        <tr mat-header-row [hidden]="true" *matHeaderRowDef="tableExpandedColumns"></tr>
-                                        <tr mat-row *matRowDef="let entry; columns: tableExpandedColumns"></tr>
+                                        <tr
+                                            mat-header-row
+                                            [hidden]="true"
+                                            *matHeaderRowDef="
+                                                isEntryExpanded ? tableExpandedAllColumns : tableExpandedColumns
+                                            "
+                                        ></tr>
+                                        <tr
+                                            mat-row
+                                            *matRowDef="
+                                                let entry;
+                                                columns: isEntryExpanded
+                                                    ? tableExpandedAllColumns
+                                                    : tableExpandedColumns
+                                            "
+                                        ></tr>
                                     </table>
                                 </div>
                             </td>
                         </ng-container>
 
-                        <tr mat-header-row *matHeaderRowDef="isEntryExpanded ? tableAllColumns : tableColumns"></tr>
+                        <tr
+                            mat-header-row
+                            *matHeaderRowDef="isEntryExpanded ? tableAllColumns : tableColumns; sticky: true"
+                        ></tr>
                         <tr
                             mat-row
                             *matRowDef="let entry; columns: isEntryExpanded ? tableAllColumns : tableColumns"
@@ -547,6 +547,7 @@
                                 'border-none':
                                     !entry.isExpanded || (entry.isExpanded && entry.otherTransactions?.length === 1)
                             }"
+                            [hidden]="!entry.isExpanded"
                         ></tr>
                     </table>
                 </div>
