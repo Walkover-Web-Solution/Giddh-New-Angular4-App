@@ -67,6 +67,9 @@ $custom-typography: mat-typography-config(
         width: 100%;
         max-width: 100%;
     }
+    .on-mobile-view tbody .mat-row[hidden] {
+        display: none !important;
+    }
     tr.mat-row,
     tr.mat-footer-row {
         height: auto !important;
@@ -98,6 +101,24 @@ $custom-typography: mat-typography-config(
         white-space: inherit;
         margin-bottom: 14px;
         width: 100%;
+        &.child-td {
+            display: table !important;
+
+            tr {
+                box-shadow: 0 0px 0px rgb(0 0 0 / 10%) !important;
+                border-bottom: 1px solid rgb(0 0 0 / 10%);
+            }
+            tr:last-child {
+                border-bottom: 0px !important;
+                margin-bottom: 0px;
+            }
+        }
+        &.hide-td {
+            display: none !important;
+        }
+        .justify-content-end {
+            justify-content: flex-start !important;
+        }
     }
     .on-mobile-view tbody td:after {
         content: "";
@@ -158,6 +179,15 @@ $custom-typography: mat-typography-config(
     }
     .hamburger-menu h4 {
         line-height: 1.4;
+    }
+    .daybook-table {
+        .on-mobile-view {
+            tbody {
+                tr:first-child {
+                    margin-top: 5px !important;
+                }
+            }
+        }
     }
 }
 
@@ -5847,7 +5877,8 @@ perfect-scrollbar > .ps > .ps-overlay {
     border-bottom: 1px solid $gainsboro;
 }
 
-.tax-engine .table-fixed {
+.tax-engine .table-fixed,
+.daybook-table .mat-table {
     table-layout: fixed;
 }
 
