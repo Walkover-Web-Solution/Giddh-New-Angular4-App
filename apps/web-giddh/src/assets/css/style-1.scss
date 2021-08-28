@@ -2812,7 +2812,7 @@ giddh-datepicker {
     }
 }
 .other-details-section,
-.other-detail-card {
+.collapse-pane {
     giddh-datepicker {
         .mat-form-field {
             width: 100% !important;
@@ -3114,10 +3114,6 @@ td.mat-footer-cell {
     background: $black !important;
     color: $white;
     font-size: 12px !important;
-}
-
-.chat-button {
-    z-index: 9999 !important;
 }
 
 @media (max-width: 1075px) {
