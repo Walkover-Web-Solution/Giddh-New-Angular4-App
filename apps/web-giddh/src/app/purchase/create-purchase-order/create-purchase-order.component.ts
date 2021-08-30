@@ -360,6 +360,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public translationLoaded: boolean = false;
     /** Length of entry description */
     public entryDescriptionLength: number = ENTRY_DESCRIPTION_LENGTH;
+    /** True if form save in progress */
+    public isFormSaveInProgress: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -2001,6 +2003,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public savePurchaseOrder(type: string): void {
+        if(this.isFormSaveInProgress) {
+            return;
+        }
+
         let data: VoucherClass = _.cloneDeep(this.purchaseOrder);
 
         // special check if gst no filed is visible then and only then check for gst validation
@@ -2127,6 +2133,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             return;
         }
 
+        this.isFormSaveInProgress = true;
+
         let postRequestObject = {
             type: "purchase",
             date: data.voucherDetails.voucherDate,
@@ -2150,6 +2158,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
         if (type === "create") {
             this.purchaseOrderService.create(getRequestObject, updatedData).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.isFormSaveInProgress = false;
                 this.toaster.clearAllToaster();
                 if (response && response.status === "success") {
                     this.vendorAcList$ = observableOf(_.orderBy(this.defaultVendorSuggestions, 'label'));
@@ -2165,6 +2174,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             });
         } else {
             this.purchaseOrderService.update(getRequestObject, updatedData).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.isFormSaveInProgress = false;
                 this.toaster.clearAllToaster();
                 if (response && response.status === "success") {
                     this.toaster.successToast(this.localeData?.po_updated);
