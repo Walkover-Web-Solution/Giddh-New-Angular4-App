@@ -4,26 +4,28 @@
             <div class="col-sm-6">
                 <p class="bold mr-b05">{{ selectedItem?.entryDate }} | {{ selectedItem.baseAccount.name }}</p>
             </div>
-            <div class="col-sm-6 text-right xs-left d-flex justify-content-end align-items-center">
-                <button
-                    mat-raised-button
-                    class="mr-b05 btn btn-success"
-                    type="button"
-                    (click)="showApproveConfirmPopup(approveConfirm)"
-                >
-                    {{ localeData?.approve }}
-                </button>
-                <button
-                    mat-raised-button
-                    class="mr-b05 btn btn-danger"
-                    type="button"
-                    (click)="openModal(rejectionReason)"
-                >
-                    {{ localeData?.reject }}
-                </button>
-                <span class="mr-b05 close-modal cp pull-right mr-l1" (click)="closeDetailsMode()">
-                    <img src="assets/images/multiply.svg" />
-                </span>
+            <div class="col-sm-6 text-right xs-left">
+                <div class="d-flex justify-content-end align-items-center">
+                    <button
+                        mat-raised-button
+                        class="mr-b05 btn btn-success d-flex align-items-center"
+                        type="button"
+                        (click)="showApproveConfirmPopup(approveConfirm)"
+                    >
+                        {{ localeData?.approve }}
+                    </button>
+                    <button
+                        mat-raised-button
+                        class="mr-b05 btn btn-danger"
+                        type="button"
+                        (click)="openModal(rejectionReason)"
+                    >
+                        {{ localeData?.reject }}
+                    </button>
+                    <span class="mr-b05 close-modal cp pull-right" (click)="closeDetailsMode()">
+                        <img src="assets/images/multiply.svg" />
+                    </span>
+                </div>
             </div>
             <div class="col-sm-12">
                 <div class="upload-file" *ngIf="!isImageZoomView">
