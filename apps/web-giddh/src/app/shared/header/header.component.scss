@@ -15,7 +15,7 @@
     background-color: $white;
     width: 60px;
     left: 0;
-    z-index: 9910;
+    z-index: 991;
     box-shadow: -2px -2px 15px rgba(0, 0, 0, 0.2) !important;
 }
 
@@ -985,6 +985,7 @@ aside-setting {
         -ms-transform: translate(0, 0px);
         transform: translate3d(0, 0px, 0px);
         right: 0;
+        z-index: 9991;
     }
 }
 

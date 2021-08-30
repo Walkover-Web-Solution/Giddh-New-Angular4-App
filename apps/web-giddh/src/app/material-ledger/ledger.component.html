@@ -192,7 +192,7 @@
                                 <!-- Functionality not working -->
                                 <div
                                     class="ledger-datepicker"
-                                    id="giddh-datepicker-mobile-view"
+                                    id="giddh-datepicker-mobile-view mr-r05"
                                     container="body"
                                     *ngIf="isMobileScreen"
                                 >
@@ -1537,7 +1537,7 @@
                                 <mat-grid-tile
                                     [ngClass]="{ 'multicurrency-amount': isLedgerAccountAllowsMultiCurrency }"
                                     colspan="1"
-                                    class="text-right no-right-border"
+                                    class="text-right no-right-border flex-column align-items-end"
                                     [attr.data-title]="commonLocaleData?.app_amount"
                                 >
                                     <amount-field
@@ -1942,7 +1942,7 @@
                                     colspan="1"
                                     [ngClass]="{ 'multicurrency-amount': isLedgerAccountAllowsMultiCurrency }"
                                     [attr.data-title]="commonLocaleData?.app_amount"
-                                    class="position-relative text-right no-right-border"
+                                    class="position-relative text-right no-right-border flex-column align-items-end"
                                 >
                                     <amount-field
                                         [amount]="txn.amount"

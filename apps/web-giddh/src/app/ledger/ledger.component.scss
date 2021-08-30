@@ -1104,8 +1104,9 @@ sh-select:focus {
 }
 
 .ledger-row td:nth-child(3) {
-    justify-content: flex-end !important;
+    justify-content: center !important;
 }
+
 @media (max-width: 767px) {
     .linked-entities {
         width: 100%;

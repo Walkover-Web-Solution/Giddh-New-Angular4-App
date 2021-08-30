@@ -1533,19 +1533,22 @@ header .navbar {
     padding: 6px 16px;
 }
 
-.btn-primary {
+.btn-primary,
+.btn-primary:focus,
+.btn-primary:active:focus,
+.btn-primary:not(:disabled):not(.disabled).active,
+.btn-primary:not(:disabled):not(.disabled):active,
+.show > .btn-primary.dropdown-toggle {
     background: $white !important;
     border-color: $gainsboro !important;
     color: $midnight-express !important;
 }
 
 .btn-primary:hover,
-.btn-primary:focus,
 .btn-primary:disabled,
 .btn-primary.active,
 .btn-primary:active,
 .open > .dropdown-toggle.btn-primary,
-.btn-primary:active:focus,
 .btn-primary:active:hover,
 .open > .dropdown-toggle.btn-primary:focus,
 .btn-primary:not(:disabled):not(.disabled):active {
@@ -2315,6 +2318,10 @@ button:focus {
 .btn:focus,
 .btn.focus {
     box-shadow: none !important;
+}
+.mat-raised-button:focus,
+.mat-raised-button.focus {
+    box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%) !important;
 }
 .Inpt_dwn {
     padding-right: 25px !important;
@@ -4619,7 +4626,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 .modal-header > .close {
     color: $white;
-    opacity: 1;
+    opacity: 1 !important;
     font-weight: 100;
     text-shadow: none;
     font-size: 30px;
@@ -6950,7 +6957,7 @@ button.btn.btn-filter {
 }
 
 .modal {
-    z-index: 9992;
+    z-index: 9999;
 }
 
 .select2-ledger .menu .item:hover {
@@ -8023,11 +8030,11 @@ giddh-datepicker {
 
 .cdk-overlay-container,
 .cdk-global-overlay-wrapper {
-    z-index: 9992;
+    z-index: 9999;
 }
 
 .cdk-overlay-connected-position-bounding-box {
-    z-index: 9992;
+    z-index: 9999;
 }
 
 giddh-datepicker {
@@ -8038,7 +8045,9 @@ giddh-datepicker {
 }
 
 .left-col-new,
-.right-col-new {
+.right-col-new,
+.daybook-advance-search,
+.advance-search {
     giddh-datepicker {
         .mat-form-field-appearance-fill .mat-form-field-flex {
             border: none !important;
@@ -8744,6 +8753,12 @@ body.update-scroll-hidden {
         width: 100%;
         overflow-x: auto;
     }
+    giddh-datepicker .mat-form-field {
+        min-width: 100% !important;
+    }
+    .mat-raised-button {
+        min-width: auto !important;
+    }
 }
 
 @media (max-width: 840px) {
@@ -8926,7 +8941,6 @@ body.update-scroll-hidden {
         }
 
         .close {
-            top: 10px;
             font-size: 26px;
         }
     }
