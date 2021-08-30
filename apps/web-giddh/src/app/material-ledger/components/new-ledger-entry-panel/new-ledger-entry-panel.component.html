@@ -16,7 +16,7 @@
             <table class="width-100 total-detail-table">
                 <tbody>
                     <tr *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields">
-                        <td class="item-padding qty-unit" *ngIf="currentTxn?.selectedAccount?.stock">
+                        <td class="item-padding qty-unit align-top" *ngIf="currentTxn?.selectedAccount?.stock">
                             <table>
                                 <tbody>
                                     <tr>
@@ -39,7 +39,7 @@
                                                 [DecimalPlaces]="4"
                                             />
                                         </td>
-                                        <td [style.width.px]="79" *ngIf="currentTxn?.unitRate">
+                                        <td [style.width.px]="79" *ngIf="currentTxn?.unitRate" class="text-right">
                                             <label class="font-12">{{ commonLocaleData?.app_unit }}</label>
                                             <mat-select
                                                 id="ledger-unit"
@@ -833,7 +833,7 @@
                         <li>
                             <a
                                 mat-button
-                                class="text-light pl-2 pr-2"
+                                class="text-light mr-0 min-width-auto"
                                 href="javascript:void(0)"
                                 (click)="currencyChange()"
                             >
@@ -965,6 +965,7 @@
             id="tourist-scheme-1"
             [(ngModel)]="isRcmEntry"
             (change)="changeRcmCheckboxState($event)"
+            class="mr-r1"
         >
         </mat-checkbox>
         <label

@@ -207,10 +207,10 @@
                 </div>
                 <div class="clearfix mr-b1">
                     <div class="row ml-0 mr-0">
-                        <div class="col-sm-5">
+                        <div class="col-md-5 col-sm-3">
                             <label>{{ commonLocaleData?.app_amount }}</label>
                         </div>
-                        <div class="col-sm-7">
+                        <div class="col-md-7 col-sm-9">
                             <div class="row">
                                 <div class="col-6 col-md-6">
                                     <div class="form-group">
@@ -262,7 +262,7 @@
                 </div>
 
                 <mat-accordion class="w-100 m-10" multi>
-                    <mat-expansion-panel [expanded]="isExpanded" class="mr-t1 overflow-visible">
+                    <mat-expansion-panel [expanded]="isExpanded" class="mr-t1">
                         <mat-expansion-panel-header>
                             <mat-panel-title (click)="toggleOtherDetails()">{{
                                 commonLocaleData?.app_other_details
