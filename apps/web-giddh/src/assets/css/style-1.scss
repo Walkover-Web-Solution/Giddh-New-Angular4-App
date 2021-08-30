@@ -2585,12 +2585,6 @@ form#groupDetailForm {
                         }
                     }
                 }
-                .ledger-bottom {
-                    .accordion-expansion {
-                        flex: 0 0 100% !important;
-                        max-width: 100% !important;
-                    }
-                }
             }
         }
     }
@@ -2689,6 +2683,10 @@ form#groupDetailForm {
     #setting-tab .nav > li > a:hover {
         color: inherit !important;
     }
+
+    .cdk-overlay-pane {
+        max-width: 95vw !important;
+    }
 }
 
 @media (min-width: 768px) and (max-width: 1019px) {
@@ -2781,7 +2779,8 @@ mat-dialog-container .modal-header {
 #share-modal,
 #exportModal,
 .other-details-section,
-.daybook-advance-search {
+.daybook-advance-search,
+.petty-cash-reject-modal {
     .mat-form-field {
         .mat-form-field-wrapper {
             padding-bottom: 0 !important;
@@ -2815,7 +2814,6 @@ giddh-datepicker {
 .collapse-pane {
     giddh-datepicker {
         .mat-form-field {
-            width: 100% !important;
             min-width: 100% !important;
         }
     }
@@ -2844,11 +2842,28 @@ giddh-datepicker {
                     }
                     &:nth-child(3) {
                         .mat-grid-tile-content {
-                            justify-content: flex-end !important;
+                            justify-content: center !important;
+                            align-items: flex-end;
+                            flex-direction: column;
                         }
                     }
                 }
             }
+        }
+    }
+}
+
+.mat-expansion-panel {
+    .mat-expansion-panel-header {
+        padding: 0 15px !important;
+    }
+    .mat-expansion-panel-body {
+        padding: 0 0px 0px !important;
+    }
+    sh-select {
+        .chip {
+            height: auto !important;
+            word-break: break-word !important;
         }
     }
 }
@@ -2872,12 +2887,6 @@ giddh-datepicker {
     top: 10px;
     right: 0px;
     opacity: 0.8;
-}
-
-.petty-cash {
-    .mat-tab-body.mat-tab-body-active {
-        z-index: 999;
-    }
 }
 
 .advance-search-by-date {
@@ -3010,18 +3019,10 @@ td.mat-footer-cell {
         display: none !important;
     }
 }
-.expense-head .mat-raised-button {
-    padding: 0 16px !important;
-}
 .responsive-label {
     display: none;
 }
-.export-daybook {
-    .mat-raised-button {
-        padding-left: 10px !important;
-        padding-right: 10px !important;
-    }
-}
+
 .mat-dialog-container {
     height: auto !important;
 }
@@ -3121,6 +3122,15 @@ td.mat-footer-cell {
     .mat-raised-button {
         padding: 7px 10px !important;
         line-height: normal !important;
+    }
+}
+
+@media (max-width: 1300px) {
+    .ledger-bottom {
+        .accordion-expansion {
+            flex: 0 0 100% !important;
+            max-width: 100% !important;
+        }
     }
 }
 /* material css for ledger end*/

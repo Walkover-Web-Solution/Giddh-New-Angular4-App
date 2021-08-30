@@ -4,6 +4,8 @@
     box-shadow: 3px 3px 6px $black-russian;
     background: $white;
     position: relative;
+    overflow-y: auto;
+    max-height: calc(100vh - 135px);
 }
 .main-expense-details {
     width: 90%;
@@ -45,9 +47,6 @@
     }
     .expense-head {
         padding-top: 20px;
-    }
-    .input-calender {
-        top: 15px;
     }
     .main-expense-details {
         width: 100%;

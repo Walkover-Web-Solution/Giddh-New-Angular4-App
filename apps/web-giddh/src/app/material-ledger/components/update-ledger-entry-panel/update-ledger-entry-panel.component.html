@@ -1118,7 +1118,7 @@
                 <!-- region more details and total section -->
 
                 <div class="row ledger-bottom">
-                    <div class="col-md-6 pd-t1">
+                    <div class="col-md-6 pd-t1 accordion-expansion">
                         <!-- make it functional (Developer end) -->
                         <div *ngIf="shouldShowWarehouse && warehouses?.length > 1" class="row mr-b1">
                             <div class="col-sm-6 pd-r1">
@@ -1367,13 +1367,13 @@
 
                     <div class="col-md-6 pd-t1 accordion-expansion">
                         <mat-accordion multi>
-                            <mat-expansion-panel class="overflow-visible">
+                            <mat-expansion-panel>
                                 <mat-expansion-panel-header>
                                     <mat-panel-title (click)="getInvoiceLists()">{{
                                         localeData?.more_details
                                     }}</mat-panel-title>
                                 </mat-expansion-panel-header>
-                                <div class="pd-1 mr-b05 mr-t05 advanced">
+                                <div class="pd-1 mr-b05 mr-t05 advanced table-responsive">
                                     <table class="xs-table-block">
                                         <tr>
                                             <td class="select2-parent pd-r1">
