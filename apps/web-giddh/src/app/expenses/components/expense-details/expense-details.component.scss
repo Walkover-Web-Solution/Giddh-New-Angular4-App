@@ -119,7 +119,11 @@ span.close-modal.cp.pull-right {
 .list-item {
     border-bottom: 1px solid $gainsboro;
 }
-
+.entry-against {
+    &.error-box {
+        border-radius: 7px;
+    }
+}
 @media only screen and (max-width: 1440px) {
     .petty-cash {
         height: initial;
