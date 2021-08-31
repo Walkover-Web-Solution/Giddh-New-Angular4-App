@@ -348,6 +348,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
         this.showAdvanced = false;
         this.vm.selectedLedger = new LedgerResponse();
+        this.vm.selectedLedger.voucher = { name: '', shortCode: '' };
         this.vm.selectedLedger.otherTaxModal = new SalesOtherTaxesModal();
 
         if (this.isPettyCash) {
