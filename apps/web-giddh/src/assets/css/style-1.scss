@@ -1536,7 +1536,6 @@ table:focus {
 @media only screen and (max-width: 1440px) {
     body.unresponsive {
         width: 100%;
-        overflow-x: hidden !important;
     }
     .container {
         width: 100%;
@@ -2775,9 +2774,6 @@ form#groupDetailForm {
 .mat-dialog-title {
     margin-bottom: 0px !important;
 }
-mat-dialog-container .modal-header {
-    padding: 11px !important;
-}
 .mat-radio-button {
     margin-right: 16px;
 }
@@ -2820,7 +2816,9 @@ giddh-datepicker {
     }
 }
 .other-details-section,
-.collapse-pane {
+.collapse-pane,
+.left-col-new,
+.right-col-new {
     giddh-datepicker {
         .mat-form-field {
             min-width: 100% !important;
@@ -2996,6 +2994,9 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
 .mat-table tbody .mat-header-row:hover td {
     background: $light-alice-blue;
 }
+.mat-table tbody > tr > td.no-wrap {
+    white-space: nowrap !important;
+}
 table.mat-table {
     border-spacing: 2px !important;
 }
@@ -3099,6 +3100,9 @@ td.mat-footer-cell {
                 }
             }
         }
+        .mat-tab-body-active {
+            z-index: 991;
+        }
     }
     .bg-white {
         .form-group {
@@ -3124,6 +3128,20 @@ td.mat-footer-cell {
     background: $black !important;
     color: $white;
     font-size: 12px !important;
+}
+
+.mat-button-focus-overlay {
+    background: transparent !important;
+}
+
+@media (max-width: 767px) {
+    .petty-cash {
+        .mat-tab-group {
+            .mat-tab-body-active {
+                z-index: 9999;
+            }
+        }
+    }
 }
 
 @media (max-width: 1075px) {

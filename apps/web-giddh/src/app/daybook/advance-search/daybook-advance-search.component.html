@@ -36,24 +36,22 @@
                         <div class="col-sm-7 col-xs-12">
                             <div class="row">
                                 <div class="col-6 col-sm-6">
-                                    <div class="checkbox square-switch mr-b1">
-                                        <mat-checkbox
-                                            color="primary"
-                                            id="includeParticulars"
-                                            formControlName="includeParticulars"
+                                    <mat-checkbox
+                                        color="primary"
+                                        id="includeParticulars"
+                                        formControlName="includeParticulars"
+                                    >
+                                        <span
+                                            class="pull-left"
+                                            *ngIf="advanceSearchForm.get('includeParticulars').value"
+                                            >{{ commonLocaleData?.app_include }}</span
                                         >
-                                            <span
-                                                class="pull-left"
-                                                *ngIf="advanceSearchForm.get('includeParticulars').value"
-                                                >{{ commonLocaleData?.app_include }}</span
-                                            >
-                                            <span
-                                                class="pull-right"
-                                                *ngIf="!advanceSearchForm.get('includeParticulars').value"
-                                                >{{ commonLocaleData?.app_exclude }}</span
-                                            >
-                                        </mat-checkbox>
-                                    </div>
+                                        <span
+                                            class="pull-right"
+                                            *ngIf="!advanceSearchForm.get('includeParticulars').value"
+                                            >{{ commonLocaleData?.app_exclude }}</span
+                                        >
+                                    </mat-checkbox>
                                 </div>
                                 <div class="col-6 col-sm-6">
                                     <div class="form-group">
@@ -91,24 +89,22 @@
                         <div class="col-sm-7 col-xs-12">
                             <div class="row">
                                 <div class="col-6 col-sm-6">
-                                    <div class="checkbox square-switch">
-                                        <mat-checkbox
-                                            color="primary"
-                                            id="includeVouchers"
-                                            formControlName="includeVouchers"
+                                    <mat-checkbox
+                                        color="primary"
+                                        id="includeVouchers"
+                                        formControlName="includeVouchers"
+                                    >
+                                        <span
+                                            class="pull-left"
+                                            *ngIf="advanceSearchForm.get('includeVouchers').value"
+                                            >{{ commonLocaleData?.app_include }}</span
                                         >
-                                            <span
-                                                class="pull-left"
-                                                *ngIf="advanceSearchForm.get('includeVouchers').value"
-                                                >{{ commonLocaleData?.app_include }}</span
-                                            >
-                                            <span
-                                                class="pull-right"
-                                                *ngIf="!advanceSearchForm.get('includeVouchers').value"
-                                                >{{ commonLocaleData?.app_exclude }}</span
-                                            >
-                                        </mat-checkbox>
-                                    </div>
+                                        <span
+                                            class="pull-right"
+                                            *ngIf="!advanceSearchForm.get('includeVouchers').value"
+                                            >{{ commonLocaleData?.app_exclude }}</span
+                                        >
+                                    </mat-checkbox>
                                 </div>
                                 <div class="col-6 col-sm-6">
                                     <div class="form-group">
@@ -187,30 +183,26 @@
                                     <div class="col-sm-7 col-xs-12" formGroupName="inventory">
                                         <div class="row">
                                             <div class="col-sm-6">
-                                                <div class="checkbox square-switch">
-                                                    <mat-checkbox
-                                                        color="primary"
-                                                        id="includeInventory"
-                                                        formControlName="includeInventory"
+                                                <mat-checkbox
+                                                    color="primary"
+                                                    id="includeInventory"
+                                                    formControlName="includeInventory"
+                                                >
+                                                    <span
+                                                        class="pull-left"
+                                                        *ngIf="
+                                                            advanceSearchForm.get('inventory.includeInventory').value
+                                                        "
+                                                        >{{ commonLocaleData?.app_include }}</span
                                                     >
-                                                        <span
-                                                            class="pull-left"
-                                                            *ngIf="
-                                                                advanceSearchForm.get('inventory.includeInventory')
-                                                                    .value
-                                                            "
-                                                            >{{ commonLocaleData?.app_include }}</span
-                                                        >
-                                                        <span
-                                                            class="pull-right"
-                                                            *ngIf="
-                                                                !advanceSearchForm.get('inventory.includeInventory')
-                                                                    .value
-                                                            "
-                                                            >{{ commonLocaleData?.app_exclude }}</span
-                                                        >
-                                                    </mat-checkbox>
-                                                </div>
+                                                    <span
+                                                        class="pull-right"
+                                                        *ngIf="
+                                                            !advanceSearchForm.get('inventory.includeInventory').value
+                                                        "
+                                                        >{{ commonLocaleData?.app_exclude }}</span
+                                                    >
+                                                </mat-checkbox>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="form-group">

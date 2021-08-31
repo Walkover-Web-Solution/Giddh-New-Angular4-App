@@ -55,6 +55,16 @@
             height: 20px;
         }
     }
+    .ledger-row {
+        &:first-child {
+            .mat-grid-tile {
+                .mat-grid-tile-content {
+                    left: 20px;
+                    position: relative;
+                }
+            }
+        }
+    }
 }
 #ledger-transaction-left-list .mat-grid-tile,
 #ledger-transaction-right-list .mat-grid-tile {
@@ -64,6 +74,7 @@
 #ledger-transaction-left-list {
     border-bottom: 1px solid $gainsboro;
 }
+
 .form-control,
 input {
     color: $nero;
@@ -637,6 +648,9 @@ sh-select:focus {
 
 .mat-raised-button {
     min-width: 36px;
+    .mat-button-wrapper {
+        display: flex;
+    }
 }
 
 /*mobile ledger view css*/
