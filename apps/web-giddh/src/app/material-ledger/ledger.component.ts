@@ -240,6 +240,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public advanceSearchDialogRef: any;
     /** Last touched transaction (for ipad and tablet) */
     public touchedTransaction: any;
+    /** This is used to show hide bottom spacing when more detail is opened while CREATE/UPDATE ledger */
+    public isMoreDetailsOpened: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -1067,6 +1069,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         };
         this.shouldShowRcmTaxableAmount = false;
         this.shouldShowItcSection = false;
+        this.isMoreDetailsOpened = false;
         if (this.isLedgerAccountAllowsMultiCurrency) {
             this.getCurrencyRate('blankLedger');
         }
@@ -1138,6 +1141,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             }
         }
+        this.isMoreDetailsOpened = false;
         this.lc.showNewLedgerPanel = false;
     }
 
@@ -2354,5 +2358,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
         setTimeout(() => {
             this.touchedTransaction = {};
         }, 200);
+    }
+
+    /**
+     * Handler for more detail open in CREATE ledger
+     *
+     * @param {boolean} isOpened True, if more detail is opened while creating new ledger entry
+     * @memberof LedgerComponent
+     */
+    public handleOpenMoreDetail(isOpened: boolean): void {
+        this.isMoreDetailsOpened = isOpened;
     }
 }
