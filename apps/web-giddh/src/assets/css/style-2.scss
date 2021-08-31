@@ -4633,6 +4633,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     cursor: pointer;
     padding: 0 !important;
     margin: 0 !important;
+    min-width: auto !important;
 }
 
 /**new modal design**/
