@@ -143,6 +143,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Output() public clickUnpaidInvoiceList: EventEmitter<any> = new EventEmitter();
     /** Emit event for getting invoice list for credit note linking */
     @Output() public getInvoiceListsForCreditNote: EventEmitter<any> = new EventEmitter();
+    /** Emits when more detail is opened */
+    @Output() public moreDetailOpen: EventEmitter<any> = new EventEmitter();
     /** Emits when other taxes are saved */
     @Output() public saveOtherTax: EventEmitter<any> = new EventEmitter();
     @ViewChild('entryContent', { static: true }) public entryContent: ElementRef;
@@ -237,6 +239,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public adjustmentDialogRef: any;
     /** True if datepicker is open */
     public isDatepickerOpen: boolean = false;
+    /** True if more details is open */
+    public isMoreDetailsOpen: boolean;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -1634,4 +1638,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.saveOtherTax.emit(this.blankLedger);
     }
 
+    /**
+     * Toggles the more detail section
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public toggleMoreDetail(): void {
+        this.isMoreDetailsOpen = !this.isMoreDetailsOpen;
+        this.moreDetailOpen.emit(this.isMoreDetailsOpen);
+    }
 }
