@@ -815,6 +815,7 @@
                                                                         currentOrganizationType === 'COMPANY' &&
                                                                         currentCompanyBranches?.length > 2
                                                                     "
+                                                                    (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                                     (changeTransactionType)="
                                                                         toggleTransactionType($event)
                                                                     "
@@ -1072,6 +1073,7 @@
                                                                         currentOrganizationType === 'COMPANY' &&
                                                                         currentCompanyBranches?.length > 2
                                                                     "
+                                                                    (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                                     (changeTransactionType)="
                                                                         toggleTransactionType($event)
                                                                     "
@@ -1718,6 +1720,7 @@
                                                     isLedgerAccountAllowsMultiCurrency
                                                 "
                                                 [inputMaskFormat]="inputMaskFormat"
+                                                (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                 (changeTransactionType)="toggleTransactionType($event)"
                                                 [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
                                                 (resetBlankLedger)="resetBlankTransaction()"
@@ -2118,6 +2121,7 @@
                                                 [isLedgerAccountAllowsMultiCurrency]="
                                                     isLedgerAccountAllowsMultiCurrency
                                                 "
+                                                (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                 (changeTransactionType)="toggleTransactionType($event)"
                                                 [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
                                                 (resetBlankLedger)="resetBlankTransaction()"
@@ -2592,6 +2596,9 @@
                     </section>
                 </div>
             </div>
+
+            <div class="show-if-ledger-open" *ngIf="isMoreDetailsOpened"></div>
+
             <!-- modal sections -->
             <div *ngIf="isShowLedgerColumnarReportTable">
                 <div class="back-btn text-right pr-1 mt-1 mr-b1">
