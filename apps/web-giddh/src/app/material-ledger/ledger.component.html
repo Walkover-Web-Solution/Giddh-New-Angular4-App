@@ -243,7 +243,7 @@
                                         [disabled]="
                                             currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
                                         "
-                                        class="btn btn-danger"
+                                        class="btn btn-danger d-flex align-items-center justify-content-center"
                                         id="delete-ledger"
                                         (click)="performBulkAction('delete')"
                                         [matTooltip]="commonLocaleData?.app_delete"
@@ -259,7 +259,7 @@
                                             currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
                                         "
                                         id="generate-invoice"
-                                        class="btn btn-warning"
+                                        class="btn btn-warning d-flex align-items-center justify-content-center"
                                         (click)="performBulkAction('generate')"
                                         [matTooltip]="commonLocaleData?.app_generate_voucher"
                                         [matTooltipPosition]="'above'"
@@ -273,7 +273,7 @@
                                         [disabled]="
                                             currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
                                         "
-                                        class="btn btn-success"
+                                        class="btn btn-success d-flex align-items-center justify-content-center"
                                         id="attach-file"
                                         (click)="performBulkAction('upload', BulkUploadfileInput)"
                                         [matTooltip]="localeData?.attach_file"
@@ -585,8 +585,8 @@
                                             </mat-grid-tile>
                                         </mat-grid-list>
                                     </div>
-                                    <div class="ledger-book">
-                                        <div class="left-col-new" (click)="$event.stopPropagation()">
+                                    <div class="row ml-0 mr-0 ledger-book">
+                                        <div class="col-6 left-col-new" (click)="$event.stopPropagation()">
                                             <mat-grid-list
                                                 cols="4"
                                                 rowHeight="43px"
@@ -844,7 +844,7 @@
                                                 </ng-container>
                                             </mat-grid-list>
                                         </div>
-                                        <div class="right-col-new" (click)="$event.stopPropagation()">
+                                        <div class="col-6 right-col-new" (click)="$event.stopPropagation()">
                                             <mat-grid-list
                                                 cols="4"
                                                 rowHeight="43px"

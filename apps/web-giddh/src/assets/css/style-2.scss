@@ -4633,6 +4633,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     cursor: pointer;
     padding: 0 !important;
     margin: 0 !important;
+    min-width: auto !important;
 }
 
 /**new modal design**/
@@ -5884,8 +5885,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     border-bottom: 1px solid $gainsboro;
 }
 
-.tax-engine .table-fixed,
-.daybook-table .mat-table {
+.tax-engine .table-fixed {
     table-layout: fixed;
 }
 
