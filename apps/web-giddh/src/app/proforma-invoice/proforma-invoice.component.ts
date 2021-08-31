@@ -6065,7 +6065,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 'operatingcost, indirectexpenses' : 'otherincome, revenuefromoperations';
             withStocks = !!query;
 
-            if(this.voucherApiVersion === 2 && (this.invoiceType === VoucherTypeEnum.sales || this.invoiceType === VoucherTypeEnum.purchase || this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote || this.invoiceType === VoucherTypeEnum.cash)) {
+            if(this.voucherApiVersion === 2) {
                 group += ", fixedassets";
             }
         } else if (searchType === SEARCH_TYPE.BANK) {

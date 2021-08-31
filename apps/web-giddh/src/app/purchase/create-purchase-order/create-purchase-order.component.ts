@@ -360,6 +360,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public translationLoaded: boolean = false;
     /** Length of entry description */
     public entryDescriptionLength: number = ENTRY_DESCRIPTION_LENGTH;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private store: Store<AppState>,
@@ -400,6 +402,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.getInvoiceSettings();
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
@@ -3099,6 +3102,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         } else if (searchType === SEARCH_TYPE.ITEM) {
             group = 'operatingcost, indirectexpenses';
             withStocks = !!query;
+
+            if(this.voucherApiVersion === 2) {
+                group += ", fixedassets";
+            }
         }
         const requestObject = {
             q: encodeURIComponent(query),
