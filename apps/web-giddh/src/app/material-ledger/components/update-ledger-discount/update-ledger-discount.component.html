@@ -68,6 +68,7 @@
                     <li *ngIf="idx > 0" class="discount-item">
                         <label class="checkbox overflow-hidden width-100 p-0 m-0" (click)="$event.stopPropagation()">
                             <mat-checkbox
+                                color="primary"
                                 class="pull-left"
                                 [id]="'update-ledger-discount-checkbox-' + idx"
                                 name="tax_{{ idx }}"
