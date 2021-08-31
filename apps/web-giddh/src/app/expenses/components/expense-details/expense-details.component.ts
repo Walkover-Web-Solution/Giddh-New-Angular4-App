@@ -154,6 +154,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     private pettyCashEntryType: string;
     /** True if api call in progress */
     public isPettyCashEntryLoading: boolean = false;
+    /** True if we need to show red border around the field */
+    public showEntryAgainstRequired: boolean = false;
 
     constructor(
         private toaster: ToasterService,
@@ -320,12 +322,11 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public approveEntry(): void {
         if (this.entryAgainstObject.base && !this.entryAgainstObject.model) {
-            let errorMessage = this.localeData?.entry_against_error;
-            errorMessage = errorMessage.replace("[ENTRY_AGAINST]", this.entryAgainstObject.base);
-            this.toaster.showSnackBar("error", errorMessage);
+            this.showEntryAgainstRequired = true;
             this.hideApproveConfirmPopup(false);
             return;
         }
+        this.showEntryAgainstRequired = false;
         this.approveEntryRequestInProcess = true;
         let actionType: ActionPettycashRequest = {
             actionType: 'approve',
@@ -413,6 +414,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
             this.getPettyCashEntry(this.selectedItem.uniqueName);
             this.store.dispatch(this.ledgerActions.setAccountForEdit(this.selectedItem.baseAccount.uniqueName || null));
             this.buildCreatorString();
+            this.showEntryAgainstRequired = false;
         }
     }
 
@@ -437,6 +439,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public onSelectEntryAgainstAccount(option: IOption): void {
         if (option && option.value) {
+            this.showEntryAgainstRequired = false;
             this.accountEntryPettyCash.particular.uniqueName = option.value;
             this.accountEntryPettyCash.particular.name = option.label;
         }
