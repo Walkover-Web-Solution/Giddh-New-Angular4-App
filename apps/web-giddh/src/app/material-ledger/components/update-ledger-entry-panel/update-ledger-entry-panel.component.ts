@@ -1007,14 +1007,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public getInvoiceListsData(event: any): void {
-        if (event.value === 'rcpt') {
-            if (this.isPettyCash && !this.accountUniqueName) {
-                let message = this.localeData?.account_entry_error;
-                message = message?.replace("[ACCOUNT]", this.pettyCashBaseAccountTypeString);
-                this.toaster.showSnackBar("error", message);
-                return;
-            }
-        } else if (event.value === VoucherTypeEnum.creditNote || event.value === VoucherTypeEnum.debitNote) {
+        if (event.value === VoucherTypeEnum.creditNote || event.value === VoucherTypeEnum.debitNote) {
             this.getInvoiceListsForCreditNote();
             this.vm.selectedLedger.generateInvoice = true;
         }

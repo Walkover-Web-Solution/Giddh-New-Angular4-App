@@ -88,7 +88,8 @@
                                     </label>
                                     <div class="clearfix">
                                         <sh-select
-                                            class="text-left multi-select"
+                                            [ngClass]="{ 'error-box': showEntryAgainstRequired }"
+                                            class="text-left multi-select entry-against"
                                             name="depositAccountUniqueName"
                                             #entryAgainstAccountDropDown
                                             [options]="entryAgainstObject.dropDownOption"
