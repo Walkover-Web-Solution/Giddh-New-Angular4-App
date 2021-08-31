@@ -95,6 +95,7 @@
                                             [options]="entryAgainstObject.dropDownOption"
                                             [(ngModel)]="entryAgainstObject.model"
                                             (selected)="onSelectEntryAgainstAccount($event)"
+                                            (onClear)="onClearEntryAgainstAccount()"
                                             [placeholder]="commonLocaleData?.app_select_account"
                                             [notFoundLink]="false"
                                             [enableDynamicSearch]="true"
