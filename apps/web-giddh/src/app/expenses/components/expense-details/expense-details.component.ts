@@ -294,6 +294,10 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public showApproveConfirmPopup(ref: TemplateRef<any>): void {
+        if (this.entryAgainstObject.base && !this.entryAgainstObject.model) {
+            this.showEntryAgainstRequired = true;
+            return;
+        }
         this.approveEntryModalRef = this.dialog.open(ref, { disableClose: true });
         this.selectedEntryForApprove = cloneDeep(this.selectedItem);
         this.selectedEntryForApprove.amount = this.updateLedgerComponentInstance.vm.compoundTotal;
@@ -1000,5 +1004,17 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         this.toaster.showSnackBar("success", response?.body);
         this.rejectReason.setValue("");
         this.previewNextItem.emit(true);
+    }
+
+    /**
+     * This will clear the selected entry object
+     *
+     * @memberof ExpenseDetailsComponent
+     */
+    public onClearEntryAgainstAccount(): void {
+        this.showEntryAgainstRequired = false;
+        this.accountEntryPettyCash.particular.uniqueName = "";
+        this.accountEntryPettyCash.particular.name = "";
+        this.entryAgainstObject.model = "";
     }
 }
