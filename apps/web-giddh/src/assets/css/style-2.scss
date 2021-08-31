@@ -5885,7 +5885,8 @@ perfect-scrollbar > .ps > .ps-overlay {
     border-bottom: 1px solid $gainsboro;
 }
 
-.tax-engine .table-fixed {
+.tax-engine .table-fixed,
+.daybook-table .mat-table {
     table-layout: fixed;
 }
 
