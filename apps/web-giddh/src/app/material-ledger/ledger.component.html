@@ -1208,7 +1208,7 @@
                                     <div class="transaction-date pd-l15 pd-r15 pd-t2 bold">
                                         {{ transactionDate }}
                                     </div>
-                                    <mat-grid-list cols="2" rowHeight="50px">
+                                    <mat-grid-list cols="2" rowHeight="55px">
                                         <ng-container
                                             *ngFor="
                                                 let transactions of allTransactionsList[transactionDate];
@@ -1260,7 +1260,7 @@
                                                             class="text-gray mr-r05"
                                                             >{{ localeData?.to }}</span
                                                         >
-                                                        <span class="mr-r1">{{
+                                                        <span class="mr-r15">{{
                                                             transactions?.inventory
                                                                 ? transactions?.particular?.name +
                                                                   " (" +
