@@ -23,6 +23,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { DaybookService } from '../services/daybook.service';
 import { ToasterService } from '../services/toaster.service';
 import { MatDialog } from '@angular/material/dialog';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
     selector: 'daybook',
@@ -126,6 +127,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public modalDialogRef: any;
     /** Last touched transaction (for ipad and tablet) */
     public touchedTransaction: any;
+    /** true if mobile device */
+    public isMobile: boolean;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -137,7 +140,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
         private ledgerActions: LedgerActions,
         private daybookService: DaybookService,
         private toasterService: ToasterService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private breakpointObserver: BreakpointObserver
     ) {
 
         this.daybookQueryRequest = new DaybookQueryRequest();
@@ -203,6 +207,12 @@ export class DaybookComponent implements OnInit, OnDestroy {
                     this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
                 }
             }
+        });
+
+        this.breakpointObserver.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobile = result?.breakpoints['(max-width: 767px)'];
         });
 
         // get company taxes
@@ -593,14 +603,16 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @memberof DaybookComponent
      */
     public showUpdateLedgerModalIpad(txn: any): void {
-        if (this.touchedTransaction?.uniqueName === txn?.uniqueName) {
-            this.showUpdateLedgerModal(txn);
-        } else {
-            this.touchedTransaction = txn;
+        if (!this.isMobile){
+            if (this.touchedTransaction?.uniqueName === txn?.uniqueName) {
+                this.showUpdateLedgerModal(txn);
+            } else {
+                this.touchedTransaction = txn;
+            }
+    
+            setTimeout(() => {
+                this.touchedTransaction = {};
+            }, 200);
         }
-
-        setTimeout(() => {
-            this.touchedTransaction = {};
-        }, 200);
     }
 }
