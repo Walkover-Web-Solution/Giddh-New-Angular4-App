@@ -525,8 +525,10 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public toggleBodyClass(): void {
         if (this.asideMenuStateForOtherTaxes === 'in') {
+            document.querySelector('.petty-cash')?.classList?.add('sidebar-overlay');
             document.querySelector('body').classList.add('fixed');
         } else {
+            document.querySelector('.petty-cash')?.classList?.remove('sidebar-overlay');
             document.querySelector('body').classList.remove('fixed');
         }
     }
