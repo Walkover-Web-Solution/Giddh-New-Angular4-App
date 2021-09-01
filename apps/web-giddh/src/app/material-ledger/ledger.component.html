@@ -88,7 +88,7 @@
                                     </div>
                                     <div class="d-flex mr-l15">
                                         <button
-                                            mat-button
+                                            mat-raised-button
                                             [disabled]="
                                                 currentOrganizationType === 'COMPANY' &&
                                                 currentCompanyBranches?.length > 2
@@ -98,12 +98,13 @@
                                             (click)="performBulkAction('delete')"
                                             [matTooltip]="commonLocaleData?.app_delete"
                                             [matTooltipPosition]="'above'"
+                                            matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-trash font-16"></i>
                                         </button>
 
                                         <button
-                                            mat-button
+                                            mat-raised-button
                                             [disabled]="
                                                 currentOrganizationType === 'COMPANY' &&
                                                 currentCompanyBranches?.length > 2
@@ -113,12 +114,13 @@
                                             (click)="performBulkAction('generate')"
                                             [matTooltip]="commonLocaleData?.app_generate_voucher"
                                             [matTooltipPosition]="'above'"
+                                            matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-generate-invoice font-16"></i>
                                         </button>
                                     </div>
                                     <button
-                                        mat-button
+                                        mat-raised-button
                                         [disabled]="
                                             currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
                                         "
@@ -127,6 +129,7 @@
                                         (click)="performBulkAction('upload', BulkUploadfileInput)"
                                         [matTooltip]="localeData?.attach_file"
                                         [matTooltipPosition]="'above'"
+                                        matTooltipClass="tooltip-black"
                                     >
                                         <i class="icon-file-path"></i>
                                     </button>
@@ -166,10 +169,11 @@
                                                 matSuffix
                                                 mat-icon-button
                                                 (click)="searchText = ''; search(searchText)"
+                                                class="position-absolute"
                                             >
-                                                <i aria-hidden="true" class="icon-cross"></i>
+                                                <i aria-hidden="true" class="icon-cross font-12"></i>
                                             </button>
-                                            <span matPrefix><i class="icon-search pos-abs"></i></span>
+                                            <span matPrefix><i class="icon-search position-absolute"></i></span>
                                         </mat-form-field>
                                     </span>
                                     <a
@@ -179,6 +183,7 @@
                                         (click)="resetAdvanceSearch()"
                                         [matTooltip]="commonLocaleData?.app_reset_advance_search"
                                         [matTooltipPosition]="'above'"
+                                        matTooltipClass="tooltip-black"
                                     >
                                         <i aria-hidden="true" class="icon-refresh"></i>
                                     </a>
@@ -187,7 +192,7 @@
                                 <!-- Functionality not working -->
                                 <div
                                     class="ledger-datepicker"
-                                    id="giddh-datepicker-mobile-view"
+                                    id="giddh-datepicker-mobile-view mr-r05"
                                     container="body"
                                     *ngIf="isMobileScreen"
                                 >
@@ -212,6 +217,7 @@
                                     class="advance-icon d-flex advance-search-filter pointer"
                                     [matTooltip]="commonLocaleData?.app_advance_search"
                                     [matTooltipPosition]="'above'"
+                                    matTooltipClass="tooltip-black"
                                     [ngStyle]="{ 'margin-left': checkedTrxWhileHovering?.length === 0 ? '7px' : '0px' }"
                                 >
                                     <span class="icon-advance-filter"></span>
@@ -223,6 +229,8 @@
                                     href="javascript:;"
                                     (click)="resetAdvanceSearch()"
                                     [matTooltip]="commonLocaleData?.app_reset_advance_search"
+                                    [matTooltipPosition]="'above'"
+                                    matTooltipClass="tooltip-black"
                                 >
                                     <i aria-hidden="true" class="icon-refresh"></i>
                                 </a>
@@ -232,29 +240,30 @@
                                 >
                                     <button
                                         mat-raised-button
-                                        color="warn"
                                         [disabled]="
                                             currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
                                         "
+                                        class="btn btn-danger d-flex align-items-center justify-content-center"
                                         id="delete-ledger"
                                         (click)="performBulkAction('delete')"
                                         [matTooltip]="commonLocaleData?.app_delete"
                                         [matTooltipPosition]="'above'"
+                                        matTooltipClass="tooltip-black"
                                     >
                                         <i class="icon-trash font-16"></i>
                                     </button>
 
                                     <button
                                         mat-raised-button
-                                        color="primary"
                                         [disabled]="
                                             currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
                                         "
                                         id="generate-invoice"
-                                        class="mr-l1"
+                                        class="btn btn-warning d-flex align-items-center justify-content-center"
                                         (click)="performBulkAction('generate')"
                                         [matTooltip]="commonLocaleData?.app_generate_voucher"
                                         [matTooltipPosition]="'above'"
+                                        matTooltipClass="tooltip-black"
                                     >
                                         <i class="icon-generate-invoice font-16"></i>
                                     </button>
@@ -264,11 +273,12 @@
                                         [disabled]="
                                             currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
                                         "
-                                        class="btn btn-success mr-l1"
+                                        class="btn btn-success d-flex align-items-center justify-content-center"
                                         id="attach-file"
                                         (click)="performBulkAction('upload', BulkUploadfileInput)"
                                         [matTooltip]="localeData?.attach_file"
                                         [matTooltipPosition]="'above'"
+                                        matTooltipClass="tooltip-black"
                                     >
                                         <i class="icon-file-path font-16"></i>
                                     </button>
@@ -315,11 +325,13 @@
                                                             class="icon-branch-icon pull-right"
                                                             *ngIf="!option.isCompany"
                                                             [matTooltip]="commonLocaleData?.app_branch"
+                                                            matTooltipClass="tooltip-black"
                                                         ></i>
                                                         <i
                                                             class="icon-company-profile pull-right"
                                                             *ngIf="option.isCompany"
                                                             [matTooltip]="commonLocaleData?.app_company"
+                                                            matTooltipClass="tooltip-black"
                                                         ></i>
                                                     </span>
                                                     <span class="entity-details">
@@ -393,11 +405,13 @@
                                                                 class="icon-branch-icon pull-right"
                                                                 *ngIf="!option.isCompany"
                                                                 [matTooltip]="commonLocaleData?.app_branch"
+                                                                matTooltipClass="tooltip-black"
                                                             ></i>
                                                             <i
                                                                 class="icon-company-profile pull-right"
                                                                 *ngIf="option.isCompany"
                                                                 [matTooltip]="commonLocaleData?.app_company"
+                                                                matTooltipClass="tooltip-black"
                                                             ></i>
                                                         </span>
                                                         <span class="entity-details">
@@ -436,6 +450,7 @@
                                         class="icomoon-ico d-flex align-items-center"
                                         [matTooltip]="localeData?.import_statement"
                                         [matTooltipPosition]="'above'"
+                                        matTooltipClass="tooltip-black"
                                         (click)="showUploadBankStatementModal()"
                                     >
                                         <i class="icon-upload lh-0"></i>
@@ -447,6 +462,7 @@
                                         class="icomoon-ico d-flex align-items-center"
                                         [matTooltip]="localeData?.share_ledger"
                                         [matTooltipPosition]="'above'"
+                                        matTooltipClass="tooltip-black"
                                         (click)="showShareLedgerModal()"
                                     >
                                         <i class="icon-ledger-path lh-0"></i>
@@ -458,6 +474,7 @@
                                         href="javascript:void(0)"
                                         [matTooltip]="commonLocaleData?.app_export"
                                         [matTooltipPosition]="'above'"
+                                        matTooltipClass="tooltip-black"
                                         (click)="showExportLedgerModal()"
                                     >
                                         <i class="icon-ledger-union-5 lh-0"></i>
@@ -469,6 +486,7 @@
                                         href="javascript:void(0)"
                                         [matTooltip]="localeData?.delete_bank_transactions"
                                         [matTooltipPosition]="'above'"
+                                        matTooltipClass="tooltip-black"
                                         (click)="showBulkDeleteBankTransactionsConfirmationModal()"
                                         *ngIf="entryUniqueNamesForBulkAction?.length > 0"
                                     >
@@ -481,6 +499,7 @@
                                         href="javascript:void(0)"
                                         [matTooltip]="localeData?.reload_bank_transactions"
                                         [matTooltipPosition]="'above'"
+                                        matTooltipClass="tooltip-black"
                                         (click)="getBankTransactions()"
                                     >
                                         <i class="icon-refresh lh-0 font-18"></i>
@@ -566,8 +585,8 @@
                                             </mat-grid-tile>
                                         </mat-grid-list>
                                     </div>
-                                    <div class="ledger-book">
-                                        <div class="left-col-new" (click)="$event.stopPropagation()">
+                                    <div class="row ml-0 mr-0 ledger-book">
+                                        <div class="col-6 left-col-new" (click)="$event.stopPropagation()">
                                             <mat-grid-list
                                                 cols="4"
                                                 rowHeight="43px"
@@ -796,6 +815,7 @@
                                                                         currentOrganizationType === 'COMPANY' &&
                                                                         currentCompanyBranches?.length > 2
                                                                     "
+                                                                    (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                                     (changeTransactionType)="
                                                                         toggleTransactionType($event)
                                                                     "
@@ -825,7 +845,7 @@
                                                 </ng-container>
                                             </mat-grid-list>
                                         </div>
-                                        <div class="right-col-new" (click)="$event.stopPropagation()">
+                                        <div class="col-6 right-col-new" (click)="$event.stopPropagation()">
                                             <mat-grid-list
                                                 cols="4"
                                                 rowHeight="43px"
@@ -1053,6 +1073,7 @@
                                                                         currentOrganizationType === 'COMPANY' &&
                                                                         currentCompanyBranches?.length > 2
                                                                     "
+                                                                    (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                                     (changeTransactionType)="
                                                                         toggleTransactionType($event)
                                                                     "
@@ -1184,10 +1205,10 @@
                         <ng-container *ngIf="allTransactionDates && allTransactionDates.length > 0">
                             <ng-container *ngFor="let transactionDate of allTransactionDates">
                                 <div class="border-none pt-0 pb-0">
-                                    <div class="transaction-date pd-l15 pd-r15 pd-t05">
+                                    <div class="transaction-date pd-l15 pd-r15 pd-t2 bold">
                                         {{ transactionDate }}
                                     </div>
-                                    <mat-grid-list cols="2" rowHeight="50px">
+                                    <mat-grid-list cols="2" rowHeight="55px">
                                         <ng-container
                                             *ngFor="
                                                 let transactions of allTransactionsList[transactionDate];
@@ -1239,7 +1260,7 @@
                                                             class="text-gray mr-r05"
                                                             >{{ localeData?.to }}</span
                                                         >
-                                                        <span>{{
+                                                        <span class="mr-r15">{{
                                                             transactions?.inventory
                                                                 ? transactions?.particular?.name +
                                                                   " (" +
@@ -1438,13 +1459,15 @@
                                     let i = index;
                                     trackBy: trackByTransactionUniqueName
                                 "
+                                (touchend)="showUpdateLedgerModalIpad(txn)"
                                 (dblclick)="showUpdateLedgerModal(txn)"
                                 (keydown.enter)="showUpdateLedgerModal(txn)"
                                 [ngClass]="{
                                     'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked
                                 }"
                                 [matTooltip]="txn.description"
-                                [matTooltipPosition]="'right'"
+                                [matTooltipPosition]="'above'"
+                                matTooltipClass="tooltip-black"
                                 (mouseover)="entryHovered(txn.entryUniqueName)"
                                 (mouseout)="selectedTrxWhileHovering = ''"
                             >
@@ -1486,6 +1509,7 @@
                                             (click)="downloadAttachedFile(txn.attachedFileUniqueName, $event)"
                                             [matTooltip]="localeData?.download_file + ' : ' + txn.attachedFileName"
                                             [matTooltipPosition]="'right'"
+                                            matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-download-circle pull-left"></i>
                                         </span>
@@ -1505,6 +1529,7 @@
                                                 txn.voucherNumber
                                             "
                                             [matTooltipPosition]="'right'"
+                                            matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-download-circle pull-left"></i>
                                         </span>
@@ -1514,7 +1539,7 @@
                                 <mat-grid-tile
                                     [ngClass]="{ 'multicurrency-amount': isLedgerAccountAllowsMultiCurrency }"
                                     colspan="1"
-                                    class="text-right no-right-border"
+                                    class="text-right no-right-border flex-column align-items-end"
                                     [attr.data-title]="commonLocaleData?.app_amount"
                                 >
                                     <amount-field
@@ -1557,6 +1582,7 @@
                                                             [(ngModel)]="lc.blankLedger.entryDate"
                                                             [placeholder]="lc.formatPlaceholder"
                                                             (dateSelected)="getInvoiceListsForCreditNote(true)"
+                                                            (datepickerState)="datepickerState($event)"
                                                         ></giddh-datepicker>
                                                     </div>
                                                 </mat-grid-tile>
@@ -1593,6 +1619,7 @@
                                                             (onShow)="isSelectOpen = true"
                                                             (onHide)="onSelectHide()"
                                                             (selected)="selectAccount($event, txn)"
+                                                            (onClear)="selectAccount($event, txn, true)"
                                                             (keydown)="keydownPressed($event)"
                                                             [placeholder]="localeData?.to_select_accounts"
                                                             [notFoundLink]="true"
@@ -1693,6 +1720,7 @@
                                                     isLedgerAccountAllowsMultiCurrency
                                                 "
                                                 [inputMaskFormat]="inputMaskFormat"
+                                                (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                 (changeTransactionType)="toggleTransactionType($event)"
                                                 [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
                                                 (resetBlankLedger)="resetBlankTransaction()"
@@ -1836,6 +1864,7 @@
                                     let i = index;
                                     trackBy: trackByTransactionUniqueName
                                 "
+                                (touchend)="showUpdateLedgerModalIpad(txn)"
                                 (dblclick)="showUpdateLedgerModal(txn)"
                                 vr-item
                                 tabindex="-1"
@@ -1844,7 +1873,8 @@
                                     'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked
                                 }"
                                 [matTooltip]="txn.description"
-                                [matTooltipPosition]="'right'"
+                                [matTooltipPosition]="'above'"
+                                matTooltipClass="tooltip-black"
                                 (mouseover)="entryHovered(txn.entryUniqueName)"
                                 (mouseout)="selectedTrxWhileHovering = ''"
                             >
@@ -1885,6 +1915,7 @@
                                             (click)="downloadAttachedFile(txn.attachedFileUniqueName, $event)"
                                             [matTooltip]="localeData?.download_file + ' : ' + txn.attachedFileName"
                                             [matTooltipPosition]="'right'"
+                                            matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-download-circle pull-left"></i>
                                         </span>
@@ -1904,6 +1935,7 @@
                                                 txn.voucherNumber
                                             "
                                             [matTooltipPosition]="'right'"
+                                            matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-download-circle pull-left"></i>
                                         </span>
@@ -1913,7 +1945,7 @@
                                     colspan="1"
                                     [ngClass]="{ 'multicurrency-amount': isLedgerAccountAllowsMultiCurrency }"
                                     [attr.data-title]="commonLocaleData?.app_amount"
-                                    class="position-relative text-right no-right-border"
+                                    class="position-relative text-right no-right-border flex-column align-items-end"
                                 >
                                     <amount-field
                                         [amount]="txn.amount"
@@ -1948,6 +1980,7 @@
                                                         <span class="ledger-checkbox pull-left"> </span>
                                                         <giddh-datepicker
                                                             name="bsdateledger"
+                                                            (datepickerState)="datepickerState($event)"
                                                             [(ngModel)]="lc.blankLedger.entryDate"
                                                             [placeholder]="lc.formatPlaceholder"
                                                         ></giddh-datepicker>
@@ -1985,6 +2018,7 @@
                                                             (onHide)="onSelectHide()"
                                                             [(ngModel)]="txn.particular"
                                                             (selected)="selectAccount($event, txn)"
+                                                            (onClear)="selectAccount($event, txn, true)"
                                                             [showClear]="false"
                                                             [placeholder]="localeData?.by_select_accounts"
                                                             (keydown)="keydownPressed($event)"
@@ -2087,6 +2121,7 @@
                                                 [isLedgerAccountAllowsMultiCurrency]="
                                                     isLedgerAccountAllowsMultiCurrency
                                                 "
+                                                (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                 (changeTransactionType)="toggleTransactionType($event)"
                                                 [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
                                                 (resetBlankLedger)="resetBlankTransaction()"
@@ -2120,7 +2155,8 @@
                                             <span
                                                 *ngIf="ledgerTxnBalance?.closingBalance?.type === 'CREDIT'"
                                                 [matTooltip]="lc.ledgerUnderStandingObj.balanceText.cr"
-                                                [matTooltipPosition]="'left'"
+                                                [matTooltipPosition]="'right'"
+                                                matTooltipClass="tooltip-black"
                                             >
                                                 {{ localeData?.to_balance_cf }}:
                                                 <span class="digit-blue">
@@ -2138,7 +2174,7 @@
                                     </tr>
                                     <tr class="total-col">
                                         <td colspan="12" class="col-xs-12 text-right white h32 border-top pd-r1">
-                                            <div class="d-flex flex-column">
+                                            <div class="d-flex flex-column align-items-end">
                                                 <span class="bd-rt padding-ledger">
                                                     <amount-field
                                                         [amount]="lc.reckoningDebitTotal"
@@ -2170,7 +2206,8 @@
                                             <span
                                                 *ngIf="ledgerTxnBalance?.closingBalance?.type === 'DEBIT'"
                                                 [matTooltip]="lc.ledgerUnderStandingObj.balanceText.dr"
-                                                [matTooltipPosition]="'left'"
+                                                [matTooltipPosition]="'right'"
+                                                matTooltipClass="tooltip-black"
                                             >
                                                 <!-- By -->
                                                 {{ localeData?.by_balance_cf }}:
@@ -2187,7 +2224,7 @@
                                     </tr>
                                     <tr class="total-col">
                                         <td colspan="12" class="col-xs-12 text-right white h32 border-top pd-r1">
-                                            <div class="d-flex flex-column">
+                                            <div class="d-flex flex-column align-items-end">
                                                 <span class="bd-rt padding-ledger">
                                                     <amount-field
                                                         [amount]="lc.reckoningCreditTotal"
@@ -2396,7 +2433,7 @@
                                                 >
                                                 </amount-field>
                                                 &nbsp;
-                                                <span class="capitalize">{{ commonLocaleData?.app_cr }}</span>
+                                                <span class="text-capitalize">{{ commonLocaleData?.app_cr }}</span>
                                             </h3>
                                             <h3
                                                 class="digit-blue sub-total font-12 d-inline-flex"
@@ -2412,7 +2449,7 @@
                                                 >
                                                 </amount-field>
                                                 &nbsp;
-                                                <span class="capitalize">{{ commonLocaleData?.app_cr }}</span>
+                                                <span class="text-capitalize">{{ commonLocaleData?.app_cr }}</span>
                                             </h3>
                                         </div>
                                     </div>
@@ -2428,7 +2465,7 @@
                                                 >
                                                 </amount-field>
                                                 &nbsp;
-                                                <span class="capitalize">{{ commonLocaleData?.app_dr }}</span>
+                                                <span class="text-capitalize">{{ commonLocaleData?.app_dr }}</span>
                                             </h3>
                                             <h3
                                                 class="digit-blue sub-total font-12 d-inline-flex"
@@ -2444,7 +2481,7 @@
                                                 >
                                                 </amount-field>
                                                 &nbsp;
-                                                <span class="capitalize">{{ commonLocaleData?.app_dr }}</span>
+                                                <span class="text-capitalize">{{ commonLocaleData?.app_dr }}</span>
                                             </h3>
                                         </div>
                                     </div>
@@ -2534,6 +2571,7 @@
                                                         ? lc.ledgerUnderStandingObj.balanceText.dr
                                                         : lc.ledgerUnderStandingObj.balanceText.cr
                                                 "
+                                                matTooltipClass="tooltip-black"
                                             >
                                                 <amount-field
                                                     [amount]="ledgerTxnBalance?.convertedClosingBalance?.amount"
@@ -2558,6 +2596,9 @@
                     </section>
                 </div>
             </div>
+
+            <div class="show-if-ledger-open" *ngIf="isMoreDetailsOpened"></div>
+
             <!-- modal sections -->
             <div *ngIf="isShowLedgerColumnarReportTable">
                 <div class="back-btn text-right pr-1 mt-1 mr-b1">
@@ -2598,7 +2639,7 @@
                 (applyTaxes)="calculateOtherTaxes($event); toggleOtherTaxesAsidePane(null)"
             >
             </app-aside-menu-sales-other-taxes>
-            <!-- update ladger entry popup -->
+            <!-- update ledger entry popup -->
             <ng-template #updateLedgerModal>
                 <update-ledger-entry-panel
                     [defaultSuggestions]="defaultSuggestions"
@@ -2611,7 +2652,13 @@
                     (showQuickAccountModalFromUpdateLedger)="toggleAsidePane()"
                 ></update-ledger-entry-panel>
             </ng-template>
-            <!-- update ladger entry popup -->
+            <!-- update ledger entry popup -->
+            <ng-template #advanceSearchModal>
+                <advance-search-model
+                    [advanceSearchRequest]="advanceSearchRequest"
+                    (closeModelEvent)="closeAdvanceSearchPopup($event)"
+                ></advance-search-model>
+            </ng-template>
             <!-- endregion -->
             <ng-template #datepickerTemplate>
                 <div class="datepicker-modal">

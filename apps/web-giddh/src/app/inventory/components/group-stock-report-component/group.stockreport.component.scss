@@ -436,7 +436,7 @@ button.btn.btn-filter {
             background: $deep-sky-blue;
             border: 1px solid $deep-sky-blue;
             color: $white;
-            border-radius: 2px;
+            border-radius: 5px;
             font-size: 14px;
             padding: 7px 8px;
             width: auto;
@@ -477,7 +477,6 @@ button.btn.btn-filter {
         word-break: break-all;
     }
     .right-inventory {
-        width: 43%;
         justify-content: flex-start;
         align-items: flex-start;
         flex-direction: row !important;
@@ -509,11 +508,6 @@ button.btn.btn-filter {
         .btn-group {
             justify-content: flex-end;
         }
-        .transfer-btn {
-            margin-top: 15px;
-            margin-bottom: 15px;
-            margin-right: 0;
-        }
     }
 }
 
@@ -537,21 +531,6 @@ button.btn.btn-filter {
             margin-top: 0;
             margin-bottom: 0;
             margin-right: 8px;
-        }
-    }
-}
-
-@media (min-width: 769px) and (max-width: 860px) {
-    .right-inventory {
-        display: flex;
-        flex-direction: column;
-        .btn-group {
-            justify-content: flex-end;
-        }
-        .transfer-btn {
-            margin-top: 15px;
-            margin-bottom: 15px;
-            margin-right: 0;
         }
     }
 }

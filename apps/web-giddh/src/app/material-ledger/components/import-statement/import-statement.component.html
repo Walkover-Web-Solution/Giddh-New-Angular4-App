@@ -1,5 +1,5 @@
 <div id="import-statement-modal">
-    <div class="modal-header">
+    <div class="modal-header flex-row-reverse">
         <button
             aria-hidden="true"
             class="close"
@@ -10,7 +10,7 @@
         </button>
         <h3 class="unbold" mat-dialog-title>{{ inputData?.localeData?.import_page_heading }}</h3>
     </div>
-    <div class="modal-body mr-b4">
+    <div class="modal-body">
         <form name="importStatementForm" novalidate autocomplete="off">
             <div class="pd-b2 clearfix browse-file-btn">
                 <label class="w100 file-upload-label">{{ inputData?.localeData?.file }} <sup>*</sup></label>
@@ -36,7 +36,7 @@
                             matInput
                             type="password"
                             name="password"
-                            class="form-control mat-field-border pd-0"
+                            class="form-control mat-field-border"
                             [(ngModel)]="postRequest.password"
                         />
                     </label>

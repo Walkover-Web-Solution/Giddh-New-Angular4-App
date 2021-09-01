@@ -1510,7 +1510,6 @@
                                                         </span>
                                                     </span>
                                                 </div>
-
                                                 <div class="hsn-code-dropdown" *ngIf="hsnSacDropdownShow">
                                                     <div class="d-flex wrap-hsn-sac mb-2 mt-3">
                                                         <span>
@@ -1565,7 +1564,7 @@
 
                                                     <div class="btn-group mt-2 pt-1 d-flex">
                                                         <button
-                                                            class="btn btn-sm btn-success"
+                                                            class="btn btn-sm btn-success-green"
                                                             type="button"
                                                             (click)="hsnSacDropdownShow = !hsnSacDropdownShow"
                                                         >
@@ -1890,6 +1889,7 @@
                                                         shippingDate.errors &&
                                                         (shippingDate.dirty || shippingDate.touched)
                                                     "
+                                                    [showToggleIcon]="false"
                                                 >
                                                 </giddh-datepicker>
                                                 <p
@@ -2618,7 +2618,7 @@
                                                                 />
                                                                 <div class="d-flex wrap-hsn-sac mb-2 mt-3">
                                                                     <button
-                                                                        class="btn btn-sm btn-success"
+                                                                        class="btn btn-sm btn-success-green"
                                                                         type="button"
                                                                         (click)="
                                                                             hsnSacDropdownShow = !hsnSacDropdownShow
@@ -2985,6 +2985,7 @@
                                         [class.invalid-inp]="
                                             shippingDate.errors && (shippingDate.dirty || shippingDate.touched)
                                         "
+                                        [showToggleIcon]="false"
                                     >
                                     </giddh-datepicker>
                                     <p
@@ -3243,7 +3244,12 @@
 
                     <!-- region purchase invoice -->
                     <span class="d-inline-block v-align-middle">
-                        <button type="button" class="btn btn-default" (click)="savePurchaseOrder('create')">
+                        <button
+                            type="button"
+                            class="btn btn-default"
+                            [disabled]="isFormSaveInProgress"
+                            (click)="savePurchaseOrder('create')"
+                        >
                             {{ commonLocaleData?.app_save }}
                         </button>
                     </span>
@@ -3256,7 +3262,12 @@
                     <button type="button" class="btn btn-danger d-inline-block v-align-middle" (click)="cancelUpdate()">
                         {{ commonLocaleData?.app_cancel }}
                     </button>
-                    <button type="button" class="btn btn-default" (click)="savePurchaseOrder('update')">
+                    <button
+                        type="button"
+                        class="btn btn-default"
+                        [disabled]="isFormSaveInProgress"
+                        (click)="savePurchaseOrder('update')"
+                    >
                         {{ commonLocaleData?.app_update }}
                     </button>
                 </div>

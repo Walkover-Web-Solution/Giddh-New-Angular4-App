@@ -16,18 +16,18 @@
             <table class="width-100 total-detail-table">
                 <tbody>
                     <tr *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields">
-                        <td class="item-padding qty-unit" *ngIf="currentTxn?.selectedAccount?.stock">
+                        <td class="item-padding qty-unit align-top" *ngIf="currentTxn?.selectedAccount?.stock">
                             <table>
                                 <tbody>
                                     <tr>
-                                        <td class="text-right width-70">
-                                            <label class="mr-r05 font-12">{{ localeData?.qty }}</label>
+                                        <td class="text-right width-70 pd-r05">
+                                            <label class="font-12">{{ localeData?.qty }}</label>
                                             <input
                                                 matInput
                                                 id="ledger-quantity"
                                                 type="text"
                                                 name="inventory_quantity"
-                                                class="form-control text-right mat-field-border pd-0"
+                                                class="form-control text-right mat-field-border"
                                                 [disabled]="
                                                     shouldShowAdvanceReceiptMandatoryFields || isReadOnly
                                                         ? 'disabled'
@@ -39,7 +39,7 @@
                                                 [DecimalPlaces]="4"
                                             />
                                         </td>
-                                        <td [style.width.px]="79" *ngIf="currentTxn?.unitRate">
+                                        <td [style.width.px]="79" *ngIf="currentTxn?.unitRate" class="text-right">
                                             <label class="font-12">{{ commonLocaleData?.app_unit }}</label>
                                             <mat-select
                                                 id="ledger-unit"
@@ -60,9 +60,8 @@
                                 </tbody>
                             </table>
                         </td>
-                        <td class="text-center table-plus" *ngIf="currentTxn?.selectedAccount?.stock">
-                            <label class="d-block">&nbsp;</label>
-                            <label class="font-20 pd-t04">x</label>
+                        <td class="icon-box" *ngIf="currentTxn?.selectedAccount?.stock">
+                            <label class="icon-cross"></label>
                         </td>
                         <td class="item-padding text-right price" *ngIf="currentTxn?.selectedAccount?.stock">
                             <label class="font-12">{{ localeData?.price }}</label>
@@ -80,7 +79,7 @@
                                 (ngModelChange)="changePrice($event)"
                                 name="unitPrice"
                                 (keyup)="isInclusiveEntry = false"
-                                class="form-control text-right mat-field-border pd-0"
+                                class="form-control text-right mat-field-border"
                             />
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
@@ -96,9 +95,8 @@
                             </p>
                         </td>
 
-                        <td class="text-center equal-2" *ngIf="currentTxn?.selectedAccount?.stock">
-                            <label class="d-block">&nbsp;</label>
-                            <label class="font-20">=</label>
+                        <td class="icon-box" *ngIf="currentTxn?.selectedAccount?.stock">
+                            <label class="font-18 mr-t05">=</label>
                         </td>
 
                         <td
@@ -113,7 +111,7 @@
                                 *ngIf="!isAdvanceReceipt"
                                 type="text"
                                 name="amount"
-                                class="form-control text-right mat-field-border pd-0"
+                                class="form-control text-right mat-field-border"
                                 [prefix]="selectedPrefixForCurrency"
                                 [suffix]="selectedSuffixForCurrency"
                                 [mask]="inputMaskFormat"
@@ -129,7 +127,7 @@
                                 *ngIf="isAdvanceReceipt"
                                 type="text"
                                 name="advanceAmount"
-                                class="form-control text-right mat-field-border pd-0"
+                                class="form-control text-right mat-field-border"
                                 [prefix]="selectedPrefixForCurrency"
                                 [suffix]="selectedSuffixForCurrency"
                                 disabled
@@ -157,10 +155,9 @@
                                 currentTxn?.selectedAccount &&
                                 !shouldShowAdvanceReceiptMandatoryFields
                             "
-                            class="text-center table-minus"
+                            class="icon-box"
                         >
-                            <label class="d-block">&nbsp;</label>
-                            <label class="font-20">-</label>
+                            <label class="icon-minus"></label>
                         </td>
                         <!--discount-->
                         <td
@@ -200,25 +197,23 @@
                         </td>
 
                         <td
-                            class="text-center equal-2"
+                            class="icon-box"
                             *ngIf="
                                 (currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) &&
                                 (companyTaxesList$ | async)?.length
                             "
                         >
-                            <label class="d-block">&nbsp;</label>
-                            <label class="font-20">+</label>
+                            <label class="icon-plus"></label>
                         </td>
 
                         <td
-                            class="text-center equal-2"
+                            class="icon-box"
                             *ngIf="
                                 (currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) &&
                                 !(companyTaxesList$ | async)?.length
                             "
                         >
-                            <label class="d-block">&nbsp;</label>
-                            <label class="font-20">=</label>
+                            <label class="font-18 mr-t05">=</label>
                         </td>
 
                         <td
@@ -291,14 +286,13 @@
                         </td>
 
                         <td
-                            class="text-center equal-2"
+                            class="icon-box"
                             *ngIf="
                                 (currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) &&
                                 (companyTaxesList$ | async)?.length
                             "
                         >
-                            <label class="d-block">&nbsp;</label>
-                            <label class="font-20">=</label>
+                            <label class="font-18 mr-t05">=</label>
                         </td>
 
                         <td
@@ -317,7 +311,7 @@
                                 [suffix]="selectedSuffixForCurrency"
                                 [mask]="inputMaskFormat"
                                 name="totalAmount"
-                                class="form-control text-right mat-field-border pd-0"
+                                class="form-control text-right mat-field-border"
                                 [(ngModel)]="currentTxn.total"
                                 (blur)="calculateAmount()"
                                 [disabled]="isAdvanceReceipt ? 'disabled' : null"
@@ -383,7 +377,7 @@
                                     <input
                                         matInput
                                         id="ledger-other-tax-disabled"
-                                        class="text-right form-control mr-l1 mat-field-border pd-0"
+                                        class="text-right form-control mr-l1 mat-field-border"
                                         disabled="disabled"
                                         [(ngModel)]="blankLedger.otherTaxesSum"
                                         name="entry.otherTaxesSum"
@@ -452,7 +446,7 @@
 
         <mat-accordion multi>
             <mat-expansion-panel class="mr-t1 overflow-visible">
-                <mat-expansion-panel-header>
+                <mat-expansion-panel-header (click)="toggleMoreDetail()">
                     <mat-panel-title>{{ localeData?.more_details }}</mat-panel-title>
                 </mat-expansion-panel-header>
                 <div class="more-details">
@@ -461,7 +455,7 @@
                             <table>
                                 <tr>
                                     <td class="select2-parent pd-r1">
-                                        <div class="form-group">
+                                        <div class="form-group mb-0">
                                             <label class="default-color">{{
                                                 commonLocaleData?.app_voucher_type
                                             }}</label>
@@ -495,7 +489,7 @@
                                             id="ledger-invoice-number"
                                             type="text"
                                             [placeholder]="commonLocaleData?.app_invoice_no"
-                                            class="form-control mat-field-border pd-0"
+                                            class="form-control mat-field-border"
                                             [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher"
                                         />
                                     </td>
@@ -632,7 +626,7 @@
                                 </tr>
                             </table>
 
-                            <table class="mr-t1">
+                            <table class="mr-t1 cheque-no-clear">
                                 <tbody>
                                     <tr>
                                         <td class="pd-r1">
@@ -645,7 +639,7 @@
                                                 id="ledger-cheque-number"
                                                 type="text"
                                                 [placeholder]="localeData?.cheque_number_placeholder"
-                                                class="form-control mat-field-border pd-0"
+                                                class="form-control mat-field-border"
                                                 [(ngModel)]="blankLedger.chequeNumber"
                                             />
                                         </td>
@@ -656,7 +650,7 @@
                                             <giddh-datepicker
                                                 class="db"
                                                 [showToggleIcon]="false"
-                                                [cssClass]="'mat-field-border bdr form-control pd-0'"
+                                                [cssClass]="'mat-field-border bdr form-control'"
                                                 [disabled]="isReadOnly"
                                                 id="cheque-clearance-date"
                                                 (datepickerState)="datepickerState($event)"
@@ -839,7 +833,7 @@
                         <li>
                             <a
                                 mat-button
-                                class="text-light pl-2 pr-2"
+                                class="text-light mr-0 min-width-auto"
                                 href="javascript:void(0)"
                                 (click)="currencyChange()"
                             >
@@ -898,10 +892,9 @@
             <div class="col-12 col-md-12 pd-t1">
                 <button
                     mat-raised-button
-                    color="warn"
                     id="ledger-reset-button"
                     [hidden]="isBankTransaction"
-                    class="pull-left"
+                    class="btn btn-danger float-left"
                     (click)="resetPanel()"
                 >
                     {{ commonLocaleData?.app_reset }}
@@ -909,7 +902,7 @@
 
                 <div class="pull-right xs-d-block">
                     <button
-                        mat-button
+                        mat-raised-button
                         id="ledger-add-button-dr"
                         [hidden]="isBankTransaction"
                         class="btn btn-default btn-sm"
@@ -919,10 +912,10 @@
                     </button>
 
                     <button
-                        mat-button
+                        mat-raised-button
                         id="ledger-add-button-cr"
                         [hidden]="isBankTransaction"
-                        class="btn btn-default btn-sm mr-l2"
+                        class="btn btn-default btn-sm"
                         (click)="addToDrOrCr('CREDIT', $event)"
                     >
                         {{ localeData?.add_to_cr }}
@@ -930,9 +923,8 @@
 
                     <button
                         mat-raised-button
-                        color="primary"
+                        class="btn btn-success"
                         id="saveLedger"
-                        class="mr-0 mr-l2"
                         [disabled]="isFileUploading || isReadOnly"
                         [ladda]="isLedgerCreateInProcess$ | async"
                         (click)="saveLedger()"
@@ -967,13 +959,20 @@
 <ng-template #rcmEntryCheckbox>
     <div *ngIf="currentTxn?.shouldShowRcmEntry" class="rcm-entry pd-b1 mt-b1">
         <mat-checkbox
+            #rcmCheckbox
             color="primary"
             [disabled]="isReadOnly"
             id="tourist-scheme-1"
-            [ngModel]="isRcmEntry"
-            (change)="!isReadOnly ? toggleRcmCheckbox($event) : ''"
-            ><span [innerHTML]="localeData?.transaction_available_rc"></span
-        ></mat-checkbox>
+            [(ngModel)]="isRcmEntry"
+            (change)="changeRcmCheckboxState($event)"
+            class="mr-r1"
+        >
+        </mat-checkbox>
+        <label
+            for="tourist-scheme-1"
+            (click)="!isReadOnly ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''"
+            [innerHTML]="localeData?.transaction_available_rc"
+        ></label>
         <span class="text-light font-12"> ({{ localeData?.tax_compulsory }})</span>
     </div>
 </ng-template>

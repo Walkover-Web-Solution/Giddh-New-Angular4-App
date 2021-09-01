@@ -46,10 +46,6 @@ table.width-100 {
     font-size: 24px;
 }
 
-#entryModal {
-    max-height: 100vh !important;
-}
-
 ng-select > div i.fa.fa-caret-down::before {
     color: $white;
     font-size: 20px;
@@ -146,6 +142,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     align-items: center;
     padding: 10px 10px 0 10px;
     font-size: 12px;
+    height: 60px;
     label {
         margin-top: 10px;
     }
@@ -162,8 +159,6 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 }
 
 .download-invoice-ledger > i {
-    top: 18px;
-    position: relative;
     background-color: $white;
     padding-left: 5px;
 }
@@ -204,13 +199,6 @@ span.eligible-ITC {
 
 .pd-l05 {
     padding-left: 5px;
-}
-
-.adjustment-field {
-    max-height: 160px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    min-height: 160px;
 }
 
 .ledger-bottom {
@@ -349,7 +337,6 @@ p.edit-message {
     .total-detail-table .table-amount {
         width: 100%;
         flex: 0 0 30%;
-        max-width: 30%;
         white-space: initial;
     }
 }
@@ -495,5 +482,11 @@ p.edit-message {
 .total-detail-table {
     .mat-input-element {
         box-sizing: border-box !important;
+    }
+}
+
+@media (max-width: 1075px) {
+    .icon-box {
+        padding: 10px 0px 0 0px;
     }
 }

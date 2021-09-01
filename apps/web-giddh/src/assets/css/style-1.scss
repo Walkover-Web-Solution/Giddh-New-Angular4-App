@@ -905,9 +905,13 @@ aside-menu-account .container-fluid {
 
 /*ledger style*/
 
-.ledg-head a i {
-    font-size: 24px;
-    line-height: 34px;
+.ledg-head {
+    a {
+        i {
+            font-size: 24px;
+            line-height: 34px;
+        }
+    }
 }
 
 #eledgerwrap .alert-danger {
@@ -1532,7 +1536,6 @@ table:focus {
 @media only screen and (max-width: 1440px) {
     body.unresponsive {
         width: 100%;
-        overflow-x: hidden !important;
     }
     .container {
         width: 100%;
@@ -1878,17 +1881,7 @@ ul.pills li {
 
 /* tax section on manage groups and accounts*/
 
-.download-invoice-ledger {
-    position: absolute;
-    right: 0;
-    top: 0px;
-    height: 20px;
-    padding: 0 15px;
-    cursor: pointer;
-}
-
 .download-invoice-ledger > i {
-    top: 10px;
     color: $gray;
 }
 
@@ -1942,10 +1935,8 @@ ul.pills li {
     text-decoration: underline;
 }
 
-@media only screen and (max-width: 1440px) and (orientation: landscape) {
-    .pop-panel {
-        max-width: 480px;
-    }
+.tbpl-list .list-inline {
+    line-height: normal;
 }
 
 .email-type li label input {
@@ -2168,7 +2159,7 @@ ul.pills li {
 
 #entryModal {
     .modal-body {
-        padding: 15px 20px 15px;
+        padding: 15px 20px;
         display: flex;
         flex-direction: column;
     }
@@ -2573,6 +2564,29 @@ form#groupDetailForm {
         flex-direction: column;
         margin: 0 !important;
     }
+    .expense-ledger {
+        update-ledger-entry-panel {
+            .modal-body {
+                .entry-popup {
+                    .ledger-head {
+                        display: none !important;
+                    }
+                    .custom-tabs {
+                        margin-left: -15px;
+                        margin-right: -15px;
+                        .nav.nav-tabs {
+                            position: relative !important;
+                            width: 100% !important;
+                            top: 0 !important;
+                            margin: 0 !important;
+                            left: 0 !important;
+                            right: 0 !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 @media screen and (max-width: 768px) {
     .table-container.trial-balance {
@@ -2668,6 +2682,10 @@ form#groupDetailForm {
     #setting-tab .nav > li > a:hover {
         color: inherit !important;
     }
+
+    .cdk-overlay-pane {
+        max-width: 95vw !important;
+    }
 }
 
 @media (min-width: 768px) and (max-width: 1019px) {
@@ -2682,16 +2700,20 @@ form#groupDetailForm {
     font-size: 12px !important;
 }
 
+.tooltip-inner {
+    background: $black !important;
+}
+
 /**
 * aside pane styles
 */
 
 .aside-pane {
-    background-color: #f4f5f8;
+    background-color: $solitude;
     position: relative;
     z-index: 5;
     height: 100vh;
-    color: #000000;
+    color: $black;
 }
 .aside-pane {
     max-width: 760px;
@@ -2743,9 +2765,6 @@ form#groupDetailForm {
 .mat-dialog-title {
     margin-bottom: 0px !important;
 }
-mat-dialog-container .modal-header {
-    padding: 11px !important;
-}
 .mat-radio-button {
     margin-right: 16px;
 }
@@ -2755,7 +2774,9 @@ mat-dialog-container .modal-header {
 .advance-search,
 #share-modal,
 #exportModal,
-.other-details-section {
+.other-details-section,
+.daybook-advance-search,
+.petty-cash-reject-modal {
     .mat-form-field {
         .mat-form-field-wrapper {
             padding-bottom: 0 !important;
@@ -2774,24 +2795,24 @@ mat-dialog-container .modal-header {
         }
     }
 }
-.other-details-section {
-    .mat-form-field {
-        input {
-            border: 1px solid $gainsboro !important;
-            height: 24px;
-            border-radius: 5px;
-            padding: 6px;
-        }
-    }
-}
 .password-label,
 .clearance-date {
     .mat-form-field-appearance-fill .mat-form-field-flex {
         background-color: $white !important;
     }
+}
+giddh-datepicker {
+    .mat-form-field {
+        width: 100% !important;
+    }
+}
+.other-details-section,
+.collapse-pane,
+.left-col-new,
+.right-col-new {
     giddh-datepicker {
         .mat-form-field {
-            width: 100% !important;
+            min-width: 100% !important;
         }
     }
 }
@@ -2819,7 +2840,9 @@ mat-dialog-container .modal-header {
                     }
                     &:nth-child(3) {
                         .mat-grid-tile-content {
-                            justify-content: flex-end !important;
+                            justify-content: center !important;
+                            align-items: flex-end;
+                            flex-direction: column;
                         }
                     }
                 }
@@ -2828,14 +2851,32 @@ mat-dialog-container .modal-header {
     }
 }
 
+.mat-expansion-panel {
+    .mat-expansion-panel-header {
+        padding: 0 15px !important;
+    }
+    .mat-expansion-panel-body {
+        padding: 0 0px 0px !important;
+    }
+    sh-select {
+        .chip {
+            height: auto !important;
+            word-break: break-word !important;
+        }
+    }
+}
+
+.mat-button,
 .mat-raised-button {
-    padding: 0 !important;
+    margin-right: 15px !important;
+    height: 36px;
 }
 
 .ledger-head {
     .mat-grid-tile-content {
         justify-content: space-between !important;
         padding: 0 10px;
+        font-weight: 600;
     }
 }
 
@@ -2882,13 +2923,24 @@ mat-dialog-container .modal-header {
         right: 10px !important;
         position: absolute;
     }
-    input.mat-input-element {
-        box-sizing: border-box !important;
-    }
+}
+.mat-input-element {
+    box-sizing: border-box !important;
 }
 update-ledger-entry-panel .ledger-main .mat-form-field {
     min-width: auto !important;
 }
+
+.expense-ledger {
+    update-ledger-entry-panel {
+        #entryModal {
+            .modal-body {
+                padding: 15px 0px !important;
+            }
+        }
+    }
+}
+
 .mat-snack-bar-container {
     color: $white !important;
     font-size: 13px;
@@ -2905,7 +2957,9 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
 .mat-snack-bar-container.info {
     background-color: $info-toast !important;
 }
-.mat-form-field-appearance-fill .mat-form-field-flex {
+.mat-form-field-appearance-fill .mat-form-field-flex,
+.mat-form-field-ripple,
+.mat-form-field-appearance-fill .mat-form-field-underline::before {
     background: none !important;
 }
 .overflow-visible {
@@ -2916,40 +2970,199 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
     font-family: "opensans-semibold";
     font-size: 14px !important;
 }
-.mat-form-field-appearance-fill .mat-form-field-underline::before,
-.mat-form-field-appearance-fill .mat-form-field-underline .mat-form-field-ripple {
-    background-color: transparent !important;
+.mat-header-cell.text-right {
+    .mat-sort-header-container {
+        justify-content: flex-end !important;
+    }
 }
-.main-expense-details .mat-form-field-appearance-fill .mat-form-field-flex,
-.petty-cash-reject-modal .mat-form-field-appearance-fill .mat-form-field-flex,
-.petty-cash-reject-modal .mat-form-field-wrapper {
-    padding: 0px !important;
+.mat-header-cell,
+.mat-cell {
+    font-weight: 400;
+    padding: 14px 10px !important;
+    text-transform: capitalize;
+    display: table-cell !important;
 }
-.expense-head .mat-raised-button {
-    padding: 0 16px !important;
+.mat-table tbody .mat-header-row:hover td {
+    background: $light-alice-blue;
+}
+.mat-table tbody > tr > td.no-wrap {
+    white-space: nowrap !important;
+}
+table.mat-table {
+    border-spacing: 2px !important;
+}
+th.mat-header-cell:first-of-type,
+td.mat-cell:first-of-type,
+td.mat-footer-cell:first-of-type {
+    border-left: none;
+    white-space: normal !important;
+    word-break: inherit;
+}
+th.mat-header-cell,
+td.mat-cell,
+td.mat-footer-cell {
+    vertical-align: middle !important;
+    word-break: break-word;
+    white-space: nowrap;
+    border-bottom-width: 1px;
+    border-bottom-color: $gainsboro !important;
+}
+.mat-header-row,
+.mat-row {
+    display: table-row !important;
+    vertical-align: inherit;
+    border-color: inherit;
+}
+.mat-row,
+.mat-header-row,
+.mat-footer-row {
+    &:after {
+        display: none !important;
+    }
 }
 .responsive-label {
     display: none;
 }
-@media (max-width: 767px) {
-    .mat-mobile-view {
-        .responsive-label {
-            display: inline-block;
-            color: $midnight-blue !important;
-            font-family: "opensans-semibold";
+
+.mat-dialog-container {
+    height: auto !important;
+}
+.mat-snack-bar-container {
+    padding: 0px !important;
+
+    &.error {
+        .snack-container {
+            background-image: url("../images/failure.svg");
+        }
+    }
+    &.success {
+        .snack-container {
+            background-image: url("../images/success.svg");
+        }
+    }
+    &.warning {
+        .snack-container {
+            background-image: url("../images/exclamation-white.svg");
+        }
+    }
+    &.info {
+        .snack-container {
+            background-image: url("../images/info-white.svg");
+        }
+    }
+}
+.other-tax {
+    .mat-checkbox-layout {
+        .mat-checkbox-label {
             font-size: 14px !important;
-            min-width: 130px;
         }
-        .mat-header-row {
-            display: none;
+    }
+}
+.petty-cash {
+    .mat-tab-group {
+        .mat-tab-header {
+            background: $alice-blue-light !important;     
+            .mat-tab-label-container {
+                padding-left: 15px !important;
+                .mat-tab-list {
+                    .mat-tab-label {
+                        padding: 0 35px 0 0 !important;
+                        opacity: 1 !important;
+                        min-width: auto !important;
+                        height: 44px !important;
+                        color: $night-rider !important;
+                        .mat-tab-label-content {
+                            margin-bottom: 5px !important;
+                        }
+                        &:focus {
+                            font-weight: 800 !important;
+                            color: $nero !important;
+                        }
+                        &.active {
+                            font-weight: 800 !important;
+                            color: $nero !important;
+                        }
+                    }
+                    .mat-ink-bar {
+                        background-color: $vivid-blue !important;
+                        height: 4px !important;
+                        width: 60px !important;
+                    }
+                }
+            }
         }
-        .mat-row {
-            flex-direction: column;
-            align-items: start;
-            padding: 8px 2px;
+    }
+    .bg-white {
+        .form-group {
+            .mat-form-field {
+                .mat-form-field-flex {
+                    padding: 0 !important;
+                }
+            }
         }
-        .mat-cell {
-            padding-left: 0px !important;
+    }
+}
+
+.sidebar-overlay{
+    .mat-tab-body-active {
+        z-index: 991 !important;
+    }
+}
+
+.mr-0 {
+    margin-right: 0 !important;
+}
+.disable-ripple {
+    .mat-radio-ripple {
+        display: none;
+    }
+}
+
+.tooltip-black {
+    background: $black !important;
+    color: $white;
+    font-size: 12px !important;
+}
+
+.mat-button-focus-overlay {
+    background: transparent !important;
+}
+
+@media (max-width: 767px) {
+    .sidebar-overlay {
+        .mat-tab-group {
+            .mat-tab-body-active {
+                z-index: 9999 !important;
+            }
+        }
+    }
+    .petty-cash{
+        .mat-tab-group {
+            .mat-tab-header {
+                position: fixed;
+                width: 100%;
+                z-index: 9;   
+            }
+            .mat-tab-body-wrapper{
+                padding-top: 60px;
+            }
+        }
+    }
+}
+
+@media (max-width: 1075px) {
+    .mat-button,
+    .mat-raised-button {
+        padding: 7px 10px !important;
+        line-height: normal !important;
+    }
+}
+
+@media (max-width: 1300px) {
+    .ledger-bottom {
+        .accordion-expansion {
+            flex: 0 0 100% !important;
+            max-width: 100% !important;
         }
     }
 }

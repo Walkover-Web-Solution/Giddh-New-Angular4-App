@@ -82,6 +82,7 @@
                             <div class="inner-container">
                                 <div
                                     class="show-on-small-screen"
+                                    [ngClass]="{ 'pending-sales-balance-due': isPendingSales }"
                                     *ngIf="isSalesInvoice || isProformaInvoice || isEstimateInvoice"
                                 >
                                     <div class="text-right">
@@ -105,7 +106,6 @@
                                             </span>
 
                                             <!-- added multicurrency feature make it functional to change into appropriate currency -->
-
                                             <span
                                                 class="sp-rupees d-flex justify-content-end"
                                                 *ngIf="isMulticurrencyAccount"
@@ -356,7 +356,7 @@
                                         <ng-container>
                                             <section
                                                 [ngClass]="{
-                                                    ' billing-address-wrap': !invFormData.voucherDetails.customerName
+                                                    'billing-address-wrap': !invFormData.voucherDetails.customerName
                                                 }"
                                             >
                                                 <div class="wrap-billing-address clearfix w-100">
@@ -737,7 +737,6 @@
                                                                                         commonLocaleData?.app_gstin
                                                                                     "
                                                                                 />
-
                                                                                 <input
                                                                                     [readonly]="autoFillShipping"
                                                                                     maxLength="15"
@@ -1901,7 +1900,7 @@
                                             {{ transaction.sku_and_customfields }}
                                         </p>
                                         <div class="date-hsn-code">
-                                            <div class="row">
+                                            <div class="row mr-0 ml-0">
                                                 <div class="col-6 col-sm-6 pr-0" *ngIf="entry.entryDate">
                                                     <div class="entry-date">
                                                         <label>{{ localeData?.entry_date }}: </label>
@@ -2432,7 +2431,7 @@
 
                                                                 <div class="btn-group mt-2 pt-1 d-flex">
                                                                     <button
-                                                                        class="btn btn-sm btn-success"
+                                                                        class="btn btn-sm btn-success-green"
                                                                         type="button"
                                                                         (click)="hsnDropdownShow = !hsnDropdownShow"
                                                                     >
@@ -2805,6 +2804,7 @@
                                                             shippingDate.errors &&
                                                             (shippingDate.dirty || shippingDate.touched)
                                                         "
+                                                        [showToggleIcon]="false"
                                                     >
                                                     </giddh-datepicker>
 
@@ -4084,7 +4084,7 @@
                                                                 type="text"
                                                                 [disabled]="!transaction.isStockTxn"
                                                                 (blur)="handleQuantityBlur(entry, transaction)"
-                                                                placeholder="Quantity"
+                                                                [placeholder]="commonLocaleData?.app_quantity"
                                                                 decimalDigitsDirective
                                                                 name="transaction.quantity_{{ entryIdx }}"
                                                                 class="form-control text-right"
@@ -4485,6 +4485,7 @@
                                                         shippingDate.errors &&
                                                         (shippingDate.dirty || shippingDate.touched)
                                                     "
+                                                    [showToggleIcon]="false"
                                                 >
                                                 </giddh-datepicker>
                                                 <p

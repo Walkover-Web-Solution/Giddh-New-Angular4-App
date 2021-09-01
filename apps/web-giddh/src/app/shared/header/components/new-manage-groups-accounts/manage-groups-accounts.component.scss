@@ -31,6 +31,15 @@
     height: calc(100vh - 70px);
 }
 
+.close {
+    color: $white !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+    font-size: 30px !important;
+    &:hover {
+        color: $white !important;
+    }
+}
 @media (max-height: 800px) {
     .custom-filed-list-wrapper {
         height: 550px;

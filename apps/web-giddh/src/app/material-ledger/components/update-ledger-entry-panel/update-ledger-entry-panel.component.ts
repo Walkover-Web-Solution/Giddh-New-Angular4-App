@@ -86,6 +86,8 @@ const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make ad
 export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
     /** Instance of mat accordion */
     @ViewChild(MatAccordion) public accordion: MatAccordion;
+    /** Instance of RCM checkbox */
+    @ViewChild("rcmCheckbox") public rcmCheckbox: ElementRef;
     public vm: UpdateLedgerVm;
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -348,6 +350,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         });
         this.vm.selectedLedger = new LedgerResponse();
+        this.vm.selectedLedger.voucher = { name: '', shortCode: '' };
         this.vm.selectedLedger.otherTaxModal = new SalesOtherTaxesModal();
 
         if (this.isPettyCash) {
@@ -1004,14 +1007,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public getInvoiceListsData(event: any): void {
-        if (event.value === 'rcpt') {
-            if (this.isPettyCash && !this.accountUniqueName) {
-                let message = this.localeData?.account_entry_error;
-                message = message?.replace("[ACCOUNT]", this.pettyCashBaseAccountTypeString);
-                this.toaster.showSnackBar("error", message);
-                return;
-            }
-        } else if (event.value === VoucherTypeEnum.creditNote || event.value === VoucherTypeEnum.debitNote) {
+        if (event.value === VoucherTypeEnum.creditNote || event.value === VoucherTypeEnum.debitNote) {
             this.getInvoiceListsForCreditNote();
             this.vm.selectedLedger.generateInvoice = true;
         }
@@ -1250,16 +1246,39 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     /**
+     * This will reset the state of checkbox and ngModel to make sure we update it based on user confirmation later
+     *
+     * @param {*} event
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+     public changeRcmCheckboxState(event: any): void {
+        if (!this.isPettyCash && this.currentOrganizationType === 'COMPANY' && (this.branches && this.branches.length > 1)) {
+            return;
+        }
+        this.isRcmEntry = !this.isRcmEntry;
+        this.toggleRcmCheckbox(event, 'checkbox');
+    }
+
+    /**
      * Toggle the RCM checkbox based on user confirmation
      *
      * @param {*} event Click event
      * @memberof UpdateLedgerEntryPanelComponent
      */
-    public toggleRcmCheckbox(event: any): void {
+    public toggleRcmCheckbox(event: any, element: string): void {
         if (!this.isPettyCash && this.currentOrganizationType === 'COMPANY' && (this.branches && this.branches.length > 1)) {
             return;
         }
-        this.rcmConfiguration = this.generalService.getRcmConfiguration(event?.checked, this.commonLocaleData);
+        let isChecked; 
+        
+        if(element === "checkbox") {
+            isChecked = event?.checked;
+            this.rcmCheckbox['checked'] = !isChecked;
+        } else {
+            isChecked = !event?._checked;
+        }
+
+        this.rcmConfiguration = this.generalService.getRcmConfiguration(isChecked, this.commonLocaleData);
 
         let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
             width: '630px',
@@ -1281,11 +1300,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public handleRcmChange(action: string): void {
-        if (action === CONFIRMATION_ACTIONS.YES) {
+        if (action === this.commonLocaleData?.app_yes) {
             // Toggle the state of RCM as user accepted the terms of RCM modal
             this.isRcmEntry = !this.isRcmEntry;
             this.vm.isRcmEntry = this.isRcmEntry;
+            this.rcmCheckbox['checked'] = this.isRcmEntry;
             this.vm.generateGrandTotal();
+            this.changeDetectorRef.detectChanges();
         }
     }
 
@@ -2116,7 +2137,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         }
 
                         this.vm.reInitilizeDiscount(resp[0]);
-                        if (this.generalService.currentOrganizationType === OrganizationType.Branch || (this.branches && this.branches.length === 1)) {
+                        if (this.isPettyCash || this.generalService.currentOrganizationType === OrganizationType.Branch || (this.branches && this.branches.length === 1)) {
                             this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
                             this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
                         }

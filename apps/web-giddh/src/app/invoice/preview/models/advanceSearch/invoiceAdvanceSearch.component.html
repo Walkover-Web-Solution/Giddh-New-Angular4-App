@@ -29,6 +29,7 @@
                                     name="invoiceDateRange"
                                     [(ngModel)]="request.invoiceDate"
                                     [placeholder]="commonLocaleData?.app_select_date"
+                                    [showToggleIcon]="false"
                                 >
                                 </giddh-datepicker>
                             </div>
@@ -42,8 +43,8 @@
                     </div>
 
                     <div class="col-md-8 col-sm-12">
-                        <div class="total-amount row mr-0 ml-0">
-                            <div class="col-md-8 col-sm-6 col-6 pl-0 pr-0">
+                        <div class="total-amount row">
+                            <div class="col-md-8 col-sm-6 col-6">
                                 <sh-select
                                     [placeholder]="commonLocaleData?.app_select"
                                     name="entryTotalBy"
@@ -53,7 +54,7 @@
                                 ></sh-select>
                             </div>
 
-                            <div class="col-md-4 col-sm-6 col-6 pr-0">
+                            <div class="col-md-4 col-sm-6 col-6 pl-0">
                                 <input
                                     class="form-control"
                                     type="tel"
@@ -74,8 +75,8 @@
                     </div>
 
                     <div class="col-md-8 col-sm-12">
-                        <div class="row mr-0 ml-0">
-                            <div class="col-md-4 col-sm-6 col-6 pl-0 pr-0">
+                        <div class="row">
+                            <div class="col-md-4 col-sm-6 col-6">
                                 <sh-select
                                     [placeholder]="commonLocaleData?.app_select_action"
                                     [options]="dateOptions"
@@ -84,8 +85,12 @@
                                 ></sh-select>
                             </div>
 
-                            <div class="col-md-8 col-sm-6 col-6 pr-0">
-                                <giddh-datepicker name="invoiceDateRange" [(ngModel)]="request.dueDate">
+                            <div class="col-md-8 col-sm-6 col-6 pl-0">
+                                <giddh-datepicker
+                                    name="invoiceDateRange"
+                                    [(ngModel)]="request.dueDate"
+                                    [showToggleIcon]="false"
+                                >
                                 </giddh-datepicker>
                             </div>
                         </div>
@@ -98,8 +103,8 @@
                     </div>
 
                     <div class="col-md-8 col-sm-12">
-                        <div class="due-amount row mr-0 ml-0">
-                            <div class="col-md-8 col-sm-6 col-6 pl-0 pr-0">
+                        <div class="due-amount row">
+                            <div class="col-md-8 col-sm-6 col-6">
                                 <sh-select
                                     [placeholder]="commonLocaleData?.app_select"
                                     name="entryTotalBy"
@@ -109,7 +114,7 @@
                                 ></sh-select>
                             </div>
 
-                            <div class="col-md-4 col-sm-6 col-6 pr-0">
+                            <div class="col-md-4 col-sm-6 col-6 pl-0">
                                 <input
                                     class="form-control"
                                     type="tel"
@@ -127,8 +132,8 @@
                     </div>
 
                     <div class="col-md-8 col-sm-12">
-                        <div class="status-description row mr-0 ml-0">
-                            <div class="col-md-8 col-sm-12 pl-0 pr-0">
+                        <div class="status-description row">
+                            <div class="col-md-8 col-sm-12">
                                 <sh-select
                                     [placeholder]="commonLocaleData?.app_select_action"
                                     [multiple]="true"
@@ -139,7 +144,7 @@
                                 ></sh-select>
                             </div>
 
-                            <div class="col-sm-4 col-md-4 pr-0"></div>
+                            <div class="col-sm-4 col-md-4 pl-0"></div>
                         </div>
                     </div>
                 </div>
@@ -149,8 +154,8 @@
                     </div>
 
                     <div class="col-md-8 col-sm-12">
-                        <div class="status-description row mr-0 ml-0">
-                            <div class="col-md-8 col-sm-12 pl-0 pr-0 pl-0">
+                        <div class="status-description row">
+                            <div class="col-md-8 col-sm-12">
                                 <sh-select
                                     [placeholder]="commonLocaleData?.app_select_action"
                                     [multiple]="true"
@@ -161,7 +166,7 @@
                                 ></sh-select>
                             </div>
 
-                            <div class="col-sm-4 col-md-4 pr-0"></div>
+                            <div class="col-sm-4 col-md-4 pl-0"></div>
                         </div>
                     </div>
                 </div>
@@ -172,8 +177,8 @@
                     </div>
 
                     <div class="col-md-8 col-sm-12">
-                        <div class="status-description row mr-0 ml-0">
-                            <div class="col-md-8 col-sm-12 pl-0 pr-0">
+                        <div class="status-description row">
+                            <div class="col-md-8 col-sm-12">
                                 <textarea
                                     class="form-control"
                                     name="description"
@@ -181,7 +186,7 @@
                                 ></textarea>
                             </div>
 
-                            <div class="col-sm-4 col-md-4 pr-0"></div>
+                            <div class="col-sm-4 col-md-4 pl-0"></div>
                         </div>
                     </div>
                 </div>
@@ -196,8 +201,8 @@
                     </div>
 
                     <div class="col-sm-8 col-md-8">
-                        <div class="row mr-0 ml-0">
-                            <div class="col-sm-4 col-md-4 pl-0 pr-0">
+                        <div class="row">
+                            <div class="col-sm-4 col-md-4">
                                 <sh-select
                                     [placeholder]="commonLocaleData?.app_select_action"
                                     [options]="dateOptions"
@@ -206,7 +211,7 @@
                                 ></sh-select>
                             </div>
 
-                            <div class="col-sm-8 col-md-8 pr-0">
+                            <div class="col-sm-8 col-md-8 pl-0">
                                 <input
                                     type="text"
                                     name="invoiceDate"
@@ -226,8 +231,8 @@
                     </div>
 
                     <div class="col-sm-8 col-md-8">
-                        <div class="total-amount row mr-0 ml-0">
-                            <div class="col-md-6 col-sm-6 col-6 pl-0 pr-0">
+                        <div class="total-amount row">
+                            <div class="col-md-6 col-sm-6 col-6">
                                 <sh-select
                                     [placeholder]="commonLocaleData?.app_select_range"
                                     [options]="filtersForEntryTotal"
@@ -236,7 +241,7 @@
                                 ></sh-select>
                             </div>
 
-                            <div class="col-md-6 col-sm-6 col-6 pr-0">
+                            <div class="col-md-6 col-sm-6 col-6 pl-0">
                                 <input
                                     class="form-control"
                                     placeholder="00"
@@ -254,8 +259,8 @@
                     </div>
 
                     <div class="col-md-8 col-sm-12">
-                        <div class="status-description row mr-0 ml-0">
-                            <div class="col-md-8 col-sm-12 pl-0 pr-0 pl-0">
+                        <div class="status-description row">
+                            <div class="col-md-8 col-sm-12">
                                 <sh-select
                                     [placeholder]="commonLocaleData?.app_select_action"
                                     [multiple]="true"
@@ -266,7 +271,7 @@
                                 ></sh-select>
                             </div>
 
-                            <div class="col-sm-4 col-md-4 pr-0"></div>
+                            <div class="col-sm-4 col-md-4 pl-0"></div>
                         </div>
                     </div>
                 </div>
@@ -302,8 +307,8 @@
                     </div>
 
                     <div class="col-md-8 col-sm-12">
-                        <div class="total-amount row mr-0 ml-0">
-                            <div class="col-md-8 col-sm-6 col-6 pl-0 pr-0">
+                        <div class="total-amount row">
+                            <div class="col-md-8 col-sm-6 col-6">
                                 <sh-select
                                     [placeholder]="commonLocaleData?.app_select_range"
                                     name="amountFieldSelector"
@@ -315,7 +320,7 @@
                                 </sh-select>
                             </div>
 
-                            <div class="col-md-4 col-sm-6 col-6 pr-0">
+                            <div class="col-md-4 col-sm-6 col-6 pl-0">
                                 <input
                                     class="form-control"
                                     placeholder="00"
@@ -347,7 +352,7 @@
                                     (selected)="dateChanged($event, 'invoice')"
                                 ></sh-select>
                             </div>
-                            <div class="col-sm-7 col-12">
+                            <div class="col-sm-7 col-12 pl-0">
                                 <input
                                     type="text"
                                     name="invoiceDate"
@@ -375,7 +380,7 @@
                                     (selected)="invoiceTotalRangeChanged($event)"
                                 ></sh-select>
                             </div>
-                            <div class="col-md-7 col-sm-12">
+                            <div class="col-md-7 col-sm-12 pl-0">
                                 <input
                                     class="form-control mr-b15"
                                     placeholder="00"
@@ -400,10 +405,9 @@
                                     [options]="dateOptions"
                                     [ItemHeight]="33"
                                     (selected)="dateChanged($event, 'due')"
-                                >
-                                </sh-select>
+                                ></sh-select>
                             </div>
-                            <div class="col-sm-7 col-12">
+                            <div class="col-sm-7 col-12 pl-0">
                                 <input
                                     type="text"
                                     bsDatepicker
@@ -422,7 +426,7 @@
                 <button type="submit" class="btn btn-md btn-success mr-r1" (click)="save()">
                     {{ commonLocaleData?.app_search }}
                 </button>
-                <button type="submit" class="btn btn-md btn-cancel" (click)="onCancel()">
+                <button type="submit" class="btn btn-md btn-cancel mr-0" (click)="onCancel()">
                     {{ commonLocaleData?.app_cancel }}
                 </button>
             </div>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { InvoiceUiDataService } from 'apps/web-giddh/src/app/services/invoice.ui.data.service';
 
 @Component({
@@ -7,7 +7,7 @@ import { InvoiceUiDataService } from 'apps/web-giddh/src/app/services/invoice.ui
     styleUrls: ['edit.filters.component.scss']
 })
 
-export class EditFiltersContainersComponent implements OnChanges {
+export class EditFiltersContainersComponent implements OnChanges, AfterViewChecked {
     @Input() public editMode: string;
     @Output() public selectTab: EventEmitter<any> = new EventEmitter();
     public ifDesignSelected: boolean = true;
@@ -25,7 +25,8 @@ export class EditFiltersContainersComponent implements OnChanges {
     }
 
     constructor(
-        private invoiceUiDataService: InvoiceUiDataService
+        private invoiceUiDataService: InvoiceUiDataService,
+        private cdr: ChangeDetectorRef
     ) {
         this.openTab('design');
     }
@@ -50,5 +51,14 @@ export class EditFiltersContainersComponent implements OnChanges {
         if (s.editMode && s.editMode.currentValue !== s.editMode.previousValue) {
             this.editMode = s.editMode.currentValue;
         }
+    }
+
+    /**
+     * Used this to solve getting expression change error
+     *
+     * @memberof EditFiltersContainersComponent
+     */
+    public ngAfterViewChecked(): void {
+        this.cdr.detectChanges();
     }
 }

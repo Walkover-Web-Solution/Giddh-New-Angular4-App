@@ -12,45 +12,39 @@
     (translationComplete)="translationComplete($event)"
 >
     <!-- start header -->
-    <div class="modal-header" #header>
-        <span
-            aria-hidden="true"
-            class="close"
-            [style.line-height.px]="64"
-            [style.height.px]="64"
-            data-dismiss="modal"
-            (click)="closePopupEvent()"
-            >×</span
-        >
-        <span class="row mr-0 ml-0">
+    <div class="modal-header d-flex flex-row-reverse" #header>
+        <span class="d-flex">
+            <div class="pull-right mr-r1 search-bar-wrapper">
+                <div class="form-inline">
+                    <div class="form-group search-bar">
+                        <input
+                            type="text"
+                            name="grpSrch"
+                            #grpSrch
+                            id="grpSrch"
+                            [(ngModel)]="searchString"
+                            (keyup)="searchGroups(grpSrch.value)"
+                            class="form-control"
+                            [placeholder]="localeData?.search_accounts"
+                            financial-accordion="search"
+                            [style.width.px]="260"
+                        />
+                        <a
+                            href="javascript:void(0);"
+                            class="pos-abs btn-link"
+                            (click)="resetGroupSearchString()"
+                            *ngIf="grpSrch.value"
+                            >{{ commonLocaleData?.app_clear }}</a
+                        >
+                    </div>
+                </div>
+                <!-- form-inline -->
+            </div>
+            <span aria-hidden="true" class="close m-0 p-0" data-dismiss="modal" (click)="closePopupEvent()">×</span>
+        </span>
+        <span>
             <h3 class="modal-title bg pd-t05">{{ localeData?.page_heading }}</h3>
         </span>
-        <div class="pull-right mr-r3 search-bar-wrapper">
-            <div class="form-inline">
-                <div class="form-group search-bar">
-                    <input
-                        type="text"
-                        name="grpSrch"
-                        #grpSrch
-                        id="grpSrch"
-                        [(ngModel)]="searchString"
-                        (keyup)="searchGroups(grpSrch.value)"
-                        class="form-control"
-                        [placeholder]="localeData?.search_accounts"
-                        financial-accordion="search"
-                        [style.width.px]="260"
-                    />
-                    <a
-                        href="javascript:void(0);"
-                        class="pos-abs btn-link"
-                        (click)="resetGroupSearchString()"
-                        *ngIf="grpSrch.value"
-                        >{{ commonLocaleData?.app_clear }}</a
-                    >
-                </div>
-            </div>
-            <!-- form-inline -->
-        </div>
     </div>
     <!-- end header -->
 
@@ -219,7 +213,7 @@
                                             <label *ngIf="first || isMobileScreen" class="d-block">&nbsp;</label>
                                             <button
                                                 *ngIf="item.get('uniqueName').value"
-                                                class="btn btn-defualt close-button"
+                                                class="btn btn-default close-button"
                                                 (click)="openModal(template, index)"
                                             >
                                                 <i class="icon-trash"></i>

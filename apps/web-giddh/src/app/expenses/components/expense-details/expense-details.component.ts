@@ -21,6 +21,7 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 import { cloneDeep } from '../../../lodash-optimized';
 import { SearchService } from '../../../services/search.service';
 import { MatDialog } from '@angular/material/dialog';
+import { CompanyActions } from '../../../actions/company.actions';
 
 @Component({
     selector: 'app-expense-details',
@@ -153,6 +154,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     private pettyCashEntryType: string;
     /** True if api call in progress */
     public isPettyCashEntryLoading: boolean = false;
+    /** True if we need to show red border around the field */
+    public showEntryAgainstRequired: boolean = false;
 
     constructor(
         private toaster: ToasterService,
@@ -160,7 +163,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         private store: Store<AppState>,
         private expenseService: ExpenseService,
         private searchService: SearchService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private companyActions: CompanyActions
     ) {
         this.files = [];
         this.uploadInput = new EventEmitter<UploadInput>();
@@ -174,6 +178,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public ngOnInit(): void {
+        // get company taxes
+        this.store.dispatch(this.companyActions.getTax());
         this.fileUploadOptions = { concurrency: 1, allowedContentTypes: ['image/png', 'image/jpeg'] };
         this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
             this.companyTaxesList = res || [];
@@ -288,6 +294,10 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public showApproveConfirmPopup(ref: TemplateRef<any>): void {
+        if (this.entryAgainstObject.base && !this.entryAgainstObject.model) {
+            this.showEntryAgainstRequired = true;
+            return;
+        }
         this.approveEntryModalRef = this.dialog.open(ref, { disableClose: true });
         this.selectedEntryForApprove = cloneDeep(this.selectedItem);
         this.selectedEntryForApprove.amount = this.updateLedgerComponentInstance.vm.compoundTotal;
@@ -316,12 +326,11 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public approveEntry(): void {
         if (this.entryAgainstObject.base && !this.entryAgainstObject.model) {
-            let errorMessage = this.localeData?.entry_against_error;
-            errorMessage = errorMessage.replace("[ENTRY_AGAINST]", this.entryAgainstObject.base);
-            this.toaster.showSnackBar("error", errorMessage);
+            this.showEntryAgainstRequired = true;
             this.hideApproveConfirmPopup(false);
             return;
         }
+        this.showEntryAgainstRequired = false;
         this.approveEntryRequestInProcess = true;
         let actionType: ActionPettycashRequest = {
             actionType: 'approve',
@@ -409,6 +418,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
             this.getPettyCashEntry(this.selectedItem.uniqueName);
             this.store.dispatch(this.ledgerActions.setAccountForEdit(this.selectedItem.baseAccount.uniqueName || null));
             this.buildCreatorString();
+            this.showEntryAgainstRequired = false;
         }
     }
 
@@ -433,6 +443,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public onSelectEntryAgainstAccount(option: IOption): void {
         if (option && option.value) {
+            this.showEntryAgainstRequired = false;
             this.accountEntryPettyCash.particular.uniqueName = option.value;
             this.accountEntryPettyCash.particular.name = option.label;
         }
@@ -514,8 +525,10 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public toggleBodyClass(): void {
         if (this.asideMenuStateForOtherTaxes === 'in') {
+            document.querySelector('.petty-cash')?.classList?.add('sidebar-overlay');
             document.querySelector('body').classList.add('fixed');
         } else {
+            document.querySelector('.petty-cash')?.classList?.remove('sidebar-overlay');
             document.querySelector('body').classList.remove('fixed');
         }
     }
@@ -993,5 +1006,17 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         this.toaster.showSnackBar("success", response?.body);
         this.rejectReason.setValue("");
         this.previewNextItem.emit(true);
+    }
+
+    /**
+     * This will clear the selected entry object
+     *
+     * @memberof ExpenseDetailsComponent
+     */
+    public onClearEntryAgainstAccount(): void {
+        this.showEntryAgainstRequired = false;
+        this.accountEntryPettyCash.particular.uniqueName = "";
+        this.accountEntryPettyCash.particular.name = "";
+        this.entryAgainstObject.model = "";
     }
 }

@@ -162,7 +162,7 @@
                                         <a
                                             class="dropdown-item cp"
                                             href="javascript:void(0)"
-                                            click)="toggleBulkUpdatePopup(false);"
+                                            (click)="toggleBulkUpdatePopup(false)"
                                             >{{ localeData?.bulk_update }}</a
                                         >
                                     </li>
@@ -1050,7 +1050,7 @@
                                             *ngIf="modalUniqueName === item.uniqueName"
                                             account-detail-modal-component
                                             [voucherType]="selectedVoucher"
-                                            [accountUniqueName]="item.account.uniqueName"
+                                            [accountUniqueName]="item?.account?.uniqueName"
                                             [from]="invoiceSearchRequest.from"
                                             [to]="invoiceSearchRequest.to"
                                             [isModalOpen]="modalUniqueName === item.uniqueName"
@@ -1323,7 +1323,7 @@
                                         *ngIf="modalUniqueName === item.uniqueName"
                                         account-detail-modal-component
                                         [voucherType]="selectedVoucher"
-                                        [accountUniqueName]="item.account.uniqueName"
+                                        [accountUniqueName]="item?.account?.uniqueName"
                                         [from]="invoiceSearchRequest.from"
                                         [to]="invoiceSearchRequest.to"
                                         [isModalOpen]="modalUniqueName === item.uniqueName"
@@ -1560,7 +1560,7 @@
                                             <div
                                                 *ngIf="modalUniqueName === item.uniqueName"
                                                 account-detail-modal-component
-                                                [accountUniqueName]="item.account.uniqueName"
+                                                [accountUniqueName]="item?.account?.uniqueName"
                                                 [voucherType]="selectedVoucher"
                                                 [from]="invoiceSearchRequest.from"
                                                 [to]="invoiceSearchRequest.to"
@@ -1667,7 +1667,6 @@
                                                     <strong> {{ localeData?.balance_due }} </strong>
                                                 </div>
                                             </div>
-
                                             <div>
                                                 {{ item.accountCurrencySymbol }}
                                                 {{ item?.totalBalance?.amountForAccount | giddhCurrency }}

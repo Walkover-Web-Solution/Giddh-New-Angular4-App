@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import * as moment from 'moment';
@@ -14,7 +14,7 @@ import { IOption } from '../../../theme/ng-select/option.interface';
 import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { SearchService } from '../../../services/search.service';
 import { InventoryService } from '../../../services/inventory.service';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
     selector: 'advance-search-model',
@@ -23,12 +23,17 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class AdvanceSearchModelComponent implements OnInit, OnDestroy {
+export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges {
+    /** Instance of mat accordion */
+    @ViewChild(MatAccordion) accordion: MatAccordion;
     @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
     public bsRangeValue: string[];
+    /** Taking advance search params as input */
+    @Input() public advanceSearchRequest: AdvanceSearchRequest;
+    /** Output emitter for close modal event */
+    @Output() public closeModelEvent: EventEmitter<{ advanceSearchData, isClose }> = new EventEmitter(null);
     public advanceSearchObject: ILedgerAdvanceSearchRequest = null;
     public advanceSearchForm: FormGroup;
-    public showOtherDetails: boolean = false;
     public showChequeDatePicker: boolean = false;
     public accounts$: Observable<IOption[]>;
     public groups$: Observable<IOption[]>;
@@ -123,6 +128,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy {
     public isDefaultStocksLoading: boolean = true;
     /** True if default groups api call in progress */
     public isDefaultGroupsLoading: boolean = true;
+    /** True if other details should be expanded by default */
+    public isExpanded: boolean = false;
 
     constructor(
         private groupService: GroupService,
@@ -131,8 +138,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy {
         private modalService: BsModalService,
         private generalService: GeneralService,
         private searchService: SearchService,
-        @Inject(MAT_DIALOG_DATA) public inputData, 
-        public dialogRef: MatDialogRef<any>,
         private changeDetectionRef: ChangeDetectorRef
     ) {
 
@@ -146,22 +151,30 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy {
         this.loadDefaultGroupsSuggestions();
     }
 
-    public setValuesInForm(): void {
-        if (this.inputData?.advanceSearchRequest.dataToSend) {
-            let dataToSend = this.inputData?.advanceSearchRequest.dataToSend;
+    /**
+     * Lifecycle hook which updates input data if data has updated
+     *
+     * @param {SimpleChanges} changes
+     * @memberof AdvanceSearchModelComponent
+     */
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (!this.advanceSearchForm) {
+            this.setAdvanceSearchForm();
+        }
 
-            this.advanceSearchForm?.patchValue(dataToSend);
-
-            if (dataToSend.bsRangeValue) {
-                this.fromDate = moment((this.inputData?.advanceSearchRequest as AdvanceSearchRequest).dataToSend.bsRangeValue[0], GIDDH_DATE_FORMAT).toDate();
-                this.toDate = moment((this.inputData?.advanceSearchRequest as AdvanceSearchRequest).dataToSend.bsRangeValue[1], GIDDH_DATE_FORMAT).toDate();
-                this.selectedDateRange = { startDate: dataToSend.bsRangeValue[0], endDate: dataToSend.bsRangeValue[1] };
-                this.selectedDateRangeUi = moment(dataToSend.bsRangeValue[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dataToSend.bsRangeValue[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                if (this.advanceSearchForm) {
-                    let bsDaterangepicker = this.advanceSearchForm.get('bsRangeValue');
-                    bsDaterangepicker?.patchValue(this.selectedDateRangeUi);
-                }
+        if ('advanceSearchRequest' in changes && changes.advanceSearchRequest.currentValue && changes.advanceSearchRequest.currentValue !== changes.advanceSearchRequest.previousValue && changes.advanceSearchRequest.currentValue.dataToSend?.bsRangeValue) {
+            this.fromDate = moment((changes.advanceSearchRequest.currentValue as AdvanceSearchRequest).dataToSend.bsRangeValue[0], GIDDH_DATE_FORMAT).toDate();
+            this.toDate = moment((changes.advanceSearchRequest.currentValue as AdvanceSearchRequest).dataToSend.bsRangeValue[1], GIDDH_DATE_FORMAT).toDate();
+            this.selectedDateRange = { startDate: changes.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[0], endDate: changes.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[1] };
+            this.selectedDateRangeUi = moment(changes.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(changes.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            if (this.advanceSearchForm) {
+                let bsDaterangepicker = this.advanceSearchForm.get('bsRangeValue');
+                bsDaterangepicker?.patchValue(this.selectedDateRangeUi);
             }
+        }
+
+        if (this.advanceSearchForm && 'advanceSearchRequest' in changes && changes.advanceSearchRequest.currentValue && changes.advanceSearchRequest.currentValue.dataToSend) {
+            let dataToSend = changes.advanceSearchRequest.currentValue.dataToSend;
 
             this.groupUniqueNames = [];
 
@@ -199,20 +212,19 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy {
     }
 
     public resetAdvanceSearchModal() {
-        this.inputData.advanceSearchRequest.dataToSend.bsRangeValue = [moment().toDate(), moment().subtract(30, 'days').toDate()];
+        this.advanceSearchRequest.dataToSend.bsRangeValue = [moment().toDate(), moment().subtract(30, 'days').toDate()];
         if (this.dropDowns) {
             this.dropDowns.forEach((el) => {
                 el.clear();
             });
         }
-        let f: any = moment(this.inputData?.advanceSearchRequest.dataToSend.bsRangeValue[0], GIDDH_DATE_FORMAT);
-        let t: any = moment(this.inputData?.advanceSearchRequest.dataToSend.bsRangeValue[1], GIDDH_DATE_FORMAT);
+        let f: any = moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0], GIDDH_DATE_FORMAT);
+        let t: any = moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1], GIDDH_DATE_FORMAT);
         this.bsRangeValue = [];
         this.bsRangeValue.push(f._d);
         this.bsRangeValue.push(t._d);
-        this.inputData.advanceSearchRequest.dataToSend = new AdvanceSearchModel();
-        this.inputData.advanceSearchRequest.page = 1;
-        this.showOtherDetails = false;
+        this.advanceSearchRequest.dataToSend = new AdvanceSearchModel();
+        this.advanceSearchRequest.page = 1;
         this.setAdvanceSearchForm();
     }
 
@@ -258,9 +270,15 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy {
             }),
         });
 
-        setTimeout(() => {
-            this.setValuesInForm();
-        }, 100);
+        if (this.advanceSearchRequest) {
+            this.advanceSearchForm?.patchValue(this.advanceSearchRequest.dataToSend);
+
+            if(this.advanceSearchForm.get('includeDescription').value) {
+                this.isExpanded = true;
+            } else {
+                this.isExpanded = false;
+            }
+        }
     }
 
     public setVoucherTypes(event?: any) {
@@ -303,7 +321,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy {
     }
 
     public onCancel() {
-        this.dialogRef.close({ advanceSearchData: this.inputData?.advanceSearchRequest, isClose: true });
+        this.closeModelEvent.emit({ advanceSearchData: this.advanceSearchRequest, isClose: true });
         this.hideGiddhDatepicker();
     }
 
@@ -311,14 +329,14 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy {
      * onSearch
      */
     public onSearch() {
-        this.inputData.advanceSearchRequest.dataToSend = this.advanceSearchForm.value;
-        if (this.inputData?.advanceSearchRequest.dataToSend && typeof this.inputData?.advanceSearchRequest.dataToSend.bsRangeValue === 'string') {
-            this.inputData.advanceSearchRequest.dataToSend.bsRangeValue = [this.fromDate, this.toDate];
+        this.advanceSearchRequest.dataToSend = this.advanceSearchForm.value;
+        if (this.advanceSearchRequest.dataToSend && typeof this.advanceSearchRequest.dataToSend.bsRangeValue === 'string') {
+            this.advanceSearchRequest.dataToSend.bsRangeValue = [this.fromDate, this.toDate];
         }
-        if (this.inputData?.advanceSearchRequest.dataToSend && this.inputData?.advanceSearchRequest.dataToSend.dateOnCheque) {
-            this.inputData.advanceSearchRequest.dataToSend.dateOnCheque = moment(this.inputData?.advanceSearchRequest.dataToSend.dateOnCheque).format(GIDDH_DATE_FORMAT);
+        if (this.advanceSearchRequest.dataToSend && this.advanceSearchRequest.dataToSend.dateOnCheque) {
+            this.advanceSearchRequest.dataToSend.dateOnCheque = moment(this.advanceSearchRequest.dataToSend.dateOnCheque).format(GIDDH_DATE_FORMAT);
         }
-        this.dialogRef.close({ advanceSearchData: this.inputData?.advanceSearchRequest, isClose: false });
+        this.closeModelEvent.emit({ advanceSearchData: this.advanceSearchRequest, isClose: false });
     }
 
     public prepareRequest() {
@@ -487,7 +505,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy {
      * @memberof AdvanceSearchModelComponent
      */
     public toggleOtherDetails() {
-        this.showOtherDetails = !this.showOtherDetails;
         let val: boolean = !this.advanceSearchForm.get('includeDescription').value;
         this.advanceSearchForm.get('includeDescription')?.patchValue(val);
         if (!val) {
@@ -579,8 +596,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy {
                 q: encodeURIComponent(query),
                 page
             }
-            if (this.inputData?.advanceSearchRequest.branchUniqueName) {
-                requestObject.branchUniqueName = encodeURIComponent(this.inputData?.advanceSearchRequest.branchUniqueName);
+            if (this.advanceSearchRequest.branchUniqueName) {
+                requestObject.branchUniqueName = encodeURIComponent(this.advanceSearchRequest.branchUniqueName);
             }
             this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
@@ -666,8 +683,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy {
                 page,
                 count: API_COUNT_LIMIT
             }
-            if (this.inputData?.advanceSearchRequest.branchUniqueName) {
-                requestObject.branchUniqueName = this.inputData?.advanceSearchRequest.branchUniqueName;
+            if (this.advanceSearchRequest.branchUniqueName) {
+                requestObject.branchUniqueName = this.advanceSearchRequest.branchUniqueName;
             }
             this.inventoryService.GetStocks(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
@@ -723,8 +740,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy {
                 page,
                 count: API_COUNT_LIMIT
             }
-            if (this.inputData?.advanceSearchRequest.branchUniqueName) {
-                requestObject.branchUniqueName = encodeURIComponent(this.inputData?.advanceSearchRequest.branchUniqueName);
+            if (this.advanceSearchRequest.branchUniqueName) {
+                requestObject.branchUniqueName = encodeURIComponent(this.advanceSearchRequest.branchUniqueName);
             }
             this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {

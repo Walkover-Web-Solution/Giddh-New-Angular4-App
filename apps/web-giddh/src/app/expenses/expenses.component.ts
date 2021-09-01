@@ -8,7 +8,6 @@ import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
 import { ExpenseResults, PettyCashReportResponse } from '../models/api-models/Expences';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { CompanyActions } from '../actions/company.actions';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { StateDetailsRequest } from '../models/api-models/Company';
@@ -454,21 +453,21 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will show the next item from the list in preview. If current item is the last item, 
+     * This will show the next item from the list in preview. If current item is the last item,
      * then it will show the first item from the list, if all items are processed, it will exit the preview mode
-     * 
+     *
      * @param {*} event
      * @memberof ExpensesComponent
      */
     public previewNextItem(event: any): void {
         if(event) {
             let nextItemIndex;
-            this.pettyCashPendingReportResponse?.results?.forEach((item, index) => { 
+            this.pettyCashPendingReportResponse?.results?.forEach((item, index) => {
                 if(item?.uniqueName === this.selectedRowItem?.uniqueName) {
                     nextItemIndex = index + 1;
                 }
             });
-            
+
             if(this.pettyCashPendingReportResponse?.results?.length > 1) {
                 if(nextItemIndex && this.pettyCashPendingReportResponse?.results[nextItemIndex]) {
                     this.selectedRowItem = this.pettyCashPendingReportResponse?.results[nextItemIndex];

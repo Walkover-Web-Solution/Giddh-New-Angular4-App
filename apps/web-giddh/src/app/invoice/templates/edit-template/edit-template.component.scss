@@ -15,8 +15,6 @@
 .template-grid h3 {
     text-transform: capitalize;
     font-size: 18px;
-    padding-bottom: 5px;
-    height: 34px;
 }
 
 .template-action {
@@ -31,7 +29,6 @@
 }
 
 .primary-color {
-    overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
 }
@@ -64,17 +61,17 @@
     background: $whisper;
 }
 .badge {
-    background: $whisper-color;
-    color: $charcoal;
+    background: $whisper-color !important;
+    color: $charcoal !important;
     font-family: opensans-regular;
-    border: none;
-    font-weight: 400;
+    border: none !important;
+    font-weight: 400 !important;
     padding: 10px;
     border-radius: 50px;
 }
 .badge.btn-success:hover {
-    background: $gainsboro-light;
-    color: $charcoal;
+    background: $gainsboro-light !important;
+    color: $charcoal !important;
 }
 .badge.btn-sky-blue,
 .badge.btn-sky-blue:hover {

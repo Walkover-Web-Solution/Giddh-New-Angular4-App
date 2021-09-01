@@ -7,7 +7,7 @@
 >
     <div id="entryModal">
         <!-- region header -->
-        <div class="modal-header" *ngIf="!isPettyCash">
+        <div class="modal-header flex-row-reverse" *ngIf="!isPettyCash">
             <span
                 aria-hidden="true"
                 class="close hover-orange"
@@ -59,7 +59,7 @@
         <!-- endregion -->
 
         <!-- region main body -->
-        <div class="modal-body pl-0 pr-0" [hidden]="isChangeAcc">
+        <div class="modal-body" [hidden]="isChangeAcc">
             <!-- region transactions -->
             <div class="ledg-head entry-popup">
                 <table class="w-100 ledger-head mr-t1 hidden-xs">
@@ -146,7 +146,14 @@
                                             [ngClass]="{
                                                 'other-account-entry': txn.particular.uniqueName === 'others'
                                             }"
-                                            class="col-5 position-relative select2-parent select2-ledger"
+                                            class="
+                                                col-5
+                                                position-relative
+                                                select2-parent select2-ledger
+                                                d-flex
+                                                justify-content-between
+                                                align-items-center
+                                            "
                                         >
                                             <ng-template [ngIf]="!txn.isDiscount">
                                                 <div class="d-flex update-ledger-account">
@@ -438,7 +445,14 @@
                                         <td
                                             [attr.data-title]="commonLocaleData?.app_particular"
                                             id="{{ 'credit-id-' + i }}"
-                                            class="position-relative col-5 select2-parent select2-ledger"
+                                            class="
+                                                position-relative
+                                                col-5
+                                                select2-parent select2-ledger
+                                                d-flex
+                                                justify-content-between
+                                                align-items-center
+                                            "
                                             [ngClass]="{
                                                 'other-account-entry': txn.particular.uniqueName === 'others'
                                             }"
@@ -609,7 +623,7 @@
                                                 (click)="addBlankTrx('CREDIT', txn, $event)"
                                                 (blur)="onTxnAmountChange(txn)"
                                             />
-                                            <p class="mb-0 amount-total pr-1" *ngIf="vm.isMultiCurrencyAvailable">
+                                            <p class="mb-0 amount-total" *ngIf="vm.isMultiCurrencyAvailable">
                                                 <ng-container
                                                     *ngTemplateOutlet="
                                                         totalWithCurrencySymbol;
@@ -1096,9 +1110,7 @@
                         </div>
 
                         <div class="clearfix pd-1 text-right bd-rb pr-0">
-                            <span class="in-words font-14">
-                                {{ vm.grandTotal | myNumberToWordsPipe | lowercase }}
-                            </span>
+                            <span class="in-words font-14">{{ vm.grandTotal | myNumberToWordsPipe | lowercase }}</span>
                         </div>
                     </ng-container>
                 </div>

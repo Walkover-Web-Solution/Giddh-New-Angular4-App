@@ -33,7 +33,6 @@ import { WarehouseActions } from '../settings/warehouse/action/warehouse.action'
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { AppState } from '../store';
 import { BorderConfiguration, IOption } from '../theme/ng-virtual-select/sh-options.interface';
-import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
 import { NewLedgerEntryPanelComponent } from './components/new-ledger-entry-panel/new-ledger-entry-panel.component';
 import { UpdateLedgerEntryPanelComponent } from './components/update-ledger-entry-panel/update-ledger-entry-panel.component';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
@@ -82,6 +81,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public needToReCalculate: BehaviorSubject<boolean> = new BehaviorSubject(false);
     @ViewChild('newLedPanel', { static: false }) public newLedgerComponent: NewLedgerEntryPanelComponent;
     @ViewChild('updateLedgerModal', { static: false }) public updateLedgerModal: any;
+    /** Instance of advance search modal */
+    @ViewChild('advanceSearchModal', { static: false }) public advanceSearchModal: any;
     /** datepicker element reference  */
     @ViewChild('datepickerTemplate', { static: false }) public datepickerTemplate: ElementRef;
     public isTransactionRequestInProcess$: Observable<boolean>;
@@ -233,6 +234,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public updateLedgerComponentRef: any;
     /** Object of update ledger modal VM */
     public updateLedgerModalVm: any;
+    /** True if datepicker is open */
+    public isDatepickerOpen: boolean = false;
+    /** Instance of advance search modal dialog */
+    public advanceSearchDialogRef: any;
+    /** Last touched transaction (for ipad and tablet) */
+    public touchedTransaction: any;
+    /** This is used to show hide bottom spacing when more detail is opened while CREATE/UPDATE ledger */
+    public isMoreDetailsOpened: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -326,10 +335,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
-    public selectAccount(e: IOption, txn: TransactionVM) {
+    public selectAccount(e: IOption, txn: TransactionVM, clearAccount?: boolean) {
         this.keydownClassAdded = false;
         this.selectedTxnAccUniqueName = '';
-        if (!e.value) {
+        if (!e.value || clearAccount) {
             // if there's no selected account set selectedAccount to null
             txn.selectedAccount = null;
             this.lc.currentBlankTxn = null;
@@ -342,6 +351,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             txn.discounts = [
                 this.lc.staticDefaultDiscount()
             ];
+            txn.particular = undefined;
             return;
         }
         let requestObject;
@@ -1059,6 +1069,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         };
         this.shouldShowRcmTaxableAmount = false;
         this.shouldShowItcSection = false;
+        this.isMoreDetailsOpened = false;
         if (this.isLedgerAccountAllowsMultiCurrency) {
             this.getCurrencyRate('blankLedger');
         }
@@ -1107,6 +1118,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public hideNewLedgerEntryPopup(event?) {
         this.selectedTrxWhileHovering = '';
+
+        if(this.isDatepickerOpen) {
+            return;
+        }
+
         if (event && event.path) {
             let classList = event.path.map(m => {
                 return m.classList;
@@ -1125,6 +1141,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             }
         }
+        this.isMoreDetailsOpened = false;
         this.lc.showNewLedgerPanel = false;
     }
 
@@ -1274,6 +1291,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.searchText = "";
         this.isAdvanceSearchImplemented = false;
         this.trxRequest.page = 0;
+        let accountUniqueName = this.advanceSearchRequest.accountUniqueName;
+        this.advanceSearchRequest = new AdvanceSearchRequest();
+        this.advanceSearchRequest.accountUniqueName = accountUniqueName;
         this.search("");
         this.getTransactionData();
     }
@@ -1453,17 +1473,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
             });
         }
 
-        let dialogRef = this.dialog.open(AdvanceSearchModelComponent, {
-            width: '980px',
-            data: {
-                advanceSearchRequest: this.advanceSearchRequest
-            }
-        });
-
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            if (response) {
-                this.closeAdvanceSearchPopup(response);
-            }
+        this.advanceSearchDialogRef = this.dialog.open(this.advanceSearchModal, {
+            width: '980px'
         });
     }
 
@@ -1475,6 +1486,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * closeAdvanceSearchPopup
      */
     public closeAdvanceSearchPopup(event) {
+        this.advanceSearchDialogRef?.close();
         if (!event.isClose) {
             this.getAdvanceSearchTxn();
             if (event.advanceSearchData) {
@@ -1521,6 +1533,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 ...debitTrx.filter(f => f.isChecked).map(dt => dt.entryUniqueName),
                 ...creditTrx.filter(f => f.isChecked).map(ct => ct.entryUniqueName),
             ]);
+
         if (!this.entryUniqueNamesForBulkAction || !this.entryUniqueNamesForBulkAction.length) {
             this.toaster.showSnackBar("error", this.localeData?.select_one_entry, this.commonLocaleData?.app_error);
             return;
@@ -1632,10 +1645,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            this.entryUniqueNamesForBulkAction = [];
-
             if (response) {
                 this.onConfirmationBulkActionConfirmation();
+            } else {
+                this.entryUniqueNamesForBulkAction = [];
             }
         });
     }
@@ -2317,5 +2330,43 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public trackById(index: number, transaction: any): string {
         return transaction?.id;
+    }
+
+    /**
+     * This maintains state of datepicker (open/closed)
+     *
+     * @param {*} event
+     * @memberof LedgerComponent
+     */
+    public datepickerState(event: any): void {
+        this.isDatepickerOpen = event;
+    }
+
+    /**
+     * This will keep the track of touch event and will check if double clicked on any transaction, it will open the update ledger modal
+     *
+     * @param {ITransactionItem} txn
+     * @memberof LedgerComponent
+     */
+    public showUpdateLedgerModalIpad(txn: ITransactionItem): void {
+        if(this.touchedTransaction?.entryUniqueName === txn?.entryUniqueName) {
+            this.showUpdateLedgerModal(txn);
+        } else {
+            this.touchedTransaction = txn;
+        }
+
+        setTimeout(() => {
+            this.touchedTransaction = {};
+        }, 200);
+    }
+
+    /**
+     * Handler for more detail open in CREATE ledger
+     *
+     * @param {boolean} isOpened True, if more detail is opened while creating new ledger entry
+     * @memberof LedgerComponent
+     */
+    public handleOpenMoreDetail(isOpened: boolean): void {
+        this.isMoreDetailsOpened = isOpened;
     }
 }

@@ -139,7 +139,15 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         }
         if (val?.length > 0 && this.rows) {
             if (this.doNotResetSelectedValues) {
-                this._selectedValues = this._selectedValues.filter(selected => val.indexOf(selected.value) > -1);
+                if(typeof this._selectedValues[0] === "string") {
+                    let selectedValues = this._selectedValues.map(value => {
+                        let filteredValue = this.rows.filter(row => row.value === String(value));
+                        let rowNotFound: any = { label: value, value: value };
+                        return (filteredValue && filteredValue[0]?.value) ? filteredValue[0] : rowNotFound;
+                    });
+                    this._selectedValues = selectedValues;
+                }
+                this._selectedValues = this._selectedValues.filter(selected => val.indexOf(selected?.value) > -1);
             } else {
                 this._selectedValues = this.rows.filter((f: any) => val.findIndex(p => p === f.label || p === f.value) !== -1);
             }
@@ -184,7 +192,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         filteredArr = this.getFilteredArrOfIOptionItems(array, term, action);
 
         startsWithArr = filteredArr.filter((item) => {
-            if (startsWith(String(item.label).toLocaleLowerCase(), term) || startsWith(String(item.value).toLocaleLowerCase(), term)) {
+            if (startsWith(String(item?.label).toLocaleLowerCase(), term) || startsWith(String(item?.value).toLocaleLowerCase(), term)) {
                 return item;
             } else {
                 includesArr.push(item);
@@ -211,7 +219,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
             });
         } else {
             return array.filter((item: IOption) => {
-                return includes(String(item.label).toLocaleLowerCase(), term) || includes(String(item.value).toLocaleLowerCase(), term);
+                return includes(String(item?.label).toLocaleLowerCase(), term) || includes(String(item?.value).toLocaleLowerCase(), term);
             });
         }
     }
@@ -327,7 +335,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         this.focusFilter();
         this.onShow.emit();
         if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-            let item = this.rows.find(p => p.value === (this._selectedValues?.length > 0 ? this._selectedValues[0] : (this.rows?.length > 0 ? this.rows[0].value : null)));
+            let item = this.rows.find(p => p?.value === (this._selectedValues?.length > 0 ? this._selectedValues[0] : (this.rows?.length > 0 ? this.rows[0].value : null)));
             if (item !== null) {
                 this.menuEle.virtualScrollElm.scrollInto(item);
             }
@@ -462,7 +470,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     public subscribeToQueryChange(): void {
         if (this.enableDynamicSearch) {
             fromEvent(this.inputFilter?.nativeElement, 'input').pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((event: any) => {
-                this.dynamicSearchedQuery.emit(event?.target?.value.trim());
+                this.dynamicSearchedQuery.emit(event?.target?.value?.trim());
             });
         }
     }
@@ -534,20 +542,20 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
     public clearSingleSelection(event, option: IOption) {
         event.stopPropagation();
-        this.selectedValues = this.selectedValues.filter(f => f.value !== option.value).map(p => p.value);
+        this.selectedValues = this.selectedValues.filter(f => f?.value !== option?.value).map(p => p?.value);
         this.clearSingleItem.emit(this.selectedValues);
         this.onChange();
     }
     public openListIfNotOpened(ev) {
         if (!this.isOpen) {
-            this.filter = ev.target.value;
+            this.filter = ev?.target?.value;
             this.show(ev);
         }
     }
     public onChange() {
         if (this.multiple) {
             let newValues: string[];
-            newValues = this._selectedValues.map(p => p.value);
+            newValues = this._selectedValues.map(p => p?.value);
             this.propagateChange(newValues);
             this.selected.emit(this._selectedValues);
         } else {

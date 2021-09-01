@@ -467,7 +467,7 @@
                                         [placement]="'top'"
                                         (click)="getBankTransactions()"
                                     >
-                                        <i class="icon-refresh lh-0 font-18"></i>
+                                        <i class="icon-refresh lh-0"></i>
                                     </a>
                                 </div>
                             </div>
@@ -573,8 +573,8 @@
                                             </table>
                                         </div>
                                     </div>
-                                    <div class="ledger-book">
-                                        <div class="left-col-new">
+                                    <div class="ledger-book row ml-0 mr-0">
+                                        <div class="col-6 left-col-new">
                                             <table class="table ledger-table transaction-mapped-table mb-0">
                                                 <thead>
                                                     <tr class="row">
@@ -864,7 +864,7 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <div class="right-col-new">
+                                        <div class="col-6 right-col-new">
                                             <table class="table ledger-table transaction-mapped-table mb-0">
                                                 <thead>
                                                     <tr class="row">
@@ -1477,35 +1477,27 @@
                                             [attr.data-title]="commonLocaleData?.app_amount"
                                             class="col-xs-4 col-md-3 col-lg-3 text-right"
                                         >
-                                            <div class="d-flex flex-column">
-                                                <ng-container *ngIf="(lc.transactionData$ | async)?.page <= 1">
-                                                    <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'">
-                                                        <amount-field
-                                                            [amount]="ledgerTxnBalance?.forwardedBalance?.amount"
-                                                            [currencySymbol]="ledgerTxnBalance?.currencySymbol"
-                                                            [currencyCode]="ledgerTxnBalance?.currencyCode"
-                                                        >
-                                                        </amount-field> </span
-                                                    ><br />
-                                                    <span
-                                                        class="amount-total"
-                                                        *ngIf="isLedgerAccountAllowsMultiCurrency"
+                                            <ng-container *ngIf="(lc.transactionData$ | async)?.page <= 1">
+                                                <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'">
+                                                    <amount-field
+                                                        [amount]="ledgerTxnBalance?.forwardedBalance?.amount"
+                                                        [currencySymbol]="ledgerTxnBalance?.currencySymbol"
+                                                        [currencyCode]="ledgerTxnBalance?.currencyCode"
                                                     >
-                                                        <amount-field
-                                                            [amount]="
-                                                                ledgerTxnBalance?.convertedForwardedBalance?.amount
-                                                            "
-                                                            [currencySymbol]="ledgerTxnBalance?.convertedCurrencySymbol"
-                                                            [currencyCode]="ledgerTxnBalance?.convertedCurrencyCode"
-                                                        >
-                                                        </amount-field>
-                                                    </span>
-                                                    <span
-                                                        *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'"
-                                                        >{{ commonLocaleData?.app_numbers?.zero }}</span
+                                                    </amount-field> </span
+                                                ><br />
+                                                <span class="amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                                    <amount-field
+                                                        [amount]="ledgerTxnBalance?.convertedForwardedBalance?.amount"
+                                                        [currencySymbol]="ledgerTxnBalance?.convertedCurrencySymbol"
+                                                        [currencyCode]="ledgerTxnBalance?.convertedCurrencyCode"
                                                     >
-                                                </ng-container>
-                                            </div>
+                                                    </amount-field>
+                                                </span>
+                                                <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'">{{
+                                                    commonLocaleData?.app_numbers?.zero
+                                                }}</span>
+                                            </ng-container>
                                         </td>
                                     </tr>
                                     <!-- endregion -->
@@ -1629,7 +1621,13 @@
 
                                         <td
                                             [ngClass]="{ 'multicurrency-amount': isLedgerAccountAllowsMultiCurrency }"
-                                            class="col-xs-4 col-md-3 col-lg-3 position-relative text-right"
+                                            class="
+                                                col-xs-4 col-md-3 col-lg-3
+                                                position-relative
+                                                text-right
+                                                flex-column
+                                                align-items-end
+                                            "
                                             [attr.data-title]="commonLocaleData?.app_amount"
                                         >
                                             <amount-field
@@ -1945,35 +1943,27 @@
                                             [attr.data-title]="commonLocaleData?.app_amount"
                                             class="col-xs-4 col-md-3 col-lg-3 text-right"
                                         >
-                                            <div class="d-flex flex-column">
-                                                <ng-container *ngIf="(lc.transactionData$ | async)?.page <= 1">
-                                                    <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'">
-                                                        <amount-field
-                                                            [amount]="ledgerTxnBalance?.forwardedBalance?.amount"
-                                                            [currencySymbol]="ledgerTxnBalance?.currencySymbol"
-                                                            [currencyCode]="ledgerTxnBalance?.currencyCode"
-                                                        >
-                                                        </amount-field>
-                                                    </span>
-                                                    <span
-                                                        class="amount-total"
-                                                        *ngIf="isLedgerAccountAllowsMultiCurrency"
+                                            <ng-container *ngIf="(lc.transactionData$ | async)?.page <= 1">
+                                                <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'">
+                                                    <amount-field
+                                                        [amount]="ledgerTxnBalance?.forwardedBalance?.amount"
+                                                        [currencySymbol]="ledgerTxnBalance?.currencySymbol"
+                                                        [currencyCode]="ledgerTxnBalance?.currencyCode"
                                                     >
-                                                        <amount-field
-                                                            [amount]="
-                                                                ledgerTxnBalance?.convertedForwardedBalance?.amount
-                                                            "
-                                                            [currencySymbol]="ledgerTxnBalance?.convertedCurrencySymbol"
-                                                            [currencyCode]="ledgerTxnBalance?.convertedCurrencyCode"
-                                                        >
-                                                        </amount-field>
-                                                    </span>
-                                                    <span
-                                                        *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'"
-                                                        >{{ commonLocaleData?.app_numbers?.zero }}</span
+                                                    </amount-field> </span
+                                                ><br />
+                                                <span class="amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                                    <amount-field
+                                                        [amount]="ledgerTxnBalance?.convertedForwardedBalance?.amount"
+                                                        [currencySymbol]="ledgerTxnBalance?.convertedCurrencySymbol"
+                                                        [currencyCode]="ledgerTxnBalance?.convertedCurrencyCode"
                                                     >
-                                                </ng-container>
-                                            </div>
+                                                    </amount-field>
+                                                </span>
+                                                <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'">{{
+                                                    commonLocaleData?.app_numbers?.zero
+                                                }}</span>
+                                            </ng-container>
                                         </td>
                                     </tr>
                                     <!-- endregion -->
@@ -2098,7 +2088,13 @@
                                         <td
                                             [ngClass]="{ 'multicurrency-amount': isLedgerAccountAllowsMultiCurrency }"
                                             [attr.data-title]="commonLocaleData?.app_amount"
-                                            class="col-xs-4 col-md-3 col-lg-3 position-relative text-right"
+                                            class="
+                                                col-xs-4 col-md-3 col-lg-3
+                                                position-relative
+                                                text-right
+                                                flex-column
+                                                align-items-end
+                                            "
                                         >
                                             <amount-field
                                                 [amount]="txn.amount"
@@ -2489,29 +2485,25 @@
                                 <div class="col-md-6 col-sm-6 col-12 text-right">
                                     {{ localeData?.balance_bank }}
                                     <h3 class="font-20 primary-color d-flex justify-content-end">
-                                        <span class="d-inline-flex">
-                                            <amount-field
-                                                [amount]="reconcileClosingBalanceForBank?.amount"
-                                                [currencySymbol]="false"
-                                                [currencyCode]="false"
-                                            >
-                                            </amount-field>
-                                            {{ reconcileClosingBalanceForBank?.type }}
-                                        </span>
+                                        <amount-field
+                                            [amount]="reconcileClosingBalanceForBank?.amount"
+                                            [currencySymbol]="false"
+                                            [currencyCode]="false"
+                                        >
+                                        </amount-field>
+                                        {{ reconcileClosingBalanceForBank?.type }}
                                     </h3>
                                 </div>
                                 <div class="col-md-6 col-sm-6 col-12 text-left">
                                     {{ localeData?.pending_cheque }}
                                     <h3 class="font-20 primary-color d-flex">
-                                        <span class="d-inline-flex">
-                                            <amount-field
-                                                [amount]="closingBalanceBeforeReconcile?.amount"
-                                                [currencySymbol]="false"
-                                                [currencyCode]="false"
-                                            >
-                                            </amount-field>
-                                            {{ closingBalanceBeforeReconcile?.type }}
-                                        </span>
+                                        <amount-field
+                                            [amount]="closingBalanceBeforeReconcile?.amount"
+                                            [currencySymbol]="false"
+                                            [currencyCode]="false"
+                                        >
+                                        </amount-field>
+                                        {{ closingBalanceBeforeReconcile?.type }}
                                     </h3>
                                 </div>
                             </div>
@@ -2558,8 +2550,9 @@
                                                 [currencyCode]="false"
                                             >
                                             </amount-field>
-                                        </span> </span
-                                    ><br />
+                                        </span>
+                                    </span>
+                                    <br />
                                     <span class="mr-r2 grey-text-color"
                                         >{{ commonLocaleData?.app_credit }}
                                         <span class="digit-blue d-inline-flex">
@@ -2576,14 +2569,13 @@
                             <div class="col-sm-3 col-xs-12 stat-block">
                                 <div class="ledger-state-box">
                                     <h1>{{ localeData?.opening_balance }}</h1>
-                                    <h3 class="digit-blue d-flex">
+                                    <h3 class="digit-blue d-inline-flex">
                                         <amount-field
                                             [amount]="ledgerTxnBalance?.forwardedBalance?.amount"
                                             [currencySymbol]="ledgerTxnBalance?.currencySymbol"
                                             [currencyCode]="ledgerTxnBalance?.currencyCode"
                                         >
                                         </amount-field>
-                                        &nbsp;
                                         {{
                                             ledgerTxnBalance?.forwardedBalance?.amount > 0
                                                 ? ledgerTxnBalance?.forwardedBalance?.type === "DEBIT"
@@ -2603,8 +2595,6 @@
                                             [currencyCode]="ledgerTxnBalance?.convertedCurrencyCode"
                                         >
                                         </amount-field>
-
-                                        &nbsp;
                                         {{
                                             ledgerTxnBalance?.convertedForwardedBalance?.amount > 0
                                                 ? ledgerTxnBalance?.forwardedBalance?.type === "DEBIT"
@@ -2630,7 +2620,6 @@
                                                     [currencyCode]="ledgerTxnBalance?.currencyCode"
                                                 >
                                                 </amount-field>
-                                                &nbsp;
                                                 <span class="capitalize">{{ commonLocaleData?.app_cr }}</span>
                                             </h3>
 
@@ -2647,7 +2636,6 @@
                                                     [currencyCode]="ledgerTxnBalance?.convertedCurrencyCode"
                                                 >
                                                 </amount-field>
-                                                &nbsp;
                                                 <span class="capitalize">{{ commonLocaleData?.app_cr }}</span>
                                             </h3>
                                         </div>
@@ -2663,7 +2651,6 @@
                                                     [currencyCode]="ledgerTxnBalance?.currencyCode"
                                                 >
                                                 </amount-field>
-                                                &nbsp;
                                                 <span class="capitalize">{{ commonLocaleData?.app_dr }}</span>
                                             </h3>
 
@@ -2680,7 +2667,6 @@
                                                     [currencyCode]="ledgerTxnBalance?.convertedCurrencyCode"
                                                 >
                                                 </amount-field>
-                                                &nbsp;
                                                 <span class="capitalize">{{ commonLocaleData?.app_dr }}</span>
                                             </h3>
                                         </div>
@@ -2756,7 +2742,6 @@
                                                     [currencyCode]="ledgerTxnBalance?.currencyCode"
                                                 >
                                                 </amount-field>
-                                                &nbsp;
                                                 {{
                                                     ledgerTxnBalance?.closingBalance?.amount > 0
                                                         ? ledgerTxnBalance?.closingBalance?.type === "DEBIT"
@@ -2785,7 +2770,6 @@
                                                     [currencyCode]="ledgerTxnBalance?.convertedCurrencyCode"
                                                 >
                                                 </amount-field>
-                                                &nbsp;
                                                 {{
                                                     ledgerTxnBalance?.convertedClosingBalance?.amount > 0
                                                         ? ledgerTxnBalance?.convertedClosingBalance?.type === "DEBIT"

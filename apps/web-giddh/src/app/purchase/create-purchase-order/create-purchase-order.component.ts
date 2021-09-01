@@ -359,6 +359,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public translationLoaded: boolean = false;
     /** Length of entry description */
     public entryDescriptionLength: number = ENTRY_DESCRIPTION_LENGTH;
+    /** True if form save in progress */
+    public isFormSaveInProgress: boolean = false;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private store: Store<AppState>,
@@ -398,6 +402,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.getInvoiceSettings();
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
@@ -1888,11 +1893,13 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         if (this.activeIndex === entryIdx) {
             this.activeIndex = null;
         }
-        for (let index = entryIdx + 1; index < this.purchaseOrder.entries.length; index++) {
-            const viewRef: any = this.container.get(index);
-            viewRef.context.entryIdx -= 1;
-        }
         if (this.container) {
+            for (let index = entryIdx + 1; index < this.purchaseOrder.entries.length; index++) {
+                const viewRef: any = this.container.get(index);
+                if(viewRef) {
+                    viewRef.context.entryIdx -= 1;
+                }
+            }
             this.container.remove(entryIdx);
         }
         this.purchaseOrder.entries.splice(entryIdx, 1);
@@ -1997,6 +2004,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public savePurchaseOrder(type: string): void {
+        if(this.isFormSaveInProgress) {
+            return;
+        }
+
         let data: VoucherClass = _.cloneDeep(this.purchaseOrder);
 
         // special check if gst no filed is visible then and only then check for gst validation
@@ -2123,6 +2134,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             return;
         }
 
+        this.isFormSaveInProgress = true;
+
         let postRequestObject = {
             type: "purchase",
             date: data.voucherDetails.voucherDate,
@@ -2146,6 +2159,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
         if (type === "create") {
             this.purchaseOrderService.create(getRequestObject, updatedData).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.isFormSaveInProgress = false;
                 this.toaster.clearAllToaster();
                 if (response && response.status === "success") {
                     this.vendorAcList$ = observableOf(_.orderBy(this.defaultVendorSuggestions, 'label'));
@@ -2161,6 +2175,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             });
         } else {
             this.purchaseOrderService.update(getRequestObject, updatedData).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.isFormSaveInProgress = false;
                 this.toaster.clearAllToaster();
                 if (response && response.status === "success") {
                     this.toaster.successToast(this.localeData?.po_updated);
@@ -3095,6 +3110,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         } else if (searchType === SEARCH_TYPE.ITEM) {
             group = 'operatingcost, indirectexpenses';
             withStocks = !!query;
+
+            if(this.voucherApiVersion === 2) {
+                group += ", fixedassets";
+            }
         }
         const requestObject = {
             q: encodeURIComponent(query),

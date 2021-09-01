@@ -9,7 +9,7 @@
                 [suffix]="suffixInput"
                 [mask]="maskInput"
                 name="discountTotal"
-                class="form-control cursor-pointer text-right mat-field-border pd-0"
+                class="form-control cursor-pointer text-right mat-field-border"
                 (focus)="discountMenu = true; hideOtherPopups.emit(true)"
                 [(ngModel)]="discountTotal"
                 readonly
@@ -32,7 +32,7 @@
                     <input
                         matInput
                         id="ledger-discount-percent"
-                        class="form-control text-right cursor-pointer mat-field-border pd-0"
+                        class="form-control text-right cursor-pointer mat-field-border"
                         [disabled]="!discountFromPer"
                         decimalDigitsDirective
                         [DecimalPlaces]="2"
@@ -49,7 +49,7 @@
                     <input
                         matInput
                         id="ledger-discount-value"
-                        class="form-control text-right cursor-pointer mat-field-border pd-0"
+                        class="form-control text-right cursor-pointer mat-field-border"
                         [disabled]="!discountFromVal"
                         decimalDigitsDirective
                         [DecimalPlaces]="2"

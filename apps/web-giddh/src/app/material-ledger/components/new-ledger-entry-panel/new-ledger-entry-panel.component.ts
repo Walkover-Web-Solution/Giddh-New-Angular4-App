@@ -101,6 +101,8 @@ const NEW_LEDGER_ENTRIES = [
 export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
     /** Instance of mat accordion */
     @ViewChild(MatAccordion) accordion: MatAccordion;
+    /** Instance of RCM checkbox */
+    @ViewChild("rcmCheckbox") public rcmCheckbox: ElementRef;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -141,6 +143,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Output() public clickUnpaidInvoiceList: EventEmitter<any> = new EventEmitter();
     /** Emit event for getting invoice list for credit note linking */
     @Output() public getInvoiceListsForCreditNote: EventEmitter<any> = new EventEmitter();
+    /** Emits when more detail is opened */
+    @Output() public moreDetailOpen: EventEmitter<any> = new EventEmitter();
     /** Emits when other taxes are saved */
     @Output() public saveOtherTax: EventEmitter<any> = new EventEmitter();
     @ViewChild('entryContent', { static: true }) public entryContent: ElementRef;
@@ -235,6 +239,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public adjustmentDialogRef: any;
     /** True if datepicker is open */
     public isDatepickerOpen: boolean = false;
+    /** True if more details is open */
+    public isMoreDetailsOpen: boolean;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -366,7 +372,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
             this.calculatePreAppliedTax();
             this.preparePreAppliedDiscounts();
-            if (this.blankLedger.otherTaxModal.appliedOtherTax && this.blankLedger.otherTaxModal.appliedOtherTax.uniqueName) {
+            if (this.blankLedger?.otherTaxModal?.appliedOtherTax && this.blankLedger?.otherTaxModal?.appliedOtherTax?.uniqueName) {
                 this.blankLedger.isOtherTaxesApplicable = true;
             }
         }
@@ -1003,13 +1009,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public clickedOutside(event: any): void {
-        let classList = event.path.map(m => {
-            return m.classList;
-        });
-
         if(this.isDatepickerOpen) {
             return;
         }
+        
+        let classList = event.path.map(m => {
+            return m.classList;
+        });
 
         if (classList && classList instanceof Array) {
             const shouldNotClose = classList.some((className: DOMTokenList) => {
@@ -1117,6 +1123,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.blankLedger.otherTaxModal.itemLabel = '';
             return;
         }
+        if(!this.blankLedger?.otherTaxModal) {
+            this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
+        }
         this.blankLedger.otherTaxModal.itemLabel = this.currentTxn && this.currentTxn.selectedAccount ?
             this.currentTxn.selectedAccount.stock ? `${this.currentTxn.selectedAccount.name}(${this.currentTxn.selectedAccount.stock.name})` :
                 this.currentTxn.selectedAccount.name : '';
@@ -1140,7 +1149,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             return;
         }
 
-        if (modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
+        if (modal?.appliedOtherTax && modal?.appliedOtherTax?.uniqueName) {
             const amount = (this.isAdvanceReceipt) ? transaction.advanceReceiptAmount : transaction.amount;
             if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
                 taxableValue = Number(amount) - transaction.discount;
@@ -1149,7 +1158,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 taxableValue = (rawAmount + transaction.tax);
             }
 
-            let tax = companyTaxes.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
+            let tax = companyTaxes.find(ct => ct.uniqueName === modal?.appliedOtherTax?.uniqueName);
             if (tax) {
                 this.blankLedger.otherTaxType = ['tcsrc', 'tcspay'].includes(tax.taxType) ? 'tcs' : 'tds';
             }
@@ -1259,13 +1268,33 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     /**
+     * This will reset the state of checkbox and ngModel to make sure we update it based on user confirmation later
+     *
+     * @param {*} event
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public changeRcmCheckboxState(event: any): void {
+        this.isRcmEntry = !this.isRcmEntry;
+        this.toggleRcmCheckbox(event, 'checkbox');
+    }
+
+    /**
      * Toggle the RCM checkbox based on user confirmation
      *
      * @param {*} event Click event
      * @memberof NewLedgerEntryPanelComponent
      */
-    public toggleRcmCheckbox(event: any): void {
-        this.rcmConfiguration = this.generalService.getRcmConfiguration(event?.checked, this.commonLocaleData);
+    public toggleRcmCheckbox(event: any, element: string): void {
+        let isChecked; 
+        
+        if(element === "checkbox") {
+            isChecked = event?.checked;
+            this.rcmCheckbox['checked'] = !isChecked;
+        } else {
+            isChecked = !event?._checked;
+        }
+
+        this.rcmConfiguration = this.generalService.getRcmConfiguration(isChecked, this.commonLocaleData);
 
         let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
             width: '630px',
@@ -1290,9 +1319,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (action === this.commonLocaleData?.app_yes) {
             // Toggle the state of RCM as user accepted the terms of RCM modal
             this.isRcmEntry = !this.isRcmEntry;
+            this.rcmCheckbox['checked'] = this.isRcmEntry;
             this.calculateTotal();
         }
         this.currentTxn['subVoucher'] = this.isRcmEntry ? SubVoucher.ReverseCharge : '';
+        this.cdRef.detectChanges();
     }
 
     /**
@@ -1607,4 +1638,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.saveOtherTax.emit(this.blankLedger);
     }
 
+    /**
+     * Toggles the more detail section
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public toggleMoreDetail(): void {
+        this.isMoreDetailsOpen = !this.isMoreDetailsOpen;
+        this.moreDetailOpen.emit(this.isMoreDetailsOpen);
+    }
 }
