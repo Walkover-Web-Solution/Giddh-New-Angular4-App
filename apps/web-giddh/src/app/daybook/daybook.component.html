@@ -360,10 +360,7 @@
                                 [hidden]="!entry.isExpanded"
                                 [attr.colspan]="isEntryExpanded ? tableAllColumns?.length : tableColumns?.length"
                             >
-                                <div
-                                    class="d-flex overflow-hidden"
-                                    [@detailExpand]="isEntryExpanded ? 'expanded' : 'collapsed'"
-                                >
+                                <div class="d-flex overflow-hidden">
                                     <div class="w-100" *ngIf="entry.isExpanded && entry.otherTransactions?.length">
                                         <table
                                             class="w-100 nested-table"
