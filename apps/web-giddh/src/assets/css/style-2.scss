@@ -1600,9 +1600,9 @@ fieldset[disabled] .btn-primary:hover {
 .btn-default:active,
 .btn-default:active:focus,
 .open > .dropdown-toggle.btn-default {
-    background: $chetwode-blue;
-    color: $white;
-    border-color: $chetwode-blue;
+    background: $chetwode-blue !important;
+    color: $white !important;
+    border-color: $chetwode-blue !important;
 }
 
 .success-btn {
