@@ -108,16 +108,22 @@ button.btn.btn-filter {
     align-items: center;
 }
 
-.daybook-w-100{
+.daybook-w-100 {
     width: 100px;
 }
 
-.daybook-w-150{
+.daybook-w-150 {
     width: 150px;
 }
 
-.daybook-w-200{
+.daybook-w-200 {
     width: 200px;
+    white-space: normal !important;
+}
+
+.daybook-w-300 {
+    width: 300px;
+    white-space: normal !important;
 }
 
 /*responsive */
