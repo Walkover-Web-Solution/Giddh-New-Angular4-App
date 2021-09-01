@@ -1,281 +1,401 @@
-<ng-container appTranslate [file]="'invoice'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+<ng-container
+    appTranslate
+    [file]="'invoice'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
     <div validateSectionPermission [hasPermission]="hasPendingVouchersListPermissions">
         <ng-container *ngIf="!showEditMode">
             <div class="invoice-generate-container">
-                <div class="btn-dropdown-dr-cr"
-                    *ngIf="selectedVoucher === 'debit note' || selectedVoucher === 'credit note'">
-                    <div class="btn-group d-inline-block mr-b1" dropdown triggers="mouseover" #dp="bs-dropdown"
-                        (mouseleave)="dp.hide()">
-                        <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
-                            aria-controls="dropdown-basic">
-                            {{ selectedVoucher | titlecase}}
+                <div
+                    class="btn-dropdown-dr-cr"
+                    *ngIf="selectedVoucher === 'debit note' || selectedVoucher === 'credit note'"
+                >
+                    <div
+                        class="btn-group d-inline-block mr-b1"
+                        dropdown
+                        triggers="mouseover"
+                        #dp="bs-dropdown"
+                        (mouseleave)="dp.hide()"
+                    >
+                        <button
+                            dropdownToggle
+                            type="button"
+                            class="btn more-btn-dropdown dropdown-toggle"
+                            aria-controls="dropdown-basic"
+                        >
+                            {{ selectedVoucher | titlecase }}
                             <span class="caret"></span>
                         </button>
                         <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-
                             <li role="menuitem" (click)="changeDebitOrCredit('debit note')">
-                                <a class="dropdown-item cp"
-                                    href="javascript:void(0)">{{commonLocaleData?.app_voucher_types?.debit_note}}</a>
+                                <a class="dropdown-item cp" href="javascript:void(0)">{{
+                                    commonLocaleData?.app_voucher_types?.debit_note
+                                }}</a>
                             </li>
 
                             <li role="menuitem" (click)="changeDebitOrCredit('credit note')">
-                                <a class="dropdown-item cp"
-                                    href="javascript:void(0)">{{commonLocaleData?.app_voucher_types?.credit_note}}</a>
+                                <a class="dropdown-item cp" href="javascript:void(0)">{{
+                                    commonLocaleData?.app_voucher_types?.credit_note
+                                }}</a>
                             </li>
                         </ul>
                     </div>
                 </div>
 
-                <form #invoiceForm="ngForm" (ngSubmit)="getLedgersByFilters(invoiceForm)" novalidate
-                    class="form-inline mr-b15">
+                <form
+                    #invoiceForm="ngForm"
+                    (ngSubmit)="getLedgersByFilters(invoiceForm)"
+                    novalidate
+                    class="form-inline mr-b15"
+                >
                     <div class="d-flex w-100 flex-none">
                         <div class="d-flex form-group mobile-width-100 flex-none">
                             <div class="form-group date-advance-search pending-advance-search flex-fill">
                                 <div class="input-group mr-r1 mb-0" id="dp-parent">
                                     <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
                                         <i class="icon-calender calendar-addon"></i>
-                                        <input type="text" name="selectedDateRange"
-                                            [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
-                                            class="giddh-datepicker date-range-picker border-radius-2" />
+                                        <input
+                                            type="text"
+                                            name="selectedDateRange"
+                                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                            class="giddh-datepicker date-range-picker border-radius-2"
+                                        />
                                     </div>
                                     <button
-                                        class="clear-filter btn btn-filter align-items-center d-flex justify-content-center"
-                                        *ngIf="customDateSelected && isMobileView" (click)="resetDateSearch()">
-                                        <span class="icon-cross"></span> {{commonLocaleData?.app_clear_filter}}
+                                        class="
+                                            clear-filter
+                                            btn btn-filter
+                                            align-items-center
+                                            d-flex
+                                            justify-content-center
+                                        "
+                                        *ngIf="customDateSelected && isMobileView"
+                                        (click)="resetDateSearch()"
+                                    >
+                                        <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                                     </button>
                                 </div>
                                 <span>
-                                    <button *ngIf="!isCompany" [hidden]="selectedLedgerItems.length === 0"
-                                        class="btn btn-primary" (click)="generateBulkInvoice(false)">
-                                        {{localeData?.generate_multiple}}
+                                    <button
+                                        *ngIf="!isCompany"
+                                        [hidden]="selectedLedgerItems.length === 0"
+                                        class="btn btn-primary"
+                                        (click)="generateBulkInvoice(false)"
+                                    >
+                                        {{ localeData?.generate_multiple }}
                                     </button>
-                                    <button *ngIf="!isCompany" [hidden]="selectedLedgerItems.length === 0"
-                                        class="btn btn-primary" (click)="generateBulkInvoice(true)">
-                                        {{localeData?.generate_compound}}
+                                    <button
+                                        *ngIf="!isCompany"
+                                        [hidden]="selectedLedgerItems.length === 0"
+                                        class="btn btn-primary"
+                                        (click)="generateBulkInvoice(true)"
+                                    >
+                                        {{ localeData?.generate_compound }}
                                     </button>
-                                    <button *ngIf="!isCompany && !isMobileView" placement="top"
+                                    <button
+                                        *ngIf="!isCompany && !isMobileView"
+                                        placement="top"
                                         [tooltip]="localeData?.works_for_single_entry"
-                                        [hidden]="selectedLedgerItems.length === 0  || !togglePrevGenBtn"
-                                        class="btn btn-primary" (click)="previewInvoice()">{{localeData?.preview_generate}}
+                                        [hidden]="selectedLedgerItems.length === 0 || !togglePrevGenBtn"
+                                        class="btn btn-primary"
+                                        (click)="previewInvoice()"
+                                    >
+                                        {{ localeData?.preview_generate }}
                                     </button>
                                 </span>
                             </div>
                         </div>
                         <div class="align-items-center d-flex justify-content-center filter-width">
-                            <div class="clear-filter" [ngClass]="{'width-auto' : selectedLedgerItems.length === 0}"
-                                *ngIf="customDateSelected && !isMobileView" (click)="resetDateSearch()">
+                            <div
+                                class="clear-filter"
+                                [ngClass]="{ 'width-auto': selectedLedgerItems.length === 0 }"
+                                *ngIf="customDateSelected && !isMobileView"
+                                (click)="resetDateSearch()"
+                            >
                                 <button class="btn btn-filter mr-0">
-                                    <span class="icon-cross"></span> {{commonLocaleData?.app_clear_filter}}
+                                    <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                                 </button>
                             </div>
                         </div>
                     </div>
-            </form>
+                </form>
 
                 <div class="table-responsive" [hidden]="!ledgersData?.results?.length">
-                <table class="table basic giddh-table pending-table on-mobile-view">
+                    <table class="table basic giddh-table pending-table on-mobile-view">
+                        <thead class="thead-background1">
+                            <tr>
+                                <th width="4%" *ngIf="selectedInvoices.length > 0">
+                                    <div class="check-image d-flex justify-content-center">
+                                        <img
+                                            src="assets/images/unchecked.png"
+                                            *ngIf="!allItemsSelected"
+                                            (click)="toggleAllItems(true)"
+                                        />
+                                        <img
+                                            src="assets/images/checked.png"
+                                            *ngIf="allItemsSelected"
+                                            (click)="toggleAllItems(false)"
+                                        />
+                                    </div>
+                                </th>
 
-                    <thead class="thead-background1">
-                        <tr>
-                            <th width="4%" *ngIf="selectedInvoices.length > 0">
+                                <th *ngIf="selectedInvoices.length === 0" width="4%">
+                                    <div class="check-image d-flex justify-content-center">#</div>
+                                </th>
 
-                                <div class="check-image d-flex justify-content-center">
-                                    <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
-                                        (click)="toggleAllItems(true)">
-                                    <img src="assets/images/checked.png" *ngIf="allItemsSelected"
-                                        (click)="toggleAllItems(false)">
-                                </div>
-                            </th>
+                                <th width="12%">
+                                    <div class="d-flex">
+                                        <div class="flex-fill">{{ commonLocaleData?.app_date }}</div>
+                                    </div>
+                                </th>
+                                <th width="20%" class="td-search-box" #searchParticularContainer>
+                                    <div [hidden]="showParticularSearch">
+                                        <span> {{ commonLocaleData?.app_particular }}</span>
+                                    </div>
 
-                            <th *ngIf="selectedInvoices.length === 0" width="4%">
-                                <div class="check-image d-flex justify-content-center">
-                                    #
-                                </div>
-                            </th>
+                                    <div class="input-container" [hidden]="!showParticularSearch">
+                                        <input
+                                            type="text"
+                                            [placeholder]="localeData?.search_particular"
+                                            class="w100"
+                                            [formControl]="particularInput"
+                                            #particularSearch
+                                        />
+                                        <i class="icon-search" (click)="showParticularSearch = false"></i>
+                                    </div>
+                                </th>
 
-                            <th width="12%">
-                                <div class="d-flex">
-                                    <div class="flex-fill"> {{commonLocaleData?.app_date}}</div>
-                                </div>
-                            </th>
-                            <th width="20%" class="td-search-box" #searchParticularContainer>
+                                <th width="13%">
+                                    <div class="d-flex">
+                                        <div class="flex-fill text-right">{{ commonLocaleData?.app_amount }}</div>
+                                    </div>
+                                </th>
 
-                                <div [hidden]="showParticularSearch">
-                                    <span> {{commonLocaleData?.app_particular}}</span>
-                                </div>
+                                <th width="20%" class="td-search-box" #searchAccountContainer>
+                                    <div [hidden]="showAccountSearch">
+                                        <span> {{ commonLocaleData?.app_account }}</span>
+                                    </div>
 
-                                <div class="input-container" [hidden]="!showParticularSearch">
-                                    <input type="text" [placeholder]="localeData?.search_particular" class="w100"
-                                        [formControl]="particularInput" #particularSearch />
-                                    <i class="icon-search" (click)="showParticularSearch = false;"></i>
-                                </div>
-                            </th>
+                                    <div class="input-container" [hidden]="!showAccountSearch">
+                                        <input
+                                            type="text"
+                                            [placeholder]="commonLocaleData?.app_search_account"
+                                            class="w100"
+                                            [formControl]="accountUniqueNameInput"
+                                            #accountUniqueNameSearch
+                                        />
+                                    </div>
+                                </th>
 
-                            <th width="13%">
-                                <div class="d-flex">
-                                    <div class="flex-fill text-right"> {{commonLocaleData?.app_amount}}</div>
-                                </div>
-                            </th>
+                                <th width="13%">
+                                    <div class="d-flex">
+                                        <div class="flex-fill text-right">{{ commonLocaleData?.app_total }}</div>
+                                    </div>
+                                </th>
 
-                            <th width="20%" class="td-search-box" #searchAccountContainer>
+                                <th width="20%" class="td-search-box" #searchDescContainer>
+                                    <div [hidden]="showDescSearch">
+                                        <span> {{ commonLocaleData?.app_description }}</span>
+                                    </div>
 
-                                <div [hidden]="showAccountSearch">
-                                    <span> {{commonLocaleData?.app_account}}</span>
-                                </div>
+                                    <div class="input-container" [hidden]="!showDescSearch">
+                                        <input
+                                            type="text"
+                                            [placeholder]="localeData?.search_description"
+                                            class="w100"
+                                        />
+                                        <i class="icon-search" (click)="showDescSearch = false"></i>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody
+                            *ngIf="!(getLedgerDataInProcess$ | async)"
+                            (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
+                            (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
+                        >
+                            <tr
+                                *ngFor="let item of ledgersData?.results; let i = index"
+                                [ngClass]="{ 'danger': item.hasGenerationErr }"
+                                (mouseover)="hoveredItemForAction = item.uniqueName"
+                            >
+                                <td
+                                    class="check-image"
+                                    data-title="#"
+                                    *ngIf="
+                                        hoveredItemForAction === item.uniqueName ||
+                                        item.isSelected ||
+                                        selectedInvoices.length > 0
+                                    "
+                                >
+                                    <div class="check-image d-flex justify-content-center" data-title="#">
+                                        <img
+                                            *ngIf="!item.isSelected"
+                                            src="assets/images/unchecked.png"
+                                            (click)="toggleItem(item, true)"
+                                        />
+                                        <img
+                                            *ngIf="item.isSelected"
+                                            src="assets/images/checked.png"
+                                            (click)="toggleItem(item, false)"
+                                        />
+                                    </div>
+                                    <div *ngIf="item.hasGenerationErr">
+                                        <i class="fa fa-info-circle" placement="right" [tooltip]="item.errMsg"></i>
+                                    </div>
+                                </td>
 
-                                <div class="input-container" [hidden]="!showAccountSearch">
-                                    <input type="text" [placeholder]="commonLocaleData?.app_search_account" class="w100"
-                                        [formControl]="accountUniqueNameInput" #accountUniqueNameSearch />
-                                </div>
+                                <td
+                                    *ngIf="
+                                        !item.isSelected &&
+                                        hoveredItemForAction !== item.uniqueName &&
+                                        selectedInvoices.length === 0
+                                    "
+                                    data-title="#"
+                                >
+                                    <div class="d-flex justify-content-center">
+                                        {{ i + 1 }}
+                                    </div>
+                                </td>
 
-                            </th>
+                                <td [attr.data-title]="commonLocaleData?.app_date">{{ item.entryDate }}</td>
 
-                            <th width="13%">
-                                <div class="d-flex">
-                                    <div class="flex-fill text-right"> {{commonLocaleData?.app_total}}</div>
-                                </div>
-                            </th>
+                                <td [attr.data-title]="commonLocaleData?.app_particular" class="hide-on-mobile">
+                                    <table class="table nested-table particular-nested-table">
+                                        <tr *ngFor="let transaction of item.transactions">
+                                            <td class="p-0 border-none">
+                                                {{ transaction.particular.name }}
+                                                <span *ngIf="transaction.inventory && transaction.inventory.stock"
+                                                    >({{ transaction.inventory.stock.name }})
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
 
-                            <th width="20%" class="td-search-box" #searchDescContainer>
+                                <td [attr.data-title]="commonLocaleData?.app_amount" class="hide-on-mobile">
+                                    <table class="table nested-table amount-nested-table">
+                                        <tr *ngFor="let transaction of item.transactions">
+                                            <td class="text-right p-0 border-none">
+                                                <span class="d-inline-flex">
+                                                    <amount-field
+                                                        [amount]="transaction.amount"
+                                                        [currencySymbol]="item.accountCurrencySymbol"
+                                                        [currencyCode]="activeCompany.baseCurrency"
+                                                    >
+                                                    </amount-field>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td id="mobile-nested-table">
+                                    <table>
+                                        <tr>
+                                            <th>{{ commonLocaleData?.app_particular }}</th>
+                                            <th>{{ commonLocaleData?.app_amount }}</th>
+                                        </tr>
+                                        <tr *ngFor="let transaction of item.transactions">
+                                            <td>
+                                                {{ transaction.particular.name }}
+                                                <span *ngIf="transaction.inventory && transaction.inventory.stock"
+                                                    >({{ transaction.inventory.stock.name }})
+                                                </span>
+                                            </td>
+                                            <td class="text-right">
+                                                <span class="d-inline-flex">
+                                                    <amount-field
+                                                        [amount]="transaction.amount"
+                                                        [currencySymbol]="item.accountCurrencySymbol"
+                                                        [currencyCode]="activeCompany.baseCurrency"
+                                                    >
+                                                    </amount-field>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
 
-                                <div [hidden]="showDescSearch">
-                                    <span> {{commonLocaleData?.app_description}}</span>
-                                </div>
+                                <td
+                                    (dblclick)="modalUniqueName = item.uniqueName"
+                                    class="cp no-dbl-click-select"
+                                    (clickOutside)="modalUniqueName = ''"
+                                    [attr.data-title]="commonLocaleData?.app_account"
+                                >
+                                    {{ item?.account?.name }}
+                                    <div
+                                        *ngIf="modalUniqueName === item.uniqueName"
+                                        account-detail-modal-component
+                                        [accountUniqueName]="item?.account?.uniqueName"
+                                        [from]="ledgerSearchRequest.from"
+                                        [to]="ledgerSearchRequest.to"
+                                        [isModalOpen]="modalUniqueName === item.uniqueName"
+                                        [voucherType]="selectedVoucher"
+                                    ></div>
+                                </td>
 
-                                <div class="input-container" [hidden]="!showDescSearch">
-                                    <input type="text" [placeholder]="localeData?.search_description" class="w100" />
-                                    <i class="icon-search" (click)="showDescSearch = false;"></i>
-                                </div>
+                                <td
+                                    class="text-right"
+                                    [attr.data-title]="commonLocaleData?.app_total"
+                                    [tooltip]="totalPopupTemplate"
+                                >
+                                    <span class="d-inline-flex">
+                                        <amount-field
+                                            [amount]="item.total.amount"
+                                            [currencySymbol]="item.accountCurrencySymbol"
+                                            [currencyCode]="activeCompany.baseCurrency"
+                                        >
+                                        </amount-field>
+                                    </span>
+                                </td>
+                                <ng-template #totalPopupTemplate
+                                    ><span [innerHTML]="item.totalTooltipText"></span>
+                                </ng-template>
+                                <td
+                                    [attr.data-title]="commonLocaleData?.app_description"
+                                    class="pending-table-description"
+                                >
+                                    {{ item.description ? item.description : "-" }}
+                                </td>
+                            </tr>
+                        </tbody>
 
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody *ngIf="!(getLedgerDataInProcess$ | async)"
-                        (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
-                        (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''">
-
-                        <tr *ngFor="let item of ledgersData?.results; let i = index;"
-                            [ngClass]="{'danger': item.hasGenerationErr}"
-                            (mouseover)="hoveredItemForAction = item.uniqueName">
-
-                            <td class="check-image" data-title="#"
-                                *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedInvoices.length > 0">
-                                <div class="check-image d-flex justify-content-center" data-title="#">
-                                    <img *ngIf="!item.isSelected" src="assets/images/unchecked.png"
-                                        (click)="toggleItem(item, true)" />
-                                    <img *ngIf="item.isSelected" src="assets/images/checked.png"
-                                        (click)="toggleItem(item, false)" />
-                                </div>
-                                <div *ngIf="item.hasGenerationErr">
-                                    <i class='fa fa-info-circle' placement="right" [tooltip]="item.errMsg"></i>
-                                </div>
-                            </td>
-
-                            <td *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedInvoices.length === 0"
-                                data-title="#">
-                                <div class="d-flex justify-content-center">
-                                    {{ i + 1}}
-                                </div>
-                            </td>
-
-                            <td [attr.data-title]="commonLocaleData?.app_date">{{item.entryDate}}</td>
-
-                            <td [attr.data-title]="commonLocaleData?.app_particular" class="hide-on-mobile">
-                                <table class="table nested-table particular-nested-table">
-                                    <tr *ngFor="let transaction of item.transactions">
-                                        <td class="p-0 border-none">
-                                            {{transaction.particular.name }}
-                                            <span
-                                                *ngIf="transaction.inventory && transaction.inventory.stock">({{transaction.inventory.stock.name}})
-                                            </span>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-
-                            <td [attr.data-title]="commonLocaleData?.app_amount" class="hide-on-mobile">
-                                <table class="table nested-table amount-nested-table">
-                                    <tr *ngFor="let transaction of item.transactions">
-                                        <td class="text-right p-0 border-none">
-                                            <span class="d-inline-flex">
-                                                <amount-field [amount]="transaction.amount" [currencySymbol]="item.accountCurrencySymbol" [currencyCode]="activeCompany.baseCurrency">
-                                                </amount-field>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                </table>
-
-                            </td>
-                            <td id="mobile-nested-table">
-                                <table>
-                                    <tr>
-                                        <th>{{commonLocaleData?.app_particular}}</th>
-                                        <th>{{commonLocaleData?.app_amount}}</th>
-                                    </tr>
-                                    <tr *ngFor="let transaction of item.transactions">
-
-                                        <td>
-                                            {{transaction.particular.name }}
-                                            <span
-                                                *ngIf="transaction.inventory && transaction.inventory.stock">({{transaction.inventory.stock.name}})
-                                            </span>
-                                        </td>
-                                        <td class="text-right">
-                                            <span class="d-inline-flex">
-                                                <amount-field [amount]="transaction.amount" [currencySymbol]="item.accountCurrencySymbol" [currencyCode]="activeCompany.baseCurrency">
-                                                </amount-field>
-                                            </span>
-                                        </td>
-
-                                    </tr>
-
-                                </table>
-                            </td>
-
-                            <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
-                                (clickOutside)="modalUniqueName = ''" [attr.data-title]="commonLocaleData?.app_account">
-                                {{item.account.name}}
-                                <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
-                                    [accountUniqueName]="item.account.uniqueName" [from]="ledgerSearchRequest.from"
-                                    [to]="ledgerSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName"
-                                    [voucherType]="selectedVoucher">
-                                </div>
-                            </td>
-
-                            <td class="text-right" [attr.data-title]="commonLocaleData?.app_total"
-                                [tooltip]="totalPopupTemplate">
-                                <span class="d-inline-flex">
-                                    <amount-field [amount]="item.total.amount" [currencySymbol]="item.accountCurrencySymbol" [currencyCode]="activeCompany.baseCurrency">
-                                    </amount-field>
-                                </span>
-                            </td>
-                            <ng-template #totalPopupTemplate><span [innerHTML]="item.totalTooltipText"></span>
-                            </ng-template>
-                            <td [attr.data-title]="commonLocaleData?.app_description" class="pending-table-description">
-                                {{ item.description ? item.description : '-' }}</td>
-                    </tbody>
-                    <tbody *ngIf="(isGetAllRequestInProcess$ | async) || (getLedgerDataInProcess$ | async)"
-                        id="centerAlign">
-                        <tr>
-                            <td colspan="8">
-                                <giddh-page-loader></giddh-page-loader>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                        <tbody
+                            *ngIf="(isGetAllRequestInProcess$ | async) || (getLedgerDataInProcess$ | async)"
+                            id="centerAlign"
+                        >
+                            <tr>
+                                <td colspan="8">
+                                    <giddh-page-loader></giddh-page-loader>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
 
-            <div *ngIf="ledgersData?.totalItems > 20"
+            <div
+                *ngIf="ledgersData?.totalItems > 20"
                 [hidden]="(isGetAllRequestInProcess$ | async) || (getLedgerDataInProcess$ | async)"
-                class="pagination-wrapper">
+                class="pagination-wrapper"
+            >
                 <div class="text-center">
-                    <pagination [totalItems]="ledgersData.totalItems" [(ngModel)]="ledgersData.page" [maxSize]="5"
-                        class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false"
-                        (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first"
-                        [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next"
-                        [lastText]="commonLocaleData?.app_last"></pagination>
+                    <pagination
+                        [totalItems]="ledgersData.totalItems"
+                        [(ngModel)]="ledgersData.page"
+                        [maxSize]="5"
+                        class="pagination-sm"
+                        [boundaryLinks]="true"
+                        [itemsPerPage]="20"
+                        [rotate]="false"
+                        (pageChanged)="pageChanged($event)"
+                        [firstText]="commonLocaleData?.app_first"
+                        [previousText]="commonLocaleData?.app_previous"
+                        [nextText]="commonLocaleData?.app_next"
+                        [lastText]="commonLocaleData?.app_last"
+                    ></pagination>
                 </div>
             </div>
 
@@ -286,32 +406,46 @@
         <!-- region edit invoice -->
         <div *ngIf="showEditMode">
             <div class="invoice-edit-wrapper">
-                <span class="close-modal cp pull-right " (click)="closeModel() ">
-                    <img src="assets/images/multiply.svg ">
+                <span class="close-modal cp pull-right" (click)="closeModel()">
+                    <img src="assets/images/multiply.svg " />
                 </span>
-                <div class="invoice-edit-body ">
-                    <proforma-invoice-component [accountUniqueName]="selectedAccountUniqueName"
+                <div class="invoice-edit-body">
+                    <proforma-invoice-component
+                        [accountUniqueName]="selectedAccountUniqueName"
                         [selectedItem]="selectedItem"
-                        [invoiceNo]="(selectedVoucher !=='purchase' ) ? selectedItem?.voucherNumber : selectedItem?.uniqueName "
-                        [invoiceType]="selectedVoucher" [callFromOutside]="false" (cancelVoucherUpdate)="closeModel() ">
+                        [invoiceNo]="
+                            selectedVoucher !== 'purchase' ? selectedItem?.voucherNumber : selectedItem?.uniqueName
+                        "
+                        [invoiceType]="selectedVoucher"
+                        [callFromOutside]="false"
+                        (cancelVoucherUpdate)="closeModel()"
+                    >
                     </proforma-invoice-component>
                 </div>
-
             </div>
-
         </div>
         <!-- endregion -->
 
         <ng-template #datepickerTemplate>
             <div class="datepicker-modal">
                 <div class="modal-body">
-                    <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
-                        [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption"
-                        [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
-                        [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
-                        (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
-                        [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
-                        [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+                    <app-datepicker-wrapper
+                        [inputStartDate]="selectedDateRange?.startDate"
+                        [inputEndDate]="selectedDateRange?.endDate"
+                        [alwaysShowCalendars]="true"
+                        [ranges]="datePickerOption"
+                        [selectedRangeLabel]="selectedRangeLabel"
+                        [showCustomRangeLabel]="true"
+                        [showClearButton]="false"
+                        [showCancel]="true"
+                        [linkedCalendars]="true"
+                        [showDropdowns]="true"
+                        (rangeClicked)="dateSelectedCallback($event)"
+                        (datesUpdated)="dateSelectedCallback($event)"
+                        [keepCalendarOpeningWithRange]="false"
+                        [showRangeLabelOnInput]="false"
+                        [dateFieldPosition]="dateFieldPosition"
+                    ></app-datepicker-wrapper>
                 </div>
             </div>
         </ng-template>
