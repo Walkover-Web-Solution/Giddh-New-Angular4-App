@@ -6,7 +6,9 @@
 .height-30 {
     height: 30px;
 }
-
+.min-h-32 {
+    min-height: 32px;
+}
 .ledg-head.entry-popup table td.select2-ledger > sh-select {
     position: initial;
     margin-top: 1px;
@@ -276,9 +278,7 @@ span.eligible-ITC {
 .table-amount[disabled] {
     pointer-events: none;
 }
-#update-ledger-assign-tag.disabled-ledger::ng-deep
-    .sh-select-disabled
-    .bg-white {
+#update-ledger-assign-tag.disabled-ledger::ng-deep .sh-select-disabled .bg-white {
     background-color: $whisper-light !important;
 }
 #update-ledger-assign-tag.disabled-ledger::ng-deep input,

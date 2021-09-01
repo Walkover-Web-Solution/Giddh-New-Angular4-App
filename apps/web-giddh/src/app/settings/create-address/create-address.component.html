@@ -4,69 +4,123 @@
             <div>
                 <div class="form-header">
                     <h3
-                        *ngIf="addressConfiguration.type === 'createAddress' || addressConfiguration.type === 'createBranchAddress'">
-                        {{localeData?.create_address}}</h3>
-                    <h3 *ngIf="addressConfiguration.type === 'editAddress'">{{localeData?.update_address}}</h3>
-                    <h3 *ngIf="addressConfiguration.type === 'editBranch'">{{localeData?.edit_branch}}</h3>
-                    <h3 *ngIf="addressConfiguration.type === 'editWarehouse'">{{localeData?.edit_warehouse}}</h3>
+                        *ngIf="
+                            addressConfiguration.type === 'createAddress' ||
+                            addressConfiguration.type === 'createBranchAddress'
+                        "
+                    >
+                        {{ localeData?.create_address }}
+                    </h3>
+                    <h3 *ngIf="addressConfiguration.type === 'editAddress'">{{ localeData?.update_address }}</h3>
+                    <h3 *ngIf="addressConfiguration.type === 'editBranch'">{{ localeData?.edit_branch }}</h3>
+                    <h3 *ngIf="addressConfiguration.type === 'editWarehouse'">{{ localeData?.edit_warehouse }}</h3>
                 </div>
                 <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
 
                 <div class="aside-body">
-                    <div class="aside-pane-form"
-                        [ngClass]="{'edit-branch-mode': addressConfiguration.type === 'editBranch'}">
+                    <div
+                        class="aside-pane-form"
+                        [ngClass]="{ 'edit-branch-mode': addressConfiguration.type === 'editBranch' }"
+                    >
                         <section
-                            *ngIf="addressConfiguration.type !== 'editBranch' && addressConfiguration.type !== 'editWarehouse'"
-                            class="clearfix margin-child-label">
-                            <div *ngIf="companyName" class="font-14 mr-b15"
-                                [innerHTML]="getInformationSaveText(companyName)"></div>
+                            *ngIf="
+                                addressConfiguration.type !== 'editBranch' &&
+                                addressConfiguration.type !== 'editWarehouse'
+                            "
+                            class="clearfix margin-child-label"
+                        >
+                            <div
+                                *ngIf="companyName"
+                                class="font-14 mr-b15"
+                                [innerHTML]="getInformationSaveText(companyName)"
+                            ></div>
                             <div class="form-bg-aside clearfix">
                                 <div class="row">
                                     <div class="form-group col-12">
-                                        <label>{{commonLocaleData?.app_name}} <sup>*</sup></label>
-                                        <input maxlength="100"
-                                            [class.error-box]="addressForm?.get('name')?.touched && addressForm?.get('name')?.invalid"
-                                            type="text" formControlName="name" class="form-control"
-                                            [placeholder]="localeData?.enter_name">
-                                        <span class="danger"
-                                            *ngIf="addressForm?.get('name')?.touched && addressForm?.get('name')?.errors?.maxlength">
-                                            {{commonLocaleData?.app_max_100_characters_allowed_limit}}
+                                        <label>{{ commonLocaleData?.app_name }} <sup>*</sup></label>
+                                        <input
+                                            maxlength="100"
+                                            [class.error-box]="
+                                                addressForm?.get('name')?.touched && addressForm?.get('name')?.invalid
+                                            "
+                                            type="text"
+                                            formControlName="name"
+                                            class="form-control"
+                                            [placeholder]="localeData?.enter_name"
+                                        />
+                                        <span
+                                            class="danger"
+                                            *ngIf="
+                                                addressForm?.get('name')?.touched &&
+                                                addressForm?.get('name')?.errors?.maxlength
+                                            "
+                                        >
+                                            {{ commonLocaleData?.app_max_100_characters_allowed_limit }}
                                         </span>
-                                        <span class="danger"
-                                            *ngIf="addressForm?.get('name')?.touched && addressForm?.get('name')?.errors?.required">
-                                            {{localeData?.field_required_error}}
+                                        <span
+                                            class="danger"
+                                            *ngIf="
+                                                addressForm?.get('name')?.touched &&
+                                                addressForm?.get('name')?.errors?.required
+                                            "
+                                        >
+                                            {{ localeData?.field_required_error }}
                                         </span>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div *ngIf="addressConfiguration?.tax?.name" class="col-sm-4 form-group">
-                                        <label>{{addressConfiguration?.tax?.name}}</label>
+                                        <label>{{ addressConfiguration?.tax?.name }}</label>
                                         <input
-                                            [class.error-box]="addressForm?.get('taxNumber')?.touched && addressForm?.get('taxNumber')?.invalid"
-                                            type="text" (keyup)="getStateCode(states, $event)" class="form-control"
+                                            [class.error-box]="
+                                                addressForm?.get('taxNumber')?.touched &&
+                                                addressForm?.get('taxNumber')?.invalid
+                                            "
+                                            type="text"
+                                            (keyup)="getStateCode(states, $event)"
+                                            class="form-control"
                                             formControlName="taxNumber"
-                                            [attr.placeholder]="getEnterTaxText(addressConfiguration?.tax?.name)">
+                                            [attr.placeholder]="getEnterTaxText(addressConfiguration?.tax?.name)"
+                                        />
                                     </div>
                                     <div class="col-sm-4 form-group">
-                                        <label>{{commonLocaleData?.app_state}} <sup>*</sup></label>
-                                        <sh-select #states
-                                            [disabled]="addressConfiguration?.type === 'editAddress' && addressToUpdate?.taxNumber && addressConfiguration?.tax?.name && addressConfiguration?.tax?.name === 'GSTIN'"
-                                            [options]="addressConfiguration.stateList" required [isRequired]="true"
-                                            [isFilterEnabled]="true" formControlName="state" class="w-100"
+                                        <label>{{ commonLocaleData?.app_state }} <sup>*</sup></label>
+                                        <sh-select
+                                            #states
+                                            [disabled]="
+                                                addressConfiguration?.type === 'editAddress' &&
+                                                addressToUpdate?.taxNumber &&
+                                                addressConfiguration?.tax?.name &&
+                                                addressConfiguration?.tax?.name === 'GSTIN'
+                                            "
+                                            [options]="addressConfiguration.stateList"
+                                            required
+                                            [isRequired]="true"
+                                            [isFilterEnabled]="true"
+                                            formControlName="state"
+                                            class="w-100"
                                             [useInBuiltFilterForIOptionTypeItems]="true"
-                                            [forceClearReactive]="forceClear$ | async">
+                                            [forceClearReactive]="forceClear$ | async"
+                                        >
                                         </sh-select>
                                     </div>
                                     <!-- static code added for the pincode -->
                                     <div class="col-sm-4">
                                         <div class="form-group mr-b05">
-                                            <label for="pinCodeNum"
-                                                class="d-block">{{commonLocaleData?.app_pin_code}}</label>
-                                            <input type="text" class="form-control" autocomplete="false"
-                                                name="pinCodeNum" [placeholder]="commonLocaleData?.app_enter_pin_code"
-                                                formControlName="pincode" decimalDigitsDirective
-                                                [preventDecimal]="true" />
+                                            <label for="pinCodeNum" class="d-block">{{
+                                                commonLocaleData?.app_pin_code
+                                            }}</label>
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                autocomplete="false"
+                                                name="pinCodeNum"
+                                                [placeholder]="commonLocaleData?.app_enter_pin_code"
+                                                formControlName="pincode"
+                                                decimalDigitsDirective
+                                                [preventDecimal]="true"
+                                            />
                                         </div>
                                     </div>
                                     <!-- end -->
@@ -74,58 +128,111 @@
 
                                 <div class="clearfix row">
                                     <div class="form-group col-12">
-                                        <label>{{commonLocaleData?.app_address}}<sup
-                                                *ngIf="addressForm?.get('taxNumber')?.valid && addressForm?.get('taxNumber')?.value && addressConfiguration?.tax && addressConfiguration?.tax?.name === 'GSTIN'">*</sup></label>
+                                        <label
+                                            >{{ commonLocaleData?.app_address
+                                            }}<sup
+                                                *ngIf="
+                                                    addressForm?.get('taxNumber')?.valid &&
+                                                    addressForm?.get('taxNumber')?.value &&
+                                                    addressConfiguration?.tax &&
+                                                    addressConfiguration?.tax?.name === 'GSTIN'
+                                                "
+                                                >*</sup
+                                            ></label
+                                        >
                                         <textarea
-                                            [class.error-box]="addressForm?.get('taxNumber')?.valid && addressForm?.get('taxNumber')?.value && addressForm?.get('address')?.touched && addressForm?.get('address')?.errors?.required"
-                                            name="name" class="form-control min-height-100" formControlName="address"
+                                            [class.error-box]="
+                                                addressForm?.get('taxNumber')?.valid &&
+                                                addressForm?.get('taxNumber')?.value &&
+                                                addressForm?.get('address')?.touched &&
+                                                addressForm?.get('address')?.errors?.required
+                                            "
+                                            name="name"
+                                            class="form-control min-height-100"
+                                            formControlName="address"
                                             [placeholder]="localeData?.enter_address"
-                                            [attr.required]="addressForm?.get('taxNumber')?.valid && addressForm?.get('taxNumber')?.value && addressConfiguration?.tax && addressConfiguration?.tax?.name === 'GSTIN'"></textarea>
-                                        <span class="danger"
-                                            *ngIf="addressForm?.get('taxNumber')?.valid && addressForm?.get('taxNumber')?.value && addressForm?.get('address')?.touched && addressForm?.get('address')?.errors?.required">
-                                            {{localeData?.field_required_error}}
+                                            [attr.required]="
+                                                addressForm?.get('taxNumber')?.valid &&
+                                                addressForm?.get('taxNumber')?.value &&
+                                                addressConfiguration?.tax &&
+                                                addressConfiguration?.tax?.name === 'GSTIN'
+                                            "
+                                        ></textarea>
+                                        <span
+                                            class="danger"
+                                            *ngIf="
+                                                addressForm?.get('taxNumber')?.valid &&
+                                                addressForm?.get('taxNumber')?.value &&
+                                                addressForm?.get('address')?.touched &&
+                                                addressForm?.get('address')?.errors?.required
+                                            "
+                                        >
+                                            {{ localeData?.field_required_error }}
                                         </span>
                                     </div>
                                 </div>
 
                                 <div *ngIf="addressConfiguration.type !== 'createBranchAddress'" class="row">
                                     <div class="col-sm-12 form-group linked-entities">
-                                        <label>{{localeData?.link_entity}}</label>
+                                        <label>{{ localeData?.link_entity }}</label>
                                         <div class="form-group">
-                                            <sh-select [options]="addressConfiguration?.linkedEntities"
-                                                name="linkedEntities" formControlName="linkedEntity"
+                                            <sh-select
+                                                [options]="addressConfiguration?.linkedEntities"
+                                                name="linkedEntities"
+                                                formControlName="linkedEntity"
                                                 (clearSingleItem)="handleFinalSelection($event)"
-                                                [isFilterEnabled]="true" [multiple]="true
-                                                " [placeholder]="commonLocaleData?.app_select_entity">
+                                                [isFilterEnabled]="true"
+                                                [multiple]="true"
+                                                [placeholder]="commonLocaleData?.app_select_entity"
+                                            >
                                                 <ng-template #optionTemplate let-option="option">
                                                     <ng-container>
-                                                        <a (click)="selectEntity(option)" href="javascript:void(0)"
-                                                            class="list-item d-flex">
-                                                            <span><input type="checkbox"
-                                                                    [checked]="addressForm?.get('linkedEntity')?.value?.includes(option.value)"
-                                                                    [value]="option.value"></span>&nbsp;
+                                                        <a
+                                                            (click)="selectEntity(option)"
+                                                            href="javascript:void(0)"
+                                                            class="list-item d-flex"
+                                                        >
+                                                            <span
+                                                                ><input
+                                                                    type="checkbox"
+                                                                    [checked]="
+                                                                        addressForm
+                                                                            ?.get('linkedEntity')
+                                                                            ?.value?.includes(option.value)
+                                                                    "
+                                                                    [value]="option.value" /></span
+                                                            >&nbsp;
                                                             <span class="entity-icon">
-                                                                <i class="icon-branch-icon pull-right"
+                                                                <i
+                                                                    class="icon-branch-icon pull-right"
                                                                     *ngIf="option.entity === 'BRANCH'"
-                                                                    [tooltip]="commonLocaleData?.app_branch"></i>
-                                                                <i class="icon-warehouse-icon pull-right"
+                                                                    [tooltip]="commonLocaleData?.app_branch"
+                                                                ></i>
+                                                                <i
+                                                                    class="icon-warehouse-icon pull-right"
                                                                     *ngIf="option.entity === 'WAREHOUSE'"
-                                                                    [tooltip]="commonLocaleData?.app_warehouse"></i>
+                                                                    [tooltip]="commonLocaleData?.app_warehouse"
+                                                                ></i>
                                                             </span>
                                                             <span class="entity-details">
-                                                                <div class="item">{{
-                                                                    option.label || '-' }}</div>
-                                                                <div class="item-unique">
-                                                                    {{ option.name || '-' }}
+                                                                <div class="item giddh-limit single-line-clamp">
+                                                                    {{ option.label || "-" }}
+                                                                </div>
+                                                                <div class="item-unique giddh-limit single-line-clamp">
+                                                                    {{ option.name || "-" }}
                                                                 </div>
                                                             </span>
                                                             <span class="default-entity">
-                                                                <i (click)="setDefault(option, $event)"
+                                                                <i
+                                                                    (click)="setDefault(option, $event)"
                                                                     *ngIf="!option.isDefault"
-                                                                    class="icon-no-selected mr-r05"></i>
-                                                                <i (click)="setDefault(option, $event)"
+                                                                    class="icon-no-selected mr-r05"
+                                                                ></i>
+                                                                <i
+                                                                    (click)="setDefault(option, $event)"
                                                                     *ngIf="option.isDefault"
-                                                                    class="icon-favorite-selected mr-r05"></i>
+                                                                    class="icon-favorite-selected mr-r05"
+                                                                ></i>
                                                             </span>
                                                         </a>
                                                     </ng-container>
@@ -138,69 +245,111 @@
                         </section>
 
                         <section *ngIf="addressConfiguration.type === 'editBranch'" class="clearfix margin-child-label">
-                            <div class="form_bg clearfix">
+                            <div class="clearfix">
                                 <div class="row">
                                     <!-- DO NOT REMOVE THIS HIDDEN FIELD -->
                                     <div hidden class="form-group col-12">
-                                        <label>{{localeData?.branch_name}} <sup>*</sup></label>
-                                        <input maxlength="100"
-                                            [class.error-box]="addressForm?.get('name')?.touched && addressForm?.get('name')?.invalid"
-                                            type="text" formControlName="name" class="form-control"
-                                            [placeholder]="localeData?.enter">
-                                        <span class="danger"
-                                            *ngIf="addressForm?.get('name')?.touched && addressForm?.get('name')?.errors?.maxlength">
-                                            {{commonLocaleData?.app_max_100_characters_allowed_limit}}
+                                        <label>{{ localeData?.branch_name }} <sup>*</sup></label>
+                                        <input
+                                            maxlength="100"
+                                            [class.error-box]="
+                                                addressForm?.get('name')?.touched && addressForm?.get('name')?.invalid
+                                            "
+                                            type="text"
+                                            formControlName="name"
+                                            class="form-control"
+                                            [placeholder]="localeData?.enter"
+                                        />
+                                        <span
+                                            class="danger"
+                                            *ngIf="
+                                                addressForm?.get('name')?.touched &&
+                                                addressForm?.get('name')?.errors?.maxlength
+                                            "
+                                        >
+                                            {{ commonLocaleData?.app_max_100_characters_allowed_limit }}
                                         </span>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-sm-12 form-group">
-                                        <label>{{localeData?.branch_name}} <sup>*</sup></label>
-                                        <input maxlength="50"
-                                            [class.error-box]="addressForm?.get('alias')?.touched && addressForm?.get('alias')?.invalid"
-                                            type="text" formControlName="alias" class="form-control"
-                                            [placeholder]="localeData?.enter_alias">
-                                        <span class="danger"
-                                            *ngIf="addressForm?.get('alias')?.touched && addressForm?.get('alias')?.errors?.maxlength">
-                                            {{localeData?.max_50_characters_allowed_limit}}
+                                        <label>{{ localeData?.branch_name }} <sup>*</sup></label>
+                                        <input
+                                            maxlength="50"
+                                            [class.error-box]="
+                                                addressForm?.get('alias')?.touched && addressForm?.get('alias')?.invalid
+                                            "
+                                            type="text"
+                                            formControlName="alias"
+                                            class="form-control"
+                                            [placeholder]="localeData?.enter_alias"
+                                        />
+                                        <span
+                                            class="danger"
+                                            *ngIf="
+                                                addressForm?.get('alias')?.touched &&
+                                                addressForm?.get('alias')?.errors?.maxlength
+                                            "
+                                        >
+                                            {{ localeData?.max_50_characters_allowed_limit }}
                                         </span>
                                     </div>
                                 </div>
 
                                 <div class="clearfix row">
                                     <div class="form-group col-12 linked-entities linked-add create">
-                                        <label>{{localeData?.linked_addresses}}</label>
+                                        <label>{{ localeData?.linked_addresses }}</label>
                                         <div class="form-group">
-                                            <sh-select class="linked-address"
-                                                [options]="addressConfiguration?.linkedEntities" name="linkedEntities"
+                                            <sh-select
+                                                class="linked-address"
+                                                [options]="addressConfiguration?.linkedEntities"
+                                                name="linkedEntities"
                                                 formControlName="linkedEntity"
-                                                (clearSingleItem)="handleFinalSelection($event)" [ItemHeight]="200"
-                                                [isFilterEnabled]="true" [multiple]="true"
-                                                [placeholder]="commonLocaleData?.app_select_entity">
+                                                (clearSingleItem)="handleFinalSelection($event)"
+                                                [ItemHeight]="200"
+                                                [isFilterEnabled]="true"
+                                                [multiple]="true"
+                                                [placeholder]="commonLocaleData?.app_select_entity"
+                                            >
                                                 <ng-template #optionTemplate let-option="option">
                                                     <ng-container>
-                                                        <a (click)="selectEntity(option)" href="javascript:void(0)"
-                                                            class="list-item d-flex">
-                                                            <span><input type="checkbox"
-                                                                    [checked]="addressForm?.get('linkedEntity')?.value?.includes(option.value)"
-                                                                    [value]="option.value"></span>&nbsp;
+                                                        <a
+                                                            (click)="selectEntity(option)"
+                                                            href="javascript:void(0)"
+                                                            class="list-item d-flex"
+                                                        >
+                                                            <span
+                                                                ><input
+                                                                    type="checkbox"
+                                                                    [checked]="
+                                                                        addressForm
+                                                                            ?.get('linkedEntity')
+                                                                            ?.value?.includes(option.value)
+                                                                    "
+                                                                    [value]="option.value" /></span
+                                                            >&nbsp;
                                                             <span class="entity-details">
-                                                                <div class="item giddh-limit single-line-clamp">{{
-                                                                    option.label || '-' }}</div>
+                                                                <div class="item giddh-limit single-line-clamp">
+                                                                    {{ option.label || "-" }}
+                                                                </div>
                                                                 <div class="item-unique">
                                                                     <p *ngIf="option.taxType && option.taxNumber">
-                                                                        {{ option.taxType }} :
-                                                                        {{ option.taxNumber }}</p>
+                                                                        {{ option.taxType }} : {{ option.taxNumber }}
+                                                                    </p>
                                                                 </div>
                                                             </span>
                                                             <span class="default-entity">
-                                                                <i (click)="setDefault(option, $event)"
+                                                                <i
+                                                                    (click)="setDefault(option, $event)"
                                                                     *ngIf="!option.isDefault"
-                                                                    class="icon-no-selected mr-r05"></i>
-                                                                <i (click)="setDefault(option, $event)"
+                                                                    class="icon-no-selected mr-r05"
+                                                                ></i>
+                                                                <i
+                                                                    (click)="setDefault(option, $event)"
                                                                     *ngIf="option.isDefault"
-                                                                    class="icon-favorite-selected mr-r05"></i>
+                                                                    class="icon-favorite-selected mr-r05"
+                                                                ></i>
                                                             </span>
                                                         </a>
                                                     </ng-container>
@@ -214,41 +363,63 @@
                             <div *ngIf="companyName" class="font-14" [innerHTML]="getBranchOfText(companyName)"></div>
                         </section>
 
-                        <section *ngIf="addressConfiguration.type === 'editWarehouse'"
-                            class="clearfix margin-child-label">
-                            <div class="form_bg clearfix">
+                        <section
+                            *ngIf="addressConfiguration.type === 'editWarehouse'"
+                            class="clearfix margin-child-label"
+                        >
+                            <div class="clearfix">
                                 <div class="row">
                                     <div class="form-group col-12">
-                                        <label>{{commonLocaleData?.app_name}} <sup>*</sup></label>
-                                        <input maxlength="100"
-                                            [class.error-box]="addressForm?.get('name')?.touched && addressForm?.get('name')?.invalid"
-                                            type="text" formControlName="name" class="form-control"
-                                            [placeholder]="localeData?.enter_name" required>
-                                        <span class="danger"
-                                            *ngIf="addressForm?.get('name')?.touched && addressForm?.get('name')?.errors?.maxlength">
-                                            {{commonLocaleData?.app_max_100_characters_allowed_limit}}
+                                        <label>{{ commonLocaleData?.app_name }} <sup>*</sup></label>
+                                        <input
+                                            maxlength="100"
+                                            [class.error-box]="
+                                                addressForm?.get('name')?.touched && addressForm?.get('name')?.invalid
+                                            "
+                                            type="text"
+                                            formControlName="name"
+                                            class="form-control"
+                                            [placeholder]="localeData?.enter_name"
+                                            required
+                                        />
+                                        <span
+                                            class="danger"
+                                            *ngIf="
+                                                addressForm?.get('name')?.touched &&
+                                                addressForm?.get('name')?.errors?.maxlength
+                                            "
+                                        >
+                                            {{ commonLocaleData?.app_max_100_characters_allowed_limit }}
                                         </span>
                                     </div>
                                 </div>
 
                                 <div class="clearfix row">
                                     <div class="form-group col-12 linked-entities linked-add create">
-                                        <label>{{localeData?.addresses}}</label>
+                                        <label>{{ localeData?.addresses }}</label>
                                         <div class="form-group">
-                                            <sh-select [options]="addressConfiguration?.linkedEntities"
-                                                name="linkedEntities" formControlName="linkedEntity"
-                                                [isFilterEnabled]="true" [placeholder]="localeData?.select_address">
+                                            <sh-select
+                                                [options]="addressConfiguration?.linkedEntities"
+                                                name="linkedEntities"
+                                                formControlName="linkedEntity"
+                                                [isFilterEnabled]="true"
+                                                [placeholder]="localeData?.select_address"
+                                            >
                                                 <ng-template #optionTemplate let-option="option">
                                                     <ng-container>
-                                                        <a (click)="selectEntity(option)" href="javascript:void(0)"
-                                                            class="list-item d-flex">
+                                                        <a
+                                                            (click)="selectEntity(option)"
+                                                            href="javascript:void(0)"
+                                                            class="list-item d-flex"
+                                                        >
                                                             <span class="entity-details">
-                                                                <div class="item giddh-limit single-line-clamp">{{
-                                                                    option.label || '-' }}</div>
+                                                                <div class="item giddh-limit single-line-clamp">
+                                                                    {{ option.label || "-" }}
+                                                                </div>
                                                                 <div class="item-unique">
                                                                     <p *ngIf="option.taxType && option.taxNumber">
-                                                                        {{ option.taxType }} :
-                                                                        {{ option.taxNumber }}</p>
+                                                                        {{ option.taxType }} : {{ option.taxNumber }}
+                                                                    </p>
                                                                 </div>
                                                             </span>
                                                         </a>
@@ -269,16 +440,32 @@
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 text-left">
                                 <div class="mt-5">
-                                    <button [ladda]="showLoader" [disabled]="addressForm?.invalid" type="submit"
-                                        class="btn btn-success">
+                                    <button
+                                        [ladda]="showLoader"
+                                        [disabled]="addressForm?.invalid"
+                                        type="submit"
+                                        class="btn btn-success"
+                                    >
                                         <ng-container
-                                            *ngIf="addressConfiguration.type === 'createAddress' || addressConfiguration.type === 'createBranchAddress'">
-                                            {{commonLocaleData?.app_save}}</ng-container>
+                                            *ngIf="
+                                                addressConfiguration.type === 'createAddress' ||
+                                                addressConfiguration.type === 'createBranchAddress'
+                                            "
+                                        >
+                                            {{ commonLocaleData?.app_save }}</ng-container
+                                        >
                                         <ng-container
-                                            *ngIf="addressConfiguration.type === 'editAddress' || addressConfiguration.type === 'editBranch' || addressConfiguration.type === 'editWarehouse'">
-                                            {{commonLocaleData?.app_update}}</ng-container>
+                                            *ngIf="
+                                                addressConfiguration.type === 'editAddress' ||
+                                                addressConfiguration.type === 'editBranch' ||
+                                                addressConfiguration.type === 'editWarehouse'
+                                            "
+                                        >
+                                            {{ commonLocaleData?.app_update }}</ng-container
+                                        >
                                     </button>
-                                    <button type="reset" class="btn btn-danger">{{commonLocaleData?.app_clear}}
+                                    <button type="reset" class="btn btn-danger">
+                                        {{ commonLocaleData?.app_clear }}
                                     </button>
                                 </div>
                             </div>

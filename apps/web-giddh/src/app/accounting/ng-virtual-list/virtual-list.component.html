@@ -1,7 +1,6 @@
 <div #dd [style.width]="width">
     <!-- <div class="header" #mainContainer [class.sh-select-disabled]="disabled" [class.inline]="mode==='inline'" (click)="show($event)" [class.open]="isOpen" tabindex="0" (focus)="show($event)" (blur)="hide($event)" (keydown)="keydownUp($event)"> -->
 
-
     <!--region multiple-->
     <!-- <div *ngIf="multiple" [ngClass]="{'has-item':selectedValues?.length}" style="background: white;" class="bdr">
           <ng-container *ngIf="selectedValues?.length">
@@ -32,11 +31,22 @@
 
     <!-- </div> -->
     <!-- <span class="clear" *ngIf="showClear && selectedValues.length > 0" (click)="$event.stopPropagation();clear();">&times;</span> -->
-    <virtual-list-menu #menuEle [isOpen]="isOpen" [rows]="rows" [selectedValues]="selectedValues"
-        [optionTemplate]="optionTemplate" (noToggleClick)="toggleSelected($event)"
-        (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink"
-        [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText" [ItemHeight]="ItemHeight"
-        [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight"
-        [isPaginationEnabled]="isPaginationEnabled" [dropdownMinHeight]="dropdownMinHeight"
-        (scrollEnd)="scrollEnd.emit()"></virtual-list-menu>
+    <virtual-list-menu
+        #menuEle
+        [isOpen]="isOpen"
+        [rows]="rows"
+        [selectedValues]="selectedValues"
+        [optionTemplate]="optionTemplate"
+        (noToggleClick)="toggleSelected($event)"
+        (noResultClicked)="noResultsClicked.emit(); hide()"
+        [noResultLinkEnabled]="notFoundLink"
+        [notFoundMsg]="notFoundMsg"
+        [notFoundLinkText]="notFoundLinkText"
+        [ItemHeight]="ItemHeight"
+        [NoFoundMsgHeight]="NoFoundMsgHeight"
+        [NoFoundLinkHeight]="NoFoundLinkHeight"
+        [isPaginationEnabled]="isPaginationEnabled"
+        [dropdownMinHeight]="dropdownMinHeight"
+        (scrollEnd)="scrollEnd.emit()"
+    ></virtual-list-menu>
 </div>

@@ -152,3 +152,8 @@ label {
         }
     }
 }
+@media (max-width: 767px) {
+    .custom-tabs::ng-deep .nav-tabs {
+        position: fixed !important;
+    }
+}

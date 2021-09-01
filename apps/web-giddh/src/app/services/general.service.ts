@@ -250,10 +250,10 @@ export class GeneralService {
                 const allowedFirstLevelUniqueNames = ['operatingcost', 'indirectexpenses', 'fixedassets'];
                 // List of not allowed second level parent groups
                 const disallowedSecondLevelUniqueNames = ['discount', 'exchangeloss'];
-                const currentLedgerFirstParent = currentLedgerAccountDetails.parentGroups[0] ? currentLedgerAccountDetails.parentGroups[0].uniqueName : '';
-                const currentLedgerSecondParent = currentLedgerAccountDetails.parentGroups[1] ? currentLedgerAccountDetails.parentGroups[1].uniqueName : '';
-                const selectedAccountFirstParent = selectedAccountDetails.parentGroups[0] ? selectedAccountDetails.parentGroups[0].uniqueName : '';
-                const selectedAccountSecondParent = selectedAccountDetails.parentGroups[1] ? selectedAccountDetails.parentGroups[1].uniqueName : '';
+                const currentLedgerFirstParent = (currentLedgerAccountDetails.parentGroups && currentLedgerAccountDetails.parentGroups[0]) ? currentLedgerAccountDetails.parentGroups[0].uniqueName : '';
+                const currentLedgerSecondParent = (currentLedgerAccountDetails.parentGroups && currentLedgerAccountDetails.parentGroups[1]) ? currentLedgerAccountDetails.parentGroups[1].uniqueName : '';
+                const selectedAccountFirstParent = (selectedAccountDetails.parentGroups && selectedAccountDetails.parentGroups[0]) ? selectedAccountDetails.parentGroups[0].uniqueName : '';
+                const selectedAccountSecondParent = (selectedAccountDetails.parentGroups && selectedAccountDetails.parentGroups[1]) ? selectedAccountDetails.parentGroups[1].uniqueName : '';
                 // Both accounts (current ledger and selected account) in order to satisfy RCM MUST have first
                 // level parent group unique name in allowed unique names and MUST NOT have their second level parent
                 // in disallowed unique names
@@ -876,7 +876,7 @@ export class GeneralService {
      *
      * @param {string} voucherCode Voucher code
      * @param {*} commonLocaleData Global context of multi-lingual keys
-     * @return {*} {string} Multi-lingual current voucher label
+     * @return {string} Multi-lingual current voucher label
      * @memberof GeneralService
      */
      public getCurrentVoucherLabel(voucherCode: string, commonLocaleData: any): string {
