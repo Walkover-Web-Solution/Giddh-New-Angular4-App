@@ -3241,7 +3241,12 @@
 
                     <!-- region purchase invoice -->
                     <span class="d-inline-block v-align-middle">
-                        <button type="button" class="btn btn-default" (click)="savePurchaseOrder('create')">
+                        <button
+                            type="button"
+                            class="btn btn-default"
+                            [disabled]="isFormSaveInProgress"
+                            (click)="savePurchaseOrder('create')"
+                        >
                             {{ commonLocaleData?.app_save }}
                         </button>
                     </span>
@@ -3254,7 +3259,12 @@
                     <button type="button" class="btn btn-danger d-inline-block v-align-middle" (click)="cancelUpdate()">
                         {{ commonLocaleData?.app_cancel }}
                     </button>
-                    <button type="button" class="btn btn-default" (click)="savePurchaseOrder('update')">
+                    <button
+                        type="button"
+                        class="btn btn-default"
+                        [disabled]="isFormSaveInProgress"
+                        (click)="savePurchaseOrder('update')"
+                    >
                         {{ commonLocaleData?.app_update }}
                     </button>
                 </div>
