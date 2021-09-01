@@ -1041,7 +1041,7 @@
                                 class="text-right table-amount last-table-amount"
                             >
                                 <div class="text-right">
-                                    <div *ngIf="!vm.selectedLedger.isOtherTaxesApplicable" class="other-tax">
+                                    <div *ngIf="!vm.selectedLedger.isOtherTaxesApplicable" class="other-tax align-items-center">
                                         <input
                                             type="checkbox"
                                             id="update-ledger-other-tax"
@@ -1518,7 +1518,6 @@
                                                 class="form-control"
                                                 [ngModel]="vm.selectedLedger.voucherNo"
                                                 [disabled]="true"
-                                                [style.width.px]="80"
                                             />
                                         </div>
                                     </td>
