@@ -1592,14 +1592,14 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .btn-default:hover,
-.btn-default:focus,
-.btn-default.active.focus .btn-default:disabled,
-.btn-default[disabled]:hover,
+.btn-default:disabled,
 .open > .dropdown-toggle.btn-default:focus,
 .open > .dropdown-toggle.btn-default:hover,
 .btn-default:active,
+.btn-default.active,
 .btn-default:active:focus,
-.open > .dropdown-toggle.btn-default {
+.open > .dropdown-toggle.btn-default,
+.btn-default:not(:disabled):not(.disabled):active  {
     background: $chetwode-blue !important;
     color: $white !important;
     border-color: $chetwode-blue !important;
