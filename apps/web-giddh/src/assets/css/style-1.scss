@@ -3060,7 +3060,7 @@ td.mat-footer-cell {
 .petty-cash {
     .mat-tab-group {
         .mat-tab-header {
-            background: $alice-blue-light !important;
+            background: $alice-blue-light !important;     
             .mat-tab-label-container {
                 padding-left: 15px !important;
                 .mat-tab-list {
@@ -3090,9 +3090,6 @@ td.mat-footer-cell {
                 }
             }
         }
-        .mat-tab-body-active {
-            z-index: 991;
-        }
     }
     .bg-white {
         .form-group {
@@ -3102,6 +3099,12 @@ td.mat-footer-cell {
                 }
             }
         }
+    }
+}
+
+.sidebar-overlay{
+    .mat-tab-body-active {
+        z-index: 991 !important;
     }
 }
 
@@ -3125,10 +3128,22 @@ td.mat-footer-cell {
 }
 
 @media (max-width: 767px) {
-    .petty-cash {
+    .sidebar-overlay {
         .mat-tab-group {
             .mat-tab-body-active {
-                z-index: 9999;
+                z-index: 9999 !important;
+            }
+        }
+    }
+    .petty-cash{
+        .mat-tab-group {
+            .mat-tab-header {
+                position: fixed;
+                width: 100%;
+                z-index: 9;   
+            }
+            .mat-tab-body-wrapper{
+                padding-top: 60px;
             }
         }
     }
