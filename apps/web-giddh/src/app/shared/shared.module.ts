@@ -144,7 +144,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         GiddhDaterangepickerComponent,
         PrimarySidebarComponent,
         CompanyBranchComponent,
-        PrimarySidebarComponent,
         GenericAsideMenuAccountComponent
     ],
     imports: [

@@ -7,71 +7,107 @@
             <div class="row">
                 <div class="col-6 form-group">
                     <label>Date <sup>*</sup></label>
-                    <input name="dateRange" formControlName="inventoryEntryDate" type="text" autocomplete="off"
-                        class="form-control" bsDatepicker [bsConfig]=" {dateInputFormat: giddhDateFormat}">
+                    <input
+                        name="dateRange"
+                        formControlName="inventoryEntryDate"
+                        type="text"
+                        autocomplete="off"
+                        class="form-control"
+                        bsDatepicker
+                        [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                    />
                     <span
-                        *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)">
-                        <span *ngIf="inventoryEntryDate?.errors && inventoryEntryDate?.errors['required']"
-                            class="text-danger">Please select Date.</span>
+                        *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)"
+                    >
+                        <span
+                            *ngIf="inventoryEntryDate?.errors && inventoryEntryDate?.errors['required']"
+                            class="text-danger"
+                            >Please select Date.</span
+                        >
                     </span>
                 </div>
 
                 <div class="col-6 form-group">
                     <label>Product Name <sup>*</sup></label>
-                    <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'"
-                        (selected)="stockChanged($event)" [ItemHeight]="'33'" formControlName="stock"
-                        [isRequired]="true"></sh-select>
+                    <sh-select
+                        [options]="stockListOptions"
+                        [multiple]="false"
+                        [placeholder]="'Select Product'"
+                        (selected)="stockChanged($event)"
+                        [ItemHeight]="'33'"
+                        formControlName="stock"
+                        [isRequired]="true"
+                    ></sh-select>
                 </div>
             </div>
 
             <div class="row">
-
                 <div class="col-6 form-group">
                     <label>Sender's Name <sup>*</sup></label>
-                    <sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Sender'"
-                        formControlName="inventoryUser" [ItemHeight]="'33'" [isRequired]="true"></sh-select>
+                    <sh-select
+                        [options]="userListOptions"
+                        [multiple]="false"
+                        [placeholder]="'Select Sender'"
+                        formControlName="inventoryUser"
+                        [ItemHeight]="'33'"
+                        [isRequired]="true"
+                    ></sh-select>
                 </div>
 
                 <div class="col-6 form-group">
                     <label>Receiver's Name <sup>*</sup></label>
-                    <sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Receiver'"
-                        (selected)="recieverUniqueName = $event.value" [ItemHeight]="'33'" [isRequired]="true">
+                    <sh-select
+                        [options]="userListOptions"
+                        [multiple]="false"
+                        [placeholder]="'Select Receiver'"
+                        (selected)="recieverUniqueName = $event.value"
+                        [ItemHeight]="'33'"
+                        [isRequired]="true"
+                    >
                     </sh-select>
                 </div>
             </div>
 
-
             <div class="row">
                 <div class="col-6 form-group">
                     <label>Quantity <sup>*</sup></label>
-                    <input name="dateRange" type="text" class="form-control" formControlName="quantity"
-                        [placeholder]="'Enter Quantity'" />
+                    <input
+                        name="dateRange"
+                        type="text"
+                        class="form-control"
+                        formControlName="quantity"
+                        [placeholder]="'Enter Quantity'"
+                    />
                 </div>
 
                 <div class="col-6 form-group">
                     <label>Unit <sup>*</sup></label>
-                    <sh-select [options]="stockUnitsOptions" [placeholder]="'Choose unit'" formControlName="stockUnit"
-                        [multiple]="false" [ItemHeight]="33" [isRequired]="true"></sh-select>
+                    <sh-select
+                        [options]="stockUnitsOptions"
+                        [placeholder]="'Choose unit'"
+                        formControlName="stockUnit"
+                        [multiple]="false"
+                        [ItemHeight]="33"
+                        [isRequired]="true"
+                    ></sh-select>
                 </div>
-
             </div>
 
             <div class="row">
                 <div class="col-lg-8 form-group">
                     <label class="mr-b1">Description</label>
-                    <input name="dateRange" formControlName="description" type="text" class="form-control">
+                    <input name="dateRange" formControlName="description" type="text" class="form-control" />
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-12 text-left mr-t1">
                     <button class="btn btn-default" (click)="onCancel.emit($event)">Cancel</button>
-                    <button class="btn btn-success" [ladda]="isLoading" [disabled]="form.invalid"
-                        (click)="save()">Save</button>
+                    <button class="btn btn-success" [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">
+                        Save
+                    </button>
                 </div>
             </div>
-
-
         </form>
     </div>
 </div>
