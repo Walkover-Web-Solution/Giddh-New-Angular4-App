@@ -201,7 +201,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Prefill's the entry data
+     * Prefills the entry data
      *
      * @param {PettyCashResonse} res
      * @memberof ExpenseDetailsComponent
@@ -225,7 +225,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Toggle's the entry against
+     * Toggles the entry against
      *
      * @memberof ExpenseDetailsComponent
      */
@@ -304,7 +304,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Hide's the approve confirm popup
+     * Hides the approve confirm popup
      *
      * @param {boolean} isApproved
      * @memberof ExpenseDetailsComponent
@@ -319,7 +319,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Approve's the entry
+     * Approves the entry
      *
      * @returns {void}
      * @memberof ExpenseDetailsComponent
