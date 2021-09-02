@@ -161,6 +161,11 @@ export class LedgerActions {
                 } else if (response.status === 'no-network') {
                     this.ResetUpdateLedger();
                     return { type: 'EmptyAction' };
+                } else if(response.status === 'confirm') {
+                    return {
+                        type: LEDGER.SHOW_DUPLICATE_VOUCHER_CONFIRMATION,
+                        payload: response
+                    }
                 } else {
                     this._toasty.successToast(this.localeService.translate("app_messages.entry_updated"));
                     if (action && action.payload && action.payload.request && action.payload.request.refreshLedger) {
@@ -666,14 +671,14 @@ export class LedgerActions {
         };
     }
 
-    private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }, isCreateUpdateLedger?: boolean): CustomActions {
+    private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }, isCreateLedger?: boolean): CustomActions {
         if (response.status === 'error') {
             if (showToast) {
                 this._toasty.errorToast(response.message);
             }
             return errorAction;
         } else if(response.status === "confirm") {
-            if(isCreateUpdateLedger) {
+            if(isCreateLedger) {
                 return {
                     type: LEDGER.SHOW_DUPLICATE_VOUCHER_CONFIRMATION,
                     payload: response
