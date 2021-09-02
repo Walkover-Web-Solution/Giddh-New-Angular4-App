@@ -542,6 +542,10 @@ sh-select:focus {
     }
 }
 
+#clear-filter {
+    margin-right: 8px;
+}
+
 .ledg-head .advance-search-block {
     height: 34px;
     vertical-align: middle;
@@ -648,9 +652,6 @@ sh-select:focus {
 
 .mat-raised-button {
     min-width: 36px;
-    .mat-button-wrapper {
-        display: flex;
-    }
 }
 
 /*mobile ledger view css*/

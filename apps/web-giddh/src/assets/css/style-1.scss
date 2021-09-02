@@ -2872,6 +2872,16 @@ giddh-datepicker {
     height: 36px;
 }
 
+.search-ledger-field {
+    .btn-danger,
+    .btn-success,
+    .btn-warning {
+        .mat-button-wrapper {
+            display: flex;
+        }
+    }
+}
+
 .ledger-head {
     .mat-grid-tile-content {
         justify-content: space-between !important;
