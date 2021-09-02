@@ -251,7 +251,7 @@ export class PendingListComponent implements OnInit, OnChanges {
     }
 
     /**
-     * Call's detect changes method
+     * Calls detect changes method
      *
      * @private
      * @memberof PendingListComponent
