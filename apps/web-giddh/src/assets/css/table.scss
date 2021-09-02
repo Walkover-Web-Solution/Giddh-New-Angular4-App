@@ -97,6 +97,9 @@
     tbody tr:last-child .status-mobile {
         border-bottom: none !important;
     }
+    tbody tr:first-child .status-mobile {
+        border-top: none !important;
+    }
     .icon-sort-asc {
         color: $omiod;
         font-size: 16px !important;
