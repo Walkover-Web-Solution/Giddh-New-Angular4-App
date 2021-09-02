@@ -881,10 +881,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                     if (!this.isProformaInvoice && !this.isEstimateInvoice) {
                         if (this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote) {
-                            this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.accountUniqueName, {
-                                invoiceNumber: this.invoiceNo,
-                                voucherType: this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType)
-                            }));
+                            if (this.voucherApiVersion === 2) {
+                                this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.accountUniqueName, {
+                                    invoiceNumber: this.invoiceNo,
+                                    voucherType: this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType),
+                                    uniqueName: this.selectedItem?.uniqueName
+                                }));
+                            } else {
+                                this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.accountUniqueName, {
+                                    invoiceNumber: this.invoiceNo,
+                                    voucherType: this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType)
+                                }));
+                            }
                         }
                         // TODO: Add purchase record get API call once advance receipt is complete
                     } else {
@@ -4048,10 +4056,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (this.isSalesInvoice || this.isCashInvoice) {
                 this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
                 // To get re-assign receipts voucher store
-                this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(response.body.account?.uniqueName, {
-                    invoiceNumber: response.body.number,
-                    voucherType: response.body.type
-                }));
+                if (this.voucherApiVersion === 2) {
+                    this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(response.body.account?.uniqueName, {
+                        invoiceNumber: response.body.number,
+                        voucherType: response.body.type,
+                        uniqueName: response.body.uniqueName
+                    }));
+                } else {
+                    this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(response.body.account?.uniqueName, {
+                        invoiceNumber: response.body.number,
+                        voucherType: response.body.type
+                    }));
+                }
             }
             // reset form and other
             this.resetInvoiceForm(invoiceForm);
@@ -4417,10 +4433,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         if (!this.isProformaInvoice && !this.isEstimateInvoice) {
             if (this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote) {
-                this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.accountUniqueName, {
-                    invoiceNumber: this.invoiceNo,
-                    voucherType: this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType)
-                }));
+                if (this.voucherApiVersion === 2) {
+                    this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.accountUniqueName, {
+                        invoiceNumber: this.invoiceNo,
+                        voucherType: this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType),
+                        uniqueName: this.selectedItem?.uniqueName
+                    }));
+                } else {
+                    this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.accountUniqueName, {
+                        invoiceNumber: this.invoiceNo,
+                        voucherType: this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType)
+                    }));
+                }
             } else if (this.isPurchaseInvoice) {
                 const accountUniqueName = (this.selectedItem) ? this.selectedItem.account?.uniqueName : this.accountUniqueName;
                 const purchaseRecordUniqueName = (this.selectedItem) ? this.selectedItem.uniqueName : this.invoiceNo;

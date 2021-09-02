@@ -69,7 +69,7 @@ export class LedgerActions {
             }, true, {
                 type: LEDGER.CREATE_BLANK_LEDGER_RESPONSE,
                 payload: res
-            }))));
+            }, true))));
 
     public DeleteTrxEntry$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -662,12 +662,19 @@ export class LedgerActions {
         };
     }
 
-    private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
+    private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }, isCreateUpdateLedger?: boolean): CustomActions {
         if (response.status === 'error') {
             if (showToast) {
                 this.toaster.showSnackBar("error", response.message);
             }
             return errorAction;
+        } else if(response.status === "confirm") {
+            if(isCreateUpdateLedger) {
+                return {
+                    type: LEDGER.SHOW_DUPLICATE_VOUCHER_CONFIRMATION,
+                    payload: response
+                }
+            }
         } else {
             if (showToast && typeof response.body === 'string') {
                 this.toaster.showSnackBar("success", response.body);
