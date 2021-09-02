@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { ToasterService } from '../../../services/toaster.service';
@@ -9,6 +9,7 @@ import { CommonPaginatedRequest } from '../../../models/api-models/Invoice';
 import { ExpenseService } from '../../../services/expences.service';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import * as moment from 'moment/moment';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-rejected-list',
@@ -16,6 +17,16 @@ import * as moment from 'moment/moment';
     styleUrls: ['./rejected-list.component.scss'],
 })
 export class RejectedListComponent implements OnInit, OnChanges {
+    /** Instance of delete entry modal */
+    @ViewChild('deleteEntryModal') public deleteEntryModal;
+    @Output() public isFilteredSelected: EventEmitter<boolean> = new EventEmitter();
+    /** This will emit the from and to date returned by api */
+    @Output() public reportDates: EventEmitter<any> = new EventEmitter();
+    /** This will emit the filter object to reload the report */
+    @Output() public reloadPendingReportList: EventEmitter<any> = new EventEmitter();
+    /** This will emit the filter object to reload the report */
+    @Output() public reloadReportList: EventEmitter<any> = new EventEmitter();
+    @Input() public isClearFilter: boolean = false;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -26,29 +37,26 @@ export class RejectedListComponent implements OnInit, OnChanges {
     @Input() public isPettyCashRejectedReportLoading: boolean = false;
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public pettycashRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
-    public RejectedItems: ExpenseResults[] = [];
+    public rejectedItems: ExpenseResults[] = [];
     public expensesItems$: Observable<ExpenseResults[]>;
     public universalDate$: Observable<any>;
     public todaySelected: boolean = false;
     public todaySelected$: Observable<boolean> = observableOf(false);
     public actionPettycashRequest: ActionPettycashRequest = new ActionPettycashRequest();
-    @Input() public isClearFilter: boolean = false;
-    @Output() public isFilteredSelected: EventEmitter<boolean> = new EventEmitter();
-    /** This will emit the from and to date returned by api */
-    @Output() public reportDates: EventEmitter<any> = new EventEmitter();
-    /** This will emit the filter object to reload the report */
-    @Output() public reloadPendingReportList: EventEmitter<any> = new EventEmitter();
-    /** This will emit the filter object to reload the report */
-    @Output() public reloadReportList: EventEmitter<any> = new EventEmitter();
+    /** Table columns for rejected report */
+    public rejectedTableColumns: string[] = ['s_no', 'entry_date', 'submitted_by', 'account', 'amount', 'receipt', 'file', 'reason_rejection', 'action'];
+    /** It will hold reference of delete modal */
+    public deleteEntryModalRef: any;
 
     constructor(
         private store: Store<AppState>,
-        private toasty: ToasterService,
-        private cdRf: ChangeDetectorRef,
-        private expenseService: ExpenseService
+        private toaster: ToasterService,
+        private cdRef: ChangeDetectorRef,
+        private expenseService: ExpenseService,
+        public dialog: MatDialog
     ) {
-        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
-        this.todaySelected$ = this.store.pipe(select(p => p.session.todaySelected), takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
+        this.todaySelected$ = this.store.pipe(select(state => state.session.todaySelected), takeUntil(this.destroyed$));
 
         observableCombineLatest([this.universalDate$, this.todaySelected$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             if (!Array.isArray(resp[0])) {
@@ -70,17 +78,34 @@ export class RejectedListComponent implements OnInit, OnChanges {
         });
     }
 
-    public ngOnInit() {
+    /**
+     * Initializes the component
+     *
+     * @memberof RejectedListComponent
+     */
+    public ngOnInit(): void {
         this.getReportResponse();
     }
 
-    public getPettyCashRejectedReports(SalesDetailedfilter: CommonPaginatedRequest) {
-        SalesDetailedfilter.status = 'rejected';
-        SalesDetailedfilter.sort = this.pettycashRequest.sort;
-        SalesDetailedfilter.sortBy = this.pettycashRequest.sortBy;
-        this.reloadReportList.emit(SalesDetailedfilter);
+    /**
+     * Emits the filter to reload report
+     *
+     * @param {CommonPaginatedRequest} salesDetailedfilter
+     * @memberof RejectedListComponent
+     */
+    public getPettyCashRejectedReports(salesDetailedfilter: CommonPaginatedRequest): void {
+        salesDetailedfilter.status = 'rejected';
+        salesDetailedfilter.sort = this.pettycashRequest.sort;
+        salesDetailedfilter.sortBy = this.pettycashRequest.sortBy;
+        this.reloadReportList.emit(salesDetailedfilter);
     }
 
+    /**
+     * Updates the variables if data updated from parent
+     *
+     * @param {SimpleChanges} changes
+     * @memberof RejectedListComponent
+     */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes['isClearFilter']) {
             if (changes['isClearFilter'].currentValue) {
@@ -88,58 +113,89 @@ export class RejectedListComponent implements OnInit, OnChanges {
             }
         }
 
-        if(changes['pettyCashRejectedReportResponse'] && changes['pettyCashRejectedReportResponse'].currentValue) {
+        if (changes['pettyCashRejectedReportResponse'] && changes['pettyCashRejectedReportResponse'].currentValue) {
             this.getReportResponse();
         }
     }
 
-    public clearFilter() {
+    /**
+     * It will clear filters
+     *
+     * @memberof RejectedListComponent
+     */
+    public clearFilter(): void {
         this.pettycashRequest.sort = '';
         this.pettycashRequest.sortBy = '';
         this.pettycashRequest.page = 1;
     }
 
-    public revertActionClicked(item: ExpenseResults) {
+    /**
+     * It will revert the item from reject to pending
+     *
+     * @param {ExpenseResults} item
+     * @memberof RejectedListComponent
+     */
+    public revertActionClicked(item: ExpenseResults): void {
         this.actionPettycashRequest.actionType = 'revert';
         this.actionPettycashRequest.uniqueName = item.uniqueName;
         this.expenseService.actionPettycashReports(this.actionPettycashRequest, {}).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res.status === 'success') {
-                this.toasty.successToast(res.body);
+                this.toaster.showSnackBar("success", res.body);
                 this.getPettyCashRejectedReports(this.pettycashRequest);
                 this.getPettyCashPendingReports(this.pettycashRequest);
             } else {
-                this.toasty.successToast(res.message);
+                this.toaster.showSnackBar("error", res.message);
             }
         });
     }
 
-    public getPettyCashPendingReports(SalesDetailedfilter: CommonPaginatedRequest) {
-        SalesDetailedfilter.status = 'pending';
-        this.reloadPendingReportList.emit(SalesDetailedfilter);
+    /**
+     * Emits the filter to reload pending report
+     *
+     * @param {CommonPaginatedRequest} salesDetailedfilter
+     * @memberof RejectedListComponent
+     */
+    public getPettyCashPendingReports(salesDetailedfilter: CommonPaginatedRequest): void {
+        salesDetailedfilter.status = 'pending';
+        this.reloadPendingReportList.emit(salesDetailedfilter);
     }
 
-    public deleteActionClicked(item: ExpenseResults) {
+    /**
+     * It opens the dialog to delete item
+     *
+     * @param {ExpenseResults} item
+     * @param {TemplateRef<any>} ref
+     * @memberof RejectedListComponent
+     */
+    public deleteActionClicked(item: ExpenseResults, ref: TemplateRef<any>): void {
         this.actionPettycashRequest.actionType = 'delete';
         this.actionPettycashRequest.uniqueName = item.uniqueName;
+        this.deleteEntryModalRef = this.dialog.open(ref, { disableClose: true });
     }
 
-    public sort(order: 'asc' | 'desc' = 'asc', key: string) {
-        this.pettycashRequest.sortBy = key;
-        this.pettycashRequest.sort = order;
-        this.getPettyCashRejectedReports(this.pettycashRequest);
-    }
-
-    public pageChanged(ev: any): void {
-        if (ev.page === this.pettycashRequest.page) {
+    /**
+     * Callback for page change
+     *
+     * @param {*} event
+     * @returns {void}
+     * @memberof RejectedListComponent
+     */
+    public pageChanged(event: any): void {
+        if (event.page === this.pettycashRequest.page) {
             return;
         }
-        this.pettycashRequest.page = ev.page;
+        this.pettycashRequest.page = event.page;
         this.getPettyCashPendingReports(this.pettycashRequest);
     }
 
-    detectChanges() {
-        if (!this.cdRf['destroyed']) {
-            this.cdRf.detectChanges();
+    /**
+     * Call's detect changes method
+     *
+     * @memberof RejectedListComponent
+     */
+    public detectChanges(): void {
+        if (!this.cdRef['destroyed']) {
+            this.cdRef.detectChanges();
         }
     }
 
@@ -154,21 +210,6 @@ export class RejectedListComponent implements OnInit, OnChanges {
     }
 
     /**
-     * This will replace the search field title
-     *
-     * @param {string} title
-     * @returns {string}
-     * @memberof RejectedListComponent
-     */
-    public replaceTitle(title: string): string {
-        if (this.localeData && this.localeData?.search_field) {
-            return this.localeData?.search_field.replace("[FIELD]", title);
-        } else {
-            return title;
-        }
-    }
-
-    /**
      * Gets report response
      *
      * @private
@@ -176,7 +217,10 @@ export class RejectedListComponent implements OnInit, OnChanges {
      */
     private getReportResponse(): void {
         if (this.pettyCashRejectedReportResponse) {
-            this.RejectedItems = this.pettyCashRejectedReportResponse.results;
+            this.rejectedItems = this.pettyCashRejectedReportResponse.results?.map((rejected, index) => {
+                rejected.index = index;
+                return rejected;
+            });;
             this.reportDates.emit([this.pettyCashRejectedReportResponse.fromDate, this.pettyCashRejectedReportResponse.toDate]);
             setTimeout(() => {
                 this.detectChanges();
@@ -192,11 +236,23 @@ export class RejectedListComponent implements OnInit, OnChanges {
     public deleteEntry(): void {
         this.expenseService.actionPettycashReports(this.actionPettycashRequest, {}).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res.status === 'success') {
-                this.toasty.successToast(res.body);
+                this.toaster.showSnackBar("success", res.body);
                 this.getPettyCashRejectedReports(this.pettycashRequest);
             } else {
-                this.toasty.successToast(res.message);
+                this.toaster.showSnackBar("error", res.message);
             }
         });
+    }
+
+    /**
+     * Callback for sorting change
+     *
+     * @param {*} event
+     * @memberof RejectedListComponent
+     */
+    public sortChange(event: any): void {
+        this.pettycashRequest.sortBy = event?.active;
+        this.pettycashRequest.sort = event?.direction;
+        this.getPettyCashRejectedReports(this.pettycashRequest);
     }
 }

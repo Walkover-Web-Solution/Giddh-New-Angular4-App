@@ -1,0 +1,17 @@
+@import "../../../../assets/css/color.scss";
+
+.btn-success:disabled {
+    color: $white !important;
+}
+.mat-form-field {
+    width: 80% !important;
+}
+
+@media (max-width: 599px) {
+    .mat-form-field {
+        width: 65% !important;
+    }
+}
+.share-link {
+    margin-left: 5px;
+}

@@ -1,15 +1,8 @@
 <mat-form-field appearance="fill" [floatLabel]="'auto'">
-    <input
-        matInput
-        [matDatepicker]="picker"
-        [placeholder]="placeholder"
-        [value]="calendarDate"
-        [min]="minDate"
-        autocomplete="off"
-        (focus)="picker.open()"
-        (click)="picker.open()"
-        (dateChange)="dateChange($event)"
-    />
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
+    <input matInput [matDatepicker]="picker" [placeholder]="placeholder" [value]="calendarDate" [min]="minDate"
+        autocomplete="off" (focus)="emitDatepickerState(true); picker.open();" (click)="emitDatepickerState(true); picker.open();" (dateChange)="dateChange($event)" [class]="cssClass">
+    <ng-container *ngIf="showToggleIcon">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    </ng-container>
+    <mat-datepicker (closed)="emitDatepickerState(false);" #picker></mat-datepicker>
 </mat-form-field>

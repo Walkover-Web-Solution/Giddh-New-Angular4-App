@@ -1,75 +1,152 @@
 <div class="container-fluid" *ngIf="!isPettyCashRejectedReportLoading">
     <div class="table-responsive">
-        <table class="table basic giddh-table table-bordered on-mobile-view">
-            <thead [hidden]="!RejectedItems?.length">
-                <tr>
-                    <th>#</th>
-                    <th>
-                        {{ commonLocaleData?.app_date }}
-                        <ng-container
-                            class="d-inline-block"
-                            *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'entry_date' }"
-                        ></ng-container>
-                    </th>
-                    <th>{{ localeData?.submitted_by }}</th>
-                    <th>{{ commonLocaleData?.app_account }}</th>
-                    <th class="text-right">
-                        {{ commonLocaleData?.app_amount }}
-                        <ng-container
-                            class="d-inline-block ml-1"
-                            *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'amount' }"
-                        ></ng-container>
-                    </th>
-                    <th>{{ localeData?.payment_receipt }}</th>
-                    <th>{{ localeData?.file }}</th>
-                    <th>{{ localeData?.reason_of_rejection }}</th>
-                    <th>{{ commonLocaleData?.app_action }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let expenses of RejectedItems; let i = index">
-                    <td data-title="#">{{ i + 1 }}</td>
-                    <td [attr.data-title]="commonLocaleData?.app_date">{{ expenses.entryDate }}</td>
-                    <td [attr.data-title]="localeData?.submitted_by">{{ expenses.createdBy.name }}</td>
-                    <td [attr.data-title]="commonLocaleData?.app_account">
-                        <i class="dot-icon dot-warning" *ngIf="expenses.entryType === 'sales'"></i>
-                        <i class="dot-icon dot-success" *ngIf="expenses.entryType === 'deposit'"></i>
-                        <i class="dot-icon dot-primary" *ngIf="expenses.entryType === 'expense'"></i
-                        >{{ expenses.particularAccount.name }}
-                    </td>
-                    <td [attr.data-title]="commonLocaleData?.app_amount" class="text-right pr-2">
-                        {{ expenses.currencySymbol }}
-                        {{ expenses.amount | giddhCurrency }}
-                    </td>
-                    <td [attr.data-title]="localeData?.payment_receipt">
-                        <span *ngIf="expenses.baseAccountCategory === 'OTHER'" class="font-12 text-gray">A/c</span>
-                        <span
-                            *ngIf="expenses.baseAccountCategory === 'BANK'"
-                            class="font-12 text-gray icon-atm-card"
-                        ></span>
-                        <span
-                            *ngIf="expenses.baseAccountCategory === 'CASH'"
-                            class="font-12 text-gray icon-cash"
-                        ></span>
-                        {{ expenses.baseAccount.name ? expenses.baseAccount.name : "-" }}
-                    </td>
-                    <td [attr.data-title]="localeData?.file">
-                        <i *ngIf="expenses.fileNames" class="icon-image middle text-gray"></i>
-                        {{ expenses.fileNames ? expenses.fileNames : "-" }}
-                    </td>
-                    <td [attr.data-title]="localeData?.reason_of_rejection">
-                        {{ expenses.statusMessage ? expenses.statusMessage : "-" }}
-                    </td>
-                    <td [attr.data-title]="commonLocaleData?.app_action" class="action-btns">
-                        <a (click)="revertActionClicked(expenses)" class="btn-icon">
+        <table
+            mat-table
+            class="w-100 on-mobile-view"
+            [dataSource]="rejectedItems"
+            matSort
+            (matSortChange)="sortChange($event)"
+            [matSortActive]="pettycashRequest.sortBy"
+            [matSortDirection]="pettycashRequest.sort"
+        >
+            <ng-container matColumnDef="s_no">
+                <th mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef>#</th>
+                <td mat-cell *matCellDef="let rejected" data-title="#">
+                    <span class="responsive-label" [hidden]="!rejectedItems?.length">#</span>
+                    {{ rejected.index + 1 }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="entry_date">
+                <th mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef mat-sort-header>
+                    {{ commonLocaleData?.app_date }}
+                </th>
+                <td mat-cell *matCellDef="let rejected" [attr.data-title]="commonLocaleData?.app_date">
+                    <span class="responsive-label" [hidden]="!rejectedItems?.length">{{
+                        commonLocaleData?.app_date
+                    }}</span>
+                    {{ rejected.entryDate }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="submitted_by">
+                <th mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef>
+                    {{ localeData?.submitted_by }}
+                </th>
+                <td mat-cell *matCellDef="let rejected" [attr.data-title]="localeData?.submitted_by">
+                    <span class="responsive-label" [hidden]="!rejectedItems?.length">{{
+                        localeData?.submitted_by
+                    }}</span>
+                    {{ rejected.createdBy.name }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="account">
+                <th mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef>
+                    {{ commonLocaleData?.app_account }}
+                </th>
+                <td mat-cell *matCellDef="let rejected" [attr.data-title]="commonLocaleData?.app_account">
+                    <span class="responsive-label" [hidden]="!rejectedItems?.length">{{
+                        commonLocaleData?.app_account
+                    }}</span>
+                    <i class="dot-icon dot-warning" *ngIf="rejected.entryType === 'sales'"></i>
+                    <i class="dot-icon dot-success" *ngIf="rejected.entryType === 'deposit'"></i>
+                    <i class="dot-icon dot-primary" *ngIf="rejected.entryType === 'expense'"></i
+                    >{{ rejected.particularAccount.name }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="amount">
+                <th
+                    mat-header-cell
+                    [hidden]="!rejectedItems?.length"
+                    *matHeaderCellDef
+                    mat-sort-header
+                    class="text-right"
+                >
+                    {{ commonLocaleData?.app_amount }}
+                </th>
+                <td
+                    mat-cell
+                    *matCellDef="let rejected"
+                    [attr.data-title]="commonLocaleData?.app_amount"
+                    class="text-right"
+                >
+                    <span class="responsive-label" [hidden]="!rejectedItems?.length">{{
+                        commonLocaleData?.app_amount
+                    }}</span>
+                    {{ rejected.currencySymbol }}
+                    {{ rejected.amount | giddhCurrency }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="receipt">
+                <th mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef>
+                    {{ localeData?.payment_receipt }}
+                </th>
+                <td mat-cell *matCellDef="let rejected" [attr.data-title]="localeData?.payment_receipt">
+                    <span class="responsive-label" [hidden]="!rejectedItems?.length">{{
+                        localeData?.payment_receipt
+                    }}</span>
+                    <span *ngIf="rejected.baseAccountCategory === 'OTHER'" class="font-12 text-gray mr-r05">{{
+                        commonLocaleData?.app_ac
+                    }}</span>
+                    <span
+                        *ngIf="rejected.baseAccountCategory === 'BANK'"
+                        class="font-12 text-gray icon-atm-card mr-r05"
+                    ></span>
+                    <span
+                        *ngIf="rejected.baseAccountCategory === 'CASH'"
+                        class="font-12 text-gray icon-cash mr-r05"
+                    ></span>
+                    {{ rejected.baseAccount.name ? rejected.baseAccount.name : "-" }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="file">
+                <th mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef>{{ localeData?.file }}</th>
+                <td mat-cell *matCellDef="let rejected" [attr.data-title]="localeData?.file">
+                    <span class="responsive-label" [hidden]="!rejectedItems?.length">{{ localeData?.file }}</span>
+                    <i *ngIf="rejected.fileNames" class="icon-image middle text-gray"></i>
+                    {{ rejected.fileNames ? rejected.fileNames : "-" }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="reason_rejection">
+                <th mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef>
+                    {{ localeData?.reason_of_rejection }}
+                </th>
+                <td mat-cell *matCellDef="let rejected" [attr.data-title]="localeData?.reason_of_rejection">
+                    <span class="responsive-label" [hidden]="!rejectedItems?.length">{{
+                        localeData?.reason_of_rejection
+                    }}</span>
+                    {{ rejected.statusMessage ? rejected.statusMessage : "-" }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="action">
+                <th mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef>
+                    {{ commonLocaleData?.app_action }}
+                </th>
+                <td
+                    mat-cell
+                    *matCellDef="let rejected"
+                    [attr.data-title]="commonLocaleData?.app_action"
+                    class="action-btns"
+                >
+                    <div class="d-flex align-items-center">
+                        <a (click)="revertActionClicked(rejected)" class="btn-icon">
                             <i class="icon-Revert"></i>
                         </a>
-                        <a (click)="deleteActionClicked(expenses); deleteEntryModal?.show()" class="btn-icon">
+                        <a (click)="deleteActionClicked(rejected, deleteEntryModal)" class="btn-icon">
                             <i class="icon-trash"></i>
                         </a>
-                    </td>
-                </tr>
-            </tbody>
+                    </div>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="rejectedTableColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let rejected; columns: rejectedTableColumns"></tr>
         </table>
     </div>
 </div>
@@ -94,45 +171,16 @@
     <giddh-page-loader></giddh-page-loader>
 </div>
 
-<div class="no-data" *ngIf="!RejectedItems?.length && !isPettyCashRejectedReportLoading">
+<div class="no-data" *ngIf="!rejectedItems?.length && !isPettyCashRejectedReportLoading">
     <no-data></no-data>
 </div>
 
-<!-- region sorting template -->
-<ng-template #sortingTemplate let-col>
-    <div class="icon-pointer d-inline-block ml-1 pointer">
-        <div
-            class="icon-sort-asc"
-            *ngIf="pettycashRequest.sortBy !== col"
-            (click)="sort('asc', col)"
-            [ngClass]="{ 'active-text-color': pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc' }"
-        ></div>
-        <div
-            class="icon-sort-asc"
-            *ngIf="pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'"
-            (click)="sort('desc', col)"
-            [ngClass]="{ 'active-text-color': pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc' }"
-        ></div>
-        <div
-            class="icon-sort-asc"
-            *ngIf="pettycashRequest.sortBy === col && pettycashRequest.sort === 'desc'"
-            (click)="sort('asc', col)"
-            [ngClass]="{ 'active-text-color': pettycashRequest.sortBy === col && pettycashRequest.sort === 'desc' }"
-        ></div>
-    </div>
+<ng-template #deleteEntryModal>
+    <confirm-modal
+        [title]="commonLocaleData?.app_delete"
+        [body]="localeData?.delete_transaction"
+        (cancelCallBack)="deleteEntryModalRef?.close()"
+        (successCallBack)="deleteEntry(); deleteEntryModalRef?.close()"
+    >
+    </confirm-modal>
 </ng-template>
-<!-- endregion -->
-<!--delete Account modal  -->
-<div bsModal #deleteEntryModal="bs-modal" class="modal fade aaa" role="dialog">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content" *ngIf="deleteEntryModal?.isShown">
-            <confirm-modal
-                [title]="commonLocaleData?.app_delete"
-                [body]="localeData?.delete_transaction"
-                (cancelCallBack)="deleteEntryModal?.hide()"
-                (successCallBack)="deleteEntry(); deleteEntryModal?.hide()"
-            >
-            </confirm-modal>
-        </div>
-    </div>
-</div>

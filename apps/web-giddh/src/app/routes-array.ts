@@ -18,6 +18,7 @@ export const ROUTES = [
     { path: 'giddh-all-items', redirectTo: 'pages/giddh-all-items', pathMatch: 'full' },
     { path: 'audit-logs', redirectTo: 'pages/audit-logs', pathMatch: 'full' },
     { path: 'ledger/:accountUniqueName', redirectTo: 'pages/ledger/:accountUniqueName', pathMatch: 'full' },
+    { path: 'material-ledger/:accountUniqueName', redirectTo: 'pages/material-ledger/:accountUniqueName', pathMatch: 'full' },
     { path: 'dummy' },
     { path: 'browser-support' },
     { path: 'proforma-invoice' },
@@ -69,6 +70,11 @@ export const ROUTES = [
             {
                 path: 'ledger/:accountUniqueName',
                 loadChildren: () => import('./ledger/ledger.module').then(module => module.LedgerModule),
+                data: { preload: true }
+            },
+            {
+                path: 'material-ledger/:accountUniqueName',
+                loadChildren: () => import('./material-ledger/ledger.module').then(module => module.LedgerModule),
                 data: { preload: true }
             },
             { path: 'permissions', loadChildren: () => import('./permissions/permission.module').then(module => module.PermissionModule) },

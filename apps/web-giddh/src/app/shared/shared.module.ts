@@ -1,5 +1,5 @@
-import { CommonModule, formatDate, registerLocaleData } from '@angular/common';
-import { LOCALE_ID, ModuleWithProviders, NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { LaddaModule } from 'angular2-ladda';
@@ -47,39 +47,26 @@ import { OnBoardingComponent } from './on-boarding/on-boarding.component';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 import { AsideHelpSupportComponent } from './header/components/aside-help-support/aside-help-support.component';
 import { AsideSettingComponent } from './header/components/aside-setting/aside-setting.component';
-import { DeleteTemplateConfirmationModelComponent } from '../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.component';
 import { LoaderComponent } from '../loader/loader.component';
 import { ProformaAddBulkItemsComponent } from '../proforma-invoice/components/proforma-add-bulk-items/proforma-add-bulk-items.component';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { GiddhDatepickerComponent } from '../theme/giddh-datepicker/giddh-datepicker.component';
-import { MatNativeDateModule, MAT_DATE_FORMATS, NativeDateAdapter, DateAdapter } from '@angular/material/core';
-import { MatInputModule } from '@angular/material/input';
 import { RevisionHistoryComponent } from './revision-history/revision-history.component';
 import { PurchaseOrderPreviewModalComponent } from './purchase-order-preview/purchase-order-preview.component';
 import { PurchaseSendEmailModalComponent } from './purchase-send-email/purchase-send-email.component';
-import { GiddhDaterangepickerComponent } from '../theme/giddh-daterangepicker/giddh-daterangepicker.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
-import { GiddhPageLoaderComponent } from './giddh-page-loader/giddh-page-loader.component';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
-
 import { CompanyBranchComponent } from './primary-sidebar/company-branch/company-branch.component';
-
-import localeEn from '@angular/common/locales/en-GB';
-import localeHi from '@angular/common/locales/hi';
-import localeMr from '@angular/common/locales/mr';
-import { ValidateSectionPermissionDirectiveModule } from './validate-section-permission/validate-section-permission.module';
 import { AmountFieldComponentModule } from './amount-field/amount-field.module';
 import { AccountAddNewDetailsModule } from './header/components/account-add-new-details/account-add-new-details.module';
 import { LedgerDiscountModule } from '../ledger/components/ledger-discount/ledger-discount.module';
 import { ConfirmationModalModule } from '../common/confirmation-modal/confirmation-modal.module';
 import { DatepickerWrapperModule } from './datepicker-wrapper/datepicker.wrapper.module';
+import { ValidateSectionPermissionDirectiveModule } from './validate-section-permission/validate-section-permission.module';
 import { HamburgerMenuModule } from './header/components/hamburger-menu/hamburger-menu.module';
 import { GenericAsideMenuAccountComponent } from './generic-aside-menu-account/generic.aside.menu.account.component';
 import { GiddhPageLoaderModule } from './giddh-page-loader/giddh-page-loader.module';
-registerLocaleData(localeEn);
-registerLocaleData(localeHi);
-registerLocaleData(localeMr);
+import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
+import { GiddhDateRangepickerModule } from '../theme/giddh-daterangepicker/giddh-daterangepicker.module';
+import { DeleteTemplateConfirmationModalModule } from '../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -93,23 +80,6 @@ const SOCIAL_CONFIG = (isElectron || isCordova) ? null : new AuthServiceConfig([
 
 export function provideConfig() {
     return SOCIAL_CONFIG || { id: null, providers: [] };
-}
-
-export const GIDDH_DATEPICKER_FORMAT = {
-    parse: { dateInput: 'dd-MM-yyyy' },
-    display: {
-        dateInput: 'input'
-    }
-};
-
-export class PickDateAdapter extends NativeDateAdapter {
-    format(date: Date, displayFormat: Object): string {
-        if (displayFormat === 'input') {
-            return formatDate(date, 'dd-MM-yyyy', this.locale);
-        } else {
-            return formatDate(date, 'MMM yyyy', this.locale);
-        }
-    }
 }
 
 @NgModule({
@@ -134,14 +104,11 @@ export class PickDateAdapter extends NativeDateAdapter {
         AsideMenuOtherTaxes,
         AccountUpdateNewDetailsComponent,
         WelcomeComponent,
-        DeleteTemplateConfirmationModelComponent,
         LoaderComponent,
         ProformaAddBulkItemsComponent,
-        GiddhDatepickerComponent,
         RevisionHistoryComponent,
         PurchaseOrderPreviewModalComponent,
         PurchaseSendEmailModalComponent,
-        GiddhDaterangepickerComponent,
         PrimarySidebarComponent,
         CompanyBranchComponent,
         GenericAsideMenuAccountComponent
@@ -178,20 +145,19 @@ export class PickDateAdapter extends NativeDateAdapter {
         CommandKModule,
         NgxDaterangepickerMd.forRoot(),
         ScrollingModule,
-        MatDatepickerModule,
-        MatFormFieldModule,
-        MatNativeDateModule,
-        MatInputModule,
         CurrencyModule,
         TranslateDirectiveModule,
-        ValidateSectionPermissionDirectiveModule,
         AmountFieldComponentModule,
         AccountAddNewDetailsModule,
         LedgerDiscountModule,
         ConfirmationModalModule,
         DatepickerWrapperModule,
         HamburgerMenuModule,
-        GiddhPageLoaderModule
+        ValidateSectionPermissionDirectiveModule,
+        GiddhPageLoaderModule,
+        GiddhDatepickerModule,
+        GiddhDateRangepickerModule,
+        DeleteTemplateConfirmationModalModule
     ],
     exports: [
         CommonModule,
@@ -228,17 +194,14 @@ export class PickDateAdapter extends NativeDateAdapter {
         TooltipModule,
         BsDatepickerModule,
         NgxDaterangepickerMd,
-        DeleteTemplateConfirmationModelComponent,
         LoaderComponent,
         ProformaAddBulkItemsComponent,
-        GiddhDatepickerComponent,
         RevisionHistoryComponent,
         PurchaseOrderPreviewModalComponent,
         PurchaseSendEmailModalComponent,
         CurrencyModule,
         PrimarySidebarComponent,
         TranslateDirectiveModule,
-        ValidateSectionPermissionDirectiveModule,
         CompanyBranchComponent,
         AmountFieldComponentModule,
         AccountAddNewDetailsModule,
@@ -246,8 +209,12 @@ export class PickDateAdapter extends NativeDateAdapter {
         ConfirmationModalModule,
         DatepickerWrapperModule,
         HamburgerMenuModule,
+        ValidateSectionPermissionDirectiveModule,
         GenericAsideMenuAccountComponent,
-        GiddhPageLoaderModule
+        GiddhPageLoaderModule,
+        GiddhDatepickerModule,
+        GiddhDateRangepickerModule,
+        DeleteTemplateConfirmationModalModule
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,
@@ -265,12 +232,7 @@ export class PickDateAdapter extends NativeDateAdapter {
         {
             provide: PERFECT_SCROLLBAR_CONFIG,
             useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-        },
-        MatDatepickerModule,
-        MatNativeDateModule,
-        { provide: MAT_DATE_FORMATS, useValue: GIDDH_DATEPICKER_FORMAT },
-        { provide: DateAdapter, useClass: PickDateAdapter },
-        { provide: LOCALE_ID, useValue: 'en' }
+        }
     ]
 })
 export class SharedModule {
