@@ -267,6 +267,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public adjustmentDialogRef: any;
     public advanceReceiptRemoveDialogRef: any;
 
+    public isMoreDetailOpen: boolean;
+
     constructor(
         private accountService: AccountService,
         private ledgerService: LedgerService,
@@ -1794,7 +1796,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     private openAdjustPaymentModal(): void {
         this.adjustmentDialogRef = this.dialog.open(this.adjustPaymentModal, {
-            width: '980px'
+            width: '980px',
+            panelClass: 'container-modal-class'
         });
     }
 
