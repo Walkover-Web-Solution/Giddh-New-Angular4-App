@@ -490,3 +490,22 @@ p.edit-message {
         padding: 10px 0px 0 0px;
     }
 }
+
+@media (max-width: 991px) {
+    .ledger-head {
+        display: none !important;
+    }
+    .ledg-head {
+        .custom-tabs {
+            .nav.nav-tabs {
+                width: 100%;
+                top: 0px !important;
+                padding-top: 0px !important;
+                left: 0px !important;
+            }
+        }
+    }
+    .ledger-book {
+        padding-top: 15px;
+    }
+}
