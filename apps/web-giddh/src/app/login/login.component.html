@@ -51,7 +51,7 @@
                                                 autocomplete="new-password"
                                             />
                                             <button
-                                                class="btn btn-success btn-lg btn-block mr-t1"
+                                                class="btn btn-blue btn-lg btn-block mr-t1"
                                                 type="submit"
                                                 [disabled]="
                                                     !loginWithPasswdForm.controls['uniqueKey'].value ||
@@ -86,7 +86,7 @@
                                             <div class="clearfix mr-b2">
                                                 <button
                                                     [disabled]="!signupVerifyForm.controls['verificationCode'].valid"
-                                                    class="btn btn-success btn-block btn-lg"
+                                                    class="btn btn-blue btn-block btn-lg"
                                                     (click)="
                                                         VerifyEmail(
                                                             loginWithPasswdForm.controls['uniqueKey'].value,
@@ -127,7 +127,7 @@
                                                 />
                                             </div>
                                             <button
-                                                class="btn btn-block btn-success btn-lg mr-t1"
+                                                class="btn btn-block btn-blue btn-lg mr-t1"
                                                 type="submit"
                                                 (click)="forgotPassword(forgotPasswordForm.controls['userId'].value)"
                                                 [disabled]="!forgotPasswordForm.controls['userId'].value"
@@ -167,7 +167,7 @@
                                                 </div>
                                             </div>
                                             <button
-                                                class="btn btn-block btn-success btn-lg mr-t1"
+                                                class="btn btn-block btn-blue btn-lg mr-t1"
                                                 type="submit"
                                                 (click)="resetPassword(resetPasswordForm)"
                                                 [disabled]="
@@ -246,7 +246,7 @@
                             <button
                                 [disabled]="!emailVerifyForm.controls['email'].valid"
                                 [ladda]="isLoginWithEmailInProcess$ | async"
-                                class="btn sharp btn-block btn-success btn-lg mr-t1"
+                                class="btn sharp btn-block btn-blue btn-lg mr-t1"
                                 (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)"
                             >
                                 Submit
@@ -263,7 +263,7 @@
                             <small>We have sent a verification code to your registered email.</small>
                             <button
                                 [disabled]="!emailVerifyForm.controls['token'].valid"
-                                class="btn sharp btn-block btn-success btn-lg mr-t1"
+                                class="btn sharp btn-block btn-blue btn-lg mr-t1"
                                 [ladda]="isVerifyEmailInProcess$ | async"
                                 (click)="
                                     VerifyEmail(
@@ -332,7 +332,7 @@
                         </div>
                         <button
                             *ngIf="!(isLoginWithMobileSubmited$ | async)"
-                            class="btn sharp btn-block btn-success btn-lg mr-t1"
+                            class="btn sharp btn-block btn-blue btn-lg mr-t1"
                             (click)="
                                 getOtp(
                                     mobileVerifyForm.controls['mobileNumber'].value,
@@ -349,7 +349,7 @@
                             <input class="form-control square" placeholder="Enter OTP" formControlName="otp" />
                             <button
                                 type="login"
-                                class="btn sharp btn-block btn-success btn-lg mr-t1"
+                                class="btn sharp btn-block btn-blue btn-lg mr-t1"
                                 [ladda]="isVerifyMobileInProcess$ | async"
                                 (click)="
                                     VerifyCode(
@@ -398,7 +398,7 @@
                             <small>We have sent an OTP to your registered mobile number.</small>
                             <button
                                 type="login"
-                                class="btn sharp btn-block btn-success btn-lg mr-t1"
+                                class="btn sharp btn-block btn-blue btn-lg mr-t1"
                                 [ladda]="isTwoWayAuthInProcess$ | async"
                                 (click)="verifyTwoWayCode()"
                                 [disabled]="twoWayOthForm.get('otp').invalid"
