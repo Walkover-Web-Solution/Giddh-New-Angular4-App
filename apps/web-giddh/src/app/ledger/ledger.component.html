@@ -3082,6 +3082,20 @@
                 </div>
             </div>
             <!-- Bulk action confirmation popup -->
+            <div bsModal #entryConfirmModal="bs-modal" class="modal fade" role="dialog">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content" *ngIf="entryConfirmModal?.isShown">
+                        <confirm-modal
+                            [title]="commonLocaleData?.app_confirm"
+                            [body]="duplicateEntryConfirmationMessage"
+                            [permanentlyDeleteMessage]="' '"
+                            (cancelCallBack)="cancelMergeEntry()"
+                            (successCallBack)="confirmMergeEntry()"
+                        >
+                        </confirm-modal>
+                    </div>
+                </div>
+            </div>
         </ng-container>
     </div>
 </ng-container>
