@@ -180,6 +180,7 @@ export interface ReciptRequest {
 export interface DownloadVoucherRequest {
     voucherNumber: string[];
     voucherType: string;
+    uniqueName?: string;
 }
 class CurrencyClass {
     public code: string;

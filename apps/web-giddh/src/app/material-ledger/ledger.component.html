@@ -2683,6 +2683,21 @@
                     </div>
                 </div>
             </ng-template>
+
+            <ng-template #entryConfirmModal>
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <confirm-modal
+                            [title]="commonLocaleData?.app_confirm"
+                            [body]="duplicateEntryConfirmationMessage"
+                            [permanentlyDeleteMessage]="' '"
+                            (cancelCallBack)="cancelMergeEntry()"
+                            (successCallBack)="confirmMergeEntry()"
+                        >
+                        </confirm-modal>
+                    </div>
+                </div>
+            </ng-template>
         </ng-container>
     </div>
 </ng-container>

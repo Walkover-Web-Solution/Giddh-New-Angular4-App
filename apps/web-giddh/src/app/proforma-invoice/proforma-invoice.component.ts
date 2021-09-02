@@ -882,7 +882,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         if (this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote) {
                             this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.accountUniqueName, {
                                 invoiceNumber: this.invoiceNo,
-                                voucherType: this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType)
+                                voucherType: this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType),
+                                uniqueName: (this.voucherApiVersion === 2) ? this.selectedItem?.uniqueName : undefined
                             }));
                         }
                         // TODO: Add purchase record get API call once advance receipt is complete
@@ -3912,7 +3913,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 // To get re-assign receipts voucher store
                 this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(response.body.account?.uniqueName, {
                     invoiceNumber: response.body.number,
-                    voucherType: response.body.type
+                    voucherType: response.body.type,
+                    uniqueName: (this.voucherApiVersion === 2) ? response.body.uniqueName : undefined
                 }));
             }
             // reset form and other
@@ -4281,7 +4283,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote) {
                 this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.accountUniqueName, {
                     invoiceNumber: this.invoiceNo,
-                    voucherType: this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType)
+                    voucherType: this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType),
+                    uniqueName: (this.voucherApiVersion === 2) ? this.selectedItem?.uniqueName : undefined
                 }));
             } else if (this.isPurchaseInvoice) {
                 const accountUniqueName = (this.selectedItem) ? this.selectedItem.account?.uniqueName : this.accountUniqueName;

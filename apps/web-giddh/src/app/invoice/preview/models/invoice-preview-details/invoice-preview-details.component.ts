@@ -377,6 +377,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     voucherType: this.selectedItem.voucherType === VoucherTypeEnum.cash ? VoucherTypeEnum.sales : this.selectedItem.voucherType,
                     voucherNumber: [this.selectedItem.voucherNumber]
                 };
+
+                if(this._generalService.voucherApiVersion === 2) {
+                    model.uniqueName = this.selectedItem.uniqueName;
+                }
+
                 let accountUniqueName: string = this.selectedItem.account?.uniqueName;
                 this.sanitizedPdfFileUrl = null;
                 this._receiptService.DownloadVoucher(model, accountUniqueName, false).pipe(takeUntil(this.destroyed$)).subscribe(result => {
