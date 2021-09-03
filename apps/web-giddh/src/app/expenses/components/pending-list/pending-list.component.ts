@@ -120,7 +120,10 @@ export class PendingListComponent implements OnInit, OnChanges {
     public showApproveConfirmPopup(ref: TemplateRef<any>, item: ExpenseResults): void {
         this.accountEntryPettyCash = { particular: { name: item?.baseAccount?.name } };
         this.prepareEntryAgainstObject(item);
-        this.approveEntryModalRef = this.dialog.open(ref, { disableClose: true });
+        this.approveEntryModalRef = this.dialog.open(ref, {
+            width: '500px',
+            disableClose: true
+        });
         this.selectedEntryForApprove = item;
     }
 

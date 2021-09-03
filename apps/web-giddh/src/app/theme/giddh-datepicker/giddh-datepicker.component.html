@@ -10,6 +10,7 @@
         (click)="emitDatepickerState(true); picker.open()"
         (dateChange)="dateChange($event)"
         [class]="cssClass"
+        [disabled]="disabled"
     />
     <ng-container *ngIf="showToggleIcon">
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>

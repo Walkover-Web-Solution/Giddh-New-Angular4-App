@@ -909,6 +909,11 @@
                                     <update-ledger-discount
                                         id="update-ledger-discount-amount"
                                         #discount
+                                        [disabled]="
+                                            !isPettyCash &&
+                                            currentOrganizationType === 'COMPANY' &&
+                                            branches?.length > 1
+                                        "
                                         [discountAccountsDetails]="vm.discountArray"
                                         [ledgerAmount]="vm.selectedLedger.actualAmount"
                                         [prefixInput]="vm.selectedPrefixForCurrency"
@@ -1193,10 +1198,8 @@
                                     [(ngModel)]="vm.selectedLedger.description"
                                     class="form-control mat-field-border"
                                     [placeholder]="commonLocaleData?.app_description"
-                                    [attr.disabled]="
+                                    [disabled]="
                                         !isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1
-                                            ? 'disabled'
-                                            : null
                                     "
                                 ></textarea>
                             </div>
@@ -1267,7 +1270,7 @@
                                             let entryIdx = index
                                         "
                                     >
-                                        <div class="col-md-5 col-sm-5 pd-r05">
+                                        <div class="col-md-4 col-sm-4 pd-r05">
                                             <div class="form-group">
                                                 <label
                                                     >{{ localeData?.adjustment_vouchers }}
@@ -1283,7 +1286,7 @@
                                                 />
                                             </div>
                                         </div>
-                                        <div class="col-md-5 col-sm-5 pd-l05 pd-r05">
+                                        <div class="col-md-4 col-sm-4 pd-l05 pd-r05">
                                             <div class="form-group">
                                                 <label
                                                     >{{ commonLocaleData?.app_amount
@@ -1330,7 +1333,7 @@
                                             *ngIf="
                                                 item.voucherType === 'receipt' && item.subVoucher === 'ADVANCE_RECEIPT'
                                             "
-                                            class="col-sm-2 pd-l05"
+                                            class="col-sm-3 pd-l05"
                                         >
                                             <div class="form-group">
                                                 <label>{{ commonLocaleData?.app_tax }}</label>

@@ -21,7 +21,7 @@
     </a>
     <div
         class="my-dropdown-menu pd-1"
-        [ngStyle]="{ 'display': discountMenu ? 'block' : 'none' }"
+        [ngStyle]="{ 'display': discountMenu && !disabled ? 'block' : 'none' }"
         (click)="$event.stopPropagation()"
     >
         <div>

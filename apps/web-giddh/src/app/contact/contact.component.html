@@ -342,16 +342,17 @@
                                         role="menu"
                                         aria-labelledby="button-basic"
                                     >
-                                        <li role="menuitem" (click)="openEmailDialog()">
+                                        <li role="menuitem" class="pointer" (click)="openEmailDialog()">
                                             {{ commonLocaleData?.app_email }}
                                         </li>
                                         <!-- <li role="menuitem" (click)="openSmsDialog();">
                                         {{commonLocaleData?.app_sms}}</li> -->
-                                        <li role="menuitem" (click)="downloadCSV()">
+                                        <li role="menuitem" class="pointer" (click)="downloadCSV()">
                                             {{ commonLocaleData?.app_download_csv }}
                                         </li>
                                         <li
                                             role="menuitem"
+                                            class="pointer"
                                             *ngIf="selectedAccountsList.length > 0 && activeTab === 'vendor'"
                                             (click)="openBulkPaymentModal(template)"
                                         >
@@ -568,7 +569,7 @@
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="border-radius-0">
-                    <div class="modal-header theme-bg pd-l2 pd-r2 clearfix">
+                    <div class="modal-header theme-bg pd-l2 pd-r2">
                         <h3 class="modal-title bg" id="modal-title-mail-customer">{{ messageBody.header.set }}</h3>
                         <span
                             aria-hidden="true"
