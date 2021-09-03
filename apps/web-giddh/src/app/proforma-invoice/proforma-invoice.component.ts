@@ -3881,7 +3881,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     purchaseOrders: purchaseOrders,
                     company: this.purchaseBillCompany
                 } as PurchaseRecordRequest;
-                requestObject = this.updateData(requestObject, data);
+
+                if(this.voucherApiVersion === 2) {
+                    requestObject = <GenericRequestForGenerateSCD>this.updateData(requestObject, data);
+                } else {
+                    requestObject = this.updateData(requestObject, data);
+                }
                 if (this.advanceReceiptAdjustmentData) {
                     requestObject.voucherAdjustments = this.advanceReceiptAdjustmentData;
                 }
@@ -5449,17 +5454,24 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @param {PurchaseRecordRequest} request Request object required by the service
      * @memberof ProformaInvoiceComponent
      */
-    private updatePurchaseRecord(request: PurchaseRecordRequest): void {
+    private updatePurchaseRecord(request: any): void {
         // Update the puchase record with voucher API for voucher version 2 else merge the purchase record (PATCH method, UPDATE flow)
-        const apiCallObservable = this.voucherApiVersion === 2 ?
-            this.salesService.updateVoucher(request) : this.purchaseRecordService.generatePurchaseRecord(request, 'PATCH');
-        apiCallObservable.pipe(takeUntil(this.destroyed$))
+        if(this.voucherApiVersion === 2) {
+            this.salesService.updateVoucherV4(request)
             .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
                 this.actionsAfterVoucherUpdate(response, this.invoiceForm);
             }, () => {
                 this.startLoader(false);
                 this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
             });
+        } else {
+           this.purchaseRecordService.generatePurchaseRecord(request, 'PATCH').pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<VoucherClass, PurchaseRecordRequest>) => {
+                this.actionsAfterVoucherUpdate(response, this.invoiceForm);
+            }, () => {
+                this.startLoader(false);
+                this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
+            });   
+        }
     }
 
     /**
