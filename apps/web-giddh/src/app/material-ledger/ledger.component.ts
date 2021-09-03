@@ -884,7 +884,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public hideBankLedgerPopup(event?: any) {
-        // cuando se emita falso en caso de éxito del mapa de cuenta
+        if(this.isDatepickerOpen) {
+            return;
+        }
+        
         if (!event) {
             this.getBankTransactions();
             this.getTransactionData();

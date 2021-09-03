@@ -1367,12 +1367,15 @@
 
                     <div class="col-md-6 pd-t1 accordion-expansion">
                         <mat-accordion multi>
-                            <mat-expansion-panel [ngClass]="{ 'overflow-visible': isMoreDetailOpen }">
+                            <mat-expansion-panel
+                                (opened)="isMoreDetailOpen = true"
+                                (closed)="isMoreDetailOpen = false"
+                                [ngClass]="{ 'overflow-visible': isMoreDetailOpen }"
+                            >
                                 <mat-expansion-panel-header>
-                                    <mat-panel-title
-                                        (click)="getInvoiceLists(); isMoreDetailOpen = !isMoreDetailOpen"
-                                        >{{ localeData?.more_details }}</mat-panel-title
-                                    >
+                                    <mat-panel-title (click)="getInvoiceLists()">{{
+                                        localeData?.more_details
+                                    }}</mat-panel-title>
                                 </mat-expansion-panel-header>
                                 <div class="pd-1 mr-b05 mr-t05 advanced">
                                     <table class="xs-table-block">
