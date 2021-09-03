@@ -266,7 +266,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public otherTaxDialogRef: any;
     public adjustmentDialogRef: any;
     public advanceReceiptRemoveDialogRef: any;
-
+    /** True if more details is open */
     public isMoreDetailOpen: boolean;
 
     constructor(

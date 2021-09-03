@@ -643,6 +643,7 @@
                                                                             name="bsdateledger"
                                                                             [(ngModel)]="item.entryDate"
                                                                             (dateSelected)="onChangeEntryDate(item)"
+                                                                            (datepickerState)="datepickerState($event)"
                                                                         ></giddh-datepicker>
                                                                     </span>
                                                                 </div>
@@ -903,6 +904,7 @@
                                                                             name="bsDates"
                                                                             [(ngModel)]="item.entryDate"
                                                                             (dateSelected)="onChangeEntryDate(item)"
+                                                                            (datepickerState)="datepickerState($event)"
                                                                         ></giddh-datepicker>
                                                                     </span>
                                                                 </div>
