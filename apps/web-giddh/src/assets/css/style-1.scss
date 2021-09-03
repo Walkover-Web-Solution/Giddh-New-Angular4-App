@@ -2872,6 +2872,16 @@ giddh-datepicker {
     height: 36px;
 }
 
+.search-ledger-field {
+    .btn-danger,
+    .btn-success,
+    .btn-warning {
+        .mat-button-wrapper {
+            display: flex;
+        }
+    }
+}
+
 .ledger-head {
     .mat-grid-tile-content {
         justify-content: space-between !important;
@@ -2964,6 +2974,11 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
 }
 .overflow-visible {
     overflow: visible !important;
+}
+.container-modal-class {
+    .mat-dialog-container {
+        overflow: initial !important;
+    }
 }
 .mat-header-cell {
     color: $midnight-blue !important;
@@ -3061,7 +3076,7 @@ td.mat-footer-cell {
 .petty-cash {
     .mat-tab-group {
         .mat-tab-header {
-            background: $alice-blue-light !important;     
+            background: $alice-blue-light !important;
             .mat-tab-label-container {
                 padding-left: 15px !important;
                 .mat-tab-list {
@@ -3103,7 +3118,7 @@ td.mat-footer-cell {
     }
 }
 
-.sidebar-overlay{
+.sidebar-overlay {
     .mat-tab-body-active {
         z-index: 991 !important;
     }
@@ -3136,14 +3151,14 @@ td.mat-footer-cell {
             }
         }
     }
-    .petty-cash{
+    .petty-cash {
         .mat-tab-group {
             .mat-tab-header {
                 position: fixed;
                 width: 100%;
-                z-index: 9;   
+                z-index: 9;
             }
-            .mat-tab-body-wrapper{
+            .mat-tab-body-wrapper {
                 padding-top: 60px;
             }
         }
