@@ -1,0 +1,25 @@
+<div>
+    <div class="modal-header theme-bg pd-l2 pd-r2 clearfix">
+        <h3 class="modal-title bg" id="modal-title">{{ inputData?.title }}</h3>
+        <i class="icon-cross text-right close-modal" aria-hidden="true" (click)="sendResponse(null)"></i>
+    </div>
+    <div class="modal-body pd-l2 pd-r2 clearfix" id="export-body">
+        <form name="newRole" novalidate autocomplete="off">
+            <div class="modal-wrap mr-b2 text-center">
+                <h2>{{ inputData?.body }}</h2>
+            </div>
+            <div class="row mr-t2 ledger-btn">
+                <div class="col-xs-6 col-sm-6 pr-1 pl-1">
+                    <button type="submit" class="btn btn-block btn-success" (click)="sendResponse(false)">
+                        {{ inputData?.button1Text }}
+                    </button>
+                </div>
+                <div class="col-xs-6 col-sm-6 pr-1 pl-1">
+                    <button type="submit" class="btn btn-block btn-success" (click)="sendResponse(true)">
+                        {{ inputData?.button2Text }}
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
