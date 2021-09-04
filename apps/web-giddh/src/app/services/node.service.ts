@@ -11,7 +11,7 @@ import { HttpWrapperService } from "./httpWrapper.service";
 export class NodeService {
 
     constructor(
-        private errorHandler: GiddhErrorHandler, 
+        private errorHandler: GiddhErrorHandler,
         private http: HttpWrapperService,
         private generalService: GeneralService) {
 
@@ -19,10 +19,10 @@ export class NodeService {
 
     public saveCompany(): Observable<BaseResponse<any, any>> {
         let apiUrl = this.generalService.getApiDomain();
-            return this.http.get(apiUrl + NODE_API.SAVE_COMPANY.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))).pipe(map((res) => {
-                let data: BaseResponse<any, any> = res;
-                data.queryString = {};
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+        return this.http.get(apiUrl + NODE_API.SAVE_COMPANY.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 }
