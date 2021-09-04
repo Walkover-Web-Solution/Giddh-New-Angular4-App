@@ -298,7 +298,10 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
             this.showEntryAgainstRequired = true;
             return;
         }
-        this.approveEntryModalRef = this.dialog.open(ref, { disableClose: true });
+        this.approveEntryModalRef = this.dialog.open(ref, { 
+            width: '500px',
+            disableClose: true
+        });
         this.selectedEntryForApprove = cloneDeep(this.selectedItem);
         this.selectedEntryForApprove.amount = this.updateLedgerComponentInstance.vm.compoundTotal;
     }

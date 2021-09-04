@@ -34,6 +34,8 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     @Input() public cssClass: string = "";
     /** Will show toggle icon if true */
     @Input() public showToggleIcon: boolean = true;
+    /** Will disable the field if true */
+    @Input() public disabled: boolean = false;
     /** Emitting selected date object as output */
     @Output() public dateSelected: EventEmitter<any> = new EventEmitter<any>();
     /** Emitting the state of datepicker (open/close) */
