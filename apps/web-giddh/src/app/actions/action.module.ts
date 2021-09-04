@@ -28,15 +28,9 @@ import { GeneralActions } from './general/general.actions';
 import { SettingsPermissionActions } from './settings/permissions/settings.permissions.action';
 import { SettingsBranchActions } from './settings/branch/settings.branch.action';
 import { SessionActions } from './session.action';
-import { SettingsTagActions } from './settings/tag/settings.tag.actions';
 import { InventoryReportActions } from './inventory/inventory.report.actions';
 import { InventoryEntryActions } from './inventory/inventory.entry.actions';
 import { InventoryUsersActions } from './inventory/inventory.users.actions';
-import { SettingsTriggersActions } from './settings/triggers/settings.triggers.actions';
-import { ImportExcelActions } from './import-excel/import-excel.actions';
-import { SettingsDiscountActions } from './settings/discount/settings.discount.action';
-import { NewVsOldInvoicesActions } from './new-vs-old-invoices.actions';
-import { CompanyImportExportActions } from './company-import-export/company-import-export.actions';
 import { AgingReportActions } from './aging-report.actions';
 import { InvoiceReceiptActions } from './invoice/receipt/receipt.actions';
 import { GstReconcileActions } from './gst-reconcile/GstReconcile.actions';
@@ -80,7 +74,6 @@ import { PurchaseOrderActions } from './purchase-order/purchase-order.action';
             SettingsIntegrationActions,
             SettingsProfileActions,
             SettingsBranchActions,
-            SettingsTagActions,
             SettingsTaxesActions,
             SalesActions,
             SettingsLinkedAccountsActions,
@@ -88,14 +81,8 @@ import { PurchaseOrderActions } from './purchase-order/purchase-order.action';
             SettingsFinancialYearActions,
             SettingsPermissionActions,
             SessionActions,
-            SettingsTriggersActions,
-            ImportExcelActions,
-            SettingsDiscountActions,
-            NewVsOldInvoicesActions,
             AgingReportActions,
-            CompanyImportExportActions,
             InvoiceReceiptActions,
-            CompanyImportExportActions,
             GstReconcileActions,
             SubscriptionsActions,
             ProformaActions,

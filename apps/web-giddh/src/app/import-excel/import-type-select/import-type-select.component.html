@@ -1,44 +1,52 @@
-<ng-container appTranslate [file]="'import-data'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'import-data'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="row">
         <div class="col-12">
             <div class="pd-t2 mt-2">
                 <div class="text-center mr-t2 mr-b2">
-                    <h1 class="lead">{{localeData?.section_heading}}</h1>
-                    <h4>{{localeData?.easy_import}}</h4>
-                    <a href="javascript:void 0" class="text-link-2 mt-1 d-block text-center"
-                        [routerLink]="['/pages','import', 'report', 'import-report']">{{localeData?.previous_imports}}</a>
+                    <h1 class="lead">{{ localeData?.section_heading }}</h1>
+                    <h4>{{ localeData?.easy_import }}</h4>
+                    <a
+                        href="javascript:void 0"
+                        class="text-link-2 mt-1 d-block text-center"
+                        [routerLink]="['/pages', 'import', 'report', 'import-report']"
+                        >{{ localeData?.previous_imports }}</a
+                    >
                 </div>
                 <ul class="import-type mr-b2 mr-t4 pd-t3">
                     <li *ngIf="!isBranch">
-                        <a class="text-link-2" [routerLink]="['/pages','import','group']">
+                        <a class="text-link-2" [routerLink]="['/pages', 'import', 'group']">
                             <img src="assets/images/new/group-import.svg" />
-                            <h2>{{commonLocaleData?.app_import_type?.groups}}</h2>
+                            <h2>{{ commonLocaleData?.app_import_type?.groups }}</h2>
                         </a>
                     </li>
                     <li *ngIf="!isBranch">
-                        <a class="text-link-2" [routerLink]="['/pages','import','account']">
+                        <a class="text-link-2" [routerLink]="['/pages', 'import', 'account']">
                             <img src="assets/images/new/acc-import.svg" />
-                            <h2>{{commonLocaleData?.app_import_type?.accounts}}</h2>
+                            <h2>{{ commonLocaleData?.app_import_type?.accounts }}</h2>
                         </a>
                     </li>
                     <li *ngIf="!isBranch">
-                        <a class="text-link-2" [routerLink]="['/pages','import','stock']">
+                        <a class="text-link-2" [routerLink]="['/pages', 'import', 'stock']">
                             <img src="assets/images/new/Inventory-13.svg" />
-                            <h2>{{commonLocaleData?.app_import_type?.inventory}}</h2>
+                            <h2>{{ commonLocaleData?.app_import_type?.inventory }}</h2>
                         </a>
                     </li>
                     <li *ngIf="isBranch || branches?.length === 1">
-                        <a class="text-link-2" [routerLink]="['/pages','import','entries']">
+                        <a class="text-link-2" [routerLink]="['/pages', 'import', 'entries']">
                             <img src="assets/images/new/entries-import.svg" />
-                            <h2>{{commonLocaleData?.app_import_type?.entries}}</h2>
+                            <h2>{{ commonLocaleData?.app_import_type?.entries }}</h2>
                         </a>
                     </li>
                     <li *ngIf="!isBranch">
-                        <a class="text-link-2" [routerLink]="['/pages','import','trial-balance']">
+                        <a class="text-link-2" [routerLink]="['/pages', 'import', 'trial-balance']">
                             <img src="assets/images/new/tb-import.svg" />
-                            <h2>{{commonLocaleData?.app_import_type?.trial_balance}}</h2>
+                            <h2>{{ commonLocaleData?.app_import_type?.trial_balance }}</h2>
                         </a>
                     </li>
                 </ul>

@@ -1,30 +1,46 @@
 <!-- upload And Map Content start-->
 <div class="upload-and-map-content">
-    <h2 class="text-center"> {{localeData?.import}} {{ title | titlecase}}</h2>
-    <div *ngIf="currentCompanyBranches?.length > 1 && entity === 'entries' && currentOrganizationType === 'COMPANY'"
-        class="form-group max-width-500 center-block">
+    <h2 class="text-center">{{ localeData?.import }} {{ title | titlecase }}</h2>
+    <div
+        *ngIf="currentCompanyBranches?.length > 1 && entity === 'entries' && currentOrganizationType === 'COMPANY'"
+        class="form-group max-width-500 center-block"
+    >
         <!-- Currently only import entries is only visible for branch as API doesn't support permission.
         Import is only allowed for 'entries' and not for other options ('inventory', 'account', 'trial-balance', 'groups')
         on branch level and for company level other options are supported but not entries -->
-        <label class="mt-4 mb-8">{{localeData?.select_branch_headquarter}} <sup>*</sup></label>
+        <label class="mt-4 mb-8">{{ localeData?.select_branch_headquarter }} <sup>*</sup></label>
         <div class="form-group linked-entities">
             <div class="form-group">
-                <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [showClear]="false"
-                    [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
-                    [placeholder]="localeData?.select_branch" [fixedValue]="currentBranch?.alias">
+                <sh-select
+                    [options]="currentCompanyBranches"
+                    [(ngModel)]="currentBranch.uniqueName"
+                    [showClear]="false"
+                    [ItemHeight]="33"
+                    width="100%"
+                    (selected)="handleBranchChange($event)"
+                    [isFilterEnabled]="true"
+                    [placeholder]="localeData?.select_branch"
+                    [fixedValue]="currentBranch?.alias"
+                >
                     <ng-template #optionTemplate let-option="option">
                         <ng-container>
                             <a href="javascript:void(0)" class="list-item d-flex">
                                 <span class="entity-icon">
-                                    <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany"
-                                        tooltip="{{commonLocaleData?.app_branch}}"></i>
-                                    <i class="icon-company-profile pull-right" *ngIf="option.isCompany"
-                                        tooltip="{{commonLocaleData?.app_company}}"></i>
+                                    <i
+                                        class="icon-branch-icon pull-right"
+                                        *ngIf="!option.isCompany"
+                                        tooltip="{{ commonLocaleData?.app_branch }}"
+                                    ></i>
+                                    <i
+                                        class="icon-company-profile pull-right"
+                                        *ngIf="option.isCompany"
+                                        tooltip="{{ commonLocaleData?.app_company }}"
+                                    ></i>
                                 </span>
                                 <span class="entity-details">
-                                    <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
+                                    <div class="item giddh-limit single-line-clamp">{{ option.label || "-" }}</div>
                                     <div class="item-unique giddh-limit single-line-clamp">
-                                        {{ option.name || '-' }}
+                                        {{ option.name || "-" }}
                                     </div>
                                 </span>
                             </a>
@@ -35,39 +51,51 @@
         </div>
     </div>
     <div class="upload-excel max-width-500 center-block box mr-t2 dashed-border">
-        <input type="file" id="csvUploadInput" [placeholder]="localeData?.browse_file_placeholder"
-            (change)="onFileChange($event.target.files)" droppable="true" class="form-control" />
+        <input
+            type="file"
+            id="csvUploadInput"
+            [placeholder]="localeData?.browse_file_placeholder"
+            (change)="onFileChange($event.target.files)"
+            droppable="true"
+            class="form-control"
+        />
         <div class="clearfix position-relative width-100">
             <div class="file-input-wrapper text-center">
                 <div class="clearfix mr-b2">
                     <img src="assets/images/new/import_icon.svg" [style.width.px]="100" />
                 </div>
                 <div class="clearfix pd-r2 pd-l2">
-                    <label class="clearfix text-light-2 font-14">{{localeData?.upload_message}}</label>
+                    <label class="clearfix text-light-2 font-14">{{ localeData?.upload_message }}</label>
 
                     <div class="mr-t3">
-                        <label class="file-upload-panel" for="csvUploadInput"> <span
-                                *ngIf="!selectedFileName">{{localeData?.browse_file_label}}</span>
-                            <span *ngIf="selectedFileName" class="select-file">{{selectedFileName}}</span> <span
-                                class="pull-right select-file"><i class="fa fa-check"
-                                    *ngIf="selectedFileName"></i></span></label>
+                        <label class="file-upload-panel" for="csvUploadInput">
+                            <span *ngIf="!selectedFileName">{{ localeData?.browse_file_label }}</span>
+                            <span *ngIf="selectedFileName" class="select-file">{{ selectedFileName }}</span>
+                            <span class="pull-right select-file"
+                                ><i class="fa fa-check" *ngIf="selectedFileName"></i></span
+                        ></label>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
     <div class="max-width-500 center-block mr-t05 clearfix">
-        <button class="btn btn-sm btn-link" type="button"
-            (click)="downloadSampleFile(entity)">{{localeData?.download_sample_xls}}</button>
-        <button class="btn btn-sm btn-link pull-right" type="button"
-            (click)="downloadSampleFile(entity, true)">{{localeData?.download_sample_csv}}</button>
+        <button class="btn btn-sm btn-link" type="button" (click)="downloadSampleFile(entity)">
+            {{ localeData?.download_sample_xls }}
+        </button>
+        <button class="btn btn-sm btn-link pull-right" type="button" (click)="downloadSampleFile(entity, true)">
+            {{ localeData?.download_sample_csv }}
+        </button>
 
         <div class="pull-right mr-t2">
-            <button class="btn btn-default" [routerLink]="['/pages/import']">{{commonLocaleData?.app_back}}</button>
-            <button class="btn btn-success" [ladda]="isLoading" [disabled]="file === null"
-                (click)="handleFileUpload(file)">
-                {{commonLocaleData?.app_next}}
+            <button class="btn btn-default" [routerLink]="['/pages/import']">{{ commonLocaleData?.app_back }}</button>
+            <button
+                class="btn btn-success"
+                [ladda]="isLoading"
+                [disabled]="file === null"
+                (click)="handleFileUpload(file)"
+            >
+                {{ commonLocaleData?.app_next }}
             </button>
         </div>
     </div>

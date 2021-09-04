@@ -304,11 +304,11 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if(dateObj) {
                 this.universalDate = cloneDeep(dateObj);
-                
+
                 setTimeout(() => {
                     this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
                         this.todaySelected = response;
-            
+
                         if (this.universalDate && !this.todaySelected) {
                             this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
                             this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
@@ -319,7 +319,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                             this.fromDate = "";
                             this.toDate = "";
                         }
-                        
+
                         this.getAccounts(this.fromDate, this.toDate, null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                     });
                 }, 100);
@@ -426,16 +426,16 @@ export class ContactComponent implements OnInit, OnDestroy {
                 break;
 
             case 1: // go to ledger
-                this.goToRoute('ledger', `/${this.fromDate}/${this.toDate}`, account.uniqueName);
+                this.goToRoute('ledger', `/${this.fromDate}/${this.toDate}`, account?.uniqueName);
                 break;
 
             case 2: // go to sales or purchase
                 this.purchaseOrSales = this.activeTab === 'customer' ? 'sales' : 'purchase';
                 if (this.purchaseOrSales === 'purchase') {
-                    this.goToRoute('proforma-invoice/invoice/purchase', '', account.uniqueName);
+                    this.goToRoute('proforma-invoice/invoice/purchase', '', account?.uniqueName);
                 } else {
-                    let isCashInvoice = account.uniqueName === 'cash';
-                    this.goToRoute(`proforma-invoice/invoice/${isCashInvoice ? 'cash' : 'sales'}`, '', account.uniqueName);
+                    let isCashInvoice = account?.uniqueName === 'cash';
+                    this.goToRoute(`proforma-invoice/invoice/${isCashInvoice ? 'cash' : 'sales'}`, '', account?.uniqueName);
                 }
                 break;
             // case 3: // send sms
@@ -1268,9 +1268,9 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.selectedAccountsList.splice(indexOfEntry, 1);
         }
         // selected contacts list
-        let indexOfEntrySelected = this.selectedCheckedContacts.indexOf(element.uniqueName);
+        let indexOfEntrySelected = this.selectedCheckedContacts.indexOf(element?.uniqueName);
         if (indexOfEntrySelected === -1 && isChecked) {
-            this.selectedCheckedContacts.push(element.uniqueName);
+            this.selectedCheckedContacts.push(element?.uniqueName);
         } else if (indexOfEntrySelected > -1 && !this.allSelectionModel) {
             this.selectedCheckedContacts.splice(indexOfEntrySelected, 1);
         }
@@ -1322,7 +1322,7 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     public addNewFieldFilters(field: any): void {
         for (let key of field) {
-            if (key.uniqueName) {
+            if (key?.uniqueName) {
                 this.showFieldFilter[key.uniqueName] = false;
             }
         }
@@ -1369,35 +1369,35 @@ export class ContactComponent implements OnInit, OnDestroy {
 
             this.dataVariables = [
                 {
-                    name: this.localeData?.data_variables.opening_balance,
+                    name: this.localeData?.data_variables?.opening_balance,
                     value: '%s_OB',
                 },
                 {
-                    name: this.localeData?.data_variables.closing_balance,
+                    name: this.localeData?.data_variables?.closing_balance,
                     value: '%s_CB',
                 },
                 {
-                    name: this.localeData?.data_variables.credit_total,
+                    name: this.localeData?.data_variables?.credit_total,
                     value: '%s_CT',
                 },
                 {
-                    name: this.localeData?.data_variables.debit_total,
+                    name: this.localeData?.data_variables?.debit_total,
                     value: '%s_DT',
                 },
                 {
-                    name: this.localeData?.data_variables.from_date,
+                    name: this.localeData?.data_variables?.from_date,
                     value: '%s_FD',
                 },
                 {
-                    name: this.localeData?.data_variables.to_date,
+                    name: this.localeData?.data_variables?.to_date,
                     value: '%s_TD',
                 },
                 {
-                    name: this.localeData?.data_variables.magic_link,
+                    name: this.localeData?.data_variables?.magic_link,
                     value: '%s_ML',
                 },
                 {
-                    name: this.localeData?.data_variables.account_name,
+                    name: this.localeData?.data_variables?.account_name,
                     value: '%s_AN',
                 }
             ];

@@ -1,5 +1,5 @@
 <div class="modal-header" appTranslate (commonLocaleData)="commonLocaleData = $event">
-    <h4 class="modal-title pull-left">{{commonLocaleData?.app_send_email}}</h4>
+    <h4 class="modal-title pull-left">{{ commonLocaleData?.app_send_email }}</h4>
     <button type="button" class="close pull-right" aria-label="Close" (click)="hideModal()">
         <span aria-hidden="true">&times;</span>
     </button>
@@ -7,18 +7,24 @@
 <div class="modal-body">
     <div class="row mr-b1">
         <div class="col-sm-12">
-            <input type="text" class="form-control" [placeholder]="commonLocaleData?.app_enter_email"
-                [(ngModel)]="emailId">
+            <input
+                type="text"
+                class="form-control"
+                [placeholder]="commonLocaleData?.app_enter_email"
+                [(ngModel)]="emailId"
+            />
         </div>
     </div>
     <!-- region buttons -->
     <div class="row mr-t2 mr-b1">
         <div class="col-sm-12">
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-success"
-                    (click)="sendEmail()">{{commonLocaleData?.app_send}}</button>
-                <button type="button" class="btn btn-danger"
-                    (click)="hideModal()">{{commonLocaleData?.app_cancel}}</button>
+                <button type="button" class="btn btn-success" (click)="sendEmail()">
+                    {{ commonLocaleData?.app_send }}
+                </button>
+                <button type="button" class="btn btn-danger" (click)="hideModal()">
+                    {{ commonLocaleData?.app_cancel }}
+                </button>
             </div>
         </div>
     </div>

@@ -29,7 +29,6 @@ import { cloneDeep } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { DiscountListComponent } from '../../sales/discount-list/discountList.component';
 import { TaxControlComponent } from '../../theme/tax-control/tax-control.component';
-import { SettingsDiscountActions } from '../../actions/settings/discount/settings.discount.action';
 import { CompanyActions } from '../../actions/company.actions';
 import { ConfirmationModalConfiguration, CONFIRMATION_ACTIONS } from '../../common/confirmation-modal/confirmation-modal.interface';
 import { NgForm } from '@angular/forms';
@@ -361,6 +360,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public translationLoaded: boolean = false;
     /** Length of entry description */
     public entryDescriptionLength: number = ENTRY_DESCRIPTION_LENGTH;
+    /** True if form save in progress */
+    public isFormSaveInProgress: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -372,7 +373,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         private settingsProfileActions: SettingsProfileActions,
         private toaster: ToasterService,
         private commonActions: CommonActions,
-        private settingsDiscountAction: SettingsDiscountActions,
         private companyActions: CompanyActions,
         private generalService: GeneralService,
         public purchaseOrderService: PurchaseOrderService,
@@ -405,7 +405,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.getInvoiceSettings();
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
-        this.store.dispatch(this.settingsDiscountAction.GetDiscount());
         this.store.dispatch(this.companyActions.getTax());
         this.store.dispatch(this.settingsBranchAction.resetAllBranches());
         this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
@@ -1893,11 +1892,13 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         if (this.activeIndex === entryIdx) {
             this.activeIndex = null;
         }
-        for (let index = entryIdx + 1; index < this.purchaseOrder.entries.length; index++) {
-            const viewRef: any = this.container.get(index);
-            viewRef.context.entryIdx -= 1;
-        }
         if (this.container) {
+            for (let index = entryIdx + 1; index < this.purchaseOrder.entries.length; index++) {
+                const viewRef: any = this.container.get(index);
+                if(viewRef) {
+                    viewRef.context.entryIdx -= 1;
+                }
+            }
             this.container.remove(entryIdx);
         }
         this.purchaseOrder.entries.splice(entryIdx, 1);
@@ -2002,6 +2003,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public savePurchaseOrder(type: string): void {
+        if(this.isFormSaveInProgress) {
+            return;
+        }
+
         let data: VoucherClass = _.cloneDeep(this.purchaseOrder);
 
         // special check if gst no filed is visible then and only then check for gst validation
@@ -2128,6 +2133,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             return;
         }
 
+        this.isFormSaveInProgress = true;
+
         let postRequestObject = {
             type: "purchase",
             date: data.voucherDetails.voucherDate,
@@ -2151,6 +2158,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
         if (type === "create") {
             this.purchaseOrderService.create(getRequestObject, updatedData).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.isFormSaveInProgress = false;
                 this.toaster.clearAllToaster();
                 if (response && response.status === "success") {
                     this.vendorAcList$ = observableOf(_.orderBy(this.defaultVendorSuggestions, 'label'));
@@ -2166,6 +2174,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             });
         } else {
             this.purchaseOrderService.update(getRequestObject, updatedData).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.isFormSaveInProgress = false;
                 this.toaster.clearAllToaster();
                 if (response && response.status === "success") {
                     this.toaster.successToast(this.localeData?.po_updated);

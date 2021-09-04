@@ -9,12 +9,12 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { ToasterService } from '../../services/toaster.service';
 import { IForceClear } from '../../models/api-models/Sales';
-import { SettingsTriggersActions } from '../../actions/settings/triggers/settings.triggers.actions';
 import { SearchService } from '../../services/search.service';
 import { GroupService } from '../../services/group.service';
 import { API_COUNT_LIMIT } from '../../app.constant';
 import { cloneDeep, each } from '../../lodash-optimized';
 import { NgForm } from '@angular/forms';
+import { SettingsTriggersService } from '../../services/settings.triggers.service';
 
 @Component({
     selector: 'setting-trigger',
@@ -105,9 +105,9 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
     constructor(
         private groupService: GroupService,
         private store: Store<AppState>,
-        private _settingsTriggersActions: SettingsTriggersActions,
         private searchService: SearchService,
-        private _toaster: ToasterService
+        private toaster: ToasterService,
+        private settingsTriggersService: SettingsTriggersService
     ) {
 
     }
@@ -117,21 +117,12 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
             let day = i.toString();
             this.days.push({ label: day, value: day });
         }
-        this.store.dispatch(this._settingsTriggersActions.GetTriggers());
 
         // default value assinged bcz currently there is only single option
         this.newTriggerObj.action = 'webhook';
         this.newTriggerObj.scope = 'closing balance';
-        this.store.pipe(select(p => p.settings.triggers), takeUntil(this.destroyed$)).subscribe((o) => {
-            if (o) {
-                this.availableTriggers = cloneDeep(o);
-                if (this.newTriggerObj.entity) {
-                    this.resetNewFormModel();
-                    this.resetNewFormFields();
-                }
-            }
-        });
 
+        this.getTriggers();
         this.loadDefaultAccountsSuggestions();
         this.loadDefaultGroupsSuggestions();
 
@@ -144,9 +135,29 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
                 this.groups = cloneDeep(groupsRes);
             }
         });
+    }
 
-        this.store.pipe(select(state => state.settings.isGetAllTriggersInProcess), takeUntil(this.destroyed$)).subscribe(response => {
-            this.isLoading = response;
+    /**
+     * Fetching list of triggers
+     *
+     * @memberof SettingTriggerComponent
+     */
+    public getTriggers(): void {
+        this.isLoading = true;
+        this.settingsTriggersService.GetTriggers().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if(response?.status === "success") {
+                this.availableTriggers = cloneDeep(response?.body);
+                if (this.newTriggerObj.entity) {
+                    this.resetNewFormModel();
+                    this.resetNewFormFields();
+                }
+            } else {
+                if(this.commonLocaleData?.app_something_went_wrong) {
+                    this.toaster.clearAllToaster();
+                    this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                }
+            }
+            this.isLoading = false;
         });
     }
 
@@ -154,40 +165,43 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         let dataToSave = cloneDeep(data);
         dataToSave.action = 'webhook';
         if (!dataToSave.name) {
-            this._toaster.errorToast(this.localeData?.validations?.trigger_name, 'Validation');
+            this.toaster.errorToast(this.localeData?.validations?.trigger_name, this.localeData?.validation);
             return;
         }
         if (!dataToSave.entity) {
-            this._toaster.errorToast(this.localeData?.validations?.entity_type, 'Validation');
+            this.toaster.errorToast(this.localeData?.validations?.entity_type, this.localeData?.validation);
             return;
         }
         if (!dataToSave.entityUniqueName) {
-            this._toaster.errorToast(this.localeData?.validations?.entity, 'Validation');
+            this.toaster.errorToast(this.localeData?.validations?.entity, this.localeData?.validation);
             return;
         }
         if (!dataToSave.scope) {
-            this._toaster.errorToast(this.localeData?.validations?.scope, 'Validation');
+            this.toaster.errorToast(this.localeData?.validations?.scope, this.localeData?.validation);
             return;
         }
         if (!dataToSave.filter) {
-            this._toaster.errorToast(this.localeData?.validations?.filter, 'Validation');
+            this.toaster.errorToast(this.localeData?.validations?.filter, this.localeData?.validation);
             return;
         }
         if (!dataToSave.action) {
-            this._toaster.errorToast(this.localeData?.validations?.action, 'Validation');
+            this.toaster.errorToast(this.localeData?.validations?.action, this.localeData?.validation);
             return;
         }
         if (!dataToSave.value && this.newTriggerObj.scope !== 'closing balance') {
-            this._toaster.errorToast(this.localeData?.validations?.enter_value, 'Validation');
+            this.toaster.errorToast(this.localeData?.validations?.enter_value, this.localeData?.validation);
             return;
         } else {
             delete dataToSave['value'];
         }
         if (!dataToSave.url) {
-            this._toaster.errorToast(this.localeData?.validations?.enter_url, 'Validation');
+            this.toaster.errorToast(this.localeData?.validations?.enter_url, this.localeData?.validation);
             return;
         }
-        this.store.dispatch(this._settingsTriggersActions.CreateTrigger(dataToSave));
+        
+        this.settingsTriggersService.CreateTrigger(dataToSave).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.showToaster(this.commonLocaleData?.app_messages?.trigger_created, response);
+        });
     }
 
     public deleteTax(taxToDelete) {
@@ -218,13 +232,21 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         this.triggerConfirmationModel.hide();
         if (userResponse) {
             if (this.confirmationFor === 'delete') {
-                this.store.dispatch(this._settingsTriggersActions.DeleteTrigger(this.newTriggerObj.uniqueName));
+                this.settingsTriggersService.DeleteTrigger(this.newTriggerObj.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    this.showToaster(this.commonLocaleData?.app_messages?.trigger_deleted, response);
+                });
             } else if (this.confirmationFor === 'edit') {
                 each(this.newTriggerObj.taxDetail, (tax) => {
                     tax.date = moment(tax.date).format(GIDDH_DATE_FORMAT);
                 });
-                this.store.dispatch(this._settingsTriggersActions.UpdateTrigger(this.newTriggerObj));
+
+                this.settingsTriggersService.UpdateTrigger(this.newTriggerObj, this.newTriggerObj.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    this.resetNewFormModel();
+                    this.showToaster(this.commonLocaleData?.app_messages?.trigger_updated, response);
+                });
             }
+        } else {
+            this.resetNewFormModel();
         }
     }
 
@@ -258,16 +280,25 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
                 this.forceClearFilterList$ = observableOf({ status: true });
             }
         } else {
-            this.filterList = [
-                { label: this.localeData?.filter_types?.amount_greater_than, value: 'amountGreaterThan' },
-                { label: this.localeData?.filter_types?.amount_less_than, value: 'amountSmallerThan' },
-                { label: this.localeData?.filter_types?.amount_equals, value: 'amountEquals' },
-                { label: this.localeData?.filter_types?.description_equals, value: 'descriptionEquals' },
-                { label: this.localeData?.filter_types?.add, value: 'add' },
-                { label: this.localeData?.filter_types?.update, value: 'update' },
-                { label: this.localeData?.filter_types?.delete, value: 'delete' }
-            ];
+            this.showAllFilters();
         }
+    }
+
+    /**
+     * This will show all filters
+     *
+     * @memberof SettingTriggerComponent
+     */
+    public showAllFilters(): void {
+        this.filterList = [
+            { label: this.localeData?.filter_types?.amount_greater_than, value: 'amountGreaterThan' },
+            { label: this.localeData?.filter_types?.amount_less_than, value: 'amountSmallerThan' },
+            { label: this.localeData?.filter_types?.amount_equals, value: 'amountEquals' },
+            { label: this.localeData?.filter_types?.description_equals, value: 'descriptionEquals' },
+            { label: this.localeData?.filter_types?.add, value: 'add' },
+            { label: this.localeData?.filter_types?.update, value: 'update' },
+            { label: this.localeData?.filter_types?.delete, value: 'delete' }
+        ];
     }
 
     public onSelectClosingBalance() {
@@ -545,6 +576,12 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
             url: '',
             description: ''
         };
+
+        this.showAllFilters();
+        
+        setTimeout(() => {
+            this.resetNewFormFields();
+        }, 100);
     }
 
     /**
@@ -558,5 +595,23 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         this.forceClear$ = observableOf({ status: true });
         this.createTriggerForm?.reset();
         this.onResetEntityType();
+    }
+
+    /**
+     * This will show toaster for success/error message and will get all triggers if success response received
+     *
+     * @private
+     * @param {string} successMessage
+     * @param {*} response
+     * @memberof SettingTriggerComponent
+     */
+     private showToaster(successMessage: string, response: any): void {
+        this.toaster.clearAllToaster();
+        if (response?.status === "success") {
+            this.getTriggers();
+            this.toaster.successToast(successMessage, this.commonLocaleData?.app_success);
+        } else {
+            this.toaster.errorToast(response?.message, response?.code);                
+        }
     }
 }

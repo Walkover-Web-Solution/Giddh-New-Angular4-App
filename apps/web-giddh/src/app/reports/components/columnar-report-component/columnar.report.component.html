@@ -1,13 +1,22 @@
-<ng-container appTranslate [file]="'reports/monthly-columnar'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'reports/monthly-columnar'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="columnar-report-page mr-t2">
         <div class="container-fluid font-14">
             <div class="row">
                 <div class="col-xl-3 col-md-8 col-sm-12 col-xs-12 mr-b15">
-                    <sh-select [options]="selectYear" [fixedValue]="activeFinancialYearLabel"
-                        [placeholder]="localeData?.select_year" name="financialYear"
-                        (selected)="selectFinancialYear($event);" [forceClearReactive]="forceClear$ | async">
+                    <sh-select
+                        [options]="selectYear"
+                        [fixedValue]="activeFinancialYearLabel"
+                        [placeholder]="localeData?.select_year"
+                        name="financialYear"
+                        (selected)="selectFinancialYear($event)"
+                        [forceClearReactive]="forceClear$ | async"
+                    >
                     </sh-select>
                 </div>
             </div>
@@ -15,63 +24,108 @@
                 <div class="col-xl-3 col-md-8 col-sm-12 col-12">
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-12 col-12 mr-b15">
-                            <sh-select [options]="fromMonthNames" [placeholder]="localeData?.from_month"
-                                name="fromMonth" [(ngModel)]="fromMonth"
-                                [forceClearReactive]="forceClearMonths$ | async" (selected)="selectFromMonth($event);">
+                            <sh-select
+                                [options]="fromMonthNames"
+                                [placeholder]="localeData?.from_month"
+                                name="fromMonth"
+                                [(ngModel)]="fromMonth"
+                                [forceClearReactive]="forceClearMonths$ | async"
+                                (selected)="selectFromMonth($event)"
+                            >
                             </sh-select>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-12 col-12 mr-b15">
-                            <sh-select [options]="toMonthNames" [placeholder]="localeData?.to_month" name="toMonth"
-                                [(ngModel)]="toMonth" [forceClearReactive]="forceClearMonths$ | async"
-                                (selected)="selectToMonth($event);"></sh-select>
+                            <sh-select
+                                [options]="toMonthNames"
+                                [placeholder]="localeData?.to_month"
+                                name="toMonth"
+                                [(ngModel)]="toMonth"
+                                [forceClearReactive]="forceClearMonths$ | async"
+                                (selected)="selectToMonth($event)"
+                            ></sh-select>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-xl-3 col-md-8 col-sm-12 col-12 mr-b15 clear-both">
-                    <sh-select [options]="flatGroupsOptions" [placeholder]="localeData?.group" name="group"
-                        (selected)="selectGroup($event);" [forceClearReactive]="forceClear$ | async"
-                        [enableDynamicSearch]="true" [isPaginationEnabled]="true" (scrollEnd)="handleGroupScrollEnd()"
-                        (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"></sh-select>
+                    <sh-select
+                        [options]="flatGroupsOptions"
+                        [placeholder]="localeData?.group"
+                        name="group"
+                        (selected)="selectGroup($event)"
+                        [forceClearReactive]="forceClear$ | async"
+                        [enableDynamicSearch]="true"
+                        [isPaginationEnabled]="true"
+                        (scrollEnd)="handleGroupScrollEnd()"
+                        (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
+                    ></sh-select>
                 </div>
             </div>
             <div class="row">
                 <div class="col-xl-3 col-md-8 col-sm-12 col-12 mr-b15 clear-both">
-                    <input type="checkbox" name="showHideOpeningClosingBalance" id="showHideOpeningClosingBalance"
-                        [(ngModel)]="exportRequest.showHideOpeningClosingBalance">&nbsp;<label
-                        for="showHideOpeningClosingBalance">{{localeData?.opening_closing_balance}}</label>
+                    <input
+                        type="checkbox"
+                        name="showHideOpeningClosingBalance"
+                        id="showHideOpeningClosingBalance"
+                        [(ngModel)]="exportRequest.showHideOpeningClosingBalance"
+                    />&nbsp;<label for="showHideOpeningClosingBalance">{{ localeData?.opening_closing_balance }}</label>
                 </div>
             </div>
             <div class="row">
                 <div class="col-xl-3 col-md-8 col-sm-12 col-12 mr-b15 clear-both">
-                    <input type="checkbox" name="balanceTypeAsSign" id="balanceTypeAsSign"
+                    <input
+                        type="checkbox"
+                        name="balanceTypeAsSign"
+                        id="balanceTypeAsSign"
                         [(ngModel)]="exportRequest.balanceTypeAsSign"
-                        (ngModelChange)="onBalanceTypeAsSignChanged($event)">&nbsp;<label
-                        for="balanceTypeAsSign">{{localeData?.cr_dr}}</label>
+                        (ngModelChange)="onBalanceTypeAsSignChanged($event)"
+                    />&nbsp;<label for="balanceTypeAsSign">{{ localeData?.cr_dr }}</label>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-12 col-xs-12 mr-b15 clear-both">
-                    <button class="btn btn-sky-blue" [disabled]="!isFormValid() || isLoading"
-                        (click)="exportReport(false);">{{commonLocaleData?.app_export}}</button>
-                    <button class="btn btn-sky-blue" [disabled]="!isFormValid() || isLoading"
-                        (click)="exportReport(true);">{{commonLocaleData?.app_show}}</button>
-                    <button class="btn btn-sky-blue" (click)="clearFilter();">{{commonLocaleData?.app_reset}}</button>
+                    <button
+                        class="btn btn-sky-blue"
+                        [disabled]="!isFormValid() || isLoading"
+                        (click)="exportReport(false)"
+                    >
+                        {{ commonLocaleData?.app_export }}
+                    </button>
+                    <button
+                        class="btn btn-sky-blue"
+                        [disabled]="!isFormValid() || isLoading"
+                        (click)="exportReport(true)"
+                    >
+                        {{ commonLocaleData?.app_show }}
+                    </button>
+                    <button class="btn btn-sky-blue" (click)="clearFilter()">{{ commonLocaleData?.app_reset }}</button>
                 </div>
             </div>
-
         </div>
     </div>
-    <columnar-report-table-component [columnarReportResponse]="columnarReportResponse"
-        [isBalanceTypeAsSign]="isBalanceTypeAsSign" [localeData]="localeData" [commonLocaleData]="commonLocaleData">
+    <columnar-report-table-component
+        [columnarReportResponse]="columnarReportResponse"
+        [isBalanceTypeAsSign]="isBalanceTypeAsSign"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+    >
     </columnar-report-table-component>
     <div class="pagination-wrapper" *ngIf="columnarReportResponse && columnarReportResponse?.totalPages > 1">
-        <pagination [totalItems]="columnarReportResponse.totalItems" [(ngModel)]="columnarReportResponse.page"
-            [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [rotate]="false" [itemsPerPage]="paginationCount"
-            (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first"
-            [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next"
-            [lastText]="commonLocaleData?.app_last"></pagination>
+        <pagination
+            [totalItems]="columnarReportResponse.totalItems"
+            [(ngModel)]="columnarReportResponse.page"
+            [maxSize]="6"
+            class="pagination-sm"
+            [boundaryLinks]="true"
+            [rotate]="false"
+            [itemsPerPage]="paginationCount"
+            (pageChanged)="pageChanged($event)"
+            [firstText]="commonLocaleData?.app_first"
+            [previousText]="commonLocaleData?.app_previous"
+            [nextText]="commonLocaleData?.app_next"
+            [lastText]="commonLocaleData?.app_last"
+        ></pagination>
     </div>
     <div *ngIf="isLoading && isShowColumnarReport">
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>

@@ -1,7 +1,21 @@
-<overview-summary *ngIf="!showTransaction" [activeCompanyGstNumber]="activeCompanyGstNumber"
-    [currentPeriod]="currentPeriod" [selectedGst]="selectedGst" [isTransactionSummary]="isTransactionSummary" [localeData]="localeData" [commonLocaleData]="commonLocaleData" (hsnSacSelected)="hsnSacSelected.emit()">
+<overview-summary
+    *ngIf="!showTransaction"
+    [activeCompanyGstNumber]="activeCompanyGstNumber"
+    [currentPeriod]="currentPeriod"
+    [selectedGst]="selectedGst"
+    [isTransactionSummary]="isTransactionSummary"
+    [localeData]="localeData"
+    [commonLocaleData]="commonLocaleData"
+    (hsnSacSelected)="hsnSacSelected.emit()"
+>
 </overview-summary>
 
-<view-transactions *ngIf="showTransaction" [activeCompanyGstNumber]="activeCompanyGstNumber"
-    [currentPeriod]="currentPeriod" [selectedGst]="selectedGst" [localeData]="localeData" [commonLocaleData]="commonLocaleData">
+<view-transactions
+    *ngIf="showTransaction"
+    [activeCompanyGstNumber]="activeCompanyGstNumber"
+    [currentPeriod]="currentPeriod"
+    [selectedGst]="selectedGst"
+    [localeData]="localeData"
+    [commonLocaleData]="commonLocaleData"
+>
 </view-transactions>

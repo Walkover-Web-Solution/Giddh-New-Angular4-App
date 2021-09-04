@@ -90,7 +90,6 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 
 .other-tax {
     justify-content: flex-end;
-    display: flex;
     padding-top: 25px;
     display: flex;
     padding-left: 8px;
@@ -279,9 +278,7 @@ span.eligible-ITC {
 .table-amount[disabled] {
     pointer-events: none;
 }
-#update-ledger-assign-tag.disabled-ledger::ng-deep
-    .sh-select-disabled
-    .bg-white {
+#update-ledger-assign-tag.disabled-ledger::ng-deep .sh-select-disabled .bg-white {
     background-color: $whisper-light !important;
 }
 #update-ledger-assign-tag.disabled-ledger::ng-deep input,
