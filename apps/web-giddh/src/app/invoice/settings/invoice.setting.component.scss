@@ -112,6 +112,7 @@ input.form-control.send-alert {
         position: absolute;
         top: -24px;
         left: 0;
+        right: 15px;
         font-size: 12px;
         color: $dark-gray;
         text-align: left;
@@ -204,8 +205,8 @@ span.viasocket a {
     }
 }
 
-.btn-group{
-    .btn{
+.btn-group {
+    .btn {
         border-radius: 5px !important;
     }
 }

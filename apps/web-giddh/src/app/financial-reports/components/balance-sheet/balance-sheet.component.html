@@ -1,20 +1,38 @@
-<ng-container appTranslate [file]="'trial-profit-balance/balance-sheet'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
-    <financial-filter #filter [selectedCompany]="selectedCompany" (onPropertyChanged)="filterData($event)"
-        [showLoader]="showLoader | async" [showLabels]="true" (seachChange)="searchChanged($event)"
-        (expandAllChange)="expandAllEvent()" [(expandAll)]="expandAll" [BsExportXLS]="true">
+<ng-container
+    appTranslate
+    [file]="'trial-profit-balance/balance-sheet'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <financial-filter
+        #filter
+        [selectedCompany]="selectedCompany"
+        (onPropertyChanged)="filterData($event)"
+        [showLoader]="showLoader | async"
+        [showLabels]="true"
+        (seachChange)="searchChanged($event)"
+        (expandAllChange)="expandAllEvent()"
+        [(expandAll)]="expandAll"
+        [BsExportXLS]="true"
+    >
     </financial-filter>
-    <div *ngIf="(showLoader | async)">
+    <div *ngIf="showLoader | async">
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </div>
-    <div *ngIf="(!(showLoader | async) && data)">
-        <balance-sheet-grid #bsGrid [search]="search" [from]="from" [to]="to" (searchChange)="searchChanged($event)"
-            [expandAll]="expandAll" [bsData]="data"></balance-sheet-grid>
+    <div *ngIf="!(showLoader | async) && data">
+        <balance-sheet-grid
+            #bsGrid
+            [search]="search"
+            [from]="from"
+            [to]="to"
+            (searchChange)="searchChanged($event)"
+            [expandAll]="expandAll"
+            [bsData]="data"
+        ></balance-sheet-grid>
     </div>
-    <div *ngIf="(!(showLoader | async) && !(data))"
-        class="d-flex align-items-center justify-content-center tb-pl-bs-data">
+    <div *ngIf="!(showLoader | async) && !data" class="d-flex align-items-center justify-content-center tb-pl-bs-data">
         <div class="d-flex">
-            <h2>{{localeData?.no_data_found}}</h2>
+            <h2>{{ localeData?.no_data_found }}</h2>
         </div>
     </div>
 </ng-container>

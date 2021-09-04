@@ -1,66 +1,131 @@
 <div #dd [style.width]="width" class="position-relative">
-    <div [attr.style]="borderConfiguration?.style" class="header" #mainContainer [class.sh-select-disabled]="disabled"
-        [class.inline]="mode==='inline'" [class.open]="isOpen" (click)="show($event)" (focus)="show($event)"
-        (blur)="hide($event)" (keydown)="keydownUp($event)">
-
+    <div
+        [attr.style]="borderConfiguration?.style"
+        class="header"
+        #mainContainer
+        [class.sh-select-disabled]="disabled"
+        [class.inline]="mode === 'inline'"
+        [class.open]="isOpen"
+        (click)="show($event)"
+        (focus)="show($event)"
+        (blur)="hide($event)"
+        (keydown)="keydownUp($event)"
+    >
         <!--region multiple-->
-        <div *ngIf="multiple" [ngClass]="{'has-item':selectedValues?.length}" class="bdr white-bg">
+        <div *ngIf="multiple" [ngClass]="{ 'has-item': selectedValues?.length }" class="bdr white-bg">
             <ng-container *ngIf="selectedValues?.length">
                 <span class="chip" *ngFor="let sl of selectedValues">
                     {{ sl.label }}
-                    <span class="chip-close-btn" (mousedown)="clearSingleSelection($event, sl)"
-                        (click)="clearSingleSelection($event, sl)">&times;</span>
+                    <span
+                        class="chip-close-btn"
+                        (mousedown)="clearSingleSelection($event, sl)"
+                        (click)="clearSingleSelection($event, sl)"
+                        >&times;</span
+                    >
                 </span>
             </ng-container>
 
-            <input [attr.style]="borderConfiguration?.style" autocomplete="disabled" type="text"
+            <input
+                [attr.style]="borderConfiguration?.style"
+                autocomplete="disabled"
+                type="text"
                 class="pd-l1 form-control"
-                [ngClass]="{'hasValue':filter?.length, 'bottom-border-only' : showBottomBorderOnly}" #inputFilter
-                tabindex="0" (blur)="filterInputBlur($event)"
-                [placeholder]="selectedValues?.length > 0 ? filter : placeholder" [(ngModel)]="filter"
-                (ngModelChange)="updateFilter($event)">
+                [ngClass]="{ 'hasValue': filter?.length, 'bottom-border-only': showBottomBorderOnly }"
+                #inputFilter
+                tabindex="0"
+                (blur)="filterInputBlur($event)"
+                [placeholder]="selectedValues?.length > 0 ? filter : placeholder"
+                [(ngModel)]="filter"
+                (ngModelChange)="updateFilter($event)"
+            />
         </div>
         <!--endregion-->
 
         <!--region single-->
-        <button class="label-btn form-control text-left" *ngIf="!multiple && showLabelOnly"
-            [hidden]="((!isOpen || !isFilterEnabled))">{{selectedValues[0]?.label}}
+        <button
+            class="label-btn form-control text-left"
+            *ngIf="!multiple && showLabelOnly"
+            [hidden]="!isOpen || !isFilterEnabled"
+        >
+            {{ selectedValues[0]?.label }}
         </button>
 
-        <input autocomplete="disabled" type="text" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}"
-            class="form-control pd-r3" #inputFilter *ngIf="!multiple && !showLabelOnly"
-            [hidden]="((!isOpen || !isFilterEnabled))" [attr.style]="borderConfiguration?.style"
-            (blur)="filterInputBlur($event)" [placeholder]="placeholder" [(ngModel)]="filter"
-            (ngModelChange)="handleInputChange($event)">
+        <input
+            autocomplete="disabled"
+            type="text"
+            [ngClass]="{ 'bottom-border-only': showBottomBorderOnly }"
+            class="form-control pd-r3"
+            #inputFilter
+            *ngIf="!multiple && !showLabelOnly"
+            [hidden]="!isOpen || !isFilterEnabled"
+            [attr.style]="borderConfiguration?.style"
+            (blur)="filterInputBlur($event)"
+            [placeholder]="placeholder"
+            [(ngModel)]="filter"
+            (ngModelChange)="handleInputChange($event)"
+        />
 
-        <div *ngIf="((!isOpen || !isFilterEnabled) && !multiple)">
+        <div *ngIf="(!isOpen || !isFilterEnabled) && !multiple">
             <ng-container *ngIf="selectedValues?.length">
                 <div *ngIf="!multiple">
-                    <button class="form-control label-btn text-left"
-                        *ngIf="showLabelOnly">{{selectedValues[0]?.label}}</button>
-                    <input autocomplete="disabled" type="text" *ngIf="!showLabelOnly"
-                        [ngClass]="{'bottom-border-only' : showBottomBorderOnly}" (input)="openListIfNotOpened($event)"
-                        (click)="selectText($event);" type="text" value="{{selectedValues[0].label}}"
-                        class="form-control selected-val cp" [attr.style]="borderConfiguration?.style" />
+                    <button class="form-control label-btn text-left" *ngIf="showLabelOnly">
+                        {{ selectedValues[0]?.label }}
+                    </button>
+                    <input
+                        autocomplete="disabled"
+                        type="text"
+                        *ngIf="!showLabelOnly"
+                        [ngClass]="{ 'bottom-border-only': showBottomBorderOnly }"
+                        (input)="openListIfNotOpened($event)"
+                        (click)="selectText($event)"
+                        type="text"
+                        value="{{ selectedValues[0].label || filter }}"
+                        class="form-control selected-val cp"
+                        [attr.style]="borderConfiguration?.style"
+                    />
                 </div>
             </ng-container>
             <ng-container *ngIf="!selectedValues?.length">
-                <input autocomplete="disabled" type="text" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}"
-                    *ngIf="!showLabelOnly" [attr.style]="borderConfiguration?.style" [tabindex]="tabIndex"
-                    class="firstElementToFocus form-control pd-r3" name="filter2" [(ngModel)]="filter"
-                    (input)="openListIfNotOpened($event)" [placeholder]="placeholder" [value]="filter" />
+                <input
+                    autocomplete="disabled"
+                    type="text"
+                    [ngClass]="{ 'bottom-border-only': showBottomBorderOnly }"
+                    *ngIf="!showLabelOnly"
+                    [attr.style]="borderConfiguration?.style"
+                    [tabindex]="tabIndex"
+                    class="firstElementToFocus form-control pd-r3"
+                    name="filter2"
+                    [(ngModel)]="filter"
+                    (input)="openListIfNotOpened($event)"
+                    [placeholder]="placeholder"
+                    [value]="filter"
+                />
             </ng-container>
         </div>
         <!--endregion-->
-
     </div>
 
-    <sh-select-menu #menuEle [showLabelOnly]="showLabelOnly" [isOpen]="isOpen" [rows]="rows"
-        [isPaginationEnabled]="isPaginationEnabled" (scrollEnd)="reachedEnd()" [selectedValues]="selectedValues"
-        [optionTemplate]="optionTemplate" (noToggleClick)="toggleSelected($event)"
-        (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink"
-        [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText" [ItemHeight]="ItemHeight"
-        [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight"
-        [noResultLinkTemplate]="notFoundLinkTemplate" [dropdownMinHeight]="dropdownMinHeight"
-        [salesShSelectPading]="salesShSelectPading" [isRequired]="isRequired" [filter]="filter"></sh-select-menu>
+    <sh-select-menu
+        #menuEle
+        [showLabelOnly]="showLabelOnly"
+        [isOpen]="isOpen"
+        [rows]="rows"
+        [isPaginationEnabled]="isPaginationEnabled"
+        (scrollEnd)="reachedEnd()"
+        [selectedValues]="selectedValues"
+        [optionTemplate]="optionTemplate"
+        (noToggleClick)="toggleSelected($event)"
+        (noResultClicked)="noResultsClicked.emit(); hide()"
+        [noResultLinkEnabled]="notFoundLink"
+        [notFoundMsg]="notFoundMsg"
+        [notFoundLinkText]="notFoundLinkText"
+        [ItemHeight]="ItemHeight"
+        [NoFoundMsgHeight]="NoFoundMsgHeight"
+        [NoFoundLinkHeight]="NoFoundLinkHeight"
+        [noResultLinkTemplate]="notFoundLinkTemplate"
+        [dropdownMinHeight]="dropdownMinHeight"
+        [salesShSelectPading]="salesShSelectPading"
+        [isRequired]="isRequired"
+        [filter]="filter"
+    ></sh-select-menu>
 </div>

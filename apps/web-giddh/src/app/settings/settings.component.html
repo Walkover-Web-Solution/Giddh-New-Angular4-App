@@ -1,18 +1,28 @@
-<ng-container appTranslate [file]="'settings'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
-    <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState === 'in'">
-        <tax-sidebar (navigateEvent)="handleNavigation()" (clickOutside)="isMobileScreen ? asideGstSidebarMenuState = 'out' : ''" [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
+<ng-container
+    appTranslate
+    [file]="'settings'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <div
+        class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
+        *ngIf="asideGstSidebarMenuState === 'in'"
+    >
+        <tax-sidebar
+            (navigateEvent)="handleNavigation()"
+            (clickOutside)="isMobileScreen ? (asideGstSidebarMenuState = 'out') : ''"
+            [exclude]="'#primary-new-header'"
+            class="gst-sidebar"
+        ></tax-sidebar>
     </div>
 
-    <div class="container-fluid settings-bg setting-data" [keyboardShortcut]="['alt+right', 'alt+left']"
-        [config]="{ignoreHost:true}" (onShortcutPress)="selectTabByShortcut($event)">
+    <div class="container-fluid settings-bg setting-data">
         <div class="row">
             <div class="invoice-control w-100">
                 <div id="setting-tab">
                     <div class="relative">
                         <div *ngIf="activeTab === 'taxes'">
-                            <hamburger-menu [pageHeading]="localeData?.setting_taxes">
-                            </hamburger-menu>
+                            <hamburger-menu [pageHeading]="localeData?.setting_taxes"> </hamburger-menu>
                             <div class="setting-container">
                                 <setting-taxes></setting-taxes>
                             </div>
@@ -33,14 +43,22 @@
                         <div *ngIf="activeTab === 'profile'">
                             <hamburger-menu [pageHeading]="profileTabHeading"></hamburger-menu>
                             <div class="setting-container">
-                                <setting-profile (pageHeading)="profileTabHeading = $event" #profileComponent></setting-profile>
-                                <span *ngIf="isCompanyProfileUpdated && (isUpdateCompanyInProgress$ | async)"
-                                    class="auto-save float-right">
-                                    <i class="icon-refresh mr-r05 font-14 rotate"></i>{{commonLocaleData?.app_saving}}
+                                <setting-profile
+                                    (pageHeading)="profileTabHeading = $event"
+                                    #profileComponent
+                                ></setting-profile>
+                                <span
+                                    *ngIf="isCompanyProfileUpdated && (isUpdateCompanyInProgress$ | async)"
+                                    class="auto-save float-right"
+                                >
+                                    <i class="icon-refresh mr-r05 font-14 rotate"></i>{{ commonLocaleData?.app_saving }}
                                 </span>
-                                <span *ngIf="isCompanyProfileUpdated && !(isUpdateCompanyInProgress$ | async)"
-                                    class="auto-save float-right">
-                                    <i class="glyphicon glyphicon-check mr-r05 font-14"></i>{{commonLocaleData?.app_saved}}
+                                <span
+                                    *ngIf="isCompanyProfileUpdated && !(isUpdateCompanyInProgress$ | async)"
+                                    class="auto-save float-right"
+                                >
+                                    <i class="glyphicon glyphicon-check mr-r05 font-14"></i
+                                    >{{ commonLocaleData?.app_saved }}
                                 </span>
                             </div>
                         </div>
@@ -92,4 +110,3 @@
         </div>
     </div>
 </ng-container>
-

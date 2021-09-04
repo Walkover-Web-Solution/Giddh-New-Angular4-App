@@ -3,13 +3,19 @@
 
     <section class="m-l-20 m-r-20 m-t-15">
         <div class="m-t-15">
-            <button class="btn btn-default" [ngClass]="{'active': activeTab === 'inprogress'}"
-                (click)="tabChanged('inprogress')">
-                {{localeData?.inprogress}}
+            <button
+                class="btn btn-default"
+                [ngClass]="{ 'active': activeTab === 'inprogress' }"
+                (click)="tabChanged('inprogress')"
+            >
+                {{ localeData?.inprogress }}
             </button>
-            <button class="btn btn-default" [ngClass]="{'active': activeTab === 'completed'}"
-                (click)="tabChanged('completed')">
-                {{localeData?.completed}}
+            <button
+                class="btn btn-default"
+                [ngClass]="{ 'active': activeTab === 'completed' }"
+                (click)="tabChanged('completed')"
+            >
+                {{ localeData?.completed }}
             </button>
         </div>
         <div class="m-t-15" id="Tab">

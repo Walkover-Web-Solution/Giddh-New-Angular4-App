@@ -43,8 +43,8 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 })
 
 export class GstComponent implements OnInit, OnDestroy {
-    @ViewChild('monthWise', {static: true}) public monthWise: BsDropdownDirective;
-    @ViewChild('periodDropdown', {static: true}) public periodDropdown;
+    @ViewChild('monthWise', { static: true }) public monthWise: BsDropdownDirective;
+    @ViewChild('periodDropdown', { static: true }) public periodDropdown;
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
     /* Aside pane state*/

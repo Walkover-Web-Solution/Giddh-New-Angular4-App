@@ -23,26 +23,27 @@
     }
 </style>
 <div class="text-center">
-    <div id="success" style="display: none;">
-        <h1 style="margin-bottom:40px;">Success</h1>
+    <div id="success" style="display: none">
+        <h1 style="margin-bottom: 40px">Success</h1>
         <h5>You can close this window.</h5>
     </div>
 
-    <div id="failed" style="display: none;">
-        <h1 style="margin-bottom:40px;">Cancelled</h1>
+    <div id="failed" style="display: none">
+        <h1 style="margin-bottom: 40px">Cancelled</h1>
         <h5>You can close this window.</h5>
     </div>
 
     <div class="copy-right">
-        <p>All right are reserved &copy; 2020 Walkover <a href="https://beta.giddh.com/" target="_Blank">Giddh.com</a>
+        <p>
+            All right are reserved &copy; 2020 Walkover <a href="https://beta.giddh.com/" target="_Blank">Giddh.com</a>
         </p>
     </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
-    var companyUniqueName = getQueryStringValue('companyUniqueName');
-    var search = '';
+    var companyUniqueName = getQueryStringValue("companyUniqueName");
+    var search = "";
     var status = getQueryStringValue("status");
     var JSONcallBackStatus = getQueryStringValue("JSONcallBackStatus");
     if (JSONcallBackStatus) {
@@ -51,51 +52,62 @@
 
     function getApi() {
         switch (window.location.hostname) {
-            case 'localhost':
-            case 'dev.giddh.com':
-                apiBaseUrl = 'https://apidev.giddh.com/';
+            case "localhost":
+            case "dev.giddh.com":
+                apiBaseUrl = "https://apidev.giddh.com/";
                 break;
-            case 'test.giddh.com':
-                apiBaseUrl = 'https://apitest.giddh.com/';
+            case "test.giddh.com":
+                apiBaseUrl = "https://apitest.giddh.com/";
                 break;
-            case 'stage.giddh.com':
-                apiBaseUrl = 'https://apirelease.giddh.com/';
+            case "stage.giddh.com":
+                apiBaseUrl = "https://apitest.giddh.com/";
                 break;
-            case 'app.giddh.com':
-                apiBaseUrl = 'https://api.giddh.com/';
+            case "app.giddh.com":
+                apiBaseUrl = "https://api.giddh.com/";
                 break;
             default:
-                apiBaseUrl = 'https://api.giddh.com/';
+                apiBaseUrl = "https://api.giddh.com/";
         }
         return apiBaseUrl;
     }
 
     function postCallBackData() {
-        var paramToSend = 'JSONcallBackStatus' + window.location.search.split('JSONcallBackStatus')[1];
-        $.get(apiBaseUrl + 'company/' + companyUniqueName + '/yodlee/call-back?' + paramToSend, function (data, status) {
-            console.log('Account Added Successfully');
-        });
+        var paramToSend = "JSONcallBackStatus" + window.location.search.split("JSONcallBackStatus")[1];
+        $.get(
+            apiBaseUrl + "company/" + companyUniqueName + "/yodlee/call-back?" + paramToSend,
+            function (data, status) {
+                console.log("Account Added Successfully");
+            }
+        );
     }
 
     function getQueryStringValue(key) {
-        return decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
+        return decodeURIComponent(
+            window.location.search.replace(
+                new RegExp(
+                    "^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$",
+                    "i"
+                ),
+                "$1"
+            )
+        );
     }
 
     getApi();
 
     $(document).ready(function () {
-        var apiBaseUrl = '';
-        $('#failed').hide();
-        $('#success').hide();
+        var apiBaseUrl = "";
+        $("#failed").hide();
+        $("#success").hide();
         // Would write the value of the QueryString-variable called name to the console
 
         if (!JSONcallBackStatus) {
-            $('#failed').show();
-            $('#success').hide();
+            $("#failed").show();
+            $("#success").hide();
         } else {
             postCallBackData();
-            $('#success').show();
-            $('#failed').hide();
+            $("#success").show();
+            $("#failed").hide();
         }
         // status.find()
     });

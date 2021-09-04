@@ -3,29 +3,46 @@
         <div>
             <form #search="ngForm" name="searchFormClb" novalidate="" class="form-inline flex-row flex-nowrap">
                 <div class="form-group select-entity mr-r15">
-                    <div class="linked-entities"
-                        *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
-                        <label class="d-block">{{commonLocaleData?.app_select_entity}}</label>
+                    <div
+                        class="linked-entities"
+                        *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                    >
+                        <label class="d-block">{{ commonLocaleData?.app_select_entity }}</label>
                         <div class="form-group">
-                            <sh-select [options]="currentCompanyBranches" name="entity"
-                                [(ngModel)]="currentBranch.uniqueName" [showClear]="false" [ItemHeight]="33"
-                                width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
-                                [placeholder]="commonLocaleData?.app_select_entity" [fixedValue]="currentBranch?.alias"
-                                class="entity-dropdown">
+                            <sh-select
+                                [options]="currentCompanyBranches"
+                                name="entity"
+                                [(ngModel)]="currentBranch.uniqueName"
+                                [showClear]="false"
+                                [ItemHeight]="33"
+                                width="100%"
+                                (selected)="handleBranchChange($event)"
+                                [isFilterEnabled]="true"
+                                [placeholder]="commonLocaleData?.app_select_entity"
+                                [fixedValue]="currentBranch?.alias"
+                                class="entity-dropdown"
+                            >
                                 <ng-template #optionTemplate let-option="option">
                                     <ng-container>
                                         <a href="javascript:void(0)" class="list-item d-flex">
                                             <span class="entity-icon">
-                                                <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany"
-                                                    tooltip="{{commonLocaleData?.app_branch}}"></i>
-                                                <i class="icon-company-profile pull-right" *ngIf="option.isCompany"
-                                                    tooltip="{{commonLocaleData?.app_company}}"></i>
+                                                <i
+                                                    class="icon-branch-icon pull-right"
+                                                    *ngIf="!option.isCompany"
+                                                    tooltip="{{ commonLocaleData?.app_branch }}"
+                                                ></i>
+                                                <i
+                                                    class="icon-company-profile pull-right"
+                                                    *ngIf="option.isCompany"
+                                                    tooltip="{{ commonLocaleData?.app_company }}"
+                                                ></i>
                                             </span>
                                             <span class="entity-details">
-                                                <div class="item giddh-limit single-line-clamp">{{ option.label || '-'
-                                                    }}</div>
+                                                <div class="item giddh-limit single-line-clamp">
+                                                    {{ option.label || "-" }}
+                                                </div>
                                                 <div class="item-unique giddh-limit single-line-clamp">
-                                                    {{ option.name || '-' }}
+                                                    {{ option.name || "-" }}
                                                 </div>
                                             </span>
                                         </a>
@@ -36,21 +53,36 @@
                     </div>
                 </div>
                 <div class="form-group select-group mr-r15">
-                    <label class="d-block">{{localeData?.select_groups_label}}</label>
-                    <sh-select [options]="searchedGroups" name="groups" [(ngModel)]="groupName" [showClear]="false"
-                        [ItemHeight]="33" width="100%" (selected)="onSelectGroup($event)" [isFilterEnabled]="true"
-                        required [placeholder]="localeData?.select_groups_placeholder" autocomplete="off"
-                        [enableDynamicSearch]="true" [isPaginationEnabled]="true" (scrollEnd)="handleGroupScrollEnd()"
-                        (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)">
+                    <label class="d-block">{{ localeData?.select_groups_label }}</label>
+                    <sh-select
+                        [options]="searchedGroups"
+                        name="groups"
+                        [(ngModel)]="groupName"
+                        [showClear]="false"
+                        [ItemHeight]="33"
+                        width="100%"
+                        (selected)="onSelectGroup($event)"
+                        [isFilterEnabled]="true"
+                        required
+                        [placeholder]="localeData?.select_groups_placeholder"
+                        autocomplete="off"
+                        [enableDynamicSearch]="true"
+                        [isPaginationEnabled]="true"
+                        (scrollEnd)="handleGroupScrollEnd()"
+                        (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
+                    >
                     </sh-select>
                 </div>
                 <div class="form-group mr-r15">
-                    <label>{{localeData?.from_to}}</label>
+                    <label>{{ localeData?.from_to }}</label>
                     <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                         <i class="icon-calender calendar-addon"></i>
-                        <input type="text" name="selectedDateRange"
-                            [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
-                            class="giddh-datepicker date-range-picker" />
+                        <input
+                            type="text"
+                            name="selectedDateRange"
+                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker"
+                        />
                     </div>
                 </div>
                 <!-- <div class="form-group" (clickOutside)="showFromDatePicker=false;">
@@ -81,16 +113,22 @@
         </div> -->
                 <div>
                     <label>&nbsp;</label>
-                    <button [disabled]="search.invalid" class="btn btn-sm btn-success"
-                        (click)="getClosingBalance(false,$event)">
-                        {{commonLocaleData?.app_search}}
+                    <button
+                        [disabled]="search.invalid"
+                        class="btn btn-sm btn-success"
+                        (click)="getClosingBalance(false, $event)"
+                    >
+                        {{ commonLocaleData?.app_search }}
                     </button>
                 </div>
                 <div>
                     <label>&nbsp;</label>
-                    <button [disabled]="search.invalid" class="btn btn-sm btn-default"
-                        (click)="getClosingBalance(true,$event)">
-                        {{commonLocaleData?.app_refresh}}
+                    <button
+                        [disabled]="search.invalid"
+                        class="btn btn-sm btn-default"
+                        (click)="getClosingBalance(true, $event)"
+                    >
+                        {{ commonLocaleData?.app_refresh }}
                     </button>
                 </div>
             </form>
@@ -100,13 +138,23 @@
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
-            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption"
-                [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
-                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
-                (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOption"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
         </div>
     </div>
 </ng-template>

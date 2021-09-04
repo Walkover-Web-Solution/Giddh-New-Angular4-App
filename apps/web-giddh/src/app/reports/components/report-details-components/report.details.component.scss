@@ -50,9 +50,6 @@
     min-width: 210px;
     left: 100% !important;
 }
-ul#dropdown-nested {
-    min-width: 254px;
-}
 ul#dropdown-nested li .caret {
     float: right;
     margin-top: 8px;
@@ -70,7 +67,7 @@ ul#dropdown-nested li .caret {
     color: $dim-gray;
 }
 .sales-register-menu {
-    min-width: 195px !important;
+    min-width: 100%;
 }
 
 .list-inline > li {

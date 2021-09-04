@@ -71,7 +71,7 @@ export class ShSelectMenuComponent implements OnChanges {
     }
 
     public toggleSelected(row) {
-        if (row.value === this.selectAllRecords) {
+        if (row?.value === this.selectAllRecords) {
             this._rows.forEach(key => {
                 if (this.isSelectAllChecked) {
                     if (this.selectedValues.indexOf(key) !== -1) {
@@ -84,7 +84,7 @@ export class ShSelectMenuComponent implements OnChanges {
                 }
             });
         } else {
-            if (!row.disabled) {
+            if (!row?.disabled) {
                 this.noToggleClick.emit(row);
             }
         }

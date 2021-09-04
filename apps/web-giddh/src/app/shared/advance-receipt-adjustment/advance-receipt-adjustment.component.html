@@ -1,8 +1,13 @@
-<ng-container appTranslate [file]="'advance-receipt-adjustment'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete()">
+<ng-container
+    appTranslate
+    [file]="'advance-receipt-adjustment'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete()"
+>
     <!-- Adjust Payment modal start -->
     <div class="modal-header">
-        <h4 class="modal-title bg pull-left">{{localeData?.page_heading}}</h4>
+        <h4 class="modal-title bg pull-left">{{ localeData?.page_heading }}</h4>
         <button type="button" class="close pull-right" aria-label="Close" (click)="onCancel()">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -11,51 +16,105 @@
         <div class="row">
             <div class="col-md-12">
                 <span class="text-light" *ngIf="isUpdateMode && isVoucherModule">
-                    {{localeData?.adjusted_amount_error}}
+                    {{ localeData?.adjusted_amount_error }}
                 </span>
                 <div class="row mb-2">
                     <div class="col-md-8 mr-t05">
                         <div class="form-group">
-                            <label>{{localeData?.customer_name}} </label>
-                            <input type="text" class="form-control" name="customerName"
-                                [(ngModel)]="adjustPayment.customerName" readonly disabled>
+                            <label>{{ localeData?.customer_name }} </label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                name="customerName"
+                                [(ngModel)]="adjustPayment.customerName"
+                                readonly
+                                disabled
+                            />
                         </div>
                     </div>
                     <div class="col-md-4 text-right font-14 pt-2 xs-left">
-                        <p>{{adjustedVoucherType === 'rcpt' ? commonLocaleData?.app_voucher_types?.receipt :
-                            (adjustedVoucherType === 'advance-receipt') ?
-                            commonLocaleData?.app_voucher_types?.advance_receipt : localeData?.voucher_label | replace:'[VOUCHER_TYPE]':currentVoucherLabel}}
+                        <p>
+                            {{
+                                adjustedVoucherType === "rcpt"
+                                    ? commonLocaleData?.app_voucher_types?.receipt
+                                    : adjustedVoucherType === "advance-receipt"
+                                    ? commonLocaleData?.app_voucher_types?.advance_receipt
+                                    : (localeData?.voucher_label | replace: "[VOUCHER_TYPE]":currentVoucherLabel)
+                            }}
                             Total: <i class="font-10"></i>
                             <span class="d-inline-flex justify-content-end">
-                                <amount-field [amount]="adjustPayment?.grandTotal"
+                                <amount-field
+                                    [amount]="adjustPayment?.grandTotal"
                                     [currencySymbol]="invoiceFormDetails.accountDetails.currencySymbol"
-                                    [currencyCode]="invoiceFormDetails.accountDetails.currency?.code">
+                                    [currencyCode]="invoiceFormDetails.accountDetails.currency?.code"
+                                >
                                 </amount-field>
                             </span>
-                            <span *ngIf="enableVoucherAdjustmentMultiCurrency && isMultiCurrencyAccount" class="d-flex justify-content-end company-currency">
-                                <amount-field [amount]="getConvertedCompanyAmount(adjustPayment?.grandTotal, invoiceFormDetails?.voucherDetails?.exchangeRate)" [currencySymbol]="baseCurrencySymbol"
-                                    [currencyCode]="companyCurrency">
+                            <span
+                                *ngIf="enableVoucherAdjustmentMultiCurrency && isMultiCurrencyAccount"
+                                class="d-flex justify-content-end company-currency"
+                            >
+                                <amount-field
+                                    [amount]="
+                                        getConvertedCompanyAmount(
+                                            adjustPayment?.grandTotal,
+                                            invoiceFormDetails?.voucherDetails?.exchangeRate
+                                        )
+                                    "
+                                    [currencySymbol]="baseCurrencySymbol"
+                                    [currencyCode]="companyCurrency"
+                                >
                                 </amount-field>
                             </span>
                         </p>
-                        <p>{{(adjustedVoucherType === 'rcpt' || adjustedVoucherType === 'advance-receipt') ?
-                            commonLocaleData?.app_balance : commonLocaleData?.app_due }} <span
-                                class="text-light">{{localeData?.post_adj}}</span> <span class="nowrap"><i
-                                    class="font-10"></i>
-                            </span>
+                        <p>
+                            {{
+                                adjustedVoucherType === "rcpt" || adjustedVoucherType === "advance-receipt"
+                                    ? commonLocaleData?.app_balance
+                                    : commonLocaleData?.app_due
+                            }}
+                            <span class="text-light">{{ localeData?.post_adj }}</span>
+                            <span class="nowrap"><i class="font-10"></i> </span>
                             <span class="d-inline-flex justify-content-end">
-                                <amount-field [amount]="getBalanceDue()"
+                                <amount-field
+                                    [amount]="getBalanceDue()"
                                     [currencySymbol]="invoiceFormDetails.accountDetails.currencySymbol"
-                                    [currencyCode]="invoiceFormDetails.accountDetails.currency?.code">
+                                    [currencyCode]="invoiceFormDetails.accountDetails.currency?.code"
+                                >
                                 </amount-field>
                             </span>
-                            <span *ngIf="enableVoucherAdjustmentMultiCurrency && isMultiCurrencyAccount" class="d-flex justify-content-end company-currency">
-                                <amount-field *ngIf="!(getBalanceDue() === 0 && (adjustedVoucherType === 'rcpt' || adjustedVoucherType === 'advance-receipt' || adjustedVoucherType === 'jr' || adjustedVoucherType === 'pay'))" [amount]="getConvertedBalanceDue()" [currencySymbol]="baseCurrencySymbol"
-                                    [currencyCode]="companyCurrency">
+                            <span
+                                *ngIf="enableVoucherAdjustmentMultiCurrency && isMultiCurrencyAccount"
+                                class="d-flex justify-content-end company-currency"
+                            >
+                                <amount-field
+                                    *ngIf="
+                                        !(
+                                            getBalanceDue() === 0 &&
+                                            (adjustedVoucherType === 'rcpt' ||
+                                                adjustedVoucherType === 'advance-receipt' ||
+                                                adjustedVoucherType === 'jr' ||
+                                                adjustedVoucherType === 'pay')
+                                        )
+                                    "
+                                    [amount]="getConvertedBalanceDue()"
+                                    [currencySymbol]="baseCurrencySymbol"
+                                    [currencyCode]="companyCurrency"
+                                >
                                 </amount-field>
                             </span>
                         </p>
-                        <p *ngIf="enableVoucherAdjustmentMultiCurrency && getBalanceDue() === 0 && getConvertedBalanceDue() !== 0 && adjustedVoucherType !== 'rcpt' && adjustedVoucherType !== 'advance-receipt' && adjustedVoucherType !== 'jr' && adjustedVoucherType !== 'pay'">
+                        <p
+                            *ngIf="
+                                enableVoucherAdjustmentMultiCurrency &&
+                                getBalanceDue() === 0 &&
+                                getConvertedBalanceDue() !== 0 &&
+                                adjustedVoucherType !== 'rcpt' &&
+                                adjustedVoucherType !== 'advance-receipt' &&
+                                adjustedVoucherType !== 'jr' &&
+                                adjustedVoucherType !== 'pay'
+                            "
+                        >
                             {{ getExchangeGainLossText() }}
                         </p>
                     </div>
@@ -64,46 +123,61 @@
                     <div class="row voucher-form">
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <label for="name">{{localeData?.adjustment_voucher}}<span
-                                        class="text-danger">*</span></label>
+                                <label for="name"
+                                    >{{ localeData?.adjustment_voucher }}<span class="text-danger">*</span></label
+                                >
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <label>{{commonLocaleData?.app_amount}}<span class="text-danger">* </span></label>
+                                <label>{{ commonLocaleData?.app_amount }}<span class="text-danger">* </span></label>
                             </div>
                         </div>
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <label>{{commonLocaleData?.app_tax}}</label>
+                                <label>{{ commonLocaleData?.app_tax }}</label>
                             </div>
                         </div>
                     </div>
                     <ng-container
-                        *ngFor="let entry of adjustVoucherForm?.adjustments; let entryIdx = index; let first = first; let last = last;">
+                        *ngFor="
+                            let entry of adjustVoucherForm?.adjustments;
+                            let entryIdx = index;
+                            let first = first;
+                            let last = last
+                        "
+                    >
                         <div class="row voucher-form pb-1">
                             <div class="col-sm-3">
                                 <div class="form-group">
                                     <div class="select-error select-caret relative">
                                         <sh-select
-                                            [disabled]="(shouldDisableEdit(entry) || entry.linkingAdjustment) ? 'disabled' : null"
-                                            class="text-left" name="voucherName{{entry.uniqueName}}"
-                                            [defaultValue]="entry.voucherNumber" [fixedValue]="entry.voucherNumber"
-                                            (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm);" required
-                                            [placeholder]="localeData?.select_voucher" [(ngModel)]="entry.uniqueName"
-                                            (selected)="selectVoucher($event, entry, entryIdx);"
-                                            [options]="adjustVoucherOptions" [multiple]="false">
+                                            [disabled]="
+                                                shouldDisableEdit(entry) || entry.linkingAdjustment ? 'disabled' : null
+                                            "
+                                            class="text-left"
+                                            name="voucherName{{ entry.uniqueName }}"
+                                            [defaultValue]="entry.voucherNumber"
+                                            [fixedValue]="entry.voucherNumber"
+                                            (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm)"
+                                            required
+                                            [placeholder]="localeData?.select_voucher"
+                                            [(ngModel)]="entry.uniqueName"
+                                            (selected)="selectVoucher($event, entry, entryIdx)"
+                                            [options]="adjustVoucherOptions"
+                                            [multiple]="false"
+                                        >
                                             <ng-template #optionTemplate let-option="option">
                                                 <a href="javascript:void(0)" class="list-item">
-                                                    <div class="item">{{option.label}}</div>
+                                                    <div class="item">{{ option.label }}</div>
                                                     <div class="item-unique">
                                                         <p class="font-12 text-gray mb-0">
-                                                            ({{commonLocaleData?.app_dated}}:
-                                                            {{option.additional.voucherDate}})
+                                                            ({{ commonLocaleData?.app_dated }}:
+                                                            {{ option.additional.voucherDate }})
                                                         </p>
                                                         <p class="font-12 text-gray mb-0">
-                                                            ({{commonLocaleData?.app_amount}}:
-                                                            {{currencySymbol}}{{option?.additional?.balanceDue?.amountForAccount}})
+                                                            ({{ commonLocaleData?.app_amount }}: {{ currencySymbol
+                                                            }}{{ option?.additional?.balanceDue?.amountForAccount }})
                                                         </p>
                                                     </div>
                                                 </a>
@@ -116,70 +190,155 @@
                             <div class="col-sm-3">
                                 <div class="form-group">
                                     <input
-                                        [disabled]="(shouldDisableEdit(entry) || entry.linkingAdjustment) ? 'disabled' : null"
-                                        required decimalDigitsDirective type="text" class="form-control"
-                                        [placeholder]="localeData?.enter_amount" name="amount{{entry.uniqueName}}"
+                                        [disabled]="
+                                            shouldDisableEdit(entry) || entry.linkingAdjustment ? 'disabled' : null
+                                        "
+                                        required
+                                        decimalDigitsDirective
+                                        type="text"
+                                        class="form-control"
+                                        [placeholder]="localeData?.enter_amount"
+                                        name="amount{{ entry.uniqueName }}"
                                         [(ngModel)]="entry.adjustmentAmount.amountForAccount"
-                                        (ngModelChange)="calculateTax(entry, entryIdx);" [prefix]="enableVoucherAdjustmentMultiCurrency ? entry.accountCurrency?.symbol : currencySymbol"
-                                        [mask]="inputMaskFormat">
-                                    <span *ngIf="enableVoucherAdjustmentMultiCurrency && isMultiCurrencyAccount && entry.adjustmentAmount.amountForAccount" class="company-currency">
-                                        <amount-field [amount]="entry.adjustmentAmount.amountForCompany" [currencySymbol]="baseCurrencySymbol"
-                                            [currencyCode]="companyCurrency">
+                                        (ngModelChange)="calculateTax(entry, entryIdx)"
+                                        [prefix]="
+                                            enableVoucherAdjustmentMultiCurrency
+                                                ? entry.accountCurrency?.symbol
+                                                : currencySymbol
+                                        "
+                                        [mask]="inputMaskFormat"
+                                    />
+                                    <span
+                                        *ngIf="
+                                            enableVoucherAdjustmentMultiCurrency &&
+                                            isMultiCurrencyAccount &&
+                                            entry.adjustmentAmount.amountForAccount
+                                        "
+                                        class="company-currency"
+                                    >
+                                        <amount-field
+                                            [amount]="entry.adjustmentAmount.amountForCompany"
+                                            [currencySymbol]="baseCurrencySymbol"
+                                            [currencyCode]="companyCurrency"
+                                        >
                                         </amount-field>
                                     </span>
                                     <span
-                                        *ngIf="entry.voucherType === 'receipt' && entry.subVoucher === 'ADVANCE_RECEIPT'"
-                                        class="text-light inclusive-tax">({{localeData?.inclusive_tax}})</span>
+                                        *ngIf="
+                                            entry.voucherType === 'receipt' && entry.subVoucher === 'ADVANCE_RECEIPT'
+                                        "
+                                        class="text-light inclusive-tax"
+                                        >({{ localeData?.inclusive_tax }})</span
+                                    >
                                 </div>
                             </div>
                             <div class="col-sm-2">
                                 <div class="form-group">
-                                    <ng-container *ngIf="entry.voucherType === 'receipt' && entry.subVoucher === 'ADVANCE_RECEIPT'">
+                                    <ng-container
+                                        *ngIf="
+                                            entry.voucherType === 'receipt' && entry.subVoucher === 'ADVANCE_RECEIPT'
+                                        "
+                                    >
                                         <input
-                                            id="name_{{entry.uniqueName}}" type="text" class="form-control"
-                                            name="calculatedTaxAmount_{{entry.uniqueName}}" decimalDigitsDirective
-                                            [(ngModel)]="entry.calculatedTaxAmount"  [prefix]="enableVoucherAdjustmentMultiCurrency ? entry.accountCurrency?.symbol : ''"
-                                            [placeholder]="commonLocaleData?.app_numbers?.zero+''+commonLocaleData?.app_numbers?.zero+'.'+commonLocaleData?.app_numbers?.zero+''+commonLocaleData?.app_numbers?.zero"
-                                            disabled [mask]="enableVoucherAdjustmentMultiCurrency ? inputMaskFormat : ''">
-                                            <span *ngIf="enableVoucherAdjustmentMultiCurrency && isMultiCurrencyAccount && entry.voucherType === 'receipt' && entry.subVoucher === 'ADVANCE_RECEIPT'" class="company-currency">
-                                                <amount-field [amount]="getConvertedCompanyAmount(entry.calculatedTaxAmount, entry.exchangeRate)" [currencySymbol]="baseCurrencySymbol"
-                                                    [currencyCode]="companyCurrency">
-                                                </amount-field>
-                                            </span>
+                                            id="name_{{ entry.uniqueName }}"
+                                            type="text"
+                                            class="form-control"
+                                            name="calculatedTaxAmount_{{ entry.uniqueName }}"
+                                            decimalDigitsDirective
+                                            [(ngModel)]="entry.calculatedTaxAmount"
+                                            [prefix]="
+                                                enableVoucherAdjustmentMultiCurrency
+                                                    ? entry.accountCurrency?.symbol
+                                                    : ''
+                                            "
+                                            [placeholder]="
+                                                commonLocaleData?.app_numbers?.zero +
+                                                '' +
+                                                commonLocaleData?.app_numbers?.zero +
+                                                '.' +
+                                                commonLocaleData?.app_numbers?.zero +
+                                                '' +
+                                                commonLocaleData?.app_numbers?.zero
+                                            "
+                                            disabled
+                                            [mask]="enableVoucherAdjustmentMultiCurrency ? inputMaskFormat : ''"
+                                        />
+                                        <span
+                                            *ngIf="
+                                                enableVoucherAdjustmentMultiCurrency &&
+                                                isMultiCurrencyAccount &&
+                                                entry.voucherType === 'receipt' &&
+                                                entry.subVoucher === 'ADVANCE_RECEIPT'
+                                            "
+                                            class="company-currency"
+                                        >
+                                            <amount-field
+                                                [amount]="
+                                                    getConvertedCompanyAmount(
+                                                        entry.calculatedTaxAmount,
+                                                        entry.exchangeRate
+                                                    )
+                                                "
+                                                [currencySymbol]="baseCurrencySymbol"
+                                                [currencyCode]="companyCurrency"
+                                            >
+                                            </amount-field>
+                                        </span>
                                     </ng-container>
                                 </div>
                             </div>
                             <div *ngIf="!entry.linkingAdjustment && !shouldDisableEdit(entry)" class="col-sm-3">
-                                <a href="javascript:void(0)" (click)="deleteAdjustVoucherRow(entryIdx);"
-                                    class="font-22 text-light d-inline-block"><i class="icon-trash"></i></a>
+                                <a
+                                    href="javascript:void(0)"
+                                    (click)="deleteAdjustVoucherRow(entryIdx)"
+                                    class="font-22 text-light d-inline-block"
+                                    ><i class="icon-trash"></i
+                                ></a>
                             </div>
                         </div>
                     </ng-container>
 
-                    <p><a href="javascript:void(0)" (click)="addNewBlankAdjustVoucherRow()" class="font-14"><span
-                                class="font-16">+</span> {{commonLocaleData?.app_add_new_line}}</a></p>
+                    <p>
+                        <a href="javascript:void(0)" (click)="addNewBlankAdjustVoucherRow()" class="font-14"
+                            ><span class="font-16">+</span> {{ commonLocaleData?.app_add_new_line }}</a
+                        >
+                    </p>
 
                     <div class="clearfix">
                         <div *ngIf="isVoucherModule" class="clearfix mr-b1 mt-2 row">
                             <div class="col-md-2 col-sm-3 col-xs-5">
-                                <span class="d-inline-block font-14">{{localeData?.tax_deducted}}</span>
+                                <span class="d-inline-block font-14">{{ localeData?.tax_deducted }}</span>
                             </div>
 
                             <div class="col-md-8 col-sm-8 col-xs-7">
                                 <span class="p-0 mr-2 d-inline-block">
-                                    <input class="radio-custom cp ml-0" type="radio" id="deductedNo"
-                                        name="isTaxDeducted" [value]="false" [(ngModel)]="isTaxDeducted"
-                                        (ngModelChange)="isTdsSelected($event )" />
-                                    <label for="deductedNo"
-                                        class="radio-custom-label">{{commonLocaleData?.app_no}}</label>
+                                    <input
+                                        class="radio-custom cp ml-0"
+                                        type="radio"
+                                        id="deductedNo"
+                                        name="isTaxDeducted"
+                                        [value]="false"
+                                        [(ngModel)]="isTaxDeducted"
+                                        (ngModelChange)="isTdsSelected($event)"
+                                    />
+                                    <label for="deductedNo" class="radio-custom-label">{{
+                                        commonLocaleData?.app_no
+                                    }}</label>
                                 </span>
 
                                 <span class="p-0 mr-2 d-inline-block">
-                                    <input class="radio-custom cp ml-0" type="radio" name="isTaxDeducted"
-                                        id="deductedYes" [value]="true" [(ngModel)]="isTaxDeducted"
-                                        (ngModelChange)="isTdsSelected($event )" />
-                                    <label for="deductedYes"
-                                        class="radio-custom-label">{{commonLocaleData?.app_yes}}</label>
+                                    <input
+                                        class="radio-custom cp ml-0"
+                                        type="radio"
+                                        name="isTaxDeducted"
+                                        id="deductedYes"
+                                        [value]="true"
+                                        [(ngModel)]="isTaxDeducted"
+                                        (ngModelChange)="isTdsSelected($event)"
+                                    />
+                                    <label for="deductedYes" class="radio-custom-label">{{
+                                        commonLocaleData?.app_yes
+                                    }}</label>
                                 </span>
                             </div>
                         </div>
@@ -188,32 +347,58 @@
                             <div>
                                 <div>
                                     <div class="form-group row clearfix">
-                                        <label class="col-md-2">{{commonLocaleData?.app_tds}}</label>
+                                        <label class="col-md-2">{{ commonLocaleData?.app_tds }}</label>
                                         <div class="col-md-3">
                                             <div #tdsTypeBox>
-                                                <sh-select class="text-left dropdown-arrow" name="tdsTaxUniqueName"
+                                                <sh-select
+                                                    class="text-left dropdown-arrow"
+                                                    name="tdsTaxUniqueName"
                                                     [placeholder]="commonLocaleData?.app_select_tax"
                                                     [(ngModel)]="adjustVoucherForm.tdsTaxUniqueName"
-                                                    [options]="availableTdsTaxes" (selected)="tdsTaxSelected($event)"
-                                                    [notFoundLink]="false" [multiple]="false" [ItemHeight]="33">
+                                                    [options]="availableTdsTaxes"
+                                                    (selected)="tdsTaxSelected($event)"
+                                                    [notFoundLink]="false"
+                                                    [multiple]="false"
+                                                    [ItemHeight]="33"
+                                                >
                                                 </sh-select>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="form-group row clearfix">
-                                        <label class="col-md-2">{{commonLocaleData?.app_amount}} <span
-                                                class="text-danger">* </span></label>
+                                        <label class="col-md-2"
+                                            >{{ commonLocaleData?.app_amount }}
+                                            <span class="text-danger">* </span></label
+                                        >
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" required #tdsAmountBox
-                                                decimalDigitsDirective [prefix]="currencySymbol"
-                                                [mask]="inputMaskFormat" name="tdsAmount.amountForAccount"
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                required
+                                                #tdsAmountBox
+                                                decimalDigitsDirective
+                                                [prefix]="currencySymbol"
+                                                [mask]="inputMaskFormat"
+                                                name="tdsAmount.amountForAccount"
                                                 (ngModelChange)="changeTdsAmount($event)"
                                                 [(ngModel)]="adjustVoucherForm.tdsAmount.amountForAccount"
-                                                [placeholder]="commonLocaleData?.app_amount">
-                                            <span *ngIf="enableVoucherAdjustmentMultiCurrency && isMultiCurrencyAccount" class="company-currency">
-                                                <amount-field [amount]="getConvertedCompanyAmount(adjustVoucherForm.tdsAmount.amountForAccount, invoiceFormDetails?.voucherDetails?.exchangeRate)" [currencySymbol]="baseCurrencySymbol"
-                                                    [currencyCode]="companyCurrency">
+                                                [placeholder]="commonLocaleData?.app_amount"
+                                            />
+                                            <span
+                                                *ngIf="enableVoucherAdjustmentMultiCurrency && isMultiCurrencyAccount"
+                                                class="company-currency"
+                                            >
+                                                <amount-field
+                                                    [amount]="
+                                                        getConvertedCompanyAmount(
+                                                            adjustVoucherForm.tdsAmount.amountForAccount,
+                                                            invoiceFormDetails?.voucherDetails?.exchangeRate
+                                                        )
+                                                    "
+                                                    [currencySymbol]="baseCurrencySymbol"
+                                                    [currencyCode]="companyCurrency"
+                                                >
                                                 </amount-field>
                                             </span>
                                         </div>
@@ -223,38 +408,57 @@
                             <div class="row">
                                 <div class="col-md-8">
                                     <div class="form-group">
-                                        <label>{{commonLocaleData?.app_description}} </label>
-                                        <textarea type="text" [placeholder]="commonLocaleData?.app_description"
-                                            name="description" [(ngModel)]="adjustVoucherForm.description"
-                                            class="form-control"></textarea>
+                                        <label>{{ commonLocaleData?.app_description }} </label>
+                                        <textarea
+                                            type="text"
+                                            [placeholder]="commonLocaleData?.app_description"
+                                            name="description"
+                                            [(ngModel)]="adjustVoucherForm.description"
+                                            class="form-control"
+                                        ></textarea>
                                     </div>
                                 </div>
                             </div>
                         </ng-container>
-                        <span class="text-light" *ngIf="exceedDueAmount<0">
-                            {{localeData?.excess_amount}}:
+                        <span class="text-light" *ngIf="exceedDueAmount < 0">
+                            {{ localeData?.excess_amount }}:
                             <span class="d-inline-flex">
-                                <amount-field [amount]="-exceedDueAmount"
+                                <amount-field
+                                    [amount]="-exceedDueAmount"
                                     [currencySymbol]="invoiceFormDetails.accountDetails.currencySymbol"
-                                    [currencyCode]="invoiceFormDetails.accountDetails.currency?.code">
+                                    [currencyCode]="invoiceFormDetails.accountDetails.currency?.code"
+                                >
                                 </amount-field>
                             </span>
 
                             <i class="icon-info pointer" [tooltip]="localeData?.adjustment_amount_error"></i>
                         </span>
                         <div class="note-message mt-3" *ngIf="isVoucherModule">
-                            <p>{{commonLocaleData?.app_note}}:</p>
-                            <p>{{localeData?.adjustment_note}}</p>
+                            <p>{{ commonLocaleData?.app_note }}:</p>
+                            <p>{{ localeData?.adjustment_note }}</p>
                         </div>
                         <div class="mt-2">
-                            <button *ngIf="!isUpdateMode" type="button" class="btn btn-success mr-r1"
+                            <button
+                                *ngIf="!isUpdateMode"
+                                type="button"
+                                class="btn btn-success mr-r1"
                                 [disabled]="isInvalidForm"
-                                (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)">{{commonLocaleData?.app_save}}</button>
-                            <button *ngIf="isUpdateMode" type="button" class="btn btn-success mr-r1"
+                                (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)"
+                            >
+                                {{ commonLocaleData?.app_save }}
+                            </button>
+                            <button
+                                *ngIf="isUpdateMode"
+                                type="button"
+                                class="btn btn-success mr-r1"
                                 [disabled]="isInvalidForm"
-                                (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)">{{commonLocaleData?.app_update}}</button>
-                            <button class="btn btn-cancel"
-                                (click)="onClear(true)">{{commonLocaleData?.app_reset}}</button>
+                                (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)"
+                            >
+                                {{ commonLocaleData?.app_update }}
+                            </button>
+                            <button class="btn btn-cancel" (click)="onClear(true)">
+                                {{ commonLocaleData?.app_reset }}
+                            </button>
                         </div>
                     </div>
                 </form>
