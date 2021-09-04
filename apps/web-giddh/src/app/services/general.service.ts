@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../common/confirmation-modal/confirmation-modal.interface';
@@ -10,6 +10,7 @@ import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { Router } from '@angular/router';
 import { AdjustedVoucherType } from '../app.constant';
+import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
 @Injectable()
 export class GeneralService {
@@ -78,7 +79,8 @@ export class GeneralService {
     private _sessionId: string;
 
     constructor(
-        private router: Router
+        private router: Router,
+        @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs
     ) {}
 
     public SetIAmLoaded(iAmLoaded: boolean) {
@@ -924,5 +926,9 @@ export class GeneralService {
     public collapseSidebar(): void {
         document.querySelector('.primary-sidebar')?.classList?.add('sidebar-collapse');
         document.querySelector('.nav-left-bar')?.classList?.add('width-60');
+    }
+
+    public getApiDomain(): string {
+        return (isElectron) ? NODE_API_URL : this.config.apiUrl;
     }
 }

@@ -27,7 +27,8 @@ export class SettingsProfileService {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
         if (this.companyUniqueName) {
-            return this._http.get(this.config.apiUrl + SETTINGS_PROFILE_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+            let apiUrl = this._generalService.getApiDomain();
+            return this._http.get(apiUrl + SETTINGS_PROFILE_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
                 let data: BaseResponse<SmsKeyClass, string> = res;
                 data.queryString = {};
                 return data;

@@ -8,18 +8,24 @@
     "repository": {
         "url": "https://github.com/nstudio/xplat"
     },
+    "scripts": {
+        "na": "ts-node node-api/server.ts"
+    },
     "license": "MIT",
     "dependencies": {
+        "@getstation/electron-google-oauth2": "^2.0.0",
         "angular2-highcharts": "git+https://github.com/mtflynn/angular2-highcharts.git",
         "configstore": "^5.0.0",
         "electron-is-dev": "^1.1.0",
         "electron-log": "^4.0.2",
         "electron-oauth": "git+https://github.com/govi2010/electron-oauth2.git",
         "electron-updater": "4.2.0",
+        "express": "^4.17.1",
         "is-cidr": "^3.1.0",
         "jquery": "^3.4.1",
         "moment": "^2.24.0",
-        "@getstation/electron-google-oauth2": "^2.0.0",
+        "realm": "^10.6.1",
+        "ts-node": "^10.2.1",
         "tslib": "^1.10.0"
     }
 }

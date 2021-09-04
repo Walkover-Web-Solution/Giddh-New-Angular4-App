@@ -60,6 +60,7 @@ import { CashFlowStatementService } from './cashflowstatement.service';
 import { PurchaseOrderService } from './purchase-order.service';
 import { BulkVoucherExportService } from './bulkvoucherexport.service';
 import { LocaleService } from './locale.service';
+import { NodeService } from "./node.service";
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -131,7 +132,8 @@ export class ServiceModule {
                 CashFlowStatementService,
                 PurchaseOrderService,
                 BulkVoucherExportService,
-                LocaleService
+                LocaleService,
+                NodeService
             ]
         };
     }
