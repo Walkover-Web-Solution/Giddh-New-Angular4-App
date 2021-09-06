@@ -1329,7 +1329,11 @@
                                                 />
                                             </div>
                                         </div>
-                                        <div>
+                                        <div
+                                            *ngIf="
+                                                item.voucherType === 'receipt' && item.subVoucher === 'ADVANCE_RECEIPT'
+                                            "
+                                        >
                                             <div class="form-group">
                                                 <label>{{ commonLocaleData?.app_tax }}</label>
                                                 <input
