@@ -169,8 +169,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                 }
             }
             this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-                if (response?.body?.results?.length > 0) {
-                    this.allAdvanceReceiptResponse = response.body.results.map(result => ({ ...result, adjustmentAmount: { amountForAccount: result.balanceDue.amountForAccount, amountForCompany: result.balanceDue.amountForCompany } }));
+                if (response && response.body) {
+                    this.allAdvanceReceiptResponse = response.body.results?.map(result => ({ ...result, adjustmentAmount: { amountForAccount: result.balanceDue.amountForAccount, amountForCompany: result.balanceDue.amountForCompany } }));
                     this.adjustVoucherOptions = [];
                     if (this.allAdvanceReceiptResponse && this.allAdvanceReceiptResponse.length) {
                         this.allAdvanceReceiptResponse.forEach(item => {
