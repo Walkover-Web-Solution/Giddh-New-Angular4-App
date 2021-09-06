@@ -1264,7 +1264,7 @@
                                 </p>
                                 <div class="clearfix adjustment-field">
                                     <div
-                                        class="d-flex flex-wrap"
+                                        class="d-flex flex-wrap flex-sm-nowrap"
                                         *ngFor="
                                             let item of vm.selectedLedger?.voucherAdjustments?.adjustments;
                                             let entryIdx = index
@@ -1287,7 +1287,7 @@
                                             </div>
                                         </div>
                                         <div class="mr-r1">
-                                            <div class="form-group">
+                                            <div class="form-group amount-width">
                                                 <label
                                                     >{{ commonLocaleData?.app_amount
                                                     }}<span class="text-danger">*</span>
@@ -1334,7 +1334,7 @@
                                                 item.voucherType === 'receipt' && item.subVoucher === 'ADVANCE_RECEIPT'
                                             "
                                         >
-                                            <div class="form-group">
+                                            <div class="form-group tax-width">
                                                 <label>{{ commonLocaleData?.app_tax }}</label>
                                                 <input
                                                     matInput
