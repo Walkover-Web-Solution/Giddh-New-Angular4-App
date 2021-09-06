@@ -1264,13 +1264,13 @@
                                 </p>
                                 <div class="clearfix adjustment-field">
                                     <div
-                                        class="row"
+                                        class="d-flex flex-wrap"
                                         *ngFor="
                                             let item of vm.selectedLedger?.voucherAdjustments?.adjustments;
                                             let entryIdx = index
                                         "
                                     >
-                                        <div class="col-md-4 col-sm-4 pd-r05">
+                                        <div class="mr-r1">
                                             <div class="form-group">
                                                 <label
                                                     >{{ localeData?.adjustment_vouchers }}
@@ -1286,7 +1286,7 @@
                                                 />
                                             </div>
                                         </div>
-                                        <div class="col-md-4 col-sm-4 pd-l05 pd-r05">
+                                        <div class="mr-r1">
                                             <div class="form-group">
                                                 <label
                                                     >{{ commonLocaleData?.app_amount
@@ -1329,12 +1329,7 @@
                                                 />
                                             </div>
                                         </div>
-                                        <div
-                                            *ngIf="
-                                                item.voucherType === 'receipt' && item.subVoucher === 'ADVANCE_RECEIPT'
-                                            "
-                                            class="col-sm-3 pd-l05"
-                                        >
+                                        <div>
                                             <div class="form-group">
                                                 <label>{{ commonLocaleData?.app_tax }}</label>
                                                 <input
