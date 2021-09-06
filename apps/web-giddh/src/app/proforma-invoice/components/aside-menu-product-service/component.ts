@@ -62,9 +62,7 @@ export class AsideMenuProductServiceComponent implements OnDestroy {
         this.hideFirstStep = false;
         this.isAddStockOpen = false;
         this.isAddServiceOpen = false;
-        if (!e) {
-            this.closeAsideEvent.emit();
-        }
+        this.closeAsideEvent.emit();
     }
     
     public backButtonPressed() {
