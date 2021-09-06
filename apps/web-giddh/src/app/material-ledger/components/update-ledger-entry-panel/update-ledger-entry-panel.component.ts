@@ -1320,7 +1320,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public handleAdvanceReceiptChange(): void {
         this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
         this.vm.isAdvanceReceipt = this.isAdvanceReceipt;
-        this.vm.selectedLedger.generateInvoice = this.isAdvanceReceipt;
         if (this.shouldShowAdvanceReceiptMandatoryFields) {
             this.vm.generatePanelAmount();
         }
