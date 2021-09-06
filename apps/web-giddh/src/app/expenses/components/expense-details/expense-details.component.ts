@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ActionPettycashRequest, ExpenseActionRequest, ExpenseResults, PettyCashResonse } from '../../../models/api-models/Expences';
 import { ToasterService } from '../../../services/toaster.service';
 import { ExpenseService } from '../../../services/expences.service';
@@ -16,11 +15,13 @@ import { LEDGER_API } from '../../../services/apiurls/ledger.api';
 import { DownloadLedgerAttachmentResponse } from '../../../models/api-models/Ledger';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { TaxResponse } from '../../../models/api-models/Company';
-import { UpdateLedgerEntryPanelComponent } from '../../../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.component';
+import { UpdateLedgerEntryPanelComponent } from '../../../material-ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { cloneDeep } from '../../../lodash-optimized';
 import { SearchService } from '../../../services/search.service';
+import { MatDialog } from '@angular/material/dialog';
+import { CompanyActions } from '../../../actions/company.actions';
 
 @Component({
     selector: 'app-expense-details',
@@ -41,21 +42,25 @@ import { SearchService } from '../../../services/search.service';
 })
 
 export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
-    /* This will hold local JSON data */
-    @Input() public localeData: any = {};
-    /* This will hold common JSON data */
-    @Input() public commonLocaleData: any = {};
-    public modalRef: BsModalRef;
-    public approveEntryModalRef: BsModalRef;
-    public message: string;
-    public actionPettyCashRequestBody: ExpenseActionRequest;
+    /** Instance of approve confirm dialog */
+    @ViewChild("approveConfirm") public approveConfirm;
+    /** Instance of approve confirm dialog */
+    @ViewChild("rejectionReason") public rejectionReason;
+    @ViewChild(UpdateLedgerEntryPanelComponent, { static: false }) public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
+    @ViewChild('entryAgainstAccountDropDown', { static: false }) public entryAgainstAccountDropDown: ShSelectComponent;
     @Output() public toggleDetailsMode: EventEmitter<boolean> = new EventEmitter();
     @Output() public selectedDetailedRowInput: EventEmitter<ExpenseResults> = new EventEmitter();
     /** This will emit true if we need to show next record in preview */
     @Output() public previewNextItem: EventEmitter<boolean> = new EventEmitter();
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     @Input() public selectedRowItem: any;
-    @ViewChild(UpdateLedgerEntryPanelComponent, { static: false }) public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
-    @ViewChild('entryAgainstAccountDropDown', { static: false }) public entryAgainstAccountDropDown: ShSelectComponent;
+    public modalRef: any;
+    public approveEntryModalRef: any;
+    public message: string;
+    public actionPettyCashRequestBody: ExpenseActionRequest;
     public selectedItem: ExpenseResults;
     public rejectReason = new FormControl();
     public actionPettycashRequest: ActionPettycashRequest = new ActionPettycashRequest();
@@ -143,21 +148,23 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will hold creator name */
     public byCreator: string = '';
-
     /** True if account belongs to cash/bank account */
     private cashOrBankEntry: any;
     /** Stores the petty cash entry type */
     private pettyCashEntryType: string;
     /** True if api call in progress */
     public isPettyCashEntryLoading: boolean = false;
+    /** True if we need to show red border around the field */
+    public showEntryAgainstRequired: boolean = false;
 
     constructor(
-        private modalService: BsModalService,
-        private toasty: ToasterService,
+        private toaster: ToasterService,
         private ledgerActions: LedgerActions,
         private store: Store<AppState>,
         private expenseService: ExpenseService,
-        private searchService: SearchService
+        private searchService: SearchService,
+        private dialog: MatDialog,
+        private companyActions: CompanyActions
     ) {
         this.files = [];
         this.uploadInput = new EventEmitter<UploadInput>();
@@ -165,11 +172,14 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         this.companyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
     }
 
-    public openModal(RejectionReason: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(RejectionReason, { class: 'modal-md' });
-    }
-
-    public ngOnInit() {
+    /**
+     * Initializes the component
+     *
+     * @memberof ExpenseDetailsComponent
+     */
+    public ngOnInit(): void {
+        // get company taxes
+        this.store.dispatch(this.companyActions.getTax());
         this.fileUploadOptions = { concurrency: 1, allowedContentTypes: ['image/png', 'image/jpeg'] };
         this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
             this.companyTaxesList = res || [];
@@ -177,7 +187,26 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         this.buildCreatorString();
     }
 
-    public preFillData(res: PettyCashResonse) {
+    /**
+     * This will open reject dialog
+     *
+     * @param {TemplateRef<any>} rejectionReason
+     * @memberof ExpenseDetailsComponent
+     */
+     public openModal(rejectionReason: TemplateRef<any>): void {
+        this.modalRef = this.dialog.open(rejectionReason, {
+            width: '630px',
+            disableClose: true
+        });
+    }
+
+    /**
+     * Prefills the entry data
+     *
+     * @param {PettyCashResonse} res
+     * @memberof ExpenseDetailsComponent
+     */
+    public preFillData(res: PettyCashResonse): void {
         this.prepareEntryAgainstObject(res);
 
         this.companyUniqueName = null;
@@ -195,7 +224,12 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    public toggleEntryAgainst() {
+    /**
+     * Toggles the entry against
+     *
+     * @memberof ExpenseDetailsComponent
+     */
+    public toggleEntryAgainst(): void {
         switch (this.entryAgainstObject.against) {
             case 'Entry against Debtor':
                 this.entryAgainstObject.base = 'Debtor Name';
@@ -219,7 +253,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                 this.pettyCashEntryType = 'expense';
                 this.cashOrBankEntry = false;
                 this.loadDefaultCreditorAccountsSuggestions();
-                break;    
+                break;
 
             case 'Cash Sales':
                 this.entryAgainstObject.base = 'Receipt Mode';
@@ -244,33 +278,62 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         this.entryAgainstObject.model = null;
     }
 
-    public closeDetailsMode() {
+    /**
+     * Exits the entry preview/edit mode
+     *
+     * @memberof ExpenseDetailsComponent
+     */
+    public closeDetailsMode(): void {
         this.toggleDetailsMode.emit(true);
     }
 
-    public showApproveConfirmPopup(ref: TemplateRef<any>) {
-        this.approveEntryModalRef = this.modalService.show(ref, { class: 'modal-md' });
+    /**
+     * Shows the approve confirm popup
+     *
+     * @param {TemplateRef<any>} ref
+     * @memberof ExpenseDetailsComponent
+     */
+    public showApproveConfirmPopup(ref: TemplateRef<any>): void {
+        if (this.entryAgainstObject.base && !this.entryAgainstObject.model) {
+            this.showEntryAgainstRequired = true;
+            return;
+        }
+        this.approveEntryModalRef = this.dialog.open(ref, { 
+            width: '500px',
+            disableClose: true
+        });
         this.selectedEntryForApprove = cloneDeep(this.selectedItem);
         this.selectedEntryForApprove.amount = this.updateLedgerComponentInstance.vm.compoundTotal;
     }
 
-    public hideApproveConfirmPopup(isApproved) {
+    /**
+     * Hides the approve confirm popup
+     *
+     * @param {boolean} isApproved
+     * @memberof ExpenseDetailsComponent
+     */
+    public hideApproveConfirmPopup(isApproved: boolean): void {
         if (!isApproved) {
-            this.approveEntryModalRef.hide();
+            this.approveEntryModalRef.close();
             this.selectedEntryForApprove = null;
         } else {
             this.approveEntry();
         }
     }
 
-    public approveEntry() {
+    /**
+     * Approves the entry
+     *
+     * @returns {void}
+     * @memberof ExpenseDetailsComponent
+     */
+    public approveEntry(): void {
         if (this.entryAgainstObject.base && !this.entryAgainstObject.model) {
-            let errorMessage = this.localeData?.entry_against_error;
-            errorMessage = errorMessage.replace("[ENTRY_AGAINST]", this.entryAgainstObject.base);
-            this.toasty.errorToast(errorMessage);
+            this.showEntryAgainstRequired = true;
             this.hideApproveConfirmPopup(false);
             return;
         }
+        this.showEntryAgainstRequired = false;
         this.approveEntryRequestInProcess = true;
         let actionType: ActionPettycashRequest = {
             actionType: 'approve',
@@ -308,7 +371,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                 this.hideApproveConfirmPopup(false);
                 this.processNextRecord(res);
             } else {
-                this.toasty.errorToast(res.message);
+                this.toaster.showSnackBar("error", res.message);
                 this.approveEntryRequestInProcess = false;
             }
         }, (error => {
@@ -316,33 +379,57 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         }));
     }
 
-    public prepareApproveRequestObject(pettyCashEntryObj: PettyCashResonse) {
+    /**
+     * Prepares approve entry request object
+     *
+     * @param {PettyCashResonse} pettyCashEntryObj
+     * @memberof ExpenseDetailsComponent
+     */
+    public prepareApproveRequestObject(pettyCashEntryObj: PettyCashResonse): void {
         if (pettyCashEntryObj && this.actionPettyCashRequestBody) {
             this.actionPettyCashRequestBody.ledgerRequest.attachedFile = (this.DownloadAttachedImgResponse.length > 0) ? this.DownloadAttachedImgResponse[0].uniqueName : '';
             this.actionPettyCashRequestBody.ledgerRequest.attachedFileName = (this.DownloadAttachedImgResponse.length > 0) ? this.DownloadAttachedImgResponse[0].name : '';
         }
     }
 
-    public pettyCashAction(actionType: ActionPettycashRequest) {
+    /**
+     * Performs action on petty cash entry
+     *
+     * @param {ActionPettycashRequest} actionType
+     * @memberof ExpenseDetailsComponent
+     */
+    public pettyCashAction(actionType: ActionPettycashRequest): void {
         this.expenseService.actionPettycashReports(actionType, this.actionPettyCashRequestBody).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res.status === 'success') {
                 this.processNextRecord(res);
             } else {
-                this.toasty.errorToast(res.body ?? res.message);
+                this.toaster.showSnackBar("error", res.body ?? res.message);
             }
-            this.modalRef.hide();
+            this.modalRef.close();
         });
     }
 
+    /**
+     * This updates the values on change from parent component
+     *
+     * @param {SimpleChanges} changes
+     * @memberof ExpenseDetailsComponent
+     */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes['selectedRowItem'] && changes['selectedRowItem'].currentValue !== changes['selectedRowItem'].previousValue) {
             this.selectedItem = changes['selectedRowItem'].currentValue;
             this.getPettyCashEntry(this.selectedItem.uniqueName);
             this.store.dispatch(this.ledgerActions.setAccountForEdit(this.selectedItem.baseAccount.uniqueName || null));
             this.buildCreatorString();
+            this.showEntryAgainstRequired = false;
         }
     }
 
+    /**
+     * Reject's entry
+     *
+     * @memberof ExpenseDetailsComponent
+     */
     public submitReject(): void {
         this.actionPettyCashRequestBody = new ExpenseActionRequest();
         this.actionPettyCashRequestBody.message = this.rejectReason.value;
@@ -351,25 +438,26 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         this.pettyCashAction(this.actionPettycashRequest);
     }
 
-    public onSelectEntryAgainstAccount(option: IOption) {
+    /**
+     * Callback for selection of entry against
+     *
+     * @param {IOption} option
+     * @memberof ExpenseDetailsComponent
+     */
+    public onSelectEntryAgainstAccount(option: IOption): void {
         if (option && option.value) {
+            this.showEntryAgainstRequired = false;
             this.accountEntryPettyCash.particular.uniqueName = option.value;
             this.accountEntryPettyCash.particular.name = option.label;
         }
     }
 
-    public cancelUpload(id: string): void {
-        this.uploadInput.emit({ type: 'cancel', id });
-    }
-
-    public removeFile(id: string): void {
-        this.uploadInput.emit({ type: 'remove', id });
-    }
-
-    public removeAllFiles(): void {
-        this.uploadInput.emit({ type: 'removeAll' });
-    }
-
+    /**
+     * Callback for file upload
+     *
+     * @param {UploadOutput} output
+     * @memberof ExpenseDetailsComponent
+     */
     public onUploadFileOutput(output: UploadOutput): void {
         if (output.type === 'allAddedToQueue') {
             this.imgAttached = true;
@@ -383,15 +471,20 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                 this.DownloadAttachedImgResponse.push(output.file.response.body);
                 this.imgAttachedFileName = output.file.response.body.name;
                 this.imageURL.push(img);
-                this.toasty.successToast(this.localeData?.file_upload_success);
+                this.toaster.showSnackBar("success", this.localeData?.file_upload_success);
             } else {
-                this.toasty.errorToast(output.file.response.message, output.file.response.code);
+                this.toaster.showSnackBar("error", output.file.response.message, output.file.response.code);
             }
             this.imgUploadInprogress = false;
             this.imgAttached = true;
         }
     }
 
+    /**
+     * Upload's the file
+     *
+     * @memberof ExpenseDetailsComponent
+     */
     public startUpload(): void {
         let sessionId = null;
         this.companyUniqueName = null;
@@ -407,40 +500,48 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         this.uploadInput.emit(event);
     }
 
-    public previewFile(files: any) {
-        let preview: any = document.getElementById('signatureImage');
-        let a: any = document.querySelector('input[type=file]');
-        let file = a.files[0];
-        let reader = new FileReader();
-        reader.onloadend = () => {
-            preview.src = reader.result;
-        };
-        if (file) {
-            reader.readAsDataURL(file);
-        } else {
-            preview.src = '';
-        }
-    }
-
-    public clickZoomImageView(i) {
+    /**
+     * Zoom's the image view
+     *
+     * @param {number} index
+     * @memberof ExpenseDetailsComponent
+     */
+    public clickZoomImageView(index: number): void {
         this.isImageZoomView = true;
-        this.zoomViewImageSrc = this.imageURL[i];
+        this.zoomViewImageSrc = this.imageURL[index];
     }
 
-    public hideZoomImageView() {
+    /**
+     * Hide's zoom image view
+     *
+     * @memberof ExpenseDetailsComponent
+     */
+    public hideZoomImageView(): void {
         this.isImageZoomView = false;
         this.zoomViewImageSrc = '';
     }
 
-    public toggleBodyClass() {
+    /**
+     * Toggle's the fixed class on body
+     *
+     * @memberof ExpenseDetailsComponent
+     */
+    public toggleBodyClass(): void {
         if (this.asideMenuStateForOtherTaxes === 'in') {
+            document.querySelector('.petty-cash')?.classList?.add('sidebar-overlay');
             document.querySelector('body').classList.add('fixed');
         } else {
+            document.querySelector('.petty-cash')?.classList?.remove('sidebar-overlay');
             document.querySelector('body').classList.remove('fixed');
         }
     }
 
-    public toggleOtherTaxesAsidePane(modal) {
+    /**
+     * Toggle's other tax aside pane
+     *
+     * @memberof ExpenseDetailsComponent
+     */
+    public toggleOtherTaxesAsidePane(): void {
         this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
     }
@@ -905,8 +1006,20 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     private processNextRecord(response: any): void {
-        this.toasty.successToast(response?.body);
+        this.toaster.showSnackBar("success", response?.body);
         this.rejectReason.setValue("");
         this.previewNextItem.emit(true);
+    }
+
+    /**
+     * This will clear the selected entry object
+     *
+     * @memberof ExpenseDetailsComponent
+     */
+    public onClearEntryAgainstAccount(): void {
+        this.showEntryAgainstRequired = false;
+        this.accountEntryPettyCash.particular.uniqueName = "";
+        this.accountEntryPettyCash.particular.name = "";
+        this.entryAgainstObject.model = "";
     }
 }

@@ -23,6 +23,11 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
     constructor() {
     }
 
+    /**
+     * Initializes the component
+     *
+     * @memberof ApprovePettyCashEntryConfirmDialogComponent
+     */
     public ngOnInit(): void {
         this.buildCreatorString();
     }
@@ -33,7 +38,7 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
      * @memberof ApprovePettyCashEntryConfirmDialogComponent
      */
     public buildCreatorString(): void {
-        if(this.selectedEntryForApprove && this.selectedEntryForApprove.createdBy) {
+        if (this.selectedEntryForApprove && this.selectedEntryForApprove.createdBy) {
             this.byCreator = this.localeData?.by_creator;
             this.byCreator = this.byCreator.replace("[CREATOR_NAME]", this.selectedEntryForApprove.createdBy.name);
         } else {

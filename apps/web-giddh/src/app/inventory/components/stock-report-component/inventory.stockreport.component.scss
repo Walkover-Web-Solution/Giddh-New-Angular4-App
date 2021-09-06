@@ -279,18 +279,22 @@ button[aria-expanded="true"] i {
 .mr-b100 {
     margin-bottom: 100px;
 }
+
 .advance-icon {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
     font-size: 18px;
     margin-left: 10px;
-    border: 1px solid $chetwode-blue;
+    border: 1px solid $gainsboro;
     border-radius: 5px;
     color: $midnight-blue;
     background: $white;
+    .icon-advance-filter {
+        padding: 10px;
+    }
 }
 .inventory-stock-table .d-flex {
     align-items: center;
@@ -348,6 +352,10 @@ button.btn.btn-filter {
 }
 .inventory-branch-dropdown {
     display: none !important;
+}
+
+.wrap-head-report {
+    max-width: 60%;
 }
 
 @media (max-width: 1440px) {

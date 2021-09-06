@@ -30,7 +30,8 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
     @Input() public maskInput: string;
     @Input() public prefixInput: string;
     @Input() public suffixInput: string;
-
+    /** True if discount menu should not open */
+    @Input() public disabled: boolean = false;
     public discountTotal: number;
     public appliedDiscount: UpdateLedgerDiscountData[] = [];
     public discountFromPer: boolean = true;

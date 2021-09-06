@@ -69,6 +69,10 @@
 
 .textarea.form-control {
     height: 70px;
+    width: 99%;
+}
+#rejectReason {
+    width: 98% !important;
 }
 
 span.close-modal.cp.pull-right {
@@ -77,6 +81,7 @@ span.close-modal.cp.pull-right {
     align-items: center;
     height: 36px;
     width: 36px;
+    padding: 10px;
     background-color: $gainsboro-light;
     border: 1px solid $gainsboro;
     border-radius: 5px;
@@ -114,7 +119,11 @@ span.close-modal.cp.pull-right {
 .list-item {
     border-bottom: 1px solid $gainsboro;
 }
-
+.entry-against {
+    &.error-box {
+        border-radius: 7px;
+    }
+}
 @media only screen and (max-width: 1440px) {
     .petty-cash {
         height: initial;
@@ -123,5 +132,10 @@ span.close-modal.cp.pull-right {
 @media only screen and (max-width: 991px) {
     .petty-cash {
         height: initial;
+    }
+}
+@media only screen and (max-width: 767px) {
+    .upload-file {
+        margin-top: 10px;
     }
 }
