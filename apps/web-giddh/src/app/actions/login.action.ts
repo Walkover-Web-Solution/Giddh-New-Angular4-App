@@ -983,9 +983,11 @@ export class LoginActions {
     }
 
     private finalThingTodo(stateDetail: any, companies: any, isSocialLogin?: boolean) {
-        this.nodeService.saveCompany().pipe(take(1)).subscribe(response => {
-            console.log(response);
-        });
+        if(isElectron) {
+            this.nodeService.saveCompany().pipe(take(1)).subscribe(response => {
+                
+            });
+        }
         this.store.pipe(select(state => state.session.user), take(1)).subscribe(response => {
             let request = { userUniqueName: response.user.uniqueName, companyUniqueName: stateDetail.body.companyUniqueName };
             this.store.dispatch(this.companyActions.getCompanyUser(request));
