@@ -3152,6 +3152,10 @@ td.mat-footer-cell {
     background: transparent !important;
 }
 
+.mat-select-disabled {
+    background: #eeeeee !important;
+}
+
 @media (max-width: 767px) {
     .sidebar-overlay {
         .mat-tab-group {
@@ -3193,5 +3197,6 @@ td.mat-footer-cell {
 
 .mat-sort-header-arrow {
     opacity: 1 !important;
+    transform: none !important;
 }
 /* material css for ledger end*/
