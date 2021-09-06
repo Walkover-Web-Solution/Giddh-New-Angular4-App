@@ -2357,6 +2357,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public confirmMergeEntry(): void {
+        this.entryConfirmModal?.hide();
         this.lc.blankLedger.mergePB = true;
         this.saveBlankTransaction();
     }
