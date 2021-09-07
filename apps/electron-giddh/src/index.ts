@@ -4,7 +4,6 @@ import { log } from "./util";
 import WindowManager from "./WindowManager";
 import { GoogleLoginElectronConfig } from "./main-auth.config";
 import ElectronGoogleOAuth2 from '@getstation/electron-google-oauth2';
-//import "./node-api/server";
 
 let windowManager: WindowManager = null;
 let STAGING_ENV = false;

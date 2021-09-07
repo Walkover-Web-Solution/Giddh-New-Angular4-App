@@ -17,9 +17,9 @@ export class NodeService {
 
     }
 
-    public saveCompany(): Observable<BaseResponse<any, any>> {
+    public saveCompany(companyUniqueName): Observable<BaseResponse<any, any>> {
         let apiUrl = this.generalService.getApiDomain();
-        return this.http.get(apiUrl + NODE_API.SAVE_COMPANY.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))).pipe(map((res) => {
+        return this.http.get(apiUrl + NODE_API.SAVE_COMPANY.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.queryString = {};
             return data;

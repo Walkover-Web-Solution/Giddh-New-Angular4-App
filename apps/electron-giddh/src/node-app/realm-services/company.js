@@ -1,4 +1,4 @@
-const realm = require('realm');
+const Realm = require('realm');
 const Schema = require('../schemas/company');
 const generalHelper = require('../helpers/general');
 
@@ -17,27 +17,26 @@ async function saveCompany(response) {
     if(response && response.status === "success") {
         const config = {
             schema: [Schema.User, Schema.Branch, Schema.Warehouse, Schema.Address, Schema.EcommerceType, Schema.Ecommerce, Schema.Currency, Schema.CountryV2, Schema.FinancialYear, Schema.UserDetails, Schema.Country, Schema.PlanDetails, Schema.CompaniesWithTransactions, Schema.Subscription, Schema.Entity, Schema.Permissions, Schema.Scopes, Schema.Role, Schema.UserEntityRoles, Schema.Company],
-            schemaVersion: 16
+            schemaVersion: 1
         };
 
         const companyData = generalHelper.cleanCompanyData(response.body);
 
-        try {
-            const realmObject = await Realm.open(config);
+        const realmObject = await Realm.open(config);
 
-            realmObject.write(() => {
-                /** Deleting existing company info */
+        realmObject.write(() => {
+            const company = realmObject.objects('Company');
+            /** Deleting existing company info */
+            if(company) {
                 realmObject.delete(realmObject.objects("Company"));
-                /** Inserting updated company info */
-                realmObject.create("Company", companyData);
-            });
+            }
+            /** Inserting updated company info */
+            realmObject.create("Company", companyData);
+        });
 
-            return { response: "success",  message: "Company details saved successfully." };
-        } catch(error) {
-            return { response: "error",  message: error };
-        }
+        return { status: "success",  message: "Company details saved successfully." };
     } else {
-        return { response: "error",  message: response.message };
+        return { status: "error",  message: response.message };
     }
 }
 
@@ -45,14 +44,18 @@ async function getCompany(request) {
     try {
         const config = {
             schema: [Schema.User, Schema.Branch, Schema.Warehouse, Schema.Address, Schema.EcommerceType, Schema.Ecommerce, Schema.Currency, Schema.CountryV2, Schema.FinancialYear, Schema.UserDetails, Schema.Country, Schema.PlanDetails, Schema.CompaniesWithTransactions, Schema.Subscription, Schema.Entity, Schema.Permissions, Schema.Scopes, Schema.Role, Schema.UserEntityRoles, Schema.Company],
-            schemaVersion: 16
+            schemaVersion: 1
         };
 
         const realmObject = await Realm.open(config);
         const company = realmObject.objects('Company');
-        return { response: "success",  body: company };
+        if(company) {
+            return { status: "success",  body: company[0] };
+        } else {
+            return { status: "error",  message: "Company details unavailable." };    
+        }
     } catch(error) {
-        return { response: "error",  message: error };
+        return { status: "error",  message: error };
     }
 }
 

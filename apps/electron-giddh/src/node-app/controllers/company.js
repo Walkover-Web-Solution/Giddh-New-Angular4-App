@@ -5,6 +5,8 @@ function saveCompany(req, res) {
     giddhCompanyService.getCompany(req, res).then(response => {
         realCompanyService.saveCompany(response).then(finalResponse => {
             res.json(finalResponse);
+        }).catch(error => {
+            res.json({ status: "error", "message": error });
         });
     }).catch(error => {
         res.json({ status: "error", "message": error });
