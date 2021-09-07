@@ -1691,8 +1691,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
             data: {
                 title: this.commonLocaleData?.app_confirmation,
                 body: this.localeData?.select_voucher_generate,
-                button1Text: this.commonLocaleData?.app_generate_compound,
-                button2Text: this.commonLocaleData?.app_generate_multiple
+                button1Text: this.commonLocaleData?.app_generate_multiple,
+                button2Text: this.commonLocaleData?.app_generate_compound
             }
         });
 
