@@ -31,6 +31,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
+import { LightboxModule } from 'ngx-lightbox';
 
 @NgModule({
     declarations: [ExpensesComponent, PendingListComponent, RejectedListComponent, FilterListComponent, ExpenseDetailsComponent, ApprovePettyCashEntryConfirmDialogComponent],
@@ -61,7 +62,8 @@ import { MatInputModule } from '@angular/material/input';
         MatDialogModule,
         MatListModule,
         MatDividerModule,
-        MatInputModule
+        MatInputModule,
+        LightboxModule
     ],
     exports: [
         ExpensesComponent,

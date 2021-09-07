@@ -12,6 +12,7 @@ import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import * as moment from 'moment/moment';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
+import { Lightbox } from 'ngx-lightbox';
 
 @Component({
     selector: 'app-pending-list',
@@ -70,13 +71,16 @@ export class PendingListComponent implements OnInit, OnChanges {
     public accountEntryPettyCash: any = { particular: { name: "" } };
     /** Table columns for pending report */
     public pendingTableColumns: string[] = ['s_no', 'entry_date', 'submitted_by', 'account', 'amount', 'receipt', 'file', 'description', 'action'];
+    /** Holds company uniquename */
+    public companyUniqueName: string;
 
     constructor(
         private store: Store<AppState>,
         private expenseService: ExpenseService,
         private toaster: ToasterService,
         private cdRef: ChangeDetectorRef,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private lightbox: Lightbox
     ) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.todaySelected$ = this.store.pipe(select(state => state.session.todaySelected), takeUntil(this.destroyed$));
@@ -98,6 +102,10 @@ export class PendingListComponent implements OnInit, OnChanges {
                     this.pettycashRequest.status = 'pending';
                 }
             }
+        });
+
+        this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$)).subscribe(response => {
+            this.companyUniqueName = response;
         });
     }
 
@@ -334,5 +342,22 @@ export class PendingListComponent implements OnInit, OnChanges {
         this.pettycashRequest.sortBy = event?.active;
         this.pettycashRequest.sort = event?.direction;
         this.getPettyCashPendingReports(this.pettycashRequest);
+    }
+
+    /**
+     * This will open the images in lightbox
+     *
+     * @param {*} event
+     * @param {*} fileNames
+     * @memberof PendingListComponent
+     */
+    public openZoomImageView(event, fileNames: any): void {
+        event.preventDefault();
+        event.stopPropagation();
+        let images = [];
+        fileNames?.forEach(file => {
+            images.push({ src: ApiUrl + 'company/' + this.companyUniqueName + '/image/' + file });
+        });
+        this.lightbox.open(images, 0);
     }
 }

@@ -111,8 +111,11 @@
                 </th>
                 <td mat-cell *matCellDef="let expenses" [attr.data-title]="localeData?.file">
                     <span class="responsive-label" [hidden]="!expensesItems?.length">{{ localeData?.file }}</span>
-                    <i *ngIf="expenses.fileNames" class="icon-image middle text-gray"></i>
-                    {{ expenses.fileNames }}
+                    <i
+                        *ngIf="expenses.fileNames"
+                        (click)="openZoomImageView($event, expenses.fileNames)"
+                        class="icon-image middle text-gray"
+                    ></i>
                 </td>
             </ng-container>
 
