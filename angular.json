@@ -120,7 +120,8 @@
                             "apps/web-giddh/src/assets/css/style-2.scss",
                             "apps/web-giddh/src/assets/css/ladda-themeless.min.css",
                             "apps/web-giddh/src/assets/css/perfect-scrollbar.component.css",
-                            "apps/web-giddh/src/assets/css/toastr.css"
+                            "apps/web-giddh/src/assets/css/toastr.css",
+                            "node_modules/ngx-lightbox/lightbox.css"
                         ],
                         "scripts": [
                             "node_modules/bootstrap-daterangepicker/daterangepicker.js"
@@ -392,7 +393,8 @@
                             "apps/web-giddh/src/assets/css/style-2.scss",
                             "apps/web-giddh/src/assets/css/ladda-themeless.min.css",
                             "apps/web-giddh/src/assets/css/perfect-scrollbar.component.css",
-                            "apps/web-giddh/src/assets/css/toastr.css"
+                            "apps/web-giddh/src/assets/css/toastr.css",
+                            "node_modules/ngx-lightbox/lightbox.css"
                         ],
                         "scripts": [
                             "node_modules/bootstrap-daterangepicker/daterangepicker.js"
@@ -596,7 +598,8 @@
                             "apps/web-giddh/src/assets/css/style-2.scss",
                             "apps/web-giddh/src/assets/css/ladda-themeless.min.css",
                             "apps/web-giddh/src/assets/css/perfect-scrollbar.component.css",
-                            "apps/web-giddh/src/assets/css/toastr.css"
+                            "apps/web-giddh/src/assets/css/toastr.css",
+                            "node_modules/ngx-lightbox/lightbox.css"
                         ],
                         "scripts": [
                             "node_modules/bootstrap-daterangepicker/daterangepicker.js"
