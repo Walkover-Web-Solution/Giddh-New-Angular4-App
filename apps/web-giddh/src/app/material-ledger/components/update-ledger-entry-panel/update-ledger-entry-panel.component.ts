@@ -1733,6 +1733,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         }
         this.adjustmentDialogRef.close();
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
