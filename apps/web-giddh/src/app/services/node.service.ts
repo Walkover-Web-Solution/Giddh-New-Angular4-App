@@ -17,6 +17,13 @@ export class NodeService {
 
     }
 
+    /**
+     * This will save the active company data in electron app realm db
+     *
+     * @param {*} companyUniqueName
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof NodeService
+     */
     public saveCompany(companyUniqueName): Observable<BaseResponse<any, any>> {
         let apiUrl = this.generalService.getApiDomain();
         return this.http.get(apiUrl + NODE_API.SAVE_COMPANY.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))).pipe(map((res) => {

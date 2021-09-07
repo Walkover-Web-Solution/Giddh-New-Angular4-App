@@ -928,6 +928,12 @@ export class GeneralService {
         document.querySelector('.nav-left-bar')?.classList?.add('width-60');
     }
 
+    /**
+     * This will return the api host domain based on electron app/web
+     *
+     * @returns {string}
+     * @memberof GeneralService
+     */
     public getApiDomain(): string {
         return (isElectron) ? NODE_API_URL : this.config.apiUrl;
     }
