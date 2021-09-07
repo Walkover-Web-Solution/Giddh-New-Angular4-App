@@ -1441,7 +1441,14 @@
                                 </mat-grid-tile>
                             </mat-grid-list>
 
-                            <mat-grid-list cols="4" rowHeight="50px">
+                            <mat-grid-list
+                                cols="4"
+                                rowHeight="50px"
+                                *ngIf="
+                                    ledgerTxnBalance?.forwardedBalance?.type !== 'DEBIT' ||
+                                    ledgerTxnBalance?.forwardedBalance?.amount == 0
+                                "
+                            >
                                 <mat-grid-tile [attr.data-title]="commonLocaleData?.app_select_all" colspan="1">
                                     <mat-checkbox
                                         color="primary"
