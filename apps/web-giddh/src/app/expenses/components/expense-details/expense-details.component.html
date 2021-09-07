@@ -33,7 +33,7 @@
                         <ng-container *ngFor="let item of imageURL; let i = index">
                             <li>
                                 <div class="upload-img">
-                                    <img [src]="item" (click)="clickZoomImageView(i)" id="signatureImage" />
+                                    <img [src]="item.src" (click)="openZoomImageView(i)" id="signatureImage" />
                                 </div>
                             </li>
                         </ng-container>
@@ -52,13 +52,6 @@
                             </div>
                         </li>
                     </ul>
-                </div>
-                <!-- img zoom pls uncomment this code -->
-                <div class="clearfix img-zoom" *ngIf="isImageZoomView">
-                    <img [src]="zoomViewImageSrc" alt="" />
-                    <a class="img-close pointer" (click)="hideZoomImageView()">
-                        <i class="icon-cross"></i>
-                    </a>
                 </div>
             </div>
             <div class="col-sm-12">
