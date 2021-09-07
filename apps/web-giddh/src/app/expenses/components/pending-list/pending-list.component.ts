@@ -347,13 +347,13 @@ export class PendingListComponent implements OnInit, OnChanges {
     /**
      * This will open the images in lightbox
      *
-     * @param {*} $event
+     * @param {*} event
      * @param {*} fileNames
      * @memberof PendingListComponent
      */
-    public openZoomImageView($event, fileNames: any): void {
-        $event.preventDefault();
-        $event.stopPropagation();
+    public openZoomImageView(event, fileNames: any): void {
+        event.preventDefault();
+        event.stopPropagation();
         let images = [];
         fileNames?.forEach(file => {
             images.push({ src: ApiUrl + 'company/' + this.companyUniqueName + '/image/' + file });
