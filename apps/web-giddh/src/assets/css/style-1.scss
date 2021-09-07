@@ -2256,7 +2256,7 @@ ul.pills li {
 /*box styles  on settings integration page*/
 
 .box {
-    padding: 15px;
+    padding-top: 15px;
     background-color: $white;
 }
 
@@ -3006,12 +3006,29 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
     text-transform: capitalize;
     display: table-cell !important;
 }
-.mat-table tbody .mat-header-row:hover td {
-    background: $light-alice-blue;
+.mat-table {
+    tbody {
+        > tr {
+            > td {
+                color: $omiod !important;
+                &:first-child {
+                    color: $black-pearl !important;
+                }
+            }
+            > td.no-wrap {
+                white-space: nowrap !important;
+            }
+        }
+        tr {
+            &:hover {
+                td {
+                    background: $light-alice-blue !important;
+                }
+            }
+        }
+    }
 }
-.mat-table tbody > tr > td.no-wrap {
-    white-space: nowrap !important;
-}
+
 table.mat-table {
     border-spacing: 2px !important;
 }
