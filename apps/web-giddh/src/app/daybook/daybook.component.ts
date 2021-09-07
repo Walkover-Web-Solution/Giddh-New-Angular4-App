@@ -567,7 +567,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @memberof DaybookComponent
      */
     public hideUpdateLedgerModal(): void {
-        this.updateLedgerModal.hide();
+        this.updateLedgerModal.close();
         document.querySelector('body').classList.remove('update-ledger-overlay');
         this.getDaybook(this.searchFilterData);
     }
