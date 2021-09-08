@@ -1,6 +1,6 @@
 const apiHelper = require("../helpers/apicall");
 
-async function getCompany(req, res) {
+async function getCompanies(req, res) {
     const options = {
         method: 'GET',
         headers: {
@@ -9,9 +9,9 @@ async function getCompany(req, res) {
         }
     }
 
-    const url = 'https://apitest.giddh.com/company/' + req.params.companyUniqueName;
+    const url = 'https://apitest.giddh.com/users/' + req.params.userUniqueName + '/v2/companies';
 
     return apiHelper.callApi(url, options);
 }
 
-module.exports.getCompany = getCompany;
+module.exports.getCompanies = getCompanies;

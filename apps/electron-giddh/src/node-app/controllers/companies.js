@@ -1,14 +1,14 @@
 const checkInternetConnected = require("check-internet-connected");
-const realCompanyService = require('../realm-services/company');
-const giddhCompanyService = require('../giddh-services/company');
+const realCompaniesService = require('../realm-services/companies');
+const giddhCompaniesService = require('../giddh-services/companies');
 
-function getCompany(req, res) {
+function getCompanies(req, res) {
     checkInternetConnected({
         timeout: 2000,
         retries: 1
     }).then(() => {
-        giddhCompanyService.getCompany(req, res).then(response => {
-            realCompanyService.saveCompany(response).then(finalResponse => {
+        giddhCompaniesService.getCompanies(req, res).then(response => {
+            realCompaniesService.saveCompanies(response).then(finalResponse => {
                 res.json(finalResponse);
             }).catch(error => {
                 res.json({ status: "error", "message": error });
@@ -17,10 +17,10 @@ function getCompany(req, res) {
             res.json({ status: "error", "message": error });
         });
     }).catch(() => {
-        realCompanyService.getCompany(req).then(finalResponse => {
+        realCompaniesService.getCompanies(req).then(finalResponse => {
             res.json(finalResponse);
         });
     });
 }
 
-exports.getCompany = getCompany;
+exports.getCompanies = getCompanies;

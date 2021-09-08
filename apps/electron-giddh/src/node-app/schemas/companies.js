@@ -8,7 +8,7 @@ const Companies = {
             objectType: "User"
         },
         name: "string",
-        showOnSubscription: "bool?",
+        showOnSubscription: "bool",
         subscription: {
             type: "object?",
             objectType: "Subscription"
