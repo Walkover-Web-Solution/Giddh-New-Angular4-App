@@ -19,7 +19,7 @@ function cleanCompanyData(obj) {
 }
 
 function checkInternet(callback) {
-    require('dns').lookup('google.com', (err) => {
+    require('dns').lookup('apple.com', (err) => {
         if (err && err.code == "ENOTFOUND") {
             callback(false);
         } else {

@@ -31,8 +31,6 @@ async function saveCompanies(request) {
             });
         });
 
-        realmObject.close();
-
         return { status: "success", body: companiesList };
     } else {
         return { status: "error", message: request.message };
@@ -54,8 +52,6 @@ async function getCompanies(request) {
 
     const realmObject = await Realm.open(config);
     const companies = realmObject.objects('Companies');
-
-    realmObject.close();
     
     if (companies) {
         return { status: "success", body: companies };
