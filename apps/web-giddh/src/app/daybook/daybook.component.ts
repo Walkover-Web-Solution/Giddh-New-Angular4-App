@@ -535,6 +535,11 @@ export class DaybookComponent implements OnInit, OnDestroy {
             this.updateLedgerComponent?.loadDefaultSearchSuggestions();
         });
 
+        this.modalDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            document.querySelector('body').classList.remove('update-ledger-overlay');
+            this.getDaybook(this.searchFilterData);
+        });
+
         document.querySelector('body').classList.add('update-ledger-overlay');
     }
 
@@ -568,8 +573,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
      */
     public hideUpdateLedgerModal(): void {
         this.modalDialogRef.close();
-        document.querySelector('body').classList.remove('update-ledger-overlay');
-        this.getDaybook(this.searchFilterData);
     }
 
     /**
