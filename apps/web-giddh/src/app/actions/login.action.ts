@@ -31,7 +31,6 @@ import { AuthenticationService } from '../services/authentication.service';
 import { ROUTES } from '../routes-array';
 import { SettingsProfileActions } from "./settings/profile/settings.profile.action";
 import { LocaleService } from '../services/locale.service';
-import { NodeService } from '../services/node.service';
 
 @Injectable()
 export class LoginActions {
@@ -632,8 +631,7 @@ export class LoginActions {
         private _dbService: DbService,
         private settingsProfileActions: SettingsProfileActions,
         private zone: NgZone,
-        private localeService: LocaleService,
-        private nodeService: NodeService
+        private localeService: LocaleService
     ) {
     }
 
@@ -983,11 +981,6 @@ export class LoginActions {
     }
 
     private finalThingTodo(stateDetail: any, companies: any, isSocialLogin?: boolean) {
-        if(isElectron) {
-            this.nodeService.saveCompany(stateDetail.body.companyUniqueName).pipe(take(1)).subscribe(response => {
-                
-            });
-        }
         this.store.pipe(select(state => state.session.user), take(1)).subscribe(response => {
             let request = { userUniqueName: response.user.uniqueName, companyUniqueName: stateDetail.body.companyUniqueName };
             this.store.dispatch(this.companyActions.getCompanyUser(request));

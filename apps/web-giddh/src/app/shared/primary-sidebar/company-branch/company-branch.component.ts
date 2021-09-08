@@ -11,7 +11,6 @@ import { BranchFilterRequest, CompanyResponse, Organization, OrganizationDetails
 import { OrganizationType } from '../../../models/user-login-state';
 import { CompanyService } from '../../../services/companyService.service';
 import { GeneralService } from '../../../services/general.service';
-import { NodeService } from '../../../services/node.service';
 import { SettingsBranchService } from '../../../services/settings.branch.service';
 import { AppState } from '../../../store';
 import { AuthService } from '../../../theme/ng-social-login-module';
@@ -77,8 +76,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         private settingsBranchService: SettingsBranchService,
         private changeDetectorRef: ChangeDetectorRef,
         private companyService: CompanyService,
-        private router: Router,
-        private nodeService: NodeService
+        private router: Router
     ) {
 
     }
@@ -183,11 +181,6 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
      * @memberof CompanyBranchComponent
      */
     public changeCompany(selectedCompanyUniqueName: string, selectBranchUniqueName: string, fetchLastState?: boolean) {
-        if(isElectron) {
-            this.nodeService.saveCompany(selectedCompanyUniqueName).pipe(take(1)).subscribe(response => {
-                
-            });
-        }
         this.generalService.companyUniqueName = selectedCompanyUniqueName;
         const details = {
             branchDetails: {
