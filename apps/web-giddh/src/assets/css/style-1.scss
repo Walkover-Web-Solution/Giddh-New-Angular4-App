@@ -3029,6 +3029,31 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
     }
 }
 
+.daybook-table {
+    tr.mat-row,
+    tr.mat-footer-row {
+        border-top: 1px solid $gainsboro;
+    }
+    td.mat-cell {
+        border-bottom-width: 0px !important;
+        border-top: 1px solid $gainsboro;
+    }
+    .nested-table {
+        > tbody {
+            tr {
+                td {
+                    border: 0 !important;
+                    padding: 8px 0;
+                }
+                border-top: 1px solid $blue-grey;
+                &:first-child {
+                    border-top: none !important;
+                }
+            }
+        }
+    }
+}
+
 table.mat-table {
     border-spacing: 2px !important;
 }
