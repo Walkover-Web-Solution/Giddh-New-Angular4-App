@@ -43,10 +43,15 @@
 .btn-icon .icon-trash {
     font-size: 20px;
 }
-
 .icon-pointer .active-text-color {
     color: $wild-blue-yonder !important;
 }
 .icon-pointer {
     cursor: pointer;
+}
+@media (min-width: 769px) {
+    .table-responsive {
+        max-height: calc(100vh - 245px);
+        overflow-y: auto;
+    }
 }

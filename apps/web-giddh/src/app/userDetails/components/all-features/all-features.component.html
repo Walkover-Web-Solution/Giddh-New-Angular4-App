@@ -4,9 +4,9 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class="modal-header">
-        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closePopup()">×</span>
+    <div class="modal-header d-flex align-items-center flex-row-reverse">
         <h3>{{ localeData?.page_heading }}</h3>
+        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closePopup()">×</span>
     </div>
     <p class="mb-2 money-back-guarantee py-2" [innerHTML]="localeData?.money_back_guarantee"></p>
     <div id="my-frame" class="modal-body all-feature-modal clearfix">

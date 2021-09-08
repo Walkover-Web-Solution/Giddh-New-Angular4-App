@@ -1,21 +1,28 @@
 @import "../../assets/css/color.scss";
+
+.petty-cash {
+    position: relative;
+    top: -4px;
+}
 .left-expense {
     width: 400px;
     box-shadow: 3px 3px 6px $black-russian;
     background: $white;
     position: relative;
+    overflow-y: auto;
+    max-height: calc(100vh - 135px);
 }
 .main-expense-details {
     width: 90%;
-    height: calc(100vh - 230px);
     overflow-y: auto;
+    padding-top: 10px;
+    max-height: calc(100vh - 135px);
 }
 .main-edit-expense {
     display: flex;
 }
 .input-calender {
     width: 225px;
-    top: 55px;
 }
 .input-calender > span {
     background: none;
@@ -36,10 +43,6 @@
     justify-content: center;
     color: $gray;
 }
-.expense-head {
-    padding-top: 55px;
-}
-
 @media only screen and (max-width: 767px) {
     .left-expense {
         width: 100%;
@@ -47,14 +50,7 @@
     .main-edit-expense {
         display: block;
     }
-    .expense-head {
-        padding-top: 20px;
+    .main-expense-details {
+        width: 100%;
     }
-    .input-calender {
-        top: 15px;
-    }
-}
-.clear-filter-div {
-    position: relative;
-    top: 55px;
 }
