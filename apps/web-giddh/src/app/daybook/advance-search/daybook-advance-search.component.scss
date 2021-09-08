@@ -5,10 +5,6 @@ input {
 input.form-control.date-range-picker {
     text-align: left;
     border: 1px solid $gainsboro;
-    padding-left: 5px !important;
-}
-.square-switch {
-    width: 110px;
 }
 .custom-datepicker {
     i {
@@ -20,12 +16,10 @@ input.form-control.date-range-picker {
 .icon-calender {
     position: absolute;
     z-index: 9;
-    height: 32px;
     width: 36px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    height: 36px !important;
     border-right: 1px solid $gainsboro !important;
     cursor: pointer;
 }
@@ -34,5 +28,15 @@ input.form-control.date-range-picker {
     border: 1px solid $chetwode-blue;
     border-radius: 4px;
     padding: 2px;
-    top: 0 !important;
+    top: 0px !important;
+}
+.giddh-datepicker {
+    &.date-range-picker {
+        padding-left: 45px !important;
+    }
+}
+.modal-header {
+    > .close {
+        top: 10px !important;
+    }
 }

@@ -1,99 +1,48 @@
-<div id="exportModal">
-    <div class="modal-header">
+<div id="exportModal" class="disable-ripple">
+    <div class="modal-header d-flex flex-row-reverse">
         <span
             aria-hidden="true"
             class="close"
-            data-dismiss="modal"
             (click)="closeExportDaybookModal.emit('close')"
             [attr.aria-label]="commonLocaleData?.app_close"
             >×</span
         >
-        <h3>{{ localeData?.export_daybook }}</h3>
+        <h3 mat-dialog-title>{{ localeData?.export_daybook }}</h3>
     </div>
-    <div class="modal-body mr-b4" id="export-body">
-        <form name="addShareEmailForm" novalidate autocomplete="off">
+    <div class="modal-body" id="export-body">
+        <form name="addShareEmailForm" class="export-daybook" novalidate autocomplete="off">
             <div class="pd-b2 clearfix">
                 <label class="w100 d-sm-inline-flex d-flex">{{ localeData?.type }} </label>
-
-                <span class="p-0 mr-r3">
-                    <input
-                        id="mini"
-                        class="radio-custom cp ml-0"
-                        name="emailTypeSelected"
-                        type="radio"
-                        [(ngModel)]="emailTypeSelected"
-                        [value]="emailTypeMini"
-                    />
-                    <label for="mini" class="radio-custom-label">{{ commonLocaleData?.app_mini }}</label>
-                </span>
-
-                <span class="p-0 mr-r3">
-                    <input
-                        id="entryDate"
-                        class="radio-custom cp ml-0"
-                        name="emailTypeSelected"
-                        type="radio"
-                        [(ngModel)]="emailTypeSelected"
-                        [value]="emailTypeDetail"
-                    />
-                    <label for="entryDate" class="radio-custom-label">{{ commonLocaleData?.app_detailed }}</label>
-                </span>
+                <mat-radio-group color="primary" name="emailTypeSelected" [(ngModel)]="emailTypeSelected">
+                    <mat-radio-button id="mini" [value]="emailTypeMini"
+                        >{{ commonLocaleData?.app_mini }}
+                    </mat-radio-button>
+                    <mat-radio-button id="entryDate" [value]="emailTypeDetail"
+                        >{{ commonLocaleData?.app_detailed }}
+                    </mat-radio-button>
+                </mat-radio-group>
             </div>
             <div class="pd-b2 clearfix">
                 <label class="w100 d-sm-inline-flex d-flex">{{ commonLocaleData?.app_export_as }}: </label>
-
-                <span class="p-0 mr-r3">
-                    <input
-                        id="pdf"
-                        class="radio-custom cp ml-0"
-                        name="fileType"
-                        type="radio"
-                        [(ngModel)]="fileType"
-                        [value]="'pdf'"
-                    />
-                    <label for="pdf" class="radio-custom-label">{{ commonLocaleData?.app_pdf }}</label>
-                </span>
-
-                <span class="p-0 mr-r3">
-                    <input
-                        id="excel"
-                        class="radio-custom cp ml-0"
-                        name="fileType"
-                        type="radio"
-                        [(ngModel)]="fileType"
-                        [value]="'xlsx'"
-                    />
-                    <label for="excel" class="radio-custom-label">{{ commonLocaleData?.app_excel }}</label>
-                </span>
+                <mat-radio-group color="primary" name="fileType" [(ngModel)]="fileType">
+                    <mat-radio-button id="pdf" [value]="'pdf'">{{ commonLocaleData?.app_pdf }}</mat-radio-button>
+                    <mat-radio-button id="excel" [value]="'xlsx'">{{ commonLocaleData?.app_excel }}</mat-radio-button>
+                </mat-radio-group>
             </div>
             <div class="pd-b2 clearfix">
                 <label class="w100 d-sm-inline-flex d-flex">{{ localeData?.order }} </label>
-
-                <span class="p-0 mr-r3">
-                    <input
-                        id="ascending"
-                        class="radio-custom cp ml-0"
-                        name="order"
-                        [(ngModel)]="order"
-                        type="radio"
-                        [value]="'asc'"
-                    />
-                    <label for="ascending" class="radio-custom-label">{{ commonLocaleData?.app_ascending }}</label>
-                </span>
-
-                <span class="p-0 mr-r3">
-                    <input
-                        id="descending"
-                        class="radio-custom cp ml-0"
-                        name="order"
-                        [(ngModel)]="order"
-                        type="radio"
-                        [value]="'desc'"
-                    />
-                    <label for="descending" class="radio-custom-label">{{ commonLocaleData?.app_descending }}</label>
-                </span>
+                <mat-radio-group color="primary" name="order" [(ngModel)]="order">
+                    <mat-radio-button id="ascending" [value]="'asc'"
+                        >{{ commonLocaleData?.app_ascending }}
+                    </mat-radio-button>
+                    <mat-radio-button id="descending" [value]="'desc'"
+                        >{{ commonLocaleData?.app_descending }}
+                    </mat-radio-button>
+                </mat-radio-group>
             </div>
-            <button class="btn-success btn" (click)="exportLedger()">{{ commonLocaleData?.app_download }}</button>
+            <button mat-raised-button class="btn-success btn" (click)="exportLedger()">
+                {{ commonLocaleData?.app_download }}
+            </button>
         </form>
     </div>
 </div>

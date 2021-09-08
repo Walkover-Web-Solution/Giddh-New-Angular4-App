@@ -28,8 +28,7 @@
             <span class="caret"></span>
         </div>
     </a>
-
-    <div class="pr">
+    <div class="position-relative">
         <ul
             class="dropdown-menu pd update-ledger-tax-dropdown"
             [ngStyle]="{ 'display': showTaxPopup ? 'block' : 'none' }"
@@ -37,7 +36,7 @@
         >
             <li *ngFor="let tax of taxRenderData; trackBy: trackByFn; let i = index">
                 <label
-                    class="checkbox overflow-hidden width-100 p-0 m-0 custom-item bd-rb px-1 py-1 mr-b05"
+                    class="checkbox overflow-hidden width-100 m-0 custom-item bd-rb px-1 py-1 mr-b05"
                     (click)="$event.stopPropagation()"
                     [ngClass]="{ 'disabled-label': tax.isDisabled }"
                 >
