@@ -42,7 +42,7 @@ const Address = {
             objectType: "Branch",
             default: [],
             items: {
-                type: "object",
+                type: "object?",
                 objectType: "Branch"
             }
         },
@@ -51,19 +51,19 @@ const Address = {
             objectType: "Warehouse",
             default: [],
             items: {
-                type: "object",
+                type: "object?",
                 objectType: "Warehouse"
             }
         },
         linkEntity: "string?",
-        uniqueName: "string",
+        uniqueName: "string?",
         pincode: "string?",
         address: "string?",
         stateName: "string?",
         stateCode: "string?",
         taxNumber: "string?",
         taxType: "string?",
-        name: "string"
+        name: "string?"
     }
 }
 

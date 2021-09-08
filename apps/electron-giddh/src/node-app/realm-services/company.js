@@ -45,25 +45,21 @@ async function saveCompany(request) {
  * @returns
  */
 async function getCompany(request) {
-    try {
-        const config = {
-            schema: [Schema.User, Schema.Branch, Schema.Warehouse, Schema.Address, Schema.EcommerceType, Schema.Ecommerce, Schema.Currency, Schema.CountryV2, Schema.FinancialYear, Schema.UserDetails, Schema.Country, Schema.PlanDetails, Schema.CompaniesWithTransactions, Schema.Subscription, Schema.Entity, Schema.Permissions, Schema.Scopes, Schema.Role, Schema.UserEntityRoles, Schema.Company],
-            schemaVersion: 1,
-            path: 'company.realm'
-        };
+    const config = {
+        schema: [Schema.User, Schema.Branch, Schema.Warehouse, Schema.Address, Schema.EcommerceType, Schema.Ecommerce, Schema.Currency, Schema.CountryV2, Schema.FinancialYear, Schema.UserDetails, Schema.Country, Schema.PlanDetails, Schema.CompaniesWithTransactions, Schema.Subscription, Schema.Entity, Schema.Permissions, Schema.Scopes, Schema.Role, Schema.UserEntityRoles, Schema.Company],
+        schemaVersion: 1,
+        path: 'company.realm'
+    };
 
-        const realmObject = await Realm.open(config);
-        const company = realmObject.objects('Company');
+    const realmObject = await Realm.open(config);
+    const company = realmObject.objects('Company');
 
-        realmObject.close();
+    realmObject.close();
 
-        if (company) {
-            return { status: "success", body: company[0] };
-        } else {
-            return { status: "error", message: "Company details unavailable." };
-        }
-    } catch (error) {
-        return { status: "error", message: error };
+    if (company) {
+        return { status: "success", body: company[0] };
+    } else {
+        return { status: "error", message: "Company details unavailable." };
     }
 }
 
