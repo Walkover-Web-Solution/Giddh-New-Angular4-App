@@ -6,10 +6,14 @@
         [value]="calendarDate"
         [min]="minDate"
         autocomplete="off"
-        (focus)="picker.open()"
-        (click)="picker.open()"
+        (focus)="emitDatepickerState(true); picker.open()"
+        (click)="emitDatepickerState(true); picker.open()"
         (dateChange)="dateChange($event)"
+        [class]="cssClass"
+        [disabled]="disabled"
     />
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
+    <ng-container *ngIf="showToggleIcon">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    </ng-container>
+    <mat-datepicker (closed)="emitDatepickerState(false)" #picker></mat-datepicker>
 </mat-form-field>

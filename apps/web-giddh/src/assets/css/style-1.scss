@@ -141,7 +141,7 @@ a:active {
 }
 
 textarea {
-    resize: none;
+    resize: none !important;
 }
 
 /*top menus bar*/
@@ -406,7 +406,7 @@ aside-menu-account .container-fluid {
 }
 
 .mr-t05 {
-    margin-top: 5px;
+    margin-top: 5px !important;
 }
 
 .mr-b05 {
@@ -430,7 +430,7 @@ aside-menu-account .container-fluid {
 }
 
 .mr-l1 {
-    margin-left: 10px;
+    margin-left: 10px !important;
 }
 
 .mr-r1 {
@@ -438,7 +438,7 @@ aside-menu-account .container-fluid {
 }
 
 .mr-t2 {
-    margin-top: 20px;
+    margin-top: 20px !important;
 }
 
 .mr-b2 {
@@ -446,7 +446,7 @@ aside-menu-account .container-fluid {
 }
 
 .mr-l2 {
-    margin-left: 20px;
+    margin-left: 20px !important;
 }
 
 .mr-r2 {
@@ -520,7 +520,7 @@ aside-menu-account .container-fluid {
 }
 
 .bdr {
-    border: 1px solid $gainsboro;
+    border: 1px solid $gainsboro !important;
     border-radius: 5px;
 }
 
@@ -574,7 +574,7 @@ aside-menu-account .container-fluid {
 }
 
 .white-bg {
-    background: $white;
+    background: $white !important;
 }
 
 .min-width-100 {
@@ -590,7 +590,7 @@ aside-menu-account .container-fluid {
 }
 
 .resize-none {
-    resize: none;
+    resize: none !important;
 }
 
 .list-style-none {
@@ -905,9 +905,13 @@ aside-menu-account .container-fluid {
 
 /*ledger style*/
 
-.ledg-head a i {
-    font-size: 24px;
-    line-height: 34px;
+.ledg-head {
+    a {
+        i {
+            font-size: 24px;
+            line-height: 34px;
+        }
+    }
 }
 
 #eledgerwrap .alert-danger {
@@ -1532,7 +1536,6 @@ table:focus {
 @media only screen and (max-width: 1440px) {
     body.unresponsive {
         width: 100%;
-        overflow-x: hidden !important;
     }
     .container {
         width: 100%;
@@ -1877,18 +1880,7 @@ ul.pills li {
 }
 
 /* tax section on manage groups and accounts*/
-
-.download-invoice-ledger {
-    position: absolute;
-    right: 0;
-    top: 0px;
-    height: 20px;
-    padding: 0 15px;
-    cursor: pointer;
-}
-
 .download-invoice-ledger > i {
-    top: 10px;
     color: $gray;
 }
 
@@ -2164,10 +2156,22 @@ ul.pills li {
     padding-bottom: 350px;
 }
 
-#entryModal .modal-body {
-    padding: 15px 20px 15px;
-    display: flex;
-    flex-direction: column;
+#entryModal {
+    .modal-body {
+        padding: 15px 20px;
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.expense-ledger {
+    update-ledger-entry-panel {
+        #entryModal {
+            .modal-body {
+                padding: 15px 0px !important;
+            }
+        }
+    }
 }
 
 .expense-ledger {
@@ -2262,7 +2266,7 @@ ul.pills li {
 /*box styles  on settings integration page*/
 
 .box {
-    padding: 15px;
+    padding-top: 15px;
     background-color: $white;
 }
 
@@ -2579,6 +2583,29 @@ form#groupDetailForm {
         flex-direction: column;
         margin: 0 !important;
     }
+    .expense-ledger {
+        update-ledger-entry-panel {
+            .modal-body {
+                .entry-popup {
+                    .ledger-head {
+                        display: none !important;
+                    }
+                    .custom-tabs {
+                        margin-left: -15px;
+                        margin-right: -15px;
+                        .nav.nav-tabs {
+                            position: relative !important;
+                            width: 100% !important;
+                            top: 0 !important;
+                            margin: 0 !important;
+                            left: 0 !important;
+                            right: 0 !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 @media screen and (max-width: 768px) {
     .table-container.trial-balance {
@@ -2674,6 +2701,10 @@ form#groupDetailForm {
     #setting-tab .nav > li > a:hover {
         color: inherit !important;
     }
+
+    .cdk-overlay-pane {
+        max-width: 95vw !important;
+    }
 }
 
 @media (min-width: 768px) and (max-width: 1019px) {
@@ -2688,16 +2719,20 @@ form#groupDetailForm {
     font-size: 12px !important;
 }
 
+.tooltip-inner {
+    background: $black !important;
+}
+
 /**
 * aside pane styles
 */
 
 .aside-pane {
-    background-color: #f4f5f8;
+    background-color: $solitude;
     position: relative;
     z-index: 5;
     height: 100vh;
-    color: #000000;
+    color: $black;
 }
 .aside-pane {
     max-width: 760px;
@@ -2742,3 +2777,449 @@ form#groupDetailForm {
         max-width: 280px;
     }
 }
+/* material css for ledger */
+.mat-dialog-container {
+    padding: 0px !important;
+}
+.mat-dialog-title {
+    margin-bottom: 0px !important;
+}
+.mat-radio-button {
+    margin-right: 16px;
+}
+.ledg-head,
+#import-statement-modal,
+.xs-table-block,
+.advance-search,
+#share-modal,
+#exportModal,
+.other-details-section,
+.daybook-advance-search,
+.petty-cash-reject-modal {
+    .mat-form-field {
+        .mat-form-field-wrapper {
+            padding-bottom: 0 !important;
+            .mat-form-field-flex {
+                padding: 0 !important;
+                align-items: center;
+                .mat-form-field-infix {
+                    padding: 0 !important;
+                    border-top: 0 !important;
+                    width: 100% !important;
+                }
+            }
+            .mat-form-field-underline {
+                display: none !important;
+            }
+        }
+    }
+}
+.password-label,
+.clearance-date {
+    .mat-form-field-appearance-fill .mat-form-field-flex {
+        background-color: $white !important;
+    }
+}
+giddh-datepicker {
+    .mat-form-field {
+        width: 100% !important;
+    }
+}
+.other-details-section,
+.collapse-pane,
+.left-col-new,
+.right-col-new {
+    giddh-datepicker {
+        .mat-form-field {
+            min-width: 100% !important;
+        }
+    }
+}
+.ledg-head {
+    .ledger-row {
+        .mat-input-element {
+            min-height: 38px;
+            height: 38px;
+        }
+    }
+    .mat-form-field-appearance-fill {
+        .mat-form-field-flex {
+            background: $white !important;
+        }
+    }
+    .ledger-book {
+        .left-col-new,
+        .right-col-new {
+            .mat-grid-list {
+                .mat-grid-tile {
+                    .mat-grid-tile-content {
+                        position: relative !important;
+                        width: 100%;
+                        justify-content: flex-start !important;
+                    }
+                    &:nth-child(3) {
+                        .mat-grid-tile-content {
+                            justify-content: center !important;
+                            align-items: flex-end;
+                            flex-direction: column;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.mat-expansion-panel {
+    .mat-expansion-panel-header {
+        padding: 0 15px !important;
+    }
+    .mat-expansion-panel-body {
+        padding: 0 0px 0px !important;
+    }
+    sh-select {
+        .chip {
+            height: auto !important;
+            word-break: break-word !important;
+        }
+    }
+}
+
+.mat-button,
+.mat-raised-button {
+    margin-right: 15px !important;
+    height: 36px;
+}
+
+.search-ledger-field {
+    .btn-danger,
+    .btn-success,
+    .btn-warning {
+        .mat-button-wrapper {
+            display: flex;
+        }
+    }
+}
+
+.ledger-head {
+    .mat-grid-tile-content {
+        justify-content: space-between !important;
+        padding: 0 10px;
+        font-weight: 600;
+    }
+}
+
+#eledgerwrap .alert .mat-close {
+    position: absolute;
+    top: 10px;
+    right: 0px;
+    opacity: 0.8;
+}
+
+.advance-search-by-date {
+    .input-wrapper {
+        .mat-form-field {
+            .mat-form-field-wrapper {
+                .mat-form-field-flex {
+                    .mat-form-field-infix {
+                        border: 1px solid $gainsboro !important;
+                        border-radius: 20px;
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
+.mat-field-border {
+    border: 1px solid $gainsboro !important;
+}
+.mat-grid-tile.select2-parent.select2-ledger .mat-grid-tile-content {
+    padding-left: 0px !important;
+}
+.ledg-head .mat-grid-list .mat-grid-tile.new-entry-date .mat-grid-tile-content {
+    padding-left: 2px !important;
+}
+.ledg-head
+    .mat-grid-list
+    .mat-grid-tile.new-entry-ledger.select2-parent.select2-ledger
+    .ledger-account-label
+    input.form-control.focused {
+    padding-left: 1px !important;
+}
+.ledger-advance-search-field {
+    .mat-form-field-suffix {
+        right: 10px !important;
+        position: absolute;
+    }
+}
+.mat-input-element {
+    box-sizing: border-box !important;
+}
+update-ledger-entry-panel .ledger-main .mat-form-field {
+    min-width: auto !important;
+}
+
+.expense-ledger {
+    update-ledger-entry-panel {
+        #entryModal {
+            .modal-body {
+                padding: 15px 0px !important;
+            }
+        }
+    }
+}
+
+.mat-snack-bar-container {
+    color: $white !important;
+    font-size: 13px;
+}
+.mat-snack-bar-container.error {
+    background-color: $red-toast !important;
+}
+.mat-snack-bar-container.success {
+    background-color: $green-toast !important;
+}
+.mat-snack-bar-container.warning {
+    background-color: $warning-toast !important;
+}
+.mat-snack-bar-container.info {
+    background-color: $info-toast !important;
+}
+.mat-form-field-appearance-fill .mat-form-field-flex,
+.mat-form-field-ripple,
+.mat-form-field-appearance-fill .mat-form-field-underline::before {
+    background: none !important;
+}
+.overflow-visible {
+    overflow: visible !important;
+}
+.container-modal-class {
+    .mat-dialog-container {
+        overflow: initial !important;
+    }
+}
+.mat-header-cell {
+    color: $midnight-blue !important;
+    font-family: "opensans-semibold";
+    font-size: 14px !important;
+}
+.mat-header-cell.text-right {
+    .mat-sort-header-container {
+        justify-content: flex-end !important;
+    }
+}
+.mat-header-cell,
+.mat-cell {
+    font-weight: 400;
+    padding: 14px 10px !important;
+    text-transform: capitalize;
+    display: table-cell !important;
+}
+.mat-table {
+    tbody {
+        > tr {
+            > td {
+                color: $omiod !important;
+                &:first-child {
+                    color: $black-pearl !important;
+                }
+            }
+            > td.no-wrap {
+                white-space: nowrap !important;
+            }
+        }
+        tr {
+            &:hover {
+                td {
+                    background: $light-alice-blue !important;
+                }
+            }
+        }
+    }
+}
+
+table.mat-table {
+    border-spacing: 2px !important;
+}
+th.mat-header-cell:first-of-type,
+td.mat-cell:first-of-type,
+td.mat-footer-cell:first-of-type {
+    border-left: none;
+    white-space: normal !important;
+    word-break: inherit;
+}
+th.mat-header-cell,
+td.mat-cell,
+td.mat-footer-cell {
+    vertical-align: middle !important;
+    word-break: break-word;
+    white-space: nowrap;
+    border-bottom-width: 1px;
+    border-bottom-color: $gainsboro !important;
+}
+.mat-header-row,
+.mat-row {
+    display: table-row !important;
+    vertical-align: inherit;
+    border-color: inherit;
+}
+.mat-row,
+.mat-header-row,
+.mat-footer-row {
+    &:after {
+        display: none !important;
+    }
+}
+.responsive-label {
+    display: none;
+}
+
+.mat-dialog-container {
+    height: auto !important;
+}
+.mat-snack-bar-container {
+    padding: 0px !important;
+
+    &.error {
+        .snack-container {
+            background-image: url("../images/failure.svg");
+        }
+    }
+    &.success {
+        .snack-container {
+            background-image: url("../images/success.svg");
+        }
+    }
+    &.warning {
+        .snack-container {
+            background-image: url("../images/exclamation-white.svg");
+        }
+    }
+    &.info {
+        .snack-container {
+            background-image: url("../images/info-white.svg");
+        }
+    }
+}
+.other-tax {
+    .mat-checkbox-layout {
+        .mat-checkbox-label {
+            font-size: 14px !important;
+        }
+    }
+}
+.petty-cash {
+    .mat-tab-group {
+        .mat-tab-header {
+            background: $alice-blue-light !important;
+            .mat-tab-label-container {
+                padding-left: 15px !important;
+                .mat-tab-list {
+                    .mat-tab-label {
+                        padding: 0 35px 0 0 !important;
+                        opacity: 1 !important;
+                        min-width: auto !important;
+                        height: 44px !important;
+                        color: $night-rider !important;
+                        .mat-tab-label-content {
+                            margin-bottom: 5px !important;
+                        }
+                        &:focus {
+                            font-weight: 800 !important;
+                            color: $nero !important;
+                        }
+                        &.active {
+                            font-weight: 800 !important;
+                            color: $nero !important;
+                        }
+                    }
+                    .mat-ink-bar {
+                        background-color: $vivid-blue !important;
+                        height: 4px !important;
+                        width: 60px !important;
+                    }
+                }
+            }
+        }
+    }
+    .bg-white {
+        .form-group {
+            .mat-form-field {
+                .mat-form-field-flex {
+                    padding: 0 !important;
+                }
+            }
+        }
+    }
+}
+
+.sidebar-overlay {
+    .mat-tab-body-active {
+        z-index: 991 !important;
+    }
+}
+
+.mr-0 {
+    margin-right: 0 !important;
+}
+.disable-ripple {
+    .mat-radio-ripple {
+        display: none;
+    }
+}
+
+.tooltip-black {
+    background: $black !important;
+    color: $white;
+    font-size: 12px !important;
+}
+
+.mat-button-focus-overlay {
+    background: transparent !important;
+}
+
+@media (max-width: 767px) {
+    .sidebar-overlay {
+        .mat-tab-group {
+            .mat-tab-body-active {
+                z-index: 9999 !important;
+            }
+        }
+    }
+    .petty-cash {
+        .mat-tab-group {
+            .mat-tab-header {
+                position: fixed;
+                width: 100%;
+                z-index: 9;
+            }
+            .mat-tab-body-wrapper {
+                padding-top: 60px;
+            }
+        }
+    }
+}
+
+@media (max-width: 1075px) {
+    .mat-button,
+    .mat-raised-button {
+        padding: 7px 10px !important;
+        line-height: normal !important;
+    }
+}
+
+@media (max-width: 1300px) {
+    .ledger-bottom {
+        .accordion-expansion {
+            flex: 0 0 100% !important;
+            max-width: 100% !important;
+        }
+    }
+}
+
+.mat-sort-header-arrow.ng-trigger.ng-trigger-arrowPosition {
+    opacity: 1 !important;
+    transform: none !important;
+}
+/* material css for ledger end*/

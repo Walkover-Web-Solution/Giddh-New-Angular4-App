@@ -1,9 +1,9 @@
 <div class="filter-list">
-    <ul class="inner-filter-list">
+    <mat-list class="inner-filter-list">
         <ng-container *ngFor="let filterItem of expensesDetailedItems">
-            <li
+            <mat-list-item
                 class="cursor-pointer"
-                (click)="rowClicked(filterItem)"
+                (click)="editExpense(filterItem)"
                 [ngClass]="{ 'activeItem': filterItem.uniqueName === selectedItem.uniqueName }"
             >
                 <div class="left-item">
@@ -16,7 +16,6 @@
                     <i class="dot-icon dot-primary" *ngIf="filterItem.entryType === 'expense'"></i>
                     <p class="mb-0 font-14 d-inline-block">{{ filterItem?.baseAccount?.name }}</p>
                 </div>
-
                 <div class="right-item">
                     <p class="font-14">{{ filterItem.currencySymbol }} {{ filterItem.amount | giddhCurrency }}</p>
                     <p class="font-12">
@@ -28,7 +27,8 @@
                         }}</i>
                     </p>
                 </div>
-            </li>
+            </mat-list-item>
+            <mat-divider></mat-divider>
         </ng-container>
-    </ul>
+    </mat-list>
 </div>

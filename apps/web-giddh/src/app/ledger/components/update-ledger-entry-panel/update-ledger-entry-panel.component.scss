@@ -155,8 +155,6 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 }
 
 .download-invoice-ledger > i {
-    top: 18px;
-    position: relative;
     background-color: $white;
     padding-left: 5px;
 }
@@ -189,21 +187,6 @@ span.eligible-ITC {
     border: 1px solid $gainsboro;
     margin-top: 10px;
     position: relative;
-}
-
-.pd-r05 {
-    padding-right: 5px;
-}
-
-.pd-l05 {
-    padding-left: 5px;
-}
-
-.adjustment-field {
-    max-height: 160px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    min-height: 160px;
 }
 
 .ledger-bottom {
@@ -245,11 +228,9 @@ span.eligible-ITC {
         }
     }
 }
-
 #update-ledger-select-account {
     width: 30%;
 }
-
 .edit-adjustment {
     padding: 0 5px 0;
 }
@@ -274,6 +255,9 @@ span.eligible-ITC {
 .ledger-head .row {
     margin: 0;
 }
+.show-if-ledger-open {
+    height: 300px;
+}
 .dropdown-container[disabled],
 .table-amount[disabled] {
     pointer-events: none;
@@ -292,9 +276,6 @@ span.eligible-ITC {
     input[type="checkbox"] {
         opacity: 0;
     }
-}
-.show-if-ledger-open {
-    height: 300px;
 }
 p.edit-message {
     background-color: $whisper-light;

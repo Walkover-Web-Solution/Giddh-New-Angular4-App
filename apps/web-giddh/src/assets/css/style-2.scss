@@ -1,6 +1,13 @@
 @charset "utf-8";
+@import "~@angular/material/theming";
 @import "../css/giddh-common.scss";
-@import "@angular/material/prebuilt-themes/deeppurple-amber.css";
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
+
+$custom-typography: mat-typography-config(
+    $font-family: "opensans-regular",
+);
+@include angular-material-typography($custom-typography);
+
 @import "../css/ngx-bs-datepicker.scss";
 
 /* table css need to removed at last  (start)
@@ -48,16 +55,24 @@
     .text-left-sm {
         text-align: left !important;
     }
-    .on-mobile-view tbody tr {
+    .on-mobile-view tbody tr,
+    .on-mobile-view tbody .mat-row {
         box-shadow: 0 0px 5px rgba(0, 0, 0, 0.1);
         background: $white;
         border-bottom: none;
         cursor: pointer;
-        display: block;
+        display: block !important;
         padding: 5px 0 10px 0px;
         margin: 10px auto 22px;
         width: 100%;
         max-width: 100%;
+    }
+    .on-mobile-view tbody .mat-row[hidden] {
+        display: none !important;
+    }
+    tr.mat-row,
+    tr.mat-footer-row {
+        height: auto !important;
     }
     .on-mobile-view table {
         background: transparent;
@@ -72,9 +87,10 @@
     .on-mobile-view table thead {
         display: none;
     }
-    .on-mobile-view tbody > tr > td {
+    .on-mobile-view tbody > tr > td,
+    .on-mobile-view tbody > .mat-row > td {
         border: 0 !important;
-        display: block;
+        display: block !important;
         padding: 5px 10px 5px 50% !important;
         position: relative;
         text-align: left !important;
@@ -83,6 +99,26 @@
         word-wrap: inherit !important;
         max-width: 100%;
         white-space: inherit;
+        margin-bottom: 14px;
+        width: 100%;
+        &.child-td {
+            display: table !important;
+
+            tr {
+                box-shadow: 0 0px 0px rgb(0 0 0 / 10%) !important;
+                border-bottom: 1px solid rgb(0 0 0 / 10%);
+            }
+            tr:last-child {
+                border-bottom: 0px !important;
+                margin-bottom: 0px;
+            }
+        }
+        &.hide-td {
+            display: none !important;
+        }
+        .justify-content-end {
+            justify-content: flex-start !important;
+        }
     }
     .on-mobile-view tbody td:after {
         content: "";
@@ -111,7 +147,8 @@
         width: 40%;
         text-align: left;
     }
-    .on-mobile-view .table-bordered > tfoot > tr > td {
+    .on-mobile-view .table-bordered > tfoot > tr > td,
+    .on-mobile-view .table-bordered > tfoot > .mat-row > td {
         border: none;
     }
     .on-mobile-view th {
@@ -142,6 +179,15 @@
     }
     .hamburger-menu h4 {
         line-height: 1.4;
+    }
+    .daybook-table {
+        .on-mobile-view {
+            tbody {
+                tr:first-child {
+                    margin-top: 5px !important;
+                }
+            }
+        }
     }
 }
 
@@ -460,7 +506,6 @@ input {
 }
 
 .approve-modal .modal-top {
-    background: $alice-blue-light;
     padding: 15px 15px 0;
 }
 
@@ -489,7 +534,7 @@ input {
     font-size: 13px;
     color: $chetwode-blue !important;
     display: block;
-    padding: 7px 10px !important;
+    padding: 7px 10px;
     display: block;
     width: 100%;
     text-align: left;
@@ -1163,12 +1208,12 @@ modal-container.modal {
     color: $nobel;
 }
 .price-input {
-    border: 1px solid $gainsboro;
-    font-size: 14px;
-    background: $white;
-    padding: 1px 2px;
+    border: 1px solid $gainsboro !important;
+    font-size: 14px !important;
+    background: $white !important;
+    padding: 1px 2px !important;
     display: inline-block;
-    max-width: 90px;
+    max-width: 90px !important;
     min-width: 70px;
 }
 
@@ -1376,6 +1421,10 @@ modal-container.modal {
     font-size: 14px !important;
 }
 
+.form-control.mat-select-disabled {
+    background: $whisper-light !important;
+}
+
 input {
     color: $nero !important;
 }
@@ -1399,6 +1448,18 @@ input:-moz-placeholder {
     outline: none;
     border-color: $chetwode-blue !important;
     box-shadow: none;
+}
+
+.p-0 {
+    padding: 0 !important;
+}
+
+.pl-0 {
+    padding-left: 0 !important;
+}
+
+.pr-0 {
+    padding-left: 0 !important;
 }
 
 .sidebar {
@@ -1476,25 +1537,28 @@ header .navbar {
     padding: 6px 16px;
 }
 
-.btn-primary {
-    background: $white;
-    border-color: $gainsboro;
-    color: $midnight-express;
+.btn-primary,
+.btn-primary:focus,
+.btn-primary:active:focus,
+.btn-primary:not(:disabled):not(.disabled).active,
+.btn-primary:not(:disabled):not(.disabled):active,
+.show > .btn-primary.dropdown-toggle {
+    background: $white !important;
+    border-color: $gainsboro !important;
+    color: $midnight-express !important;
 }
 
 .btn-primary:hover,
-.btn-primary:focus,
 .btn-primary:disabled,
 .btn-primary.active,
 .btn-primary:active,
 .open > .dropdown-toggle.btn-primary,
-.btn-primary:active:focus,
 .btn-primary:active:hover,
 .open > .dropdown-toggle.btn-primary:focus,
 .btn-primary:not(:disabled):not(.disabled):active {
-    background: $chetwode-blue;
-    color: $white;
-    border-color: $chetwode-blue;
+    background: $chetwode-blue !important;
+    color: $white !important;
+    border-color: $chetwode-blue !important;
 }
 
 .btn-primary.disabled.focus,
@@ -1506,9 +1570,9 @@ header .navbar {
 fieldset[disabled] .btn-primary.focus,
 fieldset[disabled] .btn-primary:focus,
 fieldset[disabled] .btn-primary:hover {
-    background: $chetwode-blue;
-    color: $white;
-    border-color: $midnight-blue;
+    background: $chetwode-blue !important;
+    color: $white !important;
+    border-color: $midnight-blue !important;
 }
 
 .btn {
@@ -1526,23 +1590,23 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .btn-default {
-    background: $white;
-    border-color: $gainsboro;
-    color: $midnight-express;
+    background: $white !important;
+    border-color: $gainsboro !important;
+    color: $midnight-express !important;
 }
 
 .btn-default:hover,
-.btn-default:focus,
-.btn-default.active.focus .btn-default:disabled,
-.btn-default[disabled]:hover,
+.btn-default:disabled,
 .open > .dropdown-toggle.btn-default:focus,
 .open > .dropdown-toggle.btn-default:hover,
 .btn-default:active,
+.btn-default.active,
 .btn-default:active:focus,
-.open > .dropdown-toggle.btn-default {
-    background: $chetwode-blue;
-    color: $white;
-    border-color: $chetwode-blue;
+.open > .dropdown-toggle.btn-default,
+.btn-default:not(:disabled):not(.disabled):active {
+    background: $chetwode-blue !important;
+    color: $white !important;
+    border-color: $chetwode-blue !important;
 }
 
 .success-btn {
@@ -1559,9 +1623,9 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 #actionPane .btn-default {
-    background: $whisper;
-    color: $night-rider;
-    border-color: $whisper;
+    background: $whisper !important;
+    color: $night-rider !important;
+    border-color: $whisper !important;
     border-radius: 5px !important;
 }
 
@@ -1820,20 +1884,26 @@ input[type="checkbox"]:checked:after {
     line-height: 0 !important;
 }
 
+.btn-success-green {
+    background-color: $success-green !important;
+    color: $white !important;
+    border: 1px solid $success-green !important;
+}
+
 .btn-success-outline {
-    border: 1px solid $light-sea-green;
-    color: $light-sea-green;
+    border: 1px solid $light-sea-green !important;
+    color: $light-sea-green !important;
 }
 
 .btn-success-outline:hover {
-    color: $white;
-    background: $light-sea-green;
+    color: $white !important;
+    background: $light-sea-green !important;
 }
 
 .btn-success {
-    background: $light-sea-green;
-    color: $white;
-    border: 1px solid $light-sea-green;
+    background: $light-sea-green !important;
+    color: $white !important;
+    border: 1px solid $light-sea-green !important;
 }
 
 .btn-success:hover,
@@ -1843,20 +1913,22 @@ input[type="checkbox"]:checked:after {
 .btn-success:not(:disabled):not(.disabled):active,
 .btn-success:not(:disabled):not(.disabled).active,
 .show > .btn-success.dropdown-toggle {
-    background: $teal;
-    color: $white;
-    border: 1px solid $teal;
+    background: $teal !important;
+    color: $white !important;
+    border: 1px solid $teal !important;
     box-shadow: none;
 }
 
 .btn-success:disabled,
 .btn-success:disabled:hover {
-    color: rgba(255, 255, 255, 0.51);
-    border: 1px solid $success-green-disable;
-    background: $success-green-disable;
+    color: rgba(255, 255, 255, 0.51) !important;
+    border: 1px solid $success-green-disable !important;
+    background: $success-green-disable !important;
 }
 .btn-warning {
     color: $white !important;
+    background-color: $warning !important;
+    border-color: $warning !important;
 }
 .btn-warning:not(:disabled):not(.disabled):active:focus,
 .btn-warning:not(:disabled):not(.disabled).active:focus,
@@ -1869,20 +1941,19 @@ input[type="checkbox"]:checked:after {
 }
 
 .btn-danger {
-    background: $whisper;
-    color: $red;
-    border-color: $whisper;
+    background: $whisper !important;
+    color: $red !important;
+    border-color: $whisper !important;
 }
 
 .btn-danger:hover,
 .btn-danger:active,
 .btn-danger:focus,
 .btn-danger:active:focus {
-    background: $gainsboro;
-    color: $red;
-    border-color: $gainsboro;
-    outline: none;
-    box-shadow: none;
+    background: $gainsboro !important;
+    color: $red !important;
+    border-color: $gainsboro !important;
+    outline: none !important;
 }
 
 .btn-danger:disabled,
@@ -1890,10 +1961,9 @@ input[type="checkbox"]:checked:after {
 .btn-danger:active:focus,
 .btn-danger:active:hover,
 .btn-danger:focus {
-    background: $whisper;
-    color: $red;
-    border-color: $whisper;
-    opacity: 0.5;
+    background: $whisper !important;
+    color: $red !important;
+    border-color: $whisper !important;
 }
 
 .btn-cancel {
@@ -2222,8 +2292,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .download-invoice-ledger {
-    padding-right: 6px;
-    padding-left: 0;
+    padding-left: 15px;
     align-items: center;
     font-size: 15px;
 }
@@ -2252,6 +2321,10 @@ button:focus {
 .btn:focus,
 .btn.focus {
     box-shadow: none !important;
+}
+.mat-raised-button:focus,
+.mat-raised-button.focus {
+    box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%) !important;
 }
 .Inpt_dwn {
     padding-right: 25px !important;
@@ -2676,10 +2749,6 @@ a.btn.btn-xs.btn-link.pull-right {
     -webkit-border-radius: 0px;
     border-radius: 0px;
     margin-left: 10px;
-}
-
-#share-modal .input-group .input-group-btn:last-child > .btn {
-    margin-left: 15px;
 }
 
 .input-group-btn.sticky:last-child > .btn {
@@ -3828,9 +3897,13 @@ label {
     background: $floral-white !important;
 }
 
-.dropdown-container .dropdown-menu li label span {
+.dropdown-container .dropdown-menu li label span:not(.mat-checkbox-inner-container) {
     max-width: calc(100% - 22px);
     color: $night-rider;
+}
+.dropdown-container .dropdown-menu li label span.mat-checkbox-inner-container {
+    color: $night-rider;
+    width: 38px;
 }
 
 .dropdown-container .dropdown-menu {
@@ -4555,16 +4628,15 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 }
 
 .modal-header > .close {
-    position: absolute;
-    right: 20px;
-    top: 4px;
-    line-height: 48px;
     color: $white;
-    opacity: 1;
+    opacity: 1 !important;
     font-weight: 100;
     text-shadow: none;
     font-size: 30px;
     cursor: pointer;
+    padding: 0 !important;
+    margin: 0 !important;
+    min-width: auto !important;
 }
 
 /**new modal design**/
@@ -5701,10 +5773,10 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine .transactions-list .filter-band .btn,
 .tax-engine .transactions-list .filter-band .btn:focus,
 .tax-engine .transactions-list .filter-band .btn:hover {
-    color: $primary;
-    border-color: $primary;
-    background-color: transparent;
-    box-shadow: none;
+    color: $primary !important;
+    border-color: $primary !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
 }
 
 .tax-engine .transactions-list .filter-band .btn {
@@ -5716,7 +5788,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine .transactions-list .filter-band .btn .caret,
 .tax-engine .transactions-list .filter-band .btn:focus .caret,
 .tax-engine .transactions-list .filter-band .btn:hover .caret {
-    border-top-color: $primary;
+    border-top-color: $primary !important;
 }
 
 .tax-engine .caret {
@@ -5816,7 +5888,8 @@ perfect-scrollbar > .ps > .ps-overlay {
     border-bottom: 1px solid $gainsboro;
 }
 
-.tax-engine .table-fixed {
+.tax-engine .table-fixed,
+.daybook-table .mat-table {
     table-layout: fixed;
 }
 
@@ -6678,7 +6751,7 @@ ul.dropdown-menu p.lead.pd {
     color: $white;
     box-shadow: 0px 4px 4px -3px $wistful;
     border-radius: 0px;
-    border-color: $chetwode-blue;
+    border-color: $chetwode-blue !important;
 }
 
 .aside-panel-ledger button.btn.btn-lg.btn-primary {
@@ -6776,6 +6849,7 @@ ul.dropdown-menu p.lead.pd {
     height: 36px !important;
     border-right: none !important;
     color: $nobel !important;
+    cursor: pointer;
 }
 
 .date-advance-search .input-group input.form-control {
@@ -6887,7 +6961,7 @@ button.btn.btn-filter {
 }
 
 .modal {
-    z-index: 9992;
+    z-index: 9999;
 }
 
 .select2-ledger .menu .item:hover {
@@ -7492,6 +7566,15 @@ span#HW_badge_cont:nth-child(3) {
                 }
             }
         }
+        .active-link {
+            a {
+                span {
+                    i {
+                        color: $white;
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -7529,11 +7612,15 @@ span#HW_badge_cont:nth-child(3) {
     padding-right: 0;
     padding-left: 60px !important;
 }
+
 .setting-sidebar-open .desktop-header {
     padding-left: 0;
 }
 .setting-sidebar-open .desktop-header.menu_open {
     padding-right: 240px !important;
+}
+.gst-sidebar-open .menu_open {
+    padding-left: 300px !important;
 }
 .desktop-header.menu_open {
     padding-left: 60px !important;
@@ -7862,92 +7949,116 @@ ul.dropdown-menu.action-dropdown {
 }
 
 /*material datepicker css starts*/
-.recurring-form .mat-form-field {
-    max-width: 170px;
-}
-.collapse-pane .mat-form-field {
-    min-width: 100%;
-    max-width: 100%;
-}
-.mat-form-field {
-    min-width: 170px;
-    width: 100%;
-    display: inline-block;
-}
-.mat-form-field-suffix {
-    right: 0;
-    position: absolute !important;
-}
-.mat-form-field-appearance-fill .mat-form-field-flex {
-    height: 36px;
-    background-color: $white;
-    padding: 0;
-}
-.mat-form-field-appearance-fill .mat-form-field-underline::before {
-    display: none !important;
-    opacity: 0 !important;
-}
-.mat-form-field-appearance-fill .mat-form-field-infix {
-    padding: 0;
-    margin: 0;
-    border: 0;
-}
-.mat-form-field-appearance-fill .mat-form-field-flex {
-    border-radius: 2px !important;
-    padding: 0 !important;
-    border: 1px solid $gainsboro !important;
-    border-radius: 5px !important;
-    display: flex !important;
-    align-items: center !important;
-}
-.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button,
-.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
-    width: 26px;
-    height: 26px;
-}
-.mat-form-field-appearance-fill:not(.mat-form-field-disabled)
-    .mat-form-field-flex:hover
-    ~ .mat-form-field-underline
-    .mat-form-field-ripple {
-    opacity: 0 !important;
-}
-input.mat-input-element {
-    margin-top: 0;
-    padding: 9px 6px;
-}
-.mat-form-field-wrapper {
-    padding-bottom: 0;
-}
-.mat-focused .mat-form-field-flex {
-    border: 1px solid $chetwode-blue !important;
-}
-.mat-form-field-underline {
-    display: none !important;
-}
-.cdk-overlay-container,
-.cdk-global-overlay-wrapper {
-    z-index: 99999;
-}
-.mat-calendar-body-selected {
-    background-color: $midnight-blue;
-}
-.giddh-limit {
-    &.single-line-clamp {
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+ngx-daterangepicker-material,
+giddh-datepicker {
+    .recurring-form .mat-form-field {
+        max-width: 170px;
+    }
+    .collapse-pane .mat-form-field {
+        min-width: 100%;
+        max-width: 100%;
+    }
+    .mat-form-field {
+        min-width: 170px;
+        width: 100%;
+        display: inline-block;
+    }
+    .mat-form-field-suffix {
+        right: 0;
+        position: absolute !important;
+    }
+    .mat-form-field-appearance-fill .mat-form-field-flex {
+        height: 36px;
+        background-color: $white;
+        padding: 0;
+    }
+    .mat-form-field-appearance-fill .mat-form-field-underline::before {
+        display: none !important;
+        opacity: 0 !important;
+    }
+    .mat-form-field-appearance-fill .mat-form-field-infix {
+        padding: 0;
+        margin: 0;
+        border: 0;
+    }
+    .mat-form-field-appearance-fill .mat-form-field-flex {
+        padding: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+    .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button,
+    .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
+        width: 26px;
+        height: 26px;
+    }
+    .mat-form-field-appearance-fill:not(.mat-form-field-disabled)
+        .mat-form-field-flex:hover
+        ~ .mat-form-field-underline
+        .mat-form-field-ripple {
+        opacity: 0 !important;
+    }
+    input.mat-input-element {
+        margin-top: 0;
+        padding: 9px 6px;
+    }
+    .mat-form-field-wrapper {
+        padding-bottom: 0;
+    }
+    .mat-focused .mat-form-field-flex {
+        border: 1px solid $chetwode-blue !important;
+    }
+    .mat-form-field-underline {
+        display: none !important;
+    }
+    .mat-calendar-body-selected {
+        background-color: $midnight-blue;
+    }
+    .giddh-limit {
+        &.single-line-clamp {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    }
+    .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button,
+    .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
+        width: 36px !important;
+        height: 36px !important;
+        margin-right: 0;
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
     }
 }
-.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button,
-.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
-    width: 36px !important;
-    height: 36px !important;
-    margin-right: 0;
-    display: flex !important;
-    justify-content: center;
-    align-items: center;
+
+.cdk-overlay-container,
+.cdk-global-overlay-wrapper {
+    z-index: 9999;
 }
+
+.cdk-overlay-connected-position-bounding-box {
+    z-index: 9999;
+}
+
+giddh-datepicker {
+    .mat-form-field-appearance-fill .mat-form-field-flex {
+        border: 1px solid $gainsboro !important;
+        border-radius: 5px !important;
+    }
+}
+
+.left-col-new,
+.right-col-new,
+.daybook-advance-search,
+.advance-search {
+    giddh-datepicker {
+        .mat-form-field-appearance-fill .mat-form-field-flex {
+            border: none !important;
+        }
+    }
+}
+
 /*material datepicker css end*/
 .master-custom-tabs.custom-tabs {
     .nav-tabs {
@@ -8169,7 +8280,7 @@ input.mat-input-element {
         left: 60px !important;
     }
     #content-wrapper {
-        padding-left: 300px !important;
+        padding-left: 300px;
     }
     .nav-left-bar {
         display: block;
@@ -8206,14 +8317,11 @@ body.update-scroll-hidden {
     position: static !important;
     padding-left: 15px !important;
 }
-
-body.update-scroll-hidden {
-    overflow-y: hidden;
+.sales-register {
+    width: calc(100% - 60px) !important;
 }
-.wrap-billing-address.clearfix {
-    .bottom-border-only {
-        padding-left: 0 !important;
-    }
+.menu_open .sales-register {
+    width: calc(100% - 240px) !important;
 }
 .nav-left-bar {
     &.width-60 {
@@ -8345,9 +8453,6 @@ body.update-scroll-hidden {
         }
     }
 }
-.manage-account-popup.full-screen-modal {
-    z-index: 999991;
-}
 .on-setting-page.aside-setting,
 .on-user-page.aside-setting {
     #content-wrapper {
@@ -8362,26 +8467,8 @@ body.update-scroll-hidden {
 .manage-account-popup.full-screen-modal {
     z-index: 99999;
 }
-body.update-scroll-hidden {
-    overflow-y: hidden;
-}
 .trial-balance-viewport {
     height: 500px;
-}
-.e-waybill-tabs.custom-tabs .nav-tabs {
-    position: static !important;
-    padding-left: 15px !important;
-}
-.sales-register {
-    width: calc(100% - 60px) !important;
-}
-.menu_open .sales-register {
-    width: calc(100% - 240px) !important;
-}
-.wrap-billing-address.clearfix {
-    .bottom-border-only {
-        padding-left: 0 !important;
-    }
 }
 .gst-sidebar-open {
     .daterangepicker.show-calendar {
@@ -8400,6 +8487,10 @@ body.update-scroll-hidden {
         display: none;
     }
 }
+.cdk-overlay-pane {
+    height: auto !important;
+}
+
 /* responsive  starts here*/
 
 @media (max-width: 1440px) {
@@ -8454,29 +8545,6 @@ body.update-scroll-hidden {
         width: 90px;
         height: 90px !important;
         font-size: 14px;
-    }
-    .gst-sidebar-open {
-        .gst-sidebar {
-            left: -250px !important;
-        }
-        #content-wrapper {
-            padding-left: 0;
-        }
-        .plan-wrapper {
-            padding-left: 0;
-        }
-        .menu_open {
-            #content-wrapper {
-                padding-left: 300px;
-            }
-            .plan-wrapper {
-                padding-left: 60px;
-            }
-        }
-    }
-    .e-waybill-tabs.custom-tabs .nav-tabs {
-        position: static !important;
-        padding-left: 15px !important;
     }
     .groups-buttons {
         height: auto;
@@ -8533,7 +8601,7 @@ body.update-scroll-hidden {
             left: 60px !important;
         }
         #content-wrapper {
-            padding-left: 300px !important;
+            padding-left: 300px;
         }
     }
 }
@@ -8689,6 +8757,12 @@ body.update-scroll-hidden {
         width: 100%;
         overflow-x: auto;
     }
+    giddh-datepicker .mat-form-field {
+        min-width: 100% !important;
+    }
+    .mat-raised-button {
+        min-width: auto !important;
+    }
 }
 
 @media (max-width: 840px) {
@@ -8734,7 +8808,6 @@ body.update-scroll-hidden {
         width: 100% !important;
         padding-right: 0 !important;
     }
-
     .bulk-create-table sh-select input,
     .bulk-create-table .mat-form-field-wrapper input,
     .bulk-create-table .mat-form-field-appearance-fill .mat-form-field-flex {
@@ -8872,7 +8945,6 @@ body.update-scroll-hidden {
         }
 
         .close {
-            top: 0;
             font-size: 26px;
         }
     }
@@ -8912,11 +8984,6 @@ body.update-scroll-hidden {
     .mobile-setting-sidebar {
         overflow-y: hidden;
     }
-    .gst-sidebar-open {
-        #content-wrapper {
-            padding-left: 0 !important;
-        }
-    }
     .customer-aging .nav.nav-tabs {
         display: flex !important;
     }
@@ -8934,9 +9001,6 @@ body.update-scroll-hidden {
                 display: none !important;
             }
         }
-    }
-    .gst-sidebar-open .gst-menu-icon {
-        display: inline-flex !important;
     }
     .setting-sidebar {
         display: block;
@@ -9091,11 +9155,6 @@ body.update-scroll-hidden {
 
     #setting-tab > .tab-container > .tab-content {
         padding-top: 15px !important;
-    }
-}
-@media (max-width: 1199px) {
-    .ledger-book .left-col-new .entry-modal {
-        width: 100%;
     }
 }
 
@@ -9841,6 +9900,9 @@ body.update-scroll-hidden {
         width: auto;
         max-width: 300px;
     }
+    .d-sm-inline {
+        display: inline-block !important;
+    }
 }
 @media (min-width: 768px) {
     .invoice-modal-content .modal-dialog {
@@ -9849,9 +9911,15 @@ body.update-scroll-hidden {
     .edit-modal.modal-small {
         display: none;
     }
+    .mat-dialog-container {
+        .modal-dialog {
+            margin: 0px auto;
+            padding: 0px;
+        }
+    }
     .modal-dialog {
         max-width: 650px !important;
-        margin: 30px auto;
+        margin: 56px auto;
         padding: 0 10px;
     }
     .modal-dialog.modal-xl {
@@ -9860,6 +9928,7 @@ body.update-scroll-hidden {
     .receipt-note-modal {
         max-width: 100% !important;
     }
+
     .po-preview-modal {
         max-width: 100% !important;
         width: 900px !important;
@@ -10131,3 +10200,12 @@ mat-year-view table tr td.mat-calendar-body-label {
     display: none !important;
 }
 /** Angular material datepicker **/
+
+input[type="checkbox"].cdk-visually-hidden::before,
+input[type="checkbox"].cdk-visually-hidden::after {
+    height: 1px !important;
+    position: absolute !important;
+    width: 1px !important;
+    outline: 0px !important;
+    border: none !important;
+}
