@@ -12,7 +12,8 @@ async function saveCompany(request) {
     if (request && request.status === "success") {
         const config = {
             schema: [Schema.User, Schema.Branch, Schema.Warehouse, Schema.Address, Schema.EcommerceType, Schema.Ecommerce, Schema.Currency, Schema.CountryV2, Schema.FinancialYear, Schema.UserDetails, Schema.Country, Schema.PlanDetails, Schema.CompaniesWithTransactions, Schema.Subscription, Schema.Entity, Schema.Permissions, Schema.Scopes, Schema.Role, Schema.UserEntityRoles, Schema.Company],
-            schemaVersion: 1
+            schemaVersion: 1,
+            path: 'company.realm'
         };
 
         const companyData = generalHelper.cleanCompanyData(request.body);
@@ -28,6 +29,8 @@ async function saveCompany(request) {
             /** Inserting updated company info */
             realmObject.create("Company", companyData);
         });
+        
+        realmObject.close();
 
         return { status: "success", body: companyData };
     } else {
@@ -45,11 +48,15 @@ async function getCompany(request) {
     try {
         const config = {
             schema: [Schema.User, Schema.Branch, Schema.Warehouse, Schema.Address, Schema.EcommerceType, Schema.Ecommerce, Schema.Currency, Schema.CountryV2, Schema.FinancialYear, Schema.UserDetails, Schema.Country, Schema.PlanDetails, Schema.CompaniesWithTransactions, Schema.Subscription, Schema.Entity, Schema.Permissions, Schema.Scopes, Schema.Role, Schema.UserEntityRoles, Schema.Company],
-            schemaVersion: 1
+            schemaVersion: 1,
+            path: 'company.realm'
         };
 
         const realmObject = await Realm.open(config);
         const company = realmObject.objects('Company');
+
+        realmObject.close();
+
         if (company) {
             return { status: "success", body: company[0] };
         } else {

@@ -12,7 +12,8 @@ async function saveCompanies(request) {
     if (request && request.status === "success") {
         const config = {
             schema: [CompanySchema.User, CompanySchema.UserDetails, CompanySchema.Country, CompanySchema.PlanDetails, CompanySchema.CompaniesWithTransactions, CompanySchema.Subscription, Schema.Companies],
-            schemaVersion: 3
+            schemaVersion: 1,
+            path: 'companies.realm'
         };
 
         const companiesList = request.body;
@@ -30,6 +31,8 @@ async function saveCompanies(request) {
             });
         });
 
+        realmObject.close();
+
         return { status: "success", body: companiesList };
     } else {
         return { status: "error", message: request.message };
@@ -45,11 +48,15 @@ async function saveCompanies(request) {
 async function getCompanies(request) {
     const config = {
         schema: [CompanySchema.User, CompanySchema.UserDetails, CompanySchema.Country, CompanySchema.PlanDetails, CompanySchema.CompaniesWithTransactions, CompanySchema.Subscription, Schema.Companies],
-        schemaVersion: 3
+        schemaVersion: 1,
+        path: 'companies.realm'
     };
 
     const realmObject = await Realm.open(config);
     const companies = realmObject.objects('Companies');
+
+    realmObject.close();
+    
     if (companies) {
         return { status: "success", body: companies };
     } else {

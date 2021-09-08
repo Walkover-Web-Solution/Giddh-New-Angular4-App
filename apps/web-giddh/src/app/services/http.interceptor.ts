@@ -30,7 +30,7 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
         if (this.generalService.currentOrganizationType === OrganizationType.Branch && request && request.urlWithParams) {
             request = this.addBranchUniqueName(request);
         }
-        if (this.isOnline) {
+        if (this.isOnline || isElectron) {
             return next.handle(request);
         } else {
             setTimeout(() => {

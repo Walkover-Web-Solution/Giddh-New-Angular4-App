@@ -11,10 +11,10 @@ function getCompanies(req, res) {
             realCompaniesService.saveCompanies(response).then(finalResponse => {
                 res.json(finalResponse);
             }).catch(error => {
-                res.json({ status: "error", "message": error });
+                res.json({ status: "error", "message": error.message });
             });
         }).catch(error => {
-            res.json({ status: "error", "message": error });
+            res.json({ status: "error", "message": error.message });
         });
     }).catch(() => {
         realCompaniesService.getCompanies(req).then(finalResponse => {
