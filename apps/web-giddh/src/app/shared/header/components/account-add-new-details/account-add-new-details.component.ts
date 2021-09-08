@@ -195,7 +195,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.initializeNewForm();
         this.activeGroup$.subscribe(response => {
             if (response) {
-                if (response.parentGroups && response.parentGroups.length) {
+           if (response.parentGroups && response.parentGroups.length
+                    && response.parentGroups[0]?.uniqueName) {
                     let parent = response.parentGroups;
                     const HSN_SAC_PARENT_GROUPS = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
                     if (parent.length > 1 && parent[1]) {
@@ -206,7 +207,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         this.isParentDebtorCreditor(response.uniqueName);
                     }
                 }
-            }
+
+
+                this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
+               }
         });
         this.getCompanyCustomField();
 
