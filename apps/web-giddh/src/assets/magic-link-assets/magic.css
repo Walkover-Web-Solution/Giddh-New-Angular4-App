@@ -725,10 +725,6 @@ body {
     right: 0 !important;
 }
 
-.download-invoice-ledger {
-    position: absolute;
-}
-
 /*#transaction_table table th[class*="col-"]:last-child {
     border-right: 1px solid #d9d9d9 !important;
 }*/
@@ -992,11 +988,9 @@ h4 {
 }
 
 .magic-table .download-invoice-ledger {
-    padding: 0 5px;
+    padding: 0 0 0 5px;
 }
-.magic-table .pd-r25 {
-    padding-right: 25px !important;
-}
+
 /*footer style end*/
 
 /* --------------- Responsive Fixes --------------- */
