@@ -11,8 +11,8 @@ const Schema = require('../schemas/companies');
 async function saveCompanies(request) {
     if (request && request.status === "success") {
         const config = {
-            schema: [CompanySchema.User, CompanySchema.Subscription, Schema.Companies],
-            schemaVersion: 1
+            schema: [CompanySchema.User, CompanySchema.UserDetails, CompanySchema.Country, CompanySchema.PlanDetails, CompanySchema.CompaniesWithTransactions, CompanySchema.Subscription, Schema.Companies],
+            schemaVersion: 3
         };
 
         const companiesList = request.body;
@@ -25,7 +25,9 @@ async function saveCompanies(request) {
                 realmObject.delete(realmObject.objects("Companies"));
             }
             /** Inserting updated companies info */
-            realmObject.create("Companies", companiesList);
+            companiesList.forEach(company => {
+                realmObject.create("Companies", company);
+            });
         });
 
         return { status: "success", body: companiesList };
@@ -42,14 +44,14 @@ async function saveCompanies(request) {
  */
 async function getCompanies(request) {
     const config = {
-        schema: [Schema.User, Schema.Subscription, Schema.Companies],
-        schemaVersion: 1
+        schema: [CompanySchema.User, CompanySchema.UserDetails, CompanySchema.Country, CompanySchema.PlanDetails, CompanySchema.CompaniesWithTransactions, CompanySchema.Subscription, Schema.Companies],
+        schemaVersion: 3
     };
 
     const realmObject = await Realm.open(config);
     const companies = realmObject.objects('Companies');
     if (companies) {
-        return { status: "success", body: companies[0] };
+        return { status: "success", body: companies };
     } else {
         return { status: "error", message: "Companies list unavailable." };
     }

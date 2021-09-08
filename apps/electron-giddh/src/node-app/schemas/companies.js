@@ -14,7 +14,8 @@ const Companies = {
             objectType: "Subscription"
         },
         uniqueName: "string"
-    }
+    },
+    primaryKey: "uniqueName"
 }
 
 module.exports.Companies = Companies;
