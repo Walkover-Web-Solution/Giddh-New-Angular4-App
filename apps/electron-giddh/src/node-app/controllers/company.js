@@ -10,12 +10,12 @@ const giddhCompanyService = require('../giddh-services/company');
  * @param {*} res
  */
 function getCompany(req, res) {
-    checkInternetConnected(generalHelper.getInternetConnectedConfig).then( async connected => {
+    checkInternetConnected(generalHelper.getInternetConnectedConfig).then(async connected => {
         try {
             const response = await giddhCompanyService.getCompany(req, res);
-            const finalResponse = realCompanyService.saveCompany(response);
+            const finalResponse = await realCompanyService.saveCompany(response);
             res.json(finalResponse);
-        } catch(error) {
+        } catch (error) {
             res.json({ status: "error", "message": error.message });
         }
     }).catch(async error => {
