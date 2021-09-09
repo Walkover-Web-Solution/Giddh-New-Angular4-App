@@ -30,7 +30,7 @@ export class DocumentIssuedComponent implements OnInit, OnChanges, OnDestroy {
      * ngOnChnages
      */
     public ngOnChanges(s: SimpleChanges) {
-        if (s['doc_issues']?.currentValue && s['doc_issues']?.currentValue !== s['doc_issues'].previousValue) {
+        if (s['doc_issues']?.currentValue && s['doc_issues']?.currentValue !== s['doc_issues']?.previousValue) {
             this.doc_issues.doc_det.forEach(f => {
                 this.doc_issuesVM.push(...f.docs);
             });

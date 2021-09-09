@@ -131,7 +131,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
     public ngOnChanges(s: SimpleChanges) {
 
-        if (s && s.currentPeriod && s.currentPeriod?.currentValue) {
+        if (s && s.currentPeriod && s.currentPeriod.currentValue) {
             let date = {
                 startDate: moment(this.currentPeriod.from, GIDDH_DATE_FORMAT).startOf('month').format(GIDDH_DATE_FORMAT),
                 endDate: moment(this.currentPeriod.to, GIDDH_DATE_FORMAT).endOf('month').format(GIDDH_DATE_FORMAT)
@@ -139,7 +139,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             this.isMonthSelected = date.startDate === this.currentPeriod.from && date.endDate === this.currentPeriod.to;
         }
 
-        if (s && s.fileReturn && s.fileReturn?.currentValue && s.fileReturn?.currentValue.isAuthenticate) {
+        if (s && s.fileReturn && s.fileReturn.currentValue && s.fileReturn.currentValue.isAuthenticate) {
             if (this.gstAuthenticated) {
                 this.fileGstReturnV2();
             } else {
@@ -147,8 +147,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             }
         }
 
-        if (s && s.fileGstr3b && s.fileGstr3b?.currentValue.via) {
-            let gsp = s.fileGstr3b?.currentValue.via;
+        if (s && s.fileGstr3b && s.fileGstr3b.currentValue?.via) {
+            let gsp = s.fileGstr3b.currentValue.via;
             if (this.gstAuthenticated) {
                 if (gsp === 'VAYANA' && this.isVayanaAuthenticated) {
                     this.fileGstr3B(gsp);
