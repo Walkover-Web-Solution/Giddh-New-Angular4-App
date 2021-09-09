@@ -102,7 +102,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
             if (p && p.recurringVoucherDetails) {
                 let items = _.cloneDeep(p.recurringVoucherDetails);
                 items.map(item => {
-                    item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, item.uniqueName);
+                    item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, item?.uniqueName);
                     return item;
                 });
 
@@ -190,9 +190,9 @@ export class RecurringComponent implements OnInit, OnDestroy {
                 item.isSelected = this.allItemsSelected;
 
                 if (this.allItemsSelected) {
-                    this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item.uniqueName);
+                    this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item?.uniqueName);
                 } else {
-                    this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item.uniqueName);
+                    this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item?.uniqueName);
                 }
 
                 return item;
@@ -203,12 +203,12 @@ export class RecurringComponent implements OnInit, OnDestroy {
     public toggleItem(item: any, action: boolean) {
         item.isSelected = action;
         if (action) {
-            this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item.uniqueName);
+            this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item?.uniqueName);
         } else {
-            this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item.uniqueName);
+            this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item?.uniqueName);
             this.allItemsSelected = false;
         }
-        this.itemStateChanged(item.uniqueName);
+        this.itemStateChanged(item?.uniqueName);
     }
 
     public clickedOutside(event, el, fieldName: string) {

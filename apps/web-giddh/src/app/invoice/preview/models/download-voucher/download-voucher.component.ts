@@ -54,7 +54,7 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
             voucherType: voucherType
         };
 
-        this._invoiceService.DownloadInvoice(this.selectedItem.account.uniqueName, dataToSend).pipe(takeUntil(this.destroyed$))
+        this._invoiceService.DownloadInvoice(this.selectedItem.account?.uniqueName, dataToSend).pipe(takeUntil(this.destroyed$))
             .subscribe(res => {
                 if (res) {
                     if (dataToSend.typeOfInvoice.length > 1) {

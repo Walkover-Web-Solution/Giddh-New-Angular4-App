@@ -240,8 +240,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      * Delete Webhook
      */
     public deleteWebhook(webhook, index) {
-        if (webhook.uniqueName) {
-            this.store.dispatch(this.invoiceActions.deleteWebhook(webhook.uniqueName));
+        if (webhook?.uniqueName) {
+            this.store.dispatch(this.invoiceActions.deleteWebhook(webhook?.uniqueName));
             this.initSettingObj();
         } else {
             this.webhooks.splice(index, 1);
@@ -373,9 +373,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public selectLinkAccount(data) {
         let arrOfAcc = cloneDeep(this.accountList);
         if (data.value) {
-            let result = arrOfAcc.filter((obj) => obj.uniqueName === data.value);
+            let result = arrOfAcc.filter((obj) => obj?.uniqueName === data.value);
             this.accountToSend.name = result[0].name;
-            this.accountToSend.uniqueName = result[0].uniqueName;
+            this.accountToSend.uniqueName = result[0]?.uniqueName;
         }
     }
 
@@ -548,7 +548,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
                 if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
                     // Find the current checked out branch
-                    currentBranch = branches.find(branch => branch.uniqueName === this.generalService.currentBranchUniqueName);
+                    currentBranch = branches.find(branch => branch?.uniqueName === this.generalService.currentBranchUniqueName);
                 } else {
                     // Find the HO branch
                     currentBranch = branches.find(branch => !branch.parentBranch);

@@ -238,11 +238,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if ('items' in changes && changes.items.currentValue.filter(newItem => (!changes?.items?.previousValue || changes?.items?.previousValue?.every(oldItem => oldItem.uniqueName !== newItem?.uniqueName)))?.length) {
+        if ('items' in changes && changes.items.currentValue.filter(newItem => (!changes?.items?.previousValue || changes?.items?.previousValue?.every(oldItem => oldItem?.uniqueName !== newItem?.uniqueName)))?.length) {
             this.filteredData = changes.items.currentValue;
-            if (this.selectedItem && this.selectedItem.uniqueName) {
+            if (this.selectedItem && this.selectedItem?.uniqueName) {
                 this.selectedItem = this.filteredData.filter(item => {
-                    return item.uniqueName === this.selectedItem.uniqueName;
+                    return item?.uniqueName === this.selectedItem?.uniqueName;
                 })[0];
             }
             if (this.invoiceSearch && this.searchElement && this.searchElement.nativeElement) {
@@ -350,7 +350,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
     public getVoucherVersions() {
         let request = new ProformaGetAllVersionRequest();
-        request.accountUniqueName = this.selectedItem?.account.uniqueName;
+        request.accountUniqueName = this.selectedItem?.account?.uniqueName;
         request.page = 1;
         request.count = 15;
 
@@ -379,7 +379,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 };
 
                 if(this._generalService.voucherApiVersion === 2) {
-                    model.uniqueName = this.selectedItem.uniqueName;
+                    model.uniqueName = this.selectedItem?.uniqueName;
                 }
 
                 let accountUniqueName: string = this.selectedItem.account?.uniqueName;
@@ -464,7 +464,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 let getRequest = {
                     voucherType: this.selectedItem.voucherType,
                     voucherNumber: [this.selectedItem.voucherNumber],
-                    uniqueName: this.selectedItem.uniqueName
+                    uniqueName: this.selectedItem?.uniqueName
                 };
 
                 this.sanitizedPdfFileUrl = null;
@@ -503,7 +503,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                         this.pdfPreviewHasError = true;
                     }
                 });
-            }            
+            }
             this.detectChanges();
         } else {
             if (this.selectedItem) {
@@ -656,7 +656,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                         uniqueName: this.selectedItem?.account?.uniqueName
                     },
                     uniqueName: this.selectedItem?.uniqueName,
-                    attachedFiles: [response.uniqueName]
+                    attachedFiles: [response?.uniqueName]
                 };
                 this.purchaseRecordService.generatePurchaseRecord(requestObject, 'PATCH', true).pipe(takeUntil(this.destroyed$)).subscribe(() => {
                     this.downloadVoucher('base64');
@@ -790,8 +790,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      */
     public openSendMailModal(template: TemplateRef<any>): void {
         this.sendEmailRequest.email = this.selectedItem.account.email;
-        this.sendEmailRequest.uniqueName = this.selectedItem.uniqueName;
-        this.sendEmailRequest.accountUniqueName = this.selectedItem.account.uniqueName;
+        this.sendEmailRequest.uniqueName = this.selectedItem?.uniqueName;
+        this.sendEmailRequest.accountUniqueName = this.selectedItem.account?.uniqueName;
         this.sendEmailRequest.companyUniqueName = this.companyUniqueName;
         this.modalRef = this.modalService.show(template);
     }

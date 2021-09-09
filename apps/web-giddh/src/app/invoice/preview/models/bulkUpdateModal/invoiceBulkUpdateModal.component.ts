@@ -130,9 +130,9 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
             if (output.file.response.status === 'success') {
                 this.updateInProcess = false;
                 this.updateImageSignatureRequest.imageSignatureUniqueName = '';
-                if (output.file.response.body && output.file.response.body.uniqueName) {
-                    this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName;
-                    this.updateImageSignatureRequest.imageSignatureUniqueName = output.file.response.body.uniqueName;
+                if (output.file.response.body && output.file.response.body?.uniqueName) {
+                    this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body?.uniqueName;
+                    this.updateImageSignatureRequest.imageSignatureUniqueName = output.file.response.body?.uniqueName;
                 }
                 this._toaster.successToast(this.localeData?.file_uploaded);
             } else {
@@ -233,7 +233,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
                 this.allTemplatesOptions = [];
                 templates.forEach(tmpl => {
                     this.allTemplatesOptions.push({
-                        label: tmpl.name, value: tmpl.uniqueName
+                        label: tmpl.name, value: tmpl?.uniqueName
                     });
                 });
             }

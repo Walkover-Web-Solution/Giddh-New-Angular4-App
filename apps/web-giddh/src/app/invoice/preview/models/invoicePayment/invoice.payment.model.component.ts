@@ -88,7 +88,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
         try {
             arr.forEach((item: INameUniqueName) => {
                 o.nameStr.push(item.name);
-                o.uNameStr.push(item.uniqueName);
+                o.uNameStr.push(item?.uniqueName);
             });
             b.nameStr = o.nameStr.join(', ');
             b.uNameStr = o.uNameStr.join(', ');
@@ -267,7 +267,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
                 data.body.results.forEach(account => {
                     paymentMode.push({
                         label: account.name,
-                        value: account.uniqueName,
+                        value: account?.uniqueName,
                         additional: { currency: account.currency?.code || this.companyCurrencyName, currencySymbol: account.currency?.symbol || this.baseCurrencySymbol }
                     });
                 });
