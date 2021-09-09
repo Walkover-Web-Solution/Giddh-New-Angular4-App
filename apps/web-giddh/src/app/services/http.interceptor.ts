@@ -27,10 +27,18 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
     }
 
     public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        if(isElectron) {
+            let env = PRODUCTION_ENV ? "prod" : STAGING_ENV ? "stage" : "test";
+
+            request = request.clone({
+                params: request.params.append('env', env)
+            });
+        }
+
         if (this.generalService.currentOrganizationType === OrganizationType.Branch && request && request.urlWithParams) {
             request = this.addBranchUniqueName(request);
         }
-        if (this.isOnline || isElectron) {
+        if (this.isOnline || (isElectron && request.url.includes('localhost'))) {
             return next.handle(request);
         } else {
             setTimeout(() => {

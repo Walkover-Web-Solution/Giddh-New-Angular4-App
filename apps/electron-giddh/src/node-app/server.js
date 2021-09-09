@@ -5,7 +5,7 @@ const electron = require('electron');
 const app = express();
 app.use(express.json());
 
-const server = app.listen(8080, () => console.log(`Express server listening on port 8080`));
+const server = app.listen(8080);
 
 const electronApp = electron.app || electron.remote.app;
 process.chdir(electronApp.getPath('userData'));

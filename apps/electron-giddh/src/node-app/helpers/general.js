@@ -1,32 +1,28 @@
-function cleanCompanyData(obj) {
-    if(obj && obj.addresses && obj.addresses.length > 0) {
-        obj.addresses.forEach(address => {
-            if(!address.branches) {
+function cleanCompanyData(companyData) {
+    if (companyData && companyData.addresses && companyData.addresses.length > 0) {
+        companyData.addresses.forEach(address => {
+            if (!address.branches) {
                 address.branches = [];
             }
-            if(!address.warehouses) {
+            if (!address.warehouses) {
                 address.warehouses = [];
             }
         });
     } else {
-        obj.addresses = [];
-        obj.addresses[0] = {};
-        obj.addresses[0].branches = [];
-        obj.addresses[0].warehouses = [];
+        companyData.addresses = [];
+        companyData.addresses.push = [{ branches: [], warehouses: [] }];
     }
 
-    return obj;
+    return companyData;
 }
 
-function checkInternet(callback) {
-    require('dns').lookup('apple.com', (err) => {
-        if (err && err.code == "ENOTFOUND") {
-            callback(false);
-        } else {
-            callback(true);
-        }
-    })
+function getInternetConnectedConfig() {
+    return {
+        timeout: 2000, //timeout connecting to each server, each try
+        retries: 1, //number of retries to do before failing
+        domain: 'https://apple.com', //the domain to check DNS record of
+    };
 }
 
 module.exports.cleanCompanyData = cleanCompanyData;
-module.exports.checkInternet = checkInternet;
+module.exports.getInternetConnectedConfig = getInternetConnectedConfig;
