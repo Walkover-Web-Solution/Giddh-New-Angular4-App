@@ -1,4 +1,4 @@
-const companyController = require('../controllers/company');
+const { getCompanyController } = require('../controllers/company');
 
 /**
  * Company routes
@@ -6,7 +6,9 @@ const companyController = require('../controllers/company');
  * @param {*} app
  */
 function getCompanyRoutes(app) {
-    app.get('/company/:companyUniqueName', companyController.getCompany);
+    app.get('/company/:companyUniqueName', getCompanyController);
 }
 
-module.exports = getCompanyRoutes;
+module.exports = {
+    getCompanyRoutes
+};

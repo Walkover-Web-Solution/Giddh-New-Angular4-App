@@ -35,5 +35,7 @@ function getInternetConnectedConfig() {
     };
 }
 
-module.exports.cleanCompanyData = cleanCompanyData;
-module.exports.getInternetConnectedConfig = getInternetConnectedConfig;
+module.exports = {
+    cleanCompanyData,
+    getInternetConnectedConfig
+};

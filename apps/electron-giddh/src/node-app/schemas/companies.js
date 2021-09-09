@@ -18,4 +18,6 @@ const Companies = {
     primaryKey: "uniqueName"
 }
 
-module.exports.Companies = Companies;
+module.exports = {
+    Companies
+};

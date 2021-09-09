@@ -1,6 +1,6 @@
 const Realm = require('realm');
-const Schema = require('../schemas/company');
-const generalHelper = require('../helpers/general');
+const { User, Branch, Warehouse, Address, EcommerceType, Ecommerce, Currency, CountryV2, FinancialYear, UserDetails, Country, PlanDetails, CompaniesWithTransactions, Subscription, Entity, Permissions, Scopes, Role, UserEntityRoles, Company } = require('../schemas/company');
+const { cleanCompanyData } = require('../helpers/general');
 
 /**
  * This will save the active company information
@@ -8,15 +8,15 @@ const generalHelper = require('../helpers/general');
  * @param {*} request
  * @returns
  */
-async function saveCompany(request) {
+async function saveCompanyRealm(request) {
     if (request && request.status === "success") {
         const config = {
-            schema: [Schema.User, Schema.Branch, Schema.Warehouse, Schema.Address, Schema.EcommerceType, Schema.Ecommerce, Schema.Currency, Schema.CountryV2, Schema.FinancialYear, Schema.UserDetails, Schema.Country, Schema.PlanDetails, Schema.CompaniesWithTransactions, Schema.Subscription, Schema.Entity, Schema.Permissions, Schema.Scopes, Schema.Role, Schema.UserEntityRoles, Schema.Company],
+            schema: [User, Branch, Warehouse, Address, EcommerceType, Ecommerce, Currency, CountryV2, FinancialYear, UserDetails, Country, PlanDetails, CompaniesWithTransactions, Subscription, Entity, Permissions, Scopes, Role, UserEntityRoles, Company],
             schemaVersion: 2,
             path: 'company.realm'
         };
 
-        const companyData = generalHelper.cleanCompanyData(request.body);
+        const companyData = cleanCompanyData(request.body);
 
         const realmObject = await Realm.open(config);
 
@@ -42,9 +42,9 @@ async function saveCompany(request) {
  * @param {*} request
  * @returns
  */
-async function getCompany(request) {
+async function getCompanyRealm(request) {
     const config = {
-        schema: [Schema.User, Schema.Branch, Schema.Warehouse, Schema.Address, Schema.EcommerceType, Schema.Ecommerce, Schema.Currency, Schema.CountryV2, Schema.FinancialYear, Schema.UserDetails, Schema.Country, Schema.PlanDetails, Schema.CompaniesWithTransactions, Schema.Subscription, Schema.Entity, Schema.Permissions, Schema.Scopes, Schema.Role, Schema.UserEntityRoles, Schema.Company],
+        schema: [User, Branch, Warehouse, Address, EcommerceType, Ecommerce, Currency, CountryV2, FinancialYear, UserDetails, Country, PlanDetails, CompaniesWithTransactions, Subscription, Entity, Permissions, Scopes, Role, UserEntityRoles, Company],
         schemaVersion: 2,
         path: 'company.realm'
     };
@@ -59,5 +59,7 @@ async function getCompany(request) {
     }
 }
 
-exports.saveCompany = saveCompany;
-exports.getCompany = getCompany;
+module.exports = {
+    saveCompanyRealm,
+    getCompanyRealm
+};

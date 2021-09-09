@@ -1,6 +1,6 @@
 const Realm = require('realm');
-const CompanySchema = require('../schemas/company');
-const Schema = require('../schemas/companies');
+const { User, UserDetails, Country, PlanDetails, CompaniesWithTransactions, Subscription } = require('../schemas/company');
+const { Companies } = require('../schemas/companies');
 
 /**
  * This will save the companies list
@@ -8,10 +8,10 @@ const Schema = require('../schemas/companies');
  * @param {*} request
  * @returns
  */
-async function saveCompanies(request) {
+async function saveCompaniesRealm(request) {
     if (request && request.status === "success") {
         const config = {
-            schema: [CompanySchema.User, CompanySchema.UserDetails, CompanySchema.Country, CompanySchema.PlanDetails, CompanySchema.CompaniesWithTransactions, CompanySchema.Subscription, Schema.Companies],
+            schema: [User, UserDetails, Country, PlanDetails, CompaniesWithTransactions, Subscription, Companies],
             schemaVersion: 1,
             path: 'companies.realm'
         };
@@ -43,9 +43,9 @@ async function saveCompanies(request) {
  * @param {*} request
  * @returns
  */
-async function getCompanies(request) {
+async function getCompaniesRealm(request) {
     const config = {
-        schema: [CompanySchema.User, CompanySchema.UserDetails, CompanySchema.Country, CompanySchema.PlanDetails, CompanySchema.CompaniesWithTransactions, CompanySchema.Subscription, Schema.Companies],
+        schema: [User, UserDetails, Country, PlanDetails, CompaniesWithTransactions, Subscription, Companies],
         schemaVersion: 1,
         path: 'companies.realm'
     };
@@ -60,5 +60,7 @@ async function getCompanies(request) {
     }
 }
 
-exports.saveCompanies = saveCompanies;
-exports.getCompanies = getCompanies;
+module.exports = {
+    saveCompaniesRealm,
+    getCompaniesRealm
+};

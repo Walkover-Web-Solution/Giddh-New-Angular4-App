@@ -1,7 +1,7 @@
 const checkInternetConnected = require('check-internet-connected');
-const generalHelper = require('../helpers/general');
-const realCompaniesService = require('../realm-services/companies');
-const giddhCompaniesService = require('../giddh-services/companies');
+const { getInternetConnectedConfig } = require('../helpers/general');
+const { saveCompaniesRealm, getCompaniesRealm } = require('../realm-services/companies');
+const { getCompaniesGiddh } = require('../giddh-services/companies');
 
 /**
  * This will return companies list (if internet is available, it will fetch list of companies from giddh otherwise will return list of companies from local db)
@@ -9,18 +9,18 @@ const giddhCompaniesService = require('../giddh-services/companies');
  * @param {*} req
  * @param {*} res
  */
-function getCompanies(req, res) {
-    checkInternetConnected(generalHelper.getInternetConnectedConfig).then(async connected => {
+function getCompaniesController(req, res) {
+    checkInternetConnected(getInternetConnectedConfig).then(async connected => {
         try {
-            const response = await giddhCompaniesService.getCompanies(req, res);
-            const finalResponse = await realCompaniesService.saveCompanies(response);
+            const response = await getCompaniesGiddh(req, res);
+            const finalResponse = await saveCompaniesRealm(response);
             res.json(finalResponse);
         } catch (error) {
             res.json({ status: "error", "message": error.message });
         }
     }).catch(async error => {
         try {
-            const finalResponse = await realCompaniesService.getCompanies(req);
+            const finalResponse = await getCompaniesRealm(req);
             res.json(finalResponse);
         } catch (error) {
             res.json({ status: "error", "message": error.message });
@@ -28,4 +28,6 @@ function getCompanies(req, res) {
     });
 }
 
-exports.getCompanies = getCompanies;
+module.exports = {
+    getCompaniesController
+};

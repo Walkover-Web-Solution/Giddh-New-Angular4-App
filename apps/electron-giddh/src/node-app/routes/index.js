@@ -1,5 +1,5 @@
-const companyRoutes = require('./company');
-const companiesRoutes = require('./companies');
+const { getCompanyRoutes } = require('./company');
+const { getCompaniesRoutes } = require('./companies');
 
 /**
  * Initializing all routes here
@@ -7,8 +7,10 @@ const companiesRoutes = require('./companies');
  * @param {*} app
  */
 function defineRoutes(app) {
-    companyRoutes(app);
-    companiesRoutes(app);
+    getCompanyRoutes(app);
+    getCompaniesRoutes(app);
 }
 
-module.exports = defineRoutes;
+module.exports = {
+    defineRoutes
+};

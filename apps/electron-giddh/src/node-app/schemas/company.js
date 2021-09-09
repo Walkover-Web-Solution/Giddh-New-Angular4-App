@@ -380,23 +380,25 @@ const Company = {
     primaryKey: "uniqueName"
 };
 
-module.exports.User = User;
-module.exports.Branch = Branch;
-module.exports.Warehouse = Warehouse;
-module.exports.Address = Address;
-module.exports.EcommerceType = EcommerceType;
-module.exports.Ecommerce = Ecommerce;
-module.exports.Currency = Currency;
-module.exports.CountryV2 = CountryV2;
-module.exports.FinancialYear = FinancialYear;
-module.exports.UserDetails = UserDetails;
-module.exports.Country = Country;
-module.exports.PlanDetails = PlanDetails;
-module.exports.CompaniesWithTransactions = CompaniesWithTransactions;
-module.exports.Subscription = Subscription;
-module.exports.Entity = Entity;
-module.exports.Permissions = Permissions;
-module.exports.Scopes = Scopes;
-module.exports.Role = Role;
-module.exports.UserEntityRoles = UserEntityRoles;
-module.exports.Company = Company;
+module.exports = {
+    User,
+    Branch,
+    Warehouse,
+    Address,
+    EcommerceType,
+    Ecommerce,
+    Currency,
+    CountryV2,
+    FinancialYear,
+    UserDetails,
+    Country,
+    PlanDetails,
+    CompaniesWithTransactions,
+    Subscription,
+    Entity,
+    Permissions,
+    Scopes,
+    Role,
+    UserEntityRoles,
+    Company
+};

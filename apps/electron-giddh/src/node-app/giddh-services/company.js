@@ -1,5 +1,5 @@
-const apiHelper = require("../helpers/apicall");
-const env = require("../helpers/env");
+const { callApi } = require("../helpers/apicall");
+const { getApiUrl } = require("../helpers/env");
 
 /**
  * This will get the company details
@@ -8,7 +8,7 @@ const env = require("../helpers/env");
  * @param {*} res
  * @returns
  */
-async function getCompany(req, res) {
+async function getCompanyGiddh(req, res) {
     const options = {
         method: 'GET',
         headers: {
@@ -17,8 +17,10 @@ async function getCompany(req, res) {
         }
     }
 
-    const url = env.getApiUrl(req) + 'company/' + req.params.companyUniqueName;
-    return apiHelper.callApi(url, options);
+    const url = getApiUrl(req) + 'company/' + req.params.companyUniqueName;
+    return callApi(url, options);
 }
 
-module.exports.getCompany = getCompany;
+module.exports = {
+    getCompanyGiddh
+};
