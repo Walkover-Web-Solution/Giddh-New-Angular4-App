@@ -1,6 +1,13 @@
 const apiHelper = require("../helpers/apicall");
 const env = require("../helpers/env");
 
+/**
+ * This will get the company details
+ *
+ * @param {*} req
+ * @param {*} res
+ * @returns
+ */
 async function getCompany(req, res) {
     const options = {
         method: 'GET',

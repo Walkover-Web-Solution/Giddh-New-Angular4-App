@@ -1,3 +1,9 @@
+/**
+ * This will assign blank object/array to company data if null/undefined value is received from giddh api
+ *
+ * @param {*} companyData
+ * @returns
+ */
 function cleanCompanyData(companyData) {
     if (companyData && companyData.addresses && companyData.addresses.length > 0) {
         companyData.addresses.forEach(address => {
@@ -16,6 +22,11 @@ function cleanCompanyData(companyData) {
     return companyData;
 }
 
+/**
+ * This will return the config for internet connectivity check
+ *
+ * @returns
+ */
 function getInternetConnectedConfig() {
     return {
         timeout: 2000, //timeout connecting to each server, each try

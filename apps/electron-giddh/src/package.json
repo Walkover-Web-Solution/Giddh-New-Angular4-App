@@ -8,9 +8,6 @@
     "repository": {
         "url": "https://github.com/nstudio/xplat"
     },
-    "scripts": {
-        "na": "ts-node node-api/server.ts"
-    },
     "license": "MIT",
     "dependencies": {
         "@getstation/electron-google-oauth2": "^2.0.0",
@@ -26,7 +23,6 @@
         "jquery": "^3.4.1",
         "moment": "^2.24.0",
         "realm": "^10.6.1",
-        "ts-node": "^10.2.1",
         "tslib": "^1.10.0"
     }
 }

@@ -1,6 +1,13 @@
 const apiHelper = require("../helpers/apicall");
 const env = require("../helpers/env");
 
+/**
+ * This will get the list of companies
+ *
+ * @param {*} req
+ * @param {*} res
+ * @returns
+ */
 async function getCompanies(req, res) {
     const options = {
         method: 'GET',

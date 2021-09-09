@@ -1,3 +1,9 @@
+/**
+ * This will return api url based on env received
+ *
+ * @param {*} request
+ * @returns
+ */
 function getApiUrl(request) {
     switch(request.params.env) {
         case "test":
