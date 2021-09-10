@@ -1381,9 +1381,9 @@
                                 </mat-expansion-panel-header>
                                 <div class="pd-1 mr-b05 mr-t05 advanced">
                                     <table class="xs-table-block">
-                                        <tr>
+                                        <tr class="d-flex align-items-center flex-wrap">
                                             <td class="select2-parent pd-r1">
-                                                <div class="form-group">
+                                                <div class="form-group mr-b05">
                                                     <label class="default-color">{{
                                                         commonLocaleData?.app_voucher_type
                                                     }}</label>
@@ -1419,7 +1419,7 @@
                                                     vm.selectedLedger.voucher?.shortCode == 'pay'
                                                 "
                                             >
-                                                <div class="form-group">
+                                                <div class="form-group mr-b05">
                                                     <label class="default-color">{{
                                                         voucherApiVersion === 2
                                                             ? commonLocaleData?.app_number
@@ -1459,13 +1459,13 @@
                                                 </div>
                                             </td>
                                             <td
-                                                class="pd-r1"
+                                                class="pd-r1 reference-invoice"
                                                 *ngIf="
                                                     vm.selectedLedger.voucher?.shortCode == 'credit note' ||
                                                     vm.selectedLedger.voucher?.shortCode == 'debit note'
                                                 "
                                             >
-                                                <div class="form-group">
+                                                <div class="form-group mr-b05">
                                                     <label class="default-color">{{
                                                         voucherApiVersion === 2
                                                             ? commonLocaleData?.app_reference_invoice
@@ -1526,13 +1526,15 @@
                                                 class="cp remove-invoice pd-r2 hidden-xs"
                                                 (click)="removeSelectedInvoice()"
                                             >
-                                                <span class="remove-invoice-icon">×</span>
-                                                <span class="remove-invoice-label">{{
-                                                    commonLocaleData?.app_remove
-                                                }}</span>
+                                                <div class="mr-t1">
+                                                    <span class="remove-invoice-icon">×</span>
+                                                    <span class="remove-invoice-label">{{
+                                                        commonLocaleData?.app_remove
+                                                    }}</span>
+                                                </div>
                                             </td>
                                             <td class="pd-r1">
-                                                <div class="form-group">
+                                                <div class="form-group mr-b05">
                                                     <label class="default-color">{{ localeData?.voucher_no }}</label>
                                                     <input
                                                         matInput
