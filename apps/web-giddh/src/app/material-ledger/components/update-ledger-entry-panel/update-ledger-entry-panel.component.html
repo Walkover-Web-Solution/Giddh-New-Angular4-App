@@ -1421,7 +1421,9 @@
                                             >
                                                 <div class="form-group">
                                                     <label class="default-color">{{
-                                                        commonLocaleData?.app_invoice_no
+                                                        voucherApiVersion === 2
+                                                            ? commonLocaleData?.app_number
+                                                            : commonLocaleData?.app_invoice_no
                                                     }}</label>
                                                     <input
                                                         matInput
@@ -1433,17 +1435,24 @@
                                                         "
                                                         id="update-ledger-invoice-number"
                                                         type="text"
-                                                        [placeholder]="commonLocaleData?.app_invoice_no"
+                                                        [placeholder]="
+                                                            voucherApiVersion === 2
+                                                                ? commonLocaleData?.app_number
+                                                                : commonLocaleData?.app_invoice_no
+                                                        "
                                                         class="form-control mat-field-border"
                                                         [(ngModel)]="vm.selectedLedger.voucherNumber"
                                                     />
                                                     <input
                                                         matInput
                                                         *ngIf="vm.selectedLedger.voucher?.shortCode !== 'sal'"
-                                                        [disabled]=""
                                                         id="update-ledger-invoice-number"
                                                         type="text"
-                                                        [placeholder]="commonLocaleData?.app_invoice_no"
+                                                        [placeholder]="
+                                                            voucherApiVersion === 2
+                                                                ? commonLocaleData?.app_number
+                                                                : commonLocaleData?.app_invoice_no
+                                                        "
                                                         class="form-control mat-field-border"
                                                         [(ngModel)]="vm.selectedLedger.invoiceNumberAgainstVoucher"
                                                     />
@@ -1458,8 +1467,8 @@
                                             >
                                                 <div class="form-group">
                                                     <label class="default-color">{{
-                                                        vm.selectedLedger.voucher?.shortCode == "debit note"
-                                                            ? localeData?.voucher_no
+                                                        voucherApiVersion === 2
+                                                            ? commonLocaleData?.app_reference_invoice
                                                             : commonLocaleData?.app_invoice_no
                                                     }}</label>
                                                     <sh-select
@@ -1517,7 +1526,7 @@
                                                 class="cp remove-invoice pd-r2 hidden-xs"
                                                 (click)="removeSelectedInvoice()"
                                             >
-                                                <span class="“remove-invoice-icon”">×</span>
+                                                <span class="remove-invoice-icon">×</span>
                                                 <span class="remove-invoice-label">{{
                                                     commonLocaleData?.app_remove
                                                 }}</span>
@@ -1541,6 +1550,28 @@
 
                                     <table>
                                         <tr>
+                                            <td
+                                                *ngIf="
+                                                    voucherApiVersion === 2 &&
+                                                    (vm.selectedLedger.voucher?.shortCode === 'credit note' ||
+                                                        vm.selectedLedger.voucher?.shortCode === 'debit note')
+                                                "
+                                                class="pd-r1 pb-1"
+                                            >
+                                                <label class="default-color">{{ commonLocaleData?.app_number }}</label>
+                                                <input
+                                                    matInput
+                                                    id="update-ledger-invoice-number"
+                                                    type="text"
+                                                    [placeholder]="
+                                                        voucherApiVersion === 2
+                                                            ? commonLocaleData?.app_number
+                                                            : commonLocaleData?.app_invoice_no
+                                                    "
+                                                    class="form-control mat-field-border"
+                                                    [(ngModel)]="vm.selectedLedger.invoiceNumberAgainstVoucher"
+                                                />
+                                            </td>
                                             <td
                                                 *ngIf="
                                                     vm.selectedLedger.voucher?.shortCode !== 'jr' &&
