@@ -88,7 +88,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
         try {
             arr.forEach((item: INameUniqueName) => {
                 o.nameStr.push(item.name);
-                o.uNameStr.push(item?.uniqueName);
+                o.uNameStr.push(item.uniqueName);
             });
             b.nameStr = o.nameStr.join(', ');
             b.uNameStr = o.uNameStr.join(', ');

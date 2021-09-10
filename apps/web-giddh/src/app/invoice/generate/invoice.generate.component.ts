@@ -351,9 +351,9 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                 item.isSelected = this.allItemsSelected ? true : false;
 
                 if (this.allItemsSelected) {
-                    this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item?.uniqueName);
+                    this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item.uniqueName);
                 } else {
-                    this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item?.uniqueName);
+                    this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item.uniqueName);
                 }
 
                 return item;
@@ -379,16 +379,16 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             uniqueNames: uniq(this.selectedLedgerItems)
         };
         let res = find(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
-            return item?.uniqueName === this.selectedLedgerItems[0];
+            return item.uniqueName === this.selectedLedgerItems[0];
         });
         this.selectedItem = cloneDeep(res);
-        if (this.selectedItem && this.selectedItem.account && this.selectedItem.account?.uniqueName) {
-            this.selectedAccountUniqueName = this.selectedItem.account?.uniqueName;
+        if (this.selectedItem && this.selectedItem.account && this.selectedItem.account.uniqueName) {
+            this.selectedAccountUniqueName = this.selectedItem.account.uniqueName;
         } else {
             this.selectedAccountUniqueName = '';
         }
         this.store.dispatch(this.invoiceActions.ModifiedInvoiceStateData(model?.uniqueNames));
-        if (res && res.account && res.account?.uniqueName) {
+        if ( res?.account.uniqueName) {
             this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account?.uniqueName, model));
         }
 
@@ -418,7 +418,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         let arr: GenBulkInvoiceGroupByObj[] = [];
         forEach(this.ledgersData.results, (item: ILedgersInvoiceResult): void => {
             if (item.isSelected) {
-                arr.push({ accUniqueName: item.account?.uniqueName, uniqueName: item?.uniqueName });
+                arr.push({ accUniqueName: item.account.uniqueName, uniqueName: item.uniqueName });
             }
         });
         let res = groupBy(arr, 'accUniqueName');
@@ -525,11 +525,11 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public insertItemsIntoArr() {
         if (this.ledgersData) {
             forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
-                let idx = indexOf(this.selectedLedgerItems, item?.uniqueName);
+                let idx = indexOf(this.selectedLedgerItems, item.uniqueName);
                 if (item.isSelected) {
                     if (idx === -1) {
-                        this.selectedLedgerItems.push(item?.uniqueName);
-                        this.selectedCountOfAccounts.push(item.account?.uniqueName);
+                        this.selectedLedgerItems.push(item.uniqueName);
+                        this.selectedCountOfAccounts.push(item.account.uniqueName);
                     }
                 } else {
                     if (idx !== -1) {

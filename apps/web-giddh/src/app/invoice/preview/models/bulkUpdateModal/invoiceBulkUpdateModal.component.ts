@@ -233,7 +233,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
                 this.allTemplatesOptions = [];
                 templates.forEach(tmpl => {
                     this.allTemplatesOptions.push({
-                        label: tmpl.name, value: tmpl?.uniqueName
+                        label: tmpl.name, value: tmpl.uniqueName
                     });
                 });
             }

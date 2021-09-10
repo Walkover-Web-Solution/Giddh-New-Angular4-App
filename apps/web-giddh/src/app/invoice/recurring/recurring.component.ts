@@ -190,9 +190,9 @@ export class RecurringComponent implements OnInit, OnDestroy {
                 item.isSelected = this.allItemsSelected;
 
                 if (this.allItemsSelected) {
-                    this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item?.uniqueName);
+                    this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item.uniqueName);
                 } else {
-                    this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item?.uniqueName);
+                    this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item.uniqueName);
                 }
 
                 return item;
