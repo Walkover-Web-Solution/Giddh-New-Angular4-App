@@ -18,8 +18,16 @@ import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { SharedModule } from '../shared/shared.module';
 import { SalesModule } from '../sales/sales.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
-import { UpdateLedgerEntryPanelModule } from '../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.module';
+import { UpdateLedgerEntryPanelModule } from '../material-ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.module';
 import { AsideMenuSalesOtherTaxesModule } from '../sales/aside-menu-sales-other-taxes/aside-menu-sales-other-taxes.module';
+import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
     declarations: [DaybookComponent, ExportDaybookComponent, DaybookAdvanceSearchModelComponent],
@@ -41,7 +49,15 @@ import { AsideMenuSalesOtherTaxesModule } from '../sales/aside-menu-sales-other-
         AsideMenuSalesOtherTaxesModule,
         SalesModule,
         NoDataModule,
-        UpdateLedgerEntryPanelModule
+        UpdateLedgerEntryPanelModule,
+        MatInputModule,
+        MatTooltipModule,
+        MatButtonModule,
+        MatTableModule,
+        MatDialogModule,
+        MatCheckboxModule,
+        MatRadioModule,
+        MatExpansionModule
     ],
     entryComponents: [
         PaginationComponent

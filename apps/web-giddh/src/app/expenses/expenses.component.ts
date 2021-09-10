@@ -8,7 +8,6 @@ import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
 import { ExpenseResults, PettyCashReportResponse } from '../models/api-models/Expences';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { CompanyActions } from '../actions/company.actions';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { StateDetailsRequest } from '../models/api-models/Company';
@@ -26,8 +25,6 @@ import { ToasterService } from '../services/toaster.service';
     styleUrls: ['./expenses.component.scss'],
 })
 export class ExpensesComponent implements OnInit, OnDestroy {
-    @ViewChild('tabset', { static: true }) tabset: TabsetComponent;
-
     public universalDate$: Observable<any>;
     public todaySelected: boolean = false;
     public isSelectedRow: boolean = false;
@@ -91,6 +88,8 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     public pettyCashRejectedReportResponse: PettyCashReportResponse;
     /** True if petty cash rejected report is loading */
     public isPettyCashRejectedReportLoading: boolean = false;
+    /** The index of the active tab. */
+    public selectedTabIndex: number = 0;
 
     constructor(
         private store: Store<AppState>,
@@ -225,6 +224,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
                 this.pettycashRequest.sortBy = this.rejectedTabSortOptions.sortBy;
             }
             this.getPettyCashRejectedReports(this.pettycashRequest);
+
             setTimeout(() => {
                 if (this.currentSelectedTab == "pending" && this.pendingListComponent && this.pendingListComponent.pettycashRequest && this.pendingTabSortOptions) {
                     this.pendingListComponent.pettycashRequest.sort = this.pendingTabSortOptions.sort;
@@ -297,8 +297,15 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         });
     }
 
-    public tabChanged(tab: string, e) {
-        if (e && !e.target) {
+    /**
+     * Callback for tab change event
+     *
+     * @param {*} event
+     * @memberof ExpensesComponent
+     */
+    public tabChanged(event: any): void {
+        let tab = (event?.index === 0) ? "pending" : "rejected";
+        if (event && !event.target) {
             this.saveLastState(tab);
         }
 
@@ -346,9 +353,9 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         if (this.route.snapshot.queryParams.tab) {
             this.currentSelectedTab = this.route.snapshot.queryParams.tab;
             if (this.currentSelectedTab === "pending") {
-                this.tabset.tabs[0].active = true;
+                this.selectedTabIndex = 0;
             } else {
-                this.tabset.tabs[1].active = true;
+                this.selectedTabIndex = 1;
             }
         }
     }
@@ -446,21 +453,21 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will show the next item from the list in preview. If current item is the last item, 
+     * This will show the next item from the list in preview. If current item is the last item,
      * then it will show the first item from the list, if all items are processed, it will exit the preview mode
-     * 
+     *
      * @param {*} event
      * @memberof ExpensesComponent
      */
     public previewNextItem(event: any): void {
         if(event) {
             let nextItemIndex;
-            this.pettyCashPendingReportResponse?.results?.forEach((item, index) => { 
+            this.pettyCashPendingReportResponse?.results?.forEach((item, index) => {
                 if(item?.uniqueName === this.selectedRowItem?.uniqueName) {
                     nextItemIndex = index + 1;
                 }
             });
-            
+
             if(this.pettyCashPendingReportResponse?.results?.length > 1) {
                 if(nextItemIndex && this.pettyCashPendingReportResponse?.results[nextItemIndex]) {
                     this.selectedRowItem = this.pettyCashPendingReportResponse?.results[nextItemIndex];

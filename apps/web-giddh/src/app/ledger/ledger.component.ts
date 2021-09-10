@@ -219,6 +219,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public noResultsFoundLabel = SearchResultText.NewSearch;
     /** This will hold if it's default load */
     public isDefaultLoad: boolean = true;
+    /** This is used to show hide bottom spacing when more detail is opened while CREATE/UPDATE ledger */
+    public isMoreDetailsOpened: boolean = false;
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** Stores the branch list of a company */
@@ -233,8 +235,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public showBranchSwitcher: boolean;
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
-    /** This is used to show hide bottom spacing when more detail is opened while CREATE/UPDATE ledger */
-    public isMoreDetailsOpened: boolean = false;
     /** This will hold if import statement modal is visible */
     public isImportStatementVisible: boolean = false;
     /** This will hold bank transactions api response */
@@ -837,7 +837,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.isBankTransactionLoading = true;
 
             let getRequest = { accountUniqueName: this.trxRequest.accountUniqueName, from: this.trxRequest.from, count: this.bankTransactionsResponse.countPerPage, page: this.bankTransactionsResponse.page }
-            this._ledgerService.GetBankTranscationsForLedger(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            this._ledgerService.GetBankTransactionsForLedger(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 this.isBankTransactionLoading = false;
                 if (res.status === 'success') {
                     if (res.body) {
@@ -2195,18 +2195,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This returns the transaction id of item
-     *
-     * @param {number} index
-     * @param {*} item
-     * @returns {*}
-     * @memberof LedgerComponent
-     */
-    public trackByTransactionId(index: number, item: any): any {
-        return item.transactionId;
-    }
-
-    /**
      * Callback for translation response complete
      *
      * @param {boolean} event
@@ -2274,6 +2262,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             });
         }
+    }
+
+    /**
+     * This returns the transaction id of item
+     *
+     * @param {number} index
+     * @param {*} item
+     * @returns {*}
+     * @memberof LedgerComponent
+     */
+    public trackByTransactionId(index: number, item: any): any {
+        return item.transactionId;
     }
 
     /**
