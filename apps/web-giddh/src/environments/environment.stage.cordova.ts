@@ -9,7 +9,7 @@ export const environment: Environment = {
     production: true,
     showDevModule: false,
     AppUrl: './',
-    ApiUrl: 'https://apitest.giddh.com/',
+    ApiUrl: 'https://apirelease.giddh.com/',
     isElectron: false,
     isCordova: true,
     APP_FOLDER: '',
