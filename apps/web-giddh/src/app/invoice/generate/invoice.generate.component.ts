@@ -388,7 +388,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             this.selectedAccountUniqueName = '';
         }
         this.store.dispatch(this.invoiceActions.ModifiedInvoiceStateData(model?.uniqueNames));
-        if ( res?.account.uniqueName) {
+        if ( res?.account?.uniqueName) {
             this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account?.uniqueName, model));
         }
 
@@ -428,7 +428,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             obj.entries = [];
             forEach(item, (o: GenBulkInvoiceGroupByObj): void => {
                 obj.accountUniqueName = o.accUniqueName;
-                obj.entries.push(o?.uniqueName);
+                obj.entries.push(o.uniqueName);
             });
             model.push(obj);
         });

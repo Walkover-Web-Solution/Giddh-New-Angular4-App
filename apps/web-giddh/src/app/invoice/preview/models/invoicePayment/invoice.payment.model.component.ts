@@ -267,7 +267,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
                 data.body.results.forEach(account => {
                     paymentMode.push({
                         label: account.name,
-                        value: account?.uniqueName,
+                        value: account.uniqueName,
                         additional: { currency: account.currency?.code || this.companyCurrencyName, currencySymbol: account.currency?.symbol || this.baseCurrencySymbol }
                     });
                 });

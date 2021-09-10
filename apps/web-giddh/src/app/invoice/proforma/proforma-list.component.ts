@@ -259,7 +259,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                             item = this.addToolTiptext(item);
                         }
 
-                        item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, item?.uniqueName);
+                        item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, item.uniqueName);
 
                         this.itemsListForDetails.push(this.parseItemForVm(item));
 
@@ -532,9 +532,9 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public toggleItem(item: any, action: boolean) {
         item.isSelected = action;
         if (action) {
-            this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item?.uniqueName);
+            this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item.uniqueName);
         } else {
-            this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item?.uniqueName);
+            this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item.uniqueName);
             this.allItemsSelected = false;
         }
         this.itemStateChanged(item);

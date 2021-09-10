@@ -240,8 +240,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      * Delete Webhook
      */
     public deleteWebhook(webhook, index) {
-        if (webhook?.uniqueName) {
-            this.store.dispatch(this.invoiceActions.deleteWebhook(webhook?.uniqueName));
+        if (webhook.uniqueName) {
+            this.store.dispatch(this.invoiceActions.deleteWebhook(webhook.uniqueName));
             this.initSettingObj();
         } else {
             this.webhooks.splice(index, 1);
