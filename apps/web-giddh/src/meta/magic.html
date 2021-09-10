@@ -171,7 +171,7 @@
                                                                                     <span
                                                                                         class="download-invoice-ledger"
                                                                                         v-tooltip="'Download '+((ledger.voucherGeneratedType === 'sales') ? 'Invoice' : 'Voucher')+' : '+ledger.voucherNumber"
-                                                                                        v-on:click="downloadInvoice(ledger.voucherNumber)"
+                                                                                        v-on:click="downloadInvoice(ledger)"
                                                                                         container="body">
                                                                                         <img src="../assets/images/download-circle-icon.svg"
                                                                                             width="15">
@@ -306,7 +306,7 @@
                                                                                     <span
                                                                                         class="download-invoice-ledger"
                                                                                         v-tooltip="'Download '+((ledger.voucherGeneratedType === 'sales') ? 'Invoice' : 'Voucher')+' : '+ledger.voucherNumber"
-                                                                                        v-on:click="downloadInvoice(ledger.voucherNumber)"
+                                                                                        v-on:click="downloadInvoice(ledger)"
                                                                                         container="body">
                                                                                         <img src="../assets/images/download-circle-icon.svg"
                                                                                             width="15">

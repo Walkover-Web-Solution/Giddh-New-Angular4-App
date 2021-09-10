@@ -269,22 +269,25 @@ var app = new Vue({
                 this.isSmall = false;
             }
         },
-        downloadInvoice: function (invoiceNum) {
+        downloadInvoice: function (entry) {
             var id = this.getParameterByName('id');
             var apiBaseUrl = this.getApi();
             if (id) {
-                axios.get(apiBaseUrl + 'magic-link/' + id + '/download-invoice/' + invoiceNum)
-                    .then(response => {
+                axios.post(apiBaseUrl + 'magic-link/' + id + '/download-voucher/', {
+                    voucherNumber: [entry.voucherNumber],
+                    voucherType: entry.voucherName,
+                    uniqueName: entry.voucherUniqueName
+                }).then(response => {
                         // JSON responses are automatically parsed.
                         if (response.status === 200 && response.data.status === 'success') {
                             var blobData = this.base64ToBlob(response.data.body, 'application/pdf', 512);
-                            return saveAs(blobData, invoiceNum + '.pdf');
+                            return saveAs(blobData, entry.voucherNumber + '.pdf');
                         } else {
-                            this.$toaster.error('Invoice for ' + invoiceNum + ' cannot be downloaded now.');
+                            this.$toaster.error('Invoice for ' + entry.voucherNumber + ' cannot be downloaded now.');
                         }
                     })
                     .catch(e => {
-                        this.$toaster.error('Invoice for ' + invoiceNum + ' cannot be downloaded now.');
+                        this.$toaster.error('Invoice for ' + entry.voucherNumber + ' cannot be downloaded now.');
                     })
             } else {
                 this.$toaster.error('Magic link ID not found.');
