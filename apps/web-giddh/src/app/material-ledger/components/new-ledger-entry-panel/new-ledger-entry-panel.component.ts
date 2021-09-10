@@ -1526,7 +1526,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     private openAdjustPaymentModal(): void {
         this.adjustmentDialogRef = this.dialog.open(this.adjustPaymentModal, {
-            width: '980px'
+            width: '980px',
+            panelClass: 'container-modal-class'
         });
     }
 

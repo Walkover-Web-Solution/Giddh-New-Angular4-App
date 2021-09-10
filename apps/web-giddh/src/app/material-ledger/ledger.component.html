@@ -1407,7 +1407,11 @@
                                         localeData?.to_balance_bf
                                     }}</span>
                                 </mat-grid-tile>
-                                <mat-grid-tile [attr.data-title]="commonLocaleData?.app_amount" colspan="1">
+                                <mat-grid-tile
+                                    [attr.data-title]="commonLocaleData?.app_amount"
+                                    colspan="1"
+                                    class="no-right-border"
+                                >
                                     <div class="d-flex flex-column">
                                         <ng-container *ngIf="(lc.transactionData$ | async)?.page <= 1">
                                             <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'">
@@ -1416,9 +1420,12 @@
                                                     [currencySymbol]="ledgerTxnBalance?.currencySymbol"
                                                     [currencyCode]="ledgerTxnBalance?.currencyCode"
                                                 >
-                                                </amount-field> </span
-                                            ><br />
-                                            <span class="amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                                </amount-field>
+                                            </span>
+                                            <span
+                                                class="amount-total text-right"
+                                                *ngIf="isLedgerAccountAllowsMultiCurrency"
+                                            >
                                                 <amount-field
                                                     [amount]="ledgerTxnBalance?.convertedForwardedBalance?.amount"
                                                     [currencySymbol]="ledgerTxnBalance?.convertedCurrencySymbol"
@@ -1434,7 +1441,14 @@
                                 </mat-grid-tile>
                             </mat-grid-list>
 
-                            <mat-grid-list cols="4" rowHeight="50px">
+                            <mat-grid-list
+                                cols="4"
+                                rowHeight="50px"
+                                *ngIf="
+                                    ledgerTxnBalance?.forwardedBalance?.type !== 'DEBIT' ||
+                                    ledgerTxnBalance?.forwardedBalance?.amount == 0
+                                "
+                            >
                                 <mat-grid-tile [attr.data-title]="commonLocaleData?.app_select_all" colspan="1">
                                     <mat-checkbox
                                         color="primary"

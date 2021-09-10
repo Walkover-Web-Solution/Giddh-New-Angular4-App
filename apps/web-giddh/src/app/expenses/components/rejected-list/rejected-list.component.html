@@ -2,6 +2,7 @@
     <div class="table-responsive">
         <table
             mat-table
+            [@.disabled]="true"
             class="w-100 on-mobile-view"
             [dataSource]="rejectedItems"
             matSort
@@ -107,8 +108,11 @@
                 <th mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef>{{ localeData?.file }}</th>
                 <td mat-cell *matCellDef="let rejected" [attr.data-title]="localeData?.file">
                     <span class="responsive-label" [hidden]="!rejectedItems?.length">{{ localeData?.file }}</span>
-                    <i *ngIf="rejected.fileNames" class="icon-image middle text-gray"></i>
-                    {{ rejected.fileNames ? rejected.fileNames : "-" }}
+                    <i
+                        *ngIf="rejected.fileNames"
+                        (click)="openZoomImageView(rejected.fileNames)"
+                        class="icon-image middle text-gray pointer"
+                    ></i>
                 </td>
             </ng-container>
 

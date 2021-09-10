@@ -22,6 +22,7 @@ import { cloneDeep } from '../../../lodash-optimized';
 import { SearchService } from '../../../services/search.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CompanyActions } from '../../../actions/company.actions';
+import { Lightbox } from 'ngx-lightbox';
 
 @Component({
     selector: 'app-expense-details',
@@ -66,16 +67,14 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     public actionPettycashRequest: ActionPettycashRequest = new ActionPettycashRequest();
     public imgAttached: boolean = false;
     public imgUploadInprogress: boolean = false;
-    public isImageZoomView: boolean = false;
     public fileUploadOptions: UploaderOptions;
     public uploadInput: EventEmitter<UploadInput>;
     public sessionId$: Observable<string>;
     public companyUniqueName$: Observable<string>;
     public files: UploadFile[];
-    public imageURL: string[] = [];
+    public imageURL: any[] = [];
     public companyUniqueName: string;
     public signatureSrc: string = '';
-    public zoomViewImageSrc: string = '';
     public asideMenuStateForOtherTaxes: string = 'out';
     public accountType: string;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
@@ -164,7 +163,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         private expenseService: ExpenseService,
         private searchService: SearchService,
         private dialog: MatDialog,
-        private companyActions: CompanyActions
+        private companyActions: CompanyActions,
+        private lightbox: Lightbox
     ) {
         this.files = [];
         this.uploadInput = new EventEmitter<UploadInput>();
@@ -217,9 +217,12 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         this.imageURL = [];
 
         if (imgs) {
-            imgs.forEach(imgUniqeName => {
-                let imgUrls = imgPrefix + imgUniqeName;
-                this.imageURL.push(imgUrls);
+            imgs.forEach(imgUniqueName => {
+                const image = {
+                    src: imgPrefix + imgUniqueName
+                };
+
+                this.imageURL.push(image);
             });
         }
     }
@@ -426,7 +429,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Reject's entry
+     * Rejects entry
      *
      * @memberof ExpenseDetailsComponent
      */
@@ -467,7 +470,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         } else if (output.type === 'done') {
             if (output.file.response.status === 'success') {
                 this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName;
-                let img = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName;
+                let img = {
+                    src: ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName
+                }
                 this.DownloadAttachedImgResponse.push(output.file.response.body);
                 this.imgAttachedFileName = output.file.response.body.name;
                 this.imageURL.push(img);
@@ -481,7 +486,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Upload's the file
+     * Uploads the file
      *
      * @memberof ExpenseDetailsComponent
      */
@@ -501,28 +506,17 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Zoom's the image view
+     * Zooms the image view
      *
      * @param {number} index
      * @memberof ExpenseDetailsComponent
      */
-    public clickZoomImageView(index: number): void {
-        this.isImageZoomView = true;
-        this.zoomViewImageSrc = this.imageURL[index];
+    public openZoomImageView(index: number): void {
+        this.lightbox.open(this.imageURL, index);
     }
 
     /**
-     * Hide's zoom image view
-     *
-     * @memberof ExpenseDetailsComponent
-     */
-    public hideZoomImageView(): void {
-        this.isImageZoomView = false;
-        this.zoomViewImageSrc = '';
-    }
-
-    /**
-     * Toggle's the fixed class on body
+     * Toggles the fixed class on body
      *
      * @memberof ExpenseDetailsComponent
      */
@@ -537,7 +531,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Toggle's other tax aside pane
+     * Toggles other tax aside pane
      *
      * @memberof ExpenseDetailsComponent
      */

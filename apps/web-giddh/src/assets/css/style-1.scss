@@ -3006,12 +3006,54 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
     text-transform: capitalize;
     display: table-cell !important;
 }
-.mat-table tbody .mat-header-row:hover td {
-    background: $light-alice-blue;
+.mat-table {
+    tbody {
+        > tr {
+            > td {
+                color: $omiod !important;
+                &:first-child {
+                    color: $black-pearl !important;
+                }
+            }
+            > td.no-wrap {
+                white-space: nowrap !important;
+            }
+        }
+        tr {
+            &:hover {
+                td {
+                    background: $light-alice-blue !important;
+                }
+            }
+        }
+    }
 }
-.mat-table tbody > tr > td.no-wrap {
-    white-space: nowrap !important;
+
+.daybook-table {
+    tr.mat-row,
+    tr.mat-footer-row {
+        border-top: 1px solid $gainsboro;
+    }
+    td.mat-cell {
+        border-bottom-width: 0px !important;
+        border-top: 1px solid $gainsboro;
+    }
+    .nested-table {
+        > tbody {
+            tr {
+                td {
+                    border: 0 !important;
+                    padding: 8px 0;
+                }
+                border-top: 1px solid $blue-grey;
+                &:first-child {
+                    border-top: none !important;
+                }
+            }
+        }
+    }
 }
+
 table.mat-table {
     border-spacing: 2px !important;
 }
@@ -3191,7 +3233,8 @@ td.mat-footer-cell {
     }
 }
 
-.mat-sort-header-arrow {
+.mat-sort-header-arrow.ng-trigger.ng-trigger-arrowPosition {
     opacity: 1 !important;
+    transform: none !important;
 }
 /* material css for ledger end*/

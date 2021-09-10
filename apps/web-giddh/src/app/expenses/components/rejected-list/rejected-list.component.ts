@@ -10,6 +10,7 @@ import { ExpenseService } from '../../../services/expences.service';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import * as moment from 'moment/moment';
 import { MatDialog } from '@angular/material/dialog';
+import { Lightbox } from 'ngx-lightbox';
 
 @Component({
     selector: 'app-rejected-list',
@@ -47,13 +48,16 @@ export class RejectedListComponent implements OnInit, OnChanges {
     public rejectedTableColumns: string[] = ['s_no', 'entry_date', 'submitted_by', 'account', 'amount', 'receipt', 'file', 'reason_rejection', 'action'];
     /** It will hold reference of delete modal */
     public deleteEntryModalRef: any;
+    /** Holds company uniquename */
+    public companyUniqueName: string;
 
     constructor(
         private store: Store<AppState>,
         private toaster: ToasterService,
         private cdRef: ChangeDetectorRef,
         private expenseService: ExpenseService,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private lightbox: Lightbox
     ) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.todaySelected$ = this.store.pipe(select(state => state.session.todaySelected), takeUntil(this.destroyed$));
@@ -75,6 +79,10 @@ export class RejectedListComponent implements OnInit, OnChanges {
                     this.pettycashRequest.status = 'rejected';
                 }
             }
+        });
+
+        this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$)).subscribe(response => {
+            this.companyUniqueName = response;
         });
     }
 
@@ -189,7 +197,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
     }
 
     /**
-     * Call's detect changes method
+     * Calls detect changes method
      *
      * @memberof RejectedListComponent
      */
@@ -254,5 +262,20 @@ export class RejectedListComponent implements OnInit, OnChanges {
         this.pettycashRequest.sortBy = event?.active;
         this.pettycashRequest.sort = event?.direction;
         this.getPettyCashRejectedReports(this.pettycashRequest);
+    }
+
+    /**
+     * This will open the images in lightbox
+     *
+     * @param {*} $event
+     * @param {*} fileNames
+     * @memberof RejectedListComponent
+     */
+     public openZoomImageView(fileNames: any): void {
+        let images = [];
+        fileNames?.forEach(file => {
+            images.push({ src: ApiUrl + 'company/' + this.companyUniqueName + '/image/' + file });
+        });
+        this.lightbox.open(images, 0);
     }
 }
