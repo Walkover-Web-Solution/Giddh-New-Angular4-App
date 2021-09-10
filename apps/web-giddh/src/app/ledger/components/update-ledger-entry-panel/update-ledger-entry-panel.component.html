@@ -1055,7 +1055,10 @@
                                 class="text-right table-amount last-table-amount"
                             >
                                 <div class="text-right">
-                                    <div *ngIf="!vm.selectedLedger.isOtherTaxesApplicable" class="other-tax align-items-center">
+                                    <div
+                                        *ngIf="!vm.selectedLedger.isOtherTaxesApplicable"
+                                        class="other-tax align-items-center"
+                                    >
                                         <input
                                             type="checkbox"
                                             id="update-ledger-other-tax"

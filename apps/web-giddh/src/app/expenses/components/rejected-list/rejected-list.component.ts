@@ -197,7 +197,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
     }
 
     /**
-     * Call's detect changes method
+     * Calls detect changes method
      *
      * @memberof RejectedListComponent
      */
