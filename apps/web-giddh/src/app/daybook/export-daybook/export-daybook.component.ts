@@ -5,7 +5,8 @@ import { ReplaySubject } from 'rxjs';
 
 @Component({
     selector: 'export-daybook',
-    templateUrl: './export-daybook.component.html'
+    templateUrl: './export-daybook.component.html',
+    styleUrls: ['./export-daybook.component.scss']
 })
 export class ExportDaybookComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */

@@ -31,7 +31,17 @@
     height: calc(100vh - 70px);
 }
 
-@media (max-height: 768px) {
+.close {
+    color: $white !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+    font-size: 30px !important;
+    line-height: 36px;
+    &:hover {
+        color: $white !important;
+    }
+}
+@media (max-height: 800px) {
     .custom-filed-list-wrapper {
         height: 550px;
         overflow-y: auto;

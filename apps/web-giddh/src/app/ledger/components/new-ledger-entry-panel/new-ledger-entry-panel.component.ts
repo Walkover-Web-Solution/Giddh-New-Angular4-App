@@ -370,7 +370,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
             this.calculatePreAppliedTax();
             this.preparePreAppliedDiscounts();
-
             if (this.blankLedger.otherTaxModal.appliedOtherTax && this.blankLedger.otherTaxModal.appliedOtherTax.uniqueName) {
                 this.blankLedger.isOtherTaxesApplicable = true;
             }

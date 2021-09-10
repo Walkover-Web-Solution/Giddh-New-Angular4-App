@@ -152,7 +152,6 @@
                             <label class="d-block">&nbsp;</label>
                             <label class="font-20">-</label>
                         </td>
-
                         <!--discount-->
                         <td
                             [attr.disabled]="isReadOnly ? 'disabled' : null"
@@ -976,7 +975,6 @@
         {{ selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol }}
     </span>
 </ng-template>
-
 <ng-template #rcmEntryCheckbox>
     <div *ngIf="currentTxn?.shouldShowRcmEntry" class="rcm-entry pd-b1 mt-1">
         <input

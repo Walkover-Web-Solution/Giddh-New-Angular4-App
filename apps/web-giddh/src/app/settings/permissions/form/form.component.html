@@ -6,8 +6,8 @@
 >
     <div class="row">
         <div class="col-xl-10 col-md-12">
-            <div class="row">
-                <div class="col-xl-3 col-md-6 col-sm-4 pr-0">
+            <div class="row mr-0 ml-0">
+                <div class="col-xl-3 col-md-6 col-sm-4 pl-0">
                     <div class="form-group ml-0">
                         <label *ngIf="isLblShow">{{ localeData?.unique_name_email_label }}</label>
                         <input
@@ -20,7 +20,7 @@
                         />
                     </div>
                 </div>
-                <div class="col-xl-3 col-md-6 col-sm-4 pr-0">
+                <div class="col-xl-3 col-md-6 col-sm-4 pl-0">
                     <div class="form-group">
                         <label *ngIf="isLblShow">{{ localeData?.role_name_label }}</label>
                         <sh-select
@@ -32,7 +32,7 @@
                         ></sh-select>
                     </div>
                 </div>
-                <div class="col-xl-2 col-md-6 col-sm-4 pr-0">
+                <div class="col-xl-2 col-md-6 col-sm-4 pl-0">
                     <!-- time span -->
                     <div
                         class="form-group"
@@ -130,7 +130,7 @@
                     </div>
                     <!-- time span end -->
                 </div>
-                <div class="col-xl-2 col-md-6 col-sm-4 pr-0">
+                <div class="col-xl-2 col-md-6 col-sm-4 pl-0">
                     <div
                         class="form-group"
                         [exclude]="'.ip-addresses-dropdown'"
@@ -264,7 +264,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-2 col-md-6 col-sm-4 pr-0">
+                <div class="col-xl-2 col-md-6 col-sm-4 pl-0">
                     <div class="form-group add-btn">
                         <label class="d-block" *ngIf="isUpdtCase">&nbsp;</label>
                         <button

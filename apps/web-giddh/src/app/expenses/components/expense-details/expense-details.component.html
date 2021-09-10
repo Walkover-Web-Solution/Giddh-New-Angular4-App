@@ -1,142 +1,162 @@
 <div *ngIf="!isPettyCashEntryLoading">
-    <div class="clearfix p-15 pt-0">
+    <div>
         <div class="row">
             <div class="col-sm-6">
                 <p class="bold mr-b05">{{ selectedItem?.entryDate }} | {{ selectedItem.baseAccount.name }}</p>
             </div>
             <div class="col-sm-6 text-right xs-left">
-                <button type="button" class="mr-b05 btn btn-success" (click)="showApproveConfirmPopup(ApproveConfirm)">
-                    {{ localeData?.approve }}
-                </button>
-                <button type="button" class="mr-b05 btn btn-danger" (click)="openModal(RejectionReason)">
-                    {{ localeData?.reject }}
-                </button>
-                <span class="close-modal cp pull-right" (click)="closeDetailsMode()">
-                    <img src="assets/images/multiply.svg" />
-                </span>
+                <div class="d-flex justify-content-end align-items-center">
+                    <button
+                        mat-raised-button
+                        class="mr-b05 btn btn-success d-flex align-items-center"
+                        type="button"
+                        (click)="showApproveConfirmPopup(approveConfirm)"
+                    >
+                        {{ localeData?.approve }}
+                    </button>
+                    <button
+                        mat-raised-button
+                        class="mr-b05 btn btn-danger"
+                        type="button"
+                        (click)="openModal(rejectionReason)"
+                    >
+                        {{ localeData?.reject }}
+                    </button>
+                    <span class="mr-b05 close-modal cp pull-right" (click)="closeDetailsMode()">
+                        <img src="assets/images/multiply.svg" />
+                    </span>
+                </div>
             </div>
-        </div>
-
-        <div class="upload-file" *ngIf="!isImageZoomView">
-            <ul>
-                <ng-container *ngFor="let item of imageURL; let i = index">
-                    <li>
-                        <div class="upload-img">
-                            <img [src]="item" (click)="clickZoomImageView(i)" id="signatureImage" />
+            <div class="col-sm-12">
+                <div class="upload-file" *ngIf="!isImageZoomView">
+                    <ul>
+                        <ng-container *ngFor="let item of imageURL; let i = index">
+                            <li>
+                                <div class="upload-img">
+                                    <img [src]="item.src" (click)="openZoomImageView(i)" id="signatureImage" />
+                                </div>
+                            </li>
+                        </ng-container>
+                        <li>
+                            <div class="upload-img add-img">
+                                <label for="signatureImg-edit"><i class="icon-add"></i></label>
+                                <input
+                                    type="file"
+                                    accept="image/png, image/jpeg"
+                                    id="signatureImg-edit"
+                                    ngFileSelect
+                                    (uploadOutput)="onUploadFileOutput($event)"
+                                    [options]="fileUploadOptions"
+                                    [uploadInput]="uploadInput"
+                                />
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="petty-cash">
+                    <div class="bg-white pd-b1">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group mb-2">
+                                    <mat-form-field appearance="fill" class="w-100">
+                                        <label>{{ commonLocaleData?.app_description }}</label>
+                                        <textarea
+                                            matInput
+                                            name="comment"
+                                            class="textarea form-control mat-field-border mt-2"
+                                            [(ngModel)]="comment"
+                                            [placeholder]="localeData?.description_placeholder"
+                                        ></textarea>
+                                    </mat-form-field>
+                                </div>
+                            </div>
                         </div>
-                    </li>
-                </ng-container>
-                <li>
-                    <div class="upload-img add-img">
-                        <label for="signatureImg-edit"><i class="icon-add"></i></label>
-                        <input
-                            type="file"
-                            accept="image/png, image/jpeg"
-                            id="signatureImg-edit"
-                            ngFileSelect
-                            (uploadOutput)="onUploadFileOutput($event)"
-                            [options]="fileUploadOptions"
-                            [uploadInput]="uploadInput"
-                        />
-                    </div>
-                </li>
-            </ul>
-        </div>
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="d-inline-block mr-2">
+                                    <label class="font-14">
+                                        {{ entryAgainstObject.base }}<span class="text-danger">*</span>
+                                    </label>
+                                    <div class="clearfix">
+                                        <sh-select
+                                            [ngClass]="{ 'error-box': showEntryAgainstRequired }"
+                                            class="text-left multi-select entry-against"
+                                            name="depositAccountUniqueName"
+                                            #entryAgainstAccountDropDown
+                                            [options]="entryAgainstObject.dropDownOption"
+                                            [(ngModel)]="entryAgainstObject.model"
+                                            (selected)="onSelectEntryAgainstAccount($event)"
+                                            (onClear)="onClearEntryAgainstAccount()"
+                                            [placeholder]="commonLocaleData?.app_select_account"
+                                            [notFoundLink]="false"
+                                            [enableDynamicSearch]="true"
+                                            [isPaginationEnabled]="true"
+                                            (scrollEnd)="handleAccountScrollEnd()"
+                                            (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
+                                            [defaultValue]="entryAgainstObject.name"
+                                            [fixedValue]="entryAgainstObject.name"
+                                            [forceClearReactive]="forceClear$ | async"
+                                            [multiple]="false"
+                                            [ItemHeight]="33"
+                                            [useInBuiltFilterForIOptionTypeItems]="true"
+                                        >
+                                            <ng-template #optionTemplate1 let-option="option">
+                                                <a href="javascript:void(0)" class="list-item">
+                                                    <div class="item">{{ option.label }}</div>
+                                                    <div class="item-unique">{{ option.value }}</div>
+                                                </a>
+                                            </ng-template>
+                                        </sh-select>
+                                    </div>
+                                </div>
+                            </div>
 
-        <!-- img zoom pls uncomment this code -->
-        <div class="clearfix img-zoom" *ngIf="isImageZoomView">
-            <img [src]="zoomViewImageSrc" alt="" />
-            <a class="img-close pointer" (click)="hideZoomImageView()">
-                <i class="icon-cross"></i>
-            </a>
-        </div>
-    </div>
-
-    <div class="petty-cash">
-        <div class="bg-white p-15 pb-0">
-            <div class="form-group mb-2">
-                <label>{{ commonLocaleData?.app_description }}</label>
-                <textarea
-                    name="comment"
-                    class="textarea form-control"
-                    [(ngModel)]="comment"
-                    [placeholder]="localeData?.description_placeholder"
-                ></textarea>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-8">
-                    <div class="d-inline-block mr-2">
-                        <label> {{ entryAgainstObject.base }}<span class="text-danger">*</span> </label>
-                        <div class="clearfix">
-                            <sh-select
-                                class="text-left multi-select"
-                                name="depositAccountUniqueName"
-                                #entryAgainstAccountDropDown
-                                [options]="entryAgainstObject.dropDownOption"
-                                [(ngModel)]="entryAgainstObject.model"
-                                (selected)="onSelectEntryAgainstAccount($event)"
-                                [placeholder]="commonLocaleData?.app_select_account"
-                                [notFoundLink]="false"
-                                [enableDynamicSearch]="true"
-                                [isPaginationEnabled]="true"
-                                (scrollEnd)="handleAccountScrollEnd()"
-                                (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
-                                [defaultValue]="entryAgainstObject.name"
-                                [fixedValue]="entryAgainstObject.name"
-                                [forceClearReactive]="forceClear$ | async"
-                                [multiple]="false"
-                                [ItemHeight]="33"
-                                [useInBuiltFilterForIOptionTypeItems]="true"
+                            <div
+                                class="col-4 text-right"
+                                (click)="toggleEntryAgainst()"
+                                *ngIf="entryAgainstObject.against"
                             >
-                                <ng-template #optionTemplate1 let-option="option">
-                                    <a href="javascript:void(0)" class="list-item">
-                                        <div class="item">{{ option.label }}</div>
-                                        <div class="item-unique">{{ option.value }}</div>
-                                    </a>
-                                </ng-template>
-                            </sh-select>
+                                <a href="javascript:void(0)" class="d-inline-block pt-3 font-14">
+                                    {{ entryAgainstObject.against }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="expense-ledger" *ngIf="accountEntryPettyCash">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <update-ledger-entry-panel
+                                    [isPettyCash]="true"
+                                    [pettyCashEntry]="accountEntryPettyCash"
+                                    [pettyCashBaseAccountTypeString]="entryAgainstObject.base"
+                                    [pettyCashBaseAccountUniqueName]="this.accountEntryPettyCash.particular.uniqueName"
+                                    (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane()"
+                                ></update-ledger-entry-panel>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <div
-                    class="col-sm-4 text-right xs-left"
-                    (click)="toggleEntryAgainst()"
-                    *ngIf="entryAgainstObject.against"
-                >
-                    <a href="javascript:void(0)" class="d-inline-block pt-3">
-                        {{ entryAgainstObject.against }}
-                    </a>
-                </div>
             </div>
-        </div>
-        <div class="expense-ledger" *ngIf="accountEntryPettyCash">
-            <update-ledger-entry-panel
-                [isPettyCash]="true"
-                [pettyCashEntry]="accountEntryPettyCash"
-                [pettyCashBaseAccountTypeString]="entryAgainstObject.base"
-                [pettyCashBaseAccountUniqueName]="this.accountEntryPettyCash.particular.uniqueName"
-                (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane($event)"
-            ></update-ledger-entry-panel>
         </div>
     </div>
 </div>
 <!-- modal start -->
-<ng-template #RejectionReason>
+<ng-template #rejectionReason>
     <div class="modal-header">
-        <h3 class="modal-title pull-left">{{ localeData?.rejection_reason }}</h3>
+        <h3 mat-dialog-title class="modal-title pull-left">{{ localeData?.rejection_reason }}</h3>
         <button
+            mat-button
             type="button"
             class="close pull-right"
             [attr.aria-label]="commonLocaleData?.app_close"
-            (click)="modalRef.hide()"
+            (click)="modalRef?.close()"
         >
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-
-    <div class="modal-body">
+    <div class="modal-body petty-cash-reject-modal">
         <div class="clearfix modal-top">
             <p class="font-12 text-gray mr-b1">
                 <span>{{ selectedItem?.entryDate }} </span> |
@@ -170,18 +190,20 @@
             </div>
         </div>
         <div class="form-group">
-            <label for="rejectReason">{{ localeData?.reason_label }}</label> <sup>*</sup>
-            <textarea
-                name="rejectReason"
-                required
-                id="rejectReason"
-                [formControl]="rejectReason"
-                class="textarea form-control"
-                [placeholder]="localeData?.reason_placeholder"
-            ></textarea>
+            <mat-form-field appearance="fill" class="w-100">
+                <label for="rejectReason">{{ localeData?.reason_label }}</label> <sup>*</sup>
+                <textarea
+                    matInput
+                    name="rejectReason"
+                    id="rejectReason"
+                    [formControl]="rejectReason"
+                    class="textarea form-control mat-field-border mt-2"
+                    [placeholder]="localeData?.reason_placeholder"
+                ></textarea>
+            </mat-form-field>
         </div>
 
-        <button type="submit" class="btn btn-success" [disabled]="!rejectReason.value" (click)="submitReject()">
+        <button mat-raised-button class="btn btn-success" [disabled]="!rejectReason.value" (click)="submitReject()">
             {{ commonLocaleData?.app_submit }}
         </button>
     </div>
@@ -189,7 +211,7 @@
 <!-- modal end -->
 
 <!-- region approve entry confirm -->
-<ng-template #ApproveConfirm>
+<ng-template #approveConfirm>
     <petty-cash-approve-confirm-dialog
         [selectedEntryForApprove]="selectedEntryForApprove"
         [approveEntryRequestInProcess]="approveEntryRequestInProcess"
@@ -212,8 +234,8 @@
     [otherTaxesModal]="updateLedgerComponentInstance.vm.selectedLedger.otherTaxModal"
     [@slideInOut]="asideMenuStateForOtherTaxes"
     [commonLocaleData]="commonLocaleData"
-    (closeModal)="toggleOtherTaxesAsidePane(null)"
-    (applyTaxes)="updateLedgerComponentInstance.vm.calculateOtherTaxes($event); toggleOtherTaxesAsidePane(null)"
+    (closeModal)="toggleOtherTaxesAsidePane()"
+    (applyTaxes)="updateLedgerComponentInstance.vm.calculateOtherTaxes($event); toggleOtherTaxesAsidePane()"
 >
 </app-aside-menu-sales-other-taxes>
 <!-- endregion -->
