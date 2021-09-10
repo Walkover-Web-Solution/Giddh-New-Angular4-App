@@ -1549,6 +1549,30 @@
                                     </div>
                                 </div>
 
+                                <div class="row mt-1" *ngIf="voucherApiVersion === 2 && (isCreditNote || isDebitNote)">
+                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
+                                        <label> {{ commonLocaleData?.app_number }} </label>
+                                    </div>
+                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
+                                        <div class="col-sm-12 col-xl-6 col-lg-5 col-md-10 pl-0">
+                                            <div>
+                                                <input
+                                                    type="text"
+                                                    name="accountDetails.invoiceNum"
+                                                    class="form-control invoice-date attention-to"
+                                                    [ngClass]="{ 'date-invoice': !isPurchaseInvoice }"
+                                                    [disabled]="
+                                                        isUpdateMode && !(isDebitNote || isPurchaseInvoice)
+                                                            ? 'disabled'
+                                                            : null
+                                                    "
+                                                    [(ngModel)]="invFormData.voucherDetails.voucherNumber"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="row mt-1" *ngIf="isMobileScreen">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ invoiceDateLabel }}</label>

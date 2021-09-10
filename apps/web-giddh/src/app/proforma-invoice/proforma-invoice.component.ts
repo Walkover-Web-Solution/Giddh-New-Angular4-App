@@ -1739,7 +1739,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         } else if (this.isPurchaseInvoice) {
             this.invoiceDateLabel = this.localeData?.bill_date;
         } else {
-            this.invoiceNoLabel = !this.isPurchaseInvoice ? this.localeData?.invoice_no : this.localeData?.purchase_bill_no;
+            if(this.voucherApiVersion === 2) {
+                this.invoiceNoLabel = (this.isDebitNote || this.isCreditNote) ? this.commonLocaleData?.app_reference_invoice : this.commonLocaleData?.app_number;
+            } else {
+                this.invoiceNoLabel = !this.isPurchaseInvoice ? this.localeData?.invoice_no : this.localeData?.purchase_bill_no;
+            }
             this.invoiceDateLabel = this.commonLocaleData?.app_invoice_date;
             this.invoiceDueDateLabel = !this.isPurchaseInvoice ? this.localeData?.due_date : this.localeData?.balance_due_date;
         }
@@ -5502,7 +5506,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (this.isPurchaseInvoice) {
                 this._toasty.successToast(this.localeData?.purchase_bill_created);
             } else {
-                this._toasty.successToast(`${this.localeData?.entry_created}: ${this.voucherNumber}`);
+                let message = (this.voucherNumber) ? `${this.localeData?.entry_created}: ${this.voucherNumber}` : this.commonLocaleData?.app_messages?.voucher_saved;
+                this._toasty.successToast(message);
             }
 
             /** For pending type need to navigate to get all module of voucher type   */
@@ -7034,7 +7039,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.translationLoaded = true;
             this.customerPlaceHolder = this.localeData?.select_customer;
             this.customerNotFoundText = this.localeData?.add_customer;
-            this.invoiceNoLabel = this.localeData?.invoice_no;
+            if(this.voucherApiVersion === 2) {
+                if(this.isDebitNote || this.isCreditNote) {
+                    this.invoiceNoLabel = this.commonLocaleData?.app_reference_invoice;
+                } else {
+                    this.invoiceNoLabel = this.commonLocaleData.app_number;
+                }
+            } else {
+                this.invoiceNoLabel = this.localeData?.invoice_no;
+            }
             this.invoiceDateLabel = this.commonLocaleData?.app_invoice_date;
             this.invoiceDueDateLabel = this.localeData?.invoice_due_date;
 

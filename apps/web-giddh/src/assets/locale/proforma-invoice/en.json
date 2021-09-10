@@ -86,7 +86,7 @@
     "custom_field1": "Custom field 1",
     "custom_field2": "Custom field 2",
     "file_uploaded": "File uploaded successfully",
-    "voucher_updated": "Voucher updated Successfully",
+    "voucher_updated": "Voucher updated successfully",
     "purchase_record_error": "Please change either purchase invoice number or vendor details.",
     "purchase_bill": "Purchase Bill",
     "quantity_error": "Quantity recorded can't be more than quantity ordered",
