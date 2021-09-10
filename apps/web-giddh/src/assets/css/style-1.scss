@@ -2174,6 +2174,16 @@ ul.pills li {
     }
 }
 
+.expense-ledger {
+    update-ledger-entry-panel {
+        #entryModal {
+            .modal-body {
+                padding: 15px 0px !important;
+            }
+        }
+    }
+}
+
 .advanced label {
     font-size: 14px;
 }
