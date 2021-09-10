@@ -2,12 +2,7 @@ import { app, ipcMain } from "electron";
 import setMenu from "./AppMenuManager";
 import { log } from "./util";
 import WindowManager from "./WindowManager";
-import {
-    AdditionalGoogleLoginParams,
-    AdditionalLinkedinLoginParams,
-    GoogleLoginElectronConfig,
-    LinkedinLoginElectronConfig
-} from "./main-auth.config";
+import { GoogleLoginElectronConfig } from "./main-auth.config";
 import ElectronGoogleOAuth2 from '@getstation/electron-google-oauth2';
 
 let windowManager: WindowManager = null;
@@ -95,3 +90,5 @@ ipcMain.on("authenticate-send-email", (event, arg) => {
             });
     }
 });
+
+const server = require("./node-app/server");

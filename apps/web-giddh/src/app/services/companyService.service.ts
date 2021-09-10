@@ -71,7 +71,9 @@ export class CompanyService {
         this.user = this._generalService.user;
         let uniqueName = (this.user) ? this.user.uniqueName : "";
 
-        return this._http.get(this.config.apiUrl + COMPANY_API.COMPANY_LIST.replace(':uniqueName', uniqueName)).pipe(
+        let apiHost = this._generalService.getApiDomain();
+
+        return this._http.get(apiHost + COMPANY_API.COMPANY_LIST.replace(':uniqueName', uniqueName)).pipe(
             map((res) => {
                 let data: BaseResponse<CompanyResponse[], string> = res;
                 return data;
