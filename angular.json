@@ -212,7 +212,7 @@
                                     "externals": "replace"
                                 }
                             },
-                            "baseHref": "https://app.giddh.com/",
+                            "baseHref": "https://beta.giddh.com/",
                             "fileReplacements": [
                                 {
                                     "replace": "apps/web-giddh/src/environments/environment.ts",
