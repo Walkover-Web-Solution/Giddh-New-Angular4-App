@@ -1565,11 +1565,7 @@
                                                     matInput
                                                     id="update-ledger-invoice-number"
                                                     type="text"
-                                                    [placeholder]="
-                                                        voucherApiVersion === 2
-                                                            ? commonLocaleData?.app_number
-                                                            : commonLocaleData?.app_invoice_no
-                                                    "
+                                                    [placeholder]="commonLocaleData?.app_number"
                                                     class="form-control mat-field-border"
                                                     [(ngModel)]="vm.selectedLedger.invoiceNumberAgainstVoucher"
                                                 />
