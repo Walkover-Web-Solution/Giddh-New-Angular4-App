@@ -572,6 +572,7 @@
                                             [ngClass]="{
                                                 'form-group float-left mb-0 mr-r1 mr-t1': voucherApiVersion === 2
                                             }"
+                                            *ngIf="selectedInvoiceForCreditNote"
                                         >
                                             <span class="remove-invoice-icon">×</span>
                                             <span class="label">{{ commonLocaleData?.app_remove }}</span>
