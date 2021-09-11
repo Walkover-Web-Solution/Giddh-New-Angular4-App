@@ -691,7 +691,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             if (this.selectedInvoicesList.length > 1) {
                 let selectedinvoicesName = [];
                 this.selectedInvoicesList.forEach(item => {
-                    selectedinvoicesName.push(item.voucherNumber);
+                    selectedinvoicesName.push(item?.voucherNumber);
                 });
                 let bulkDeleteModel = {
                     voucherNumbers: selectedinvoicesName,
@@ -713,7 +713,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
             } else {
                 let model = {
-                    invoiceNumber: (selectedVoucher) ? selectedVoucher.voucherNumber : this.selectedInvoice.voucherNumber,
+                    invoiceNumber: (selectedVoucher) ? selectedVoucher.voucherNumber : this.selectedInvoice?.voucherNumber,
                     voucherType: this.selectedVoucher
                 };
 
