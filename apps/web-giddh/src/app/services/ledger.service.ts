@@ -226,7 +226,12 @@ export class LedgerService {
     }
 
     public DownloadInvoice(model: DownloadLedgerRequest, accountUniqueName: string): Observable<BaseResponse<string, DownloadLedgerRequest>> {
-        let dataToSend = { voucherNumber: model.invoiceNumber, voucherType: model.voucherType };
+        let dataToSend = {};
+        if (model.uniqueName) {
+            dataToSend = { uniqueName: model.uniqueName, voucherType: model.voucherType };
+        } else {
+            dataToSend = { voucherNumber: model.invoiceNumber, voucherType: model.voucherType };
+        }
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
         let url = `${this.config.apiUrl}${LEDGER_API.DOWNLOAD_INVOICE}`
