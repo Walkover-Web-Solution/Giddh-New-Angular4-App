@@ -984,6 +984,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public toggleTransactionType(event: any) {
+        this.lc.showNewLedgerPanel = false;
         let allTrx: TransactionVM[] = filter(this.lc.blankLedger.transactions, bl => bl.type === event.type);
         let unAccountedTrx = find(allTrx, a => !a.selectedAccount);
 
