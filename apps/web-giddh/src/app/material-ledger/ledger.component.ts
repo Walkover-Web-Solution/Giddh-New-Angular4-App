@@ -856,7 +856,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public showBankLedgerPopup(txn: TransactionVM, item: BlankLedgerVM) {
         this.selectBankTxn(txn);
         this.lc.currentBankEntry = item;
-        this.lc.showBankLedgerPanel = true;
+        if(txn.particular) {
+            this.lc.showBankLedgerPanel = true;
+        } else {
+            this.lc.showBankLedgerPanel = false;
+        }
     }
 
     public hideBankLedgerPopup(event?: any) {
