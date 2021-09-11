@@ -244,6 +244,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public touchedTransaction: any;
     /** This is used to show hide bottom spacing when more detail is opened while CREATE/UPDATE ledger */
     public isMoreDetailsOpened: boolean = false;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private store: Store<AppState>,
@@ -826,6 +828,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 });
             }
         });
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     private assignPrefixAndSuffixForCurrency() {
@@ -1049,18 +1052,22 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
-    public downloadInvoice(invoiceName: string, voucherType: string, e: Event) {
+    public downloadInvoice(transaction: any, e: Event) {
         e.stopPropagation();
         let activeAccount = null;
         this.lc.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
         let downloadRequest = new DownloadLedgerRequest();
-        downloadRequest.invoiceNumber = [invoiceName];
-        downloadRequest.voucherType = voucherType;
+        if(this.voucherApiVersion === 2) {
+            downloadRequest.uniqueName = transaction.voucherUniqueName;
+        } else {
+            downloadRequest.invoiceNumber = [transaction.voucherNumber];
+        }
+        downloadRequest.voucherType = transaction.voucherGeneratedType;
 
         this.ledgerService.DownloadInvoice(downloadRequest, this.lc.accountUnq).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d.status === 'success') {
                 let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
-                download(`${activeAccount.name} - ${invoiceName}.pdf`, blob, 'application/pdf');
+                download(`${activeAccount.name} - ${transaction.voucherNumber}.pdf`, blob, 'application/pdf');
             } else {
                 this.toaster.showSnackBar("error", d.message);
             }
