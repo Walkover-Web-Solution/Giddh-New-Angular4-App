@@ -1285,13 +1285,7 @@
                                                         <span
                                                             class="download-invoice-ledger d-flex"
                                                             *ngIf="transactions.voucherGenerated"
-                                                            (click)="
-                                                                downloadInvoice(
-                                                                    transactions.voucherNumber,
-                                                                    transactions.voucherGeneratedType,
-                                                                    $event
-                                                                )
-                                                            "
+                                                            (click)="downloadInvoice(transactions, $event)"
                                                         >
                                                             <i class="icon-download-circle pull-left"></i>
                                                         </span>
@@ -1532,9 +1526,7 @@
                                         <span
                                             class="download-invoice-ledger d-flex"
                                             *ngIf="txn.voucherGenerated"
-                                            (click)="
-                                                downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)
-                                            "
+                                            (click)="downloadInvoice(txn, $event)"
                                             [matTooltip]="
                                                 commonLocaleData?.app_download +
                                                 ' ' +
@@ -1940,9 +1932,7 @@
                                         <span
                                             class="download-invoice-ledger d-flex"
                                             *ngIf="txn.voucherGenerated"
-                                            (click)="
-                                                downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)
-                                            "
+                                            (click)="downloadInvoice(txn, $event)"
                                             [matTooltip]="
                                                 commonLocaleData?.app_download +
                                                 ' ' +
