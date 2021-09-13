@@ -268,6 +268,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public advanceReceiptRemoveDialogRef: any;
     /** True if more details is open */
     public isMoreDetailOpen: boolean;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private accountService: AccountService,
@@ -427,6 +429,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }
                 });
         }
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     public toggleShow(): void {

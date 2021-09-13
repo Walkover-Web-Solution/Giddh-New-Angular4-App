@@ -701,7 +701,10 @@
                                                                             currentCompanyBranches?.length > 2
                                                                         "
                                                                         [enableDynamicSearch]="true"
-                                                                        (selected)="selectAccount($event, txn)"
+                                                                        (selected)="
+                                                                            selectAccount($event, txn);
+                                                                            showBankLedgerPopup(txn, item)
+                                                                        "
                                                                         [placeholder]="
                                                                             commonLocaleData?.app_select_accounts
                                                                         "
@@ -945,7 +948,10 @@
                                                                             currentOrganizationType === 'COMPANY' &&
                                                                             currentCompanyBranches?.length > 2
                                                                         "
-                                                                        (selected)="selectAccount($event, txn)"
+                                                                        (selected)="
+                                                                            selectAccount($event, txn);
+                                                                            showBankLedgerPopup(txn, item)
+                                                                        "
                                                                         [isPaginationEnabled]="true"
                                                                         (scrollEnd)="handleScrollEnd()"
                                                                         (dynamicSearchedQuery)="
@@ -1634,7 +1640,9 @@
                                                             (keydown.enter)="onEnter(select, txn)"
                                                             (onShow)="isSelectOpen = true"
                                                             (onHide)="onSelectHide()"
-                                                            (selected)="selectAccount($event, txn)"
+                                                            (selected)="
+                                                                selectAccount($event, txn); showNewLedgerEntryPopup(txn)
+                                                            "
                                                             (onClear)="selectAccount($event, txn, true)"
                                                             (keydown)="keydownPressed($event)"
                                                             [placeholder]="localeData?.to_select_accounts"
@@ -2033,7 +2041,9 @@
                                                             (onShow)="isSelectOpen = true"
                                                             (onHide)="onSelectHide()"
                                                             [(ngModel)]="txn.particular"
-                                                            (selected)="selectAccount($event, txn)"
+                                                            (selected)="
+                                                                selectAccount($event, txn); showNewLedgerEntryPopup(txn)
+                                                            "
                                                             (onClear)="selectAccount($event, txn, true)"
                                                             [showClear]="false"
                                                             [placeholder]="localeData?.by_select_accounts"
@@ -2696,6 +2706,21 @@
                             [showRangeLabelOnInput]="false"
                             [dateFieldPosition]="dateFieldPosition"
                         ></app-datepicker-wrapper>
+                    </div>
+                </div>
+            </ng-template>
+
+            <ng-template #entryConfirmModal>
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <confirm-modal
+                            [title]="commonLocaleData?.app_confirm"
+                            [body]="duplicateEntryConfirmationMessage"
+                            [permanentlyDeleteMessage]="' '"
+                            (cancelCallBack)="cancelMergeEntry()"
+                            (successCallBack)="confirmMergeEntry()"
+                        >
+                        </confirm-modal>
                     </div>
                 </div>
             </ng-template>

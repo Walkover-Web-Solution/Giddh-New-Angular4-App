@@ -70,8 +70,7 @@
 .icon-pointer .glyphicon {
     cursor: pointer;
 }
-.icon-pointer .glyphicon:hover {
-}
+
 .td-search-box div i:hover {
     color: $nobel;
 }
@@ -146,7 +145,7 @@
     }
 }
 button[aria-expanded="true"] i {
-    color: $dim-gray;
+    color: $dark-gray;
 }
 .stock-description {
     white-space: normal;
@@ -202,7 +201,7 @@ button[aria-expanded="true"] i {
 }
 button.btn.btn-filter {
     background: $whisper;
-    border: 1px solid $gainsboro;
+    border: 1px solid $whisper;
     font-size: 14px;
     color: $midnight-blue;
     display: inline-flex;

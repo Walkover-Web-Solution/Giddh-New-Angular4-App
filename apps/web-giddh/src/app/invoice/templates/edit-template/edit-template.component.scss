@@ -28,6 +28,11 @@
     padding: 15px 0 0;
 }
 
+.primary-color {
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
 @import "../../../../../../web-giddh/src/assets/css/color.scss";
 .btn-warning {
     color: $white;

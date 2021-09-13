@@ -774,7 +774,7 @@
                                                 $implicit: showPurchaseOrderSearch,
                                                 fieldName: 'purchaseOrderNumbers',
                                                 formControl: purchaseOrderNumbersInput,
-                                                title: 'Purchase Order #'
+                                                title: localeData?.po_number
                                             }
                                         "
                                     >
@@ -819,7 +819,7 @@
                                 </th>
                                 <th *ngIf="gstEInvoiceEnable && selectedVoucher === 'sales'" width="10%">
                                     <div class="d-flex">
-                                        <div class="flex-fill">E-invoice Status</div>
+                                        <div class="flex-fill">{{ localeData?.e_invoice_status }}</div>
                                     </div>
                                 </th>
                                 <th [attr.data-title]="commonLocaleData?.app_status" width="10%">
@@ -950,7 +950,7 @@
                                     width="10%"
                                 >
                                     <div class="d-flex">
-                                        <div class="flex-fill">E-invoice Status</div>
+                                        <div class="flex-fill">{{ localeData?.e_invoice_status }}</div>
                                     </div>
                                 </th>
                                 <th [attr.data-title]="commonLocaleData?.app_status" width="10%">
@@ -960,7 +960,6 @@
                                 </th>
                             </tr>
                         </thead>
-
                         <!--sales-->
                         <tbody
                             (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
@@ -998,7 +997,6 @@
                                         />
                                     </div>
                                 </td>
-
                                 <!-- Serial No. -->
                                 <td
                                     data-title="#"
@@ -1010,7 +1008,6 @@
                                 >
                                     <div class="d-flex justify-content-start">{{ i + 1 }}</div>
                                 </td>
-
                                 <!-- Invoice No. -->
                                 <td width="13%" [attr.data-title]="commonLocaleData?.app_invoice_no">
                                     <div
@@ -1062,14 +1059,12 @@
                                 </td>
                                 <!-- Invoice Date -->
                                 <td [attr.data-title]="commonLocaleData?.app_date">{{ item.voucherDate }}</td>
-
                                 <td
                                     [attr.data-title]="localeData?.linked_voucher"
                                     *ngIf="selectedVoucher === 'purchase'"
                                 >
                                     {{ item.purchaseOrderNumbers }}
                                 </td>
-
                                 <!-- Total Amt. -->
                                 <td
                                     width="10%"
@@ -1090,9 +1085,7 @@
                                 <ng-template #grandTotalPopupTemplate
                                     ><span [innerHTML]="item.grandTotalTooltipText"></span>
                                 </ng-template>
-
                                 <!-- Balance Due -->
-
                                 <td
                                     width="12%"
                                     [attr.data-title]="localeData?.balance_due"
@@ -1113,7 +1106,6 @@
                                 <ng-template #balanceDuePopupTemplate
                                     ><span [innerHTML]="item.balanceDueTooltipText"></span>
                                 </ng-template>
-
                                 <!-- Due Date -->
                                 <td width="12%" [attr.data-title]="localeData?.due_date">
                                     {{ item.dueDate ? item.dueDate : "-" }}
@@ -1121,7 +1113,7 @@
                                 <!-- E-invoice status -->
                                 <td
                                     *ngIf="gstEInvoiceEnable && selectedVoucher === 'sales'"
-                                    data-title="E-Invoice Status"
+                                    [attr.data-title]="localeData?.e_invoice_status"
                                     width="10%"
                                 >
                                     <div class="e-invoice-status font-14">
@@ -1202,7 +1194,6 @@
                                         </div>
                                     </div>
                                 </td>
-
                                 <!--for cancelled status-->
                                 <td
                                     width="10%"
@@ -1211,7 +1202,6 @@
                                 >
                                     <span>{{ item.balanceStatus }}</span>
                                 </td>
-
                                 <td
                                     *ngIf="selectedVoucher === 'purchase'"
                                     class="cp d-flex status-mobile flex-column min-wid-status"
@@ -1256,7 +1246,6 @@
                                 </td>
                             </tr>
                         </tbody>
-
                         <!--non sales-->
                         <tbody
                             *ngIf="
@@ -1465,7 +1454,6 @@
                                 </td>
                             </tr>
                         </tbody>
-
                         <tbody *ngIf="isGetAllRequestInProcess$ | async">
                             <tr>
                                 <td
@@ -1593,7 +1581,6 @@
                                                 {{ item.voucherDate }}
                                             </div>
                                         </div>
-
                                         <div *ngIf="selectedVoucher !== 'purchase'" class="col-6 p-0">
                                             <div class="d-flex">
                                                 <div class="flex-fill">
@@ -1704,11 +1691,13 @@
                         [boundaryLinks]="true"
                         [itemsPerPage]="paginationLimit"
                         [rotate]="false"
+                        previousText="&#9664;"
+                        nextText="&#9658;"
+                        (pageChanged)="pageChanged($event)"
                         [firstText]="commonLocaleData?.app_first"
                         [previousText]="commonLocaleData?.app_previous"
                         [nextText]="commonLocaleData?.app_next"
                         [lastText]="commonLocaleData?.app_last"
-                        (pageChanged)="pageChanged($event)"
                     ></pagination>
                 </div>
                 <!--no data-->
@@ -1939,11 +1928,11 @@
                         [depositAmount]="depositAmount"
                         [invoiceFormDetails]="invFormData"
                         [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
+                        [adjustedVoucherType]="selectedVoucher"
                         (closeModelEvent)="closeAdvanceReceiptModal()"
                         (submitClicked)="getAdvanceReceiptAdjustData($event)"
-                        [isVoucherModule]="true"
+                        [isVoucherModule]="true && voucherApiVersion !== 2"
                         [voucherForAdjustment]="voucherForAdjustment"
-                        [adjustedVoucherType]="selectedVoucher"
                     >
                     </advance-receipt-adjustment-component>
                 </div>

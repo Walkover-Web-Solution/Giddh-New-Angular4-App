@@ -71,6 +71,19 @@
         <div class="checkbox">
             <label>
                 <input
+                    name="originalCopy"
+                    type="checkbox"
+                    value="Transport"
+                    checked
+                    [(ngModel)]="isOriginal"
+                    (change)="invoiceTypeChanged($event)"
+                />
+                {{ localeData?.invoice_copy_options?.original }}
+            </label>
+        </div>
+        <div class="checkbox">
+            <label>
+                <input
                     type="checkbox"
                     value="Transport"
                     (change)="invoiceTypeChanged($event)"
@@ -97,7 +110,12 @@
     <div class="row mr-t2 mr-b1">
         <div class="col-sm-12">
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-success" (click)="onDownloadInvoiceEvent()">
+                <button
+                    [disabled]="!isOriginal && !isTransport && !isCustomer"
+                    type="button"
+                    class="btn btn-success"
+                    (click)="onDownloadInvoiceEvent()"
+                >
                     {{ commonLocaleData?.app_download }}
                 </button>
 

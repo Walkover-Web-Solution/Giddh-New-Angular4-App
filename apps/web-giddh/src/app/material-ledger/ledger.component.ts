@@ -85,6 +85,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('advanceSearchModal', { static: false }) public advanceSearchModal: any;
     /** datepicker element reference  */
     @ViewChild('datepickerTemplate', { static: false }) public datepickerTemplate: ElementRef;
+    /** Instance of entry confirmation modal */
+    @ViewChild('entryConfirmModal', {static: false}) public entryConfirmModal: any;
     public isTransactionRequestInProcess$: Observable<boolean>;
     public ledgerBulkActionSuccess$: Observable<boolean>;
     public searchTermStream: Subject<string> = new Subject();
@@ -802,6 +804,28 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.hasLedgerPermission = response;
             this.cdRf.detectChanges();
         });
+
+        this.store.pipe(select(state => state.ledger.showDuplicateVoucherConfirmation), takeUntil(this.destroyed$)).subscribe(response => {
+            if(response?.status === "confirm") {
+                let dialogRef = this.dialog.open(ConfirmModalComponent, {
+                    data: {
+                        title: this.commonLocaleData?.app_confirm,
+                        body: response?.message,
+                        ok: this.commonLocaleData?.app_yes,
+                        cancel: this.commonLocaleData?.app_no,
+                        permanentlyDeleteMessage: ' '
+                    }
+                });
+        
+                dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                    if (response) {
+                        this.confirmMergeEntry();
+                    } else {
+                        this.cancelMergeEntry();
+                    }
+                });
+            }
+        });
     }
 
     private assignPrefixAndSuffixForCurrency() {
@@ -856,7 +880,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public showBankLedgerPopup(txn: TransactionVM, item: BlankLedgerVM) {
         this.selectBankTxn(txn);
         this.lc.currentBankEntry = item;
-        this.lc.showBankLedgerPanel = true;
+        if(txn.particular) {
+            this.lc.showBankLedgerPanel = true;
+        } else {
+            this.lc.showBankLedgerPanel = false;
+        }
     }
 
     public hideBankLedgerPopup(event?: any) {
@@ -980,6 +1008,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public toggleTransactionType(event: any) {
+        this.lc.showNewLedgerPanel = false;
         let allTrx: TransactionVM[] = filter(this.lc.blankLedger.transactions, bl => bl.type === event.type);
         let unAccountedTrx = find(allTrx, a => !a.selectedAccount);
 
@@ -1081,7 +1110,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public showNewLedgerEntryPopup(trx: TransactionVM) {
         this.selectBlankTxn(trx);
-        this.lc.showNewLedgerPanel = true;
+        if(trx.particular) {
+            this.lc.showNewLedgerPanel = true;
+        } else {
+            this.lc.showNewLedgerPanel = false;
+        }
     }
 
     public onSelectHide() {
@@ -2371,5 +2404,24 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public handleOpenMoreDetail(isOpened: boolean): void {
         this.isMoreDetailsOpened = isOpened;
+    }
+
+    /**
+     * This will merge the duplicate voucher entry
+     *
+     * @memberof LedgerComponent
+     */
+    public confirmMergeEntry(): void {
+        this.lc.blankLedger.mergePB = true;
+        this.saveBlankTransaction();
+    }
+
+    /**
+     * This will close the merge popup
+     *
+     * @memberof LedgerComponent
+     */
+    public cancelMergeEntry(): void {
+        this.lc.showNewLedgerPanel = true;
     }
 }
