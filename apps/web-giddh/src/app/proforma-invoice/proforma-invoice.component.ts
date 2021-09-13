@@ -2389,6 +2389,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
                 if (this.isCreditNote || this.isDebitNote) {
                     updatedData['invoiceNumberAgainstVoucher'] = this.invFormData.voucherDetails.voucherNumber;
+                    updatedData['number'] = this.invFormData.voucherDetails.voucherNumber;
                     updatedData['invoiceLinkingRequest'] = data.voucherDetails.invoiceLinkingRequest;
                 }
                 if (this.isCreditNote) {
@@ -3806,6 +3807,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 } as GenericRequestForGenerateSCD;
                 if (this.isCreditNote || this.isDebitNote) {
                     requestObject['invoiceNumberAgainstVoucher'] = this.invFormData.voucherDetails.voucherNumber;
+                    requestObject['number'] = this.invFormData.voucherDetails.voucherNumber;
                 }
                 if (((this.isCreditNote || this.isDebitNote) && this.selectedInvoice) || this.isSalesInvoice) {
                     if (this.isSalesInvoice) {
@@ -4807,7 +4809,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         voucherDetails.grantTotalAmountForCompany = result.grandTotal.amountForCompany;
         if ([VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote].indexOf(this.invoiceType) > -1) {
             // Credit note and Debit note
-            voucherDetails.voucherNumber = result.invoiceNumberAgainstVoucher || '';
+            voucherDetails.voucherNumber = result.invoiceNumberAgainstVoucher || result.number || '';
         } else if (!this.copyPurchaseBill) {
             voucherDetails.voucherNumber = result.number;
         }
