@@ -29,6 +29,7 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { GiddhCurrencyPipe } from '../shared/helpers/pipes/currencyPipe/currencyType.pipe';
 import { NoDataModule } from '../shared/no-data/no-data.module';
+import { LightboxModule } from 'ngx-lightbox';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: false,
@@ -72,7 +73,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         NgxDaterangepickerMd.forRoot(),
         TextMaskModule,
         NgxMaskModule.forRoot(),
-        NoDataModule
+        NoDataModule,
+        LightboxModule
     ],
     entryComponents: [
         PaginationComponent
