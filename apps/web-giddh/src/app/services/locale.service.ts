@@ -11,6 +11,15 @@ import { Observable } from "rxjs";
 export class LocaleService {
     /** This will hold the common locale json */
     public commonLocale: any = {};
+    private _language: string;
+    
+    get language(): string {
+        return this._language;
+    }
+
+    set language(lang: string) {
+        this._language = lang;
+    }
 
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService) {
 

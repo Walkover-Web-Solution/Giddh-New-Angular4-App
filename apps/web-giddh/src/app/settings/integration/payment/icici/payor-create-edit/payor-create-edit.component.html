@@ -49,7 +49,7 @@
                         [placeholder]="localeData?.payment?.login_id_placeholder"
                     />
                 </div>
-                <div class="clearfix mr-t1" *ngIf="!activePayorAccount">
+                <div class="clearfix mr-t1">
                     <label>{{ localeData?.payment?.user }}<span class="red-text">*</span></label>
                     <sh-select
                         formControlName="userUniqueName"
@@ -58,11 +58,6 @@
                         [options]="usersList"
                         required
                     ></sh-select>
-                </div>
-                <div class="clearfix mr-t1" *ngIf="activePayorAccount">
-                    <label>{{ localeData?.payment?.user }}</label
-                    ><br />
-                    <span class="font-14">{{ activePayorAccount?.user?.name }}</span>
                 </div>
                 <div class="clearfix mr-t1">
                     <label>{{ localeData?.payment?.limit_upto }}</label>

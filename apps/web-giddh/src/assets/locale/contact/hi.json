@@ -66,5 +66,8 @@
     "customers_selected": "ग्राहक चुने गए",
     "vendors": "विक्रेता",
     "vendors_selected": "विक्रेता चयनित",
-    "select_payor": "भुगतानकर्ता का चयन करें"
+    "select_payor": "भुगतानकर्ता का चयन करें",
+    "connect_icici_bank": "आईसीआईसीआई बैंक कनेक्ट करें",
+    "pending_approval": "लंबित अनुमोदन",
+    "due": "देय"
 }

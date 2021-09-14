@@ -158,7 +158,7 @@
                                 class="btn btn-primary"
                                 (click)="clickedCancelOtp()"
                             >
-                                {{ commonLocaleData?.app_cancel_otp }}
+                                {{ commonLocaleData?.app_cancel }}
                             </button>
                         </div>
                     </div>
@@ -184,7 +184,7 @@
                         <div class="account-holder-name">
                             <p>{{ item.name }}</p>
                             <p class="text-gray due-amount hidden-xs">
-                                {{ commonLocaleData?.app_total_due }}:{{ item.totalDueAmount | giddhCurrency }}
+                                {{ localeData?.due }}:{{ item.totalDueAmount | giddhCurrency }}
                                 <span
                                     class="red-text cursor-pointer"
                                     *ngIf="selectedAccForBulkPayment.length > 1"
@@ -240,6 +240,7 @@
                                             type="text"
                                             [required]="!isPayClicked"
                                             [disabled]="isPayClicked"
+                                            [ngClass]="{ 'error-box': !item.closingBalanceAmount }"
                                         />
                                     </div>
                                     <div class="form-group remark-block">
