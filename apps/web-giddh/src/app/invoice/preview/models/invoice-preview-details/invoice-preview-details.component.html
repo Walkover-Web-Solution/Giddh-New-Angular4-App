@@ -57,7 +57,7 @@
                             <li
                                 class="single-invoice-detail cp"
                                 *ngFor="let item of filteredData"
-                                [ngClass]="{ 'activeItem': item.uniqueName === selectedItem.uniqueName }"
+                                [ngClass]="{ 'activeItem': item?.uniqueName === selectedItem?.uniqueName }"
                                 (click)="selectVoucher(item)"
                             >
                                 <div class="row mr-0">
