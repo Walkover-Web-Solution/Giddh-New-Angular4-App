@@ -35,6 +35,8 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     public activeLocale: string = "";
     /** True if we should show heading */
     public showSettingHeading: boolean = false;
+    /** This contains router url */
+    public routerUrl: string = "";
 
     constructor(private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>, private localeService: LocaleService) {
 
@@ -69,6 +71,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationEnd) {
                 this.showHideSettingsHeading(event.url);
+                this.routerUrl = event.url;
             }
         });
     }
