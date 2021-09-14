@@ -880,7 +880,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public showBankLedgerPopup(txn: TransactionVM, item: BlankLedgerVM) {
         this.selectBankTxn(txn);
         this.lc.currentBankEntry = item;
-        this.lc.showBankLedgerPanel = true;
+        if(txn.particular) {
+            this.lc.showBankLedgerPanel = true;
+        } else {
+            this.lc.showBankLedgerPanel = false;
+        }
     }
 
     public hideBankLedgerPopup(event?: any) {
@@ -1004,6 +1008,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public toggleTransactionType(event: any) {
+        this.lc.showNewLedgerPanel = false;
         let allTrx: TransactionVM[] = filter(this.lc.blankLedger.transactions, bl => bl.type === event.type);
         let unAccountedTrx = find(allTrx, a => !a.selectedAccount);
 
@@ -1105,7 +1110,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public showNewLedgerEntryPopup(trx: TransactionVM) {
         this.selectBlankTxn(trx);
-        this.lc.showNewLedgerPanel = true;
+        if(trx.particular) {
+            this.lc.showNewLedgerPanel = true;
+        } else {
+            this.lc.showNewLedgerPanel = false;
+        }
     }
 
     public onSelectHide() {
