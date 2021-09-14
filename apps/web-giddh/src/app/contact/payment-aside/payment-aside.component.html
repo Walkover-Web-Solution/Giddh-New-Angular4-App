@@ -287,7 +287,7 @@
                 <img src="{{ imgPath }}payment-succes.svg" />
             </div>
             <h4>{{ commonLocaleData?.app_payment_proceed }}</h4>
-            <p>{{ localeData?.payment_status_note }}</p>
+            <p>{{ paymentSuccessfulMessage }}</p>
             <button class="btn btn-success" (click)="successModalRef.hide()">{{ commonLocaleData?.app_done }}</button>
         </div>
     </ng-template>

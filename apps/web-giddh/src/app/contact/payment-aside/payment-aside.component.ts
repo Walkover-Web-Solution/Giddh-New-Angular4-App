@@ -131,6 +131,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public isPayorListInProgress: boolean = false;
     /** True if payor is required */
     public isPayorRequired: boolean = true;
+    /** Holds message of payment successful */
+    public paymentSuccessfulMessage: string = "";
 
     constructor(
         private formBuilder: FormBuilder,
@@ -335,6 +337,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         bankTransferConfirmOtpRequest.otp = this.receivedOtp;
         this._companyService.bulkVendorPaymentConfirm(this.companyUniqueName, this.selectedBankUrn, this.selectedBankUniqueName, bankTransferConfirmOtpRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && res.status === 'success') {
+                this.paymentSuccessfulMessage = res.body?.Message;
                 this.closePaymentModel(true);
                 this.openModalWithClass(this.successTemplate);
             } else {
