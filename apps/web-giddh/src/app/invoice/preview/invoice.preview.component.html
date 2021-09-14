@@ -980,7 +980,7 @@
                                     class="check-image"
                                     *ngIf="
                                         hoveredItemForAction === item?.uniqueName ||
-                                        item.isSelected ||
+                                        item?.isSelected ||
                                         selectedItems.length > 0
                                     "
                                 >
@@ -1212,7 +1212,7 @@
                                             class="action-icon ml-auto"
                                             [ngClass]="{
                                                 'item-selected':
-                                                    hoveredItemForAction === item?.uniqueName || item.isSelected
+                                                    hoveredItemForAction === item?.uniqueName || item?.isSelected
                                             }"
                                         >
                                             <a
@@ -1226,7 +1226,7 @@
                                                 [tooltip]="commonLocaleData?.app_copy"
                                                 [routerLink]="[
                                                     '/pages/proforma-invoice/invoice/purchase/' +
-                                                        item.account?.uniqueName +
+                                                        item?.account?.uniqueName +
                                                         '/' +
                                                         item?.uniqueName +
                                                         '/copy'
