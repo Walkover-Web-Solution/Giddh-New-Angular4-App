@@ -531,9 +531,7 @@
                                 <a
                                     href="javascript:;"
                                     class="aqua-color"
-                                    (click)="
-                                        openPurchaseOrderPreviewPopup(purchaseOrderPreviewModal, order?.uniqueName)
-                                    "
+                                    (click)="openPurchaseOrderPreviewPopup(purchaseOrderPreviewModal, order.uniqueName)"
                                     *ngFor="let order of purchaseOrderNumbers; let i = index"
                                     >{{ order.number }}<span *ngIf="checkIfPipeSymbolRequired(i)">|</span></a
                                 >
