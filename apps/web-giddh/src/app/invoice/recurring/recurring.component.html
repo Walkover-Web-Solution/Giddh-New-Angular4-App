@@ -419,7 +419,7 @@
                     >
                         <tr
                             *ngFor="let col of recurringVoucherDetails; let i = index"
-                            (mouseover)="hoveredItemForAction = col.uniqueName"
+                            (mouseover)="hoveredItemForAction = col?.uniqueName"
                         >
                             <td width="4%" data-title="#">
                                 <div class="justify-content-sm d-flex justify-content-center">{{ i + 1 }}</div>

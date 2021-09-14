@@ -283,15 +283,7 @@
                                                     ' : ' +
                                                     vm.selectedLedger.voucherNumber
                                                 "
-                                                (click)="
-                                                    downloadInvoice(
-                                                        vm.selectedLedger.voucherNumber,
-                                                        vm.selectedLedger.voucherGeneratedType
-                                                            ? vm.selectedLedger.voucherGeneratedType
-                                                            : vm.selectedLedger.voucher.name,
-                                                        $event
-                                                    )
-                                                "
+                                                (click)="downloadInvoice(vm.selectedLedger, $event)"
                                                 matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-download-circle pull-left"></i>
@@ -590,15 +582,7 @@
                                                     vm.selectedLedger.voucherNumber
                                                 "
                                                 matTooltipClass="tooltip-black"
-                                                (click)="
-                                                    downloadInvoice(
-                                                        vm.selectedLedger.voucherNumber,
-                                                        vm.selectedLedger.voucherGeneratedType
-                                                            ? vm.selectedLedger.voucherGeneratedType
-                                                            : vm.selectedLedger.voucher.name,
-                                                        $event
-                                                    )
-                                                "
+                                                (click)="downloadInvoice(vm.selectedLedger, $event)"
                                             >
                                                 <i class="icon-download-circle pull-left"></i>
                                             </span>
