@@ -2615,6 +2615,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 document.querySelector('body').classList.remove('fixed');
             }
         }
+        if (this.accountAsideMenuState === 'in') {
+            document.querySelector('.invoice-modal-content')?.classList?.add('aside-account-create');
+            document.querySelector('body').classList.add('fixed');
+        } else {
+            document.querySelector('.invoice-modal-content')?.classList?.remove('aside-account-create');
+            document.querySelector('body').classList.remove('fixed');
+        }
     }
 
     public toggleOtherTaxesAsidePane(modalBool: boolean, index: number = null) {
