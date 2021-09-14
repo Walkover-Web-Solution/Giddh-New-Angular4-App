@@ -66,5 +66,8 @@
     "customers_selected": "Customers Selected",
     "vendors": "Vendors",
     "vendors_selected": "Vendors Selected",
-    "select_payor": "Select Payor"
+    "select_payor": "Select Payor",
+    "connect_icici_bank": "Connect ICICI Bank",
+    "pending_approval": "Pending approval",
+    "due": "Due"
 }

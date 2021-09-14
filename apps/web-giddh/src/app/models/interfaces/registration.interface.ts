@@ -17,6 +17,7 @@ export class IntegratedBankList {
     bankName: string;
     accountNo: string;
     effectiveBal: string;
+    errorMessage?: string;
 }
 
 /** Get bank request object */

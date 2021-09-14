@@ -204,7 +204,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             this.selectIntegratedBankList = [];
             if (bankList && bankList.length) {
                 bankList.forEach(item => {
-                    if (item) {
+                    if (item && !item.errorMessage) {
                         item.bankName = item.bankName ? item.bankName : "";
                         this.selectIntegratedBankList.push({ label: item.bankName, value: item.uniqueName, additional: item });
                     }
