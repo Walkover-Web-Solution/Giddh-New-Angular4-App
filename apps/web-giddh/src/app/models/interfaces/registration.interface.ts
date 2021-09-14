@@ -42,6 +42,7 @@ export class BulkPaymentResponse {
     otp: any;
     requestId: string;
     success: boolean;
+    Message?: string;
 }
 
 /** Bulk payment confirmation request object */

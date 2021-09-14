@@ -59,7 +59,6 @@
     "bank_bal": "Bank Bal",
     "account_number": "Account #",
     "payment_status": "Payment Status",
-    "payment_status_note": "Status of all payments will be mailed shortly.",
     "aging_error_message": "4th column must be less than 5th and 5th must be less than 6th",
     "search_name": "Search Name",
     "customers": "Customers",

@@ -59,7 +59,6 @@
     "bank_bal": "बँक शिल्लक",
     "account_number": "खाते #",
     "payment_status": "पैसे भरल्याची स्थिती",
-    "payment_status_note": "सर्व देयकेची स्थिती लवकरच मेल केली जाईल.",
     "aging_error_message": "चौथा स्तंभ 5 व्या पेक्षा कमी आणि 5 वा 6 वा कमी असणे आवश्यक आहे",
     "search_name": "नाव शोधा",
     "customers": "ग्राहक",
