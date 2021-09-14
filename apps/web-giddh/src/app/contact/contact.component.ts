@@ -422,7 +422,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.searchStr$.next(searchedText);
         });
 
-        this.store.pipe(select(state => state.company && state.company), takeUntil(this.destroyed$)).subscribe(response => {
+        this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(response => {
             this.isIciciAccountPendingForApproval = false;
             this.isGetAllIntegratedBankInProgress = response?.isGetAllIntegratedBankInProgress;
             if(response?.integratedBankList?.length > 0) {
