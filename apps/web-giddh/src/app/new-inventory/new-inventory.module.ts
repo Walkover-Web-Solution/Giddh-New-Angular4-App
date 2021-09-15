@@ -39,6 +39,11 @@ import { DashboardProfitStockList } from './component/inventory-dashboard/dashbo
 import { DashboardPurchaseReport } from './component/inventory-dashboard/dashboard-purchase-report/dashboard-purchase-report.component';
 import { DashboardSalesReport } from './component/inventory-dashboard/dashboard-sales-report/dashboard-sales-report.component';
 import { DashboardSellingReport } from './component/inventory-dashboard/dashboard-selling-report/dashboard-selling-report.component';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
+import { CommonModule } from '@angular/common';
+import { NgxUploaderModule } from 'ngx-uploader';
+import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 
 @NgModule({
     declarations: [
@@ -83,7 +88,12 @@ import { DashboardSellingReport } from './component/inventory-dashboard/dashboar
         SharedModule,
         TabsModule.forRoot(),
         BsDropdownModule.forRoot(),
-        ModalModule
+        CommonModule,
+        ModalModule,
+        FormFieldsModule,
+        TranslateDirectiveModule,
+        NgxUploaderModule,
+        DecimalDigitsModule
     ],
     exports: [
         NewInventoryComponent,

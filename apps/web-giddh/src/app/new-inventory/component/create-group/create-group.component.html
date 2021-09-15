@@ -1,26 +1,34 @@
-<div class="relative">
+<div
+    class="relative"
+    appTranslate
+    [file]="'inventory/stock-group'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <hamburger-menu [pageHeading]="'Create Group'"></hamburger-menu>
-    <div class="container-fluid">
-        <div class="create-group-page">
-            <div class="row">
-                <div class="col-xl-5 col-lg-6 col-md-6">
-                    <div class="create-group-form">
-                        <p class="mr-b15 text-gray font-14">
-                            Lorem Ipsum dummy text will come here about create stock.
-                        </p>
-                    </div>
-                    <form>
+    <form autocomplete="off" novalidate name="groupForm" [formGroup]="groupForm" (ngSubmit)="saveGroup()">
+        <div class="container-fluid">
+            <div class="create-group-page">
+                <div class="row">
+                    <div class="col-xl-5 col-lg-6 col-md-6">
+                        <div class="create-group-form">
+                            <p class="mr-b15 text-gray font-14">
+                                Lorem Ipsum dummy text will come here about create stock.
+                            </p>
+                        </div>
                         <div class="row mr-b15">
                             <div class="col-sm-6">
                                 <label>Group Name <span class="red-text">*</span></label>
                             </div>
                             <div class="col-sm-6">
-                                <input
-                                    id="group-name"
-                                    class="form-control"
-                                    type="text"
+                                <text-field
+                                    [cssClass]="'form-control'"
+                                    name="name"
+                                    id="name"
                                     placeholder="Enter Group Name"
-                                />
+                                    formControlName="name"
+                                    (change)="generateUniqueName()"
+                                ></text-field>
                             </div>
                         </div>
                         <div class="row mr-b15">
@@ -28,24 +36,86 @@
                                 <label>Unique Name <span class="red-text">*</span></label>
                             </div>
                             <div class="col-sm-6">
-                                <input id="unique-name" class="form-control" type="text" placeholder="Unique Name" />
+                                <text-field
+                                    [cssClass]="'form-control'"
+                                    name="unique-name"
+                                    id="unique-name"
+                                    placeholder="Unique Name"
+                                    formControlName="uniqueName"
+                                    (blur)="validateUniqueName()"
+                                ></text-field>
                             </div>
                         </div>
                         <div class="row mr-b15">
+                            <div class="col-sm-6">
+                                <label>&nbsp;</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <span class="mr-r15">
+                                    <input
+                                        type="radio"
+                                        class="radio-custom radio-theme"
+                                        name="showCodeType"
+                                        id="hsnCodeType"
+                                        formControlName="showCodeType"
+                                        value="hsn"
+                                        (change)="changeCodeType()"
+                                    />
+                                    <label for="hsnCodeType" class="radio-custom-label">HSN Code</label>
+                                </span>
+                                <span>
+                                    <input
+                                        type="radio"
+                                        class="radio-custom radio-theme"
+                                        name="showCodeType"
+                                        id="sacCodeType"
+                                        formControlName="showCodeType"
+                                        value="sac"
+                                        (change)="changeCodeType()"
+                                    />
+                                    <label for="sacCodeType" class="ml-1 radio-custom-label">SAC Code</label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row mr-b15" *ngIf="groupForm.get('showCodeType').value === 'hsn'">
                             <div class="col-sm-6">
                                 <label>HSN Code</label>
                             </div>
                             <div class="col-sm-6">
-                                <input id="hsn-code" class="form-control" type="text" placeholder="Enter Code" />
+                                <text-field
+                                    [cssClass]="'form-control'"
+                                    name="hsn-code"
+                                    id="hsn-code"
+                                    placeholder="Enter Code"
+                                    formControlName="hsnNumber"
+                                    decimalDigitsDirective
+                                    maxlength="10"
+                                ></text-field>
                             </div>
                         </div>
-                        <div class="row mr-b15">
+                        <div class="row mr-b15" *ngIf="groupForm.get('showCodeType').value === 'sac'">
                             <div class="col-sm-6">
                                 <label>SAC Code</label>
                             </div>
                             <div class="col-sm-6">
-                                <input id="sac-code" class="form-control" type="text" placeholder="Enter Code" />
-                                <div class="mr-t15"><input id="usb-group" type="checkbox" />Is it Sub-group?</div>
+                                <text-field
+                                    [cssClass]="'form-control'"
+                                    name="sac-code"
+                                    id="sac-code"
+                                    placeholder="Enter Code"
+                                    formControlName="sacNumber"
+                                    decimalDigitsDirective
+                                    maxlength="10"
+                                ></text-field>
+                            </div>
+                        </div>
+                        <div class="row mr-t15">
+                            <div class="col-sm-6">
+                                <label>&nbsp;</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input name="sub-group" id="sub-group" type="checkbox" formControlName="isSubGroup" />
+                                <label for="sub-group">Is it Sub-group?</label>
                             </div>
                         </div>
                         <div class="row mr-t15">
@@ -53,44 +123,81 @@
                                 <label>Parent Group</label>
                             </div>
                             <div class="col-sm-6">
-                                <input class="form-control" id="select-parent-group" placeholder="Select Group" />
+                                <sh-select
+                                    [options]="groups$ | async"
+                                    formControlName="parentStockGroupUniqueName"
+                                    [disabled]="!groupForm.get('isSubGroup').value"
+                                    [placeholder]="'Select Parent Group'"
+                                    [multiple]="false"
+                                    [ItemHeight]="33"
+                                    [forceClearReactive]="forceClear$ | async"
+                                    [isRequired]="true"
+                                ></sh-select>
                             </div>
                         </div>
-                    </form>
-                </div>
-                <div class="col-xl-7 col-lg-6 col-md-6">
-                    <div class="image-group relative">
-                        <div class="add-image">
-                            <img src="{{ imgPath }}add-image.svg" />
-                        </div>
-                        <div class="group-vector">
-                            <img src="{{ imgPath }}create-group-vector.svg" />
+                    </div>
+                    <div class="col-xl-7 col-lg-6 col-md-6">
+                        <div class="image-group relative">
+                            <div class="add-image">
+                                <img src="{{ imgPath }}add-image.svg" (click)="groupImage.click()" />
+                                <input
+                                    #groupImage
+                                    type="file"
+                                    class="d-none"
+                                    name="image"
+                                    id="image"
+                                    [options]="fileUploadOptions"
+                                    ngFileSelect
+                                    [uploadInput]="uploadInput"
+                                    (uploadOutput)="onUploadOutput($event)"
+                                />
+                            </div>
+                            <div class="group-vector">
+                                <img src="{{ imgPath }}create-group-vector.svg" />
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="other-group">
-                <tabset class="custom-tabs">
-                    <tab heading="Other">
-                        <div class="other-tab-content">
-                            <input type="checkbox" id="out-of-stock" />
-                            <span class="font-14"
-                                >Continue selling when out of stock? (Will be applicable on all the subsequent
-                                group/stock)</span
-                            >
-                        </div>
-                    </tab>
-                </tabset>
-            </div>
-        </div>
-    </div>
-    <div class="create-group-footer sticky-footer">
-        <div class="footer-wrapper">
-            <div class="button-group">
-                <button id="clear-btn" class="btn btn-primary bdr-radius-50 min-width-100">Clear</button>
-                <button id="create-group-btn" class="btn btn-success bdr-radius-50">Create Group</button>
+                <div class="other-group">
+                    <tabset class="custom-tabs">
+                        <tab heading="Other">
+                            <div class="other-tab-content">
+                                <input
+                                    type="checkbox"
+                                    name="out-of-stock-selling"
+                                    id="out-of-stock-selling"
+                                    formControlName="outOfStockSelling"
+                                />
+                                <span class="font-14"
+                                    >Continue selling when out of stock? (Will be applicable on all the subsequent
+                                    group/stock)</span
+                                >
+                            </div>
+                        </tab>
+                    </tabset>
+                </div>
             </div>
         </div>
-    </div>
+        <div class="create-group-footer sticky-footer">
+            <div class="footer-wrapper">
+                <div class="button-group">
+                    <button
+                        id="clear-btn"
+                        type="button"
+                        class="btn btn-primary bdr-radius-50 min-width-100"
+                        (click)="resetGroupForm()"
+                    >
+                        Clear
+                    </button>
+                    <button
+                        id="create-group-btn"
+                        [disabled]="groupForm?.invalid || isFileUploading"
+                        class="btn btn-success bdr-radius-50"
+                    >
+                        Create Group
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>

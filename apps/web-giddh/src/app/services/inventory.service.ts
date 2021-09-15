@@ -910,4 +910,18 @@ export class InventoryService {
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, companyUniqueName)));
     }
+
+    public createStockGroup(model: any): Observable<BaseResponse<any, any>> {
+        const companyUniqueName = this._generalService.companyUniqueName;
+        let url = this.config.apiUrl + INVENTORY_API.V5.CREATE_STOCK_GROUP;
+        url = url.replace(":companyUniqueName", companyUniqueName);
+
+        return this._http.post(url, model)
+            .pipe(map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = '';
+                data.queryString = {};
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, companyUniqueName)));
+    }
 }
