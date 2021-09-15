@@ -23,6 +23,8 @@ export class GeneralService {
     public menuClickedFromOutSideHeader: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
     public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
     public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    /** Stores the version number for new voucher APIs (1 for old APIs and 2 for new APIs) */
+    public voucherApiVersion: 1 | 2 = 1;
 
     get user(): UserDetails {
         return this._user;
@@ -723,30 +725,6 @@ export class GeneralService {
     }
 
     /**
-     * Validates the bank details: Bank Name, Account number, IFSC code.
-     * If either of them is provided then the rest two fields are also mandatory
-     * as all the 3 values are required for payment purpose. If none of them is provided,
-     * then also it is valid. It is invalid when anyone of them is missing and rest
-     * are provided
-     *
-     * @returns {boolean} True, if bank details are valid
-     * @memberof GeneralService
-     */
-    public checkForValidBankDetails(bankDetails: any, countryCode: string): boolean {
-        const fieldsWithValue = bankDetails;
-        const keys = countryCode === 'AE' ?
-            ['beneficiaryName', 'bankName', 'branchName', 'bankAccountNo', 'swiftCode'] :
-            ['bankName', 'bankAccountNo', 'ifsc'];
-        let isValid = true;
-        if (fieldsWithValue) {
-            isValid = keys.every(key => Boolean(fieldsWithValue[key])) || keys.every(key => !Boolean(fieldsWithValue[key]));
-            return isValid;
-        } else {
-            return isValid;
-        }
-    }
-
-    /**
      * Returns the string initials upto 2 letters/characters
      *
      * @param {string} name String whose intials are required
@@ -781,22 +759,47 @@ export class GeneralService {
      * @param {string} module name
      * @param {Array<any>} apiItems List of permissible items obtained from API
      * @param {Array<AllItems>} itemList List of all the items of menu
-     * @returns {Array<AllItems>} Array of permissible menu items
+     * @param {string} countryCode
+     * @returns {Array<AllItems>}
      * @memberof GeneralService
      */
-    public getVisibleMenuItems(module: string, apiItems: Array<any>, itemList: Array<AllItems>): Array<AllItems> {
+    public getVisibleMenuItems(module: string, apiItems: Array<any>, itemList: Array<AllItems>, countryCode: string = ""): Array<AllItems> {
         const visibleMenuItems = cloneDeep(itemList);
         itemList?.forEach((menuItem, menuIndex) => {
             visibleMenuItems[menuIndex].items = [];
             menuItem.items?.forEach(item => {
                 const isValidItem = apiItems.find(apiItem => apiItem.uniqueName === item.link);
-                if ((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) {
+                if (((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) && (!item.additional?.countrySpecific?.length || item.additional?.countrySpecific?.indexOf(countryCode) > -1)) {
                     // If items returned from API have the current item which can be shown in branch/company mode, add it
                     visibleMenuItems[menuIndex].items.push(item);
                 }
             });
         });
         return visibleMenuItems;
+    }
+
+    /**
+     * Validates the bank details: Bank Name, Account number, IFSC code.
+     * If either of them is provided then the rest two fields are also mandatory
+     * as all the 3 values are required for payment purpose. If none of them is provided,
+     * then also it is valid. It is invalid when anyone of them is missing and rest
+     * are provided
+     *
+     * @returns {boolean} True, if bank details are valid
+     * @memberof GeneralService
+     */
+    public checkForValidBankDetails(bankDetails: any, countryCode: string): boolean {
+        const fieldsWithValue = bankDetails;
+        const keys = countryCode === 'AE' ?
+            ['beneficiaryName', 'bankName', 'branchName', 'bankAccountNo', 'swiftCode'] :
+            ['bankName', 'bankAccountNo', 'ifsc'];
+        let isValid = true;
+        if (fieldsWithValue) {
+            isValid = keys.every(key => Boolean(fieldsWithValue[key])) || keys.every(key => !Boolean(fieldsWithValue[key]));
+            return isValid;
+        } else {
+            return isValid;
+        }
     }
 
     /**
@@ -838,6 +841,39 @@ export class GeneralService {
     }
 
     /**
+     * This will give multi-lingual current voucher label
+     *
+     * @param {string} voucherCode Voucher code
+     * @param {*} commonLocaleData Global context of multi-lingual keys
+     * @return {string} Multi-lingual current voucher label
+     * @memberof GeneralService
+     */
+     public getCurrentVoucherLabel(voucherCode: string, commonLocaleData: any): string {
+        switch(voucherCode) {
+            case AdjustedVoucherType.Sales: case AdjustedVoucherType.SalesInvoice: return commonLocaleData?.app_voucher_types.sales;
+            case AdjustedVoucherType.Purchase: return commonLocaleData?.app_voucher_types.purchase;
+            case AdjustedVoucherType.CreditNote: return commonLocaleData?.app_voucher_types.credit_note;
+            case AdjustedVoucherType.DebitNote: return commonLocaleData?.app_voucher_types.debit_note;
+            case AdjustedVoucherType.Payment: return commonLocaleData?.app_voucher_types.payment;
+            default: return '';
+        }
+    }
+
+    /**
+     * Determines if an element is child element to another element
+     *
+     * @param {*} child Element received as child
+     * @param {*} parent Element received as parent
+     * @return {boolean} True, if element is child of another element
+     * @memberof GeneralService
+     */
+    public childOf(child: any, parent: any): boolean {
+        while ((child = child.parentNode) && child !== parent) {
+        }
+        return !!child;
+    }
+
+    /**
      * This will sort branches by alias
      *
      * @param {*} branchA
@@ -872,39 +908,7 @@ export class GeneralService {
     }
 
     /**
-     * This will give multi-lingual current voucher label
-     *
-     * @param {string} voucherCode Voucher code
-     * @param {*} commonLocaleData Global context of multi-lingual keys
-     * @return {string} Multi-lingual current voucher label
-     * @memberof GeneralService
-     */
-     public getCurrentVoucherLabel(voucherCode: string, commonLocaleData: any): string {
-        switch(voucherCode) {
-            case AdjustedVoucherType.Sales: case AdjustedVoucherType.SalesInvoice: return commonLocaleData?.app_voucher_types.sales;
-            case AdjustedVoucherType.Purchase: return commonLocaleData?.app_voucher_types.purchase;
-            case AdjustedVoucherType.CreditNote: return commonLocaleData?.app_voucher_types.credit_note;
-            case AdjustedVoucherType.DebitNote: return commonLocaleData?.app_voucher_types.debit_note;
-            case AdjustedVoucherType.Payment: return commonLocaleData?.app_voucher_types.payment;
-            default: return '';
-        }
-    }
-
-    /**
-     * Determines if an element is child element to another element
-     *
-     * @param {*} child Element received as child
-     * @param {*} parent Element received as parent
-     * @return {boolean} True, if element is child of another element
-     * @memberof GeneralService
-     */
-    public childOf(child: any, parent: any): boolean {
-        while ((child = child.parentNode) && child !== parent) {
-        }
-        return !!child;
-    }
-
-    /* This will expand left sidebar
+     * This will expand left sidebar
      *
      * @memberof GeneralService
      */
@@ -924,5 +928,17 @@ export class GeneralService {
     public collapseSidebar(): void {
         document.querySelector('.primary-sidebar')?.classList?.add('sidebar-collapse');
         document.querySelector('.nav-left-bar')?.classList?.add('width-60');
+    }
+
+    /**
+     * Adds voucher version to request's URL
+     *
+     * @param {string} url API URL
+     * @param {number} voucherVersion Company voucher version
+     * @memberof GeneralService
+     */
+    public addVoucherVersion(url: string, voucherVersion: number): string {
+        const delimiter = url.includes('?') ? '&' : '?';
+        return url.concat(`${delimiter}voucherVersion=${voucherVersion}`);
     }
 }

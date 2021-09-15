@@ -790,7 +790,7 @@
                                 {{ item.key | titlecase }}
                             </th>
                         </ng-container>
-                        <th *ngIf="activeTab === 'vendor' && isICICIIntegrated" width="10%">
+                        <th *ngIf="activeTab === 'vendor'" width="10%">
                             {{ commonLocaleData?.app_action }}
                         </th>
                     </tr>
@@ -893,11 +893,11 @@
                                                                     </a>
                                                                 </li>
 
-                                                                <!--<li class="li-link">
+                                                                <!-- <li class="li-link">
                                                                     <a href="javascript: void 0"
                                                                         (click)="performActions(3, account, $event )">{{commonLocaleData?.app_send_sms}}
                                                                     </a>
-                                                                </li>-->
+                                                                </li> -->
 
                                                                 <li class="li-link">
                                                                     <a
@@ -1245,11 +1245,11 @@
                                                                     </a>
                                                                 </li>
 
-                                                                <!--<li class="li-link">
+                                                                <!-- <li class="li-link">
                                                                     <a href="javascript: void 0"
                                                                         (click)="performActions(3, account, $event )">{{commonLocaleData?.app_send_sms}}
                                                                     </a>
-                                                                </li>-->
+                                                                </li> -->
 
                                                                 <li class="li-link">
                                                                     <a
@@ -1492,21 +1492,40 @@
                                     {{ item.value || "-" }}
                                 </td>
                             </ng-container>
-                            <td [attr.data-title]="commonLocaleData?.app_action" *ngIf="isICICIIntegrated">
-                                <button
-                                    *ngIf="account?.bankPaymentDetails && account?.country?.code === 'IN'"
-                                    class="btn btn-small btn-success"
-                                    (click)="openBulkPaymentModal(template, account)"
-                                >
-                                    {{ commonLocaleData?.app_pay_now }}
+                            <td [attr.data-title]="commonLocaleData?.app_action">
+                                <button *ngIf="isGetAllIntegratedBankInProgress" class="btn btn-small btn-light">
+                                    {{ commonLocaleData?.app_loading }}
                                 </button>
                                 <button
-                                    *ngIf="!account.bankPaymentDetails"
+                                    *ngIf="!isGetAllIntegratedBankInProgress && isIciciAccountPendingForApproval"
                                     class="btn btn-small btn-light"
-                                    (click)="updateCustomerAcc('vendor', account)"
+                                    (click)="showIntegrationProcess()"
                                 >
-                                    {{ commonLocaleData?.app_add_bank_details }}
+                                    {{ localeData?.pending_approval }}
                                 </button>
+                                <button
+                                    *ngIf="!isICICIIntegrated && !isGetAllIntegratedBankInProgress"
+                                    class="btn btn-small btn-light"
+                                    [routerLink]="['/pages/settings/integration/payment']"
+                                >
+                                    {{ localeData?.connect_icici_bank }}
+                                </button>
+                                <ng-container *ngIf="isICICIIntegrated && !isGetAllIntegratedBankInProgress">
+                                    <button
+                                        *ngIf="account?.bankPaymentDetails && account?.country?.code === 'IN'"
+                                        class="btn btn-small btn-success"
+                                        (click)="openBulkPaymentModal(template, account)"
+                                    >
+                                        {{ commonLocaleData?.app_pay_now }}
+                                    </button>
+                                    <button
+                                        *ngIf="!account.bankPaymentDetails"
+                                        class="btn btn-small btn-light"
+                                        (click)="updateCustomerAcc('vendor', account)"
+                                    >
+                                        {{ commonLocaleData?.app_add_bank_details }}
+                                    </button>
+                                </ng-container>
                             </td>
                         </tr>
                     </ng-container>

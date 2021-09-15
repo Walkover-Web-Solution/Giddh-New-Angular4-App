@@ -38,6 +38,7 @@ import { SettingsBranchActions } from '../actions/settings/branch/settings.branc
 import { OrganizationType } from '../models/user-login-state';
 import { GiddhCurrencyPipe } from '../shared/helpers/pipes/currencyPipe/currencyType.pipe';
 import { FormControl } from '@angular/forms';
+import { Lightbox } from 'ngx-lightbox';
 
 export interface PayNowRequest {
     accountUniqueName: string;
@@ -201,12 +202,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     public openingBalance: any;
     /** This will hold closing balance amount */
     public closingBalance: number = 0;
-    /** Stores the current organization type */
-    public currentOrganizationType: OrganizationType;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
     /** Listens for Master open/close event, required to load the data once master is closed */
     public isAddAndManageOpenedFromOutside$: Observable<boolean>;
     /** This will store screen size */
@@ -219,6 +220,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     public todaySelected: boolean = false;
     /** Holds company name if bank accounts are loaded in case of vendor */
     public bankAccountsLoadedForCompany: boolean = false;
+    /** Is get all integrated bank api in progress */
+    public isGetAllIntegratedBankInProgress: boolean = false;
+    /** Holds images folder path */
+    public imgPath: string = '';
+    /** True if single icici bank account is there and is pending for approval */
+    public isIciciAccountPendingForApproval: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -231,12 +238,17 @@ export class ContactComponent implements OnInit, OnDestroy {
         private _companyActions: CompanyActions,
         private componentFactoryResolver: ComponentFactoryResolver,
         private _groupWithAccountsAction: GroupWithAccountsAction,
-        private _cdRef: ChangeDetectorRef, private _generalService: GeneralService,
-        private _route: ActivatedRoute, private _generalAction: GeneralActions,
-        private breakPointObservar: BreakpointObserver, private modalService: BsModalService,
-        private settingsProfileActions: SettingsProfileActions, private groupService: GroupService,
+        private _cdRef: ChangeDetectorRef, 
+        private _generalService: GeneralService,
+        private _route: ActivatedRoute, 
+        private _generalAction: GeneralActions,
+        private breakPointObservar: BreakpointObserver, 
+        private modalService: BsModalService,
+        private settingsProfileActions: SettingsProfileActions, 
+        private groupService: GroupService,
         private settingsBranchAction: SettingsBranchActions,
-        public currencyPipe: GiddhCurrencyPipe) {
+        public currencyPipe: GiddhCurrencyPipe,
+        private lightbox: Lightbox) {
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
@@ -261,6 +273,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.store.dispatch(this._companyActions.getAllRegistrations());
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.getCompanyCustomField();
@@ -409,12 +422,20 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.searchStr$.next(searchedText);
         });
 
-        this.store.pipe(select(state => state.company && state.company.integratedBankList), takeUntil(this.destroyed$)).subscribe(response => {
-            if(response?.length > 0) {
+        this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(response => {
+            this.isIciciAccountPendingForApproval = false;
+            this.isGetAllIntegratedBankInProgress = response?.isGetAllIntegratedBankInProgress;
+            if(response?.integratedBankList?.length > 0) {
+                let approvalPendingAccounts = response?.integratedBankList.filter(account => !account.errorMessage);
+                if(!approvalPendingAccounts?.length) {
+                    this.isIciciAccountPendingForApproval = true;
+                }
+                
                 this.isICICIIntegrated = true;
             } else {
                 this.isICICIIntegrated = false;
             }
+            this._cdRef.detectChanges();
         });
     }
 
@@ -842,7 +863,9 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public toggleAllSelection(action: boolean) {
-
+        if(action) {
+            this.selectedAccountsList = [];
+        }
         this.checkboxInfo[this.checkboxInfo.selectedPage] = action;
         this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
         if (action) {
@@ -1121,14 +1144,14 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public columnFilter(event, column) {
-        // if (event && column) {
         this.showFieldFilter[column] = event;
         this.setTableColspan();
-        this.showFieldFilter.selectAll = Object.keys(this.showFieldFilter).filter((filterName) => filterName !== 'selectAll').every(filterName => this.showFieldFilter[filterName]);
         if (window.localStorage) {
             localStorage.setItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer'], JSON.stringify(this.showFieldFilter));
         }
-        // }
+        setTimeout(() => {
+            this.showFieldFilter.selectAll = Object.keys(this.showFieldFilter).filter((filterName) => filterName !== 'selectAll').every(filterName => this.showFieldFilter[filterName]);
+        }, 500);
     }
 
     /**
@@ -1515,5 +1538,16 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.order = ord;
 
         this.getAccounts(this.fromDate, this.toDate, null, 'false', PAGINATION_LIMIT, this.searchStr, key, ord, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+    }
+
+    /**
+     * This will show the integration process GIF in lightbox
+     *
+     * @memberof ContactComponent
+     */
+    public showIntegrationProcess(): void {
+        const images = [];
+        images.push({ src: this.imgPath + "icici-integration-process.gif" });
+        this.lightbox.open(images, 0);
     }
 }

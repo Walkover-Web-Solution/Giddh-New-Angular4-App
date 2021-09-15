@@ -422,7 +422,6 @@
     "app_due_amount": "देय रक्कम",
     "app_enter_otp": "ओटीपी प्रविष्ट करा",
     "app_resend": "पुन्हा पाठवा",
-    "app_cancel_otp": "OTP रद्द करा",
     "app_payment_proceed": "देयक पुढे",
     "app_clear": "साफ",
     "app_custom": "सानुकूल",
@@ -637,7 +636,8 @@
 		"receive_otp": "आपल्याला लवकरच आपल्या मोबाइलवर एक सत्यापन कोड प्राप्त होईल.",
 		"otp_sent_email": "आपल्या ईमेल खात्यावर एक सत्यापन कोड पाठविला गेला आहे.",
 		"internet_error": "कृपया आपले इंटरनेट कनेक्शन तपासा.",
-		"internet_disconnected": "इंटरनेट डिस्कनेक्ट झाले"
+		"internet_disconnected": "इंटरनेट डिस्कनेक्ट झाले",
+        "voucher_saved": "व्हाउचर यशस्वीरित्या व्युत्पन्न केले"
 	},
 	"app_supported_languages": {
 		"english": "इंग्रजी",
@@ -656,5 +656,7 @@
         "weekly": "साप्ताहिक",
         "monthly": "मासिक",
         "unlimited": "अमर्यादित"
-    }
+    },
+    "app_voucher_unavailable": "समायोजनासाठी कोणतेही व्हाउचर नाही.",
+    "app_reference_invoice": "संदर्भ पावती"
 }

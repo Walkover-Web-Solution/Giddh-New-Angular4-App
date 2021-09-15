@@ -19,8 +19,8 @@ import { GroupResponse } from 'apps/web-giddh/src/app/models/api-models/Group';
 import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/SettingsDiscount';
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { Observable, of as observableOf, of, ReplaySubject } from 'rxjs';
-import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { CommonActions } from '../../../../actions/common.actions';
 import { CompanyActions } from '../../../../actions/company.actions';
@@ -172,14 +172,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         totalPages: 0,
         query: ''
     };
-    /** This will hold inventory settings */
-    public inventorySettings: any;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /** This will hold placeholder for tax */
     public taxNamePlaceholder: string = "";
+    /** This will hold inventory settings */
+    public inventorySettings: any;
     /** Stores the search results pagination details */
     public accountsSearchResultsPaginationData = {
         page: 0,
@@ -1070,10 +1070,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         this.selectedCountryCurrency = res.country.currency.code;
                         this.selectedAccountCallingCode = res.country.callingCode;
                         if (selectedAcountCurrency) {
-                            this.addAccountForm.get('currency').patchValue(selectedAcountCurrency);
+                            this.addAccountForm.get('currency')?.patchValue(selectedAcountCurrency);
                             this.selectedCurrency = selectedAcountCurrency;
                         } else {
-                            this.addAccountForm.get('currency').patchValue(this.selectedCountryCurrency);
+                            this.addAccountForm.get('currency')?.patchValue(this.selectedCountryCurrency);
                             this.selectedCurrency = this.selectedCountryCurrency;
                         }
                         if (!this.addAccountForm.get('mobileCode').value) {
@@ -1481,28 +1481,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     /**
-     * This will get invoice settings
-     *
-     * @memberof AccountUpdateNewDetailsComponent
-     */
-    public getInvoiceSettings(): void {
-        this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.status === "success" && response.body) {
-                let invoiceSettings = _.cloneDeep(response.body);
-                this.inventorySettings = invoiceSettings.companyInventorySettings;
-
-                if (!this.addAccountForm.get("hsnOrSac")?.value) {
-                    if (this.inventorySettings?.manageInventory) {
-                        this.addAccountForm.get("hsnOrSac").patchValue("hsn");
-                    } else {
-                        this.addAccountForm.get("hsnOrSac").patchValue("sac");
-                    }
-                }
-            }
-        });
-    }
-
-    /**
      * Callback for translation response complete
      *
      * @param {boolean} event
@@ -1526,13 +1504,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     } else {
                         this.GSTIN_OR_TRN = '';
                     }
-                    this.taxNamePlaceholder = this.commonLocaleData.app_enter_tax_name;
-                    this.taxNamePlaceholder = this.taxNamePlaceholder.replace("[TAX_NAME]", this.formFields['taxName'].label);
+                    this.taxNamePlaceholder = this.commonLocaleData?.app_enter_tax_name;
+                    this.taxNamePlaceholder = this.taxNamePlaceholder.replace("[TAX_NAME]", this.formFields['taxName']?.label || '');
                 }
             });
         }
     }
-
 
     /**
      * Search query change handler for group
@@ -1587,6 +1564,29 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }, 500);
         }
     }
+
+    /**
+     * This will get invoice settings
+     *
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public getInvoiceSettings(): void {
+        this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.status === "success" && response.body) {
+                let invoiceSettings = cloneDeep(response.body);
+                this.inventorySettings = invoiceSettings.companyInventorySettings;
+
+                if (!this.addAccountForm.get("hsnOrSac")?.value) {
+                    if (this.inventorySettings?.manageInventory) {
+                        this.addAccountForm.get("hsnOrSac")?.patchValue("hsn");
+                    } else {
+                        this.addAccountForm.get("hsnOrSac")?.patchValue("sac");
+                    }
+                }
+            }
+        });
+    }
+
 
     /**
      * Scroll end handler for group dropdown

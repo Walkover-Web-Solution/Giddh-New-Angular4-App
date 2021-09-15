@@ -35,6 +35,8 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     public activeLocale: string = "";
     /** True if we should show heading */
     public showSettingHeading: boolean = false;
+    /** This contains router url */
+    public routerUrl: string = "";
 
     constructor(private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>, private localeService: LocaleService) {
 
@@ -55,7 +57,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
-            if (this.activeLocale && this.activeLocale !== response?.value) {
+            if(this.activeLocale && this.activeLocale !== response?.value) {
                 this.localeService.getLocale('aside-setting', response?.value).subscribe(response => {
                     this.localeData = response;
                     this.translationComplete(true);
@@ -69,6 +71,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationEnd) {
                 this.showHideSettingsHeading(event.url);
+                this.routerUrl = event.url?.split('?')[0];
             }
         });
     }

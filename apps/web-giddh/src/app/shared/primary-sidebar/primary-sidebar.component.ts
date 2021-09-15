@@ -97,10 +97,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public commonLocaleData: any = {};
     /** This holds the active locale */
     public activeLocale: string = "";
+    /** This will open company branch switch dropdown */
+    public showCompanyBranchSwitch: boolean = false;
     /** This will holds true if we added ledger item in local db once */
     public isItemAdded: boolean = false;
-    /** This will open company branch switch dropdown */
-    public showCompanyBranchSwitch:boolean = false;
     /** This will show/hide account sidepan */
     public accountAsideMenuState: string = 'out';
     /** This will hold group unique name from CMD+k for creating account */
