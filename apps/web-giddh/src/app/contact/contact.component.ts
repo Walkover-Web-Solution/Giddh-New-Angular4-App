@@ -863,7 +863,9 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public toggleAllSelection(action: boolean) {
-
+        if(action) {
+            this.selectedAccountsList = [];
+        }
         this.checkboxInfo[this.checkboxInfo.selectedPage] = action;
         this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
         if (action) {
