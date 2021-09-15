@@ -640,6 +640,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.currencyTogglerModel = false;
 
             if (params['accountUniqueName']) {
+                this.isShowLedgerColumnarReportTable = false;
                 this.lc.accountUnq = params['accountUniqueName'];
                 this.needToShowLoader = true;
                 this.searchText = '';
@@ -954,7 +955,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public getTransactionData() {
-        this.isAdvanceSearchImplemented = false;
         this.closingBalanceBeforeReconcile = null;
         this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
         this.store.dispatch(this.ledgerActions.GetTransactions(this.trxRequest));
@@ -1817,6 +1817,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.advanceSearchRequest.accountUniqueName, from, to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, null, this.advanceSearchRequest.branchUniqueName)
             );
         }
+        this.cdRf.detectChanges();
     }
 
     public getInvoiceLists(request) {
