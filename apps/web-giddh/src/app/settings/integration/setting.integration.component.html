@@ -419,8 +419,9 @@
                                                         ><i class="icon-success"></i>
                                                         {{ localeData?.payment?.connected }}</span
                                                     >
-                                                    <span class="mr-l15 user-action-div" *ngIf="payor?.isConnected">
+                                                    <span class="mr-l15 user-action-div">
                                                         <a
+                                                            *ngIf="payor?.isConnected"
                                                             href="javascript:;"
                                                             class="icon-edit-pencil"
                                                             (click)="openEditAccountUserModal(bankAccount, payor)"
@@ -438,7 +439,7 @@
                                                     </span>
                                                 </div>
                                             </div>
-                                            <div class="inline" *ngIf="!payor?.isConnected">
+                                            <div class="inline mb-2" *ngIf="!payor?.isConnected">
                                                 <div class="col-md-12">
                                                     <p
                                                         class="font-12"

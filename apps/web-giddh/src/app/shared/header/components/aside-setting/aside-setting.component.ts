@@ -71,7 +71,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationEnd) {
                 this.showHideSettingsHeading(event.url);
-                this.routerUrl = event.url;
+                this.routerUrl = event.url?.split('?')[0];
             }
         });
     }
