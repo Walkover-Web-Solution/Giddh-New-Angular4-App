@@ -1287,15 +1287,21 @@ export class ContactComponent implements OnInit, OnDestroy {
         let indexOfEntry = this.selectedAccountsList.indexOf(element);
         if (indexOfEntry === -1 && isChecked) {
             this.selectedAccountsList.push(element);
-        } else if (indexOfEntry > -1 && !this.allSelectionModel) {
+        } else if (indexOfEntry > -1 && !isChecked) {
             this.selectedAccountsList.splice(indexOfEntry, 1);
         }
         // selected contacts list
         let indexOfEntrySelected = this.selectedCheckedContacts.indexOf(element?.uniqueName);
         if (indexOfEntrySelected === -1 && isChecked) {
             this.selectedCheckedContacts.push(element?.uniqueName);
-        } else if (indexOfEntrySelected > -1 && !this.allSelectionModel) {
+        } else if (indexOfEntrySelected > -1 && !isChecked) {
             this.selectedCheckedContacts.splice(indexOfEntrySelected, 1);
+        }
+
+        if(this.activeTab === "customer") {
+            this.allSelectionModel = this.sundryDebtorsAccounts?.length === this.selectedCheckedContacts?.length;
+        } else {
+            this.allSelectionModel = this.sundryCreditorsAccounts?.length === this.selectedCheckedContacts?.length;
         }
     }
 
