@@ -31,9 +31,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceReceiptFilter, ReceiptItem, ReciptResponse } from 'apps/web-giddh/src/app/models/api-models/recipt';
 import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
 import { CompanyResponse, ValidateInvoice } from 'apps/web-giddh/src/app/models/api-models/Company';
-import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdvanceSearch.component';
-import { BulkExportModal } from './models/bulk-export-modal/bulk-export.component';
 import { ToasterService } from '../../services/toaster.service';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { VoucherTypeEnum, VoucherClass } from '../../models/api-models/Sales';
@@ -233,6 +231,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public eInvoiceCancellationReasonOptions = [];
     /** True if user has voucher list permission */
     public hasVoucherListPermissions: boolean = true;
+    /** True if dropdown menu needs to show upwards */
+    public isDropUp: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -240,7 +240,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         private _invoiceService: InvoiceService,
         private _toaster: ToasterService,
         private _activatedRoute: ActivatedRoute,
-        private companyActions: CompanyActions,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private cdr: ChangeDetectorRef,
         private _breakPointObservar: BreakpointObserver,
@@ -1874,5 +1873,24 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      */
     public handleBlurOnCancellationRemarks(): void {
         this.eInvoiceCancel.cancellationRemarks = this.eInvoiceCancel?.cancellationRemarks.trim();
+    }
+
+    /**
+     * This will determine if dropdown menu needs to show downwards or upwards
+     *
+     * @param {*} event
+     * @memberof InvoicePreviewComponent
+     */
+    public showActionsMenu(event: any) {
+        const screenHeight = event?.view?.innerHeight;
+        const clickedPosition = event?.y;
+        const actionPopupHeight = 200;
+        const calculatedPosition = screenHeight - clickedPosition;
+
+        if(calculatedPosition > actionPopupHeight) {
+            this.isDropUp = false;
+        } else {
+            this.isDropUp = true;
+        }
     }
 }
