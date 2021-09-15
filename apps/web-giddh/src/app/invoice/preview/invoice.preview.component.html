@@ -1151,6 +1151,7 @@
                                                     dropdownToggle
                                                     class="dropdown-toggle icon-dots-three-vertical pull-right"
                                                     aria-controls="dropdown-basic"
+                                                    (click)="showActionsMenu($event)"
                                                 ></a>
                                                 <div
                                                     id="dropdown-basic"
@@ -1158,7 +1159,9 @@
                                                     class="dropdown-menu dropdown-menu-right width-150"
                                                     role="menu"
                                                     aria-labelledby="edit-model-basic"
+                                                    [ngClass]="{ 'dropup-menu': isDropUp }"
                                                 >
+                                                    <!-- add "dropup-menu" with above div on line 1166 -->
                                                     <ul class="select-action-dropdown">
                                                         <li (click)="onPerformAction(item, 'paid')">
                                                             <a class="cp" href="javascript:void(0)">{{
@@ -1424,6 +1427,7 @@
                                                     dropdownToggle
                                                     class="dropdown-toggle icon-dots-three-vertical pull-right"
                                                     aria-controls="dropdown-basic"
+                                                    (click)="showActionsMenu($event)"
                                                 ></a>
                                                 <div
                                                     id="dropdown-basic"
@@ -1431,6 +1435,7 @@
                                                     class="dropdown-menu dropdown-menu-right width-150"
                                                     role="menu"
                                                     aria-labelledby="edit-model-basic"
+                                                    [ngClass]="{ 'dropup-menu': isDropUp }"
                                                 >
                                                     <ul class="select-action-dropdown">
                                                         <li (click)="onPerformAction(item, 'cancel')">
