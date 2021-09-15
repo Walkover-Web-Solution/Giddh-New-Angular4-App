@@ -1,6 +1,7 @@
 const COMMON_USER = 'company/:companyUniqueName/inventory-users';
 const COMMON_ENTRY = COMMON_USER + '/:inventoryUserUniqueName/inventory-entries';
 const COMMON_TRANSFER_ENTRY = 'inventory-transfer';
+const COMMON_V5 = 'v5/company/:companyUniqueName';
 export const INVENTORY_API = {
     USER: {
         CREATE: COMMON_USER,
@@ -63,5 +64,8 @@ export const INVENTORY_API = {
     DELETE_BRANCH_TRANSFER: 'company/:companyUniqueName/branch-transfer/:branchTransferUniqueName',
     UPDATE_BRANCH_TRANSFER: 'company/:companyUniqueName/branch-transfer/:branchTransferUniqueName',
     DOWNLOAD_NEW_BRANCH_TRANSFER: 'company/:companyUniqueName/branch-transfer/download?fileType=base64',
-    GET_UNIT_CODE_REGEX: 'ui/forms?formName=:formName&country=:country'
+    GET_UNIT_CODE_REGEX: 'ui/forms?formName=:formName&country=:country',
+    V5: {
+        CREATE_STOCK_GROUP: COMMON_V5 + '/stock-group'
+    }
 };

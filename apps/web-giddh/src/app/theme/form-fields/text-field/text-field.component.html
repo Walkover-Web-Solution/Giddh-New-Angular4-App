@@ -8,6 +8,7 @@
         [type]="type"
         [placeholder]="placeholder"
         [(ngModel)]="ngModel"
+        (ngModelChange)="handleChange()"
         (input)="handleInput()"
         [maxlength]="maxlength"
         [readonly]="readonly"

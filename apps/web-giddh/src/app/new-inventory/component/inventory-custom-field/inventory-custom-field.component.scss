@@ -1,0 +1,32 @@
+.custom-field-page {
+    h4 {
+        font-size: 16px;
+        font-family: "opensans-semibold";
+    }
+}
+@media (max-width: 767px) {
+    .giddh-table {
+        tr {
+            td {
+                white-space: normal !important;
+                word-break: inherit !important;
+                width: 100% !important;
+            }
+        }
+    }
+}
+@media (max-width: 575px) {
+    .custom-field-page {
+        .custom-field-header {
+            flex-direction: column;
+            justify-content: flex-start !important;
+            align-items: flex-start !important;
+            h4 {
+                margin-bottom: 10px;
+            }
+            .btn {
+                width: 100%;
+            }
+        }
+    }
+}

@@ -101,6 +101,8 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
      */
     set value(value: any) {
         this.ngModel = value;
+        this.onChangeCallback(value);
+        this.onTouchedCallback();
         this.stateChanges.next();
     }
 
@@ -161,6 +163,10 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
      * @memberof TextFieldComponent
      */
     public handleInput(): void {
+        this.onChangeCallback(this.value);
+    }
+
+    public handleChange(): void {
         this.onChangeCallback(this.value);
     }
 }
