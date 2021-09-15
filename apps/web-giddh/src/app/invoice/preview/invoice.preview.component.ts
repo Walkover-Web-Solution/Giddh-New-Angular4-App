@@ -233,6 +233,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public hasVoucherListPermissions: boolean = true;
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
+    /** True if dropdown menu needs to show upwards */
+    public isDropUp: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -1894,5 +1896,24 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      */
     public handleBlurOnCancellationRemarks(): void {
         this.eInvoiceCancel.cancellationRemarks = this.eInvoiceCancel?.cancellationRemarks.trim();
+    }
+
+    /**
+     * This will determine if dropdown menu needs to show downwards or upwards
+     *
+     * @param {*} event
+     * @memberof InvoicePreviewComponent
+     */
+    public showActionsMenu(event: any) {
+        const screenHeight = event?.view?.innerHeight;
+        const clickedPosition = event?.y;
+        const actionPopupHeight = 200;
+        const calculatedPosition = screenHeight - clickedPosition;
+
+        if(calculatedPosition > actionPopupHeight) {
+            this.isDropUp = false;
+        } else {
+            this.isDropUp = true;
+        }
     }
 }
