@@ -187,7 +187,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                     if (response && response.results) {
                         response.results.map(item => {
                             item = this.addToolTiptext(item);
-                            item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, item.uniqueName);
+                            item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, item?.uniqueName);
                         });
                     }
                     this.ledgersData = response;
@@ -365,10 +365,10 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public toggleItem(item: any, action: boolean) {
         item.isSelected = action;
         if (action) {
-            this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item.uniqueName);
+            this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item?.uniqueName);
             this.countAndToggleVar();
         } else {
-            this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item.uniqueName);
+            this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item?.uniqueName);
             this.allItemsSelected = false;
         }
         this.insertItemsIntoArr();
@@ -387,9 +387,9 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             this.selectedAccountUniqueName = '';
         }
-        this.store.dispatch(this.invoiceActions.ModifiedInvoiceStateData(model.uniqueNames));
-        if (res && res.account && res.account.uniqueName) {
-            this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account.uniqueName, model));
+        this.store.dispatch(this.invoiceActions.ModifiedInvoiceStateData(model?.uniqueNames));
+        if ( res?.account?.uniqueName) {
+            this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account?.uniqueName, model));
         }
 
         this.toggleBodyClass();

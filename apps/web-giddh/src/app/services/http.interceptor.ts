@@ -38,6 +38,7 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
         if (this.generalService.currentOrganizationType === OrganizationType.Branch && request && request.urlWithParams) {
             request = this.addBranchUniqueName(request);
         }
+        request = this.addLanguage(request);
         if (this.isOnline || (isElectron && request.url.includes('localhost'))) {
             return next.handle(request);
         } else {
@@ -65,6 +66,23 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
         if (!request.params.has('branchUniqueName') && !request.url.includes('branchUniqueName') && !request.url.includes('.json')) {
             request = request.clone({
                 params: request.params.append('branchUniqueName', encodeURIComponent(this.generalService.currentBranchUniqueName))
+            });
+        }
+        return request;
+    }
+
+    /**
+     * Adds language code to every API call
+     *
+     * @private
+     * @param {HttpRequest<any>} request
+     * @returns {HttpRequest<any>}
+     * @memberof GiddhHttpInterceptor
+     */
+    private addLanguage(request: HttpRequest<any>): HttpRequest<any> {
+        if (!request.params.has('lang') && !request.url.includes('.json')) {
+            request = request.clone({
+                params: request.params.append('lang', (this.localeService.language || "en"))
             });
         }
         return request;
