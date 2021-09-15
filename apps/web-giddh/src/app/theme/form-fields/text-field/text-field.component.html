@@ -1,6 +1,6 @@
 <div class="text-field-container">
     <input
-        type="text"
+        [type]="type"
         *ngIf="useMaterial"
         matInput
         [name]="name"
@@ -8,16 +8,18 @@
         [class]="cssClass"
         [placeholder]="placeholder"
         [(ngModel)]="ngModel"
+        (ngModelChange)="handleChange()"
         (input)="handleInput()"
     />
     <input
-        type="text"
+        [type]="type"
         *ngIf="!useMaterial"
         [name]="name"
         [id]="id"
         [class]="cssClass"
         [placeholder]="placeholder"
         [(ngModel)]="ngModel"
+        (ngModelChange)="handleChange()"
         (input)="handleInput()"
     />
 </div>
