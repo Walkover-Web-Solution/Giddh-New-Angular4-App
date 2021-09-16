@@ -151,10 +151,10 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches], (companies, branches) => {
             if (branches) {
-                if (branches?.length) {
+                if (branches.length) {
                     this.unFilteredBranchList = orderBy(branches, 'name');
                     this.branches$ = observableOf(this.unFilteredBranchList);
-                } else if (branches?.length === 0) {
+                } else if (branches.length === 0) {
                     this.unFilteredBranchList = [];
                     this.branches$ = observableOf(null);
                 }
@@ -165,7 +165,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 each(companies, (cmp) => {
                     each(cmp.userEntityRoles, (company) => {
                         if (company.entity.entity === 'COMPANY' && company.role.uniqueName === 'super_admin') {
-                            if (branches && branches?.length) {
+                            if (branches && branches.length) {
                                 let existIndx = branches.findIndex((b) => b.uniqueName === cmp.uniqueName);
                                 if (existIndx === -1) {
                                     companiesWithSuperAdminRole.push(cmp);

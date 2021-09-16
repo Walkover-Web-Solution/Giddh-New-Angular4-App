@@ -350,11 +350,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         let addresses = cloneDeep(this.companyProfileObj.addresses);
         let gstNumber;
         let isValid;
-        if (addresses && addresses?.length) {
+        if (addresses && addresses.length) {
             gstNumber = addresses[addresses.length - 1].taxNumber;
 
-            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
-                for (let key = 0; key < this.formFields['taxName']['regex']?.length; key++) {
+            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
+                for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
                     if (regex.test(gstNumber)) {
                         isValid = true;
@@ -398,7 +398,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     public updateProfile(data) {
         let dataToSave = cloneDeep(data);
-        if (dataToSave.addresses?.length > 0) {
+        if (dataToSave.addresses.length > 0) {
             for (let entry of dataToSave.addresses) {
                 if (!entry.taxNumber && !entry.stateCode && !entry.address) {
                     dataToSave.addresses = without(dataToSave.addresses, entry);
@@ -463,8 +463,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         let isValid: boolean = false;
 
         if (ele.value) {
-            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
-                for (let key = 0; key < this.formFields['taxName']['regex']?.length; key++) {
+            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
+                for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
                     if (regex.test(ele.value)) {
                         isValid = true;
@@ -494,7 +494,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     public setChildState(ele: HTMLInputElement, index: number) {
         let gstVal: string = ele.value;
-        if (gstVal?.length >= 2) {
+        if (gstVal.length >= 2) {
             this.statesSource$.pipe(take(1)).subscribe(state => {
                 let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
 
@@ -540,7 +540,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     public isValidMobileNumber(ele: HTMLInputElement) {
         if (ele.value) {
-            if (ele.value?.length > 9 && ele.value?.length < 16) {
+            if (ele.value.length > 9 && ele.value.length < 16) {
                 ele.classList.remove('error-box');
                 this.isMobileNumberValid = true;
             } else {
@@ -1066,13 +1066,13 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             if (profileObj.contactNo && profileObj.contactNo.indexOf('-') > -1) {
                 profileObj.contactNo = profileObj.contactNo.substring(profileObj.contactNo.indexOf('-') + 1);
             }
-            if (profileObj.addresses && profileObj.addresses?.length > 3) {
+            if (profileObj.addresses && profileObj.addresses.length > 3) {
                 this.gstDetailsBackup = cloneDeep(profileObj.addresses);
                 this.showAllGST = false;
                 profileObj.addresses = profileObj.addresses.slice(0, 3);
             }
 
-            if (profileObj.addresses && !profileObj.addresses?.length) {
+            if (profileObj.addresses && !profileObj.addresses.length) {
                 let newGstObj = {
                     taxNumber: '',
                     stateCode: '',
@@ -1109,7 +1109,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             this.companyProfileObj.balanceDecimalPlaces = String(profileObj.balanceDecimalPlaces);
 
             if (profileObj && profileObj.country) {
-                if (profileObj.countryV2 !== undefined && this.states?.length === 0) {
+                if (profileObj.countryV2 !== undefined && this.states.length === 0) {
                     this.getStates(profileObj.countryV2.alpha2CountryCode);
                     this.getOnboardingForm(profileObj.countryV2.alpha2CountryCode);
                 }

@@ -36,7 +36,7 @@
             <div class="create-warehouse" *ngIf="showLoader">
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </div>
-            <div class="no-data" *ngIf="!warehouses?.length && !showLoader">
+            <div class="no-data" *ngIf="!warehouses.length && !showLoader">
                 <h1>{{ localeData?.no_warehouse_found }}</h1>
             </div>
             <div *ngIf="!showLoader" class="row warehouse-box">
