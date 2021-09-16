@@ -129,7 +129,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany && activeCompany.userEntityRoles && activeCompany.userEntityRoles.length && activeCompany.userEntityRoles[0] && activeCompany.userEntityRoles[0].role && activeCompany.userEntityRoles[0].role.uniqueName === 'super_admin') {
+            if (activeCompany && activeCompany.userEntityRoles && activeCompany.userEntityRoles?.length && activeCompany.userEntityRoles[0] && activeCompany.userEntityRoles[0].role && activeCompany.userEntityRoles[0].role.uniqueName === 'super_admin') {
                 this.isSuperAdminCompany = true;
             } else {
                 this.isSuperAdminCompany = false;
@@ -155,7 +155,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     }
 
     public onSelectDateRange(ev) {
-        if (ev && ev.length) {
+        if (ev && ev?.length) {
             let from = moment(ev[0]).format(GIDDH_DATE_FORMAT);
             let to = moment(ev[1]).format(GIDDH_DATE_FORMAT);
             this.permissionForm?.patchValue({ from, to });
@@ -187,11 +187,11 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     }
 
     public getIPOptsFromData(data: ShareRequestForm) {
-        if (data.allowedIps.length > 0) {
+        if (data.allowedIps?.length > 0) {
             this.toggleIpOptVal(IP_ADDR);
             return [IP_ADDR];
         }
-        if (data.allowedCidrs.length > 0) {
+        if (data.allowedCidrs?.length > 0) {
             this.toggleIpOptVal(CIDR_RANGE);
             return [CIDR_RANGE];
         }
@@ -217,7 +217,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             let allowedIps = this.permissionForm.get('allowedIps') as FormArray;
             let allowedCidrs = this.permissionForm.get('allowedCidrs') as FormArray;
 
-            if (data.allowedIps.length > 0) {
+            if (data.allowedIps?.length > 0) {
                 forEach(data.allowedIps, (val) => {
                     allowedIps.push(this.initRangeForm(val));
                 });
@@ -225,7 +225,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                 allowedIps.push(this.initRangeForm());
             }
 
-            if (data.allowedCidrs.length > 0) {
+            if (data.allowedCidrs?.length > 0) {
                 forEach(data.allowedCidrs, (val) => {
                     allowedCidrs.push(this.initRangeForm(val));
                 });
@@ -325,10 +325,10 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                 IpArr.push(n.range);
             }
         });
-        if (CidrArr.length > 0) {
+        if (CidrArr?.length > 0) {
             IpArr = [];
         }
-        if (IpArr.length > 0) {
+        if (IpArr?.length > 0) {
             CidrArr = [];
         }
         form.allowedCidrs = CidrArr;

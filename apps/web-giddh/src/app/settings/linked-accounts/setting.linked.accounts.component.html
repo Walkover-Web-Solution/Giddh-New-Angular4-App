@@ -47,14 +47,14 @@
         </div>
     </div>
 
-    <div class="box clearfix mr-t2" *ngIf="ebankAccounts && ebankAccounts.length">
+    <div class="box clearfix mr-t2" *ngIf="ebankAccounts && ebankAccounts?.length">
         <div class="">
             <h1 class="section-head pt-0">{{ localeData?.added_accounts }}</h1>
             <div class="mt-1">
                 <section
                     *ngFor="let acc of ebankAccounts; let accIdx = index"
                     class="clearfix bank-account"
-                    [ngClass]="{ 'mr-b4': accIdx != ebankAccounts.length - 1 }"
+                    [ngClass]="{ 'mr-b4': accIdx != ebankAccounts?.length - 1 }"
                 >
                     <h3 class="subHead bd-rb">
                         {{ acc.siteName }}

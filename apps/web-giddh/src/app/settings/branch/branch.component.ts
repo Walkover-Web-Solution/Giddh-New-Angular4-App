@@ -122,7 +122,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         private settingsUtilityService: SettingsUtilityService,
         private toasterService: ToasterService
     ) {
-        
+
     }
 
     public ngOnInit() {
@@ -151,21 +151,21 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches], (companies, branches) => {
             if (branches) {
-                if (branches.length) {
+                if (branches?.length) {
                     this.unFilteredBranchList = orderBy(branches, 'name');
                     this.branches$ = observableOf(this.unFilteredBranchList);
-                } else if (branches.length === 0) {
+                } else if (branches?.length === 0) {
                     this.unFilteredBranchList = [];
                     this.branches$ = observableOf(null);
                 }
                 this.showLoader = false;
             }
-            if (companies && companies.length && branches) {
+            if (companies && companies?.length && branches) {
                 let companiesWithSuperAdminRole = [];
                 each(companies, (cmp) => {
                     each(cmp.userEntityRoles, (company) => {
                         if (company.entity.entity === 'COMPANY' && company.role.uniqueName === 'super_admin') {
-                            if (branches && branches.length) {
+                            if (branches && branches?.length) {
                                 let existIndx = branches.findIndex((b) => b.uniqueName === cmp.uniqueName);
                                 if (existIndx === -1) {
                                     companiesWithSuperAdminRole.push(cmp);
@@ -179,7 +179,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.companies$ = observableOf(orderBy(companiesWithSuperAdminRole, 'name'));
             }
         })), takeUntil(this.destroyed$)).subscribe();
-        
+
         this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 if (res.isBranch) {

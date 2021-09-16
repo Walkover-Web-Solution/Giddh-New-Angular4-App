@@ -116,7 +116,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.branchForm.get('name')?.patchValue(this.companyDetails.name);
-                if (!this.addressConfiguration.stateList.length) {
+                if (!this.addressConfiguration.stateList?.length) {
                     this.loadStates(this.companyDetails.country.countryCode.toUpperCase());
                     this.loadTaxDetails(this.companyDetails.country.countryCode.toUpperCase());
                 }
@@ -355,7 +355,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         onboardingFormRequest.country = countryCode;
         this.commonService.getOnboardingForm(onboardingFormRequest).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.status === 'success') {
-                if (response.body && response.body.fields && response.body.fields.length > 0) {
+                if (response.body && response.body.fields && response.body.fields?.length > 0) {
                     const taxField = response.body.fields.find(field => field && field.name === 'taxName');
                     // Tax field found, support for the country taxation
                     this.addressConfiguration.tax.name = taxField ? taxField.label : '';
