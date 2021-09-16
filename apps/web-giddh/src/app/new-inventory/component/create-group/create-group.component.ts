@@ -69,23 +69,27 @@ export class InventoryCreateGroupComponent implements OnInit, OnDestroy {
             parentStockGroupUniqueName: [''],
             isSubGroup: [false],
             outOfStockSelling: [false],
-            imageUniqueName: [''],
-            imageName: ['']
+            image: this.formBuilder.group({
+                uniqueName: [''],
+                name: ['']
+            })
         });
     }
 
     public changeCodeType(): void {
-        if(this.groupForm.get('showCodeType').value === 'hsn') {
+        if (this.groupForm.get('showCodeType').value === 'hsn') {
             this.groupForm?.patchValue({ sacNumber: "" });
-        } else if(this.groupForm.get('showCodeType').value === 'sac') {
+        } else if (this.groupForm.get('showCodeType').value === 'sac') {
             this.groupForm?.patchValue({ hsnNumber: "" });
         }
     }
 
     public saveGroup(): void {
         this.inventoryService.createStockGroup(this.groupForm.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if(response?.status === "success") {
-
+            if (response?.status === "success") {
+                this.resetGroupForm();
+                this.toaster.clearAllToaster();
+                this.toaster.successToast("Stock group created successfully.");
             } else {
                 this.toaster.clearAllToaster();
                 this.toaster.errorToast(response?.message);
@@ -161,13 +165,13 @@ export class InventoryCreateGroupComponent implements OnInit, OnDestroy {
         } else if (output.type === 'done') {
             if (output.file.response.status === 'success') {
                 this.isFileUploading = false;
-                this.groupForm?.patchValue({ image: output.file.response.body?.uniqueName });
-                this.groupForm?.patchValue({ imageName: output.file.response.body?.name });
+                this.groupForm?.get("image")?.patchValue({ uniqueName: output.file.response.body?.uniqueName });
+                this.groupForm?.get("image")?.patchValue({ name: output.file.response.body?.name });
                 this.toaster.successToast(this.commonLocaleData?.app_messages?.file_uploaded);
             } else {
                 this.isFileUploading = false;
-                this.groupForm?.patchValue({ image: "" });
-                this.groupForm?.patchValue({ imageName: "" });
+                this.groupForm?.get("image")?.patchValue({ uniqueName: "" });
+                this.groupForm?.get("image")?.patchValue({ name: "" });
                 this.toaster.errorToast(output.file.response.message);
             }
         }
