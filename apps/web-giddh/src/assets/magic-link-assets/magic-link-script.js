@@ -276,7 +276,7 @@ var app = new Vue({
                 var voucherVersion = this.getParameterByName('voucherVersion');
                 var apiObservable;
                 if(voucherVersion == 2) {
-                    apiObservable = axios.post(apiBaseUrl + 'magic-link/' + id + '/download-voucher/', {
+                    apiObservable = axios.post(apiBaseUrl + 'magic-link/' + id + '/download-voucher?voucherVersion=2', {
                         voucherNumber: [entry.voucherNumber],
                         voucherType: entry.voucherName,
                         uniqueName: entry.voucherUniqueName
