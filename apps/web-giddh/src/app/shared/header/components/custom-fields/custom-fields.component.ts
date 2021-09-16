@@ -1,5 +1,5 @@
 import { BreakpointObserver } from "@angular/cdk/layout";
-import { Component, OnDestroy, OnInit, TemplateRef } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef } from "@angular/core";
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { cloneDeep } from "apps/web-giddh/src/app/lodash-optimized";
 import { GroupService } from "apps/web-giddh/src/app/services/group.service";
@@ -12,9 +12,9 @@ import { takeUntil } from "rxjs/operators";
 @Component({
     selector: 'custom-fields',
     templateUrl: './custom-fields.component.html',
-    styleUrls: [`./custom-fields.component.scss`]
+    styleUrls: [`./custom-fields.component.scss`],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-
 export class CustomFieldsComponent implements OnInit, OnDestroy {
     /** Add custom field form reference */
     public customFieldForm: FormGroup;
@@ -48,7 +48,8 @@ export class CustomFieldsComponent implements OnInit, OnDestroy {
         private groupService: GroupService,
         private toasterService: ToasterService,
         private modalService: BsModalService,
-        private breakPointObservar: BreakpointObserver
+        private breakPointObservar: BreakpointObserver,
+        private changeDetectorRef: ChangeDetectorRef
     ) {
 
     }
@@ -159,6 +160,7 @@ export class CustomFieldsComponent implements OnInit, OnDestroy {
                 if (this.modalRef) {
                     this.modalRef.hide()
                 }
+                this.changeDetectorRef.detectChanges();
             }
         });
     }
@@ -180,6 +182,7 @@ export class CustomFieldsComponent implements OnInit, OnDestroy {
             });
             this.removeCustomFieldRow(0, false);
         }
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -211,7 +214,6 @@ export class CustomFieldsComponent implements OnInit, OnDestroy {
     */
     public addNewCustomFieldRow(): any {
         const customRow = this.customFieldForm.get('customField') as FormArray;
-        console.log(this.customFieldForm);
         if (this.customFieldForm.valid) {
             customRow.push(this.initNewCustomField(null));
         } else {
