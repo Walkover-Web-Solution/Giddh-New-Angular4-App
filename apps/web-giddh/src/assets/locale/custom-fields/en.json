@@ -1,0 +1,17 @@
+{
+    "delete_custom_field_title": "Are you sure, you want to delete this?",
+    "delete_custom_field_alert": "Deleting this field from here, will remove it from all the accounts",
+    "name_placeholder": "Enter custom field name",
+    "custom_field_created": "Custom field created successfully",
+    "custom_field_deleted": "Custom field deleted successfully",
+    "custom_field_updated": "Custom field updated successfully",
+    "fill_mandatory_fields": "Please fill all mandatory field",
+    "name_length_validation": "Name can not be greater than 50 characters",
+    "number_length_validation": "Length can not be greater than 30 for type number",
+    "string_length_validation": "Length can not be greater than 150 for type string",
+    "name": "Name",
+    "type": "Type",
+    "length": "Length",
+    "add_new_row": "+ Add New Row",
+    "field_type_placeholder": "Type to filter"
+}
