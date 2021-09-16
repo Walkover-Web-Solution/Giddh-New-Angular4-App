@@ -10,9 +10,9 @@ import { OrganizationType } from '../../models/user-login-state';
 import { GeneralService } from '../../services/general.service';
 import { AppState } from '../../store';
 import { GstReport } from '../constants/gst.constant';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { SHOW_GST_FILING } from '../../app.constant';
 
 @Component({
@@ -111,7 +111,7 @@ export class FilingComponent implements OnInit, OnDestroy {
                 this.activeCompanyGstNumber = params['selectedGst'];
                 this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
             }
-			this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
+            this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
             if (this.selectedGst !== params['return_type']) {
                 this.selectedGst = params['return_type'];
                 this.loadGstReport(this.activeCompanyGstNumber);
@@ -124,8 +124,8 @@ export class FilingComponent implements OnInit, OnDestroy {
 
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
 
-		// get activeCompany gst number
-		this.store.pipe(select(s => s.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(result => {
+        // get activeCompany gst number
+        this.store.pipe(select(s => s.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(result => {
             this.loadGstReport(result);
         });
         this.getCurrentPeriod$ = this.store.pipe(select(appStore => appStore.gstR.currentPeriod), takeUntil(this.destroyed$));
@@ -151,16 +151,16 @@ export class FilingComponent implements OnInit, OnDestroy {
         this.fileReturnSucces = false;
     }
 
-	public selectTabFromUrl(tab: number) {
-		if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[tab]) {
-			this.selectedTabId = tab;
-			this.staticTabs.tabs[this.selectedTabId].active = true;
-		}
-	}
+    public selectTabFromUrl(tab: number) {
+        if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[tab]) {
+            this.selectedTabId = tab;
+            this.staticTabs.tabs[this.selectedTabId].active = true;
+        }
+    }
 
-	public ngOnDestroy(): void {
-		this.destroyed$.next(true);
-		this.destroyed$.complete();
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
     }
 
@@ -211,7 +211,7 @@ export class FilingComponent implements OnInit, OnDestroy {
      * @memberof FilingComponent
      */
     public handleNavigation(type: string): void {
-        switch(type) {
+        switch (type) {
             case GstReport.Gstr1: case GstReport.Gstr2:
                 this.navigateToOverview(type);
                 break;

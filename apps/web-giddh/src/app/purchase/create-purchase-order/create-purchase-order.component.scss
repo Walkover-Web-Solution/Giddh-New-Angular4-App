@@ -606,10 +606,6 @@ section.static-purchase-table {
     margin-left: 48%;
 }
 
-.m-l-10 {
-    margin-left: 10px;
-}
-
 .mt-1 {
     margin-top: 10px;
 }
@@ -1010,7 +1006,7 @@ span.eligible-ITC {
     line-height: 2.4;
     border-bottom: 1px solid $gainsboro;
     padding-left: 6px;
-    border-bottom-color: rgb(214, 214, 214);
+    border-bottom-color: $gainsboro;
 }
 
 .loader-class {

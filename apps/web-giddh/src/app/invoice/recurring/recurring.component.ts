@@ -102,7 +102,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
             if (p && p.recurringVoucherDetails) {
                 let items = _.cloneDeep(p.recurringVoucherDetails);
                 items.map(item => {
-                    item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, item.uniqueName);
+                    item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, item?.uniqueName);
                     return item;
                 });
 

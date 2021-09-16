@@ -111,9 +111,9 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private settingsTagService: SettingsTagService,
         private generalService: GeneralService,
+        private modalService: BsModalService,
         private breakPointObservar: BreakpointObserver,
         private settingsBranchAction: SettingsBranchActions,
-        private modalService: BsModalService,
         private toaster: ToasterService
     ) {
         this.filterForm = this.fb.group({
@@ -352,7 +352,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 this.getTags();
                 this.toaster.successToast(this.commonLocaleData?.app_messages?.tag_created, this.commonLocaleData?.app_success);
             } else {
-                this.toaster.errorToast(response?.message, response?.code);                
+                this.toaster.errorToast(response?.message, response?.code);
             }
         });
         this.toggleTagsModal();

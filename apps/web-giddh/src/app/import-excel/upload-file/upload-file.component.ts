@@ -53,7 +53,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private generalService: GeneralService
     ) {
-        
+
     }
 
     public onFileChange(file: FileList) {
