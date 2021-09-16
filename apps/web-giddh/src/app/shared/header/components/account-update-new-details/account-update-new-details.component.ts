@@ -274,10 +274,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(this.activeGroupUniqueName));
 
                     this.store.pipe(select(appStore => appStore.groupwithaccounts.activeGroupUniqueName), take(1)).subscribe(response => {
-                        if(response !== this.activeGroupUniqueName) {
+                        if (response !== this.activeGroupUniqueName) {
                             this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
                         }
                     });
+
+                    this.showHideAddressTab();
                 }
 
                 let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
@@ -917,42 +919,16 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.activeParentGroup = activeParentgroup;
         this.toggleStateRequired();
         if (activeParentgroup === 'sundrycreditors' || activeParentgroup === 'sundrydebtors') {
-            const accountAddress = this.addAccountForm.get('addresses') as FormArray;
             this.isShowBankDetails(activeParentgroup);
             this.isDebtorCreditor = true;
-
-            setTimeout(() => {
-                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
-                    this.staticTabs.tabs[0].active = true;
-                    this.changeDetectorRef.detectChanges();
-                }
-            }, 50);
-
-            if (accountAddress.controls.length === 0 || !accountAddress.length) {
-                this.addBlankGstForm();
-            }
         } else if (activeParentgroup === 'bankaccounts') {
             this.isBankAccount = true;
             this.isDebtorCreditor = false;
             this.showBankDetail = false;
-
-            setTimeout(() => {
-                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
-                    this.staticTabs.tabs[0].active = true;
-                    this.changeDetectorRef.detectChanges();
-                }
-            }, 50);
         } else {
             this.isBankAccount = false;
             this.isDebtorCreditor = false;
             this.showBankDetail = false;
-
-            setTimeout(() => {
-                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
-                    this.staticTabs.tabs[1].active = true;
-                    this.changeDetectorRef.detectChanges();
-                }
-            }, 50);
         }
         this.changeDetectorRef.detectChanges();
     }
@@ -1760,4 +1736,34 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
     }
 
+    /**
+     * This will show/hide address tab depending on parent group
+     *
+     * @private
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    private showHideAddressTab(): void {
+        if (!this.isHsnSacEnabledAcc) {
+            setTimeout(() => {
+                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
+                    this.staticTabs.tabs[0].active = true;
+                    this.changeDetectorRef.detectChanges();
+                }
+            }, 50);
+
+            const accountAddress = this.addAccountForm.get('addresses') as FormArray;
+            if (accountAddress.controls.length === 0 || !accountAddress.length) {
+                this.addBlankGstForm();
+            }
+        } else {
+            this.addAccountForm.get('addresses').reset();
+
+            setTimeout(() => {
+                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[1]) {
+                    this.staticTabs.tabs[1].active = true;
+                    this.changeDetectorRef.detectChanges();
+                }
+            }, 50);
+        }
+    }
 }
