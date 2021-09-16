@@ -17,6 +17,7 @@ export class IntegratedBankList {
     bankName: string;
     accountNo: string;
     effectiveBal: string;
+    errorMessage?: string;
 }
 
 /** Get bank request object */
@@ -41,6 +42,7 @@ export class BulkPaymentResponse {
     otp: any;
     requestId: string;
     success: boolean;
+    Message?: string;
 }
 
 /** Bulk payment confirmation request object */
