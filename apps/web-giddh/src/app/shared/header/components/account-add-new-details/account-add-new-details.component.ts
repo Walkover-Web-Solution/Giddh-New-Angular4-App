@@ -29,9 +29,8 @@ import { GeneralActions } from "../../../../actions/general/general.actions";
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
-import { API_COUNT_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { API_COUNT_LIMIT, EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
-import { EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { clone, cloneDeep, uniqBy } from 'apps/web-giddh/src/app/lodash-optimized';
@@ -149,16 +148,16 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         totalPages: 0,
         query: ''
     };
-    /** This will hold inventory settings */
-    public inventorySettings: any;
-    /** This will hold parent unique name */
-    public activeParentGroupUniqueName: string = '';
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /** This will hold placeholder for tax */
     public taxNamePlaceholder: string = "";
+    /** This will hold inventory settings */
+    public inventorySettings: any;
+    /** This will hold parent unique name */
+    public activeParentGroupUniqueName: string = '';
 
     constructor(
         private _fb: FormBuilder,
@@ -166,11 +165,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private _toaster: ToasterService,
         private commonActions: CommonActions,
         private _generalActions: GeneralActions,
+        private changeDetectorRef: ChangeDetectorRef,
         private generalService: GeneralService,
         private groupService: GroupService,
         private groupWithAccountsAction: GroupWithAccountsAction,
-        private invoiceService: InvoiceService,
-        private changeDetectorRef: ChangeDetectorRef) {
+        private invoiceService: InvoiceService) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
 
     }
@@ -200,7 +199,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.initializeNewForm();
         this.activeGroup$.subscribe(response => {
             if (response) {
-                if (response.parentGroups && response.parentGroups.length) {
+                if (response.uniqueName !== this.activeGroupUniqueName) {
+                    this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
+                } else if (response.parentGroups && response.parentGroups.length) {
                     let parent = response.parentGroups;
                     const HSN_SAC_PARENT_GROUPS = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
                     if (parent.length > 1 && parent[1]) {
@@ -679,6 +680,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 this.addBlankGstForm();
             }
         } else {
+            this.isBankAccount = false;
             this.isDebtorCreditor = false;
             this.showBankDetail = false;
             this.addAccountForm.get('addresses').reset();
@@ -1153,26 +1155,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     /**
-     * This will get invoice settings
-     *
-     * @memberof AccountAddNewDetailsComponent
-     */
-    public getInvoiceSettings(): void {
-        this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.status === "success" && response.body) {
-                let invoiceSettings = _.cloneDeep(response.body);
-                this.inventorySettings = invoiceSettings.companyInventorySettings;
-
-                if (this.inventorySettings?.manageInventory) {
-                    this.addAccountForm.get("hsnOrSac").patchValue("hsn");
-                } else {
-                    this.addAccountForm.get("hsnOrSac").patchValue("sac");
-                }
-            }
-        });
-    }
-
-    /*
      * Callback for translation response complete
      *
      * @param {boolean} event
@@ -1203,5 +1185,25 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
             });
         }
+    }
+
+    /**
+     * This will get invoice settings
+     *
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public getInvoiceSettings(): void {
+        this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.status === "success" && response.body) {
+                let invoiceSettings = cloneDeep(response.body);
+                this.inventorySettings = invoiceSettings.companyInventorySettings;
+
+                if (this.inventorySettings?.manageInventory) {
+                    this.addAccountForm.get("hsnOrSac")?.patchValue("hsn");
+                } else {
+                    this.addAccountForm.get("hsnOrSac")?.patchValue("sac");
+                }
+            }
+        });
     }
 }

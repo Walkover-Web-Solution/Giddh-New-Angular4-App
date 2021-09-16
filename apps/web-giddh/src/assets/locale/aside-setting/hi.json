@@ -8,12 +8,21 @@
                 {
                     "label": "कंपनी प्रोफाइल",
                     "link": "/pages/settings/profile",
-                    "icon": "<i class='icon-company'></i>"
+                    "icon": "<i class='icon-company'></i>",
+                    "linked_pages": [
+                        "/pages/settings/profile/personal",
+                        "/pages/settings/profile/address",
+                        "/pages/settings/profile/other"
+                    ]
                 },
                 {
                     "label": "उपयोगकर्ता प्रोफ़ाइल",
                     "link": "/pages/user-details/mobile-number",
-                    "icon": "<i class='icon-user-new'></i>"
+                    "icon": "<i class='icon-user-new'></i>",
+                    "linked_pages": [
+                        "/pages/user-details/auth-key",
+                        "/pages/user-details/session"
+                    ]
                 },
                 {
                     "label": "उपयोगकर्ता प्रबंधित करें (अनुमति)",
@@ -25,7 +34,13 @@
                 {
                     "label": "एकीकरण",
                     "link": "/pages/settings/integration",
-                    "icon": "<i class='icon-integration1'></i>"
+                    "icon": "<i class='icon-integration1'></i>",
+                    "linked_pages": [
+                        "/pages/settings/integration/email",
+                        "/pages/settings/integration/collection",
+                        "/pages/settings/integration/ecommerce",
+                        "/pages/settings/integration/payment"
+                    ]
                 },
                 {
                     "label": "जुड़े खातों",
@@ -52,7 +67,10 @@
                 {
                     "label": "शाखा",
                     "link": "/pages/settings/branch",
-                    "icon": "<i class='icon-branch1'></i>"
+                    "icon": "<i class='icon-branch1'></i>",
+                    "linked_pages": [
+                        "/pages/settings/create-branch"
+                    ]
                 },
                 {
                     "label": "छूट",
@@ -62,7 +80,10 @@
                 {
                     "label": "गोदाम",
                     "link": "/pages/settings/warehouse",
-                    "icon": "<i class='icon-warehouse1'></i>"
+                    "icon": "<i class='icon-warehouse1'></i>",
+                    "linked_pages": [
+                        "/pages/settings/create-warehouse"
+                    ]
                 }
             ],
             [
@@ -83,19 +104,34 @@
                 {
                     "label": "शाखा प्रोफ़ाइल",
                     "link": "/pages/settings/profile",
-                    "icon": "<i class='icon-branch1'></i>"
+                    "icon": "<i class='icon-branch1'></i>",
+                    "linked_pages": [
+                        "/pages/settings/profile/personal",
+                        "/pages/settings/profile/address",
+                        "/pages/settings/profile/other"
+                    ]
                 },
                 {
                     "label": "उपयोगकर्ता प्रोफ़ाइल",
                     "link": "/pages/user-details/mobile-number",
-                    "icon": "<i class='icon-user-new'></i>"
+                    "icon": "<i class='icon-user-new'></i>",
+                    "linked_pages": [
+                        "/pages/user-details/auth-key",
+                        "/pages/user-details/session"
+                    ]
                 }
             ],
             [
                 {
                     "label": "एकीकरण",
                     "link": "/pages/settings/integration",
-                    "icon": "<i class='icon-integration1'></i>"
+                    "icon": "<i class='icon-integration1'></i>",
+                    "linked_pages": [
+                        "/pages/settings/integration/email",
+                        "/pages/settings/integration/collection",
+                        "/pages/settings/integration/ecommerce",
+                        "/pages/settings/integration/payment"
+                    ]
                 },
                 {
                     "label": "जुड़े खातों",
@@ -110,7 +146,7 @@
                 {
                     "label": "उत्प्रेरक",
                     "link": "/pages/settings/trigger",
-                    "icon": "<i class='icon-trigger'></i>"
+                    "icon": "<i class='icon-trigger-new'></i>"
                 }
             ],
             [
@@ -122,7 +158,10 @@
                 {
                     "label": "गोदाम",
                     "link": "/pages/settings/warehouse",
-                    "icon": "<i class='icon-warehouse1'></i>"
+                    "icon": "<i class='icon-warehouse1'></i>",
+                    "linked_pages": [
+                        "/pages/settings/create-warehouse"
+                    ]
                 }
             ],
             [

@@ -133,6 +133,20 @@
                 }
             }
         }
+        .active-link {
+            background-color: $cornflower;
+            a {
+                span {
+                    color: $white !important;
+                    i {
+                        color: $white !important;
+                    }
+                }
+                span {
+                    color: $white !important;
+                }
+            }
+        }
     }
 }
 .setting-items ul li:hover a span i {
@@ -148,7 +162,7 @@
     width: 240px;
     left: auto;
     right: 0;
-    z-index: 990;
+    z-index: 999;
     box-shadow: -2px -2px 15px rgba(0, 0, 0, 0.2) !important;
     &:after {
         display: none;

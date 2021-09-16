@@ -211,6 +211,7 @@ export class GstComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
+        this.asideGstSidebarMenuState === 'out';
     }
 
     /**

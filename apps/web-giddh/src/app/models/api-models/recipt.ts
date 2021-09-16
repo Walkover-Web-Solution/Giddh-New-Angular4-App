@@ -17,6 +17,7 @@ export interface ReciptDeleteRequest {
 export class ReceiptVoucherDetailsRequest {
     public invoiceNumber: string;
     public voucherType: string;
+    public uniqueName?: string;
 }
 
 export interface ReceiptAccount {
@@ -142,7 +143,7 @@ export interface Transaction {
     category: string;
     taxableValue: number;
     date?: any;
-    isStockTxn?: string;
+    isStockTxn?: boolean;
     stockDetails?: string;
     rate?: number;
 }
@@ -179,7 +180,20 @@ export interface ReciptRequest {
 export interface DownloadVoucherRequest {
     voucherNumber: string[];
     voucherType: string;
+    uniqueName?: string;
 }
 class CurrencyClass {
     public code: string;
+}
+
+/** Voucher request modal */
+export class VoucherRequest {
+    public number: string;
+    public type: string;
+    public uniqueName: string;
+    constructor(voucherNumber: string, type: string, uniqueName?: string) {
+        this.number = voucherNumber ?? '';
+        this.type = type ?? '';
+        this.uniqueName = uniqueName;
+    }
 }

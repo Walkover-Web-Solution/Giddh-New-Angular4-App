@@ -127,7 +127,10 @@
                     "link": "/pages/invoice/ewaybill",
                     "icon": "icon-eway-bill-new",
                     "description": "बाद में गिद्ध से सीधे उत्पन्न करें",
-                    "hide": "sidebar"
+                    "hide": "sidebar",
+                    "additional": {
+                        "countrySpecific": ["IN"]
+                    }
                 },
                 {
                     "label": "जीएसटीआर 1",
@@ -136,7 +139,8 @@
                     "hide": "sidebar",
                     "additional": {
                         "isGstMenu": true,
-                        "type": "gstr1"
+                        "type": "gstr1",
+                        "countrySpecific": ["IN"]
                     }
                 },
                 {
@@ -146,7 +150,8 @@
                     "hide": "sidebar",
                     "additional": {
                         "isGstMenu": true,
-                        "type": "gstr2"
+                        "type": "gstr2",
+                        "countrySpecific": ["IN"]
                     }
                 },
                 {
@@ -156,7 +161,8 @@
                     "hide": "sidebar",
                     "additional": {
                         "isGstMenu": true,
-                        "type": "gstr3b"
+                        "type": "gstr3b",
+                        "countrySpecific": ["IN"]
                     }
                 },
                 {
@@ -172,7 +178,10 @@
                     "link": "/pages/vat-report",
                     "icon": "icon-vat1",
                     "description": "फ़ाइल और समीक्षा वैट",
-                    "hide": "sidebar"
+                    "hide": "sidebar",
+                    "additional": {
+                        "countrySpecific": ["AE"]
+                    }
                 },
                 {
                     "label": "सेटिंग्स",

@@ -331,15 +331,15 @@
                     <tbody *ngIf="!isLoading">
                         <tr *ngFor="let receipt of allReceipts; let i = index">
                             <td data-title="#">{{ i + 1 }}</td>
-                            <td width="13%" class="text-break" data-title="{{ localeData?.receipt_no_label }}">
+                            <td width="13%" class="text-break" [attr.data-title]="localeData?.receipt_no_label">
                                 {{ receipt?.receiptNumber }}
                             </td>
-                            <td class="entry-date" data-title="{{ localeData?.entry_date }}">{{ receipt?.date }}</td>
-                            <td data-title="{{ localeData?.suppliers_name }}">{{ receipt?.type }}</td>
-                            <td width="13%" class="text-break" data-title="{{ commonLocaleData?.app_voucher_type }}">
+                            <td class="entry-date" [attr.data-title]="localeData?.entry_date">{{ receipt?.date }}</td>
+                            <td [attr.data-title]="localeData?.suppliers_name">{{ receipt?.type }}</td>
+                            <td width="13%" class="text-break" [attr.data-title]="commonLocaleData?.app_voucher_type">
                                 {{ receipt?.baseAccountName }}
                             </td>
-                            <td data-title="{{ localeData?.payment_mode_label }}">
+                            <td [attr.data-title]="localeData?.payment_mode_label">
                                 <div *ngFor="let paymentMode of receipt?.particularNames?.split(',')">
                                     {{ paymentMode }}
                                 </div>
@@ -348,7 +348,7 @@
                                 width="13%"
                                 class="text-break"
                                 *ngIf="receipt?.invoices"
-                                data-title="{{ localeData?.invoice_no_label }}"
+                                [attr.data-title]="localeData?.invoice_no_label"
                             >
                                 <div *ngFor="let invoice of receipt?.invoices?.split(',')">{{ invoice }}</div>
                             </td>
