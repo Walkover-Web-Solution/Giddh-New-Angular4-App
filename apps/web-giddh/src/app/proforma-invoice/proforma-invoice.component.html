@@ -211,7 +211,7 @@
                                                                     href="javascript:void(0)"
                                                                     class="list-item flex-column"
                                                                 >
-                                                                    <div class="item">{{ option.label }}</div>
+                                                                    <div class="item">{{ option?.label }}</div>
                                                                     <div class="item-unique">{{ option.value }}</div>
                                                                 </a>
                                                             </ng-template>
@@ -1358,7 +1358,7 @@
                                                                     [value]="option.value" /></span
                                                             >&nbsp;
                                                             <span>
-                                                                <div class="item">{{ option.label }}</div>
+                                                                <div class="item">{{ option?.label }}</div>
                                                                 <div
                                                                     class="item-unique"
                                                                     *ngIf="option.additional?.pending"
@@ -1427,7 +1427,7 @@
                                                                 href="javascript:void(0)"
                                                                 class="linking-item list-item sh-template"
                                                             >
-                                                                <div class="item">{{ option.label }}</div>
+                                                                <div class="item">{{ option?.label }}</div>
                                                                 <div class="item-unique">
                                                                     ({{ commonLocaleData?.app_dated }}:
                                                                     {{ option.additional?.voucherDate }})
@@ -1544,6 +1544,30 @@
                                                         {{ localeData?.invalid_date }}
                                                     </p>
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-1" *ngIf="voucherApiVersion === 2 && (isCreditNote || isDebitNote)">
+                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
+                                        <label> {{ commonLocaleData?.app_number }} </label>
+                                    </div>
+                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
+                                        <div class="col-sm-12 col-xl-6 col-lg-5 col-md-10 pl-0">
+                                            <div>
+                                                <input
+                                                    type="text"
+                                                    name="accountDetails.invoiceNum"
+                                                    class="form-control invoice-date attention-to"
+                                                    [ngClass]="{ 'date-invoice': !isPurchaseInvoice }"
+                                                    [disabled]="
+                                                        isUpdateMode && !(isDebitNote || isPurchaseInvoice)
+                                                            ? 'disabled'
+                                                            : null
+                                                    "
+                                                    [(ngModel)]="invFormData.voucherDetails.voucherNumber"
+                                                />
                                             </div>
                                         </div>
                                     </div>
@@ -1836,9 +1860,9 @@
                                         *ngFor="let item of theadArrReadOnly"
                                         [hidden]="!item.display"
                                         class="thead-sales-invoice"
-                                        [ngClass]="item.label"
+                                        [ngClass]="item?.label"
                                     >
-                                        {{ item.label }}
+                                        {{ item?.label }}
                                         <span *ngIf="item.label === 'Tax' && isRcmEntry"
                                             >({{ commonLocaleData?.app_rcm }})<sup class="mandatory-asterisk"
                                                 >*</sup
@@ -2253,7 +2277,7 @@
                                                     <ng-template #optionTemplate let-option="option">
                                                         <ng-container *ngIf="!option.additional?.stock">
                                                             <a href="javascript:void(0)" class="list-item flex-column">
-                                                                <div class="item">{{ option.label }}</div>
+                                                                <div class="item">{{ option?.label }}</div>
                                                                 <div class="item-unique">
                                                                     {{ option.additional?.uniqueName }}
                                                                 </div>
@@ -2261,7 +2285,7 @@
                                                         </ng-container>
                                                         <ng-container *ngIf="option.additional?.stock">
                                                             <a href="javascript:void(0)" class="list-item flex-column">
-                                                                <div class="item">{{ option.label }}</div>
+                                                                <div class="item">{{ option?.label }}</div>
                                                                 <div class="item-unique">
                                                                     {{ option.additional?.uniqueName }}
                                                                 </div>
@@ -3305,6 +3329,7 @@
                                                                                                 : false
                                                                                         "
                                                                                     >
+
                                                                                     </amount-field>
                                                                                 </p>
                                                                             </span>
@@ -3820,7 +3845,7 @@
                                                                             href="javascript:void(0)"
                                                                             class="list-item flex-column"
                                                                         >
-                                                                            <div class="item">{{ option.label }}</div>
+                                                                            <div class="item">{{ option?.label }}</div>
                                                                             <div class="item-unique">
                                                                                 {{ option.additional?.uniqueName }}
                                                                             </div>
@@ -3831,7 +3856,7 @@
                                                                             href="javascript:void(0)"
                                                                             class="list-item flex-column"
                                                                         >
-                                                                            <div class="item">{{ option.label }}</div>
+                                                                            <div class="item">{{ option?.label }}</div>
                                                                             <div class="item-unique">
                                                                                 {{ option.additional?.uniqueName }}
                                                                             </div>
@@ -4848,7 +4873,7 @@
                                                             >
                                                                 <ng-template #optionTemplate1 let-option="option">
                                                                     <a href="javascript:void(0)" class="list-item">
-                                                                        <div class="item">{{ option.label }}</div>
+                                                                        <div class="item">{{ option?.label }}</div>
                                                                         <div class="item-unique">
                                                                             {{ option.value }}
                                                                         </div>

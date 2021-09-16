@@ -511,6 +511,12 @@ button.btn.btn-filter {
     }
 }
 
+@media (min-width: 1410px) and (max-width: 1530px) {
+    .head-report {
+        max-width: 400px;
+    }
+}
+
 @media (max-width: 1409px) {
     .head-report {
         max-width: 300px;

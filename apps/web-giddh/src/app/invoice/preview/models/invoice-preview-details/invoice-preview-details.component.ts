@@ -238,7 +238,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if ('items' in changes && changes.items.currentValue.filter(newItem => (!changes?.items?.previousValue || changes?.items?.previousValue?.every(oldItem => oldItem.uniqueName !== newItem?.uniqueName)))?.length) {
+        if ('items' in changes && changes.items.currentValue.filter(newItem => (!changes?.items?.previousValue || changes?.items?.previousValue?.every(oldItem => oldItem?.uniqueName !== newItem?.uniqueName)))?.length) {
             this.filteredData = changes.items.currentValue;
             if (this.selectedItem && this.selectedItem.uniqueName) {
                 this.selectedItem = this.filteredData.filter(item => {
@@ -503,7 +503,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                         this.pdfPreviewHasError = true;
                     }
                 });
-            }            
+            }
             this.detectChanges();
         } else {
             if (this.selectedItem) {
@@ -656,7 +656,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                         uniqueName: this.selectedItem?.account?.uniqueName
                     },
                     uniqueName: this.selectedItem?.uniqueName,
-                    attachedFiles: [response.uniqueName]
+                    attachedFiles: [response?.uniqueName]
                 };
                 this.purchaseRecordService.generatePurchaseRecord(requestObject, 'PATCH', true).pipe(takeUntil(this.destroyed$)).subscribe(() => {
                     this.downloadVoucher('base64');
