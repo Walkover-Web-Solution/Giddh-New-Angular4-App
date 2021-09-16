@@ -19,8 +19,8 @@ import { GroupResponse } from 'apps/web-giddh/src/app/models/api-models/Group';
 import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/SettingsDiscount';
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { Observable, of as observableOf, of, ReplaySubject } from 'rxjs';
-import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { CommonActions } from '../../../../actions/common.actions';
 import { CompanyActions } from '../../../../actions/company.actions';
@@ -80,6 +80,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     @Input() public isBankAccount: boolean = false;
     @Input() public showDeleteButton: boolean = true;
     @Input() public accountDetails: any;
+    /** True if custom fields api needs to be called again */
+    @Input() public reloadCustomFields: boolean = false;
     @ViewChild('autoFocusUpdate', { static: true }) public autoFocusUpdate: ElementRef;
     public moveAccountForm: FormGroup;
     public taxGroupForm: FormGroup;
@@ -93,10 +95,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         = new EventEmitter();
     @Output() public deleteClicked: EventEmitter<any> = new EventEmitter();
     @Output() public isGroupSelected: EventEmitter<IOption> = new EventEmitter();
+    /** Emits if we have to switch to custom fields tab */
+    @Output() public goToCustomFields: EventEmitter<boolean> = new EventEmitter();
     public showOtherDetails: boolean = false;
     public partyTypeSource: IOption[] = [];
     public stateList: StateList[] = [];
-
     public states: any[] = [];
     public statesSource$: Observable<IOption[]> = observableOf([]);
     public isTaxableAccount$: Observable<boolean>;
@@ -867,6 +870,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (s && s['showVirtualAccount'] && s['showVirtualAccount'].currentValue) {
             this.showOtherDetails = true;
         }
+        if(s && s['reloadCustomFields']?.currentValue && s['reloadCustomFields']?.currentValue !== s['reloadCustomFields']?.previousValue) {
+            this.getCompanyCustomField();
+        }
     }
 
     public ngOnDestroy() {
@@ -1381,6 +1387,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     * @memberof AccountUpdateNewDetailsComponent
     */
     public getCompanyCustomField(): void {
+        this.companyCustomFields = [];
         this.groupService.getCompanyCustomField().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === 'success') {
                 this.companyCustomFields = response.body;

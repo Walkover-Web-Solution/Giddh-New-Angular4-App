@@ -657,5 +657,6 @@
         "weekly": "Weekly",
         "monthly": "Monthly",
         "unlimited": "Unlimited"
-    }
+    },
+    "app_create_custom_field": "Create Custom Fields"
 }
