@@ -160,7 +160,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
                 this.showLoader = false;
             }
-            if (companies && companies?.length && branches) {
+            if (companies && companies.length && branches) {
                 let companiesWithSuperAdminRole = [];
                 each(companies, (cmp) => {
                     each(cmp.userEntityRoles, (company) => {

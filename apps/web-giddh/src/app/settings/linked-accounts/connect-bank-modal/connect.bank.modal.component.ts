@@ -315,7 +315,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
     public getBankSyncStatus(providerId) {
         let validateProvider;
         this._settingsLinkedAccountsService.GetBankSyncStatus(providerId).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res.status === 'success' && res.body.providerAccount && res.body.providerAccount?.length) {
+            if (res.status === 'success' && res.body.providerAccount && res.body.providerAccount.length) {
                 this.bankSyncInProgress = true;
                 validateProvider = this.validateProviderResponse(res.body.providerAccount[0]);
                 if (!validateProvider && !this.cancelRequest) {
