@@ -36,7 +36,7 @@
                             </tr>
                         </thead>
 
-                        <tbody *ngIf="!isLoading && availableTaxes.length">
+                        <tbody *ngIf="!isLoading && availableTaxes?.length">
                             <tr *ngFor="let tax of availableTaxes; let i = index">
                                 <td data-title="#">{{ i + 1 }}</td>
                                 <td *ngIf="!taxToEdit[i]" [attr.data-title]="localeData?.tax">{{ tax.taxNumber }}</td>
@@ -232,7 +232,7 @@
                     </table>
                 </div>
             </div>
-            <div class="no-data" *ngIf="!isLoading && !availableTaxes.length">
+            <div class="no-data" *ngIf="!isLoading && !availableTaxes?.length">
                 <no-data
                     [primaryMessage]="commonLocaleData?.app_no_entries_found"
                     [secondaryMessage]="' '"
