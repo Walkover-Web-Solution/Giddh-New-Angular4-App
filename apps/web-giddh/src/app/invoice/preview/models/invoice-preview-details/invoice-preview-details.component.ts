@@ -375,6 +375,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     voucherType: this.selectedItem.voucherType === VoucherTypeEnum.cash ? VoucherTypeEnum.sales : this.selectedItem.voucherType,
                     voucherNumber: [this.selectedItem.voucherNumber]
                 };
+
+                if(this._generalService.voucherApiVersion === 2) {
+                    model.uniqueName = this.selectedItem.uniqueName;
+                }
+
                 let accountUniqueName: string = this.selectedItem.account?.uniqueName;
                 this.sanitizedPdfFileUrl = null;
                 this._receiptService.DownloadVoucher(model, accountUniqueName, false).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -451,23 +456,52 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
             this.companyName$.pipe(take(1)).subscribe(companyUniqueName => this.companyUniqueName = companyUniqueName);
 
-            let getRequest = { companyUniqueName: this.companyUniqueName, accountUniqueName: this.selectedItem?.account?.uniqueName, uniqueName: this.selectedItem?.uniqueName };
+            if(this._generalService.voucherApiVersion === 2) {
+                let accountUniqueName: string = this.selectedItem.account?.uniqueName;
 
-            this.sanitizedPdfFileUrl = null;
-            this.purchaseRecordService.getPdf(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response && response.status === "success" && response.body) {
-                    let blob: Blob = this._generalService.base64ToBlob(response.body, 'application/pdf', 512);
-                    this.attachedDocumentBlob = blob;
-                    const file = new Blob([blob], { type: 'application/pdf' });
-                    URL.revokeObjectURL(this.pdfFileURL);
-                    this.pdfFileURL = URL.createObjectURL(file);
-                    this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
-                    this.pdfPreviewLoaded = true;
+                let getRequest = {
+                    voucherType: this.selectedItem.voucherType,
+                    voucherNumber: [this.selectedItem.voucherNumber],
+                    uniqueName: this.selectedItem.uniqueName
+                };
+
+                this.sanitizedPdfFileUrl = null;
+                this._receiptService.DownloadVoucher(getRequest, accountUniqueName, false).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+                    if (result) {
+                        this.selectedItem.blob = result;
+                        const file = new Blob([result], { type: 'application/pdf' });
+                        URL.revokeObjectURL(this.pdfFileURL);
+                        this.pdfFileURL = URL.createObjectURL(file);
+                        this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                        this.isVoucherDownloadError = false;
+                    } else {
+                        this.isVoucherDownloadError = true;
+                        this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                    }
+                    this.isVoucherDownloading = false;
                     this.detectChanges();
-                } else {
-                    this.pdfPreviewHasError = true;
-                }
-            });
+                }, (err) => {
+                    this.handleDownloadError(err);
+                });
+            } else {
+                let getRequest = { companyUniqueName: this.companyUniqueName, accountUniqueName: this.selectedItem?.account?.uniqueName, uniqueName: this.selectedItem?.uniqueName };
+
+                this.sanitizedPdfFileUrl = null;
+                this.purchaseRecordService.getPdf(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response && response.status === "success" && response.body) {
+                        let blob: Blob = this._generalService.base64ToBlob(response.body, 'application/pdf', 512);
+                        this.attachedDocumentBlob = blob;
+                        const file = new Blob([blob], { type: 'application/pdf' });
+                        URL.revokeObjectURL(this.pdfFileURL);
+                        this.pdfFileURL = URL.createObjectURL(file);
+                        this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                        this.pdfPreviewLoaded = true;
+                        this.detectChanges();
+                    } else {
+                        this.pdfPreviewHasError = true;
+                    }
+                });
+            }            
             this.detectChanges();
         } else {
             if (this.selectedItem) {

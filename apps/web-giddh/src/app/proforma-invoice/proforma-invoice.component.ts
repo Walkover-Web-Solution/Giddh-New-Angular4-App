@@ -883,7 +883,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         if (this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote) {
                             this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.accountUniqueName, {
                                 invoiceNumber: this.invoiceNo,
-                                voucherType: this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType)
+                                voucherType: this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType),
+                                uniqueName: (this.voucherApiVersion === 2) ? this.selectedItem?.uniqueName : undefined
                             }));
                         }
                         // TODO: Add purchase record get API call once advance receipt is complete
@@ -1893,7 +1894,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         } else if (this.isPurchaseInvoice) {
             this.invoiceDateLabel = this.localeData?.bill_date;
         } else {
-            this.invoiceNoLabel = !this.isPurchaseInvoice ? this.localeData?.invoice_no : this.localeData?.purchase_bill_no;
+            if(this.voucherApiVersion === 2) {
+                this.invoiceNoLabel = (this.isDebitNote || this.isCreditNote) ? this.commonLocaleData?.app_reference_invoice : this.commonLocaleData?.app_number;
+            } else {
+                this.invoiceNoLabel = !this.isPurchaseInvoice ? this.localeData?.invoice_no : this.localeData?.purchase_bill_no;
+            }
             this.invoiceDateLabel = this.commonLocaleData?.app_invoice_date;
             this.invoiceDueDateLabel = !this.isPurchaseInvoice ? this.localeData?.due_date : this.localeData?.balance_due_date;
         }
@@ -4018,7 +4023,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     purchaseOrders: purchaseOrders,
                     company: this.purchaseBillCompany
                 } as PurchaseRecordRequest;
-                requestObject = this.updateData(requestObject, data);
+
+                if(this.voucherApiVersion === 2) {
+                    requestObject = <GenericRequestForGenerateSCD>this.updateData(requestObject, data);
+                } else {
+                    requestObject = this.updateData(requestObject, data);
+                }
                 if (this.advanceReceiptAdjustmentData) {
                     requestObject.voucherAdjustments = this.advanceReceiptAdjustmentData;
                 }
@@ -4050,7 +4060,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 // To get re-assign receipts voucher store
                 this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(response.body.account?.uniqueName, {
                     invoiceNumber: response.body.number,
-                    voucherType: response.body.type
+                    voucherType: response.body.type,
+                    uniqueName: (this.voucherApiVersion === 2) ? response.body.uniqueName : undefined
                 }));
             }
             // reset form and other
@@ -4419,7 +4430,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote) {
                 this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.accountUniqueName, {
                     invoiceNumber: this.invoiceNo,
-                    voucherType: this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType)
+                    voucherType: this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType),
+                    uniqueName: (this.voucherApiVersion === 2) ? this.selectedItem?.uniqueName : undefined
                 }));
             } else if (this.isPurchaseInvoice) {
                 const accountUniqueName = (this.selectedItem) ? this.selectedItem.account?.uniqueName : this.accountUniqueName;
@@ -4931,7 +4943,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         voucherDetails.grantTotalAmountForCompany = result.grandTotal.amountForCompany;
         if ([VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote].indexOf(this.invoiceType) > -1) {
             // Credit note and Debit note
-            voucherDetails.voucherNumber = result.invoiceNumberAgainstVoucher || '';
+            voucherDetails.voucherNumber = result.invoiceNumberAgainstVoucher || (this.voucherApiVersion === 2 ? result.number : '') || '';
         } else if (!this.copyPurchaseBill) {
             voucherDetails.voucherNumber = result.number;
         }
@@ -5581,17 +5593,24 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @param {PurchaseRecordRequest} request Request object required by the service
      * @memberof ProformaInvoiceComponent
      */
-    private updatePurchaseRecord(request: PurchaseRecordRequest): void {
+    private updatePurchaseRecord(request: any): void {
         // Update the puchase record with voucher API for voucher version 2 else merge the purchase record (PATCH method, UPDATE flow)
-        const apiCallObservable = this.voucherApiVersion === 2 ?
-            this.salesService.updateVoucher(request) : this.purchaseRecordService.generatePurchaseRecord(request, 'PATCH');
-        apiCallObservable.pipe(takeUntil(this.destroyed$))
+        if(this.voucherApiVersion === 2) {
+            this.salesService.updateVoucherV4(request)
             .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
                 this.actionsAfterVoucherUpdate(response, this.invoiceForm);
             }, () => {
                 this.startLoader(false);
                 this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
             });
+        } else {
+           this.purchaseRecordService.generatePurchaseRecord(request, 'PATCH').pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<VoucherClass, PurchaseRecordRequest>) => {
+                this.actionsAfterVoucherUpdate(response, this.invoiceForm);
+            }, () => {
+                this.startLoader(false);
+                this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
+            });   
+        }
     }
 
     /**
@@ -5622,7 +5641,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (this.isPurchaseInvoice) {
                 this._toasty.successToast(this.localeData?.purchase_bill_created);
             } else {
-                this._toasty.successToast(`${this.localeData?.entry_created}: ${this.voucherNumber}`);
+                let message = (this.voucherNumber) ? `${this.localeData?.entry_created}: ${this.voucherNumber}` : this.commonLocaleData?.app_messages?.voucher_saved;
+                this._toasty.successToast(message);
             }
 
             /** For pending type need to navigate to get all module of voucher type   */
@@ -7154,7 +7174,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.translationLoaded = true;
             this.customerPlaceHolder = this.localeData?.select_customer;
             this.customerNotFoundText = this.localeData?.add_customer;
-            this.invoiceNoLabel = this.localeData?.invoice_no;
+            if(this.voucherApiVersion === 2) {
+                if(this.isDebitNote || this.isCreditNote) {
+                    this.invoiceNoLabel = this.commonLocaleData?.app_reference_invoice;
+                } else {
+                    this.invoiceNoLabel = this.commonLocaleData.app_number;
+                }
+            } else {
+                this.invoiceNoLabel = this.localeData?.invoice_no;
+            }
             this.invoiceDateLabel = this.commonLocaleData?.app_invoice_date;
             this.invoiceDueDateLabel = this.localeData?.invoice_due_date;
 

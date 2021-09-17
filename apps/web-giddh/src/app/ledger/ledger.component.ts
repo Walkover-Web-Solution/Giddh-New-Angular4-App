@@ -97,6 +97,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('datepickerTemplate', { static: false }) public datepickerTemplate: ElementRef;
     /** bulk delete bank transactions confirmation modal instance */
     @ViewChild('bulkDeleteBankTransactionsConfirmationModal', { static: false }) public bulkDeleteBankTransactionsConfirmationModal: ModalDirective;
+    /** Instance of entry confirmation modal */
+    @ViewChild('entryConfirmModal', {static: false}) public entryConfirmModal: ModalDirective;
     public showUpdateLedgerForm: boolean = false;
     public isTransactionRequestInProcess$: Observable<boolean>;
     public ledgerBulkActionSuccess$: Observable<boolean>;
@@ -219,6 +221,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public noResultsFoundLabel = SearchResultText.NewSearch;
     /** This will hold if it's default load */
     public isDefaultLoad: boolean = true;
+    /** This is used to show hide bottom spacing when more detail is opened while CREATE/UPDATE ledger */
+    public isMoreDetailsOpened: boolean = false;
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** Stores the branch list of a company */
@@ -233,8 +237,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public showBranchSwitcher: boolean;
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
-    /** This is used to show hide bottom spacing when more detail is opened while CREATE/UPDATE ledger */
-    public isMoreDetailsOpened: boolean = false;
     /** This will hold if import statement modal is visible */
     public isImportStatementVisible: boolean = false;
     /** This will hold bank transactions api response */
@@ -250,6 +252,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** True if user has ledger permission */
     public hasLedgerPermission: boolean = true;
+    /** This will hold duplicate entry confirmation message */
+    public duplicateEntryConfirmationMessage: string = "";
 
     constructor(
         private store: Store<AppState>,
@@ -809,6 +813,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.hasLedgerPermission = response;
             this._cdRf.detectChanges();
         });
+
+        this.store.pipe(select(state => state.ledger.showDuplicateVoucherConfirmation), takeUntil(this.destroyed$)).subscribe(response => {
+            this.duplicateEntryConfirmationMessage = "";
+            if(response?.status === "confirm") {
+                this.duplicateEntryConfirmationMessage = response?.message;
+                this.entryConfirmModal?.show();
+            }
+        });
     }
 
     private assignPrefixAndSuffixForCurrency() {
@@ -837,7 +849,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.isBankTransactionLoading = true;
 
             let getRequest = { accountUniqueName: this.trxRequest.accountUniqueName, from: this.trxRequest.from, count: this.bankTransactionsResponse.countPerPage, page: this.bankTransactionsResponse.page }
-            this._ledgerService.GetBankTranscationsForLedger(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            this._ledgerService.GetBankTransactionsForLedger(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 this.isBankTransactionLoading = false;
                 if (res.status === 'success') {
                     if (res.body) {
@@ -2195,18 +2207,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This returns the transaction id of item
-     *
-     * @param {number} index
-     * @param {*} item
-     * @returns {*}
-     * @memberof LedgerComponent
-     */
-    public trackByTransactionId(index: number, item: any): any {
-        return item.transactionId;
-    }
-
-    /**
      * Callback for translation response complete
      *
      * @param {boolean} event
@@ -2277,6 +2277,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * This returns the transaction id of item
+     *
+     * @param {number} index
+     * @param {*} item
+     * @returns {*}
+     * @memberof LedgerComponent
+     */
+    public trackByTransactionId(index: number, item: any): any {
+        return item.transactionId;
+    }
+
+    /**
      * This will show bulk delete bank transactions modal
      *
      * @memberof LedgerComponent
@@ -2337,5 +2349,26 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public trackById(index: number, transaction: any): string {
         return transaction?.id;
+    }
+
+    /**
+     * This will merge the duplicate voucher entry
+     *
+     * @memberof LedgerComponent
+     */
+    public confirmMergeEntry(): void {
+        this.entryConfirmModal?.hide();
+        this.lc.blankLedger.mergePB = true;
+        this.saveBlankTransaction();
+    }
+
+    /**
+     * This will close the merge popup
+     *
+     * @memberof LedgerComponent
+     */
+    public cancelMergeEntry(): void {
+        this.entryConfirmModal?.hide();
+        this.lc.showNewLedgerPanel = true;
     }
 }

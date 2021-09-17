@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, forwardRef, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, forwardRef, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import * as _moment from 'moment';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
@@ -25,15 +25,21 @@ const moment = _moment;
     ]
 })
 
-export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, OnChanges, OnDestroy {
+export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, OnDestroy {
     /** Taking placeholder as input */
     @Input() public placeholder: any = "";
-    /** Taking ngModel as input */
-    @Input() public ngModel: any;
     /** Min date */
     @Input() public minDate: Date;
+    /** Taking any css class as input to be applied on date input field */
+    @Input() public cssClass: string = "";
+    /** Will show toggle icon if true */
+    @Input() public showToggleIcon: boolean = true;
+    /** Will disable the field if true */
+    @Input() public disabled: boolean = false;
     /** Emitting selected date object as output */
     @Output() public dateSelected: EventEmitter<any> = new EventEmitter<any>();
+    /** Emitting the state of datepicker (open/close) */
+    @Output() public datepickerState: EventEmitter<any> = new EventEmitter<any>();
 
     /** Internal data model */
     private innerValue: any = '';
@@ -41,12 +47,15 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     public calendarDate: any = '';
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
-    //Placeholders for the callbacks which are later provided by the Control Value Accessor
+    /** Placeholders for the callbacks which are later provided by the Control Value Accessor */
     private onTouchedCallback: () => void = noop;
     private onChangeCallback: (_: any) => void = noop;
 
-    constructor(private adapter: DateAdapter<any>, private store: Store<AppState>) {
+    constructor(
+        private adapter: DateAdapter<any>, 
+        private store: Store<AppState>,
+        private changeDetectorRef: ChangeDetectorRef
+    ) {
 
     }
 
@@ -61,22 +70,6 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
                 this.adapter.setLocale(response?.value);
             }
         });
-    }
-
-    /**
-     * Updates the value on value change event
-     *
-     * @param {SimpleChanges} changes
-     * @memberof GiddhDatepickerComponent
-     */
-    public ngOnChanges(changes: SimpleChanges): void {
-        if ('ngModel' in changes) {
-            if (changes.ngModel.currentValue) {
-                this.calendarDate = moment(changes.ngModel.currentValue, GIDDH_DATE_FORMAT).toDate();
-            } else {
-                this.calendarDate = "";
-            }
-        }
     }
 
     /**
@@ -99,6 +92,16 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
         let selectedDate = moment(event.value, GIDDH_DATE_FORMAT).toDate();
         this.onChangeCallback(selectedDate);
         this.dateSelected.emit(selectedDate);
+    }
+
+    /**
+     * Callback for datepicker state change
+     *
+     * @param {boolean} state
+     * @memberof GiddhDatepickerComponent
+     */
+    public emitDatepickerState(state: boolean): void {
+        this.datepickerState.emit(state);
     }
 
     //////// ControlValueAccessor //////////
@@ -141,8 +144,14 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
      * @memberof GiddhDatepickerComponent
      */
     public writeValue(value: any): void {
-        if (value && value !== this.innerValue) {
+        if (value) {
             this.innerValue = value;
+            this.calendarDate = moment(value, GIDDH_DATE_FORMAT).toDate();
+            this.changeDetectorRef.detectChanges();
+        } else {
+            this.innerValue = "";
+            this.calendarDate = "";
+            this.changeDetectorRef.detectChanges();
         }
     }
 

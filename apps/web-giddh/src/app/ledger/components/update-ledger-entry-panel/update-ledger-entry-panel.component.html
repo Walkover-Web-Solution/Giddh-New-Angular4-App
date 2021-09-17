@@ -7,7 +7,7 @@
 >
     <div id="entryModal">
         <!-- region header -->
-        <div class="modal-header" *ngIf="!isPettyCash">
+        <div class="modal-header flex-row-reverse" *ngIf="!isPettyCash">
             <span
                 aria-hidden="true"
                 class="close hover-orange"
@@ -146,7 +146,14 @@
                                             [ngClass]="{
                                                 'other-account-entry': txn.particular.uniqueName === 'others'
                                             }"
-                                            class="col-5 position-relative select2-parent select2-ledger"
+                                            class="
+                                                col-5
+                                                position-relative
+                                                select2-parent select2-ledger
+                                                d-flex
+                                                justify-content-between
+                                                align-items-center
+                                            "
                                         >
                                             <ng-template [ngIf]="!txn.isDiscount">
                                                 <div class="d-flex update-ledger-account">
@@ -181,13 +188,13 @@
                                                         [options]="searchResults"
                                                         #dbtSelect
                                                         (click)="addBlankTrx('DEBIT', txn, $event)"
+                                                        [fixedValue]="txn.particular.name"
                                                         (selected)="selectAccount($event, txn, dbtSelect)"
                                                         (onClear)="selectAccount($event, txn, dbtSelect, true)"
                                                         [showClear]="false"
                                                         [(ngModel)]="txn.particular.uniqueName"
                                                         [ItemHeight]="67"
                                                         (onShow)="dbs.hide()"
-                                                        [fixedValue]="txn.particular.name"
                                                         [defaultValue]="txn.particular.name"
                                                         [placeholder]="localeData?.to_select_accounts"
                                                     >
@@ -438,7 +445,14 @@
                                         <td
                                             [attr.data-title]="commonLocaleData?.app_particular"
                                             id="{{ 'credit-id-' + i }}"
-                                            class="position-relative col-5 select2-parent select2-ledger"
+                                            class="
+                                                position-relative
+                                                col-5
+                                                select2-parent select2-ledger
+                                                d-flex
+                                                justify-content-between
+                                                align-items-center
+                                            "
                                             [ngClass]="{
                                                 'other-account-entry': txn.particular.uniqueName === 'others'
                                             }"
@@ -1594,7 +1608,6 @@
                                     </td>
                                 </tr>
                             </table>
-
                             <table class="xs-table-block">
                                 <tbody>
                                     <tr>
@@ -1615,7 +1628,6 @@
                                                 [(ngModel)]="vm.selectedLedger.chequeNumber"
                                             />
                                         </td>
-
                                         <td>
                                             <label class="default-color">{{
                                                 commonLocaleData?.app_cheque_clearance_date
@@ -1639,7 +1651,6 @@
                                     </tr>
                                 </tbody>
                             </table>
-
                             <table class="mr-t1">
                                 <tbody>
                                     <tr>
@@ -1726,7 +1737,6 @@
                                     </span>
                                 </div>
                             </div>
-
                             <div class="d-flex w-100 mb-2 justify-content-between">
                                 <div class="w-100 d-flex pd-l15" *ngIf="vm.isMultiCurrencyAvailable">
                                     <ul class="list-inline d-flex font-14 currency-convertor">
@@ -1876,7 +1886,6 @@
     </div>
 
     <!-- endregion -->
-
     <!-- region totalWithCurrencySymbol template -->
     <ng-template #totalWithCurrencySymbol let-amountToDispaly>
         <span class="d-flex justify-content-end">

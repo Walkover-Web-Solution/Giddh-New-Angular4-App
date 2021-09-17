@@ -1552,6 +1552,30 @@
                                     </div>
                                 </div>
 
+                                <div class="row mt-1" *ngIf="voucherApiVersion === 2 && (isCreditNote || isDebitNote)">
+                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
+                                        <label> {{ commonLocaleData?.app_number }} </label>
+                                    </div>
+                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
+                                        <div class="col-sm-12 col-xl-6 col-lg-5 col-md-10 pl-0">
+                                            <div>
+                                                <input
+                                                    type="text"
+                                                    name="accountDetails.invoiceNum"
+                                                    class="form-control invoice-date attention-to"
+                                                    [ngClass]="{ 'date-invoice': !isPurchaseInvoice }"
+                                                    [disabled]="
+                                                        isUpdateMode && !(isDebitNote || isPurchaseInvoice)
+                                                            ? 'disabled'
+                                                            : null
+                                                    "
+                                                    [(ngModel)]="invFormData.voucherDetails.voucherNumber"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="row mt-1" *ngIf="isMobileScreen">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ invoiceDateLabel }}</label>
@@ -1904,7 +1928,7 @@
                                             {{ transaction.sku_and_customfields }}
                                         </p>
                                         <div class="date-hsn-code">
-                                            <div class="row">
+                                            <div class="row mr-0 ml-0">
                                                 <div class="col-6 col-sm-6 pr-0" *ngIf="entry.entryDate">
                                                     <div class="entry-date">
                                                         <label>{{ localeData?.entry_date }}: </label>
@@ -2324,7 +2348,7 @@
 
                                             <!-- region entry date/ hsncode -->
                                             <div class="date-hsn-code">
-                                                <div class="row">
+                                                <div class="row mr-0 ml-0">
                                                     <div class="col-6 col-sm-6 pr-0">
                                                         <div class="entry-date">
                                                             <label>{{ localeData?.entry_date }}: </label>
@@ -2447,7 +2471,7 @@
 
                                                                 <div class="btn-group mt-2 pt-1 d-flex">
                                                                     <button
-                                                                        class="btn btn-sm btn-success"
+                                                                        class="btn btn-sm btn-success-green"
                                                                         type="button"
                                                                         (click)="hsnDropdownShow = !hsnDropdownShow"
                                                                     >
@@ -4541,6 +4565,7 @@
                                                         shippingDate.errors &&
                                                         (shippingDate.dirty || shippingDate.touched)
                                                     "
+                                                    [showToggleIcon]="false"
                                                 >
                                                 </giddh-datepicker>
                                                 <p

@@ -1,0 +1,57 @@
+<div id="import-statement-modal">
+    <div class="modal-header flex-row-reverse">
+        <button
+            aria-hidden="true"
+            class="close"
+            mat-dialog-close
+            [attr.aria-label]="inputData?.commonLocaleData?.app_close"
+        >
+            ×
+        </button>
+        <h3 class="unbold" mat-dialog-title>{{ inputData?.localeData?.import_page_heading }}</h3>
+    </div>
+    <div class="modal-body">
+        <form name="importStatementForm" novalidate autocomplete="off">
+            <div class="pd-b2 clearfix browse-file-btn">
+                <label class="w100 file-upload-label">{{ inputData?.localeData?.file }} <sup>*</sup></label>
+                <label class="radio-inline p-0 browse-file-label">
+                    {{ inputData?.localeData?.choose_file }}
+                    <input
+                        type="file"
+                        name="file"
+                        class="form-control file-upload-field"
+                        [(ngModel)]="selectedFile"
+                        (change)="onFileChange($event.target.files)"
+                        required
+                        accept="application/pdf"
+                    />
+                </label>
+                <span class="path-name"> {{ selectedFile }} </span>
+            </div>
+            <div class="pd-b2 clearfix password-label">
+                <mat-form-field appearance="fill">
+                    <label class="w100">{{ inputData?.localeData?.password }}</label>
+                    <label class="radio-inline p-0">
+                        <input
+                            matInput
+                            type="password"
+                            name="password"
+                            class="form-control mat-field-border"
+                            [(ngModel)]="postRequest.password"
+                        />
+                    </label>
+                </mat-form-field>
+            </div>
+            <div class="modal-wrap">
+                <button
+                    mat-button
+                    [disabled]="!postRequest.file"
+                    class="btn btn-success mr-t1"
+                    (click)="importStatement()"
+                >
+                    {{ inputData?.localeData?.upload }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

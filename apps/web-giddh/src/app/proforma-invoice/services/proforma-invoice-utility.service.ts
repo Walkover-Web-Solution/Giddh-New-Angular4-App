@@ -92,6 +92,9 @@ export class ProformaInvoiceUtilityService {
                 });
             });
         }
+        if([VoucherTypeEnum.debitNote, VoucherTypeEnum.creditNote].includes(data.type)) {
+            data.number = data.invoiceNumberAgainstVoucher || data.number || '';
+        }
         return data;
     }
 
