@@ -172,10 +172,11 @@
                             <tr *ngFor="let item of stockUnit$ | async">
                                 <td>{{ item?.name }} ({{ item?.code }})</td>
                                 <td>
-                                    {{ item.parentStockUnit?.name }} <span *ngIf="!item.parentStockUnit?.name">-</span>
+                                    {{ item?.parentStockUnit?.name }}
+                                    <span *ngIf="!item?.parentStockUnit?.name">-</span>
                                 </td>
                                 <td class="text-right">
-                                    {{ item.displayQuantityPerUnit | giddhRoundOff: giddhDecimalPlaces }}
+                                    {{ item?.displayQuantityPerUnit | giddhRoundOff: giddhDecimalPlaces }}
                                 </td>
                                 <td class="action ico-btn">
                                     <button class="btn-default btn-xs" [disabled]="editMode" (click)="editUnit(item)">
