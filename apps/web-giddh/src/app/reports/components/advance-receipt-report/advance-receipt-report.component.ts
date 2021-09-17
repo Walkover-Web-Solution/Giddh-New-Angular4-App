@@ -472,9 +472,9 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @returns {Observable<BaseResponse<any, GetAllAdvanceReceiptsRequest>>} Observable to carry out further operations
      * @memberof AdvanceReceiptReportComponent
      */
-    private fetchAllReceipts(additionalRequestParameters?: GetAllAdvanceReceiptsRequest): Observable<BaseResponse<any, GetAllAdvanceReceiptsRequest>> {
+    private fetchAllReceipts(additionalRequestParameters?: any): Observable<BaseResponse<any, any>> {
         this.isLoading = true;
-        let requestObject: GetAllAdvanceReceiptsRequest = {
+        let requestObject: any = {
             companyUniqueName: this.activeCompanyUniqueName,
             from: this.fromDate,
             to: this.toDate,
@@ -503,7 +503,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             }
             requestObject = { ...requestObject, ...optionalParams };
         }
-        return this.receiptService.getAllAdvanceReceipts(requestObject);
+        return this.receiptService.GetAllReceipt(requestObject, 'receipt');
     }
 
     /**
@@ -538,7 +538,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 this.pageConfiguration.currentPage = response.body.page;
                 this.pageConfiguration.totalPages = response.body.totalPages;
                 this.pageConfiguration.totalItems = response.body.totalItems;
-                this.allReceipts = response.body.results;
+                this.allReceipts = response.body.items;
                 this.changeDetectorRef.detectChanges();
                 return response.body;
             } else {

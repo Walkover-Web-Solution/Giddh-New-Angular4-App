@@ -332,12 +332,14 @@
                         <tr *ngFor="let receipt of allReceipts; let i = index">
                             <td data-title="#">{{ i + 1 }}</td>
                             <td width="13%" class="text-break" [attr.data-title]="localeData?.receipt_no_label">
-                                {{ receipt?.receiptNumber }}
+                                {{ receipt?.voucherNumber }}
                             </td>
-                            <td class="entry-date" [attr.data-title]="localeData?.entry_date">{{ receipt?.date }}</td>
+                            <td class="entry-date" [attr.data-title]="localeData?.entry_date">
+                                {{ receipt?.voucherDate }}
+                            </td>
                             <td [attr.data-title]="localeData?.suppliers_name">{{ receipt?.type }}</td>
                             <td width="13%" class="text-break" [attr.data-title]="commonLocaleData?.app_voucher_type">
-                                {{ receipt?.baseAccountName }}
+                                {{ receipt?.account?.name }}
                             </td>
                             <td [attr.data-title]="localeData?.payment_mode_label">
                                 <div *ngFor="let paymentMode of receipt?.particularNames?.split(',')">
@@ -356,8 +358,8 @@
                             <td [attr.data-title]="commonLocaleData?.app_total_amount">
                                 <span class="d-inline-flex">
                                     <amount-field
-                                        [amount]="receipt?.totalAmount.amount"
-                                        [currencySymbol]="receipt?.totalAmount?.symbol"
+                                        [amount]="receipt?.grandTotal?.amountForAccount"
+                                        [currencySymbol]="receipt?.companyCurrencySymbol"
                                         [currencyCode]="activeCompany.baseCurrency"
                                     >
                                     </amount-field>
@@ -366,8 +368,8 @@
                             <td [attr.data-title]="localeData?.unused_amount">
                                 <span class="d-inline-flex">
                                     <amount-field
-                                        [amount]="receipt?.unusedAmount.amount"
-                                        [currencySymbol]="receipt?.unusedAmount?.symbol"
+                                        [amount]="receipt?.balanceDue?.amountForCompany"
+                                        [currencySymbol]="receipt?.balanceDue?.amountForCompany"
                                         [currencyCode]="activeCompany.baseCurrency"
                                     >
                                     </amount-field>
