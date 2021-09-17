@@ -7,7 +7,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { NewInventoryGroupComponent } from './component/inventory-group/inventory-group.component';
 import { CreateNewInventoryAsideComponent } from './component/create-new-inventory-aside-pane/create-new-inventory-aside.component';
-import { InventoryCreateGroupComponent } from './component/create-group/create-group.component';
+import { InventoryCreateUpdateGroupComponent } from './component/stock-group/create-update-group/create-update-group.component';
 import { CreateNewGroupComponent } from './component/create-new-group/create-new-group.component';
 import { CreateNewItemComponent } from './component/create-new-item/create-new-item.component';
 import { CreateNewUnitComponent } from './component/create-unit/create-unit.component';
@@ -50,7 +50,7 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
         NewInventoryComponent,
         NewInventoryGroupComponent,
         CreateNewInventoryAsideComponent,
-        InventoryCreateGroupComponent,
+        InventoryCreateUpdateGroupComponent,
         CreateNewGroupComponent,
         CreateNewItemComponent,
         CreateNewUnitComponent,
@@ -99,7 +99,7 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
         NewInventoryComponent,
         NewInventoryGroupComponent,
         CreateNewInventoryAsideComponent,
-        InventoryCreateGroupComponent,
+        InventoryCreateUpdateGroupComponent,
         CreateNewGroupComponent,
         CreateNewItemComponent,
         CreateNewUnitComponent,
