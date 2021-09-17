@@ -658,5 +658,6 @@
         "unlimited": "असीमित"
     },
     "app_voucher_unavailable": "समायोजन के लिए कोई वाउचर नहीं है।",
-    "app_reference_invoice": "संदर्भ चालान"
+    "app_reference_invoice": "संदर्भ चालान",
+    "app_create_custom_field": "कस्टम फ़ील्डस बनाएं"
 }
