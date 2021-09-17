@@ -28,6 +28,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
     declarations: [DaybookComponent, ExportDaybookComponent, DaybookAdvanceSearchModelComponent],
@@ -57,7 +58,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
         MatDialogModule,
         MatCheckboxModule,
         MatRadioModule,
-        MatExpansionModule
+        MatExpansionModule,
+        MatSlideToggleModule
     ],
     entryComponents: [
         PaginationComponent
