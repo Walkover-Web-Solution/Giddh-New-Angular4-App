@@ -740,8 +740,8 @@
                         <table class="table table-bordered m-0">
                             <tbody>
                                 <tr *ngFor="let txn of entry.transactions">
-                                    <td>{{ entry.entryDate }}</td>
-                                    <td>{{ txn.particular.name }}</td>
+                                    <td>{{ entry?.entryDate }}</td>
+                                    <td>{{ txn.particular?.name }}</td>
                                     <td>
                                         <amount-field
                                             [amount]="txn.amount"
