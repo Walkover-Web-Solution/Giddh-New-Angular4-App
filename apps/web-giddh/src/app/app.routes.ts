@@ -20,6 +20,7 @@ import { MobileHomeSidebarComponent } from './mobile-home/mobile-home-sidebar/mo
 import { MobileSearchCompanyComponent } from './mobile-home/mobile-search-company/mobile-search-company.component';
 import { MobileSearchBranchComponent } from './mobile-home/mobile-search-branch/mobile-search-branch.component';
 import { DownloadComponent } from './download/download.component';
+import { InventoryCreateUpdateGroupComponent } from './new-inventory/component/stock-group/create-update-group/create-update-group.component';
 
 export const ROUTES: Routes = [
     { path: 'download', component: DownloadComponent },
@@ -95,6 +96,7 @@ export const ROUTES: Routes = [
             { path: 'company-import-export', loadChildren: () => import('./companyImportExport/companyImportExport.module').then(module => module.CompanyImportExportModule) },
             { path: 'reports', loadChildren: () => import('./reports/reports.module').then(module => module.ReportsModule), canActivate: [NeedsAuthorization] },
             { path: 'proforma-invoice', loadChildren: () => import('./proforma-invoice/proforma-invoice.module').then(module => module.ProformaInvoiceModule), canActivate: [NeedsAuthorization] },
+            { path: 'create-group', component: InventoryCreateUpdateGroupComponent, canActivate: [NeedsAuthorization] },
             { path: 'onboarding', component: OnboardingComponent, canActivate: [NeedsAuthorization] },
             { path: 'welcome', component: WelcomeComponent, canActivate: [NeedsAuthorization] },
             { path: 'billing-detail', loadChildren: () => import('./billing-details/billingDetail.module').then(module => module.BillingDetailModule) },

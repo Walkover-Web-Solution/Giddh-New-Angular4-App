@@ -924,4 +924,17 @@ export class InventoryService {
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, companyUniqueName)));
     }
+
+    public getStockGroup(groupUniqueName: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        let url = this.config.apiUrl + INVENTORY_API.V5.GET_STOCK_GROUP;
+        url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        url = url.replace(':groupUniqueName', encodeURIComponent(groupUniqueName));
+
+        return this._http.get(url).pipe(map((res) => {
+            let data: BaseResponse<NewBranchTransferResponse, string> = res;
+            data.request = groupUniqueName;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<NewBranchTransferResponse, string>(e, groupUniqueName)));
+    }
 }

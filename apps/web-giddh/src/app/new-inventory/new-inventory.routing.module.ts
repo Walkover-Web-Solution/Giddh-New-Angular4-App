@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { NewInventoryComponent } from "./new-inventory.component";
-import { InventoryCreateGroupComponent } from "./component/create-group/create-group.component";
+import { InventoryCreateUpdateGroupComponent } from "./component/stock-group/create-update-group/create-update-group.component";
 import { AboutGroupDetailComponent } from "./component/about-group-detail/about-group-detail.component";
 import { AboutProductServiceDetailComponent } from "./component/about-product-service-detail/about-product-service-detail.component";
 import { InventoryComboListComponent } from "./component/combo-list/inventory-combo-list.component";
@@ -21,8 +21,12 @@ import { DashboardSellingReport } from "./component/inventory-dashboard/dashboar
                 component: NewInventoryComponent,
             },
             {
-                path: "create-group",
-                component: InventoryCreateGroupComponent,
+                path: "stock-group/create",
+                component: InventoryCreateUpdateGroupComponent,
+            },
+            {
+                path: "stock-group/edit/:groupUniqueName",
+                component: InventoryCreateUpdateGroupComponent,
             },
             {
                 path: "about-group-detail",
