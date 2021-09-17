@@ -429,7 +429,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.branchesWithWarehouse = response.body.results;
                     successCallback();
                 } else if (response.status === 'error') {
-                    this.toastService.errorToast(response.message, response.code);
+                    this.toastService.errorToast(response?.message, response?.code);
                 }
             }
         });

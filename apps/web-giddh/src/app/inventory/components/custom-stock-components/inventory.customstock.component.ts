@@ -101,7 +101,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
                 this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             }
         });
-        
+
         let activeGroup = null;
         this.activeGroupUniqueName$.pipe(take(1)).subscribe(a => activeGroup = a);
         if (activeGroup) {
@@ -165,9 +165,9 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
             this.customUnitObj.quantityPerUnit = giddhRoundOff(item.displayQuantityPerUnit, this.giddhDecimalPlaces);
         }
         if (this.customUnitObj.parentStockUnit) {
-            this.customUnitObj.parentStockUnitCode = item.parentStockUnit.code;
+            this.customUnitObj.parentStockUnitCode = item.parentStockUnit?.code;
         }
-        this.editCode = item.code;
+        this.editCode = item?.code;
         this.editMode = true;
     }
 
@@ -228,7 +228,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         if (this.editMode) {
             return true;
         }
-        let val: string = this.customUnitObj.code;
+        let val: string = this.customUnitObj?.code;
         if (val && this.stockUnitsList.includes({ label: val, value: val })) {
             val = uniqueNameInvalidStringReplace(val);
         }
