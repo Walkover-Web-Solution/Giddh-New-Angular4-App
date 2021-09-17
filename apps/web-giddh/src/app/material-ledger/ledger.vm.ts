@@ -267,9 +267,48 @@ export class LedgerVM {
             this.bankTransactionsDebitData = [];
             this.showEledger = true;
             let creditLoop = 0, debitLoop = 0;
+            let blankLedger = {
+                transactions: [
+                    {
+                        ...new TransactionVM(),
+                        id: uuidv4(),
+                        type: 'DEBIT',
+                        discounts: [this.staticDefaultDiscount()],
+                        selectedAccount: null,
+                        isInclusiveTax: true,
+                    },
+                    {
+                        ...new TransactionVM(),
+                        id: uuidv4(),
+                        type: 'CREDIT',
+                        discounts: [this.staticDefaultDiscount()],
+                        selectedAccount: null,
+                        isInclusiveTax: true,
+                    }],
+                voucherType: 'sal',
+                entryDate: moment().format(GIDDH_DATE_FORMAT),
+                unconfirmedEntry: false,
+                attachedFile: '',
+                attachedFileName: '',
+                tag: null,
+                description: '',
+                generateInvoice: false,
+                chequeNumber: '',
+                chequeClearanceDate: '',
+                invoiceNumberAgainstVoucher: '',
+                compoundTotal: 0,
+                convertedCompoundTotal: 0,
+                invoicesToBePaid: [],
+                otherTaxModal: new SalesOtherTaxesModal(),
+                tdsTcsTaxesSum: 0,
+                otherTaxesSum: 0,
+                otherTaxType: 'tcs',
+                exchangeRate: 1,
+                valuesInAccountCurrency: true
+            };
             forEach(data, (txn: IELedgerResponse) => {
                 let item: BlankLedgerVM;
-                item = cloneDeep(this.blankLedger);
+                item = cloneDeep(blankLedger);
                 if (isCompany) {
                     item.transactions = [
                         this.addNewTransaction('DEBIT'),
