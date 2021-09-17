@@ -8,14 +8,14 @@ import { PreviousInvoicesVm } from '../../../models/api-models/proforma';
 })
 
 export class ProformaLastInvoicesComponent {
-    @Output() public invoiceSelected: EventEmitter<{ accountUniqueName: string, invoiceNo: string }> = new EventEmitter();
+    @Output() public invoiceSelected: EventEmitter<{ accountUniqueName: string, invoiceNo: string, uniqueName?: string }> = new EventEmitter();
     @Input() public data: PreviousInvoicesVm[] = [];
 
     constructor() {
     }
 
     onInvoiceSelected(item: PreviousInvoicesVm) {
-        this.invoiceSelected.emit({ accountUniqueName: item.account?.uniqueName, invoiceNo: item.versionNumber });
+        this.invoiceSelected.emit({ accountUniqueName: item.account?.uniqueName, invoiceNo: item.versionNumber, uniqueName: item.uniqueName });
     }
 
     public clickInside(event) {
