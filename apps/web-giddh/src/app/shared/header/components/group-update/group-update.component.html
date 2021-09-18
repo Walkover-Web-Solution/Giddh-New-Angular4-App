@@ -142,8 +142,8 @@
             >
                 <ng-template #optionTemplate let-option="option">
                     <a href="javascript:void(0)" class="list-item">
-                        <div class="item">{{ option.label }}</div>
-                        <div class="item-unique">{{ option.value }}</div>
+                        <div class="item">{{ option?.label }}</div>
+                        <div class="item-unique">{{ option?.value }}</div>
                     </a>
                 </ng-template>
             </sh-select>
