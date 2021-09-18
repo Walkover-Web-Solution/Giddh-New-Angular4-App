@@ -202,7 +202,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.updateAccountInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.updateAccountInProcess), takeUntil(this.destroyed$));
         this.updateAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.updateAccountIsSuccess), takeUntil(this.destroyed$));
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
-        
+
         this.selectedItems = [];
         this.settings = {
             singleSelection: false,
@@ -558,10 +558,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     public selectAccount(v: IOption[]) {
-        if (v.length) {
+        if (v?.length) {
             let accounts = [];
             v.map(a => {
-                accounts.push(a.value);
+                accounts?.push(a?.value);
             });
             this.selectedaccountForMerge = accounts;
         } else {
