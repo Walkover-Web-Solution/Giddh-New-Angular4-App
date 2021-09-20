@@ -94,6 +94,8 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     };
     /** Stores the value of groups */
     public searchedGroups: IOption[];
+    /** True if we need to show discount field */
+    public showDiscountField: boolean = false;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     constructor(
@@ -548,6 +550,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public getDiscountList(): void {
         this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
+                this.showDiscountField = false;
                 this.discountList = [];
                 Object.keys(response?.body).forEach(key => {
                     this.discountList.push({
@@ -556,6 +559,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                         isSelected: false
                     });
                 });
+                this.showDiscountField = true;
             }
         });
     }

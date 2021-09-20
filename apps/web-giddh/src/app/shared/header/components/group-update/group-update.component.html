@@ -236,6 +236,7 @@
             <div class="clearfix">
                 <span>
                     <sh-select
+                        *ngIf="showDiscountField"
                         class="pull-left calc-width"
                         [options]="discountList"
                         [isFilterEnabled]="true"
