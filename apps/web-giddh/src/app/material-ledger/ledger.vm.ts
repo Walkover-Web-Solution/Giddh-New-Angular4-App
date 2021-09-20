@@ -64,45 +64,7 @@ export class LedgerVM {
 
     constructor() {
         this.noAccountChosenForNewEntry = false;
-        this.blankLedger = {
-            transactions: [
-                {
-                    ...new TransactionVM(),
-                    id: uuidv4(),
-                    type: 'DEBIT',
-                    discounts: [this.staticDefaultDiscount()],
-                    selectedAccount: null,
-                    isInclusiveTax: true,
-                },
-                {
-                    ...new TransactionVM(),
-                    id: uuidv4(),
-                    type: 'CREDIT',
-                    discounts: [this.staticDefaultDiscount()],
-                    selectedAccount: null,
-                    isInclusiveTax: true,
-                }],
-            voucherType: 'sal',
-            entryDate: moment().format(GIDDH_DATE_FORMAT),
-            unconfirmedEntry: false,
-            attachedFile: '',
-            attachedFileName: '',
-            tag: null,
-            description: '',
-            generateInvoice: false,
-            chequeNumber: '',
-            chequeClearanceDate: '',
-            invoiceNumberAgainstVoucher: '',
-            compoundTotal: 0,
-            convertedCompoundTotal: 0,
-            invoicesToBePaid: [],
-            otherTaxModal: new SalesOtherTaxesModal(),
-            tdsTcsTaxesSum: 0,
-            otherTaxesSum: 0,
-            otherTaxType: 'tcs',
-            exchangeRate: 1,
-            valuesInAccountCurrency: true
-        };
+        this.blankLedger = this.getBlankLedger();
     }
 
     public calculateReckonging(transactions: any) {
@@ -267,45 +229,7 @@ export class LedgerVM {
             this.bankTransactionsDebitData = [];
             this.showEledger = true;
             let creditLoop = 0, debitLoop = 0;
-            let blankLedger = {
-                transactions: [
-                    {
-                        ...new TransactionVM(),
-                        id: uuidv4(),
-                        type: 'DEBIT',
-                        discounts: [this.staticDefaultDiscount()],
-                        selectedAccount: null,
-                        isInclusiveTax: true,
-                    },
-                    {
-                        ...new TransactionVM(),
-                        id: uuidv4(),
-                        type: 'CREDIT',
-                        discounts: [this.staticDefaultDiscount()],
-                        selectedAccount: null,
-                        isInclusiveTax: true,
-                    }],
-                voucherType: 'sal',
-                entryDate: moment().format(GIDDH_DATE_FORMAT),
-                unconfirmedEntry: false,
-                attachedFile: '',
-                attachedFileName: '',
-                tag: null,
-                description: '',
-                generateInvoice: false,
-                chequeNumber: '',
-                chequeClearanceDate: '',
-                invoiceNumberAgainstVoucher: '',
-                compoundTotal: 0,
-                convertedCompoundTotal: 0,
-                invoicesToBePaid: [],
-                otherTaxModal: new SalesOtherTaxesModal(),
-                tdsTcsTaxesSum: 0,
-                otherTaxesSum: 0,
-                otherTaxType: 'tcs',
-                exchangeRate: 1,
-                valuesInAccountCurrency: true
-            };
+            let blankLedger = this.getBlankLedger();
             forEach(data, (txn: IELedgerResponse) => {
                 let item: BlankLedgerVM;
                 item = cloneDeep(blankLedger);
@@ -398,6 +322,54 @@ export class LedgerVM {
             name: '',
             particular: '',
             isActive: true
+        };
+    }
+
+    /**
+     * Returns blank ledger object
+     *
+     * @returns {*}
+     * @memberof LedgerVM
+     */
+    public getBlankLedger(): any {
+        return {
+            transactions: [
+                {
+                    ...new TransactionVM(),
+                    id: uuidv4(),
+                    type: 'DEBIT',
+                    discounts: [this.staticDefaultDiscount()],
+                    selectedAccount: null,
+                    isInclusiveTax: true,
+                },
+                {
+                    ...new TransactionVM(),
+                    id: uuidv4(),
+                    type: 'CREDIT',
+                    discounts: [this.staticDefaultDiscount()],
+                    selectedAccount: null,
+                    isInclusiveTax: true,
+                }],
+            voucherType: 'sal',
+            entryDate: moment().format(GIDDH_DATE_FORMAT),
+            unconfirmedEntry: false,
+            attachedFile: '',
+            attachedFileName: '',
+            tag: null,
+            description: '',
+            generateInvoice: false,
+            chequeNumber: '',
+            chequeClearanceDate: '',
+            invoiceNumberAgainstVoucher: '',
+            compoundTotal: 0,
+            convertedCompoundTotal: 0,
+            invoicesToBePaid: [],
+            otherTaxModal: new SalesOtherTaxesModal(),
+            tdsTcsTaxesSum: 0,
+            otherTaxesSum: 0,
+            otherTaxType: 'tcs',
+            exchangeRate: 1,
+            valuesInAccountCurrency: true
         };
     }
 }
