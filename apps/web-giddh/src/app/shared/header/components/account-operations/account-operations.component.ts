@@ -558,10 +558,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     public selectAccount(v: IOption[]) {
-        if (v?.length) {
+        if (v.length) {
             let accounts = [];
             v.map(a => {
-                accounts?.push(a?.value);
+                accounts.push(a.value);
             });
             this.selectedaccountForMerge = accounts;
         } else {
