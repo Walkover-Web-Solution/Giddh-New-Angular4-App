@@ -539,6 +539,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
         this.store.pipe(select(state => state.invoice.isGenerateBulkInvoiceCompleted), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                this.updateSelectedItems = true;
                 this.getVoucher(this.isUniversalDateApplicable);
                 this.store.dispatch(this.invoiceActions.resetBulkEInvoice());
             }
