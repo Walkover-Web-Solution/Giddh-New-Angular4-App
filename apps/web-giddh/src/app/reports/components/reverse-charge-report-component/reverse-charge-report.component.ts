@@ -160,7 +160,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         })), takeUntil(this.destroyed$)).subscribe();
 
         this.store.pipe(
-            select(state => state.session.activeCompany), take(1)
+            select(state => state.session.activeCompany), takeUntil(this.destroyed$)
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });

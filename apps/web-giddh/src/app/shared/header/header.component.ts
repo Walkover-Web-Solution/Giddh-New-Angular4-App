@@ -403,6 +403,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
                     this.selectedCompanyCountry = selectedCmp.country;
                 }
+
+                this.loadCompanyBranches();
             }
         });
 
@@ -529,8 +531,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.manageGroupsAccountsModal.onHidden.pipe(takeUntil(this.destroyed$)).subscribe(e => {
             this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
         });
-
-        this.loadCompanyBranches();
 
         // region subscribe to last state for showing title of page this.selectedPage
         this.store.pipe(select(s => s.session.lastState), take(1)).subscribe(s => {
