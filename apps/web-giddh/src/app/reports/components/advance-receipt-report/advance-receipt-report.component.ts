@@ -196,7 +196,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             this.fetchReceiptsData();
         });
         this.store.pipe(
-            select(state => state.session.activeCompany), take(1)
+            select(state => state.session.activeCompany), takeUntil(this.destroyed$)
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
