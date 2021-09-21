@@ -1510,7 +1510,13 @@
                                 >
                                     {{ localeData?.connect_icici_bank }}
                                 </button>
-                                <ng-container *ngIf="isICICIIntegrated && !isGetAllIntegratedBankInProgress">
+                                <ng-container
+                                    *ngIf="
+                                        isICICIIntegrated &&
+                                        !isGetAllIntegratedBankInProgress &&
+                                        !isIciciAccountPendingForApproval
+                                    "
+                                >
                                     <button
                                         *ngIf="account?.bankPaymentDetails && account?.country?.code === 'IN'"
                                         class="btn btn-small btn-success"
