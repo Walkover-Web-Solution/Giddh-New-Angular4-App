@@ -116,7 +116,7 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
 
     public deleteConfirmedRole() {
         this.permissionConfirmationModel.hide();
-        this.store.dispatch(this.permissionActions.DeleteRole(this.selectedRoleForDelete.uniqueName));
+        this.store.dispatch(this.permissionActions.DeleteRole(this.selectedRoleForDelete?.uniqueName));
     }
 
     public closeConfirmationPopup() {

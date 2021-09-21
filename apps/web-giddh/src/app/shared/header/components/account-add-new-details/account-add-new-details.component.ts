@@ -84,8 +84,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     @Input() public isBankAccount: boolean = true;
     /** True if account creation is from command k */
     @Input() public fromCommandK: boolean = false;
+    /** True if custom fields api needs to be called again */
+    @Input() public reloadCustomFields: boolean = false;
     @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
     @Output() public isGroupSelected: EventEmitter<IOption> = new EventEmitter();
+    /** Emits if we have to switch to custom fields tab */
+    @Output() public goToCustomFields: EventEmitter<boolean> = new EventEmitter();
     @ViewChild('autoFocus', { static: true }) public autoFocus: ElementRef;
     /** Tabs instance */
     @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
@@ -207,6 +211,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         this.isHsnSacEnabledAcc = (response.parentGroups) ? HSN_SAC_PARENT_GROUPS.includes(response.parentGroups[0]?.uniqueName) : false;
                         this.isParentDebtorCreditor(response.uniqueName);
                     }
+
+                    this.showHideAddressTab();
                 }
             }
         });
@@ -606,6 +612,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (s && s['activeGroupUniqueName'] && s['activeGroupUniqueName'].currentValue) {
             this.activeGroupUniqueName = s['activeGroupUniqueName'].currentValue;
         }
+        if(s && s['reloadCustomFields']?.currentValue && s['reloadCustomFields']?.currentValue !== s['reloadCustomFields']?.previousValue) {
+            this.getCompanyCustomField();
+        }
     }
 
     public ngOnDestroy() {
@@ -658,32 +667,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.activeParentGroup = activeParentgroup;
         this.activeParentGroupUniqueName = activeParentgroup;
         if (activeParentgroup === 'sundrycreditors' || activeParentgroup === 'sundrydebtors') {
-            const accountAddress = this.addAccountForm.get('addresses') as FormArray;
             this.isShowBankDetails(activeParentgroup);
             this.isDebtorCreditor = true;
-
-            setTimeout(() => {
-                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
-                    this.staticTabs.tabs[0].active = true;
-                    this.changeDetectorRef.detectChanges();
-                }
-            }, 50);
-
-            if (accountAddress.controls.length === 0 || !accountAddress.length) {
-                this.addBlankGstForm();
-            }
         } else {
             this.isBankAccount = false;
             this.isDebtorCreditor = false;
             this.showBankDetail = false;
-            this.addAccountForm.get('addresses').reset();
-
-            setTimeout(() => {
-                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
-                    this.staticTabs.tabs[1].active = true;
-                    this.changeDetectorRef.detectChanges();
-                }
-            }, 50);
         }
         this.changeDetectorRef.detectChanges();
     }
@@ -934,6 +923,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     * @memberof AccountAddNewDetailsComponent
     */
     public getCompanyCustomField(): void {
+        this.companyCustomFields = [];
         this.groupService.getCompanyCustomField().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === 'success') {
                 this.companyCustomFields = response.body;
@@ -1179,7 +1169,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
     }
 
-    /**
+    /*  
      * This will get invoice settings
      *
      * @memberof AccountAddNewDetailsComponent
@@ -1197,5 +1187,36 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
             }
         });
+    }
+  
+    /**
+     * This will show/hide address tab depending on parent group
+     *
+     * @private
+     * @memberof AccountAddNewDetailsComponent
+     */
+    private showHideAddressTab(): void {
+        if(!this.isHsnSacEnabledAcc) {
+            setTimeout(() => {
+                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
+                    this.staticTabs.tabs[0].active = true;
+                    this.changeDetectorRef.detectChanges();
+                }
+            }, 50);
+
+            const accountAddress = this.addAccountForm.get('addresses') as FormArray;
+            if (accountAddress.controls.length === 0 || !accountAddress.length) {
+                this.addBlankGstForm();
+            }
+        } else {
+            this.addAccountForm.get('addresses').reset();
+            
+            setTimeout(() => {
+                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[1]) {
+                    this.staticTabs.tabs[1].active = true;
+                    this.changeDetectorRef.detectChanges();
+                }
+            }, 50);
+        }
     }
 }
