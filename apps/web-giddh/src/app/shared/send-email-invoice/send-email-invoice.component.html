@@ -36,6 +36,27 @@
             <div class="checkbox">
                 <label>
                     <input
+                        name="originalCopy"
+                        type="checkbox"
+                        value="Original"
+                        checked
+                        [(ngModel)]="isOriginal"
+                        (change)="invoiceTypeChanged($event)"
+                    />
+                    {{ localeData?.original }}
+                    <input
+                        type="checkbox"
+                        value="Transport"
+                        (change)="invoiceTypeChanged($event)"
+                        [(ngModel)]="isTransport"
+                    />
+                    {{ localeData?.transport }}
+                </label>
+            </div>
+
+            <div class="checkbox">
+                <label>
+                    <input
                         type="checkbox"
                         value="Transport"
                         (change)="invoiceTypeChanged($event)"
@@ -62,7 +83,12 @@
         <div class="row mr-t2 mr-b1">
             <div class="col-sm-12">
                 <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-success" [disabled]="!emailAddresses" (click)="sendEmail()">
+                    <button
+                        type="button"
+                        class="btn btn-success"
+                        [disabled]="!emailAddresses || (!isTransport && !isOriginal && !isCustomer)"
+                        (click)="sendEmail()"
+                    >
                         {{ commonLocaleData?.app_send }}
                     </button>
 

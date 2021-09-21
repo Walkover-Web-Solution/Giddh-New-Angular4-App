@@ -7,7 +7,7 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import * as moment from 'moment/moment';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
@@ -19,6 +19,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { cloneDeep, map, orderBy } from '../../../lodash-optimized';
 import { SettingsTagService } from '../../../services/settings.tag.service';
 import { ToasterService } from '../../../services/toaster.service';
+import { IForceClear } from '../../../models/api-models/Sales';
 
 @Component({
     selector: 'financial-filter',
@@ -105,15 +106,17 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /* This will clear the select value in sh-select */
+    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
 
     constructor(private fb: FormBuilder,
         private cd: ChangeDetectorRef,
         private store: Store<AppState>,
         private settingsTagService: SettingsTagService,
         private generalService: GeneralService,
+        private modalService: BsModalService,
         private breakPointObservar: BreakpointObserver,
         private settingsBranchAction: SettingsBranchActions,
-        private modalService: BsModalService,
         private toaster: ToasterService
     ) {
         this.filterForm = this.fb.group({
@@ -216,14 +219,18 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 this.filterData();
             }
         });
-        this.store.pipe(
-            select(state => state.session.activeCompany), takeUntil(this.destroyed$)
-        ).subscribe(activeCompany => {
-            this.activeCompany = activeCompany;
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany?.uniqueName !== this.activeCompany?.uniqueName) {
+                this.activeCompany = activeCompany;
+                this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+            }
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
-        this.currentCompanyBranches$.subscribe(response => {
+        this.currentCompanyBranches$.subscribe(response => {           
             if (response && response.length) {
+                this.filterForm.get('branchUniqueName').setValue("");
+                this.forceClear$ = observableOf({ status: true });
+                this.currentCompanyBranches = [];
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.alias,
                     value: branch.uniqueName,
@@ -252,10 +259,10 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                             uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
                         };
                     }
-                    this.filterForm.get('branchUniqueName').setValue(this.currentBranch.uniqueName);
-                    this.filterForm.updateValueAndValidity();
-                    this.cd.detectChanges();
                 }
+                this.filterForm.get('branchUniqueName').setValue(this.currentBranch?.uniqueName);
+                this.filterForm.updateValueAndValidity();
+                this.cd.detectChanges();
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
@@ -352,7 +359,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 this.getTags();
                 this.toaster.successToast(this.commonLocaleData?.app_messages?.tag_created, this.commonLocaleData?.app_success);
             } else {
-                this.toaster.errorToast(response?.message, response?.code);                
+                this.toaster.errorToast(response?.message, response?.code);
             }
         });
         this.toggleTagsModal();

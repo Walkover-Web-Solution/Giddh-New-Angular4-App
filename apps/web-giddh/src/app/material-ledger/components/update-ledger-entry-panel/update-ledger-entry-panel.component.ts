@@ -26,7 +26,7 @@ import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
-import { ConfirmationModalConfiguration, CONFIRMATION_ACTIONS } from '../../../common/confirmation-modal/confirmation-modal.interface';
+import { ConfirmationModalConfiguration } from '../../../common/confirmation-modal/confirmation-modal.interface';
 import { LoaderService } from '../../../loader/loader.service';
 import { cloneDeep, filter, last, orderBy, uniqBy } from '../../../lodash-optimized';
 import { AccountResponse } from '../../../models/api-models/Account';
@@ -268,6 +268,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public advanceReceiptRemoveDialogRef: any;
     /** True if more details is open */
     public isMoreDetailOpen: boolean;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private accountService: AccountService,
@@ -427,6 +429,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }
                 });
         }
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     public toggleShow(): void {
@@ -947,16 +950,20 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
     }
 
-    public downloadInvoice(invoiceName: string, voucherType: string, e: Event) {
+    public downloadInvoice(transaction: any, e: Event) {
         e.stopPropagation();
         let downloadRequest = new DownloadLedgerRequest();
-        downloadRequest.invoiceNumber = [invoiceName];
-        downloadRequest.voucherType = voucherType;
+        if(this.voucherApiVersion === 2) {
+            downloadRequest.uniqueName = transaction.voucherUniqueName;
+        } else {
+            downloadRequest.invoiceNumber = [transaction.voucherNumber];
+        }
+        downloadRequest.voucherType = (transaction.voucherGeneratedType) ? transaction.voucherGeneratedType : transaction.voucher?.name;
 
         this.ledgerService.DownloadInvoice(downloadRequest, this.activeAccount.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d.status === 'success') {
                 let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
-                return saveAs(blob, `${this.activeAccount.name} - ${invoiceName}.pdf`);
+                return saveAs(blob, `${this.activeAccount.name} - ${transaction.voucherNumber}.pdf`);
             } else {
                 this.toaster.showSnackBar("error", d.message);
             }

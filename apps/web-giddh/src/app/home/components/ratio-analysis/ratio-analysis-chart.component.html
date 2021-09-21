@@ -32,7 +32,7 @@
                             {{ localeData?.current_liabilities }}</small
                         >
                     </div>
-                    <div class="col-md-3 col-sm-12 col-xs-12 text-center ratio-chart-block">
+                    <div class="col-md-3 col-sm-12 col-12 text-center ratio-chart-block">
                         <highcharts-chart *ngIf="debtOptions" [Highcharts]="debtChart" [options]="debtOptions">
                         </highcharts-chart>
                         <h1 class="mr-b1">{{ localeData?.debt_equity_ratio }}</h1>

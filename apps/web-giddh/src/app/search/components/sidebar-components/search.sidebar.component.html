@@ -85,32 +85,6 @@
                         />
                     </div>
                 </div>
-                <!-- <div class="form-group" (clickOutside)="showFromDatePicker=false;">
-            <label>From date</label>
-            <div class="input-group">
-                <input type="text" name="from" pattern="\d{1,2}\-\d{1,2}\-\d{4}$" [ngModel]="moment(fromDate).format(giddhDateFormat)" (focus)="showFromDatePicker = true; showToDatePicker=false;" class="form-control" required/>
-                <span class="input-group-btn">
-            <button type="button" class="btn btn-default" (click)="showFromDatePicker = !showFromDatePicker"><i class="icon-calender"></i></button>
-          </span>
-            </div>
-            <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
-                <datepicker name="fromDate" [(ngModel)]="fromDate" (selectionDone)="showFromDatePicker=!showFromDatePicker" [showWeeks]="false"></datepicker>
-            </div>
-        </div>
-
-        <div class="form-group" (clickOutside)="showToDatePicker=false;">
-            <label>To date</label>
-            <div class="input-group">
-                <input type="text" name="to" required [ngModel]="moment(toDate).format(giddhDateFormat)" (focus)="showToDatePicker = true;showFromDatePicker=false;" class="form-control" />
-                <span class="input-group-btn">
-            <button type="button" class="btn btn-default" (click)="showToDatePicker = !showToDatePicker"><i class="icon-calender"></i></button>
-          </span>
-
-            </div>
-            <div *ngIf="showToDatePicker" style="position: absolute; z-index:10; min-height:290px;">
-                <datepicker name="toDate" [(ngModel)]="toDate" (selectionDone)="showToDatePicker=!showToDatePicker" [showWeeks]="false"></datepicker>
-            </div>
-        </div> -->
                 <div>
                     <label>&nbsp;</label>
                     <button

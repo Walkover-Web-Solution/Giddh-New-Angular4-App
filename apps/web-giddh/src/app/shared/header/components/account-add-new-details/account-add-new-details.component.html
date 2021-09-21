@@ -186,7 +186,7 @@
                                             value="hsn"
                                         />
                                         <label for="hsnCodeType" class="radio-custom-label">{{
-                                            commonLocaleData?.app_hsn_code
+                                            commonLocaleData?.app_hsn
                                         }}</label>
                                     </span>
                                     <span>
@@ -199,7 +199,7 @@
                                             value="sac"
                                         />
                                         <label for="sacCodeType" class="ml-1 radio-custom-label">{{
-                                            commonLocaleData?.app_sac_code
+                                            commonLocaleData?.app_sac
                                         }}</label>
                                     </span>
                                 </div>
@@ -231,9 +231,9 @@
             <ng-container>
                 <tab
                     [heading]="localeData?.tabs?.address"
-                    [active]="isDebtorCreditor"
-                    [disabled]="!isDebtorCreditor"
-                    [ngClass]="{ 'active': isDebtorCreditor }"
+                    [active]="!isHsnSacEnabledAcc"
+                    [disabled]="isHsnSacEnabledAcc"
+                    [customClass]="isHsnSacEnabledAcc ? 'd-none' : ''"
                     class="gstin-address"
                 >
                     <ng-container>
@@ -319,8 +319,10 @@
                                                 class="form-control"
                                                 autocomplete="false"
                                                 #gstNumberField
-                                                (keyup)="getStateCode(gst, states, $event)"
-                                                (blur)="checkGstNumValidation(gstNumberField)"
+                                                (blur)="
+                                                    checkGstNumValidation(gstNumberField);
+                                                    getStateCode(gst, states, $event)
+                                                "
                                                 name="gstNumber"
                                                 formControlName="gstNumber"
                                                 [placeholder]="taxNamePlaceholder"
@@ -417,7 +419,7 @@
                     </ng-container>
                 </tab>
             </ng-container>
-            <tab [heading]="localeData?.tabs?.contact" [active]="!isDebtorCreditor" class="contact-form-wrap">
+            <tab [heading]="localeData?.tabs?.contact" [active]="isHsnSacEnabledAcc" class="contact-form-wrap">
                 <div class="contact-form">
                     <div class="row">
                         <div class="col-sm-6">
@@ -738,6 +740,13 @@
                         </ng-container>
                     </ng-container>
                 </ng-container>
+                <a
+                    href="javascript:;"
+                    class="btn-link"
+                    (click)="goToCustomFields.emit(true)"
+                    *ngIf="!companyCustomFields?.length"
+                    >{{ commonLocaleData?.app_create_custom_field }}</a
+                >
             </tab>
             <div class="row">
                 <div class="col-sm-12 mt-5">

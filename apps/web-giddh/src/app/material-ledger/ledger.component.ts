@@ -85,6 +85,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('advanceSearchModal', { static: false }) public advanceSearchModal: any;
     /** datepicker element reference  */
     @ViewChild('datepickerTemplate', { static: false }) public datepickerTemplate: ElementRef;
+    /** Instance of entry confirmation modal */
+    @ViewChild('entryConfirmModal', {static: false}) public entryConfirmModal: any;
     public isTransactionRequestInProcess$: Observable<boolean>;
     public ledgerBulkActionSuccess$: Observable<boolean>;
     public searchTermStream: Subject<string> = new Subject();
@@ -242,6 +244,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public touchedTransaction: any;
     /** This is used to show hide bottom spacing when more detail is opened while CREATE/UPDATE ledger */
     public isMoreDetailsOpened: boolean = false;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private store: Store<AppState>,
@@ -803,6 +807,29 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.hasLedgerPermission = response;
             this.cdRf.detectChanges();
         });
+
+        this.store.pipe(select(state => state.ledger.showDuplicateVoucherConfirmation), takeUntil(this.destroyed$)).subscribe(response => {
+            if(response?.status === "confirm") {
+                let dialogRef = this.dialog.open(ConfirmModalComponent, {
+                    data: {
+                        title: this.commonLocaleData?.app_confirm,
+                        body: response?.message,
+                        ok: this.commonLocaleData?.app_yes,
+                        cancel: this.commonLocaleData?.app_no,
+                        permanentlyDeleteMessage: ' '
+                    }
+                });
+        
+                dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                    if (response) {
+                        this.confirmMergeEntry();
+                    } else {
+                        this.cancelMergeEntry();
+                    }
+                });
+            }
+        });
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     private assignPrefixAndSuffixForCurrency() {
@@ -1025,18 +1052,22 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
-    public downloadInvoice(invoiceName: string, voucherType: string, e: Event) {
+    public downloadInvoice(transaction: any, e: Event) {
         e.stopPropagation();
         let activeAccount = null;
         this.lc.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
         let downloadRequest = new DownloadLedgerRequest();
-        downloadRequest.invoiceNumber = [invoiceName];
-        downloadRequest.voucherType = voucherType;
+        if(this.voucherApiVersion === 2) {
+            downloadRequest.uniqueName = transaction.voucherUniqueName;
+        } else {
+            downloadRequest.invoiceNumber = [transaction.voucherNumber];
+        }
+        downloadRequest.voucherType = transaction.voucherGeneratedType;
 
         this.ledgerService.DownloadInvoice(downloadRequest, this.lc.accountUnq).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d.status === 'success') {
                 let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
-                download(`${activeAccount.name} - ${invoiceName}.pdf`, blob, 'application/pdf');
+                download(`${activeAccount.name} - ${transaction.voucherNumber}.pdf`, blob, 'application/pdf');
             } else {
                 this.toaster.showSnackBar("error", d.message);
             }
@@ -1044,37 +1075,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public resetBlankTransaction() {
-        this.lc.blankLedger = {
-            transactions:
-                (this.currentOrganizationType === OrganizationType.Branch ||
-                    (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) ? [ // Add the blank transaction only if it is branch mode or company with single branch
-                    this.lc.addNewTransaction('DEBIT'),
-                    this.lc.addNewTransaction('CREDIT')
-                ] : [],
-            voucherType: null,
-            entryDate: this.selectedDateRange?.endDate ? moment(this.selectedDateRange.endDate).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT),
-            unconfirmedEntry: false,
-            attachedFile: '',
-            attachedFileName: '',
-            tag: null,
-            description: '',
-            generateInvoice: false,
-            chequeNumber: '',
-            chequeClearanceDate: '',
-            invoiceNumberAgainstVoucher: '',
-            compoundTotal: 0,
-            convertedCompoundTotal: 0,
-            invoicesToBePaid: [],
-            otherTaxModal: new SalesOtherTaxesModal(),
-            otherTaxesSum: 0,
-            tdsTcsTaxesSum: 0,
-            otherTaxType: 'tcs',
-            exchangeRate: 1,
-            valuesInAccountCurrency: (this.selectedCurrency === 0),
-            selectedCurrencyToDisplay: this.selectedCurrency,
-            baseCurrencyToDisplay: cloneDeep(this.baseCurrencyDetails),
-            foreignCurrencyToDisplay: cloneDeep(this.foreignCurrencyDetails)
-        };
+        this.lc.blankLedger = this.lc.getBlankLedger();
+        this.lc.blankLedger.transactions = 
+            (this.currentOrganizationType === OrganizationType.Branch ||
+                (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) ? [ // Add the blank transaction only if it is branch mode or company with single branch
+                this.lc.addNewTransaction('DEBIT'),
+                this.lc.addNewTransaction('CREDIT')
+            ] : [];
+        this.lc.blankLedger.voucherType = null;
+        this.lc.blankLedger.entryDate = this.selectedDateRange?.endDate ? moment(this.selectedDateRange.endDate).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
+        this.lc.blankLedger.valuesInAccountCurrency = (this.selectedCurrency === 0);
+        this.lc.blankLedger.selectedCurrencyToDisplay = this.selectedCurrency;
+        this.lc.blankLedger.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
+        this.lc.blankLedger.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
         this.shouldShowRcmTaxableAmount = false;
         this.shouldShowItcSection = false;
         this.isMoreDetailsOpened = false;
@@ -2381,5 +2394,24 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public handleOpenMoreDetail(isOpened: boolean): void {
         this.isMoreDetailsOpened = isOpened;
+    }
+
+    /**
+     * This will merge the duplicate voucher entry
+     *
+     * @memberof LedgerComponent
+     */
+    public confirmMergeEntry(): void {
+        this.lc.blankLedger.mergePB = true;
+        this.saveBlankTransaction();
+    }
+
+    /**
+     * This will close the merge popup
+     *
+     * @memberof LedgerComponent
+     */
+    public cancelMergeEntry(): void {
+        this.lc.showNewLedgerPanel = true;
     }
 }
