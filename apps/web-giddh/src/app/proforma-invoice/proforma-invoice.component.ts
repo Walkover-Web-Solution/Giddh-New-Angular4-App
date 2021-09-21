@@ -1072,6 +1072,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                         tempObj.entries.forEach((entry, index) => {
                             tempObj.entries[index].entryDate = voucherDate || this.universalDate || new Date();
+                            tempObj.entries[index].uniqueName = undefined;
                         });
 
                         obj.entries = tempObj.entries;
