@@ -12,27 +12,60 @@
             <ul class="mb-3">
                 <li>
                     <a class="d-block clearfix">
-                        <!-- <span [innerHTML]="tab.icon"></span>
-                        <span>{{tab.label}}</span> -->
-                        <span><i class="icon-item-product"></i></span>
-                        <span>Items/Products</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="d-block clearfix" [routerLink]="['/pages/new-inventory/create-new-inventory']">
-                        <span><i class="icon-fixed-assets"></i></span>
-                        <span>Fixed Assets</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="d-block clearfix">
                         <span><i class="icon-inventory-dashboard"></i></span>
                         <span>Dashboard</span>
                     </a>
                 </li>
                 <li>
                     <a class="d-block clearfix">
-                        <span><i class="icon-branch"></i></span>
+                        <span><i class="icon-report"></i></span>
+                        <span>Report</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="d-block clearfix">
+                        <span><i class="icon-settings-cog"></i></span>
+                        <span>Settings</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="d-block clearfix">
+                        <span><i class="icon-inventory"></i></span>
+                        <span>Inventory</span>
+                    </a>
+                    <ng-container>
+                        <ul class="inventory-sub-bar">
+                            <li>
+                                <a href="javascript:void(0);"> Group Wise </a>
+                                <a href="javascript:void(0);"> Item Wise </a>
+                                <a href="javascript:void(0);"> Combo </a>
+                                <a href="javascript:void(0);"> Transactions </a>
+                                <a href="javascript:void(0);"> Custom Fields </a>
+                            </li>
+                        </ul>
+                    </ng-container>
+                </li>
+                <li>
+                    <a class="d-block clearfix">
+                        <span><i class="icon-adjust-inventory"></i></span>
+                        <span>Adjust Inventory</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="d-block clearfix">
+                        <span><i class="icon-package"></i></span>
+                        <span>Packages</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="d-block clearfix">
+                        <span><i class="icon-delivery"></i></span>
+                        <span>Delivery Challan</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="d-block clearfix">
+                        <span><i class="icon-branch-transfer"></i></span>
                         <span>Branch Transfer</span>
                     </a>
                 </li>
@@ -40,6 +73,12 @@
                     <a class="d-block clearfix">
                         <span><i class="icon-warehouse"></i></span>
                         <span>Warehouse</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="d-block clearfix" [routerLink]="['/pages/new-inventory/create-new-inventory']">
+                        <span><i class="icon-fixed-assets"></i></span>
+                        <span>Fixed Assets</span>
                     </a>
                 </li>
             </ul>

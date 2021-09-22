@@ -2211,6 +2211,14 @@ ul.pills li {
     }
 }
 
+.new-inventory-page {
+    .custom-tabs {
+        ul {
+            display: none !important;
+        }
+    }
+}
+
 /*invoice pages global styles  */
 
 /*full width modal  */
