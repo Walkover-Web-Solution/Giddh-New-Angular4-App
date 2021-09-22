@@ -106,7 +106,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
             this.changeDetectorRef.detectChanges();
         });
 
-        this.store.pipe(select(state => state.session.activeCompany), take(1)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
 

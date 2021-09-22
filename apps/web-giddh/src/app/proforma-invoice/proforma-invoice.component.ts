@@ -601,6 +601,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public isTdsPresent: boolean;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
+    /** This holds the voucher uniquename which needs to be copied */
+    public voucherUniqueName: string = "";
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -1070,6 +1072,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                         tempObj.entries.forEach((entry, index) => {
                             tempObj.entries[index].entryDate = voucherDate || this.universalDate || new Date();
+                            tempObj.entries[index].uniqueName = undefined;
                         });
 
                         obj.entries = tempObj.entries;
@@ -1414,7 +1417,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         result[0]?.items.forEach(item => {
                             arr.push({
                                 versionNumber: item.voucherNumber, date: item.voucherDate, grandTotal: item.grandTotal,
-                                account: { name: item.account?.name, uniqueName: item.account?.uniqueName }
+                                account: { name: item.account?.name, uniqueName: item.account?.uniqueName },
+                                uniqueName: item.uniqueName
                             });
                         });
                     }
@@ -1427,7 +1431,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                     versionNumber: this.isProformaInvoice ? item.proformaNumber : item.estimateNumber,
                                     date: item.voucherDate,
                                     grandTotal: item.grandTotal,
-                                    account: { name: item.customerName, uniqueName: item.customerUniqueName }
+                                    account: { name: item.customerName, uniqueName: item.customerUniqueName },
+                                    uniqueName: item.uniqueName
                                 });
                             });
                         }
@@ -4173,9 +4178,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
-    public getLastInvoiceDetails(obj: { accountUniqueName: string, invoiceNo: string }) {
+    public getLastInvoiceDetails(obj: { accountUniqueName: string, invoiceNo: string, uniqueName?: string }) {
         this.accountUniqueName = obj.accountUniqueName;
         this.invoiceNo = obj.invoiceNo;
+        this.voucherUniqueName = obj.uniqueName
         this.isLastInvoiceCopied = true;
         this.showLastEstimateModal = false;
         this.getVoucherDetailsFromInputs();
@@ -4300,11 +4306,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.accountUniqueName, {
                     invoiceNumber: this.invoiceNo,
                     voucherType: this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType),
-                    uniqueName: (this.voucherApiVersion === 2) ? this.selectedItem?.uniqueName : undefined
+                    uniqueName: (this.voucherApiVersion === 2) ? (this.selectedItem?.uniqueName || this.voucherUniqueName) : undefined
                 }));
             } else if (this.isPurchaseInvoice) {
                 const accountUniqueName = (this.selectedItem) ? this.selectedItem.account?.uniqueName : this.accountUniqueName;
-                const purchaseRecordUniqueName = (this.selectedItem) ? this.selectedItem.uniqueName : this.invoiceNo;
+                const purchaseRecordUniqueName = this.selectedItem?.uniqueName || this.voucherUniqueName || this.invoiceNo;
                 if (this.voucherApiVersion === 2) {
                     this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.accountUniqueName, {
                         invoiceNumber: this.selectedItem?.voucherNumber,

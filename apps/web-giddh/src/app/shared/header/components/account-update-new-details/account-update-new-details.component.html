@@ -223,9 +223,10 @@
             <ng-container>
                 <tab
                     [heading]="localeData?.tabs?.address"
+                    [active]="!isHsnSacEnabledAcc"
+                    [disabled]="isHsnSacEnabledAcc"
+                    [customClass]="isHsnSacEnabledAcc ? 'd-none' : ''"
                     class="gstin-address"
-                    [active]="isDebtorCreditor || isBankAccount"
-                    [disabled]="!isDebtorCreditor && !isBankAccount"
                     (selectTab)="tabChanged('address')"
                 >
                     <ng-container>
@@ -422,7 +423,7 @@
             <tab
                 [heading]="localeData?.tabs?.contact"
                 class="contact-form-wrap"
-                [active]="!isDebtorCreditor"
+                [active]="isHsnSacEnabledAcc"
                 (selectTab)="tabChanged('contacts')"
             >
                 <div class="contact-form">
@@ -758,6 +759,13 @@
                         </ng-container>
                     </ng-container>
                 </ng-container>
+                <a
+                    href="javascript:;"
+                    class="btn-link"
+                    (click)="goToCustomFields.emit(true)"
+                    *ngIf="!companyCustomFields?.length"
+                    >{{ commonLocaleData?.app_create_custom_field }}</a
+                >
             </tab>
         </tabset>
         <div class="row" *ngIf="!isOtherSelectedTab">

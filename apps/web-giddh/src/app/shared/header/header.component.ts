@@ -393,6 +393,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
                     this.selectedCompanyCountry = selectedCmp.country;
                 }
+
+                this.loadCompanyBranches();
             }
         });
 
@@ -514,8 +516,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.manageGroupsAccountsModal.onHidden.pipe(takeUntil(this.destroyed$)).subscribe(e => {
             this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
         });
-
-        this.loadCompanyBranches();
 
         // region subscribe to last state for showing title of page this.selectedPage
         this.store.pipe(select(s => s.session.lastState), take(1)).subscribe(s => {
@@ -784,9 +784,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public toggleBodyClass(): void {
         if (this.asideHelpSupportMenuState === 'in') {
-            document.querySelector('body').classList.add('fixed');
+            document.querySelector('body')?.classList?.add('fixed');
         } else {
-            document.querySelector('body').classList.remove('fixed');
+            document.querySelector('body')?.classList?.remove('fixed');
         }
     }
 
@@ -800,7 +800,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         setTimeout(() => {
             if(show) {
                 this.asideSettingMenuState = 'out';
-                document.querySelector('body').classList.remove('aside-setting');
+                document.querySelector('body')?.classList?.remove('aside-setting');
             }
             this.asideInventorySidebarMenuState = 'out'
             document.querySelector('body').classList.remove('mobile-setting-sidebar');
@@ -827,9 +827,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.toggleBodyClass();
 
             if(this.asideSettingMenuState === "in") {
-                document.querySelector('body').classList.add('aside-setting');
+                document.querySelector('body')?.classList?.add('aside-setting');
             } else {
-                document.querySelector('body').classList.remove('aside-setting');
+                document.querySelector('body')?.classList?.remove('aside-setting');
             }
 
             if (this.asideSettingMenuState === "in" && this.asideInventorySidebarMenuState === "in") {
@@ -849,7 +849,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         setTimeout(() => {
             if (this.asideHelpSupportMenuState === "in") {
                 this.asideHelpSupportMenuState = 'out';
-                document.querySelector('body').classList.remove('fixed');
+                document.querySelector('body')?.classList?.remove('fixed');
             }
         }, 50);
     }
