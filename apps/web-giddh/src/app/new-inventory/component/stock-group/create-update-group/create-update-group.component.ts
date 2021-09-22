@@ -1,32 +1,32 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-import { Configuration } from '../../../app.constant';
-import { IForceClear } from '../../../models/api-models/Sales';
-import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
-import { LEDGER_API } from '../../../services/apiurls/ledger.api';
-import { InventoryService } from '../../../services/inventory.service';
-import { ToasterService } from '../../../services/toaster.service';
-import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
-import { AppState } from '../../../store';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { Configuration } from '../../../../app.constant';
+import { IForceClear } from '../../../../models/api-models/Sales';
+import { IGroupsWithStocksHierarchyMinItem } from '../../../../models/interfaces/groupsWithStocks.interface';
+import { LEDGER_API } from '../../../../services/apiurls/ledger.api';
+import { InventoryService } from '../../../../services/inventory.service';
+import { ToasterService } from '../../../../services/toaster.service';
+import { uniqueNameInvalidStringReplace } from '../../../../shared/helpers/helperFunctions';
+import { AppState } from '../../../../store';
+import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 
 @Component({
-    selector: 'inventory-create-group',
-    templateUrl: './create-group.component.html',
-    styleUrls: ['./create-group.component.scss'],
+    selector: 'inventory-create-update-group',
+    templateUrl: './create-update-group.component.html',
+    styleUrls: ['./create-update-group.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class InventoryCreateGroupComponent implements OnInit, OnDestroy {
+export class InventoryCreateUpdateGroupComponent implements OnInit, OnDestroy {
     /* This will store image path */
     public imgPath: string = '';
     /** Form Group for group form */
     public groupForm: FormGroup;
     public groups$: Observable<IOption[]>;
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public uploadInput: EventEmitter<UploadInput> = new EventEmitter<UploadInput>();
     public isFileUploading: boolean = false;
@@ -37,16 +37,28 @@ export class InventoryCreateGroupComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     public fileUploadOptions: UploaderOptions = { concurrency: 0 };
+    public groupUniqueName: string = "";
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
         private store: Store<AppState>,
         private formBuilder: FormBuilder,
         private inventoryService: InventoryService,
-        private toaster: ToasterService
+        private toaster: ToasterService,
+        public route: ActivatedRoute
     ) {
         this.sessionKey$ = this.store.pipe(select(state => state.session.user.session.id), takeUntil(this.destroyed$));
         this.companyName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
         this.initGroupForm();
+
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            if (params && params['groupUniqueName']) {
+                this.groupUniqueName = params['groupUniqueName'];
+                this.getGroupDetails();
+            } else {
+                this.groupUniqueName = "";
+            }
+        });
     }
 
     public ngOnInit(): void {
@@ -85,9 +97,17 @@ export class InventoryCreateGroupComponent implements OnInit, OnDestroy {
     }
 
     public saveGroup(): void {
+        if(!this.groupForm?.get("image")?.get("uniqueName")?.value) {
+            this.groupForm?.removeControl("image");
+        }
         this.inventoryService.createStockGroup(this.groupForm.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.resetGroupForm();
+                this.groupForm.addControl("image", this.formBuilder.group({
+                    uniqueName: [''],
+                    name: ['']
+                }));
+
                 this.toaster.clearAllToaster();
                 this.toaster.successToast("Stock group created successfully.");
             } else {
@@ -165,15 +185,34 @@ export class InventoryCreateGroupComponent implements OnInit, OnDestroy {
         } else if (output.type === 'done') {
             if (output.file.response.status === 'success') {
                 this.isFileUploading = false;
-                this.groupForm?.get("image")?.patchValue({ uniqueName: output.file.response.body?.uniqueName });
-                this.groupForm?.get("image")?.patchValue({ name: output.file.response.body?.name });
+                this.groupForm?.get("image")?.patchValue({ uniqueName: output.file.response.body?.uniqueName, name: output.file.response.body?.name });
                 this.toaster.successToast(this.commonLocaleData?.app_messages?.file_uploaded);
             } else {
                 this.isFileUploading = false;
-                this.groupForm?.get("image")?.patchValue({ uniqueName: "" });
-                this.groupForm?.get("image")?.patchValue({ name: "" });
+                this.groupForm?.get("image")?.patchValue({ uniqueName: "", name: "" });
                 this.toaster.errorToast(output.file.response.message);
             }
         }
+    }
+
+    private getGroupDetails(): void {
+        this.inventoryService.getStockGroup(this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if(response?.status === "success" && response?.body) {
+                this.groupForm?.patchValue({
+                    name: response.body.name,
+                    uniqueName: response.body.uniqueName,
+                    showCodeType: response.body.hsnNumber ? "hsn" : "sac",
+                    hsnNumber: response.body.hsnNumber,
+                    sacNumber: response.body.sacNumber,
+                    parentStockGroupUniqueName: response.body.parentStockGroup?.uniqueName,
+                    isSubGroup: [false],
+                    outOfStockSelling: response.body.outOfStockSelling,
+                    image: this.formBuilder.group({
+                        uniqueName: response.body.image?.uniqueName,
+                        name: response.body.image?.name
+                    })
+                });
+            }
+        });
     }
 }
