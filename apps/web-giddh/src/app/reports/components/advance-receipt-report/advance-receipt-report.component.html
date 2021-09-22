@@ -185,6 +185,7 @@
                                         #receiptNumber
                                         (clickOutside)="showReceiptSearchBar ? searchBy($event, 'receipt', false) : ''"
                                         [(ngModel)]="searchQueryParams.receiptNumber"
+                                        (ngModelChange)="updateSearchQuery(searchQueryParams.receiptNumber)"
                                         type="text"
                                         [placeholder]="localeData?.receipt_no_placeholder"
                                         class="w100"
@@ -197,7 +198,12 @@
                                     {{ commonLocaleData?.app_date }}
                                     <div class="icon-pointer pl-1 pointer">
                                         <ng-container
-                                            *ngTemplateOutlet="sortTemplate; context: { column: 'RECEIPT_DATE' }"
+                                            *ngTemplateOutlet="
+                                                sortTemplate;
+                                                context: {
+                                                    column: voucherApiVersion === 2 ? 'voucherDate' : 'RECEIPT_DATE'
+                                                }
+                                            "
                                         >
                                         </ng-container>
                                     </div>
@@ -254,6 +260,7 @@
                                             showCustomerSearchBar ? searchBy($event, 'customerName', false) : ''
                                         "
                                         [(ngModel)]="searchQueryParams.baseAccountName"
+                                        (ngModelChange)="updateSearchQuery(searchQueryParams.baseAccountName)"
                                         type="text"
                                         [placeholder]="localeData?.customer_name_placeholder"
                                         class="w100"
@@ -275,6 +282,7 @@
                                             showPaymentSearchBar ? searchBy($event, 'paymentMode', false) : ''
                                         "
                                         [(ngModel)]="searchQueryParams.particularName"
+                                        (ngModelChange)="updateSearchQuery(searchQueryParams.particularName)"
                                         type="text"
                                         [placeholder]="localeData?.payment_mode_placeholder"
                                         class="w100"
@@ -295,6 +303,7 @@
                                             showInvoiceSearchBar ? searchBy($event, 'invoiceNumber', false) : ''
                                         "
                                         [(ngModel)]="searchQueryParams.invoiceNumber"
+                                        (ngModelChange)="updateSearchQuery(searchQueryParams.invoiceNumber)"
                                         type="text"
                                         [placeholder]="localeData?.invoice_no_placeholder"
                                         class="w100"
@@ -308,7 +317,12 @@
                                     {{ commonLocaleData?.app_total_amount }}
                                     <div class="icon-pointer pl-1 pointer">
                                         <ng-container
-                                            *ngTemplateOutlet="sortTemplate; context: { column: 'TOTAL_AMOUNT' }"
+                                            *ngTemplateOutlet="
+                                                sortTemplate;
+                                                context: {
+                                                    column: voucherApiVersion === 2 ? 'grandTotal' : 'TOTAL_AMOUNT'
+                                                }
+                                            "
                                         >
                                         </ng-container>
                                     </div>
@@ -332,12 +346,14 @@
                         <tr *ngFor="let receipt of allReceipts; let i = index">
                             <td data-title="#">{{ i + 1 }}</td>
                             <td width="13%" class="text-break" [attr.data-title]="localeData?.receipt_no_label">
-                                {{ receipt?.receiptNumber }}
+                                {{ voucherApiVersion === 2 ? receipt?.voucherNumber : receipt?.receiptNumber }}
                             </td>
-                            <td class="entry-date" [attr.data-title]="localeData?.entry_date">{{ receipt?.date }}</td>
+                            <td class="entry-date" [attr.data-title]="localeData?.entry_date">
+                                {{ voucherApiVersion === 2 ? receipt?.voucherDate : receipt?.date }}
+                            </td>
                             <td [attr.data-title]="localeData?.suppliers_name">{{ receipt?.type }}</td>
                             <td width="13%" class="text-break" [attr.data-title]="commonLocaleData?.app_voucher_type">
-                                {{ receipt?.baseAccountName }}
+                                {{ voucherApiVersion === 2 ? receipt?.account?.name : receipt?.baseAccountName }}
                             </td>
                             <td [attr.data-title]="localeData?.payment_mode_label">
                                 <div *ngFor="let paymentMode of receipt?.particularNames?.split(',')">
@@ -356,8 +372,16 @@
                             <td [attr.data-title]="commonLocaleData?.app_total_amount">
                                 <span class="d-inline-flex">
                                     <amount-field
-                                        [amount]="receipt?.totalAmount.amount"
-                                        [currencySymbol]="receipt?.totalAmount?.symbol"
+                                        [amount]="
+                                            voucherApiVersion === 2
+                                                ? receipt?.grandTotal?.amountForAccount
+                                                : receipt?.totalAmount?.amount
+                                        "
+                                        [currencySymbol]="
+                                            voucherApiVersion === 2
+                                                ? receipt?.companyCurrencySymbol
+                                                : receipt?.totalAmount?.symbol
+                                        "
                                         [currencyCode]="activeCompany.baseCurrency"
                                     >
                                     </amount-field>
@@ -366,8 +390,16 @@
                             <td [attr.data-title]="localeData?.unused_amount">
                                 <span class="d-inline-flex">
                                     <amount-field
-                                        [amount]="receipt?.unusedAmount.amount"
-                                        [currencySymbol]="receipt?.unusedAmount?.symbol"
+                                        [amount]="
+                                            voucherApiVersion === 2
+                                                ? receipt?.balanceDue?.amountForCompany
+                                                : receipt?.unusedAmount?.amount
+                                        "
+                                        [currencySymbol]="
+                                            voucherApiVersion === 2
+                                                ? receipt?.balanceDue?.amountForCompany
+                                                : receipt?.unusedAmount?.symbol
+                                        "
                                         [currencyCode]="activeCompany.baseCurrency"
                                     >
                                     </amount-field>

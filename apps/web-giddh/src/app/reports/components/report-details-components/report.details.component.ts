@@ -78,7 +78,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.companyActions.resetUserChosenFinancialYear());
             });
         this.store.pipe(
-            select(state => state.session.activeCompany), take(1)
+            select(state => state.session.activeCompany), takeUntil(this.destroyed$)
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
