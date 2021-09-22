@@ -36,6 +36,7 @@
                                     [isFilterEnabled]="true"
                                     [placeholder]="commonLocaleData?.app_select_entity"
                                     [fixedValue]="currentBranch?.alias"
+                                    [forceClearReactive]="forceClear$ | async"
                                 >
                                     <ng-template #optionTemplate let-option="option">
                                         <ng-container>
