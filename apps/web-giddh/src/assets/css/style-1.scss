@@ -1898,7 +1898,19 @@ ul.pills li {
         }
     }
 }
-/*invoice pages global styles  */ /*full width modal  */
+
+.new-inventory-page {
+    .custom-tabs {
+        ul {
+            display: none !important;
+        }
+    }
+}
+
+/*invoice pages global styles  */
+
+/*full width modal  */
+
 .modal-liquid.modal-dialog {
     width: 100%;
     margin: 0;

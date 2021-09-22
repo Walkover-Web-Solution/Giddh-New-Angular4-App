@@ -75,13 +75,31 @@
                 }
             }
             &:hover {
-                background-color: $lavender;
+                a {
+                    span {
+                        color: $cornflower !important;
+                    }
+                }
             }
         }
     }
 }
 .inventory-items ul li:hover a span i {
     color: $nero !important;
+}
+
+.inventory-sub-bar {
+    font-family: "opensans-regular" !important;
+    li {
+        a {
+            color: $nero !important;
+            padding-left: 50px !important;
+            &:hover {
+                background: $lavender;
+                color: $midnight-blue !important;
+            }
+        }
+    }
 }
 @media (max-width: 767px) {
     :host.inventory-sidebar {

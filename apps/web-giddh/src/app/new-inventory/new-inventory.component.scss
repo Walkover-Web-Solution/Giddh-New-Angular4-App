@@ -1,6 +1,6 @@
 @import "../../assets/css/color.scss";
 .inventory-header {
-    padding-top: 20px;
+    padding-top: 15px;
     justify-content: space-between;
     i {
         width: 36px;
@@ -81,6 +81,7 @@ button#more-btn-inventory {
     align-items: center;
     border-radius: 50px !important;
 }
+
 @media (max-width: 1270px) and (min-width: 768px) {
     .inventory-header {
         position: relative;

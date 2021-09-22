@@ -2,17 +2,16 @@
     <div class="header-create-group">
         <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
         <div class="form-header">
-            <div class="back-button mr-r15"><i class="icon-back-arrow"></i></div>
-            <!-- (click)="backToMainAside()" - add funcationality back to main aside -->
-            <h3 *ngIf="createGroupaside">Create Group</h3>
-            <h3 *ngIf="hideCreateFieldData">Create New</h3>
+            <h3>Create New</h3>
         </div>
     </div>
-    <div class="aside-body flexy-child-1 create-new-block" *ngIf="hideCreateFieldData">
-        <div class="create-product-wrapper">
+    <div class="aside-body flexy-child-1 create-new-block">
+        <div class="create-product-wrapper mr-t2">
             <div class="create-one-item pd-b15 pd-t15 d-flex">
                 <div class="wrapper-create-item">
-                    <div class="circle-icon"></div>
+                    <div class="circle-icon">
+                        <i class="icon-inventory"></i>
+                    </div>
                     <div class="create-item">
                         <h4>Create Product/Service</h4>
                         <p>
@@ -24,7 +23,9 @@
             </div>
             <div class="create-one-item pd-b15 pd-t15 d-flex">
                 <div class="wrapper-create-item">
-                    <div class="circle-icon"></div>
+                    <div class="circle-icon">
+                        <i class="icon-inventory"></i>
+                    </div>
                     <div class="create-item">
                         <h4>Create Group</h4>
                         <p>
@@ -36,7 +37,9 @@
             </div>
             <div class="create-one-item pd-b15 pd-t15 d-flex">
                 <div class="wrapper-create-item">
-                    <div class="circle-icon"></div>
+                    <div class="circle-icon">
+                        <i class="icon-combo"></i>
+                    </div>
                     <div class="create-item">
                         <h4>Create Combo</h4>
                         <p>
@@ -48,7 +51,9 @@
             </div>
             <div class="create-one-item pd-b15 pd-t15 d-flex">
                 <div class="wrapper-create-item">
-                    <div class="circle-icon"></div>
+                    <div class="circle-icon">
+                        <i class="icon-unit"></i>
+                    </div>
                     <div class="create-item">
                         <h4>Create Unit</h4>
                         <p>
@@ -60,135 +65,15 @@
             </div>
             <div class="create-one-item pd-b15 pd-t15 d-flex">
                 <div class="wrapper-create-item">
-                    <div class="circle-icon"></div>
+                    <div class="circle-icon">
+                        <i class="icon-export"></i>
+                    </div>
                     <div class="create-item">
                         <h4>Import Inventory</h4>
                         <p>
                             (Dummy text Lorem Ipsum Dummy text Lorem Ipsum Dummy text Lorem Ipsum Dummy text Lorem
                             Ipsum)
                         </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="aside-body create-group-aside-body">
-        <div class="create-group-block">
-            <div class="create-group-page">
-                <div>
-                    <div class="create-group-top">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <p class="font-14">Lorem Ipsum dummy text will come here about create Group.</p>
-                            <img src="{{ imgPath }}add-image.svg" />
-                        </div>
-                    </div>
-                    <div class="bg-white p-15">
-                        <div class="wrapper-contain">
-                            <form>
-                                <div class="row mr-b15">
-                                    <div class="col-sm-6">
-                                        <label>Group Name <span class="red-text">*</span></label>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <input
-                                            id="group-name"
-                                            class="form-control"
-                                            type="text"
-                                            placeholder="Enter Group Name"
-                                        />
-                                    </div>
-                                </div>
-                                <div class="row mr-b15">
-                                    <div class="col-sm-6">
-                                        <label>Unique Name <span class="red-text">*</span></label>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <input
-                                            id="unique-name"
-                                            class="form-control"
-                                            type="text"
-                                            placeholder="Unique Name"
-                                        />
-                                    </div>
-                                </div>
-                                <div class="row mr-b15">
-                                    <div class="col-sm-6">
-                                        <span class="p-0 mr-3" (click)="selectCode(true)">
-                                            <input
-                                                id="group-hsn-code-option"
-                                                class="radio-custom cp ml-0"
-                                                type="radio"
-                                                name="selectCode"
-                                                [value]=""
-                                            />
-                                            <label for="group-hsn-code-option" class="radio-custom-label">HSN</label>
-                                        </span>
-                                        <span class="p-0" (click)="selectCode(false)">
-                                            <input
-                                                id="group-sac-code-option"
-                                                class="radio-custom cp ml-0"
-                                                type="radio"
-                                                name="selectCode"
-                                                [value]=""
-                                            />
-                                            <label for="group-sac-code-option" class="radio-custom-label">SAC</label>
-                                        </span>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <input
-                                            *ngIf="isHSN"
-                                            id="group-hsn-code"
-                                            class="form-control"
-                                            type="text"
-                                            placeholder="Enter HSN Code"
-                                        />
-                                        <input
-                                            *ngIf="!isHSN"
-                                            id="group-sac-code"
-                                            class="form-control"
-                                            type="text"
-                                            placeholder="Enter SAC Code"
-                                        />
-                                        <div class="mt-1 font-14" *ngIf="!isHSN">
-                                            <input id="usb-group" type="checkbox" />Is it Sub-group?
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mr-t15">
-                                    <div class="col-sm-6">
-                                        <label>Parent Group</label>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <input
-                                            class="form-control"
-                                            id="select-parent-group"
-                                            placeholder="Select Group"
-                                        />
-                                    </div>
-                                </div>
-                            </form>
-                            <div class="other-group">
-                                <tabset class="custom-tabs create-new-group-tab">
-                                    <tab heading="Other">
-                                        <div class="other-tab-content">
-                                            <input type="checkbox" id="out-of-stock" />
-                                            <span class="font-14"
-                                                >Continue selling when out of stock? (Will be applicable on all the
-                                                subsequent group/stock)</span
-                                            >
-                                        </div>
-                                    </tab>
-                                </tabset>
-                            </div>
-                            <div class="button-group">
-                                <button id="clear-btn" class="btn btn-primary bdr-radius-50 min-width-100">
-                                    Clear
-                                </button>
-                                <button id="create-group-btn" class="btn btn-success bdr-radius-50">
-                                    Create Group
-                                </button>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
