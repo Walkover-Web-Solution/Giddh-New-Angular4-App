@@ -1,17 +1,18 @@
 <div class="aside-pane">
-    <div class="header-create-new">
+    <div class="header-create-group">
         <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
         <div class="form-header">
             <h3>Create New</h3>
         </div>
     </div>
-
-    <div class="aside-body">
-        <div class="create-product-wrapper">
+    <div class="aside-body flexy-child-1 create-new-block">
+        <div class="create-product-wrapper mr-t2">
             <div class="create-one-item pd-b15 pd-t15 d-flex">
                 <div class="wrapper-create-item">
-                    <div class="circle-icon"></div>
-                    <div class="create-item" (click)="createGroupToggleAsidePane()">
+                    <div class="circle-icon">
+                        <i class="icon-inventory"></i>
+                    </div>
+                    <div class="create-item">
                         <h4>Create Product/Service</h4>
                         <p>
                             (Product you sell or purchase and keep track of its quantities Service you provide to
@@ -22,7 +23,9 @@
             </div>
             <div class="create-one-item pd-b15 pd-t15 d-flex">
                 <div class="wrapper-create-item">
-                    <div class="circle-icon"></div>
+                    <div class="circle-icon">
+                        <i class="icon-inventory"></i>
+                    </div>
                     <div class="create-item">
                         <h4>Create Group</h4>
                         <p>
@@ -34,7 +37,9 @@
             </div>
             <div class="create-one-item pd-b15 pd-t15 d-flex">
                 <div class="wrapper-create-item">
-                    <div class="circle-icon"></div>
+                    <div class="circle-icon">
+                        <i class="icon-combo"></i>
+                    </div>
                     <div class="create-item">
                         <h4>Create Combo</h4>
                         <p>
@@ -46,7 +51,9 @@
             </div>
             <div class="create-one-item pd-b15 pd-t15 d-flex">
                 <div class="wrapper-create-item">
-                    <div class="circle-icon"></div>
+                    <div class="circle-icon">
+                        <i class="icon-unit"></i>
+                    </div>
                     <div class="create-item">
                         <h4>Create Unit</h4>
                         <p>
@@ -58,8 +65,10 @@
             </div>
             <div class="create-one-item pd-b15 pd-t15 d-flex">
                 <div class="wrapper-create-item">
-                    <div class="circle-icon"></div>
-                    <div class="create-item" [routerLink]="['/pages/import/stock']">
+                    <div class="circle-icon">
+                        <i class="icon-export"></i>
+                    </div>
+                    <div class="create-item">
                         <h4>Import Inventory</h4>
                         <p>
                             (Dummy text Lorem Ipsum Dummy text Lorem Ipsum Dummy text Lorem Ipsum Dummy text Lorem
