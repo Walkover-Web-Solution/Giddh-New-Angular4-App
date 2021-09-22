@@ -286,14 +286,14 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
                 }
                 if (!activeGroup) {
                     for (let grp of grps) {
-                        if (grp.accounts && grp.accounts?.length > 0) {
+                        if (grp?.accounts && grp?.accounts?.length > 0) {
                             allAccount.push(...grp.accounts);
                         }
                     }
                 } else {
                     for (let grp of grps) {
-                        if (grp.uniqueName === activeGroup.uniqueName) {
-                            if (grp.accounts && grp.accounts?.length > 0) {
+                        if (grp?.uniqueName === activeGroup?.uniqueName) {
+                            if (grp?.accounts && grp?.accounts?.length > 0) {
                                 allAccount.push(...grp.accounts);
                             }
                         }
@@ -550,8 +550,8 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
 
         let listBckup = this.mc.activeGroupFromGroupListBackup(grpsBck, this.currentGroup?.uniqueName, null);
         if (listBckup) {
-            this.currentGroup.groups = listBckup.groups;
-            this.currentGroup.accounts = listBckup.accounts;
+            this.currentGroup.groups = listBckup?.groups;
+            this.currentGroup.accounts = listBckup?.accounts;
         }
         this.mc.selectGroup(this.currentGroup, this.currentGroupIndex, true);
 
