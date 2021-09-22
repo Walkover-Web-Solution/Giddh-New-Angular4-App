@@ -4,6 +4,7 @@ import { log } from "./util";
 import WindowManager from "./WindowManager";
 import { GoogleLoginElectronConfig } from "./main-auth.config";
 import ElectronGoogleOAuth2 from '@getstation/electron-google-oauth2';
+import { startServer } from "./offline-api/app";
 
 let windowManager: WindowManager = null;
 let STAGING_ENV = false;
@@ -91,4 +92,4 @@ ipcMain.on("authenticate-send-email", (event, arg) => {
     }
 });
 
-const server = require("./node-app/server");
+startServer();
