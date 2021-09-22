@@ -67,6 +67,7 @@ export const INVENTORY_API = {
     GET_UNIT_CODE_REGEX: 'ui/forms?formName=:formName&country=:country',
     V5: {
         CREATE_STOCK_GROUP: COMMON_V5 + '/stock-group',
-        GET_STOCK_GROUP: COMMON_V5 + '/stock-group/:groupUniqueName'
+        GET_STOCK_GROUP: COMMON_V5 + '/stock-group/:groupUniqueName',
+        UPDATE_STOCK_GROUP: COMMON_V5 + '/stock-group/:groupUniqueName'
     }
 };
