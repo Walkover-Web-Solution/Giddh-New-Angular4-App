@@ -182,6 +182,7 @@
             <div class="footer-wrapper">
                 <div class="button-group">
                     <button
+                        *ngIf="!groupUniqueName"
                         id="clear-btn"
                         type="button"
                         class="btn btn-primary bdr-radius-50 min-width-100"
@@ -190,11 +191,20 @@
                         Clear
                     </button>
                     <button
+                        *ngIf="groupUniqueName"
+                        id="clear-btn"
+                        type="button"
+                        class="btn btn-primary bdr-radius-50 min-width-100"
+                        [routerLink]="'/pages/new-inventory/stock-group/list'"
+                    >
+                        Cancel
+                    </button>
+                    <button
                         id="create-group-btn"
                         [disabled]="groupForm?.invalid || isFileUploading"
                         class="btn btn-success bdr-radius-50"
                     >
-                        Create Group
+                        {{ groupUniqueName ? "Update Group" : "Create Group" }}
                     </button>
                 </div>
             </div>
