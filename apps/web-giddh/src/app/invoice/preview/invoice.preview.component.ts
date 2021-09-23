@@ -719,12 +719,19 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         }
                     });
                 }
-
             } else {
-                let model = {
-                    invoiceNumber: (selectedVoucher) ? selectedVoucher.voucherNumber : this.selectedInvoice?.voucherNumber,
-                    voucherType: this.selectedVoucher
-                };
+                let model;
+                if (this.voucherApiVersion === 2) {
+                    model = {
+                        uniqueName: (selectedVoucher) ? selectedVoucher.uniqueName : this.selectedInvoice?.uniqueName,
+                        voucherType: this.selectedVoucher
+                    }
+                } else {
+                    model = {
+                        invoiceNumber: (selectedVoucher) ? selectedVoucher.voucherNumber : this.selectedInvoice?.voucherNumber,
+                        voucherType: this.selectedVoucher
+                    }
+                }
 
                 let account = (selectedVoucher) ? selectedVoucher.account.uniqueName : this.selectedInvoice.account.uniqueName;
 
