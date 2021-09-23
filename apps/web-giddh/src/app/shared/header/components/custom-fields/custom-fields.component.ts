@@ -112,7 +112,7 @@ export class CustomFieldsComponent implements OnInit, OnDestroy {
                 }
             }
             this.isGetCustomInProgress = false;
-
+            this.changeDetectorRef.detectChanges();
         });
     }
 
