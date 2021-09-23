@@ -2243,6 +2243,11 @@ button:focus {
     box-shadow: none !important;
 }
 
+.mat-raised-button:focus,
+.mat-raised-button.focus {
+    box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%) !important;
+}
+
 .Inpt_dwn {
     padding-right: 25px !important;
     text-align: right;
@@ -10260,4 +10265,76 @@ input[type="checkbox"].cdk-visually-hidden::after {
     .cdk-overlay-container-z-index {
         z-index: 1000 !important;
     }
+}
+//inventory control styling
+
+.inventory-filter-bar {
+    padding: 15px;
+    display: flex;
+
+    .search-control {
+        display: flex;
+        border: 1px solid gainsboro;
+        border-radius: 53px;
+        flex: 1;
+        margin-right: 15px;
+
+        .search-icon {
+            padding: 10px;
+        }
+
+        input.form-control {
+            border: none !important;
+        }
+
+        sh-select {
+            flex: 1;
+        }
+
+        .menu-btn-control {
+            overflow: hidden;
+            border-top-right-radius: 20px;
+            border-bottom-right-radius: 20px;
+            display: flex;
+
+            button {
+                border-left: 1px solid gainsboro;
+                border-radius: 0;
+                margin-right: 0 !important;
+                height: 100%;
+                &:hover {
+                    background: #eeeff9;
+                    color: #1a237e !important;
+                }
+            }
+        }
+    }
+
+    .round-btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid gainsboro;
+        line-height: 0;
+
+        i.svg {
+            display: flex;
+        }
+        &:hover {
+            background: #eeeff9;
+            color: #1a237e !important;
+        }
+    }
+}
+
+.create-btn-inventory {
+    border-radius: 50px !important;
+    padding: 0 26px;
+    background-color: #01a9f4;
+    color: white;
+}
+
+.menu-selector button.mat-focus-indicator.mat-menu-item {
+    line-height: 0;
+    height: 37px !important;
 }

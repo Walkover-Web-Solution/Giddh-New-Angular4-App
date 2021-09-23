@@ -1,89 +1,74 @@
-<div class="container-fluid group-container">
-    <div class="table-responsive">
-        <table class="table giddh-table on-mobile-view">
-            <thead>
-                <tr>
-                    <th>&nbsp;</th>
-                    <th>Group</th>
-                    <th>Parent Group</th>
-                    <th>Top Sold Item</th>
-                    <th>Less Stock</th>
-                    <th>Zero Stock</th>
-                    <th>Negative Stock</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td data-title="Select">
-                        <div class="d-block text-center text-left-sm">
-                            <input type="checkbox" id="select-group" />
+<div class="table-responsive">
+    <table class="table giddh-table on-mobile-view">
+        <thead>
+            <tr>
+                <th class="text-center">
+                    &nbsp;
+                    <mat-checkbox class="m-0" color="primary"></mat-checkbox>
+                </th>
+                <th>Group</th>
+                <th>Opening Value</th>
+                <th>Inward Value</th>
+                <th>Outward Value</th>
+                <th>Closing Value</th>
+                <th>Less Stock</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td data-title="Select">
+                    <div class="d-block text-center text-left-sm">
+                        <mat-checkbox color="primary" id="select-group"></mat-checkbox>
+                    </div>
+                </td>
+                <td data-title="Group">
+                    <div class="product-name-image d-flex">
+                        <div class="table-td-imag">
+                            <img src="{{ imgPath }}add-image.svg" />
                         </div>
-                    </td>
-                    <td data-title="Group">
-                        <div class="product-name-image d-flex">
-                            <div>
+                        <div class="cursor-pointer mx-2">
+                            <strong tooltip="Group Unique Name" class="text-black">Product Name</strong>
+                            <p class="text-gray">(34 Items)</p>
+                        </div>
+                    </div>
+                </td>
+
+                <td data-title="Opening Value">₹17,48,242.86</td>
+                <td data-title="Inward Value">₹17,48,242.86</td>
+                <td data-title="Outward Value">₹17,48,242.86</td>
+                <td data-title="Closing Value">₹17,48,242.86</td>
+                <td data-title="Less Stock">
+                    <a href="javascript:void(0)" [routerLink]="['/pages/new-inventory/about-group-detail']"> 42 </a>
+                </td>
+            </tr>
+            <tr>
+                <td data-title="Select">
+                    <div class="d-block text-center text-left-sm">
+                        <mat-checkbox color="primary" id="select-product-checkbox"></mat-checkbox>
+                    </div>
+                </td>
+                <td data-title="Group">
+                    <div class="product-name-image d-flex">
+                        <div class="d-flex">
+                            <div class="table-td-imag">
                                 <img src="{{ imgPath }}add-image.svg" />
                             </div>
-                            <div class="cursor-pointer mx-2">
-                                <a href="javascript:void(0)" [routerLink]="['/pages/new-inventory/about-group-detail']">
-                                    <p>Product Name</p>
-                                    <p class="text-gray">(34 Items)</p>
-                                </a>
-                            </div>
                         </div>
-                    </td>
-                    <td data-title="Parent Group">Dummy Group Name Text</td>
-                    <td data-title="Top Sold Item" tooltip="solde till date:1/1/2020 , 5,023 Qty. 1,222/-">
-                        Dummy Text Product Name
-                    </td>
-                    <td data-title="Less Stock">Dummy Product Name</td>
-                    <td data-title="Zero Stock">Dummy Product Name</td>
-                    <td data-title="Negative Stock">Dummy Product Name</td>
-                </tr>
-                <tr>
-                    <td data-title="Select">
-                        <div class="d-block text-center text-left-sm">
-                            <input type="checkbox" id="select-product-checkbox" />
+                        <div class="cursor-pointer mx-2">
+                            <strong tooltip="Group Unique Name" class="text-black">Product Name</strong>
+                            <p class="text-gray">(34 Items)</p>
                         </div>
-                    </td>
-                    <td data-title="Group">
-                        <div class="product-name-image d-flex">
-                            <div class="d-flex">
-                                <div>
-                                    <img src="{{ imgPath }}add-image.svg" />
-                                </div>
-                            </div>
-                            <div class="cursor-pointer mx-2">
-                                <a href="javascript:void(0)" [routerLink]="['/pages/new-inventory/about-group-detail']">
-                                    <p>Product Name</p>
-                                    <p class="text-gray">(34 Items)</p>
-                                </a>
-                            </div>
-                        </div>
-                    </td>
-                    <td data-title="Parent Group">Dummy Group Name Text</td>
-                    <td data-title="Top Sold Item" tooltip="solde till date:1/1/2020 , 5,023 Qty. 1,222/-">
-                        Dummy Text Product Name
-                    </td>
-                    <td data-title="Less Stock">Dummy Product Name</td>
-                    <td data-title="Zero Stock">Dummy Product Name</td>
-                    <td data-title="Negative Stock">Dummy Product Name</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-<div class="inventory-footer sticky-footer">
-    <div class="inner-content-footer">
-        <div class="d-flex">
-            <div class="mr-3">
-                <p class="text-gray">Group Count:</p>
-                <p class="text-left label-value">23</p>
-            </div>
-            <div class="mr-3">
-                <p class="text-gray">Items Count:</p>
-                <p class="text-left label-value">23</p>
-            </div>
-        </div>
-    </div>
+                    </div>
+                </td>
+
+                <td data-title="Opening Value">₹28,242.00</td>
+                <td data-title="Inward Value">₹28,242.00</td>
+                <td data-title="Outward Value">₹28,242.00</td>
+                <td data-title="Closing Value">₹28,242.00</td>
+                <td data-title="Less Stock">
+                    <a href="javascript:void(0)" [routerLink]="['/pages/new-inventory/about-group-detail']"> 1 </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
