@@ -951,9 +951,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (dbResult) {
             // slice menus
             if (window.innerWidth > 1440 && window.innerHeight > 717) {
-                this.accountItemsFromIndexDB = (dbResult && dbResult?.aidata) ? slice(dbResult.aidata?.accounts, 0, 7) : [];
+                this.accountItemsFromIndexDB = (dbResult && dbResult.aidata) ? slice(dbResult.aidata.accounts, 0, 7) : [];
             } else {
-                this.accountItemsFromIndexDB = (dbResult && dbResult?.aidata) ? slice(dbResult.aidata?.accounts, 0, 5) : [];
+                this.accountItemsFromIndexDB = (dbResult && dbResult.aidata) ? slice(dbResult.aidata.accounts, 0, 5) : [];
             }
         } else {
             // slice default menus and account on small screen
