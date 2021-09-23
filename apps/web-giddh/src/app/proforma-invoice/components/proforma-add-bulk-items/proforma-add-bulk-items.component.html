@@ -36,7 +36,7 @@
                                             *ngFor="let item of filteredData"
                                             (click)="addItemToSelectedArr(item)"
                                         >
-                                            <h5>{{ item.name }}</h5>
+                                            <h5>{{ item?.name }}</h5>
                                         </div>
                                     </perfect-scrollbar>
                                 </div>
@@ -59,7 +59,7 @@
                                             <div class="single-selected-stock clearfix d-flex">
                                                 <div class="flex-fill">
                                                     <div class="stock-name">
-                                                        <p>{{ item.name }}</p>
+                                                        <p>{{ item?.name }}</p>
                                                         <p>
                                                             <span *ngIf="item?.additional?.skuCode" class="stockSku"
                                                                 ><label>{{ commonLocaleData?.app_sku }}: </label
@@ -104,7 +104,7 @@
                                                         </span>
                                                     </div>
 
-                                                    <span class="mr-l15" (click)="removeSelectedItem(item.uniqueName)">
+                                                    <span class="mr-l15" (click)="removeSelectedItem(item?.uniqueName)">
                                                         <i class="icon-cross"></i>
                                                     </span>
                                                 </div>

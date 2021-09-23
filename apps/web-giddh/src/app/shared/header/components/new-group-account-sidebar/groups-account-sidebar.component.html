@@ -63,7 +63,7 @@
                                     tooltip="{{ item.synonyms }}"
                                     placement="bottom"
                                 >
-                                    {{ item.name }}
+                                    {{ item?.name }}
                                 </a>
                             </ng-container>
                             <ng-container *ngIf="!item.isGroup">
@@ -79,7 +79,7 @@
                                     id="acc_{{ item.name }}"
                                     (click)="onAccountClick(item, i)"
                                 >
-                                    {{ item.name }}
+                                    {{ item?.name }}
                                 </a>
                             </ng-container>
                         </li>
