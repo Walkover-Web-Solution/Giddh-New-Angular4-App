@@ -97,6 +97,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('datepickerTemplate', { static: false }) public datepickerTemplate: ElementRef;
     /** bulk delete bank transactions confirmation modal instance */
     @ViewChild('bulkDeleteBankTransactionsConfirmationModal', { static: false }) public bulkDeleteBankTransactionsConfirmationModal: ModalDirective;
+    /** Instance of entry confirmation modal */
+    @ViewChild('entryConfirmModal', {static: false}) public entryConfirmModal: ModalDirective;
     public showUpdateLedgerForm: boolean = false;
     public isTransactionRequestInProcess$: Observable<boolean>;
     public ledgerBulkActionSuccess$: Observable<boolean>;
@@ -250,6 +252,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** True if user has ledger permission */
     public hasLedgerPermission: boolean = true;
+    /** This will hold duplicate entry confirmation message */
+    public duplicateEntryConfirmationMessage: string = "";
 
     constructor(
         private store: Store<AppState>,
@@ -509,7 +513,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(
-            select(appState => appState.session.activeCompany), take(1)
+            select(appState => appState.session.activeCompany), takeUntil(this.destroyed$)
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
@@ -808,6 +812,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.pipe(select(appState => appState.ledger.hasLedgerPermission), takeUntil(this.destroyed$)).subscribe(response => {
             this.hasLedgerPermission = response;
             this._cdRf.detectChanges();
+        });
+
+        this.store.pipe(select(state => state.ledger.showDuplicateVoucherConfirmation), takeUntil(this.destroyed$)).subscribe(response => {
+            this.duplicateEntryConfirmationMessage = "";
+            if(response?.status === "confirm") {
+                this.duplicateEntryConfirmationMessage = response?.message;
+                this.entryConfirmModal?.show();
+            }
         });
     }
 
@@ -1725,9 +1737,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public toggleBodyClass() {
         if (this.asideMenuState === 'in' || this.asideMenuStateForOtherTaxes === 'in') {
-            document.querySelector('body').classList.add('fixed');
+            document.querySelector('body')?.classList?.add('fixed');
         } else {
-            document.querySelector('body').classList.remove('fixed');
+            document.querySelector('body')?.classList?.remove('fixed');
         }
     }
 
@@ -2337,5 +2349,26 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public trackById(index: number, transaction: any): string {
         return transaction?.id;
+    }
+
+    /**
+     * This will merge the duplicate voucher entry
+     *
+     * @memberof LedgerComponent
+     */
+    public confirmMergeEntry(): void {
+        this.entryConfirmModal?.hide();
+        this.lc.blankLedger.mergePB = true;
+        this.saveBlankTransaction();
+    }
+
+    /**
+     * This will close the merge popup
+     *
+     * @memberof LedgerComponent
+     */
+    public cancelMergeEntry(): void {
+        this.entryConfirmModal?.hide();
+        this.lc.showNewLedgerPanel = true;
     }
 }

@@ -286,7 +286,7 @@
                                                 commonLocaleData?.app_active
                                         "
                                     >
-                                        <span class="green-dote"> </span> {{ commonLocaleData?.app_active }}
+                                        <span class="green-dot"> </span> {{ commonLocaleData?.app_active }}
                                     </div>
                                     <div
                                         class="text-warning font-14 d-inline-block middle"
@@ -296,7 +296,7 @@
                                                 commonLocaleData?.app_active
                                         "
                                     >
-                                        <span class="orange-dote"> </span> {{ localeData?.subscription?.trial }}
+                                        <span class="orange-dot"> </span> {{ localeData?.subscription?.trial }}
                                     </div>
                                     <div
                                         class="text-danger d-inline-block middle"
@@ -476,7 +476,7 @@
                                 >{{ calculateRemainingDays(item?.expiry) }}</span
                             >
                             <span
-                                class="green-dote"
+                                class="green-dot"
                                 *ngIf="calculateRemainingDays(item?.expiry) === commonLocaleData?.app_active"
                             ></span>
                             {{
@@ -486,7 +486,7 @@
                             }}
                         </div>
                         <div class="active font-14" *ngIf="item?.status === 'active'">
-                            <span class="green-dote"></span> {{ commonLocaleData?.app_active }}
+                            <span class="green-dot"></span> {{ commonLocaleData?.app_active }}
                         </div>
                         <div class="text-danger font-14" *ngIf="item?.status === 'expired'">
                             <span class="red-dot"></span> {{ localeData?.subscription?.expired }}
@@ -526,8 +526,7 @@
         [moveSelectedCompany]="selectedCompany"
         [localeData]="localeData"
         [commonLocaleData]="commonLocaleData"
-    >
-    </move-company>
+    ></move-company>
 </ng-template>
 
 <!-- deactivate Company Modal -->

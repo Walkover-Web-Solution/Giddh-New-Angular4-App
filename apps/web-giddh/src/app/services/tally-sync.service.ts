@@ -27,7 +27,9 @@ export class TallySyncService {
     }
 
     public getInProgressSync(model: CommonPaginatedRequest) {
-        const url = this.config.apiUrl + TALLY_SYNC_API.INPROGRESS;
+        const companyUniqueName = this._generalService.companyUniqueName;
+        const url = this.config.apiUrl + TALLY_SYNC_API.INPROGRESS
+            .replace(':companyUniqueName', companyUniqueName);
         return this._http.get(url, model).pipe(map((res) => {
             return res.body;
         }), catchError((e) => this.errorHandler.HandleCatch<TallySyncResponseData, string>(e)));

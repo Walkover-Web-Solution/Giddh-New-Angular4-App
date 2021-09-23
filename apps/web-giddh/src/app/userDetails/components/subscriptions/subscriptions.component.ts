@@ -109,7 +109,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, OnDestroy {
                 this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
                     if (activeCompany) {
                         this.sortAssociatedCompanies();
-                        
+
                         this.seletedUserPlans = this.activeCompany.subscription;
 
                         if (this.seletedUserPlans?.startedAt) {
@@ -462,6 +462,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, OnDestroy {
         text = text?.replace("[TRANSACTION_LIMIT]", this.decimalPipe.transform(this.seletedUserPlans?.planDetails?.transactionLimit))?.replace("[RATE_EXTRA_TRANSACTION]", this.decimalPipe.transform(this.seletedUserPlans?.planDetails?.ratePerExtraTransaction))?.replace("[CURRENCY]", this.activeCompany?.baseCurrency);
         return text;
     }
+
 
     /**
      * This will return subscribed plan text

@@ -148,6 +148,10 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
             this.innerValue = value;
             this.calendarDate = moment(value, GIDDH_DATE_FORMAT).toDate();
             this.changeDetectorRef.detectChanges();
+        } else {
+            this.innerValue = "";
+            this.calendarDate = "";
+            this.changeDetectorRef.detectChanges();
         }
     }
 

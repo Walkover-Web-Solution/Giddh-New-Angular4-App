@@ -19,8 +19,8 @@ import { GroupResponse } from 'apps/web-giddh/src/app/models/api-models/Group';
 import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/SettingsDiscount';
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { Observable, of as observableOf, of, ReplaySubject } from 'rxjs';
-import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { CommonActions } from '../../../../actions/common.actions';
 import { CompanyActions } from '../../../../actions/company.actions';
@@ -80,6 +80,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     @Input() public isBankAccount: boolean = false;
     @Input() public showDeleteButton: boolean = true;
     @Input() public accountDetails: any;
+    /** True if custom fields api needs to be called again */
+    @Input() public reloadCustomFields: boolean = false;
     @ViewChild('autoFocusUpdate', { static: true }) public autoFocusUpdate: ElementRef;
     public moveAccountForm: FormGroup;
     public taxGroupForm: FormGroup;
@@ -93,10 +95,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         = new EventEmitter();
     @Output() public deleteClicked: EventEmitter<any> = new EventEmitter();
     @Output() public isGroupSelected: EventEmitter<IOption> = new EventEmitter();
+    /** Emits if we have to switch to custom fields tab */
+    @Output() public goToCustomFields: EventEmitter<boolean> = new EventEmitter();
     public showOtherDetails: boolean = false;
     public partyTypeSource: IOption[] = [];
     public stateList: StateList[] = [];
-
     public states: any[] = [];
     public statesSource$: Observable<IOption[]> = observableOf([]);
     public isTaxableAccount$: Observable<boolean>;
@@ -172,14 +175,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         totalPages: 0,
         query: ''
     };
-    /** This will hold inventory settings */
-    public inventorySettings: any;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /** This will hold placeholder for tax */
     public taxNamePlaceholder: string = "";
+    /** This will hold inventory settings */
+    public inventorySettings: any;
     /** Stores the search results pagination details */
     public accountsSearchResultsPaginationData = {
         page: 0,
@@ -274,10 +277,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(this.activeGroupUniqueName));
 
                     this.store.pipe(select(appStore => appStore.groupwithaccounts.activeGroupUniqueName), take(1)).subscribe(response => {
-                        if(response !== this.activeGroupUniqueName) {
+                        if (response !== this.activeGroupUniqueName) {
                             this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
                         }
                     });
+
+                    this.showHideAddressTab();
                 }
 
                 let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
@@ -867,6 +872,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (s && s['showVirtualAccount'] && s['showVirtualAccount'].currentValue) {
             this.showOtherDetails = true;
         }
+        if(s && s['reloadCustomFields']?.currentValue && s['reloadCustomFields']?.currentValue !== s['reloadCustomFields']?.previousValue) {
+            this.getCompanyCustomField();
+        }
     }
 
     public ngOnDestroy() {
@@ -917,42 +925,16 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.activeParentGroup = activeParentgroup;
         this.toggleStateRequired();
         if (activeParentgroup === 'sundrycreditors' || activeParentgroup === 'sundrydebtors') {
-            const accountAddress = this.addAccountForm.get('addresses') as FormArray;
             this.isShowBankDetails(activeParentgroup);
             this.isDebtorCreditor = true;
-
-            setTimeout(() => {
-                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
-                    this.staticTabs.tabs[0].active = true;
-                    this.changeDetectorRef.detectChanges();
-                }
-            }, 50);
-
-            if (accountAddress.controls.length === 0 || !accountAddress.length) {
-                this.addBlankGstForm();
-            }
         } else if (activeParentgroup === 'bankaccounts') {
             this.isBankAccount = true;
             this.isDebtorCreditor = false;
             this.showBankDetail = false;
-
-            setTimeout(() => {
-                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
-                    this.staticTabs.tabs[0].active = true;
-                    this.changeDetectorRef.detectChanges();
-                }
-            }, 50);
         } else {
             this.isBankAccount = false;
             this.isDebtorCreditor = false;
             this.showBankDetail = false;
-
-            setTimeout(() => {
-                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
-                    this.staticTabs.tabs[1].active = true;
-                    this.changeDetectorRef.detectChanges();
-                }
-            }, 50);
         }
         this.changeDetectorRef.detectChanges();
     }
@@ -1070,10 +1052,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         this.selectedCountryCurrency = res.country.currency.code;
                         this.selectedAccountCallingCode = res.country.callingCode;
                         if (selectedAcountCurrency) {
-                            this.addAccountForm.get('currency').patchValue(selectedAcountCurrency);
+                            this.addAccountForm.get('currency')?.patchValue(selectedAcountCurrency);
                             this.selectedCurrency = selectedAcountCurrency;
                         } else {
-                            this.addAccountForm.get('currency').patchValue(this.selectedCountryCurrency);
+                            this.addAccountForm.get('currency')?.patchValue(this.selectedCountryCurrency);
                             this.selectedCurrency = this.selectedCountryCurrency;
                         }
                         if (!this.addAccountForm.get('mobileCode').value) {
@@ -1381,6 +1363,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     * @memberof AccountUpdateNewDetailsComponent
     */
     public getCompanyCustomField(): void {
+        this.companyCustomFields = [];
         this.groupService.getCompanyCustomField().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === 'success') {
                 this.companyCustomFields = response.body;
@@ -1481,28 +1464,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     /**
-     * This will get invoice settings
-     *
-     * @memberof AccountUpdateNewDetailsComponent
-     */
-    public getInvoiceSettings(): void {
-        this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.status === "success" && response.body) {
-                let invoiceSettings = _.cloneDeep(response.body);
-                this.inventorySettings = invoiceSettings.companyInventorySettings;
-
-                if (!this.addAccountForm.get("hsnOrSac")?.value) {
-                    if (this.inventorySettings?.manageInventory) {
-                        this.addAccountForm.get("hsnOrSac").patchValue("hsn");
-                    } else {
-                        this.addAccountForm.get("hsnOrSac").patchValue("sac");
-                    }
-                }
-            }
-        });
-    }
-
-    /**
      * Callback for translation response complete
      *
      * @param {boolean} event
@@ -1526,13 +1487,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     } else {
                         this.GSTIN_OR_TRN = '';
                     }
-                    this.taxNamePlaceholder = this.commonLocaleData.app_enter_tax_name;
-                    this.taxNamePlaceholder = this.taxNamePlaceholder.replace("[TAX_NAME]", this.formFields['taxName'].label);
+                    this.taxNamePlaceholder = this.commonLocaleData?.app_enter_tax_name;
+                    this.taxNamePlaceholder = this.taxNamePlaceholder.replace("[TAX_NAME]", this.formFields['taxName']?.label || '');
                 }
             });
         }
     }
-
 
     /**
      * Search query change handler for group
@@ -1587,6 +1547,29 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }, 500);
         }
     }
+
+    /**
+     * This will get invoice settings
+     *
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public getInvoiceSettings(): void {
+        this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.status === "success" && response.body) {
+                let invoiceSettings = cloneDeep(response.body);
+                this.inventorySettings = invoiceSettings.companyInventorySettings;
+
+                if (!this.addAccountForm.get("hsnOrSac")?.value) {
+                    if (this.inventorySettings?.manageInventory) {
+                        this.addAccountForm.get("hsnOrSac")?.patchValue("hsn");
+                    } else {
+                        this.addAccountForm.get("hsnOrSac")?.patchValue("sac");
+                    }
+                }
+            }
+        });
+    }
+
 
     /**
      * Scroll end handler for group dropdown
@@ -1760,4 +1743,34 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
     }
 
+    /**
+     * This will show/hide address tab depending on parent group
+     *
+     * @private
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    private showHideAddressTab(): void {
+        if (!this.isHsnSacEnabledAcc) {
+            setTimeout(() => {
+                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
+                    this.staticTabs.tabs[0].active = true;
+                    this.changeDetectorRef.detectChanges();
+                }
+            }, 50);
+
+            const accountAddress = this.addAccountForm.get('addresses') as FormArray;
+            if (accountAddress.controls.length === 0 || !accountAddress.length) {
+                this.addBlankGstForm();
+            }
+        } else {
+            this.addAccountForm.get('addresses').reset();
+
+            setTimeout(() => {
+                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[1]) {
+                    this.staticTabs.tabs[1].active = true;
+                    this.changeDetectorRef.detectChanges();
+                }
+            }, 50);
+        }
+    }
 }
