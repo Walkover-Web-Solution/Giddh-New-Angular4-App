@@ -701,10 +701,7 @@
                                                                             currentCompanyBranches?.length > 2
                                                                         "
                                                                         [enableDynamicSearch]="true"
-                                                                        (selected)="
-                                                                            selectAccount($event, txn);
-                                                                            showBankLedgerPopup(txn, item)
-                                                                        "
+                                                                        (selected)="selectAccount($event, txn)"
                                                                         [placeholder]="
                                                                             commonLocaleData?.app_select_accounts
                                                                         "
@@ -948,10 +945,7 @@
                                                                             currentOrganizationType === 'COMPANY' &&
                                                                             currentCompanyBranches?.length > 2
                                                                         "
-                                                                        (selected)="
-                                                                            selectAccount($event, txn);
-                                                                            showBankLedgerPopup(txn, item)
-                                                                        "
+                                                                        (selected)="selectAccount($event, txn)"
                                                                         [isPaginationEnabled]="true"
                                                                         (scrollEnd)="handleScrollEnd()"
                                                                         (dynamicSearchedQuery)="
