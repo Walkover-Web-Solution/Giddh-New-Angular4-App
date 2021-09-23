@@ -10,6 +10,7 @@
     max-width: 760px;
     z-index: 99999;
 }
+
 #close {
     position: absolute;
     left: auto;
@@ -18,11 +19,12 @@
     background-color: transparent;
     color: $white;
     font-size: 17px;
-    top: 18px;
+    top: 7px;
     margin-right: 0;
     border: 0;
     border-radius: 0;
 }
+
 :host .container-fluid {
     padding-left: 0;
     padding-right: 0;
@@ -60,28 +62,35 @@
     text-align: center;
     margin: 0 auto;
 }
+
 .header-create-group {
     .form-header {
         display: flex;
     }
 }
+
 .create-group-aside-body {
     padding: 15px 15px 0;
+
     .create-group-block {
         .create-group-top {
             padding-bottom: 15px;
+
             img {
                 width: 80px;
             }
         }
+
         .bg-white {
             height: 82vh;
         }
+
         .wrapper-contain {
             form {
                 max-width: 600px;
                 width: 100%;
             }
+
             .other-group {
                 margin-top: 20px;
                 margin-bottom: 70px;
@@ -89,23 +98,28 @@
         }
     }
 }
+
 .create-new-block {
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
+
     .create-product-wrapper {
         .create-one-item {
             padding: 15px 0 0;
+
             &:hover {
                 background-color: $lavender;
             }
+
             .wrapper-create-item {
                 border-bottom: 1px solid $gainsboro;
                 display: flex;
                 margin: 0 45px 0;
                 padding: 25px 0;
                 cursor: pointer;
+
                 .circle-icon {
                     width: 50px;
                     height: 50px;
@@ -113,24 +127,29 @@
                     background-color: $white;
                     border-radius: 50%;
                     padding: 14px;
+
                     i {
                         font-size: 18px;
                     }
                 }
+
                 .create-item {
                     max-width: 80%;
                     margin-left: 15px;
                     width: 100%;
+
                     h4 {
                         font-size: 16px;
                         font-family: "opensans-semibold";
                         margin-bottom: 5px;
                     }
+
                     p {
                         font-size: 14px;
                     }
                 }
             }
+
             &:last-child {
                 .wrapper-create-item {
                     border-bottom: none;
@@ -148,6 +167,7 @@
         max-width: 600px;
     }
 }
+
 @media (max-width: 575px) {
     :host {
         max-width: 370px;
@@ -159,6 +179,7 @@
         .create-group-block {
             .create-group-top {
                 padding-bottom: 15px;
+
                 img {
                     width: 50px;
                 }
@@ -166,6 +187,7 @@
         }
     }
 }
+
 @media (max-width: 375px) {
     :host {
         max-width: 310px;
@@ -174,11 +196,55 @@
         max-width: 310px;
     }
 }
+
 @media (max-width: 320px) {
     :host {
         max-width: 280px;
     }
     :host .aside-pane {
         max-width: 280px;
+    }
+}
+
+//new design style
+.create-group-card {
+    border-bottom: 1px solid gainsboro;
+    padding: 25px 15px;
+    height: auto;
+    text-align: left;
+    width: 100%;
+    line-height: 1.5;
+
+    .create-group-button-wrapper {
+        display: flex;
+        align-items: center;
+    }
+
+    .create-group-icon-container {
+        margin-right: 20px;
+
+        .create-group-icon {
+            width: 50px;
+            display: flex;
+            height: 50px;
+            background-color: white;
+            border-radius: 100%;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #1a237e;
+        }
+    }
+
+    .create-group-text-content {
+        label {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        p {
+            font-size: 14px;
+            white-space: normal;
+        }
     }
 }

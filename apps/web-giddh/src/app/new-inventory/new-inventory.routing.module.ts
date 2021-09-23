@@ -44,6 +44,7 @@ const routes: Routes = [
                 path: "inventory-custom-field",
                 component: InventoryCustomFieldComponent,
             },
+
         ],
     },
     {

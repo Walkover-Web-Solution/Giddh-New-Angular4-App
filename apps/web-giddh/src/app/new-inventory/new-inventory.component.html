@@ -29,7 +29,7 @@
     <!-- end new inventory header-->
 
     <div class="container-fluid">
-        <div class="mat-elevation-z3">
+        <div class="mat-elevation-z3 inventory-card">
             <!--new inventory data filter card header-->
             <div class="inventory-filter-bar">
                 <div class="search-control">
@@ -78,13 +78,6 @@
                     <button class="round-btn" mat-icon-button [matMenuTriggerFor]="importExport" aria-label="Customise">
                         <i class="svg">
                             <svg xmlns="http://www.w3.org/2000/svg" width="12.444" height="16" viewBox="0 0 12.444 16">
-                                <defs>
-                                    <style>
-                                        .a {
-                                            fill: #1c1c1c;
-                                        }
-                                    </style>
-                                </defs>
                                 <path
                                     class="a"
                                     d="M82.456,1185.2l3.556,3.556H83.344v6.222H81.567v-6.222H78.9Zm6.222,12.444h2.667l-3.556,3.556-3.556-3.556H86.9v-6.222h1.778Z"
@@ -111,6 +104,19 @@
                     >
                         + Create New
                     </button>
+                </div>
+            </div>
+            <div class="inventory-filter-bar">
+                <div class="action-button-container">
+                    <button class="round-btn" mat-button><i class="icon-inventory1 mr-2"></i>Archive</button>
+                    <button class="round-btn" mat-button><i class="icon-edit-pencil mr-2"> </i>Bulk edit</button>
+                    <button class="round-btn" mat-icon-button>
+                        <i class="icon-trash"> </i>
+                    </button>
+                </div>
+                <div>
+                    <span class="dots-select">2 Groups Selected</span>
+                    <button mat-icon-button class="ml-3" style="font-size: 25px">×</button>
                 </div>
             </div>
             <!--end new inventory data filter card header-->
