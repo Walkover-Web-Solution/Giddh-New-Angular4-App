@@ -9,24 +9,29 @@
     width: 240px;
     left: -240px;
     z-index: 999;
+
     .aside-pane {
         background: $white;
         overflow: initial;
         z-index: unset;
+
         .back-to-main-slider {
             display: block;
             padding: 15px 15px 3px;
             margin-bottom: 0;
         }
+
         .help-aside-body {
             .inventory-items {
                 ul {
                     li {
                         padding: 0px;
+
                         a {
                             display: flex;
                             align-items: flex-start;
                             padding: 7px 15px;
+
                             span {
                                 i {
                                     color: grey;
@@ -44,21 +49,27 @@
 
 .inventory-items {
     padding: 15px 0 0;
+
     ul {
         padding: 0;
         list-style: none;
         font-size: 14px;
         font-family: "opensans-semibold";
+
         li {
             padding: 6px 20px;
             margin-bottom: 0px;
+
             a {
                 cursor: pointer;
+
                 img {
                     margin-right: 12px;
                 }
+
                 span {
                     color: $nero;
+
                     &:first-child {
                         line-height: 1.6;
                         height: 20px;
@@ -68,12 +79,14 @@
                         width: 28px;
                         float: left;
                     }
+
                     &:last-child {
                         float: left;
                         width: 80%;
                     }
                 }
             }
+
             &:hover {
                 a {
                     span {
@@ -84,29 +97,39 @@
         }
     }
 }
+
 .inventory-items ul li:hover a span i {
     color: $nero !important;
 }
 
 .inventory-sub-bar {
     font-family: "opensans-regular" !important;
+
     li {
         a {
             color: $nero !important;
             padding-left: 50px !important;
+
             &:hover {
+                background: $lavender;
+                color: $midnight-blue !important;
+            }
+
+            &.active {
                 background: $lavender;
                 color: $midnight-blue !important;
             }
         }
     }
 }
+
 @media (max-width: 767px) {
     :host.inventory-sidebar {
         z-index: 9999;
         top: 0;
     }
 }
+
 @media (max-height: 700px) {
     .help-aside-body {
         height: 100%;
