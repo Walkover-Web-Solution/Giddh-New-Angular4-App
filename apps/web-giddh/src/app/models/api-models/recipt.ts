@@ -10,8 +10,9 @@ export class InvoiceReceiptFilter extends InvoiceFilterClassForInvoicePreview {
 }
 
 export interface ReciptDeleteRequest {
-    invoiceNumber: string;
+    invoiceNumber?: string;
     voucherType: string;
+    uniqueName?: string;
 }
 
 export class ReceiptVoucherDetailsRequest {
