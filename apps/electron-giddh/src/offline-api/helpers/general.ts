@@ -1,3 +1,6 @@
+import electron from "electron";
+import fs from "fs";
+
 /**
  * This will assign blank object/array to company data if null/undefined value is received from giddh api
  *
@@ -33,4 +36,30 @@ export function getInternetConnectedConfig() {
         retries: 1, //number of retries to do before failing
         domain: 'https://apple.com', //the domain to check DNS record of
     };
+}
+
+/**
+ * This will create the database file
+ *
+ * @export
+ * @param {string} filename
+ */
+export function createDbFile(filename: string): boolean {
+    const data = fs.existsSync(filename);
+    if (!data) {
+        fs.writeFileSync(filename, "", "utf8");
+        return true;
+    }
+    return false;
+}
+
+/**
+ * This will return the directory path
+ *
+ * @export
+ * @returns {*}
+ */
+export function getPath(): any {
+    const app = electron?.app || electron?.remote?.app;
+    return app.getPath('userData') + "/db/";
 }

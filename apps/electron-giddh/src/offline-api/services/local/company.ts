@@ -1,4 +1,6 @@
-import { cleanCompanyData } from "../../helpers/general";
+import Datastore from "nedb";
+import { findAsync, insertAsync, updateAsync } from "../../helpers/nedb_async";
+import { cleanCompanyData, createDbFile, getPath } from "../../helpers/general";
 
 /**
  * This will save the active company information
@@ -8,10 +10,18 @@ import { cleanCompanyData } from "../../helpers/general";
  */
 export async function saveCompanyLocal(request: any): Promise<any> {
     if (request && request.status === "success") {
-
         const companyData = cleanCompanyData(request.body);
+        const filename = getPath() + "company.db";
+        createDbFile(filename);
 
+        const db = new Datastore({ filename: filename, autoload: true });
+        const response = await findAsync(db, {});
 
+        if (response?.length > 0) {
+            updateAsync(db, {}, { $set: companyData }, { multi: false });
+        } else {
+            insertAsync(db, companyData);
+        }
 
         return { status: "success", body: companyData };
     } else {
@@ -26,10 +36,14 @@ export async function saveCompanyLocal(request: any): Promise<any> {
  * @returns
  */
 export async function getCompanyLocal(request: any): Promise<any> {
-    const company = {};
+    const filename = getPath() + "company.db";
+    createDbFile(filename);
 
-    if (company) {
-        return { status: "success", body: company[0] };
+    const db = new Datastore({ filename: filename, autoload: true });
+    const response = await findAsync(db, {});
+
+    if (response?.length > 0) {
+        return { status: "success", body: response };
     } else {
         return { status: "error", message: "Company details unavailable." };
     }
