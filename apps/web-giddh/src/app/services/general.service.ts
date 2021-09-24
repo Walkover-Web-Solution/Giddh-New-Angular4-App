@@ -950,6 +950,6 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public getApiDomain(): string {
-        return (isElectron) ? NODE_API_URL : this.config.apiUrl;
+        return (isElectron) ? OFFLINE_API_URL : this.config.apiUrl;
     }
 }
