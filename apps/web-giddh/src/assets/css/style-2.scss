@@ -966,12 +966,14 @@ ul.sub-list {
     border-right: 0px;
 }
 
-.advance-search p small {
-    color: $silver;
-}
-
-.advance-search p {
-    line-height: 15px;
+.daybook-advance-search,
+.advance-search {
+    p {
+        line-height: 15px;
+        small {
+            color: $silver;
+        }
+    }
 }
 
 .advance-search .scrollable-content .item > a {
@@ -1459,7 +1461,7 @@ input:-moz-placeholder {
 }
 
 .pr-0 {
-    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
 
 .sidebar {
@@ -8239,6 +8241,9 @@ giddh-datepicker {
     left: 60px !important;
     width: calc(100% - 60px) !important;
     z-index: 99 !important;
+}
+.aside-account-create {
+    z-index: 991 !important;
 }
 .primary-sidebar {
     .giddh-primary-items {

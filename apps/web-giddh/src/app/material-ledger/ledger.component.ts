@@ -640,6 +640,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.currencyTogglerModel = false;
 
             if (params['accountUniqueName']) {
+                this.isShowLedgerColumnarReportTable = false;
                 this.lc.accountUnq = params['accountUniqueName'];
                 this.needToShowLoader = true;
                 this.searchText = '';
@@ -950,7 +951,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public getTransactionData() {
-        this.isAdvanceSearchImplemented = false;
         this.closingBalanceBeforeReconcile = null;
         this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
         this.store.dispatch(this.ledgerActions.GetTransactions(this.trxRequest));
@@ -980,6 +980,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public toggleTransactionType(event: any) {
+        this.lc.showNewLedgerPanel = false;
         let allTrx: TransactionVM[] = filter(this.lc.blankLedger.transactions, bl => bl.type === event.type);
         let unAccountedTrx = find(allTrx, a => !a.selectedAccount);
 
@@ -1039,37 +1040,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public resetBlankTransaction() {
-        this.lc.blankLedger = {
-            transactions:
-                (this.currentOrganizationType === OrganizationType.Branch ||
-                    (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) ? [ // Add the blank transaction only if it is branch mode or company with single branch
-                    this.lc.addNewTransaction('DEBIT'),
-                    this.lc.addNewTransaction('CREDIT')
-                ] : [],
-            voucherType: null,
-            entryDate: this.selectedDateRange?.endDate ? moment(this.selectedDateRange.endDate).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT),
-            unconfirmedEntry: false,
-            attachedFile: '',
-            attachedFileName: '',
-            tag: null,
-            description: '',
-            generateInvoice: false,
-            chequeNumber: '',
-            chequeClearanceDate: '',
-            invoiceNumberAgainstVoucher: '',
-            compoundTotal: 0,
-            convertedCompoundTotal: 0,
-            invoicesToBePaid: [],
-            otherTaxModal: new SalesOtherTaxesModal(),
-            otherTaxesSum: 0,
-            tdsTcsTaxesSum: 0,
-            otherTaxType: 'tcs',
-            exchangeRate: 1,
-            valuesInAccountCurrency: (this.selectedCurrency === 0),
-            selectedCurrencyToDisplay: this.selectedCurrency,
-            baseCurrencyToDisplay: cloneDeep(this.baseCurrencyDetails),
-            foreignCurrencyToDisplay: cloneDeep(this.foreignCurrencyDetails)
-        };
+        this.lc.blankLedger = this.lc.getBlankLedger();
+        this.lc.blankLedger.transactions = 
+            (this.currentOrganizationType === OrganizationType.Branch ||
+                (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) ? [ // Add the blank transaction only if it is branch mode or company with single branch
+                this.lc.addNewTransaction('DEBIT'),
+                this.lc.addNewTransaction('CREDIT')
+            ] : [];
+        this.lc.blankLedger.voucherType = null;
+        this.lc.blankLedger.entryDate = this.selectedDateRange?.endDate ? moment(this.selectedDateRange.endDate).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
+        this.lc.blankLedger.valuesInAccountCurrency = (this.selectedCurrency === 0);
+        this.lc.blankLedger.selectedCurrencyToDisplay = this.selectedCurrency;
+        this.lc.blankLedger.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
+        this.lc.blankLedger.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
         this.shouldShowRcmTaxableAmount = false;
         this.shouldShowItcSection = false;
         this.isMoreDetailsOpened = false;
@@ -1081,7 +1064,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public showNewLedgerEntryPopup(trx: TransactionVM) {
         this.selectBlankTxn(trx);
-        this.lc.showNewLedgerPanel = true;
+        if(trx.particular) {
+            this.lc.showNewLedgerPanel = true;
+        } else {
+            this.lc.showNewLedgerPanel = false;
+        }
     }
 
     public onSelectHide() {
@@ -1808,6 +1795,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.advanceSearchRequest.accountUniqueName, from, to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, null, this.advanceSearchRequest.branchUniqueName)
             );
         }
+        this.cdRf.detectChanges();
     }
 
     public getInvoiceLists(request) {

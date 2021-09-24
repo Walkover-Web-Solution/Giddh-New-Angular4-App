@@ -89,7 +89,6 @@
                         "polyfills": "apps/web-giddh/src/polyfills.ts",
                         "tsConfig": "apps/web-giddh/tsconfig.app.json",
                         "aot": true,
-                        "baseHref": "/",
                         "assets": [
                             {
                                 "glob": "**/*",

@@ -26,7 +26,7 @@ import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
-import { ConfirmationModalConfiguration, CONFIRMATION_ACTIONS } from '../../../common/confirmation-modal/confirmation-modal.interface';
+import { ConfirmationModalConfiguration } from '../../../common/confirmation-modal/confirmation-modal.interface';
 import { LoaderService } from '../../../loader/loader.service';
 import { cloneDeep, filter, last, orderBy, uniqBy } from '../../../lodash-optimized';
 import { AccountResponse } from '../../../models/api-models/Account';
@@ -1320,7 +1320,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public handleAdvanceReceiptChange(): void {
         this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
         this.vm.isAdvanceReceipt = this.isAdvanceReceipt;
-        this.vm.selectedLedger.generateInvoice = this.isAdvanceReceipt;
         if (this.shouldShowAdvanceReceiptMandatoryFields) {
             this.vm.generatePanelAmount();
         }
