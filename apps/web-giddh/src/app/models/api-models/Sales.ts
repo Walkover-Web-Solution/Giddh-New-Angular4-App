@@ -237,6 +237,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     public maxQuantity?: number;
     public purchaseOrderItemMapping?: { uniqueName: string; entryUniqueName: any; };
     public showCodeType: string;
+    public highPrecisionAmount?: number;
 
     constructor() {
         super();
@@ -327,7 +328,7 @@ export class SalesEntryClass {
     public isNewEntryInUpdateMode?: boolean;
     public isOtherTaxApplicable: boolean = false;
     public otherTaxSum: number;
-    public otherTaxType: 'tcs' | 'tds';
+    public otherTaxType: 'tcs' | 'tds' | undefined;
     public cessSum: number;
     public otherTaxModal: SalesOtherTaxesModal;
     public tcsCalculationMethod: SalesOtherTaxesCalculationMethodEnum;
@@ -385,14 +386,7 @@ export class OtherSalesItemClass {
     public message2?: string;
     public slogan?: any;
 
-    constructor() {
-        this.shippingDate = null;
-        this.shippedVia = null;
-        this.trackingNumber = null;
-        this.customField1 = null;
-        this.customField2 = null;
-        this.customField3 = null;
-    }
+    constructor() { }
 }
 
 /**
@@ -482,6 +476,7 @@ export class VoucherDetailsClass {
     public balance?: any;
     public deposit?: any;
     public balanceDue?: number;
+    public convertedBalanceDue?: number;
     public balanceStatus?: string;
     public totalAsWords: string;
     public grandTotal: number;

@@ -1,0 +1,157 @@
+<div class="relative adjust-group-page">
+    <hamburger-menu [pageHeading]="'Adjust group'"></hamburger-menu>
+    <span class="pull-right pd cursor-pointer back-to-page" [routerLink]="['/pages/new-inventory/adjust-inventory']"
+        >Back</span
+    >
+    <div class="adjust-field-wrapper mt-2 relative">
+        <div>
+            <form>
+                <p class="text-gray mx-3 my-3 font-14">
+                    Note: All the items or sub-groups under the selected Group will be revalued.
+                </p>
+                <div class="col-md-8 col-lg-8 col-xl-6 col-12">
+                    <div class="row mr-b15">
+                        <div class="col-sm-4 col-lg-4">
+                            <label>Mode of Adjustment <span class="red-text">*</span></label>
+                        </div>
+                        <div class="col-sm-8 col-lg-6">
+                            <span class="p-0 mr-3">
+                                <input
+                                    id="mode-of-quantity"
+                                    class="radio-custom cp ml-0"
+                                    type="radio"
+                                    name="modeOfadjustment"
+                                    [value]=""
+                                />
+                                <label for="mode-of-quantity" class="radio-custom-label">Quantity</label>
+                            </span>
+                            <span class="p-0 mr-3">
+                                <input
+                                    id="mode-of-value"
+                                    class="radio-custom cp ml-0"
+                                    type="radio"
+                                    name="modeOfadjustment"
+                                    [value]=""
+                                />
+                                <label for="mode-of-value" class="radio-custom-label">Value</label>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row mr-b15">
+                        <div class="col-sm-4 col-lg-4">
+                            <label>Reference No. <span class="red-text">*</span></label>
+                        </div>
+                        <div class="col-sm-8 col-lg-6">
+                            <input
+                                type="text"
+                                id="reference-no"
+                                class="form-control"
+                                placeholder="Enter Reference Number"
+                            />
+                        </div>
+                    </div>
+                    <div class="row mr-b15">
+                        <div class="col-sm-4 col-lg-4">
+                            <label>Date <span class="red-text">*</span></label>
+                        </div>
+                        <div class="col-sm-8 col-lg-6">
+                            <giddh-datepicker name="adjustGroupDate"></giddh-datepicker>
+                        </div>
+                    </div>
+                    <div class="row mr-b15">
+                        <div class="col-sm-4 col-lg-4">
+                            <label>Account <span class="red-text">*</span></label>
+                        </div>
+                        <div class="col-sm-8 col-lg-6">
+                            <sh-select id="account-no" placeholder="Select Account"></sh-select>
+                        </div>
+                    </div>
+                    <div class="row mr-b15">
+                        <div class="col-sm-4 col-lg-4">
+                            <label>Reason <span class="red-text">*</span></label>
+                        </div>
+                        <div class="col-sm-8 col-lg-6">
+                            <sh-select id="reason" placeholder="Select Reason"></sh-select>
+                            <!-- button for add new reason aside pane, button is show in sh-select option
+                                <button (click)="addAdjustment()">add reason</button> -->
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="bg-white px-3 py-3 mt-4 mb-4">
+            <div class="table-responsive">
+                <table class="table giddh-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Product/Service/Group</th>
+                            <th>Method</th>
+                            <th>Sub-Group</th>
+                            <th>Product/Service</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>
+                                <div class="d-flex mb-2">
+                                    <span>
+                                        <img src="{{ imgPath }}Login-Page-Image.png" width="36" height="36" />
+                                    </span>
+                                    <sh-select
+                                        id="select-group-product-service"
+                                        placeholder="Select Name"
+                                        class="mr-l15 w-100"
+                                    ></sh-select>
+                                </div>
+                                <textarea placeholder="Add Description" class="form-control"></textarea>
+                            </td>
+                            <td>
+                                <input
+                                    type="text"
+                                    id="percentage"
+                                    class="form-control mb-2"
+                                    value="Percentage"
+                                    disabled
+                                />
+                                <input type="text" id="percent-value" value="0%" class="form-control" />
+                            </td>
+                            <td>
+                                <sh-select id="select-subgroup" class="mb-2" value="12 Selected"></sh-select>
+                            </td>
+                            <td>
+                                <sh-select id="select-product-service" class="mb-2" value="212 Selected"></sh-select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="add-line-bulk-item font-14">
+                <a href="javascript:void(0)">+ Add New Line</a> |
+                <a href="javascript:void(0)" (click)="openModal(template)">+ Add Bulk Entries</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="inventory-footer sticky-footer">
+    <div class="inner-content-footer">
+        <div class="d-flex">
+            <div class="button-group">
+                <button id="adjust-group-btn" class="btn btn-primary min-width-100 bdr-radius-50">Clear</button>
+                <button id="adjust-group-convert-btn" class="btn btn-success min-width-100 bdr-radius-50" disabled>
+                    Convert to Adjust
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- adjust inventory aside pane -->
+<div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
+<inventory-adjustment-aside *ngIf="asideMenuState === 'in'" (closeAsideEvent)="addAdjustment()">
+</inventory-adjustment-aside>
+
+<!-- adjust bulk entry modal -->
+<ng-template #template>
+    <inventory-adjust-bulk-entry></inventory-adjust-bulk-entry>
+</ng-template>

@@ -65,28 +65,41 @@
                 <div [hidden]="!smsTabActive" class="mr-b2">
                     <textarea class="form-control" #smsList [placeholder]="localeData?.enter_mobile_no"></textarea>
                 </div>
-                <div class="clearfix" [hidden]="smsTabActive">
-                    <h3 class="font-16 mr-b05">{{ localeData?.invoice_copy }}</h3>
-                    <hr />
-                    <div class="checkbox">
-                        <label
-                            ><input type="checkbox" value="Transport" (change)="onSelectInvoiceCopy($event)" />{{
-                                localeData?.transport
-                            }}</label
-                        >
+                <ng-container *ngIf="currentVoucherFilter === 'invoices'">
+                    <div class="clearfix" [hidden]="smsTabActive">
+                        <h3 class="font-16 mr-b05">{{ localeData?.invoice_copy }}</h3>
+                        <hr />
+                        <div class="checkbox">
+                            <label
+                                ><input
+                                    type="checkbox"
+                                    value="Original"
+                                    checked
+                                    (change)="onSelectInvoiceCopy($event)"
+                                />{{ localeData?.original }}</label
+                            >
+                        </div>
+                        <div class="checkbox">
+                            <label
+                                ><input type="checkbox" value="Transport" (change)="onSelectInvoiceCopy($event)" />{{
+                                    localeData?.transport
+                                }}</label
+                            >
+                        </div>
+                        <div class="checkbox">
+                            <label
+                                ><input type="checkbox" value="Customer" (change)="onSelectInvoiceCopy($event)" />{{
+                                    commonLocaleData?.app_customer
+                                }}</label
+                            >
+                        </div>
                     </div>
-                    <div class="checkbox">
-                        <label
-                            ><input type="checkbox" value="Customer" (change)="onSelectInvoiceCopy($event)" />{{
-                                commonLocaleData?.app_customer
-                            }}</label
-                        >
-                    </div>
-                </div>
+                </ng-container>
 
                 <div class="clearfix">
                     <button
                         [hidden]="!emailTabActive"
+                        [disabled]="!emailList?.value || (currentVoucherFilter === 'invoices' && !invoiceType?.length)"
                         type="button"
                         class="btn btn-sm btn-success"
                         (click)="onSendInvoiceOnMail(emailList.value)"
@@ -206,7 +219,7 @@
                     type="button"
                     class="btn btn-sm btn-success"
                     (click)="downloadInvoice()"
-                    [disabled]="!invoiceType.length"
+                    [disabled]="!invoiceType.length && currentVoucherFilter === 'invoices'"
                     [hidden]="emailTabActive || smsTabActive"
                 >
                     {{ localeData?.download_invoice }}

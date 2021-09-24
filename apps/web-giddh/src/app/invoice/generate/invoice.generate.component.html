@@ -219,13 +219,13 @@
                             <tr
                                 *ngFor="let item of ledgersData?.results; let i = index"
                                 [ngClass]="{ 'danger': item.hasGenerationErr }"
-                                (mouseover)="hoveredItemForAction = item.uniqueName"
+                                (mouseover)="hoveredItemForAction = item?.uniqueName"
                             >
                                 <td
                                     class="check-image"
                                     data-title="#"
                                     *ngIf="
-                                        hoveredItemForAction === item.uniqueName ||
+                                        hoveredItemForAction === item?.uniqueName ||
                                         item.isSelected ||
                                         selectedInvoices.length > 0
                                     "
@@ -250,7 +250,7 @@
                                 <td
                                     *ngIf="
                                         !item.isSelected &&
-                                        hoveredItemForAction !== item.uniqueName &&
+                                        hoveredItemForAction !== item?.uniqueName &&
                                         selectedInvoices.length === 0
                                     "
                                     data-title="#"
@@ -319,19 +319,19 @@
                                 </td>
 
                                 <td
-                                    (dblclick)="modalUniqueName = item.uniqueName"
+                                    (dblclick)="modalUniqueName = item?.uniqueName"
                                     class="cp no-dbl-click-select"
                                     (clickOutside)="modalUniqueName = ''"
                                     [attr.data-title]="commonLocaleData?.app_account"
                                 >
                                     {{ item?.account?.name }}
                                     <div
-                                        *ngIf="modalUniqueName === item.uniqueName"
+                                        *ngIf="modalUniqueName === item?.uniqueName"
                                         account-detail-modal-component
                                         [accountUniqueName]="item?.account?.uniqueName"
                                         [from]="ledgerSearchRequest.from"
                                         [to]="ledgerSearchRequest.to"
-                                        [isModalOpen]="modalUniqueName === item.uniqueName"
+                                        [isModalOpen]="modalUniqueName === item?.uniqueName"
                                         [voucherType]="selectedVoucher"
                                     ></div>
                                 </td>

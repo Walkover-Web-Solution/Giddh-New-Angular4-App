@@ -241,6 +241,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public isDatepickerOpen: boolean = false;
     /** True if more details is open */
     public isMoreDetailsOpen: boolean;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -355,6 +357,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.availableItcList[1].label = this.localeData?.import_services;
             this.availableItcList[2].label = this.localeData?.others;
         }
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     @HostListener('click', ['$event'])
@@ -365,7 +368,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
-        if (this.currentTxn && this.currentTxn.selectedAccount) {
+        if (changes?.currentTxn?.currentValue?.selectedAccount) {
             this.currentTxn.advanceReceiptAmount = giddhRoundOff(this.currentTxn.amount, this.giddhBalanceDecimalPlaces);
             if (!this.currentTxn.selectedAccount.stock) {
                 this.selectedWarehouse = String(this.defaultWarehouse);

@@ -163,8 +163,9 @@ export class MailLedgerRequest {
  * its response will be success message in body
  */
 export class DownloadLedgerRequest {
-    public invoiceNumber: string[];
+    public invoiceNumber?: string[];
     public voucherType: string;
+    public uniqueName?: string;
 }
 
 export interface DownloadLedgerAttachmentResponse {

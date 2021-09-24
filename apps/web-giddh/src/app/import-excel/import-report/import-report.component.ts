@@ -45,7 +45,7 @@ export class ImportReportComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.getStatus();
 
-        this.store.pipe(select(state => state.session.activeCompany), take(1)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
             }
@@ -70,7 +70,7 @@ export class ImportReportComponent implements OnInit, OnDestroy {
         this.isLoading = true;
         this.importExcelService.importStatus(this.importPaginatedRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if(response?.status === "success" && response?.body) {
-                response.body.results = response?.body?.results.map(res => {
+                response.body.results =response?.body?.results?.map(res => {
                     res.processDate = moment.utc(res.processDate, 'YYYY-MM-DD hh:mm:ss a').local().format(GIDDH_DATE_FORMAT + ' hh:mm:ss a');
                     return res;
                 });

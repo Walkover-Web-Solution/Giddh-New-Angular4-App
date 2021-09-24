@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { select, Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import * as moment from 'moment/moment';
 import { BsDatepickerConfig } from "ngx-bootstrap/datepicker";
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -9,9 +9,9 @@ import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { distinct, filter, take, takeUntil } from 'rxjs/operators';
 import { InventoryAction } from '../../actions/inventory/inventory.actions';
 import { ManufacturingActions } from '../../actions/manufacturing/manufacturing.actions';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../models/user-login-state';
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { StocksResponse } from '../../models/api-models/Inventory';
 import { IMfStockSearchRequest } from '../../models/interfaces/manufacturing.interface';
 import { GeneralService } from '../../services/general.service';
@@ -185,7 +185,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
             }
         })), takeUntil(this.destroyed$)).subscribe();
         this.store.pipe(
-            select(state => state.session.activeCompany), take(1)
+            select(state => state.session.activeCompany), takeUntil(this.destroyed$)
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
