@@ -36,7 +36,7 @@ module.exports = {
             'process.env.OFFLINE_API_URL': JSON.stringify(process.env.OFFLINE_API_URL),
             'process.env.ENV': JSON.stringify('development'),
             'process.env.NODE_ENV': JSON.stringify('development'),
-            'process.env.isElectron': JSON.stringify(false),
+            'process.env.isElectron': JSON.stringify(true),
             'process.env.errlyticsNeeded': JSON.stringify(false),
             'process.env.errlyticsKey': JSON.stringify(''),
             'process.env.AppUrl': JSON.stringify('http://localhost:4200/'),
