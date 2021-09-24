@@ -368,7 +368,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
-        if (this.currentTxn && this.currentTxn.selectedAccount) {
+        if (changes?.currentTxn?.currentValue?.selectedAccount) {
             this.currentTxn.advanceReceiptAmount = giddhRoundOff(this.currentTxn.amount, this.giddhBalanceDecimalPlaces);
             if (!this.currentTxn.selectedAccount.stock) {
                 this.selectedWarehouse = String(this.defaultWarehouse);
