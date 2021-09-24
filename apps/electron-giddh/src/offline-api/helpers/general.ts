@@ -44,13 +44,17 @@ export function getInternetConnectedConfig() {
  * @export
  * @param {string} filename
  */
-export function createDbFile(filename: string): boolean {
-    const data = fs.existsSync(filename);
-    if (!data) {
-        fs.writeFileSync(filename, "", "utf8");
-        return true;
+export function createDbFile(filename: string): any {
+    try {
+        const fileExists = fs.existsSync(filename);
+        if (!fileExists) {
+            fs.writeFileSync(filename, "", "utf8");
+            return true;
+        }
+        return false;
+    } catch(error) {
+        return error;
     }
-    return false;
 }
 
 /**
@@ -59,7 +63,9 @@ export function createDbFile(filename: string): boolean {
  * @export
  * @returns {*}
  */
-export function getPath(): any {
+export function getPath(filename: string): any {
     const app = electron?.app || electron?.remote?.app;
-    return app.getPath('userData') + "/";
+    const path = app.getPath('userData') + "/" + filename;
+    createDbFile(path);
+    return path;
 }
