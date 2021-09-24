@@ -61,5 +61,5 @@ export function createDbFile(filename: string): boolean {
  */
 export function getPath(): any {
     const app = electron?.app || electron?.remote?.app;
-    return app.getPath('userData') + "/db/";
+    return app.getPath('userData') + "/";
 }

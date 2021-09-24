@@ -11,7 +11,7 @@ import { cleanCompanyData, createDbFile, getPath } from "../../helpers/general";
 export async function saveCompanyLocal(request: any): Promise<any> {
     if (request && request.status === "success") {
         const companyData = cleanCompanyData(request.body);
-        const filename = getPath() + "company.db";
+        const filename = getPath() + "company-data.db";
         createDbFile(filename);
 
         const db = new Datastore({ filename: filename, autoload: true });
@@ -36,7 +36,7 @@ export async function saveCompanyLocal(request: any): Promise<any> {
  * @returns
  */
 export async function getCompanyLocal(request: any): Promise<any> {
-    const filename = getPath() + "company.db";
+    const filename = getPath() + "company-data.db";
     createDbFile(filename);
 
     const db = new Datastore({ filename: filename, autoload: true });
