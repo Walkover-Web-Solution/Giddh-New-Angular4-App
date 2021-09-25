@@ -5,7 +5,6 @@ import { AccountMergeRequest, AccountMoveRequest, AccountRequest, AccountRequest
 import { HttpWrapperService } from './httpWrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { ACCOUNTS_API, ACCOUNTS_API_V2 } from './apiurls/account.api';
-import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { APPLY_TAX_API } from './apiurls/applyTax.api';
@@ -17,18 +16,14 @@ import { APPLY_DISCOUNT_API } from './apiurls/applyDiscount';
 
 @Injectable()
 export class AccountService {
-
-    private user: UserDetails;
     private companyUniqueName: string;
 
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService,
         private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
-        this.user = this.generalService.user;
         this.companyUniqueName = this.generalService.companyUniqueName;
     }
 
     public UpdateAccount(model: AccountRequest, accountUniqueName: string): Observable<BaseResponse<AccountResponse, AccountRequest>> {
-        this.user = this.generalService.user;
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.put(this.config.apiUrl + ACCOUNTS_API.UPDATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
             map((res) => {
@@ -41,7 +36,6 @@ export class AccountService {
     }
 
     public MergeAccount(model: AccountMergeRequest[], accountUniqueName: string): Observable<BaseResponse<string, AccountMergeRequest[]>> {
-        this.user = this.generalService.user;
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.put(this.config.apiUrl + ACCOUNTS_API.MERGE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
             map((res) => {
@@ -54,7 +48,6 @@ export class AccountService {
     }
 
     public UnmergeAccount(model: AccountUnMergeRequest, accountUniqueName: string): Observable<BaseResponse<string, AccountUnMergeRequest>> {
-        this.user = this.generalService.user;
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + ACCOUNTS_API.UNMERGE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
             map((res) => {
@@ -67,7 +60,6 @@ export class AccountService {
     }
 
     public ApplyTax(model: ApplyTaxRequest): Observable<BaseResponse<string, ApplyTaxRequest>> {
-        this.user = this.generalService.user;
         this.companyUniqueName = this.generalService.companyUniqueName;
         let mod = [];
         mod.push(model);
@@ -81,7 +73,6 @@ export class AccountService {
     }
 
     public ApplyDiscount(model: AssignDiscountRequestForAccount): Observable<BaseResponse<string, AssignDiscountRequestForAccount>> {
-        this.user = this.generalService.user;
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + APPLY_DISCOUNT_API.APPLY_DISCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
             map((res) => {
@@ -93,7 +84,6 @@ export class AccountService {
     }
     
     public GetApplyDiscount(accountUniqueName: string): Observable<BaseResponse<any, string>> {
-        this.user = this.generalService.user;
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + APPLY_DISCOUNT_API.GET_APPLY_DISCOUNT_API.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
@@ -104,7 +94,6 @@ export class AccountService {
     }
 
     public AccountMove(model: AccountMoveRequest, accountUniqueName: string, activeGroupUniqueName: string): Observable<BaseResponse<string, AccountMoveRequest>> {
-        this.user = this.generalService.user;
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.put(this.config.apiUrl + ACCOUNTS_API.MOVE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
             map((res) => {
@@ -117,7 +106,6 @@ export class AccountService {
     }
 
     public AccountShare(model: ShareAccountRequest, accountUniqueName: string): Observable<BaseResponse<string, ShareAccountRequest>> {
-        this.user = this.generalService.user;
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.put(this.config.apiUrl + ACCOUNTS_API.SHARE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
             map((res) => {
@@ -130,7 +118,6 @@ export class AccountService {
     }
 
     public Share(model: ShareEntityRequest, roleUniqueName: string): Observable<BaseResponse<string, ShareEntityRequest>> {
-        this.user = this.generalService.user;
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + ACCOUNTS_API.SHARE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':roleUniqueName', encodeURIComponent(roleUniqueName)), model).pipe(
             map((res) => {
@@ -143,7 +130,6 @@ export class AccountService {
     }
 
     public UnShare(entryUniqueName: string, entity: string, entityUniqueName: string): Observable<BaseResponse<string, ShareEntityRequest>> {
-        this.user = this.generalService.user;
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.delete(this.config.apiUrl + ACCOUNTS_API.CHANGE_PERMISSION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':assignRoleEntryUniqueName', encodeURIComponent(entryUniqueName))).pipe(
             map((res) => {
@@ -155,7 +141,6 @@ export class AccountService {
     }
 
     public UpdateEntityPermission(model: ShareRequestForm, entity: string, newRoleUniqueName: string): Observable<BaseResponse<string, ShareEntityRequest>> {
-        this.user = this.generalService.user;
         this.companyUniqueName = this.generalService.companyUniqueName;
 
         return this.http.put(this.config.apiUrl + ACCOUNTS_API.CHANGE_PERMISSION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':assignRoleEntryUniqueName', encodeURIComponent(model.uniqueName)), model).pipe(
@@ -168,7 +153,6 @@ export class AccountService {
     }
 
     public AccountUnshare(userEmail: string, accountUniqueName: string): Observable<BaseResponse<string, string>> {
-        this.user = this.generalService.user;
         this.companyUniqueName = this.generalService.companyUniqueName;
 
         return this.http.put(this.config.apiUrl + ACCOUNTS_API.CHANGE_PERMISSION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), { user: userEmail }).pipe(map((res) => {
@@ -180,7 +164,6 @@ export class AccountService {
     }
 
     public AccountShareWith(accountUniqueName: string): Observable<BaseResponse<AccountSharedWithResponse[], string>> {
-        this.user = this.generalService.user;
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + ACCOUNTS_API.SHARED_WITH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).pipe(
             map((res) => {
@@ -193,7 +176,6 @@ export class AccountService {
     }
 
     public DeleteAccount(accountUniqueName: string, groupUniqueName: string): Observable<BaseResponse<string, any>> {
-        this.user = this.generalService.user;
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.delete(this.config.apiUrl + ACCOUNTS_API.DELETE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).pipe(map((res) => {
             let data: BaseResponse<string, any> = res;
@@ -204,7 +186,6 @@ export class AccountService {
     }
 
     public getFlattenAccounts(q?: string, page?: string, count?: string): Observable<BaseResponse<FlattenAccountsResponse, string>> {
-        this.user = this.generalService.user;
         this.companyUniqueName = this.generalService.companyUniqueName;
         if (this.companyUniqueName) {
             return this.http.get(this.config.apiUrl + ACCOUNTS_API.FLATTEN_ACCOUNTS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || '')).replace(':count', count || '').replace(':page', encodeURIComponent(page || ''))).pipe(map((res) => {
@@ -219,7 +200,6 @@ export class AccountService {
     }
 
     public GetTaxHierarchy(accountUniqueName: string): Observable<BaseResponse<AccountsTaxHierarchyResponse, string>> {
-        this.user = this.generalService.user;
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + ACCOUNTS_API.TAX_HIERARCHY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).pipe(map((res) => {
             let data: BaseResponse<AccountsTaxHierarchyResponse, string> = res;
@@ -233,7 +213,6 @@ export class AccountService {
      * accounts v2 api's
      */
     public GetAccountDetailsV2(accountUniqueName: string): Observable<BaseResponse<AccountResponseV2, string>> {
-        this.user = this.generalService.user;
         this.companyUniqueName = this.generalService.companyUniqueName;
         if (accountUniqueName) {
             return this.http.get(this.config.apiUrl + ACCOUNTS_API_V2.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).pipe(map((res) => {
@@ -247,7 +226,6 @@ export class AccountService {
     }
 
     public CreateAccountV2(model: AccountRequestV2, groupUniqueName: string): Observable<BaseResponse<AccountResponseV2, AccountRequestV2>> {
-        this.user = this.generalService.user;
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + ACCOUNTS_API_V2.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)), model).pipe(
             map((res) => {
@@ -260,7 +238,6 @@ export class AccountService {
     }
 
     public UpdateAccountV2(model: AccountRequestV2, reqObj: { groupUniqueName: string, accountUniqueName: string }): Observable<BaseResponse<AccountResponseV2, AccountRequestV2>> {
-        this.user = this.generalService.user;
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.put(this.config.apiUrl + ACCOUNTS_API_V2.UPDATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':groupUniqueName', encodeURIComponent(reqObj?.groupUniqueName))
@@ -282,7 +259,6 @@ export class AccountService {
      * @memberof AccountService
      */
     public applyDiscounts(model: ApplyDiscountRequestV2): Observable<BaseResponse<string, ApplyDiscountRequestV2>> {
-        this.user = this.generalService.user;
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + APPLY_DISCOUNT_API.APPLY_DISCOUNTS_V2.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
             map((res) => {
