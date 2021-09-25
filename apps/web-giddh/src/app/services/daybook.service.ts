@@ -1,10 +1,8 @@
 import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpWrapperService } from './httpWrapper.service';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { UserDetails } from '../models/api-models/loginModels';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
@@ -15,15 +13,13 @@ import { DAYBOOK_SEARCH_API } from './apiurls/daybook.api';
 @Injectable()
 export class DaybookService {
     private companyUniqueName: string;
-    private user: UserDetails;
 
-    constructor(private errorHandler: GiddhErrorHandler, public _http: HttpWrapperService, public _router: Router,
-        private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    constructor(private errorHandler: GiddhErrorHandler, public http: HttpWrapperService,
+        private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
     public GetDaybook(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): Observable<BaseResponse<DayBookResponseModel, DayBookRequestModel>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + DAYBOOK_SEARCH_API.SEARCH
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':page', queryRequest.page.toString())
@@ -31,7 +27,7 @@ export class DaybookService {
             .replace(':from', encodeURIComponent(queryRequest.from))
             .replace(':to', encodeURIComponent(queryRequest.to));
         url = url.concat(`&branchUniqueName=${queryRequest.branchUniqueName !== this.companyUniqueName ? encodeURIComponent(queryRequest.branchUniqueName) : ''}`);
-        return this._http.post(url, request).pipe(
+        return this.http.post(url, request).pipe(
             map((res) => {
                 let data: BaseResponse<DayBookResponseModel, DayBookRequestModel> = res;
                 data.request = request;
@@ -42,8 +38,7 @@ export class DaybookService {
     }
 
     public ExportDaybook(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): Observable<BaseResponse<DayBookResponseModel, DayBookRequestModel>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + DAYBOOK_SEARCH_API.EXPORT
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':page', queryRequest.page.toString())
@@ -57,7 +52,7 @@ export class DaybookService {
             queryRequest.branchUniqueName = queryRequest.branchUniqueName !== this.companyUniqueName ? queryRequest.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${queryRequest.branchUniqueName}`);
         }
-        return this._http.get(url).pipe(
+        return this.http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<DayBookResponseModel, DayBookRequestModel> = res;
                 data.queryString = queryRequest;
@@ -68,8 +63,7 @@ export class DaybookService {
     }
 
     public ExportDaybookPost(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): Observable<BaseResponse<DayBookResponseModel, DayBookRequestModel>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + DAYBOOK_SEARCH_API.EXPORT
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':page', queryRequest.page.toString())
@@ -83,7 +77,7 @@ export class DaybookService {
             queryRequest.branchUniqueName = queryRequest.branchUniqueName !== this.companyUniqueName ? queryRequest.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${queryRequest.branchUniqueName}`);
         }
-        return this._http.post(url, request).pipe(map((res) => {
+        return this.http.post(url, request).pipe(map((res) => {
             let data: BaseResponse<DayBookResponseModel, DayBookRequestModel> = res;
             data.request = request;
             data.queryString = queryRequest;
