@@ -53,7 +53,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private generalService: GeneralService
     ) {
-        
+
     }
 
     public onFileChange(file: FileList) {
@@ -107,7 +107,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         });
         this.setTitle();
         this.store.pipe(
-            select(state => state.session.activeCompany), take(1)
+            select(state => state.session.activeCompany), takeUntil(this.destroyed$)
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });

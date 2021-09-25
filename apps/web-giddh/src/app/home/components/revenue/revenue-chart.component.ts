@@ -48,12 +48,12 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     public graphExpanded: boolean = false;
     public currentDateRangePickerValue: Date[] = [];
     public previousDateRangePickerValue: Date[] = [];
+    /** True if chart changed */
+    public chartChanged: boolean = false;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** True if chart changed */
-    public chartChanged: boolean = false;
 
     constructor(private store: Store<AppState>, private _homeActions: HomeActions, public currencyPipe: GiddhCurrencyPipe, private _generalService: GeneralService, private dashboardService: DashboardService, private toasterService: ToasterService) {
         this.getCurrentWeekStartEndDate = this.getWeekStartEndDate(new Date());
@@ -70,7 +70,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.getRevenueGraphTypes();
-        
+
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
@@ -94,7 +94,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                         this.graphParams.uniqueName = this.activeGraphType['uniqueName'];
                         this.graphParams.type = this.activeGraphType['type'];
                     }
-                    this.revenueGraphTypes.push({ uniqueName: res[key].uniqueName, type: res[key].type });
+                    this.revenueGraphTypes.push({ uniqueName: res[key].uniqueName, type: res[key].type, displayName: res[key].displayName });
                 });
 
                 this.getRevenueGraphData();

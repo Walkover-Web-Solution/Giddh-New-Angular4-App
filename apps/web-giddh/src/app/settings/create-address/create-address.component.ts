@@ -228,7 +228,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             this.addressForm.get('taxNumber').setValue(gstVal);
             if (gstVal?.length) {
 
-                if (gstVal?.length >= 2) {
+                if (gstVal.length >= 2) {
                     let currentState = this.addressConfiguration.stateList.find(state => state.code === gstVal.substring(0, 2));
                     if (currentState) {
                         this.addressForm.get('state')?.patchValue(currentState.value);

@@ -291,7 +291,7 @@
                                     <span *ngIf="!selectedCompaniesUniquename.length">
                                         {{ commonLocaleData?.app_select_branch }} </span
                                     ><span *ngIf="selectedCompaniesUniquename.length"
-                                        >{{ selectedCompaniesUniquename.length }} {{ localeData?.selected }}</span
+                                        >{{ selectedCompaniesUniquename?.length }} {{ localeData?.selected }}</span
                                     ><span class="select_drop pull-right mr-t1"><i class="fa fa-caret-down"></i></span>
                                 </button>
                                 <ul *dropdownMenu class="dropdown-menu width-100" role="menu">

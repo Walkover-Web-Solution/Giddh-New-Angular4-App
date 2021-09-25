@@ -142,8 +142,8 @@
             >
                 <ng-template #optionTemplate let-option="option">
                     <a href="javascript:void(0)" class="list-item">
-                        <div class="item">{{ option.label }}</div>
-                        <div class="item-unique">{{ option.value }}</div>
+                        <div class="item">{{ option?.label }}</div>
+                        <div class="item-unique">{{ option?.value }}</div>
                     </a>
                 </ng-template>
             </sh-select>
@@ -216,7 +216,7 @@
                             [popover]="popTemplate"
                             placement="right"
                             triggers="mouseenter:mouseleave"
-                            >{{ inAppTax.name }}
+                            >{{ inAppTax?.name }}
                         </span>
                     </div>
                     <p *ngIf="!(activeGroupTaxHierarchy$ | async)?.inheritedTaxes.length">
@@ -236,6 +236,7 @@
             <div class="clearfix">
                 <span>
                     <sh-select
+                        *ngIf="showDiscountField"
                         class="pull-left calc-width"
                         [options]="discountList"
                         [isFilterEnabled]="true"
@@ -267,7 +268,7 @@
                     <div class="popover-content">
                         <label>{{ localeData?.discounts_inherited_from }}:</label>
                         <ul>
-                            <li>{{ item.name }}</li>
+                            <li>{{ item?.name }}</li>
                         </ul>
                     </div>
                 </ng-template>
