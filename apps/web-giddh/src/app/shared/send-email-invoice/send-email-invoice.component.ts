@@ -13,7 +13,7 @@ export class SendEmailInvoiceComponent implements OnInit {
     @Output() public successEvent: EventEmitter<any> = new EventEmitter<any>();
     @Output() public cancelEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
     public emailAddresses: string = '';
-    public invoiceType: string[] = [];
+    public invoiceType: string[] = ['Original'];
     public isTransport: boolean = false;
     public isCustomer: boolean = false;
     public activeTab: string = 'email';
@@ -21,6 +21,8 @@ export class SendEmailInvoiceComponent implements OnInit {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True, when original copy is to be downloaded */
+    public isOriginal: boolean = true;
 
     constructor() {
     }

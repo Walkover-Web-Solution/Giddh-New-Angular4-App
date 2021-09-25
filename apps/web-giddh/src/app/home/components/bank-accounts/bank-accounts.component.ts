@@ -23,10 +23,10 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     public fromDate: string;
     public bankAccounts: any[] = [];
     public activeCompany: any = {};
-    /* This will hold local JSON data */
-    public localeData: any = {};
     /** True if api call in progress */
     public isLoading: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
 
     constructor(private store: Store<AppState>, private _contactService: ContactService) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));

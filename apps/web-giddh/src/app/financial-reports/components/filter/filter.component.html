@@ -36,6 +36,7 @@
                                     [isFilterEnabled]="true"
                                     [placeholder]="commonLocaleData?.app_select_entity"
                                     [fixedValue]="currentBranch?.alias"
+                                    [forceClearReactive]="forceClear$ | async"
                                 >
                                     <ng-template #optionTemplate let-option="option">
                                         <ng-container>
@@ -92,8 +93,7 @@
                                     [showClear]="false"
                                     (selected)="selectFinancialYearOption($event)"
                                     [ItemHeight]="33"
-                                >
-                                </sh-select>
+                                ></sh-select>
                             </div>
                         </div>
                         <div

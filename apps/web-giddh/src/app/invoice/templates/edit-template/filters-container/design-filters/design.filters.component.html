@@ -15,6 +15,7 @@
                         class="form-control"
                         placeholder="My Template Name"
                         name="templateName"
+                        maxlength="18"
                         [(ngModel)]="customTemplate.name"
                         (ngModelChange)="onValueChange(null, null)"
                 /></label>
@@ -40,7 +41,7 @@
                         <!-- {{ sampleTemplates | json}} -->
                         <ng-container *ngFor="let template of sampleTemplates">
                             <li
-                                (click)="onDesignChange('uniqueName', template.uniqueName)"
+                                (click)="onDesignChange('uniqueName', template?.uniqueName)"
                                 *ngIf="template.type === 'invoice' && templateType === 'invoice'"
                             >
                                 <img src="./assets/images/templates/{{ template.templateType }}.png" alt="" />
@@ -49,7 +50,7 @@
                                 </div>
                             </li>
                             <li
-                                (click)="onDesignChange('uniqueName', template.uniqueName)"
+                                (click)="onDesignChange('uniqueName', template?.uniqueName)"
                                 *ngIf="template.type === 'voucher' && templateType === 'voucher'"
                             >
                                 <img src="./assets/images/templates/{{ template.templateType }}.png" alt="" />

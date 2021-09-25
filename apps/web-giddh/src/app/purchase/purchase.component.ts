@@ -1,20 +1,20 @@
 import { take } from 'rxjs/operators';
-/**
- * Created by kunalsaxena on 9/1/17.
- */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CompanyActions } from '../actions/company.actions';
 import { AppState } from '../store/roots';
 import { Store, select } from '@ngrx/store';
 import { StateDetailsRequest } from '../models/api-models/Company';
-
+import { PurchaseOrderActions } from '../actions/purchase-order/purchase-order.action';
 
 @Component({
     styleUrls: [`./purchase.component.scss`],
     templateUrl: './purchase.component.html'
 })
-export class PurchaseComponent implements OnInit {
-    constructor(private store: Store<AppState>, private _companyActions: CompanyActions) {
+
+export class PurchaseComponent implements OnInit, OnDestroy {
+
+    constructor(private store: Store<AppState>, private _companyActions: CompanyActions, public purchaseOrderActions: PurchaseOrderActions) {
+
     }
 
     public ngOnInit(): void {
@@ -25,6 +25,15 @@ export class PurchaseComponent implements OnInit {
         stateDetailsRequest.lastState = 'purchase';
 
         this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
+    }
+
+    /**
+     * Releases the memory
+     *
+     * @memberof PurchaseComponent
+     */
+    public ngOnDestroy(): void {
+        this.store.dispatch(this.purchaseOrderActions.setPurchaseOrderFilters({}));
     }
 
 }

@@ -32,6 +32,7 @@ export interface LedgerState {
     ledgerTransactionsBalance: any;
     refreshLedger: boolean;
     hasLedgerPermission: boolean;
+    showDuplicateVoucherConfirmation: any;
 }
 
 export const initialState: LedgerState = {
@@ -51,7 +52,8 @@ export const initialState: LedgerState = {
     ledgerBulkActionFailedEntries: [],
     ledgerTransactionsBalance: null,
     refreshLedger: false,
-    hasLedgerPermission: true
+    hasLedgerPermission: true,
+    showDuplicateVoucherConfirmation: {}
 };
 
 export function ledgerReducer(state = initialState, action: CustomActions): LedgerState {
@@ -143,12 +145,14 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             if (ledgerResponse.status === 'success') {
                 return Object.assign({}, state, {
                     ledgerCreateSuccess: true,
-                    ledgerCreateInProcess: false
+                    ledgerCreateInProcess: false,
+                    showDuplicateVoucherConfirmation: {}
                 });
             }
             return Object.assign({}, state, {
                 ledgerCreateSuccess: false,
-                ledgerCreateInProcess: false
+                ledgerCreateInProcess: false,
+                showDuplicateVoucherConfirmation: {}
             });
         case LEDGER.SET_SELECTED_TXN_FOR_EDIT:
             return {
@@ -189,13 +193,15 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             return {
                 ...state,
                 isTxnUpdateInProcess: true,
-                isTxnUpdateSuccess: false
+                isTxnUpdateSuccess: false,
+                showDuplicateVoucherConfirmation: {}
             };
         case LEDGER.RESET_UPDATE_TXN_ENTRY:
             return {
                 ...state,
                 isTxnUpdateInProcess: false,
-                isTxnUpdateSuccess: false
+                isTxnUpdateSuccess: false,
+                showDuplicateVoucherConfirmation: {}
             };
         case LEDGER.UPDATE_TXN_ENTRY_RESPONSE:
             let updateResponse: BaseResponse<LedgerResponse, LedgerUpdateRequest> = action.payload;
@@ -204,13 +210,15 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
                     ...state,
                     isTxnUpdateInProcess: false,
                     isTxnUpdateSuccess: true,
-                    transactionDetails: updateResponse.body
+                    transactionDetails: updateResponse.body,
+                    showDuplicateVoucherConfirmation: {}
                 };
             }
             return {
                 ...state,
                 isTxnUpdateInProcess: false,
-                isTxnUpdateSuccess: false
+                isTxnUpdateSuccess: false,
+                showDuplicateVoucherConfirmation: {}
             };
         case LEDGER.CREATE_QUICK_ACCOUNT:
             return {
@@ -371,6 +379,15 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             let request = action.payload;
             return Object.assign({}, state, {
                 refreshLedger: request
+            });
+        }
+
+        case LEDGER.SHOW_DUPLICATE_VOUCHER_CONFIRMATION: {
+            let request = action.payload;
+            return Object.assign({}, state, {
+                ledgerCreateSuccess: false,
+                ledgerCreateInProcess: false,
+                showDuplicateVoucherConfirmation: request
             });
         }
 
