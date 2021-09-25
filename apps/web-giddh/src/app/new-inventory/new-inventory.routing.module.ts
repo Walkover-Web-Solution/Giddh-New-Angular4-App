@@ -13,20 +13,20 @@ import { AdjustProductServiceComponent } from "./component/adjust-product-servic
 import { CreateNewInventoryComponent } from "./component/create-new-inventory-component/create-new-inventory.component";
 import { InventoryDashboardComponent } from "./component/inventory-dashboard/inventory-dashboard.component";
 import { DashboardSellingReport } from "./component/inventory-dashboard/dashboard-selling-report/dashboard-selling-report.component";
-import { NewInventoryGroupComponent } from "./component/inventory-group/inventory-group.component";
 import { ProductServiceListComponent } from "./component/inventory-product-service-list/inventory-product-service-list.component";
 import { InventoryTransactionListComponent } from "./component/inventory-transaction-list/inventory-transaction-list.component";
 import { InventoryCustomFieldComponent } from "./component/inventory-custom-field/inventory-custom-field.component";
+import { ListGroupComponent } from "./component/stock-group/list-group/list-group.component";
 
 const routes: Routes = [
     {
         path: "", component: NewInventoryComponent,
         children: [
-            { path: "", redirectTo: "inventory-group", pathMatch: "full" },
+            { path: "", redirectTo: "stock-group/list-group", pathMatch: "full" },
 
             {
-                path: "inventory-group",
-                component: NewInventoryGroupComponent,
+                path: "stock-group/list-group",
+                component: ListGroupComponent,
             },
             {
                 path: "inventory-product-service-list",

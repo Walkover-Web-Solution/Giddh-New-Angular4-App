@@ -5,7 +5,6 @@ import { NewInventoryRoutingModule } from "./new-inventory.routing.module";
 import { SharedModule } from "../shared/shared.module";
 import { TabsModule } from "ngx-bootstrap/tabs";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
-import { NewInventoryGroupComponent } from "./component/inventory-group/inventory-group.component";
 import { CreateNewInventoryAsideComponent } from "./component/create-new-inventory-aside-pane/create-new-inventory-aside.component";
 import { InventoryCreateUpdateGroupComponent } from "./component/stock-group/create-update-group/create-update-group.component";
 import { CreateNewGroupComponent } from "./component/create-new-group/create-new-group.component";
@@ -50,6 +49,9 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatTableModule } from "@angular/material/table";
 import { MatSortModule } from "@angular/material/sort";
+import { ListGroupComponent } from "./component/stock-group/list-group/list-group.component";
+import { MatRadioModule } from "@angular/material/radio";
+import { MatTabsModule } from "@angular/material/tabs";
 
 @NgModule({
     declarations: [
@@ -87,7 +89,8 @@ import { MatSortModule } from "@angular/material/sort";
         DashboardPurchaseReport,
         DashboardSalesReport,
         DashboardSellingReport,
-        NewInventoryGroupComponent
+        ListGroupComponent
+
     ],
     imports: [
         NewInventoryRoutingModule,
@@ -106,10 +109,12 @@ import { MatSortModule } from "@angular/material/sort";
         MatCheckboxModule,
         MatTableModule,
         MatSortModule,
+        MatRadioModule,
+        MatTabsModule,
     ],
     exports: [
         NewInventoryComponent,
-        NewInventoryGroupComponent,
+        ListGroupComponent,
         CreateNewInventoryAsideComponent,
         InventoryCreateUpdateGroupComponent,
         CreateNewGroupComponent,

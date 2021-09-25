@@ -6,26 +6,26 @@
 
 <div class="relative new-inventory-page">
     <!--new inventory header-->
-    <div class="new-inventory-page-header">
-        <h2><strong>Inventory > Group Wise</strong></h2>
+    <!--    <div class="new-inventory-page-header">-->
+    <!--        <h2><strong>Inventory > Group Wise</strong></h2>-->
 
-        <div class="inventory-header-right">
-            <sh-select placeholder="XYZ Alias Name Branch"></sh-select>
-            <div class="custom-datepicker ml-3">
-                <i class="icon-calender calendar-addon bdr-radius-50" (click)="expandDateRang()"></i>
-                <div (click)="showGiddhDatepicker($event)">
-                    <input
-                        type="text"
-                        name="selectedDateRange"
-                        id="select-date"
-                        [ngClass]="{ 'full-width': !dateRangFullWidth }"
-                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                        class="giddh-datepicker date-range-picker bdr-radius-50"
-                    />
-                </div>
-            </div>
-        </div>
-    </div>
+    <!--        <div class="inventory-header-right">-->
+    <!--            <sh-select placeholder="XYZ Alias Name Branch"></sh-select>-->
+    <!--            <div class="custom-datepicker ml-3">-->
+    <!--                <i class="icon-calender calendar-addon bdr-radius-50" (click)="expandDateRang()"></i>-->
+    <!--                <div (click)="showGiddhDatepicker($event)">-->
+    <!--                    <input-->
+    <!--                        type="text"-->
+    <!--                        name="selectedDateRange"-->
+    <!--                        id="select-date"-->
+    <!--                        [ngClass]="{ 'full-width': !dateRangFullWidth }"-->
+    <!--                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"-->
+    <!--                        class="giddh-datepicker date-range-picker bdr-radius-50"-->
+    <!--                    />-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
     <!-- end new inventory header-->
 
     <div class="container-fluid">
@@ -99,13 +99,14 @@
 
                     <button
                         mat-raised-button
-                        class="create-btn-inventory ml-3 mr-0"
+                        class="create-btn-inventory btn-sky-blue ml-3 mr-0"
                         (click)="createGroupToggleAsidePane()"
                     >
                         + Create New
                     </button>
                 </div>
             </div>
+
             <div class="inventory-filter-bar">
                 <div class="action-button-container">
                     <button class="round-btn" mat-button><i class="icon-inventory1 mr-2"></i>Archive</button>

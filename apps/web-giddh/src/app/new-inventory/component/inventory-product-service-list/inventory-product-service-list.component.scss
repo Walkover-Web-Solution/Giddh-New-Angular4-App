@@ -2,14 +2,18 @@
 
 .product-list-container {
     min-height: calc(100vh - 340px);
-    .product-name-image {
-        img {
-            width: 40px;
-            height: 40px;
-        }
-        p {
-            min-width: 120px;
-        }
+}
+
+.product-name-image {
+    .table-td-imag img {
+        height: 40px;
+        width: 40px;
+        object-fit: cover;
+        border: 1.5px dashed #b2b2b2;
+    }
+
+    p {
+        min-width: 120px;
     }
 }
 .sticky-footer {
@@ -33,6 +37,7 @@
 @media (max-width: 768px) {
     .product-name-image {
         flex-direction: column;
+
         p {
             margin-top: 5px;
         }
