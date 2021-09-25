@@ -90,7 +90,7 @@ sh-select::ng-deep input {
     margin-bottom: 15px;
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid gainsboro;
+    border-bottom: 1px solid $gainsboro;
     align-items: center;
 
     .inventory-header-right {

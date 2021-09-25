@@ -72,13 +72,13 @@ const ELEMENT_DATA: PeriodicElement[] = [
 ];
 
 @Component({
-    selector: "inventory-group",
-    templateUrl: "./inventory-group.component.html",
-    styleUrls: ["./inventory-group.component.scss"],
+    selector: "list-group",
+    templateUrl: "./list-group.component.html",
+    styleUrls: ["./list-group.component.scss"],
 
 })
 
-export class NewInventoryGroupComponent implements OnInit {
+export class ListGroupComponent implements OnInit {
     /* this will store image path*/
     public imgPath: string = "";
 
