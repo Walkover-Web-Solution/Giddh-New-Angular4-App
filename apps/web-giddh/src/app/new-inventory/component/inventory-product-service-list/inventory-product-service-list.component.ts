@@ -91,7 +91,6 @@ const ELEMENT_DATA: PeriodicElement[] = [
         saleRate: "₹10,00,000.00",
         closingQty: "50",
     },
-
 ];
 
 

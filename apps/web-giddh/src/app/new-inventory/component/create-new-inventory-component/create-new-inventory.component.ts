@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { distinctUntilChanged, filter, take, takeUntil, map } from 'rxjs/operators';
-import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
+import { Component, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { takeUntil } from "rxjs/operators";
+import { ReplaySubject } from "rxjs";
+
 @Component({
     selector: 'create-new-inventory',
     templateUrl: './create-new-inventory.component.html',

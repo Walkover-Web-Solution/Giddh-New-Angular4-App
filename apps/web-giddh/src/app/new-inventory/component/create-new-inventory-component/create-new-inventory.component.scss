@@ -1,4 +1,16 @@
 @import "../../../../assets/css/color.scss";
+.new-inventory-page-header {
+    padding: 0 15px 15px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid $gainsboro;
+    align-items: center;
+
+    .inventory-header-right {
+        display: flex;
+    }
+}
 .create-new-inventory-page {
     .back-to-page {
         position: absolute;
@@ -24,8 +36,9 @@
     }
     .sales-purchase-details {
         background-color: $white;
-        margin: 0 -15px;
+        //margin: 0 -15px;
         padding: 15px 15px;
+        border-radius: 7px;
         .select-puchase-info {
             background-color: $whisper-color;
             padding: 6px 10px;
@@ -448,4 +461,12 @@
             display: none !important;
         }
     }
+}
+
+.tab-container-new {
+    padding: 15px;
+    margin-top: 15px;
+    background-color: #f8f8f8;
+    margin-bottom: 15px;
+    border-radius: 7px;
 }
