@@ -709,7 +709,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             if (transaction.inventory && !transaction.inventory.warehouse) {
                 transaction.inventory.warehouse = { name: '', uniqueName: this.selectedWarehouse };
             }
-            if (transaction?.voucherAdjustments && transaction?.voucherAdjustments?.adjustments && transaction?.voucherAdjustments?.adjustments?.length > 0) {
+            if (transaction?.voucherAdjustments?.adjustments?.length > 0) {
                 transaction.voucherAdjustments.adjustments.forEach((adjustment: any) => {
                     if (adjustment.balanceDue !== undefined) {
                         delete adjustment.balanceDue;
@@ -1344,7 +1344,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public closeAdjustmentModal(event: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }): void {
-        if (!this.currentTxn?.voucherAdjustments || (this.currentTxn?.voucherAdjustments && this.currentTxn?.voucherAdjustments?.adjustments && !this.currentTxn?.voucherAdjustments?.adjustments?.length)) {
+        if (!this.currentTxn?.voucherAdjustments || !this.currentTxn?.voucherAdjustments?.adjustments?.length) {
             if (this.currentTxn['subVoucher'] === SubVoucher.AdvanceReceipt) {
                 this.isAdjustAdvanceReceiptSelected = false;
             } else {
