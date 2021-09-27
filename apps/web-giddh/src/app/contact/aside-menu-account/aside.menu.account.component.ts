@@ -54,7 +54,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         private accountService: AccountService,
         private store: Store<AppState>,
         private accountsAction: AccountsAction,
-        private _groupWithAccountsAction: GroupWithAccountsAction,
+        private groupWithAccountsAction: GroupWithAccountsAction,
     ) {
         // account-add component's property
         this.createAccountInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountInProcess), takeUntil(this.destroyed$));
@@ -70,7 +70,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         if (this.isUpdateAccount && this.activeAccountDetails) {
             this.accountDetails = this.activeAccountDetails;
-            this.store.dispatch(this._groupWithAccountsAction.getGroupWithAccounts(this.activeAccountDetails.name));
+            this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(this.activeAccountDetails.name));
             this.store.dispatch(this.accountsAction.getAccountDetails(this.activeAccountDetails.uniqueName));
         }
 

@@ -2,7 +2,6 @@ import { catchError, map } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
-import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { SmsKeyClass } from '../models/api-models/SettingsIntegraion';
@@ -12,22 +11,19 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
 @Injectable()
 export class SettingsProfileService {
-
-    private user: UserDetails;
     private companyUniqueName: string;
 
-    constructor(private errorHandler: GiddhErrorHandler, private _http: HttpWrapperService,
-        private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService,
+        private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
     /*
     * Get company profile
     */
     public GetProfileInfo(): Observable<BaseResponse<SmsKeyClass, string>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
         if (this.companyUniqueName) {
-            return this._http.get(this.config.apiUrl + SETTINGS_PROFILE_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+            return this.http.get(this.config.apiUrl + SETTINGS_PROFILE_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
                 let data: BaseResponse<SmsKeyClass, string> = res;
                 data.queryString = {};
                 return data;
@@ -41,9 +37,8 @@ export class SettingsProfileService {
      * Update company profile
      */
     public UpdateProfile(model): Observable<BaseResponse<any, any>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.put(this.config.apiUrl + SETTINGS_PROFILE_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.put(this.config.apiUrl + SETTINGS_PROFILE_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = model;
             return data;
@@ -54,10 +49,9 @@ export class SettingsProfileService {
      * Patch company profile
      */
     public PatchProfile(model): Observable<BaseResponse<any, any>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = (model.moveCompany) ? model.moveCompany : this._generalService.companyUniqueName;
+        this.companyUniqueName = (model.moveCompany) ? model.moveCompany : this.generalService.companyUniqueName;
         const contextPath = (model.callNewPlanApi) ? SETTINGS_PROFILE_API.UPDATE_COMPANY_PLAN : SETTINGS_PROFILE_API.GET;
-        return this._http.patch(this.config.apiUrl + contextPath.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+        return this.http.patch(this.config.apiUrl + contextPath.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = model;
             return data;
@@ -68,9 +62,8 @@ export class SettingsProfileService {
      * Get Company Inventory Settings
      */
     public GetInventoryInfo(): Observable<BaseResponse<SmsKeyClass, string>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + SETTINGS_PROFILE_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)) + '/settings').pipe(map((res) => {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + SETTINGS_PROFILE_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)) + '/settings').pipe(map((res) => {
             let data: BaseResponse<SmsKeyClass, string> = res;
             data.queryString = {};
             return data;
@@ -81,9 +74,8 @@ export class SettingsProfileService {
      * Update company profile
      */
     public UpdateInventory(model): Observable<BaseResponse<any, any>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.put(this.config.apiUrl + SETTINGS_PROFILE_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)) + '/settings', model).pipe(map((res) => {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.put(this.config.apiUrl + SETTINGS_PROFILE_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)) + '/settings', model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = model;
             return data;
@@ -97,9 +89,9 @@ export class SettingsProfileService {
      * @memberof SettingsProfileService
      */
     public getBranchInfo(): Observable<BaseResponse<any, any>> {
-        const companyUniqueName = this._generalService.companyUniqueName;
-        const branchUniqueName = this._generalService.currentBranchUniqueName;
-        return this._http.get(this.config.apiUrl + SETTINGS_PROFILE_API.GET_BRANCH_INFO
+        const companyUniqueName = this.generalService.companyUniqueName;
+        const branchUniqueName = this.generalService.currentBranchUniqueName;
+        return this.http.get(this.config.apiUrl + SETTINGS_PROFILE_API.GET_BRANCH_INFO
             .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
             .replace(':branchUniqueName', encodeURIComponent(branchUniqueName)))
             .pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
@@ -112,7 +104,7 @@ export class SettingsProfileService {
      * @memberof SettingsProfileService
      */
     public getCompanyAddresses(method: string, params?: any): Observable<BaseResponse<any, any>> {
-        const companyUniqueName = this._generalService.companyUniqueName;
+        const companyUniqueName = this.generalService.companyUniqueName;
         let contextPath = `${this.config.apiUrl}${SETTINGS_PROFILE_API.GET_COMPANY_ADDRESSES}`
             .replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
         if (method === 'GET') {
@@ -124,10 +116,10 @@ export class SettingsProfileService {
                     }
                 });
             }
-            return this._http.get(contextPath).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+            return this.http.get(contextPath).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
         } else if (method === 'POST') {
             contextPath = contextPath.concat(`?page=${[params.page]}`);
-            return this._http.post(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+            return this.http.post(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
         }
     }
 
@@ -139,12 +131,12 @@ export class SettingsProfileService {
      * @memberof SettingsProfileService
      */
     public updateBranchInfo(params: any): Observable<BaseResponse<any, any>> {
-        const companyUniqueName = this._generalService.companyUniqueName;
-        const branchUniqueName = this._generalService.currentBranchUniqueName || params.branchUniqueName;
+        const companyUniqueName = this.generalService.companyUniqueName;
+        const branchUniqueName = this.generalService.currentBranchUniqueName || params.branchUniqueName;
         let contextPath = `${this.config.apiUrl}${SETTINGS_PROFILE_API.UPDATE_BRANCH_INFO}`
             .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
             .replace(':branchUniqueName', encodeURIComponent(branchUniqueName));
-        return this._http.put(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+        return this.http.put(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
 
     /**
@@ -154,10 +146,10 @@ export class SettingsProfileService {
      * @memberof SettingsProfileService
      */
     public getAllLinkedEntities(): Observable<BaseResponse<any, any>> {
-        const companyUniqueName = this._generalService.companyUniqueName;
+        const companyUniqueName = this.generalService.companyUniqueName;
         let contextPath = `${this.config.apiUrl}${SETTINGS_PROFILE_API.GET_LINKED_ENTITIES}`
             .replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
-        return this._http.get(contextPath).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+        return this.http.get(contextPath).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
 
     /**
@@ -168,10 +160,10 @@ export class SettingsProfileService {
      * @memberof SettingsProfileService
      */
     public createNewAddress(params: any): Observable<BaseResponse<any, any>> {
-        const companyUniqueName = this._generalService.companyUniqueName;
+        const companyUniqueName = this.generalService.companyUniqueName;
         let contextPath = `${this.config.apiUrl}${SETTINGS_PROFILE_API.CREATE_NEW_ADDRESS}`
             .replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
-        return this._http.post(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+        return this.http.post(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
 
     /**
@@ -182,12 +174,12 @@ export class SettingsProfileService {
      * @memberof SettingsProfileService
      */
     public updateAddress(params: any): Observable<BaseResponse<any, any>> {
-        const companyUniqueName = this._generalService.companyUniqueName;
+        const companyUniqueName = this.generalService.companyUniqueName;
         const addressUniqueName = params.uniqueName;
         let contextPath = `${this.config.apiUrl}${SETTINGS_PROFILE_API.UPDATE_ADDRESS}`
             .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
             .replace(':addressUniqueName', encodeURIComponent(addressUniqueName));
-        return this._http.put(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+        return this.http.put(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
 
     /**
@@ -198,11 +190,11 @@ export class SettingsProfileService {
      * @memberof SettingsProfileService
      */
     public deleteAddress(addressUniqueName: string): Observable<BaseResponse<any, any>> {
-        const companyUniqueName = this._generalService.companyUniqueName;
+        const companyUniqueName = this.generalService.companyUniqueName;
         let contextPath = `${this.config.apiUrl}${SETTINGS_PROFILE_API.DELETE_ADDRESS}`
             .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
             .replace(':addressUniqueName', encodeURIComponent(addressUniqueName));
-        return this._http.delete(contextPath).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+        return this.http.delete(contextPath).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
 
     /**
@@ -213,10 +205,10 @@ export class SettingsProfileService {
      * @memberof SettingsProfileService
      */
     public createNewBranch(params: any): Observable<BaseResponse<any, any>> {
-        const companyUniqueName = this._generalService.companyUniqueName;
+        const companyUniqueName = this.generalService.companyUniqueName;
         let contextPath = `${this.config.apiUrl}${SETTINGS_PROFILE_API.CREATE_BRANCH}`
             .replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
-        return this._http.post(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+        return this.http.post(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
 
     /**
@@ -227,10 +219,10 @@ export class SettingsProfileService {
      * @memberof SettingsProfileService
      */
     public createNewWarehouse(params: any): Observable<BaseResponse<any, any>> {
-        const companyUniqueName = this._generalService.companyUniqueName;
+        const companyUniqueName = this.generalService.companyUniqueName;
         let contextPath = `${this.config.apiUrl}${SETTINGS_PROFILE_API.CREATE_NEW_WAREHOUSE}`
             .replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
-        return this._http.post(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+        return this.http.post(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
 
     /**
@@ -241,12 +233,12 @@ export class SettingsProfileService {
      * @memberof SettingsProfileService
      */
     public updatWarehouseInfo(params: any): Observable<BaseResponse<any, any>> {
-        const companyUniqueName = this._generalService.companyUniqueName;
+        const companyUniqueName = this.generalService.companyUniqueName;
         const warehouseUniqueName = params.warehouseUniqueName;
         let contextPath = `${this.config.apiUrl}${SETTINGS_PROFILE_API.EDIT_WAREHOUSE}`
             .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
             .replace(':warehouseUniqueName', encodeURIComponent(warehouseUniqueName));
-        return this._http.put(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+        return this.http.put(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
 
     /**
@@ -257,9 +249,8 @@ export class SettingsProfileService {
      * @memberof SettingsProfileService
      */
     public getCompanyDetails(companyUniqueName: string): Observable<BaseResponse<SmsKeyClass, string>> {
-        this.user = this._generalService.user;
         this.companyUniqueName = companyUniqueName;
-        return this._http.get(this.config.apiUrl + SETTINGS_PROFILE_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + SETTINGS_PROFILE_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
             let data: BaseResponse<SmsKeyClass, string> = res;
             data.queryString = {};
             return data;

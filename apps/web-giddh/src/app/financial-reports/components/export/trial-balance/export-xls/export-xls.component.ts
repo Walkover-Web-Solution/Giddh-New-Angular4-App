@@ -8,26 +8,24 @@ import { AppState } from 'apps/web-giddh/src/app/store';
     selector: 'trial-balance-export-xls',
     templateUrl: './export-xls.component.html'
 })
-
 export class TrialBalanceExportXlsComponent implements OnInit {
     @Input() public trialBalanceRequest: TrialBalanceRequest;
     public enableDownload: boolean = true;
     @Output() public tbExportXLSEvent = new EventEmitter<string>();
-
     public showTbXls: boolean;
     public imgPath: string = '';
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     public localeData: any = {};
 
     constructor(
         private store: Store<AppState>,
-        private _tbPlActions: TBPlBsActions) {
+        private tbPlActions: TBPlBsActions) {
 
     }
 
     public downloadTbXls(value: string) {
         let request = { ...this.trialBalanceRequest, export: value, filename: this.localeData?.xls.trial_balance.download_filename } as TrialBalanceExportExcelRequest;
-        this.store.dispatch(this._tbPlActions.DownloadTrialBalanceExcel(request));
+        this.store.dispatch(this.tbPlActions.DownloadTrialBalanceExcel(request));
         return false;
     }
 
