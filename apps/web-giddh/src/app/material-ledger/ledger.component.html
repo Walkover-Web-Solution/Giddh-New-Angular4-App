@@ -198,14 +198,13 @@
                                 >
                                     <img (click)="showGiddhDatepicker($event)" src="{{ imgPath }}calender-icon.svg" />
                                 </div>
-                                <span class="input-wrapper ipad-view-datepicker">
+                                <span class="input-wrapper ipad-view-datepicker" (click)="showGiddhDatepicker($event)">
                                     <mat-form-field appearance="fill">
                                         <input
                                             matInput
                                             id="giddh-datepicker-ipad-view"
                                             type="text"
                                             name="selectedDateRange"
-                                            (click)="showGiddhDatepicker($event)"
                                             [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                                             class="giddh-datepicker date-range-picker"
                                         />
@@ -354,7 +353,10 @@
                             class="col-lg-4 col-md-12 col-sm-12 col-xs-12 text-center date-range-options"
                             *ngIf="!isMobileScreen"
                         >
-                            <div class="advance-search-by-date date-advance-search">
+                            <div
+                                class="advance-search-by-date date-advance-search"
+                                (click)="showGiddhDatepicker($event)"
+                            >
                                 <span class="input-wrapper">
                                     <mat-form-field appearance="fill">
                                         <input
@@ -362,7 +364,6 @@
                                             id="giddh-datepicker"
                                             type="text"
                                             name="selectedDateRange"
-                                            (click)="showGiddhDatepicker($event)"
                                             [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                                             class="giddh-datepicker date-range-picker"
                                         />
