@@ -27,13 +27,11 @@ import { FormControl } from '@angular/forms';
     templateUrl: 'aging-report.component.html',
     styleUrls: ['aging-report.component.scss']
 })
-
 export class AgingReportComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-
     public totalDueSelectedOption: string = '0';
     public totalDueAmount: number = 0;
     public includeName: boolean = false;
@@ -63,7 +61,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public isAdvanceSearchApplied: boolean = false;
     public agingAdvanceSearchModal: AgingAdvanceSearchModal = new AgingAdvanceSearchModal();
     public commonRequest: ContactAdvanceSearchCommonModal = new ContactAdvanceSearchCommonModal();
-
     @ViewChild('advanceSearch', { static: true }) public advanceSearch: ModalDirective;
     @ViewChild('paginationChild', { static: false }) public paginationChild: ElementViewContainerRef;
     @ViewChild('filterDropDownList', { static: true }) public filterDropDownList: BsDropdownDirective;
@@ -98,7 +95,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public searchedName: FormControl = new FormControl();
     /** True, if name search field is to be shown in the filters */
     public showNameSearch: boolean;
-
     /** Observable if loading in process */
     public getAgingReportRequestInProcess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -106,8 +102,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     constructor(
         private store: Store<AppState>,
         private agingReportActions: AgingReportActions,
-        private _cdr: ChangeDetectorRef,
-        private _breakpointObserver: BreakpointObserver,
+        private cdr: ChangeDetectorRef,
+        private breakpointObserver: BreakpointObserver,
         private componentFactoryResolver: ComponentFactoryResolver,
         private settingsBranchAction: SettingsBranchActions,
         private generalService: GeneralService,
@@ -147,7 +143,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     public detectChanges() {
-        this._cdr.detectChanges();
+        this.cdr.detectChanges();
     }
 
     public ngOnInit() {
@@ -179,7 +175,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             this.getDueReport();
         });
 
-        this._breakpointObserver
+        this.breakpointObserver
             .observe(['(max-width: 768px)'])
             .pipe(takeUntil(this.destroyed$))
             .subscribe((state: BreakpointState) => {
