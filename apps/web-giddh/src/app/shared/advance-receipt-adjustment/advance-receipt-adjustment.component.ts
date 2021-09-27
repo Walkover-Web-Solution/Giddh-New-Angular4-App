@@ -156,14 +156,14 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             if (typeof customerUniqueName === 'string') {
                 // New entry is created from ledger
                 requestObject = {
-                    accountUniqueNames: [customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName],
+                    accountUniqueNames: [customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName ?? voucherType],
                     voucherType,
                     subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
                 }
             } else {
                 // A ledger entry is updated
                 requestObject = {
-                    accountUniqueNames: [...customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName],
+                    accountUniqueNames: [...customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName ?? voucherType],
                     voucherType,
                     subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
                 }
@@ -189,7 +189,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                         if (this.isVoucherModule) {
                             this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
                         } else {
-                            this.toaster.warningToast(this.localeData?.voucher_unavailable);
+                            this.toaster.warningToast(this.commonLocaleData?.app_voucher_unavailable);
                         }
                     }
                 }

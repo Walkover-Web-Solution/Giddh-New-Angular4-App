@@ -1,0 +1,551 @@
+<div class="aside-pane">
+    <div class="header-create-group">
+        <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
+        <div class="form-header">
+            <div class="back-button mr-r15"><i class="icon-back-arrow"></i></div>
+            <!-- funcation of back to main aside (click)="backToMainAside()" -->
+            <h3>Create Item</h3>
+        </div>
+    </div>
+    <div class="aside-body create-group-aside-body">
+        <div class="create-group-block">
+            <div class="create-group-page">
+                <div>
+                    <div class="create-group-top">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex flex-column">
+                                <p class="font-14 mb-1">Select if its a physical good or a service.</p>
+                                <div class="select-type">
+                                    <span class="mr-r15">
+                                        <input
+                                            type="radio"
+                                            class="radio-custom"
+                                            name="product-type"
+                                            id="product-type"
+                                        />
+                                        <label for="product-type" class="radio-custom-label">Product</label>
+                                    </span>
+                                    <span>
+                                        <input
+                                            type="radio"
+                                            class="radio-custom"
+                                            name="service-type"
+                                            id="service-type"
+                                        />
+                                        <label for="service-type" class="radio-custom-label">Service</label>
+                                    </span>
+                                </div>
+                            </div>
+                            <img src="{{ imgPath }}add-image.svg" />
+                        </div>
+                    </div>
+                    <div class="bg-white p-15">
+                        <div class="wrapper-contain">
+                            <form>
+                                <div class="row mr-b15">
+                                    <div class="col-sm-4 mr-b15">
+                                        <label>Product Name <span class="red-text">*</span></label>
+                                        <input
+                                            id="product-name"
+                                            class="form-control"
+                                            type="text"
+                                            placeholder="Enter Product Name"
+                                        />
+                                    </div>
+                                    <div class="col-sm-4 mr-b15">
+                                        <label>Unique Name <span class="red-text">*</span></label>
+                                        <input
+                                            id="unique-name"
+                                            class="form-control"
+                                            type="text"
+                                            placeholder="Enter Unique Name"
+                                        />
+                                    </div>
+                                    <div class="col-sm-4 mr-b15">
+                                        <label>Product Unit <span class="red-text">*</span></label>
+                                        <input id="product-unit" class="form-control" type="text" placeholder="Nos." />
+                                    </div>
+                                    <div class="col-sm-4 mr-b15">
+                                        <label class="w-100 d-flex align-items-center justify-content-between"
+                                            >Under Group <i class="icon-info text-gray pull-right"></i
+                                        ></label>
+                                        <input
+                                            id="under-product"
+                                            class="form-control"
+                                            type="text"
+                                            placeholder="Select Product"
+                                        />
+                                    </div>
+                                </div>
+                            </form>
+                            <tabset class="custom-tabs create-item-tab">
+                                <tab heading="Account *">
+                                    <div class="account-tab-content">
+                                        <form>
+                                            <div class="row">
+                                                <div class="col-sm-4 mr-b15">
+                                                    <label>Opening Qty</label>
+                                                    <input
+                                                        type="text"
+                                                        id="opening-qty"
+                                                        class="form-control"
+                                                        placeholder="Enter Qty"
+                                                    />
+                                                </div>
+                                                <div class="col-sm-4 mr-b15">
+                                                    <label>Amount</label>
+                                                    <input
+                                                        type="text"
+                                                        id="amount"
+                                                        class="form-control"
+                                                        placeholder="Amount"
+                                                    />
+                                                </div>
+                                                <div class="col-sm-4 mr-b15">
+                                                    <label>Unit</label>
+                                                    <sh-select placeholder="Enter Unit" id="unit-of-qty"></sh-select>
+                                                    <!-- please add create unit option on dropdown as like create account -->
+                                                </div>
+                                                <div class="col-sm-4 mr-b15">
+                                                    <label>Rate</label>
+                                                    <input
+                                                        type="text"
+                                                        id="rate"
+                                                        class="form-control"
+                                                        disabled
+                                                        placeholder="Auto Calculate"
+                                                    />
+                                                </div>
+                                                <div class="col-sm-4 mr-b15">
+                                                    <label
+                                                        class="w-100 d-flex justify-content-between align-items-center"
+                                                    >
+                                                        <span
+                                                            >Amount Group
+                                                            <span class="red-text">*</span>
+                                                        </span>
+                                                        <i class="icon-info text-gray"> </i>
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        id="amount-group"
+                                                        class="form-control"
+                                                        placeholder="Current Assets"
+                                                    />
+                                                </div>
+                                                <div class="col-sm-4 mr-b15">
+                                                    <label
+                                                        class="w-100 d-flex justify-content-between align-items-center"
+                                                        >Low stock alert <i class="icon-info text-gray"> </i
+                                                    ></label>
+                                                    <input
+                                                        type="text"
+                                                        id="low-stock-alert"
+                                                        class="form-control"
+                                                        placeholder="Enter Qty"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <div class="sales-purchase-details mt-5">
+                                            <p class="mr-b15">
+                                                <input type="checkbox" id="check-product-sale" checked />Is the
+                                                Product/Service eligible for Sale or Purchase?
+                                            </p>
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="purchase-information">
+                                                        <div class="select-puchase-info mr-b15">
+                                                            <input type="checkbox" id="purchase-info" />
+                                                            <span>Purchase Information</span>
+                                                        </div>
+                                                        <form>
+                                                            <div class="mr-b15">
+                                                                <label>Linked Account/s</label>
+                                                                <input
+                                                                    type="text"
+                                                                    id="linked-account"
+                                                                    class="form-control"
+                                                                    placeholder="All Accounts Selected"
+                                                                />
+                                                            </div>
+                                                            <div class="mr-b15">
+                                                                <label>Applicable Tax</label>
+                                                                <input
+                                                                    type="text"
+                                                                    id="applicable-tax"
+                                                                    class="form-control"
+                                                                    placeholder="Select Tax"
+                                                                />
+                                                                <p class="mt-1 font-14">
+                                                                    <input type="checkbox" id="tax-price" />Price
+                                                                    Inclusive of Tax ?
+                                                                </p>
+                                                            </div>
+                                                            <div class="mr-b15">
+                                                                <label>Opening Qty</label>
+                                                                <input
+                                                                    type="text"
+                                                                    id="purchase-open-qty"
+                                                                    class="form-control"
+                                                                    placeholder="Enter Qty"
+                                                                />
+                                                            </div>
+                                                            <div class="d-flex align-items-center unit-rate-fields">
+                                                                <div class="unit mr-r15 mr-b15">
+                                                                    <label>Unit</label>
+                                                                    <input
+                                                                        type="text"
+                                                                        class="form-control"
+                                                                        id="select-unit"
+                                                                        placeholder="Select Unit"
+                                                                    />
+                                                                </div>
+                                                                <div class="rate mr-r15 mr-b15">
+                                                                    <label>Rate</label>
+                                                                    <input
+                                                                        type="text"
+                                                                        id="rate-field"
+                                                                        class="form-control"
+                                                                        id="rate"
+                                                                        placeholder="Rate"
+                                                                    />
+                                                                </div>
+                                                                <div class="mr-b15">
+                                                                    <label class="d-block">&nbsp;</label>
+                                                                    <i class="icon-plus pd cursor-pointer"></i>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="purchase-information">
+                                                        <div class="select-puchase-info mr-b15">
+                                                            <input type="checkbox" id="sales-info" />
+                                                            <span>Sales Information</span>
+                                                        </div>
+                                                        <form>
+                                                            <div class="mr-b15">
+                                                                <label>Linked Account/s</label>
+                                                                <input
+                                                                    type="text"
+                                                                    id="sales-linked-account"
+                                                                    class="form-control"
+                                                                    placeholder="All Accounts Selected"
+                                                                />
+                                                            </div>
+                                                            <div class="mr-b15">
+                                                                <label>Applicable Tax</label>
+                                                                <input
+                                                                    type="text"
+                                                                    id="sales-applicable-tax"
+                                                                    class="form-control"
+                                                                    placeholder="Select Tax"
+                                                                />
+                                                                <p class="mt-1 font-14">
+                                                                    <input type="checkbox" id="tax-price" />Price
+                                                                    Inclusive of Tax ?
+                                                                </p>
+                                                            </div>
+                                                            <div class="mr-b15">
+                                                                <label>Opening Qty</label>
+                                                                <input
+                                                                    type="text"
+                                                                    id="sales-open-qty"
+                                                                    class="form-control"
+                                                                    placeholder="Enter Qty"
+                                                                />
+                                                            </div>
+                                                            <div class="d-flex align-items-center unit-rate-fields">
+                                                                <div class="unit mr-r15 mr-b15">
+                                                                    <label>Unit</label>
+                                                                    <input
+                                                                        type="text"
+                                                                        class="form-control"
+                                                                        id="sales-select-unit"
+                                                                        placeholder="Select Unit"
+                                                                    />
+                                                                </div>
+                                                                <div class="rate mr-r15 mr-b15">
+                                                                    <label>Rate</label>
+                                                                    <input
+                                                                        type="text"
+                                                                        class="form-control"
+                                                                        id="sales-rate"
+                                                                        placeholder="Rate"
+                                                                    />
+                                                                </div>
+                                                                <div class="mr-b15">
+                                                                    <label class="d-block">&nbsp;</label>
+                                                                    <i class="icon-plus pd cursor-pointer"></i>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </tab>
+                                <tab heading="Inventory">
+                                    <div>
+                                        <p class="mr-b15">
+                                            <span>
+                                                <input
+                                                    type="checkbox"
+                                                    class="checkbox-custom"
+                                                    name="product-service"
+                                                    id="product-service"
+                                                />
+                                                <label for="product-service" class="checkbox-custom-label"
+                                                    >Is the Product/Service a manufactured entity?</label
+                                                >
+                                            </span>
+                                        </p>
+                                        <div class="product-manufacturing">
+                                            <p class="product-made-by">Chair(Made with)</p>
+                                            <form>
+                                                <div class="row">
+                                                    <div class="col-sm-4 mr-b15">
+                                                        <label>Output Qty <span class="red-text">*</span></label>
+                                                        <input
+                                                            type="text"
+                                                            id="output-qty"
+                                                            class="form-control"
+                                                            placeholder="Enter"
+                                                        />
+                                                    </div>
+                                                    <div class="col-sm-4 mr-b15">
+                                                        <label>Stock Unit<span class="red-text">*</span></label>
+                                                        <input
+                                                            type="text"
+                                                            id="stock-unit"
+                                                            class="form-control"
+                                                            placeholder="Amount"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-4 mr-b15">
+                                                        <label>Input Stock Name<span class="red-text">*</span></label>
+                                                        <input
+                                                            type="text"
+                                                            id="select-stock-nme"
+                                                            class="form-control"
+                                                            placeholder="Select Stock"
+                                                        />
+                                                    </div>
+                                                    <div class="col-sm-4 mr-b15">
+                                                        <label>Stock Qty.<span class="red-text">*</span></label>
+                                                        <input
+                                                            type="text"
+                                                            id="select-stock-qty"
+                                                            class="form-control"
+                                                            placeholder="Qty."
+                                                        />
+                                                    </div>
+                                                    <div class="col-sm-3 mr-b15">
+                                                        <label>Stock Unit<span class="red-text">*</span></label>
+                                                        <input
+                                                            type="text"
+                                                            id="select-stock-unit"
+                                                            class="form-control"
+                                                            placeholder="Select Unit"
+                                                        />
+                                                    </div>
+                                                    <div class="mr-b15">
+                                                        <label class="d-block">&nbsp;</label>
+                                                        <i class="icon-plus pd"></i>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <p class="mr-b15">
+                                            <span>
+                                                <input
+                                                    type="checkbox"
+                                                    class="checkbox-custom"
+                                                    name="stock"
+                                                    id="stock"
+                                                />
+                                                <label for="stock" class="checkbox-custom-label"
+                                                    >Continue selling when out of stock?</label
+                                                >
+                                            </span>
+                                        </p>
+                                        <p class="mr-b15">
+                                            <span>
+                                                <input
+                                                    type="checkbox"
+                                                    class="checkbox-custom"
+                                                    name="return-policy"
+                                                    id="return-policy"
+                                                />
+                                                <label for="return-policy" class="checkbox-custom-label"
+                                                    >Is this stock eligible for return policy?</label
+                                                >
+                                            </span>
+                                        </p>
+                                        <p class="mr-b15">
+                                            <span>
+                                                <input
+                                                    type="checkbox"
+                                                    checked
+                                                    class="checkbox-custom"
+                                                    name="variant"
+                                                    id="variant"
+                                                />
+                                                <label for="variant" class="checkbox-custom-label"
+                                                    >Variant? This product has multiple options like size or colours
+                                                    etc..</label
+                                                >
+                                            </span>
+                                        </p>
+                                        <!-- this div wil be visible if uper checkbox checked -->
+                                        <div class="product-option">
+                                            <div class="product-option-wrapper">
+                                                <form>
+                                                    <div class="row mr-b15">
+                                                        <div class="col-sm-4">
+                                                            <label>Option 1</label>
+                                                            <input
+                                                                type="text"
+                                                                class="form-control"
+                                                                placeholder="Size"
+                                                                id="select-option"
+                                                            />
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <label>Category</label>
+                                                            <textarea
+                                                                type="text"
+                                                                class="form-control"
+                                                                placeholder="xs, x, m"
+                                                                id="select-category"
+                                                            ></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mr-b15">
+                                                        <div class="col-sm-4">
+                                                            <input
+                                                                type="text"
+                                                                class="form-control"
+                                                                placeholder="Ex: Size, Color"
+                                                                id="select-size-color"
+                                                            />
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <input
+                                                                type="text"
+                                                                class="form-control"
+                                                                placeholder="Separate options with a comma"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div class="add-another-option cursor-pointer mr-b15 pd">
+                                                        <i class="icon-plus mr-1"></i>Another Option
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </tab>
+                                <tab heading="Other">
+                                    <form>
+                                        <div class="row">
+                                            <div class="col-sm-4 mr-b15">
+                                                <label>Stock Display Name</label>
+                                                <input
+                                                    type="text"
+                                                    class="form-control"
+                                                    placeholder="Enter"
+                                                    id="stock-display-name"
+                                                />
+                                            </div>
+                                            <div class="col-sm-4 mr-b15">
+                                                <span class="p-0 mr-3" (click)="selectCode(true)">
+                                                    <input
+                                                        id="combo-hsn-code-option"
+                                                        class="radio-custom cp ml-0"
+                                                        type="radio"
+                                                        name="selectCode"
+                                                        [value]=""
+                                                    />
+                                                    <label for="combo-hsn-code-option" class="radio-custom-label"
+                                                        >HSN</label
+                                                    >
+                                                </span>
+                                                <span class="p-0" (click)="selectCode(false)">
+                                                    <input
+                                                        id="combo-sac-code-option"
+                                                        class="radio-custom cp ml-0"
+                                                        type="radio"
+                                                        name="selectCode"
+                                                    />
+                                                    <label for="combo-sac-code-option" class="radio-custom-label"
+                                                        >SAC</label
+                                                    >
+                                                </span>
+                                                <input
+                                                    *ngIf="isHSN"
+                                                    id="product-name"
+                                                    class="form-control"
+                                                    type="text"
+                                                    placeholder="Enter HSN Code"
+                                                />
+                                                <input
+                                                    *ngIf="!isHSN"
+                                                    id="product-name"
+                                                    class="form-control"
+                                                    type="text"
+                                                    placeholder="Enter SAC Code"
+                                                />
+                                            </div>
+
+                                            <div class="col-sm-4 mr-b15">
+                                                <label>SKU Code</label>
+                                                <input
+                                                    id="sku-code"
+                                                    class="form-control"
+                                                    type="text"
+                                                    placeholder="Enter Code"
+                                                />
+                                            </div>
+                                            <div class="col-sm-4 mr-b15">
+                                                <label>Barcode (ISBN, UPC, GTIN, etc.)</label>
+                                                <input
+                                                    id="bar-code"
+                                                    class="form-control"
+                                                    type="text"
+                                                    placeholder="Enter"
+                                                />
+                                            </div>
+                                            <div class="col-sm-4 mr-b15">
+                                                <label>Custom Field</label>
+                                                <input
+                                                    id="expiry-code"
+                                                    class="form-control"
+                                                    type="text"
+                                                    placeholder="Enter Code"
+                                                />
+                                            </div>
+                                        </div>
+                                    </form>
+                                </tab>
+                            </tabset>
+                            <div class="button-group mt-5">
+                                <button id="clear-btn" class="btn btn-primary bdr-radius-50 min-width-100">
+                                    Clear
+                                </button>
+                                <button id="create-btn" class="btn btn-success bdr-radius-50 min-width-100">
+                                    Create
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

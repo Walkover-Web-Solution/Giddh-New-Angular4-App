@@ -1,0 +1,86 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="top-content">
+                <div class="d-flex w-100 justify-content-between overflow-x-auto">
+                    <div class="total-details-box mr-r05 border-none opening-box">
+                        <h5>
+                            Group Count
+                            <div>
+                                <span class="d-inline-flex number-total"> 23 </span>
+                            </div>
+                        </h5>
+                    </div>
+                    <div class="total-details-box border-none due-box">
+                        <h5>
+                            Item Count
+                            <div>
+                                <span class="d-inline-flex number-total"> 23 </span>
+                            </div>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="product-list-container">
+                <div class="table-responsive">
+                    <table class="table giddh-table on-mobile-view">
+                        <thead>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Group</th>
+                                <th>SKU</th>
+                                <th>HSN/SAC</th>
+                                <th>Account/s</th>
+                                <th>Pur Rate</th>
+                                <th>Sale Rate</th>
+                                <th>Closing Qty.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-title="Select">
+                                    <div class="d-block text-center text-left-sm">
+                                        <input type="checkbox" id="select-group" />
+                                    </div>
+                                </td>
+                                <td data-title="Name">
+                                    <div class="product-name-image d-flex">
+                                        <div>
+                                            <img src="{{ imgPath }}images/add-image.svg" />
+                                        </div>
+                                        <div class="cursor-pointer mx-2">
+                                            <a
+                                                href="javascript:void(0)"
+                                                [routerLink]="['/pages/new-inventory/about-product-service-detail']"
+                                            >
+                                                <p>Product Name</p>
+                                                <p class="text-gray">(34 Items)</p>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td data-title="Type">Product</td>
+                                <td data-title="Group">Group 1</td>
+                                <td data-title="SKU">23124</td>
+                                <td data-title="HSN/SAC">12345</td>
+                                <td data-title="Account/s">
+                                    <div>Cost of goods sold</div>
+                                    <div>Sales 2</div>
+                                </td>
+                                <td data-title="Pur Rate">₹10,00,000.00</td>
+                                <td data-title="Sale Rate">₹10,00,000.00</td>
+                                <td data-title="Closing Qty">21,200 nos.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -59,6 +59,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     public isMobileScreen: boolean = false;
 
     constructor(private store: Store<AppState>, private vatService: VatService, private toasty: ToasterService, private cdRef: ChangeDetectorRef, public route: ActivatedRoute, private router: Router, private invoiceReceiptActions: InvoiceReceiptActions, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private invoiceService: InvoiceService, private generalService: GeneralService, private breakpointObserver: BreakpointObserver) {
+
     }
 
     /**

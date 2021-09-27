@@ -172,7 +172,7 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
             let loop = 0;
             let found = false;
             let filteredItems = [];
-            allItems.forEach((items) => {
+            allItems?.forEach((items) => {
                 found = false;
                 if (items.label.toLowerCase().includes(search.trim().toLowerCase())) {
                     if (filteredItems[loop] === undefined) {
@@ -183,7 +183,7 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
                     found = true;
                 } else {
                     let itemsFound = [];
-                    items.items.forEach(item => {
+                    items?.items?.forEach(item => {
                         if (item.label.toLowerCase().includes(search.trim().toLowerCase())) {
                             if (filteredItems[loop] === undefined) {
                                 filteredItems[loop] = [];

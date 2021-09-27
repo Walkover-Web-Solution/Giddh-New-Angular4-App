@@ -19,7 +19,7 @@ import { OrganizationType } from '../../../models/user-login-state';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
 import { cloneDeep, isArray } from '../../../lodash-optimized';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
-import { AdvanceReceiptSummaryRequest, GetAllAdvanceReceiptsRequest } from '../../../models/api-models/Reports';
+import { AdvanceReceiptSummaryRequest } from '../../../models/api-models/Reports';
 import { GeneralService } from '../../../services/general.service';
 import { ReceiptService } from '../../../services/receipt.service';
 import { ToasterService } from '../../../services/toaster.service';
@@ -38,7 +38,6 @@ import { ReceiptAdvanceSearchComponent } from '../receipt-advance-search/receipt
     styleUrls: ['./advance-receipt-report.component.scss']
 })
 export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, OnInit {
-
     /** Customer name search bar */
     @ViewChild('customerName', { static: true }) public customerName: ElementRef;
     /** Parent of customer name search bar */
@@ -59,7 +58,6 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     @ViewChild('receiptAdvanceSearchFilterModal', { static: true }) public receiptAdvanceSearchFilterModal: ElementViewContainerRef;
     /** Container of Advance search modal instance */
     @ViewChild('receiptAdvanceSearchModalContainer', { static: true }) public receiptAdvanceSearchModalContainer: ModalDirective;
-
     /** Moment method */
     public moment = moment;
     /** Receipt type for filter */
@@ -87,7 +85,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         particularName: '', // Payment Mode
         invoiceNumber: '',  // Invoice Number
         sortBy: '',  // Sort by
-        sort: '' // Sort value
+        sort: '',
+        q: ''
     };
     /** True, if the user clicks to search Receipt */
     public showReceiptSearchBar: boolean = false;
@@ -107,11 +106,10 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public currentBranch: any = { name: '', uniqueName: '' };
     /** Stores the current company */
     public activeCompany: any;
-    /** Stores the current organization type */
-    public currentOrganizationType: OrganizationType;
     /** True if api call in progress */
     public isLoading: boolean = false;
-
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
     /** Advance search model to initialize the advance search fields */
     private advanceSearchModel: ReceiptAdvanceSearchModel = {
         adjustmentVoucherDetails: {
@@ -164,6 +162,9 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public advanceReceiptAdvanceSearchAmountFilters: any;
     /** List of receipt types for filters */
     public receiptTypes: any;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
+
     /** @ignore */
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -179,6 +180,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
 
     /** Subscribe to universal date and set header title */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.store.dispatch(this.generalAction.setAppTitle('/pages/reports/receipt'));
         this.store.pipe(select(state => state.session.companyUniqueName), take(1)).subscribe(uniqueName => this.activeCompanyUniqueName = uniqueName);
@@ -194,7 +196,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             this.fetchReceiptsData();
         });
         this.store.pipe(
-            select(state => state.session.activeCompany), take(1)
+            select(state => state.session.activeCompany), takeUntil(this.destroyed$)
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
@@ -472,26 +474,45 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @returns {Observable<BaseResponse<any, GetAllAdvanceReceiptsRequest>>} Observable to carry out further operations
      * @memberof AdvanceReceiptReportComponent
      */
-    private fetchAllReceipts(additionalRequestParameters?: GetAllAdvanceReceiptsRequest): Observable<BaseResponse<any, GetAllAdvanceReceiptsRequest>> {
+    private fetchAllReceipts(additionalRequestParameters?: any): Observable<BaseResponse<any, any>> {
         this.isLoading = true;
-        let requestObject: GetAllAdvanceReceiptsRequest = {
-            companyUniqueName: this.activeCompanyUniqueName,
-            from: this.fromDate,
-            to: this.toDate,
-            count: PAGINATION_LIMIT,
-            receiptTypes: this.searchQueryParams.receiptTypes,
-            receiptNumber: this.searchQueryParams.receiptNumber,
-            baseAccountName: this.searchQueryParams.baseAccountName,
-            particularName: this.searchQueryParams.particularName,
-            invoiceNumber: this.searchQueryParams.invoiceNumber,
-            totalAmount: (this.advanceSearchModel.totalAmountFilter) ? this.advanceSearchModel.totalAmountFilter.amount : "",
-            totalAmountOperation: (this.advanceSearchModel.totalAmountFilter) ? this.advanceSearchModel.totalAmountFilter.selectedValue : "",
-            unUsedAmount: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.amount : "",
-            unUsedAmountOperation: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.selectedValue : "",
-            sort: this.searchQueryParams.sort,
-            sortBy: this.searchQueryParams.sortBy,
-            branchUniqueName: this.currentBranch.uniqueName
-        };
+        let requestObject: any = {};
+
+        if(this.voucherApiVersion === 2) {
+            requestObject = {
+                companyUniqueName: this.activeCompanyUniqueName,
+                from: this.fromDate,
+                to: this.toDate,
+                count: PAGINATION_LIMIT,
+                q: this.searchQueryParams.q,
+                totalAmount: (this.advanceSearchModel.totalAmountFilter) ? this.advanceSearchModel.totalAmountFilter.amount : "",
+                totalAmountOperation: (this.advanceSearchModel.totalAmountFilter) ? this.advanceSearchModel.totalAmountFilter.selectedValue : "",
+                unUsedAmount: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.amount : "",
+                unUsedAmountOperation: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.selectedValue : "",
+                sort: this.searchQueryParams.sort,
+                sortBy: this.searchQueryParams.sortBy,
+                branchUniqueName: this.currentBranch.uniqueName
+            };
+        } else {
+            requestObject = {
+                companyUniqueName: this.activeCompanyUniqueName,
+                from: this.fromDate,
+                to: this.toDate,
+                count: PAGINATION_LIMIT,
+                receiptTypes: this.searchQueryParams.receiptTypes,
+                receiptNumber: this.searchQueryParams.receiptNumber,
+                baseAccountName: this.searchQueryParams.baseAccountName,
+                particularName: this.searchQueryParams.particularName,
+                invoiceNumber: this.searchQueryParams.invoiceNumber,
+                totalAmount: (this.advanceSearchModel.totalAmountFilter) ? this.advanceSearchModel.totalAmountFilter.amount : "",
+                totalAmountOperation: (this.advanceSearchModel.totalAmountFilter) ? this.advanceSearchModel.totalAmountFilter.selectedValue : "",
+                unUsedAmount: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.amount : "",
+                unUsedAmountOperation: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.selectedValue : "",
+                sort: this.searchQueryParams.sort,
+                sortBy: this.searchQueryParams.sortBy,
+                branchUniqueName: this.currentBranch.uniqueName
+            };
+        }
 
         const optionalParams = cloneDeep(additionalRequestParameters);
         if (optionalParams) {
@@ -503,7 +524,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             }
             requestObject = { ...requestObject, ...optionalParams };
         }
-        return this.receiptService.getAllAdvanceReceipts(requestObject);
+        return (this.voucherApiVersion === 2) ? this.receiptService.GetAllReceipt(requestObject, 'receipt') : this.receiptService.getAllAdvanceReceipts(requestObject);
     }
 
     /**
@@ -538,7 +559,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 this.pageConfiguration.currentPage = response.body.page;
                 this.pageConfiguration.totalPages = response.body.totalPages;
                 this.pageConfiguration.totalItems = response.body.totalItems;
-                this.allReceipts = response.body.results;
+                this.allReceipts = (this.voucherApiVersion === 2) ? response.body.items : response.body.results;
                 this.changeDetectorRef.detectChanges();
                 return response.body;
             } else {
@@ -642,5 +663,15 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             this.advanceSearchModel.totalAmountFilter.filterValues = this.advanceReceiptAdvanceSearchAmountFilters;
             this.advanceSearchModel.unusedAmountFilter.filterValues = this.advanceReceiptAdvanceSearchAmountFilters;
         }
+    }
+
+    /**
+     * This will update the search query param
+     *
+     * @param {*} value
+     * @memberof AdvanceReceiptReportComponent
+     */
+    public updateSearchQuery(value): void {
+        this.searchQueryParams.q = value;
     }
 }

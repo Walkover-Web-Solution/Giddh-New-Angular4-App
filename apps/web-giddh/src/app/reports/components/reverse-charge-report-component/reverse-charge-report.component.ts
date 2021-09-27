@@ -79,12 +79,12 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public currentCompanyBranches: Array<any>;
     /** Stores the current branch */
     public currentBranch: any = { name: '', uniqueName: '' };
-    /** Stores the current organization type */
-    public currentOrganizationType: OrganizationType;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
     /* True, if mobile screen size is detected **/
     public isMobileScreen: boolean = true;
     /** True if today selected */
@@ -160,7 +160,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         })), takeUntil(this.destroyed$)).subscribe();
 
         this.store.pipe(
-            select(state => state.session.activeCompany), take(1)
+            select(state => state.session.activeCompany), takeUntil(this.destroyed$)
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
