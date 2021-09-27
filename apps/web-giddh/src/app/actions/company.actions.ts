@@ -223,12 +223,12 @@ export class CompanyActions {
             ofType(CompanyActions.REFRESH_COMPANIES_RESPONSE),
             map((action: CustomActions) => {
                 let response: BaseResponse<CompanyResponse[], string> = action.payload;
-                if (response.status === 'error') {
+                if (response?.status === 'error') {
                     this._toasty.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
                 }
                 // check if user have companies
-                if (response.body.length) {
+                if (response?.body?.length) {
                     let activeCompanyName = null;
                     let totalCompany = 0;
                     this.store.pipe(select(s => s.session.companyUniqueName), take(1)).subscribe(a => activeCompanyName = a);

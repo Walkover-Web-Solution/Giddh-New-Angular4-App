@@ -37,7 +37,6 @@ import { UserDetails } from '../models/api-models/loginModels';
     templateUrl: './welcome.component.html',
     styleUrls: ['./welcome.component.scss']
 })
-
 export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public stateGstCode: any[] = [];
     public countrySource: IOption[] = [];
@@ -104,7 +103,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         amountPaid: '',
         razorpaySignature: ''
     };
-
     public addressesObj: Addresses = {
         stateCode: '',
         address: '',
@@ -113,7 +111,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         taxNumber: '',
         pincode: ''
     };
-
     public subscriptionPlan: CreateCompanyUsersPlan = {
         companies: null,
         totalCompanies: 0,
@@ -143,17 +140,14 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         companyTotalTransactions: null,
         totalTransactions: 0
     };
-
     public subscriptionRequestObj: SubscriptionRequest = {
         planUniqueName: '',
         subscriptionId: '',
         userUniqueName: '',
         licenceKey: ''
     };
-
     public createNewCompanyPreObj: CompanyCreateRequest;
     public loggedInUser: UserDetails;
-
     public businessType: IOption[] = [];
     public formFields: any[] = [];
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
@@ -166,17 +160,14 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public isOnBoardingInProgress: boolean;
     /** True, if item update is in progress */
     public isItemUpdateInProgress: boolean;
-
     /** Event emitter to represent back button click */
     @Output() backButtonClicked: EventEmitter<any> = new EventEmitter();
     /** Event emitter to represent next button click */
     @Output() nextButtonClicked: EventEmitter<any> = new EventEmitter();
-
     /** Item details to be pre-filled in welcome form */
     @Input() itemDetails: any;
     /** True if API is in progress */
     @Input() isApiInProgress: boolean;
-
     /** States dropdown instance */
     @ViewChild('states', { static: true }) statesDropdown: ShSelectComponent;
     /** GST number field */
@@ -200,22 +191,21 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
     public isCreateCompanyInProgress: boolean = false;
     public isCompanyCreated$: Observable<boolean>;
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     public commonLocaleData: any = {};
 
     constructor(
         private store: Store<AppState>,
-        private _router: Router,
-        private _generalService: GeneralService,
-        private _toasty: ToasterService,
+        private router: Router,
+        private generalService: GeneralService,
+        private toasty: ToasterService,
         private companyActions: CompanyActions,
-        private _companyService: CompanyService,
-        private _generalActions: GeneralActions,
+        private companyService: CompanyService,
+        private generalActions: GeneralActions,
         private commonActions: CommonActions,
         private zone: NgZone
     ) {
@@ -229,7 +219,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngOnInit() {
-        this.store.dispatch(this._generalActions.resetStatesList());
+        this.store.dispatch(this.generalActions.resetStatesList());
         this.store.dispatch(this.commonActions.resetOnboardingForm());
         
         this.store.pipe(select(state => state.itemOnboarding), takeUntil(this.destroyed$))
@@ -267,7 +257,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             });
         }
         if (!this.isOnBoardingInProgress) {
-            this._companyService.GetAllBusinessNatureList().pipe(takeUntil(this.destroyed$)).subscribe((businessNatureResponse) => {
+            this.companyService.GetAllBusinessNatureList().pipe(takeUntil(this.destroyed$)).subscribe((businessNatureResponse) => {
                 if (businessNatureResponse && businessNatureResponse.body) {
                     _.map(businessNatureResponse.body, (businessNature) => {
                         this.businessNatureList.push({ label: businessNature, value: businessNature });
@@ -283,14 +273,14 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         });
 
-        this.loggedInUser = this._generalService.user;
+        this.loggedInUser = this.generalService.user;
         this.subscriptionRequestObj.userUniqueName = (this.loggedInUser) ? this.loggedInUser.uniqueName : "";
 
         this.store.pipe(select(state => state.session.isCompanyCreated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 setTimeout(() => {
-                    if (this._router.url.includes("welcome")) {
-                        this._router.navigate(['/pages/onboarding']);
+                    if (this.router.url.includes("welcome")) {
+                        this.router.navigate(['/pages/onboarding']);
                     }
                 }, 2000);
             }
@@ -298,11 +288,11 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngAfterViewInit() {
-        this._generalService.IAmLoaded.next(true);
+        this.generalService.IAmLoaded.next(true);
     }
 
     public skip() {
-        this._router.navigate(['/onboarding']);
+        this.router.navigate(['/onboarding']);
     }
 
     public reFillForm() {
@@ -388,7 +378,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.createNewCompanyPreparedObj.addresses = [];
             }
 
-            this._generalService.createNewCompany = this.createNewCompanyPreparedObj;
+            this.generalService.createNewCompany = this.createNewCompanyPreparedObj;
             this.store.dispatch(this.companyActions.userStoreCreateCompany(this.createNewCompanyPreparedObj));
             setTimeout(() => {
                 this.company.contactNo = this.getFormattedContactNumber(this.company.contactNo);
@@ -477,7 +467,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             if (!isValid) {
                 let text = this.commonLocaleData?.app_invalid_tax_name;
                 text = text?.replace("[TAX_NAME]", this.formFields['taxName'].label);
-                this._toasty.errorToast(text);
+                this.toasty.errorToast(text);
                 ele.classList.add('error-box');
                 this.isGstValid = false;
             } else {
@@ -509,12 +499,12 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
                     } else {
                         statesEle.setDisabledState(false);
-                        this._toasty.clearAllToaster();
+                        this.toasty.clearAllToaster();
 
                         if (this.formFields['taxName'] && !this.welcomeForm.form.get('gstNumber')?.valid) {
                             let text = this.commonLocaleData?.app_invalid_tax_name;
                             text = text?.replace("[TAX_NAME]", this.formFields['taxName'].label);
-                            this._toasty.warningToast(text);
+                            this.toasty.warningToast(text);
                             this.companyProfileObj.state = '';
                         }
                     }
@@ -567,10 +557,10 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         if (!this.isOnBoardingInProgress) {
             /* Company or Branch on boarding is going on */
             if (isBranch) {
-                this._router.navigate(['pages', 'settings', 'branch']); // <!-- pages/settings/branch -->
+                this.router.navigate(['pages', 'settings', 'branch']); // <!-- pages/settings/branch -->
             } else {
                 this.zone.run(() => {
-                    this._router.navigate(['/new-user']);
+                    this.router.navigate(['/new-user']);
                 });
             }
         }
@@ -711,7 +701,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             } else {
                 let statesRequest = new StatesRequest();
                 statesRequest.country = this.createNewCompanyPreparedObj.country;
-                this.store.dispatch(this._generalActions.getAllState(statesRequest));
+                this.store.dispatch(this.generalActions.getAllState(statesRequest));
             }
         });
     }
@@ -819,14 +809,14 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
                 return true;
             } else {
-                this._toasty.errorToast(this.localeData?.invalid_contact_number_error);
+                this.toasty.errorToast(this.localeData?.invalid_contact_number_error);
                 if (contactNumberElement) {
                     contactNumberElement.classList.add('error-box');
                 }
                 return false;
             }
         } catch (error) {
-            this._toasty.errorToast(this.localeData?.invalid_contact_number_error);
+            this.toasty.errorToast(this.localeData?.invalid_contact_number_error);
             if (contactNumberElement) {
                 contactNumberElement.classList.add('error-box');
             }
@@ -1043,10 +1033,10 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WelcomeComponent
      */
     public createBranch(): void {
-        this._companyService.createNewBranch(this.activeCompany.uniqueName, this.createNewCompanyPreObj).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+        this.companyService.createNewBranch(this.activeCompany.uniqueName, this.createNewCompanyPreObj).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             this.store.dispatch(this.companyActions.userStoreCreateBranch(null));
             this.store.dispatch(this.companyActions.removeCompanyCreateSession());
-            this._router.navigate(['pages/settings/branch']);
+            this.router.navigate(['pages/settings/branch']);
         });
     }
 

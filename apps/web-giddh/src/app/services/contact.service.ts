@@ -1,7 +1,6 @@
 import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Router } from '@angular/router';
 import { HttpWrapperService } from './httpWrapper.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
@@ -9,13 +8,14 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { CONTACT_API } from './apiurls/contact.api';
 import { ContactAdvanceSearchModal } from "../models/api-models/Contact";
+import { PAGINATION_LIMIT } from '../app.constant';
 
 @Injectable()
 export class ContactService {
     private companyUniqueName: string;
 
-    constructor(private errorHandler: GiddhErrorHandler, public _http: HttpWrapperService, public _router: Router,
-        private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    constructor(private errorHandler: GiddhErrorHandler, public http: HttpWrapperService,
+        private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
     /**
@@ -37,7 +37,7 @@ export class ContactService {
      */
     public GetContacts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber: number, refresh: string, count: number, query?: string, sortBy: string = '',
         order: string = 'asc', postData?: ContactAdvanceSearchModal, branchUniqueName?: string): Observable<BaseResponse<any, string>> {
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + 'v2/company/:companyUniqueName/groups/:groupUniqueName/account-balances?page=:page' +
             '&count=:count&refresh=:refresh&q=:query&sortBy=:sortBy&sort=:order&from=:fromDate&to=:toDate';
         query = (query) ? query : '';
@@ -57,13 +57,13 @@ export class ContactService {
             url = url.concat('&branchUniqueName=', branchUniqueName);
         }
         if (postData && Object.keys(postData).length > 0) {
-            return this._http.post(url, postData).pipe(map((res) => {
+            return this.http.post(url, postData).pipe(map((res) => {
                 let data: BaseResponse<any, string> = res;
                 data.request = '';
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', '')));
         } else {
-            return this._http.get(url).pipe(map((res) => {
+            return this.http.get(url).pipe(map((res) => {
                 let data: BaseResponse<any, string> = res;
                 data.request = '';
                 return data;
@@ -72,9 +72,9 @@ export class ContactService {
     }
 
     public addComment(comment, accountUniqueName): Observable<BaseResponse<any, string>> {
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
         let description = comment;
-        return this._http.post(this.config.apiUrl + CONTACT_API.ADD_COMMENT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), { description }).pipe(map((res) => {
+        return this.http.post(this.config.apiUrl + CONTACT_API.ADD_COMMENT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), { description }).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
             data.request = '';
             return data;
@@ -82,17 +82,17 @@ export class ContactService {
     }
 
     public deleteComment(accountUniqueName): Observable<BaseResponse<any, string>> {
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.delete(this.config.apiUrl + CONTACT_API.ADD_COMMENT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).pipe(map((res) => {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.delete(this.config.apiUrl + CONTACT_API.ADD_COMMENT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
             data.request = '';
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', '')));
     }
 
-    public GetContactsDashboard(fromDate: string, toDate: string, groupUniqueName: string, pageNumber: number, refresh: string, count: number = 50, query?: string, sortBy: string = '',
+    public GetContactsDashboard(fromDate: string, toDate: string, groupUniqueName: string, pageNumber: number, refresh: string, count: number = PAGINATION_LIMIT, query?: string, sortBy: string = '',
         order: string = 'asc', postData?: ContactAdvanceSearchModal): Observable<BaseResponse<any, string>> {
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + 'v2/company/:companyUniqueName/groups/:groupUniqueName/account-balances?page=:page' +
             '&count=:count&refresh=:refresh&q=:query&sortBy=:sortBy&sort=:order&from=:fromDate&to=:toDate&module=dashboard';
 
@@ -108,13 +108,13 @@ export class ContactService {
             .replace(':toDate', toDate);
 
         if (postData && Object.keys(postData).length > 0) {
-            return this._http.post(url, postData).pipe(map((res) => {
+            return this.http.post(url, postData).pipe(map((res) => {
                 let data: BaseResponse<any, string> = res;
                 data.request = '';
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', '')));
         } else {
-            return this._http.get(url).pipe(map((res) => {
+            return this.http.get(url).pipe(map((res) => {
                 let data: BaseResponse<any, string> = res;
                 data.request = '';
                 return data;

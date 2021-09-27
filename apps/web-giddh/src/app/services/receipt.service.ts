@@ -2,7 +2,6 @@ import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { UserDetails } from '../models/api-models/loginModels';
 import {
     DownloadVoucherRequest,
     InvoiceReceiptFilter,
@@ -36,16 +35,15 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 @Injectable()
 export class ReceiptService {
     private companyUniqueName: string;
-    private user: UserDetails;
 
-    constructor(private _generalService: GeneralService, private _http: HttpWrapperService, private errorHandler: GiddhErrorHandler,
+    constructor(private generalService: GeneralService, private http: HttpWrapperService, private errorHandler: GiddhErrorHandler,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
     }
 
     public UpdateReceipt(accountUniqueName: string, model: ReciptRequest): Observable<BaseResponse<string, ReciptRequest>> {
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.put(this.config.apiUrl + RECEIPT_API.PUT
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.put(this.config.apiUrl + RECEIPT_API.PUT
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
                 map((res) => {
@@ -58,17 +56,17 @@ export class ReceiptService {
     }
 
     public GetAllReceipt(body: InvoiceReceiptFilter, type: string): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
         const requestPayload = type === VoucherTypeEnum.purchase ? this.getPurchaseRecordPayload(body) : body;
-        const contextPath = (type === VoucherTypeEnum.purchase && this._generalService.voucherApiVersion !== 2) ? RECEIPT_API.GET_ALL_PURCHASE_RECORDS : RECEIPT_API.GET_ALL;
+        const contextPath = (type === VoucherTypeEnum.purchase && this.generalService.voucherApiVersion !== 2) ? RECEIPT_API.GET_ALL_PURCHASE_RECORDS : RECEIPT_API.GET_ALL;
         const requestParameter = {
             page: body.page, count: body.count, from: body.from, to: body.to, q: (body.q) ? encodeURIComponent(body.q) : body.q, sort: body.sort, sortBy: body.sortBy
         };
-        let url = this.createQueryString(this.config.apiUrl + contextPath, (type === VoucherTypeEnum.purchase && this._generalService.voucherApiVersion !== 2) ? requestParameter : { ...requestParameter, type });
-        if (this._generalService.voucherApiVersion === 2) {
-            url = this._generalService.addVoucherVersion(url, this._generalService.voucherApiVersion);
+        let url = this.createQueryString(this.config.apiUrl + contextPath, (type === VoucherTypeEnum.purchase && this.generalService.voucherApiVersion !== 2) ? requestParameter : { ...requestParameter, type });
+        if (this.generalService.voucherApiVersion === 2) {
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
-        return this._http.post(url
+        return this.http.post(url
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), requestPayload).pipe(
                 map((res) => {
                     let data: BaseResponse<ReciptResponse, InvoiceReceiptFilter> = res;
@@ -126,14 +124,14 @@ export class ReceiptService {
     }
 
     public DeleteReceipt(accountUniqueName: string, queryRequest: ReciptDeleteRequest): Observable<BaseResponse<string, ReciptDeleteRequest>> {
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + RECEIPT_API.DELETE
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
-        if (this._generalService.voucherApiVersion === 2) {
-            url = this._generalService.addVoucherVersion(url, this._generalService.voucherApiVersion);
+        if (this.generalService.voucherApiVersion === 2) {
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
-        return this._http.deleteWithBody(
+        return this.http.deleteWithBody(
             url,
             queryRequest
         ).pipe(
@@ -148,15 +146,14 @@ export class ReceiptService {
     }
 
     public DownloadVoucher(model: DownloadVoucherRequest, accountUniqueName: string, isPreview: boolean = false): any {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + RECEIPT_API.DOWNLOAD_VOUCHER
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
-        if (this._generalService.voucherApiVersion === 2) {
-            url = this._generalService.addVoucherVersion(url, this._generalService.voucherApiVersion);
+        if (this.generalService.voucherApiVersion === 2) {
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
-        return this._http.post(url
+        return this.http.post(url
             , model, { responseType: isPreview ? 'text' : 'blob' }).pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
@@ -169,8 +166,8 @@ export class ReceiptService {
     }
 
     public GetVoucherDetails(accountUniqueName: string, model: ReceiptVoucherDetailsRequest): Observable<BaseResponse<Voucher, ReceiptVoucherDetailsRequest>> {
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + RECEIPT_API.GET_DETAILS
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + RECEIPT_API.GET_DETAILS
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)),
             model
@@ -185,16 +182,16 @@ export class ReceiptService {
     }
 
     public getVoucherDetailsV4(accountUniqueName: string, model: ReceiptVoucherDetailsRequest): Observable<BaseResponse<Voucher, ReceiptVoucherDetailsRequest>> {
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + RECEIPT_API.GET_DETAILS_V4
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
         let requestObj: VoucherRequest | ReceiptVoucherDetailsRequest = Object.assign({}, model);
-        if (this._generalService.voucherApiVersion === 2) {
+        if (this.generalService.voucherApiVersion === 2) {
             requestObj = new VoucherRequest(model.invoiceNumber, model.voucherType, model.uniqueName);
-            url = this._generalService.addVoucherVersion(url, this._generalService.voucherApiVersion);
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
-        return this._http.post(url, requestObj
+        return this.http.post(url, requestObj
         ).pipe(
             map((res) => {
                 let data: BaseResponse<Voucher, ReceiptVoucherDetailsRequest> = res;
@@ -209,7 +206,7 @@ export class ReceiptService {
   * get detailed registered sales
   * */
     public getDetailedSalesRegister(request: ReportsDetailedRequestFilter) {
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.createQueryString(this.config.apiUrl + COMPANY_API.GET_DETAILED_REGISTERED_SALES, {
             page: request.page, count: request.count, from: request.from, to: request.to, q: request.q, sort: request.sort, sortBy: request.sortBy
         });
@@ -218,7 +215,7 @@ export class ReceiptService {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
         }
-        return this._http.get(url).pipe(map((res) => {
+        return this.http.get(url).pipe(map((res) => {
             let data: BaseResponse<SalesRegisteDetailedResponse, string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, SalesRegisteDetailedResponse>(e, ReportsDetailedRequestFilter)));
@@ -228,7 +225,7 @@ export class ReceiptService {
   * get detailed registered sales
   * */
     public getDetailedPurchaseRegister(request: ReportsDetailedRequestFilter) {
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.createQueryString(this.config.apiUrl + COMPANY_API.GET_DETAILED_REGISTERED_PURCHASE, {
             page: request.page, count: request.count, from: request.from, to: request.to, q: request.q, sort: request.sort, sortBy: request.sortBy
         });
@@ -237,7 +234,7 @@ export class ReceiptService {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
         }
-        return this._http.get(url).pipe(map((res) => {
+        return this.http.get(url).pipe(map((res) => {
             let data: BaseResponse<SalesRegisteDetailedResponse, string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, SalesRegisteDetailedResponse>(e, ReportsDetailedRequestFilter)));
@@ -274,15 +271,15 @@ export class ReceiptService {
     }
 
     public getAllReceiptBalanceDue(body: InvoiceReceiptFilter, type: string): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
         let requestType = type;
         let url = this.createQueryString(this.config.apiUrl + RECEIPT_API.GET_ALL_BAL_SALE_DUE, {
             page: body.page, count: body.count, from: body.from, to: body.to, type: requestType, q: body.q ? encodeURIComponent(body.q) : body.q, sort: body.sort, sortBy: body.sortBy
         });
-        if (this._generalService.voucherApiVersion === 2) {
-            url = this._generalService.addVoucherVersion(url, this._generalService.voucherApiVersion);
+        if (this.generalService.voucherApiVersion === 2) {
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
-        return this._http.post(url
+        return this.http.post(url
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), body).pipe(
                 map((res) => {
                     let data: BaseResponse<ReciptResponse, InvoiceReceiptFilter> = res;
@@ -302,8 +299,8 @@ export class ReceiptService {
      * @memberof ReceiptService
      */
     public GetPurchaseRecordDetails(accountUniqueName: string, purchaseRecordUniqueName: string): Observable<BaseResponse<Voucher, any>> {
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + RECEIPT_API.GET_PURCHASE_RECORD
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + RECEIPT_API.GET_PURCHASE_RECORD
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
             .replace(':purchaseRecordUniqueNumber', purchaseRecordUniqueName)
@@ -331,7 +328,7 @@ export class ReceiptService {
         if (requestObject.branchUniqueName) {
             url = url.concat(`&branchUniqueName=${requestObject.branchUniqueName !== companyUniqueName ? requestObject.branchUniqueName : ''}`);
         }
-        return this._http.post(url, requestObject).pipe(catchError((error) => this.errorHandler.HandleCatch<any, GetAllAdvanceReceiptsRequest>(error)));
+        return this.http.post(url, requestObject).pipe(catchError((error) => this.errorHandler.HandleCatch<any, GetAllAdvanceReceiptsRequest>(error)));
     }
 
     /**
@@ -351,6 +348,6 @@ export class ReceiptService {
         if (requestObject.branchUniqueName) {
             url = url.concat(`&branchUniqueName=${requestObject.branchUniqueName !== companyUniqueName ? requestObject.branchUniqueName : ''}`);
         }
-        return this._http.get(url, {}).pipe(catchError((error) => this.errorHandler.HandleCatch<any, AdvanceReceiptSummaryRequest>(error)));
+        return this.http.get(url, {}).pipe(catchError((error) => this.errorHandler.HandleCatch<any, AdvanceReceiptSummaryRequest>(error)));
     }
 }

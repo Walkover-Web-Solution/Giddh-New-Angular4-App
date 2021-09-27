@@ -2,7 +2,6 @@ import { catchError, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
-import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GST_RETURN_API, PURCHASE_INVOICE_API } from './apiurls/purchase-invoice.api';
@@ -80,12 +79,10 @@ export class GeneratePurchaseInvoiceRequest {
 
 @Injectable()
 export class PurchaseInvoiceService {
-
-    private user: UserDetails;
     private companyUniqueName: string;
 
-    constructor(private errorHandler: GiddhErrorHandler, private _http: HttpWrapperService,
-        private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService,
+        private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
     /*
@@ -94,9 +91,8 @@ export class PurchaseInvoiceService {
     * Method: GET
     */
     public SendGSTR3BEmail(reqObj: { month: string, gstNumber: string, isNeedDetailSheet: string, email?: string }): Observable<BaseResponse<any, string>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + PURCHASE_INVOICE_API.SEND_GSTR3B_EMAIL.replace(':companyUniqueName', this.companyUniqueName).replace(':isNeedDetailSheet', reqObj.isNeedDetailSheet).replace(':month', reqObj.month).replace(':company_gstin', reqObj.gstNumber).replace(':userEmail', reqObj.email)).pipe(map((res) => {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + PURCHASE_INVOICE_API.SEND_GSTR3B_EMAIL.replace(':companyUniqueName', this.companyUniqueName).replace(':isNeedDetailSheet', reqObj.isNeedDetailSheet).replace(':month', reqObj.month).replace(':company_gstin', reqObj.gstNumber).replace(':userEmail', reqObj.email)).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
             data.queryString = { reqObj };
             return data;
@@ -104,8 +100,7 @@ export class PurchaseInvoiceService {
     }
 
     public FileGstReturn(reqObj): Observable<BaseResponse<any, string>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
         let url;
         if (reqObj.via && reqObj.via === 'JIO_GST') {
             url = GST_RETURN_API.FILE_JIO_GST_RETURN.replace(':companyUniqueName', this.companyUniqueName).replace(':from', reqObj.period.from).replace(':to', reqObj.period.to).replace(':company_gstin', reqObj.gstNumber);
@@ -115,7 +110,7 @@ export class PurchaseInvoiceService {
         } else if (reqObj.via === 'VAYANA') {
             url = GST_RETURN_API.FILE_VAYANA_RETURN.replace(':companyUniqueName', this.companyUniqueName).replace(':from', reqObj.period.from).replace(':to', reqObj.period.to).replace(':company_gstin', reqObj.gstNumber);
         }
-        return this._http.get(this.config.apiUrl + url).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + url).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
             data.queryString = { reqObj };
             return data;
@@ -123,9 +118,8 @@ export class PurchaseInvoiceService {
     }
 
     public FileGstr3B(reqObj: any): Observable<BaseResponse<any, any>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + GST_RETURN_API.FILE_GSTR3B.replace(':companyUniqueName', this.companyUniqueName).replace(':company_gstin', reqObj.gstNumber).replace(':from', reqObj.period.from).replace(':to', reqObj.period.to).replace(':gsp', reqObj.via), {}).pipe(map((res) => {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + GST_RETURN_API.FILE_GSTR3B.replace(':companyUniqueName', this.companyUniqueName).replace(':company_gstin', reqObj.gstNumber).replace(':from', reqObj.period.from).replace(':to', reqObj.period.to).replace(':gsp', reqObj.via), {}).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
             data.queryString = {};
             return data;
