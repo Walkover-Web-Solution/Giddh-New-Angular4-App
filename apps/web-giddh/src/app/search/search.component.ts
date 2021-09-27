@@ -13,19 +13,17 @@ import { CompanyActions } from '../actions/company.actions';
 })
 export class SearchComponent implements OnInit, OnDestroy {
     public searchRequestEmitter = new EventEmitter<SearchRequest>();
-
     public _searchRequest: SearchRequest;
     public pageChangeEvent: any;
     public filterEventQuery: any;
-
     /** Stores the current branch unique name */
     public currentBranchUniqueName: string;
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor(private store: Store<AppState>, private _searchActions: SearchActions, private companyActions: CompanyActions) {
+    constructor(private store: Store<AppState>, private searchActions: SearchActions, private companyActions: CompanyActions) {
     }
 
     public get searchRequest(): SearchRequest {
@@ -49,7 +47,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
-        this.store.dispatch(this._searchActions.ResetSearchState());
+        this.store.dispatch(this.searchActions.ResetSearchState());
     }
 
     public paginationChanged(ev) {

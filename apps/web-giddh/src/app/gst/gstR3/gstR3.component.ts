@@ -24,13 +24,12 @@ import { SHOW_GST_FILING } from '../../app.constant';
     styleUrls: ['gstR3.component.scss'],
 })
 export class FileGstR3Component implements OnInit, OnDestroy {
-    /* This will hold the value out/in to open/close setting sidebar popup */
+    /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
-    /* Aside pane state*/
+    /** Aside pane state*/
     public asideMenuState: string = 'out';
-    /* this will check mobile screen size */
+    /** This will check mobile screen size */
     public isMobileScreen: boolean = false;
-
     public gstr3BData: Gstr3bOverviewResult2;
     public currentPeriod: GstDatePeriod = null;
     public selectedGstr: string = null;
@@ -49,13 +48,11 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public selectedMMYYYY: string = '';
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
-
     private gstr3BOverviewDataFetchedSuccessfully$: Observable<boolean>;
-    private gstr3BOverviewData$: Observable<Gstr3bOverviewResult2>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Stores the current period */
     public getCurrentPeriod$: Observable<any> = of(null);
@@ -67,15 +64,14 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     constructor(
         private store: Store<AppState>,
         private router: Router,
-        private _toasty: ToasterService,
-        private _gstAction: GstReconcileActions,
+        private toasty: ToasterService,
+        private gstAction: GstReconcileActions,
         private activatedRoute: ActivatedRoute,
-        private _invoicePurchaseActions: InvoicePurchaseActions,
+        private invoicePurchaseActions: InvoicePurchaseActions,
         private breakpointObserver: BreakpointObserver
     ) {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.gstr3BOverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr3BOverViewDataFetchedSuccessfully, takeUntil(this.destroyed$)));
-        this.gstr3BOverviewData$ = this.store.pipe(select(p => p.gstR.gstr3BOverViewDate), takeUntil(this.destroyed$));
         this.gstFileSuccess$ = this.store.pipe(select(p => p.gstR.gstReturnFileSuccess), takeUntil(this.destroyed$));
         this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.activeCompanyGstNumber !== response) {
@@ -84,6 +80,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         });
         this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
     }
+    
     public ngOnInit(): void {
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.breakpointObserver
@@ -102,12 +99,12 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             };
             if (params['selectedGst']) {
                 this.activeCompanyGstNumber = params['selectedGst'];
-                this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
+                this.store.dispatch(this.gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
             }
             this.isCompany = params['isCompany'] === 'true';
             this.selectedMonth = moment(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
             this.selectedMonth = moment(this.selectedMonth).format('MMMM YYYY');
-            this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
+            this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
             this.selectedGstr = params['return_type'];
         });
 
@@ -124,7 +121,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
 
             this.gstr3BOverviewDataFetchedSuccessfully$.pipe(takeUntil(this.destroyed$)).subscribe(bool => {
                 if (!bool && !this.dateSelected) {
-                    this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr3b, request));
+                    this.store.dispatch(this.gstAction.GetOverView(GstReport.Gstr3b, request));
                 }
             });
         });
@@ -235,14 +232,14 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 to: moment(ev).endOf('month').format(GIDDH_DATE_FORMAT)
             };
             this.dateSelected = true;
-            this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
+            this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
             let request: GstOverViewRequest = new GstOverViewRequest();
             request.from = this.currentPeriod.from;
             request.to = this.currentPeriod.to;
             request.gstin = this.activeCompanyGstNumber;
-            this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr1, request));
-            this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr2, request));
-            this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr3b, request));
+            this.store.dispatch(this.gstAction.GetOverView(GstReport.Gstr1, request));
+            this.store.dispatch(this.gstAction.GetOverView(GstReport.Gstr2, request));
+            this.store.dispatch(this.gstAction.GetOverView(GstReport.Gstr3b, request));
         }
     }
 
@@ -251,26 +248,30 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     }
 
     /**
-     * onDownloadSheetGSTR
+     * Download/Email GSTR3B sheet
+     *
+     * @param {boolean} isDownloadDetailSheet
+     * @returns
+     * @memberof FileGstR3Component
      */
-
     public emailGSTR3bSheet(isDownloadDetailSheet: boolean) {
 
         if (!this.userEmail) {
-            return this._toasty.errorToast(this.localeData?.email_required_error);
+            return this.toasty.errorToast(this.localeData?.email_required_error);
         }
         // Note:- appended ",1" with selectedMonth (July 2020) because "July 2020" format does not support for firefox browser and ("July 2020, 1") is valid format for chrome and firefox browser
         let convertValidDateFormatForMoment = this.selectedMonth + ',1';
         let monthToSend = moment(convertValidDateFormatForMoment).format("MM") + "-" + moment(convertValidDateFormatForMoment).format("YYYY");
         if (!monthToSend) {
-            this._toasty.errorToast(this.localeData?.month_required_error);
+            this.toasty.errorToast(this.localeData?.month_required_error);
         } else if (!this.activeCompanyGstNumber) {
-            return this._toasty.errorToast(this.localeData?.gstin_unavailable_error);
+            return this.toasty.errorToast(this.localeData?.gstin_unavailable_error);
         } else {
-            this.store.dispatch(this._invoicePurchaseActions.SendGSTR3BEmail(monthToSend, this.activeCompanyGstNumber, isDownloadDetailSheet, this.userEmail));
+            this.store.dispatch(this.invoicePurchaseActions.SendGSTR3BEmail(monthToSend, this.activeCompanyGstNumber, isDownloadDetailSheet, this.userEmail));
             this.userEmail = '';
         }
     }
+    
     /**
     * Unsubscribes from subscription
     *

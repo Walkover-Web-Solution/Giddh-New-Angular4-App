@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class BrowserSupported implements CanActivate {
-    constructor(public _router: Router) {
+    constructor(public router: Router) {
     }
 
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
@@ -17,13 +17,13 @@ export class BrowserSupported implements CanActivate {
 
         if (msie > 0) {
             browserSupport = false;
-            this._router.navigate(['/browser-support']);
+            this.router.navigate(['/browser-support']);
         } else if (Trident > 0) {
             browserSupport = false;
-            this._router.navigate(['/browser-support']);
+            this.router.navigate(['/browser-support']);
         } else if (Edge > 0) {
             browserSupport = false;
-            this._router.navigate(['/browser-support']);
+            this.router.navigate(['/browser-support']);
         }
         return browserSupport;
     }
