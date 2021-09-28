@@ -39,7 +39,7 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
             request = this.addBranchUniqueName(request);
         }
         request = this.addLanguage(request);
-        if (this.isOnline || (isElectron && request.url.includes('localhost'))) {
+        if (this.isOnline || (isElectron && (request.url.includes('localhost') || request.url.includes('.json')))) {
             return next.handle(request);
         } else {
             setTimeout(() => {

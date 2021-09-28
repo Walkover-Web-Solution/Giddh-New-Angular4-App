@@ -176,12 +176,12 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
     /**
      * Change company callback method
      *
-     * @param {string} selectedCompanyUniqueName Selected company unique name
+     * @param {string} selectedCompany Selected company
      * @param {boolean} [fetchLastState] True, if last state of the company needs to be fetched
      * @memberof CompanyBranchComponent
      */
-    public changeCompany(selectedCompanyUniqueName: string, selectBranchUniqueName: string, fetchLastState?: boolean) {
-        this.generalService.companyUniqueName = selectedCompanyUniqueName;
+    public changeCompany(selectedCompany: any, selectBranchUniqueName: string, fetchLastState?: boolean) {
+        this.generalService.companyUniqueName = selectedCompany?.uniqueName;
         const details = {
             branchDetails: {
                 uniqueName: selectBranchUniqueName
@@ -194,7 +194,17 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
             this.setOrganizationDetails(OrganizationType.Company, details);
         }
 
-        this.store.dispatch(this.loginAction.ChangeCompany(selectedCompanyUniqueName, fetchLastState));
+        if(isElectron && !this.generalService.isOnline()) {
+            let stateDetailsObj = { state: 'home', companyUniqueName: selectedCompany?.uniqueName };
+            this.store.dispatch(this.companyActions.setStateDetailsRequest(stateDetailsObj));
+
+            this.store.dispatch(this.companyActions.setActiveCompanyData({
+                name: selectedCompany?.name,
+                uniqueName: selectedCompany?.uniqueName
+            }));
+        }
+
+        this.store.dispatch(this.loginAction.ChangeCompany(selectedCompany?.uniqueName, fetchLastState));
     }
 
     /**
@@ -338,7 +348,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
             }, 20);
         } else {
             if(company?.uniqueName !== this.activeCompany?.uniqueName) {
-                this.changeCompany(company?.uniqueName, '', false);
+                this.changeCompany(company, '', false);
             }
         }
     }
@@ -385,16 +395,16 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
     /**
      * Switches to branch mode
      *
-     * @param {string} companyUniqueName Company uniqueName
+     * @param {string} company Company
      * @param {string} branchUniqueName Branch uniqueName
      * @memberof CompanyBranchComponent
      */
-    public changeBranch(companyUniqueName: string, branchUniqueName: string, event: any): void {
+    public changeBranch(company: any, branchUniqueName: string, event: any): void {
         event.stopPropagation();
         event.preventDefault();
 
-        if (this.activeCompany?.uniqueName !== companyUniqueName) {
-            this.changeCompany(companyUniqueName, branchUniqueName, false);
+        if (this.activeCompany?.uniqueName !== company?.uniqueName) {
+            this.changeCompany(company, branchUniqueName, false);
         } else if(branchUniqueName !== this.generalService.currentBranchUniqueName) {
             const details = {
                 branchDetails: {

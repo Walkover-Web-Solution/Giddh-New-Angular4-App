@@ -952,4 +952,14 @@ export class GeneralService {
     public getApiDomain(): string {
         return (isElectron) ? OFFLINE_API_URL : this.config.apiUrl;
     }
+
+    /**
+     * THis will return boolean based on user is offline/online
+     *
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public isOnline(): boolean {
+        return navigator.onLine;
+    }
 }

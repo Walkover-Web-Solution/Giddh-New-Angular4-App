@@ -1,5 +1,6 @@
 import electron from "electron";
 import fs from "fs";
+import { callApi } from "./apicall";
 
 /**
  * This will assign blank object/array to company data if null/undefined value is received from giddh api
@@ -7,7 +8,7 @@ import fs from "fs";
  * @param {*} companyData
  * @returns
  */
-export function cleanCompanyData(companyData) {
+export function cleanCompanyData(companyData): any {
     if (companyData && companyData.addresses && companyData.addresses.length > 0) {
         companyData.addresses.forEach(address => {
             if (!address.branches) {
@@ -30,7 +31,7 @@ export function cleanCompanyData(companyData) {
  *
  * @returns
  */
-export function getInternetConnectedConfig() {
+export function getInternetConnectedConfig(): any {
     return {
         timeout: 2000, //timeout connecting to each server, each try
         retries: 1, //number of retries to do before failing
@@ -44,17 +45,14 @@ export function getInternetConnectedConfig() {
  * @export
  * @param {string} filename
  */
-export function createDbFile(filename: string): any {
-    try {
+export async function createDbFile(filename: string): Promise<void> {
+    return new Promise((resolve, reject) => {
         const fileExists = fs.existsSync(filename);
         if (!fileExists) {
-            fs.writeFileSync(filename, "", "utf8");
-            return true;
+            fs.writeFileSync(filename, "", "utf-8");
         }
-        return false;
-    } catch(error) {
-        return error;
-    }
+        resolve();
+    });
 }
 
 /**
@@ -63,9 +61,9 @@ export function createDbFile(filename: string): any {
  * @export
  * @returns {*}
  */
-export function getPath(filename: string): any {
+export async function getPath(filename: string): Promise<any> {
     const app = electron?.app || electron?.remote?.app;
     const path = app.getPath('userData') + "/" + filename;
-    createDbFile(path);
+    await createDbFile(path);
     return path;
 }
