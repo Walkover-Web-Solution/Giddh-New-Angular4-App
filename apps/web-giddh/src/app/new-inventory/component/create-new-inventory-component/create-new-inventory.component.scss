@@ -1,4 +1,5 @@
 @import "../../../../assets/css/color.scss";
+
 .new-inventory-page-header {
     padding: 0 15px 15px;
     margin-bottom: 15px;
@@ -11,6 +12,13 @@
         display: flex;
     }
 }
+
+.page-title-inventory {
+    font-weight: bold;
+    color: $midnight-blue;
+    font-size: 16px;
+}
+
 .create-new-inventory-page {
     .back-to-page {
         position: absolute;
@@ -20,47 +28,59 @@
         z-index: 10;
         color: $primary;
     }
+
     .select-product-type {
         .form-body {
             background-color: transparent;
         }
+
         display: flex;
         justify-content: space-between;
         border-bottom: 1px solid $gainsboro;
         margin-bottom: 15px;
         font-size: 14px;
         padding-bottom: 5px;
+
         img {
             width: 86px;
         }
     }
+
     .sales-purchase-details {
         background-color: $white;
         //margin: 0 -15px;
         padding: 15px 15px;
         border-radius: 7px;
+
         .select-puchase-info {
             background-color: $whisper-color;
             padding: 6px 10px;
             font-family: "opensans-semibold";
         }
+
         .add-new-field {
             position: relative;
-            .icon-plus {
+
+            .icon-button-add {
                 color: $primary;
                 position: absolute;
-                right: -20px;
-                top: 5px;
+                right: -25px;
+                top: -5px;
+                z-index: 1;
             }
-            .icon-cross {
+
+            .icon-button-remove {
                 color: $red;
                 position: absolute;
                 right: -25px;
-                top: 0px;
+                top: -5px;
+                z-index: 1;
             }
         }
+
         .sales-information {
             position: relative;
+
             &::after {
                 position: absolute;
                 width: 1px;
@@ -72,10 +92,12 @@
             }
         }
     }
+
     .stock-made-with {
         margin-bottom: 15px;
         position: relative;
         font-family: "opensans-semibold";
+
         &:after {
             position: absolute;
             content: "";
@@ -86,18 +108,22 @@
             top: 13px;
         }
     }
+
     .show-on-mobile {
         display: none;
     }
+
     .qty-unit {
         display: flex;
         align-items: center;
+
         input,
         sh-select {
             width: 150px;
             margin-right: 10px;
             min-width: 120px;
         }
+
         i {
             color: $primary;
         }
@@ -109,10 +135,29 @@
             min-height: 90px;
         }
     }
+
     .combo-detail-content {
         min-height: 63vh;
     }
 }
+
+.add-image-button {
+    button {
+        padding: 0;
+        margin: 0 !important;
+        height: auto;
+        border: 2px dashed #d9d9d9;
+        overflow: hidden;
+    }
+
+    img {
+        height: 87px;
+        width: 87px;
+        object-fit: contain;
+        transform: scale(1.2);
+    }
+}
+
 .inventory-footer {
     background-color: $whisper-color;
     z-index: 3;
@@ -127,6 +172,7 @@
     width: 100%;
     padding-left: 15px;
 }
+
 .combo-table,
 .table {
     max-width: 1000px;
@@ -145,7 +191,17 @@
         color: $gray;
         font-size: 17px;
     }
+    .delete-tb-tr-icon {
+        position: absolute;
+        right: -50px;
+        font-size: 16px;
+        border: 1px solid #999999;
+        line-height: 1;
+        height: 29px;
+        width: 29px;
+    }
 }
+
 .combo-table tr,
 .combo-table th,
 .combo-table td,
@@ -158,6 +214,7 @@
     border-collapse: collapse;
     min-width: 160px;
 }
+
 .combo-table th,
 .bulk-create-table th {
     border-bottom: 1px solid $gainsboro;
@@ -169,8 +226,10 @@
 .bulk-create-table td:first-child {
     min-width: auto !important;
 }
+
 .bulk-create-content {
     min-height: 63vh;
+
     .bulk-create-head {
         .button-group {
             button {
@@ -181,6 +240,7 @@
                 height: 36px;
                 border-color: $gainsboro;
                 background-color: $white;
+
                 i {
                     vertical-align: top;
                     font-size: 20px;
@@ -188,14 +248,17 @@
                 }
             }
         }
+
         .checkbox-custom-label {
             padding-bottom: 0;
             width: 100%;
         }
+
         .search-field {
             display: flex;
             width: 200px;
             position: relative;
+
             .input-addon {
                 position: absolute;
                 left: 6px;
@@ -203,13 +266,16 @@
                 z-index: 4;
                 color: $gray;
             }
+
             input {
                 padding-left: 30px !important;
             }
         }
     }
+
     .bulk-create-table td {
         padding: 0;
+
         &.list-number {
             display: flex;
             justify-content: center;
@@ -217,6 +283,7 @@
             min-height: 36px;
             border: none;
         }
+
         input {
             min-height: 36px;
             border: none;
@@ -224,9 +291,11 @@
             width: 100%;
         }
     }
+
     .add-new-rows {
         display: flex;
         align-items: center;
+
         span {
             input {
                 width: 80px;
@@ -234,10 +303,12 @@
         }
     }
 }
+
 .final-product-recipe {
     background-color: $white;
     padding: 15px;
     margin-bottom: 15px;
+
     .variant-field {
         .variant-name-field {
             min-width: 30%;
@@ -245,25 +316,30 @@
             max-width: 30%;
         }
     }
+
     .width-30-percent {
         min-width: 30%;
         padding-right: 30px;
         max-width: 30%;
     }
+
     .col-sm-1 {
         flex: 0 0 5.333333%;
         max-width: 5.333333%;
     }
+
     .to-span {
         position: relative;
         right: 1%;
     }
+
     .recipe-input-tab {
         .col-sm-3 {
             flex: 0 0 27%;
             max-width: 27%;
         }
     }
+
     .add-new-final-product {
         display: none;
     }
@@ -277,6 +353,7 @@
             padding-right: 15px;
             max-width: 31%;
         }
+
         .variant-field {
             .variant-name-field {
                 min-width: 31%;
@@ -286,6 +363,7 @@
         }
     }
 }
+
 @media (max-width: 1199px) {
     .pl-5 {
         padding-left: 15px !important;
@@ -295,29 +373,35 @@
             .mt-5 {
                 margin-top: 0 !important;
             }
+
             .pl-5 {
                 padding-left: 15px !important;
             }
+
             .sales-information {
                 &::after {
                     display: none;
                 }
             }
         }
+
         .show-on-mobile {
             display: block;
         }
+
         .qty-unit {
             margin-top: 10px;
         }
     }
 }
+
 @media (min-width: 1200px) and (max-width: 1650px) {
     .col-xl-8 {
         flex: 100%;
         max-width: 100%;
     }
 }
+
 @media (max-width: 991px) {
     .addon-form,
     .variant-form {
@@ -332,35 +416,43 @@
         input {
             margin-bottom: 15px;
         }
+
         .expense-form {
             flex-direction: column !important;
             justify-content: flex-start;
             align-items: flex-start !important;
             text-align: left;
+
             .width-30-percent {
                 min-width: 100%;
                 padding-right: 0;
                 max-width: 100%;
             }
+
             input {
                 margin-bottom: 15px;
             }
+
             .add-expense {
                 margin-left: 0;
             }
+
             span {
                 padding: 0 15px;
                 margin-bottom: 11px;
             }
         }
+
         .add-new-final-product {
             display: flex;
         }
+
         .width-30-percent {
             min-width: 33.33%;
             padding-right: 15px;
             max-width: 33.33%;
         }
+
         .variant-field {
             .variant-name-field {
                 min-width: 33.33%;
@@ -370,21 +462,25 @@
         }
     }
 }
+
 @media (max-width: 768px) {
     .bulk-create-table.on-mobile-view {
         tr {
             border: none !important;
+
             td {
                 input {
                     border: 1px solid $gainsboro !important;
                 }
             }
         }
+
         tbody {
             border: none !important;
         }
     }
 }
+
 @media (max-width: 767px) {
     .create-new-inventory-page {
         .select-physical-product {
@@ -392,23 +488,36 @@
                 margin-right: 40px;
             }
         }
+
         .right-img-div {
             display: none;
         }
+
         .product-detail-content,
         .service-detail-content,
         .combo-detail-content {
             .add-image {
-                text-align: right;
-                margin-bottom: 10px;
+                button {
+                    padding: 0;
+                    margin: 0 !important;
+                    height: auto;
+                    border: 2px dashed #d9d9d9;
+                    overflow: hidden;
+                }
+
                 img {
-                    width: 80px;
+                    height: 87px;
+                    width: 87px;
+                    object-fit: contain;
+                    transform: scale(1.2);
                 }
             }
         }
+
         .combo-detail-content {
             min-height: auto;
         }
+
         .select-product-type {
             padding-bottom: 10px;
         }
@@ -418,12 +527,14 @@
         display: inline-block !important;
     }
 }
+
 @media (max-width: 575px) {
     .create-new-inventory-page {
         .select-physical-product {
             .radio-btn-wrapper {
                 display: block;
                 width: 100%;
+
                 span {
                     width: 43%;
                     float: left;
@@ -432,6 +543,7 @@
                 }
             }
         }
+
         .sales-purchase-details {
             .purchase-information,
             .sales-information {
@@ -440,6 +552,7 @@
                 }
             }
         }
+
         .show-on-mobile {
             display: none;
         }
@@ -450,6 +563,7 @@
             padding-right: 15px;
             max-width: 100%;
         }
+
         .variant-field {
             .variant-name-field {
                 min-width: 100%;
@@ -457,6 +571,7 @@
                 max-width: 100%;
             }
         }
+
         .hide-label-on-mobile {
             display: none !important;
         }

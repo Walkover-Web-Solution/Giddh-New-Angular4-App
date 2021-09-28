@@ -1,24 +1,38 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, Optional, Self } from "@angular/core";
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Optional,
+    Self,
+} from "@angular/core";
 import { ControlValueAccessor, NgControl } from "@angular/forms";
 import { MatFormFieldControl } from "@angular/material/form-field";
 import { Subject } from "rxjs";
 
-const noop = () => { };
+const noop = () => {
+};
 
 @Component({
-    selector: 'text-field',
-    styleUrls: ['./text-field.component.scss'],
-    templateUrl: './text-field.component.html',
+    selector: "text-field",
+    styleUrls: ["./text-field.component.scss"],
+    templateUrl: "./text-field.component.html",
     providers: [
         {
             provide: MatFormFieldControl,
-            useExisting: TextFieldComponent
-        }
+            useExisting: TextFieldComponent,
+        },
     ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor {
     @Input() public cssClass: string = "";
+
+    @Input() public cssStyle: string = "";
     /** Taking placeholder as input */
     @Input() public placeholder: any = "";
     /** Taking name as input */
@@ -40,7 +54,7 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     constructor(
         @Optional() @Self() public ngControl: NgControl,
         private elementRef: ElementRef<HTMLElement>,
-        private changeDetectorRef: ChangeDetectorRef
+        private changeDetectorRef: ChangeDetectorRef,
     ) {
         if (this.ngControl != null) {
             this.ngControl.valueAccessor = this;
@@ -145,8 +159,8 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
      * @memberof TextFieldComponent
      */
     public setDescribedByIds(ids: string[]): void {
-        const controlElement = this.elementRef.nativeElement.querySelector('.text-field-container')!;
-        controlElement.setAttribute('aria-describedby', ids.join(' '));
+        const controlElement = this.elementRef.nativeElement.querySelector(".text-field-container")!;
+        controlElement.setAttribute("aria-describedby", ids.join(" "));
     }
 
     /**
