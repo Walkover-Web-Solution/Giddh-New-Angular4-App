@@ -11,7 +11,7 @@ import { getPath } from "../../helpers/general";
 export async function saveCompaniesLocal(request): Promise<any> {
     if (request && request.status === "success") {
         const companiesList = request.body;
-        const filename = getPath("companies.db");
+        const filename = await getPath("companies.db");
         const db = new Datastore({ filename: filename, autoload: true });
 
         /** Removing the companies list if exists already */
@@ -32,7 +32,7 @@ export async function saveCompaniesLocal(request): Promise<any> {
  * @returns
  */
 export async function getCompaniesLocal(request: any): Promise<any> {
-    const filename = getPath("companies.db");
+    const filename = await getPath("companies.db");
     const db = new Datastore({ filename: filename, autoload: true });
 
     /** Finding the companies list */
