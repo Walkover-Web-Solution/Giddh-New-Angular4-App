@@ -74,6 +74,8 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         return GstReport;
     }
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(private gstAction: GstReconcileActions, private store: Store<AppState>, private route: Router, private activatedRoute: ActivatedRoute, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver,
         private invoiceReceiptActions: InvoiceReceiptActions,
@@ -139,7 +141,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             this.filterParam.status = params.status;
             this.viewFilteredTxn('page', 1);
         });
-
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     public viewFilteredTxn(filter, val) {
@@ -163,11 +165,20 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     public onSelectInvoice(invoice) {
         let downloadVoucherRequestObject;
         if (invoice && invoice.account) {
-            downloadVoucherRequestObject = {
-                voucherNumber: [invoice.voucherNumber],
-                voucherType: invoice.voucherType,
-                accountUniqueName: invoice.account.uniqueName
-            };
+            if(this.voucherApiVersion === 2) {
+                downloadVoucherRequestObject = {
+                    uniqueName: [invoice.uniqueName],
+                    voucherType: invoice.voucherType,
+                    accountUniqueName: invoice.account.uniqueName
+                };
+            } else {
+                downloadVoucherRequestObject = {
+                    voucherNumber: [invoice.voucherNumber],
+                    voucherType: invoice.voucherType,
+                    accountUniqueName: invoice.account.uniqueName
+                };
+            }
+            
             this.selectedInvoice = invoice;
             this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
         }
