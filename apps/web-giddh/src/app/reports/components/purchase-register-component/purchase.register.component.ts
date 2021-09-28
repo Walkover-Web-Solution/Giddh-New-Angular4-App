@@ -103,7 +103,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                     isCompany: true
                 });
                 let currentBranchUniqueName;
-                if (!this.currentBranch.uniqueName) {
+                if (!this.currentBranch?.uniqueName) {
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                         this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
@@ -116,7 +116,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                         };
                     }
                 } else {
-                    const selectedBranch = _.cloneDeep(response.find(branch => branch.uniqueName === this.currentBranch.uniqueName));
+                    const selectedBranch = _.cloneDeep(response.find(branch => branch.uniqueName === this.currentBranch?.uniqueName));
                     if (selectedBranch) {
                         this.currentBranch.name = selectedBranch.name;
                         this.currentBranch.alias = selectedBranch.alias;
@@ -234,6 +234,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 activeFinancialYear = this.selectedCompany.financialYears.find(p => p.uniqueName === uniqueNameToSearch);
                 this.activeFinacialYr = activeFinancialYear;
                 this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
+                this.currentBranch.uniqueName = currentBranchUniqueName ? currentBranchUniqueName : this.currentBranch?.uniqueName;
                 this.selectedType = currentTimeFilter ? currentTimeFilter.toLowerCase() : this.selectedType;
                 this.currentBranch.uniqueName = currentBranchUniqueName ? currentBranchUniqueName : this.currentBranch.uniqueName;
                 this.populateRecords(this.selectedType);
@@ -243,8 +244,8 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     }
 
     public selectFinancialYearOption(v: IOption) {
-        if (v.value) {
-            let financialYear = this.selectedCompany.financialYears.find(p => p.uniqueName === v.value);
+        if (v?.value) {
+            let financialYear = this.selectedCompany.financialYears.find(p => p.uniqueName === v?.value);
             this.activeFinacialYr = financialYear;
             this.populateRecords(this.interval, this.selectedMonth);
         }
@@ -268,7 +269,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 to: endDate,
                 from: startDate,
                 interval: interval,
-                branchUniqueName: this.currentBranch.uniqueName
+                branchUniqueName: this.currentBranch?.uniqueName
             }
             this.companyService.getPurchaseRegister(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res.status === 'error') {
@@ -293,14 +294,14 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 to: moment(event[1]).format(GIDDH_DATE_FORMAT),
                 from: moment(event[0]).format(GIDDH_DATE_FORMAT),
                 interval: 'monthly',
-                branchUniqueName: this.currentBranch.uniqueName
+                branchUniqueName: this.currentBranch?.uniqueName
             }
             this.companyService.getPurchaseRegister(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res.status === 'error') {
                     this._toaster.errorToast(res.message);
                 } else {
                     this.purchaseRegisterTotal = new PurchaseReportsModel();
-                    this.purchaseRegisterTotal.particular = this.activeFinacialYr.uniqueName;
+                    this.purchaseRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
                     this.reportRespone = this.filterReportResp(res.body);
                 }
             });
@@ -356,7 +357,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
      */
     private savePreferences(): void {
         this.store.dispatch(this.companyActions.setUserChosenFinancialYear({
-            financialYear: this.currentActiveFinacialYear.value, branchUniqueName: this.currentBranch.uniqueName, timeFilter: this.selectedType
+            financialYear: this.currentActiveFinacialYear.value, branchUniqueName: this.currentBranch?.uniqueName, timeFilter: this.selectedType
         }));
     }
 

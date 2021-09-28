@@ -1054,7 +1054,7 @@
                 #advanceReceiptComponent
                 [adjustedVoucherType]="blankLedger.voucherType"
                 [invoiceFormDetails]="adjustVoucherConfiguration"
-                [advanceReceiptAdjustmentUpdatedData]="currentTxn.voucherAdjustments"
+                [advanceReceiptAdjustmentUpdatedData]="currentTxn?.voucherAdjustments"
                 (closeModelEvent)="closeAdjustmentModal($event)"
                 (submitClicked)="getAdjustedPaymentData($event)"
             >

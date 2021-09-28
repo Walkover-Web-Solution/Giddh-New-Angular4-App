@@ -7,12 +7,12 @@ import { SnackBarComponent } from '../theme/snackbar/snackbar.component';
 @Injectable()
 export class ToasterService {
 
-    constructor(private _toaster: ToastrService, private snackBar: MatSnackBar) {
+    constructor(private toaster: ToastrService, private snackBar: MatSnackBar) {
 
     }
 
     public successToast(msg: string, title: string = APP_DEFAULT_TITLE): void {
-        this._toaster.success(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS));
+        this.toaster.success(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS));
     }
 
     /**
@@ -23,28 +23,28 @@ export class ToasterService {
      * @memberof ToasterService
      */
     public successToastWithHtml(msg: string, title: string = APP_DEFAULT_TITLE): void {
-        this._toaster.success(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS_WITH_HTML));
+        this.toaster.success(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS_WITH_HTML));
     }
 
     public errorToast(msg: string, title: string = APP_DEFAULT_TITLE, params?: any): void {
         if (params) {
             params = { timeOut: params };
-            this._toaster.error(msg, title, Object.assign({}, { ...DEFAULT_TOASTER_OPTIONS, ...params }));
+            this.toaster.error(msg, title, Object.assign({}, { ...DEFAULT_TOASTER_OPTIONS, ...params }));
         } else {
-            this._toaster.error(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS));
+            this.toaster.error(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS));
         }
     }
 
     public warningToast(msg: string, title: string = APP_DEFAULT_TITLE): void {
-        this._toaster.warning(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS));
+        this.toaster.warning(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS));
     }
 
     public infoToast(msg: string, title: string = APP_DEFAULT_TITLE): void {
-        this._toaster.info(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS));
+        this.toaster.info(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS));
     }
 
     public clearAllToaster(): void {
-        this._toaster.clear();
+        this.toaster.clear();
     }
 
     /**

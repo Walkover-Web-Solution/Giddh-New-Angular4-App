@@ -24,11 +24,11 @@ import { SHOW_GST_FILING } from '../../app.constant';
 })
 export class FilingComponent implements OnInit, OnDestroy {
     @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
-    /* This will hold the value out/in to open/close setting sidebar popup */
+    /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
-    /* Aside pane state*/
+    /** Aside pane state*/
     public asideMenuState: string = 'out';
-    /* this will check mobile screen size */
+    /** this will check mobile screen size */
     public isMobileScreen: boolean = false;
     public currentPeriod: GstDatePeriod = null;
     public selectedGst: string = null;
@@ -44,23 +44,20 @@ export class FilingComponent implements OnInit, OnDestroy {
     public fileReturnSucces: boolean = false;
     /** True, if HSN tab needs to be opened by default (required if a user clicks on HSN data in GSTR1) */
     public showHsn: boolean;
-
     public gstr1OverviewDataInProgress$: Observable<boolean>;
     public gstr2OverviewDataInProgress$: Observable<boolean>;
-
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
     /** Returns the enum to be used in template */
     public get GstReport() {
         return GstReport;
     }
-
     private gstr1OverviewDataFetchedSuccessfully$: Observable<boolean>;
     private gstr2OverviewDataFetchedSuccessfully$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Stores the current period */
     public getCurrentPeriod$: Observable<any> = of(null);
@@ -70,10 +67,10 @@ export class FilingComponent implements OnInit, OnDestroy {
     public showGstFiling: boolean = SHOW_GST_FILING;
 
     constructor(
-        private _route: Router,
+        private route: Router,
         private activatedRoute: ActivatedRoute,
         private store: Store<AppState>,
-        private _gstAction: GstReconcileActions,
+        private gstAction: GstReconcileActions,
         private generalService: GeneralService,
         private breakpointObserver: BreakpointObserver) {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
@@ -82,7 +79,6 @@ export class FilingComponent implements OnInit, OnDestroy {
         this.gstr2OverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr2OverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
         this.gstr1OverviewDataInProgress$ = this.store.pipe(select(p => p.gstR.gstr1OverViewDataInProgress), takeUntil(this.destroyed$));
         this.gstr2OverviewDataInProgress$ = this.store.pipe(select(p => p.gstR.gstr2OverViewDataInProgress), takeUntil(this.destroyed$));
-
         this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
 
         this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
@@ -91,6 +87,7 @@ export class FilingComponent implements OnInit, OnDestroy {
             }
         });
     }
+    
     public ngOnInit() {
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.breakpointObserver
@@ -109,9 +106,9 @@ export class FilingComponent implements OnInit, OnDestroy {
             };
             if (params['selectedGst']) {
                 this.activeCompanyGstNumber = params['selectedGst'];
-                this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
+                this.store.dispatch(this.gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
             }
-            this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
+			this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
             if (this.selectedGst !== params['return_type']) {
                 this.selectedGst = params['return_type'];
                 this.loadGstReport(this.activeCompanyGstNumber);
@@ -191,7 +188,7 @@ export class FilingComponent implements OnInit, OnDestroy {
      * @memberof FilingComponent
      */
     public navigateToOverview(type: string): void {
-        this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: 0, selectedGst: this.activeCompanyGstNumber } });
+        this.route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: 0, selectedGst: this.activeCompanyGstNumber } });
     }
 
     /**
@@ -201,7 +198,7 @@ export class FilingComponent implements OnInit, OnDestroy {
      * @memberof FilingComponent
      */
     public navigateTogstR3B(type: string): void {
-        this._route.navigate(['pages', 'gstfiling', 'gstR3'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, isCompany: this.isCompany, selectedGst: this.activeCompanyGstNumber } });
+        this.route.navigate(['pages', 'gstfiling', 'gstR3'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, isCompany: this.isCompany, selectedGst: this.activeCompanyGstNumber } });
     }
 
     /**
@@ -243,20 +240,20 @@ export class FilingComponent implements OnInit, OnDestroy {
             this.gstr1OverviewDataFetchedSuccessfully$.pipe(take(1)).subscribe(bool => {
                 if (!bool) {
                     // it means no gstr1 data available or error occurred or user directly navigated to this tab
-                    this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr1, request));
+                    this.store.dispatch(this.gstAction.GetOverView(GstReport.Gstr1, request));
                 }
             });
         } else {
             this.gstr2OverviewDataFetchedSuccessfully$.pipe(take(1)).subscribe(bool => {
                 if (!bool) {
                     // it means no gstr2 data available or error occurred or user directly navigated to this tab
-                    this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr2, request));
+                    this.store.dispatch(this.gstAction.GetOverView(GstReport.Gstr2, request));
                 }
             });
         }
 
         // get session details
-        this.store.dispatch(this._gstAction.GetGSPSession(this.activeCompanyGstNumber));
+        this.store.dispatch(this.gstAction.GetGSPSession(this.activeCompanyGstNumber));
 
         this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
             if (this.isMobileScreen) {

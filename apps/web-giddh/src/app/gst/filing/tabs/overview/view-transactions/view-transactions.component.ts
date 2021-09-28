@@ -33,22 +33,17 @@ export const filterTransaction = {
     templateUrl: './view-transactions.component.html',
     styleUrls: ['./view-transactions.component.scss'],
 })
-
 export class ViewTransactionsComponent implements OnInit, OnDestroy {
-
     @Input() public currentPeriod: any = null;
     @Input() public selectedGst: string = null;
     @Input() public activeCompanyGstNumber: string = null;
     @Input() public isTransactionSummary: boolean;
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     @Input() public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-    // @Input() public filterParam = filterTransaction;
-
     @ViewChild('downloadOrSendMailModel', { static: true }) public downloadOrSendMailModel: ModalDirective;
     @ViewChild('downloadOrSendMailComponent', { static: true }) public downloadOrSendMailComponent: ElementViewContainerRef;
-
     public viewTransaction$: Observable<GstTransactionResult> = of(null);
     public gstr1entityType = [];
     public invoiceType = [];
@@ -75,13 +70,12 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     /** Returns the enum to be used in template */
     /** It will store mobile size */
     public isMobileScreen: boolean = false;
-
     public get GstReport() {
         return GstReport;
     }
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private gstAction: GstReconcileActions, private store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver,
+    constructor(private gstAction: GstReconcileActions, private store: Store<AppState>, private route: Router, private activatedRoute: ActivatedRoute, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceService: InvoiceService,
         private toaster: ToasterService,
@@ -99,7 +93,6 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-
         this.gstr1entityType = [
             { label: this.commonLocaleData?.app_invoices, value: 'invoices' },
             { label: this.commonLocaleData?.app_credit_notes, value: 'credit-notes' },
@@ -160,7 +153,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     }
 
     public goBack() {
-        this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to } });
+        this.route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to } });
     }
 
     public pageChanged(event) {
@@ -249,12 +242,11 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * download file as pdf
-    *
-    * @param data
-    * @param invoiceUniqueName
-    * @memberof ViewTransactionsComponent
-    */
+     * download file as pdf
+     *
+     * @returns {void}
+     * @memberof ViewTransactionsComponent
+     */
     public downloadFile(): void {
         let blob = this.generalService.base64ToBlob(this.base64Data, 'application/pdf', 512);
         return saveAs(blob, `${this.commonLocaleData?.app_invoice}-${this.selectedInvoice.account.uniqueName}.pdf`);

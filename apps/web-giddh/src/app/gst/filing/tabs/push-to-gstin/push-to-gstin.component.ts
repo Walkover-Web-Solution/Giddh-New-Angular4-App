@@ -14,27 +14,24 @@ import { takeUntil } from 'rxjs/operators';
     styleUrls: ['./push-to-gstin.component.scss'],
 })
 export class PushToGstInComponent implements OnInit, OnDestroy {
-
     @Input() public currentPeriod: GstDatePeriod = null;
     @Input() public activeCompanyGstNumber: string = '';
     @Input() public selectedGst: string = '';
     /** True, if HSN tab needs to be opened by default (required if a user clicks on HSN data in GSTR1) */
     @Input() public showHsn: boolean;
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     @Input() public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-
     /** Emitted when back button is clicked on HSN summary page */
     @Output() public backClicked: EventEmitter<void> = new EventEmitter();
-
     public showTransaction: boolean = false;
     public gstr1SummaryDetails: Gstr1SummaryResponse;
     public gstr1SummaryDetailsInProcess: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
-        private _store: Store<AppState>,
+        private store: Store<AppState>,
         private gstrAction: GstReconcileActions,
         private activatedRoute: ActivatedRoute,
         private changeDetectorRef: ChangeDetectorRef) {
@@ -42,14 +39,14 @@ export class PushToGstInComponent implements OnInit, OnDestroy {
             this.showTransaction = !!params['transaction'];
         });
 
-        this._store.pipe(select(s => s.gstR.gstr1SummaryResponse), takeUntil(this.destroyed$)).subscribe(result => {
+        this.store.pipe(select(s => s.gstR.gstr1SummaryResponse), takeUntil(this.destroyed$)).subscribe(result => {
             this.gstr1SummaryDetails = result;
             if (this.showHsn) {
                 this.changeDetectorRef.detectChanges();
             }
         });
 
-        this._store.pipe(select(s => s.gstR.gstr1SummaryDetailsInProcess), takeUntil(this.destroyed$)).subscribe(result => {
+        this.store.pipe(select(s => s.gstR.gstr1SummaryDetailsInProcess), takeUntil(this.destroyed$)).subscribe(result => {
             this.gstr1SummaryDetailsInProcess = result;
         });
     }
@@ -64,7 +61,7 @@ export class PushToGstInComponent implements OnInit, OnDestroy {
         request.from = this.currentPeriod.from;
         request.to = this.currentPeriod.to;
 
-        this._store.dispatch(this.gstrAction.GetGSTR1SummaryDetails(request));
+        this.store.dispatch(this.gstrAction.GetGSTR1SummaryDetails(request));
     }
 
     public ngOnDestroy() {
@@ -81,5 +78,4 @@ export class PushToGstInComponent implements OnInit, OnDestroy {
         this.showHsn = false;
         this.backClicked.emit();
     }
-
 }

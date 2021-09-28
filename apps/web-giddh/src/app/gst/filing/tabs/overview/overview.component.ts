@@ -11,30 +11,26 @@ import { takeUntil } from 'rxjs/operators';
     styleUrls: ['overview.component.css'],
 })
 export class FilingOverviewComponent implements OnInit, OnDestroy {
-
     @Input() public currentPeriod: GstDatePeriod = new GstDatePeriod();
     @Input() public activeCompanyGstNumber: string = '';
     @Input() public selectedGst: string = '';
     @Input() public isTransactionSummary: boolean = false;
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     @Input() public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-
     /** Emits when HSN/SAC is selected */
     @Output() public hsnSacSelected: EventEmitter<void> = new EventEmitter();
-
     public showTransaction: boolean = false;
     public filters: any = {};
-
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private _route: Router, private activatedRoute: ActivatedRoute) {
+    constructor(private route: Router, private activatedRoute: ActivatedRoute) {
     }
 
     public ngOnInit() {
         this.activatedRoute.url.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            this.showTransaction = this._route.routerState.snapshot.url.includes('transaction');
+            this.showTransaction = this.route.routerState.snapshot.url.includes('transaction');
         });
     }
 
@@ -43,11 +39,12 @@ export class FilingOverviewComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * ngOnDestroy
+     * Releases the memory
+     *
+     * @memberof FilingOverviewComponent
      */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-
 }

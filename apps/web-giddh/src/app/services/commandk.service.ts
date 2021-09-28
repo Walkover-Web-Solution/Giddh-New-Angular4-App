@@ -10,7 +10,7 @@ import { GiddhErrorHandler } from './catchManager/catchmanger';
 
 @Injectable()
 export class CommandKService {
-    constructor(private errorHandler: GiddhErrorHandler, private _http: HttpWrapperService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
 
     }
 
@@ -21,7 +21,7 @@ export class CommandKService {
         url = url.replace(':q', encodeURIComponent(request.q));
         url = url.replace(':group', request.group);
         url = url.replace(':isMobile', request.isMobile);
-        return this._http.get(url).pipe(
+        return this.http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;

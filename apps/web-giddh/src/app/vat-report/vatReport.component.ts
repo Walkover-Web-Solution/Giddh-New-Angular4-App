@@ -25,7 +25,6 @@ import { cloneDeep } from '../lodash-optimized';
     styleUrls: ['./vatReport.component.scss'],
     templateUrl: './vatReport.component.html'
 })
-
 export class VatReportComponent implements OnInit, OnDestroy {
     public vatReport: any[] = [];
     public activeCompany: any;
@@ -45,7 +44,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public currentPeriod: any = {};
     public showCalendar: boolean = false;
     public datepickerVisibility: any = 'hidden';
-
     /** Stores the tax details of a company */
     public taxes: IOption[] = [];
     /** Tax number */
@@ -60,26 +58,26 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public currentCompanyBranches: Array<any>;
     /** Stores the current branch */
     public currentBranch: any = { name: '', uniqueName: '' };
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
-    /* This will hold the value out/in to open/close setting sidebar popup */
+    /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
-    /* this will check mobile screen size */
+    /** this will check mobile screen size */
     public isMobileScreen: boolean = false;
 
     constructor(
         private gstReconcileService: GstReconcileService,
         private store: Store<AppState>,
         private vatService: VatService,
-        private _generalService: GeneralService,
-        private _toasty: ToasterService,
+        private generalService: GeneralService,
+        private toasty: ToasterService,
         private cdRef: ChangeDetectorRef,
         private companyActions: CompanyActions,
-        private _route: Router,
+        private route: Router,
         private settingsBranchAction: SettingsBranchActions,
         private breakpointObserver: BreakpointObserver
     ) {
@@ -107,9 +105,9 @@ export class VatReportComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.currentOrganizationType = this._generalService.currentOrganizationType;
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.loadTaxDetails();
-        this.saveLastState(this._generalService.companyUniqueName);
+        this.saveLastState(this.generalService.companyUniqueName);
         this.currentPeriod = {
             from: moment().startOf('month').format(GIDDH_DATE_FORMAT),
             to: moment().endOf('month').format(GIDDH_DATE_FORMAT)
@@ -151,7 +149,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
-                        currentBranchUniqueName = this._generalService.currentBranchUniqueName;
+                        currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                         this.currentBranch = cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
@@ -163,7 +161,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
                     }
                 }
             } else {
-                if (this._generalService.companyUniqueName) {
+                if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
                     this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
                 }
@@ -200,7 +198,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
                         this.vatReport = res.body.sections;
                         this.cdRef.detectChanges();
                     } else {
-                        this._toasty.errorToast(res.message);
+                        this.toasty.errorToast(res.message);
                     }
                 }
             });
@@ -215,11 +213,11 @@ export class VatReportComponent implements OnInit, OnDestroy {
         vatReportRequest.branchUniqueName = this.currentBranch.uniqueName;
         this.vatService.downloadVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res.status === "success") {
-                let blob = this._generalService.base64ToBlob(res.body, 'application/xls', 512);
+                let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
                 return saveAs(blob, `VatReport.xlsx`);
             } else {
-                this._toasty.clearAllToaster();
-                this._toasty.errorToast(res.message);
+                this.toasty.clearAllToaster();
+                this.toasty.errorToast(res.message);
             }
         });
     }
@@ -244,11 +242,11 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public periodChanged(ev) {
         if (ev && ev.picker) {
             this.currentPeriod = {
-                from: moment(ev.picker.startDate._d).format(GIDDH_DATE_FORMAT),
-                to: moment(ev.picker.endDate._d).format(GIDDH_DATE_FORMAT)
+                from: moment(ev.picker.startDate.d).format(GIDDH_DATE_FORMAT),
+                to: moment(ev.picker.endDate.d).format(GIDDH_DATE_FORMAT)
             };
-            this.fromDate = moment(ev.picker.startDate._d).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(ev.picker.endDate._d).format(GIDDH_DATE_FORMAT);
+            this.fromDate = moment(ev.picker.startDate.d).format(GIDDH_DATE_FORMAT);
+            this.toDate = moment(ev.picker.endDate.d).format(GIDDH_DATE_FORMAT);
             this.isMonthSelected = false;
         } else {
             this.currentPeriod = {
@@ -312,7 +310,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
      * @memberof VatReportComponent
      */
     public viewVatReportTransactions(section) {
-        this._route.navigate(['pages', 'vat-report', 'transactions', 'section', section], { queryParams: { from: this.currentPeriod.from, to: this.currentPeriod.to, taxNumber: this.taxNumber } });
+        this.route.navigate(['pages', 'vat-report', 'transactions', 'section', section], { queryParams: { from: this.currentPeriod.from, to: this.currentPeriod.to, taxNumber: this.taxNumber } });
     }
 
     /**
@@ -349,7 +347,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
      *
      * @memberof VatReportComponent
      */
-     public handleNavigation(): void {
-        this._route.navigate(['pages', 'gstfiling']);
+    public handleNavigation(): void {
+        this.route.navigate(['pages', 'gstfiling']);
     }
 }
