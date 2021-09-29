@@ -3,48 +3,49 @@ import { findAsync, insertAsync, loadDatabase, removeAsync } from "../../helpers
 import { getPath } from "../../helpers/general";
 
 /**
- * This will save the companies list
+ * This will save the branches list
  *
+ * @param {*} request
  * @param {*} response
  * @returns
  */
-export async function saveCompaniesLocal(response: any): Promise<any> {
+export async function saveBranchesLocal(request: any, response: any): Promise<any> {
     if (response && response.status === "success") {
-        const companiesList = response.body;
-        const filename = getPath("companies.db");
+        const branchesList = response.body;
+        const filename = getPath("branches-" + request.params.companyUniqueName + ".db");
         const db = new Datastore({ filename: filename });
 
         /** Connecting to database */
         await loadDatabase(db);
-        /** Removing the companies list if exists already */
+        /** Removing the branches list if exists already */
         await removeAsync(db, {}, { multi: true });
-        /** Inserting the companies list */
-        await insertAsync(db, companiesList);
+        /** Inserting the branches list */
+        await insertAsync(db, branchesList);
 
-        return { status: "success", body: companiesList };
+        return { status: "success", body: branchesList };
     } else {
         return { status: "error", message: response?.message };
     }
 }
 
 /**
- * This will return the list of companies
+ * This will return the list of branches
  *
  * @param {*} request
  * @returns
  */
-export async function getCompaniesLocal(request: any): Promise<any> {
-    const filename = getPath("companies.db");
+export async function getBranchesLocal(request: any): Promise<any> {
+    const filename = getPath("branches-" + request.params.companyUniqueName + ".db");
     const db = new Datastore({ filename: filename });
 
     /** Connecting to database */
     await loadDatabase(db);
-    /** Finding the companies list */
+    /** Finding the branches list */
     const response = await findAsync(db, {});
 
     if (response?.length > 0) {
         return { status: "success", body: response };
     } else {
-        return { status: "error", message: "Companies list unavailable." };
+        return { status: "error", message: "Branches list unavailable." };
     }
 }

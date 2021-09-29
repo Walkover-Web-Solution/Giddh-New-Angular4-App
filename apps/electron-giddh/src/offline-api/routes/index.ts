@@ -1,5 +1,6 @@
 import { getCompaniesRoutes } from "./companies";
 import { getCompanyRoutes } from "./company";
+import { getBranchesRoutes } from "./branches";
 
 /**
  * Initializing all routes here
@@ -9,4 +10,5 @@ import { getCompanyRoutes } from "./company";
 export function defineRoutes(app) {
     getCompanyRoutes(app);
     getCompaniesRoutes(app);
+    getBranchesRoutes(app);
 }

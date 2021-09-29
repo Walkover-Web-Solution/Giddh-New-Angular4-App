@@ -3,14 +3,14 @@ import { getApiUrl } from "../../helpers/environment";
 import { getDefaultApiOptions } from "../../helpers/general";
 
 /**
- * This will get the list of companies
+ * This will get the list of branches
  *
  * @param {*} req
  * @param {*} res
  * @returns
  */
-export async function getCompaniesGiddh(req: any, res: any): Promise<any> {
+export async function getBranchesGiddh(req: any, res: any): Promise<any> {
     const options = getDefaultApiOptions(req);
-    const url = getApiUrl(req) + 'users/' + req.params.userUniqueName + '/v2/companies';
+    const url = getApiUrl(req) + 'company/' + req.params.companyUniqueName + '/branch';
     return callApi(url, options);
 }

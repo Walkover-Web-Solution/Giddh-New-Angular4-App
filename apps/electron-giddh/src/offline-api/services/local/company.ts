@@ -1,17 +1,18 @@
 import Datastore from "nedb";
 import { findAsync, insertAsync, loadDatabase, removeAsync } from "../../helpers/nedb_async";
-import { cleanCompanyData, getPath } from "../../helpers/general";
+import { getPath } from "../../helpers/general";
 
 /**
  * This will save the active company information
  *
  * @param {*} request
+ * @param {*} response
  * @returns
  */
-export async function saveCompanyLocal(request: any): Promise<any> {
-    if (request && request.status === "success") {
-        const companyData = cleanCompanyData(request.body);
-        const filename = getPath("company-details.db");
+export async function saveCompanyLocal(request: any, response: any): Promise<any> {
+    if (response && response.status === "success") {
+        const companyData = response.body;
+        const filename = getPath("company-" + request.params.companyUniqueName + ".db");
         const db = new Datastore({ filename: filename });
 
         /** Connecting to database */
@@ -23,7 +24,7 @@ export async function saveCompanyLocal(request: any): Promise<any> {
 
         return { status: "success", body: companyData };
     } else {
-        return { status: "error", message: request.message };
+        return { status: "error", message: response?.message };
     }
 }
 
@@ -34,7 +35,7 @@ export async function saveCompanyLocal(request: any): Promise<any> {
  * @returns
  */
 export async function getCompanyLocal(request: any): Promise<any> {
-    const filename = getPath("company-details.db");
+    const filename = getPath("company-" + request.params.companyUniqueName + ".db");
     const db = new Datastore({ filename: filename });
 
     /** Connecting to database */

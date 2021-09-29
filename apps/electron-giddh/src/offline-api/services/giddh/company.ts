@@ -1,5 +1,6 @@
 import { callApi } from "../../helpers/apicall";
 import { getApiUrl } from "../../helpers/environment";
+import { getDefaultApiOptions } from "../../helpers/general";
 
 /**
  * This will get the company details
@@ -9,14 +10,7 @@ import { getApiUrl } from "../../helpers/environment";
  * @returns
  */
 export async function getCompanyGiddh(req: any, res: any): Promise<any> {
-    const options = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Session-Id': req.headers['session-id']
-        }
-    }
-
+    const options = getDefaultApiOptions(req);
     const url = getApiUrl(req) + 'company/' + req.params.companyUniqueName;
     return callApi(url, options);
 }

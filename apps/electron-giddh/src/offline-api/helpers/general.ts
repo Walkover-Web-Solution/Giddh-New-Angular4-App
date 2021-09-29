@@ -68,3 +68,20 @@ export function getPath(filename: string): any {
     createDbFile(path);
     return path;
 }
+
+/**
+ * This will return the default options for every api call
+ *
+ * @export
+ * @param {*} req
+ * @returns {*}
+ */
+export function getDefaultApiOptions(req): any {
+    return {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Session-Id': req.headers['session-id']
+        }
+    };
+}

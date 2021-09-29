@@ -1,26 +1,26 @@
 import checkInternetConnected from "check-internet-connected";
+import { getBranchesGiddh } from "../services/giddh/branches";
 import { getInternetConnectedConfig } from "../helpers/general";
-import { getCompanyGiddh } from "../services/giddh/company";
-import { getCompanyLocal, saveCompanyLocal } from "../services/local/company";
+import { getBranchesLocal, saveBranchesLocal } from "../services/local/branches";
 
 /**
- * This will return company data (if internet is available, it will fetch company data from giddh otherwise will return company data from local db)
+ * This will return branches list (if internet is available, it will fetch list of branches from giddh otherwise will return list of branches from local db)
  *
  * @param {*} req
  * @param {*} res
  */
-export function getCompanyController(req, res) {
+export function getBranchesController(req, res) {
     checkInternetConnected(getInternetConnectedConfig).then(async connected => {
         try {
-            const response = await getCompanyGiddh(req, res);
-            const finalResponse = await saveCompanyLocal(req, response);
+            const response = await getBranchesGiddh(req, res);
+            const finalResponse = await saveBranchesLocal(req, response);
             res.json(finalResponse);
         } catch (error) {
             res.json({ status: "error", "message": error.message });
         }
     }).catch(async error => {
         try {
-            const finalResponse = await getCompanyLocal(req);
+            const finalResponse = await getBranchesLocal(req);
             res.json(finalResponse);
         } catch (error) {
             res.json({ status: "error", "message": error.message });
