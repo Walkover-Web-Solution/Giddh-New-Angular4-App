@@ -854,6 +854,10 @@ export class ContactComponent implements OnInit, OnDestroy {
             componentInstance.maxSize = 5;
             componentInstance.writeValue(s.page);
             componentInstance.boundaryLinks = true;
+            componentInstance.firstText = this.commonLocaleData?.app_first;
+            componentInstance.previousText = this.commonLocaleData?.app_previous;
+            componentInstance.nextText = this.commonLocaleData?.app_next;
+            componentInstance.lastText = this.commonLocaleData?.app_last;
             componentInstance.pageChanged.pipe(takeUntil(this.destroyed$)).subscribe(e => {
                 this.pageChangedDueReport(e);
             });
