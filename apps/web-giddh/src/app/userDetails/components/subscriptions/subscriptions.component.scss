@@ -50,8 +50,6 @@
 
 .dropdown-menu {
     position: absolute;
-    /*top: 100%;*/
-    /* left: 0; */
     z-index: 99;
     min-width: 160px;
     padding: 5px 0 !important;
@@ -62,10 +60,9 @@
     background-color: $white;
     background-clip: padding-box;
     border: 1px solid $gainsboro;
-    border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
-    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    -webkit-box-shadow: 0 6px 12px $black-russian;
+    box-shadow: 0 6px 12px $black-russian;
 }
 .subscription-dropdown .dropdown-menu {
     max-width: 400px;

@@ -1,0 +1,74 @@
+<div class="relative">
+    <hamburger-menu [pageHeading]="'Adjust inventory'"></hamburger-menu>
+</div>
+
+<div class="container-fluid mr-t15 adjust-inventory-list-page">
+    <div class="d-flex justify-content-between adjust-inventory-header">
+        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+            <i class="icon-calender calendar-addon bdr-radius-50"></i>
+            <input
+                type="text"
+                id="select-date"
+                name="selectedDateRange"
+                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                class="giddh-datepicker date-range-picker bdr-radius-50"
+                placeholder="Enter Date"
+            />
+        </div>
+        <button id="add-adjustment-btn" class="btn btn-sky-blue mr-0 bdr-radius-50" (click)="adjustInventory()">
+            + Add Adjustment
+        </button>
+    </div>
+    <div class="custom-field-list mr-t15">
+        <div class="table-responsive">
+            <table class="table giddh-table on-mobile-view">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Reference No.</th>
+                        <th>Reason</th>
+                        <th>Type</th>
+                        <th>Adjusted</th>
+                        <th>Adjusted By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td data-title="Date">15/10/2020</td>
+                        <td data-title="Reference No.">234423</td>
+                        <td data-title="Reason">Stock on fire</td>
+                        <td data-title="Type">Quantity</td>
+                        <td data-title="Adjusted">Product Name</td>
+                        <td data-title="Adjusted By">Shubhendra Agarawal</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
+<aside-adjust-inventory *ngIf="asideMenuState === 'in'" (closeAsideEvent)="adjustInventory()"></aside-adjust-inventory>
+<!-- Datepicker template -->
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOption"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>

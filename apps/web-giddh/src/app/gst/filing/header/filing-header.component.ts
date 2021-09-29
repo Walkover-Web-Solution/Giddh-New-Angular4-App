@@ -143,7 +143,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             }
         }
 
-        if (s && s.fileGstr3b && s.fileGstr3b.currentValue.via) {
+        if (s && s.fileGstr3b && s.fileGstr3b.currentValue?.via) {
             let gsp = s.fileGstr3b.currentValue.via;
             if (this.gstAuthenticated) {
                 if (gsp === 'VAYANA' && this.isVayanaAuthenticated) {

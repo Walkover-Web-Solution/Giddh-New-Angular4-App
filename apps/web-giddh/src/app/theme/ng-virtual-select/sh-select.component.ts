@@ -59,10 +59,10 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Input() public borderConfiguration: BorderConfiguration;
     /** True, if search suggesstion should not be displayed */
     @Input() public showSearchSuggestion: boolean = true;
-    /** True, if selected values should not be reset when options change */
-    @Input() public doNotResetSelectedValues: boolean = false;
     /** True if field is required */
     @Input() public isRequired: boolean = false;
+    /** True, if selected values should not be reset when options change */
+    @Input() public doNotResetSelectedValues: boolean = false;
     /** True if select all option is checked */
     @Input() public isSelectAllChecked: boolean = false;
 
