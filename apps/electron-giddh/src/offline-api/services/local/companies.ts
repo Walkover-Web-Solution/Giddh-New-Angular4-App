@@ -1,5 +1,5 @@
 import Datastore from "nedb";
-import { findAsync, insertAsync, removeAsync } from "../../helpers/nedb_async";
+import { findAsync, insertAsync, loadDatabase, removeAsync } from "../../helpers/nedb_async";
 import { getPath } from "../../helpers/general";
 
 /**
@@ -12,8 +12,10 @@ export async function saveCompaniesLocal(request): Promise<any> {
     if (request && request.status === "success") {
         const companiesList = request.body;
         const filename = await getPath("companies.db");
-        const db = new Datastore({ filename: filename, autoload: true });
+        const db = new Datastore({ filename: filename });
 
+        /** Connecting to database */
+        await loadDatabase(db);
         /** Removing the companies list if exists already */
         await removeAsync(db, {}, { multi: true });
         /** Inserting the companies list */
@@ -33,8 +35,10 @@ export async function saveCompaniesLocal(request): Promise<any> {
  */
 export async function getCompaniesLocal(request: any): Promise<any> {
     const filename = await getPath("companies.db");
-    const db = new Datastore({ filename: filename, autoload: true });
+    const db = new Datastore({ filename: filename });
 
+    /** Connecting to database */
+    await loadDatabase(db);
     /** Finding the companies list */
     const response = await findAsync(db, {});
 

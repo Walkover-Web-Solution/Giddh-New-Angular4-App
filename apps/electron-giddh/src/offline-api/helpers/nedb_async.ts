@@ -1,4 +1,23 @@
 /**
+ * Connects to local database
+ *
+ * @export
+ * @param {*} db
+ * @returns {Promise<any>}
+ */
+ export function loadDatabase(db: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+        db.loadDatabase((err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(true);
+            }
+        })
+    });
+}
+
+/**
  * Inserts in local database
  *
  * @export
