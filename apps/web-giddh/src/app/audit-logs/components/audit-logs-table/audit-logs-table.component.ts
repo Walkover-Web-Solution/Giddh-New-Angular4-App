@@ -12,11 +12,10 @@ import { AppState } from '../../../store/roots';
     templateUrl: './audit-logs-table.component.html',
     styleUrls: ['audit-logs-table.component.scss']
 })
-
 export class AuditLogsTableComponent implements OnInit, OnDestroy {
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     @Input() public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     /** To toggle multiple line show/hide for address*/
     public showSingleAddress: boolean = false;
