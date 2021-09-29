@@ -11,7 +11,7 @@ import { cleanCompanyData, getPath } from "../../helpers/general";
 export async function saveCompanyLocal(request: any): Promise<any> {
     if (request && request.status === "success") {
         const companyData = cleanCompanyData(request.body);
-        const filename = await getPath("company-details.db");
+        const filename = getPath("company-details.db");
         const db = new Datastore({ filename: filename });
 
         /** Connecting to database */
@@ -34,7 +34,7 @@ export async function saveCompanyLocal(request: any): Promise<any> {
  * @returns
  */
 export async function getCompanyLocal(request: any): Promise<any> {
-    const filename = await getPath("company-details.db");
+    const filename = getPath("company-details.db");
     const db = new Datastore({ filename: filename });
 
     /** Connecting to database */
