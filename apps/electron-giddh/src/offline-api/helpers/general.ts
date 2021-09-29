@@ -62,7 +62,7 @@ export function createDbFile(filename: string): any {
  * @export
  * @returns {*}
  */
-export async function getPath(filename: string): Promise<any> {
+export function getPath(filename: string): any {
     const app = electron?.app || electron?.remote?.app;
     const path = app.getPath('userData') + "/" + filename;
     createDbFile(path);
