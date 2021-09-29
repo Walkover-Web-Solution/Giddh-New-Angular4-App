@@ -1,6 +1,5 @@
 import electron from "electron";
 import fs from "fs";
-import { callApi } from "./apicall";
 
 /**
  * This will assign blank object/array to company data if null/undefined value is received from giddh api
