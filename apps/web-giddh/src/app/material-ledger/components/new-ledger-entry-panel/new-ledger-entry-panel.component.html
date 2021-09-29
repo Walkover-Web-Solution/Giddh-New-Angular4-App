@@ -45,14 +45,14 @@
                                                 id="ledger-unit"
                                                 class="form-control"
                                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
-                                                (change)="unitChanged($event.target.value)"
-                                                [value]="currentTxn?.inventory.unit.code"
+                                                (change)="unitChanged($event?.target?.value)"
+                                                [value]="currentTxn?.inventory?.unit?.code"
                                             >
                                                 <mat-option
-                                                    *ngFor="let item of currentTxn.unitRate"
-                                                    [value]="item.code"
+                                                    *ngFor="let item of currentTxn?.unitRate"
+                                                    [value]="item?.code"
                                                 >
-                                                    {{ item.stockUnitCode }}
+                                                    {{ item?.stockUnitCode }}
                                                 </mat-option>
                                             </mat-select>
                                         </td>
