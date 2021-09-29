@@ -158,6 +158,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public inventorySettings: any;
     /** This will hold parent unique name */
     public activeParentGroupUniqueName: string = '';
+    /** True if custom fields api call in progress */
+    public isCustomFieldLoading: boolean = false;
 
     constructor(
         private _fb: FormBuilder,
@@ -923,6 +925,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     * @memberof AccountAddNewDetailsComponent
     */
     public getCompanyCustomField(): void {
+        if(this.isCustomFieldLoading) {
+            return;
+        }
+        this.isCustomFieldLoading = true;
         this.companyCustomFields = [];
         this.groupService.getCompanyCustomField().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === 'success') {
@@ -931,6 +937,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             } else {
                 this._toaster.errorToast(response.message);
             }
+            this.isCustomFieldLoading = false;
+            this.changeDetectorRef.detectChanges();
         });
     }
 
