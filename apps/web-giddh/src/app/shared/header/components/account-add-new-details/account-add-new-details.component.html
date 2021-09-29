@@ -231,9 +231,9 @@
             <ng-container>
                 <tab
                     [heading]="localeData?.tabs?.address"
-                    [active]="isDebtorCreditor"
-                    [disabled]="!isDebtorCreditor"
-                    [ngClass]="{ 'active': isDebtorCreditor }"
+                    [active]="!isHsnSacEnabledAcc"
+                    [disabled]="isHsnSacEnabledAcc"
+                    [customClass]="isHsnSacEnabledAcc ? 'd-none' : ''"
                     class="gstin-address"
                 >
                     <ng-container>
@@ -417,7 +417,7 @@
                     </ng-container>
                 </tab>
             </ng-container>
-            <tab [heading]="localeData?.tabs?.contact" [active]="!isDebtorCreditor" class="contact-form-wrap">
+            <tab [heading]="localeData?.tabs?.contact" [active]="isHsnSacEnabledAcc" class="contact-form-wrap">
                 <div class="contact-form">
                     <div class="row">
                         <div class="col-sm-6">

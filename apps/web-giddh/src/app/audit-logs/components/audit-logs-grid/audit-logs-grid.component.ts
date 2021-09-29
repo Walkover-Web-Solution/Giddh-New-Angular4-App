@@ -32,7 +32,7 @@ export class AuditLogsGridComponent implements OnInit, OnDestroy {
     /**
      * TypeScript public modifiers
      */
-    constructor(private store: Store<AppState>, private _auditLogsActions: AuditLogsActions) {
+    constructor(private store: Store<AppState>, private auditLogsActions: AuditLogsActions) {
         this.loadMoreInProcess$ = this.store.pipe(select(p => p.auditlog.LoadMoreInProcess), takeUntil(this.destroyed$));
         this.logs$ = this.store.pipe(select(p => p.auditlog.logs), takeUntil(this.destroyed$));
         this.size$ = this.store.pipe(select(p => p.auditlog.size), takeUntil(this.destroyed$));
@@ -61,7 +61,7 @@ export class AuditLogsGridComponent implements OnInit, OnDestroy {
         this.store.pipe(select(p => p.auditlog), take(1)).subscribe((r) => {
             let request = cloneDeep(r.currentLogsRequest);
             let page = r.currentPage + 1;
-            this.store.dispatch(this._auditLogsActions.LoadMoreLogs(request, page));
+            this.store.dispatch(this.auditLogsActions.LoadMoreLogs(request, page));
         });
     }
 }

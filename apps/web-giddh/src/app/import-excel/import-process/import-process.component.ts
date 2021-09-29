@@ -9,7 +9,6 @@ import { cloneDeep, sortBy } from '../../lodash-optimized';
     styleUrls: ['./import-process.component.scss'],
     templateUrl: './import-process.component.html'
 })
-
 export class ImportProcessComponent {
     public rawImportData: ImportExcelResponseData;
 
@@ -37,18 +36,13 @@ export class ImportProcessComponent {
     @Output() public onBack = new EventEmitter();
     @Input() public isLoading: boolean;
     @Input() public entity: string;
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
     public options: IOption[];
     public userHeader: string[] = [];
     public importDisable: boolean = true;
-
     private _importData: ImportExcelRequestData;
-
-    constructor() {
-        
-    }
 
     public save() {
         const data = { ...this.importData.data, items: this.importData.data.items };

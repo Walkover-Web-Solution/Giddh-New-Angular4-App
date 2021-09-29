@@ -8,7 +8,7 @@ import { ROUTES } from '../routes-array';
 
 @Injectable()
 export class UserAuthenticated implements CanActivate {
-    constructor(public _router: Router, private store: Store<AppState>, private zone: NgZone) {
+    constructor(public router: Router, private store: Store<AppState>, private zone: NgZone) {
     }
 
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
@@ -26,21 +26,21 @@ export class UserAuthenticated implements CanActivate {
                         urlParams.forEach((val, key) => {
                             queryParams[key] = val;
                         });
-                        this._router.navigate([p.lastState.replace(tempParams, '')], { queryParams });
+                        this.router.navigate([p.lastState.replace(tempParams, '')], { queryParams });
                     } else {
                         if (p.lastState) {
-                            this._router.navigate([p.lastState]);
+                            this.router.navigate([p.lastState]);
                         } else {
-                            this._router.navigate(['home']);
+                            this.router.navigate(['home']);
                         }
                     }
                 } else {
-                    this._router.navigate(['home']);
+                    this.router.navigate(['home']);
                 }
             }
             if (p.userLoginState === userLoginStateEnum.newUserLoggedIn) {
                 this.zone.run(() => {
-                    this._router.navigate(['/new-user']);
+                    this.router.navigate(['/new-user']);
                 });
             }
             return !(p.userLoginState === userLoginStateEnum.userLoggedIn || p.userLoginState === userLoginStateEnum.newUserLoggedIn);

@@ -3,6 +3,7 @@ import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from './Sales';
 import { PettyCashEntryStatus } from './Expences';
 import { VoucherAdjustments } from './AdvanceReceiptsAdjust';
+import { PAGINATION_LIMIT } from '../../app.constant';
 
 /*
  * Model for ledger create api request
@@ -228,7 +229,7 @@ export class TransactionsResponse implements ITransactions {
 export class TransactionsRequest {
     public q: string = '';
     public page: number = 0;
-    public count: number = 50;
+    public count: number = PAGINATION_LIMIT;
     public accountUniqueName: string = '';
     public from: string = '';
     public to: string = '';

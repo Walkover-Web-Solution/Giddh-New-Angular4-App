@@ -24,18 +24,15 @@ import { DecimalPipe } from '@angular/common';
     styleUrls: ['./subscriptions.component.scss'],
     templateUrl: './subscriptions.component.html'
 })
-
 export class SubscriptionsComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild('addCompanyNewModal', { static: true }) public addCompanyNewModal: ModalDirective;
     @ViewChild('companynewadd', { static: true }) public companynewadd: ElementViewContainerRef;
-
-    /* This will have active tab value */
+    /** This will have active tab value */
     @Input() public activeTab: string = '';
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     @Input() public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-
     public subscriptions: SubscriptionsUser[] = [];
     public allSubscriptions: SubscriptionsUser[] = [];
     public subscriptions$: Observable<SubscriptionsUser[]>;
@@ -71,12 +68,12 @@ export class SubscriptionsComponent implements OnInit, OnChanges, OnDestroy {
     public showSubscribedPlansList: boolean = false;
     public selectedCompany: any;
     public allAssociatedCompanies: CompanyResponse[] = [];
-    /* This will contain the plan unique name of default trial plan */
+    /** This will contain the plan unique name of default trial plan */
     public defaultTrialPlan: string = DEFAULT_SIGNUP_TRIAL_PLAN;
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
-    constructor(private store: Store<AppState>, private _subscriptionsActions: SubscriptionsActions, private modalService: BsModalService, private _route: Router, private activeRoute: ActivatedRoute, private subscriptionService: SubscriptionsService, private generalService: GeneralService, private settingsProfileActions: SettingsProfileActions, private companyActions: CompanyActions, private decimalPipe: DecimalPipe) {
+    constructor(private store: Store<AppState>, private subscriptionsActions: SubscriptionsActions, private modalService: BsModalService, private route: Router, private activeRoute: ActivatedRoute, private subscriptionService: SubscriptionsService, private generalService: GeneralService, private settingsProfileActions: SettingsProfileActions, private companyActions: CompanyActions, private decimalPipe: DecimalPipe) {
         this.subscriptions$ = this.store.pipe(select(s => s.subscriptions.subscriptions), takeUntil(this.destroyed$));
         this.companies$ = this.store.pipe(select(cmp => cmp.session.companies), takeUntil(this.destroyed$));
     }
@@ -130,7 +127,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, OnDestroy {
                     this.isPlanShow = true;
                     this.isLoading = false;
                 } else {
-                    this.store.dispatch(this._subscriptionsActions.SubscribedCompaniesResponse(res));
+                    this.store.dispatch(this.subscriptionsActions.SubscribedCompaniesResponse(res));
                 }
             } else {
                 this.isPlanShow = true;
@@ -172,7 +169,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public goToBillingDetails() {
-        this._route.navigate(['billing-detail', 'buy-plan']);
+        this.route.navigate(['billing-detail', 'buy-plan']);
     }
 
     public selectedSubscriptionPlan(subscription: SubscriptionsUser) {
@@ -301,7 +298,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, OnDestroy {
                 totalTransactions: this.seletedUserPlans.totalTransactions
             };
 
-            this._route.navigate(['billing-detail', 'buy-plan']);
+            this.route.navigate(['billing-detail', 'buy-plan']);
             this.store.dispatch(this.companyActions.selectedPlan(this.subscriptionPlan));
         } else {
             this.subscriptionRequestObj.userUniqueName = this.loggedInUser.uniqueName;
@@ -395,7 +392,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public addOrMoveCompanyCallback(event): void {
         if (event === true) {
-            this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
+            this.store.dispatch(this.subscriptionsActions.SubscribedCompanies());
         }
         this.modalRef.hide();
     }
