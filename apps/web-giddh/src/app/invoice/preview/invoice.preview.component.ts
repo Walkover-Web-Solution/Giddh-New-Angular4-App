@@ -678,23 +678,33 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public deleteConfirmedInvoice(selectedVoucher?: any) {
         this.invoiceConfirmationModel.hide();
         if (this.selectedVoucher === VoucherTypeEnum.purchase) {
-            const requestObject = {
-                uniqueName: (selectedVoucher) ? encodeURIComponent(selectedVoucher.uniqueName) : (this.selectedInvoice) ? encodeURIComponent(this.selectedInvoice.uniqueName) : (this.selectedInvoiceForDetails) ? encodeURIComponent(this.selectedInvoiceForDetails.uniqueName) : ''
-            };
-            this.purchaseRecordService.deletePurchaseRecord(requestObject).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-                this.selectedItems = [];
-                if (response.status === 'success') {
-                    this._toaster.successToast(response.body);
-                    this.selectedInvoiceForDetails = null;
-                    this.getVoucher(this.isUniversalDateApplicable);
-                } else {
-                    this._toaster.errorToast(response.message);
-                    this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.lastListingFilters, this.selectedVoucher));
-                    this._receiptServices.getAllReceiptBalanceDue(this.lastListingFilters, this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-                        this.parseBalRes(res);
-                    });
-                }
-            });
+            if (this.voucherApiVersion === 2) {
+                let model = {
+                    uniqueName: (selectedVoucher) ? encodeURIComponent(selectedVoucher.uniqueName) : (this.selectedInvoice) ? encodeURIComponent(this.selectedInvoice.uniqueName) : (this.selectedInvoiceForDetails) ? encodeURIComponent(this.selectedInvoiceForDetails.uniqueName) : '',
+                    voucherType: this.selectedVoucher
+                };
+
+                let account = (selectedVoucher) ? encodeURIComponent(selectedVoucher.account?.uniqueName) : (this.selectedInvoice) ? encodeURIComponent(this.selectedInvoice.account?.uniqueName) : (this.selectedInvoiceForDetails) ? encodeURIComponent(this.selectedInvoiceForDetails.account?.uniqueName) : '';
+                this.store.dispatch(this.invoiceReceiptActions.DeleteInvoiceReceiptRequest(model, account));
+            } else {
+                const requestObject = {
+                    uniqueName: (selectedVoucher) ? encodeURIComponent(selectedVoucher.uniqueName) : (this.selectedInvoice) ? encodeURIComponent(this.selectedInvoice.uniqueName) : (this.selectedInvoiceForDetails) ? encodeURIComponent(this.selectedInvoiceForDetails.uniqueName) : ''
+                };
+                this.purchaseRecordService.deletePurchaseRecord(requestObject).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                    this.selectedItems = [];
+                    if (response.status === 'success') {
+                        this._toaster.successToast(response.body);
+                        this.selectedInvoiceForDetails = null;
+                        this.getVoucher(this.isUniversalDateApplicable);
+                    } else {
+                        this._toaster.errorToast(response.message);
+                        this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.lastListingFilters, this.selectedVoucher));
+                        this._receiptServices.getAllReceiptBalanceDue(this.lastListingFilters, this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+                            this.parseBalRes(res);
+                        });
+                    }
+                });
+            }
         } else {
             //  It will execute when Bulk delete operation
             if (this.selectedInvoicesList.length > 1) {
@@ -733,8 +743,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     }
                 }
 
-                let account = (selectedVoucher) ? selectedVoucher.account.uniqueName : this.selectedInvoice.account.uniqueName;
-
+                let account = (selectedVoucher) ? selectedVoucher.account?.uniqueName : this.selectedInvoice.account?.uniqueName;
                 this.store.dispatch(this.invoiceReceiptActions.DeleteInvoiceReceiptRequest(model, account));
             }
 
