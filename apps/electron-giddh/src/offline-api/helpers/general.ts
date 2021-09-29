@@ -7,7 +7,7 @@ import fs from "fs";
  * @param {*} companyData
  * @returns
  */
-export function cleanCompanyData(companyData) {
+export function cleanCompanyData(companyData): any {
     if (companyData && companyData.addresses && companyData.addresses.length > 0) {
         companyData.addresses.forEach(address => {
             if (!address.branches) {
@@ -30,7 +30,7 @@ export function cleanCompanyData(companyData) {
  *
  * @returns
  */
-export function getInternetConnectedConfig() {
+export function getInternetConnectedConfig(): any {
     return {
         timeout: 2000, //timeout connecting to each server, each try
         retries: 1, //number of retries to do before failing
@@ -48,10 +48,9 @@ export function createDbFile(filename: string): any {
     try {
         const fileExists = fs.existsSync(filename);
         if (!fileExists) {
-            fs.writeFileSync(filename, "", "utf8");
-            return true;
+            fs.writeFileSync(filename, "", "utf-8");
         }
-        return false;
+        return true;
     } catch(error) {
         return error;
     }
