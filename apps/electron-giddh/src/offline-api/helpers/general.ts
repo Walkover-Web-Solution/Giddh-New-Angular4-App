@@ -45,14 +45,16 @@ export function getInternetConnectedConfig(): any {
  * @export
  * @param {string} filename
  */
-export async function createDbFile(filename: string): Promise<void> {
-    return new Promise((resolve, reject) => {
+export function createDbFile(filename: string): any {
+    try {
         const fileExists = fs.existsSync(filename);
         if (!fileExists) {
             fs.writeFileSync(filename, "", "utf-8");
         }
-        resolve();
-    });
+        return true;
+    } catch(error) {
+        return error;
+    }
 }
 
 /**
@@ -64,6 +66,6 @@ export async function createDbFile(filename: string): Promise<void> {
 export async function getPath(filename: string): Promise<any> {
     const app = electron?.app || electron?.remote?.app;
     const path = app.getPath('userData') + "/" + filename;
-    await createDbFile(path);
+    createDbFile(path);
     return path;
 }
