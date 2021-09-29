@@ -783,10 +783,10 @@
                                         "
                                         class="form-control text-right p-0"
                                         [(ngModel)]="vm.stockTrxEntry.inventory.unit.code"
-                                        (change)="vm.unitChanged($event?.target?.value)"
+                                        (change)="vm.unitChanged($event.target.value)"
                                     >
-                                        <option *ngFor="let item of vm.stockTrxEntry?.unitRate" [value]="item?.code">
-                                            {{ item?.stockUnitCode }}
+                                        <option *ngFor="let item of vm.stockTrxEntry.unitRate" [value]="item.code">
+                                            {{ item.stockUnitCode }}
                                         </option>
                                     </select>
                                 </div>

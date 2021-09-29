@@ -70,11 +70,11 @@ export class ImportStatementComponent implements OnDestroy {
         this.getRequest.accountUniqueName = this.accountUniqueName;
 
         this.ledgerService.importStatement(this.getRequest, this.postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === 'success') {
+            if (response.status === 'success') {
                 this.toaster.successToast(this.localeData?.import_success);
                 this.closeModal.emit(true);
             } else {
-                this.toaster.errorToast(response?.message, response?.code);
+                this.toaster.errorToast(response.message, response.code);
             }
         });
     }

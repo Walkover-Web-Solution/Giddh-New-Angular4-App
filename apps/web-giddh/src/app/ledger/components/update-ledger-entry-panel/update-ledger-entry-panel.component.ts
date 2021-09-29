@@ -449,8 +449,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             let multiCurrencyAccCurrency: ICurrencyResponse;
 
             this.vm.currencyList$.pipe(take(1)).subscribe(res => currencies = res);
-            multiCurrencyAccCurrency = currencies.find(f => f?.code === this.multiCurrencyAccDetails?.currency);
-            this.vm.baseCurrencyDetails = { code: multiCurrencyAccCurrency?.code, symbol: multiCurrencyAccCurrency?.symbol };
+            multiCurrencyAccCurrency = currencies.find(f => f.code === this.multiCurrencyAccDetails.currency);
+            this.vm.baseCurrencyDetails = { code: multiCurrencyAccCurrency.code, symbol: multiCurrencyAccCurrency.symbol };
         } else {
             this.vm.baseCurrencyDetails = this.vm.foreignCurrencyDetails;
         }
@@ -1150,9 +1150,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public keydownPressed(e) {
-        if (e?.code === 'ArrowDown') {
+        if (e.code === 'ArrowDown') {
             this.keydownClassAdded = true;
-        } else if (e?.code === 'Enter' && this.keydownClassAdded) {
+        } else if (e.code === 'Enter' && this.keydownClassAdded) {
             this.keydownClassAdded = true;
             this.toggleAsidePaneOpen();
         } else {
@@ -1280,7 +1280,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     private assignPrefixAndSuffixForCurrency() {
-        this.vm.isPrefixAppliedForCurrency = this.vm.isPrefixAppliedForCurrency = !(['AED'].includes(this.vm.selectedCurrency === 0 ? this.vm.baseCurrencyDetails?.code : this.vm.foreignCurrencyDetails?.code));
+        this.vm.isPrefixAppliedForCurrency = this.vm.isPrefixAppliedForCurrency = !(['AED'].includes(this.vm.selectedCurrency === 0 ? this.vm.baseCurrencyDetails.code : this.vm.foreignCurrencyDetails.code));
         this.vm.selectedPrefixForCurrency = this.vm.isPrefixAppliedForCurrency ?
             this.vm.selectedCurrency === 0 ?
                 (this.vm.baseCurrencyDetails) ? this.vm.baseCurrencyDetails.symbol : (this.vm.foreignCurrencyDetails) ? this.vm.foreignCurrencyDetails.symbol : '' :
@@ -2030,13 +2030,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             if (t.inventory) {
                                 const unitRates = cloneDeep(this.vm.selectedLedger.unitRates);
                                 if (unitRates && unitRates.length) {
-                                    unitRates.forEach(rate => rate.code = rate?.stockUnitCode);
+                                    unitRates.forEach(rate => rate.code = rate.stockUnitCode);
                                     t.unitRate = unitRates;
                                 } else {
                                     t.unitRate = [{
-                                        code: t.inventory.unit?.code,
+                                        code: t.inventory.unit.code,
                                         rate: t.inventory.rate,
-                                        stockUnitCode: t.inventory.unit?.code
+                                        stockUnitCode: t.inventory.unit.code
                                     }];
                                 }
                                 initialAccounts.push({
