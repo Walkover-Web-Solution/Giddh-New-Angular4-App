@@ -759,10 +759,13 @@
                                         "
                                         class="form-control text-right"
                                         [(ngModel)]="vm.stockTrxEntry.inventory.unit.code"
-                                        (change)="vm.unitChanged($event.target.value)"
+                                        (change)="vm.unitChanged($event?.target?.value)"
                                     >
-                                        <mat-option *ngFor="let item of vm.stockTrxEntry.unitRate" [value]="item.code">
-                                            {{ item.stockUnitCode }}
+                                        <mat-option
+                                            *ngFor="let item of vm.stockTrxEntry?.unitRate"
+                                            [value]="item?.code"
+                                        >
+                                            {{ item?.stockUnitCode }}
                                         </mat-option>
                                     </mat-select>
                                 </div>

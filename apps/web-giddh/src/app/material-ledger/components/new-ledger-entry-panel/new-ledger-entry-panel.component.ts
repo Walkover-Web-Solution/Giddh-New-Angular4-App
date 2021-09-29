@@ -251,7 +251,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         private loaderService: LoaderService,
         private settingsUtilityService: SettingsUtilityService,
         private toaster: ToasterService,
-        public dialog: MatDialog,	
+        public dialog: MatDialog,
         private settingsTagService: SettingsTagService
     ) {
         this.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
@@ -316,14 +316,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
         });
 
-        this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {	
-            if (response?.status === "success" && response?.body?.length > 0) {	
-                _.map(response?.body, (tag) => {	
-                    tag.label = tag.name;	
-                    tag.value = tag.name;	
-                });	
-                this.tags = _.orderBy(response?.body, 'name');	
-            }	
+        this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.length > 0) {
+                _.map(response?.body, (tag) => {
+                    tag.label = tag.name;
+                    tag.value = tag.name;
+                });
+                this.tags = _.orderBy(response?.body, 'name');
+            }
         });
 
         // for tcs and tds identification
@@ -467,12 +467,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.blankLedger.generateInvoice = false;
     }
 
-    /**	
-     * To calculate discount	
-     *	
-     * @param {*} event	
-     * @memberof NewLedgerEntryPanelComponent	
-     */	
+    /**
+     * To calculate discount
+     *
+     * @param {*} event
+     * @memberof NewLedgerEntryPanelComponent
+     */
     public calculateDiscount(event: any): void {
         this.currentTxn.discount = event.discountTotal;
         if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length > 0) {
@@ -916,7 +916,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.selectedItemToMap = item;
         this.mapBodyContent = this.localeData?.map_cheque_bank_transaction;
         this.mapBodyContent = this.mapBodyContent.replace("[CHEQUE_NUMBER]", item.chequeNumber);
-        
+
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
             width: '630px',
             data: {
@@ -1015,7 +1015,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if(this.isDatepickerOpen) {
             return;
         }
-        
+
         let classList = event.path.map(m => {
             return m.classList;
         });
@@ -1288,8 +1288,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public toggleRcmCheckbox(event: any, element: string): void {
-        let isChecked; 
-        
+        let isChecked;
+
         if(element === "checkbox") {
             isChecked = event?.checked;
             this.rcmCheckbox['checked'] = !isChecked;
@@ -1452,9 +1452,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     private assignPrefixAndSuffixForCurrency(): void {
-        const isPrefixAppliedForCurrency = !(['AED'].includes(this.selectedCurrency === 0 ? this.baseCurrencyDetails.code : this.foreignCurrencyDetails.code));
-        this.selectedPrefixForCurrency = isPrefixAppliedForCurrency ? this.selectedCurrency === 0 ? this.baseCurrencyDetails.symbol : this.foreignCurrencyDetails.symbol : '';
-        this.selectedSuffixForCurrency = isPrefixAppliedForCurrency ? '' : this.selectedCurrency === 0 ? this.baseCurrencyDetails.symbol : this.foreignCurrencyDetails.symbol;
+        const isPrefixAppliedForCurrency = !(['AED'].includes(this.selectedCurrency === 0 ? this.baseCurrencyDetails?.code : this.foreignCurrencyDetails?.code));
+        this.selectedPrefixForCurrency = isPrefixAppliedForCurrency ? this.selectedCurrency === 0 ? this.baseCurrencyDetails?.symbol : this.foreignCurrencyDetails?.symbol : '';
+        this.selectedSuffixForCurrency = isPrefixAppliedForCurrency ? '' : this.selectedCurrency === 0 ? this.baseCurrencyDetails?.symbol : this.foreignCurrencyDetails?.symbol;
     }
 
     /**
