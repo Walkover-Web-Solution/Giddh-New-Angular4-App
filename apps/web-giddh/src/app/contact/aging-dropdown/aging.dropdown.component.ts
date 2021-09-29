@@ -22,6 +22,10 @@ export class AgingDropdownComponent implements OnDestroy {
     @Input() public options: AgingDropDownoptions;
     public setDueRangeRequestInFlight$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** If dropdown has valid values */
+    private isValid: boolean = true;
+    /** True if range needs to be updated */
+    private updateRange: boolean = false;
 
     constructor(private store: Store<AppState>, private toasty: ToasterService, private agingReportActions: AgingReportActions) {
         this.setDueRangeRequestInFlight$ = this.store.pipe(select(s => s.agingreport.setDueRangeRequestInFlight), takeUntil(this.destroyed$));
@@ -37,26 +41,26 @@ export class AgingDropdownComponent implements OnDestroy {
     }
 
     public saveAgingDropdown() {
-        let valid = true;
+        this.isValid = true;
         if (this.options.fourth >= (this.options.fifth || this.options.sixth)) {
             this.showToaster();
-            valid = false;
+            this.isValid = false;
         }
         if ((this.options.fifth >= this.options.sixth) || (this.options.fifth <= this.options.fourth)) {
             this.showToaster();
-            valid = false;
+            this.isValid = false;
         }
         if (this.options.sixth <= (this.options.fourth || this.options.fifth)) {
             this.showToaster();
-            valid = false;
+            this.isValid = false;
         }
-        if (valid) {
-            this.store.dispatch(this.agingReportActions.CreateDueRange({ range: [this.options.fourth.toString(), this.options.fifth.toString(), this.options.sixth.toString()] }));
-        }
-        this.closeAgingDropDown();
+        this.updateRange = true;
     }
     
     public closeAging(e) {
+        if (this.isValid && this.updateRange) {
+            this.store.dispatch(this.agingReportActions.CreateDueRange({ range: [this.options.fourth.toString(), this.options.fifth.toString(), this.options.sixth.toString()] }));
+        }
         this.closeAgingDropDown();
     }
 

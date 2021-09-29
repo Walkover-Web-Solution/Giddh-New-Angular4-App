@@ -187,6 +187,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         componentInstance.closeModelEvent.subscribe(e => this.closeDownloadOrSendMailPopup(e));
         componentInstance.downloadOrSendMailEvent.subscribe(e => this.onDownloadOrSendMailEvent(e));
         componentInstance.downloadInvoiceEvent.subscribe(e => this.ondownloadInvoiceEvent(e));
+        componentInstance.currentVoucherFilter = this.filterParam.entityType;
     }
 
     public closeDownloadOrSendMailPopup(userResponse: any) {

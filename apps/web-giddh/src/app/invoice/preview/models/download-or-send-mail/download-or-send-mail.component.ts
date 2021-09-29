@@ -10,8 +10,8 @@ import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.a
 import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
 import { ReceiptVoucherDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/recipt';
 import { Router } from '@angular/router';
-import { findIndex, isEmpty } from 'apps/web-giddh/src/app/lodash-optimized';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { findIndex, isEmpty } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
     selector: 'download-or-send-mail-invoice',
@@ -34,7 +34,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     public showEsign: boolean = false;
     public showEditButton: boolean = false;
     public isErrOccured$: Observable<boolean>;
-    public invoiceType: string[] = [];
+    public invoiceType: string[] = ['Original'];
     public showMore: boolean = false;
     public emailTabActive: boolean = true;
     public downloadTabActive: boolean = false;
@@ -43,7 +43,6 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     public isElectron = isElectron;
     public isCordova = isCordova;
     public voucherRequest = null;
-    public voucherDetailsInProcess$: Observable<boolean> = of(true);
     public accountUniqueName: string = '';
     public selectedInvoiceNo: string = '';
     public selectedVoucherType: string = null;
@@ -59,6 +58,8 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** this will store screen size */
     public isMobileScreen : boolean = false;
+    /** Stores the current voucher filter applied */
+    public currentVoucherFilter: string;
 
     constructor(
         private _toasty: ToasterService,
@@ -77,7 +78,6 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
         });
 
         this.isErrOccured$ = this.store.pipe(select(p => p.invoice.invoiceDataHasError), distinctUntilChanged(), takeUntil(this.destroyed$));
-        this.voucherDetailsInProcess$ = this.store.pipe(select(p => p.receipt.voucherDetailsInProcess), takeUntil(this.destroyed$));
         this.voucherPreview$ = this.store.pipe(select(p => p.receipt.base64Data), distinctUntilChanged(), takeUntil(this.destroyed$));
     }
 
@@ -129,7 +129,6 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                 this.showEditButton = false;
             }
         });
-
         this.store.pipe(select(p => p.invoice.settings), takeUntil(this.destroyed$)).subscribe((o: any) => {
             if (o && o.invoiceSettings) {
                 this.isSendSmsEnabled = o.invoiceSettings.sendInvLinkOnSms;

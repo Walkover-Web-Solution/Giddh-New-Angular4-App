@@ -93,16 +93,16 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    @Output() public closeUpdateLedgerModal: EventEmitter<boolean> = new EventEmitter();	
-    @Output() public showQuickAccountModalFromUpdateLedger: EventEmitter<boolean> = new EventEmitter();	
-    @Output() public toggleOtherTaxesAsideMenu: EventEmitter<UpdateLedgerVm> = new EventEmitter();	
-    /** Emits when more detail is opened */	
-    @Output() public moreDetailOpen: EventEmitter<any> = new EventEmitter();	
-    @Input() public isPettyCash: boolean = false;	
-    @Input() public pettyCashEntry: any;	
-    @Input() public pettyCashBaseAccountTypeString: string;	
-    @Input() public pettyCashBaseAccountUniqueName: string;	
-    /** Stores the active company details */	
+    @Output() public closeUpdateLedgerModal: EventEmitter<boolean> = new EventEmitter();
+    @Output() public showQuickAccountModalFromUpdateLedger: EventEmitter<boolean> = new EventEmitter();
+    @Output() public toggleOtherTaxesAsideMenu: EventEmitter<UpdateLedgerVm> = new EventEmitter();
+    /** Emits when more detail is opened */
+    @Output() public moreDetailOpen: EventEmitter<any> = new EventEmitter();
+    @Input() public isPettyCash: boolean = false;
+    @Input() public pettyCashEntry: any;
+    @Input() public pettyCashBaseAccountTypeString: string;
+    @Input() public pettyCashBaseAccountUniqueName: string;
+    /** Stores the active company details */
     @Input() public activeCompany: any;
     @Input() public searchResultsPaginationPage: any;
     @Input() public searchResultsPaginationTotalPages: any;
@@ -268,6 +268,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public advanceReceiptRemoveDialogRef: any;
     /** True if more details is open */
     public isMoreDetailOpen: boolean;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private accountService: AccountService,
@@ -310,14 +312,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.searchResultsPaginationData.totalPages = this.searchResultsPaginationTotalPages;
         }
 
-        this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {	
-            if (response?.status === "success" && response?.body?.length > 0) {	
-                _.map(response?.body, (tag) => {	
-                    tag.label = tag.name;	
-                    tag.value = tag.name;	
-                });	
-                this.tags = _.orderBy(response?.body, 'name');	
-            }	
+        this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.length > 0) {
+                _.map(response?.body, (tag) => {
+                    tag.label = tag.name;
+                    tag.value = tag.name;
+                });
+                this.tags = _.orderBy(response?.body, 'name');
+            }
         });
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
@@ -356,10 +358,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.vm.selectedLedger.otherTaxModal = new SalesOtherTaxesModal();
 
         if (this.isPettyCash) {
-            if (this.pettyCashEntry) {	
-                this.entryUniqueName = this.pettyCashEntry.uniqueName;	
-                this.accountUniqueName = this.pettyCashEntry.particular.uniqueName;	
-                this.selectedLedgerStream$ = observableOf(this.pettyCashEntry as LedgerResponse);	
+            if (this.pettyCashEntry) {
+                this.entryUniqueName = this.pettyCashEntry.uniqueName;
+                this.accountUniqueName = this.pettyCashEntry.particular.uniqueName;
+                this.selectedLedgerStream$ = observableOf(this.pettyCashEntry as LedgerResponse);
             }
         }
         this.vm.companyTaxesList$.pipe(take(1)).subscribe(taxes => {
@@ -427,6 +429,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }
                 });
         }
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     public toggleShow(): void {
@@ -465,8 +468,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             let multiCurrencyAccCurrency: ICurrencyResponse;
 
             this.vm.currencyList$.pipe(take(1)).subscribe(res => currencies = res);
-            multiCurrencyAccCurrency = currencies.find(f => f.code === this.multiCurrencyAccDetails.currency);
-            this.vm.baseCurrencyDetails = { code: multiCurrencyAccCurrency.code, symbol: multiCurrencyAccCurrency.symbol };
+            multiCurrencyAccCurrency = currencies.find(f => f?.code === this.multiCurrencyAccDetails?.currency);
+            this.vm.baseCurrencyDetails = { code: multiCurrencyAccCurrency?.code, symbol: multiCurrencyAccCurrency?.symbol };
         } else {
             this.vm.baseCurrencyDetails = this.vm.foreignCurrencyDetails;
         }
@@ -947,16 +950,20 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
     }
 
-    public downloadInvoice(invoiceName: string, voucherType: string, e: Event) {
+    public downloadInvoice(transaction: any, e: Event) {
         e.stopPropagation();
         let downloadRequest = new DownloadLedgerRequest();
-        downloadRequest.invoiceNumber = [invoiceName];
-        downloadRequest.voucherType = voucherType;
+        if(this.voucherApiVersion === 2) {
+            downloadRequest.uniqueName = transaction.voucherUniqueName;
+        } else {
+            downloadRequest.invoiceNumber = [transaction.voucherNumber];
+        }
+        downloadRequest.voucherType = (transaction.voucherGeneratedType) ? transaction.voucherGeneratedType : transaction.voucher?.name;
 
         this.ledgerService.DownloadInvoice(downloadRequest, this.activeAccount.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d.status === 'success') {
                 let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
-                return saveAs(blob, `${this.activeAccount.name} - ${invoiceName}.pdf`);
+                return saveAs(blob, `${this.activeAccount.name} - ${transaction.voucherNumber}.pdf`);
             } else {
                 this.toaster.showSnackBar("error", d.message);
             }
@@ -1179,9 +1186,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public keydownPressed(e) {
-        if (e.code === 'ArrowDown') {
+        if (e?.code === 'ArrowDown') {
             this.keydownClassAdded = true;
-        } else if (e.code === 'Enter' && this.keydownClassAdded) {
+        } else if (e?.code === 'Enter' && this.keydownClassAdded) {
             this.keydownClassAdded = true;
             this.toggleAsidePaneOpen();
         } else {
@@ -1271,8 +1278,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (!this.isPettyCash && this.currentOrganizationType === 'COMPANY' && (this.branches && this.branches.length > 1)) {
             return;
         }
-        let isChecked; 
-        
+        let isChecked;
+
         if(element === "checkbox") {
             isChecked = event?.checked;
             this.rcmCheckbox['checked'] = !isChecked;
@@ -1341,7 +1348,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     private assignPrefixAndSuffixForCurrency() {
-        this.vm.isPrefixAppliedForCurrency = this.vm.isPrefixAppliedForCurrency = !(['AED'].includes(this.vm.selectedCurrency === 0 ? this.vm.baseCurrencyDetails.code : this.vm.foreignCurrencyDetails.code));
+        this.vm.isPrefixAppliedForCurrency = this.vm.isPrefixAppliedForCurrency = !(['AED'].includes(this.vm.selectedCurrency === 0 ? this.vm.baseCurrencyDetails?.code : this.vm.foreignCurrencyDetails?.code));
         this.vm.selectedPrefixForCurrency = this.vm.isPrefixAppliedForCurrency ?
             this.vm.selectedCurrency === 0 ?
                 (this.vm.baseCurrencyDetails) ? this.vm.baseCurrencyDetails.symbol : (this.vm.foreignCurrencyDetails) ? this.vm.foreignCurrencyDetails.symbol : '' :
@@ -2085,13 +2092,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             if (t.inventory) {
                                 const unitRates = cloneDeep(this.vm.selectedLedger.unitRates);
                                 if (unitRates && unitRates.length) {
-                                    unitRates.forEach(rate => rate.code = rate.stockUnitCode);
+                                    unitRates.forEach(rate => rate.code = rate?.stockUnitCode);
                                     t.unitRate = unitRates;
                                 } else {
                                     t.unitRate = [{
-                                        code: t.inventory.unit.code,
+                                        code: t.inventory.unit?.code,
                                         rate: t.inventory.rate,
-                                        stockUnitCode: t.inventory.unit.code
+                                        stockUnitCode: t.inventory.unit?.code
                                     }];
                                 }
                                 initialAccounts.push({

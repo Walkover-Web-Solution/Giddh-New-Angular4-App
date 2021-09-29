@@ -1,0 +1,34 @@
+.adjust-inventory-list-page {
+    h4 {
+        font-size: 16px;
+        font-family: "opensans-semibold";
+    }
+    .custom-datepicker {
+        input {
+            text-align: left;
+            padding-left: 40px !important;
+        }
+    }
+}
+@media (max-width: 767px) {
+    .giddh-table {
+        tr {
+            td {
+                white-space: normal !important;
+                word-break: inherit !important;
+                width: 100% !important;
+            }
+        }
+    }
+}
+@media (max-width: 414px) {
+    .adjust-inventory-list-page {
+        .adjust-inventory-header {
+            flex-direction: column;
+            .btn {
+                width: 160px;
+                margin-top: 15px;
+            }
+        }
+    }
+}

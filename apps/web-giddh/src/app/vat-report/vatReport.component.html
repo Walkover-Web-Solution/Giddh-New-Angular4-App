@@ -129,15 +129,13 @@
                                                         <ng-container *ngIf="!isMonthSelected">
                                                             {{
                                                                 moment(currentPeriod?.from, giddhDateFormat).format(
-                                                                    "DD
-                                                            MMM YYYY"
+                                                                    "DD MMM YYYY"
                                                                 )
                                                             }}
                                                             -
                                                             {{
                                                                 moment(currentPeriod?.to, giddhDateFormat).format(
-                                                                    "DD MMM
-                                                            YYYY"
+                                                                    "DD MMM YYYY"
                                                                 )
                                                             }}
                                                         </ng-container>

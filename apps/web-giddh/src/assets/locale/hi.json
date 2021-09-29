@@ -635,7 +635,8 @@
 		"receive_otp": "आपको शीघ्र ही आपके मोबाइल पर एक सत्यापन कोड प्राप्त होगा।",
 		"otp_sent_email": "आपके ईमेल खाते पर एक सत्यापन कोड भेज दिया गया है।",
 		"internet_error": "कृपया अपने इंटरनेट कनेक्शन की जाँच करें।",
-		"internet_disconnected": "इंटरनेट डिस्कनेक्ट"
+		"internet_disconnected": "इंटरनेट डिस्कनेक्ट",
+        "voucher_saved": "वाउचर सफलतापूर्वक जेनरेट हुआ"
 	},
 	"app_supported_languages": {
 		"english": "अंग्रेज़ी",
@@ -654,5 +655,8 @@
         "weekly": "साप्ताहिक",
         "monthly": "महीने के",
         "unlimited": "असीमित"
-    }
+    },
+    "app_voucher_unavailable": "समायोजन के लिए कोई वाउचर नहीं है।",
+    "app_reference_invoice": "संदर्भ चालान",
+    "app_create_custom_field": "कस्टम फ़ील्डस बनाएं"
 }

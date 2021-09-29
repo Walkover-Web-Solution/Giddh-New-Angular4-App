@@ -646,7 +646,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         private invoiceService: InvoiceService,
         private _invoiceUiDataService: InvoiceUiDataService
     ) {
-        
+
     }
 
     /**
@@ -689,10 +689,10 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             if (s && s.customCreatedTemplates) {
                 this.customCreatedTemplates = cloneDeep(s.customCreatedTemplates);
                 this.customCreatedTemplates.sort((a, b) => {
-                    if (a.uniqueName < b.uniqueName) {
+                    if (a?.uniqueName < b?.uniqueName) {
                         return -1;
                     }
-                    if (a.uniqueName > b.uniqueName) {
+                    if (a?.uniqueName > b?.uniqueName) {
                         return 1;
                     }
                     return 0;
@@ -780,7 +780,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             // if (data.sections[1].content[8].field === 'taxes' && data.sections[1].content[7].field !== 'taxableValue') {
             //   data.sections[1].content[8].field = 'taxableValue';
             // }
-            data.copyFrom = copiedTemplate.uniqueName;
+            data.copyFrom = copiedTemplate?.uniqueName;
             if (data.fontSize) {
                 data.fontSmall = data.fontSize - 4;
                 data.fontDefault = data.fontSize;
@@ -857,7 +857,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 data.sections['footer'].data['textUnderSlogan'].label = '';
             }
             data = this.newLineToBR(data);
-            this._invoiceTemplatesService.updateTemplate(data.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            this._invoiceTemplatesService.updateTemplate(data?.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res.status === 'success') {
                     this._toasty.successToast('Template Updated Successfully.');
                     this.confirmationFlag = null;
@@ -904,7 +904,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             defaultTemplate = ss.defaultTemplate;
         });
 
-        this._invoiceUiDataService.setTemplateUniqueName(template.uniqueName, 'preview', customCreatedTemplates, defaultTemplate);
+        this._invoiceUiDataService.setTemplateUniqueName(template?.uniqueName, 'preview', customCreatedTemplates, defaultTemplate);
         // let data = cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
         this.showinvoiceTemplatePreviewModal = true;
         this.invoiceTemplatePreviewModal.show();
@@ -924,7 +924,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.transactionMode = 'update';
-        this._invoiceUiDataService.setTemplateUniqueName(template.uniqueName, 'update', customCreatedTemplates, defaultTemplate);
+        this._invoiceUiDataService.setTemplateUniqueName(template?.uniqueName, 'update', customCreatedTemplates, defaultTemplate);
         this.selectedTemplateUniqueName = template.copyFrom;
         this.templateModal.show();
     }
@@ -935,7 +935,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
     public onSetTemplateAsDefault(template, templateType: string) {
         if (template) {
             let selectedTemplate = cloneDeep(template);
-            this.store.dispatch(this.invoiceActions.setTemplateAsDefault(selectedTemplate.uniqueName, templateType));
+            this.store.dispatch(this.invoiceActions.setTemplateAsDefault(selectedTemplate?.uniqueName, templateType));
         }
     }
 
@@ -947,7 +947,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             this.confirmationFlag = 'deleteConfirmation';
             let selectedTemplate = cloneDeep(template);
             this.deleteTemplateConfirmationMessage = `Are you sure you want to delete "<b>${selectedTemplate.name}</b>" template?`;
-            this.selectedTemplateUniqueName = selectedTemplate.uniqueName;
+            this.selectedTemplateUniqueName = selectedTemplate?.uniqueName;
             this.customTemplateConfirmationModal.show();
         }
     }
