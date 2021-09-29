@@ -12,20 +12,18 @@ import { AgingReportActions } from '../../actions/aging-report.actions';
     templateUrl: 'aging.dropdown.component.html',
     styleUrls: ['./aging.dropdown.component.scss']
 })
-
 export class AgingDropdownComponent implements OnDestroy {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-
     @Input() public showComponent: boolean = true;
     @Output() public closeEvent: EventEmitter<any> = new EventEmitter();
     @Input() public options: AgingDropDownoptions;
     public setDueRangeRequestInFlight$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private _toasty: ToasterService, public _toaster: ToasterService, private _agingReportActions: AgingReportActions) {
+    constructor(private store: Store<AppState>, private toasty: ToasterService, private agingReportActions: AgingReportActions) {
         this.setDueRangeRequestInFlight$ = this.store.pipe(select(s => s.agingreport.setDueRangeRequestInFlight), takeUntil(this.destroyed$));
     }
 
@@ -35,11 +33,10 @@ export class AgingDropdownComponent implements OnDestroy {
     }
 
     public closeAgingDropDown() {
-        this.store.dispatch(this._agingReportActions.CloseDueRange());
+        this.store.dispatch(this.agingReportActions.CloseDueRange());
     }
 
     public saveAgingDropdown() {
-
         let valid = true;
         if (this.options.fourth >= (this.options.fifth || this.options.sixth)) {
             this.showToaster();
@@ -54,15 +51,16 @@ export class AgingDropdownComponent implements OnDestroy {
             valid = false;
         }
         if (valid) {
-            this.store.dispatch(this._agingReportActions.CreateDueRange({ range: [this.options.fourth.toString(), this.options.fifth.toString(), this.options.sixth.toString()] }));
+            this.store.dispatch(this.agingReportActions.CreateDueRange({ range: [this.options.fourth.toString(), this.options.fifth.toString(), this.options.sixth.toString()] }));
         }
         this.closeAgingDropDown();
     }
+    
     public closeAging(e) {
         this.closeAgingDropDown();
     }
 
     private showToaster() {
-        this._toasty.errorToast(this.localeData?.aging_dropdown_error);
+        this.toasty.errorToast(this.localeData?.aging_dropdown_error);
     }
 }

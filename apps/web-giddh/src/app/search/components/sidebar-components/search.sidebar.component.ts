@@ -119,7 +119,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
         this.store.pipe(
-            select(appState => appState.session.activeCompany), take(1)
+            select(appState => appState.session.activeCompany), takeUntil(this.destroyed$)
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });

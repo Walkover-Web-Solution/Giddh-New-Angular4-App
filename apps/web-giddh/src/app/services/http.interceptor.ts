@@ -13,7 +13,7 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
     private isOnline: boolean = navigator.onLine;
 
     constructor(
-        private _toasterService: ToasterService,
+        private toasterService: ToasterService,
         private loadingService: LoaderService,
         private generalService: GeneralService,
         private localeService: LocaleService
@@ -43,7 +43,7 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
             return next.handle(request);
         } else {
             setTimeout(() => {
-                this._toasterService.warningToast(this.localeService.translate("app_messages.internet_error"), this.localeService.translate("app_messages.internet_disconnected"));
+                this.toasterService.warningToast(this.localeService.translate("app_messages.internet_error"), this.localeService.translate("app_messages.internet_disconnected"));
             }, 100);
             this.loadingService.hide();
             if (request.body && request.body.handleNetworkDisconnection) {
