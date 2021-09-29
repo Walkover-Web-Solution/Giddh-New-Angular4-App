@@ -39,11 +39,11 @@
                                                 id="ledger-unit"
                                                 class="form-control"
                                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
-                                                (change)="unitChanged($event.target.value)"
-                                                [value]="currentTxn?.inventory.unit.code"
+                                                (change)="unitChanged($event?.target?.value)"
+                                                [value]="currentTxn?.inventory?.unit?.code"
                                             >
-                                                <option *ngFor="let item of currentTxn.unitRate" [value]="item.code">
-                                                    {{ item.stockUnitCode }}
+                                                <option *ngFor="let item of currentTxn?.unitRate" [value]="item?.code">
+                                                    {{ item?.stockUnitCode }}
                                                 </option>
                                             </select>
                                         </td>
