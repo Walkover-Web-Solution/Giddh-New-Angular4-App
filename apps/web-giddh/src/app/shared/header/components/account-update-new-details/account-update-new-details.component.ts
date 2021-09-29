@@ -203,6 +203,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public activeAccountGroup: IOption[] | INameUniqueName[] = [];
     /** This holds account country name */
     public accountCountryName: string = "";
+    /** True if custom fields api call in progress */
+    public isCustomFieldLoading: boolean = false;
 
     constructor(
         private _fb: FormBuilder,
@@ -1363,6 +1365,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     * @memberof AccountUpdateNewDetailsComponent
     */
     public getCompanyCustomField(): void {
+        if(this.isCustomFieldLoading) {
+            return;
+        }
+        this.isCustomFieldLoading = true;
         this.companyCustomFields = [];
         this.groupService.getCompanyCustomField().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === 'success') {
@@ -1371,6 +1377,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             } else {
                 this._toaster.errorToast(response.message);
             }
+            this.isCustomFieldLoading = false;
+            this.changeDetectorRef.detectChanges();
         });
     }
 
