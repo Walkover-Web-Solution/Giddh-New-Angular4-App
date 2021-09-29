@@ -52,6 +52,8 @@ import { MatSortModule } from "@angular/material/sort";
 import { ListGroupComponent } from "./component/stock-group/list-group/list-group.component";
 import { MatRadioModule } from "@angular/material/radio";
 import { MatTabsModule } from "@angular/material/tabs";
+import { MatChipsModule } from "@angular/material/chips";
+import { MatInputModule } from "@angular/material/input";
 
 @NgModule({
     declarations: [
@@ -111,6 +113,8 @@ import { MatTabsModule } from "@angular/material/tabs";
         MatSortModule,
         MatRadioModule,
         MatTabsModule,
+        MatChipsModule,
+        MatInputModule,
     ],
     exports: [
         NewInventoryComponent,

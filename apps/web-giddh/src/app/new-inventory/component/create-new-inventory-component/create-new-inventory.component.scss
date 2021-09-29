@@ -70,9 +70,10 @@
             }
 
             .icon-button-remove {
-                color: $red;
+                color: $olive;
                 position: absolute;
                 right: -25px;
+                font-size: 20px;
                 top: -5px;
                 z-index: 1;
             }
@@ -131,9 +132,9 @@
 
     // Inventory
     .product-option-wrapper {
-        textarea {
-            min-height: 90px;
-        }
+        background-color: white;
+        padding: 15px;
+        border-radius: 8px;
     }
 
     .combo-detail-content {
@@ -173,11 +174,21 @@
     padding-left: 15px;
 }
 
-.combo-table,
-.table {
+::ng-deep table.stock-table td input {
+    border: none;
+}
+
+table.stock-table td,
+table.stock-table th {
+    padding: 7px 15px;
+}
+
+.combo-table.table,
+.bulk-create-table.table {
     max-width: 1000px;
     width: 100%;
     margin-bottom: 0;
+
     .delete-row {
         position: absolute;
         right: -40px;
@@ -191,6 +202,7 @@
         color: $gray;
         font-size: 17px;
     }
+
     .delete-tb-tr-icon {
         position: absolute;
         right: -50px;
@@ -202,6 +214,7 @@
     }
 }
 
+.stock-table td,
 .combo-table tr,
 .combo-table th,
 .combo-table td,
@@ -221,8 +234,7 @@
 }
 
 .combo-table th:first-child,
-.combo-table td:first-child,
-.bulk-create-table th:first-child,
+.stock-table th:first-child,
 .bulk-create-table td:first-child {
     min-width: auto !important;
 }
