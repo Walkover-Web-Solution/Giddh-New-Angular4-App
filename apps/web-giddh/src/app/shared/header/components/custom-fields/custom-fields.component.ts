@@ -123,8 +123,12 @@ export class CustomFieldsComponent implements OnInit, OnDestroy {
      * @memberof CustomFieldsComponent
      */
     public openModal(template: TemplateRef<any>, index: number): void {
-        this.modalRef = this.modalService.show(template);
+        this.modalRef = this.modalService.show(template, { class: 'delete-custom-field-modal' });
         this.selectedRowIndex = index;
+
+        setTimeout(() => {
+            document.querySelector(".delete-custom-field-modal")?.parentElement.classList?.add("delete-custom-field-modal-container");
+        }, 50);
     }
 
     /**
