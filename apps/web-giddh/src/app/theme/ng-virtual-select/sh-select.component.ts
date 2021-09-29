@@ -198,8 +198,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
                 includesArr.push(item);
             }
         });
-        startsWithArr = startsWithArr.sort((a, b) => a.label?.length - b.label?.length);
-        includesArr = includesArr.sort((a, b) => a.label?.length - b.label?.length);
+        startsWithArr = startsWithArr.sort((a, b) => a?.label?.length - b?.label?.length);
+        includesArr = includesArr.sort((a, b) => a?.label?.length - b?.label?.length);
 
         return concat(startsWithArr, includesArr);
     }
@@ -215,7 +215,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
                     stockName = _.cloneDeep(item.additional.stock.name);
                     stockUnqName = _.cloneDeep(item.additional.stock.uniqueName);
                 }
-                return _.includes(String(item.label).toLocaleLowerCase(), term) || _.includes(item.additional.uniqueName.toLocaleLowerCase(), term) || _.includes(mergedAccounts, term) || _.includes(stockName.toLocaleLowerCase(), term) || _.includes(stockUnqName.toLocaleLowerCase(), term);
+                return _.includes(String(item?.label).toLocaleLowerCase(), term) || _.includes(item?.additional?.uniqueName.toLocaleLowerCase(), term) || _.includes(mergedAccounts, term) || _.includes(stockName.toLocaleLowerCase(), term) || _.includes(stockUnqName.toLocaleLowerCase(), term);
             });
         } else {
             return array.filter((item: IOption) => {
@@ -251,13 +251,13 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
                 if (this.customFilter) {
                     return this.customFilter(lowercaseFilter, item);
                 }
-                return !lowercaseFilter || String(item.label).toLocaleLowerCase().indexOf(lowercaseFilter) !== -1;
+                return !lowercaseFilter || String(item?.label).toLocaleLowerCase().indexOf(lowercaseFilter) !== -1;
             }) : [];
 
             if (this.customSorting) {
                 this.filteredData = filteredData.sort(this.customSorting);
             } else {
-                this.filteredData = filteredData.sort((a, b) => a.label?.length - b.label?.length);
+                this.filteredData = filteredData.sort((a, b) => a?.label?.length - b?.label?.length);
             }
         }
         if (this.filteredData?.length === 0) {

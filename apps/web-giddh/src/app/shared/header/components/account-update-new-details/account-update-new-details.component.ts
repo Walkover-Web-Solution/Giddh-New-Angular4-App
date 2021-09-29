@@ -1487,6 +1487,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     } else {
                         this.GSTIN_OR_TRN = '';
                     }
+
                     this.taxNamePlaceholder = this.commonLocaleData?.app_enter_tax_name;
                     this.taxNamePlaceholder = this.taxNamePlaceholder.replace("[TAX_NAME]", this.formFields['taxName']?.label || '');
                 }
