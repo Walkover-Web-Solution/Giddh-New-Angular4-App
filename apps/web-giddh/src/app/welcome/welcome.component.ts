@@ -343,7 +343,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public prepareWelcomeForm() {
-        if (this.company &&  this.createNewCompanyPreparedObj) {
+        if (this.company && this.createNewCompanyPreparedObj) {
             this.createNewCompanyPreparedObj.name = this.company.name ? this.company.name : '';
             this.createNewCompanyPreparedObj.phoneCode = this.company.phoneCode ? this.company.phoneCode : '';
             this.createNewCompanyPreparedObj.contactNo = this.company.contactNo ? this.company.contactNo : '';
