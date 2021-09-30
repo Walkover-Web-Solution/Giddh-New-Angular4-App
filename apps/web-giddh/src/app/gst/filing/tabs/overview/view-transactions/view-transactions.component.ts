@@ -174,7 +174,8 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         if (invoice && invoice.account) {
             if(this.voucherApiVersion === 2) {
                 downloadVoucherRequestObject = {
-                    uniqueName: [invoice.uniqueName],
+                    voucherNumber: [invoice.voucherNumber],
+                    uniqueName: invoice.voucherUniqueName,
                     voucherType: invoice.voucherType,
                     accountUniqueName: invoice.account.uniqueName
                 };
@@ -204,7 +205,8 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         let componentInstance = componentInstanceView.instance as DownloadOrSendInvoiceOnMailComponent;
         componentInstance.closeModelEvent.subscribe(e => this.closeDownloadOrSendMailPopup(e));
         componentInstance.downloadOrSendMailEvent.subscribe(e => this.onDownloadOrSendMailEvent(e));
-        componentInstance.downloadInvoiceEvent.subscribe(e => this.ondownloadInvoiceEvent(e));
+        componentInstance.downloadInvoiceEvent.subscribe(e => this.onDownloadInvoiceEvent(e));
+        componentInstance.currentVoucherFilter = this.filterParam.entityType;
     }
 
     public closeDownloadOrSendMailPopup(userResponse: any) {
@@ -297,7 +299,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
      * @param {*} invoiceCopy
      * @memberof ViewTransactionsComponent
      */
-    public ondownloadInvoiceEvent(invoiceCopy): void {
+    public onDownloadInvoiceEvent(invoiceCopy): void {
         let dataToSend = {
             voucherNumber: [this.selectedInvoice.voucherNumber],
             typeOfInvoice: invoiceCopy,
