@@ -237,7 +237,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.isCreateCompanyInProgress = data;
         });
 
-        if (this.isItemUpdateInProgress) {
+        if (this.isItemUpdateInProgress && this.company) {
             this.company.name = (this.itemDetails && this.itemDetails.name) ? this.itemDetails.name : '';
             this.company.phoneCode = (this.itemDetails && this.itemDetails.mobileNumber) ? this.getCallingCode(this.itemDetails.mobileNumber) : '';
             this.company.contactNo = (this.itemDetails && this.itemDetails.mobileNumber) ? this.getFormattedContactNumber(this.itemDetails.mobileNumber) : '';
@@ -343,7 +343,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public prepareWelcomeForm() {
-        if (this.company) {
+        if (this.company && this.createNewCompanyPreparedObj) {
             this.createNewCompanyPreparedObj.name = this.company.name ? this.company.name : '';
             this.createNewCompanyPreparedObj.phoneCode = this.company.phoneCode ? this.company.phoneCode : '';
             this.createNewCompanyPreparedObj.contactNo = this.company.contactNo ? this.company.contactNo : '';
