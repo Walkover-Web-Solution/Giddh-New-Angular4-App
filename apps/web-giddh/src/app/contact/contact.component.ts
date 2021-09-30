@@ -101,8 +101,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     public selectedWhileHovering: string;
     public searchLoader$: Observable<boolean>;
     /** sorting */
-    public key: string = 'amountDue'; // set default
-    public order: string = 'desc';
+    public key: string = 'name'; // set default
+    public order: string = 'asc';
     public showFieldFilter: CustomerVendorFiledFilter = new CustomerVendorFiledFilter();
     public updateCommentIdx: number = null;
     public searchStr$ = new Subject<string>();
@@ -506,8 +506,8 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
             this.commonRequest = new ContactAdvanceSearchCommonModal();
             this.isAdvanceSearchApplied = false;
-            this.key = 'amountDue';
-            this.order = 'desc';
+            this.key = (tabName === "vendor") ? 'amountDue' : "name";
+            this.order = (tabName === "vendor") ? 'desc' : 'asc';
             this.activeTab = tabName;
 
             if (this.universalDate && this.universalDate[0] && this.universalDate[1] && !this.todaySelected) {
@@ -948,8 +948,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
         this.commonRequest = new ContactAdvanceSearchCommonModal();
         this.isAdvanceSearchApplied = false;
-        this.key = 'amountDue';
-        this.order = 'desc';
+        this.key = (this.activeTab === "vendor") ? 'amountDue' : "name";
+        this.order = (this.activeTab === "vendor") ? 'desc' : "asc";
         this.getAccounts(this.fromDate, this.toDate,
             null, 'true', PAGINATION_LIMIT, '', '', null, (this.currentBranch ? this.currentBranch.uniqueName : ""));
     }
