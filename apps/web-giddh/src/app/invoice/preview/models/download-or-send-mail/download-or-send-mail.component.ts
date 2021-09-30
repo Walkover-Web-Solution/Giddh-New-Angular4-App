@@ -8,7 +8,6 @@ import { AppState } from '../../../../store/roots';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
 import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
-import { ReceiptVoucherDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/recipt';
 import { Router } from '@angular/router';
 import { findIndex, isEmpty } from 'apps/web-giddh/src/app/lodash-optimized';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
@@ -64,6 +63,8 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     public currentVoucherFilter: string;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
+    /** Holds voucher unique name */
+    public selectedVoucherUniqueName: string = "";
 
     constructor(
         private _toasty: ToasterService,
@@ -92,6 +93,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
 
         this.voucherPreview$.subscribe((o: any) => {
             if (o) {
+                console.log(o);
 
                 const reader = new FileReader();
                 const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
@@ -125,6 +127,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                 reader.readAsDataURL(o);
                 this.selectedInvoiceNo = o.request.voucherNumber?.join();
                 this.selectedVoucherType = o.request.voucherType;
+                this.selectedVoucherUniqueName = o.request.uniqueName;
 
                 this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(o.request.accountUniqueName, {
                     invoiceNumber: o.request.voucherNumber?.join(),
@@ -149,9 +152,11 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(p => p.receipt.voucher), takeUntil(this.destroyed$)).subscribe((o: any) => {
-            if (o && o.voucherDetails) {
-                this.accountUniqueName = o.accountDetails.uniqueName;
-                this.store.dispatch(this._invoiceActions.GetTemplateDetailsOfInvoice(o.templateDetails.templateUniqueName));
+            if (o) {
+                this.accountUniqueName = o.account.uniqueName;
+                if(o.templateDetails.templateUniqueName) {
+                    this.store.dispatch(this._invoiceActions.GetTemplateDetailsOfInvoice(o.templateDetails.templateUniqueName));
+                }
             }
         });
     }
@@ -220,8 +225,8 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
         }
     }
 
-    public goToedit(type: string) {
-        this._router.navigate(['/pages/proforma-invoice/invoice', this.selectedVoucherType, this.accountUniqueName, this.selectedInvoiceNo]);
+    public editVoucher() {
+        this._router.navigate(['/pages/proforma-invoice/invoice', this.selectedVoucherType, this.accountUniqueName, this.selectedInvoiceNo], { queryParams:  { uniqueName: this.selectedVoucherUniqueName } } );
     }
 
     /**
