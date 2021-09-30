@@ -20,7 +20,7 @@
         <div class="container-fluid">
             <div class="create-group-page">
                 <div class="row">
-                    <div class="col-xl-5 col-lg-6 col-md-6">
+                    <div class="col-xl-4 col-lg-6 col-md-6">
                         <div class="create-group-form">
                             <p class="mr-b15 text-gray font-14">
                                 Lorem Ipsum dummy text will come here about create stock.
@@ -56,10 +56,8 @@
                                 ></text-field>
                             </div>
                         </div>
+
                         <div class="row mr-b15">
-                            <div class="col-sm-6">
-                                <label>&nbsp;</label>
-                            </div>
                             <div class="col-sm-6">
                                 <mat-radio-group
                                     aria-label="Select an option"
@@ -86,39 +84,32 @@
                                     </mat-radio-button>
                                 </mat-radio-group>
                             </div>
-                        </div>
-                        <div class="row mr-b15" *ngIf="groupForm.get('showCodeType').value === 'hsn'">
                             <div class="col-sm-6">
-                                <label>HSN Code</label>
-                            </div>
-                            <div class="col-sm-6">
-                                <text-field
-                                    [cssClass]="'form-control'"
-                                    name="hsn-code"
-                                    id="hsn-code"
-                                    placeholder="Enter Code"
-                                    formControlName="hsnNumber"
-                                    decimalDigitsDirective
-                                    maxlength="10"
-                                ></text-field>
-                            </div>
-                        </div>
-                        <div class="row mr-b15" *ngIf="groupForm.get('showCodeType').value === 'sac'">
-                            <div class="col-sm-6">
-                                <label>SAC Code</label>
-                            </div>
-                            <div class="col-sm-6">
-                                <text-field
-                                    [cssClass]="'form-control'"
-                                    name="sac-code"
-                                    id="sac-code"
-                                    placeholder="Enter Code"
-                                    formControlName="sacNumber"
-                                    decimalDigitsDirective
-                                    maxlength="10"
-                                ></text-field>
+                                <div *ngIf="groupForm.get('showCodeType').value === 'hsn'">
+                                    <text-field
+                                        [cssClass]="'form-control'"
+                                        name="hsn-code"
+                                        id="hsn-code"
+                                        placeholder="Enter HSN Code"
+                                        formControlName="hsnNumber"
+                                        decimalDigitsDirective
+                                        maxlength="10"
+                                    ></text-field>
+                                </div>
+                                <div *ngIf="groupForm.get('showCodeType').value === 'sac'">
+                                    <text-field
+                                        [cssClass]="'form-control'"
+                                        name="sac-code"
+                                        id="sac-code"
+                                        placeholder="Enter SAC Code"
+                                        formControlName="sacNumber"
+                                        decimalDigitsDirective
+                                        maxlength="10"
+                                    ></text-field>
+                                </div>
                             </div>
                         </div>
+
                         <div class="row mr-t15">
                             <div class="col-sm-6">
                                 <label>&nbsp;</label>
@@ -148,6 +139,36 @@
                                     [forceClearReactive]="forceClear$ | async"
                                     [isRequired]="true"
                                 ></sh-select>
+                            </div>
+                        </div>
+                        <div class="row mr-t15">
+                            <div class="col-sm-6">
+                                <label>Tax</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <mat-select class="form-control">
+                                    <mat-option value="CESS@50">
+                                        <mat-checkbox color="primary"> CESS@50 </mat-checkbox>
+                                    </mat-option>
+                                    <mat-option value="GST12">
+                                        <mat-checkbox color="primary">GST12 </mat-checkbox>
+                                    </mat-option>
+                                    <mat-option value="Gst14">
+                                        <mat-checkbox color="primary">Gst14</mat-checkbox>
+                                    </mat-option>
+                                    <mat-option value="GST18">
+                                        <mat-checkbox color="primary">GST18</mat-checkbox>
+                                    </mat-option>
+                                    <mat-option value="TCS@20">
+                                        <mat-checkbox color="primary">TCS@20</mat-checkbox>
+                                    </mat-option>
+                                    <mat-option value="GST5">
+                                        <mat-checkbox color="primary">GST5</mat-checkbox>
+                                    </mat-option>
+                                    <mat-option value="TCSREC">
+                                        <mat-checkbox color="primary">TCSREC</mat-checkbox>
+                                    </mat-option>
+                                </mat-select>
                             </div>
                         </div>
                     </div>

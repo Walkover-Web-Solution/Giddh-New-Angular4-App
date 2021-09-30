@@ -290,6 +290,11 @@
                                 </div>
                             </form>
                             <div class="sales-purchase-details">
+                                <div class="mb-3">
+                                    <mat-checkbox color="primary" class="font-14"
+                                        >Is the Product/Service eligible for Sale or Purchase?
+                                    </mat-checkbox>
+                                </div>
                                 <div class="row">
                                     <div class="col-xl-8">
                                         <div class="row">
@@ -333,7 +338,7 @@
                                                                 </p>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-6">
-                                                                <label>Unit & Rate </label>
+                                                                <label>Unit & Price </label>
                                                             </div>
                                                             <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mr-b15">
                                                                 <div class="row add-new-field mr-b15">
@@ -431,7 +436,7 @@
                                                                 </p>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-6">
-                                                                <label>Unit & Rate </label>
+                                                                <label>Unit & Price </label>
                                                             </div>
                                                             <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mr-b15">
                                                                 <div class="row add-new-field mr-b15">
@@ -494,8 +499,8 @@
                                         name="product-service"
                                         id="product-service"
                                     >
-                                        Is the Product/Service a manufactured entity?</mat-checkbox
-                                    >
+                                        Is the Product/Service a manufactured entity?
+                                    </mat-checkbox>
                                 </span>
                             </p>
 
@@ -680,11 +685,11 @@
                                             <tr>
                                                 <th>Stock Name<span class="red-text">*</span></th>
                                                 <th>Unique Name</th>
+                                                <th>Unit</th>
                                                 <th class="text-right">Cost Price<span class="red-text">*</span></th>
                                                 <th class="text-right">Sale Price <span class="red-text">*</span></th>
                                                 <th class="text-right">SKU Code</th>
                                                 <th class="text-center">Archive</th>
-                                                <th class="text-right">Custom Field</th>
                                             </tr>
                                             <tr *ngFor="let categorys of category">
                                                 <td>{{ categorys.name }}</td>
@@ -693,6 +698,14 @@
                                                         [cssClass]="'form-control'"
                                                         placeholder="-"
                                                     ></text-field>
+                                                </td>
+                                                <td>
+                                                    <mat-select class="font-14">
+                                                        <mat-option value="unit1"> Unit 1 </mat-option>
+                                                        <mat-option value="unit2"> Unit 2 </mat-option>
+                                                        <mat-option value="unit3"> Unit 3 </mat-option>
+                                                        <mat-option value="unit4"> Unit 4 </mat-option>
+                                                    </mat-select>
                                                 </td>
                                                 <td>
                                                     <text-field
@@ -714,12 +727,6 @@
                                                 </td>
                                                 <td class="text-center">
                                                     <mat-checkbox color="primary"></mat-checkbox>
-                                                </td>
-                                                <td>
-                                                    <text-field
-                                                        [cssClass]="'form-control text-right'"
-                                                        placeholder="-"
-                                                    ></text-field>
                                                 </td>
                                             </tr>
                                         </table>
@@ -750,14 +757,14 @@
                                     <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
                                         <div class="row mr-b15">
                                             <div class="col-sm-6 col-lg-6">
-                                                <label>HSN Code</label>
+                                                <label>SKU Code</label>
                                             </div>
                                             <div class="col-sm-6 col-lg-6">
                                                 <text-field
                                                     [cssClass]="'form-control'"
                                                     id="product-name"
                                                     type="text"
-                                                    placeholder="Enter HSN Code"
+                                                    placeholder="Enter SKU Code"
                                                 ></text-field>
                                             </div>
                                         </div>
@@ -1455,7 +1462,7 @@
                                                                 </p>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-6">
-                                                                <label>Unit & Rate </label>
+                                                                <label>Unit & Price </label>
                                                             </div>
                                                             <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mr-b15">
                                                                 <div class="row add-new-field mr-b15">
@@ -1557,7 +1564,7 @@
                                                                 </p>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-6">
-                                                                <label>Unit & Rate </label>
+                                                                <label>Unit & Price </label>
                                                             </div>
                                                             <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mr-b15">
                                                                 <div class="row add-new-field mr-b15">
@@ -1836,11 +1843,11 @@
                                             <tr>
                                                 <th>Stock Name<span class="red-text">*</span></th>
                                                 <th>Unique Name</th>
+                                                <th>Unit</th>
                                                 <th class="text-right">Cost Price<span class="red-text">*</span></th>
                                                 <th class="text-right">Sale Price <span class="red-text">*</span></th>
                                                 <th class="text-right">SKU Code</th>
                                                 <th class="text-center">Archive</th>
-                                                <th class="text-right">Custom Field</th>
                                             </tr>
                                             <tr *ngFor="let categorys of category">
                                                 <td>{{ categorys.name }}</td>
@@ -1849,6 +1856,14 @@
                                                         [cssClass]="'form-control'"
                                                         placeholder="-"
                                                     ></text-field>
+                                                </td>
+                                                <td>
+                                                    <mat-select class="font-14">
+                                                        <mat-option value="unit1"> Unit 1 </mat-option>
+                                                        <mat-option value="unit2"> Unit 2 </mat-option>
+                                                        <mat-option value="unit3"> Unit 3 </mat-option>
+                                                        <mat-option value="unit4"> Unit 4 </mat-option>
+                                                    </mat-select>
                                                 </td>
                                                 <td>
                                                     <text-field
@@ -1871,12 +1886,6 @@
                                                 <td class="text-center">
                                                     <mat-checkbox color="primary"></mat-checkbox>
                                                 </td>
-                                                <td>
-                                                    <text-field
-                                                        [cssClass]="'form-control text-right'"
-                                                        placeholder="-"
-                                                    ></text-field>
-                                                </td>
                                             </tr>
                                         </table>
                                     </div>
@@ -1888,73 +1897,99 @@
                         <div class="tab-container-new">
                             <form>
                                 <div class="row">
-                                    <div class="col-md-8 col-lg-12 col-xl-8 col-12">
-                                        <div class="row">
-                                            <div class="col-md-12 col-lg-8 col-xl-6 col-12">
-                                                <div class="row mr-b15">
-                                                    <div class="col-sm-6 col-lg-6">
-                                                        <label>SAC Code</label>
-                                                    </div>
-                                                    <div class="col-sm-6 col-lg-6">
-                                                        <text-field
-                                                            [cssClass]="'form-control'"
-                                                            type="text"
-                                                            placeholder="Enter Code"
-                                                            id="service-sac-code"
-                                                        ></text-field>
-                                                    </div>
-                                                </div>
-                                                <div class="row mr-b15">
-                                                    <div class="col-sm-6 col-lg-6">
-                                                        <label>Barcode</label>
-                                                    </div>
-                                                    <div class="col-sm-6 col-lg-6">
-                                                        <text-field
-                                                            [cssClass]="'form-control'"
-                                                            type="text"
-                                                            placeholder="Enter Barcode"
-                                                            id="service-sac-code"
-                                                        ></text-field>
-                                                    </div>
-                                                </div>
-                                                <div class="row mr-b15">
-                                                    <div class="col-sm-6 col-lg-6">
-                                                        <label>SKU Code</label>
-                                                    </div>
-                                                    <div class="col-sm-6 col-lg-6">
-                                                        <text-field
-                                                            [cssClass]="'form-control'"
-                                                            type="text"
-                                                            placeholder="Enter SKU Code"
-                                                            id="service-sac-code"
-                                                        ></text-field>
-                                                    </div>
-                                                </div>
-                                                <div class="row mr-b15">
-                                                    <div class="col-sm-6 col-lg-6">
-                                                        <label>Custom Field</label>
-                                                    </div>
-                                                    <div class="col-sm-6 col-lg-6">
-                                                        <text-field
-                                                            [cssClass]="'form-control'"
-                                                            type="text"
-                                                            placeholder="Enter Custom Field"
-                                                            id="service-sac-code"
-                                                        ></text-field>
-                                                    </div>
-                                                </div>
-                                                <div class="row mr-b15">
-                                                    <div class="col-sm-6 col-lg-6">
-                                                        <label>Custom Field</label>
-                                                    </div>
-                                                    <div class="col-sm-6 col-lg-6">
-                                                        <text-field
-                                                            [cssClass]="'form-control'"
-                                                            id="service-custom-field"
-                                                            type="text"
-                                                        ></text-field>
-                                                    </div>
-                                                </div>
+                                    <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
+                                        <div class="row mr-b15">
+                                            <div class="col-sm-6 col-lg-6">
+                                                <label>HSN Code</label>
+                                            </div>
+                                            <div class="col-sm-6 col-lg-6">
+                                                <text-field
+                                                    [cssClass]="'form-control'"
+                                                    id="product-name"
+                                                    type="text"
+                                                    placeholder="Enter HSN Code"
+                                                ></text-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
+                                        <div class="row mr-b15">
+                                            <div class="col-sm-6 col-lg-6">
+                                                <label>SKU Code</label>
+                                            </div>
+                                            <div class="col-sm-6 col-lg-6">
+                                                <text-field
+                                                    [cssClass]="'form-control'"
+                                                    id="product-name"
+                                                    type="text"
+                                                    placeholder="Enter SKU Code"
+                                                ></text-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
+                                        <div class="row mr-b15">
+                                            <div class="col-sm-6 col-lg-6">
+                                                <label>Barcode (ISBN, UPC, GTIN, etc.)</label>
+                                            </div>
+                                            <div class="col-sm-6 col-lg-6">
+                                                <text-field
+                                                    [cssClass]="'form-control'"
+                                                    id="bar-code"
+                                                    type="text"
+                                                ></text-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
+                                        <div class="row mr-b15">
+                                            <div class="col-sm-6 col-lg-6">
+                                                <label>Expiry Date</label>
+                                            </div>
+                                            <div class="col-sm-6 col-lg-6">
+                                                <text-field [cssClass]="'form-control'" type="text"></text-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
+                                        <div class="row mr-b15">
+                                            <div class="col-sm-6 col-lg-6">
+                                                <label>Custom Field</label>
+                                            </div>
+                                            <div class="col-sm-6 col-lg-6">
+                                                <text-field
+                                                    [cssClass]="'form-control'"
+                                                    id="expiry-code"
+                                                    type="text"
+                                                ></text-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
+                                        <div class="row mr-b15">
+                                            <div class="col-sm-6 col-lg-6">
+                                                <label>Custom Field</label>
+                                            </div>
+                                            <div class="col-sm-6 col-lg-6">
+                                                <text-field
+                                                    [cssClass]="'form-control'"
+                                                    id="expiry-code"
+                                                    type="text"
+                                                ></text-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
+                                        <div class="row mr-b15">
+                                            <div class="col-sm-6 col-lg-6">
+                                                <label>Custom Field</label>
+                                            </div>
+                                            <div class="col-sm-6 col-lg-6">
+                                                <text-field
+                                                    [cssClass]="'form-control'"
+                                                    id="expiry-code"
+                                                    type="text"
+                                                ></text-field>
                                             </div>
                                         </div>
                                     </div>
@@ -2357,7 +2392,7 @@
                                         <sh-select id="select-under-group" placeholder="Select Group"></sh-select>
                                     </div>
                                 </div>
-                                <div *ngIf="false" class="row mr-b15">
+                                <div class="row mr-b15">
                                     <div class="col-sm-12 col-md-4 col-lg-6">
                                         <label>Unique Name<span class="red-text">*</span></label>
                                     </div>
@@ -2366,7 +2401,33 @@
                                             [cssClass]="'form-control'"
                                             id="combo-unique-name"
                                             type="text"
-                                            placeholder="EmtUniqueer Name"
+                                            placeholder="Enter Unique Name"
+                                        ></text-field>
+                                    </div>
+                                </div>
+                                <div class="row mr-b15">
+                                    <div class="col-sm-12 col-md-4 col-lg-6">
+                                        <label>HSN </label>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 col-lg-6">
+                                        <text-field
+                                            [cssClass]="'form-control'"
+                                            id="combo-unique-name"
+                                            type="text"
+                                            placeholder="Enter HSN Code"
+                                        ></text-field>
+                                    </div>
+                                </div>
+                                <div class="row mr-b15">
+                                    <div class="col-sm-12 col-md-4 col-lg-6">
+                                        <label>SKU </label>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 col-lg-6">
+                                        <text-field
+                                            [cssClass]="'form-control'"
+                                            id="combo-unique-name"
+                                            type="text"
+                                            placeholder="Enter SKU Code"
                                         ></text-field>
                                     </div>
                                 </div>
@@ -2536,7 +2597,7 @@
                                                     </p>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-6">
-                                                    <label>Unit & Rate </label>
+                                                    <label>Unit & Price </label>
                                                 </div>
                                                 <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mr-b15">
                                                     <div class="row add-new-field mr-b15">
@@ -2638,7 +2699,7 @@
                                                     </p>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-6">
-                                                    <label>Unit & Rate </label>
+                                                    <label>Unit & Price </label>
                                                 </div>
                                                 <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mr-b15">
                                                     <div class="row add-new-field mr-b15">
@@ -2918,7 +2979,7 @@
                                                                 </p>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-6">
-                                                                <label>Unit & Rate </label>
+                                                                <label>Unit & Price </label>
                                                             </div>
                                                             <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mr-b15">
                                                                 <div class="row add-new-field mr-b15">
@@ -3024,7 +3085,7 @@
                                                                 </p>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-6">
-                                                                <label>Unit & Rate </label>
+                                                                <label>Unit & Price </label>
                                                             </div>
                                                             <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mr-b15">
                                                                 <div class="row add-new-field mr-b15">
@@ -3906,7 +3967,7 @@
                 <!--                                                            </p>-->
                 <!--                                                        </div>-->
                 <!--                                                        <div class="col-sm-6 col-lg-6">-->
-                <!--                                                            <label>Unit & Rate </label>-->
+                <!--                                                            <label>Unit & Price </label>-->
                 <!--                                                        </div>-->
                 <!--                                                        <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mr-b15">-->
                 <!--                                                            <div class="row add-new-field mr-b15">-->
@@ -3989,7 +4050,7 @@
                 <!--                                                            </p>-->
                 <!--                                                        </div>-->
                 <!--                                                        <div class="col-sm-6 col-lg-6">-->
-                <!--                                                            <label>Unit & Rate </label>-->
+                <!--                                                            <label>Unit & Price </label>-->
                 <!--                                                        </div>-->
                 <!--                                                        <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mr-b15">-->
                 <!--                                                            <div class="row add-new-field mr-b15">-->
