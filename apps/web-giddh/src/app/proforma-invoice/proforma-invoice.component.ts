@@ -1233,6 +1233,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         if (!obj.accountDetails.currencySymbol) {
                             obj.accountDetails.currencySymbol = '';
                         }
+                        if (this.isPendingVoucherType && obj.accountDetails && obj.voucherDetails) {
                         if (this.currentVoucherFormDetails?.depositAllowed || this.isPendingVoucherType) {
                             obj.accountDetails.name = results[0].account.name;
                             obj.voucherDetails.customerName = results[0].account.name;
@@ -3277,7 +3278,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public onSelectBankCash(item: IOption) {
-        if (item.value) {
+        if (item.value && this.invFormData.accountDetails) {
             this.invFormData.accountDetails.name = item.label;
             this.getAccountDetails(item.value);
         }
@@ -3493,7 +3494,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public onSelectPaymentMode(event: any) {
         if (event && event.value) {
-            if (this.isCashInvoice) {
+            if (this.isCashInvoice && this.invFormData.accountDetails) {
                 this.invFormData.accountDetails.name = event.label;
                 this.invFormData.accountDetails.uniqueName = event.value;
             }
@@ -4616,7 +4617,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         obj.account.shippingDetails.stateCode = obj.account.shippingDetails.state.code;
         obj.account.shippingDetails.stateName = obj.account.shippingDetails.state.name;
 
-        if (this.isCashInvoice) {
+        if (this.isCashInvoice && obj.account) {
             obj.account.customerName = data.voucherDetails.customerName;
             obj.account.name = data.voucherDetails.customerName;
         } else {
