@@ -404,6 +404,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     public getStates() {
         this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
+                this.states = [];
                 Object.keys(res.stateList).forEach(key => {
 
                     if (res.stateList[key].stateGstCode !== null) {

@@ -35,9 +35,9 @@ import { FilingOverviewComponent } from './filing/tabs/overview/overview.compone
 import { GstRoutingModule } from './gst.routing.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { GstAsideMenuComponent } from './modals/gst-aside-menu/gst-aside-menu.component';
+import { SharedModule } from '../shared/shared.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
-import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
     declarations: [FileGstR3Component,

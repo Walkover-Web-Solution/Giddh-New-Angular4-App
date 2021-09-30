@@ -190,12 +190,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     public openingBalance: any;
     /** This will hold closing balance amount */
     public closingBalance: number = 0;
-    /** Stores the current organization type */
-    public currentOrganizationType: OrganizationType;
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
     /** Listens for Master open/close event, required to load the data once master is closed */
     public isAddAndManageOpenedFromOutside$: Observable<boolean>;
     /** This will store screen size */
@@ -854,6 +854,10 @@ export class ContactComponent implements OnInit, OnDestroy {
             componentInstance.maxSize = 5;
             componentInstance.writeValue(s.page);
             componentInstance.boundaryLinks = true;
+            componentInstance.firstText = this.commonLocaleData?.app_first;
+            componentInstance.previousText = this.commonLocaleData?.app_previous;
+            componentInstance.nextText = this.commonLocaleData?.app_next;
+            componentInstance.lastText = this.commonLocaleData?.app_last;
             componentInstance.pageChanged.pipe(takeUntil(this.destroyed$)).subscribe(e => {
                 this.pageChangedDueReport(e);
             });
@@ -1172,10 +1176,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     public columnFilter(event, column) {
         this.showFieldFilter[column] = event;
         this.setTableColspan();
-        this.showFieldFilter.selectAll = Object.keys(this.showFieldFilter).filter((filterName) => filterName !== 'selectAll').every(filterName => this.showFieldFilter[filterName]);
         if (window.localStorage) {
             localStorage.setItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer'], JSON.stringify(this.showFieldFilter));
         }
+        setTimeout(() => {
+            this.showFieldFilter.selectAll = Object.keys(this.showFieldFilter).filter((filterName) => filterName !== 'selectAll').every(filterName => this.showFieldFilter[filterName]);
+        }, 500);
     }
 
     /**

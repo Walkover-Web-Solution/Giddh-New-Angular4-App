@@ -129,7 +129,7 @@
     "duplicate_copy": "प्रतिलिपि",
     "triplicate_copy": "ट्रिपल कॉपी",
     "create_e_invoice": "ई-चालान बनाएं",
-    "e_invoice_status": "ई-चालान स्थिति",
+	"e_invoice_status": "ई-चालान स्थिति",
     "e_invoice_statuses": {
         "yet_to_be_pushed": "ई-चालान के लिए लेनदेन को अभी आईआरपी में धकेला जाना बाकी है।",
 		"pushed": "लेनदेन को सफलतापूर्वक आईआरपी में धकेल दिया गया था, और इसके लिए एक क्यूआर कोड और आईआरएन तैयार किया गया है।",
@@ -141,13 +141,13 @@
         "giddh_invoice_not_cancelled": "ई-चालान लेनदेन आईआरपी में रद्द कर दिया गया है लेकिन गिद्ध में नहीं। इससे जुड़ा IRN अब मान्य नहीं है।"
     },
     "e_invoice_statuses_label": {
-        "yet_to_be_pushed": "Yet-to-be Pushed",
-        "pushed": "Pushed",
-        "push_initiated": "Push Initiated",
-        "cancelled": "Cancelled",
-        "mark_as_cancelled": "Marked as Cancelled",
-        "failed": "Failed",
-        "na": "NA"
+        "yet_to_be_pushed": "अभी तक धक्का दिया जाना है",
+        "pushed": "धकेल दिया",
+        "push_initiated": "पुश शुरू किया गया",
+        "cancelled": "रद्द",
+        "mark_as_cancelled": "रद्द के रूप में चिह्नित",
+        "failed": "असफल हुआ",
+        "na": "उपलब्ध नहीं है"
     },
     "cancel_e_invoice": "रद्द करें ई-चालान",
     "cancel_reason": "कारण रद्द करें",
@@ -160,17 +160,17 @@
     },
     "tabs": {
         "estimates": "अनुमान (बीटा)",
-        "debit_note": "डेबिट नोट",
-        "credit_note": "क्रेडिट नोट",
-        "pending": "विचाराधीन",
-        "templates": "टेम्पलेट्स",
-        "settings": "स्थापना",
-        "proformas": "प्रोफार्मा",
-        "invoices": "चालान",
-        "recurring": "आवर्ती"
+		"debit_note": "डेबिट नोट",
+		"credit_note": "क्रेडिट नोट",
+		"pending": "विचाराधीन",
+		"templates": "टेम्पलेट्स",
+		"settings": "स्थापना",
+		"proformas": "प्रोफार्मा",
+		"invoices": "चालान",
+		"recurring": "आवर्ती"
     },
     "all_invoices": "सभी चालान",
-    "no_advance_receipt": "समायोजन के लिए कोई अग्रिम रसीद नहीं है।",
+	"no_advance_receipt": "समायोजन के लिए कोई अग्रिम रसीद नहीं है।",
     "exchange_gain_loss_label": "[BASE_CURRENCY] में: [AMOUNT] <br /> विनिमय [PROFIT_TYPE]: ",
     "works_for_single_entry": "केवल एकल प्रविष्टि के लिए काम करता है।",
     "uploaded_purchase_bill": "अपलोड किया गया बिल",

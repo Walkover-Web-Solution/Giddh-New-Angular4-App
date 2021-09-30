@@ -278,7 +278,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         if (this.formToSave?.invoiceSettings?.gstEInvoiceEnable) {
             const invoiceSettings = this.formToSave.invoiceSettings;
             if (!invoiceSettings.gstEInvoiceUserName || !invoiceSettings.gstEInvoiceUserPassword || !invoiceSettings.gstEInvoiceGstin) {
-                this._toasty.errorToast('All fields are required for E-invoicing Authentication');
+                this._toasty.errorToast(this.localeData?.e_invoice_fields_required_error_message);
                 return;
             }
             if (this.formFields['taxName'] && this.formFields['taxName']['regex'] && this.formFields['taxName']['regex'].length > 0) {
@@ -290,7 +290,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                     }
                 }
                 if (!isValid) {
-                    this._toasty.errorToast('Please provide a valid GSTIN');
+                    this._toasty.errorToast(this.localeData?.e_invoice_invalid_gstin_error_message);
                     return;
                 }
             }
@@ -375,7 +375,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         if (data.value && this.accountToSend) {
             let result = arrOfAcc.filter((obj) => obj.uniqueName === data.value);
             this.accountToSend.name = result[0].name;
-            this.accountToSend.uniqueName = result[0].uniqueName;
+            this.accountToSend.uniqueName = result[0]?.uniqueName;
         }
     }
 
@@ -548,7 +548,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
                 if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
                     // Find the current checked out branch
-                    currentBranch = branches.find(branch => branch.uniqueName === this.generalService.currentBranchUniqueName);
+                    currentBranch = branches.find(branch => branch?.uniqueName === this.generalService.currentBranchUniqueName);
                 } else {
                     // Find the HO branch
                     currentBranch = branches.find(branch => !branch.parentBranch);

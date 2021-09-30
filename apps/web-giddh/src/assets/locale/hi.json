@@ -195,7 +195,7 @@
     "app_saved": "बचाया",
     "app_tax_types": {
         "gst": "जीएसटी",
-        "input_gst": "InputGST",
+        "input_gst": "इनपुटजीएसटी",
         "others": "अन्य"
     },
     "app_duration": {
@@ -212,7 +212,7 @@
     "app_refresh": "नया करना",
     "app_next": "अगला",
     "app_financial_year_periods": {
-        "period1": "जनवरी - दिसंबर",
+        "period1": "जनवरी-दिसंबर",
         "period2": "अप्रैल-मार्च",
         "period3": "जुलाई-जुलाई"
     },
@@ -298,7 +298,7 @@
     "app_ifsc_code_label": "आयएफएससी कोड",
     "app_ifsc_code_placeholder": "आयएफएससी कोड दर्ज करें",
     "app_invalid_bank_account_number": "बैंक खाता संख्या में 9 से 18 अक्षर होने चाहिए",
-    "app_invalid_iban": "IBAN में 23 से 34 अक्षर होने चाहिए।",
+    "app_invalid_iban": "आईबीएएन में 23 से 34 अक्षर होने चाहिए।",
     "app_invalid_swift_code": "स्विफ्ट कोड / बीआईसी में 8 से 11 अक्षर होने चाहिए।",
     "app_default_taxes": "डिफ़ॉल्ट कर",
     "app_select_tax": "कर का चयन करें",
@@ -420,7 +420,7 @@
     "app_subtotal": "उप कुल",
     "app_clear_selected": "चयनित साफ़ करें",
     "app_due_amount": "देय राशि",
-    "app_enter_otp": "OTP दर्ज करें",
+    "app_enter_otp": "ओटीपी दर्ज करें",
     "app_resend": "पुन: भेजें",
     "app_payment_proceed": "भुगतान आगे बढ़ना",
     "app_clear": "साफ़",
@@ -428,7 +428,7 @@
     "app_close": "बंद करे",
     "app_apply": "लागू",
     "app_enter_tax_name": "[TAX_NAME] दर्ज करें",
-    "app_country_code": "",
+    "app_country_code": "+91",
     "app_invalid_tax_name": "अमान्य [TAX_NAME]",
     "app_order": "गण",
     "app_permanently_delete_message": "यह स्थायी रूप से हटा दिया जाएगा और अब किसी अन्य मॉड्यूल से सुलभ नहीं होगा।",
@@ -567,8 +567,8 @@
     },
     "app_characters_left": "शेष वर्ण",
 	"app_pin": "पिन",
-	"app_max_100_characters_allowed_limit": "मैक्स। १०० वर्णों की अनुमति है",
-	"app_max_50_characters_allowed_limit": "मैक्स। ५० वर्णों की अनुमति है",
+	"app_max_100_characters_allowed_limit": "मैक्स १०० वर्णों की अनुमति है",
+	"app_max_50_characters_allowed_limit": "मैक्स ५० वर्णों की अनुमति है",
 	"app_active": "सक्रिय",
 	"app_renew": "नवीकरण",
 	"app_buy_plan": "योजना खरीदें",
@@ -635,7 +635,8 @@
 		"receive_otp": "आपको शीघ्र ही आपके मोबाइल पर एक सत्यापन कोड प्राप्त होगा।",
 		"otp_sent_email": "आपके ईमेल खाते पर एक सत्यापन कोड भेज दिया गया है।",
 		"internet_error": "कृपया अपने इंटरनेट कनेक्शन की जाँच करें।",
-		"internet_disconnected": "इंटरनेट डिस्कनेक्ट"
+		"internet_disconnected": "इंटरनेट डिस्कनेक्ट",
+        "voucher_saved": "वाउचर सफलतापूर्वक जेनरेट हुआ"
 	},
 	"app_supported_languages": {
 		"english": "अंग्रेज़ी",
@@ -654,5 +655,8 @@
         "weekly": "साप्ताहिक",
         "monthly": "महीने के",
         "unlimited": "असीमित"
-    }
+    },
+    "app_voucher_unavailable": "समायोजन के लिए कोई वाउचर नहीं है।",
+    "app_reference_invoice": "संदर्भ चालान",
+    "app_create_custom_field": "कस्टम फ़ील्डस बनाएं"
 }

@@ -186,7 +186,7 @@
                                             value="hsn"
                                         />
                                         <label for="hsnCodeType" class="radio-custom-label">{{
-                                            commonLocaleData?.app_hsn_code
+                                            commonLocaleData?.app_hsn
                                         }}</label>
                                     </span>
                                     <span>
@@ -199,7 +199,7 @@
                                             value="sac"
                                         />
                                         <label for="sacCodeType" class="ml-1 radio-custom-label">{{
-                                            commonLocaleData?.app_sac_code
+                                            commonLocaleData?.app_sac
                                         }}</label>
                                     </span>
                                 </div>
@@ -319,8 +319,10 @@
                                                 class="form-control"
                                                 autocomplete="false"
                                                 #gstNumberField
-                                                (keyup)="getStateCode(gst, states, $event)"
-                                                (blur)="checkGstNumValidation(gstNumberField)"
+                                                (blur)="
+                                                    checkGstNumValidation(gstNumberField);
+                                                    getStateCode(gst, states, $event)
+                                                "
                                                 name="gstNumber"
                                                 formControlName="gstNumber"
                                                 [placeholder]="taxNamePlaceholder"
@@ -668,6 +670,7 @@
             </tab>
 
             <tab *ngIf="isDebtorCreditor" [heading]="localeData?.tabs?.custom">
+                <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isCustomFieldLoading"></giddh-page-loader>
                 <ng-container formArrayName="customFields">
                     <ng-container
                         *ngFor="let item of companyCustomFields; let index = index; let first = first; let last = last"
@@ -738,6 +741,13 @@
                         </ng-container>
                     </ng-container>
                 </ng-container>
+                <a
+                    href="javascript:;"
+                    class="btn-link"
+                    (click)="goToCustomFields.emit(true)"
+                    *ngIf="!companyCustomFields?.length"
+                    >{{ commonLocaleData?.app_create_custom_field }}</a
+                >
             </tab>
             <div class="row">
                 <div class="col-sm-12 mt-5">

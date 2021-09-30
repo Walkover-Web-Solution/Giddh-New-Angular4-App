@@ -286,14 +286,14 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
                 }
                 if (!activeGroup) {
                     for (let grp of grps) {
-                        if (grp.accounts && grp.accounts?.length > 0) {
+                        if (grp?.accounts && grp?.accounts?.length > 0) {
                             allAccount.push(...grp.accounts);
                         }
                     }
                 } else {
                     for (let grp of grps) {
-                        if (grp.uniqueName === activeGroup.uniqueName) {
-                            if (grp.accounts && grp.accounts?.length > 0) {
+                        if (grp?.uniqueName === activeGroup?.uniqueName) {
+                            if (grp?.accounts && grp?.accounts?.length > 0) {
                                 allAccount.push(...grp.accounts);
                             }
                         }
@@ -415,7 +415,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
         this.activeGroup$.pipe(take(1)).subscribe(group => activeGroup = group);
         this.getBreadCrumbPathFromGroup(activeGroup, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
         this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
-        
+
         if (col.uniqueName) {
             this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(col.uniqueName));
         }
@@ -549,7 +549,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
         this.getBreadCrumbPathFromGroup(activeGroup, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
 
         let listBckup = this.mc.activeGroupFromGroupListBackup(grpsBck, this.currentGroup?.uniqueName, null);
-        if (listBckup) {
+        if (listBckup && this.currentGroup) {
             this.currentGroup.groups = listBckup.groups;
             this.currentGroup.accounts = listBckup.accounts;
         }
