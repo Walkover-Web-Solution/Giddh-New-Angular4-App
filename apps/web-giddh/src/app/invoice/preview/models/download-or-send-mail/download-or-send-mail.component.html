@@ -6,7 +6,7 @@
 >
     <div class="modal-header clearfix" *ngIf="!isMobileScreen">
         <span *ngIf="showPdfWrap">
-            <button type="button" class="btn btn-md btn-info mr-r1" *ngIf="showEditButton" (click)="goToedit('sales')">
+            <button type="button" class="btn btn-md btn-info mr-r1" *ngIf="showEditButton" (click)="editVoucher()">
                 {{ commonLocaleData?.app_edit }}
             </button>
             <button
