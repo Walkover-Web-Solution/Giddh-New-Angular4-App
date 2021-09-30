@@ -123,7 +123,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this.isProdMode = PRODUCTION_ENV;
         this.getCountry();
         this.getCallingCodes();
-        
+
         this.imgPath = (isElectron || isCordova) ? '' : AppUrl + APP_FOLDER + '';
         this.logedInuser = this._generalService.user;
         if (this._generalService.createNewCompany) {
@@ -189,7 +189,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
                 this.company = res;
             }
         });
-        if (this.createBranch && this.isUpdateMode && this.entityDetails) {
+        if (this.createBranch && this.isUpdateMode && this.entityDetails && this.company) {
             this.company.name = this.entityDetails.name;
             this.company.nameAlias = this.entityDetails.alias;
         }
@@ -319,7 +319,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     public makeMeCaptialize(companyName: string) {
         if (companyName) {
             companyName = companyName.trim();
-            if (companyName) {
+            if (companyName && this.company) {
                 this.company.name = companyName[0].toUpperCase() + companyName.substr(1, companyName.length);
             } else {
                 this.company.name = '';
