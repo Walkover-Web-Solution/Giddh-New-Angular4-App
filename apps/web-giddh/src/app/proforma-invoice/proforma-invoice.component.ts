@@ -815,7 +815,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
         });
 
-        this.route.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
+        this.route.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(async params => {
             this.voucherTypeChanged = false;
             this.copyPurchaseBill = false;
 
@@ -878,6 +878,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.isUpdateMode = true;
                     this.isUpdateDataInProcess = true;
                     this.prepareInvoiceTypeFlags();
+
+                    if(this.callFromOutside) {
+                        await this.setSelectedItem();
+                    }
 
                     this.toggleFieldForSales = (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote));
 
@@ -7382,5 +7386,30 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         } else {
             this.currentVoucherFormDetails = undefined;
         }
+    }
+
+    /**
+     * This will set the data in selected item if user is editing voucher from outside module
+     *
+     * @private
+     * @returns {Promise<void>}
+     * @memberof ProformaInvoiceComponent
+     */
+    private setSelectedItem(): Promise<void> {
+        return new Promise((resolve: Function) => {
+            this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
+                if(params.uniqueName) {
+                    this.selectedItem = { 
+                        uniqueName: params.uniqueName, 
+                        voucherNumber: params.invoiceNo, 
+                        account: { name: params.accUniqueName, uniqueName: params.accUniqueName },
+                        grandTotal: undefined,
+                        voucherDate: undefined,
+                        voucherType: this.invoiceType
+                    };
+                }
+                resolve();
+            });
+        });
     }
 }
