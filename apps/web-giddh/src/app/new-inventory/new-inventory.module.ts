@@ -54,6 +54,7 @@ import { MatRadioModule } from "@angular/material/radio";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatInputModule } from "@angular/material/input";
+import { MatSelectModule } from "@angular/material/select";
 
 @NgModule({
     declarations: [
@@ -115,6 +116,7 @@ import { MatInputModule } from "@angular/material/input";
         MatTabsModule,
         MatChipsModule,
         MatInputModule,
+        MatSelectModule,
     ],
     exports: [
         NewInventoryComponent,

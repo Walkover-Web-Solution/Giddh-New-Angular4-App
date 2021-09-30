@@ -10,7 +10,7 @@ export interface PeriodicElement {
     inwardValue: string;
     outwardValue: string;
     closingValue: string;
-    lessStock: string;
+    // lessStock: string;
 }
 
 const ELEMENT_DATA: PeriodicElement[] = [
@@ -21,7 +21,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
         inwardValue: "₹17,48,242.86",
         closingValue: "₹17,48,242.86",
         outwardValue: "₹17,48,242.86",
-        lessStock: "42",
+        // lessStock: "42",
     },
     {
         group: "product Name",
@@ -30,7 +30,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
         inwardValue: "₹17,48,242.86",
         closingValue: "₹17,48,242.86",
         outwardValue: "₹17,48,242.86",
-        lessStock: "42",
+        // lessStock: "42",
     },
     {
         group: "product Name",
@@ -39,7 +39,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
         inwardValue: "₹17,48,242.86",
         closingValue: "₹17,48,242.86",
         outwardValue: "₹17,48,242.86",
-        lessStock: "42",
+        // lessStock: "42",
     },
     {
         group: "product Name",
@@ -48,7 +48,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
         inwardValue: "₹17,48,242.86",
         closingValue: "₹17,48,242.86",
         outwardValue: "₹17,48,242.86",
-        lessStock: "42",
+        // lessStock: "42",
     },
     {
         group: "product Name",
@@ -57,7 +57,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
         inwardValue: "₹17,48,242.86",
         closingValue: "₹17,48,242.86",
         outwardValue: "₹17,48,242.86",
-        lessStock: "42",
+        // lessStock: "42",
     },
     {
         group: "product Name",
@@ -66,7 +66,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
         inwardValue: "₹17,48,242.86",
         closingValue: "₹17,48,242.86",
         outwardValue: "₹17,48,242.86",
-        lessStock: "42",
+        // lessStock: "42",
     },
 
 ];
@@ -81,8 +81,8 @@ const ELEMENT_DATA: PeriodicElement[] = [
 export class ListGroupComponent implements OnInit {
     /* this will store image path*/
     public imgPath: string = "";
-
-    displayedColumns: string[] = ["select", "group", "openingValue", "inwardValue", "outwardValue", "closingValue", "lessStock"];
+    public showValueCondition = false;
+    displayedColumns: string[] = ["select", "group", "openingValue", "inwardValue", "outwardValue", "closingValue"];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
     selection = new SelectionModel<PeriodicElement>(true, []);
 
@@ -99,6 +99,10 @@ export class ListGroupComponent implements OnInit {
         const numSelected = this.selection.selected.length;
         const numRows = this.dataSource.data.length;
         return numSelected === numRows;
+    }
+
+    showValue() {
+        this.showValueCondition = true;
     }
 
     /** Selects all rows if they are not all selected; otherwise clear selection. */
