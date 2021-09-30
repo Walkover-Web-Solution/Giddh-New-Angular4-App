@@ -18,6 +18,8 @@ import { saveAs } from 'file-saver';
 import { GstReport } from '../../../../constants/gst.constant';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { DownloadVoucherRequest } from 'apps/web-giddh/src/app/models/api-models/recipt';
+import { ReceiptService } from 'apps/web-giddh/src/app/services/receipt.service';
 
 export const filterTransaction = {
     entityType: '',
@@ -82,7 +84,8 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         private invoiceService: InvoiceService,
         private toaster: ToasterService,
         private generalService: GeneralService,
-        private breakpointObserver: BreakpointObserver) {
+        private breakpointObserver: BreakpointObserver,
+        private receiptService: ReceiptService) {
         this.viewTransaction$ = this.store.pipe(select(p => p.gstR.viewTransactionData), takeUntil(this.destroyed$));
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
         this.viewTransactionInProgress$ = this.store.pipe(select(p => p.gstR.viewTransactionInProgress), takeUntil(this.destroyed$));
@@ -292,22 +295,44 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
      * @memberof ViewTransactionsComponent
      */
     public onDownloadInvoiceEvent(invoiceCopy): void {
-        let dataToSend = {
-            voucherNumber: [this.selectedInvoice.voucherNumber],
-            typeOfInvoice: invoiceCopy,
-            voucherType: this.selectedInvoice.voucherType
-        };
-        this.invoiceService.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend).pipe(takeUntil(this.destroyed$))
-            .subscribe(res => {
+        if(this.voucherApiVersion === 2) {
+            console.log(this.selectedInvoice);
+            let model: DownloadVoucherRequest = {
+                voucherType: this.selectedInvoice.voucherType,
+                voucherNumber: [this.selectedInvoice.voucherNumber],
+                typeOfInvoice: invoiceCopy
+            };
+
+            if(this.generalService.voucherApiVersion === 2) {
+                model.uniqueName = this.selectedInvoice.voucherUniqueName;
+            }
+
+            let accountUniqueName: string = this.selectedInvoice.account?.uniqueName;
+            this.receiptService.DownloadVoucher(model, accountUniqueName, false).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res) {
-                    if (dataToSend.typeOfInvoice.length > 1) {
-                        return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'zip');
-                    }
-                    return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
+                    return saveAs(res, `${this.selectedInvoice.voucherNumber}.` + 'pdf');
                 } else {
                     this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
                 }
             });
+        } else {
+            let dataToSend = {
+                voucherNumber: [this.selectedInvoice.voucherNumber],
+                typeOfInvoice: invoiceCopy,
+                voucherType: this.selectedInvoice.voucherType
+            };
+            this.invoiceService.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend).pipe(takeUntil(this.destroyed$))
+                .subscribe(res => {
+                    if (res) {
+                        if (dataToSend.typeOfInvoice.length > 1) {
+                            return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'zip');
+                        }
+                        return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
+                    } else {
+                        this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                    }
+                });
+        }
     }
 
     /**
