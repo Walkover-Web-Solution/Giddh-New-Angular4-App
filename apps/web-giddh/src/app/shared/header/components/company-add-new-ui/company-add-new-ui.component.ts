@@ -189,7 +189,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
                 this.company = res;
             }
         });
-        if (this.createBranch && this.isUpdateMode && this.entityDetails && this.company) {
+        if (this.createBranch && this.isUpdateMode && this.entityDetails) {
             this.company.name = this.entityDetails.name;
             this.company.nameAlias = this.entityDetails.alias;
         }
@@ -319,7 +319,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     public makeMeCaptialize(companyName: string) {
         if (companyName) {
             companyName = companyName.trim();
-            if (companyName && this.company) {
+            if (companyName) {
                 this.company.name = companyName[0].toUpperCase() + companyName.substr(1, companyName.length);
             } else {
                 this.company.name = '';
