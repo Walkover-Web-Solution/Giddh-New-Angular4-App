@@ -304,16 +304,12 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
      */
     public onDownloadInvoiceEvent(invoiceCopy): void {
         if(this.voucherApiVersion === 2) {
-            console.log(this.selectedInvoice);
             let model: DownloadVoucherRequest = {
                 voucherType: this.selectedInvoice.voucherType,
                 voucherNumber: [this.selectedInvoice.voucherNumber],
-                typeOfInvoice: invoiceCopy
+                typeOfInvoice: invoiceCopy,
+                uniqueName: this.selectedInvoice.voucherUniqueName
             };
-
-            if(this.generalService.voucherApiVersion === 2) {
-                model.uniqueName = this.selectedInvoice.voucherUniqueName;
-            }
 
             let accountUniqueName: string = this.selectedInvoice.account?.uniqueName;
             this.receiptService.DownloadVoucher(model, accountUniqueName, false).pipe(takeUntil(this.destroyed$)).subscribe(res => {
