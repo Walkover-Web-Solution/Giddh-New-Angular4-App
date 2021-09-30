@@ -506,8 +506,8 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
             this.commonRequest = new ContactAdvanceSearchCommonModal();
             this.isAdvanceSearchApplied = false;
-            this.key = 'name';
-            this.order = 'asc';
+            this.key = (tabName === "vendor") ? 'amountDue' : "name";
+            this.order = (tabName === "vendor") ? 'desc' : 'asc';
             this.activeTab = tabName;
 
             if (this.universalDate && this.universalDate[0] && this.universalDate[1] && !this.todaySelected) {
@@ -948,8 +948,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
         this.commonRequest = new ContactAdvanceSearchCommonModal();
         this.isAdvanceSearchApplied = false;
-        this.key = 'name';
-        this.order = 'asc';
+        this.key = (this.activeTab === "vendor") ? 'amountDue' : "name";
+        this.order = (this.activeTab === "vendor") ? 'desc' : "asc";
         this.getAccounts(this.fromDate, this.toDate,
             null, 'true', PAGINATION_LIMIT, '', '', null, (this.currentBranch ? this.currentBranch.uniqueName : ""));
     }
