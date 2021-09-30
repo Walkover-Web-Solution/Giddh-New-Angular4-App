@@ -28,6 +28,8 @@
                     [showBankDetail]="showBankDetail"
                     [isServiceCreation]="isServiceCreation"
                     [isCustomerCreation]="isCustomerCreation"
+                    (goToCustomFields)="showCustomFieldsTab($event)"
+                    [reloadCustomFields]="reloadCustomFields"
                 >
                 </account-add-new-details>
             </ng-container>
@@ -44,6 +46,8 @@
                     [showDeleteButton]="false"
                     [showBankDetail]="showBankDetail"
                     (submitClicked)="updateAccount($event)"
+                    (goToCustomFields)="showCustomFieldsTab($event)"
+                    [reloadCustomFields]="reloadCustomFields"
                 >
                 </account-update-new-details>
             </ng-container>
@@ -62,6 +66,8 @@
                     [isServiceCreation]="isServiceCreation"
                     [isCustomerCreation]="isCustomerCreation"
                     [fromCommandK]="true"
+                    (goToCustomFields)="showCustomFieldsTab($event)"
+                    [reloadCustomFields]="reloadCustomFields"
                 >
                 </account-add-new-details>
             </ng-container>

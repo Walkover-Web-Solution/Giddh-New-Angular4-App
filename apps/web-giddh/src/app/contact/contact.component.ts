@@ -854,6 +854,10 @@ export class ContactComponent implements OnInit, OnDestroy {
             componentInstance.maxSize = 5;
             componentInstance.writeValue(s.page);
             componentInstance.boundaryLinks = true;
+            componentInstance.firstText = this.commonLocaleData?.app_first;
+            componentInstance.previousText = this.commonLocaleData?.app_previous;
+            componentInstance.nextText = this.commonLocaleData?.app_next;
+            componentInstance.lastText = this.commonLocaleData?.app_last;
             componentInstance.pageChanged.pipe(takeUntil(this.destroyed$)).subscribe(e => {
                 this.pageChangedDueReport(e);
             });
@@ -1546,6 +1550,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.toaster.infoToast(message);
         }
         if (this.selectedAccountsList.length || this.selectedAccForPayment) {
+            this.selectedAccountsList = [this.selectedAccountsList[0]]; // since we don't have bulk payment now, we are only passing 1st available value, once bulk payment is done from API, we will remove this line of code
             this.bulkPaymentModalRef = this.modalService.show(template,
                 Object.assign({}, { class: 'payment-modal modal-xl' })
             );

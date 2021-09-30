@@ -21,13 +21,11 @@ import { API_COUNT_LIMIT } from '../../../app.constant';
     templateUrl: './audit-logs.sidebar.component.html',
     styleUrls: ['audit-logs.sidebar.component.scss']
 })
-
 export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     @Input() public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-
     public vm: AuditLogsSidebarVM;
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
