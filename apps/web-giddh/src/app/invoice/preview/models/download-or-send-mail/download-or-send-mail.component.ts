@@ -93,8 +93,6 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
 
         this.voucherPreview$.subscribe((o: any) => {
             if (o) {
-                console.log(o);
-
                 const reader = new FileReader();
                 const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
                     const byteCharacters = atob(b64Data);
