@@ -51,7 +51,7 @@ export function createDbFile(filename: string): any {
             fs.writeFileSync(filename, "", "utf-8");
         }
         return true;
-    } catch(error) {
+    } catch (error) {
         return error;
     }
 }
@@ -73,15 +73,16 @@ export function getPath(filename: string): any {
  * This will return the default options for every api call
  *
  * @export
- * @param {*} req
+ * @param {*} request
+ * @param {string} method
  * @returns {*}
  */
-export function getDefaultApiOptions(req): any {
+export function getDefaultApiOptions(request: any, method: string): any {
     return {
-        method: 'GET',
+        method: method,
         headers: {
             'Content-Type': 'application/json',
-            'Session-Id': req.headers['session-id']
+            'Session-Id': request.headers['session-id']
         }
     };
 }

@@ -10,7 +10,7 @@ import { getDefaultApiOptions } from "../../helpers/general";
  * @returns
  */
 export async function getCompaniesGiddh(req: any, res: any): Promise<any> {
-    const options = getDefaultApiOptions(req);
+    const options = getDefaultApiOptions(req, 'GET');
     const url = getApiUrl(req) + 'users/' + req.params.userUniqueName + '/v2/companies';
     return callApi(url, options);
 }
