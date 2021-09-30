@@ -7285,24 +7285,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * This will set the data in selected item if user is editing voucher from outside module
      *
      * @private
-     * @returns {Promise<void>}
      * @memberof ProformaInvoiceComponent
      */
-    private setSelectedItem(): Promise<void> {
-        return new Promise((resolve: Function) => {
-            this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
-                if(params.uniqueName) {
-                    this.selectedItem = { 
-                        uniqueName: params.uniqueName, 
-                        voucherNumber: params.invoiceNo, 
-                        account: { name: params.accUniqueName, uniqueName: params.accUniqueName },
-                        grandTotal: undefined,
-                        voucherDate: undefined,
-                        voucherType: this.invoiceType
-                    };
-                }
-                resolve();
-            });
+    private setSelectedItem(): void {
+        this.route.queryParams.pipe(take(1)).subscribe((params) => {
+            if(params.uniqueName) {
+                this.selectedItem = { 
+                    uniqueName: params.uniqueName, 
+                    voucherNumber: params.invoiceNo, 
+                    account: { name: params.accUniqueName, uniqueName: params.accUniqueName },
+                    grandTotal: undefined,
+                    voucherDate: undefined,
+                    voucherType: this.invoiceType
+                };
+            }
         });
     }
 }
