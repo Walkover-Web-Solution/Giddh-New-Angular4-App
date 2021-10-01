@@ -93,16 +93,16 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    @Output() public closeUpdateLedgerModal: EventEmitter<boolean> = new EventEmitter();	
-    @Output() public showQuickAccountModalFromUpdateLedger: EventEmitter<boolean> = new EventEmitter();	
-    @Output() public toggleOtherTaxesAsideMenu: EventEmitter<UpdateLedgerVm> = new EventEmitter();	
-    /** Emits when more detail is opened */	
-    @Output() public moreDetailOpen: EventEmitter<any> = new EventEmitter();	
-    @Input() public isPettyCash: boolean = false;	
-    @Input() public pettyCashEntry: any;	
-    @Input() public pettyCashBaseAccountTypeString: string;	
-    @Input() public pettyCashBaseAccountUniqueName: string;	
-    /** Stores the active company details */	
+    @Output() public closeUpdateLedgerModal: EventEmitter<boolean> = new EventEmitter();
+    @Output() public showQuickAccountModalFromUpdateLedger: EventEmitter<boolean> = new EventEmitter();
+    @Output() public toggleOtherTaxesAsideMenu: EventEmitter<UpdateLedgerVm> = new EventEmitter();
+    /** Emits when more detail is opened */
+    @Output() public moreDetailOpen: EventEmitter<any> = new EventEmitter();
+    @Input() public isPettyCash: boolean = false;
+    @Input() public pettyCashEntry: any;
+    @Input() public pettyCashBaseAccountTypeString: string;
+    @Input() public pettyCashBaseAccountUniqueName: string;
+    /** Stores the active company details */
     @Input() public activeCompany: any;
     @Input() public searchResultsPaginationPage: any;
     @Input() public searchResultsPaginationTotalPages: any;
@@ -310,14 +310,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.searchResultsPaginationData.totalPages = this.searchResultsPaginationTotalPages;
         }
 
-        this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {	
-            if (response?.status === "success" && response?.body?.length > 0) {	
-                _.map(response?.body, (tag) => {	
-                    tag.label = tag.name;	
-                    tag.value = tag.name;	
-                });	
-                this.tags = _.orderBy(response?.body, 'name');	
-            }	
+        this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.length > 0) {
+                _.map(response?.body, (tag) => {
+                    tag.label = tag.name;
+                    tag.value = tag.name;
+                });
+                this.tags = _.orderBy(response?.body, 'name');
+            }
         });
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
@@ -356,10 +356,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.vm.selectedLedger.otherTaxModal = new SalesOtherTaxesModal();
 
         if (this.isPettyCash) {
-            if (this.pettyCashEntry) {	
-                this.entryUniqueName = this.pettyCashEntry.uniqueName;	
-                this.accountUniqueName = this.pettyCashEntry.particular.uniqueName;	
-                this.selectedLedgerStream$ = observableOf(this.pettyCashEntry as LedgerResponse);	
+            if (this.pettyCashEntry) {
+                this.entryUniqueName = this.pettyCashEntry.uniqueName;
+                this.accountUniqueName = this.pettyCashEntry.particular.uniqueName;
+                this.selectedLedgerStream$ = observableOf(this.pettyCashEntry as LedgerResponse);
             }
         }
         this.vm.companyTaxesList$.pipe(take(1)).subscribe(taxes => {
@@ -894,7 +894,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (requestObj.voucherType !== VoucherTypeEnum.creditNote && requestObj.voucherType !== VoucherTypeEnum.debitNote) {
             requestObj.invoiceLinkingRequest = null;
         }
-        if ((this.isAdvanceReceipt && !this.isAdjustAdvanceReceiptSelected) || (this.vm.selectedLedger.voucher?.shortCode === 'rcpt' && !this.isAdjustReceiptSelected) || !this.isAdjustVoucherSelected) {
+        if ((this.isAdvanceReceipt && !this.isAdjustAdvanceReceiptSelected) || (this.vm.selectedLedger?.voucher?.shortCode === 'rcpt' && !this.isAdjustReceiptSelected) || !this.isAdjustVoucherSelected) {
             // Clear the voucher adjustments if the adjust advance receipt or adjust receipt is not selected
             this.vm.selectedLedger.voucherAdjustments = undefined;
             requestObj.voucherAdjustments = undefined;
@@ -1014,7 +1014,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.vm.selectedLedger.generateInvoice = true;
         }
         this.isAdvanceReceipt = (event.value === 'advance-receipt');
-        this.currentVoucherLabel = this.generalService.getCurrentVoucherLabel(this.vm.selectedLedger.voucher?.shortCode, this.commonLocaleData);
+        this.currentVoucherLabel = this.generalService.getCurrentVoucherLabel(this.vm.selectedLedger?.voucher?.shortCode, this.commonLocaleData);
         this.handleAdvanceReceiptChange();
     }
 
@@ -1025,7 +1025,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public handleVoucherAdjustment(isUpdateMode?: boolean): void {
-        if (!this.vm.selectedLedger.voucherGenerated && this.vm.selectedLedger.voucher?.shortCode !== 'pur') {
+        if (!this.vm.selectedLedger?.voucherGenerated && this.vm.selectedLedger?.voucher?.shortCode !== 'pur') {
             // Voucher must be generated for all vouchers except purchase order
             this.toaster.showSnackBar("info", ADJUSTMENT_INFO_MESSAGE, this.localeData?.app_giddh);
             if (this.isAdjustAdvanceReceiptSelected) {
@@ -1054,7 +1054,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public checkForGeneratedVoucher(event: any): void {
-        if (event && this.vm.selectedLedger.voucher?.shortCode !== 'pur' && !this.vm.selectedLedger.voucherGenerated) {
+        if (event && this.vm.selectedLedger?.voucher?.shortCode !== 'pur' && !this.vm.selectedLedger?.voucherGenerated) {
             // Adjustment is not allowed until the voucher is generated
             this.toaster.showSnackBar("info", ADJUSTMENT_INFO_MESSAGE, this.localeData?.app_giddh);
             event.preventDefault();
@@ -1068,8 +1068,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public getInvoiceListsForCreditNote(): void {
         const request = {
-            accountUniqueNames: [this.vm.selectedLedger.particular.uniqueName, this.vm.selectedLedger.transactions[0].particular.uniqueName],
-            voucherType: this.vm.selectedLedger.voucher?.shortCode
+            accountUniqueNames: [this.vm.selectedLedger?.particular?.uniqueName, this.vm.selectedLedger?.transactions[0]?.particular?.uniqueName],
+            voucherType: this.vm.selectedLedger?.voucher?.shortCode
         }
         let date;
         if (typeof this.vm.selectedLedger.entryDate === 'string') {
@@ -1116,7 +1116,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public getInvoiceLists() {
-        if (this.vm.selectedLedger.voucher?.shortCode === 'rcpt') {
+        if (this.vm.selectedLedger?.voucher?.shortCode === 'rcpt') {
             if (this.isPettyCash && !this.accountUniqueName) {
                 let message = this.localeData?.account_entry_error;
                 message = message.replace("[ACCOUNT]", this.pettyCashBaseAccountTypeString);
@@ -1271,8 +1271,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (!this.isPettyCash && this.currentOrganizationType === 'COMPANY' && (this.branches && this.branches.length > 1)) {
             return;
         }
-        let isChecked; 
-        
+        let isChecked;
+
         if(element === "checkbox") {
             isChecked = event?.checked;
             this.rcmCheckbox['checked'] = !isChecked;
@@ -1531,9 +1531,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     private checkTouristSchemeApplicable(baseAccountDetails: any, selectedAccountDetails, companyProfile): boolean {
-        if (baseAccountDetails && baseAccountDetails.touristSchemeApplicable) {
+        if (baseAccountDetails?.touristSchemeApplicable) {
             return true;
-        } else if (baseAccountDetails && baseAccountDetails.voucher && (baseAccountDetails.voucher.name === 'sales' || baseAccountDetails.voucher.name === 'cash') && selectedAccountDetails && selectedAccountDetails.body && selectedAccountDetails.body.parentGroups && selectedAccountDetails.body.parentGroups.length > 1 && selectedAccountDetails.body.parentGroups[1].uniqueName && this.allowParentGroup.includes(selectedAccountDetails.body.parentGroups[1].uniqueName) && companyProfile && companyProfile.countryV2 && companyProfile.countryV2.alpha2CountryCode && companyProfile.countryV2.alpha2CountryCode === 'AE') {
+        } else if (baseAccountDetails?.voucher && (baseAccountDetails?.voucher?.name === 'sales' || baseAccountDetails?.voucher?.name === 'cash') && selectedAccountDetails && selectedAccountDetails.body && selectedAccountDetails.body.parentGroups && selectedAccountDetails.body.parentGroups.length > 1 && selectedAccountDetails.body.parentGroups[1].uniqueName && this.allowParentGroup.includes(selectedAccountDetails.body.parentGroups[1].uniqueName) && companyProfile && companyProfile.countryV2 && companyProfile.countryV2.alpha2CountryCode && companyProfile.countryV2.alpha2CountryCode === 'AE') {
             return true;
         } else {
             return false;
@@ -1822,7 +1822,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
             if (this.isAdvanceReceipt) {
                 this.isAdjustAdvanceReceiptSelected = true;
-            } else if (this.vm.selectedLedger.voucher?.shortCode === 'rcpt') {
+            } else if (this.vm.selectedLedger?.voucher?.shortCode === 'rcpt') {
                 this.isAdjustReceiptSelected = true;
             }
         }
