@@ -1974,7 +1974,7 @@
                     [adjustedVoucherType]="vm.selectedLedger.voucher?.shortCode"
                     [invoiceFormDetails]="adjustVoucherConfiguration"
                     [isUpdateMode]="true"
-                    [advanceReceiptAdjustmentUpdatedData]="vm.selectedLedger.voucherAdjustments"
+                    [advanceReceiptAdjustmentUpdatedData]="vm.selectedLedger?.voucherAdjustments"
                     (closeModelEvent)="closeAdjustmentModal($event)"
                     (submitClicked)="getAdjustedPaymentData($event)"
                 >
