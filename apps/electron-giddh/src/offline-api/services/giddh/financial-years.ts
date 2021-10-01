@@ -1,6 +1,6 @@
 import { callApi } from "../../helpers/apicall";
 import { getApiUrl } from "../../helpers/environment";
-import { getDefaultApiOptions } from "../../helpers/general";
+import { getDefaultApiOptions, getDefaultQueryParams } from "../../helpers/general";
 
 /**
  * This will get the list of financial years
@@ -11,7 +11,8 @@ import { getDefaultApiOptions } from "../../helpers/general";
  */
 export async function getFinancialYearsGiddh(req: any, res: any): Promise<any> {
     const options = getDefaultApiOptions(req, 'GET');
-    const url = getApiUrl(req) + 'company/' + req.params.companyUniqueName + '/financial-year';
+    const params = getDefaultQueryParams(req);
+    const url = getApiUrl(req) + 'company/' + req.params.companyUniqueName + '/financial-year?' + params;
     return callApi(url, options);
 }
 
@@ -24,6 +25,7 @@ export async function getFinancialYearsGiddh(req: any, res: any): Promise<any> {
  */
  export async function getFinancialYearLimitsGiddh(req: any, res: any): Promise<any> {
     const options = getDefaultApiOptions(req, 'GET');
-    const url = getApiUrl(req) + 'company/' + req.params.companyUniqueName + '/financial-year-limits';
+    const params = getDefaultQueryParams(req);
+    const url = getApiUrl(req) + 'company/' + req.params.companyUniqueName + '/financial-year-limits?' + params;
     return callApi(url, options);
 }

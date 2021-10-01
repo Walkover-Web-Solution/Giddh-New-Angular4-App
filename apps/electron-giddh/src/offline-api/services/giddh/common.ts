@@ -1,6 +1,6 @@
 import { callApi } from "../../helpers/apicall";
 import { getApiUrl } from "../../helpers/environment";
-import { getDefaultApiOptions } from "../../helpers/general";
+import { getDefaultApiOptions, getDefaultQueryParams } from "../../helpers/general";
 
 /**
  * This will get the list of currencies
@@ -11,7 +11,8 @@ import { getDefaultApiOptions } from "../../helpers/general";
  */
 export async function getCurrenciesGiddh(req: any, res: any): Promise<any> {
     const options = getDefaultApiOptions(req, 'GET');
-    const url = getApiUrl(req) + 'currency';
+    const params = getDefaultQueryParams(req);
+    const url = getApiUrl(req) + 'currency?' + params;
     return callApi(url, options);
 }
 
@@ -24,7 +25,8 @@ export async function getCurrenciesGiddh(req: any, res: any): Promise<any> {
  */
 export async function getSidebarMenusGiddh(req: any, res: any): Promise<any> {
     const options = getDefaultApiOptions(req, 'GET');
-    const url = getApiUrl(req) + 'company/' + req.params.companyUniqueName + '/ui_side_bar_items';
+    const params = getDefaultQueryParams(req);
+    const url = getApiUrl(req) + 'company/' + req.params.companyUniqueName + '/ui_side_bar_items?' + params;
     return callApi(url, options);
 }
 
@@ -37,6 +39,7 @@ export async function getSidebarMenusGiddh(req: any, res: any): Promise<any> {
  */
  export async function getEntrySettingsGiddh(req: any, res: any): Promise<any> {
     const options = getDefaultApiOptions(req, 'GET');
-    const url = getApiUrl(req) + 'company/' + req.params.companyUniqueName + '/entry-settings';
+    const params = getDefaultQueryParams(req);
+    const url = getApiUrl(req) + 'company/' + req.params.companyUniqueName + '/entry-settings?' + params;
     return callApi(url, options);
 }

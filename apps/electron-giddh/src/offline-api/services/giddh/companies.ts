@@ -1,6 +1,6 @@
 import { callApi } from "../../helpers/apicall";
 import { getApiUrl } from "../../helpers/environment";
-import { getDefaultApiOptions } from "../../helpers/general";
+import { getDefaultApiOptions, getDefaultQueryParams } from "../../helpers/general";
 
 /**
  * This will get the list of companies
@@ -11,6 +11,7 @@ import { getDefaultApiOptions } from "../../helpers/general";
  */
 export async function getCompaniesGiddh(req: any, res: any): Promise<any> {
     const options = getDefaultApiOptions(req, 'GET');
-    const url = getApiUrl(req) + 'users/' + req.params.userUniqueName + '/v2/companies';
+    const params = getDefaultQueryParams(req);
+    const url = getApiUrl(req) + 'users/' + req.params.userUniqueName + '/v2/companies?' + params;
     return callApi(url, options);
 }

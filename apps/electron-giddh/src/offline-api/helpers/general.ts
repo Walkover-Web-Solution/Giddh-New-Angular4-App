@@ -86,3 +86,14 @@ export function getDefaultApiOptions(request: any, method: string): any {
         }
     };
 }
+
+/**
+ * This will return default query params for every api call
+ *
+ * @export
+ * @param {*} request
+ * @returns {string}
+ */
+export function getDefaultQueryParams(request: any): string {
+    return 'branchUniqueName=' + request.query.branchUniqueName + '&lang=' + request.query.lang;
+}
