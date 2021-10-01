@@ -6,6 +6,11 @@
     position: relative;
     top: 3px;
 }
+
+.customer-name {
+    white-space: normal !important;
+}
+
 @media screen and (max-width: 767px) {
     .filter-band {
         height: auto !important;
