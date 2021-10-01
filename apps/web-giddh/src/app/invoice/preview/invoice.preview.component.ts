@@ -1890,13 +1890,30 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             cnlRsn: this.eInvoiceCancel.cancellationReason,
             cnlRem: this.eInvoiceCancel.cancellationRemarks?.trim()
         };
-        if (this.selectedVoucher === VoucherTypeEnum.creditNote || this.selectedVoucher === VoucherTypeEnum.debitNote) {
-            requestObject.voucherType = this.selectedVoucher;
-            requestObject.voucherUniqueName = this.selectedInvoicesList[0].uniqueName;
-        } else if (this.selectedVoucher === VoucherTypeEnum.sales) {
-            requestObject.invoiceUniqueName = this.selectedInvoicesList[0].uniqueName;
+
+        const postObject: any = {};
+        let apiCallObservable;
+
+        if (this.voucherApiVersion === 2) {
+            postObject.uniqueName = this.selectedInvoicesList[0]?.uniqueName;
+            postObject.voucherType = this.selectedVoucher;
+
+            requestObject.accountUniqueName = this.selectedInvoicesList[0]?.account?.uniqueName
+            requestObject.voucherVersion = 2;
+
+            apiCallObservable = this._invoiceService.cancelEInvoiceV2(requestObject, postObject);
+        } else {
+            if (this.selectedVoucher === VoucherTypeEnum.creditNote || this.selectedVoucher === VoucherTypeEnum.debitNote) {
+                requestObject.voucherType = this.selectedVoucher;
+                requestObject.voucherUniqueName = this.selectedInvoicesList[0]?.uniqueName;
+            } else if (this.selectedVoucher === VoucherTypeEnum.sales) {
+                requestObject.invoiceUniqueName = this.selectedInvoicesList[0]?.uniqueName;
+            }
+
+            apiCallObservable = this._invoiceService.cancelEInvoice(requestObject);
         }
-        this._invoiceService.cancelEInvoice(requestObject).pipe(take(1)).subscribe(response => {
+
+        apiCallObservable.pipe(take(1)).subscribe(response => {
             this.getVoucher(this.isUniversalDateApplicable);
             if (response.status === 'success') {
                 this._toaster.successToast(response.body);
