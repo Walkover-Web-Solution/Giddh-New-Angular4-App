@@ -19,26 +19,24 @@ import { GeneralService } from "../services/general.service";
     styleUrls: ['./home.component.scss'],
     templateUrl: './home.component.html'
 })
-
 export class HomeComponent implements OnInit, OnDestroy {
     public needsToRedirectToLedger$: Observable<boolean>;
     @ViewChild('revenue', { static: true }) public revenue: RevenueChartComponent;
     @ViewChild('profitloss', { static: true }) public profitloss: ProfitLossComponent;
     @ViewChild('bankaccount', { static: true }) public bankaccount: BankAccountsComponent;
     @ViewChild('crdrlist', { static: true }) public crdrlist: CrDrComponent;
-
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public hideallcharts: boolean = false;
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     public commonLocaleData: any = {};
 
     constructor(
         private store: Store<AppState>,
         private companyActions: CompanyActions,
-        private _homeActions: HomeActions,
-        private _router: Router,
-        private _accountService: AccountService,
-        private _generalService: GeneralService
+        private homeActions: HomeActions,
+        private router: Router,
+        private accountService: AccountService,
+        private generalService: GeneralService
     ) {
         this.needsToRedirectToLedger$ = this.store.pipe(select(p => p.login.needsToRedirectToLedger), takeUntil(this.destroyed$));
     }
@@ -46,9 +44,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.needsToRedirectToLedger$.pipe(take(1)).subscribe(result => {
             if (result) {
-                this._accountService.getFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                this.accountService.getFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
                     if (data.status === 'success' && data.body.results.length > 0) {
-                        this._router.navigate([`ledger/${data.body.results[0].uniqueName}`]);
+                        this.router.navigate([`ledger/${data.body.results[0].uniqueName}`]);
                     }
                 });
             }
@@ -61,7 +59,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         stateDetailsRequest.lastState = 'home';
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
 
-        this._generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe(value => {
+        this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe(value => {
             if (value === 'hideallcharts') {
                 this.hideallcharts = true;
             }
@@ -72,7 +70,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
-        this.store.dispatch(this._homeActions.ResetHomeState());
+        this.store.dispatch(this.homeActions.ResetHomeState());
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

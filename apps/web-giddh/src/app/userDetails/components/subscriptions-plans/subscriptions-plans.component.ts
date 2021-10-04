@@ -21,12 +21,11 @@ import { ToasterService } from '../../../services/toaster.service';
     styleUrls: ['./subscriptions-plans.component.scss'],
     templateUrl: './subscriptions-plans.component.html'
 })
-
 export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     @Input() public subscriptions: any;
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     @Input() public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     public logedInUser: UserDetails;
     public subscriptionPlans: CreateCompanyUsersPlan[] = [];
@@ -43,42 +42,41 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     public isSwitchPlanInProcess: boolean = false;
     public selectNewPlan: boolean = false;
     public isShow = true;
-
     @Output() public isSubscriptionPlanShow = new EventEmitter<boolean>();
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     modalRef: BsModalRef;
-    /* This will contain the type of plans we have to show */
+    /** This will contain the type of plans we have to show */
     public showPlans: any = '';
-    /* This will contain the number of plans with multiple companies */
+    /** This will contain the number of plans with multiple companies */
     public totalMultipleCompanyPlans: number = 0;
-    /* This will contain the number of plans with single company */
+    /** This will contain the number of plans with single company */
     public totalSingleCompanyPlans: number = 0;
-    /* This will contain the number of plans with free plan */
+    /** This will contain the number of plans with free plan */
     public totalFreePlans: number = 0;
-    /* This will contain the default plans of multiple companies */
+    /** This will contain the default plans of multiple companies */
     public defaultMultipleCompanyPlan: any;
-    /* This will contain the default plans of single companies */
+    /** This will contain the default plans of single companies */
     public defaultSingleCompanyPlan: any;
-    /* This will contain the default plans of free companies */
+    /** This will contain the default plans of free companies */
     public defaultFreePlan: any;
-    /* This will contain the tooltip content of transaction limit */
+    /** This will contain the tooltip content of transaction limit */
     public transactionLimitTooltipContent: string = "";
-    /* This will contain the tooltip content of unlimited users */
+    /** This will contain the tooltip content of unlimited users */
     public unlimitedUsersTooltipContent: string = "";
-    /* This will contain the tooltip content of unlimited customers */
+    /** This will contain the tooltip content of unlimited customers */
     public unlimitedCustomersVendorsTooltipContent: string = "";
-    /* This will contain the tooltip content of desktop and mobile app */
+    /** This will contain the tooltip content of desktop and mobile app */
     public desktopMobileAppTooltipContent: string = "";
-    /* This will contain the plan unique name of default trial plan */
+    /** This will contain the plan unique name of default trial plan */
     public defaultTrialPlan: string = DEFAULT_SIGNUP_TRIAL_PLAN;
-    /* This will contain the plan name of popular plan */
+    /** This will contain the plan name of popular plan */
     public defaultPopularPlan: string = DEFAULT_POPULAR_PLAN;
     /** This will hold if plans are showing */
     public isShowPlans: boolean = false;
 
-    constructor(private modalService: BsModalService, private _generalService: GeneralService,
-        private _authenticationService: AuthenticationService, private store: Store<AppState>,
-        private _route: Router, private companyActions: CompanyActions,
+    constructor(private modalService: BsModalService, private generalService: GeneralService,
+        private authenticationService: AuthenticationService, private store: Store<AppState>,
+        private router: Router, private companyActions: CompanyActions,
         private settingsProfileActions: SettingsProfileActions, private settingsProfileService: SettingsProfileService, private toasty: ToasterService, public route: ActivatedRoute) {
 
         this.store.pipe(select(profile => profile.settings.profile), takeUntil(this.destroyed$)).subscribe((response) => {
@@ -86,7 +84,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
                 let companyInfo = _.cloneDeep(response);
 
                 if(companyInfo?.countryV2?.alpha2CountryCode) {
-                    this._authenticationService.getAllUserSubsciptionPlans(companyInfo?.countryV2?.alpha2CountryCode).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+                    this.authenticationService.getAllUserSubsciptionPlans(companyInfo?.countryV2?.alpha2CountryCode).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                         this.subscriptionPlans = res.body;
 
                         this.totalMultipleCompanyPlans = 0;
@@ -140,14 +138,14 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         this.unlimitedCustomersVendorsTooltipContent = this.localeData?.subscription?.unlimited_customers_content;
         this.desktopMobileAppTooltipContent = this.localeData?.subscription?.desktop_mobile_app_content;
 
-        this._route.navigate(['/pages', 'user-details', 'subscription'], {
+        this.router.navigate(['/pages', 'user-details', 'subscription'], {
             queryParams: {
                 showPlans: true
             }
         });
 
-        if (this._generalService.user) {
-            this.logedInUser = this._generalService.user;
+        if (this.generalService.user) {
+            this.logedInUser = this.generalService.user;
         }
 
         this.isUpdateCompanyInProgress$.pipe(takeUntil(this.destroyed$)).subscribe(inProcess => {
@@ -198,7 +196,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
      */
     public backClicked() {
         this.isSubscriptionPlanShow.emit(true);
-        this._route.navigate(['/pages', 'user-details', 'subscription']);
+        this.router.navigate(['/pages', 'user-details', 'subscription']);
     }
 
     public buyPlanClicked(plan: any) {
@@ -208,7 +206,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         } else {
             this.SubscriptionRequestObj.licenceKey = "";
         }
-        this._route.navigate(['billing-detail', 'buy-plan']);
+        this.router.navigate(['billing-detail', 'buy-plan']);
         this.store.dispatch(this.companyActions.selectedPlan(plan));
     }
 
@@ -267,14 +265,16 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
             this.showPlans = type;
         }
     }
+    
     /**
      * This function smooth scroller for all plans section
      * @param {string} type
      * @memberof SubscriptionsPlansComponent
      */
-    navigate(element: HTMLElement): void {
+    public navigate(element: HTMLElement): void {
         element.scrollIntoView({ behavior: 'smooth' });
     }
+
     /**
      * This is callback for all features popup
      *

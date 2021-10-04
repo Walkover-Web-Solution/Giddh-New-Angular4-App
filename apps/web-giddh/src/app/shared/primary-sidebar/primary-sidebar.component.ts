@@ -646,12 +646,12 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      */
     public toggleBodyClass() {
         if (this.accountAsideMenuState === 'in') {
-            document.querySelector('body').classList.add('fixed');
+            document.querySelector('body')?.classList?.add('fixed');
             if(document.getElementsByClassName("gst-sidebar-open")?.length > 0) {
                 document.querySelector(".nav-left-bar").classList.add("create-account");
             }
         } else {
-            document.querySelector('body').classList.remove('fixed');
+            document.querySelector('body')?.classList?.remove('fixed');
             document.querySelector(".nav-left-bar").classList.remove("create-account");
         }
     }

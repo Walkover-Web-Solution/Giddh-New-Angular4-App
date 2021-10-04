@@ -549,9 +549,9 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
         this.getBreadCrumbPathFromGroup(activeGroup, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
 
         let listBckup = this.mc.activeGroupFromGroupListBackup(grpsBck, this.currentGroup?.uniqueName, null);
-        if (listBckup) {
-            this.currentGroup.groups = listBckup?.groups;
-            this.currentGroup.accounts = listBckup?.accounts;
+        if (listBckup && this.currentGroup) {
+            this.currentGroup.groups = listBckup.groups;
+            this.currentGroup.accounts = listBckup.accounts;
         }
         this.mc.selectGroup(this.currentGroup, this.currentGroupIndex, true);
 

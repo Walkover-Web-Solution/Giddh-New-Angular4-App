@@ -23,6 +23,8 @@
                 [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
                 [showBankDetail]="showBankDetail"
                 [isCustomerCreation]="true"
+                (goToCustomFields)="showCustomFieldsTab($event)"
+                [reloadCustomFields]="reloadCustomFields"
             >
             </account-add-new-details>
 
@@ -42,6 +44,8 @@
                 [flatGroupsOptions]="flatGroupsOptions"
                 [showVirtualAccount]="showVirtualAccount"
                 [isDebtorCreditor]="isDebtorCreditor"
+                (goToCustomFields)="showCustomFieldsTab($event)"
+                [reloadCustomFields]="reloadCustomFields"
             >
             </account-update-new-details>
         </div>

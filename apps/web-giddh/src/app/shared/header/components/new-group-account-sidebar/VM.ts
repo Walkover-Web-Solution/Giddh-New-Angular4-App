@@ -98,9 +98,9 @@ export class GroupAccountSidebarVM {
                         this.store.pipe(select(s => s.general.groupswithaccounts), take(1)).subscribe(s => grpsBck = s);
 
                         let listBckup = this.activeGroupFromGroupListBackup(grpsBck, resp.queryString.parentUniqueName, null);
-                        if (listBckup) {
-                            newCol.groups = listBckup?.groups;
-                            newCol.accounts = listBckup?.accounts;
+                        if (listBckup && newCol) {
+                            newCol.groups = listBckup.groups;
+                            newCol.accounts = listBckup.accounts;
                         }
                         // add sub column of last added column
                         this.columns.push(new ColumnGroupsAccountVM(newCol as IGroupsWithAccounts));
