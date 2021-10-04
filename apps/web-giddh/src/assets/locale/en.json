@@ -422,7 +422,6 @@
     "app_due_amount": "Due Amount",
     "app_enter_otp": "Enter OTP",
     "app_resend": "Resend",
-    "app_cancel_otp": "Cancel OTP",
     "app_payment_proceed": "Payment proceed",
     "app_clear": "Clear",
     "app_custom": "Custom",
@@ -658,5 +657,6 @@
         "weekly": "Weekly",
         "monthly": "Monthly",
         "unlimited": "Unlimited"
-    }
+    },
+    "app_create_custom_field": "Create Custom Fields"
 }

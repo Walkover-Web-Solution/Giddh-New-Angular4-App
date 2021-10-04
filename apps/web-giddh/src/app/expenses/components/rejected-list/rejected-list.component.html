@@ -38,7 +38,7 @@
                     <span class="responsive-label" [hidden]="!rejectedItems?.length">{{
                         localeData?.submitted_by
                     }}</span>
-                    {{ rejected.createdBy.name }}
+                    {{ rejected?.createdBy?.name }}
                 </td>
             </ng-container>
 
@@ -53,7 +53,7 @@
                     <i class="dot-icon dot-warning" *ngIf="rejected.entryType === 'sales'"></i>
                     <i class="dot-icon dot-success" *ngIf="rejected.entryType === 'deposit'"></i>
                     <i class="dot-icon dot-primary" *ngIf="rejected.entryType === 'expense'"></i
-                    >{{ rejected.particularAccount.name }}
+                    >{{ rejected?.particularAccount?.name }}
                 </td>
             </ng-container>
 
@@ -100,7 +100,7 @@
                         *ngIf="rejected.baseAccountCategory === 'CASH'"
                         class="font-12 text-gray icon-cash mr-r05"
                     ></span>
-                    {{ rejected.baseAccount.name ? rejected.baseAccount.name : "-" }}
+                    {{ rejected?.baseAccount?.name ? rejected.baseAccount.name : "-" }}
                 </td>
             </ng-container>
 

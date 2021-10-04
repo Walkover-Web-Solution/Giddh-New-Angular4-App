@@ -50,6 +50,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public showEditAccount$: Observable<boolean>;
     public showEditGroup$: Observable<boolean>;
     @Output() public ShowForm: EventEmitter<boolean> = new EventEmitter(false);
+    /** Emits if we have to switch to custom fields tab */
+    @Output() public goToCustomFields: EventEmitter<boolean> = new EventEmitter();
+    /** True if custom fields api needs to be called again */
+    @Input() public reloadCustomFields: boolean = false;
     @Input() public columnsRef: GroupAccountSidebarVM;
     @Input() public height: number;
     public activeAccount$: Observable<AccountResponseV2>;

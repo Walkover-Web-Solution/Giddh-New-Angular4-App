@@ -1,4 +1,3 @@
-import { UserDetails } from '../models/api-models/loginModels';
 import { Optional, Inject, Injectable } from '@angular/core';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { HttpWrapperService } from './httpWrapper.service';
@@ -10,8 +9,6 @@ import { ECOMMERCE_API } from './apiurls/ecommerce.api';
 
 @Injectable()
 export class EcommerceService {
-
-    private user: UserDetails;
     private companyUniqueName: string;
 
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService,
@@ -27,7 +24,6 @@ export class EcommerceService {
      * @memberof EcommerceService
      */
     public isShopifyConnected(model: any, ecommerceUniqueName: string): any {
-        this.user = this.generalService.user;
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + ECOMMERCE_API.SHOPIFY_VERIFY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':ecommerceUniqueName', ecommerceUniqueName), model).pipe(
             map((res) => {
@@ -46,7 +42,6 @@ export class EcommerceService {
      * @memberof EcommerceService
      */
     public sendEmail(model: any): any {
-        this.user = this.generalService.user;
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + ECOMMERCE_API.SEND_EMAIL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
             map((res) => {

@@ -7,7 +7,7 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import * as moment from 'moment/moment';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
@@ -19,6 +19,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { cloneDeep, map, orderBy } from '../../../lodash-optimized';
 import { SettingsTagService } from '../../../services/settings.tag.service';
 import { ToasterService } from '../../../services/toaster.service';
+import { IForceClear } from '../../../models/api-models/Sales';
 
 @Component({
     selector: 'financial-filter',
@@ -26,7 +27,6 @@ import { ToasterService } from '../../../services/toaster.service';
     styleUrls: [`./filter.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-
 export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public today: Date = new Date();
     public selectedDateOption: string = '0';
@@ -41,7 +41,6 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     @Input() public tbExportCsv: boolean = false;
     @Input() public plBsExportXLS: boolean = false;
     @Input() public BsExportXLS: boolean = false;
-
     @Output() public seachChange = new EventEmitter<string>();
     @Output() public tbExportPdfEvent = new EventEmitter<string>();
     @Output() public tbExportXLSEvent = new EventEmitter<string>();
@@ -66,45 +65,44 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public activeCompany: any;
     /** True, if mobile screen size is detected */
     public isMobileScreen: boolean = true;
-
     @Input() public showLoader: boolean = true;
-
     @Input() public showLabels: boolean = false;
     @Output() public onPropertyChanged = new EventEmitter<TrialBalanceRequest>();
     @ViewChild('createTagModal', { static: true }) public createTagModal: ModalDirective;
-
     public universalDate$: Observable<any>;
     public newTagForm: FormGroup;
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
-    /* This will store modal reference */
+    /** This will store modal reference */
     public modalRef: BsModalRef;
-    /* This will store selected date range to use in api */
+    /** This will store selected date range to use in api */
     public selectedDateRange: any;
-    /* This will store selected date range to show on UI */
+    /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
-    /* This will store available date ranges */
+    /** This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /* Moment object */
+    /** Moment object */
     public moment = moment;
-    /* Selected from date */
+    /** Selected from date */
     public fromDate: string;
-    /* Selected to date */
+    /** Selected to date */
     public toDate: string;
-    /* Selected range label */
+    /** Selected range label */
     public selectedRangeLabel: any = "";
-    /* This will store the x/y position of the field to show datepicker under it */
+    /** This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private _selectedCompany: CompanyResponse;
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /* This will clear the select value in sh-select */
+    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
 
     constructor(private fb: FormBuilder,
         private cd: ChangeDetectorRef,
@@ -139,7 +137,11 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         return this._selectedCompany;
     }
 
-    // init form and other properties from input company
+    /**
+     * init form and other properties from input company
+     *
+     * @memberof FinancialReportsFilterComponent
+     */
     @Input()
     public set selectedCompany(value: CompanyResponse) {
         if (!value) {
@@ -216,14 +218,18 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 this.filterData();
             }
         });
-        this.store.pipe(
-            select(state => state.session.activeCompany), take(1)
-        ).subscribe(activeCompany => {
-            this.activeCompany = activeCompany;
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany?.uniqueName !== this.activeCompany?.uniqueName) {
+                this.activeCompany = activeCompany;
+                this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+            }
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
-        this.currentCompanyBranches$.subscribe(response => {
+        this.currentCompanyBranches$.subscribe(response => {           
             if (response && response.length) {
+                this.filterForm.get('branchUniqueName').setValue("");
+                this.forceClear$ = observableOf({ status: true });
+                this.currentCompanyBranches = [];
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.alias,
                     value: branch.uniqueName,
@@ -252,10 +258,10 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                             uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
                         };
                     }
-                    this.filterForm.get('branchUniqueName').setValue(this.currentBranch.uniqueName);
-                    this.filterForm.updateValueAndValidity();
-                    this.cd.detectChanges();
                 }
+                this.filterForm.get('branchUniqueName').setValue(this.currentBranch?.uniqueName);
+                this.filterForm.updateValueAndValidity();
+                this.cd.detectChanges();
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
@@ -319,7 +325,6 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         // this will clear the search and reset it after we click apply --G0-2745
         let a = this.search = '';
         this.seachChange.emit(a);
-
     }
 
     public refreshData() {
@@ -359,7 +364,10 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * emitExpand
+     * Emit Expand
+     *
+     * @param {boolean} event
+     * @memberof FinancialReportsFilterComponent
      */
     public emitExpand(event: boolean) {
         setTimeout(() => {

@@ -5,7 +5,6 @@ import { select, Store } from '@ngrx/store';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-
 import { CompanyActions } from '../actions/company.actions';
 import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
 import { AppState } from '../store';
@@ -17,16 +16,15 @@ import { AppState } from '../store';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FinancialReportsComponent implements OnInit, OnDestroy {
-
     public selectedCompany: CompanyResponse;
     public CanTBLoad: boolean = true;
     public CanPLLoad: boolean = false;
     public CanBSLoad: boolean = false;
     public CanNewTBLoadOnThisEnv: boolean = false;
     public isWalkoverCompany: boolean = false;
-    /* This will hold active tab */
+    /** This will hold active tab */
     public activeTab: string = 'trial-balance';
-    /* This will hold active tab index */
+    /** This will hold active tab index */
     public activeTabIndex: number = 0;
     /** True, when tabs are navigated with the help of routing, done to prevent redundant routing as
      * tab changed event is triggered on setting any tab as active which leads to a second navigation to the
@@ -35,19 +33,17 @@ export class FinancialReportsComponent implements OnInit, OnDestroy {
     public preventTabChangeWithRoute: boolean;
     /** This will store screen size */
     public isMobileScreen: boolean = false;
-
     @ViewChild('staticTabsTBPL', { static: true }) public staticTabs: TabsetComponent;
-
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     public commonLocaleData: any = {};
 
     constructor(
         private store: Store<AppState>,
         private companyActions: CompanyActions,
-        private _route: ActivatedRoute,
+        private route: ActivatedRoute,
         private router: Router,
         private breakPointObservar: BreakpointObserver,) {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
@@ -81,7 +77,6 @@ export class FinancialReportsComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-
         this.breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -94,7 +89,7 @@ export class FinancialReportsComponent implements OnInit, OnDestroy {
             this.CanNewTBLoadOnThisEnv = false;
         }
 
-        this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
+        this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
             if (val && val.tab && val.tabIndex) {
                 this.activeTab = val.tab;
                 this.activeTabIndex = val.tabIndex;

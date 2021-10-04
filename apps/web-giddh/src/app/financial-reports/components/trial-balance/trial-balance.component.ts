@@ -3,7 +3,6 @@ import { select, Store } from '@ngrx/store';
 import { createSelector } from 'reselect';
 import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { TBPlBsActions } from '../../../actions/tl-pl.actions';
 import { cloneDeep, each } from '../../../lodash-optimized';
 import { CompanyResponse } from '../../../models/api-models/Company';
@@ -17,11 +16,10 @@ import { TrialBalanceGridComponent } from './components/trial-balance-grid/trial
     selector: 'trial-balance',
     templateUrl: './trial-balance.component.html'
 })
-
 export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     public commonLocaleData: any = {};
     public showLoader: Observable<boolean>;
     public data$: Observable<AccountDetails>;
@@ -40,7 +38,7 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
         private store: Store<AppState>,
         private cd: ChangeDetectorRef,
         public tlPlActions: TBPlBsActions,
-        private _toaster: ToasterService) {
+        private toaster: ToasterService) {
         this.showLoader = this.store.pipe(select(p => p.tlPl.tb.showLoader), takeUntil(this.destroyed$));
     }
 
@@ -67,8 +65,8 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
             if (d) {
                 if (d.message) {
                     setTimeout(() => {
-                        this._toaster.clearAllToaster();
-                        this._toaster.infoToast(d.message);
+                        this.toaster.clearAllToaster();
+                        this.toaster.infoToast(d.message);
                     }, 100);
                 }
                 this.InitData(d.groupDetails);

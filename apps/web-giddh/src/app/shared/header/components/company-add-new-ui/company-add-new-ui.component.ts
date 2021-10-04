@@ -123,7 +123,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this.isProdMode = PRODUCTION_ENV;
         this.getCountry();
         this.getCallingCodes();
-        
+
         this.imgPath = (isElectron || isCordova) ? '' : AppUrl + APP_FOLDER + '';
         this.logedInuser = this._generalService.user;
         if (this._generalService.createNewCompany) {
@@ -482,7 +482,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
      */
     public getWelcomeUserText(): string {
         let text = this.localeData?.welcome_user;
-        text = text?.replace("[USER]", this.logedInuser.name);
+        text = text?.replace("[USER]", this.logedInuser?.name);
         return text;
     }
 }

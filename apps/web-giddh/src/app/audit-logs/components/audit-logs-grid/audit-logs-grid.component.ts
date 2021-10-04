@@ -12,13 +12,11 @@ import { AppState } from '../../../store/roots';
     templateUrl: './audit-logs-grid.component.html',
     styleUrls: [`./audit-logs-grid.component.scss`]
 })
-
 export class AuditLogsGridComponent implements OnInit, OnDestroy {
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     @Input() public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-
     public page$: Observable<number>;
     public totalPages$: Observable<number>;
     public totalElements$: Observable<number>;
@@ -29,10 +27,7 @@ export class AuditLogsGridComponent implements OnInit, OnDestroy {
     /** True if api call in progress */
     public isLoading: boolean = false;
 
-    /**
-     * TypeScript public modifiers
-     */
-    constructor(private store: Store<AppState>, private _auditLogsActions: AuditLogsActions) {
+    constructor(private store: Store<AppState>, private auditLogsActions: AuditLogsActions) {
         this.loadMoreInProcess$ = this.store.pipe(select(p => p.auditlog.LoadMoreInProcess), takeUntil(this.destroyed$));
         this.logs$ = this.store.pipe(select(p => p.auditlog.logs), takeUntil(this.destroyed$));
         this.size$ = this.store.pipe(select(p => p.auditlog.size), takeUntil(this.destroyed$));
@@ -61,7 +56,7 @@ export class AuditLogsGridComponent implements OnInit, OnDestroy {
         this.store.pipe(select(p => p.auditlog), take(1)).subscribe((r) => {
             let request = cloneDeep(r.currentLogsRequest);
             let page = r.currentPage + 1;
-            this.store.dispatch(this._auditLogsActions.LoadMoreLogs(request, page));
+            this.store.dispatch(this.auditLogsActions.LoadMoreLogs(request, page));
         });
     }
 }

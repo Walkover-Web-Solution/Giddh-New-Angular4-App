@@ -1,10 +1,8 @@
 import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Router } from '@angular/router';
 import { HttpWrapperService } from './httpWrapper.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { UserDetails } from '../models/api-models/loginModels';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { DASHBOARD_API } from './apiurls/dashboard.api';
 import {
@@ -20,15 +18,13 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 @Injectable()
 export class DashboardService {
     private companyUniqueName: string;
-    private user: UserDetails;
 
-    constructor(private errorHandler: GiddhErrorHandler, public _http: HttpWrapperService, public _router: Router, private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    constructor(private errorHandler: GiddhErrorHandler, public http: HttpWrapperService, private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
     public getClosingBalance(groupUniqueName: string = '', fromDate: string = '', toDate: string = '', refresh: boolean = false): Observable<BaseResponse<ClosingBalanceResponse, string>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + DASHBOARD_API.CLOSING_BALANCE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':fromDate', fromDate).replace(':toDate', toDate).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)).replace(':refresh', refresh.toString())).pipe(map((res) => {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + DASHBOARD_API.CLOSING_BALANCE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':fromDate', fromDate).replace(':toDate', toDate).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)).replace(':refresh', refresh.toString())).pipe(map((res) => {
             let data: BaseResponse<ClosingBalanceResponse, string> = res;
             data.queryString = { fromDate, toDate, groupUniqueName, refresh };
             data.request = '';
@@ -37,9 +33,8 @@ export class DashboardService {
     }
 
     public GetRationAnalysis(date: string, refresh): Observable<BaseResponse<BankAccountsResponse[], string>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + DASHBOARD_API.RATIO_ANALYSIS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':date', date).replace(':refresh', refresh)).pipe(map((res) => {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + DASHBOARD_API.RATIO_ANALYSIS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':date', date).replace(':refresh', refresh)).pipe(map((res) => {
             let data: BaseResponse<BankAccountsResponse[], string> = res;
             data.request = date;
             return data;
@@ -47,9 +42,8 @@ export class DashboardService {
     }
 
     public GetRevenueGraphTypes(): Observable<BaseResponse<GraphTypesResponse, string>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + DASHBOARD_API.REVENUE_GRAPH_TYPES).pipe(map((res) => {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + DASHBOARD_API.REVENUE_GRAPH_TYPES).pipe(map((res) => {
             let data: BaseResponse<GraphTypesResponse, string> = res;
             data.request = '';
             return data;
@@ -57,8 +51,7 @@ export class DashboardService {
     }
 
     public GetRevenueGraphData(request: RevenueGraphDataRequest): Observable<BaseResponse<RevenueGraphDataResponse, string>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
 
         let url = this.config.apiUrl + DASHBOARD_API.REVENUE_GRAPH_DATA;
         url = url.replace(":companyUniqueName", this.companyUniqueName);
@@ -71,7 +64,7 @@ export class DashboardService {
         url = url.replace(":uniqueName", request.uniqueName);
         url = url.replace(":refresh", request.refresh);
 
-        return this._http.get(url).pipe(map((res) => {
+        return this.http.get(url).pipe(map((res) => {
             let data: BaseResponse<RevenueGraphDataResponse, string> = res;
             data.request = '';
             return data;

@@ -59,18 +59,18 @@ export const SCOPE_TO_ROUTE_MAPPING = [
 @Injectable()
 export class NeedsAuthorization implements CanActivate {
 
-    constructor(public _router: Router, private _permissionDataService: PermissionDataService, private generalService: GeneralService) {
+    constructor(public router: Router, private permissionDataService: PermissionDataService, private generalService: GeneralService) {
     }
 
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         if (route && route.routeConfig && route.routeConfig.path === "journal-voucher") {
-            if (this._permissionDataService.getCompany && this._permissionDataService.getCompany.createdBy && this._permissionDataService.getCompany.createdBy.email) {
-                return this.generalService.checkIfEmailDomainAllowed(this._permissionDataService.getCompany.createdBy.email);
+            if (this.permissionDataService.getCompany && this.permissionDataService.getCompany.createdBy && this.permissionDataService.getCompany.createdBy.email) {
+                return this.generalService.checkIfEmailDomainAllowed(this.permissionDataService.getCompany.createdBy.email);
             } else {
                 return false;
             }
         } else if (this.generalService.currentOrganizationType === OrganizationType.Branch && RESTRICTED_BRANCH_ROUTES.includes(state.url.split('?')[0])) {
-            this._router.navigate(['/pages/home']);
+            this.router.navigate(['/pages/home']);
             return false;
         } else {
             return true;

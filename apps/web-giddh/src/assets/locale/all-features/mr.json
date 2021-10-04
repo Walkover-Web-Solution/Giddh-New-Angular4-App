@@ -23,7 +23,7 @@
 	"invoice_through_sms": "एसएमएसद्वारे बीजक",
 	"custom_invoice_number": "सानुकूल चलन क्रमांक",
 	"custom_invoice_template": "सानुकूल चलन टेम्पलेट",
-	"integrate_gmail_invoice": "चलन साठी Gmail समाकलित करा",
+	"integrate_gmail_invoice": "चलन साठी जीमेल समाकलित करा",
 	"set_default_email": "बीजक पाठविण्यासाठी डीफॉल्ट ईमेल सेट करा",
 	"download_invoice_ledger": "लेजरकडून बीजक डाउनलोड करा",
 	"customer_invoice_report": "ग्राहक चलन रिपोर्ट",
@@ -171,8 +171,8 @@
     "manage_inventory": "यादी व्यवस्थापित करा",
     "view_branch_data": "सर्व शाखा डेटा पहा",
     "file_gst_different_gstin": "विविध जीएसटीआयएन क्रमांकासह जीएसटी फाइल करा",
-    "e_commerce":"ई-कॉमर्स",
-    "shopify":"शॉपीफाई",
-    "woocommerce":"वूकॉमर्स",
-    "zencommerce":"ज़ेनकॉमर्स"
+    "e_commerce": "ई-कॉमर्स",
+    "shopify": "शॉपीफाई",
+    "woocommerce": "वूकॉमर्स",
+    "zencommerce": "ज़ेनकॉमर्स"
 }
