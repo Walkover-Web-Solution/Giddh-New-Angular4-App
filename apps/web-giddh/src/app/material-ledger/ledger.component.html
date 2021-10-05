@@ -335,7 +335,7 @@
                                                     </span>
                                                     <span class="entity-details">
                                                         <div class="item giddh-limit single-line-clamp">
-                                                            {{ option.label || "-" }}
+                                                            {{ option?.label || "-" }}
                                                         </div>
                                                         <div class="item-unique giddh-limit single-line-clamp">
                                                             {{ option.name || "-" }}
@@ -417,7 +417,7 @@
                                                         </span>
                                                         <span class="entity-details">
                                                             <div class="item giddh-limit single-line-clamp">
-                                                                {{ option.label || "-" }}
+                                                                {{ option?.label || "-" }}
                                                             </div>
                                                             <div class="item-unique giddh-limit single-line-clamp">
                                                                 {{ option.name || "-" }}
@@ -725,7 +725,7 @@
                                                                                     class="list-item"
                                                                                 >
                                                                                     <div class="item">
-                                                                                        {{ option.label }}
+                                                                                        {{ option?.label }}
                                                                                     </div>
                                                                                     <div class="item-unique">
                                                                                         {{
@@ -743,7 +743,7 @@
                                                                                     class="list-item"
                                                                                 >
                                                                                     <div class="item">
-                                                                                        {{ option.label }}
+                                                                                        {{ option?.label }}
                                                                                     </div>
                                                                                     <div class="item-unique">
                                                                                         {{
@@ -986,7 +986,7 @@
                                                                                     class="list-item"
                                                                                 >
                                                                                     <div class="item">
-                                                                                        {{ option.label }}
+                                                                                        {{ option?.label }}
                                                                                     </div>
                                                                                     <div class="item-unique">
                                                                                         {{
@@ -1004,7 +1004,7 @@
                                                                                     class="list-item"
                                                                                 >
                                                                                     <div class="item">
-                                                                                        {{ option.label }}
+                                                                                        {{ option?.label }}
                                                                                     </div>
                                                                                     <div class="item-unique">
                                                                                         {{
@@ -1642,7 +1642,7 @@
                                                             <ng-template #optionTemplate let-option="option">
                                                                 <ng-container *ngIf="!option.additional?.stock">
                                                                     <a href="javascript:void(0)" class="list-item">
-                                                                        <div class="item">{{ option.label }}</div>
+                                                                        <div class="item">{{ option?.label }}</div>
                                                                         <div class="item-unique">
                                                                             {{ option.additional?.uniqueName }}
                                                                         </div>
@@ -1650,7 +1650,7 @@
                                                                 </ng-container>
                                                                 <ng-container *ngIf="option.additional?.stock">
                                                                     <a href="javascript:void(0)" class="list-item">
-                                                                        <div class="item">{{ option.label }}</div>
+                                                                        <div class="item">{{ option?.label }}</div>
                                                                         <div class="item-unique">
                                                                             {{ option.additional?.uniqueName }}
                                                                         </div>
@@ -2042,7 +2042,7 @@
                                                             <ng-template #optionTemplate let-option="option">
                                                                 <ng-container *ngIf="!option.additional?.stock">
                                                                     <a href="javascript:void(0)" class="list-item">
-                                                                        <div class="item">{{ option.label }}</div>
+                                                                        <div class="item">{{ option?.label }}</div>
                                                                         <div class="item-unique">
                                                                             {{ option.additional?.uniqueName }}
                                                                         </div>
@@ -2050,7 +2050,7 @@
                                                                 </ng-container>
                                                                 <ng-container *ngIf="option.additional?.stock">
                                                                     <a href="javascript:void(0)" class="list-item">
-                                                                        <div class="item">{{ option.label }}</div>
+                                                                        <div class="item">{{ option?.label }}</div>
                                                                         <div class="item-unique">
                                                                             {{ option.additional?.uniqueName }}
                                                                         </div>
