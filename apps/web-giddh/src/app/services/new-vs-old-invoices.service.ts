@@ -13,15 +13,15 @@ import { NewVsOldInvoicesRequest, NewVsOldInvoicesResponse } from '../models/api
 export class NewVsOldInvoicesService {
     private companyUniqueName: string;
 
-    constructor(private errorHandler: GiddhErrorHandler, private _http: HttpWrapperService,
-        private _generalService: GeneralService,
+    constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService,
+        private generalService: GeneralService,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
     }
 
     public GetNewVsOldInvoices(queryRequest: NewVsOldInvoicesRequest): Observable<BaseResponse<NewVsOldInvoicesResponse, string>> {
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + NEWVSOLDINVOICE_API.GET
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + NEWVSOLDINVOICE_API.GET
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':type', queryRequest.type.toString())
             .replace(':value', queryRequest.value.toString()))

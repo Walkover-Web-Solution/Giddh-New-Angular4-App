@@ -1,0 +1,17 @@
+{
+    "delete_custom_field_title": "आपली खात्री आहे की आपण हे हटवू इच्छिता?",
+    "delete_custom_field_alert": "येथून हे फील्ड हटविण्यामुळे ते सर्व खात्यांमधून काढले जाईल",
+    "name_placeholder": "सानुकूल फील्ड नाव प्रविष्ट करा",
+    "custom_field_created": "सानुकूल फील्ड यशस्वीरित्या तयार केले",
+    "custom_field_deleted": " सानुकूल फील्ड यशस्वीरित्या काढला ",
+    "custom_field_updated": "सानुकूल फील्ड यशस्वीरित्या अद्यतनित केले",
+    "fill_mandatory_fields": "कृपया सर्व अनिवार्य फील्ड भरा",
+    "name_length_validation": "नाव 50 वर्णांपेक्षा जास्त असू शकत नाही",
+    "number_length_validation": "प्रकार संख्येसाठी लांबी 30 पेक्षा जास्त असू शकत नाही",
+    "string_length_validation": "टाइप स्ट्रिंगसाठी लांबी 150 पेक्षा जास्त असू शकत नाही",
+    "name": "नाव",
+    "type": "प्रकार",
+    "length": "लांबी",
+    "add_new_row": "नवीन पंक्ती जोडा",
+    "field_type_placeholder": "फिल्टर करण्यासाठी टाइप करा"
+}

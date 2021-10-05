@@ -13,10 +13,8 @@ import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
     templateUrl: 'ratio-analysis-chart.component.html',
     styleUrls: ['ratio-analysis-chart.component.scss', '../../home.component.scss']
 })
-
 export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
     @Input() public refresh: boolean = false;
-
     public requestInFlight = true;
     public currentRatioChart: typeof Highcharts = Highcharts;
     public currentRatioChartOptions: Highcharts.Options;
@@ -29,15 +27,15 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
     public rationResponse$: Observable<any>;
     public ratioObj: any = {};
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     public localeData: any = {};
 
-    constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
+    constructor(private store: Store<AppState>, private homeActions: HomeActions) {
         this.rationResponse$ = this.store.pipe(select(p => p.home.RatioAnalysis), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        this.store.dispatch(this._homeActions.getRatioAnalysis(moment().format(GIDDH_DATE_FORMAT), this.refresh));
+        this.store.dispatch(this.homeActions.getRatioAnalysis(moment().format(GIDDH_DATE_FORMAT), this.refresh));
     }
 
     public hardRefresh() {
@@ -47,7 +45,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
 
     public fetchChartData() {
         this.requestInFlight = true;
-        this.store.dispatch(this._homeActions.getRatioAnalysis(moment().format(GIDDH_DATE_FORMAT), this.refresh));
+        this.store.dispatch(this.homeActions.getRatioAnalysis(moment().format(GIDDH_DATE_FORMAT), this.refresh));
         this.refresh = false;
     }
 

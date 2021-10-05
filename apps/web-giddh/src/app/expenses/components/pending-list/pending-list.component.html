@@ -38,7 +38,7 @@
                     <span class="responsive-label" [hidden]="!expensesItems?.length">{{
                         localeData?.submitted_by
                     }}</span>
-                    {{ expenses.createdBy.name }}
+                    {{ expenses?.createdBy?.name }}
                 </td>
             </ng-container>
 
@@ -53,7 +53,7 @@
                     <i class="dot-icon dot-warning" *ngIf="expenses.entryType === 'sales'"></i>
                     <i class="dot-icon dot-success" *ngIf="expenses.entryType === 'deposit'"></i>
                     <i class="dot-icon dot-primary" *ngIf="expenses.entryType === 'expense'"></i>
-                    {{ expenses.particularAccount.name }}
+                    {{ expenses?.particularAccount?.name }}
                 </td>
             </ng-container>
 
@@ -101,7 +101,7 @@
                         *ngIf="expenses.baseAccountCategory === 'CASH'"
                         class="font-12 text-gray icon-cash mr-r05"
                     ></span>
-                    {{ expenses.baseAccount.name }}
+                    {{ expenses?.baseAccount?.name }}
                 </td>
             </ng-container>
 

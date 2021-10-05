@@ -38,12 +38,7 @@ import { SettingsBranchActions } from '../actions/settings/branch/settings.branc
 import { OrganizationType } from '../models/user-login-state';
 import { GiddhCurrencyPipe } from '../shared/helpers/pipes/currencyPipe/currencyType.pipe';
 import { FormControl } from '@angular/forms';
-
-export interface PayNowRequest {
-    accountUniqueName: string;
-    amount: number;
-    description: string;
-}
+import { Lightbox } from 'ngx-lightbox';
 
 @Component({
     selector: 'contact-detail',
@@ -62,7 +57,6 @@ export interface PayNowRequest {
         ]),
     ]
 })
-
 export class ContactComponent implements OnInit, OnDestroy {
     /** Stores the current range of date picker */
     public selectedDateRange: any;
@@ -104,13 +98,11 @@ export class ContactComponent implements OnInit, OnDestroy {
         ignoreBackdropClick: true
     };
     public isICICIIntegrated: boolean = false;
-
     public selectedWhileHovering: string;
     public searchLoader$: Observable<boolean>;
-    // sorting
+    /** sorting */
     public key: string = 'name'; // set default
     public order: string = 'asc';
-
     public showFieldFilter: CustomerVendorFiledFilter = new CustomerVendorFiledFilter();
     public updateCommentIdx: number = null;
     public searchStr$ = new Subject<string>();
@@ -122,7 +114,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     @ViewChild('messageBox', { static: false }) public messageBox: ElementRef;
     @ViewChild('advanceSearch', { static: true }) public advanceSearch: ModalDirective;
     @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: ElementRef;
-
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     public universalDate$: Observable<any>;
     public messageBody = {
@@ -162,15 +153,13 @@ export class ContactComponent implements OnInit, OnDestroy {
     public isBulkPaymentShow: boolean = false;
     /** selected account list array */
     public selectedAccountsList: any[] = [];
-    /**pagination count */
+    /** Pagination count */
     public paginationLimit: number = PAGINATION_LIMIT;
     /** Giddh decimal places set by user */
     public giddhDecimalPlaces = 2;
-
     private checkboxInfo: any = {
         selectedPage: 1
     };
-
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private createAccountIsSuccess$: Observable<boolean>;
     public universalDate: any;
@@ -181,7 +170,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     public dateFieldPosition: any = { x: 0, y: 0 };
     /**True, if get accounts request in process */
     public isGetAccountsInProcess: boolean = false;
-    /* This will hold the current page number */
+    /** This will hold the current page number */
     public currentPage: number = 1;
     /** company custom fields list */
     public companyCustomFields$: Observable<any[]>;
@@ -203,9 +192,9 @@ export class ContactComponent implements OnInit, OnDestroy {
     public closingBalance: number = 0;
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Listens for Master open/close event, required to load the data once master is closed */
     public isAddAndManageOpenedFromOutside$: Observable<boolean>;
@@ -219,24 +208,35 @@ export class ContactComponent implements OnInit, OnDestroy {
     public todaySelected: boolean = false;
     /** Holds company name if bank accounts are loaded in case of vendor */
     public bankAccountsLoadedForCompany: boolean = false;
+    /** Is get all integrated bank api in progress */
+    public isGetAllIntegratedBankInProgress: boolean = false;
+    /** Holds images folder path */
+    public imgPath: string = '';
+    /** True if single icici bank account is there and is pending for approval */
+    public isIciciAccountPendingForApproval: boolean = false;
 
     constructor(
         private store: Store<AppState>,
         private router: Router,
-        private _companyServices: CompanyService,
+        private companyServices: CompanyService,
         private commonActions: CommonActions,
-        private _toaster: ToasterService,
-        private _contactService: ContactService,
+        private toaster: ToasterService,
+        private contactService: ContactService,
         private settingsIntegrationActions: SettingsIntegrationActions,
-        private _companyActions: CompanyActions,
+        private companyActions: CompanyActions,
         private componentFactoryResolver: ComponentFactoryResolver,
-        private _groupWithAccountsAction: GroupWithAccountsAction,
-        private _cdRef: ChangeDetectorRef, private _generalService: GeneralService,
-        private _route: ActivatedRoute, private _generalAction: GeneralActions,
-        private breakPointObservar: BreakpointObserver, private modalService: BsModalService,
-        private settingsProfileActions: SettingsProfileActions, private groupService: GroupService,
+        private groupWithAccountsAction: GroupWithAccountsAction,
+        private cdRef: ChangeDetectorRef, 
+        private generalService: GeneralService,
+        private route: ActivatedRoute,
+        private generalAction: GeneralActions,
+        private breakPointObservar: BreakpointObserver, 
+        private modalService: BsModalService,
+        private settingsProfileActions: SettingsProfileActions, 
+        private groupService: GroupService,
         private settingsBranchAction: SettingsBranchActions,
-        public currencyPipe: GiddhCurrencyPipe) {
+        public currencyPipe: GiddhCurrencyPipe,
+        private lightbox: Lightbox) {
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
@@ -254,17 +254,18 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.activeCompany = activeCompany;
                 if(this.activeTab === "vendor" && this.activeCompany?.uniqueName && this.bankAccountsLoadedForCompany !== this.activeCompany?.uniqueName) {
                     this.bankAccountsLoadedForCompany = this.activeCompany?.uniqueName;
-                    this.store.dispatch(this._companyActions.getAllIntegratedBankInCompany(this.activeCompany?.uniqueName));
+                    this.store.dispatch(this.companyActions.getAllIntegratedBankInCompany(this.activeCompany?.uniqueName));
                 }
             }
         });
     }
 
     public ngOnInit() {
-        this.store.dispatch(this._companyActions.getAllRegistrations());
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.store.dispatch(this.companyActions.getAllRegistrations());
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.getCompanyCustomField();
-        this.currentOrganizationType = this._generalService.currentOrganizationType;
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.isAddAndManageOpenedFromOutside$ = this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$));
         // localStorage supported
         if (window.localStorage) {
@@ -286,7 +287,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.isMobileView = result?.breakpoints['(max-width: 767px)'];
         });
 
-        combineLatest([this._route.params, this._route.queryParams]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+        combineLatest([this.route.params, this.route.queryParams]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             let params = result[0];
             let queryParams = result[1];
 
@@ -374,7 +375,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
-                        currentBranchUniqueName = this._generalService.currentBranchUniqueName;
+                        currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                         this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
@@ -390,7 +391,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     }
                 }
             } else {
-                if (this._generalService.companyUniqueName) {
+                if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
                     this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
                 }
@@ -409,20 +410,28 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.searchStr$.next(searchedText);
         });
 
-        this.store.pipe(select(state => state.company && state.company.integratedBankList), takeUntil(this.destroyed$)).subscribe(response => {
-            if(response?.length > 0) {
+        this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(response => {
+            this.isIciciAccountPendingForApproval = false;
+            this.isGetAllIntegratedBankInProgress = response?.isGetAllIntegratedBankInProgress;
+            if(response?.integratedBankList?.length > 0) {
+                let approvalPendingAccounts = response?.integratedBankList.filter(account => !account.errorMessage);
+                if(!approvalPendingAccounts?.length) {
+                    this.isIciciAccountPendingForApproval = true;
+                }
+                
                 this.isICICIIntegrated = true;
             } else {
                 this.isICICIIntegrated = false;
             }
+            this.cdRef.detectChanges();
         });
     }
 
     public performActions(type: number, account: any, event?: any) {
         switch (type) {
             case 0: // go to add and manage
-                this.store.dispatch(this._groupWithAccountsAction.getGroupWithAccounts(account.name));
-                this.store.dispatch(this._groupWithAccountsAction.OpenAddAndManageFromOutside(account.name));
+                this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(account.name));
+                this.store.dispatch(this.groupWithAccountsAction.OpenAddAndManageFromOutside(account.name));
                 break;
 
             case 1: // go to ledger
@@ -482,7 +491,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             };
         }
         if (this.activeCompany && this.currentBranchData) {
-            if (this._generalService.currentOrganizationType === OrganizationType.Branch) {
+            if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
                 this.currentBranch.name = this.currentBranchData.name;
                 this.currentBranch.uniqueName = this.currentBranchData.uniqueName;
                 this.currentBranch.alias = this.currentBranchData.alias;
@@ -515,7 +524,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.getAccounts(this.fromDate, this.toDate, null, 'true', PAGINATION_LIMIT, '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
 
-            this.store.dispatch(this._generalAction.setAppTitle(`/pages/contact/${tabName}`));
+            this.store.dispatch(this.generalAction.setAppTitle(`/pages/contact/${tabName}`));
 
             if (this.activeTab !== 'aging-report') {
                 this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=0`);
@@ -540,7 +549,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
 
         if(tabName === "vendor") {
-            this.store.dispatch(this._companyActions.getAllIntegratedBankInCompany(this.activeCompany?.uniqueName));
+            this.store.dispatch(this.companyActions.getAllIntegratedBankInCompany(this.activeCompany?.uniqueName));
         }
     }
 
@@ -549,9 +558,9 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    detectChanges() {
-        if (!this._cdRef['destroyed']) {
-            this._cdRef.detectChanges();
+    public detectChanges() {
+        if (!this.cdRef['destroyed']) {
+            this.cdRef.detectChanges();
         }
     }
 
@@ -599,7 +608,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             let objToSend = cloneDeep(f);
             this.store.dispatch(this.settingsIntegrationActions.SaveCashfreeDetails(objToSend));
         } else {
-            this._toaster.errorToast(this.localeData?.cashfree_details_required_message, 'Validation');
+            this.toaster.errorToast(this.localeData?.cashfree_details_required_message, 'Validation');
             return;
         }
     }
@@ -619,7 +628,10 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * updateComment
+     * Update Comment
+     *
+     * @param {*} account
+     * @memberof ContactComponent
      */
     public updateComment(account) {
         if (account.comment) {
@@ -641,11 +653,14 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * deleteComment
+     * Delete Comment
+     *
+     * @param {*} accountUniqueName
+     * @memberof ContactComponent
      */
     public deleteComment(accountUniqueName) {
         setTimeout(() => {
-            this._contactService.deleteComment(accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            this.contactService.deleteComment(accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res.status === 'success') {
                     this.updateCommentIdx = null;
                 }
@@ -654,9 +669,13 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * canDeleteComment
+     * Checks if we can delete the comments
+     *
+     * @param {*} accountUniqueName
+     * @returns {boolean}
+     * @memberof ContactComponent
      */
-    public canDeleteComment(accountUniqueName) {
+    public canDeleteComment(accountUniqueName): boolean {
         let account;
         if (this.activeTab === 'customer') {
             account = find(this.sundryDebtorsAccountsBackup.results, (o: any) => {
@@ -676,9 +695,14 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * canDeleteComment
+     * Checks if we can update the comments
+     *
+     * @param {*} accountUniqueName
+     * @param {*} comment
+     * @returns {boolean}
+     * @memberof ContactComponent
      */
-    public canUpdateComment(accountUniqueName, comment) {
+    public canUpdateComment(accountUniqueName, comment): boolean {
         let account;
         if (this.activeTab === 'customer') {
             account = find(this.sundryDebtorsAccountsBackup.results, (o: any) => {
@@ -699,7 +723,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     public addComment(account) {
         setTimeout(() => {
-            this._contactService.addComment(account.comment, account.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            this.contactService.addComment(account.comment, account.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res.status === 'success') {
                     this.updateCommentIdx = null;
                     account.comment = cloneDeep(res.body.description);
@@ -708,7 +732,12 @@ export class ContactComponent implements OnInit, OnDestroy {
         }, 500);
     }
 
-    // Add Selected Value to Message Body
+    /**
+     * Add Selected Value to Message Body
+     *
+     * @param {*} val
+     * @memberof ContactComponent
+     */
     public addValueToMsg(val: any) {
         this.typeInTextarea(val.value);
     }
@@ -726,7 +755,11 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.messageBody.msg = el.value;
     }
 
-    // Open Modal for Email
+    /**
+     * Open Modal for Email
+     *
+     * @memberof ContactComponent
+     */
     public openEmailDialog() {
         this.messageBody.msg = '';
         this.messageBody.subject = '';
@@ -736,7 +769,11 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.mailModal.show();
     }
 
-    // Open Modal for SMS
+    /**
+     * Open Modal for SMS
+     *
+     * @memberof ContactComponent
+     */
     // public openSmsDialog() {
     //     this.messageBody.msg = '';
     //     this.messageBody.type = 'sms';
@@ -745,7 +782,13 @@ export class ContactComponent implements OnInit, OnDestroy {
     //     this.mailModal.show();
     // }
 
-    // Send Email/Sms for Accounts
+    /**
+     * Send Email/Sms for Accounts
+     *
+     * @param {string} groupsUniqueName
+     * @returns
+     * @memberof ContactComponent
+     */
     public async send(groupsUniqueName: string) {
         let request: BulkEmailRequest = {
             data: {
@@ -763,9 +806,9 @@ export class ContactComponent implements OnInit, OnDestroy {
         };
 
         if (this.messageBody.btn.set === this.commonLocaleData?.app_send_email) {
-            return this._companyServices.sendEmail(request).pipe(takeUntil(this.destroyed$))
+            return this.companyServices.sendEmail(request).pipe(takeUntil(this.destroyed$))
                 .subscribe((r) => {
-                    r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message);
+                    r.status === 'success' ? this.toaster.successToast(r.body) : this.toaster.errorToast(r.message);
                     this.checkboxInfo = {
                         selectedPage: 1
                     };
@@ -775,9 +818,9 @@ export class ContactComponent implements OnInit, OnDestroy {
         } else if (this.messageBody.btn.set === this.commonLocaleData?.app_send_sms) {
             let temp = request;
             delete temp.data['subject'];
-            return this._companyServices.sendSms(temp).pipe(takeUntil(this.destroyed$))
+            return this.companyServices.sendSms(temp).pipe(takeUntil(this.destroyed$))
                 .subscribe((r) => {
-                    r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message);
+                    r.status === 'success' ? this.toaster.successToast(r.body) : this.toaster.errorToast(r.message);
                     this.checkboxInfo = {
                         selectedPage: 1
                     };
@@ -811,6 +854,10 @@ export class ContactComponent implements OnInit, OnDestroy {
             componentInstance.maxSize = 5;
             componentInstance.writeValue(s.page);
             componentInstance.boundaryLinks = true;
+            componentInstance.firstText = this.commonLocaleData?.app_first;
+            componentInstance.previousText = this.commonLocaleData?.app_previous;
+            componentInstance.nextText = this.commonLocaleData?.app_next;
+            componentInstance.lastText = this.commonLocaleData?.app_last;
             componentInstance.pageChanged.pipe(takeUntil(this.destroyed$)).subscribe(e => {
                 this.pageChangedDueReport(e);
             });
@@ -842,7 +889,9 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public toggleAllSelection(action: boolean) {
-
+        if(action) {
+            this.selectedAccountsList = [];
+        }
         this.checkboxInfo[this.checkboxInfo.selectedPage] = action;
         this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
         if (action) {
@@ -964,7 +1013,11 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.advanceSearchRequestModal[category + 'NotEqual'] = false;
     }
 
-    // Save CSV File with data from Table...
+    /**
+     * Save CSV File with data from Table
+     *
+     * @memberof ContactComponent
+     */
     public downloadCSV() {
         if (this.activeTab === 'customer') {
             this.groupUniqueName = 'sundrydebtors';
@@ -988,10 +1041,10 @@ export class ContactComponent implements OnInit, OnDestroy {
             branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : "")
         };
 
-        this._companyServices.downloadCSV(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+        this.companyServices.downloadCSV(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.searchLoader$ = observableOf(false);
             if (res.status === 'success') {
-                let blobData = this._generalService.base64ToBlob(res.body, 'text/csv', 512);
+                let blobData = this.generalService.base64ToBlob(res.body, 'text/csv', 512);
                 return saveAs(blobData, `${this.groupUniqueName}.csv`);
             }
         });
@@ -1028,7 +1081,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this._contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal, branchUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+        this.contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal, branchUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && res.body && res.status === 'success') {
                 this.openingBalance = res.body.openingBalance;
 
@@ -1121,14 +1174,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public columnFilter(event, column) {
-        // if (event && column) {
         this.showFieldFilter[column] = event;
         this.setTableColspan();
         this.showFieldFilter.selectAll = Object.keys(this.showFieldFilter).filter((filterName) => filterName !== 'selectAll').every(filterName => this.showFieldFilter[filterName]);
         if (window.localStorage) {
             localStorage.setItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer'], JSON.stringify(this.showFieldFilter));
         }
-        // }
     }
 
     /**
@@ -1170,15 +1221,21 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.tableColsPan = length > 0 ? 4 : 3;
     }
 
+    /**
+     * save last state with active tab
+     *
+     * @private
+     * @param {*} url
+     * @memberof ContactComponent
+     */
     private setStateDetails(url) {
-        // save last state with active tab
         let companyUniqueName = null;
         this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = `contact/${url}`;
 
-        this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
+        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
     /**
@@ -1213,12 +1270,13 @@ export class ContactComponent implements OnInit, OnDestroy {
             return false;
         }
     }
+
     /**
-        * This will toggle all columns
-        *
-        * @param {boolean} event
-        * @memberof ContactComponent
-        */
+     * This will toggle all columns
+     *
+     * @param {boolean} event
+     * @memberof ContactComponent
+     */
     public selectAllColumns(event: boolean): void {
         Object.keys(this.showFieldFilter).forEach(key => this.showFieldFilter[key] = event);
         this.setTableColspan();
@@ -1235,7 +1293,7 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     public showGiddhDatepicker(element): void {
         if (element) {
-            this.dateFieldPosition = this._generalService.getPosition(element.target);
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
         }
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,
@@ -1264,15 +1322,21 @@ export class ContactComponent implements OnInit, OnDestroy {
         let indexOfEntry = this.selectedAccountsList.indexOf(element);
         if (indexOfEntry === -1 && isChecked) {
             this.selectedAccountsList.push(element);
-        } else if (indexOfEntry > -1 && !this.allSelectionModel) {
+        } else if (indexOfEntry > -1 && !isChecked) {
             this.selectedAccountsList.splice(indexOfEntry, 1);
         }
         // selected contacts list
         let indexOfEntrySelected = this.selectedCheckedContacts.indexOf(element?.uniqueName);
         if (indexOfEntrySelected === -1 && isChecked) {
             this.selectedCheckedContacts.push(element?.uniqueName);
-        } else if (indexOfEntrySelected > -1 && !this.allSelectionModel) {
+        } else if (indexOfEntrySelected > -1 && !isChecked) {
             this.selectedCheckedContacts.splice(indexOfEntrySelected, 1);
+        }
+
+        if(this.activeTab === "customer") {
+            this.allSelectionModel = this.sundryDebtorsAccounts?.length === this.selectedCheckedContacts?.length;
+        } else {
+            this.allSelectionModel = this.sundryCreditorsAccounts?.length === this.selectedCheckedContacts?.length;
         }
     }
 
@@ -1309,7 +1373,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     this.addNewFieldFilters(response.body);
                 }
             } else {
-                this._toaster.errorToast(response.message);
+                this.toaster.errorToast(response.message);
             }
         });
     }
@@ -1418,7 +1482,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             if (this.searchedName.value) {
                 return;
             }
-            if (this._generalService.childOf(event.target, element)) {
+            if (this.generalService.childOf(event.target, element)) {
                 return;
             } else {
                 this.showNameSearch = false;
@@ -1462,7 +1526,7 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @param {TemplateRef<any>} template template/model hash reference
      * @memberof ContactComponent
      */
-     public openBulkPaymentModal(template: TemplateRef<any>, item?: any): void {
+    public openBulkPaymentModal(template: TemplateRef<any>, item?: any): void {
         this.isBulkPaymentShow = true;
         this.selectedAccForPayment = null;
         if (this.selectedAccountsList.length) {
@@ -1483,9 +1547,10 @@ export class ContactComponent implements OnInit, OnDestroy {
             message = message.replace("[SUCCESS]", this.selectedCheckedContacts.length - this.selectedAccountsList.length);
             message = message.replace("[TOTAL]", this.selectedCheckedContacts.length);
 
-            this._toaster.infoToast(message);
+            this.toaster.infoToast(message);
         }
         if (this.selectedAccountsList.length || this.selectedAccForPayment) {
+            this.selectedAccountsList = [this.selectedAccountsList[0]]; // since we don't have bulk payment now, we are only passing 1st available value, once bulk payment is done from API, we will remove this line of code
             this.bulkPaymentModalRef = this.modalService.show(template,
                 Object.assign({}, { class: 'payment-modal modal-xl' })
             );
@@ -1515,5 +1580,16 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.order = ord;
 
         this.getAccounts(this.fromDate, this.toDate, null, 'false', PAGINATION_LIMIT, this.searchStr, key, ord, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+    }
+
+    /**
+     * This will show the integration process GIF in lightbox
+     *
+     * @memberof ContactComponent
+     */
+    public showIntegrationProcess(): void {
+        const images = [];
+        images.push({ src: this.imgPath + "icici-integration-process.gif" });
+        this.lightbox.open(images, 0);
     }
 }
