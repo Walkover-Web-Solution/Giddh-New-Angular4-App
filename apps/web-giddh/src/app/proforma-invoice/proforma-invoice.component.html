@@ -2985,7 +2985,7 @@
                                                     ngFileSelect
                                                     [uploadInput]="uploadInput"
                                                     (uploadOutput)="onUploadOutput($event)"
-                                                    (change)="onFileChange($event.target)"
+                                                    (change)="onFileChange($event?.target)"
                                                     droppable="true"
                                                 />
                                             </label>
