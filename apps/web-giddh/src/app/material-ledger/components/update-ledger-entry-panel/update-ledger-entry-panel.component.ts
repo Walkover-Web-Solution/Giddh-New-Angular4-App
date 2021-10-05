@@ -883,7 +883,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
             }
         });
-        if (requestObj.voucherAdjustments && requestObj.voucherAdjustments.adjustments && requestObj.voucherAdjustments.adjustments.length > 0) {
+        if (requestObj?.voucherAdjustments?.adjustments?.length > 0) {
             requestObj.voucherAdjustments.adjustments.forEach((adjustment: any) => {
                 delete adjustment.balanceDue;
             });
@@ -1044,10 +1044,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
             return;
         }
-        if (this.vm.selectedLedger.voucherAdjustments && !this.vm.selectedLedger.voucherAdjustments.adjustments) {
+        if (this.vm.selectedLedger?.voucherAdjustments && !this.vm.selectedLedger?.voucherAdjustments?.adjustments) {
             this.vm.selectedLedger.voucherAdjustments.adjustments = [];
         }
-        if ((this.isAdjustAdvanceReceiptSelected || this.isAdjustReceiptSelected || this.isAdjustVoucherSelected) && this.vm.selectedLedger.voucherAdjustments && (!this.vm.selectedLedger.voucherAdjustments.adjustments || !this.vm.selectedLedger.voucherAdjustments.adjustments.length || isUpdateMode)) {
+        if ((this.isAdjustAdvanceReceiptSelected || this.isAdjustReceiptSelected || this.isAdjustVoucherSelected) && this.vm.selectedLedger?.voucherAdjustments && (!this.vm.selectedLedger?.voucherAdjustments?.adjustments?.length || isUpdateMode)) {
             this.prepareAdjustVoucherConfiguration();
             this.openAdjustPaymentModal();
         }
@@ -1587,7 +1587,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public adjustedInvoiceAmountChange(): void {
-        if (this.vm.selectedLedger && this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments) {
+        if (this.vm.selectedLedger?.voucherAdjustments?.adjustments) {
             let totalAmount: number = 0;
             this.vm.selectedLedger.voucherAdjustments.adjustments.forEach(item => {
                 totalAmount = Number(totalAmount) + (item.adjustmentAmount ? Number(item.adjustmentAmount.amountForAccount) : 0);
@@ -1604,7 +1604,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public calculateInclusiveTaxesForAdvanceReceiptsInvoices(): void {
-        if (this.vm.selectedLedger && this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments) {
+        if (this.vm.selectedLedger?.voucherAdjustments?.adjustments) {
             this.vm.selectedLedger.voucherAdjustments.adjustments.map(item => {
                 item.calculatedTaxAmount = this.generalService.calculateInclusiveOrExclusiveTaxes(true, item.adjustmentAmount.amountForAccount, item.taxRate, 0);
             });
@@ -1617,7 +1617,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     * @memberof UpdateLedgerEntryPanelComponent
     */
     public adjustedReceiptsAmountChange(): void {
-        if (this.vm.selectedLedger && this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments) {
+        if (this.vm.selectedLedger?.voucherAdjustments?.adjustments) {
             let totalAmount: number = 0;
             this.vm.selectedLedger.voucherAdjustments.adjustments.forEach(item => {
                 totalAmount = Number(totalAmount) + (item.adjustmentAmount ? Number(item.adjustmentAmount.amountForAccount) : 0);
@@ -1635,7 +1635,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public calculateInclusiveTaxesForAdvanceReceipts(): void {
         let totalAmount: number = 0;
-        if (this.vm.selectedLedger && this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments) {
+        if (this.vm.selectedLedger?.voucherAdjustments?.adjustments) {
             this.vm.selectedLedger.voucherAdjustments.adjustments.map(item => {
                 item.calculatedTaxAmount = this.generalService.calculateInclusiveOrExclusiveTaxes(true, item.adjustmentAmount.amountForAccount, item.taxRate, 0);
                 totalAmount = Number(totalAmount) + Number(item.adjustmentAmount.amountForAccount);
@@ -1729,7 +1729,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public closeAdjustmentModal(event: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }): void {
-        if (this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments && !this.vm.selectedLedger.voucherAdjustments.adjustments.length) {
+        if (this.vm.selectedLedger?.voucherAdjustments?.adjustments && !this.vm.selectedLedger?.voucherAdjustments?.adjustments?.length) {
             // No adjustments done clear the adjustment checkbox
             this.isAdjustReceiptSelected = false;
             this.isAdjustVoucherSelected = false;
@@ -1763,7 +1763,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             // original adjustments in adjustment popup
             this.vm.selectedLedger.voucherAdjustments = cloneDeep(this.originalVoucherAdjustments);
         }
-        if (this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments) {
+        if (this.vm.selectedLedger?.voucherAdjustments?.adjustments) {
             this.vm.selectedLedger.voucherAdjustments.adjustments.forEach(adjustment => {
                 if (!adjustment.balanceDue) {
                     adjustment.balanceDue = cloneDeep(adjustment.adjustmentAmount);
@@ -1815,7 +1815,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     private makeAdjustmentCalculation(): void {
-        if (this.vm.selectedLedger && this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments && this.vm.selectedLedger.voucherAdjustments.adjustments.length) {
+        if (this.vm.selectedLedger?.voucherAdjustments?.adjustments?.length) {
             this.isAdjustVoucherSelected = true;
             if (this.vm.selectedLedger.voucherAdjustments.adjustments.every(adjustment => adjustment.voucherType === 'sales')) {
                 this.isAdjustedInvoicesWithAdvanceReceipt = true;
@@ -1989,7 +1989,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
                         //#region transaction assignment process
                         this.vm.selectedLedger = resp[0];
-                        this.originalVoucherAdjustments = cloneDeep(this.vm.selectedLedger.voucherAdjustments);
+                        this.originalVoucherAdjustments = cloneDeep(this.vm.selectedLedger?.voucherAdjustments);
                         this.formatAdjustments();
                         if (this.vm.selectedLedger && !this.invoiceList?.length && (this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.creditNote ||
                             this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.debitNote)) {
