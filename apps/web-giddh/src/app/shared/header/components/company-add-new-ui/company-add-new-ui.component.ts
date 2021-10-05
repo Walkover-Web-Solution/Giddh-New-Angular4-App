@@ -482,7 +482,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
      */
     public getWelcomeUserText(): string {
         let text = this.localeData?.welcome_user;
-        text = text?.replace("[USER]", this.logedInuser.name);
+        text = text?.replace("[USER]", this.logedInuser?.name);
         return text;
     }
 }

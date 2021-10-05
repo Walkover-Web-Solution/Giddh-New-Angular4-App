@@ -1725,9 +1725,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public toggleBodyClass() {
         if (this.asideMenuState === 'in' || this.asideMenuStateForOtherTaxes === 'in') {
-            document.querySelector('body').classList.add('fixed');
+            document.querySelector('body')?.classList?.add('fixed');
         } else {
-            document.querySelector('body').classList.remove('fixed');
+            document.querySelector('body')?.classList?.remove('fixed');
         }
     }
 

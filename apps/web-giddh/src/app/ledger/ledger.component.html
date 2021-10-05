@@ -310,10 +310,10 @@
                                                     </span>
                                                     <span class="entity-details">
                                                         <div class="item giddh-limit single-line-clamp">
-                                                            {{ option.label || "-" }}
+                                                            {{ option?.label || "-" }}
                                                         </div>
                                                         <div class="item-unique giddh-limit single-line-clamp">
-                                                            {{ option.name || "-" }}
+                                                            {{ option?.name || "-" }}
                                                         </div>
                                                     </span>
                                                 </a>
@@ -385,10 +385,10 @@
                                                         </span>
                                                         <span class="entity-details">
                                                             <div class="item giddh-limit single-line-clamp">
-                                                                {{ option.label || "-" }}
+                                                                {{ option?.label || "-" }}
                                                             </div>
                                                             <div class="item-unique giddh-limit single-line-clamp">
-                                                                {{ option.name || "-" }}
+                                                                {{ option?.name || "-" }}
                                                             </div>
                                                         </span>
                                                     </a>
@@ -774,7 +774,7 @@
                                                                                                 }}:
                                                                                                 {{
                                                                                                     option.additional
-                                                                                                        ?.stock.name
+                                                                                                        ?.stock?.name
                                                                                                 }}
                                                                                             </div>
                                                                                         </a>
@@ -1060,7 +1060,7 @@
                                                                                                 }}:
                                                                                                 {{
                                                                                                     option.additional
-                                                                                                        ?.stock.name
+                                                                                                        ?.stock?.name
                                                                                                 }}
                                                                                             </div>
                                                                                         </a>
@@ -1761,7 +1761,7 @@
                                                                                 </div>
                                                                                 <div class="item-stock">
                                                                                     {{ commonLocaleData?.app_stock }}:
-                                                                                    {{ option.additional?.stock.name }}
+                                                                                    {{ option.additional?.stock?.name }}
                                                                                 </div>
                                                                             </a>
                                                                         </ng-container>
@@ -2224,7 +2224,7 @@
                                                                                 </div>
                                                                                 <div class="item-stock">
                                                                                     {{ commonLocaleData?.app_stock }}:
-                                                                                    {{ option.additional?.stock.name }}
+                                                                                    {{ option.additional?.stock?.name }}
                                                                                 </div>
                                                                             </a>
                                                                         </ng-container>

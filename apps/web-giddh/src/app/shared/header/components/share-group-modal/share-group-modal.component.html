@@ -37,7 +37,7 @@
                                     [value]="permission.uniqueName"
                                     *ngFor="let permission of allPermissions$ | async"
                                 >
-                                    {{ permission.name }}
+                                    {{ permission?.name }}
                                 </option>
                             </select>
                             <button
@@ -77,7 +77,7 @@
                                             [value]="permission.uniqueName"
                                             *ngFor="let permission of allPermissions$ | async"
                                         >
-                                            {{ permission.name }}
+                                            {{ permission?.name }}
                                         </option>
                                     </select>
                                     <span class="select-drop d-none"><i class="fa fa-caret-down"></i></span>

@@ -67,6 +67,7 @@ import { GiddhPageLoaderModule } from './giddh-page-loader/giddh-page-loader.mod
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 import { GiddhDateRangepickerModule } from '../theme/giddh-daterangepicker/giddh-daterangepicker.module';
 import { DeleteTemplateConfirmationModalModule } from '../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
+import { CustomFieldsModule } from './header/components/custom-fields/custom-fields.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -157,7 +158,8 @@ export function provideConfig() {
         GiddhPageLoaderModule,
         GiddhDatepickerModule,
         GiddhDateRangepickerModule,
-        DeleteTemplateConfirmationModalModule
+        DeleteTemplateConfirmationModalModule,
+        CustomFieldsModule
     ],
     exports: [
         CommonModule,

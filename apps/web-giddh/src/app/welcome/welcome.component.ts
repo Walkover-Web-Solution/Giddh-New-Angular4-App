@@ -466,7 +466,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
             if (!isValid) {
                 let text = this.commonLocaleData?.app_invalid_tax_name;
-                text = text?.replace("[TAX_NAME]", this.formFields['taxName'].label);
+                text = text?.replace("[TAX_NAME]", this.formFields['taxName']?.label);
                 this.toasty.errorToast(text);
                 ele.classList.add('error-box');
                 this.isGstValid = false;
