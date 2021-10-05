@@ -45,14 +45,14 @@
                                                 id="ledger-unit"
                                                 class="form-control"
                                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
-                                                (change)="unitChanged($event.target.value)"
-                                                [value]="currentTxn?.inventory.unit.code"
+                                                (change)="unitChanged($event?.target?.value)"
+                                                [value]="currentTxn?.inventory?.unit?.code"
                                             >
                                                 <mat-option
-                                                    *ngFor="let item of currentTxn.unitRate"
-                                                    [value]="item.code"
+                                                    *ngFor="let item of currentTxn?.unitRate"
+                                                    [value]="item?.code"
                                                 >
-                                                    {{ item.stockUnitCode }}
+                                                    {{ item?.stockUnitCode }}
                                                 </mat-option>
                                             </mat-select>
                                         </td>
@@ -740,8 +740,8 @@
                         <table class="table table-bordered m-0">
                             <tbody>
                                 <tr *ngFor="let txn of entry.transactions">
-                                    <td>{{ entry.entryDate }}</td>
-                                    <td>{{ txn.particular.name }}</td>
+                                    <td>{{ entry?.entryDate }}</td>
+                                    <td>{{ txn.particular?.name }}</td>
                                     <td>
                                         <amount-field
                                             [amount]="txn.amount"

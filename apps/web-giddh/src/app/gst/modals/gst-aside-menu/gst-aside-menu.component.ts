@@ -16,7 +16,6 @@ import { GstReport } from '../../constants/gst.constant';
     templateUrl: './gst-aside-menu.component.html'
 })
 export class GstAsideMenuComponent implements OnInit, OnDestroy {
-
     @Input() public selectedService: 'VAYANA' | 'TAXPRO' | 'RECONCILE' | 'JIO_GST';
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public fireReconcileRequest: EventEmitter<boolean> = new EventEmitter(true);
@@ -25,20 +24,16 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
     @Input() public activeCompanyGstNumber = '';
     @Input() public returnType: string;
     @Output() public cancelConfirmationEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     @Input() public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-
     public taxProForm: GstSaveGspSessionRequest = new GstSaveGspSessionRequest();
     public reconcileForm: any = {};
-
     public saveGspSessionInProcess = false;
     public otpSentSuccessFully = false;
-
     public authorizeGspSessionOtpInProcess = false;
     public gspSessionOtpAuthorized = false;
-
     public reconcileOtpInProcess$: Observable<boolean>;
     public reconcileOtpSuccess$: Observable<boolean>;
     public reconcileOtpVerifyInProcess$: Observable<boolean>;
@@ -58,22 +53,18 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
     public get GstReport() {
         return GstReport;
     }
-
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
         private store: Store<AppState>,
         private gstReconcileActions: GstReconcileActions,
-        private _toaster: ToasterService
+        private toaster: ToasterService
     ) {
-
         this.reconcileOtpInProcess$ = this.store.pipe(select(p => p.gstReconcile.isGenerateOtpInProcess), takeUntil(this.destroyed$));
         this.reconcileOtpSuccess$ = this.store.pipe(select(p => p.gstReconcile.isGenerateOtpSuccess), takeUntil(this.destroyed$));
         this.reconcileOtpVerifyInProcess$ = this.store.pipe(select(p => p.gstReconcile.isGstReconcileVerifyOtpInProcess), takeUntil(this.destroyed$));
         this.reconcileOtpVerifySuccess$ = this.store.pipe(select(p => p.gstReconcile.isGstReconcileVerifyOtpSuccess), takeUntil(this.destroyed$));
-
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
-
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(pro => {
             if (pro && pro.addresses) {
                 const gstNo = pro.addresses.filter(f => {
@@ -175,7 +166,7 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
             this.store.dispatch(this.gstReconcileActions.SaveGSPSession(this.taxProForm));
         } else if ((this.selectedService === 'TAXPRO' || this.selectedService === 'VAYANA') && this.otpSentSuccessFully) {
             if (!(/^(?!\s*$).+/g.test(this.taxProForm.otp))) {
-                this._toaster.errorToast(this.localeData?.aside_menu?.otp_required_error);
+                this.toaster.errorToast(this.localeData?.aside_menu?.otp_required_error);
                 return;
             }
             this.store.dispatch(this.gstReconcileActions.SaveGSPSessionWithOTP(this.taxProForm));
@@ -199,7 +190,7 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
     public submitGstReturn() {
         this.submitGstForm.isAccepted = true;
         if (this.submitGstForm.txtVal.toLowerCase() !== 'SUBMIT'.toLowerCase()) {
-            this._toaster.errorToast(this.localeData?.aside_menu?.submit_gst_error);
+            this.toaster.errorToast(this.localeData?.aside_menu?.submit_gst_error);
             return;
         }
         this.fileGst.emit(true);

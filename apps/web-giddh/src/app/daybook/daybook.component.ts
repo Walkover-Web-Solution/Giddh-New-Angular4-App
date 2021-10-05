@@ -159,7 +159,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
 
         this.store.pipe(
-            select(appState => appState.session.activeCompany), take(1)
+            select(appState => appState.session.activeCompany), takeUntil(this.destroyed$)
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });

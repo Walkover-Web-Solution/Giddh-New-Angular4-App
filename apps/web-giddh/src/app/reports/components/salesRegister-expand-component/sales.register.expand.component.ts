@@ -75,7 +75,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.imgPath = (isElectron || isCordova) ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
         this.getDetailedsalesRequestFilter.page = 1;
-        this.getDetailedsalesRequestFilter.count = 50;
+        this.getDetailedsalesRequestFilter.count = this.paginationLimit;
         this.getDetailedsalesRequestFilter.q = '';
 
         this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
@@ -100,7 +100,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
                 _.map(this.SalesRegisteDetailedItems.items, (obj: any) => {
                     obj.date = this.getDateToDMY(obj.date);
                 });
-                if (this.voucherNumberInput.value) {
+                if (this.voucherNumberInput?.value) {
                     setTimeout(() => {
                         if (this.invoiceSearch && this.invoiceSearch.nativeElement) {
                             this.invoiceSearch.nativeElement.focus();
@@ -112,7 +112,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
 
         });
 
-        this.voucherNumberInput.valueChanges.pipe(
+        this.voucherNumberInput?.valueChanges?.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$)

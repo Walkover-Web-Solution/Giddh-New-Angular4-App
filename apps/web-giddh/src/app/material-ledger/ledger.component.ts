@@ -503,7 +503,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(
-            select(appState => appState.session.activeCompany), take(1)
+            select(appState => appState.session.activeCompany), takeUntil(this.destroyed$)
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
@@ -640,6 +640,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.currencyTogglerModel = false;
 
             if (params['accountUniqueName']) {
+                this.isShowLedgerColumnarReportTable = false;
                 this.lc.accountUnq = params['accountUniqueName'];
                 this.needToShowLoader = true;
                 this.searchText = '';
@@ -805,9 +806,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     private assignPrefixAndSuffixForCurrency() {
-        this.isPrefixAppliedForCurrency = this.isPrefixAppliedForCurrency = !(['AED'].includes(this.selectedCurrency === 0 ? this.baseCurrencyDetails.code : this.foreignCurrencyDetails.code));
-        this.selectedPrefixForCurrency = this.isPrefixAppliedForCurrency ? this.selectedCurrency === 0 ? this.baseCurrencyDetails.symbol : this.foreignCurrencyDetails.symbol : '';
-        this.selectedSuffixForCurrency = this.isPrefixAppliedForCurrency ? '' : this.selectedCurrency === 0 ? this.baseCurrencyDetails.symbol : this.foreignCurrencyDetails.symbol;
+        this.isPrefixAppliedForCurrency = this.isPrefixAppliedForCurrency = !(['AED'].includes(this.selectedCurrency === 0 ? this.baseCurrencyDetails?.code : this.foreignCurrencyDetails?.code));
+        this.selectedPrefixForCurrency = this.isPrefixAppliedForCurrency ? this.selectedCurrency === 0 ? this.baseCurrencyDetails?.symbol : this.foreignCurrencyDetails?.symbol : '';
+        this.selectedSuffixForCurrency = this.isPrefixAppliedForCurrency ? '' : this.selectedCurrency === 0 ? this.baseCurrencyDetails?.symbol : this.foreignCurrencyDetails?.symbol;
     }
 
     public initTrxRequest(accountUnq: string) {
@@ -856,18 +857,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public showBankLedgerPopup(txn: TransactionVM, item: BlankLedgerVM) {
         this.selectBankTxn(txn);
         this.lc.currentBankEntry = item;
-        if(txn.particular) {
-            this.lc.showBankLedgerPanel = true;
-        } else {
-            this.lc.showBankLedgerPanel = false;
-        }
+        this.lc.showBankLedgerPanel = true;
     }
 
     public hideBankLedgerPopup(event?: any) {
         if(this.isDatepickerOpen) {
             return;
         }
-        
+
         if (!event) {
             this.getBankTransactions();
             this.getTransactionData();
@@ -954,7 +951,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public getTransactionData() {
-        this.isAdvanceSearchImplemented = false;
         this.closingBalanceBeforeReconcile = null;
         this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
         this.store.dispatch(this.ledgerActions.GetTransactions(this.trxRequest));
@@ -964,11 +960,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let from: string;
         let to: string;
         if (mode === 'blankLedger') {
-            from = (this.lc.blankLedger.selectedCurrencyToDisplay === 0 ? this.lc.blankLedger.baseCurrencyToDisplay.code : this.lc.blankLedger.foreignCurrencyToDisplay.code);
-            to = (this.lc.blankLedger.selectedCurrencyToDisplay === 0 ? this.lc.blankLedger.foreignCurrencyToDisplay.code : this.lc.blankLedger.baseCurrencyToDisplay.code);
+            from = (this.lc.blankLedger.selectedCurrencyToDisplay === 0 ? this.lc.blankLedger.baseCurrencyToDisplay?.code : this.lc.blankLedger.foreignCurrencyToDisplay?.code);
+            to = (this.lc.blankLedger.selectedCurrencyToDisplay === 0 ? this.lc.blankLedger.foreignCurrencyToDisplay?.code : this.lc.blankLedger.baseCurrencyToDisplay?.code);
         } else {
-            from = this.selectedCurrency === 0 ? this.baseCurrencyDetails.code : this.foreignCurrencyDetails.code;
-            to = this.selectedCurrency === 0 ? this.foreignCurrencyDetails.code : this.baseCurrencyDetails.code;
+            from = this.selectedCurrency === 0 ? this.baseCurrencyDetails?.code : this.foreignCurrencyDetails?.code;
+            to = this.selectedCurrency === 0 ? this.foreignCurrencyDetails?.code : this.baseCurrencyDetails?.code;
         }
         if (from && to) {
             let date = moment().format(GIDDH_DATE_FORMAT);
@@ -1044,37 +1040,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public resetBlankTransaction() {
-        this.lc.blankLedger = {
-            transactions:
-                (this.currentOrganizationType === OrganizationType.Branch ||
-                    (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) ? [ // Add the blank transaction only if it is branch mode or company with single branch
-                    this.lc.addNewTransaction('DEBIT'),
-                    this.lc.addNewTransaction('CREDIT')
-                ] : [],
-            voucherType: null,
-            entryDate: this.selectedDateRange?.endDate ? moment(this.selectedDateRange.endDate).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT),
-            unconfirmedEntry: false,
-            attachedFile: '',
-            attachedFileName: '',
-            tag: null,
-            description: '',
-            generateInvoice: false,
-            chequeNumber: '',
-            chequeClearanceDate: '',
-            invoiceNumberAgainstVoucher: '',
-            compoundTotal: 0,
-            convertedCompoundTotal: 0,
-            invoicesToBePaid: [],
-            otherTaxModal: new SalesOtherTaxesModal(),
-            otherTaxesSum: 0,
-            tdsTcsTaxesSum: 0,
-            otherTaxType: 'tcs',
-            exchangeRate: 1,
-            valuesInAccountCurrency: (this.selectedCurrency === 0),
-            selectedCurrencyToDisplay: this.selectedCurrency,
-            baseCurrencyToDisplay: cloneDeep(this.baseCurrencyDetails),
-            foreignCurrencyToDisplay: cloneDeep(this.foreignCurrencyDetails)
-        };
+        this.lc.blankLedger = this.lc.getBlankLedger();
+        this.lc.blankLedger.transactions =
+            (this.currentOrganizationType === OrganizationType.Branch ||
+                (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) ? [ // Add the blank transaction only if it is branch mode or company with single branch
+                this.lc.addNewTransaction('DEBIT'),
+                this.lc.addNewTransaction('CREDIT')
+            ] : [];
+        this.lc.blankLedger.voucherType = null;
+        this.lc.blankLedger.entryDate = this.selectedDateRange?.endDate ? moment(this.selectedDateRange.endDate).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
+        this.lc.blankLedger.valuesInAccountCurrency = (this.selectedCurrency === 0);
+        this.lc.blankLedger.selectedCurrencyToDisplay = this.selectedCurrency;
+        this.lc.blankLedger.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
+        this.lc.blankLedger.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
         this.shouldShowRcmTaxableAmount = false;
         this.shouldShowItcSection = false;
         this.isMoreDetailsOpened = false;
@@ -1817,6 +1795,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.advanceSearchRequest.accountUniqueName, from, to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, null, this.advanceSearchRequest.branchUniqueName)
             );
         }
+        this.cdRf.detectChanges();
     }
 
     public getInvoiceLists(request) {
@@ -1830,9 +1809,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public keydownPressed(e) {
-        if (e.code === 'ArrowDown') {
+        if (e?.code === 'ArrowDown') {
             this.keydownClassAdded = true;
-        } else if (e.code === 'Enter' && this.keydownClassAdded) {
+        } else if (e?.code === 'Enter' && this.keydownClassAdded) {
             this.keydownClassAdded = true;
             this.toggleAsidePane();
         } else {

@@ -391,9 +391,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         }
         if (dbResult) {
             if (window.innerWidth > 1440 && window.innerHeight > 717) {
-                this.accountItemsFromIndexDB = (dbResult && dbResult.aidata) ? slice(dbResult.aidata.accounts, 0, 7) : [];
+                this.accountItemsFromIndexDB = (dbResult && dbResult?.aidata) ? slice(dbResult.aidata.accounts, 0, 7) : [];
             } else {
-                this.accountItemsFromIndexDB = (dbResult && dbResult.aidata) ? slice(dbResult.aidata.accounts, 0, 5) : [];
+                this.accountItemsFromIndexDB = (dbResult && dbResult?.aidata) ? slice(dbResult.aidata.accounts, 0, 5) : [];
             }
         } else {
             if (!this.activeCompanyForDb) {
@@ -646,12 +646,12 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      */
     public toggleBodyClass() {
         if (this.accountAsideMenuState === 'in') {
-            document.querySelector('body').classList.add('fixed');
+            document.querySelector('body')?.classList?.add('fixed');
             if(document.getElementsByClassName("gst-sidebar-open")?.length > 0) {
                 document.querySelector(".nav-left-bar").classList.add("create-account");
             }
         } else {
-            document.querySelector('body').classList.remove('fixed');
+            document.querySelector('body')?.classList?.remove('fixed');
             document.querySelector(".nav-left-bar").classList.remove("create-account");
         }
     }

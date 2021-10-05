@@ -1,10 +1,8 @@
 import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpWrapperService } from './httpWrapper.service';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { UserDetails } from '../models/api-models/loginModels';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { TB_PL_BS_API } from './apiurls/tl-pl.api';
 import { AccountDetails, BalanceSheetRequest, GetCogsRequest, GetCogsResponse, ProfitLossRequest, TrialBalanceExportExcelRequest, TrialBalanceRequest } from '../models/api-models/tb-pl-bs';
@@ -15,18 +13,16 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 @Injectable()
 export class TlPlService {
     private companyUniqueName: string;
-    private user: UserDetails;
 
-    constructor(private errorHandler: GiddhErrorHandler, public _http: HttpWrapperService, public _router: Router,
-        private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    constructor(private errorHandler: GiddhErrorHandler, public http: HttpWrapperService,
+        private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
     /**
      * Get Trial Balance
      */
     public GetTrailBalance(request: TrialBalanceRequest): Observable<BaseResponse<AccountDetails, TrialBalanceRequest>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
         let params: any = { from: request.from, to: request.to, refresh: request.refresh };
         if (request.tagName) {
             params.tagName = request.tagName;
@@ -36,7 +32,7 @@ export class TlPlService {
         } else {
             params.branchUniqueName = '';
         }
-        return this._http.get(this.config.apiUrl + TB_PL_BS_API.GET_TRIAL_BALANCE
+        return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_TRIAL_BALANCE
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), params).pipe(
                 map((res) => {
                     let data: BaseResponse<AccountDetails, TrialBalanceRequest> = res;
@@ -50,8 +46,7 @@ export class TlPlService {
      * Get V2 Trial Balance
      */
     public GetV2TrailBalance(request: TrialBalanceRequest): Observable<BaseResponse<AccountDetails, TrialBalanceRequest>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
         let params: any = { from: request.from, to: request.to, refresh: request.refresh };
         if (request.tagName) {
             params.tagName = request.tagName;
@@ -61,7 +56,7 @@ export class TlPlService {
         } else {
             params.branchUniqueName = '';
         }
-        return this._http.get(this.config.apiUrl + TB_PL_BS_API.GET_V2_TRIAL_BALANCE
+        return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_V2_TRIAL_BALANCE
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), params).pipe(
                 map((res) => {
                     let data: BaseResponse<AccountDetails, TrialBalanceRequest> = res;
@@ -75,8 +70,7 @@ export class TlPlService {
      * get Profit/Loss
      */
     public GetProfitLoss(request: ProfitLossRequest): Observable<BaseResponse<AccountDetails, ProfitLossRequest>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
         if (request.branchUniqueName && request.branchUniqueName === this.companyUniqueName) {
             delete request.branchUniqueName;
         }
@@ -84,7 +78,7 @@ export class TlPlService {
             .filter(p => request[p] != null)
             .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
 
-        return this._http.get(this.config.apiUrl + TB_PL_BS_API.GET_PROFIT_LOSS
+        return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_PROFIT_LOSS
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<AccountDetails, ProfitLossRequest> = res;
@@ -98,13 +92,12 @@ export class TlPlService {
      * get Profit/Loss
      */
     public GetCogs(request: GetCogsRequest): Observable<BaseResponse<GetCogsResponse, GetCogsRequest>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
         let filteredRequest = (Object.keys(request)
             .filter(p => request[p] != null)
             .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
 
-        return this._http.get(this.config.apiUrl + TB_PL_BS_API.GET_COGS
+        return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_COGS
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<GetCogsResponse, GetCogsRequest> = res;
@@ -118,8 +111,7 @@ export class TlPlService {
      * get BalanceSheet
      */
     public GetBalanceSheet(request: BalanceSheetRequest): Observable<BaseResponse<AccountDetails, BalanceSheetRequest>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
         if (request.branchUniqueName && request.branchUniqueName === this.companyUniqueName) {
             delete request.branchUniqueName;
         }
@@ -127,7 +119,7 @@ export class TlPlService {
             .filter(p => request[p] != null)
             .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
 
-        return this._http.get(this.config.apiUrl + TB_PL_BS_API.GET_BALANCE_SHEET
+        return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_BALANCE_SHEET
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<AccountDetails, BalanceSheetRequest> = res;
@@ -138,13 +130,12 @@ export class TlPlService {
     }
 
     public DownloadTrialBalanceExcel(request: TrialBalanceExportExcelRequest): Observable<BaseResponse<any, any>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
 
-        return this._http.get(this.config.apiUrl + TB_PL_BS_API.DOWNLOAD_TRIAL_BALANCE_EXCEL
+        return this.http.get(this.config.apiUrl + TB_PL_BS_API.DOWNLOAD_TRIAL_BALANCE_EXCEL
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), request).pipe(
                 map((res) => {
-                    let data = this._generalService.base64ToBlob(res.body, 'application/xml', 512);
+                    let data = this.generalService.base64ToBlob(res.body, 'application/xml', 512);
                     saveAs(data, request.filename);
                     return res;
                 }),
@@ -152,8 +143,7 @@ export class TlPlService {
     }
 
     public DownloadBalanceSheetExcel(request: ProfitLossRequest): Observable<BaseResponse<any, any>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
         if (request.branchUniqueName && request.branchUniqueName === this.companyUniqueName) {
             delete request.branchUniqueName;
         }
@@ -161,10 +151,10 @@ export class TlPlService {
             .filter(p => request[p] != null)
             .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
 
-        return this._http.get(this.config.apiUrl + TB_PL_BS_API.DOWNLOAD_BALANCE_SHEET_EXCEL
+        return this.http.get(this.config.apiUrl + TB_PL_BS_API.DOWNLOAD_BALANCE_SHEET_EXCEL
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
                 map((res) => {
-                    let data = this._generalService.base64ToBlob(res.body, 'application/xml', 512);
+                    let data = this.generalService.base64ToBlob(res.body, 'application/xml', 512);
                     saveAs(data, request.filename);
                     return res;
                 }),
@@ -172,8 +162,7 @@ export class TlPlService {
     }
 
     public DownloadProfitLossExcel(request: ProfitLossRequest): Observable<BaseResponse<any, any>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
         if (request.branchUniqueName && request.branchUniqueName === this.companyUniqueName) {
             delete request.branchUniqueName;
         }
@@ -181,10 +170,10 @@ export class TlPlService {
             .filter(p => request[p] != null)
             .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
 
-        return this._http.get(this.config.apiUrl + TB_PL_BS_API.DOWNLOAD_PROFIT_LOSS_EXCEL
+        return this.http.get(this.config.apiUrl + TB_PL_BS_API.DOWNLOAD_PROFIT_LOSS_EXCEL
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
                 map((res) => {
-                    let data = this._generalService.base64ToBlob(res.body, 'application/xml', 512);
+                    let data = this.generalService.base64ToBlob(res.body, 'application/xml', 512);
                     saveAs(data, request.filename);
                     return res;
                 }),

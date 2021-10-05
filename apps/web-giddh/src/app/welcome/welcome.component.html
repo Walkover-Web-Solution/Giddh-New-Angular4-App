@@ -187,7 +187,7 @@
                             >
                                 <div class="clearfix">
                                     <label for="gstinNum" class="d-block"
-                                        >{{ formFields["taxName"].label }}<sup class="text-danger">*</sup></label
+                                        >{{ formFields["taxName"]?.label }}<sup class="text-danger">*</sup></label
                                     >
                                     <input
                                         type="text"
@@ -257,9 +257,9 @@
                                                 <input
                                                     type="checkbox"
                                                     (click)="selectApplicableTaxes(tax, $event)"
-                                                    [checked]="tax.isSelected"
+                                                    [checked]="tax?.isSelected"
                                                 />
-                                                {{ tax.label }}
+                                                {{ tax?.label }}
                                             </li>
                                         </ul>
                                     </div>

@@ -15,9 +15,9 @@ export class PurchaseRecordService {
 
     /** @ignore */
     constructor(
-        private _http: HttpWrapperService,
+        private http: HttpWrapperService,
         private errorHandler: GiddhErrorHandler,
-        private _generalService: GeneralService,
+        private generalService: GeneralService,
         @Optional() @Inject(ServiceConfig)
         private config: IServiceConfigArgs
     ) { }
@@ -35,16 +35,16 @@ export class PurchaseRecordService {
         // TODO: Add patch integration once the API is ready
         if (method === 'POST') {
             const contextPath: string =
-                `${this.config.apiUrl}${PURCHASE_RECORD_API.GENERATE.replace(':companyUniqueName', this._generalService.companyUniqueName).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))}`;
-            return this._http.post(contextPath, requestObject).pipe(
+                `${this.config.apiUrl}${PURCHASE_RECORD_API.GENERATE.replace(':companyUniqueName', this.generalService.companyUniqueName).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))}`;
+            return this.http.post(contextPath, requestObject).pipe(
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
         } else if (method === 'PATCH') {
             if (updateAttachment) {
                 delete requestObject.account;
             }
             const contextPath: string =
-                `${this.config.apiUrl}${PURCHASE_RECORD_API.UPDATE.replace(':companyUniqueName', this._generalService.companyUniqueName).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))}`;
-            return this._http.patch(contextPath, requestObject).pipe(
+                `${this.config.apiUrl}${PURCHASE_RECORD_API.UPDATE.replace(':companyUniqueName', this.generalService.companyUniqueName).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))}`;
+            return this.http.patch(contextPath, requestObject).pipe(
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
         }
     }
@@ -59,9 +59,9 @@ export class PurchaseRecordService {
     public downloadAttachedFile(requestObject: any): Observable<BaseResponse<PurchaseRecordAttachmentResponse, any>> {
         const { accountUniqueName, purchaseRecordUniqueName } = requestObject;
         const contextPath: string =
-            `${this.config.apiUrl}${PURCHASE_RECORD_API.DOWNLOAD_ATTACHMENT.replace(':companyUniqueName', this._generalService.companyUniqueName)
+            `${this.config.apiUrl}${PURCHASE_RECORD_API.DOWNLOAD_ATTACHMENT.replace(':companyUniqueName', this.generalService.companyUniqueName)
                 .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))}`;
-        return this._http.get(contextPath, { uniqueName: purchaseRecordUniqueName }).pipe(
+        return this.http.get(contextPath, { uniqueName: purchaseRecordUniqueName }).pipe(
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
     }
 
@@ -78,10 +78,10 @@ export class PurchaseRecordService {
     public validatePurchaseRecord(requestObject: any): Observable<BaseResponse<any, any>> {
         const { accountUniqueName } = requestObject;
         const contextPath: string =
-            `${this.config.apiUrl}${PURCHASE_RECORD_API.VALIDATE_RECORD.replace(':companyUniqueName', this._generalService.companyUniqueName)
+            `${this.config.apiUrl}${PURCHASE_RECORD_API.VALIDATE_RECORD.replace(':companyUniqueName', this.generalService.companyUniqueName)
                 .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))}`;
         delete requestObject.accountUniqueName;
-        return this._http.get(contextPath, requestObject).pipe(
+        return this.http.get(contextPath, requestObject).pipe(
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
     }
 
@@ -94,8 +94,8 @@ export class PurchaseRecordService {
      */
     public deletePurchaseRecord(requestObject: any): Observable<BaseResponse<any, any>> {
         const contextPath: string =
-            `${this.config.apiUrl}${PURCHASE_RECORD_API.DELETE.replace(':companyUniqueName', this._generalService.companyUniqueName).replace(':uniqueName', requestObject.uniqueName)}`;
-        return this._http.delete(contextPath).pipe(
+            `${this.config.apiUrl}${PURCHASE_RECORD_API.DELETE.replace(':companyUniqueName', this.generalService.companyUniqueName).replace(':uniqueName', requestObject.uniqueName)}`;
+        return this.http.delete(contextPath).pipe(
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
     }
 
@@ -114,7 +114,7 @@ export class PurchaseRecordService {
         url = url.replace(':page', getRequestObject.page);
         url = url.replace(':count', getRequestObject.count);
 
-        return this._http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
+        return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
 
     /**
@@ -131,7 +131,7 @@ export class PurchaseRecordService {
         url = url.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
         url = url.replace(':uniqueName', getRequestObject.uniqueName);
 
-        return this._http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
+        return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
 
     /**
@@ -147,7 +147,7 @@ export class PurchaseRecordService {
         url = url.replace(':accountUniqueName', encodeURIComponent(requestObject.accountUniqueName));
         url = url.replace(':uniqueName', requestObject.uniqueName);
 
-        return this._http.get(url).pipe(
+        return this.http.get(url).pipe(
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
     }
 }

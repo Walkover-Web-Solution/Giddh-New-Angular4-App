@@ -422,7 +422,6 @@
     "app_due_amount": "देय रक्कम",
     "app_enter_otp": "ओटीपी प्रविष्ट करा",
     "app_resend": "पुन्हा पाठवा",
-    "app_cancel_otp": "OTP रद्द करा",
     "app_payment_proceed": "देयक पुढे",
     "app_clear": "साफ",
     "app_custom": "सानुकूल",
@@ -656,5 +655,6 @@
         "weekly": "साप्ताहिक",
         "monthly": "मासिक",
         "unlimited": "अमर्यादित"
-    }
+    },
+    "app_create_custom_field": "सानुकूल फील्डस तयार करा"
 }

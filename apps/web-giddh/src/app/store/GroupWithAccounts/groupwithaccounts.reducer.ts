@@ -53,6 +53,7 @@ export interface CurrentGroupAndAccountState {
     newlyCreatedAccount: INameUniqueName;
     isDeleteAccInProcess: boolean;
     isDeleteAccSuccess: boolean;
+    activeTab: number;
 }
 
 const prepare = (mockData: GroupsWithAccountsResponse[]): GroupsWithAccountsResponse[] => {
@@ -107,7 +108,8 @@ const initialState: CurrentGroupAndAccountState = {
     isMoveGroupInProcess: false,
     isAddAndManageOpenedFromOutside: false,
     isDeleteAccSuccess: false,
-    isDeleteAccInProcess: false
+    isDeleteAccInProcess: false,
+    activeTab: 0
 };
 
 export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = initialState, action: CustomActions): CurrentGroupAndAccountState {
@@ -153,7 +155,8 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         case GroupWithAccountsAction.HIDE_ADD_AND_MANAGE_FROM_OUTSIDE: {
             return Object.assign({}, state, {
                 groupAndAccountSearchString: '',
-                isAddAndManageOpenedFromOutside: false
+                isAddAndManageOpenedFromOutside: false,
+                activeTab: 0
             });
         }
         case GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS_RESPONSE:
@@ -579,6 +582,11 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                 ...state,
                 isMoveGroupSuccess: false
             };
+        case GroupWithAccountsAction.UPDATE_ACTIVE_TAB_ADD_AND_MANAGE: {
+            return Object.assign({}, state, {
+                activeTab: action.payload
+            });
+        }    
         default: {
             return state;
         }
