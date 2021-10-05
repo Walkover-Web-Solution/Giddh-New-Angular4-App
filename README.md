@@ -12,6 +12,40 @@
 
 5. Run `npm run start` to local serve the project.
 
+# Contributing Guide
+
+Before contributing it is required that you should have a proper knowledge of Git. If you're unfamiliar with Git you should first visit the recommended [Udacity Git course](https://blog.udacity.com/2015/06/a-beginners-git-github-tutorial.html).
+
+Giddh has 4 environments `TEST`, `STAGE`, `BETA` and `PROD`. Any feature/bug needs to be deployed  first on `TEST` env. for testing, once the feature/bug is ready for production it needs to be deployed on rest of the higher environments. Below is the flow that any new feature/bug needs to cover in order for it to be marked as complete:
+
+`feature/bug` --> `giddh-2.0` --> `beta-stage` --> `beta-branch` --> `production`
+
+Branch `beta-stage` is considered to be the parent branch of all the new branches. This is the clean branch for development. **Every contributor is required to check out their new branch from this branch only for both feature & bug**.
+
+**Feature F1 deployment cycle**:
+1. Checkout a new branch named `<card-id>-stage` (where `<card-id>` needs to be replaced by Clickup card ID) from `beta-stage`. For eg: `dtqvbd-stage`
+2. Complete your development on branch `dtqvbd-stage`
+3. Proceed to deployment of `dtqvbd-stage` to `giddh-2.0` (TEST env.)
+4. If conflicts occur follow below rules as per your scenario:
+    1. If PR from `dtqvbd-stage` -> `giddh-2.0` has conflict -> Checkout a new branch `dtqvbd-test` from `giddh-2.0` and take a pull from `dtqvbd-stage` and resolve conflicts in branch `dtqvbd-test`; raise PR from `dtqvbd-test` to `giddh-2.0`
+    2. If PR from `dtqvbd-stage` -> `beta-stage` has conflict -> Take a pull from `beta-stage` to branch `dtqvbd-stage` and resolve conflicts in it; raise PR from `dtqvbd-stage` -> `beta-stage`
+    3. If PR from `beta-stage` -> `beta-branch` has conflict -> Checkout a new branch `dtqvbd-beta` from `beta-branch` and take a pull from `beta-stage`; raise PR from `dtqvbd-beta` to `beta-branch`
+    4. If PR from `beta-branch` -> `production` has conflict -> Checkout a new branch `dtqvbd-prod` from `production` and take a pull from `beta-branch`; raise PR from `dtqvbd-prod` to `production`
+    5. <u>**IN NO CASE YOUR BRANCH `dtqvbd-stage` SHOULD TAKE A PULL FROM `giddh-2.0` AND RESOLVING MERGE CONFLICTS DIRECTLY ON GITHUB IS STRICTLY PROHIBITED**</u>
+5. Once PR is merged, provide your feature/bug on TEST env. for testing to tester
+6. If issues are raised in testing: tester raises issue **I1** for developer; **F1** card is assigned back to the developer for issue fixing
+7. **I1** issue should be fixed on `dtqvbd-stage` by developer:
+        if branch `dtqvbd-stage` has conflict with `giddh-2.0` -> follow **Step 4.1** above
+8. **I1** is tested and **F1** card is READY FOR PROD; raise PR from `dtqvbd-stage` -> `beta-stage`
+9. Once `dtqvbd-stage` is merged to `beta-stage`, raise PR from `beta-stage` to `beta-branch` (follow **Step 4** above in case of merge conflicts)
+10. Once `beta-stage` is merged to `beta-branch`, raise PR from  `beta-branch` to `production` (follow **Step 4** above in case of merge conflicts)
+
+All of the changes **must be present on a single branch `<card-id>-stage`** which will act as a <u>**single source of truth**</u> for that feature/bug for other branches
+
+`dtqvbd-stage` -> `beta-stage` -> `beta-branch` -> `production`
+
+If you face any issues in the understanding of contributing guideline then please reach out to other contributors first than trying it out for yourself. If you have any suggestions for the improvement of this guideline then also you're welcome :)
+
 # Angular Style Guide
 
 This is a guide to Angular syntax, conventions, and application structure. This style guide presents preferred conventions to write scalable Angular Apps with syntax that is easy to read, understand, and navigate through.
