@@ -165,7 +165,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 each(companies, (cmp) => {
                     each(cmp.userEntityRoles, (company) => {
                         if (company.entity.entity === 'COMPANY' && company.role.uniqueName === 'super_admin') {
-                            if (branches && branches.length) {
+                            if (branches?.length) {
                                 let existIndx = branches.findIndex((b) => b.uniqueName === cmp.uniqueName);
                                 if (existIndx === -1) {
                                     companiesWithSuperAdminRole.push(cmp);
@@ -368,7 +368,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
     private isAllCompaniesSelected() {
         this.companies$.pipe(take(1)).subscribe((companies) => {
-            if (companies.length === this.selectedCompaniesUniquename.length) {
+            if (companies?.length === this.selectedCompaniesUniquename?.length) {
                 this.isAllSelected$ = observableOf(true);
             } else {
                 this.isAllSelected$ = observableOf(false);
