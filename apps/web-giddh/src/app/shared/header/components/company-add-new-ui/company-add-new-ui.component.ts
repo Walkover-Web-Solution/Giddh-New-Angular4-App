@@ -182,7 +182,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             if (res) {
                 if (res.contactNo.includes('-')) {
                     const contactNumber = res.contactNo.split('-');
-                    if (contactNumber.length > 1) {
+                    if (contactNumber?.length > 1) {
                         res.contactNo = contactNumber[1];
                     }
                 }

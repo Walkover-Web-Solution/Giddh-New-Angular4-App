@@ -345,9 +345,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         let gstNumber;
         let isValid;
         if (addresses && addresses.length) {
-            gstNumber = addresses[addresses.length - 1].taxNumber;
+            gstNumber = addresses[addresses?.length - 1].taxNumber;
 
-            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
+            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
                     if (regex.test(gstNumber)) {
@@ -391,7 +391,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     public updateProfile(data) {
         let dataToSave = cloneDeep(data);
-        if (dataToSave.addresses.length > 0) {
+        if (dataToSave?.addresses?.length > 0) {
             for (let entry of dataToSave.addresses) {
                 if (!entry.taxNumber && !entry.stateCode && !entry.address) {
                     dataToSave.addresses = without(dataToSave.addresses, entry);
@@ -454,7 +454,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public checkGstNumValidation(ele: HTMLInputElement) {
         let isValid: boolean = false;
         if (ele.value) {
-            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
+            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
                     if (regex.test(ele.value)) {
@@ -485,7 +485,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     public setChildState(ele: HTMLInputElement, index: number) {
         let gstVal: string = ele.value;
-        if (gstVal.length >= 2) {
+        if (gstVal?.length >= 2) {
             this.statesSource$.pipe(take(1)).subscribe(state => {
                 let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
                 let s = state.find(st => st.value === stateCode);
@@ -542,7 +542,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     }
 
     public onToggleAllGSTDetails() {
-        if ((this.companyProfileObj.addresses.length === this.gstDetailsBackup.length) && (this.gstDetailsBackup.length === 3)) {
+        if ((this.companyProfileObj.addresses?.length === this.gstDetailsBackup?.length) && (this.gstDetailsBackup?.length === 3)) {
             this.gstDetailsBackup = null;
         } else {
             this.showAllGST = !this.showAllGST;
@@ -1090,7 +1090,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             this.companyProfileObj.balanceDecimalPlaces = String(profileObj.balanceDecimalPlaces);
 
             if (profileObj && profileObj.country) {
-                if (profileObj.countryV2 !== undefined && this.states.length === 0) {
+                if (profileObj?.countryV2 !== undefined && this.states?.length === 0) {
                     this.getStates(profileObj.countryV2.alpha2CountryCode);
                     this.getOnboardingForm(profileObj.countryV2.alpha2CountryCode);
                 }
