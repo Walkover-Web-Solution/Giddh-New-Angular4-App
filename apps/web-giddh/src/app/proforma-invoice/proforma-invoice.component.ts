@@ -7178,6 +7178,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, 2);
             }
         }
+        this._cdr.detectChanges();
     }
 
     /**
