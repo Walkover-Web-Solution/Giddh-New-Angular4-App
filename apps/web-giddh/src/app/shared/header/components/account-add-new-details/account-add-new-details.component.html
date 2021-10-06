@@ -384,7 +384,7 @@
                                     class="row"
                                     *ngIf="
                                         l &&
-                                        addAccountForm.get('addresses')['controls'].length > 3 &&
+                                        addAccountForm.get('addresses')['controls']?.length > 3 &&
                                         !moreGstDetailsVisible
                                     "
                                 >
@@ -393,7 +393,7 @@
                                         class="text-left col-6 cursor-pointer"
                                         (click)="showMoreGst()"
                                         >{{ commonLocaleData?.app_show_all }} ({{
-                                            addAccountForm.get("addresses")["controls"].length
+                                            addAccountForm.get("addresses")["controls"]?.length
                                         }})</a
                                     >
                                     <a

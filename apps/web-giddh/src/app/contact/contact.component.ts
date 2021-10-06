@@ -719,9 +719,9 @@ export class ContactComponent implements OnInit, OnDestroy {
         let end = el.selectionEnd;
         let text = el.value;
         let before = text.substring(0, start);
-        let after = text.substring(end, text.length);
+        let after = text.substring(end, text?.length);
         el.value = (before + newText + after);
-        el.selectionStart = el.selectionEnd = start + newText.length;
+        el.selectionStart = el.selectionEnd = start + newText?.length;
         el.focus();
         this.messageBody.msg = el.value;
     }
@@ -887,7 +887,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         if (!ev.target.checked) {
             this.checkboxInfo[this.checkboxInfo.selectedPage] = false;
             this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
-            if (this.selectedCheckedContacts.length === 0) {
+            if (this.selectedCheckedContacts?.length === 0) {
                 this.selectAllCustomer = false;
                 this.selectAllVendor = false;
                 this.selectedWhileHovering = '';
@@ -1166,7 +1166,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     private setTableColspan() {
         let balancesColsArr = ['openingBalance'];
-        let length = Object.keys(this.showFieldFilter).filter(f => this.showFieldFilter[f]).filter(f => balancesColsArr.includes(f)).length;
+        let length = Object.keys(this.showFieldFilter).filter(f => this.showFieldFilter[f]).filter(f => balancesColsArr.includes(f))?.length;
         this.tableColsPan = length > 0 ? 4 : 3;
     }
 
@@ -1465,7 +1465,7 @@ export class ContactComponent implements OnInit, OnDestroy {
      public openBulkPaymentModal(template: TemplateRef<any>, item?: any): void {
         this.isBulkPaymentShow = true;
         this.selectedAccForPayment = null;
-        if (this.selectedAccountsList.length) {
+        if (this.selectedAccountsList?.length) {
             this.selectedAccountsList = this.selectedAccountsList.filter(itemObject => {
                 return itemObject.bankPaymentDetails === true;
             });
@@ -1473,19 +1473,19 @@ export class ContactComponent implements OnInit, OnDestroy {
                 return this.selectedAccountsList.indexOf(data) === index;
             });
         }
-        if (!this.selectedAccountsList.length && item) {
+        if (!this.selectedAccountsList?.length && item) {
             if (item.bankPaymentDetails) {
                 this.selectedAccForPayment = item;
             }
         }
-        if (this.selectedAccountsList.length < this.selectedCheckedContacts.length) {
+        if (this.selectedAccountsList?.length < this.selectedCheckedContacts?.length) {
             let message = this.localeData?.bank_transactions_message;
             message = message.replace("[SUCCESS]", this.selectedCheckedContacts.length - this.selectedAccountsList.length);
             message = message.replace("[TOTAL]", this.selectedCheckedContacts.length);
 
             this._toaster.infoToast(message);
         }
-        if (this.selectedAccountsList.length || this.selectedAccForPayment) {
+        if (this.selectedAccountsList?.length || this.selectedAccForPayment) {
             this.bulkPaymentModalRef = this.modalService.show(template,
                 Object.assign({}, { class: 'payment-modal modal-xl' })
             );

@@ -385,7 +385,7 @@
                                     class="row"
                                     *ngIf="
                                         l &&
-                                        addAccountForm.get('addresses')['controls'].length > 3 &&
+                                        addAccountForm.get('addresses')['controls']?.length > 3 &&
                                         !moreGstDetailsVisible
                                     "
                                 >
@@ -394,7 +394,7 @@
                                         class="text-left col-6 cursor-pointer"
                                         (click)="showMoreGst()"
                                         >{{ commonLocaleData?.app_show_all }} ({{
-                                            addAccountForm.get("addresses")["controls"].length
+                                            addAccountForm.get("addresses")["controls"]?.length
                                         }})</a
                                     >
                                     <a
@@ -870,7 +870,7 @@
                         <ul
                             class="accmerge mr-t1"
                             *ngIf="
-                                (activeAccount$ | async)?.mergedAccounts.split(',').length > 0 &&
+                                (activeAccount$ | async)?.mergedAccounts.split(',')?.length > 0 &&
                                 (activeAccount$ | async)?.mergedAccounts.split(',')[0] !== ''
                             "
                         >
@@ -941,7 +941,7 @@
                             >{{ inAppDiscount.name }}
                         </span>
                     </div>
-                    <p *ngIf="!(activeAccount$ | async)?.inheritedDiscounts.length">
+                    <p *ngIf="!(activeAccount$ | async)?.inheritedDiscounts?.length">
                         {{ localeData?.no_inherited_discounts }}
                     </p>
                 </div>
@@ -1006,7 +1006,7 @@
                                     >{{ inAppTax.name }}
                                 </span>
                             </div>
-                            <p *ngIf="!(activeAccountTaxHierarchy$ | async)?.inheritedTaxes.length">
+                            <p *ngIf="!(activeAccountTaxHierarchy$ | async)?.inheritedTaxes?.length">
                                 {{ localeData?.no_inherited_taxes }}
                             </p>
                         </div>

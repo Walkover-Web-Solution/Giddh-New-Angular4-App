@@ -235,7 +235,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
                 if (response.status === 'success') {
                     this.customFieldForm.get('customField').reset();
                     let customFieldResponse = response.body;
-                    this.updateModeLength = customFieldResponse.length;
+                    this.updateModeLength = customFieldResponse?.length;
                     this.renderCustomField(customFieldResponse);
                     if (operationType === 'create') {
                         this.toasterService.successToast(this.localeData?.custom_field_created);
@@ -269,7 +269,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
             if (response) {
                 if (response.status === 'success') {
                     this.renderCustomField(response.body);
-                    this.updateModeLength = response.body.length;
+                    this.updateModeLength = response.body?.length;
                 } else if (response.message) {
                     this.toasterService.errorToast(response.message);
                 }
@@ -289,7 +289,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         let res: any[] = response;
         this.customFieldForm = this.createCustomFieldForm();
         const customRow = this.customFieldForm.get('customField') as FormArray;
-        if (res.length) {
+        if (res?.length) {
             res.map(item => {
                 item.isEditMode = true;
                 customRow.push(this.initNewCustomField(item));
@@ -359,12 +359,12 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public removeCustomFieldRow(index: number, isUpdate: boolean): void {
         if (!isUpdate) {
             const row = this.customFieldForm.get('customField') as FormArray;
-            if (row.length > 0) {
+            if (row?.length > 0) {
                 row.removeAt(index);
             }
         } else {
             const row = cloneDeep(this.customFieldForm.get('customField') as FormArray);
-            if (row.length > 0) {
+            if (row?.length > 0) {
                 row.removeAt(index);
             }
             let requestObject = {

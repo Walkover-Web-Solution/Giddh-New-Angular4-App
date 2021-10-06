@@ -123,7 +123,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this.isProdMode = PRODUCTION_ENV;
         this.getCountry();
         this.getCallingCodes();
-        
+
         this.imgPath = (isElectron || isCordova) ? '' : AppUrl + APP_FOLDER + '';
         this.logedInuser = this._generalService.user;
         if (this._generalService.createNewCompany) {
@@ -182,7 +182,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             if (res) {
                 if (res.contactNo.includes('-')) {
                     const contactNumber = res.contactNo.split('-');
-                    if (contactNumber.length > 1) {
+                    if (contactNumber?.length > 1) {
                         res.contactNo = contactNumber[1];
                     }
                 }

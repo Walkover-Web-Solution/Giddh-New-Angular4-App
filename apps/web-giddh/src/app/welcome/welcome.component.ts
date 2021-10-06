@@ -231,7 +231,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public ngOnInit() {
         this.store.dispatch(this._generalActions.resetStatesList());
         this.store.dispatch(this.commonActions.resetOnboardingForm());
-        
+
         this.store.pipe(select(state => state.itemOnboarding), takeUntil(this.destroyed$))
             .subscribe((itemOnBoardingDetails: ItemOnBoardingState) => {
                 this.itemOnBoardingDetails = itemOnBoardingDetails;
@@ -326,7 +326,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.companyProfileObj.state = this.createNewCompany.addresses[0].stateCode;
 
             let stateLoop = 0;
-            for (stateLoop; stateLoop < this.states.length; stateLoop++) {
+            for (stateLoop; stateLoop < this.states?.length; stateLoop++) {
                 if (this.states[stateLoop].value === this.companyProfileObj.state) {
                     this.companyProfileObj.selectedState = this.states[stateLoop].label;
                 }
@@ -375,7 +375,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.createNewCompanyPreparedObj.businessNature = this.companyProfileObj.businessNature ? this.companyProfileObj.businessNature : '';
             this.createNewCompanyPreparedObj.businessType = this.companyProfileObj.businessType ? this.companyProfileObj.businessType : '';
             this.createNewCompanyPreparedObj.address = this.companyProfileObj.address ? this.companyProfileObj.address : '';
-            this.createNewCompanyPreparedObj.taxes = (this.selectedTaxes.length > 0) ? this.selectedTaxes : [];
+            this.createNewCompanyPreparedObj.taxes = (this.selectedTaxes?.length > 0) ? this.selectedTaxes : [];
             if (this.createNewCompanyPreparedObj.phoneCode && this.createNewCompanyPreparedObj.contactNo) {
                 if (!this.createNewCompanyPreparedObj.contactNo.toString().includes('-')) {
                     this.createNewCompanyPreparedObj.contactNo = this.createNewCompanyPreparedObj.phoneCode + '-' + this.createNewCompanyPreparedObj.contactNo;
@@ -463,7 +463,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         let isValid: boolean = false;
 
         if (ele.value) {
-            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
+            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
                     if (regex.test(ele.value)) {
@@ -544,7 +544,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.isGstValid = false;
             }
 
-            for (let i = 0; i < this.taxesList.length; i++) {
+            for (let i = 0; i < this.taxesList?.length; i++) {
                 this.taxesList[i].isSelected = false;
             }
         }
@@ -720,7 +720,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         let i = 0;
         let matchedIndex = -1;
 
-        for (i; i < this.taxesList.length; i++) {
+        for (i; i < this.taxesList?.length; i++) {
             if (tax === this.taxesList[i].value) {
                 matchedIndex = i;
                 break;
@@ -958,7 +958,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         let defaultWarehouse: any;
         this.store.pipe(select(state => state.warehouse.warehouses), take(1)).subscribe((warehouses: any) => {
             if (warehouses) {
-                for (let index = 0; index < warehouses.results.length; index++) {
+                for (let index = 0; index < warehouses.results?.length; index++) {
                     if (warehouses.results[index].isDefault) {
                         defaultWarehouse = warehouses.results[index];
                         break;
@@ -1014,7 +1014,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WelcomeComponent
      */
     private isAddressValid(address: string = ''): boolean {
-        return address.trim().length > 0;
+        return address.trim()?.length > 0;
     }
 
     /**
@@ -1067,7 +1067,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         } else if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Warehouse) {
             onboardingType = this.commonLocaleData?.app_warehouse;
         }
-        
+
         text = text?.replace("[ONBOARDING_TYPE]", onboardingType);
         return text;
     }
@@ -1101,7 +1101,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         } else if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Warehouse) {
             onboardingType = this.commonLocaleData?.app_warehouse;
         }
-        
+
         text = text?.replace("[ONBOARDING_TYPE]", onboardingType);
         return text;
     }
@@ -1123,7 +1123,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         } else if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Warehouse) {
             onboardingType = this.commonLocaleData?.app_warehouse;
         }
-        
+
         text = text?.replace("[ONBOARDING_TYPE]", onboardingType);
         return text;
     }
@@ -1145,7 +1145,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         } else if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Warehouse) {
             onboardingType = this.commonLocaleData?.app_warehouse;
         }
-        
+
         text = text?.replace("[ONBOARDING_TYPE]", onboardingType);
         return text;
     }

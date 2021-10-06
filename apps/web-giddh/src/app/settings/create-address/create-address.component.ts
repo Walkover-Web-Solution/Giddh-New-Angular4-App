@@ -100,7 +100,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                         pincode: [this.addressToUpdate.pincode]
                     });
                     const linkedEntity = [...this.addressToUpdate.linkedEntities];
-                    while (linkedEntity.length) {
+                    while (linkedEntity?.length) {
                         // Update the default entity status in UPDATE mode
                         const entity = linkedEntity.pop();
                         const entityIndex = this.addressConfiguration.linkedEntities.findIndex(linkEntity => linkEntity.uniqueName === entity.uniqueName);
@@ -117,7 +117,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                         linkedEntity: [this.branchToUpdate.linkedEntities.map(entity => entity.uniqueName)]
                     });
                     const linkedEntity = [...this.branchToUpdate.linkedEntities];
-                    while (linkedEntity.length) {
+                    while (linkedEntity?.length) {
                         // Update the default entity status in UPDATE mode
                         const entity = linkedEntity.pop();
                         const entityIndex = this.addressConfiguration.linkedEntities.findIndex(linkEntity => linkEntity.uniqueName === entity.uniqueName);
@@ -133,7 +133,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                         linkedEntity: [this.warehouseToUpdate.linkedEntities.map(entity => entity.uniqueName)]
                     });
                     const linkedEntity = [...this.warehouseToUpdate.linkedEntities];
-                    while (linkedEntity.length) {
+                    while (linkedEntity?.length) {
                         // Update the default entity status in UPDATE mode
                         const entity = linkedEntity.pop();
                         const entityIndex = this.addressConfiguration.linkedEntities.findIndex(linkEntity => linkEntity.uniqueName === entity.uniqueName);

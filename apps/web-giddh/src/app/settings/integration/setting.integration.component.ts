@@ -459,7 +459,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         } else {
             let arr = control.value;
-            if (!control.value[arr.length - 1].sellerId) {
+            if (!control.value[arr?.length - 1].sellerId) {
                 return;
             }
             control.push(this.initAmazonReseller());
@@ -470,7 +470,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public removeAmazonSeller(i: number) {
         // remove address from the list
         const control = this.amazonSellerForm.controls['sellers'] as FormArray;
-        if (control.length > 1) {
+        if (control?.length > 1) {
             control.removeAt(i);
         } else {
             control.controls[0].reset();

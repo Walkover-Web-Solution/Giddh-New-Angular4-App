@@ -199,10 +199,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 if (response.parentGroups && response.parentGroups.length) {
                     let parent = response.parentGroups;
                     const HSN_SAC_PARENT_GROUPS = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
-                    if (parent.length > 1 && parent[1]) {
+                    if (parent?.length > 1 && parent[1]) {
                         this.isHsnSacEnabledAcc = (parent[1].parentGroups) ? HSN_SAC_PARENT_GROUPS.includes(parent[1].parentGroups[0]?.uniqueName) : false;
                         this.isParentDebtorCreditor(parent[1].uniqueName);
-                    } else if (parent.length === 1) {
+                    } else if (parent?.length === 1) {
                         this.isHsnSacEnabledAcc = (response.parentGroups) ? HSN_SAC_PARENT_GROUPS.includes(response.parentGroups[0]?.uniqueName) : false;
                         this.isParentDebtorCreditor(response.uniqueName);
                     }
@@ -227,13 +227,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.addAccountForm.get('country').get('countryCode').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
                 const addresses = this.addAccountForm.get('addresses') as FormArray;
-                if (addresses.controls.length === 0) {
+                if (addresses?.controls?.length === 0) {
                     this.addBlankGstForm();
                 }
                 if (a !== 'IN') {
                     this.isIndia = false;
                 } else {
-                    if (addresses.controls.length === 0) {
+                    if (addresses?.controls?.length === 0) {
                         this.addBlankGstForm();
                     }
                     this.isIndia = true;
@@ -410,7 +410,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public addGstDetailsForm(value?: string) {    // commented code because we no need GSTIN No. to add new address
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         addresses.push(this.initialGstDetailsForm());
-        if (addresses.length > 4) {
+        if (addresses?.length > 4) {
             this.moreGstDetailsVisible = false;
         }
         return;
@@ -423,7 +423,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     public addBlankGstForm() {
         const addresses = this.addAccountForm.get('addresses') as FormArray;
-        if (addresses.value.length === 0) {
+        if (addresses?.value?.length === 0) {
             addresses.push(this.initialGstDetailsForm());
         }
     }
@@ -478,7 +478,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     public showMoreGst() {
         const addresses = this.addAccountForm.get('addresses') as FormArray;
-        this.gstDetailsLength = addresses.controls.length;
+        this.gstDetailsLength = addresses?.controls?.length;
         this.moreGstDetailsVisible = true;
     }
 
@@ -668,7 +668,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
             }, 50);
 
-            if (accountAddress.controls.length === 0 || !accountAddress.length) {
+            if (accountAddress?.controls?.length === 0 || !accountAddress?.length) {
                 this.addBlankGstForm();
             }
         } else {
@@ -749,7 +749,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public checkGstNumValidation(ele: HTMLInputElement) {
         let isValid: boolean = false;
         if (ele.value?.trim()) {
-            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
+            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
                     if (regex.test(ele.value)) {
@@ -949,7 +949,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      */
     public addBlankCustomFieldForm(): void {
         const customField = this.addAccountForm.get('customFields') as FormArray;
-        if (customField.value.length === 0) {
+        if (customField?.value?.length === 0) {
             customField.push(this.initialCustomFieldDetailsForm(null));
         }
     }
@@ -963,7 +963,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      */
     public renderCustomFieldDetails(obj: any, customFieldLength: any): void {
         const customField = this.addAccountForm.get('customFields') as FormArray;
-        if (customField.length < customFieldLength) {
+        if (customField?.length < customFieldLength) {
             customField.push(this.initialCustomFieldDetailsForm(obj));
         }
     }
@@ -994,7 +994,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      */
     public createDynamicCustomFieldForm(customFieldForm: any): void {
         customFieldForm.map(item => {
-            this.renderCustomFieldDetails(item, customFieldForm.length);
+            this.renderCustomFieldDetails(item, customFieldForm?.length);
         });
     }
 

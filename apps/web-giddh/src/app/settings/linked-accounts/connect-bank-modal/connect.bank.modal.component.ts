@@ -264,7 +264,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
 
     public onSelectProvider() {
         const inputRowControls = this.loginForm.controls['row'] as FormArray;
-        if (inputRowControls.controls.length > 1) {
+        if (inputRowControls?.controls?.length > 1) {
             inputRowControls.controls = inputRowControls.controls.splice(1);
         }
         this.getProviderLoginForm(this.selectedProvider.id);

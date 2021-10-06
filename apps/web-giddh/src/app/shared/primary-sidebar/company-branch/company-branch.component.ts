@@ -98,7 +98,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
-            if (!companies || companies.length === 0) {
+            if (!companies || companies?.length === 0) {
                 return;
             }
 

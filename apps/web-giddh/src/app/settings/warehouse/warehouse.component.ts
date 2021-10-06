@@ -535,7 +535,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WarehouseComponent
      */
     private resetDefaultWarehouse(): void {
-        for (let index = 0; index < this.warehouses.length; index++) {
+        for (let index = 0; index < this.warehouses?.length; index++) {
             if (this.warehouses[index].isDefault) {
                 this.warehouses[index].isDefault = false;
                 break;

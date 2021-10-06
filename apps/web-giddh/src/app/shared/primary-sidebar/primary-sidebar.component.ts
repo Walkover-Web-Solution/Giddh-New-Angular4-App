@@ -170,7 +170,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         if ((event.metaKey || event.ctrlKey) && (event.which === 75 || event.which === 71) && !this.navigationModalVisible) {
             event.preventDefault();
             event.stopPropagation();
-            if (this.companyList.length > 0) {
+            if (this.companyList?.length > 0) {
                 this.showNavigationModal();
             }
         }
@@ -244,7 +244,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
         this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
-            if (!companies || companies.length === 0) {
+            if (!companies || companies?.length === 0) {
                 return;
             }
 
@@ -567,7 +567,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 branches = response || [];
             });
             this.dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen,
-                this.currentOrganizationType === OrganizationType.Company && branches.length > 1).then((res) => {
+                this.currentOrganizationType === OrganizationType.Company && branches?.length > 1).then((res) => {
                     this.findListFromDb(res);
                 }, (err: any) => {
                     console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');

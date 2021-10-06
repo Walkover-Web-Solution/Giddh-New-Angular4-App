@@ -219,7 +219,7 @@
                             >{{ inAppTax.name }}
                         </span>
                     </div>
-                    <p *ngIf="!(activeGroupTaxHierarchy$ | async)?.inheritedTaxes.length">
+                    <p *ngIf="!(activeGroupTaxHierarchy$ | async)?.inheritedTaxes?.length">
                         {{ localeData?.no_inherited_taxes }}
                     </p>
                 </div>

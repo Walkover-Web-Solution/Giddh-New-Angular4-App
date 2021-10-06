@@ -202,7 +202,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.updateAccountInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.updateAccountInProcess), takeUntil(this.destroyed$));
         this.updateAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.updateAccountIsSuccess), takeUntil(this.destroyed$));
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
-        
+
         this.selectedItems = [];
         this.settings = {
             singleSelection: false,
@@ -337,7 +337,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             (state: AppState) => state.groupwithaccounts.activeAccount],
             (activeAccount) => {
                 let result: boolean = false;
-                let activeGroupUniqueName = this.breadcrumbUniquePath[this.breadcrumbUniquePath.length - 2];
+                let activeGroupUniqueName = this.breadcrumbUniquePath[this.breadcrumbUniquePath?.length - 2];
                 if (activeGroupUniqueName && activeAccount) {
                     result = this.getAccountFromGroup(activeAccount, false);
                 } else {
@@ -368,7 +368,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         let grpObject = new AccountMoveRequest();
         grpObject.uniqueName = this.moveAccountForm.controls['moveto'].value;
 
-        let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath.length - 2];
+        let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath?.length - 2];
 
         this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc.uniqueName, activeGrpName));
         this.moveAccountForm.reset();
@@ -399,7 +399,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             });
             listItem = Object.assign({}, listItem, { parentGroups: [] });
             listItem.parentGroups = newParents;
-            if (listItem.groups.length > 0) {
+            if (listItem?.groups?.length > 0) {
                 result = this.flattenGroup(listItem.groups, newParents);
                 result.push(omit(listItem, 'groups'));
             } else {
@@ -558,7 +558,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     public selectAccount(v: IOption[]) {
-        if (v.length) {
+        if (v?.length) {
             let accounts = [];
             v.map(a => {
                 accounts.push(a.value);
@@ -578,7 +578,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         let activeAccount: AccountResponseV2 = null;
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
         let finalData: AccountMergeRequest[] = [];
-        if (this.selectedaccountForMerge.length) {
+        if (this.selectedaccountForMerge?.length) {
             this.selectedaccountForMerge.map((acc) => {
                 let obj = new AccountMergeRequest();
                 obj.uniqueName = acc;
@@ -634,7 +634,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public deleteAccount() {
         let activeAccUniqueName = null;
         this.activeAccount$.pipe(take(1)).subscribe(s => activeAccUniqueName = s.uniqueName);
-        let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath.length - 2];
+        let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath?.length - 2];
         this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName, activeGrpName));
 
         this.hideDeleteAccountModal();
