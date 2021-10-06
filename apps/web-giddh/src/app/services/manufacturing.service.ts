@@ -2,7 +2,6 @@ import { catchError, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
-import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { MANUFACTURING_API } from './apiurls/manufacturing.api';
@@ -13,11 +12,9 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
 @Injectable()
 export class ManufacturingService {
-
-    private user: UserDetails;
     private companyUniqueName: string;
 
-    constructor(private errorHandler: GiddhErrorHandler, private _http: HttpWrapperService, private _generalService: GeneralService,
+    constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService, private generalService: GeneralService,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
@@ -27,9 +24,8 @@ export class ManufacturingService {
      * get resuest model and stock uniquename
      */
     public CreateManufacturingItem(model: IManufacturingItemRequest, stockUniqueName: string): Observable<BaseResponse<ICommonResponseOfManufactureItem, IManufacturingItemRequest>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + MANUFACTURING_API.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', encodeURIComponent(stockUniqueName)), model).pipe(map((res) => {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + MANUFACTURING_API.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', encodeURIComponent(stockUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<ICommonResponseOfManufactureItem, IManufacturingItemRequest> = res;
             data.request = model;
             data.queryString = { stockUniqueName };
@@ -42,9 +38,8 @@ export class ManufacturingService {
      * URL:: company/:companyUniqueName/stock/:stockUniqueName/manufacture/:manufacturingUniqueName
      */
     public UpdateManufacturingItem(model: IManufacturingItemRequest, reqModal: IManufacturingUnqItemObj): Observable<BaseResponse<ICommonResponseOfManufactureItem, IManufacturingItemRequest>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.put(this.config.apiUrl + MANUFACTURING_API.UPDATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', reqModal.stockUniqueName).replace(':manufacturingUniqueName', reqModal.manufacturingUniqueName), model).pipe(map((res) => {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.put(this.config.apiUrl + MANUFACTURING_API.UPDATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', reqModal.stockUniqueName).replace(':manufacturingUniqueName', reqModal.manufacturingUniqueName), model).pipe(map((res) => {
             let data: BaseResponse<ICommonResponseOfManufactureItem, IManufacturingItemRequest> = res;
             data.request = model;
             data.queryString = reqModal;
@@ -57,9 +52,8 @@ export class ManufacturingService {
      * URL:: company/:companyUniqueName/stock/:stockUniqueName/manufacture/:manufacturingUniqueName
      */
     public DeleteManufacturingItem(model: IManufacturingUnqItemObj): Observable<BaseResponse<string, string>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.delete(this.config.apiUrl + MANUFACTURING_API.DELETE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', encodeURIComponent(model.stockUniqueName)).replace(':manufacturingUniqueName', model.manufacturingUniqueName)).pipe(map((res) => {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.delete(this.config.apiUrl + MANUFACTURING_API.DELETE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', encodeURIComponent(model.stockUniqueName)).replace(':manufacturingUniqueName', model.manufacturingUniqueName)).pipe(map((res) => {
             let data: BaseResponse<string, string> = res;
             data.request = '';
             data.queryString = { model };
@@ -72,8 +66,7 @@ export class ManufacturingService {
      * URL:: company/:companyUniqueName/stock/manufacture-report
      */
     public GetMfReport(model: IMfStockSearchRequest): Observable<BaseResponse<StocksResponse, IMfStockSearchRequest>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
         // create url conditionally
         let url = this.config.apiUrl + MANUFACTURING_API.MF_REPORT;
         if ((model.warehouseUniqueName)) {
@@ -108,7 +101,7 @@ export class ManufacturingService {
             url = url.concat(`&branchUniqueName=${encodeURIComponent(model.branchUniqueName)}`)
         }
 
-        return this._http.get(url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(
+        return this.http.get(url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(
             map((res) => {
                 let data: BaseResponse<StocksResponse, IMfStockSearchRequest> = res;
                 data.request = model;
@@ -123,9 +116,8 @@ export class ManufacturingService {
      * URL:: /company/:companyUniqueName/stock/:stockUniqueName/link-with-rates
      */
     public GetStockWithRate(model: IManufacturingUnqItemObj): Observable<BaseResponse<ICommonResponseOfManufactureItem, string>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + MANUFACTURING_API.GET_STOCK_WITH_RATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', encodeURIComponent(model.stockUniqueName))).pipe(
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + MANUFACTURING_API.GET_STOCK_WITH_RATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', encodeURIComponent(model.stockUniqueName))).pipe(
             map((res) => {
                 let data: BaseResponse<ICommonResponseOfManufactureItem, string> = res;
                 data.queryString = model;

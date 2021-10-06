@@ -197,7 +197,7 @@
     "others": "इतर",
     "choose_file": "फाईल निवडा",
     "remove_file": "यशस्वीरित्या हटविला",
-    "delete_bank_transactions": "Delete Bank Transactions",
-    "delete_bank_transactions_title": "Do you want to delete the selected bank transaction(s)?",
-    "reload_bank_transactions": "Reload bank transactions"
+    "delete_bank_transactions": "बँक व्यवहार हटवा",
+    "delete_bank_transactions_title": "तुम्हाला निवडलेले बँक व्यवहार (डिलिट) हटवायचे आहेत का?",
+    "reload_bank_transactions": "बँक व्यवहार रीलोड करा"
 }

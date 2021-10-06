@@ -17,7 +17,6 @@ import { cloneDeep } from '../../../lodash-optimized';
     templateUrl: './search-grid.component.html'
 })
 export class SearchGridComponent implements OnInit, OnDestroy {
-
     @Output() public pageChangeEvent: EventEmitter<any> = new EventEmitter(null);
     @Output() public FilterByAPIEvent: EventEmitter<any> = new EventEmitter(null);
     /** Stores the current branch unique name */
@@ -26,7 +25,6 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-
     public moment = moment;
     public companyUniqueName: string;
     public searchResponse$: Observable<AccountFlat[]>;
@@ -86,23 +84,24 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     @ViewChild('messageBox', { static: true }) public messageBox: ElementRef;
     public searchRequest$: Observable<SearchRequest>;
     public isAllChecked: boolean = false;
-
     public get sortReverse(): boolean {
         return this._sortReverse;
     }
 
-    // reversing sort
+    /**
+     * reversing sort
+     *
+     * @memberof SearchGridComponent
+     */
     public set sortReverse(value: boolean) {
         this._sortReverse = value;
         this.searchResponseFiltered$ = this.searchResponseFiltered$.pipe(map(p => cloneDeep(p).sort((a, b) => (value ? -1 : 1) * a[this._sortType].toString().localeCompare(b[this._sortType]))));
     }
 
-    // pagination related
+    /** pagination related  */
     public page: number;
     public totalPages: number;
-
     public selectedItems: string[] = [];
-
     private _sortReverse: boolean;
     private _sortType: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -111,17 +110,13 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     };
     private formattedQuery: any;
 
-    /**
-     * TypeScript public modifiers
-     */
-    constructor(private store: Store<AppState>, private _companyServices: CompanyService, private _toaster: ToasterService, private generalService: GeneralService) {
+    constructor(private store: Store<AppState>, private companyServices: CompanyService, private toaster: ToasterService, private generalService: GeneralService) {
         this.searchResponse$ = this.store.pipe(select(p => p.search.value), takeUntil(this.destroyed$));
         this.searchResponse$.subscribe(p => this.searchResponseFiltered$ = this.searchResponse$);
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.search$ = this.store.pipe(select(p => p.search.search), takeUntil(this.destroyed$));
         this.searchRequest$ = this.store.pipe(select(p => p.search.searchRequest), takeUntil(this.destroyed$));
         this.store.pipe(select(p => p.session.companyUniqueName), take(1)).subscribe(p => this.companyUniqueName = p);
-
         this.store.pipe(select(p => p.search.searchPaginationInfo), takeUntil(this.destroyed$)).subscribe((info) => {
             this.page = info.page;
             this.totalPages = info.totalPages;
@@ -227,7 +222,12 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    // Filter data of table By Filters
+    /**
+     * Filter data of table By Filters
+     *
+     * @param {SearchDataSet[]} searchQuery
+     * @memberof SearchGridComponent
+     */
     public filterData(searchQuery: SearchDataSet[]) {
         let queryForApi = this.createSearchQueryReqObj();
         let formattedQuery = this.formatQuery(queryForApi, searchQuery);
@@ -235,7 +235,12 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         this.FilterByAPIEvent.emit(formattedQuery);
     }
 
-    // Reset Filters and show all
+    /**
+     * Reset Filters and show all
+     *
+     * @param {*} isFiltered
+     * @memberof SearchGridComponent
+     */
     public resetFilters(isFiltered) {
         if (!isFiltered) {
             this.searchResponseFiltered$ = this.searchResponse$;
@@ -244,7 +249,11 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         }
     }
 
-    // CSV Headers
+    /**
+     * CSV Headers
+     *
+     * @memberof SearchGridComponent
+     */
     public getCSVHeader = () => [
         'Name',
         'UniqueName',
@@ -254,20 +263,28 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         'CR Total',
         'Closing Bal.',
         'C/B Type',
-        'Parent']
+        'Parent'
+    ];
 
-    // Rounding numbers
+    /**
+     * Rounding numbers
+     *
+     * @memberof SearchGridComponent
+     */
     public roundNum = (data, places) => {
         data = Number(data);
         data = data.toFixed(places);
         return data;
     }
 
-    // Save CSV File with data from Table...
+    /**
+     * Save CSV File with data from Table...
+     *
+     * @param {SearchDataSet[]} searchQuery
+     * @memberof SearchGridComponent
+     */
     public createCSV(searchQuery: SearchDataSet[]) {
-
         let queryForApi = this.createSearchQueryReqObj();
-
         let formattedQuery = this.formatQuery(queryForApi, searchQuery);
 
         // New logic (download CSV from API)
@@ -292,7 +309,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
 
             request.data = Object.assign({}, request.data, formattedQuery);
 
-            this._companyServices.downloadCSV(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            this.companyServices.downloadCSV(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 this.searchLoader$ = of(false);
                 if (res.status === 'success') {
                     let blobData = this.generalService.base64ToBlob(res.body, 'text/csv', 512);
@@ -303,8 +320,13 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         });
     }
 
-    // Add Selected Value to Message Body
-    public addValueToMsg(val: any) {
+    /**
+     * Add Selected Value to Message Body
+     *
+     * @param {*} val
+     * @memberof SearchGridComponent
+     */
+    public addValueToMsg(val: any): void {
         this.typeInTextarea(val.value);
     }
 
@@ -321,7 +343,11 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         this.messageBody.msg = el.value;
     }
 
-    // Open Modal for Email
+    /**
+     * Open Modal for Email
+     *
+     * @memberof SearchGridComponent
+     */
     public openEmailDialog() {
         this.messageBody.msg = '';
         this.messageBody.subject = '';
@@ -331,7 +357,11 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         this.mailModal.show();
     }
 
-    // Open Modal for SMS
+    /**
+     * Open Modal for SMS
+     *
+     * @memberof SearchGridComponent
+     */
     public openSmsDialog() {
         this.messageBody.msg = '';
         this.messageBody.type = 'sms';
@@ -352,7 +382,11 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         }
     }
 
-    // Send Email/Sms for Accounts
+    /**
+     * Send Email/Sms for Accounts
+     *
+     * @memberof SearchGridComponent
+     */
     public async send() {
         let accountsUnqList = [];
 
@@ -385,9 +419,9 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             request.data = Object.assign({}, request.data, this.formattedQuery);
 
             if (this.messageBody.btn.set === this.commonLocaleData?.app_send_email) {
-                return this._companyServices.sendEmail(request).pipe(takeUntil(this.destroyed$))
+                return this.companyServices.sendEmail(request).pipe(takeUntil(this.destroyed$))
                     .subscribe((r) => {
-                        r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message);
+                        r.status === 'success' ? this.toaster.successToast(r.body) : this.toaster.errorToast(r.message);
                         this.checkboxInfo = {
                             selectedPage: 1
                         };
@@ -395,9 +429,9 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             } else if (this.messageBody.btn.set === this.commonLocaleData?.app_send_sms) {
                 let temp = request;
                 delete temp.data['subject'];
-                return this._companyServices.sendSms(temp).pipe(takeUntil(this.destroyed$))
+                return this.companyServices.sendSms(temp).pipe(takeUntil(this.destroyed$))
                     .subscribe((r) => {
-                        r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message);
+                        r.status === 'success' ? this.toaster.successToast(r.body) : this.toaster.errorToast(r.message);
                         this.checkboxInfo = {
                             selectedPage: 1
                         };

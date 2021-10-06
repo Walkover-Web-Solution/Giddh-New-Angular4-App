@@ -15,21 +15,20 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
     templateUrl: 'cr-dr-list.component.html',
     styleUrls: ['./cr-dr-list.component.scss', '../../home.component.scss'],
 })
-
 export class CrDrComponent implements OnInit, OnDestroy {
     /** directive to get reference of element */
     @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: ElementRef;
-    /* This will store if device is mobile or not */
+    /** This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
-    /* This will store modal reference */
+    /** This will store modal reference */
     public modalRef: BsModalRef;
-    /* This will store selected date range to use in api */
+    /** This will store selected date range to use in api */
     public selectedDateRange: any;
-    /* This will store selected date range to show on UI */
+    /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
-    /* This will store the x/y position of the field to show datepicker under it */
+    /** This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
-    /* Selected range label */
+    /** Selected range label */
     public selectedRangeLabel: any = "";
     public universalDate$: Observable<any>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -42,23 +41,21 @@ export class CrDrComponent implements OnInit, OnDestroy {
     public showRecords: number = 5;
     public dueDate: any;
     public activeCompany: any = {};
-    /* This will store the dates returned by api */
+    /** This will store the dates returned by api */
     public apiFromDate: string;
     public apiToDate: string;
-    /* This will store the dates returned by api */
-
     /** True, if universal date should only be used once for initializing */
     @Input() initializeDateWithUniversalDate: boolean;
     /** True, if date picker initialization with universal date is successful */
     public isDatePickerInitialized: boolean;
     /** True if api call in progress */
     public isLoading: boolean = false;
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor(private store: Store<AppState>, private _contactService: ContactService, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService) {
+    constructor(private store: Store<AppState>, private contactService: ContactService, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil((this.initializeDateWithUniversalDate) ? of(this.isDatePickerInitialized) : this.destroyed$));
     }
 
@@ -91,7 +88,7 @@ export class CrDrComponent implements OnInit, OnDestroy {
         pageNumber = pageNumber ? pageNumber : 1;
         refresh = refresh ? refresh : 'false';
 
-        this._contactService.GetContactsDashboard(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+        this.contactService.GetContactsDashboard(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res.status === 'success') {
                 if (groupUniqueName === "sundrydebtors") {
                     this.drAccounts = res.body.results;
@@ -163,6 +160,7 @@ export class CrDrComponent implements OnInit, OnDestroy {
             Object.assign({}, { class: 'modal-xl giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
         );
     }
+    
     /**
     * This will hide the datepicker
     *

@@ -45,14 +45,14 @@
                                                 id="ledger-unit"
                                                 class="form-control"
                                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
-                                                (change)="unitChanged($event.target.value)"
-                                                [value]="currentTxn?.inventory.unit.code"
+                                                (change)="unitChanged($event?.target?.value)"
+                                                [value]="currentTxn?.inventory?.unit?.code"
                                             >
                                                 <mat-option
-                                                    *ngFor="let item of currentTxn.unitRate"
-                                                    [value]="item.code"
+                                                    *ngFor="let item of currentTxn?.unitRate"
+                                                    [value]="item?.code"
                                                 >
-                                                    {{ item.stockUnitCode }}
+                                                    {{ item?.stockUnitCode }}
                                                 </mat-option>
                                             </mat-select>
                                         </td>
@@ -521,7 +521,7 @@
                                             >
                                                 <ng-template #optionTemplate let-option="option">
                                                     <a href="javascript:void(0)" class="list-item sh-template">
-                                                        <div class="item">{{ option.label }}</div>
+                                                        <div class="item">{{ option?.label }}</div>
                                                         <div class="item-unique">
                                                             ({{ localeData?.dated }}:
                                                             {{ option.additional?.voucherDate }})
@@ -740,8 +740,8 @@
                         <table class="table table-bordered m-0">
                             <tbody>
                                 <tr *ngFor="let txn of entry.transactions">
-                                    <td>{{ entry.entryDate }}</td>
-                                    <td>{{ txn.particular.name }}</td>
+                                    <td>{{ entry?.entryDate }}</td>
+                                    <td>{{ txn.particular?.name }}</td>
                                     <td>
                                         <amount-field
                                             [amount]="txn.amount"
@@ -1019,7 +1019,7 @@
             <advance-receipt-adjustment-component
                 [adjustedVoucherType]="blankLedger.voucherType"
                 [invoiceFormDetails]="adjustVoucherConfiguration"
-                [advanceReceiptAdjustmentUpdatedData]="currentTxn.voucherAdjustments"
+                [advanceReceiptAdjustmentUpdatedData]="currentTxn?.voucherAdjustments"
                 (closeModelEvent)="closeAdjustmentModal($event)"
                 (submitClicked)="getAdjustedPaymentData($event)"
             >

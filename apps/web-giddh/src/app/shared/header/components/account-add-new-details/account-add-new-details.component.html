@@ -231,9 +231,9 @@
             <ng-container>
                 <tab
                     [heading]="localeData?.tabs?.address"
-                    [active]="isDebtorCreditor"
-                    [disabled]="!isDebtorCreditor"
-                    [ngClass]="{ 'active': isDebtorCreditor }"
+                    [active]="!isHsnSacEnabledAcc"
+                    [disabled]="isHsnSacEnabledAcc"
+                    [customClass]="isHsnSacEnabledAcc ? 'd-none' : ''"
                     class="gstin-address"
                 >
                     <ng-container>
@@ -417,7 +417,7 @@
                     </ng-container>
                 </tab>
             </ng-container>
-            <tab [heading]="localeData?.tabs?.contact" [active]="!isDebtorCreditor" class="contact-form-wrap">
+            <tab [heading]="localeData?.tabs?.contact" [active]="isHsnSacEnabledAcc" class="contact-form-wrap">
                 <div class="contact-form">
                     <div class="row">
                         <div class="col-sm-6">
@@ -668,6 +668,7 @@
             </tab>
 
             <tab *ngIf="isDebtorCreditor" [heading]="localeData?.tabs?.custom">
+                <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isCustomFieldLoading"></giddh-page-loader>
                 <ng-container formArrayName="customFields">
                     <ng-container
                         *ngFor="let item of companyCustomFields; let index = index; let first = first; let last = last"
@@ -738,6 +739,13 @@
                         </ng-container>
                     </ng-container>
                 </ng-container>
+                <a
+                    href="javascript:;"
+                    class="btn-link"
+                    (click)="goToCustomFields.emit(true)"
+                    *ngIf="!companyCustomFields?.length"
+                    >{{ commonLocaleData?.app_create_custom_field }}</a
+                >
             </tab>
             <div class="row">
                 <div class="col-sm-12 mt-5">

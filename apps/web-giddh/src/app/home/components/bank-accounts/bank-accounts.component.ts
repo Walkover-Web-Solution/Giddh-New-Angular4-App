@@ -13,7 +13,6 @@ import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
     templateUrl: 'bank-accounts.component.html',
     styleUrls: ['./bank-accounts.component.scss', '../../home.component.scss']
 })
-
 export class BankAccountsComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -23,12 +22,12 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     public fromDate: string;
     public bankAccounts: any[] = [];
     public activeCompany: any = {};
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     public localeData: any = {};
     /** True if api call in progress */
     public isLoading: boolean = false;
 
-    constructor(private store: Store<AppState>, private _contactService: ContactService) {
+    constructor(private store: Store<AppState>, private contactService: ContactService) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -58,7 +57,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         this.isLoading = true;
         pageNumber = pageNumber ? pageNumber : 1;
         refresh = refresh ? refresh : 'false';
-        this._contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+        this.contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res.status === 'success') {
                 this.bankAccounts = res.body.results;
             }

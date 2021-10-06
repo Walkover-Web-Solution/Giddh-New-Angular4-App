@@ -23,7 +23,7 @@
 	"invoice_through_sms": "एसएमएस के माध्यम से चालान",
 	"custom_invoice_number": "कस्टम चालान नंबर",
 	"custom_invoice_template": "कस्टम चालान टेम्पलेट",
-	"integrate_gmail_invoice": "चालान के लिए Gmail एकीकृत करें",
+	"integrate_gmail_invoice": "चालान के लिए जीमेल एकीकृत करें",
 	"set_default_email": "चालान भेजने के लिए डिफ़ॉल्ट ईमेल सेट करें",
 	"download_invoice_ledger": "लेजर से चालान डाउनलोड करें",
 	"customer_invoice_report": "ग्राहक चालान रिपोर्ट",
@@ -171,8 +171,8 @@
     "manage_inventory": "इन्वेंटरी प्रबंधित करें",
     "view_branch_data": "सभी शाखा डेटा देखें",
     "file_gst_different_gstin": "विभिन्न जीएसटीआईएन नंबरों के साथ जीएसटी फाइल करें",
-    "e_commerce":"ई-कॉमर्स",
-    "shopify":"शॉपीफाई",
-    "woocommerce":"वूकॉमर्स",
-    "zencommerce":"ज़ेनकॉमर्स"
+    "e_commerce": "ई-कॉमर्स",
+    "shopify": "शॉपीफाई",
+    "woocommerce": "वूकॉमर्स",
+    "zencommerce": "ज़ेनकॉमर्स"
 }

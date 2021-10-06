@@ -13,15 +13,15 @@ import { RECURRING_VOUCHER_API } from './apiurls/recurring-voucher.api';
 export class RecurringVoucherService {
 
     constructor(private errorHandler: GiddhErrorHandler,
-        private _http: HttpWrapperService,
-        private _generalService: GeneralService,
+        private http: HttpWrapperService,
+        private generalService: GeneralService,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
     public getRecurringVouchers({ filter, page, count }) {
-        const companyUniqueName = this._generalService.companyUniqueName;
+        const companyUniqueName = this.generalService.companyUniqueName;
         if (filter) {
-            return this._http.post(this.config.apiUrl + RECURRING_VOUCHER_API.GET
+            return this.http.post(this.config.apiUrl + RECURRING_VOUCHER_API.GET
                 .replace('{{companyname}}', companyUniqueName)
                 .replace(':sort', filter.sort.toString())
                 .replace(':sortBy', filter.sortBy.toString())
@@ -33,7 +33,7 @@ export class RecurringVoucherService {
                     return data;
                 }), catchError((e) => this.errorHandler.HandleCatch<RecurringInvoice[], string>(e)));
         }
-        return this._http.get(this.config.apiUrl + RECURRING_VOUCHER_API.GET
+        return this.http.get(this.config.apiUrl + RECURRING_VOUCHER_API.GET
             .replace('{{companyname}}', companyUniqueName)
             .replace(':sort', "")
             .replace(':sortBy', "")
@@ -46,8 +46,8 @@ export class RecurringVoucherService {
     }
 
     public createRecurringVouchers(model: RecurringInvoice) {
-        const companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + RECURRING_VOUCHER_API.CREATE
+        const companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + RECURRING_VOUCHER_API.CREATE
             .replace('{{companyname}}', companyUniqueName), model).pipe(map((res) => {
                 let data: BaseResponse<RecurringInvoice, string> = res;
                 data.queryString = {};
@@ -56,13 +56,13 @@ export class RecurringVoucherService {
     }
 
     public updateRecurringVouchers(model: RecurringInvoice) {
-        const companyUniqueName = this._generalService.companyUniqueName;
+        const companyUniqueName = this.generalService.companyUniqueName;
         const req = {
             duration: model.duration,
             nextCronDate: model.nextCronDate,
             cronEndDate: model.cronEndDate
         };
-        return this._http.patch(this.config.apiUrl + RECURRING_VOUCHER_API.UPDATE
+        return this.http.patch(this.config.apiUrl + RECURRING_VOUCHER_API.UPDATE
             .replace('{{companyname}}', companyUniqueName)
             .replace('{{uniqueName}}', model.uniqueName), req).pipe(
                 map((res) => {
@@ -73,8 +73,8 @@ export class RecurringVoucherService {
     }
 
     public deleteRecurringVouchers(id: string) {
-        const companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.delete(this.config.apiUrl + RECURRING_VOUCHER_API.DELETE
+        const companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.delete(this.config.apiUrl + RECURRING_VOUCHER_API.DELETE
             .replace('{{companyname}}', companyUniqueName)
             .replace('{{uniqueName}}', id)).pipe(map((res) => {
                 let data: BaseResponse<string, string> = res;

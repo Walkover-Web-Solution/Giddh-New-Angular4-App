@@ -21,13 +21,11 @@ import { API_COUNT_LIMIT } from '../../../app.constant';
     templateUrl: './audit-logs.sidebar.component.html',
     styleUrls: ['audit-logs.sidebar.component.scss']
 })
-
 export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     @Input() public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-
     public vm: AuditLogsSidebarVM;
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
@@ -71,8 +69,8 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
 
     constructor(
         private store: Store<AppState>,
-        private _companyService: CompanyService,
-        private _auditLogsActions: AuditLogsActions,
+        private companyService: CompanyService,
+        private auditLogsActions: AuditLogsActions,
         private groupService: GroupService,
         private searchService: SearchService
     ) {
@@ -95,7 +93,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
             }
         }), takeUntil(this.destroyed$));
 
-        this._companyService.getComapnyUsers().pipe(takeUntil(this.destroyed$)).subscribe(data => {
+        this.companyService.getComapnyUsers().pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data.status === 'success') {
                 let users: IOption[] = [];
                 data.body.map((d) => {
@@ -138,7 +136,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy() {
         this.vm.reset();
-        this.store.dispatch(this._auditLogsActions.ResetLogs());
+        this.store.dispatch(this.auditLogsActions.ResetLogs());
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -199,7 +197,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
             reqBody.fromDate = this.vm.selectedFromDate ? moment(this.vm.selectedFromDate).format(GIDDH_DATE_FORMAT) : '';
             reqBody.toDate = this.vm.selectedToDate ? moment(this.vm.selectedToDate).format(GIDDH_DATE_FORMAT) : '';
         }
-        this.store.dispatch(this._auditLogsActions.GetLogs(reqBody, 1));
+        this.store.dispatch(this.auditLogsActions.GetLogs(reqBody, 1));
     }
 
     public customUserFilter(term: string, item: IOption) {
@@ -209,7 +207,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
 
     public resetFilters() {
         this.vm.reset();
-        this.store.dispatch(this._auditLogsActions.ResetLogs());
+        this.store.dispatch(this.auditLogsActions.ResetLogs());
     }
 
     /**

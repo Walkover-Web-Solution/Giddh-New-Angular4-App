@@ -46,7 +46,10 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     public deleteAccountSuccess$: Observable<boolean>;
     public accountDetails: any = '';
     public breadcrumbUniquePath: string[] = [];
-
+    /** Holds true if we need to recall custom field api in create/update account */
+    public reloadCustomFields: boolean = false;
+    /** Holds true if master is open */
+    private isMasterOpen: boolean = false;
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -54,7 +57,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         private accountService: AccountService,
         private store: Store<AppState>,
         private accountsAction: AccountsAction,
-        private _groupWithAccountsAction: GroupWithAccountsAction,
+        private groupWithAccountsAction: GroupWithAccountsAction
     ) {
         // account-add component's property
         this.createAccountInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountInProcess), takeUntil(this.destroyed$));
@@ -70,7 +73,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         if (this.isUpdateAccount && this.activeAccountDetails) {
             this.accountDetails = this.activeAccountDetails;
-            this.store.dispatch(this._groupWithAccountsAction.getGroupWithAccounts(this.activeAccountDetails.name));
+            this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(this.activeAccountDetails.name));
             this.store.dispatch(this.accountsAction.getAccountDetails(this.activeAccountDetails.uniqueName));
         }
 
@@ -100,6 +103,18 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
             if (res) {
                 this.getUpdateList.emit(this.activeGroupUniqueName);
                 this.store.dispatch(this.accountsAction.resetUpdateAccountV2());
+            }
+        });
+
+        this.store.pipe(select(state => state.groupwithaccounts.activeTab), takeUntil(this.destroyed$)).subscribe(activeTab => {
+            if(activeTab === 1) {
+                this.reloadCustomFields = false;
+                this.isMasterOpen = true;
+            } else {
+                if(this.isMasterOpen) {
+                    this.isMasterOpen = false;
+                    this.reloadCustomFields = true;
+                }
             }
         });
     }
@@ -203,5 +218,18 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
                 this.showBankDetail = false;
             }
         });
+    }
+
+    /**
+     * This will show custom fields tab if clicked create custom field from add/update account
+     *
+     * @param {boolean} event
+     * @memberof AsideMenuAccountInContactComponent
+     */
+     public showCustomFieldsTab(event: boolean) {
+        if(event) {
+            this.store.dispatch(this.groupWithAccountsAction.updateActiveTabOpenAddAndManage(1));
+            this.store.dispatch(this.groupWithAccountsAction.OpenAddAndManageFromOutside(''));
+        }
     }
 }

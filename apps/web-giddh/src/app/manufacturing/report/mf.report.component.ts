@@ -185,7 +185,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
             }
         })), takeUntil(this.destroyed$)).subscribe();
         this.store.pipe(
-            select(state => state.session.activeCompany), take(1)
+            select(state => state.session.activeCompany), takeUntil(this.destroyed$)
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
@@ -310,8 +310,8 @@ export class MfReportComponent implements OnInit, OnDestroy {
      * @memberof MfReportComponent
      */
     public handleBranchChange(selectedEntity: any): void {
-        this.currentBranch.name = selectedEntity.label;
-        this.mfStockSearchRequest.branchUniqueName = selectedEntity.value;
+        this.currentBranch.name = selectedEntity?.label;
+        this.mfStockSearchRequest.branchUniqueName = selectedEntity?.value;
 
         this.forceClearWarehouse$ = observableOf({ status: true });
         this.warehouses = this.allWarehouses[selectedEntity.value];

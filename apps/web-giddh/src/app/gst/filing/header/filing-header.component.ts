@@ -49,14 +49,13 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public isMonthSelected: boolean = false;
     @Input() public fileReturn: {} = { isAuthenticate: false };
     @Input() public fileGstr3b: {} = { via: null };
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     @Input() public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     /** True if current organization is company */
     @Input() public isCompany: boolean;
     @ViewChild('cancelConfirmationModel', { static: true }) public cancelConfirmationModel: ModalDirective;
-
     public gstAuthenticated$: Observable<boolean>;
     public GstAsidePaneState: string = 'out';
     public selectedService: 'VAYANA' | 'TAXPRO' | 'RECONCILE' | 'JIO_GST';
@@ -72,7 +71,6 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public get GstReport() {
         return GstReport;
     }
-
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
@@ -81,16 +79,15 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
     constructor(
         private store: Store<AppState>,
-        private _toasty: ToasterService,
-        private _reconcileAction: GstReconcileActions,
-        private _invoicePurchaseActions: InvoicePurchaseActions,
-        private _gstReconcileActions: GstReconcileActions,
+        private toasty: ToasterService,
+        private reconcileAction: GstReconcileActions,
+        private invoicePurchaseActions: InvoicePurchaseActions,
+        private gstReconcileActions: GstReconcileActions,
         private activatedRoute: ActivatedRoute
     ) {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
         this.gstSessionResponse$ = this.store.pipe(select(p => p.gstR.gstSessionResponse), takeUntil(this.destroyed$));
-
     }
 
     public ngOnInit() {
@@ -114,7 +111,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                 from: params['from'],
                 to: params['to']
             };
-            this.store.dispatch(this._gstReconcileActions.SetSelectedPeriod(this.currentPeriod));
+            this.store.dispatch(this.gstReconcileActions.SetSelectedPeriod(this.currentPeriod));
             this.selectedGst = params['return_type'];
         });
     }
@@ -126,11 +123,10 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         request.refresh = true;
         request.action = GstReconcileActionsEnum.notfoundonportal;
         request.gstin = this.activeCompanyGstNumber;
-        this.store.dispatch(this._reconcileAction.GstReconcileInvoiceRequest(request));
+        this.store.dispatch(this.reconcileAction.GstReconcileInvoiceRequest(request));
     }
 
     public ngOnChanges(s: SimpleChanges) {
-
         if (s && s.currentPeriod && s.currentPeriod.currentValue) {
             let date = {
                 startDate: moment(this.currentPeriod.from, GIDDH_DATE_FORMAT).startOf('month').format(GIDDH_DATE_FORMAT),
@@ -147,7 +143,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             }
         }
 
-        if (s && s.fileGstr3b && s.fileGstr3b.currentValue.via) {
+        if (s && s.fileGstr3b && s.fileGstr3b.currentValue?.via) {
             let gsp = s.fileGstr3b.currentValue.via;
             if (this.gstAuthenticated) {
                 if (gsp === 'VAYANA' && this.isVayanaAuthenticated) {
@@ -169,7 +165,11 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * toggleSettingAsidePane
+     * Toggle Setting Aside Pane
+     *
+     * @param {*} event
+     * @param {('JIO_GST' | 'TAXPRO' | 'RECONCILE' | 'VAYANA')} [selectedService]
+     * @memberof FilingHeaderComponent
      */
     public toggleSettingAsidePane(event, selectedService?: 'JIO_GST' | 'TAXPRO' | 'RECONCILE' | 'VAYANA'): void {
         if (event) {
@@ -187,7 +187,10 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * onDownloadSheetGSTR
+     * Download Sheet GSTR
+     *
+     * @param {string} typeOfSheet
+     * @memberof FilingHeaderComponent
      */
     public onDownloadSheetGSTR(typeOfSheet: string) {
         if (this.activeCompanyGstNumber) {
@@ -198,31 +201,33 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             request.from = this.currentPeriod.from;
             request.to = this.currentPeriod.to;
 
-            this.store.dispatch(this._reconcileAction.DownloadGstrSheet(request));
+            this.store.dispatch(this.reconcileAction.DownloadGstrSheet(request));
         } else {
-            this._toasty.errorToast(this.localeData?.filing?.gst_unavailable);
+            this.toasty.errorToast(this.localeData?.filing?.gst_unavailable);
         }
     }
 
     /**
-     * ngOnDestroy
+     * Releases the memory
+     *
+     * @memberof FilingHeaderComponent
      */
-    public ngOnDestroy() {
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
     public fileGstReturn(Via: 'JIO_GST' | 'TAXPRO' | 'VAYANA') {
         if (this.activeCompanyGstNumber) {
-            this.store.dispatch(this._invoicePurchaseActions.FileJioGstReturn(this.currentPeriod, this.activeCompanyGstNumber, Via));
+            this.store.dispatch(this.invoicePurchaseActions.FileJioGstReturn(this.currentPeriod, this.activeCompanyGstNumber, Via));
         } else {
-            this._toasty.errorToast(this.localeData?.filing?.gst_unavailable);
+            this.toasty.errorToast(this.localeData?.filing?.gst_unavailable);
         }
     }
 
     public fileGstReturnV2() {
         if (this.selectedGst === GstReport.Gstr1) {
-            this.store.dispatch(this._gstReconcileActions.FileGstr1({
+            this.store.dispatch(this.gstReconcileActions.FileGstr1({
                 gstin: this.activeCompanyGstNumber,
                 from: this.currentPeriod.from,
                 to: this.currentPeriod.to,
@@ -237,7 +242,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public fileGstr3B(via) {
-        this.store.dispatch(this._invoicePurchaseActions.FileGSTR3B({ from: this.currentPeriod.from, to: this.currentPeriod.to }, this.activeCompanyGstNumber, via));
+        this.store.dispatch(this.invoicePurchaseActions.FileGSTR3B({ from: this.currentPeriod.from, to: this.currentPeriod.to }, this.activeCompanyGstNumber, via));
     }
 
     public toggleCancelModel() {
