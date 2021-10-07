@@ -185,7 +185,7 @@ export class ProformaAddBulkItemsComponent implements OnDestroy {
     }
 
     removeSelectedItem(uniqueName: string) {
-        this.selectedItems = this.selectedItems.filter(f => f?.uniqueName !== uniqueName);
+        this.selectedItems = this.selectedItems?.filter(f => f?.uniqueName !== uniqueName);
     }
 
     alterQuantity(item: SalesAddBulkStockItems, mode: 'plus' | 'minus' = 'plus') {
