@@ -333,7 +333,7 @@ export const GIDDH_VOUCHER_FORM = [
     {
         type: "sales",
         advanceReceiptAllowed: false,
-        rcmAllowed: false,
+        rcmAllowed: true,
         depositAllowed: true,
         taxesAllowed: true,
         quantityAllowed: true,
@@ -403,7 +403,7 @@ export const GIDDH_VOUCHER_FORM = [
     {
         type: "credit note",
         advanceReceiptAllowed: false,
-        rcmAllowed: false,
+        rcmAllowed: true,
         depositAllowed: false,
         taxesAllowed: true,
         quantityAllowed: true,
@@ -417,7 +417,7 @@ export const GIDDH_VOUCHER_FORM = [
     {
         type: "debit note",
         advanceReceiptAllowed: false,
-        rcmAllowed: false,
+        rcmAllowed: true,
         depositAllowed: false,
         taxesAllowed: true,
         quantityAllowed: true,
