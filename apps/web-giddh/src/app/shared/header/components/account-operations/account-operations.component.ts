@@ -167,7 +167,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
                             if (activeAccountTaxHierarchy.inheritedTaxes) {
                                 let inheritedTaxes = flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j.uniqueName);
-                                let allTaxes = applicableTaxes.filter(f => inheritedTaxes.indexOf(f) === -1);
+                                let allTaxes = applicableTaxes?.filter(f => inheritedTaxes.indexOf(f) === -1);
                                 // set value in tax group form
                                 this.taxGroupForm.setValue({ taxes: allTaxes });
                             } else {
