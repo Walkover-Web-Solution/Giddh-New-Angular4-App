@@ -26,13 +26,13 @@ export class GroupAccountSidebarVM {
 
     public selectGroup(item: IGroupsWithAccounts, currentIndex: number, isSearching: boolean = false) {
         this.columns.splice(currentIndex + 1, this.columns?.length - currentIndex + 1);
-        if (item.groups) {
+        if (item?.groups) {
             item.groups = sortBy(item.groups, ['uniqueName', 'name']);
         }
-        if (item.accounts) {
+        if (item?.accounts) {
             item.accounts = sortBy(item.accounts, ['uniqueName', 'name']);
         }
-        if (item.groups || item.accounts) {
+        if (item?.groups || item?.accounts) {
             this.columns.push(new ColumnGroupsAccountVM(item));
         }
 
@@ -98,7 +98,7 @@ export class GroupAccountSidebarVM {
                         this.store.pipe(select(s => s.general.groupswithaccounts), take(1)).subscribe(s => grpsBck = s);
 
                         let listBckup = this.activeGroupFromGroupListBackup(grpsBck, resp.queryString.parentUniqueName, null);
-                        if (listBckup) {
+                        if (listBckup && newCol) {
                             newCol.groups = listBckup.groups;
                             newCol.accounts = listBckup.accounts;
                         }

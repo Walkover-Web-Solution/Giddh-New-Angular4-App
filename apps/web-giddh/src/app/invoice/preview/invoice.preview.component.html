@@ -819,7 +819,7 @@
                                 </th>
                                 <th *ngIf="gstEInvoiceEnable && selectedVoucher === 'sales'" width="10%">
                                     <div class="d-flex">
-                                        <div class="flex-fill">E-invoice Status</div>
+                                        <div class="flex-fill">{{ localeData?.e_invoice_status }}</div>
                                     </div>
                                 </th>
                                 <th [attr.data-title]="commonLocaleData?.app_status" width="10%">
@@ -950,7 +950,7 @@
                                     width="10%"
                                 >
                                     <div class="d-flex">
-                                        <div class="flex-fill">E-invoice Status</div>
+                                        <div class="flex-fill">{{ localeData?.e_invoice_status }}</div>
                                     </div>
                                 </th>
                                 <th [attr.data-title]="commonLocaleData?.app_status" width="10%">
@@ -1121,7 +1121,7 @@
                                 <!-- E-invoice status -->
                                 <td
                                     *ngIf="gstEInvoiceEnable && selectedVoucher === 'sales'"
-                                    data-title="E-Invoice Status"
+                                    [attr.data-title]="localeData?.e_invoice_status"
                                     width="10%"
                                 >
                                     <div class="e-invoice-status font-14">

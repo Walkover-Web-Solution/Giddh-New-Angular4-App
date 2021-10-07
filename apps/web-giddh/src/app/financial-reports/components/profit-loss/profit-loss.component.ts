@@ -16,11 +16,10 @@ import { ProfitLossGridComponent } from './components/profit-loss-grid/profit-lo
     selector: 'profit-loss',
     templateUrl: './profit-loss.component.html'
 })
-
 export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     public commonLocaleData: any = {};
     public from: string;
     public to: string;
@@ -29,7 +28,11 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
         return this._selectedCompany;
     }
 
-    // set company and fetch data...
+    /**
+     * set company and fetch data
+     *
+     * @memberof ProfitLossComponent
+     */
     @Input()
     public set selectedCompany(value: CompanyResponse) {
         this._selectedCompany = value;
@@ -51,14 +54,12 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
     public request: ProfitLossRequest;
     public expandAll: boolean;
     @Input() public isDateSelected: boolean = false;
-
     public search: string;
     @ViewChild('plGrid', { static: true }) public plGrid: ProfitLossGridComponent;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
     private _selectedCompany: CompanyResponse;
 
-    constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private _toaster: ToasterService) {
+    constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private toaster: ToasterService) {
         this.showLoader = this.store.pipe(select(p => p.tlPl.pl.showLoader), takeUntil(this.destroyed$));
     }
 
@@ -75,8 +76,8 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
 
                 if (data && data.message) {
                     setTimeout(() => {
-                        this._toaster.clearAllToaster();
-                        this._toaster.infoToast(data.message);
+                        this.toaster.clearAllToaster();
+                        this.toaster.infoToast(data.message);
                     }, 100);
                 }
 

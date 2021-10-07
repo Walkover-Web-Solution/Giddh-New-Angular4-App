@@ -172,7 +172,7 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
             let loop = 0;
             let found = false;
             let filteredItems = [];
-            allItems.forEach((items) => {
+            allItems?.forEach((items) => {
                 found = false;
                 if (items.label.toLowerCase().includes(search.trim().toLowerCase())) {
                     if (filteredItems[loop] === undefined) {
@@ -183,7 +183,7 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
                     found = true;
                 } else {
                     let itemsFound = [];
-                    items.items.forEach(item => {
+                    items?.items?.forEach(item => {
                         if (item.label.toLowerCase().includes(search.trim().toLowerCase())) {
                             if (filteredItems[loop] === undefined) {
                                 filteredItems[loop] = [];
@@ -247,10 +247,12 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
         if (event) {
             this.store.pipe(select(appStore => appStore.general.menuItems), takeUntil(this.destroyed$)).subscribe(items => {
                 if (items) {
-                    const allItems = this.generalService.getVisibleMenuItems("all-items", items, this.localeData?.items);
-                    this.allItems$ = of(allItems);
-                    this.filteredItems$ = of(allItems);
-                    this.changeDetectorRef.detectChanges();
+                    this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(response => {
+                        const allItems = this.generalService.getVisibleMenuItems("all-items", items, this.localeData?.items, response?.countryV2?.alpha2CountryCode);
+                        this.allItems$ = of(allItems);
+                        this.filteredItems$ = of(allItems);
+                        this.changeDetectorRef.detectChanges();
+                    });
                 }
             });
         }

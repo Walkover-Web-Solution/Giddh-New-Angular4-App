@@ -223,9 +223,10 @@
             <ng-container>
                 <tab
                     [heading]="localeData?.tabs?.address"
+                    [active]="!isHsnSacEnabledAcc"
+                    [disabled]="isHsnSacEnabledAcc"
+                    [customClass]="isHsnSacEnabledAcc ? 'd-none' : ''"
                     class="gstin-address"
-                    [active]="isDebtorCreditor || isBankAccount"
-                    [disabled]="!isDebtorCreditor && !isBankAccount"
                     (selectTab)="tabChanged('address')"
                 >
                     <ng-container>
@@ -422,7 +423,7 @@
             <tab
                 [heading]="localeData?.tabs?.contact"
                 class="contact-form-wrap"
-                [active]="!isDebtorCreditor"
+                [active]="isHsnSacEnabledAcc"
                 (selectTab)="tabChanged('contacts')"
             >
                 <div class="contact-form">
@@ -688,6 +689,7 @@
                 </div>
             </tab>
             <tab *ngIf="isDebtorCreditor" [heading]="localeData?.tabs?.custom" (selectTab)="tabChanged('custom')">
+                <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isCustomFieldLoading"></giddh-page-loader>
                 <ng-container formArrayName="customFields">
                     <ng-container
                         *ngFor="let item of companyCustomFields; let index = index; let first = first; let last = last"
@@ -758,6 +760,13 @@
                         </ng-container>
                     </ng-container>
                 </ng-container>
+                <a
+                    href="javascript:;"
+                    class="btn-link"
+                    (click)="goToCustomFields.emit(true)"
+                    *ngIf="!companyCustomFields?.length"
+                    >{{ commonLocaleData?.app_create_custom_field }}</a
+                >
             </tab>
         </tabset>
         <div class="row" *ngIf="!isOtherSelectedTab">
@@ -928,7 +937,7 @@
                             <div class="popover-content">
                                 <label>{{ localeData?.discounts_inherited_from }}:</label>
                                 <ul>
-                                    <li>{{ item.name }}</li>
+                                    <li>{{ item?.name }}</li>
                                 </ul>
                             </div>
                         </ng-template>
@@ -992,7 +1001,7 @@
                                         <div class="popover-content">
                                             <label>{{ localeData?.tax_inherited }}:</label>
                                             <ul>
-                                                <li>{{ inTax.name }}</li>
+                                                <li>{{ inTax?.name }}</li>
                                             </ul>
                                         </div>
                                     </div>
@@ -1003,7 +1012,7 @@
                                     [popover]="popTemplate"
                                     placement="right"
                                     triggers="mouseenter:mouseleave"
-                                    >{{ inAppTax.name }}
+                                    >{{ inAppTax?.name }}
                                 </span>
                             </div>
                             <p *ngIf="!(activeAccountTaxHierarchy$ | async)?.inheritedTaxes.length">

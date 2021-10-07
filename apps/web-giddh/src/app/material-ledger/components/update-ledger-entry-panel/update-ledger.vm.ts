@@ -570,9 +570,9 @@ export class UpdateLedgerVm {
         let taxes: UpdateLedgerTaxData[] = cloneDeep(this.selectedTaxes);
 
 
-        requestObj.voucherType = requestObj.voucher?.shortCode;
-        requestObj.transactions = requestObj.transactions ? requestObj.transactions.filter(p => p.particular.uniqueName && !p.isDiscount) : [];
-        requestObj.generateInvoice = this.selectedLedger.generateInvoice;
+        requestObj.voucherType = requestObj?.voucher?.shortCode;
+        requestObj.transactions = requestObj?.transactions ? requestObj.transactions.filter(p => p.particular.uniqueName && !p.isDiscount) : [];
+        requestObj.generateInvoice = this.selectedLedger?.generateInvoice;
 
         requestObj.transactions.map(trx => {
             if (trx.inventory && trx.inventory.stock) {

@@ -58,7 +58,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public ngOnInit() {
-        this.store.pipe(select(state => state.session.activeCompany), take(1)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany?.countryV2?.countryName) {
                 this.showGstComposition = activeCompany.countryV2.countryName === 'India';
             } else {

@@ -1,10 +1,8 @@
 import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpWrapperService } from './httpWrapper.service';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { UserDetails } from '../models/api-models/loginModels';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
@@ -15,19 +13,18 @@ import { EXPENSE_API } from './apiurls/expense.api';
 @Injectable()
 export class ExpenseService {
     private companyUniqueName: string;
-    private user: UserDetails;
 
-    constructor(private errorHandler: GiddhErrorHandler, public _http: HttpWrapperService, public _router: Router,
-        private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    constructor(private errorHandler: GiddhErrorHandler, public http: HttpWrapperService,
+        private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
     public getPettycashReports(request: CommonPaginatedRequest): Observable<BaseResponse<PettyCashReportResponse, any>> {
         request.status = 'pending';
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.createQueryString(this.config.apiUrl + EXPENSE_API.GET, {
             page: request.page, count: request.count, sort: request.sort, sortBy: request.sortBy
         });
-        return this._http.post(url.replace(':companyUniqueName', this.companyUniqueName), request).pipe(
+        return this.http.post(url.replace(':companyUniqueName', this.companyUniqueName), request).pipe(
             map((res) => {
                 let data: BaseResponse<PettyCashReportResponse, any> = res;
                 data.request = request;
@@ -38,12 +35,12 @@ export class ExpenseService {
 
     public getPettycashRejectedReports(request: CommonPaginatedRequest): Observable<BaseResponse<PettyCashReportResponse, any>> {
         request.status = 'rejected';
-        this.companyUniqueName = this._generalService.companyUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.createQueryString(this.config.apiUrl + EXPENSE_API.GET, {
             page: request.page, count: request.count, sort: request.sort, sortBy: request.sortBy
         });
 
-        return this._http.post(url.replace(':companyUniqueName', this.companyUniqueName), request).pipe(
+        return this.http.post(url.replace(':companyUniqueName', this.companyUniqueName), request).pipe(
             map((res) => {
                 let data: BaseResponse<PettyCashReportResponse, any> = res;
                 data.request = request;
@@ -53,8 +50,8 @@ export class ExpenseService {
     }
 
     public actionPettycashReports(requestObj: ActionPettycashRequest, model?: any): Observable<BaseResponse<any, any>> {
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + EXPENSE_API.ACTION
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + EXPENSE_API.ACTION
             .replace(':companyUniqueName', this.companyUniqueName)
             .replace(':uniqueName', requestObj.uniqueName)
             .replace(':accountUniqueName', encodeURIComponent(requestObj.accountUniqueName))
@@ -68,8 +65,8 @@ export class ExpenseService {
     }
 
     public getPettycashEntry(uniqueName: string): Observable<BaseResponse<PettyCashResonse, any>> {
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + EXPENSE_API.GETEntry
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + EXPENSE_API.GETEntry
             .replace(':companyUniqueName', this.companyUniqueName)
             .replace(':accountUniqueName', encodeURIComponent(uniqueName))).pipe(
                 map((res) => {
