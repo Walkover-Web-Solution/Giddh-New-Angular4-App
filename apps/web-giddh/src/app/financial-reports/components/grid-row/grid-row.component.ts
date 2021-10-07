@@ -12,7 +12,6 @@ import {
 } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { Account, ChildGroup } from '../../../models/api-models/Search';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { SearchService } from '../../../services/search.service';
@@ -38,7 +37,6 @@ export class GridRowComponent implements OnChanges, OnDestroy {
     public minimumViewportLimit = TRIAL_BALANCE_VIEWPORT_LIMIT;
     /** True, when expand all button is toggled while search is enabled */
     @Input() public isExpandToggledDuringSearch: boolean;
-
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 

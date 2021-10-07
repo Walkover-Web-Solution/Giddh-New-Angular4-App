@@ -759,10 +759,13 @@
                                         "
                                         class="form-control text-right"
                                         [(ngModel)]="vm.stockTrxEntry.inventory.unit.code"
-                                        (change)="vm.unitChanged($event.target.value)"
+                                        (change)="vm.unitChanged($event?.target?.value)"
                                     >
-                                        <mat-option *ngFor="let item of vm.stockTrxEntry.unitRate" [value]="item.code">
-                                            {{ item.stockUnitCode }}
+                                        <mat-option
+                                            *ngFor="let item of vm.stockTrxEntry?.unitRate"
+                                            [value]="item?.code"
+                                        >
+                                            {{ item?.stockUnitCode }}
                                         </mat-option>
                                     </mat-select>
                                 </div>
@@ -1398,9 +1401,9 @@
                                             <td
                                                 class="pd-r1"
                                                 *ngIf="
-                                                    vm.selectedLedger.voucher?.shortCode === 'sal' ||
-                                                    vm.selectedLedger.voucher?.shortCode === 'pur' ||
-                                                    vm.selectedLedger.voucher?.shortCode == 'pay'
+                                                    vm.selectedLedger?.voucher?.shortCode === 'sal' ||
+                                                    vm.selectedLedger?.voucher?.shortCode === 'pur' ||
+                                                    vm.selectedLedger?.voucher?.shortCode == 'pay'
                                                 "
                                             >
                                                 <div class="form-group mr-b05">
@@ -1411,7 +1414,7 @@
                                                     }}</label>
                                                     <input
                                                         matInput
-                                                        *ngIf="vm.selectedLedger.voucher?.shortCode === 'sal'"
+                                                        *ngIf="vm.selectedLedger?.voucher?.shortCode === 'sal'"
                                                         [disabled]="
                                                             !isPettyCash &&
                                                             currentOrganizationType === 'COMPANY' &&
@@ -1429,7 +1432,8 @@
                                                     />
                                                     <input
                                                         matInput
-                                                        *ngIf="vm.selectedLedger.voucher?.shortCode !== 'sal'"
+                                                        *ngIf="vm.selectedLedger?.voucher?.shortCode !== 'sal'"
+                                                        [disabled]=""
                                                         id="update-ledger-invoice-number"
                                                         type="text"
                                                         [placeholder]="
@@ -1445,8 +1449,8 @@
                                             <td
                                                 class="pd-r1 reference-invoice"
                                                 *ngIf="
-                                                    vm.selectedLedger.voucher?.shortCode == 'credit note' ||
-                                                    vm.selectedLedger.voucher?.shortCode == 'debit note'
+                                                    vm.selectedLedger?.voucher?.shortCode == 'credit note' ||
+                                                    vm.selectedLedger?.voucher?.shortCode == 'debit note'
                                                 "
                                             >
                                                 <div class="form-group mr-b05">
@@ -1503,8 +1507,8 @@
                                             </td>
                                             <td
                                                 *ngIf="
-                                                    (vm.selectedLedger.voucher?.shortCode === 'credit note' ||
-                                                        vm.selectedLedger.voucher?.shortCode === 'debit note') &&
+                                                    (vm.selectedLedger?.voucher?.shortCode === 'credit note' ||
+                                                        vm.selectedLedger?.voucher?.shortCode === 'debit note') &&
                                                     selectedInvoice
                                                 "
                                                 class="cp remove-invoice pd-r2 hidden-xs"
@@ -1539,8 +1543,8 @@
                                             <td
                                                 *ngIf="
                                                     voucherApiVersion === 2 &&
-                                                    (vm.selectedLedger.voucher?.shortCode === 'credit note' ||
-                                                        vm.selectedLedger.voucher?.shortCode === 'debit note')
+                                                    (vm.selectedLedger?.voucher?.shortCode === 'credit note' ||
+                                                        vm.selectedLedger?.voucher?.shortCode === 'debit note')
                                                 "
                                                 class="pd-r1 pb-1"
                                             >
@@ -1556,10 +1560,10 @@
                                             </td>
                                             <td
                                                 *ngIf="
-                                                    vm.selectedLedger.voucher?.shortCode !== 'jr' &&
-                                                    vm.selectedLedger.voucher?.shortCode !== 'cntr' &&
-                                                    vm.selectedLedger.voucher?.shortCode !== 'rcpt' &&
-                                                    vm.selectedLedger.voucher?.shortCode !== 'advance-receipt'
+                                                    vm.selectedLedger?.voucher?.shortCode !== 'jr' &&
+                                                    vm.selectedLedger?.voucher?.shortCode !== 'cntr' &&
+                                                    vm.selectedLedger?.voucher?.shortCode !== 'rcpt' &&
+                                                    vm.selectedLedger?.voucher?.shortCode !== 'advance-receipt'
                                                 "
                                                 class="pd-r1 pb-1"
                                             >
@@ -1583,7 +1587,7 @@
                                             </td>
                                             <td
                                                 *ngIf="
-                                                    vm.selectedLedger.voucher?.shortCode == 'advance-receipt' &&
+                                                    vm.selectedLedger?.voucher?.shortCode == 'advance-receipt' &&
                                                     isAdvanceReceipt
                                                 "
                                                 class="pd-r1 pb-1"
@@ -1605,7 +1609,7 @@
                                             </td>
                                             <td
                                                 *ngIf="
-                                                    vm.selectedLedger.voucher?.shortCode == 'rcpt' && !isAdvanceReceipt
+                                                    vm.selectedLedger?.voucher?.shortCode == 'rcpt' && !isAdvanceReceipt
                                                 "
                                                 class="pd-r1 pb-1"
                                             >
@@ -1984,10 +1988,10 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <advance-receipt-adjustment-component
-                    [adjustedVoucherType]="vm.selectedLedger.voucher?.shortCode"
+                    [adjustedVoucherType]="vm.selectedLedger?.voucher?.shortCode"
                     [invoiceFormDetails]="adjustVoucherConfiguration"
                     [isUpdateMode]="true"
-                    [advanceReceiptAdjustmentUpdatedData]="vm.selectedLedger.voucherAdjustments"
+                    [advanceReceiptAdjustmentUpdatedData]="vm.selectedLedger?.voucherAdjustments"
                     (closeModelEvent)="closeAdjustmentModal($event)"
                     (submitClicked)="getAdjustedPaymentData($event)"
                 >

@@ -67,8 +67,8 @@
                         <li
                             class="btn-group"
                             *ngFor="let company of companyListForFilter"
-                            [ngClass]="{ 'active': company.uniqueName === activeCompany?.uniqueName }"
-                            [tooltip]="company.name"
+                            [ngClass]="{ 'active': company?.uniqueName === activeCompany?.uniqueName }"
+                            [tooltip]="company?.name"
                             placement="top"
                         >
                             <span
@@ -78,7 +78,7 @@
                                 (click)="getCompanyBranches(company); showAllBranches(company)"
                             >
                                 <i class="icon-company mr-2"></i>
-                                <span class="company-name-right">{{ company.name }}</span>
+                                <span class="company-name-right">{{ company?.name }}</span>
                                 <span
                                     class="font-11 text-right branch-count pt-0 pb-0"
                                     *ngIf="company?.branchCount > 1"
@@ -142,7 +142,7 @@
                                 >
                                     <i class="icon-head-branch mr-2"></i>
                                     <span class="d-flex flex-column">
-                                        <span class="branch-alias">{{ companyBranches.name }}</span>
+                                        <span class="branch-alias">{{ companyBranches?.name }}</span>
                                         <span class="font-11 branch-company-name">{{
                                             localeData?.company_consolidated_data
                                         }}</span>

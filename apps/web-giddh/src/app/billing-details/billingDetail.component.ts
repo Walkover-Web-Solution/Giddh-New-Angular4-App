@@ -85,10 +85,10 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor(private store: Store<AppState>, private _generalService: GeneralService, private _toasty: ToasterService, private _route: Router, private _companyService: CompanyService, private _generalActions: GeneralActions, private companyActions: CompanyActions, private cdRef: ChangeDetectorRef,
+    constructor(private store: Store<AppState>, private generalService: GeneralService, private toasty: ToasterService, private route: Router, private companyService: CompanyService, private generalActions: GeneralActions, private companyActions: CompanyActions, private cdRef: ChangeDetectorRef,
         private settingsProfileActions: SettingsProfileActions, private commonActions: CommonActions, private settingsProfileService: SettingsProfileService) {
         this.isUpdateCompanyInProgress$ = this.store.pipe(select(s => s.settings.updateProfileInProgress), takeUntil(this.destroyed$));
-        this.fromSubscription = this._route.routerState.snapshot.url.includes('buy-plan');
+        this.fromSubscription = this.route.routerState.snapshot.url.includes('buy-plan');
         this.isUpdateCompanySuccess$ = this.store.pipe(select(s => s.settings.updateProfileSuccess), takeUntil(this.destroyed$));
     }
 
@@ -106,10 +106,10 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.isCompanyCreationInProcess$ = this.store.pipe(select(s => s.session.isCompanyCreationInProcess), takeUntil(this.destroyed$));
         this.isRefreshing$ = this.store.pipe(select(s => s.session.isRefreshing), takeUntil(this.destroyed$));
-        this.logedInuser = this._generalService.user;
+        this.logedInuser = this.generalService.user;
 
-        if (this._generalService.createNewCompany) {
-            this.createNewCompanyFinalObj = this._generalService.createNewCompany;
+        if (this.generalService.createNewCompany) {
+            this.createNewCompanyFinalObj = this.generalService.createNewCompany;
         }
 
         this.store.pipe(select(s => s.session.userSelectedSubscriptionPlan), takeUntil(this.destroyed$)).subscribe(res => {
@@ -154,7 +154,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         });
         this.isUpdateCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(success => {
             if (success) {
-                this._route.navigate(['pages', 'user-details', 'subscription']);
+                this.route.navigate(['pages', 'user-details', 'subscription']);
             }
         });
         this.cdRef.detectChanges();
@@ -192,7 +192,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
             if (!isValid) {
                 let text = this.commonLocaleData?.app_invalid_tax_name;
                 text = text?.replace("[TAX_NAME]", this.formFields['taxName'].label);
-                this._toasty.errorToast(text);
+                this.toasty.errorToast(text);
                 ele.classList.add('error-box');
                 this.isGstValid = false;
             } else {
@@ -221,12 +221,12 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                         statesEle.setDisabledState(true);
                     } else {
                         statesEle.setDisabledState(false);
-                        this._toasty.clearAllToaster();
+                        this.toasty.clearAllToaster();
                         if (this.formFields['taxName'] && !this.billingForm.form.get('gstin')?.valid) {
                             this.billingDetailsObj.stateCode = '';
                             let text = this.commonLocaleData?.app_invalid_tax_name;
                             text = text?.replace("[TAX_NAME]", this.formFields['taxName'].label);
-                            this._toasty.warningToast(text);
+                            this.toasty.warningToast(text);
                         }
                     }
                 });
@@ -266,7 +266,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
             });
         }
         if (this.subscriptionPrice && this.UserCurrency) {
-            this._companyService.getRazorPayOrderId(this.subscriptionPrice, this.UserCurrency).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
+            this.companyService.getRazorPayOrderId(this.subscriptionPrice, this.UserCurrency).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
                 this.isCreateAndSwitchCompanyInProcess = false;
                 if (res.status === 'success') {
                     this.ChangePaidPlanAMT = res.body.amount;
@@ -275,7 +275,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.razorpayAmount = this.getPayAmountForRazorPay(this.ChangePaidPlanAMT);
                     this.ngAfterViewInit();
                 } else {
-                    this._toasty.errorToast(res.message);
+                    this.toasty.errorToast(res.message);
                 }
             });
         }
@@ -287,7 +287,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     public backToSubscriptions() {
-        this._route.navigate(['/pages', 'user-details', 'subscription'], {
+        this.route.navigate(['/pages', 'user-details', 'subscription'], {
             queryParams: {
                 showPlans: true
             }
@@ -296,7 +296,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
     public payWithRazor(billingDetail: NgForm) {
         if (!(this.validateEmail(billingDetail.value.email))) {
-            this._toasty.warningToast(this.localeData?.invalid_email_error, this.commonLocaleData?.app_warning);
+            this.toasty.warningToast(this.localeData?.invalid_email_error, this.commonLocaleData?.app_warning);
             return false;
         }
         if (billingDetail.valid && this.createNewCompany) {
@@ -429,7 +429,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
                 // check if createNewCompany object is initialized if not then user current company country code
                 statesRequest.country = this.createNewCompany ? this.createNewCompany.country : this.activeCompany.countryV2 ? this.activeCompany.countryV2.alpha2CountryCode : '';
-                this.store.dispatch(this._generalActions.getAllState(statesRequest));
+                this.store.dispatch(this.generalActions.getAllState(statesRequest));
             }
         });
     }
@@ -468,12 +468,12 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.isMobileNumberValid = true;
             } else {
                 this.isMobileNumberValid = false;
-                this._toasty.errorToast(this.localeData?.invalid_contact_number_error);
+                this.toasty.errorToast(this.localeData?.invalid_contact_number_error);
                 ele.classList.add('error-box');
             }
         } catch (error) {
             this.isMobileNumberValid = false;
-            this._toasty.errorToast(this.localeData?.invalid_contact_number_error);
+            this.toasty.errorToast(this.localeData?.invalid_contact_number_error);
             ele.classList.add('error-box');
         }
     }

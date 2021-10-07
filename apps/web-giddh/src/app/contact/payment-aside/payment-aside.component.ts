@@ -24,28 +24,26 @@ import { IForceClear } from '../../models/api-models/Sales';
     templateUrl: './payment-aside.component.html',
     styleUrls: [`./payment-aside.component.scss`],
 })
-
 export class PaymentAsideComponent implements OnInit, OnChanges {
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     @Input() public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-
-    //variable that holds registered account information
+    /** variable that holds registered account information */
     public registeredAccounts: any;
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    //variable holding available mode for payment transfer
+    /** variable holding available mode for payment transfer */
     public mode: IRegistration;
-    //user information
+    /** user information */
     public user: VerifyEmailResponseModel;
-    //Active account to make the transfer
+    /** Active account to make the transfer */
     public activeAccount$: Observable<AccountResponseV2>;
-    //Account details into which the amount is to be transferred
+    /** Account details into which the amount is to be transferred */
     public accountDetails: any;
-    //Default amount value
+    /** Default amount value */
     public amount = 0;
     public userDetails$: Observable<VerifyEmailResponseModel>;
-    //variable to check whether OTP is sent to show and hide OTP text field
+    /** variable to check whether OTP is sent to show and hide OTP text field */
     public OTPsent: boolean = false;
     public countryCode: string = '';
     /** Integrated bank list array */
@@ -64,9 +62,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
     /** Integrated bank list sh-select options */
     public selectIntegratedBankList: IOption[] = [];
-    //Event emitter to close the Aside panel
+    /** Event emitter to close the Aside panel */
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-    //Input current account holders information
+    /** Input current account holders information */
     @Input() public selectedAccForPayment: any;
     /** Selected account list */
     @Input() public selectedAccountsForBulkPayment: any[];
@@ -76,7 +74,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public companyUniqueName: string;
     /** count down timer observable */
     public timerCountDown$: Observable<string>;
-    //Variable holding OTP received by user
+    /** Variable holding OTP received by user */
     public receivedOtp: any;
     /** remark for payment */
     public remarks: string = '';
@@ -131,15 +129,17 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public isPayorListInProgress: boolean = false;
     /** True if payor is required */
     public isPayorRequired: boolean = true;
+    /** Holds message of payment successful */
+    public paymentSuccessfulMessage: string = "";
 
     constructor(
         private formBuilder: FormBuilder,
         private modalService: BsModalService,
         private store: Store<AppState>,
-        private _companyActions: CompanyActions,
+        private companyActions: CompanyActions,
         private accountsAction: AccountsAction,
-        private _companyService: CompanyService,
-        private _toaster: ToasterService,
+        private companyService: CompanyService,
+        private toaster: ToasterService,
         private generalService: GeneralService,
         private settingsIntegrationService: SettingsIntegrationService
     ) {
@@ -169,7 +169,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.initializeNewForm();
         // get all registered account
         this.store.pipe((select(c => c.session.companyUniqueName)), take(2)).subscribe(s => this.companyUniqueName = s);
-        this.store.dispatch(this._companyActions.getAllRegistrations());
+        this.store.dispatch(this.companyActions.getAllRegistrations());
 
         //get current registered account on the user
         this.store.pipe(select(selectStore => selectStore.company), takeUntil(this.destroyed$)).subscribe((response) => {
@@ -204,7 +204,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             this.selectIntegratedBankList = [];
             if (bankList && bankList.length) {
                 bankList.forEach(item => {
-                    if (item) {
+                    if (item && !item.errorMessage) {
                         item.bankName = item.bankName ? item.bankName : "";
                         this.selectIntegratedBankList.push({ label: item.bankName, value: item.uniqueName, additional: item });
                     }
@@ -277,6 +277,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public closeAsidePane(event?) {
         this.closeAsideEvent.emit(event);
     }
+
     /*
     * API call to send OTP to user
     *
@@ -287,14 +288,14 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 urn: this.mode.iciciCorporateDetails.URN
             }
         };
-        this._companyService.getOTP(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+        this.companyService.getOTP(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res.status === 'success') {
                 this.OTPsent = true;
             } else {
                 if (res.status === 'error' && res.code === 'BANK_ERROR') {
-                    this._toaster.warningToast(res.message);
+                    this.toaster.warningToast(res.message);
                 } else {
-                    this._toaster.errorToast(res.message);
+                    this.toaster.errorToast(res.message);
                 }
             }
         });
@@ -309,39 +310,41 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.timerOn = true
         this.startTimer(40);
         this.receivedOtp = null;
-        this._companyService.resendOtp(this.companyUniqueName, this.selectedBankUrn, this.paymentRequestId, this.selectedBankUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.companyService.resendOtp(this.companyUniqueName, this.selectedBankUrn, this.paymentRequestId, this.selectedBankUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.status === 'success') {
 
                 this.isPayClicked = true;
                 if (response.body && response.body.message) {
-                    this._toaster.successToast(response.body.message);
+                    this.toaster.successToast(response.body.message);
                     this.otpReceiverNameMessage = response.body.message;
                     this.paymentRequestId = response.body.requestId;
                 }
             } else if (response.status === 'error') {
-                this._toaster.errorToast(response.message, response.code);
+                this.toaster.errorToast(response.message, response.code);
             }
         });
     }
 
-    /*
-    * API call to confirm OTP received by user
-    *
-    * */
+    /**
+     * API call to confirm OTP received by user
+     *
+     * @memberof PaymentAsideComponent
+     */
     public confirmOTP() {
         let bankTransferConfirmOtpRequest: BulkPaymentConfirmRequest = new BulkPaymentConfirmRequest();
         this.isRequestInProcess = true;
         bankTransferConfirmOtpRequest.requestId = this.paymentRequestId;
         bankTransferConfirmOtpRequest.otp = this.receivedOtp;
-        this._companyService.bulkVendorPaymentConfirm(this.companyUniqueName, this.selectedBankUrn, this.selectedBankUniqueName, bankTransferConfirmOtpRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+        this.companyService.bulkVendorPaymentConfirm(this.companyUniqueName, this.selectedBankUrn, this.selectedBankUniqueName, bankTransferConfirmOtpRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && res.status === 'success') {
+                this.paymentSuccessfulMessage = res.body?.Message;
                 this.closePaymentModel(true);
                 this.openModalWithClass(this.successTemplate);
             } else {
                 if (res.status === 'error' && res.code === 'BANK_ERROR') {
-                    this._toaster.warningToast(res.message);
+                    this.toaster.warningToast(res.message);
                 } else {
-                    this._toaster.errorToast(res.message, res.code);
+                    this.toaster.errorToast(res.message, res.code);
                 }
             }
             this.isRequestInProcess = false;
@@ -396,7 +399,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @memberof PaymentAsideComponent
      */
     public getIntegratedBankDetails(): void {
-        this.store.dispatch(this._companyActions.getAllIntegratedBankInCompany(this.companyUniqueName));
+        this.store.dispatch(this.companyActions.getAllIntegratedBankInCompany(this.companyUniqueName));
     }
 
     /**
@@ -452,18 +455,18 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.paymentRequestId = '';
         this.otpReceiverNameMessage = '';
         this.isRequestInProcess = true;
-        this._companyService.bulkVendorPayment(this.companyUniqueName, this.requestObjectToGetOTP).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.companyService.bulkVendorPayment(this.companyUniqueName, this.requestObjectToGetOTP).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isRequestInProcess = false;
             if (response && response.status === 'success') {
                 this.isPayClicked = true;
                 if (response.body && response.body.message) {
-                    this._toaster.successToast(response.body.message);
+                    this.toaster.successToast(response.body.message);
                     this.otpReceiverNameMessage = response.body.message;
                     this.paymentRequestId = response.body.requestId;
                 }
             } else if (response.status === 'error') {
                 this.isPayClicked = false;
-                this._toaster.errorToast(response.message, response.code);
+                this.toaster.errorToast(response.message, response.code);
                 this.paymentRequestId = '';
             }
         });
@@ -708,8 +711,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             } else {
                 this.payorsList = [];
                 if(response?.message) {
-                    this._toaster.clearAllToaster();
-                    this._toaster.errorToast(response?.message);
+                    this.toaster.clearAllToaster();
+                    this.toaster.errorToast(response?.message);
                 }
             }
             this.isPayorListInProgress = false;

@@ -2777,6 +2777,10 @@ form#groupDetailForm {
         max-width: 280px;
     }
 }
+
+.delete-custom-field-modal-container {
+    z-index: 999999 !important;
+}
 /* material css for ledger */
 .mat-dialog-container {
     padding: 0px !important;

@@ -13,7 +13,7 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
     private isOnline: boolean = navigator.onLine;
 
     constructor(
-        private _toasterService: ToasterService,
+        private toasterService: ToasterService,
         private loadingService: LoaderService,
         private generalService: GeneralService,
         private localeService: LocaleService
@@ -30,11 +30,12 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
         if (this.generalService.currentOrganizationType === OrganizationType.Branch && request && request.urlWithParams) {
             request = this.addBranchUniqueName(request);
         }
+        request = this.addLanguage(request);
         if (this.isOnline) {
             return next.handle(request);
         } else {
             setTimeout(() => {
-                this._toasterService.warningToast(this.localeService.translate("app_messages.internet_error"), this.localeService.translate("app_messages.internet_disconnected"));
+                this.toasterService.warningToast(this.localeService.translate("app_messages.internet_error"), this.localeService.translate("app_messages.internet_disconnected"));
             }, 100);
             this.loadingService.hide();
             if (request.body && request.body.handleNetworkDisconnection) {
@@ -57,6 +58,23 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
         if (!request.params.has('branchUniqueName') && !request.url.includes('branchUniqueName') && !request.url.includes('.json')) {
             request = request.clone({
                 params: request.params.append('branchUniqueName', encodeURIComponent(this.generalService.currentBranchUniqueName))
+            });
+        }
+        return request;
+    }
+
+    /**
+     * Adds language code to every API call
+     *
+     * @private
+     * @param {HttpRequest<any>} request
+     * @returns {HttpRequest<any>}
+     * @memberof GiddhHttpInterceptor
+     */
+    private addLanguage(request: HttpRequest<any>): HttpRequest<any> {
+        if (!request.params.has('lang') && !request.url.includes('.json')) {
+            request = request.clone({
+                params: request.params.append('lang', (this.localeService.language || "en"))
             });
         }
         return request;
