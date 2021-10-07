@@ -59,15 +59,15 @@ export class RevisionHistoryComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         if (this.purchaseBill) {
             this.purchaseVersionsGetRequest.companyUniqueName = this.companyUniqueName;
-            this.purchaseVersionsGetRequest.accountUniqueName = this.purchaseBill.account.uniqueName;
+            this.purchaseVersionsGetRequest.accountUniqueName = this.purchaseBill.account?.uniqueName;
             this.purchaseVersionsPostRequest.uniqueName = this.purchaseBill.uniqueName;
 
             this.getPurchaseBillVersions(true);
         }
 
         if (this.purchaseOrder) {
-            this.purchaseVersionsGetRequest.companyUniqueName = this.purchaseOrder.company.uniqueName;
-            this.purchaseVersionsGetRequest.accountUniqueName = this.purchaseOrder.account.uniqueName;
+            this.purchaseVersionsGetRequest.companyUniqueName = this.purchaseOrder.company?.uniqueName;
+            this.purchaseVersionsGetRequest.accountUniqueName = this.purchaseOrder.account?.uniqueName;
             this.purchaseVersionsPostRequest.purchaseNumber = this.purchaseOrder.number;
 
             this.getPurchaseOrderVersions(true);
@@ -184,7 +184,7 @@ export class RevisionHistoryComponent implements OnInit, OnDestroy {
      * @memberof RevisionHistoryComponent
      */
     public getPurchaseBillVersions(resetPage: boolean): void {
-        if (this.purchaseVersionsGetRequest.companyUniqueName && this.purchaseVersionsPostRequest.uniqueName) {
+        if (this.purchaseVersionsGetRequest?.companyUniqueName && this.purchaseVersionsPostRequest?.uniqueName) {
             this.isLoading = true;
             this.purchaseVersions = {};
 

@@ -206,13 +206,13 @@ export class MfReportComponent implements OnInit, OnDestroy {
                 });
                 this.isCompany = this.currentOrganizationType !== OrganizationType.Branch && this.currentCompanyBranches.length > 2;
                 let currentBranchUniqueName;
-                if (!this.currentBranch.uniqueName) {
+                if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
@@ -264,7 +264,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
     }
 
     public editMFItem(item) {
-        if (item.uniqueName) {
+        if (item?.uniqueName) {
             this.store.dispatch(this.manufacturingActions.SetMFItemUniqueNameInStore(item.uniqueName));
             this.router.navigate(['/pages/manufacturing/edit']);
         }
