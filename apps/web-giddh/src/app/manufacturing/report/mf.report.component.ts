@@ -310,8 +310,8 @@ export class MfReportComponent implements OnInit, OnDestroy {
      * @memberof MfReportComponent
      */
     public handleBranchChange(selectedEntity: any): void {
-        this.currentBranch.name = selectedEntity.label;
-        this.mfStockSearchRequest.branchUniqueName = selectedEntity.value;
+        this.currentBranch.name = selectedEntity?.label;
+        this.mfStockSearchRequest.branchUniqueName = selectedEntity?.value;
 
         this.forceClearWarehouse$ = observableOf({ status: true });
         this.warehouses = this.allWarehouses[selectedEntity.value];

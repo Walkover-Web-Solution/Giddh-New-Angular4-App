@@ -297,7 +297,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
                 this.showDeleteButton = true;
                 this.startUpload();
                 //this.updateTemplate(output.file.response.body.uniqueName); //unused call to save template after logo upload
-                this.onValueChange('logoUniqueName', output.file.response.body.uniqueName);
+                this.onValueChange('logoUniqueName', output.file.response.body?.uniqueName);
                 this.isFileUploaded = true;
                 this._invoiceUiDataService.isLogoUpdateInProgress = false;
                 this._toasty.successToast('file uploaded successfully.');
@@ -324,7 +324,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
 
             data = this.newLineToBR(data);
 
-            this._invoiceTemplatesService.updateTemplate(data.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            this._invoiceTemplatesService.updateTemplate(data?.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res.status === 'success') {
                     this._toasty.successToast('Template Updated Successfully.');
                     this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(this.templateType));

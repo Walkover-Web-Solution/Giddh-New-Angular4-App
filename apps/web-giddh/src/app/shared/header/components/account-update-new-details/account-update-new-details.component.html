@@ -937,7 +937,7 @@
                             <div class="popover-content">
                                 <label>{{ localeData?.discounts_inherited_from }}:</label>
                                 <ul>
-                                    <li>{{ item.name }}</li>
+                                    <li>{{ item?.name }}</li>
                                 </ul>
                             </div>
                         </ng-template>
@@ -1001,7 +1001,7 @@
                                         <div class="popover-content">
                                             <label>{{ localeData?.tax_inherited }}:</label>
                                             <ul>
-                                                <li>{{ inTax.name }}</li>
+                                                <li>{{ inTax?.name }}</li>
                                             </ul>
                                         </div>
                                     </div>
@@ -1012,7 +1012,7 @@
                                     [popover]="popTemplate"
                                     placement="right"
                                     triggers="mouseenter:mouseleave"
-                                    >{{ inAppTax.name }}
+                                    >{{ inAppTax?.name }}
                                 </span>
                             </div>
                             <p *ngIf="!(activeAccountTaxHierarchy$ | async)?.inheritedTaxes.length">

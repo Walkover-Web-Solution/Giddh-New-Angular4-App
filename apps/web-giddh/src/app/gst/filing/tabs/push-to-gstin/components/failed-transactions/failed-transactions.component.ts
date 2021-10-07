@@ -24,7 +24,7 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor() {
-        
+
     }
 
     public ngOnInit() {
@@ -35,7 +35,7 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
      * ngOnChnages
      */
     public ngOnChanges(s: SimpleChanges) {
-        if (s['failedTransactions'].currentValue && s['failedTransactions'].currentValue !== s['failedTransactions'].previousValue) {
+        if (s['failedTransactions']?.currentValue && s['failedTransactions']?.currentValue !== s['failedTransactions']?.previousValue) {
             this.pageChanged({ page: 1, itemsPerPage: this.itemsPerPage });
         }
     }

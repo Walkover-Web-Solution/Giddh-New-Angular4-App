@@ -206,7 +206,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.updateAccountInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.updateAccountInProcess), takeUntil(this.destroyed$));
         this.updateAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.updateAccountIsSuccess), takeUntil(this.destroyed$));
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
-        
+
         this.selectedItems = [];
         this.settings = {
             singleSelection: false,

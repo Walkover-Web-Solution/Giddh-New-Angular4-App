@@ -2,7 +2,7 @@
     <div>
         <div class="row">
             <div class="col-sm-6">
-                <p class="bold mr-b05">{{ selectedItem?.entryDate }} | {{ selectedItem.baseAccount.name }}</p>
+                <p class="bold mr-b05">{{ selectedItem?.entryDate }} | {{ selectedItem?.baseAccount?.name }}</p>
             </div>
             <div class="col-sm-6 text-right xs-left">
                 <div class="d-flex justify-content-end align-items-center">
@@ -95,8 +95,8 @@
                                             [isPaginationEnabled]="true"
                                             (scrollEnd)="handleAccountScrollEnd()"
                                             (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
-                                            [defaultValue]="entryAgainstObject.name"
-                                            [fixedValue]="entryAgainstObject.name"
+                                            [defaultValue]="entryAgainstObject?.name"
+                                            [fixedValue]="entryAgainstObject?.name"
                                             [forceClearReactive]="forceClear$ | async"
                                             [multiple]="false"
                                             [ItemHeight]="33"

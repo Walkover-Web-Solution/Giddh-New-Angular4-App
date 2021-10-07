@@ -353,7 +353,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                                 quantity: null
                             };
                         }
-                        
+
                         this.branchTransfer.destinations[index].warehouse.stockDetails.quantity = (event.value) ? 1 : null;
                     }
                     this.destinationWarehouseClear$ = observableOf({ status: true });
@@ -1069,7 +1069,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         this._toasty.errorToast(res.message, res.code);
                     }
                 } else {
-                    this._toasty.errorToast(res.message, res.code);
+                    this._toasty.errorToast(res?.message, res?.code);
                 }
             });
         } else {
@@ -1091,7 +1091,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         this._toasty.errorToast(res.message, res.code);
                     }
                 } else {
-                    this._toasty.errorToast(res.message, res.code);
+                    this._toasty.errorToast(res?.message, res?.code);
                 }
             });
         }
