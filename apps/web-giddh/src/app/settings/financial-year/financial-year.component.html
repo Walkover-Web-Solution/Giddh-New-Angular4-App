@@ -51,7 +51,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="no-data" *ngIf="!financialYearObj || !financialYearObj.financialYears.length">
+                            <div class="no-data" *ngIf="!financialYearObj || !financialYearObj?.financialYears?.length">
                                 <no-data
                                     [primaryMessage]="commonLocaleData?.app_no_entries_found"
                                     [secondaryMessage]="commonLocaleData?.app_search_suggestion"

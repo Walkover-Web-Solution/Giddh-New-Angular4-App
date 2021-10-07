@@ -388,7 +388,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             this.selectedAccountUniqueName = '';
         }
         this.store.dispatch(this.invoiceActions.ModifiedInvoiceStateData(model?.uniqueNames));
-        if ( res?.account?.uniqueName) {
+        if (res?.account?.uniqueName) {
             this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account?.uniqueName, model));
         }
 
@@ -418,7 +418,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         let arr: GenBulkInvoiceGroupByObj[] = [];
         forEach(this.ledgersData.results, (item: ILedgersInvoiceResult): void => {
             if (item.isSelected) {
-                arr.push({ accUniqueName: item.account.uniqueName, uniqueName: item.uniqueName });
+                arr.push({ accUniqueName: item.account?.uniqueName, uniqueName: item?.uniqueName });
             }
         });
         let res = groupBy(arr, 'accUniqueName');

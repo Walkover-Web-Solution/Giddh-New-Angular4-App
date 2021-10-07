@@ -141,15 +141,15 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
             if (this.doNotResetSelectedValues) {
                 if(typeof this._selectedValues[0] === "string") {
                     let selectedValues = this._selectedValues.map(value => {
-                        let filteredValue = this.rows.filter(row => row.value === String(value));
+                        let filteredValue = this.rows?.filter(row => row.value === String(value));
                         let rowNotFound: any = { label: value, value: value };
                         return (filteredValue && filteredValue[0]?.value) ? filteredValue[0] : rowNotFound;
                     });
                     this._selectedValues = selectedValues;
                 }
-                this._selectedValues = this._selectedValues.filter(selected => val.indexOf(selected?.value) > -1);
+                this._selectedValues = this._selectedValues?.filter(selected => val.indexOf(selected?.value) > -1);
             } else {
-                this._selectedValues = this.rows.filter((f: any) => val.findIndex(p => p === f.label || p === f.value) !== -1);
+                this._selectedValues = this.rows?.filter((f: any) => val.findIndex(p => p === f.label || p === f.value) !== -1);
             }
         } else {
             this._selectedValues = val;
@@ -191,7 +191,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
         filteredArr = this.getFilteredArrOfIOptionItems(array, term, action);
 
-        startsWithArr = filteredArr.filter((item) => {
+        startsWithArr = filteredArr?.filter((item) => {
             if (startsWith(String(item?.label).toLocaleLowerCase(), term) || startsWith(String(item?.value).toLocaleLowerCase(), term)) {
                 return item;
             } else {
@@ -206,7 +206,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
     public getFilteredArrOfIOptionItems(array: IOption[], term: string, action: string) {
         if (action === FLATTEN_SEARCH_TERM) {
-            return array.filter((item) => {
+            return array?.filter((item) => {
                 let mergedAccounts = item.additional && item.additional.mergedAccounts ?
                     _.cloneDeep(item.additional.mergedAccounts.split(',').map(a => a.trim().toLocaleLowerCase())) : '';
                 let stockName = '';
@@ -218,7 +218,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
                 return _.includes(String(item?.label).toLocaleLowerCase(), term) || _.includes(item?.additional?.uniqueName.toLocaleLowerCase(), term) || _.includes(mergedAccounts, term) || _.includes(stockName.toLocaleLowerCase(), term) || _.includes(stockUnqName.toLocaleLowerCase(), term);
             });
         } else {
-            return array.filter((item: IOption) => {
+            return array?.filter((item: IOption) => {
                 return includes(String(item?.label).toLocaleLowerCase(), term) || includes(String(item?.value).toLocaleLowerCase(), term);
             });
         }
@@ -247,7 +247,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         } else if (this._options && this.useInBuiltFilterForIOptionTypeItems) {
             this.filteredData = this.filterByIOption(this._options, lowercaseFilter);
         } else {
-            let filteredData = this._options ? this._options.filter(item => {
+            let filteredData = this._options ? this._options?.filter(item => {
                 if (this.customFilter) {
                     return this.customFilter(lowercaseFilter, item);
                 }
@@ -542,7 +542,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
     public clearSingleSelection(event, option: IOption) {
         event.stopPropagation();
-        this.selectedValues = this.selectedValues.filter(f => f?.value !== option?.value).map(p => p?.value);
+        this.selectedValues = this.selectedValues?.filter(f => f?.value !== option?.value).map(p => p?.value);
         this.clearSingleItem.emit(this.selectedValues);
         this.onChange();
     }

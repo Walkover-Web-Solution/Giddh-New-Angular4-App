@@ -182,6 +182,7 @@ export interface DownloadVoucherRequest {
     voucherNumber: string[];
     voucherType: string;
     uniqueName?: string;
+    typeOfInvoice?: string[];
 }
 class CurrencyClass {
     public code: string;

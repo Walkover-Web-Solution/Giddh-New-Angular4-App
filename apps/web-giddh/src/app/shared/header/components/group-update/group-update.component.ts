@@ -198,7 +198,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
 
                             if (activeGroupTaxHierarchy.inheritedTaxes && activeGroupTaxHierarchy.inheritedTaxes.length) {
                                 let inheritedTaxes = flattenDeep(activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j.uniqueName);
-                                let allTaxes = applicableTaxes.filter(f => inheritedTaxes.indexOf(f) === -1);
+                                let allTaxes = applicableTaxes?.filter(f => inheritedTaxes.indexOf(f) === -1);
                                 // set value in tax group form
                                 setTimeout(() => {
                                     this.taxGroupForm.setValue({ taxes: allTaxes });
@@ -309,13 +309,13 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         let fixDiscount = 0;
         let percentageDiscount = 0;
         if (this.discountControl) {
-            percentageDiscount = this.discountControl.discountAccountsDetails.filter(f => f.isActive)
+            percentageDiscount = this.discountControl.discountAccountsDetails?.filter(f => f.isActive)
                 .filter(s => s.discountType === 'PERCENTAGE')
                 .reduce((pv, cv) => {
                     return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
                 }, 0) || 0;
 
-            fixDiscount = this.discountControl.discountAccountsDetails.filter(f => f.isActive)
+            fixDiscount = this.discountControl.discountAccountsDetails?.filter(f => f.isActive)
                 .filter(s => s.discountType === 'FIX_AMOUNT')
                 .reduce((pv, cv) => {
                     return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
@@ -374,7 +374,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             });
             listItem = Object.assign({}, listItem, { parentGroups: [] });
             listItem.parentGroups = newParents;
-            if (listItem.groups.length > 0) {
+            if (listItem?.groups?.length > 0) {
                 result = this.flattenGroup(listItem.groups, newParents);
                 result.push(omit(listItem, 'groups'));
             } else {
@@ -702,13 +702,13 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         const {isDebtor, isCreditor}: any = this.isDebtorCreditorGroup(activeGroup, true);
         if (isDebtor) {
             // Only allow TDS receivable and TCS payable
-            this.companyTaxDropDown = this.companyTaxDropDown.filter(tax => ['tdsrc', 'tcspay'].indexOf(tax?.additional?.taxType) > -1);
+            this.companyTaxDropDown = this.companyTaxDropDown?.filter(tax => ['tdsrc', 'tcspay'].indexOf(tax?.additional?.taxType) > -1);
         } else if (isCreditor) {
             // Only allow TDS payable and TCS receivable
-            this.companyTaxDropDown = this.companyTaxDropDown.filter(tax => ['tdspay', 'tcsrc'].indexOf(tax?.additional?.taxType) > -1);
+            this.companyTaxDropDown = this.companyTaxDropDown?.filter(tax => ['tdspay', 'tcsrc'].indexOf(tax?.additional?.taxType) > -1);
         } else {
             // Only normal (non-other) taxes
-            this.companyTaxDropDown = this.companyTaxDropDown.filter(tax => TCS_TDS_TAXES_TYPES.indexOf(tax?.additional?.taxType) === -1);
+            this.companyTaxDropDown = this.companyTaxDropDown?.filter(tax => TCS_TDS_TAXES_TYPES.indexOf(tax?.additional?.taxType) === -1);
         }
     }
 }

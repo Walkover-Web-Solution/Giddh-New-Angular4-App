@@ -182,14 +182,14 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             if (res) {
                 if (res.contactNo.includes('-')) {
                     const contactNumber = res.contactNo.split('-');
-                    if (contactNumber.length > 1) {
+                    if (contactNumber?.length > 1) {
                         res.contactNo = contactNumber[1];
                     }
                 }
                 this.company = res;
             }
         });
-        if (this.createBranch && this.isUpdateMode && this.entityDetails) {
+        if (this.createBranch && this.isUpdateMode && this.entityDetails && this.company) {
             this.company.name = this.entityDetails.name;
             this.company.nameAlias = this.entityDetails.alias;
         }
@@ -319,7 +319,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     public makeMeCaptialize(companyName: string) {
         if (companyName) {
             companyName = companyName.trim();
-            if (companyName) {
+            if (companyName && this.company) {
                 this.company.name = companyName[0].toUpperCase() + companyName.substr(1, companyName.length);
             } else {
                 this.company.name = '';

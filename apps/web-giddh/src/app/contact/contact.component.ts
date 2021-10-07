@@ -226,13 +226,13 @@ export class ContactComponent implements OnInit, OnDestroy {
         private companyActions: CompanyActions,
         private componentFactoryResolver: ComponentFactoryResolver,
         private groupWithAccountsAction: GroupWithAccountsAction,
-        private cdRef: ChangeDetectorRef, 
+        private cdRef: ChangeDetectorRef,
         private generalService: GeneralService,
         private route: ActivatedRoute,
         private generalAction: GeneralActions,
-        private breakPointObservar: BreakpointObserver, 
+        private breakPointObservar: BreakpointObserver,
         private modalService: BsModalService,
-        private settingsProfileActions: SettingsProfileActions, 
+        private settingsProfileActions: SettingsProfileActions,
         private groupService: GroupService,
         private settingsBranchAction: SettingsBranchActions,
         public currencyPipe: GiddhCurrencyPipe,
@@ -418,7 +418,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 if(!approvalPendingAccounts?.length) {
                     this.isIciciAccountPendingForApproval = true;
                 }
-                
+
                 this.isICICIIntegrated = true;
             } else {
                 this.isICICIIntegrated = false;
@@ -506,8 +506,8 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
             this.commonRequest = new ContactAdvanceSearchCommonModal();
             this.isAdvanceSearchApplied = false;
-            this.key = 'name';
-            this.order = 'asc';
+            this.key = (tabName === "vendor") ? 'amountDue' : "name";
+            this.order = (tabName === "vendor") ? 'desc' : 'asc';
             this.activeTab = tabName;
 
             if (this.universalDate && this.universalDate[0] && this.universalDate[1] && !this.todaySelected) {
@@ -748,9 +748,9 @@ export class ContactComponent implements OnInit, OnDestroy {
         let end = el.selectionEnd;
         let text = el.value;
         let before = text.substring(0, start);
-        let after = text.substring(end, text.length);
+        let after = text.substring(end, text?.length);
         el.value = (before + newText + after);
-        el.selectionStart = el.selectionEnd = start + newText.length;
+        el.selectionStart = el.selectionEnd = start + newText?.length;
         el.focus();
         this.messageBody.msg = el.value;
     }
@@ -854,6 +854,10 @@ export class ContactComponent implements OnInit, OnDestroy {
             componentInstance.maxSize = 5;
             componentInstance.writeValue(s.page);
             componentInstance.boundaryLinks = true;
+            componentInstance.firstText = this.commonLocaleData?.app_first;
+            componentInstance.previousText = this.commonLocaleData?.app_previous;
+            componentInstance.nextText = this.commonLocaleData?.app_next;
+            componentInstance.lastText = this.commonLocaleData?.app_last;
             componentInstance.pageChanged.pipe(takeUntil(this.destroyed$)).subscribe(e => {
                 this.pageChangedDueReport(e);
             });
@@ -932,7 +936,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         if (!ev.target.checked) {
             this.checkboxInfo[this.checkboxInfo.selectedPage] = false;
             this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
-            if (this.selectedCheckedContacts.length === 0) {
+            if (this.selectedCheckedContacts?.length === 0) {
                 this.selectAllCustomer = false;
                 this.selectAllVendor = false;
                 this.selectedWhileHovering = '';
@@ -944,8 +948,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
         this.commonRequest = new ContactAdvanceSearchCommonModal();
         this.isAdvanceSearchApplied = false;
-        this.key = 'name';
-        this.order = 'asc';
+        this.key = (this.activeTab === "vendor") ? 'amountDue' : "name";
+        this.order = (this.activeTab === "vendor") ? 'desc' : "asc";
         this.getAccounts(this.fromDate, this.toDate,
             null, 'true', PAGINATION_LIMIT, '', '', null, (this.currentBranch ? this.currentBranch.uniqueName : ""));
     }
@@ -1215,7 +1219,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     private setTableColspan() {
         let balancesColsArr = ['openingBalance'];
-        let length = Object.keys(this.showFieldFilter).filter(f => this.showFieldFilter[f]).filter(f => balancesColsArr.includes(f)).length;
+        let length = Object.keys(this.showFieldFilter).filter(f => this.showFieldFilter[f]).filter(f => balancesColsArr.includes(f))?.length;
         this.tableColsPan = length > 0 ? 4 : 3;
     }
 
@@ -1527,7 +1531,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     public openBulkPaymentModal(template: TemplateRef<any>, item?: any): void {
         this.isBulkPaymentShow = true;
         this.selectedAccForPayment = null;
-        if (this.selectedAccountsList.length) {
+        if (this.selectedAccountsList?.length) {
             this.selectedAccountsList = this.selectedAccountsList.filter(itemObject => {
                 return itemObject.bankPaymentDetails === true;
             });
@@ -1535,19 +1539,20 @@ export class ContactComponent implements OnInit, OnDestroy {
                 return this.selectedAccountsList.indexOf(data) === index;
             });
         }
-        if (!this.selectedAccountsList.length && item) {
+        if (!this.selectedAccountsList?.length && item) {
             if (item.bankPaymentDetails) {
                 this.selectedAccForPayment = item;
             }
         }
-        if (this.selectedAccountsList.length < this.selectedCheckedContacts.length) {
+        if (this.selectedAccountsList?.length < this.selectedCheckedContacts?.length) {
             let message = this.localeData?.bank_transactions_message;
             message = message.replace("[SUCCESS]", this.selectedCheckedContacts.length - this.selectedAccountsList.length);
             message = message.replace("[TOTAL]", this.selectedCheckedContacts.length);
 
             this.toaster.infoToast(message);
         }
-        if (this.selectedAccountsList.length || this.selectedAccForPayment) {
+        if (this.selectedAccountsList?.length || this.selectedAccForPayment) {
+            this.selectedAccountsList = [this.selectedAccountsList[0]]; // since we don't have bulk payment now, we are only passing 1st available value, once bulk payment is done from API, we will remove this line of code
             this.bulkPaymentModalRef = this.modalService.show(template,
                 Object.assign({}, { class: 'payment-modal modal-xl' })
             );

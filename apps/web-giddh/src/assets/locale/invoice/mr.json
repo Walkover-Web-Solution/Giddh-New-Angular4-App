@@ -141,13 +141,13 @@
         "giddh_invoice_not_cancelled": "ई-इनव्हॉईज्ड व्यवहार आयआरपीमध्ये रद्द केला गेला आहे, परंतु गिद्धमध्ये नाही. त्याच्याशी संबंधित आयआरएन यापुढे वैध नाही."
     },
     "e_invoice_statuses_label": {
-        "yet_to_be_pushed": "Yet-to-be Pushed",
-        "pushed": "Pushed",
-        "push_initiated": "Push Initiated",
-        "cancelled": "Cancelled",
-        "mark_as_cancelled": "Marked as Cancelled",
-        "failed": "Failed",
-        "na": "NA"
+        "yet_to_be_pushed": "तरीही ढकलले जाणे",
+        "pushed": "ढकलले",
+        "push_initiated": "पुश आरंभ केला",
+        "cancelled": "रद्द केले",
+        "mark_as_cancelled": "रद्द केले म्हणून चिन्हांकित",
+        "failed": "अयशस्वी",
+        "na": "उपलब्ध नाही"
     },
     "cancel_e_invoice": "ई-चलन रद्द करा",
     "cancel_reason": "कारण रद्द करा",

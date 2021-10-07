@@ -350,7 +350,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
     public getVoucherVersions() {
         let request = new ProformaGetAllVersionRequest();
-        request.accountUniqueName = this.selectedItem?.account.uniqueName;
+        request.accountUniqueName = this.selectedItem?.account?.uniqueName;
         request.page = 1;
         request.count = 15;
 

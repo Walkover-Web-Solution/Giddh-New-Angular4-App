@@ -32,13 +32,13 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private permissionActions: PermissionActions) {
-        
+
     }
 
     get isFormValid() {
-        if (this.newRoleObj.name && this.newRoleObj.isFresh && this.makeCount() > 0) {
+        if (this.newRoleObj?.name && this.newRoleObj?.isFresh && this.makeCount() > 0) {
             return true;
-        } else if (this.newRoleObj.name && !this.newRoleObj.isFresh && this.newRoleObj.uniqueName) {
+        } else if (this.newRoleObj?.name && !this.newRoleObj?.isFresh && this.newRoleObj?.uniqueName) {
             return true;
         } else {
             return false;
@@ -50,7 +50,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
             if (p.roles && p.roles.length) {
                 this.allRoles = [];
                 forEach(p.roles, (role: IRoleCommonResponseAndRequest) => {
-                    this.allRoles.push({ name: role.name, uniqueName: role.uniqueName });
+                    this.allRoles.push({ name: role?.name, uniqueName: role?.uniqueName });
                 });
             }
             this.newRoleObj.pageList = [];
@@ -60,7 +60,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
                 });
             }
         });
-        
+
         this.dropdownHeading = this.localeData?.select_pages;
 
         this.store.dispatch(this.permissionActions.GetAllPages());

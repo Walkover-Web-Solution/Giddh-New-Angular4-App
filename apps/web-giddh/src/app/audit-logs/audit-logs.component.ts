@@ -13,7 +13,6 @@ import { GeneralService } from '../services/general.service';
 import { AuditLogsFormComponent } from './components/audit-logs-form/audit-logs-form.component';
 import { GetAuditLogsRequest } from '../models/api-models/Logs';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
-
 @Component({
     selector: 'audit-logs',
     templateUrl: './audit-logs.component.html',
@@ -23,31 +22,29 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
     /** To check module for new version  */
     public isNewVersion: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
-
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
-    /* This will store modal reference */
+    /** This will store modal reference */
     public modalRef: BsModalRef;
-    /* This will store selected date range to use in api */
+    /** This will store selected date range to use in api */
     public selectedDateRange: any;
-    /* This will store selected date range to show on UI */
+    /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
-    /* This will store available date ranges */
+    /** This will store available date ranges */
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /* Moment object */
+    /** Moment object */
     public moment = moment;
-    /* Selected from date */
+    /** Selected from date */
     public fromDate: string;
-    /* Selected to date */
+    /** Selected to date */
     public toDate: string;
-    /* Selected range label */
+    /** Selected range label */
     public selectedRangeLabel: any = "";
-    /* Universal date observer */
+    /** Universal date observer */
     public universalDate$: Observable<any>;
-    /* This will store the x/y position of the field to show datepicker under it */
+    /** This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** Audit log form component reference */
     @ViewChild('auditLogFormComponent', { static: false }) public auditLogFormComponent: AuditLogsFormComponent;
@@ -55,9 +52,9 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
     public auditLogsRequest$: Observable<GetAuditLogsRequest>;
     /** To show clear filter */
     public showClearFilter: boolean = false;
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private companyActions: CompanyActions, private route: ActivatedRoute, private generalService: GeneralService, private modalService: BsModalService) {
@@ -100,14 +97,12 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
                 this.showClearFilter = true;
             }
         });
-
     }
 
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-
 
     /**
      *To show the datepicker

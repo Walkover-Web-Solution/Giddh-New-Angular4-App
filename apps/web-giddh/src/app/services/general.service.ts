@@ -251,9 +251,9 @@ export class GeneralService {
         if (currentLedgerAccountDetails && selectedAccountDetails) {
             if (![currentLedgerAccountDetails.uniqueName, selectedAccountDetails.uniqueName].includes('roundoff')) {
                 // List of allowed first level parent groups
-                const allowedFirstLevelUniqueNames = ['operatingcost', 'indirectexpenses', 'fixedassets'];
+                const allowedFirstLevelUniqueNames = (this.voucherApiVersion === 2) ? ['operatingcost', 'indirectexpenses', 'fixedassets', 'revenuefromoperations', 'otherincome'] : ['operatingcost', 'indirectexpenses', 'fixedassets'];
                 // List of not allowed second level parent groups
-                const disallowedSecondLevelUniqueNames = ['discount', 'exchangeloss'];
+                const disallowedSecondLevelUniqueNames = (this.voucherApiVersion === 2) ? ['discount', 'exchangeloss', 'roundoff', 'exchangegain', 'dividendincome', 'interestincome', 'dividendexpense', 'interestexpense'] : ['discount', 'exchangeloss'];
                 const currentLedgerFirstParent = (currentLedgerAccountDetails.parentGroups && currentLedgerAccountDetails.parentGroups[0]) ? currentLedgerAccountDetails.parentGroups[0].uniqueName : '';
                 const currentLedgerSecondParent = (currentLedgerAccountDetails.parentGroups && currentLedgerAccountDetails.parentGroups[1]) ? currentLedgerAccountDetails.parentGroups[1].uniqueName : '';
                 const selectedAccountFirstParent = (selectedAccountDetails.parentGroups && selectedAccountDetails.parentGroups[0]) ? selectedAccountDetails.parentGroups[0].uniqueName : '';

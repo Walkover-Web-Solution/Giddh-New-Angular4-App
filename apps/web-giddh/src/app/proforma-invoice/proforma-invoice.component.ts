@@ -814,7 +814,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
         });
 
-        this.route.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
+        this.route.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(async params => {
             this.voucherTypeChanged = false;
             this.copyPurchaseBill = false;
 
@@ -877,6 +877,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.isUpdateMode = true;
                     this.isUpdateDataInProcess = true;
                     this.prepareInvoiceTypeFlags();
+
+                    if(this.callFromOutside) {
+                        await this.setSelectedItem();
+                    }
 
                     this.toggleFieldForSales = (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote));
 
@@ -1233,7 +1237,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         if (!obj.accountDetails.currencySymbol) {
                             obj.accountDetails.currencySymbol = '';
                         }
-                        if (this.currentVoucherFormDetails?.depositAllowed || this.isPendingVoucherType) {
+                        if (this.currentVoucherFormDetails?.depositAllowed || (this.isPendingVoucherType && obj.accountDetails && obj.voucherDetails)) {
                             obj.accountDetails.name = results[0].account.name;
                             obj.voucherDetails.customerName = results[0].account.name;
                             this.loadBankCashAccounts(obj?.accountDetails?.currency?.code);
@@ -3277,7 +3281,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public onSelectBankCash(item: IOption) {
-        if (item.value) {
+        if (item.value && this.invFormData.accountDetails) {
             this.invFormData.accountDetails.name = item.label;
             this.getAccountDetails(item.value);
         }
@@ -3493,7 +3497,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public onSelectPaymentMode(event: any) {
         if (event && event.value) {
-            if (this.isCashInvoice) {
+            if (this.isCashInvoice && this.invFormData.accountDetails) {
                 this.invFormData.accountDetails.name = event.label;
                 this.invFormData.accountDetails.uniqueName = event.value;
             }
@@ -4616,7 +4620,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         obj.account.shippingDetails.stateCode = obj.account.shippingDetails.state.code;
         obj.account.shippingDetails.stateName = obj.account.shippingDetails.state.name;
 
-        if (this.isCashInvoice) {
+        if (this.isCashInvoice && obj.account) {
             obj.account.customerName = data.voucherDetails.customerName;
             obj.account.name = data.voucherDetails.customerName;
         } else {
@@ -7039,6 +7043,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, 2);
             }
         }
+        this._cdr.detectChanges();
     }
 
     /**
@@ -7275,5 +7280,26 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 transaction.convertedAmount = giddhRoundOff(transaction.amount * this.exchangeRate, 2);
             }
         }
+    }
+
+    /**
+     * This will set the data in selected item if user is editing voucher from outside module
+     *
+     * @private
+     * @memberof ProformaInvoiceComponent
+     */
+    private setSelectedItem(): void {
+        this.route.queryParams.pipe(take(1)).subscribe((params) => {
+            if(params.uniqueName) {
+                this.selectedItem = { 
+                    uniqueName: params.uniqueName, 
+                    voucherNumber: params.invoiceNo, 
+                    account: { name: params.accUniqueName, uniqueName: params.accUniqueName },
+                    grandTotal: undefined,
+                    voucherDate: undefined,
+                    voucherType: this.invoiceType
+                };
+            }
+        });
     }
 }
