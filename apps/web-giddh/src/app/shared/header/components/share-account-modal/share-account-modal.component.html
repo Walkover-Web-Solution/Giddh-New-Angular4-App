@@ -36,7 +36,7 @@
                             >
                                 <option value="">{{ localeData?.select_permission }}</option>
                                 <option
-                                    [value]="permission.uniqueName"
+                                    [value]="permission?.uniqueName"
                                     *ngFor="let permission of allPermissions$ | async"
                                 >
                                     {{ permission?.name }}
@@ -74,8 +74,8 @@
                                         (change)="updatePermission(val, $event)"
                                     >
                                         <option
-                                            [selected]="val.roleUniqueName === permission.uniqueName"
-                                            [value]="permission.uniqueName"
+                                            [selected]="val?.roleUniqueName === permission?.uniqueName"
+                                            [value]="permission?.uniqueName"
                                             *ngFor="let permission of allPermissions$ | async"
                                         >
                                             {{ permission?.name }}
@@ -85,7 +85,7 @@
                                 </div>
                                 <span class="delete-icon pull-right">
                                     <i
-                                        (click)="unShareAccount(val.uniqueName, val.entityUniqueName)"
+                                        (click)="unShareAccount(val?.uniqueName, val?.entityUniqueName)"
                                         class="icon-trash"
                                         aria-hidden="true"
                                     ></i>

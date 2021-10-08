@@ -346,7 +346,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (this.generalService.currentBranchUniqueName) {
                     this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
                         if (response) {
-                            this.currentBranch = response.find(branch => (branch.uniqueName === this.generalService.currentBranchUniqueName));
+                            this.currentBranch = response.find(branch => (branch?.uniqueName === this.generalService.currentBranchUniqueName));
                             if (!this.activeCompanyForDb) {
                                 this.activeCompanyForDb = new CompAidataModel();
                             }
@@ -418,7 +418,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.currentCompanyBranches = response;
                 if (this.generalService.currentBranchUniqueName) {
                     this.currentBranch = response.find(branch =>
-                        (this.generalService.currentBranchUniqueName === branch.uniqueName)) || {};
+                        (this.generalService.currentBranchUniqueName === branch?.uniqueName)) || {};
                     this.activeCompanyForDb.name = this.currentBranch ? this.currentBranch.name : '';
                     this.activeCompanyForDb.uniqueName = this.currentBranch ? this.currentBranch.uniqueName : ''
                 } else {
@@ -535,7 +535,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     if (!page.additional) {
                         return;
                     }
-                    return (page.uniqueName.substring(7, page.uniqueName?.length).indexOf(lastState.replace(tempParams, '')) > -1
+                    return (page?.uniqueName.substring(7, page?.uniqueName?.length).indexOf(lastState.replace(tempParams, '')) > -1
                         && page.additional.tabIndex === Number(queryParams.tabindex));
                 });
 
@@ -582,9 +582,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (menu) {
                 let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
                     if (menu.additional && item.additional) {
-                        return item.uniqueName.toLowerCase() === menu.uniqueName.toLowerCase() && item.additional.tabIndex === menu.additional.tabIndex;
+                        return item?.uniqueName.toLowerCase() === menu.uniqueName.toLowerCase() && item.additional.tabIndex === menu.additional.tabIndex;
                     }
-                    return item.uniqueName.toLocaleLowerCase() === menu.uniqueName.toLowerCase();
+                    return item?.uniqueName.toLocaleLowerCase() === menu.uniqueName.toLowerCase();
                 });
                 if (menuItem) {
                     this.doEntryInDb('menus', menuItem);
@@ -754,10 +754,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                             response.financialYears.forEach(key => {
                                 if(this.selectedDateRange?.endDate >= moment(key.financialYearStarts, GIDDH_DATE_FORMAT) && this.selectedDateRange?.endDate <= moment(key.financialYearEnds, GIDDH_DATE_FORMAT)) {
                                     activeFinancialYear = {
-                                        uniqueName: key.uniqueName,
-                                        isLocked: key.isLocked,
-                                        financialYearStarts: moment(key.financialYearStarts, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
-                                        financialYearEnds: moment(key.financialYearEnds, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)
+                                        uniqueName: key?.uniqueName,
+                                        isLocked: key?.isLocked,
+                                        financialYearStarts: moment(key?.financialYearStarts, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
+                                        financialYearEnds: moment(key?.financialYearEnds, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)
                                     };
                                 }
                             });
@@ -888,10 +888,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let o: IUlist = find(NAVIGATION_ITEM_LIST, (item) => {
             if (queryParamsObj) {
                 if (item.additional) {
-                    return item.uniqueName.toLowerCase() === pageName.toLowerCase() && item.additional.tabIndex === queryParamsObj.tabIndex;
+                    return item?.uniqueName.toLowerCase() === pageName.toLowerCase() && item.additional.tabIndex === queryParamsObj.tabIndex;
                 }
             } else {
-                return item.uniqueName.toLocaleLowerCase() === pageName.toLowerCase();
+                return item?.uniqueName.toLocaleLowerCase() === pageName.toLowerCase();
             }
         });
         if (o) {
@@ -931,7 +931,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (!this.activeCompanyForDb) {
             return;
         }
-        if (!this.activeCompanyForDb.uniqueName) {
+        if (!this.activeCompanyForDb?.uniqueName) {
             return;
         }
         if (dbResult) {
@@ -1219,10 +1219,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.isLedgerAccSelected = false;
         } else if (entity === 'accounts') {
             this.isLedgerAccSelected = true;
-            this.selectedLedgerName = item.uniqueName;
+            this.selectedLedgerName = item?.uniqueName;
         }
 
-        if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
+        if (this.activeCompanyForDb?.uniqueName) {
             let isSmallScreen: boolean = !(window.innerWidth > 1440 && window.innerHeight > 717);
             let branches = [];
             this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
@@ -1304,7 +1304,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
         } else {
             NAVIGATION_ITEM_LIST.find((page) => {
-                if (page.uniqueName === decodeURI(currentUrl)) {
+                if (page?.uniqueName === decodeURI(currentUrl)) {
                     this.setCurrentPageTitle(page);
                     return true;
                 }
@@ -1314,9 +1314,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public setCurrentPageTitle(menu) {
         let currentPageObj = new CurrentPage();
-        currentPageObj.name = menu.name;
-        currentPageObj.url = menu.uniqueName;
-        currentPageObj.additional = menu.additional;
+        currentPageObj.name = menu?.name;
+        currentPageObj.url = menu?.uniqueName;
+        currentPageObj.additional = menu?.additional;
         this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 

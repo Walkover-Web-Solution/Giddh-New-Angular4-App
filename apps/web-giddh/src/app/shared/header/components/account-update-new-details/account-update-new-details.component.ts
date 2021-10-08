@@ -451,7 +451,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             if (response) {
                 selectedGroupDetails = response;
                 if (selectedGroupDetails?.parentGroups) {
-                    let parentGroup = selectedGroupDetails.parentGroups?.length > 1 ? selectedGroupDetails.parentGroups[1] : { uniqueName: selectedGroupDetails.uniqueName };
+                    let parentGroup = selectedGroupDetails.parentGroups?.length > 1 ? selectedGroupDetails.parentGroups[1] : { uniqueName: selectedGroupDetails?.uniqueName };
                     if (parentGroup) {
                         this.isParentDebtorCreditor(parentGroup.uniqueName);
                     }
@@ -524,8 +524,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.discountList = [];
                 Object.keys(response?.body).forEach(key => {
                     this.discountList.push({
-                        label: response?.body[key].name,
-                        value: response?.body[key].uniqueName,
+                        label: response?.body[key]?.name,
+                        value: response?.body[key]?.uniqueName,
                         isSelected: false
                     });
                 });
@@ -1203,7 +1203,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 if (t) {
                     t.inheritedTaxes.forEach(tt => {
                         tt.applicableTaxes.forEach(ttt => {
-                            data.taxes.push(ttt.uniqueName);
+                            data.taxes.push(ttt?.uniqueName);
                         });
                     });
                 }
