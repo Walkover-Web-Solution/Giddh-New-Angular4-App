@@ -8,6 +8,7 @@
     <div class="relative white-bg">
         <hamburger-menu *ngIf="activeTab !== 'vendor'" [pageHeading]="getPageHeading()"></hamburger-menu>
         <hamburger-menu [pageHeading]="localeData?.page_heading" *ngIf="activeTab === 'vendor'"></hamburger-menu>
+
         <tabset #staticTabs class="custom-tabs customer-aging" [ngClass]="{ 'hide-header': activeTab === 'vendor' }">
             <!-- region Customer/Vendor -->
             <tab
@@ -26,15 +27,17 @@
                                 <div class="dis mr-r15 pull-left on-desktop-view">
                                     <div class="btn-group pull-right">
                                         <button
+                                            mat-raised-button
                                             *ngIf="activeTab == 'customer'"
-                                            class="btn btn-sky-blue mr-0"
+                                            class="btn-sky-blue mr-0"
                                             (click)="openAddAndManage('customer')"
                                         >
                                             {{ localeData?.new_customer }}
                                         </button>
                                         <button
+                                            mat-raised-button
                                             *ngIf="activeTab == 'vendor'"
-                                            class="btn btn-sky-blue mr-0"
+                                            class="btn-sky-blue mr-0"
                                             (click)="openAddAndManage('vendor')"
                                         >
                                             {{ localeData?.new_vendor }}
@@ -110,12 +113,14 @@
                             </div>
                             <!-- Invoice filter section ends -->
                             <button
+                                mat-raised-button
                                 class="btn btn-group btn-filter desktop-button-filter"
                                 *ngIf="selectedCheckedContacts?.length > 0"
                                 (click)="clearSelectedContacts()"
                             >
                                 <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_selected }}
                             </button>
+
                             <div class="pd-t1-md d-flex justify-content-between">
                                 <!-- On company class will show only if we are on company mode and branches length will be less than equal 2 -->
                                 <div class="d-flex justify-content-between">
@@ -161,121 +166,112 @@
                                         [tooltip]="localeData?.filter_toggle"
                                         [placement]="'right'"
                                     >
-                                        <i dropdownToggle class="icon-options"></i>
-                                        <ul
-                                            *dropdownMenu
-                                            class="dropdown-menu dropdown-menu-right"
-                                            role="menu"
-                                            [style.width.px]="'200'"
-                                        >
-                                            <li role="menuitem">
-                                                <a class="dropdown-item">
-                                                    <input
-                                                        type="checkbox"
-                                                        name="selectAll"
-                                                        [(ngModel)]="showFieldFilter.selectAll"
-                                                        (ngModelChange)="selectAllColumns($event)"
-                                                    />
-                                                    {{ commonLocaleData?.app_select_all }}
-                                                </a>
-                                            </li>
-
-                                            <li role="menuitem">
-                                                <a class="dropdown-item">
-                                                    <input
-                                                        type="checkbox"
-                                                        name="field_filter.parentGroup"
-                                                        (ngModelChange)="columnFilter($event, 'parentGroup')"
-                                                        [(ngModel)]="showFieldFilter.parentGroup"
-                                                    />
-                                                    {{ commonLocaleData?.app_parent_group }}
-                                                </a>
-                                            </li>
-
-                                            <li role="menuitem">
-                                                <a class="dropdown-item">
-                                                    <input
-                                                        type="checkbox"
-                                                        name="field_filter.openingBalance"
-                                                        (ngModelChange)="columnFilter($event, 'openingBalance')"
-                                                        [(ngModel)]="showFieldFilter.openingBalance"
-                                                    />
+                                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                                            <i class="icon-options"></i>
+                                        </button>
+                                        <mat-menu #menu="matMenu">
+                                            <button mat-menu-item>
+                                                <mat-checkbox
+                                                    color="primary"
+                                                    name="selectAll"
+                                                    [(ngModel)]="showFieldFilter.selectAll"
+                                                    (ngModelChange)="selectAllColumns($event)"
+                                                >
+                                                    {{ commonLocaleData?.app_select_all }}</mat-checkbox
+                                                >
+                                            </button>
+                                            <button mat-menu-item>
+                                                <mat-checkbox
+                                                    color="primary"
+                                                    name="field_filter.parentGroup"
+                                                    (ngModelChange)="columnFilter($event, 'parentGroup')"
+                                                    [(ngModel)]="showFieldFilter.parentGroup"
+                                                >
+                                                    {{ commonLocaleData?.app_parent_group }}</mat-checkbox
+                                                >
+                                            </button>
+                                            <button mat-menu-item>
+                                                <mat-checkbox
+                                                    color="primary"
+                                                    name="field_filter.openingBalance"
+                                                    (ngModelChange)="columnFilter($event, 'openingBalance')"
+                                                    [(ngModel)]="showFieldFilter.openingBalance"
+                                                >
                                                     {{ localeData?.opening }}
-                                                </a>
-                                            </li>
-
-                                            <li role="menuitem">
-                                                <a class="dropdown-item">
-                                                    <input
-                                                        type="checkbox"
-                                                        name="field_filter.mobile"
-                                                        (ngModelChange)="columnFilter($event, 'mobile')"
-                                                        [(ngModel)]="showFieldFilter.contact"
-                                                    />
-                                                    {{ localeData?.contacts }}</a
+                                                </mat-checkbox>
+                                            </button>
+                                            <button mat-menu-item>
+                                                <mat-checkbox
+                                                    color="primary"
+                                                    name="field_filter.mobile"
+                                                    (ngModelChange)="columnFilter($event, 'mobile')"
+                                                    [(ngModel)]="showFieldFilter.contact"
                                                 >
-                                            </li>
-
-                                            <li role="menuitem">
-                                                <a class="dropdown-item">
-                                                    <input
-                                                        type="checkbox"
-                                                        name="field_filter.state"
-                                                        (ngModelChange)="columnFilter($event, 'state')"
-                                                        [(ngModel)]="showFieldFilter.state"
-                                                    />
-                                                    {{ commonLocaleData?.app_state }}</a
+                                                    {{ localeData?.contacts }}
+                                                </mat-checkbox>
+                                            </button>
+                                            <button mat-menu-item>
+                                                <mat-checkbox
+                                                    color="primary"
+                                                    name="field_filter.mobile"
+                                                    name="field_filter.state"
+                                                    (ngModelChange)="columnFilter($event, 'state')"
+                                                    [(ngModel)]="showFieldFilter.state"
                                                 >
-                                            </li>
-                                            <li *ngIf="shouldShowTaxFilter" role="menuitem">
-                                                <a class="dropdown-item">
-                                                    <input
-                                                        type="checkbox"
-                                                        name="field_filter.gstin"
-                                                        (ngModelChange)="columnFilter($event, 'gstin')"
-                                                        [(ngModel)]="showFieldFilter.gstin"
-                                                    />
-                                                    {{ commonLocaleData?.app_tax_number }}</a
+                                                    {{ commonLocaleData?.app_state }}
+                                                </mat-checkbox>
+                                            </button>
+                                            <button mat-menu-item *ngIf="shouldShowTaxFilter">
+                                                <mat-checkbox
+                                                    color="primary"
+                                                    name="field_filter.mobile"
+                                                    name="field_filter.gstin"
+                                                    (ngModelChange)="columnFilter($event, 'gstin')"
+                                                    [(ngModel)]="showFieldFilter.gstin"
                                                 >
-                                            </li>
-                                            <li role="menuitem">
-                                                <a class="dropdown-item">
-                                                    <input
-                                                        type="checkbox"
-                                                        name="field_filter.comment"
-                                                        (ngModelChange)="columnFilter($event, 'comment')"
-                                                        [(ngModel)]="showFieldFilter.comment"
-                                                    />
+                                                    {{ commonLocaleData?.app_tax_number }}
+                                                </mat-checkbox>
+                                            </button>
+                                            <button mat-menu-item>
+                                                <mat-checkbox
+                                                    color="primary"
+                                                    name="field_filter.mobile"
+                                                    name="field_filter.comment"
+                                                    (ngModelChange)="columnFilter($event, 'comment')"
+                                                    [(ngModel)]="showFieldFilter.comment"
+                                                >
                                                     {{ localeData?.comment }}
-                                                </a>
-                                            </li>
+                                                </mat-checkbox>
+                                            </button>
                                             <ng-container *ngFor="let item of companyCustomFields$ | async">
-                                                <li role="menuitem">
-                                                    <a class="dropdown-item">
-                                                        <input
-                                                            type="checkbox"
-                                                            name="{{ item?.uniqueName }}"
-                                                            (ngModelChange)="columnFilter($event, item?.uniqueName)"
-                                                            [(ngModel)]="showFieldFilter[item?.uniqueName]"
-                                                        />
+                                                <button mat-menu-item>
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        name="field_filter.mobile"
+                                                        name="{{ item.uniqueName }}"
+                                                        (ngModelChange)="columnFilter($event, item.uniqueName)"
+                                                        [(ngModel)]="showFieldFilter[item.uniqueName]"
+                                                    >
                                                         {{ item.key | titlecase }}
-                                                    </a>
-                                                </li>
+                                                    </mat-checkbox>
+                                                </button>
                                             </ng-container>
-                                        </ul>
+                                        </mat-menu>
                                     </div>
                                 </div>
                                 <div class="btn-group pull-right on-mobile-view mr-t1">
                                     <button
+                                        mat-raised-button
                                         *ngIf="activeTab == 'customer'"
-                                        class="btn btn-sky-blue mr-r05 w-100"
+                                        class="btn-sky-blue mr-r05 w-100"
                                         (click)="openAddAndManage('customer')"
                                     >
                                         {{ localeData?.new_customer }}
                                     </button>
                                     <button
+                                        mat-raised-button
                                         *ngIf="activeTab == 'vendor'"
-                                        class="btn btn-sky-blue w-100"
+                                        class="btn-sky-blue w-100"
                                         (click)="openAddAndManage('vendor')"
                                     >
                                         {{ localeData?.new_vendor }}
@@ -302,6 +298,7 @@
                                     count-box
                                     align-items-end
                                 "
+                                style="position: relative"
                             >
                                 <h5>
                                     <ng-container *ngIf="!selectedCheckedContacts?.length">{{
@@ -324,48 +321,27 @@
                                         >
                                     </div>
                                 </h5>
-                                <div
-                                    class="btn-group more-button align-items-center"
-                                    dropdown
-                                    #dropdown="bs-dropdown"
-                                    container="body"
-                                    [autoClose]="false"
-                                    (clickOutside)="dropdown.isOpen = false"
-                                >
+                                <div class="more-button align-items-center">
                                     <button
+                                        mat-icon-button
+                                        style="position: absolute; top: 11px; right: 11px"
+                                        [matMenuTriggerFor]="downloadCsvEmail"
                                         *ngIf="selectedCheckedContacts?.length"
                                         id="button-basic"
-                                        dropdownToggle
-                                        type="button"
-                                        class="btn btn-default dropdown-toggle mr-0"
-                                        aria-controls="dropdown-basic"
                                     >
-                                        <span class="icon-arrow-down font-12"></span>
+                                        <span class="icon-arrow-down"></span>
                                     </button>
-                                    <ul
-                                        id="dropdown-basic"
-                                        *dropdownMenu
-                                        class="dropdown-menu pd-l1 pd-r1"
-                                        role="menu"
-                                        aria-labelledby="button-basic"
-                                    >
-                                        <li role="menuitem" class="pointer" (click)="openEmailDialog()">
+                                    <mat-menu #downloadCsvEmail="matMenu">
+                                        <button mat-menu-item (click)="openEmailDialog()">
                                             {{ commonLocaleData?.app_email }}
-                                        </li>
-                                        <!-- <li role="menuitem" (click)="openSmsDialog();">
-                                        {{commonLocaleData?.app_sms}}</li> -->
-                                        <li role="menuitem" class="pointer" (click)="downloadCSV()">
+                                        </button>
+                                        <button mat-menu-item (click)="downloadCSV()">
                                             {{ commonLocaleData?.app_download_csv }}
-                                        </li>
-                                        <li
-                                            role="menuitem"
-                                            class="pointer"
-                                            *ngIf="selectedAccountsList?.length > 0 && activeTab === 'vendor'"
-                                            (click)="openBulkPaymentModal(template)"
-                                        >
-                                            {{ localeData?.bulk_payment }}
-                                        </li>
-                                    </ul>
+                                        </button>
+                                        <!--                                        <button mat-menu-item  (click)="openSmsDialog();"> {{commonLocaleData?.app_sms}}</button>-->
+                                        <!--                                        <button mat-menu-item  *ngIf="selectedAccountsList.length > 0 && activeTab === 'vendor'"-->
+                                        <!--                                                (click)="openBulkPaymentModal(template)" > {{ localeData?.bulk_payment }}</button>-->
+                                    </mat-menu>
                                 </div>
                             </div>
                             <div
@@ -459,9 +435,7 @@
                     <div class="text-center top-aging-table-top separate-top-aging pd-1 mr-t1" *ngIf="isMobileScreen">
                         <p (click)="showGiddhDatepicker($event)">
                             <strong>{{ commonLocaleData?.app_due_as_on }} </strong>
-                            <span *ngIf="selectedDateRangeUi">
-                                {{ selectedDateRangeUi }}
-                            </span>
+                            <span *ngIf="selectedDateRangeUi"> {{ selectedDateRangeUi }} </span>
                         </p>
                     </div>
 
@@ -496,7 +470,8 @@
                     [localeData]="localeData"
                     [commonLocaleData]="commonLocaleData"
                     (creteNewCustomerEvent)="openAddAndManage('customer')"
-                ></aging-report>
+                >
+                </aging-report>
             </tab>
             <!-- endregion -->
         </tabset>
@@ -797,11 +772,13 @@
                         <th *ngIf="showFieldFilter.comment" class="comment-field text-break">
                             {{ localeData?.comment }}
                         </th>
+
                         <ng-container *ngFor="let item of companyCustomFields$ | async">
                             <th width="10%" *ngIf="item?.uniqueName && showFieldFilter[item?.uniqueName]">
                                 {{ item.key | titlecase }}
                             </th>
                         </ng-container>
+
                         <th *ngIf="activeTab === 'vendor'" width="10%">
                             {{ commonLocaleData?.app_action }}
                         </th>
@@ -893,7 +870,8 @@
                                                                     <a
                                                                         href="javascript: void 0"
                                                                         (click)="performActions(1, account)"
-                                                                        >{{ commonLocaleData?.app_goto_ledger }}
+                                                                    >
+                                                                        {{ commonLocaleData?.app_goto_ledger }}
                                                                     </a>
                                                                 </li>
 
@@ -906,10 +884,10 @@
                                                                 </li>
 
                                                                 <!--<li class="li-link">
-                                                                    <a href="javascript: void 0"
-                                                                        (click)="performActions(3, account, $event )">{{commonLocaleData?.app_send_sms}}
-                                                                    </a>
-                                                                </li>-->
+                                                                <a href="javascript: void 0"
+                                                                    (click)="performActions(3, account, $event )">{{commonLocaleData?.app_send_sms}}
+                                                                </a>
+                                                            </li>-->
 
                                                                 <li class="li-link">
                                                                     <a
@@ -1258,10 +1236,10 @@
                                                                 </li>
 
                                                                 <!--<li class="li-link">
-                                                                    <a href="javascript: void 0"
-                                                                        (click)="performActions(3, account, $event )">{{commonLocaleData?.app_send_sms}}
-                                                                    </a>
-                                                                </li>-->
+                                                                <a href="javascript: void 0"
+                                                                    (click)="performActions(3, account, $event )">{{commonLocaleData?.app_send_sms}}
+                                                                </a>
+                                                            </li>-->
 
                                                                 <li class="li-link">
                                                                     <a
