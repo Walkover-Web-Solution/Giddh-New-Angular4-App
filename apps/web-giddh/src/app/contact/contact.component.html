@@ -1525,7 +1525,7 @@
                                         {{ commonLocaleData?.app_pay_now }}
                                     </button>
                                     <button
-                                        *ngIf="!account.bankPaymentDetails"
+                                        *ngIf="!account?.bankPaymentDetails"
                                         class="btn btn-small btn-light"
                                         (click)="updateCustomerAcc('vendor', account)"
                                     >
