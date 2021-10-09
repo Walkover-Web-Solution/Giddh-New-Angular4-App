@@ -226,13 +226,13 @@ export class ContactComponent implements OnInit, OnDestroy {
         private companyActions: CompanyActions,
         private componentFactoryResolver: ComponentFactoryResolver,
         private groupWithAccountsAction: GroupWithAccountsAction,
-        private cdRef: ChangeDetectorRef, 
+        private cdRef: ChangeDetectorRef,
         private generalService: GeneralService,
         private route: ActivatedRoute,
         private generalAction: GeneralActions,
-        private breakPointObservar: BreakpointObserver, 
+        private breakPointObservar: BreakpointObserver,
         private modalService: BsModalService,
-        private settingsProfileActions: SettingsProfileActions, 
+        private settingsProfileActions: SettingsProfileActions,
         private groupService: GroupService,
         private settingsBranchAction: SettingsBranchActions,
         public currencyPipe: GiddhCurrencyPipe,
@@ -418,7 +418,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 if(!approvalPendingAccounts?.length) {
                     this.isIciciAccountPendingForApproval = true;
                 }
-                
+
                 this.isICICIIntegrated = true;
             } else {
                 this.isICICIIntegrated = false;
@@ -1531,7 +1531,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.selectedAccForPayment = null;
         if (this.selectedAccountsList.length) {
             this.selectedAccountsList = this.selectedAccountsList.filter(itemObject => {
-                return itemObject.bankPaymentDetails === true;
+                return itemObject?.bankPaymentDetails === true;
             });
             this.selectedAccountsList = this.selectedAccountsList.filter((data, index) => {
                 return this.selectedAccountsList.indexOf(data) === index;
