@@ -305,7 +305,8 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
                }
             }
             return {
-              ...state
+              ...state,
+              flattenAccounts: []
             }
         }
         case GENERAL_ACTIONS.UPDATE_INDEX_DB: {
