@@ -1533,7 +1533,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.selectedAccForPayment = null;
         if (this.selectedAccountsList?.length) {
             this.selectedAccountsList = this.selectedAccountsList.filter(itemObject => {
-                return itemObject.bankPaymentDetails === true;
+                return itemObject?.bankPaymentDetails === true;
             });
             this.selectedAccountsList = this.selectedAccountsList.filter((data, index) => {
                 return this.selectedAccountsList.indexOf(data) === index;
