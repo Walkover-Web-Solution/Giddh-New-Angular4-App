@@ -392,7 +392,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             if (response[0]) {
                 let isStockableAccount: boolean = false;
                 // check if current account category is type 'income' or 'expenses'
-                let parentAcc = (this.activeAccount && this.activeAccount.parentGroups && this.activeAccount.parentGroups.length > 0) ? this.activeAccount.parentGroups[0]?.uniqueName : "";
+                let parentAcc = (this.activeAccount?.parentGroups?.length > 0) ? this.activeAccount.parentGroups[0].uniqueName : "";
                 let incomeAccArray = ['revenuefromoperations', 'otherincome'];
                 let expensesAccArray = ['operatingcost', 'indirectexpenses'];
                 let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray];
@@ -1081,7 +1081,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.body) {
                 if (response.body.results) {
-                    response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice.voucherNumber ? invoice.voucherNumber : '-', value: invoice?.uniqueName, additional: invoice }))
+                    response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice?.voucherNumber ? invoice.voucherNumber : '-', value: invoice?.uniqueName, additional: invoice }))
                 } else {
                     this.forceClear$ = observableOf({ status: true });
                 }
