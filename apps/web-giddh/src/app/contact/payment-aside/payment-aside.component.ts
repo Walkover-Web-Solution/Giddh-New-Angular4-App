@@ -175,7 +175,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.store.pipe(select(selectStore => selectStore.company), takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.account) {
                 this.registeredAccounts = response.account;
-                if (this.registeredAccounts.length === 1) {
+                if (this.registeredAccounts?.length === 1) {
                     this.mode = this.registeredAccounts[0];
                 }
             }
@@ -210,7 +210,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                     }
                 });
 
-                if (this.selectIntegratedBankList.length === 1) {
+                if (this.selectIntegratedBankList?.length === 1) {
                     this.selectBank(this.selectIntegratedBankList[0]);
                 }
             }

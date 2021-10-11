@@ -378,7 +378,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
 
         this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
-            if (!companies || companies.length === 0) {
+            if (!companies || companies?.length === 0) {
                 return;
             }
 
@@ -386,7 +386,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.companyList = orderedCompanies;
             this.companyListForFilter = orderedCompanies;
             this.companies$ = observableOf(orderedCompanies);
-            this.store.dispatch(this.companyActions.setTotalNumberofCompanies(this.companyList.length));
+            this.store.dispatch(this.companyActions.setTotalNumberofCompanies(this.companyList?.length));
         });
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
@@ -458,7 +458,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(data => {
                     branches = data || [];
                 });
-                reassignNavigationalArray(this.isMobileSite, this.generalService.currentOrganizationType === OrganizationType.Company && branches.length > 1, response);
+                reassignNavigationalArray(this.isMobileSite, this.generalService.currentOrganizationType === OrganizationType.Company && branches?.length > 1, response);
                 this.apiMenuItems = response;
                 this.changeDetection.detectChanges();
             }
@@ -550,7 +550,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     if (!page.additional) {
                         return;
                     }
-                    return (page.uniqueName.substring(7, page.uniqueName.length).indexOf(lastState.replace(tempParams, '')) > -1
+                    return (page.uniqueName.substring(7, page.uniqueName?.length).indexOf(lastState.replace(tempParams, '')) > -1
                         && page.additional.tabIndex === Number(queryParams.tabindex));
                 });
 
@@ -1243,7 +1243,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 branches = response || [];
             });
             this._dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen,
-                this.currentOrganizationType === OrganizationType.Company && branches.length > 1).then((res) => {
+                this.currentOrganizationType === OrganizationType.Company && branches?.length > 1).then((res) => {
                     this.findListFromDb(res);
                 }, (err: any) => {
                     console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
@@ -1408,11 +1408,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.toggleHelpSupportPane(false);
 
         setTimeout(() => {
-            if (document.getElementsByClassName("setting-data") && document.getElementsByClassName("setting-data").length > 0) {
+            if (document.getElementsByClassName("setting-data") && document.getElementsByClassName("setting-data")?.length > 0) {
                 document.querySelector('body').classList.add('on-setting-page');
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-user-page');
-            } else if (document.getElementsByClassName("user-detail-page") && document.getElementsByClassName("user-detail-page").length > 0
+            } else if (document.getElementsByClassName("user-detail-page") && document.getElementsByClassName("user-detail-page")?.length > 0
             ) {
                 document.querySelector('body').classList.add('on-user-page');
                 document.querySelector('body').classList.remove('page-has-tabs');
