@@ -2,7 +2,7 @@
     <div class="top-bar aging-top-bar d-flex justify-content-between">
         <div class="aging-form-inline">
             <div class="btn-group pull-left on-desktop-view">
-                <button class="btn btn-sky-blue" (click)="creteNewCustomerEvent.emit(true)">
+                <button mat-raised-button class="btn-sky-blue" (click)="creteNewCustomerEvent.emit(true)">
                     {{ localeData?.new_customer }}
                 </button>
             </div>
@@ -69,40 +69,44 @@
                     class="form-group search-field max-width-250"
                     [ngClass]="{ 'default-width': isAdvanceSearchApplied }"
                 >
-                    <input
+                    <text-field
                         type="text"
                         [placeholder]="localeData?.name_amount"
-                        class="form-control name-width"
+                        [cssClass]="'form-control name-width'"
                         [(ngModel)]="searchStr"
                         (ngModelChange)="searchStr$.next($event)"
-                    />
+                    ></text-field>
                     <span class="input-addon">
                         <i class="icon-search"></i>
                     </span>
                 </div>
             </div>
             <div class="cp advance-clear-filter-icons d-flex float-right">
-                <div
-                    class="advance-icon btn btn-primary"
+                <button
+                    mat-stroked-button
+                    color="primary"
+                    class="advance-icon"
                     (click)="toggleAdvanceSearchPopup()"
                     tooltip="{{ commonLocaleData?.app_advance_search }}"
                 >
-                    <span class="pd-r05 d-sm-flex d-none">{{ commonLocaleData?.app_filter }}</span>
-                    <span class="icon-advance-filter"></span>
-                </div>
+                    <div class="d-flex align-items-center">
+                        {{ commonLocaleData?.app_filter }}
+                        <span class="icon-advance-filter ml-2"></span>
+                    </div>
+                </button>
                 <span class="refresh-btn" *ngIf="isAdvanceSearchApplied">
-                    <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()">
+                    <button mat-icon-button (click)="resetAdvanceSearch()">
                         <i
                             aria-hidden="true"
                             class="icon-refresh"
                             tooltip="{{ commonLocaleData?.app_reset_filter }}"
                         ></i>
-                    </a>
+                    </button>
                 </span>
             </div>
         </div>
         <div class="btn-group mr-t15 pull-left mobile-view">
-            <button class="btn btn-sky-blue w-100" (click)="creteNewCustomerEvent.emit(true)">
+            <button mat-raised-button class="btn-sky-blue w-100" (click)="creteNewCustomerEvent.emit(true)">
                 {{ localeData?.new_customer }}
             </button>
         </div>
@@ -211,7 +215,7 @@
 </ng-template>
 <!-- endregion -->
 <ng-template #mainTable>
-    <table class="table giddh-table aging-table table-aging-report">
+    <table class="table mat-table giddh-table aging-table table-aging-report">
         <thead [hidden]="!(dueAmountReportData$ | async)?.results?.length && !dueAmountReportRequest?.q">
             <tr class="aging-table-top">
                 <td></td>
@@ -227,11 +231,11 @@
                 </td>
                 <td></td>
             </tr>
-            <tr>
+            <tr class="mat-header-row">
                 <th
                     #searchCustomerContainer
                     (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')"
-                    class="td-search-box"
+                    class="td-search-box mat-header-cell"
                 >
                     <div class="d-flex align-items-center">
                         <ng-container
@@ -250,7 +254,7 @@
                         ></ng-container>
                     </div>
                 </th>
-                <th>
+                <th class="mat-header-cell">
                     <div class="d-flex align-items-center">
                         {{ commonLocaleData?.app_parent_group }}
                         <ng-container
@@ -258,56 +262,76 @@
                         ></ng-container>
                     </div>
                 </th>
-                <th class="text-right">
+                <th class="text-right mat-header-cell">
                     <div class="d-flex align-items-center justify-content-end">
                         {{ commonLocaleData?.app_upcoming_due }}
                         <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'futureDueAmount' }">
                         </ng-container>
                     </div>
                 </th>
-                <th class="italic unbold underline text-right">
+                <th class="italic unbold underline text-right mat-header-cell">
                     <div class="d-flex align-items-center justify-content-end">
-                        <span (click)="openAgingDropDown()"
-                            >0-{{ (agingDropDownoptions$ | async)?.fourth }} {{ commonLocaleData?.app_days }}</span
+                        <button
+                            mat-button
+                            (click)="openAgingDropDown()"
+                            class="font-italic"
+                            style="margin: 0 !important"
                         >
+                            0-{{ (agingDropDownoptions$ | async)?.fourth }} {{ commonLocaleData?.app_days }}
+                        </button>
                         <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'range0' }">
                         </ng-container>
                     </div>
                 </th>
-                <th class="italic text-right unbold underline">
+                <th class="italic text-right unbold underline mat-header-cell">
                     <div class="d-flex align-items-center justify-content-end">
-                        <span (click)="openAgingDropDown()">
+                        <button
+                            mat-button
+                            (click)="openAgingDropDown()"
+                            class="font-italic"
+                            style="margin: 0 !important"
+                        >
                             {{ (agingDropDownoptions$ | async)?.fourth + 1 }}-{{
                                 (agingDropDownoptions$ | async)?.fifth
                             }}
                             {{ commonLocaleData?.app_days }}
-                        </span>
+                        </button>
                         <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'range1' }">
                         </ng-container>
                     </div>
                 </th>
-                <th class="italic text-right unbold underline">
+                <th class="italic text-right unbold underline mat-header-cell">
                     <div class="d-flex align-items-center justify-content-end">
-                        <span (click)="openAgingDropDown()">
+                        <button
+                            mat-button
+                            (click)="openAgingDropDown()"
+                            class="font-italic"
+                            style="margin: 0 !important"
+                        >
                             {{ (agingDropDownoptions$ | async)?.fifth + 1 }}-{{
                                 (agingDropDownoptions$ | async)?.sixth
                             }}
                             {{ commonLocaleData?.app_days }}
-                        </span>
+                        </button>
                         <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'range2' }">
                         </ng-container>
                     </div>
                 </th>
-                <th class="italic text-right unbold underline">
+                <th class="italic text-right unbold underline mat-header-cell">
                     <div class="d-flex align-items-center justify-content-end">
-                        <span (click)="openAgingDropDown()"
-                            >{{ (agingDropDownoptions$ | async)?.sixth + 1 }}+ {{ commonLocaleData?.app_days }}
-                        </span>
+                        <button
+                            mat-button
+                            (click)="openAgingDropDown()"
+                            class="font-italic"
+                            style="margin: 0 !important"
+                        >
+                            {{ (agingDropDownoptions$ | async)?.sixth + 1 }}+ {{ commonLocaleData?.app_days }}
+                        </button>
                         <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'range3' }">
                         </ng-container>
                     </div>
                 </th>
-                <th class="text-right">
+                <th class="text-right mat-header-cell">
                     <div class="d-flex align-items-center justify-content-end">
                         {{ commonLocaleData?.app_total_due }}
                         <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'totalDueAmount' }">
@@ -318,10 +342,12 @@
         </thead>
         <tbody *ngIf="!(getAgingReportRequestInProcess$ | async)">
             <ng-container *ngFor="let entry of (dueAmountReportData$ | async)?.results">
-                <tr *ngIf="(dueAmountReportData$ | async)?.results?.length">
-                    <td [attr.data-title]="commonLocaleData?.app_name" class="word-break">{{ entry.name }}</td>
-                    <td [attr.data-title]="localeData?.group_name">{{ entry.groupName }}</td>
-                    <td [attr.data-title]="commonLocaleData?.app_due_amount" class="text-right">
+                <tr class="mat-row" *ngIf="(dueAmountReportData$ | async)?.results?.length">
+                    <td class="mat-cell" [attr.data-title]="commonLocaleData?.app_name" class="word-break mat-cell">
+                        {{ entry.name }}
+                    </td>
+                    <td class="mat-cell" [attr.data-title]="localeData?.group_name">{{ entry.groupName }}</td>
+                    <td [attr.data-title]="commonLocaleData?.app_due_amount" class="text-right mat-cell">
                         <span class="d-flex justify-content-end">
                             <amount-field
                                 [amount]="entry.futureDueAmount"
@@ -335,7 +361,7 @@
                         [attr.data-title]="
                             '0 - ' + (agingDropDownoptions$ | async)?.fourth + ' ' + commonLocaleData?.app_days
                         "
-                        class="text-right"
+                        class="text-right mat-cell"
                     >
                         <span class="d-flex justify-content-end">
                             <amount-field
@@ -355,7 +381,7 @@
                             ' ' +
                             commonLocaleData?.app_days
                         "
-                        class="text-right"
+                        class="text-right mat-cell"
                     >
                         <span (click)="openAgingDropDown()">
                             <span class="d-flex justify-content-end">
@@ -377,7 +403,7 @@
                             ' ' +
                             commonLocaleData?.app_days
                         "
-                        class="text-right"
+                        class="text-right mat-cell"
                     >
                         <span class="d-flex justify-content-end">
                             <amount-field
@@ -392,7 +418,7 @@
                         [attr.data-title]="
                             (agingDropDownoptions$ | async)?.sixth + 1 + ' ' + commonLocaleData?.app_days
                         "
-                        class="text-right"
+                        class="text-right mat-cell"
                     >
                         <span class="d-flex justify-content-end">
                             <amount-field
@@ -403,7 +429,7 @@
                             </amount-field>
                         </span>
                     </td>
-                    <td [attr.data-title]="commonLocaleData?.app_total_amount" class="text-right">
+                    <td [attr.data-title]="commonLocaleData?.app_total_amount" class="text-right mat-cell">
                         <span class="d-flex justify-content-end">
                             <amount-field
                                 [amount]="entry.totalDueAmount"
