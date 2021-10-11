@@ -386,9 +386,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public calculatePreAppliedTax(): void {
         let activeAccountTaxes = [];
         if (this.activeAccount && this.activeAccount.applicableTaxes) {
-            activeAccountTaxes = this.activeAccount.applicableTaxes.map((tax) => tax.uniqueName);
-            if (this.activeAccount.otherApplicableTaxes && this.activeAccount.otherApplicableTaxes.length && activeAccountTaxes && activeAccountTaxes.length) {
-                if (this.activeAccount.otherApplicableTaxes[0].uniqueName !== activeAccountTaxes[0] && activeAccountTaxes.includes(this.activeAccount.otherApplicableTaxes[0].uniqueName)) {
+            activeAccountTaxes = this.activeAccount.applicableTaxes.map((tax) => tax?.uniqueName);
+            if (this.activeAccount.otherApplicableTaxes?.length && activeAccountTaxes?.length) {
+                if (this.activeAccount.otherApplicableTaxes[0]?.uniqueName !== activeAccountTaxes[0] && activeAccountTaxes.includes(this.activeAccount.otherApplicableTaxes[0]?.uniqueName)) {
                     activeAccountTaxes = activeAccountTaxes.reverse();
                 }
             }
@@ -410,7 +410,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         if (this.taxListForStock && this.taxListForStock.length > 0) {
             this.taxListForStock.forEach(tl => {
-                let tax = (companyTaxes && companyTaxes.length > 0) ? companyTaxes.find(f => f.uniqueName === tl) : undefined;
+                let tax = (companyTaxes && companyTaxes.length > 0) ? companyTaxes.find(f => f?.uniqueName === tl) : undefined;
                 if (tax) {
                     switch (tax.taxType) {
                         case 'tcsrc':
@@ -513,7 +513,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 /** apply account's discount (default) */
                 if (this.currentTxn.discounts && this.currentTxn.discounts.length && this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
                     this.currentTxn.discounts.map(item => {
-                        let discountItem = this.accountOtherApplicableDiscount.find(element => element.uniqueName === item.discountUniqueName);
+                        let discountItem = this.accountOtherApplicableDiscount.find(element => element?.uniqueName === item?.discountUniqueName);
                         if (discountItem && discountItem.uniqueName) {
                             item.isActive = discountItem.isActive;
                         }
@@ -776,8 +776,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 if (data && data.response) {
                     const result = JSON.parse(data.response);
                     this.isFileUploading = false;
-                    this.blankLedger.attachedFile = result.body.uniqueName;
-                    this.blankLedger.attachedFileName = result.body.uniqueName;
+                    this.blankLedger.attachedFile = result.body?.uniqueName;
+                    this.blankLedger.attachedFileName = result.body?.uniqueName;
                     this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
                 }
             }, (err) => {
@@ -811,8 +811,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.loaderService.hide();
             if (output.file.response.status === 'success') {
                 this.isFileUploading = false;
-                this.blankLedger.attachedFile = output.file.response.body.uniqueName;
-                this.blankLedger.attachedFileName = output.file.response.body.name;
+                this.blankLedger.attachedFile = output.file.response.body?.uniqueName;
+                this.blankLedger.attachedFileName = output.file.response.body?.name;
                 this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
             } else {
                 this.isFileUploading = false;
@@ -933,7 +933,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public mapBankTransaction() {
 
-        if (this.blankLedger.transactionId && this.selectedItemToMap.uniqueName) {
+        if (this.blankLedger.transactionId && this.selectedItemToMap?.uniqueName) {
             let model = {
                 uniqueName: this.selectedItemToMap.uniqueName
             };
@@ -1158,7 +1158,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 taxableValue = (rawAmount + transaction.tax);
             }
 
-            let tax = companyTaxes.find(ct => ct.uniqueName === modal?.appliedOtherTax?.uniqueName);
+            let tax = companyTaxes.find(ct => ct?.uniqueName === modal?.appliedOtherTax?.uniqueName);
             if (tax) {
                 this.blankLedger.otherTaxType = ['tcsrc', 'tcspay'].includes(tax.taxType) ? 'tcs' : 'tds';
             }
@@ -1462,7 +1462,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     private validateTaxes(): boolean {
-        const taxes = [...this.currentTxn.taxesVm.filter(p => p.isChecked).map(p => p.uniqueName)];
+        const taxes = [...this.currentTxn.taxesVm.filter(p => p.isChecked).map(p => p?.uniqueName)];
         return taxes && taxes.length > 0;
     }
 
@@ -1513,7 +1513,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 currencySymbol: enableVoucherAdjustmentMultiCurrency ? this.baseCurrencyDetails?.symbol ?? this.blankLedger.baseCurrencyToDisplay?.symbol ?? '' : this.blankLedger.baseCurrencyToDisplay?.symbol,
                 currencyCode: enableVoucherAdjustmentMultiCurrency ? this.baseCurrencyDetails?.code ?? this.blankLedger.baseCurrencyToDisplay?.code ?? '' : this.blankLedger.baseCurrencyToDisplay?.code
             },
-            activeAccountUniqueName: this.activeAccount.uniqueName
+            activeAccountUniqueName: this.activeAccount?.uniqueName
         };
     }
 
@@ -1539,7 +1539,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public assignUpdateActiveAccount(accountDetails: AccountResponse | AccountResponseV2): void {
         this.accountOtherApplicableDiscount = [];
         this.activeAccount = accountDetails;
-        let parentAcc = (accountDetails && accountDetails.parentGroups && accountDetails.parentGroups.length > 0) ? accountDetails.parentGroups[0].uniqueName : "";
+        let parentAcc = (accountDetails?.parentGroups?.length > 0) ? accountDetails.parentGroups[0].uniqueName : "";
         let incomeAccArray = ['revenuefromoperations', 'otherincome'];
         let expensesAccArray = ['operatingcost', 'indirectexpenses'];
         let assetsAccArray = ['assets'];
@@ -1547,7 +1547,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
             let appTaxes = [];
             if (accountDetails && accountDetails.applicableTaxes && accountDetails.applicableTaxes.length > 0) {
-                accountDetails.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
+                accountDetails.applicableTaxes.forEach(app => appTaxes.push(app?.uniqueName));
             }
             this.currentAccountApplicableTaxes = appTaxes;
         }
@@ -1578,7 +1578,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 setTimeout(() => {
                     this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(element => {
                         this.currentTxn.discounts.map(item => {
-                            if (element.uniqueName === item.discountUniqueName) {
+                            if (element?.uniqueName === item?.discountUniqueName) {
                                 item.isActive = true;
                             }
                             return item;
@@ -1588,7 +1588,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             } else {
                 this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(element => {
                     this.currentTxn.discounts.map(item => {
-                        if (element.uniqueName === item.discountUniqueName) {
+                        if (element?.uniqueName === item?.discountUniqueName) {
                             item.isActive = true;
                         }
                         return item;
@@ -1599,7 +1599,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.currentTxn.discounts.map(item => { item.isActive = false });
             this.accountOtherApplicableDiscount.forEach(element => {
                 this.currentTxn.discounts.map(item => {
-                    if (element.uniqueName === item.discountUniqueName) {
+                    if (element?.uniqueName === item?.discountUniqueName) {
                         item.isActive = true;
                     }
                     return item;
