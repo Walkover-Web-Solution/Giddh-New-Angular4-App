@@ -40,8 +40,8 @@ export function createDbFile(filename: string): any {
  */
 export function getPath(filename: string): any {
     const app = electron?.app || electron?.remote?.app;
-    const path = app.getPath('userData') + "/data/" + filename;
-    createDbFile(path);
+    const path = app.getPath('userData') + "/" + filename;
+    //createDbFile(path);
     return path;
 }
 

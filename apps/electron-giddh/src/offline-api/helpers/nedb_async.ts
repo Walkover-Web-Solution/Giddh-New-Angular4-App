@@ -5,7 +5,7 @@
  * @param {*} db
  * @returns {Promise<any>}
  */
- export function loadDatabase(db: any): Promise<any> {
+export function loadDatabase(db: any): Promise<any> {
     return new Promise((resolve, reject) => {
         db.loadDatabase((err) => {
             if (err) {
@@ -13,7 +13,7 @@
             } else {
                 resolve(true);
             }
-        })
+        });
     });
 }
 
@@ -34,7 +34,7 @@ export function insertAsync<T>(db: any, newDoc: T): Promise<T> {
             } else {
                 resolve(document);
             }
-        })
+        });
     });
 }
 
@@ -67,7 +67,7 @@ export function findAsync<T>(db: any, query: any, projection?: T): Promise<Array
                 } else {
                     resolve(documents);
                 }
-            })
+            });
         });
     }
 }
@@ -91,7 +91,7 @@ export function updateAsync<T>(db: any, query: any, updateQuery: any, options: a
             } else {
                 resolve({ numberOfUpdated, affectedDocuments, upsert });
             }
-        })
+        });
     });
 }
 
@@ -114,7 +114,7 @@ export function removeAsync<T>(db: any, query: any, options?: any): Promise<numb
                 } else {
                     resolve(n);
                 }
-            })
+            });
         });
     } else {
         return new Promise((resolve, reject) => {
@@ -124,7 +124,7 @@ export function removeAsync<T>(db: any, query: any, options?: any): Promise<numb
                 } else {
                     resolve(n);
                 }
-            })
+            });
         });
     }
 }
