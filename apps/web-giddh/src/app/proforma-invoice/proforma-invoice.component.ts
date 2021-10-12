@@ -4659,7 +4659,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             entry.transactions.forEach(t => {
                 salesTransactionItemClass = new SalesTransactionItemClass();
                 salesTransactionItemClass.accountUniqueName = t.account?.uniqueName;
-                salesTransactionItemClass.accountName = t.account.name;
+                salesTransactionItemClass.accountName = t.account?.name;
                 salesTransactionItemClass.amount = t?.amount?.amountForAccount ?? 0;
                 salesTransactionItemClass.highPrecisionAmount = t?.amount?.amountForAccount ?? 0;
                 salesTransactionItemClass.hsnNumber = t.hsnNumber ?? entry.hsnNumber;
@@ -7291,9 +7291,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private setSelectedItem(): void {
         this.route.queryParams.pipe(take(1)).subscribe((params) => {
             if(params.uniqueName) {
-                this.selectedItem = { 
-                    uniqueName: params.uniqueName, 
-                    voucherNumber: params.invoiceNo, 
+                this.selectedItem = {
+                    uniqueName: params.uniqueName,
+                    voucherNumber: params.invoiceNo,
                     account: { name: params.accUniqueName, uniqueName: params.accUniqueName },
                     grandTotal: undefined,
                     voucherDate: undefined,
