@@ -154,7 +154,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                 let arr: IOption[] = [];
                 if (taxes) {
                     if (activeAccount) {
-                        let applicableTaxes = activeAccount.applicableTaxes.map(p => p.uniqueName);
+                        let applicableTaxes = activeAccount.applicableTaxes.map(p => p?.uniqueName);
 
                         // set isGstEnabledAcc or not
                         if (activeAccount.parentGroups[0]?.uniqueName) {
@@ -166,7 +166,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                         if (activeAccountTaxHierarchy) {
 
                             if (activeAccountTaxHierarchy.inheritedTaxes) {
-                                let inheritedTaxes = flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j.uniqueName);
+                                let inheritedTaxes = flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j?.uniqueName);
                                 let allTaxes = applicableTaxes?.filter(f => inheritedTaxes.indexOf(f) === -1);
                                 // set value in tax group form
                                 this.taxGroupForm.setValue({ taxes: allTaxes });
@@ -174,9 +174,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                                 this.taxGroupForm.setValue({ taxes: applicableTaxes });
                             }
                             return differenceBy(taxes.map(p => {
-                                return { label: p.name, value: p.uniqueName };
+                                return { label: p?.name, value: p?.uniqueName };
                             }), flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-                                return { label: p.name, value: p.uniqueName };
+                                return { label: p?.name, value: p?.uniqueName };
                             }), 'value');
 
                         } else {
@@ -184,7 +184,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                             this.taxGroupForm.setValue({ taxes: applicableTaxes });
 
                             return taxes.map(p => {
-                                return { label: p.name, value: p.uniqueName };
+                                return { label: p?.name, value: p?.uniqueName };
                             });
 
                         }
@@ -341,7 +341,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             (state: AppState) => state.groupwithaccounts.activeAccount],
             (activeAccount) => {
                 let result: boolean = false;
-                let activeGroupUniqueName = this.breadcrumbUniquePath[this.breadcrumbUniquePath.length - 2];
+                let activeGroupUniqueName = this.breadcrumbUniquePath[this.breadcrumbUniquePath?.length - 2];
                 if (activeGroupUniqueName && activeAccount) {
                     result = this.getAccountFromGroup(activeAccount, false);
                 } else {
@@ -357,12 +357,12 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         let accObject = new ShareAccountRequest();
         accObject.role = 'view_only';
         accObject.user = this.shareAccountForm.controls['userEmail'].value;
-        this.store.dispatch(this._ledgerActions.shareAccount(accObject, activeAcc.uniqueName));
+        this.store.dispatch(this._ledgerActions.shareAccount(accObject, activeAcc?.uniqueName));
         this.shareAccountForm.reset();
     }
 
     public moveToAccountSelected(event: any) {
-        this.moveAccountForm?.patchValue({ moveto: event.item.uniqueName });
+        this.moveAccountForm?.patchValue({ moveto: event.item?.uniqueName });
     }
 
     public moveAccount() {
@@ -372,9 +372,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         let grpObject = new AccountMoveRequest();
         grpObject.uniqueName = this.moveAccountForm.controls['moveto'].value;
 
-        let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath.length - 2];
+        let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath?.length - 2];
 
-        this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc.uniqueName, activeGrpName));
+        this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc?.uniqueName, activeGrpName));
         this.moveAccountForm.reset();
     }
 
@@ -382,13 +382,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         let activeGrp;
         this.activeGroup$.pipe(take(1)).subscribe(p => activeGrp = p);
 
-        this.store.dispatch(this.groupWithAccountsAction.unShareGroup(val, activeGrp.uniqueName));
+        this.store.dispatch(this.groupWithAccountsAction.unShareGroup(val, activeGrp?.uniqueName));
     }
 
     public unShareAccount(val) {
         let activeAcc;
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAcc = p);
-        this.store.dispatch(this.accountsAction.unShareAccount(val, activeAcc.uniqueName));
+        this.store.dispatch(this.accountsAction.unShareAccount(val, activeAcc?.uniqueName));
     }
 
     public flattenGroup(rawList: any[], parents: any[] = []) {
@@ -398,12 +398,12 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             let result;
             newParents = union([], parents);
             newParents.push({
-                name: listItem.name,
-                uniqueName: listItem.uniqueName
+                name: listItem?.name,
+                uniqueName: listItem?.uniqueName
             });
             listItem = Object.assign({}, listItem, { parentGroups: [] });
             listItem.parentGroups = newParents;
-            if (listItem.groups.length > 0) {
+            if (listItem?.groups?.length > 0) {
                 result = this.flattenGroup(listItem.groups, newParents);
                 result.push(omit(listItem, 'groups'));
             } else {
@@ -417,7 +417,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public isRootLevelGroupFunc(uniqueName: string) {
         const rootLevelGroups: ColumnGroupsAccountVM[] | any[] = this.columnsRef?.columns[0]?.groups || [];
         for (let grp of rootLevelGroups) {
-            if (grp.uniqueName === uniqueName) {
+            if (grp?.uniqueName === uniqueName) {
                 this.isRootLevelGroup = true;
                 return;
             } else {
@@ -440,10 +440,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         let obj;
         obj = map(rawList, (item: any) => {
             obj = {};
-            obj.name = item.name;
-            obj.uniqueName = item.uniqueName;
-            obj.synonyms = item.synonyms;
-            obj.parentGroups = item.parentGroups;
+            obj.name = item?.name;
+            obj.uniqueName = item?.uniqueName;
+            obj.synonyms = item?.synonyms;
+            obj.parentGroups = item?.parentGroups;
             return obj;
         });
         return obj;
@@ -501,7 +501,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                 if (t) {
                     t.inheritedTaxes.forEach(tt => {
                         tt.applicableTaxes.forEach(ttt => {
-                            data.taxes.push(ttt.uniqueName);
+                            data.taxes.push(ttt?.uniqueName);
                         });
                     });
                 }
@@ -556,13 +556,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
         let obj = new AccountUnMergeRequest();
         obj.uniqueNames = [this.selectedAccountForDelete];
-        this.store.dispatch(this.accountsAction.unmergeAccount(activeAccount.uniqueName, obj));
+        this.store.dispatch(this.accountsAction.unmergeAccount(activeAccount?.uniqueName, obj));
         this.showDeleteMove = false;
         this.hideDeleteMergedAccountModal();
     }
 
     public selectAccount(v: IOption[]) {
-        if (v.length) {
+        if (v?.length) {
             let accounts = [];
             v.map(a => {
                 accounts.push(a.value);
@@ -582,7 +582,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         let activeAccount: AccountResponseV2 = null;
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
         let finalData: AccountMergeRequest[] = [];
-        if (this.selectedaccountForMerge.length) {
+        if (this.selectedaccountForMerge?.length) {
             this.selectedaccountForMerge.map((acc) => {
                 let obj = new AccountMergeRequest();
                 obj.uniqueName = acc;
@@ -613,7 +613,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         let obj = new AccountUnMergeRequest();
         obj.uniqueNames = [this.setAccountForMove];
         obj.moveTo = this.selectedAccountForMove;
-        this.store.dispatch(this.accountsAction.unmergeAccount(activeAccount.uniqueName, obj));
+        this.store.dispatch(this.accountsAction.unmergeAccount(activeAccount?.uniqueName, obj));
         this.showDeleteMove = false;
         this.hideDeleteMergedAccountModal();
         this.hideMoveMergedAccountModal();
@@ -637,8 +637,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     public deleteAccount() {
         let activeAccUniqueName = null;
-        this.activeAccount$.pipe(take(1)).subscribe(s => activeAccUniqueName = s.uniqueName);
-        let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath.length - 2];
+        this.activeAccount$.pipe(take(1)).subscribe(s => activeAccUniqueName = s?.uniqueName);
+        let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath?.length - 2];
         this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName, activeGrpName));
 
         this.hideDeleteAccountModal();

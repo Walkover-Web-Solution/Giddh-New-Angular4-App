@@ -219,7 +219,7 @@
                             >{{ inAppTax?.name }}
                         </span>
                     </div>
-                    <p *ngIf="!(activeGroupTaxHierarchy$ | async)?.inheritedTaxes.length">
+                    <p *ngIf="!(activeGroupTaxHierarchy$ | async)?.inheritedTaxes?.length">
                         {{ localeData?.no_inherited_taxes }}
                     </p>
                 </div>
@@ -236,6 +236,7 @@
             <div class="clearfix">
                 <span>
                     <sh-select
+                        *ngIf="showDiscountField"
                         class="pull-left calc-width"
                         [options]="discountList"
                         [isFilterEnabled]="true"

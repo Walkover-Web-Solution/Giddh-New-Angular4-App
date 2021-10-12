@@ -1,0 +1,140 @@
+<div class="container-fluid static-tabs-on-page">
+    <div class="about-group pd-t15">
+        <div class="row">
+            <div class="col-10 col-md-6">
+                <div class="group-detail d-flex w-100 align-items-center">
+                    <div class="group-thumbnail mr-r15">
+                        <img src="{{ imgPath }}Login-Page-Image.png" alt="group-icon" />
+                    </div>
+                    <div class="group-name">
+                        <h4>Combo Name</h4>
+                        <p class="text-gray font-14">(Combo Unique Name)</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-2 col-md-6 group-detail-right-btn">
+                <div class="more-add-button d-flex align-items-center justify-content-end w-100">
+                    <div class="btn-group" dropdown>
+                        <button
+                            id="more-btn-inventory"
+                            *ngIf="!isMobileScreen"
+                            dropdownToggle
+                            type="button"
+                            class="btn btn-primary dropdown-toggle bdr-radius-50"
+                            aria-controls="more-inventory-dropdown"
+                        >
+                            More <span class="caret"></span>
+                        </button>
+                        <i class="icon-dots-three-vertical pd" *ngIf="isMobileScreen" dropdownToggle></i>
+                        <ul
+                            id="more-inventory-dropdown"
+                            *dropdownMenu
+                            class="dropdown-menu"
+                            role="menu"
+                            aria-labelledby="more-btn-inventory"
+                        >
+                            <li role="menuitem">
+                                <a
+                                    class="dropdown-item"
+                                    href="javascript:void(0);"
+                                    [routerLink]="['/pages/new-inventory/create-new-inventory']"
+                                    >Bulk Edit</a
+                                >
+                            </li>
+                            <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);">Archive</a></li>
+                            <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
+                            <li class="divider dropdown-divider" *ngIf="isMobileScreen"></li>
+                            <li role="menuitem">
+                                <a class="dropdown-item text-primary" *ngIf="isMobileScreen" href="javascript:void(0);"
+                                    >+ Add Inventory</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                    <button
+                        id="combo-create-inventory"
+                        class="btn btn-sky-blue bdr-radius-50"
+                        [routerLink]="['/pages/new-inventory/create-new-inventory']"
+                    >
+                        + Add Inventory
+                    </button>
+                    <i [routerLink]="['/pages/new-inventory']" class="icon-undo pd cursor-pointer" tooltip="Back"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <tabset class="custom-tabs combo-page-tab">
+        <tab heading="About Group">
+            <div class="row">
+                <div class="col-md-8 col-lg-8 col-xl-6 col-12">
+                    <p class="text-gray font-14 mr-b15">Lorem Ipsum dummy text will come here about create stock.</p>
+                    <form>
+                        <div class="row mr-b15">
+                            <div class="col-sm-4 col-lg-4">
+                                <label>Combo Name <span class="red-text">*</span></label>
+                            </div>
+                            <div class="col-sm-6 col-lg-6">
+                                <input id="combo-name" class="form-control" type="text" value="Combo Name" readonly />
+                            </div>
+                        </div>
+                        <div class="row mr-b15">
+                            <div class="col-sm-4 col-lg-4">
+                                <label>Unit <span class="red-text">*</span></label>
+                            </div>
+                            <div class="col-sm-6 col-g-6">
+                                <input id="combo-unit" class="form-control" type="text" value="Unit" readonly />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table combo-table mt-5 font-14">
+                    <thead>
+                        <th width="3%">&nbsp;</th>
+                        <th width="20%">Stock Name <span class="red-text">*</span></th>
+                        <th width="20%">Unit <span class="red-text">*</span></th>
+                        <th width="16%">Qty <span class="red-text">*</span></th>
+                        <th width="20%">Selling Price</th>
+                        <th width="20%">Purchase Price</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td width="3%">
+                                <img src="{{ imgPath }}Login-Page-Image.png" width="40" height="40" />
+                            </td>
+                            <td width="20%">
+                                <input type="text" class="form-control" value="Product Name/Service" readonly />
+                            </td>
+                            <td width="20%"><input type="text" class="form-control" value="Unit" readonly /></td>
+                            <td width="16%"><input type="text" class="form-control" value="2" readonly /></td>
+                            <td width="20%">0.00</td>
+                            <td width="20%">0.00</td>
+                        </tr>
+                        <tr>
+                            <td width="3%">
+                                <img src="{{ imgPath }}Login-Page-Image.png" width="40" height="40" />
+                            </td>
+                            <td width="20%">
+                                <input type="text" class="form-control" value="Product Name/Service" readonly />
+                            </td>
+                            <td width="20%"><input type="text" class="form-control" value="Unit" readonly /></td>
+                            <td width="16%"><input type="text" class="form-control" value="2" readonly /></td>
+                            <td width="20%">0.00</td>
+                            <td width="20%">0.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </tab>
+    </tabset>
+
+    <div class="sticky-footer create-group-footer">
+        <div class="footer-wrapper">
+            <div class="button-group">
+                <button id="about-clear-btn" class="btn btn-primary bdr-radius-50 min-width-100">Clear</button>
+                <button id="about-update-group" class="btn btn-success disable bdr-radius-50">Update Group</button>
+            </div>
+        </div>
+    </div>
+</div>

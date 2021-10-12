@@ -1,5 +1,4 @@
 <section id="manufacture" class="clearfix">
-    <!-- page Title -->
     <hamburger-menu *ngIf="!isInventoryPage" [pageHeading]="'Mfg. Journal Register'"></hamburger-menu>
     <div class="clearfix mr-r15 create-btn" *ngIf="isMobileScreen">
         <div class="mr-r15" *ngIf="showClearFilter()">
@@ -209,12 +208,12 @@
     </section>
     <div
         class="no-data mr-t100 col-12 col-sm-12"
-        *ngIf="!(isReportLoading$ | async) && reportData && reportData.results.length === 0"
+        *ngIf="!(isReportLoading$ | async) && reportData && reportData.results?.length === 0"
     >
         <h1>No entries found within given criteria.</h1>
         <h1>Do search with some other dates</h1>
     </div>
-    <section *ngIf="!(isReportLoading$ | async) && reportData && reportData.results.length > 0">
+    <section *ngIf="!(isReportLoading$ | async) && reportData && reportData.results?.length > 0">
         <div class="" id="mfReportTbl">
             <div class="col-12 col-sm-12 table-responsive">
                 <table class="table basic table-bordered giddh-table on-mobile-view manufacture-table">

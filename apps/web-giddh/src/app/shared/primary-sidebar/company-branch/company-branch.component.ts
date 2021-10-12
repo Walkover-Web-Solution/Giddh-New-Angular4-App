@@ -98,7 +98,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
-            if (!companies || companies.length === 0) {
+            if (!companies || companies?.length === 0) {
                 return;
             }
 
@@ -289,7 +289,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         if (!company.branches || reloadBranches) {
             company.branches = [];
             this.branchRefreshInProcess = true;
-            let branchFilterRequest: BranchFilterRequest = { from: '', to: '', companyUniqueName: company.uniqueName };
+            let branchFilterRequest: BranchFilterRequest = { from: '', to: '', companyUniqueName: company?.uniqueName };
             this.settingsBranchService.GetAllBranches(branchFilterRequest).subscribe(response => {
                 if (response?.status === "success") {
                     this.branchList = response.body.sort(this.generalService.sortBranches);

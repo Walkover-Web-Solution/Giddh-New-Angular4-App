@@ -134,15 +134,15 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
                     prevTab = se;
                 });
                 let stateDetailsRequest = new StateDetailsRequest();
-                stateDetailsRequest.companyUniqueName = this.company.uniqueName;
+                stateDetailsRequest.companyUniqueName = this.company?.uniqueName;
                 stateDetailsRequest.lastState = this.isNewUser ? 'welcome' : 'onboarding';
-                this._generalService.companyUniqueName = this.company.uniqueName;
+                this._generalService.companyUniqueName = this.company?.uniqueName;
                 if (prevTab !== 'user-details') {
                     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
                 }
                 setTimeout(() => {
                     if (prevTab !== 'user-details') {
-                        this.store.dispatch(this._loginAction.ChangeCompany(this.company.uniqueName));
+                        this.store.dispatch(this._loginAction.ChangeCompany(this.company?.uniqueName));
                         this._route.navigate([this.isNewUser ? 'welcome' : 'onboarding']);
                     }
                     this.closeModal();
@@ -150,7 +150,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
             }
         });
         this.store.pipe(select(p => p.session.companyUniqueName), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
-            if (a && a !== '' && this.company.uniqueName) {
+            if (a && a !== '' && this.company?.uniqueName) {
                 if (a.includes(this.company.uniqueName.substring(0, 8))) {
                     this.company.name = '';
                     this.company.country = '';
@@ -374,7 +374,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
      */
     public handleOnBoardingNameChange(itemName: string): void {
         if (this.onBoardingType === OnBoardingType.Warehouse) {
-            if (itemName.length > 100) {
+            if (itemName?.length > 100) {
                 this.companyForm.form.controls['name'].setErrors({ 'maxlength': true });
             }
         }
@@ -393,7 +393,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
                 if (!itemName) {
                     this.companyForm.form.controls['name'].setErrors({ 'required': true });
                 }
-                if (itemName.length > 100) {
+                if (itemName?.length > 100) {
                     this.companyForm.form.controls['name'].setErrors({ 'maxlength': true });
                 }
             }

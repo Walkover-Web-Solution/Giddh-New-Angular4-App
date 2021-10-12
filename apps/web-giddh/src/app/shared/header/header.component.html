@@ -8,7 +8,7 @@
         (mouseover)="expandSidebar()"
         (mouseout)="collapseSidebar(false, true)"
         class="nav-left-bar"
-        [ngClass]="{ 'open': isSidebarExpanded, 'unvisible': companyList.length === 0 }"
+        [ngClass]="{ 'open': isSidebarExpanded, 'unvisible': companyList?.length === 0 }"
         (clickOutside)="closeSidebarMobile($event)"
     >
         <div class="menu-wrapper">
@@ -33,7 +33,7 @@
         <div
             class="primary-main-header"
             id="primary-new-header"
-            [ngClass]="{ 'open': sideMenu.isopen, 'unvisible': companyList.length === 0 }"
+            [ngClass]="{ 'open': sideMenu.isopen, 'unvisible': companyList?.length === 0 }"
         >
             <div *ngIf="isMobileScreen">
                 <ul class="list-style-none">
@@ -272,6 +272,13 @@
                 (closeAsideEvent)="toggleSidebarPane(false, false)"
             ></aside-setting>
         </perfect-scrollbar>
+    </div>
+    <div class="help-support-aside setting-sidebar-wrapper" *ngIf="asideInventorySidebarMenuState === 'in'">
+        <inventory-sidebar
+            class="inventory-sidebar"
+            [ngClass]="{ 'inventory-sidebar': isMobileSidebar }"
+            (closeAsideEvent)="toggleSidebarPane(false, false)"
+        ></inventory-sidebar>
     </div>
     <ng-template #datepickerTemplate>
         <div class="datepicker-modal">

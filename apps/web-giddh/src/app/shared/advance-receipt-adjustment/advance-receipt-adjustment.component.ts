@@ -127,7 +127,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         });
         if (this.advanceReceiptAdjustmentUpdatedData) {
             this.advanceReceiptAdjustmentPreUpdatedData = cloneDeep(this.advanceReceiptAdjustmentUpdatedData);
-            this.adjustVoucherForm = this.advanceReceiptAdjustmentUpdatedData.adjustments.length ? cloneDeep(this.advanceReceiptAdjustmentUpdatedData) : this.adjustVoucherForm;
+            this.adjustVoucherForm = this.advanceReceiptAdjustmentUpdatedData?.adjustments?.length ? cloneDeep(this.advanceReceiptAdjustmentUpdatedData) : this.adjustVoucherForm;
             if (this.advanceReceiptAdjustmentUpdatedData && this.advanceReceiptAdjustmentUpdatedData.adjustments && this.advanceReceiptAdjustmentUpdatedData.adjustments.length && this.advanceReceiptAdjustmentUpdatedData.tdsTaxUniqueName) {
                 this.isTaxDeducted = true;
             } else {
@@ -156,14 +156,14 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             if (typeof customerUniqueName === 'string') {
                 // New entry is created from ledger
                 requestObject = {
-                    accountUniqueNames: [customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName],
+                    accountUniqueNames: [customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName ?? voucherType],
                     voucherType,
                     subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
                 }
             } else {
                 // A ledger entry is updated
                 requestObject = {
-                    accountUniqueNames: [...customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName],
+                    accountUniqueNames: [...customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName ?? voucherType],
                     voucherType,
                     subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
                 }
@@ -189,7 +189,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                         if (this.isVoucherModule) {
                             this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
                         } else {
-                            this.toaster.warningToast(this.localeData?.voucher_unavailable);
+                            this.toaster.warningToast(this.commonLocaleData?.app_voucher_unavailable);
                         }
                     }
                 }
@@ -393,7 +393,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                 return item.value && item.label.trim();
             }
         });
-        if (this.adjustVoucherForm.adjustments.length > 1 || this.adjustVoucherForm?.adjustments.every(adjustment => adjustment.uniqueName !== '')) {
+        if (this.adjustVoucherForm?.adjustments?.length > 1 || this.adjustVoucherForm?.adjustments.every(adjustment => adjustment.uniqueName !== '')) {
             this.adjustVoucherForm.adjustments.splice(index, 1);
         } else {
             this.onClear();
@@ -605,8 +605,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         });
         adjustVoucherAdjustment = cloneDeep(this.adjustVoucherForm.adjustments);
 
-        for (let i = options.length - 1; i >= 0; i--) {
-            for (let j = 0; j < adjustVoucherAdjustment.length; j++) {
+        for (let i = options?.length - 1; i >= 0; i--) {
+            for (let j = 0; j < adjustVoucherAdjustment?.length; j++) {
                 if (options[i] && options[i].label && adjustVoucherAdjustment[j] && adjustVoucherAdjustment[j].voucherNumber &&
                     options[i].value && adjustVoucherAdjustment[j].uniqueName &&
                     ((options[i].label.trim() !== '-' && adjustVoucherAdjustment[j].voucherNumber.trim() !== '-' && options[i].label.trim() === adjustVoucherAdjustment[j].voucherNumber.trim()) ||

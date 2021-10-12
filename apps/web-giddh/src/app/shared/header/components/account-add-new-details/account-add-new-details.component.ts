@@ -29,9 +29,8 @@ import { GeneralActions } from "../../../../actions/general/general.actions";
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
-import { API_COUNT_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { API_COUNT_LIMIT, EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
-import { EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { clone, cloneDeep, uniqBy } from 'apps/web-giddh/src/app/lodash-optimized';
@@ -149,16 +148,16 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         totalPages: 0,
         query: ''
     };
-    /** This will hold inventory settings */
-    public inventorySettings: any;
-    /** This will hold parent unique name */
-    public activeParentGroupUniqueName: string = '';
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /** This will hold placeholder for tax */
     public taxNamePlaceholder: string = "";
+    /** This will hold inventory settings */
+    public inventorySettings: any;
+    /** This will hold parent unique name */
+    public activeParentGroupUniqueName: string = '';
     /** True if custom fields api call in progress */
     public isCustomFieldLoading: boolean = false;
 
@@ -168,11 +167,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private _toaster: ToasterService,
         private commonActions: CommonActions,
         private _generalActions: GeneralActions,
+        private changeDetectorRef: ChangeDetectorRef,
         private generalService: GeneralService,
         private groupService: GroupService,
         private groupWithAccountsAction: GroupWithAccountsAction,
-        private invoiceService: InvoiceService,
-        private changeDetectorRef: ChangeDetectorRef) {
+        private invoiceService: InvoiceService) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
 
     }
@@ -202,13 +201,15 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.initializeNewForm();
         this.activeGroup$.subscribe(response => {
             if (response) {
-                if (response.parentGroups && response.parentGroups.length) {
+                if (response.uniqueName !== this.activeGroupUniqueName) {
+                    this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
+                } else if (response.parentGroups && response.parentGroups.length) {
                     let parent = response.parentGroups;
                     const HSN_SAC_PARENT_GROUPS = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
-                    if (parent.length > 1 && parent[1]) {
+                    if (parent?.length > 1 && parent[1]) {
                         this.isHsnSacEnabledAcc = (parent[1].parentGroups) ? HSN_SAC_PARENT_GROUPS.includes(parent[1].parentGroups[0]?.uniqueName) : false;
                         this.isParentDebtorCreditor(parent[1].uniqueName);
-                    } else if (parent.length === 1) {
+                    } else if (parent?.length === 1) {
                         this.isHsnSacEnabledAcc = (response.parentGroups) ? HSN_SAC_PARENT_GROUPS.includes(response.parentGroups[0]?.uniqueName) : false;
                         this.isParentDebtorCreditor(response.uniqueName);
                     }
@@ -235,13 +236,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.addAccountForm.get('country').get('countryCode').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
                 const addresses = this.addAccountForm.get('addresses') as FormArray;
-                if (addresses.controls.length === 0) {
+                if (addresses?.controls?.length === 0) {
                     this.addBlankGstForm();
                 }
                 if (a !== 'IN') {
                     this.isIndia = false;
                 } else {
-                    if (addresses.controls.length === 0) {
+                    if (addresses?.controls?.length === 0) {
                         this.addBlankGstForm();
                     }
                     this.isIndia = true;
@@ -418,7 +419,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public addGstDetailsForm(value?: string) {    // commented code because we no need GSTIN No. to add new address
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         addresses.push(this.initialGstDetailsForm());
-        if (addresses.length > 4) {
+        if (addresses?.length > 4) {
             this.moreGstDetailsVisible = false;
         }
         return;
@@ -431,7 +432,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     public addBlankGstForm() {
         const addresses = this.addAccountForm.get('addresses') as FormArray;
-        if (addresses.value.length === 0) {
+        if (addresses?.value?.length === 0) {
             addresses.push(this.initialGstDetailsForm());
         }
     }
@@ -486,7 +487,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     public showMoreGst() {
         const addresses = this.addAccountForm.get('addresses') as FormArray;
-        this.gstDetailsLength = addresses.controls.length;
+        this.gstDetailsLength = addresses?.controls?.length;
         this.moreGstDetailsVisible = true;
     }
 
@@ -671,6 +672,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.isShowBankDetails(activeParentgroup);
             this.isDebtorCreditor = true;
         } else {
+            this.isBankAccount = false;
             this.isDebtorCreditor = false;
             this.showBankDetail = false;
         }
@@ -740,7 +742,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public checkGstNumValidation(ele: HTMLInputElement) {
         let isValid: boolean = false;
         if (ele.value?.trim()) {
-            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
+            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
                     if (regex.test(ele.value)) {
@@ -947,7 +949,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      */
     public addBlankCustomFieldForm(): void {
         const customField = this.addAccountForm.get('customFields') as FormArray;
-        if (customField.value.length === 0) {
+        if (customField?.value?.length === 0) {
             customField.push(this.initialCustomFieldDetailsForm(null));
         }
     }
@@ -961,7 +963,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      */
     public renderCustomFieldDetails(obj: any, customFieldLength: any): void {
         const customField = this.addAccountForm.get('customFields') as FormArray;
-        if (customField.length < customFieldLength) {
+        if (customField?.length < customFieldLength) {
             customField.push(this.initialCustomFieldDetailsForm(obj));
         }
     }
@@ -992,7 +994,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      */
     public createDynamicCustomFieldForm(customFieldForm: any): void {
         customFieldForm.map(item => {
-            this.renderCustomFieldDetails(item, customFieldForm.length);
+            this.renderCustomFieldDetails(item, customFieldForm?.length);
         });
     }
 
@@ -1143,26 +1145,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     /**
-     * This will get invoice settings
-     *
-     * @memberof AccountAddNewDetailsComponent
-     */
-    public getInvoiceSettings(): void {
-        this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.status === "success" && response.body) {
-                let invoiceSettings = _.cloneDeep(response.body);
-                this.inventorySettings = invoiceSettings.companyInventorySettings;
-
-                if (this.inventorySettings?.manageInventory) {
-                    this.addAccountForm.get("hsnOrSac").patchValue("hsn");
-                } else {
-                    this.addAccountForm.get("hsnOrSac").patchValue("sac");
-                }
-            }
-        });
-    }
-
-    /*
      * Callback for translation response complete
      *
      * @param {boolean} event
@@ -1195,6 +1177,26 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
     }
 
+    /*
+     * This will get invoice settings
+     *
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public getInvoiceSettings(): void {
+        this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.status === "success" && response.body) {
+                let invoiceSettings = cloneDeep(response.body);
+                this.inventorySettings = invoiceSettings.companyInventorySettings;
+
+                if (this.inventorySettings?.manageInventory) {
+                    this.addAccountForm.get("hsnOrSac")?.patchValue("hsn");
+                } else {
+                    this.addAccountForm.get("hsnOrSac")?.patchValue("sac");
+                }
+            }
+        });
+    }
+
     /**
      * This will show/hide address tab depending on parent group
      *
@@ -1216,7 +1218,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         } else {
             this.addAccountForm.get('addresses').reset();
-            
+
             setTimeout(() => {
                 if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[1]) {
                     this.staticTabs.tabs[1].active = true;

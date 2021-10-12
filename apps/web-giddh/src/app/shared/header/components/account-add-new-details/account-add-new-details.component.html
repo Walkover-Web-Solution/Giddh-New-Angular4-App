@@ -186,7 +186,7 @@
                                             value="hsn"
                                         />
                                         <label for="hsnCodeType" class="radio-custom-label">{{
-                                            commonLocaleData?.app_hsn_code
+                                            commonLocaleData?.app_hsn
                                         }}</label>
                                     </span>
                                     <span>
@@ -199,7 +199,7 @@
                                             value="sac"
                                         />
                                         <label for="sacCodeType" class="ml-1 radio-custom-label">{{
-                                            commonLocaleData?.app_sac_code
+                                            commonLocaleData?.app_sac
                                         }}</label>
                                     </span>
                                 </div>
@@ -319,8 +319,10 @@
                                                 class="form-control"
                                                 autocomplete="false"
                                                 #gstNumberField
-                                                (keyup)="getStateCode(gst, states, $event)"
-                                                (blur)="checkGstNumValidation(gstNumberField)"
+                                                (blur)="
+                                                    checkGstNumValidation(gstNumberField);
+                                                    getStateCode(gst, states, $event)
+                                                "
                                                 name="gstNumber"
                                                 formControlName="gstNumber"
                                                 [placeholder]="taxNamePlaceholder"
@@ -384,7 +386,7 @@
                                     class="row"
                                     *ngIf="
                                         l &&
-                                        addAccountForm.get('addresses')['controls'].length > 3 &&
+                                        addAccountForm.get('addresses')['controls']?.length > 3 &&
                                         !moreGstDetailsVisible
                                     "
                                 >
@@ -393,7 +395,7 @@
                                         class="text-left col-6 cursor-pointer"
                                         (click)="showMoreGst()"
                                         >{{ commonLocaleData?.app_show_all }} ({{
-                                            addAccountForm.get("addresses")["controls"].length
+                                            addAccountForm.get("addresses")["controls"]?.length
                                         }})</a
                                     >
                                     <a

@@ -217,12 +217,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     public openingBalance: any;
     /** This will hold closing balance amount */
     public closingBalance: number = 0;
-    /** Stores the current organization type */
-    public currentOrganizationType: OrganizationType;
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
     /** Listens for Master open/close event, required to load the data once master is closed */
     public isAddAndManageOpenedFromOutside$: Observable<boolean>;
     /** This will store screen size */
@@ -537,8 +537,8 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
             this.commonRequest = new ContactAdvanceSearchCommonModal();
             this.isAdvanceSearchApplied = false;
-            this.key = "name";
-            this.order = "asc";
+            this.key = (tabName === "vendor") ? 'amountDue' : "name";
+            this.order = (tabName === "vendor") ? 'desc' : 'asc';
             this.activeTab = tabName;
 
             if (this.universalDate && this.universalDate[0] && this.universalDate[1] && !this.todaySelected) {
@@ -783,9 +783,9 @@ export class ContactComponent implements OnInit, OnDestroy {
         let end = el.selectionEnd;
         let text = el.value;
         let before = text.substring(0, start);
-        let after = text.substring(end, text.length);
+        let after = text.substring(end, text?.length);
         el.value = (before + newText + after);
-        el.selectionStart = el.selectionEnd = start + newText.length;
+        el.selectionStart = el.selectionEnd = start + newText?.length;
         el.focus();
         this.messageBody.msg = el.value;
     }
@@ -972,7 +972,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         if (!ev.checked) {
             this.checkboxInfo[this.checkboxInfo.selectedPage] = false;
             this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
-            if (this.selectedCheckedContacts.length === 0) {
+            if (this.selectedCheckedContacts?.length === 0) {
                 this.selectAllCustomer = false;
                 this.selectAllVendor = false;
                 this.selectedWhileHovering = "";
@@ -984,8 +984,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
         this.commonRequest = new ContactAdvanceSearchCommonModal();
         this.isAdvanceSearchApplied = false;
-        this.key = "name";
-        this.order = "asc";
+        this.key = (this.activeTab === "vendor") ? 'amountDue' : "name";
+        this.order = (this.activeTab === "vendor") ? 'desc' : "asc";
         this.getAccounts(this.fromDate, this.toDate,
             null, "true", PAGINATION_LIMIT, "", "", null, (this.currentBranch ? this.currentBranch.uniqueName : ""));
     }
@@ -1219,6 +1219,9 @@ export class ContactComponent implements OnInit, OnDestroy {
         if (window.localStorage) {
             localStorage.setItem(this.localStorageKeysForFilters[this.activeTab === "vendor" ? "vendor" : "customer"], JSON.stringify(this.showFieldFilter));
         }
+        setTimeout(() => {
+            this.showFieldFilter.selectAll = Object.keys(this.showFieldFilter).filter((filterName) => filterName !== 'selectAll').every(filterName => this.showFieldFilter[filterName]);
+        }, 500);
     }
 
     /**
@@ -1256,7 +1259,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     private setTableColspan() {
         let balancesColsArr = ["openingBalance"];
-        let length = Object.keys(this.showFieldFilter).filter(f => this.showFieldFilter[f]).filter(f => balancesColsArr.includes(f)).length;
+        let length = Object.keys(this.showFieldFilter).filter(f => this.showFieldFilter[f]).filter(f => balancesColsArr.includes(f))?.length;
         this.tableColsPan = length > 0 ? 4 : 3;
     }
 
@@ -1572,27 +1575,27 @@ export class ContactComponent implements OnInit, OnDestroy {
     public openBulkPaymentModal(template: TemplateRef<any>, item?: any): void {
         this.isBulkPaymentShow = true;
         this.selectedAccForPayment = null;
-        if (this.selectedAccountsList.length) {
+        if (this.selectedAccountsList?.length) {
             this.selectedAccountsList = this.selectedAccountsList.filter(itemObject => {
-                return itemObject.bankPaymentDetails === true;
+                return itemObject?.bankPaymentDetails === true;
             });
             this.selectedAccountsList = this.selectedAccountsList.filter((data, index) => {
                 return this.selectedAccountsList.indexOf(data) === index;
             });
         }
-        if (!this.selectedAccountsList.length && item) {
+        if (!this.selectedAccountsList?.length && item) {
             if (item.bankPaymentDetails) {
                 this.selectedAccForPayment = item;
             }
         }
-        if (this.selectedAccountsList.length < this.selectedCheckedContacts.length) {
+        if (this.selectedAccountsList?.length < this.selectedCheckedContacts?.length) {
             let message = this.localeData?.bank_transactions_message;
             message = message.replace("[SUCCESS]", this.selectedCheckedContacts.length - this.selectedAccountsList.length);
             message = message.replace("[TOTAL]", this.selectedCheckedContacts.length);
 
             this.toaster.infoToast(message);
         }
-        if (this.selectedAccountsList.length || this.selectedAccForPayment) {
+        if (this.selectedAccountsList?.length || this.selectedAccForPayment) {
             this.selectedAccountsList = [this.selectedAccountsList[0]]; // since we don't have bulk payment now, we are only passing 1st available value, once bulk payment is done from API, we will remove this line of code
             this.bulkPaymentModalRef = this.modalService.show(template,
                 Object.assign({}, { class: "payment-modal modal-xl" }),

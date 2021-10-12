@@ -115,13 +115,12 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.warehouseForm.get('name')?.patchValue(this.companyDetails.country.name);
-                if (!this.addressConfiguration.stateList.length) {
+                if (!this.addressConfiguration?.stateList?.length) {
                     this.loadStates(this.companyDetails.country.countryCode.toUpperCase());
                     this.loadTaxDetails(this.companyDetails.country.countryCode.toUpperCase());
                 }
             }
         });
-
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
         this.loadLinkedEntities();
         this.loadAddresses('GET', { count: 0 });
@@ -143,7 +142,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.warehouseForm.get('name')?.patchValue(this.companyDetails.country.name);
-                if (!this.addressConfiguration.stateList.length) {
+                if (!this.addressConfiguration?.stateList?.length) {
                     this.loadStates(this.companyDetails.country.countryCode.toUpperCase());
                     this.loadTaxDetails(this.companyDetails.country.countryCode.toUpperCase());
                 }

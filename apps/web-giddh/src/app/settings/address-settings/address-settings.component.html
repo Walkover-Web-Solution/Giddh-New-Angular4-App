@@ -174,7 +174,7 @@
                     </tbody>
                 </table>
                 <giddh-page-loader *ngIf="shouldShowLoader"></giddh-page-loader>
-                <div class="no-data" *ngIf="addresses.length === 0 && !shouldShowLoader">
+                <div class="no-data" *ngIf="addresses?.length === 0 && !shouldShowLoader">
                     <h1>{{ localeData?.no_address_found }}</h1>
                 </div>
             </div>
@@ -230,7 +230,7 @@
                     </div>
                 </div>
             </div>
-            <div class="no-data" *ngIf="addresses.length === 0">
+            <div class="no-data" *ngIf="addresses?.length === 0">
                 <h1>{{ localeData?.no_address_found }}</h1>
             </div>
         </div>
@@ -308,7 +308,7 @@
                     <i class="icon-cross text-right close-modal" aria-hidden="true" (click)="onCancel()"></i>
                 </div>
                 <div class="modal-body pd-l2 pd-r2 clearfix" id="export-body">
-                    <form name="newRole" novalidate class="" autocomplete="off">
+                    <form name="newRole" novalidate autocomplete="off">
                         <div class="modal-wrap mr-b2">
                             <h3>{{ localeData?.want_to_continue }}</h3>
                         </div>

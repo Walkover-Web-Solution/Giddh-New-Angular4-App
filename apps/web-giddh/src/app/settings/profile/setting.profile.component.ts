@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { select, Store } from '@ngrx/store';
-import { ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output, } from '@angular/core';
 import { AppState } from '../../store';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { ToasterService } from '../../services/toaster.service';
@@ -32,7 +32,6 @@ export interface IGstObj {
     newaddress: string;
     isDefault: boolean;
 }
-
 @Component({
     selector: 'setting-profile',
     templateUrl: './setting.profile.component.html',
@@ -116,7 +115,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public selectedState: any = '';
     public stateGstCode: any[] = [];
     public formFields: any[] = [];
-
     /** Observer to track get company profile API call in process */
     public getCompanyProfileInProgress$: Observable<boolean>;
     /** Stores the current organization type */
@@ -152,9 +150,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public isAddressChangeInProgress: boolean;
     /** Stores the current organization uniqueName */
     public currentOrganizationUniqueName: string;
-
     public imgPath: string = '';
-
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -198,7 +194,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.getCountry();
         this.getCurrency();
-
         currencyNumberSystems.map(currency => {
             this.numberSystemSource.push({ value: currency.value, label: `${currency.name}`, additional: currency });
         });
@@ -260,7 +255,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.imgPath = (isElectron || isCordova) ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
-            if (this.activeLocale && this.activeLocale !== response?.value) {
+            if(this.activeLocale && this.activeLocale !== response?.value) {
                 this.localeService.getLocale('settings/profile', response?.value).subscribe(response => {
                     this.localeData = response;
                     this.translationComplete(true);
@@ -300,7 +295,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.isMobileNumberValid = true;
 
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
-
         this.store.pipe(select(p => p.settings.inventory), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.profileRequest || 1 === 1) {
                 let inventorySetting = cloneDeep(o);
@@ -351,9 +345,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         let gstNumber;
         let isValid;
         if (addresses && addresses.length) {
-            gstNumber = addresses[addresses.length - 1].taxNumber;
+            gstNumber = addresses[addresses?.length - 1].taxNumber;
 
-            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
+            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
                     if (regex.test(gstNumber)) {
@@ -367,7 +361,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         } else {
             isValid = true;
         }
-
         if (isValid) {
             let companyDetails = cloneDeep(this.companyProfileObj);
             let newGstObj = {
@@ -398,7 +391,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     public updateProfile(data) {
         let dataToSave = cloneDeep(data);
-        if (dataToSave.addresses.length > 0) {
+        if (dataToSave?.addresses?.length > 0) {
             for (let entry of dataToSave.addresses) {
                 if (!entry.taxNumber && !entry.stateCode && !entry.address) {
                     dataToSave.addresses = without(dataToSave.addresses, entry);
@@ -413,7 +406,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         }
 
         this.store.dispatch(this.settingsProfileActions.UpdateProfile(dataToSave));
-
     }
 
     public updateInventorySetting(data) {
@@ -461,9 +453,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     public checkGstNumValidation(ele: HTMLInputElement) {
         let isValid: boolean = false;
-
         if (ele.value) {
-            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
+            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
                     if (regex.test(ele.value)) {
@@ -494,10 +485,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     public setChildState(ele: HTMLInputElement, index: number) {
         let gstVal: string = ele.value;
-        if (gstVal.length >= 2) {
+        if (gstVal?.length >= 2) {
             this.statesSource$.pipe(take(1)).subscribe(state => {
                 let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
-
                 let s = state.find(st => st.value === stateCode);
                 uniqBy(s, 'value');
                 if (s) {
@@ -552,7 +542,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     }
 
     public onToggleAllGSTDetails() {
-        if ((this.companyProfileObj.addresses.length === this.gstDetailsBackup.length) && (this.gstDetailsBackup.length === 3)) {
+        if ((this.companyProfileObj.addresses?.length === this.gstDetailsBackup?.length) && (this.gstDetailsBackup?.length === 3)) {
             this.gstDetailsBackup = null;
         } else {
             this.showAllGST = !this.showAllGST;
@@ -676,13 +666,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     public getStates(countryCode) {
         this.store.dispatch(this._generalActions.resetStatesList());
-
         this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.states = [];
                 this.statesInBackground = [];
                 this.statesSourceCompany = [];
-
                 Object.keys(res.stateList).forEach(key => {
                     this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
                     this.statesInBackground.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
@@ -736,9 +724,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             }
         });
     }
-
-
-
     /**
      * This will return the state code/name if available
      *
@@ -816,7 +801,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     /**
      * Loads all the entities of an company
-     *
      * @memberof SettingProfileComponent
      */
     public loadLinkedEntities(): void {
@@ -834,7 +818,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     /**
      * Loads all the states of a country
-     *
      * @param {string} countryCode Country code
      * @memberof SettingProfileComponent
      */
@@ -922,7 +905,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             isDefault: filteredEntity.isDefault,
             entity: filteredEntity.entity
         }));
-
         const requestObj = {
             taxNumber: addressDetails.formValue.taxNumber,
             stateCode: addressDetails.formValue.state,
@@ -1086,7 +1068,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             if (profileObj.countryV2 !== undefined && profileObj.countryV2.alpha2CountryCode !== undefined) {
                 profileObj.country = profileObj.countryV2.alpha2CountryCode;
             }
-
             this.companyProfileObj = {
                 ...this.companyProfileObj,
                 name: profileObj.name,
@@ -1109,7 +1090,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             this.companyProfileObj.balanceDecimalPlaces = String(profileObj.balanceDecimalPlaces);
 
             if (profileObj && profileObj.country) {
-                if (profileObj.countryV2 !== undefined && this.states.length === 0) {
+                if (profileObj?.countryV2 !== undefined && this.states?.length === 0) {
                     this.getStates(profileObj.countryV2.alpha2CountryCode);
                     this.getOnboardingForm(profileObj.countryV2.alpha2CountryCode);
                 }

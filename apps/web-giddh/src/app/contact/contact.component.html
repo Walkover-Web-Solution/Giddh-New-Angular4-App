@@ -115,7 +115,7 @@
                             <button
                                 mat-raised-button
                                 class="btn btn-group btn-filter desktop-button-filter"
-                                *ngIf="selectedAccountsList.length > 0"
+                                *ngIf="selectedAccountsList?.length > 0"
                                 (click)="clearSelectedContacts()"
                             >
                                 <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_selected }}
@@ -310,11 +310,11 @@
                                             : localeData?.vendors_selected
                                     }}</ng-container>
                                     <div>
-                                        <span *ngIf="!selectedCheckedContacts.length" class="number-total">{{
+                                        <span *ngIf="!selectedCheckedContacts?.length" class="number-total">{{
                                             activeTab === "customer" ? totalCustomers : totalVendors
                                         }}</span>
                                         <span
-                                            *ngIf="selectedCheckedContacts.length > 0"
+                                            *ngIf="selectedCheckedContacts?.length > 0"
                                             class="number-total total-customer-vendor-count"
                                             ><strong>{{ selectedCheckedContacts?.length }}</strong
                                             >/{{ activeTab === "customer" ? totalCustomers : totalVendors }}</span
@@ -664,7 +664,7 @@
                                     style="position: absolute; left: 10px"
                                     color="primary"
                                     type="checkbox"
-                                    *ngIf="selectedCheckedContacts.length"
+                                    *ngIf="selectedCheckedContacts?.length"
                                     [(ngModel)]="allSelectionModel"
                                     (ngModelChange)="toggleAllSelection(allSelectionModel)"
                                 ></mat-checkbox>
@@ -1449,7 +1449,7 @@
                                 <button
                                     style="min-width: 137px"
                                     mat-raised-button
-                                    *ngIf="!account.bankPaymentDetails"
+                                    *ngIf="!account?.bankPaymentDetails"
                                     class="btn-small btn-light"
                                     (click)="updateCustomerAcc('vendor', account)"
                                 >
