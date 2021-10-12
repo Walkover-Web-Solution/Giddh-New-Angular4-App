@@ -4763,8 +4763,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             entry.transactions.forEach(t => {
                 salesTransactionItemClass = new SalesTransactionItemClass();
                 salesTransactionItemClass.accountUniqueName = t.account?.uniqueName;
-                salesTransactionItemClass.accountName = t.account.name;
-                salesTransactionItemClass.amount = t.amount.amountForAccount;
+                salesTransactionItemClass.accountName = t.account?.name;
+                salesTransactionItemClass.amount = t.amount?.amountForAccount;
                 salesTransactionItemClass.hsnNumber = t.hsnNumber;
                 salesTransactionItemClass.sacNumber = t.sacNumber;
                 salesTransactionItemClass.sacNumberExists = (t.sacNumber) ? true : false;
