@@ -132,10 +132,10 @@ export class ContactComponent implements OnInit, OnDestroy {
     public searchStr: string = "";
     @ViewChild("filterDropDownList") public filterDropDownList: BsDropdownDirective;
     @ViewChild("paginationChild", { static: true }) public paginationChild: ElementViewContainerRef;
-    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
-    // @ViewChild("staticTabs", { static: true }) public staticTabs: MatTableModule;
+    // @ViewChild("staticTabs", { static: true }) public staticTabs: TabsetComponent;
+    @ViewChild("staticTabs", { static: true }) public staticTabs: MatTableModule;
 
-    // @Output() selectedTabChange: EventEmitter<string>;
+    @Output() selectedTabChange: EventEmitter<MatTabChangeEvent>;
 
     @ViewChild("mailModal", { static: false }) public mailModal: ModalDirective;
     @ViewChild("messageBox", { static: false }) public messageBox: ElementRef;
@@ -537,8 +537,8 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
             this.commonRequest = new ContactAdvanceSearchCommonModal();
             this.isAdvanceSearchApplied = false;
-            this.key = (tabName === "vendor") ? 'amountDue' : "name";
-            this.order = (tabName === "vendor") ? 'desc' : 'asc';
+            this.key = (tabName === "vendor") ? "amountDue" : "name";
+            this.order = (tabName === "vendor") ? "desc" : "asc";
             this.activeTab = tabName;
 
             if (this.universalDate && this.universalDate[0] && this.universalDate[1] && !this.todaySelected) {
@@ -984,8 +984,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
         this.commonRequest = new ContactAdvanceSearchCommonModal();
         this.isAdvanceSearchApplied = false;
-        this.key = (this.activeTab === "vendor") ? 'amountDue' : "name";
-        this.order = (this.activeTab === "vendor") ? 'desc' : "asc";
+        this.key = (this.activeTab === "vendor") ? "amountDue" : "name";
+        this.order = (this.activeTab === "vendor") ? "desc" : "asc";
         this.getAccounts(this.fromDate, this.toDate,
             null, "true", PAGINATION_LIMIT, "", "", null, (this.currentBranch ? this.currentBranch.uniqueName : ""));
     }
@@ -1220,7 +1220,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             localStorage.setItem(this.localStorageKeysForFilters[this.activeTab === "vendor" ? "vendor" : "customer"], JSON.stringify(this.showFieldFilter));
         }
         setTimeout(() => {
-            this.showFieldFilter.selectAll = Object.keys(this.showFieldFilter).filter((filterName) => filterName !== 'selectAll').every(filterName => this.showFieldFilter[filterName]);
+            this.showFieldFilter.selectAll = Object.keys(this.showFieldFilter).filter((filterName) => filterName !== "selectAll").every(filterName => this.showFieldFilter[filterName]);
         }, 500);
     }
 

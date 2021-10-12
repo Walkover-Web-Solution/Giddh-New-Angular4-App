@@ -10523,9 +10523,31 @@ input[type="checkbox"].cdk-visually-hidden::after {
     outline: 0px !important;
     border: none !important;
 }
+
 .table-header-fix {
     position: sticky;
     top: 0;
     background-color: white;
     z-index: 100;
+}
+
+.custom-mat-tabs {
+    .mat-tab-label {
+        padding: 0 20px !important;
+        min-width: 100px !important;
+    }
+
+    .mat-ink-bar {
+        height: 3px !important;
+    }
+    .mat-tab-header {
+        display: none;
+    }
+}
+@media screen and (max-width: 768px) {
+    .custom-mat-tabs {
+        .mat-tab-header {
+            display: block !important;
+        }
+    }
 }
