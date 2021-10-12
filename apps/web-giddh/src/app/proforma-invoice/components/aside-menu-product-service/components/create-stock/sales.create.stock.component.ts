@@ -571,7 +571,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         let amount = this.addStockForm.value.openingAmount;
 
         if (quantity && amount) {
-            this.addStockForm?.patchValue({ stockRate: (amount / quantity).toFixed(4) });
+            this.addStockForm?.patchValue({ stockRate: (amount / quantity)?.toFixed(4) });
         } else if (!quantity || !amount) {
             this.addStockForm.controls['stockRate']?.patchValue('');
         }
