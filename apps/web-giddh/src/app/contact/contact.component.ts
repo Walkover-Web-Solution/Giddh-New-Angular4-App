@@ -77,6 +77,10 @@ import { MatTabChangeEvent } from "@angular/material/tabs";
     ],
 })
 export class ContactComponent implements OnInit, OnDestroy {
+    // vendorDataColumns: string[] = ["app_parent_group", "opening", "app_sales_app_purchase", "app_receipt_app_payment",'closing','contacts','app_tax_number','app_state','comment','app_action'];
+    // customerDataColumns: string[] = ["position", "name", "weight", "symbol"];
+    // dataSource = this.sundryDebtorsAccounts [];
+
     /** Stores the current range of date picker */
     public selectedDateRange: any;
     public selectedDateRangeUi: any;
@@ -535,7 +539,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.isAdvanceSearchApplied = false;
             this.key = "name";
             this.order = "asc";
-            debugger;
             this.activeTab = tabName;
 
             if (this.universalDate && this.universalDate[0] && this.universalDate[1] && !this.todaySelected) {

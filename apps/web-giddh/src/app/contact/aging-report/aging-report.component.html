@@ -442,6 +442,7 @@
                 </tr>
             </ng-container>
         </tbody>
+
         <tbody *ngIf="getAgingReportRequestInProcess$ | async">
             <tr>
                 <td colspan="8">
@@ -489,17 +490,19 @@
     let-fieldName="fieldName"
     let-formControl="formControl"
 >
-    <div [hidden]="show">
-        <i class="icon-search" (click)="toggleSearch(fieldName, searchBox)"></i>
-        <span> {{ title }}</span>
+    <div class="align-items-center d-flex" [hidden]="show">
+        <button mat-icon-button (click)="toggleSearch(fieldName, searchBox)">
+            <span class="icon-search"></span>
+        </button>
+        <span>{{ title }}</span>
     </div>
-    <div class="input-container" [hidden]="!show">
-        <input
+    <div [hidden]="!show">
+        <text-field
             type="text"
             [placeholder]="getSearchFieldText(fieldName)"
-            class="w-100"
+            [cssClass]="'form-control'"
             #searchBox
             [formControl]="formControl"
-        />
+        ></text-field>
     </div>
 </ng-template>
