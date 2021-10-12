@@ -145,7 +145,7 @@
                                 <th class="text-center">{{ commonLocaleData?.app_action }}</th>
                             </tr>
                         </thead>
-                        <tbody *ngIf="!isLoading && availableTriggers.length">
+                        <tbody *ngIf="!isLoading && availableTriggers?.length">
                             <tr *ngFor="let trigger of availableTriggers; let i = index">
                                 <td data-title="#">{{ i + 1 }}</td>
                                 <td [attr.data-title]="commonLocaleData?.app_name">
@@ -291,7 +291,7 @@
                     </table>
                 </div>
             </div>
-            <div class="no-data" *ngIf="!isLoading && !availableTriggers.length">
+            <div class="no-data" *ngIf="!isLoading && !availableTriggers?.length">
                 <no-data [secondaryMessage]="' '" [secondaryMessage]="' '" [secondaryMessageClass]="'p-0'"></no-data>
             </div>
         </div>

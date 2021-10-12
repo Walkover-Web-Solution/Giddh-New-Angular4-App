@@ -100,7 +100,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                         pincode: [this.addressToUpdate.pincode]
                     });
                     const linkedEntity = [...this.addressToUpdate.linkedEntities];
-                    while (linkedEntity.length) {
+                    while (linkedEntity?.length) {
                         // Update the default entity status in UPDATE mode
                         const entity = linkedEntity.pop();
                         const entityIndex = this.addressConfiguration.linkedEntities.findIndex(linkEntity => linkEntity.uniqueName === entity.uniqueName);
@@ -117,7 +117,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                         linkedEntity: [this.branchToUpdate.linkedEntities.map(entity => entity.uniqueName)]
                     });
                     const linkedEntity = [...this.branchToUpdate.linkedEntities];
-                    while (linkedEntity.length) {
+                    while (linkedEntity?.length) {
                         // Update the default entity status in UPDATE mode
                         const entity = linkedEntity.pop();
                         const entityIndex = this.addressConfiguration.linkedEntities.findIndex(linkEntity => linkEntity.uniqueName === entity.uniqueName);
@@ -133,7 +133,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                         linkedEntity: [this.warehouseToUpdate.linkedEntities.map(entity => entity.uniqueName)]
                     });
                     const linkedEntity = [...this.warehouseToUpdate.linkedEntities];
-                    while (linkedEntity.length) {
+                    while (linkedEntity?.length) {
                         // Update the default entity status in UPDATE mode
                         const entity = linkedEntity.pop();
                         const entityIndex = this.addressConfiguration.linkedEntities.findIndex(linkEntity => linkEntity.uniqueName === entity.uniqueName);
@@ -228,7 +228,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             this.addressForm.get('taxNumber').setValue(gstVal);
             if (gstVal?.length) {
 
-                if (gstVal?.length >= 2) {
+                if (gstVal.length >= 2) {
                     let currentState = this.addressConfiguration.stateList.find(state => state.code === gstVal.substring(0, 2));
                     if (currentState) {
                         this.addressForm.get('state')?.patchValue(currentState.value);
