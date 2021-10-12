@@ -192,7 +192,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             if (res) {
                 Object.keys(res.taxes).forEach(key => {
                     // CREATED TAX VALUE AND TAX TYPES LIST MAPPING TO SHOW SELECT TYPE DROPDOWN VALUES BASED ON SELECTED TAX
-                    if (res.taxes[key].types.length > 0) {
+                    if (res.taxes[key]?.types?.length > 0) {
                         this.taxNameTypesMapping[res.taxes[key].value] = [];
                         this.taxNameTypesMapping[res.taxes[key].value] = res.taxes[key].types;
                     }
