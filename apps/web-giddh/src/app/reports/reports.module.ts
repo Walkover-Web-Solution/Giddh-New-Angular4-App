@@ -30,6 +30,8 @@ import { ReportsComponent } from './reports.component';
 import { ReportsRoutingModule } from './reports.routing.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
+import { PaymentReportComponent } from './components/payment-report/payment-report.component';
+import { PaymentAdvanceSearchComponent } from './components/payment-advance-search/payment-advance-search.component';
 
 @NgModule({
     declarations: [
@@ -46,10 +48,13 @@ import { NoDataModule } from '../shared/no-data/no-data.module';
         AdvanceReceiptReportComponent,
         ReceiptAdvanceSearchComponent,
         ColumnarReportTableComponent,
-        CashFlowStatementComponent
+        CashFlowStatementComponent,
+        PaymentReportComponent,
+        PaymentAdvanceSearchComponent
     ],
     entryComponents: [
-        ReceiptAdvanceSearchComponent
+        ReceiptAdvanceSearchComponent,
+        PaymentAdvanceSearchComponent
     ],
     exports: [
         ReportsComponent,

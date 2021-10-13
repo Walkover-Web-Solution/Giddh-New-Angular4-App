@@ -132,6 +132,7 @@
     "ngx-clipboard": "13.0.1",
     "ngx-font-picker": "^9.0.0",
     "ngx-lightbox": "2.4.1",
+    "ngx-mat-select-search": "^3.3.0",
     "ngx-perfect-scrollbar": "^9.0.0",
     "ngx-quicklink": "^0.2.6",
     "ngx-toastr": "13.0.0",

@@ -1,0 +1,22 @@
+{
+    "page_heading": "अहवाल > पावती (बीटा)",
+    "payment_no_label": "पावती #",
+    "payment_no_placeholder": "पावती शोधा",
+    "vendor_name_label": "ग्राहकाचे नाव",
+    "vendor_name_placeholder": "ग्राहक शोधा",
+    "payment_mode_label": "देय मोड",
+    "payment_mode_placeholder": "देय मोड शोधा",
+    "invoice_no_label": "बीजक #",
+    "invoice_no_placeholder": "बीजक क्रमांक",
+    "unused_amount": "न वापरलेली रक्कम",
+    "total_payments": "एकूण पावती",
+    "unused_payments": "न वापरलेल्या पावत्या",
+    "adjustment_voucher_label": "समायोजन व्हाउचर",
+    "adjustment_voucher_placeholder": "खाते निवडा",
+    "receipt_types": {
+        "normal_receipts": "सामान्य पावती",
+        "advance_receipts": "आगाऊ पावती"
+    },
+    "entry_date": "प्रवेश तारीख",
+    "suppliers_name": "पुरवठादार नाव"
+}
