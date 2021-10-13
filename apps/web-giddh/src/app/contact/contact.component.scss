@@ -194,14 +194,16 @@ tr:last-child td.position-relative.word-wrap.vendor-customer-name.cursor-pointer
 }
 
 .position-relative.word-wrap {
-    .icon-dots-three-vertical {
+    .table-menu-first-td {
         font-size: 14px;
         vertical-align: middle;
         display: none;
         color: $omiod;
+        position: absolute;
+        right: 0;
     }
 
-    &:hover .icon-dots-three-vertical {
+    &:hover .table-menu-first-td {
         display: block;
         line-height: 1;
     }
@@ -734,4 +736,17 @@ button.btn.btn-filter span.icon-cross {
         left: 7px;
         top: 4px;
     }
+}
+
+.icon-calender {
+    position: absolute;
+    z-index: 9;
+    height: 32px;
+    width: 36px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: 36px !important;
+    border-right: 1px solid $gainsboro !important;
+    cursor: pointer;
 }

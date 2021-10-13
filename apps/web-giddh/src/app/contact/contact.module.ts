@@ -38,6 +38,9 @@ import { MatRippleModule } from "@angular/material/core";
 import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatTableModule } from "@angular/material/table";
+import { MatInputModule } from "@angular/material/input";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatDialogModule } from "@angular/material/dialog";
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: false,
@@ -91,6 +94,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         FormFieldsModule,
         MatChipsModule,
         MatTableModule,
+        MatInputModule,
+        MatTooltipModule,
+        MatDialogModule
     ],
     entryComponents: [
         PaginationComponent
