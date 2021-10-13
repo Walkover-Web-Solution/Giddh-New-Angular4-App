@@ -137,7 +137,7 @@ export async function getSidebarMenusLocal(request: any): Promise<any> {
     const response = await findAsync(db, {});
 
     if (response?.length > 0) {
-        return { status: "success", body: response };
+        return { status: "success", body: response[0] };
     } else {
         return { status: "error", message: "Entry settings unavailable." };
     }

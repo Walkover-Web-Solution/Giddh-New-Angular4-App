@@ -1,5 +1,6 @@
 import electron from "electron";
 import fs from "fs";
+import * as appAath from "path";
 
 /**
  * This will return the config for internet connectivity check
@@ -40,8 +41,8 @@ export function createDbFile(filename: string): any {
  */
 export function getPath(filename: string): any {
     const app = electron?.app || electron?.remote?.app;
-    const path = app.getPath('userData') + "/" + filename;
-    //createDbFile(path);
+    const path = appAath.join(app.getPath('userData'), filename);
+    createDbFile(path);
     return path;
 }
 
