@@ -4,7 +4,8 @@ import {
     ChangeDetectorRef,
     Component,
     ComponentFactoryResolver,
-    ElementRef, EventEmitter,
+    ElementRef,
+    EventEmitter,
     OnDestroy,
     OnInit,
     Output,
@@ -19,7 +20,6 @@ import * as moment from "moment/moment";
 import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
 import { BsModalRef, BsModalService, ModalDirective, ModalOptions } from "ngx-bootstrap/modal";
 import { PaginationComponent } from "ngx-bootstrap/pagination";
-import { TabsetComponent } from "ngx-bootstrap/tabs";
 import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged, filter, take, takeUntil } from "rxjs/operators";
 import { cloneDeep, find, map as lodashMap, uniq } from "../../app/lodash-optimized";
@@ -29,7 +29,7 @@ import { GeneralActions } from "../actions/general/general.actions";
 import { GroupWithAccountsAction } from "../actions/groupwithaccounts.actions";
 import { SettingsProfileActions } from "../actions/settings/profile/settings.profile.action";
 import { SettingsIntegrationActions } from "../actions/settings/settings.integration.action";
-import { PAGINATION_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from "../app.constant";
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../app.constant";
 import { OnboardingFormRequest } from "../models/api-models/Common";
 import { StateDetailsRequest } from "../models/api-models/Company";
 import {
@@ -58,6 +58,7 @@ import { Lightbox } from "ngx-lightbox";
 import { MatCheckboxChange } from "@angular/material/checkbox/checkbox";
 import { MatTableModule } from "@angular/material/table";
 import { MatTabChangeEvent } from "@angular/material/tabs";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
     selector: "contact-detail",
@@ -134,10 +135,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     @ViewChild("paginationChild", { static: true }) public paginationChild: ElementViewContainerRef;
     // @ViewChild("staticTabs", { static: true }) public staticTabs: TabsetComponent;
     @ViewChild("staticTabs", { static: true }) public staticTabs: MatTableModule;
-
     @Output() selectedTabChange: EventEmitter<MatTabChangeEvent>;
-
-    @ViewChild("mailModal", { static: false }) public mailModal: ModalDirective;
+    // @ViewChild("mailModal", { static: false }) public mailModal: ModalDirective;
     @ViewChild("messageBox", { static: false }) public messageBox: ElementRef;
     @ViewChild("advanceSearch", { static: true }) public advanceSearch: ModalDirective;
     @ViewChild("datepickerTemplate", { static: true }) public datepickerTemplate: ElementRef;
@@ -191,7 +190,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     private createAccountIsSuccess$: Observable<boolean>;
     public universalDate: any;
     /** model reference to open/close bulk payment model */
-    public bulkPaymentModalRef: BsModalRef;
+        // public bulkPaymentModalRef: BsModalRef;
     public modalRef: BsModalRef;
     public selectedRangeLabel: any = "";
     public dateFieldPosition: any = { x: 0, y: 0 };
@@ -241,8 +240,11 @@ export class ContactComponent implements OnInit, OnDestroy {
     public imgPath: string = "";
     /** True if single icici bank account is there and is pending for approval */
     public isIciciAccountPendingForApproval: boolean = false;
+    @ViewChild("mailModal") mailModalComponent: TemplateRef<any>;
+    @ViewChild("template") bulkPaymentModalRef: TemplateRef<any>;
 
     constructor(
+        public dialog: MatDialog,
         private store: Store<AppState>,
         private router: Router,
         private companyServices: CompanyService,
@@ -267,6 +269,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
+
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.agingreport.data), takeUntil(this.destroyed$)).subscribe((data) => {
             if (data && data.results) {
@@ -275,6 +278,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             }
             this.dueAmountReportData$ = observableOf(data);
         });
+
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -335,6 +339,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.universalDate = cloneDeep(dateObj);
 
                 setTimeout(() => {
+
                     this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
                         this.todaySelected = response;
 
@@ -440,6 +445,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         ).subscribe(searchedText => {
             this.searchStr$.next(searchedText);
         });
+
 
         this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(response => {
             this.isIciciAccountPendingForApproval = false;
@@ -598,6 +604,14 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.cdRef.detectChanges();
         }
     }
+
+    // openDialog(): void {
+    //     const dialogRef = this.dialog.open(this.customTemplate);
+    //
+    //     dialogRef.afterClosed().subscribe(() => {
+    //         console.log('The dialog was closed');
+    //     });
+    // }
 
     public updateCustomerAcc(openFor: "customer" | "vendor", account: any) {
         this.activeAccountDetails = account;
@@ -801,8 +815,17 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.messageBody.type = "Email";
         this.messageBody.btn.set = this.messageBody.btn.email;
         this.messageBody.header.set = this.messageBody.header.email;
-        this.mailModal.show();
+        // this.mailModal.show();
+        const dialogRef = this.dialog.open(this.mailModalComponent);
+        dialogRef.afterClosed().subscribe(() => {
+            console.log("The dialog was closed");
+        });
     }
+
+    onNoClick(): void {
+        this.dialog.closeAll();
+    }
+
 
     /**
      * Open Modal for SMS
@@ -865,8 +888,8 @@ export class ContactComponent implements OnInit, OnDestroy {
                 });
         }
 
-        if (this.mailModal) {
-            this.mailModal.hide();
+        if (this.mailModalComponent) {
+            this.dialog.closeAll();
         }
     }
 
@@ -1294,7 +1317,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.selectedAccForPayment = null;
 
         if (this.bulkPaymentModalRef) {
-            this.bulkPaymentModalRef.hide();
+            this.dialog.closeAll();
         }
     }
 
@@ -1597,9 +1620,12 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
         if (this.selectedAccountsList?.length || this.selectedAccForPayment) {
             this.selectedAccountsList = [this.selectedAccountsList[0]]; // since we don't have bulk payment now, we are only passing 1st available value, once bulk payment is done from API, we will remove this line of code
-            this.bulkPaymentModalRef = this.modalService.show(template,
-                Object.assign({}, { class: "payment-modal modal-xl" }),
-            );
+            // this.bulkPaymentModalRef = this.modalService.show(template, Object.assign({}, { class: "payment-modal modal-xl" }),
+            const dialogRef = this.dialog.open(this.bulkPaymentModalRef);
+            dialogRef.afterClosed().subscribe(() => {
+                console.log("The dialog was closed");
+            });
+
         }
     }
 

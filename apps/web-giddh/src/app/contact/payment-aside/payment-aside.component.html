@@ -1,9 +1,9 @@
-<div class="modal-header">
+<div class="modal-header d-flex" style="align-items: center">
     <h4 class="modal-title pull-left">{{ commonLocaleData?.app_payment }}</h4>
     <button
         mat-icon-button
         type="button"
-        class="close pull-right"
+        class="close"
         [attr.aria-label]="commonLocaleData?.app_close"
         (click)="closePaymentModel(false)"
     >
@@ -252,6 +252,7 @@
                                             >{{ commonLocaleData?.app_remark }}<span class="text-danger">*</span></label
                                         >
                                         <textarea
+                                            matInput
                                             rows="1"
                                             name="remark{{ entryIdx }}"
                                             id="{{ entryIdx }}"

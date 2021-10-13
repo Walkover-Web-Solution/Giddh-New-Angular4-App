@@ -247,3 +247,15 @@ tr.aging-table-top td {
         }
     }
 }
+.icon-calender {
+    position: absolute;
+    z-index: 9;
+    height: 32px;
+    width: 36px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: 36px !important;
+    border-right: 1px solid $gainsboro !important;
+    cursor: pointer;
+}
