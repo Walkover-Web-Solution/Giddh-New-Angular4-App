@@ -685,3 +685,58 @@ export class DiscountMulticurrency {
         this.particular = ledgerDiscountClass.particular;
     }
 }
+
+export class ReceiptTransaction {
+    account: ReceiptAccount;
+    amount: ReceiptAmount;
+
+    constructor() {
+        this.account = new ReceiptAccount();
+        this.amount = new ReceiptAmount();
+    }
+}
+
+export class ReceiptAccount {
+    uniqueName: string;
+    name: string;
+
+    constructor() {
+        this.uniqueName = "";
+        this.name = "";
+    }
+}
+
+export class ReceiptAmount {
+    amountForAccount: number;
+}
+
+export class ReceiptEntry {
+    transactions: ReceiptTransaction[];
+    date: string;
+    description: string;
+    chequeNumber: string;
+    chequeClearanceDate: string;
+    taxes: TaxControlData[] = [];
+
+    constructor() {
+        this.transactions = [new ReceiptTransaction()];
+        this.taxes = [];
+    }
+}
+
+export class Receipt {
+    account: AccountDetailsClass;
+    updateAccountDetails: boolean;
+    entries: ReceiptEntry[];
+    date: string;
+    type: string;
+    exchangeRate: number;
+    attachedFiles: any[];
+    subVoucher: any;
+
+    constructor() {
+        this.account = new AccountDetailsClass();
+        this.entries = [new ReceiptEntry()];
+        this.date = "";
+    }
+}

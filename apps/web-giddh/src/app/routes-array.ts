@@ -105,6 +105,7 @@ export const ROUTES = [
             },
             { path: 'reports', loadChildren: () => import('./reports/reports.module').then(module => module.ReportsModule) },
             { path: 'purchase-management', loadChildren: () => import('./purchase/purchase.module').then(module => module.PurchaseModule) },
+            { path: 'receipt', loadChildren: () => import('./receipt/receipt.module').then(module => module.ReceiptModule) },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
         ]
     },

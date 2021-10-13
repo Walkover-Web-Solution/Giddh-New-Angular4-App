@@ -528,7 +528,7 @@ aside-menu-account .container-fluid {
     border: none;
 }
 .border-top-none {
-    border-top: none;
+    border-top: none !important;
 }
 .bd-r-right-none {
     border-right: none;
@@ -3230,5 +3230,73 @@ td.mat-footer-cell {
 .mat-sort-header-arrow.ng-trigger.ng-trigger-arrowPosition {
     opacity: 1 !important;
     transform: none !important;
+}
+.receipt-card {
+    .mat-form-field {
+        .mat-form-field-wrapper {
+            padding-bottom: 0px !important;
+        }
+        &.no-border-top {
+            .mat-form-field-wrapper {
+                .mat-form-field-flex {
+                    .mat-form-field-infix {
+                        border-top: none !important;
+                        padding-top: 0px !important;
+                    }
+                }
+            }
+        }
+    }
+    .mat-form-field-appearance-fill {
+        .mat-form-field-flex {
+            padding: 0px !important;
+            .mat-form-field-infix {
+                textarea.mat-input-element {
+                    margin: -13px 0 !important;
+                }
+            }
+        }
+    }
+    .mat-field-select {
+        .mat-form-field-wrapper {
+            .mat-form-field-flex {
+                border: 1px solid $very-light-gray;
+                height: 36px;
+                border-radius: 4px;
+                .mat-select-arrow-wrapper {
+                    vertical-align: inherit !important;
+                }
+                .mat-form-field-infix {
+                    .mat-select {
+                        padding-left: 6px;
+                    }
+                    .mat-form-field-label-wrapper {
+                        .mat-form-field-label {
+                            mat-label {
+                                padding-left: 6px;
+                                color: $nobel !important;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .disabled .form-control {
+        background: $whisper-light !important;
+    }
+}
+.border-left-right-none {
+    border-left: none !important;
+    border-right: none !important;
+}
+.text-field {
+    .text-field-container {
+        .input-custom {
+            border: none;
+            border-bottom: 1px solid $gainsboro;
+        }
+    }
 }
 /* material css for ledger end*/
