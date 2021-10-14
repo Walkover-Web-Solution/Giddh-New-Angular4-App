@@ -44,7 +44,7 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
 
     ngOnInit() {
         this.taxesOptions = this.taxes
-            .filter(f => ['tcsrc', 'tcspay', 'tdsrc', 'tdspay'].includes(f.taxType))
+            ?.filter(f => ['tcsrc', 'tcspay', 'tdsrc', 'tdspay'].includes(f.taxType))
             .map(m => {
                 return { label: m.name, value: m.uniqueName };
             })

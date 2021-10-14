@@ -187,7 +187,7 @@
                                 {{ localeData?.due }}:{{ item.totalDueAmount | giddhCurrency }}
                                 <span
                                     class="red-text cursor-pointer"
-                                    *ngIf="selectedAccForBulkPayment.length > 1"
+                                    *ngIf="selectedAccForBulkPayment?.length > 1"
                                     (click)="removeSelectedAccount(item); removeTransactionsDetailsForm(entryIdx)"
                                     ><i class="icon-trash mr-r05"></i>{{ commonLocaleData?.app_remove }}</span
                                 >
