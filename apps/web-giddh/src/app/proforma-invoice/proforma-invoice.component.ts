@@ -696,6 +696,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         );
         this.getOnboardingFormInProcess$ = this.store.pipe(select(s => s.common.getOnboardingFormInProcess), takeUntil(this.destroyed$));
         this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     public ngAfterViewInit() {
@@ -1115,6 +1116,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                     obj.voucherDetails.dueDate = date;
                                     obj.voucherDetails.voucherNumber = "";
                                 }
+                            } else if(this.isSalesInvoice) {
+                                this.isRcmEntry = (results[0]) ? results[0].subVoucher === SubVoucher.ReverseCharge : false;
                             }
                         } else {
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
@@ -1486,7 +1489,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.onSearchQueryChanged(value[1]?.body?.name, 1, 'customer');
             }
         });
-        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     /**
