@@ -68,7 +68,7 @@
         width: 100%;
         height: 100%;
         bottom: 0;
-        top: 70px;
+        top: 132px;
         opacity: 0.6;
         z-index: 98;
         background: $alice-blue-light;
@@ -92,10 +92,6 @@
     :focus {
         outline: none !important;
     }
-}
-.input-custom {
-    border: none;
-    border-bottom: 1px solid $gainsboro;
 }
 .sales-country-label {
     min-height: 36px;
@@ -130,4 +126,92 @@
     padding-bottom: 7px;
     display: table-cell;
     width: 100px;
+}
+.search-arrow-image {
+    max-width: 375px;
+    left: 15px !important;
+    position: absolute;
+    top: 50px !important;
+    z-index: 97;
+}
+section.billing-address-wrap {
+    padding-top: 65px;
+}
+.wrap-billing-address.clearfix {
+    margin-top: 15px;
+    margin-bottom: 5px;
+    input,
+    .sales-country-label,
+    sales-sh-select input {
+        padding: 0 !important;
+    }
+    .bottom-border-only {
+        padding-left: 0 !important;
+    }
+}
+.aqua-color a {
+    color: $deep-sky-blue;
+    font-size: 12px;
+}
+
+.aqua-color i {
+    font-size: 16px;
+}
+
+.input-custom {
+    border: none;
+    border-bottom: 1px solid $gainsboro !important;
+}
+
+input.mat-input-element {
+    border: none;
+    border-bottom: 1px solid $gainsboro !important;
+}
+
+.pd-b01 {
+    padding-bottom: 1px;
+}
+
+.switch-currency {
+    font-size: 14px;
+    color: $night-rider;
+    max-width: 1000px;
+    text-align: right;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.switch-currency .switch-icon {
+    padding: 0 10px;
+    cursor: pointer;
+}
+
+.receipt-card-table .form-control {
+    margin-bottom: 5px;
+}
+
+input.form-control.edit-currency {
+    display: inline-block !important;
+    width: 80px;
+    height: 26px !important;
+}
+
+@media (max-width: 990px) {
+    .search-arrow-image {
+        left: 181px;
+        max-width: 280px;
+    }
+}
+
+@media (max-width: 768px) {
+    .search-arrow-image {
+        left: 143px;
+    }
+}
+
+@media (max-width: 767px) {
+    .search-arrow-image {
+        left: 15px;
+        top: 80px;
+    }
 }
