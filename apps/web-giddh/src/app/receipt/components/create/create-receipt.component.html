@@ -23,82 +23,84 @@
                                         <label>Customer Name <span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-12 col-xl-7 col-lg-8 col-md-9 select-customer-name">
-                                        <sales-sh-select
-                                            class="float-left sales-select width-627"
-                                            name="customerUniqueName"
-                                            #customerNameDropDown
-                                            [options]="customerAccounts$ | async"
-                                            [(ngModel)]="receiptFormData.account.uniqueName"
-                                            [customFilter]="customMoveGroupFilter"
-                                            (noOptionsFound)="noResultsForCustomer($event)"
-                                            [isPaginationEnabled]="true"
-                                            (scrollEnd)="handleScrollEnd('customer')"
-                                            (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'customer')"
-                                            [notFoundMsg]="noResultsFoundLabel"
-                                            [enableDynamicSearch]="true"
-                                            (onHide)="resetPreviousSearchResults(true, 'customer')"
-                                            (selected)="onSelectCustomer($event)"
-                                            placeholder="Select"
-                                            [notFoundLink]="true"
-                                            [doNotReset]="true"
-                                            [forceClearReactive]="forceClear$ | async"
-                                            [isFilterEnabled]="true"
-                                            (noResultsClicked)="addNewAccount()"
-                                            [multiple]="false"
-                                            [ItemHeight]="67"
-                                            [notFoundLinkText]="'Add Customer'"
-                                            (keyup)="resetCustomerName($event)"
-                                            (onClear)="resetCustomerName(null)"
-                                            [isOpen]="allowFocus"
-                                        >
-                                            <ng-template #optionTemplate let-option="option">
-                                                <a href="javascript:void(0)" class="list-item flex-column">
-                                                    <div class="item">{{ option?.label }}</div>
-                                                    <div class="item-unique">{{ option.value }}</div>
-                                                </a>
-                                            </ng-template>
-                                            <ng-template #notFoundLinkTemplate>
-                                                <a
-                                                    href="javascript:void(0)"
-                                                    class="
-                                                        list-item
-                                                        pd-l05 pd-r05
-                                                        border-none
-                                                        d-flex
-                                                        justify-content-between
-                                                        w-100
-                                                    "
-                                                    [keyboardShortcut]="'alt+c'"
+                                        <div class="clearfix d-flex flex-column">
+                                            <div class="d-flex">
+                                                <sales-sh-select
+                                                    class="float-left sales-select width-627"
+                                                    name="customerUniqueName"
+                                                    #customerNameDropDown
+                                                    [options]="customerAccounts$ | async"
+                                                    [(ngModel)]="receiptFormData.account.uniqueName"
+                                                    [customFilter]="customMoveGroupFilter"
+                                                    (noOptionsFound)="noResultsForCustomer($event)"
+                                                    [isPaginationEnabled]="true"
+                                                    (scrollEnd)="handleScrollEnd('customer')"
+                                                    (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'customer')"
+                                                    [notFoundMsg]="noResultsFoundLabel"
+                                                    [enableDynamicSearch]="true"
+                                                    (onHide)="resetPreviousSearchResults(true, 'customer')"
+                                                    (selected)="onSelectCustomer($event)"
+                                                    placeholder="Select"
+                                                    [notFoundLink]="true"
+                                                    [doNotReset]="true"
+                                                    [forceClearReactive]="forceClear$ | async"
+                                                    [isFilterEnabled]="true"
+                                                    (noResultsClicked)="addNewAccount()"
+                                                    [multiple]="false"
+                                                    [ItemHeight]="67"
+                                                    [notFoundLinkText]="'Add Customer'"
+                                                    (keyup)="resetCustomerName($event)"
+                                                    (onClear)="resetCustomerName(null)"
+                                                    [isOpen]="allowFocus"
                                                 >
-                                                    <div class="item">Add Customer</div>
-                                                    <div class="item">
-                                                        {{ commonLocaleData?.app_alt_c }}
-                                                    </div>
-                                                </a>
-                                            </ng-template>
-                                        </sales-sh-select>
-                                        <div class="d-flex clearfix" *ngIf="receiptFormData?.account.uniqueName">
-                                            <span class="cp aqua-color">
-                                                <a href="javascript:void(0)" (click)="getCustomerDetails()"
-                                                    >Customer Details</a
-                                                >
-                                            </span>
+                                                    <ng-template #optionTemplate let-option="option">
+                                                        <a href="javascript:void(0)" class="list-item flex-column">
+                                                            <div class="item">{{ option?.label }}</div>
+                                                            <div class="item-unique">{{ option.value }}</div>
+                                                        </a>
+                                                    </ng-template>
+                                                    <ng-template #notFoundLinkTemplate>
+                                                        <a
+                                                            href="javascript:void(0)"
+                                                            class="
+                                                                list-item
+                                                                pd-l05 pd-r05
+                                                                border-none
+                                                                d-flex
+                                                                justify-content-between
+                                                                w-100
+                                                            "
+                                                            [keyboardShortcut]="'alt+c'"
+                                                        >
+                                                            <div class="item">Add Customer</div>
+                                                            <div class="item">
+                                                                {{ commonLocaleData?.app_alt_c }}
+                                                            </div>
+                                                        </a>
+                                                    </ng-template>
+                                                </sales-sh-select>
+                                            </div>
+                                            <div class="d-flex aqua-color" *ngIf="receiptFormData?.account.uniqueName">
+                                                <span class="cp aqua-color mr-r05">
+                                                    <a href="javascript:void(0)" (click)="getCustomerDetails()"
+                                                        >Customer Details</a
+                                                    >
+                                                </span>
+                                            </div>
                                         </div>
+                                        <!--<ng-container>
+                                            <img
+                                                src="assets/images/new/search_customer.svg"
+                                                class="img-responsive search-arrow-image"
+                                            />
+                                        </ng-container>-->
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div
-                                    class="
-                                        col-sm-12 col-xl-9
-                                        offset-lg-3
-                                        col-lg-8 col-md-9
-                                        offset-xl-2 offset-md-3
-                                        mt-2
-                                    "
-                                >
+                                <div class="col-sm-12 col-xl-9 offset-lg-3 col-lg-8 col-md-9 offset-xl-2 offset-md-3">
                                     <ng-container>
-                                        <section>
+                                        <section class="billing-address-wrap">
                                             <div class="wrap-billing-address clearfix w-100">
                                                 <div class="row">
                                                     <!-- region billing address -->
@@ -186,7 +188,7 @@
                                                                     <div class="col-sm-12 col-md-6" #billingState>
                                                                         <sales-sh-select
                                                                             [placeholder]="commonLocaleData?.app_state"
-                                                                            class="square"
+                                                                            class="square pd-b01"
                                                                             (selected)="
                                                                                 fillShippingBillingDetails(
                                                                                     $event,
@@ -395,7 +397,7 @@
                                                                                 [placeholder]="
                                                                                     commonLocaleData?.app_state
                                                                                 "
-                                                                                class="square"
+                                                                                class="square pd-b01"
                                                                                 #statesShipping
                                                                                 [forceClearReactive]="
                                                                                     billingShippingForceClearReactive$
@@ -533,7 +535,7 @@
                             </div>
                             <div class="clearfix">
                                 <div class="row mr-b05">
-                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 mt-3">
+                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>&nbsp;</label>
                                     </div>
                                     <div class="col-sm-12 col-xl-7 col-lg-8 col-md-9">
@@ -588,9 +590,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="clearfix pull-right">
+                            <div class="clearfix pull-right receipt-card-table">
                                 <ng-container>
-                                    <div class="switch-currency" *ngIf="isMulticurrencyAccount && !showSwitchCurrency">
+                                    <div
+                                        class="switch-currency d-flex align-items-center"
+                                        *ngIf="isMulticurrencyAccount && !showSwitchCurrency"
+                                    >
                                         <span class="left-currency mr-r1"
                                             >{{ commonLocaleData?.app_numbers?.one }} {{ companyCurrencyName }}</span
                                         >
@@ -600,7 +605,7 @@
                                             alt="switch-icon"
                                             (click)="switchCurrencyImg(true)"
                                         />
-                                        <span class="right-currency mr-l1">
+                                        <span class="right-currency mr-r1 d-flex align-items-center">
                                             <span class="currency-digits" *ngIf="!showCurrencyValue">{{
                                                 originalExchangeRate | giddhCurrency
                                             }}</span>
