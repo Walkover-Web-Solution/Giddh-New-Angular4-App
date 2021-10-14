@@ -116,7 +116,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.branchForm.get('name')?.patchValue(this.companyDetails.name);
-                if (!this.addressConfiguration.stateList.length) {
+                if (!this.addressConfiguration?.stateList?.length) {
                     this.loadStates(this.companyDetails.country.countryCode.toUpperCase());
                     this.loadTaxDetails(this.companyDetails.country.countryCode.toUpperCase());
                 }

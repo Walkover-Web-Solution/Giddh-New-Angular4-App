@@ -116,7 +116,7 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
             this.taxes = this.taxes.filter(f => !this.exceptTaxTypes.includes(f.taxType));
         }
         this.taxes.map(tax => {
-            const index = this.taxRenderData.findIndex(f => f.uniqueName === tax.uniqueName);
+            const index = this.taxRenderData.findIndex(f => f?.uniqueName === tax?.uniqueName);
             // if tax is already prepared then only check if it's checked or not on basis of applicable taxes
             if (index > -1) {
                 if (this.date && tax.taxDetail && tax.taxDetail.length) {
@@ -126,9 +126,9 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
                 }
             } else {
                 let taxObj = new TaxControlData();
-                taxObj.name = tax.name;
-                taxObj.type = tax.taxType;
-                taxObj.uniqueName = tax.uniqueName;
+                taxObj.name = tax?.name;
+                taxObj.type = tax?.taxType;
+                taxObj.uniqueName = tax?.uniqueName;
                 if (this.date) {
                     let taxObject = orderBy(tax.taxDetail, (p: ITaxDetail) => {
                         return moment(p.date, GIDDH_DATE_FORMAT);
@@ -147,7 +147,7 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
                 } else {
                     taxObj.amount = tax.taxDetail[0].taxValue;
                 }
-                taxObj.isChecked = (this.applicableTaxes && (this.applicableTaxes.indexOf(tax.uniqueName) > -1));
+                taxObj.isChecked = (this.applicableTaxes && (this.applicableTaxes.indexOf(tax?.uniqueName) > -1));
                 this.taxRenderData.push(taxObj);
             }
         });
@@ -305,9 +305,9 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
     private generateSelectedTaxes(): UpdateLedgerTaxData[] {
         return this.taxRenderData.filter(p => p.isChecked).map(p => {
             let tax = new UpdateLedgerTaxData();
-            tax.particular.name = p.name;
-            tax.particular.uniqueName = p.uniqueName;
-            tax.amount = p.amount;
+            tax.particular.name = p?.name;
+            tax.particular.uniqueName = p?.uniqueName;
+            tax.amount = p?.amount;
             return tax;
         });
     }

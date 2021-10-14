@@ -373,7 +373,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             });
             listItem = Object.assign({}, listItem, { parentGroups: [] });
             listItem.parentGroups = newParents;
-            if (listItem.groups.length > 0) {
+            if (listItem?.groups?.length > 0) {
                 result = this.flattenGroup(listItem.groups, newParents);
                 result.push(omit(listItem, 'groups'));
             } else {

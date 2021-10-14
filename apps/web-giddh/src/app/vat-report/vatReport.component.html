@@ -129,15 +129,13 @@
                                                         <ng-container *ngIf="!isMonthSelected">
                                                             {{
                                                                 moment(currentPeriod?.from, giddhDateFormat).format(
-                                                                    "DD
-                                                            MMM YYYY"
+                                                                    "DD MMM YYYY"
                                                                 )
                                                             }}
                                                             -
                                                             {{
                                                                 moment(currentPeriod?.to, giddhDateFormat).format(
-                                                                    "DD MMM
-                                                            YYYY"
+                                                                    "DD MMM YYYY"
                                                                 )
                                                             }}
                                                         </ng-container>
@@ -190,7 +188,7 @@
                                                             </ul>
                                                         </li>
 
-                                                        <li role="menuitem">
+                                                        <!-- <li role="menuitem">
                                                             <a
                                                                 class="dropdown-item"
                                                                 href="javascript:void(0)"
@@ -219,7 +217,7 @@
                                                                     "
                                                                 />
                                                             </a>
-                                                        </li>
+                                                        </li> -->
                                                     </ul>
                                                 </div>
                                             </span>

@@ -91,7 +91,7 @@
         </div>
         <!--endregion-->
     </div>
-    <span class="clear" *ngIf="showClear && selectedValues.length > 0" (click)="$event.stopPropagation(); clear()"
+    <span class="clear" *ngIf="showClear && selectedValues?.length > 0" (click)="$event.stopPropagation(); clear()"
         >&times;</span
     >
     <sh-select-menu
