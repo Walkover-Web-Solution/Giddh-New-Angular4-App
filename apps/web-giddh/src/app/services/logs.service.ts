@@ -53,7 +53,7 @@ export class LogsService {
      */
     public getAuditLogs(model: GetAuditLogsRequest, page: number = 1): Observable<BaseResponse<AuditLogsResponse, GetAuditLogsRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + LOGS_API.GET_AUDIT_LOGS_V2.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+        return this.http.post(this.config.apiUrl + LOGS_API.GET_AUDIT_LOGS_V2.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':page', String(page)), model).pipe(
             map((res) => {
                 let data: BaseResponse<AuditLogsResponse, GetAuditLogsRequest> = res;
                 data.request = model;
