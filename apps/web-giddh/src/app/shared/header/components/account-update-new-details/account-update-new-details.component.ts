@@ -451,7 +451,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             if (response) {
                 selectedGroupDetails = response;
                 if (selectedGroupDetails?.parentGroups) {
-                    let parentGroup = selectedGroupDetails.parentGroups?.length > 1 ? selectedGroupDetails.parentGroups[1] : { uniqueName: selectedGroupDetails.uniqueName };
+                    let parentGroup = selectedGroupDetails.parentGroups?.length > 1 ? selectedGroupDetails.parentGroups[1] : { uniqueName: selectedGroupDetails?.uniqueName };
                     if (parentGroup) {
                         this.isParentDebtorCreditor(parentGroup.uniqueName);
                     }
@@ -491,7 +491,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
                             if (activeAccountTaxHierarchy.inheritedTaxes) {
                                 let inheritedTaxes = flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j?.uniqueName);
-                                let allTaxes = applicableTaxes.filter(f => inheritedTaxes.indexOf(f) === -1);
+                                let allTaxes = applicableTaxes?.filter(f => inheritedTaxes.indexOf(f) === -1);
                                 // set value in tax group form
                                 this.taxGroupForm.setValue({ taxes: allTaxes });
                             } else {
@@ -524,8 +524,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.discountList = [];
                 Object.keys(response?.body).forEach(key => {
                     this.discountList.push({
-                        label: response?.body[key].name,
-                        value: response?.body[key].uniqueName,
+                        label: response?.body[key]?.name,
+                        value: response?.body[key]?.uniqueName,
                         isSelected: false
                     });
                 });
@@ -1203,7 +1203,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 if (t) {
                     t.inheritedTaxes.forEach(tt => {
                         tt.applicableTaxes.forEach(ttt => {
-                            data.taxes.push(ttt.uniqueName);
+                            data.taxes.push(ttt?.uniqueName);
                         });
                     });
                 }
@@ -1742,13 +1742,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     private filterTaxesForDebtorCreditor(taxes?: Array<any>): Array<any> {
         if (this.activeGroupUniqueName === 'sundrydebtors' || this.activeParentGroup === 'sundrydebtors') {
             // Only allow TDS receivable and TCS payable
-            return taxes.filter(tax => ['tdsrc', 'tcspay'].indexOf(tax?.additional?.taxType) > -1);
+            return taxes?.filter(tax => ['tdsrc', 'tcspay'].indexOf(tax?.additional?.taxType) > -1);
         } else if (this.activeGroupUniqueName === 'sundrycreditors' || this.activeParentGroup === 'sundrycreditors') {
             // Only allow TDS payable and TCS receivable
-            return taxes.filter(tax => ['tdspay', 'tcsrc'].indexOf(tax?.additional?.taxType) > -1);
+            return taxes?.filter(tax => ['tdspay', 'tcsrc'].indexOf(tax?.additional?.taxType) > -1);
         } else {
             // Only normal (non-other) taxes
-            return taxes.filter(tax => TCS_TDS_TAXES_TYPES.indexOf(tax?.additional?.taxType) === -1);
+            return taxes?.filter(tax => TCS_TDS_TAXES_TYPES.indexOf(tax?.additional?.taxType) === -1);
         }
     }
 

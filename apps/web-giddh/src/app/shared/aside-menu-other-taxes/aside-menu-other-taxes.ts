@@ -44,7 +44,7 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
 
     ngOnInit() {
         this.taxesOptions = this.taxes
-            .filter(f => ['tcsrc', 'tcspay', 'tdsrc', 'tdspay'].includes(f.taxType))
+            ?.filter(f => ['tcsrc', 'tcspay', 'tdsrc', 'tdspay'].includes(f.taxType))
             .map(m => {
                 return { label: m.name, value: m.uniqueName };
             })
@@ -71,7 +71,7 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
     public applyTax(tax: IOption) {
         if (tax && tax.value) {
             this.otherTaxesModal.appliedOtherTax = { name: tax.label, uniqueName: tax.value };
-            let taxType = this.taxes.find(f => f.uniqueName === tax.value).taxType;
+            let taxType = this.taxes.find(f => f?.uniqueName === tax.value).taxType;
             this.isDisabledCalMethod = ['tdsrc', 'tdspay'].includes(taxType);
         }
     }

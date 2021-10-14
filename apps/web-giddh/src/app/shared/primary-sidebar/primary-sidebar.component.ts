@@ -132,7 +132,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 if (this.generalService.currentBranchUniqueName) {
                     this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
                         if (response) {
-                            this.currentBranch = response.find(branch => (branch.uniqueName === this.generalService.currentBranchUniqueName));
+                            this.currentBranch = response.find(branch => (branch?.uniqueName === this.generalService.currentBranchUniqueName));
                             if (!this.activeCompanyForDb) {
                                 this.activeCompanyForDb = new CompAidataModel();
                             }
@@ -212,7 +212,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                     this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
                 }
                 if (this.generalService.companyUniqueName) {
-                    this.dbService.getAllItems(this.activeCompanyForDb.uniqueName, 'accounts').subscribe(accountList => {
+                    this.dbService.getAllItems(this.activeCompanyForDb?.uniqueName, 'accounts').subscribe(accountList => {
                         if (accountList?.length) {
                             if (window.innerWidth > 1440 && window.innerHeight > 717) {
                                 this.accountItemsFromIndexDB = accountList.slice(0, 7);
@@ -231,7 +231,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             if (response && response.length) {
                 this.currentCompanyBranches = response;
                 if (this.generalService.currentBranchUniqueName) {
-                    this.currentBranch = response.find(branch => (this.generalService.currentBranchUniqueName === branch.uniqueName)) || {};
+                    this.currentBranch = response.find(branch => (this.generalService.currentBranchUniqueName === branch?.uniqueName)) || {};
                     if (!this.activeCompanyForDb) {
                         this.activeCompanyForDb = new CompAidataModel();
                     }
@@ -386,7 +386,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         if (!this.activeCompanyForDb) {
             return;
         }
-        if (!this.activeCompanyForDb.uniqueName) {
+        if (!this.activeCompanyForDb?.uniqueName) {
             return;
         }
         if (dbResult) {
@@ -557,7 +557,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.isLedgerAccSelected = false;
         } else if (entity === 'accounts') {
             this.isLedgerAccSelected = true;
-            this.selectedLedgerName = item.uniqueName;
+            this.selectedLedgerName = item?.uniqueName;
         }
 
         if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
