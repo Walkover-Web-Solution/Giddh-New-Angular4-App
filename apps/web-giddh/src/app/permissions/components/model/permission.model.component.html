@@ -68,7 +68,7 @@
                     <label>{{ localeData?.copy_permission }}</label>
                     <select class="form-control text-capitalize" name="somename" [(ngModel)]="newRoleObj.uniqueName">
                         <option [ngValue]="">{{ commonLocaleData?.app_please_select }}</option>
-                        <option *ngFor="let role of allRoles" [ngValue]="role.uniqueName">{{ role.name }}</option>
+                        <option *ngFor="let role of allRoles" [ngValue]="role?.uniqueName">{{ role?.name }}</option>
                     </select>
                     <span class="select-drop"><i class="fa fa-caret-down"></i></span>
                 </div>
