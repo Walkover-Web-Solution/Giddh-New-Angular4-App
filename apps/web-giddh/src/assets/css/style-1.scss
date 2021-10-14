@@ -3188,6 +3188,25 @@ td.mat-footer-cell {
     background: transparent !important;
 }
 
+.receipt-card {
+    text-field {
+        input.mat-input-element {
+            border-bottom: 1px solid $gainsboro;
+        }
+    }
+}
+
+.right-currency {
+    text-field {
+        input.mat-input-element {
+            border: 1px solid $gainsboro;
+            display: inline-block !important;
+            width: 80px;
+            height: 26px !important;
+        }
+    }
+}
+
 @media (max-width: 767px) {
     .sidebar-overlay {
         .mat-tab-group {
