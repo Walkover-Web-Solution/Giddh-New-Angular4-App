@@ -12,7 +12,8 @@ const noop = () => { };
     providers: [
         {
             provide: MatFormFieldControl,
-            useExisting: TextFieldComponent
+            useExisting: TextFieldComponent,
+            multi: true
         }
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -112,6 +113,7 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
      */
     public writeValue(value: any): void {
         this.value = value;
+        this.changeDetectionRef.detectChanges();
     }
 
     /**
