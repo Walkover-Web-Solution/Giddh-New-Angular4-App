@@ -56,7 +56,7 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
         let userRole = {
             emailId: this.email,
             entity: 'account',
-            entityUniqueName: activeAccount.uniqueName,
+            entityUniqueName: activeAccount?.uniqueName,
         };
         let selectedPermission = clone(this.selectedPermission);
         this.store.dispatch(this.accountActions.shareEntity(userRole, selectedPermission.toLowerCase()));

@@ -105,7 +105,7 @@ export class UpdateLedgerVm {
         if (this.selectedLedger.transactions) {
             this.selectedLedger.transactions = this.selectedLedger.transactions.filter(f => !f.isDiscount);
             let incomeExpenseEntryIndex = this.selectedLedger.transactions.findIndex((trx: ILedgerTransactionItem) => {
-                if (trx.particular.uniqueName) {
+                if (trx?.particular?.uniqueName) {
                     let category = this.accountCatgoryGetterFunc(trx.particular, trx.particular.uniqueName);
                     return this.isValidCategory(category);
                 }
@@ -175,7 +175,7 @@ export class UpdateLedgerVm {
 
     public isThereStockEntry(uniqueName: string): boolean {
         // check if entry with same stock added multiple times
-        let isAvailable = this.selectedLedger.transactions.filter(f => f.particular.uniqueName === uniqueName);
+        let isAvailable = this.selectedLedger.transactions.filter(f => f.particular?.uniqueName === uniqueName);
         let count: number = isAvailable && isAvailable.length;
 
         if (count > 1) {
@@ -184,7 +184,7 @@ export class UpdateLedgerVm {
         // check if is there any stock entry or not
         return find(this.selectedLedger.transactions,
             (f: ILedgerTransactionItem) => {
-                if (f.particular.uniqueName && f.particular.uniqueName !== uniqueName) {
+                if (f.particular?.uniqueName && f.particular?.uniqueName !== uniqueName) {
                     return !!(f.inventory && f.inventory.stock);
                 }
             }
@@ -193,7 +193,7 @@ export class UpdateLedgerVm {
 
     public isThereIncomeOrExpenseEntry(): number {
         let isAvailable = filter(this.selectedLedger.transactions, (trx: ILedgerTransactionItem) => {
-            if (trx.particular.uniqueName) {
+            if (trx?.particular?.uniqueName) {
                 let category = this.accountCatgoryGetterFunc(trx.particular, trx.particular.uniqueName);
                 return this.isValidCategory(category) || trx.inventory;
             }
@@ -206,7 +206,7 @@ export class UpdateLedgerVm {
             return false;
         }
         let allowedUniqueNameArr = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses', 'fixedassets'];
-        return allowedUniqueNameArr.indexOf(acc.parentGroups[0].uniqueName) > -1;
+        return allowedUniqueNameArr.indexOf(acc.parentGroups[0]?.uniqueName) > -1;
     }
 
     public getEntryTotal() {
@@ -261,7 +261,7 @@ export class UpdateLedgerVm {
                 this.totalAmount = this.stockTrxEntry.amount;
             } else {
                 let trx: ILedgerTransactionItem = find(this.selectedLedger.transactions, (t) => {
-                    let category = this.accountCatgoryGetterFunc(t.particular, t.particular.uniqueName);
+                    let category = this.accountCatgoryGetterFunc(t?.particular, t?.particular?.uniqueName);
                     return this.isValidCategory(category);
                 });
                 this.totalAmount = trx ? Number(trx.amount) : 0;
@@ -287,7 +287,7 @@ export class UpdateLedgerVm {
                 taxableValue = (rawAmount + this.taxTrxTotal);
             }
 
-            let tax = companyTaxes.find(ct => ct.uniqueName === modal?.appliedOtherTax?.uniqueName);
+            let tax = companyTaxes.find(ct => ct?.uniqueName === modal?.appliedOtherTax?.uniqueName);
             if (tax && tax.taxDetail[0]) {
                 this.selectedLedger.otherTaxType = ['tcsrc', 'tcspay'].includes(tax.taxType) ? 'tcs' : 'tds';
                 totalTaxes += tax.taxDetail[0].taxValue;
@@ -342,11 +342,11 @@ export class UpdateLedgerVm {
 
     public getUniqueName(txn: ILedgerTransactionItem) {
         if ((txn.selectedAccount && txn.selectedAccount.stock)) {
-            return txn.particular.uniqueName.split('#')[0];
+            return txn.particular?.uniqueName.split('#')[0];
         } else if (txn.inventory && txn.inventory.stock) {
-            return txn.particular.uniqueName.split('#')[0];
+            return txn.particular?.uniqueName.split('#')[0];
         }
-        return txn.particular.uniqueName;
+        return txn.particular?.uniqueName;
     }
 
     public inventoryQuantityChanged(val: any) {
@@ -412,7 +412,7 @@ export class UpdateLedgerVm {
             this.convertedRate = this.calculateConversionRate(this.stockTrxEntry.inventory.rate, this.ratePrecision);
 
             // update every transaction conversion rates for multi-currency
-            this.selectedLedger.transactions.filter(f => f.particular.uniqueName !== this.stockTrxEntry.particular.uniqueName).map(trx => {
+            this.selectedLedger.transactions.filter(f => f.particular?.uniqueName !== this.stockTrxEntry.particular?.uniqueName).map(trx => {
                 trx.convertedAmount = this.calculateConversionRate(trx.amount);
                 return trx;
             });
@@ -421,10 +421,10 @@ export class UpdateLedgerVm {
             // update every transaction conversion rates for multi-currency
             if (this.selectedLedger.transactions && this.selectedLedger.transactions.length > 0) {
                 this.selectedLedger.transactions = this.selectedLedger.transactions.map(t => {
-                    let category = this.accountCatgoryGetterFunc(t.particular, t.particular.uniqueName);
+                    let category = this.accountCatgoryGetterFunc(t?.particular, t?.particular?.uniqueName);
 
                     // find account that's from category income || expenses || fixed assets and update it's amount too
-                    if (this.isValidCategory(category)) {
+                    if (category && this.isValidCategory(category)) {
                         t.amount = giddhRoundOff(Number(this.totalAmount), this.giddhBalanceDecimalPlaces);
                         t.isUpdated = true;
                     }
@@ -491,7 +491,7 @@ export class UpdateLedgerVm {
         } else {
             // find account that's from category income || expenses || fixed assets
             let trx: ILedgerTransactionItem = find(this.selectedLedger.transactions, (t) => {
-                let category = this.accountCatgoryGetterFunc(t.particular, t.particular.uniqueName);
+                let category = this.accountCatgoryGetterFunc(t?.particular, t?.particular?.uniqueName);
                 return this.isValidCategory(category);
             });
             if (trx) {
@@ -525,16 +525,16 @@ export class UpdateLedgerVm {
 
     public reInitilizeDiscount(resp: LedgerResponse) {
         let discountArray: LedgerDiscountClass[] = [];
-        let defaultDiscountIndex = resp.discounts.findIndex(f => !f.discount.uniqueName);
+        let defaultDiscountIndex = resp.discounts.findIndex(f => !f.discount?.uniqueName);
 
         if (defaultDiscountIndex > -1) {
             discountArray.push({
-                discountType: resp.discounts[defaultDiscountIndex].discount.discountType,
-                amount: resp.discounts[defaultDiscountIndex].amount,
-                discountValue: resp.discounts[defaultDiscountIndex].discount.discountValue,
-                discountUniqueName: resp.discounts[defaultDiscountIndex].discount.uniqueName,
-                name: resp.discounts[defaultDiscountIndex].discount.name,
-                particular: resp.discounts[defaultDiscountIndex].account.uniqueName,
+                discountType: resp.discounts[defaultDiscountIndex].discount?.discountType,
+                amount: resp.discounts[defaultDiscountIndex]?.amount,
+                discountValue: resp.discounts[defaultDiscountIndex].discount?.discountValue,
+                discountUniqueName: resp.discounts[defaultDiscountIndex].discount?.uniqueName,
+                name: resp.discounts[defaultDiscountIndex].discount?.name,
+                particular: resp.discounts[defaultDiscountIndex].account?.uniqueName,
                 isActive: true
             });
         } else {
@@ -551,13 +551,13 @@ export class UpdateLedgerVm {
         resp.discounts.forEach((f, index) => {
             if (index !== defaultDiscountIndex) {
                 discountArray.push({
-                    discountType: f.discount.discountType,
-                    amount: f.discount.discountValue,
-                    name: f.discount.name,
-                    particular: f.account.uniqueName,
+                    discountType: f.discount?.discountType,
+                    amount: f.discount?.discountValue,
+                    name: f.discount?.name,
+                    particular: f.account?.uniqueName,
                     isActive: true,
-                    discountValue: f.discount.discountValue,
-                    discountUniqueName: f.discount.uniqueName
+                    discountValue: f.discount?.discountValue,
+                    discountUniqueName: f.discount?.uniqueName
                 });
             }
         });
@@ -571,18 +571,18 @@ export class UpdateLedgerVm {
 
 
         requestObj.voucherType = requestObj?.voucher?.shortCode;
-        requestObj.transactions = requestObj?.transactions ? requestObj.transactions.filter(p => p.particular.uniqueName && !p.isDiscount) : [];
+        requestObj.transactions = requestObj?.transactions ? requestObj.transactions.filter(p => p.particular?.uniqueName && !p.isDiscount) : [];
         requestObj.generateInvoice = this.selectedLedger?.generateInvoice;
 
         requestObj.transactions.map(trx => {
             if (trx.inventory && trx.inventory.stock) {
-                trx.particular.uniqueName = trx.particular.uniqueName.split('#')[0];
+                trx.particular.uniqueName = trx.particular?.uniqueName.split('#')[0];
             }
         });
-        requestObj.taxes = [...taxes.map(t => t.particular.uniqueName)];
+        requestObj.taxes = [...taxes.map(t => t.particular?.uniqueName)];
 
         if (requestObj.isOtherTaxesApplicable) {
-            requestObj.taxes.push(requestObj.otherTaxModal.appliedOtherTax.uniqueName);
+            requestObj.taxes.push(requestObj.otherTaxModal.appliedOtherTax?.uniqueName);
         }
 
         requestObj.discounts = discounts.filter(p => p.amount && p.isActive).map(m => {
