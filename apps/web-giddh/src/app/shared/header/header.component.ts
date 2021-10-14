@@ -1120,7 +1120,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             branches = response || [];
         });
         if (branchName) {
-            this.currentCompanyBranches = branches.filter(branch => {
+            this.currentCompanyBranches = branches?.filter(branch => {
                 if (!branch.alias) {
                     return branch.name.toLowerCase().includes(branchName.toLowerCase());
                 } else {
