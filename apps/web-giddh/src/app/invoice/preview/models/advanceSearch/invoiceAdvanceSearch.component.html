@@ -87,8 +87,9 @@
 
                             <div class="col-md-8 col-sm-6 col-6 pl-0">
                                 <giddh-datepicker
-                                    name="invoiceDateRange"
+                                    name="invoiceDueDateRange"
                                     [(ngModel)]="request.dueDate"
+                                    [placeholder]="commonLocaleData?.app_select_date"
                                     [showToggleIcon]="false"
                                 >
                                 </giddh-datepicker>

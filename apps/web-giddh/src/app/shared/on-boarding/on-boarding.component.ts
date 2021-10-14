@@ -374,7 +374,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
      */
     public handleOnBoardingNameChange(itemName: string): void {
         if (this.onBoardingType === OnBoardingType.Warehouse) {
-            if (itemName.length > 100) {
+            if (itemName?.length > 100) {
                 this.companyForm.form.controls['name'].setErrors({ 'maxlength': true });
             }
         }
@@ -393,7 +393,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
                 if (!itemName) {
                     this.companyForm.form.controls['name'].setErrors({ 'required': true });
                 }
-                if (itemName.length > 100) {
+                if (itemName?.length > 100) {
                     this.companyForm.form.controls['name'].setErrors({ 'maxlength': true });
                 }
             }
