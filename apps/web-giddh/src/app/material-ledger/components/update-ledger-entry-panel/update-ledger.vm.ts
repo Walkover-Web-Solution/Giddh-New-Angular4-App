@@ -424,7 +424,7 @@ export class UpdateLedgerVm {
                     let category = this.accountCatgoryGetterFunc(t.particular, t.particular.uniqueName);
 
                     // find account that's from category income || expenses || fixed assets and update it's amount too
-                    if (this.isValidCategory(category)) {
+                    if (category && this.isValidCategory(category)) {
                         t.amount = giddhRoundOff(Number(this.totalAmount), this.giddhBalanceDecimalPlaces);
                         t.isUpdated = true;
                     }
