@@ -1,14 +1,9 @@
 import { Component } from "@angular/core";
 
 @Component({
-    selector: "receipt",
+    selector: "payment-receipt",
     template: '<router-outlet></router-outlet>'
 })
-export class ReceiptComponent {
+export class MainComponent {
 
-    constructor(
-
-    ) {
-
-    }
 }

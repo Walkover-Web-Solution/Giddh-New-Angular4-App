@@ -1,9 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
-import { ReceiptComponent } from "./receipt.component";
-import { ReceiptRoutingModule } from "./receipt.routing.module";
 import { MatCardModule } from '@angular/material/card';
-import { CreateReceiptComponent } from "./components/create/create-receipt.component";
 import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
 import { MatButtonModule } from "@angular/material/button";
 import { SalesShSelectModule } from "../theme/sales-ng-virtual-select/sh-select.module";
@@ -25,15 +22,18 @@ import { TaxControlModule } from "../theme/tax-control/tax-control.module";
 import { SendEmailInvoiceModule } from "../shared/send-email-invoice/send-email-invoice.module";
 import { MatDialogModule } from "@angular/material/dialog";
 import { PrintComponent } from "./components/print/print.component";
+import { MainComponent } from "./main.component";
+import { PaymentReceiptComponent } from "./components/create-edit/payment-receipt.component";
+import { PaymentReceiptRoutingModule } from "./payment-receipt.routing.module";
 
 @NgModule({
     declarations: [
-        ReceiptComponent,
-        CreateReceiptComponent,
+        MainComponent,
+        PaymentReceiptComponent,
         PrintComponent
     ],
     imports: [
-        ReceiptRoutingModule,
+        PaymentReceiptRoutingModule,
         CommonModule,
         MatCardModule,
         FormFieldsModule,
@@ -60,6 +60,6 @@ import { PrintComponent } from "./components/print/print.component";
     ]
 })
 
-export class ReceiptModule {
+export class PaymentReceiptModule {
 
 }
