@@ -29,6 +29,7 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     @Input() public maxlength: number;
     @Input() public readonly: boolean;
     @Input() public type: string = "text";
+    @Input() public showError: boolean = false;
     /** ngModel of input */
     public ngModel: any;
     /** Used for change detection */

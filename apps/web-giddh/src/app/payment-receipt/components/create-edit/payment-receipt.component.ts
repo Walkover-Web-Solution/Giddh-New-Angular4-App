@@ -16,7 +16,7 @@ import { cloneDeep, find, orderBy, uniqBy } from "../../../lodash-optimized";
 import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from "../../../models/api-models/Account";
 import { OnboardingFormRequest } from "../../../models/api-models/Common";
 import { TaxResponse } from "../../../models/api-models/Company";
-import { AccountDetailsClass, IForceClear, Receipt, StateCode } from "../../../models/api-models/Sales";
+import { AccountDetailsClass, IForceClear, PaymentReceipt, StateCode } from "../../../models/api-models/Sales";
 import { LEDGER_API } from "../../../services/apiurls/ledger.api";
 import { LedgerService } from "../../../services/ledger.service";
 import { SalesService } from "../../../services/sales.service";
@@ -29,9 +29,9 @@ import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
 import { SalesShSelectComponent } from "../../../theme/sales-ng-virtual-select/sh-select.component";
 
 @Component({
-    selector: 'create-receipt',
-    templateUrl: './create-receipt.component.html',
-    styleUrls: ['./create-receipt.component.scss'],
+    selector: 'payment-receipt',
+    templateUrl: './payment-receipt.component.html',
+    styleUrls: ['./payment-receipt.component.scss'],
     animations: [
         trigger('slideInOut', [
             state('in', style({
@@ -46,7 +46,8 @@ import { SalesShSelectComponent } from "../../../theme/sales-ng-virtual-select/s
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CreateReceiptComponent implements OnInit, OnDestroy {
+export class PaymentReceiptComponent implements OnInit, OnDestroy {
+    /** Customer name dropdown instance */
     @ViewChild('customerNameDropDown', { static: false }) public customerNameDropDown: SalesShSelectComponent;
     /** Billing state instance */
     @ViewChild('billingState', { static: true }) billingState: ElementRef;
@@ -54,10 +55,12 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
     @ViewChild('shippingState', { static: true }) shippingState: ElementRef;
     /** Instance of send email modal */
     @ViewChild('sendEmailModal', { static: false }) public sendEmailModal: any;
+    /** Instance of print modal */
     @ViewChild('sendPrintModal', { static: false }) public sendPrintModal: any;
+    /** Observable to store list of customers */
     public customerAccounts$: Observable<IOption[]>;
-    public receiptFormData: Receipt;
-    public typeAheadNoResultsOfCustomer: boolean = false;
+    /** Form object */
+    public voucherFormData: PaymentReceipt;
     /** Stores the search results pagination details for customer */
     public searchCustomerResultsPaginationData = {
         page: 0,
@@ -74,51 +77,67 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
     public preventDefaultScrollApiCall: boolean = false;
     /** Default search suggestion list to be shown for searching customer */
     public defaultCustomerSuggestions: Array<IOption> = [];
-    public selectedGrpUniqueNameForAddEditAccountModal: string = '';
+    /** Holds the group for add/edit account */
+    public selectedGroupUniqueName: string = '';
     /** Stores the search results */
     public searchResults: Array<IOption> = [];
-    private sundryDebtorsAcList: IOption[] = [];
+    /** Holds the list of sundry debtors */
+    private sundryDebtorsAccountsList: IOption[] = [];
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** No results found label for dynamic search */
     public noResultsFoundLabel = SearchResultText.NewSearch;
+    /** Observable for force clear sh-select */
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
+    /** File upload options */
     public fileUploadOptions: UploaderOptions;
+    /** Emitted for upload input */
     public uploadInput: EventEmitter<UploadInput>;
+    /** True if file is uploading */
     public isFileUploading: boolean = false;
+    /** Holds selected file name */
     public selectedFileName: string = '';
-    public file: any = null;
     /** This will handle if focus should go in customer/vendor dropdown */
     public allowFocus: boolean = true;
+    /** True if update mode */
     public isUpdateMode: boolean = false;
+    /** Holds active company data */
     public activeCompany: any = {};
+    /** Observable for bank accounts */
     public bankAccounts$: Observable<IOption[]>;
+    /** List of bank account for dropdown list */
     public bankAccounts: IOption[] = [];
     /** control for the MatSelect filter keyword */
     public searchBankAccount: FormControl = new FormControl();
+    /** Input mask format */
     public inputMaskFormat: string = '';
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Holds state of account aside menu */
     public accountAsideMenuState: string = 'out';
+    /** Selected customer details */
     public selectedCustomerForDetails: string = null;
+    /** Holds session key observable */
     public sessionKey$: Observable<string>;
-    public companyName$: Observable<string>;
+    /** Company taxes observable */
     public companyTaxesList$: Observable<TaxResponse[]>;
+    /** Holds company taxes list */
     public companyTaxesList: TaxResponse[] = [];
-    public totalForTax: number = 0;
-    /** Allowed taxes list contains the unique name of all
-     * tax types within a company and count upto which they are allowed
-     */
+    /** Allowed taxes list contains the unique name of all tax types within a company and count upto which they are allowed */
     public allowedSelectionOfAType: any = { type: [], count: 1 };
     /** This will hold account addresses */
     public accountAddressList: any[] = [];
+    /** True if auto fill shipping is enabled */
     public autoFillShipping: boolean = true;
+    /** Holds customer country name */
     public customerCountryName: string = '';
-    /** Stores the customer country code */
+    /** Holds customer country code */
     public customerCountryCode: string = '';
     /** Force clear for billing-shipping dropdown */
     public billingShippingForceClearReactive$: Observable<IForceClear> = observableOf({ status: false });
+    /** States list */
     public statesSource: IOption[] = [];
     /** This will hold states list with respect to country */
     public countryStates: any[] = [];
@@ -126,41 +145,60 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
     public companyStatesSource: IOption[] = [];
     /** True, if the Giddh supports the taxation of the country (not supported now: UK, US, Nepal, Australia) */
     public shouldShowTrnGstField: boolean = false;
+    /** Holds onboarding form fields */
     public formFields: any[] = [];
     /** This will hold onboarding api form request */
     public onboardingFormRequest: OnboardingFormRequest = { formName: '', country: '' };
-    public showGSTINNo: boolean;
-    public showTRNNo: boolean;
+    /** True if we need to show GSTIN number */
+    public showGstinNo: boolean;
+    /** True if we need to show TRN number */
+    public showTrnNo: boolean;
+    /** Holds company currency */
     public companyCurrency: string;
     /* This will hold the company country name */
     public companyCountryName: string = '';
-    public isMulticurrencyAccount = false;
+    /** Holds true if it's multi currency account */
+    public isMultiCurrencyAccount = false;
+    /** Holds company currency name */
     public companyCurrencyName: string;
-    public customerCurrencyCode: string;
-    //Multi-currency changes
+    /** Holds exchange rate */
     public exchangeRate = 1;
+    /** Original exchange rate */
     public originalExchangeRate = 1;
     /** Stores the previous exchange rate of previous debtor */
     public previousExchangeRate = 1;
-    public baseCurrencySymbol: string = '';
-    public depositCurrSymbol: string = '';
+    /** Holds Company country code */
     public companyCountryCode: string = '';
+    /** True if it's advance receipt */
     public isAdvanceReceipt: boolean = false;
+    /** Holds universal date */
     public universalDate: any;
+    /** True if we need to show switch currency */
     public showSwitchCurrency: boolean = false;
+    /** Holds reverse exchange rate */
     public reverseExchangeRate: number;
+    /** Holds original reverse exchange rate */
     public originalReverseExchangeRate: number;
-    public editCurrencyInputField: boolean = false;
+    /** True if we need to show currency value */
     public showCurrencyValue: boolean = false;
+    /** True if should show autosave icon */
     public autoSaveIcon: boolean = false;
-    public editPencilIcon: boolean = true;
+    /** Holds totals object */
     public totals: any = { subTotal: 0, taxTotal: 0, grandTotal: 0, grandTotalMultiCurrency: 0 };
+    /** Holds decimal places based on settings */
     public giddhBalanceDecimalPlaces: number = 2;
-    public receiptResponse: any;
+    /** Holds response after saving voucher */
+    public paymentReceiptResponse: any;
+    /** Reference of dialog */
     private dialogRef: any;
     /** Holds images folder path */
     public imgPath: string = '';
+    /** Holds true if form is valid */
+    public isValidForm: boolean = true;
+    /** Holds selected taxes */
+    public selectedTaxes: any[] = [];
 
+    /** @ignore */
     constructor(
         private searchService: SearchService,
         private changeDetectionRef: ChangeDetectorRef,
@@ -174,11 +212,10 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
         private dialog: MatDialog,
         private invoiceActions: InvoiceActions
     ) {
-        this.receiptFormData = new Receipt();
-        this.receiptFormData.type = "receipt";
+        this.voucherFormData = new PaymentReceipt();
+        this.voucherFormData.type = "receipt";
 
         this.sessionKey$ = this.store.pipe(select(state => state.session.user.session.id), takeUntil(this.destroyed$));
-        this.companyName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
         this.companyTaxesList$ = this.store.pipe(select(state => state.company?.taxes), takeUntil(this.destroyed$));
         this.companyTaxesList$.subscribe(companyTaxesList => {
             if (companyTaxesList) {
@@ -218,7 +255,7 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.sales.updatedAccountDetails), takeUntil(this.destroyed$)).subscribe(response => {
-            if(response) {
+            if (response) {
                 if (this.accountAsideMenuState === 'in') {
                     this.toggleAccountAsidePane();
                 }
@@ -263,7 +300,7 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
             if (dateObj) {
                 try {
                     this.universalDate = moment(dateObj[1]).toDate();
-                    this.receiptFormData.date = this.universalDate;
+                    this.voucherFormData.date = this.universalDate;
                 } catch (e) {
                     this.universalDate = new Date();
                 }
@@ -271,6 +308,11 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Initializes the component
+     *
+     * @memberof PaymentReceiptComponent
+     */
     public ngOnInit(): void {
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.loadDefaultSearchSuggestions();
@@ -286,11 +328,24 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Releases all the observables to avoid memory leaks
+     *
+     * @memberof PaymentReceiptComponent
+     */
     public ngOnDestroy(): void {
         this.destroyed$.complete();
         this.destroyed$.next();
     }
 
+    /**
+     * Move group filter for customer list
+     *
+     * @param {string} term
+     * @param {IOption} item
+     * @returns {boolean}
+     * @memberof PaymentReceiptComponent
+     */
     public customMoveGroupFilter(term: string, item: IOption): boolean {
         let newItem = { ...item };
         if (!newItem.additional) {
@@ -302,15 +357,11 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
         return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1 || item.additional.email.toLocaleLowerCase().indexOf(term) > -1 || item.additional.mobileNo.toLocaleLowerCase().indexOf(term) > -1);
     }
 
-    public noResultsForCustomer(event: boolean): void {
-        this.typeAheadNoResultsOfCustomer = event;
-    }
-
     /**
      * Scroll to bottom handler
      *
      * @param {string} searchType Search type
-     * @memberof ProformaInvoiceComponent
+     * @memberof PaymentReceiptComponent
      */
     public handleScrollEnd(searchType: string): void {
         const query = this.searchCustomerResultsPaginationData.query;
@@ -348,7 +399,7 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
      * @param {number} [page=1] Page to request
      * @param {string} searchType Type of search to make
      * @param {Function} successCallback Callback to carry out further operation
-     * @memberof ProformaInvoiceComponent
+     * @memberof PaymentReceiptComponent
      */
     public onSearchQueryChanged(query: string, page: number = 1, searchType: string, successCallback?: Function): void {
         if (!this.preventDefaultScrollApiCall &&
@@ -391,14 +442,14 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
      * @param {string} query Query to be searched
      * @param {number} [page=1] Page for which search is to be made
      * @returns {*} Search request object
-     * @memberof ProformaInvoiceComponent
+     * @memberof PaymentReceiptComponent
      */
     public getSearchRequestObject(query: string, page: number = 1): any {
         let withStocks: boolean;
         let group: string;
         this.searchCustomerResultsPaginationData.query = query;
         group = 'sundrydebtors';
-        this.selectedGrpUniqueNameForAddEditAccountModal = 'sundrydebtors';
+        this.selectedGroupUniqueName = 'sundrydebtors';
         const requestObject = {
             q: encodeURIComponent(query),
             page,
@@ -415,7 +466,7 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
      *
      * @param {*} requestObject Request object
      * @returns {Observable<any>} Observable to carry out further operation
-     * @memberof ProformaInvoiceComponent
+     * @memberof PaymentReceiptComponent
      */
     public searchAccount(requestObject: any): Observable<any> {
         return this.searchService.searchAccount(requestObject);
@@ -426,15 +477,20 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
      *
      * @private
      * @param {string} searchType Search type made by the user
-     * @memberof ProformaInvoiceComponent
+     * @memberof PaymentReceiptComponent
      */
     private assignSearchResultToList(searchType: string): void {
-        this.sundryDebtorsAcList = this.searchResults;
+        this.sundryDebtorsAccountsList = this.searchResults;
     }
 
+    /**
+     * This will create customers list
+     *
+     * @memberof PaymentReceiptComponent
+     */
     public makeCustomerList() {
-        this.customerAccounts$ = observableOf(orderBy(this.sundryDebtorsAcList, 'label'));
-        this.selectedGrpUniqueNameForAddEditAccountModal = 'sundrydebtors';
+        this.customerAccounts$ = observableOf(orderBy(this.sundryDebtorsAccountsList, 'label'));
+        this.selectedGroupUniqueName = 'sundrydebtors';
     }
 
     /**
@@ -443,7 +499,7 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
      * @param {*} results Search results
      * @param {number} [currentPage=1] Current page requested
      * @param {string} searchType Search type of the searched item
-     * @memberof ProformaInvoiceComponent
+     * @memberof PaymentReceiptComponent
      */
     public prepareSearchLists(results: any, currentPage: number = 1, searchType: string): void {
         const searchResults = results.map(result => {
@@ -470,7 +526,7 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
      *
      * @param {boolean} shouldShowDefaultList True, if default list should be shown
      * @param {string} searchType Search type made by the user
-     * @memberof ProformaInvoiceComponent
+     * @memberof PaymentReceiptComponent
      */
     public resetPreviousSearchResults(shouldShowDefaultList: boolean = false, searchType?: string): void {
         if (shouldShowDefaultList && searchType) {
@@ -498,42 +554,69 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Callback for select customer
+     *
+     * @param {IOption} item
+     * @memberof PaymentReceiptComponent
+     */
     public onSelectCustomer(item: IOption): void {
-        this.typeAheadNoResultsOfCustomer = false;
         if (item.value) {
-            this.receiptFormData.account.name = item.label;
+            this.voucherFormData.account.name = item.label;
             this.getAccountDetails(item.value);
         }
     }
 
+    /**
+     * This will call api to get account details
+     *
+     * @param {string} accountUniqueName
+     * @memberof PaymentReceiptComponent
+     */
     public getAccountDetails(accountUniqueName: string): void {
         this.store.dispatch(this.salesAction.getAccountDetailsForSales(accountUniqueName));
     }
 
+    /**
+     * Reset the customer name and address list
+     *
+     * @param {*} event
+     * @memberof PaymentReceiptComponent
+     */
     public resetCustomerName(event: any): void {
         if (event) {
             if (!event.target?.value) {
-                this.receiptFormData.account = new AccountDetailsClass();
+                this.voucherFormData.account = new AccountDetailsClass();
                 this.accountAddressList = [];
             }
         } else {
-            this.receiptFormData.account = new AccountDetailsClass();
+            this.voucherFormData.account = new AccountDetailsClass();
             this.accountAddressList = [];
         }
     }
 
+    /**
+     * This will open account aside pan to create new account
+     *
+     * @memberof PaymentReceiptComponent
+     */
     public addNewAccount(): void {
         this.allowFocus = false;
         this.selectedCustomerForDetails = null;
         this.toggleAccountAsidePane();
     }
 
+    /**
+     * Callback for file upload
+     *
+     * @param {UploadOutput} output
+     * @memberof PaymentReceiptComponent
+     */
     public onUploadOutput(output: UploadOutput): void {
         if (output.type === 'allAddedToQueue') {
             let sessionKey = null;
-            let companyUniqueName = null;
+            let companyUniqueName = this.activeCompany?.uniqueName;
             this.sessionKey$.pipe(take(1)).subscribe(key => sessionKey = key);
-            this.companyName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
             const event: UploadInput = {
                 type: 'uploadAll',
                 url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
@@ -548,20 +631,26 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
         } else if (output.type === 'done') {
             if (output.file.response.status === 'success') {
                 this.isFileUploading = false;
-                this.receiptFormData.attachedFiles = [output.file.response.body?.uniqueName];
+                this.voucherFormData.attachedFiles = [output.file.response.body?.uniqueName];
                 this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
             } else {
                 this.isFileUploading = false;
-                this.receiptFormData.attachedFiles = [];
+                this.voucherFormData.attachedFiles = [];
                 this.toaster.showSnackBar("error", output.file.response.message);
             }
         }
     }
 
+    /**
+     * Callback for file change
+     *
+     * @param {*} event
+     * @memberof PaymentReceiptComponent
+     */
     public onFileChange(event: any) {
-        this.file = (event.files as FileList).item(0);
-        if (this.file) {
-            this.selectedFileName = this.file.name;
+        let file = (event.files as FileList).item(0);
+        if (file) {
+            this.selectedFileName = file.name;
         } else {
             this.selectedFileName = '';
         }
@@ -572,7 +661,7 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
      * when voucher is changed
      *
      * @private
-     * @memberof ProformaInvoiceComponent
+     * @memberof PaymentReceiptComponent
      */
     private loadDefaultSearchSuggestions(): void {
         this.onSearchQueryChanged('', 1, 'customer', (response) => {
@@ -603,6 +692,12 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * This will focus in customer name field and will open the dropdown
+     *
+     * @private
+     * @memberof PaymentReceiptComponent
+     */
     private focusInCustomerName() {
         setTimeout(() => {
             let firstElementToFocus: any = document.getElementsByClassName('firstElementToFocus');
@@ -620,7 +715,7 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
      *
      * @private
      * @param {string} customerCurrency Currency of the customer selected
-     * @memberof ProformaInvoiceComponent
+     * @memberof PaymentReceiptComponent
      */
     private loadBankCashAccounts(customerCurrency: string): void {
         this.salesService.getAccountsWithCurrency('cash, bankaccounts', `${customerCurrency}, ${this.activeCompany?.baseCurrency}`).pipe(takeUntil(this.destroyed$)).subscribe(data => {
@@ -634,7 +729,7 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
      *
      * @param {*} data Data of bank/cash account from API response
      * @returns
-     * @memberof ProformaInvoiceComponent
+     * @memberof PaymentReceiptComponent
      */
     public updateBankAccountObject(data: any): any {
         let bankAccounts: IOption[] = [];
@@ -646,7 +741,13 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
         return orderBy(bankAccounts, 'label');
     }
 
-    private filterBankAccounts(): any {
+    /**
+     * This will filter bank accounts
+     *
+     * @private
+     * @memberof PaymentReceiptComponent
+     */
+    private filterBankAccounts(): void {
         let bankAccounts: IOption[] = [];
         this.bankAccounts$.subscribe(response => {
             if (response) {
@@ -662,7 +763,13 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
         });
     }
 
-    public toggleAccountAsidePane(event?): void {
+    /**
+     * Toggles the account aside pan
+     *
+     * @param {*} [event]
+     * @memberof PaymentReceiptComponent
+     */
+    public toggleAccountAsidePane(event?: any): void {
         if (event) {
             event.preventDefault();
         }
@@ -670,7 +777,12 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
         this.toggleBodyClass();
     }
 
-    public toggleBodyClass() {
+    /**
+     * Toggles the fixed class on body
+     *
+     * @memberof PaymentReceiptComponent
+     */
+    public toggleBodyClass(): void {
         if (this.accountAsideMenuState === 'in') {
             document.querySelector('.invoice-modal-content')?.classList?.add('aside-account-create');
             document.querySelector('body').classList.add('fixed');
@@ -680,37 +792,70 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
         }
     }
 
-    public addNewSidebarAccount(item: AddAccountRequest) {
+    /**
+     * This will add new account
+     *
+     * @param {AddAccountRequest} item
+     * @memberof PaymentReceiptComponent
+     */
+    public addNewSidebarAccount(item: AddAccountRequest): void {
         this.store.dispatch(this.salesAction.addAccountDetailsForSales(item));
     }
 
-    public updateSidebarAccount(item: UpdateAccountRequest) {
+    /**
+     * This will update the account
+     *
+     * @param {UpdateAccountRequest} item
+     * @memberof PaymentReceiptComponent
+     */
+    public updateSidebarAccount(item: UpdateAccountRequest): void {
         this.store.dispatch(this.salesAction.updateAccountDetailsForSales(item));
     }
 
-    public addAccountFromShortcut() {
-        if (!this.receiptFormData.account.uniqueName) {
+    /**
+     * This will open account aside pan on the press of shortcut key
+     *
+     * @memberof PaymentReceiptComponent
+     */
+    public addAccountFromShortcut(): void {
+        if (!this.voucherFormData.account.uniqueName) {
             this.selectedCustomerForDetails = null;
             this.toggleAccountAsidePane();
         }
     }
 
-    public getCustomerDetails() {
-        this.selectedCustomerForDetails = this.receiptFormData.account.uniqueName;
+    /**
+     * This will set customer uniquename and will toggle the aside pan
+     *
+     * @memberof PaymentReceiptComponent
+     */
+    public getCustomerDetails(): void {
+        this.selectedCustomerForDetails = this.voucherFormData.account.uniqueName;
         this.toggleAccountAsidePane();
     }
 
-    public autoFillShippingDetails() {
-        // auto fill shipping address
+    /**
+     * This will autofill shipping details
+     *
+     * @memberof PaymentReceiptComponent
+     */
+    public autoFillShippingDetails(): void {
         if (this.autoFillShipping) {
-            this.receiptFormData.account.shippingDetails = cloneDeep(this.receiptFormData.account.billingDetails);
+            this.voucherFormData.account.shippingDetails = cloneDeep(this.voucherFormData.account.billingDetails);
             if (this.shippingState && this.shippingState.nativeElement) {
                 this.shippingState.nativeElement.classList.remove('error-box');
             }
         }
     }
 
-    public fillShippingBillingDetails($event: any, isBilling) {
+    /**
+     * This will copy the billing details in shipping details
+     *
+     * @param {*} $event
+     * @param {boolean} isBilling
+     * @memberof PaymentReceiptComponent
+     */
+    public fillShippingBillingDetails($event: any, isBilling: boolean): void {
         let stateName = $event.label;
         let stateCode = $event.value;
 
@@ -719,9 +864,9 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
             if (this.billingState && this.billingState.nativeElement) {
                 this.billingState.nativeElement.classList.remove('error-box');
             }
-            this.receiptFormData.account.billingDetails.state.name = stateName;
-            this.receiptFormData.account.billingDetails.stateName = stateName;
-            this.receiptFormData.account.billingDetails.stateCode = stateCode;
+            this.voucherFormData.account.billingDetails.state.name = stateName;
+            this.voucherFormData.account.billingDetails.stateName = stateName;
+            this.voucherFormData.account.billingDetails.stateCode = stateCode;
         } else {
             if (this.shippingState && this.shippingState.nativeElement) {
                 this.shippingState.nativeElement.classList.remove('error-box');
@@ -729,9 +874,9 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
             // if it's not billing address then only update shipping details
             // check if it's not auto fill shipping address from billing address then and then only update shipping details
             if (!this.autoFillShipping) {
-                this.receiptFormData.account.shippingDetails.stateName = stateName;
-                this.receiptFormData.account.shippingDetails.stateCode = stateCode;
-                this.receiptFormData.account.shippingDetails.state.name = stateName;
+                this.voucherFormData.account.shippingDetails.stateName = stateName;
+                this.voucherFormData.account.shippingDetails.stateCode = stateCode;
+                this.voucherFormData.account.shippingDetails.state.name = stateName;
             }
         }
     }
@@ -744,7 +889,7 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
      * @param {*} countryCode Country code for the user
      * @param {boolean} isCompanyStates
      * @returns Promise to carry out further operations
-     * @memberof ProformaInvoiceComponent
+     * @memberof PaymentReceiptComponent
      */
     private getUpdatedStateCodes(countryCode: any, isCompanyStates?: boolean): Promise<any> {
         return new Promise((resolve: Function) => {
@@ -759,9 +904,9 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
                 } else {
                     this.salesService.getStateCode(countryCode).pipe(takeUntil(this.destroyed$)).subscribe(resp => {
                         if (!isCompanyStates) {
-                            this.statesSource = this.modifyStateResp((resp.body) ? resp.body.stateList : [], countryCode);
+                            this.statesSource = this.modifyStateResponse((resp.body) ? resp.body.stateList : [], countryCode);
                         } else {
-                            this.companyStatesSource = this.modifyStateResp((resp.body) ? resp.body.stateList : [], countryCode);
+                            this.companyStatesSource = this.modifyStateResponse((resp.body) ? resp.body.stateList : [], countryCode);
                         }
                         resolve();
                     }, () => {
@@ -774,7 +919,16 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
         });
     }
 
-    private modifyStateResp(stateList: StateCode[], countryCode: string): any {
+    /**
+     * This will modify states list response
+     *
+     * @private
+     * @param {StateCode[]} stateList
+     * @param {string} countryCode
+     * @returns {*}
+     * @memberof PaymentReceiptComponent
+     */
+    private modifyStateResponse(stateList: StateCode[], countryCode: string): any {
         let stateListRet: IOption[] = [];
         stateList.forEach(stateR => {
             stateListRet.push({
@@ -793,7 +947,7 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
      * To fetch regex call for onboarding countries (gulf)
      *
      * @param {string} countryCode
-     * @memberof ProformaInvoiceComponent
+     * @memberof PaymentReceiptComponent
      */
     public getOnboardingForm(countryCode: string): void {
         if (this.onboardingFormRequest.country !== countryCode) {
@@ -803,23 +957,36 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This will hide/show GSTIN/TRN based on country
+     *
+     * @private
+     * @param {string} name
+     * @memberof PaymentReceiptComponent
+     */
     private showGstAndTrnUsingCountryName(name: string): void {
         if (this.activeCompany?.country === name) {
             if (name === 'India') {
-                this.showGSTINNo = true;
-                this.showTRNNo = false;
+                this.showGstinNo = true;
+                this.showTrnNo = false;
                 this.getOnboardingForm('IN')
             } else if (name === 'United Arab Emirates') {
-                this.showGSTINNo = false;
-                this.showTRNNo = true;
+                this.showGstinNo = false;
+                this.showTrnNo = true;
                 this.getOnboardingForm('AE')
             }
         } else {
-            this.showGSTINNo = false;
-            this.showTRNNo = false;
+            this.showGstinNo = false;
+            this.showTrnNo = false;
         }
     }
 
+    /**
+     * This will assign the account details in object
+     *
+     * @param {AccountResponseV2} data
+     * @memberof PaymentReceiptComponent
+     */
     public assignAccountDetailsValuesInForm(data: AccountResponseV2): void {
         this.accountAddressList = data.addresses;
         this.customerCountryName = data.country.countryName;
@@ -838,8 +1005,8 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
                 data.addresses = [find(data.addresses, (tax) => tax.isDefault)];
             }
             // auto fill all the details
-            this.receiptFormData.account = new AccountDetailsClass(data);
-            this.receiptFormData.account.currencyCode = this.receiptFormData.account.currency.code;
+            this.voucherFormData.account = new AccountDetailsClass(data);
+            this.voucherFormData.account.currencyCode = this.voucherFormData.account.currency.code;
             this.changeDetectionRef.detectChanges();
         });
     }
@@ -848,51 +1015,53 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
      * Initializes acounnt currency details
      *
      * @param {AccountResponseV2} item Account details
-     * @memberof ProformaInvoiceComponent
+     * @memberof PaymentReceiptComponent
      */
     public initializeAccountCurrencyDetails(item: AccountResponseV2): void {
         // If currency of item is null or undefined then treat it to be equivalent of company currency
         item.currency = item.currency || this.companyCurrency;
-        this.isMulticurrencyAccount = item.currency !== this.companyCurrency;
+        this.isMultiCurrencyAccount = item.currency !== this.companyCurrency;
         if (item.addresses && item.addresses.length > 0) {
             item.addresses.forEach(address => {
                 if (address && address.isDefault) {
                     const defaultAddress: any = address;
-                    this.receiptFormData.account.billingDetails.pincode = defaultAddress.pincode;
-                    this.receiptFormData.account.shippingDetails.pincode = defaultAddress.pincode;
+                    this.voucherFormData.account.billingDetails.pincode = defaultAddress.pincode;
+                    this.voucherFormData.account.shippingDetails.pincode = defaultAddress.pincode;
                 }
             });
         }
-        if (this.isMulticurrencyAccount) {
-            this.customerCurrencyCode = item.currency;
+        if (this.isMultiCurrencyAccount) {
             this.companyCurrencyName = item.currency;
-        } else {
-            this.customerCurrencyCode = this.companyCurrency;
         }
 
         if (item && item.currency && item.currency !== this.companyCurrency) {
-            this.getCurrencyRate(this.companyCurrency, item.currency,
-                moment(this.receiptFormData.date).format(GIDDH_DATE_FORMAT));
+            this.getCurrencyRate(this.companyCurrency, item.currency, moment(this.voucherFormData.date).format(GIDDH_DATE_FORMAT));
         } else {
             this.previousExchangeRate = this.exchangeRate;
             this.originalExchangeRate = 1;
             this.exchangeRate = 1;
-            //this.recalculateEntriesTotal();
+            this.calculateTotals();
         }
 
-        if (this.isMulticurrencyAccount) {
+        if (this.isMultiCurrencyAccount) {
             this.bankAccounts$ = observableOf([]);
         }
     }
 
-    private async prepareCompanyCountryAndCurrencyFromProfile(profile) {
+    /**
+     * This will set the details based on profile
+     *
+     * @private
+     * @param {*} profile
+     * @returns {Promise<void>}
+     * @memberof PaymentReceiptComponent
+     */
+    private async prepareCompanyCountryAndCurrencyFromProfile(profile: any): Promise<void> {
         if (profile) {
             this.customerCountryName = profile.country;
             this.showGstAndTrnUsingCountryName(profile.country);
 
             this.companyCurrency = profile.baseCurrency || 'INR';
-            this.baseCurrencySymbol = profile.baseCurrencySymbol;
-            this.depositCurrSymbol = this.baseCurrencySymbol;
             this.companyCurrencyName = profile.baseCurrency;
 
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
@@ -918,9 +1087,9 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
      * @param {*} to Converted to currency symbol
      * @param {*} from Converted from currency symbol
      * @param {string} [date=moment().format(GIDDH_DATE_FORMAT)] Date on which currency rate is required, default is today's date
-     * @memberof ProformaInvoiceComponent
+     * @memberof PaymentReceiptComponent
      */
-    public getCurrencyRate(to, from, date = moment().format(GIDDH_DATE_FORMAT)): void {
+    public getCurrencyRate(to: any, from: any, date = moment().format(GIDDH_DATE_FORMAT)): void {
         if (from && to) {
             this.ledgerService.GetCurrencyRateNewApi(from, to, date).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 let rate = response.body;
@@ -930,12 +1099,10 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
                     this.exchangeRate = rate;
                     if (from !== to) {
                         // Multi currency case
-                        //this.recalculateEntriesTotal();
+                        this.calculateTotals();
                     }
                 }
-            }, (error => {
-
-            }));
+            });
         }
     }
 
@@ -944,7 +1111,7 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
      *
      * @param {*} data
      * @param {*} address
-     * @memberof ProformaInvoiceComponent
+     * @memberof PaymentReceiptComponent
      */
     public selectAddress(data: any, address: any): void {
         if (data && address) {
@@ -963,36 +1130,60 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This will send email
+     *
+     * @param {(string | { email: string, invoiceType: string[] })} request
+     * @memberof PaymentReceiptComponent
+     */
     public sendEmail(request: string | { email: string, invoiceType: string[] }): void {
         request = request as { email: string, invoiceType: string[] };
-        this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.receiptResponse?.account?.uniqueName, {
+        this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.paymentReceiptResponse?.account?.uniqueName, {
             emailId: request.email.split(','),
-            voucherNumber: [this.receiptResponse?.number],
-            voucherType: this.receiptResponse?.type,
+            voucherNumber: [this.paymentReceiptResponse?.number],
+            voucherType: this.paymentReceiptResponse?.type,
             typeOfInvoice: request.invoiceType ? request.invoiceType : []
         }));
-        this.cancelEmailModal();
+        this.closeEmailDialog();
     }
 
-    public cancelEmailModal(): void {
+    /**
+     * This will close email dialog
+     *
+     * @memberof PaymentReceiptComponent
+     */
+    public closeEmailDialog(): void {
         this.dialogRef.close();
     }
 
+    /**
+     * This will reset form
+     *
+     * @param {NgForm} formObj
+     * @memberof PaymentReceiptComponent
+     */
     public resetForm(formObj: NgForm): void {
         if (formObj) {
             formObj.form.reset();
         }
-        this.receiptFormData = new Receipt();
-        this.receiptFormData.type = "receipt";
-        this.receiptFormData.date = this.universalDate;
+        this.voucherFormData = new PaymentReceipt();
+        this.voucherFormData.type = "receipt";
+        this.voucherFormData.date = this.universalDate;
         this.forceClear$ = observableOf({ status: true });
         this.allowFocus = true;
         this.focusInCustomerName();
-        this.isMulticurrencyAccount = false;
+        this.isMultiCurrencyAccount = false;
         this.accountAddressList = [];
+        this.isValidForm = true;
     }
 
-    public switchCurrencyImg(switchCurrency: boolean): void {
+    /**
+     * This will switch currency
+     *
+     * @param {boolean} switchCurrency
+     * @memberof PaymentReceiptComponent
+     */
+    public switchCurrency(switchCurrency: boolean): void {
         this.showSwitchCurrency = switchCurrency;
         if (switchCurrency) {
             this.reverseExchangeRate = this.exchangeRate ? 1 / this.exchangeRate : 0;
@@ -1003,6 +1194,12 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This will save/cancel the input exchange rate
+     *
+     * @param {boolean} toSave
+     * @memberof PaymentReceiptComponent
+     */
     public saveCancelExchangeRate(toSave: boolean): void {
         if (toSave) {
             if (this.showSwitchCurrency) {
@@ -1022,36 +1219,55 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
         }
     }
 
-    public createReceipt(formObj: NgForm, templateRef?: TemplateRef<any>): void {
-        if (this.receiptFormData.date) {
-            this.receiptFormData.date = moment(this.receiptFormData.date).format(GIDDH_DATE_FORMAT);
-            this.receiptFormData.entries[0].date = this.receiptFormData.date;
+    /**
+     * This will create voucher
+     *
+     * @param {NgForm} formObj
+     * @param {TemplateRef<any>} [templateRef]
+     * @returns {void}
+     * @memberof PaymentReceiptComponent
+     */
+    public createVoucher(formObj: NgForm, templateRef?: TemplateRef<any>): void {
+        this.isValidForm = true;
+
+        if (!this.voucherFormData.account.uniqueName?.trim() || !this.voucherFormData.date || !this.voucherFormData.entries[0].transactions[0].amount
+            .amountForAccount || !this.voucherFormData.entries[0].transactions[0].account.uniqueName || (this.isAdvanceReceipt && this.selectedTaxes?.length === 0)) {
+            this.isValidForm = false;
+            return;
         }
 
-        if (this.receiptFormData.entries[0].chequeClearanceDate) {
-            this.receiptFormData.entries[0].chequeClearanceDate = moment(this.receiptFormData.entries[0].chequeClearanceDate).format(GIDDH_DATE_FORMAT);
+        if (this.voucherFormData.date) {
+            this.voucherFormData.date = moment(this.voucherFormData.date).format(GIDDH_DATE_FORMAT);
+            this.voucherFormData.entries[0].date = this.voucherFormData.date;
+        }
+
+        if (this.voucherFormData.entries[0].chequeClearanceDate) {
+            this.voucherFormData.entries[0].chequeClearanceDate = moment(this.voucherFormData.entries[0].chequeClearanceDate).format(GIDDH_DATE_FORMAT);
         }
 
         if (this.isAdvanceReceipt) {
-            this.receiptFormData.subVoucher = SubVoucher.AdvanceReceipt;
+            this.voucherFormData.subVoucher = SubVoucher.AdvanceReceipt;
         }
 
         let selectedTaxes = [];
-        this.receiptFormData.entries[0].taxes.filter(tax => tax.isChecked).forEach(tax => {
-            selectedTaxes.push({uniqueName: tax.uniqueName});
+        this.voucherFormData.entries[0].taxes.filter(tax => tax.isChecked).forEach(tax => {
+            selectedTaxes.push({ uniqueName: tax.uniqueName });
         });
 
-        this.receiptFormData.entries[0].taxes = selectedTaxes;
+        this.voucherFormData.entries[0].taxes = selectedTaxes;
 
-        this.salesService.generateGenericItem(this.receiptFormData, true).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.salesService.generateGenericItem(this.voucherFormData, true).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (response.status === "success") {
-                    this.toaster.showSnackBar("success", "Receipt created successfully.");
+                    let message = this.localeData?.voucher_created;
+                    message = message.replace("[VOUCHER]", this.voucherFormData.type);
+                    message = message.replace("[VOUCHER_NUMBER]", response.body?.number);
+                    this.toaster.showSnackBar("success", message);
                     this.resetForm(formObj);
 
-                    this.receiptResponse = response.body;
+                    this.paymentReceiptResponse = response.body;
 
-                    if(templateRef) {
+                    if (templateRef) {
                         this.dialogRef = this.dialog.open(templateRef, {
                             width: '500px'
                         });
@@ -1065,22 +1281,34 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * This will calculate totals
+     *
+     * @memberof PaymentReceiptComponent
+     */
     public calculateTotals(): void {
-        this.totals.subTotal = this.receiptFormData.entries[0].transactions[0].amount.amountForAccount;
-        if(isNaN(this.totals.subTotal)) {
+        this.totals.subTotal = this.voucherFormData.entries[0].transactions[0].amount.amountForAccount;
+        if (isNaN(this.totals.subTotal)) {
             this.totals.subTotal = 0;
         }
 
         this.totals.grandTotal = giddhRoundOff(this.totals.subTotal, this.giddhBalanceDecimalPlaces);
-        if(this.isMulticurrencyAccount) {
+        if (this.isMultiCurrencyAccount) {
             this.totals.grandTotalMultiCurrency = giddhRoundOff(this.totals.grandTotal * this.exchangeRate, this.giddhBalanceDecimalPlaces);
         }
     }
 
+    /**
+     * This will calculate tax if tax is selected/changed
+     *
+     * @memberof PaymentReceiptComponent
+     */
     public calculateTax(): void {
         let taxPercentage: number = 0;
         let cessPercentage: number = 0;
-        this.receiptFormData.entries[0].taxes.filter(tax => tax.isChecked).forEach(tax => {
+        this.selectedTaxes = [];
+        this.voucherFormData.entries[0].taxes.filter(tax => tax.isChecked).forEach(tax => {
+            this.selectedTaxes.push(tax);
             if (tax.type === 'gstcess') {
                 cessPercentage += tax.amount;
             } else {
@@ -1092,12 +1320,17 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
         const cessSum = (cessPercentage * this.totals.subTotal) / (100 + cessPercentage);
 
         this.totals.taxTotal = giddhRoundOff(taxSum + cessSum, this.giddhBalanceDecimalPlaces);
-        if(isNaN(this.totals.taxTotal)) {
+        if (isNaN(this.totals.taxTotal)) {
             this.totals.taxTotal = 0;
         }
     }
 
-    public cancelPrintModal(): void {
+    /**
+     * This will close print dialog
+     *
+     * @memberof PaymentReceiptComponent
+     */
+    public closePrintDialog(): void {
         this.dialogRef.close();
     }
 }

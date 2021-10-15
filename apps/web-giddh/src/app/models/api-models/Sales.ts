@@ -687,17 +687,17 @@ export class DiscountMulticurrency {
     }
 }
 
-export class ReceiptTransaction {
-    account: ReceiptAccount;
-    amount: ReceiptAmount;
+export class PaymentReceiptTransaction {
+    account: PaymentReceiptAccount;
+    amount: PaymentReceiptAmount;
 
     constructor() {
-        this.account = new ReceiptAccount();
-        this.amount = new ReceiptAmount();
+        this.account = new PaymentReceiptAccount();
+        this.amount = new PaymentReceiptAmount();
     }
 }
 
-export class ReceiptAccount {
+export class PaymentReceiptAccount {
     uniqueName: string;
     name: string;
 
@@ -707,12 +707,12 @@ export class ReceiptAccount {
     }
 }
 
-export class ReceiptAmount {
+export class PaymentReceiptAmount {
     amountForAccount: number;
 }
 
-export class ReceiptEntry {
-    transactions: ReceiptTransaction[];
+export class PaymentReceiptEntry {
+    transactions: PaymentReceiptTransaction[];
     date: string;
     description: string;
     chequeNumber: string;
@@ -720,15 +720,15 @@ export class ReceiptEntry {
     taxes: TaxControlData[] = [];
 
     constructor() {
-        this.transactions = [new ReceiptTransaction()];
+        this.transactions = [new PaymentReceiptTransaction()];
         this.taxes = [];
     }
 }
 
-export class Receipt {
+export class PaymentReceipt {
     account: AccountDetailsClass;
     updateAccountDetails: boolean;
-    entries: ReceiptEntry[];
+    entries: PaymentReceiptEntry[];
     date: string;
     type: string;
     exchangeRate: number;
@@ -737,7 +737,7 @@ export class Receipt {
 
     constructor() {
         this.account = new AccountDetailsClass();
-        this.entries = [new ReceiptEntry()];
+        this.entries = [new PaymentReceiptEntry()];
         this.date = "";
     }
 }
