@@ -88,19 +88,21 @@
                                                 </span>
                                             </div>
                                         </div>
-                                        <!--<ng-container>
+                                        <ng-container *ngIf="!receiptFormData.account.uniqueName">
                                             <img
-                                                src="assets/images/new/search_customer.svg"
+                                                src="{{ imgPath }}new/search_customer.svg"
                                                 class="img-responsive search-arrow-image"
                                             />
-                                        </ng-container>-->
+                                        </ng-container>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-12 col-xl-9 offset-lg-3 col-lg-8 col-md-9 offset-xl-2 offset-md-3">
                                     <ng-container>
-                                        <section class="billing-address-wrap">
+                                        <section
+                                            [ngClass]="{ 'billing-address-wrap': !receiptFormData.account.uniqueName }"
+                                        >
                                             <div class="wrap-billing-address clearfix w-100">
                                                 <div class="row">
                                                     <!-- region billing address -->
@@ -601,7 +603,7 @@
                                         >
                                         <img
                                             class="switch-icon"
-                                            src="assets/images/switch-icon.svg"
+                                            src="{{ imgPath }}switch-icon.svg"
                                             alt="switch-icon"
                                             (click)="switchCurrencyImg(true)"
                                         />
@@ -622,7 +624,7 @@
 
                                         <span class="edit-icon cp">
                                             <img
-                                                src="assets/images/edit-pencilicon.svg"
+                                                src="{{ imgPath }}edit-pencilicon.svg"
                                                 class="edit-pencil"
                                                 *ngIf="!autoSaveIcon"
                                                 (click)="
@@ -632,7 +634,7 @@
                                                 "
                                             />
                                             <img
-                                                src="assets/images/autosave.svg"
+                                                src="{{ imgPath }}autosave.svg"
                                                 class="edit-pencil"
                                                 (click)="
                                                     originalExchangeRate = exchangeRate;
@@ -651,7 +653,7 @@
                                         >
                                         <img
                                             class="switch-icon"
-                                            src="assets/images/switch-icon.svg"
+                                            src="{{ imgPath }}switch-icon.svg"
                                             alt="switch-icon"
                                             (click)="switchCurrencyImg(false)"
                                         />
@@ -671,12 +673,12 @@
                                         <span class="edit-icon cp">
                                             <img
                                                 *ngIf="!autoSaveIcon"
-                                                src="assets/images/edit-pencilicon.svg"
+                                                src="{{ imgPath }}edit-pencilicon.svg"
                                                 class="edit-pencil"
                                                 (click)="saveCancelExchangeRate(false)"
                                             />
                                             <img
-                                                src="assets/images/autosave.svg"
+                                                src="{{ imgPath }}autosave.svg"
                                                 class="edit-pencil"
                                                 (click)="saveCancelExchangeRate(true)"
                                                 *ngIf="autoSaveIcon"
@@ -902,6 +904,16 @@
                                             [amount]="totals.grandTotal"
                                             [currencyCode]="receiptFormData?.account?.currencyCode"
                                             [currencySymbol]="receiptFormData?.account?.currencySymbol"
+                                        ></amount-field>
+                                    </span>
+                                </p>
+                                <p class="font-20 pb-r1" *ngIf="isMulticurrencyAccount">
+                                    <span class="balance-due">Amount</span>
+                                    <span class="sp-rupees d-flex justify-content-end">
+                                        <amount-field
+                                            [amount]="totals.grandTotalMultiCurrency"
+                                            [currencyCode]="companyCurrency"
+                                            [currencySymbol]="baseCurrencySymbol"
                                         ></amount-field>
                                     </span>
                                 </p>
