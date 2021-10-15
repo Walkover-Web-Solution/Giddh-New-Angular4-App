@@ -118,7 +118,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             } else {
                 let companyCountry;
                 this.activeCompany$.pipe(take(1)).subscribe((response: any) => {
-                    companyCountry = response.countryV2?.alpha2CountryCode;
+                    companyCountry = response?.countryV2?.alpha2CountryCode;
                 });
                 if (companyCountry === 'IN') {
                     const requestObject = {
