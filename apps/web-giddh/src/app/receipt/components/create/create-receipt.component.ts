@@ -158,6 +158,8 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
     public giddhBalanceDecimalPlaces: number = 2;
     public receiptResponse: any;
     private dialogRef: any;
+    /** Holds images folder path */
+    public imgPath: string = '';
 
     constructor(
         private searchService: SearchService,
@@ -270,6 +272,7 @@ export class CreateReceiptComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.loadDefaultSearchSuggestions();
         this.loadBankCashAccounts('');
         this.store.dispatch(this.companyActions.getTax());
