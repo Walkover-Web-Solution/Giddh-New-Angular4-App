@@ -105,7 +105,7 @@ export const ROUTES = [
             { path: 'verify-email', loadChildren: () => import('./verify-email/verify-email.module').then(module => module.VerifyEmailModule) },
             { path: 'billing-detail' },
             { path: 'billing-detail/buy-plan' },
-            { path: 'receipt', loadChildren: () => import('./receipt/receipt.module').then(module => module.ReceiptModule) },
+            { path: 'receipt', loadChildren: () => import('./payment-receipt/payment-receipt.module').then(module => module.PaymentReceiptModule) },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
         ]
     },
