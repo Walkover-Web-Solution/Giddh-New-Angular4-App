@@ -109,7 +109,7 @@ export const ROUTES: Routes = [
             { path: 'verify-email', loadChildren: () => import('./verify-email/verify-email.module').then(module => module.VerifyEmailModule), canActivate: [NeedsAuthorization] },
             { path: 'billing-detail', component: BillingDetailComponent },
             { path: 'billing-detail/buy-plan', component: BillingDetailComponent },
-            { path: 'receipt', loadChildren: () => import('./receipt/receipt.module').then(module => module.ReceiptModule), canActivate: [NeedsAuthorization] },
+            { path: 'receipt', loadChildren: () => import('./payment-receipt/payment-receipt.module').then(module => module.PaymentReceiptModule), canActivate: [NeedsAuthorization] },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
         ]
     },

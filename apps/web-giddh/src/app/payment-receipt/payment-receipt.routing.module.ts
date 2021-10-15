@@ -1,8 +1,8 @@
 import { NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { NeedsAuthentication } from "../decorators/needsAuthentication";
-import { CreateReceiptComponent } from "./components/create/create-receipt.component";
-import { ReceiptComponent } from "./receipt.component";
+import { PaymentReceiptComponent } from "./components/create-edit/payment-receipt.component";
+import { MainComponent } from "./main.component";
 
 @NgModule({
     imports: [
@@ -10,10 +10,10 @@ import { ReceiptComponent } from "./receipt.component";
             {
                 path: '',
                 canActivate: [NeedsAuthentication],
-                component: ReceiptComponent,
+                component: MainComponent,
                 children: [
                     { path: '', redirectTo: 'create', pathMatch: 'full' },
-                    { path: 'create', component: CreateReceiptComponent }
+                    { path: 'create', component: PaymentReceiptComponent }
                 ]
             }
         ])
@@ -21,6 +21,6 @@ import { ReceiptComponent } from "./receipt.component";
     exports: [RouterModule]
 })
 
-export class ReceiptRoutingModule {
-    
+export class PaymentReceiptRoutingModule {
+
 }

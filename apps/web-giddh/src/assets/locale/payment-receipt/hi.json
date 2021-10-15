@@ -1,0 +1,22 @@
+{
+    "customer_name": "ग्राहक का नाम",
+    "add_customer": "ग्राहक जोड़ें",
+    "customer_details": "उपभोक्ता विवरण",
+    "billing_address": "बिल भेजने का पता",
+    "change": "परिवर्तन",
+    "shipping_billing_same": "शिपिंग पता बिलिंग पते के समान",
+    "attention_to": "पर ध्यान",
+    "receipt_date": "पर्ची की तारीख",
+    "enter_amount": "राशी डालें",
+    "receipt_mode": "रसीद मोड",
+    "cheque_no": "चेक#",
+    "cheque_date": "चेक तिथि",
+    "tax_on_advance": "अग्रिम पर कर",
+    "attach_file": "फ़ाइल जोड़ें",
+    "drag_drop_file": "फ़ाइल खींचें/छोड़ें या यहां क्लिक करें",
+    "tax_total": "कुल कर",
+    "create_receipt": "रसीद बनाएं",
+    "create_send": "बनाएं और भेजें",
+    "create_print": "बनाएं और प्रिंट करें",
+    "voucher_created": "[VOUCHER] नंबर [VOUCHER_NUMBER] के साथ सफलतापूर्वक बनाया गया"
+}

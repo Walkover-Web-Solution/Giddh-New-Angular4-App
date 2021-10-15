@@ -1,6 +1,6 @@
 <ng-container
     appTranslate
-    [file]="'receipt'"
+    [file]="'payment-receipt'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
@@ -10,7 +10,7 @@
                 <div class="clearfix">
                     <div
                         class="clearfix pd-t15"
-                        [ngClass]="{ 'wrapper-receipt-fields': !receiptFormData.account.uniqueName }"
+                        [ngClass]="{ 'wrapper-receipt-fields': !voucherFormData.account.uniqueName }"
                     >
                         <div class="inner-container">
                             <div
@@ -20,19 +20,22 @@
                             >
                                 <div class="row">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
-                                        <label>Customer Name <span class="red-text">*</span></label>
+                                        <label>{{ localeData?.customer_name }} <span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-12 col-xl-7 col-lg-8 col-md-9 select-customer-name">
                                         <div class="clearfix d-flex flex-column">
                                             <div class="d-flex">
                                                 <sales-sh-select
+                                                    [ngClass]="{
+                                                        'error-box':
+                                                            !isValidForm && !voucherFormData.account.uniqueName?.trim()
+                                                    }"
                                                     class="float-left sales-select width-627"
-                                                    name="customerUniqueName"
+                                                    name="customer-uniquename"
                                                     #customerNameDropDown
                                                     [options]="customerAccounts$ | async"
-                                                    [(ngModel)]="receiptFormData.account.uniqueName"
+                                                    [(ngModel)]="voucherFormData.account.uniqueName"
                                                     [customFilter]="customMoveGroupFilter"
-                                                    (noOptionsFound)="noResultsForCustomer($event)"
                                                     [isPaginationEnabled]="true"
                                                     (scrollEnd)="handleScrollEnd('customer')"
                                                     (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'customer')"
@@ -40,7 +43,7 @@
                                                     [enableDynamicSearch]="true"
                                                     (onHide)="resetPreviousSearchResults(true, 'customer')"
                                                     (selected)="onSelectCustomer($event)"
-                                                    placeholder="Select"
+                                                    [placeholder]="commonLocaleData?.app_select"
                                                     [notFoundLink]="true"
                                                     [doNotReset]="true"
                                                     [forceClearReactive]="forceClear$ | async"
@@ -48,7 +51,7 @@
                                                     (noResultsClicked)="addNewAccount()"
                                                     [multiple]="false"
                                                     [ItemHeight]="67"
-                                                    [notFoundLinkText]="'Add Customer'"
+                                                    [notFoundLinkText]="localeData?.add_customer"
                                                     (keyup)="resetCustomerName($event)"
                                                     (onClear)="resetCustomerName(null)"
                                                     [isOpen]="allowFocus"
@@ -72,7 +75,7 @@
                                                             "
                                                             [keyboardShortcut]="'alt+c'"
                                                         >
-                                                            <div class="item">Add Customer</div>
+                                                            <div class="item">{{ localeData?.add_customer }}</div>
                                                             <div class="item">
                                                                 {{ commonLocaleData?.app_alt_c }}
                                                             </div>
@@ -80,15 +83,15 @@
                                                     </ng-template>
                                                 </sales-sh-select>
                                             </div>
-                                            <div class="d-flex aqua-color" *ngIf="receiptFormData?.account.uniqueName">
-                                                <span class="cp aqua-color mr-r05">
-                                                    <a href="javascript:void(0)" (click)="getCustomerDetails()"
-                                                        >Customer Details</a
-                                                    >
+                                            <div class="d-flex aqua-color" *ngIf="voucherFormData?.account.uniqueName">
+                                                <span class="cp aqua-color">
+                                                    <a href="javascript:void(0)" (click)="getCustomerDetails()">{{
+                                                        localeData?.customer_details
+                                                    }}</a>
                                                 </span>
                                             </div>
                                         </div>
-                                        <ng-container *ngIf="!receiptFormData.account.uniqueName">
+                                        <ng-container *ngIf="!voucherFormData.account.uniqueName">
                                             <img
                                                 src="{{ imgPath }}new/search_customer.svg"
                                                 class="img-responsive search-arrow-image"
@@ -101,7 +104,7 @@
                                 <div class="col-sm-12 col-xl-9 offset-lg-3 col-lg-8 col-md-9 offset-xl-2 offset-md-3">
                                     <ng-container>
                                         <section
-                                            [ngClass]="{ 'billing-address-wrap': !receiptFormData.account.uniqueName }"
+                                            [ngClass]="{ 'billing-address-wrap': !voucherFormData.account.uniqueName }"
                                         >
                                             <div class="wrap-billing-address clearfix w-100">
                                                 <div class="row">
@@ -109,7 +112,9 @@
                                                     <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
                                                         <div class="form-group">
                                                             <div class="d-flex align-items-center">
-                                                                <span class="pb-0 pd-r15">Billing address</span>
+                                                                <span class="pb-0 pd-r15">{{
+                                                                    localeData?.billing_address
+                                                                }}</span>
                                                                 <span>
                                                                     <div
                                                                         class="
@@ -124,7 +129,7 @@
                                                                             class="dropdown-toggle"
                                                                             [style.height.px]="29"
                                                                         >
-                                                                            Change</a
+                                                                            {{ localeData?.change }}</a
                                                                         >
                                                                         <mat-menu #billingAddressMenu="matMenu">
                                                                             <button
@@ -137,7 +142,7 @@
                                                                                     class="dropdown-item"
                                                                                     (click)="
                                                                                         selectAddress(
-                                                                                            receiptFormData.account
+                                                                                            voucherFormData.account
                                                                                                 .billingDetails,
                                                                                             address
                                                                                         )
@@ -148,7 +153,7 @@
                                                                                     <span class="d-block">
                                                                                         {{
                                                                                             address.gstNumber
-                                                                                                ? (showGSTINNo
+                                                                                                ? (showGstinNo
                                                                                                       ? commonLocaleData?.app_gstin +
                                                                                                         ": "
                                                                                                       : commonLocaleData?.app_trn +
@@ -166,13 +171,13 @@
                                                             <div class="billing-address clearfix">
                                                                 <textarea
                                                                     matInput
-                                                                    name="billingDetails.address"
+                                                                    name="billingdetails-address"
                                                                     class="form-control"
                                                                     (keyup)="autoFillShippingDetails()"
                                                                     rows="3"
                                                                     autocomplete="off"
                                                                     [(ngModel)]="
-                                                                        receiptFormData.account.billingDetails
+                                                                        voucherFormData.account.billingDetails
                                                                             .address[0]
                                                                     "
                                                                     autofocus="off"
@@ -205,9 +210,9 @@
                                                                                     | async
                                                                             "
                                                                             [options]="statesSource"
-                                                                            name="billingDetails.stateCode"
+                                                                            name="billingdetails-statecode"
                                                                             [(ngModel)]="
-                                                                                receiptFormData.account.billingDetails
+                                                                                voucherFormData.account.billingDetails
                                                                                     .state.code
                                                                             "
                                                                         >
@@ -221,11 +226,11 @@
                                                                         <text-field
                                                                             [maxlength]="15"
                                                                             autocomplete="None"
-                                                                            name="billingDetails.gstNumber"
+                                                                            name="billingdetails-gstnumber"
                                                                             [cssClass]="'form-control input-custom'"
-                                                                            *ngIf="showGSTINNo"
+                                                                            *ngIf="showGstinNo"
                                                                             [(ngModel)]="
-                                                                                receiptFormData.account.billingDetails
+                                                                                voucherFormData.account.billingDetails
                                                                                     .gstNumber
                                                                             "
                                                                             (change)="
@@ -236,16 +241,17 @@
                                                                                 autoFillShippingDetails()
                                                                             "
                                                                             [placeholder]="commonLocaleData?.app_gstin"
-                                                                        ></text-field>
+                                                                        >
+                                                                        </text-field>
                                                                         <text-field
                                                                             [maxlength]="15"
                                                                             autocomplete="None"
                                                                             type="text"
-                                                                            name="billingDetails.gstNumber"
+                                                                            name="billingdetails-gstnumber"
                                                                             [cssClass]="'form-control input-custom'"
-                                                                            *ngIf="showTRNNo"
+                                                                            *ngIf="showTrnNo"
                                                                             [(ngModel)]="
-                                                                                receiptFormData.account.billingDetails
+                                                                                voucherFormData.account.billingDetails
                                                                                     .gstNumber
                                                                             "
                                                                             (change)="
@@ -256,15 +262,16 @@
                                                                                 autoFillShippingDetails()
                                                                             "
                                                                             [placeholder]="commonLocaleData?.app_trn"
-                                                                        ></text-field>
+                                                                        >
+                                                                        </text-field>
                                                                     </div>
                                                                     <!-- static pin code  -->
                                                                     <div
                                                                         [ngClass]="{
                                                                             'col-sm-6 col-md-6':
-                                                                                showGSTINNo || showTRNNo,
+                                                                                showGstinNo || showTrnNo,
                                                                             'col-sm-12 col-md-12': !(
-                                                                                showGSTINNo || showTRNNo
+                                                                                showGstinNo || showTrnNo
                                                                             )
                                                                         }"
                                                                     >
@@ -273,13 +280,13 @@
                                                                                 [type]="'number'"
                                                                                 [cssClass]="'form-control input-custom'"
                                                                                 autocomplete="false"
-                                                                                name="billingPinCode"
+                                                                                name="billing-pincode"
                                                                                 (blur)="autoFillShippingDetails()"
                                                                                 [placeholder]="
                                                                                     commonLocaleData?.app_pin_code
                                                                                 "
                                                                                 [(ngModel)]="
-                                                                                    receiptFormData.account
+                                                                                    voucherFormData.account
                                                                                         .billingDetails.pincode
                                                                                 "
                                                                                 decimalDigitsDirective
@@ -302,11 +309,11 @@
                                                                     <mat-checkbox
                                                                         color="primary"
                                                                         (change)="autoFillShippingDetails()"
-                                                                        name="autoFillShipping"
+                                                                        name="autofill-shipping"
                                                                         [(ngModel)]="autoFillShipping"
-                                                                        >Shipping Address Same as Billing
-                                                                        Address</mat-checkbox
                                                                     >
+                                                                        {{ localeData?.shipping_billing_same }}
+                                                                    </mat-checkbox>
                                                                 </span>
                                                                 <span>
                                                                     <div
@@ -326,7 +333,7 @@
                                                                             class="dropdown-toggle"
                                                                             [style.height.px]="24"
                                                                         >
-                                                                            Change</a
+                                                                            {{ localeData?.change }}</a
                                                                         >
                                                                         <mat-menu #shippingAddressMenu="matMenu">
                                                                             <button
@@ -339,7 +346,7 @@
                                                                                     class="dropdown-item"
                                                                                     (click)="
                                                                                         selectAddress(
-                                                                                            receiptFormData.account
+                                                                                            voucherFormData.account
                                                                                                 .shippingDetails,
                                                                                             address
                                                                                         )
@@ -351,7 +358,7 @@
                                                                                     <span class="d-block"
                                                                                         >{{
                                                                                             address.gstNumber
-                                                                                                ? (showGSTINNo
+                                                                                                ? (showGstinNo
                                                                                                       ? commonLocaleData?.app_gstin +
                                                                                                         ": "
                                                                                                       : commonLocaleData?.app_trn +
@@ -373,10 +380,10 @@
                                                                 <textarea
                                                                     matInput
                                                                     [readonly]="autoFillShipping"
-                                                                    name="shippingDetails.address"
+                                                                    name="shippingdetails-address"
                                                                     class="form-control"
                                                                     [(ngModel)]="
-                                                                        receiptFormData.account.shippingDetails
+                                                                        voucherFormData.account.shippingDetails
                                                                             .address[0]
                                                                     "
                                                                     rows="3"
@@ -413,9 +420,9 @@
                                                                                     )
                                                                                 "
                                                                                 [options]="statesSource"
-                                                                                name="shippingDetails.stateCode"
+                                                                                name="shippingdetails-statecode"
                                                                                 [(ngModel)]="
-                                                                                    receiptFormData.account
+                                                                                    voucherFormData.account
                                                                                         .shippingDetails.state.code
                                                                                 "
                                                                             >
@@ -431,11 +438,11 @@
                                                                                 autocomplete="None"
                                                                                 [maxlength]="15"
                                                                                 type="text"
-                                                                                name="shippingDetails.gstNumber"
-                                                                                *ngIf="showGSTINNo"
+                                                                                name="shippingdetails-gstnumber"
+                                                                                *ngIf="showGstinNo"
                                                                                 [cssClass]="'form-control input-custom'"
                                                                                 [(ngModel)]="
-                                                                                    receiptFormData.account
+                                                                                    voucherFormData.account
                                                                                         .shippingDetails.gstNumber
                                                                                 "
                                                                                 (change)="
@@ -453,11 +460,11 @@
                                                                                 [maxlength]="15"
                                                                                 autocomplete="None"
                                                                                 type="text"
-                                                                                name="shippingDetails.gstNumber"
+                                                                                name="shippingdetails-gstnumber"
                                                                                 [cssClass]="'form-control input-custom'"
-                                                                                *ngIf="showTRNNo"
+                                                                                *ngIf="showTrnNo"
                                                                                 [(ngModel)]="
-                                                                                    receiptFormData.account
+                                                                                    voucherFormData.account
                                                                                         .shippingDetails.gstNumber
                                                                                 "
                                                                                 (change)="
@@ -474,8 +481,8 @@
                                                                         <!-- static pin code  -->
                                                                         <div
                                                                             [ngClass]="{
-                                                                                'col-sm-6': showGSTINNo || showTRNNo,
-                                                                                'col-sm-12': !(showGSTINNo || showTRNNo)
+                                                                                'col-sm-6': showGstinNo || showTrnNo,
+                                                                                'col-sm-12': !(showGstinNo || showTrnNo)
                                                                             }"
                                                                         >
                                                                             <div class="form-group mr-b05">
@@ -485,12 +492,12 @@
                                                                                         'form-control input-custom'
                                                                                     "
                                                                                     autocomplete="false"
-                                                                                    name="shippingPinCode"
+                                                                                    name="shipping-pincode"
                                                                                     [placeholder]="
                                                                                         commonLocaleData?.app_pin_code
                                                                                     "
                                                                                     [(ngModel)]="
-                                                                                        receiptFormData.account
+                                                                                        voucherFormData.account
                                                                                             .shippingDetails.pincode
                                                                                     "
                                                                                     decimalDigitsDirective
@@ -519,7 +526,7 @@
                             <div class="clearfix">
                                 <div class="row mr-b05">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 mt-3">
-                                        <label>Attention To</label>
+                                        <label>{{ localeData?.attention_to }}</label>
                                     </div>
                                     <div class="col-sm-12 col-xl-7 col-lg-8 col-md-9">
                                         <mat-form-field appearance="fill" class="width-627">
@@ -527,8 +534,8 @@
                                                 [cssClass]="'form-control mat-field-border'"
                                                 name="attention-to"
                                                 id="attention-to"
-                                                placeholder="Enter Name"
-                                                [(ngModel)]="receiptFormData.account.attentionTo"
+                                                [placeholder]="localeData?.attention_to"
+                                                [(ngModel)]="voucherFormData.account.attentionTo"
                                             >
                                             </text-field>
                                         </mat-form-field>
@@ -546,7 +553,8 @@
                                                 color="primary"
                                                 name="advance-receipt"
                                                 [(ngModel)]="isAdvanceReceipt"
-                                                >Advance Receipt</mat-checkbox
+                                            >
+                                                {{ commonLocaleData?.app_voucher_types?.advance_receipt }}</mat-checkbox
                                             >
                                         </div>
                                     </div>
@@ -555,14 +563,15 @@
                             <div class="clearfix">
                                 <div class="row position-relative mr-b2">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
-                                        <label>Receipt Date <span class="red-text">*</span></label>
+                                        <label>{{ localeData?.receipt_date }} <span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-12 col-xl-6 col-lg-5 col-md-10">
                                         <giddh-datepicker
                                             class="inline"
+                                            [showError]="!isValidForm && !voucherFormData.date"
                                             name="receipt-date"
-                                            [(ngModel)]="receiptFormData.date"
-                                            [placeholder]="'Enter Date'"
+                                            [(ngModel)]="voucherFormData.date"
+                                            [placeholder]="commonLocaleData?.app_select_date"
                                             [cssClass]="'mat-field-border border-left-right-none form-control w-100'"
                                             [showToggleIcon]="false"
                                         ></giddh-datepicker>
@@ -570,17 +579,25 @@
                                     <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 cheque-details">
                                         <div class="form-inline flex-row flex-nowrap">
                                             <div class="form-group">
-                                                <label>Amount <span class="red-text">*</span></label>
+                                                <label
+                                                    >{{ commonLocaleData?.app_amount }}
+                                                    <span class="red-text">*</span></label
+                                                >
                                                 <mat-form-field appearance="fill" class="mr-l1">
                                                     <text-field
                                                         [cssClass]="'form-control mat-field-border'"
+                                                        [showError]="
+                                                            !isValidForm &&
+                                                            !voucherFormData.entries[0].transactions[0].amount
+                                                                .amountForAccount
+                                                        "
                                                         name="receipt-amount"
                                                         id="receipt-amount"
-                                                        placeholder="Enter Amount"
+                                                        [placeholder]="localeData?.enter_amount"
                                                         decimalDigitsDirective
                                                         [mask]="inputMaskFormat"
                                                         [(ngModel)]="
-                                                            receiptFormData.entries[0].transactions[0].amount
+                                                            voucherFormData.entries[0].transactions[0].amount
                                                                 .amountForAccount
                                                         "
                                                         (ngModelChange)="calculateTotals()"
@@ -596,7 +613,7 @@
                                 <ng-container>
                                     <div
                                         class="switch-currency d-flex align-items-center"
-                                        *ngIf="isMulticurrencyAccount && !showSwitchCurrency"
+                                        *ngIf="isMultiCurrencyAccount && !showSwitchCurrency"
                                     >
                                         <span class="left-currency mr-r1"
                                             >{{ commonLocaleData?.app_numbers?.one }} {{ companyCurrencyName }}</span
@@ -605,7 +622,7 @@
                                             class="switch-icon"
                                             src="{{ imgPath }}switch-icon.svg"
                                             alt="switch-icon"
-                                            (click)="switchCurrencyImg(true)"
+                                            (click)="switchCurrency(true)"
                                         />
                                         <span class="right-currency mr-r1 d-flex align-items-center">
                                             <span class="currency-digits" *ngIf="!showCurrencyValue">{{
@@ -647,7 +664,7 @@
                                             />
                                         </span>
                                     </div>
-                                    <div class="switch-currency" *ngIf="isMulticurrencyAccount && showSwitchCurrency">
+                                    <div class="switch-currency" *ngIf="isMultiCurrencyAccount && showSwitchCurrency">
                                         <span class="left-currency mr-r1"
                                             >{{ commonLocaleData?.app_numbers?.one }} {{ companyCurrency }}</span
                                         >
@@ -655,7 +672,7 @@
                                             class="switch-icon"
                                             src="{{ imgPath }}switch-icon.svg"
                                             alt="switch-icon"
-                                            (click)="switchCurrencyImg(false)"
+                                            (click)="switchCurrency(false)"
                                         />
                                         <span class="right-currency mr-l1">
                                             <span class="currency-digits" *ngIf="!showCurrencyValue">{{
@@ -691,11 +708,11 @@
                                 <table class="table receipt-table" width="100%" cellpadding="0" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>Receipt Mode <span class="red-text">*</span></th>
-                                            <th>Cheque#</th>
-                                            <th>Cheque Date</th>
+                                            <th>{{ localeData?.receipt_mode }} <span class="red-text">*</span></th>
+                                            <th>{{ localeData?.cheque_no }}</th>
+                                            <th>{{ localeData?.cheque_date }}</th>
                                             <th *ngIf="isAdvanceReceipt">
-                                                Tax on advance <span class="red-text">*</span>
+                                                {{ localeData?.tax_on_advance }} <span class="red-text">*</span>
                                             </th>
                                         </tr>
                                     </thead>
@@ -706,20 +723,35 @@
                                                     <mat-form-field
                                                         appearance="fill"
                                                         class="mat-field-select width-100"
+                                                        [ngClass]="{
+                                                            'error-box':
+                                                                !isValidForm &&
+                                                                !voucherFormData.entries[0].transactions[0].account
+                                                                    .uniqueName
+                                                        }"
                                                     >
-                                                        <mat-label>Select</mat-label>
+                                                        <mat-label
+                                                            *ngIf="
+                                                                !voucherFormData.entries[0].transactions[0].account
+                                                                    .uniqueName
+                                                            "
+                                                        >
+                                                            {{ commonLocaleData?.app_select }}</mat-label
+                                                        >
                                                         <mat-select
                                                             name="receipt-mode"
                                                             [(ngModel)]="
-                                                                receiptFormData.entries[0].transactions[0].account
+                                                                voucherFormData.entries[0].transactions[0].account
                                                                     .uniqueName
                                                             "
                                                         >
                                                             <mat-option>
                                                                 <ngx-mat-select-search
                                                                     [formControl]="searchBankAccount"
-                                                                    placeholderLabel="Search"
-                                                                    noEntriesFoundLabel="'No record found'"
+                                                                    [placeholderLabel]="commonLocaleData?.app_search"
+                                                                    [noEntriesFoundLabel]="
+                                                                        commonLocaleData?.app_no_records_found
+                                                                    "
                                                                 >
                                                                 </ngx-mat-select-search>
                                                             </mat-option>
@@ -737,7 +769,7 @@
                                                             matInput
                                                             class="mat-field-border form-control w-100 min-height-100"
                                                             name="description"
-                                                            [(ngModel)]="receiptFormData.entries[0].description"
+                                                            [(ngModel)]="voucherFormData.entries[0].description"
                                                         ></textarea>
                                                     </mat-form-field>
                                                 </div>
@@ -748,32 +780,35 @@
                                                         [cssClass]="'form-control mat-field-border'"
                                                         name="cheque-no"
                                                         id="cheque-no"
-                                                        placeholder="Cheque"
-                                                        [(ngModel)]="receiptFormData.entries[0].chequeNumber"
+                                                        [placeholder]="localeData?.cheque_no"
+                                                        [(ngModel)]="voucherFormData.entries[0].chequeNumber"
                                                     >
                                                     </text-field>
                                                 </mat-form-field>
                                             </td>
                                             <td>
                                                 <giddh-datepicker
-                                                    [placeholder]="'Enter Date'"
+                                                    [placeholder]="commonLocaleData?.app_select_date"
                                                     [cssClass]="
                                                         'mat-field-border border-left-right-none form-control w-100'
                                                     "
                                                     [showToggleIcon]="false"
                                                     name="cheque-clearance-date"
-                                                    [(ngModel)]="receiptFormData.entries[0].chequeClearanceDate"
+                                                    [(ngModel)]="voucherFormData.entries[0].chequeClearanceDate"
                                                 >
                                                 </giddh-datepicker>
                                             </td>
                                             <td class="overflow-visible" *ngIf="isAdvanceReceipt">
                                                 <tax-control
-                                                    class="d-inline-block"
+                                                    [ngClass]="{
+                                                        'error-box': !isValidForm && selectedTaxes?.length === 0
+                                                    }"
+                                                    class="d-inline-block w-100"
                                                     [taxes]="companyTaxesList"
-                                                    [date]="receiptFormData?.date"
-                                                    [taxRenderData]="receiptFormData.entries[0].taxes"
+                                                    [date]="voucherFormData?.date"
+                                                    [taxRenderData]="voucherFormData.entries[0].taxes"
                                                     [totalForTax]="
-                                                        receiptFormData.entries[0].transactions[0].amount
+                                                        voucherFormData.entries[0].transactions[0].amount
                                                             .amountForAccount
                                                     "
                                                     [showHeading]="false"
@@ -797,13 +832,13 @@
                             <div class="clearfix">
                                 <div class="row position-relative">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
-                                        <label><i class="icon-file-path"></i> Attach file</label>
+                                        <label><i class="icon-file-path"></i> {{ localeData?.attach_file }}</label>
                                     </div>
                                     <div class="col-sm-12 col-xl-4 col-lg-6 col-md-5">
                                         <label class="custom-file-label form-control cp position-relative" for="file">
-                                            <em *ngIf="!selectedFileName && !isFileUploading"
-                                                >Drag/Drop file or click here</em
-                                            >
+                                            <em *ngIf="!selectedFileName && !isFileUploading">{{
+                                                localeData?.drag_drop_file
+                                            }}</em>
                                             <div
                                                 *ngIf="isFileUploading"
                                                 class="d-flex justify-content-center align-items-center"
@@ -833,14 +868,14 @@
                                         <div class="form-inline flex-row flex-nowrap pull-right d-block">
                                             <div class="clearfix">
                                                 <div class="table-row">
-                                                    <div class="table-cell">Sub Total</div>
+                                                    <div class="table-cell">{{ commonLocaleData?.app_subtotal }}</div>
                                                     <div class="table-cell figure-cell">
                                                         <span class="d-flex justify-content-end">
                                                             <amount-field
                                                                 [amount]="totals.subTotal"
-                                                                [currencyCode]="receiptFormData?.account?.currencyCode"
+                                                                [currencyCode]="voucherFormData?.account?.currencyCode"
                                                                 [currencySymbol]="
-                                                                    receiptFormData?.account?.currencySymbol
+                                                                    voucherFormData?.account?.currencySymbol
                                                                 "
                                                             >
                                                             </amount-field>
@@ -848,14 +883,14 @@
                                                     </div>
                                                 </div>
                                                 <div class="table-row">
-                                                    <div class="table-cell">Tax Total</div>
+                                                    <div class="table-cell">{{ localeData?.tax_total }}</div>
                                                     <div class="table-cell figure-cell">
                                                         <span class="d-flex justify-content-end">
                                                             <amount-field
                                                                 [amount]="totals.taxTotal"
-                                                                [currencyCode]="receiptFormData?.account?.currencyCode"
+                                                                [currencyCode]="voucherFormData?.account?.currencyCode"
                                                                 [currencySymbol]="
-                                                                    receiptFormData?.account?.currencySymbol
+                                                                    voucherFormData?.account?.currencySymbol
                                                                 "
                                                             >
                                                             </amount-field>
@@ -863,29 +898,30 @@
                                                     </div>
                                                 </div>
                                                 <div class="table-row">
-                                                    <div class="table-cell">Total</div>
+                                                    <div class="table-cell">{{ commonLocaleData?.app_total }}</div>
                                                     <div class="table-cell figure-cell">
                                                         <span class="d-flex justify-content-end">
                                                             <amount-field
                                                                 [amount]="totals.grandTotal"
-                                                                [currencyCode]="receiptFormData?.account?.currencyCode"
+                                                                [currencyCode]="voucherFormData?.account?.currencyCode"
                                                                 [currencySymbol]="
-                                                                    receiptFormData?.account?.currencySymbol
+                                                                    voucherFormData?.account?.currencySymbol
                                                                 "
                                                             >
                                                             </amount-field>
                                                         </span>
                                                     </div>
                                                 </div>
-                                                <div class="table-row" *ngIf="isMulticurrencyAccount">
-                                                    <div class="table-cell">Total</div>
+                                                <div class="table-row" *ngIf="isMultiCurrencyAccount">
+                                                    <div class="table-cell">{{ commonLocaleData?.app_total }}</div>
                                                     <div class="table-cell figure-cell">
                                                         <span class="d-flex justify-content-end">
                                                             <amount-field
                                                                 [amount]="totals.grandTotalMultiCurrency"
                                                                 [currencyCode]="companyCurrency"
-                                                                [currencySymbol]="baseCurrencySymbol"
-                                                            ></amount-field>
+                                                                [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                                            >
+                                                            </amount-field>
                                                         </span>
                                                     </div>
                                                 </div>
@@ -898,23 +934,24 @@
                         <div class="col-sm-3 col-md-3 balance-due-absolute">
                             <div class="text-right">
                                 <p class="font-20 pb-r1">
-                                    <span class="balance-due">Amount</span>
+                                    <span class="balance-due">{{ commonLocaleData?.app_amount }}</span>
                                     <span class="sp-rupees d-flex justify-content-end">
                                         <amount-field
                                             [amount]="totals.grandTotal"
-                                            [currencyCode]="receiptFormData?.account?.currencyCode"
-                                            [currencySymbol]="receiptFormData?.account?.currencySymbol"
+                                            [currencyCode]="voucherFormData?.account?.currencyCode"
+                                            [currencySymbol]="voucherFormData?.account?.currencySymbol"
                                         ></amount-field>
                                     </span>
                                 </p>
-                                <p class="font-20 pb-r1" *ngIf="isMulticurrencyAccount">
-                                    <span class="balance-due">Amount</span>
+                                <p class="font-20 pb-r1" *ngIf="isMultiCurrencyAccount">
+                                    <span class="balance-due">{{ commonLocaleData?.app_amount }}</span>
                                     <span class="sp-rupees d-flex justify-content-end">
                                         <amount-field
                                             [amount]="totals.grandTotalMultiCurrency"
                                             [currencyCode]="companyCurrency"
-                                            [currencySymbol]="baseCurrencySymbol"
-                                        ></amount-field>
+                                            [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                        >
+                                        </amount-field>
                                     </span>
                                 </p>
                             </div>
@@ -931,15 +968,15 @@
                                     mat-raised-button
                                     (click)="resetForm(receiptForm)"
                                 >
-                                    Clear
+                                    {{ commonLocaleData?.app_clear }}
                                 </button>
                                 <button
                                     color="primary"
                                     type="button"
                                     mat-raised-button
-                                    (click)="createReceipt(receiptForm)"
+                                    (click)="createVoucher(receiptForm)"
                                 >
-                                    Create Receipt
+                                    {{ localeData?.create_receipt }}
                                 </button>
                                 <span class="d-inline-block v-align-middle">
                                     <div class="btn-group dropup">
@@ -947,11 +984,11 @@
                                             <span class="caret"></span>
                                         </button>
                                         <mat-menu #menu="matMenu" yPosition="above">
-                                            <button mat-menu-item (click)="createReceipt(receiptForm, sendEmailModal)">
-                                                <span>Create & Send</span>
+                                            <button mat-menu-item (click)="createVoucher(receiptForm, sendEmailModal)">
+                                                <span>{{ localeData?.create_send }}</span>
                                             </button>
-                                            <button mat-menu-item (click)="createReceipt(receiptForm, sendPrintModal)">
-                                                <span>Create & Print</span>
+                                            <button mat-menu-item (click)="createVoucher(receiptForm, sendPrintModal)">
+                                                <span>{{ localeData?.create_print }}</span>
                                             </button>
                                         </mat-menu>
                                     </div>
@@ -968,7 +1005,7 @@
         [class]="accountAsideMenuState"
         [@slideInOut]="accountAsideMenuState"
         (closeAsideEvent)="toggleAccountAsidePane($event)"
-        [selectedGrpUniqueName]="selectedGrpUniqueNameForAddEditAccountModal"
+        [selectedGrpUniqueName]="selectedGroupUniqueName"
         [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' }"
         *ngIf="accountAsideMenuState === 'in'"
         [selectedAccountUniqueName]="selectedCustomerForDetails"
@@ -980,14 +1017,14 @@
     <ng-template #sendEmailModal>
         <mat-dialog-content>
             <app-send-email-invoice-component
-                [voucherType]="receiptResponse?.type"
+                [voucherType]="paymentReceiptResponse?.type"
                 (successEvent)="sendEmail($event)"
                 [selectedItem]="{
-                    voucherNumber: receiptResponse?.number,
-                    uniqueName: receiptResponse?.account?.uniqueName,
-                    account: { email: receiptResponse?.account?.email }
+                    voucherNumber: paymentReceiptResponse?.number,
+                    uniqueName: paymentReceiptResponse?.account?.uniqueName,
+                    account: { email: paymentReceiptResponse?.account?.email }
                 }"
-                (cancelEvent)="cancelEmailModal()"
+                (cancelEvent)="closeEmailDialog()"
             ></app-send-email-invoice-component>
         </mat-dialog-content>
     </ng-template>
@@ -997,8 +1034,8 @@
                 <print
                     [localeData]="localeData"
                     [commonLocaleData]="commonLocaleData"
-                    [selectedItem]="receiptResponse"
-                    (cancelEvent)="cancelPrintModal()"
+                    [selectedItem]="paymentReceiptResponse"
+                    (cancelEvent)="closePrintDialog()"
                 ></print>
             </div>
         </div>
