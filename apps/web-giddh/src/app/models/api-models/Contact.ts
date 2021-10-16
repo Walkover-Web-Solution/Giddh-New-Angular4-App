@@ -103,6 +103,15 @@ export class CustomerVendorFiledFilter {
     public openingBalance: boolean = false;
 }
 
+export enum CustomerVendorDefaultColumns {
+    parentGroup = "parentGroup",
+    contact = "contact",
+    state = "state",
+    gstin = "gstin",
+    comment = "comment",
+    openingBalance = "openingBalance",
+}
+
 /**
  * bulk update request
  *
