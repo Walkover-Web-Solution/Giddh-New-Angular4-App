@@ -172,7 +172,7 @@
                                                 <mat-checkbox
                                                     color="primary"
                                                     name="selectAll"
-                                                    [(ngModel)]="showFieldFilter.selectAll"
+                                                    [(ngModel)]="showFieldFilter.selectAll.visibility"
                                                     (ngModelChange)="selectAllColumns($event)"
                                                 >
                                                     {{ commonLocaleData?.app_select_all }}</mat-checkbox
@@ -183,7 +183,7 @@
                                                     color="primary"
                                                     name="field_filter.parentGroup"
                                                     (ngModelChange)="columnFilter($event, 'parentGroup')"
-                                                    [(ngModel)]="showFieldFilter.parentGroup"
+                                                    [(ngModel)]="showFieldFilter.parentGroup?.visibility"
                                                 >
                                                     {{ commonLocaleData?.app_parent_group }}</mat-checkbox
                                                 >
@@ -193,7 +193,7 @@
                                                     color="primary"
                                                     name="field_filter.openingBalance"
                                                     (ngModelChange)="columnFilter($event, 'openingBalance')"
-                                                    [(ngModel)]="showFieldFilter.openingBalance"
+                                                    [(ngModel)]="showFieldFilter.openingBalance?.visibility"
                                                 >
                                                     {{ localeData?.opening }}
                                                 </mat-checkbox>
@@ -203,7 +203,7 @@
                                                     color="primary"
                                                     name="field_filter.mobile"
                                                     (ngModelChange)="columnFilter($event, 'mobile')"
-                                                    [(ngModel)]="showFieldFilter.contact"
+                                                    [(ngModel)]="showFieldFilter.contact?.visibility"
                                                 >
                                                     {{ localeData?.contacts }}
                                                 </mat-checkbox>
@@ -214,7 +214,7 @@
                                                     name="field_filter.mobile"
                                                     name="field_filter.state"
                                                     (ngModelChange)="columnFilter($event, 'state')"
-                                                    [(ngModel)]="showFieldFilter.state"
+                                                    [(ngModel)]="showFieldFilter.state?.visibility"
                                                 >
                                                     {{ commonLocaleData?.app_state }}
                                                 </mat-checkbox>
@@ -225,7 +225,7 @@
                                                     name="field_filter.mobile"
                                                     name="field_filter.gstin"
                                                     (ngModelChange)="columnFilter($event, 'gstin')"
-                                                    [(ngModel)]="showFieldFilter.gstin"
+                                                    [(ngModel)]="showFieldFilter.gstin.visibility"
                                                 >
                                                     {{ commonLocaleData?.app_tax_number }}
                                                 </mat-checkbox>
@@ -236,7 +236,7 @@
                                                     name="field_filter.mobile"
                                                     name="field_filter.comment"
                                                     (ngModelChange)="columnFilter($event, 'comment')"
-                                                    [(ngModel)]="showFieldFilter.comment"
+                                                    [(ngModel)]="showFieldFilter.comment?.visibility"
                                                 >
                                                     {{ localeData?.comment }}
                                                 </mat-checkbox>
@@ -245,10 +245,9 @@
                                                 <button mat-menu-item>
                                                     <mat-checkbox
                                                         color="primary"
-                                                        name="field_filter.mobile"
                                                         name="{{ item.uniqueName }}"
                                                         (ngModelChange)="columnFilter($event, item.uniqueName)"
-                                                        [(ngModel)]="showFieldFilter[item.uniqueName]"
+                                                        [(ngModel)]="showFieldFilter[item.uniqueName]?.visibility"
                                                     >
                                                         {{ item.key | titlecase }}
                                                     </mat-checkbox>
@@ -1084,345 +1083,358 @@
 
     <ng-template #mainTable>
         <div class="mobile-card-wrapper table-responsive vendor-page mt-3">
-            <table class="mat-table table on-mobile-view w-100" *ngIf="activeTab === 'customer'">
-                <thead class="table-header-fix" [hidden]="!searchStr && !sundryDebtorsAccounts?.length">
-                    <tr class="mat-header-row">
-                        <th class="td-search-box mat-header-cell">
-                            <div class="d-flex" style="align-items: center; padding-left: 30px">
-                                <mat-checkbox
-                                    style="position: absolute; left: 10px"
-                                    color="primary"
-                                    type="checkbox"
-                                    *ngIf="selectedCheckedContacts?.length"
-                                    [(ngModel)]="allSelectionModel"
-                                    (ngModelChange)="toggleAllSelection(allSelectionModel)"
-                                ></mat-checkbox>
-                                <div class="d-flex align-items-center">
-                                    <div>
-                                        <ng-container
-                                            *ngTemplateOutlet="
-                                                searchTemplate;
-                                                context: {
-                                                    $implicit: showNameSearch,
-                                                    fieldName: 'name',
-                                                    formControl: searchedName,
-                                                    title: commonLocaleData?.app_customer_name
-                                                }
-                                            "
-                                        ></ng-container>
-                                    </div>
-                                    <ng-container
-                                        *ngTemplateOutlet="
-                                            !showNameSearch ? sortingTemplate : '';
-                                            context: { $implicit: 'name' }
-                                        "
-                                    ></ng-container>
-                                </div>
-                            </div>
-                        </th>
+            <!--            <table class="mat-table table on-mobile-view w-100" >-->
+            <!--                <thead class="table-header-fix" [hidden]="!searchStr && !sundryDebtorsAccounts?.length">-->
+            <!--                    <tr class="mat-header-row">-->
+            <!--                        <th class="td-search-box mat-header-cell">-->
+            <!--                            <div class="d-flex" style="align-items: center; padding-left: 30px">-->
+            <!--                                <mat-checkbox-->
+            <!--                                    style="position: absolute; left: 10px"-->
+            <!--                                    color="primary"-->
+            <!--                                    type="checkbox"-->
+            <!--                                    *ngIf="selectedCheckedContacts?.length"-->
+            <!--                                    [(ngModel)]="allSelectionModel"-->
+            <!--                                    (ngModelChange)="toggleAllSelection(allSelectionModel)"-->
+            <!--                                ></mat-checkbox>-->
+            <!--                                <div class="d-flex align-items-center">-->
+            <!--                                    <div>-->
+            <!--                                        <ng-container-->
+            <!--                                            *ngTemplateOutlet="-->
+            <!--                                                searchTemplate;-->
+            <!--                                                context: {-->
+            <!--                                                    $implicit: showNameSearch,-->
+            <!--                                                    fieldName: 'name',-->
+            <!--                                                    formControl: searchedName,-->
+            <!--                                                    title: commonLocaleData?.app_customer_name-->
+            <!--                                                }-->
+            <!--                                            "-->
+            <!--                                        ></ng-container>-->
+            <!--                                    </div>-->
+            <!--                                    <ng-container-->
+            <!--                                        *ngTemplateOutlet="-->
+            <!--                                            !showNameSearch ? sortingTemplate : '';-->
+            <!--                                            context: { $implicit: 'name' }-->
+            <!--                                        "-->
+            <!--                                    ></ng-container>-->
+            <!--                                </div>-->
+            <!--                            </div>-->
+            <!--                        </th>-->
 
-                        <th *ngIf="showFieldFilter.parentGroup" class="mat-header-cell">
-                            <div class="d-flex align-items-center">
-                                {{ commonLocaleData?.app_parent_group }}
-                                <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'group' }">
-                                </ng-container>
-                            </div>
-                        </th>
+            <!--                        <th *ngIf="showFieldFilter.parentGroup" class="mat-header-cell">-->
+            <!--                            <div class="d-flex align-items-center">-->
+            <!--                                {{ commonLocaleData?.app_parent_group }}-->
+            <!--                                <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'group' }">-->
+            <!--                                </ng-container>-->
+            <!--                            </div>-->
+            <!--                        </th>-->
 
-                        <th class="text-right mat-header-cell" *ngIf="showFieldFilter.openingBalance">
-                            <div class="d-flex justify-content-end align-items-center">
-                                {{ localeData?.opening }}
-                                <ng-container
-                                    *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'openingBalance' }"
-                                >
-                                </ng-container>
-                            </div>
-                        </th>
+            <!--                        <th class="text-right mat-header-cell" *ngIf="showFieldFilter.openingBalance">-->
+            <!--                            <div class="d-flex justify-content-end align-items-center">-->
+            <!--                                {{ localeData?.opening }}-->
+            <!--                                <ng-container-->
+            <!--                                    *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'openingBalance' }"-->
+            <!--                                >-->
+            <!--                                </ng-container>-->
+            <!--                            </div>-->
+            <!--                        </th>-->
 
-                        <th class="text-right mat-header-cell">
-                            <div class="d-flex justify-content-end align-items-center">
-                                {{ commonLocaleData?.app_sales }}
-                                <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'debitTotal' }">
-                                </ng-container>
-                            </div>
-                        </th>
+            <!--                        <th class="text-right mat-header-cell">-->
+            <!--                            <div class="d-flex justify-content-end align-items-center">-->
+            <!--                                {{ commonLocaleData?.app_sales }}-->
+            <!--                                <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'debitTotal' }">-->
+            <!--                                </ng-container>-->
+            <!--                            </div>-->
+            <!--                        </th>-->
 
-                        <th class="text-right mat-header-cell">
-                            <div class="d-flex justify-content-end align-items-center">
-                                {{ commonLocaleData?.app_receipt }}
-                                <ng-container
-                                    *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'creditTotal' }"
-                                >
-                                </ng-container>
-                            </div>
-                        </th>
+            <!--                        <th class="text-right mat-header-cell">-->
+            <!--                            <div class="d-flex justify-content-end align-items-center">-->
+            <!--                                {{ commonLocaleData?.app_receipt }}-->
+            <!--                                <ng-container-->
+            <!--                                    *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'creditTotal' }"-->
+            <!--                                >-->
+            <!--                                </ng-container>-->
+            <!--                            </div>-->
+            <!--                        </th>-->
 
-                        <th class="text-right mat-header-cell">
-                            <div class="d-flex justify-content-end align-items-center">
-                                {{ localeData?.closing }}
-                                <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'amountDue' }">
-                                </ng-container>
-                            </div>
-                        </th>
+            <!--                        <th class="text-right mat-header-cell">-->
+            <!--                            <div class="d-flex justify-content-end align-items-center">-->
+            <!--                                {{ localeData?.closing }}-->
+            <!--                                <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'amountDue' }">-->
+            <!--                                </ng-container>-->
+            <!--                            </div>-->
+            <!--                        </th>-->
 
-                        <th *ngIf="showFieldFilter.contact" class="mat-header-cell">
-                            <div class="d-flex">
-                                <div class="flex-fill">
-                                    {{ localeData?.contacts }}
-                                </div>
-                            </div>
-                        </th>
+            <!--                        <th *ngIf="showFieldFilter.contact" class="mat-header-cell">-->
+            <!--                            <div class="d-flex">-->
+            <!--                                <div class="flex-fill">-->
+            <!--                                    {{ localeData?.contacts }}-->
+            <!--                                </div>-->
+            <!--                            </div>-->
+            <!--                        </th>-->
 
-                        <th *ngIf="showFieldFilter.gstin && shouldShowTaxFilter" class="mat-header-cell">
-                            <div class="d-flex align-items-center">
-                                {{ commonLocaleData?.app_tax_number }}
-                                <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'gstin' }">
-                                </ng-container>
-                            </div>
-                        </th>
+            <!--                        <th *ngIf="showFieldFilter.gstin && shouldShowTaxFilter" class="mat-header-cell">-->
+            <!--                            <div class="d-flex align-items-center">-->
+            <!--                                {{ commonLocaleData?.app_tax_number }}-->
+            <!--                                <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'gstin' }">-->
+            <!--                                </ng-container>-->
+            <!--                            </div>-->
+            <!--                        </th>-->
 
-                        <th *ngIf="showFieldFilter.state" class="mat-header-cell">
-                            <div class="d-flex align-items-center">
-                                {{ commonLocaleData?.app_state }}
-                                <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'state' }">
-                                </ng-container>
-                            </div>
-                        </th>
+            <!--                        <th *ngIf="showFieldFilter.state" class="mat-header-cell">-->
+            <!--                            <div class="d-flex align-items-center">-->
+            <!--                                {{ commonLocaleData?.app_state }}-->
+            <!--                                <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'state' }">-->
+            <!--                                </ng-container>-->
+            <!--                            </div>-->
+            <!--                        </th>-->
 
-                        <th *ngIf="showFieldFilter.comment" class="comment-field text-break mat-header-cell">
-                            {{ localeData?.comment }}
-                        </th>
+            <!--                        <th *ngIf="showFieldFilter.comment" class="comment-field text-break mat-header-cell">-->
+            <!--                            {{ localeData?.comment }}-->
+            <!--                        </th>-->
 
-                        <ng-container *ngFor="let item of companyCustomFields$ | async">
-                            <th
-                                width="10%"
-                                class="mat-header-cell"
-                                *ngIf="item?.uniqueName && showFieldFilter[item?.uniqueName]"
-                            >
-                                {{ item.key | titlecase }}
-                            </th>
-                        </ng-container>
-                    </tr>
-                </thead>
+            <!--                        <ng-container *ngFor="let item of companyCustomFields$ | async">-->
+            <!--                            <th-->
+            <!--                                width="10%"-->
+            <!--                                class="mat-header-cell"-->
+            <!--                                *ngIf="item?.uniqueName && showFieldFilter[item?.uniqueName]"-->
+            <!--                            >-->
+            <!--                                {{ item.key | titlecase }}-->
+            <!--                            </th>-->
+            <!--                        </ng-container>-->
+            <!--                    </tr>-->
+            <!--                </thead>-->
 
-                <tbody>
-                    <tr class="mat-row" *ngFor="let account of sundryDebtorsAccounts; let idx = index">
-                        <td
-                            class="position-relative word-wrap cursor-pointer mat-cell"
-                            data-title="{{ localeData?.customer }}"
-                        >
-                            <div class="customer-name-filed">
-                                <div style="display: flex; align-items: center">
-                                    <mat-checkbox
-                                        color="primary"
-                                        class="mr-2 checkbox-left-side-in-table"
-                                        type="checkbox"
-                                        [(ngModel)]="account.isSelected"
-                                        (change)="selectAccount($event, account)"
-                                    >
-                                    </mat-checkbox>
+            <!--                <tbody>-->
+            <!--                    <tr class="mat-row" *ngFor="let account of sundryDebtorsAccounts; let idx = index">-->
+            <!--                        <td-->
+            <!--                            class="position-relative word-wrap cursor-pointer mat-cell"-->
+            <!--                            data-title="{{ localeData?.customer }}"-->
+            <!--                        >-->
+            <!--                            <div class="customer-name-filed">-->
+            <!--                                <div style="display: flex; align-items: center">-->
+            <!--                                    <mat-checkbox-->
+            <!--                                        color="primary"-->
+            <!--                                        class="mr-2 checkbox-left-side-in-table"-->
+            <!--                                        type="checkbox"-->
+            <!--                                        [(ngModel)]="account.isSelected"-->
+            <!--                                        (change)="selectAccount($event, account)"-->
+            <!--                                    >-->
+            <!--                                    </mat-checkbox>-->
 
-                                    <span>{{ account.name }}</span>
-                                </div>
+            <!--                                    <span>{{ account.name }}</span>-->
+            <!--                                </div>-->
 
-                                <button
-                                    mat-icon-button
-                                    id="edit-model-basic"
-                                    class="table-menu-first-td"
-                                    [matMenuTriggerFor]="editModelBasic"
-                                >
-                                    <span class="icon-dots-three-vertical"></span>
-                                </button>
+            <!--                                <button-->
+            <!--                                    mat-icon-button-->
+            <!--                                    id="edit-model-basic"-->
+            <!--                                    class="table-menu-first-td"-->
+            <!--                                    [matMenuTriggerFor]="editModelBasic"-->
+            <!--                                >-->
+            <!--                                    <span class="icon-dots-three-vertical"></span>-->
+            <!--                                </button>-->
 
-                                <mat-menu #editModelBasic="matMenu">
-                                    <div class="account-detail-custom-header" style="width: 260px; margin-top: -8px">
-                                        <div class="d-flex p-0">
-                                            <div class="account-detail-padding flex-fill border-right-0">
-                                                <h3 class="account-detail-custom-title word-break">
-                                                    <span (click)="performActions(0, account)">
-                                                        {{ account?.name }}
-                                                    </span>
-                                                </h3>
-                                            </div>
+            <!--                                <mat-menu #editModelBasic="matMenu">-->
+            <!--                                    <div class="account-detail-custom-header" style="width: 260px; margin-top: -8px">-->
+            <!--                                        <div class="d-flex p-0">-->
+            <!--                                            <div class="account-detail-padding flex-fill border-right-0">-->
+            <!--                                                <h3 class="account-detail-custom-title word-break">-->
+            <!--                                                    <span (click)="performActions(0, account)">-->
+            <!--                                                        {{ account?.name }}-->
+            <!--                                                    </span>-->
+            <!--                                                </h3>-->
+            <!--                                            </div>-->
 
-                                            <button
-                                                mat-icon-button
-                                                class="account-detail-padding"
-                                                (click)="updateCustomerAcc('customer', account)"
-                                            >
-                                                <img src="./assets/images/path.svg" />
-                                            </button>
-                                        </div>
-                                        <div class="custom-detail">
-                                            <h4>{{ account?.mobileNo }}</h4>
-                                            <h4>{{ account?.email }}</h4>
-                                            <h4>{{ account?.gstIn }}</h4>
-                                        </div>
-                                    </div>
-                                    <button
-                                        mat-menu-item
-                                        *ngIf="!isMobileScreen"
-                                        class="font-12"
-                                        (click)="performActions(1, account)"
-                                    >
-                                        {{ commonLocaleData?.app_goto_ledger }}
-                                    </button>
-                                    <button mat-menu-item class="font-12" (click)="performActions(2, account)">
-                                        {{ commonLocaleData?.app_generate_invoice }}
-                                    </button>
-                                    <button mat-menu-item class="font-12" (click)="performActions(4, account, $event)">
-                                        {{ commonLocaleData?.app_send_email }}
-                                    </button>
-                                </mat-menu>
-                            </div>
-                        </td>
-                        <td
-                            class="word-wrap mat-cell"
-                            [attr.data-title]="commonLocaleData?.app_parent_group"
-                            *ngIf="showFieldFilter.parentGroup"
-                        >
-                            {{ account?.groupUniqueName }}
-                        </td>
-                        <td
-                            class="mat-cell"
-                            [ngClass]="{
-                                'word-wrap text-right': true,
-                                'negative-balance':
-                                    account.openingBalance?.type === 'CREDIT' &&
-                                    formatAmountInCurrency(account.openingBalance?.amount) > 0
-                            }"
-                            [attr.data-title]="localeData?.opening"
-                            *ngIf="showFieldFilter.openingBalance"
-                        >
-                            <div class="d-flex justify-content-end">
-                                <span
-                                    *ngIf="
-                                        account.openingBalance?.type === 'CREDIT' &&
-                                        formatAmountInCurrency(account.openingBalance?.amount) > 0
-                                    "
-                                    >-</span
-                                >
-                                <span>
-                                    <amount-field
-                                        [amount]="account.openingBalance?.amount"
-                                        [currencySymbol]="false"
-                                        [currencyCode]="false"
-                                    >
-                                    </amount-field>
-                                </span>
-                            </div>
-                        </td>
-                        <td class="mat-cell word-wrap text-right" [attr.data-title]="commonLocaleData?.app_receipts">
-                            <span class="d-flex justify-content-end">
-                                <amount-field
-                                    [amount]="account.debitTotal"
-                                    [currencySymbol]="false"
-                                    [currencyCode]="false"
-                                >
-                                </amount-field>
-                            </span>
-                        </td>
-                        <td class="mat-cell word-wrap text-right" [attr.data-title]="commonLocaleData?.app_sales">
-                            <span class="d-flex justify-content-end">
-                                <amount-field
-                                    [amount]="account.creditTotal"
-                                    [currencySymbol]="false"
-                                    [currencyCode]="false"
-                                >
-                                </amount-field>
-                            </span>
-                        </td>
-                        <td
-                            class="mat-cell"
-                            [ngClass]="{
-                                'word-wrap text-right': true,
-                                'negative-balance':
-                                    account.closingBalance?.type === 'CREDIT' &&
-                                    formatAmountInCurrency(account.closingBalance?.amount) > 0
-                            }"
-                            [attr.data-title]="localeData?.closing"
-                        >
-                            <div class="d-flex justify-content-end">
-                                <span
-                                    *ngIf="
-                                        account.closingBalance?.type === 'CREDIT' &&
-                                        formatAmountInCurrency(account.closingBalance?.amount) > 0
-                                    "
-                                    >-</span
-                                >
-                                <span>
-                                    <amount-field
-                                        [amount]="account.closingBalance?.amount"
-                                        [currencySymbol]="false"
-                                        [currencyCode]="false"
-                                    >
-                                    </amount-field>
-                                </span>
-                            </div>
-                        </td>
-                        <td
-                            class="mat-cell text-lowercase word-wrap font-12"
-                            *ngIf="showFieldFilter.contact"
-                            [attr.data-title]="commonLocaleData?.app_email"
-                        >
-                            <div>
-                                {{ account.email || "-" }}
-                            </div>
-                            <div>
-                                {{ account.mobileNo || "-" }}
-                            </div>
-                        </td>
-                        <td
-                            class="word-wrap mat-cell"
-                            *ngIf="showFieldFilter.gstin && shouldShowTaxFilter"
-                            [attr.data-title]="commonLocaleData?.app_gstin"
-                        >
-                            {{ account.gstIn || "-" }}
-                        </td>
-                        <td
-                            class="word-wrap mat-cell"
-                            *ngIf="showFieldFilter.state"
-                            [attr.data-title]="commonLocaleData?.app_state"
-                        >
-                            {{ account?.state?.name || "-" }}
-                        </td>
-                        <td
-                            *ngIf="showFieldFilter.comment"
-                            (click)="updateCommentIdx = idx"
-                            [attr.data-title]="localeData?.comment"
-                            class="mat-cell comment-field text-break"
-                        >
-                            <ng-container *ngIf="updateCommentIdx != idx">
-                                {{ account.comment }}
-                                <span [class.text-gray]="!account.comment" *ngIf="!account.comment">{{
-                                    localeData?.add_comment
-                                }}</span>
-                            </ng-container>
-                            <ng-container *ngIf="updateCommentIdx === idx">
-                                <textarea
-                                    matInput
-                                    class="form-control"
-                                    maxlength="100"
-                                    autofocus="true"
-                                    [placeholder]="localeData?.enter_comment_here"
-                                    [(ngModel)]="account.comment"
-                                    (blur)="updateComment(account)"
-                                ></textarea>
-                            </ng-container>
-                        </td>
-                        <ng-container *ngFor="let item of account?.customFields">
-                            <td
-                                *ngIf="item.key && showFieldFilter[item?.uniqueName]"
-                                class="mat-cell word-wrap"
-                                [attr.data-title]="item.key"
-                            >
-                                {{ item.value || "-" }}
-                            </td>
-                        </ng-container>
-                    </tr>
-                </tbody>
-            </table>
+            <!--                                            <button-->
+            <!--                                                mat-icon-button-->
+            <!--                                                class="account-detail-padding"-->
+            <!--                                                (click)="updateCustomerAcc('customer', account)"-->
+            <!--                                            >-->
+            <!--                                                <img src="./assets/images/path.svg" />-->
+            <!--                                            </button>-->
+            <!--                                        </div>-->
+            <!--                                        <div class="custom-detail">-->
+            <!--                                            <h4>{{ account?.mobileNo }}</h4>-->
+            <!--                                            <h4>{{ account?.email }}</h4>-->
+            <!--                                            <h4>{{ account?.gstIn }}</h4>-->
+            <!--                                        </div>-->
+            <!--                                    </div>-->
+            <!--                                    <button-->
+            <!--                                        mat-menu-item-->
+            <!--                                        *ngIf="!isMobileScreen"-->
+            <!--                                        class="font-12"-->
+            <!--                                        (click)="performActions(1, account)"-->
+            <!--                                    >-->
+            <!--                                        {{ commonLocaleData?.app_goto_ledger }}-->
+            <!--                                    </button>-->
+            <!--                                    <button mat-menu-item class="font-12" (click)="performActions(2, account)">-->
+            <!--                                        {{ commonLocaleData?.app_generate_invoice }}-->
+            <!--                                    </button>-->
+            <!--                                    <button mat-menu-item class="font-12" (click)="performActions(4, account, $event)">-->
+            <!--                                        {{ commonLocaleData?.app_send_email }}-->
+            <!--                                    </button>-->
+            <!--                                </mat-menu>-->
+            <!--                            </div>-->
+            <!--                        </td>-->
+            <!--                        <td-->
+            <!--                            class="word-wrap mat-cell"-->
+            <!--                            [attr.data-title]="commonLocaleData?.app_parent_group"-->
+            <!--                            *ngIf="showFieldFilter.parentGroup"-->
+            <!--                        >-->
+            <!--                            {{ account?.groupUniqueName }}-->
+            <!--                        </td>-->
+            <!--                        <td-->
+            <!--                            class="mat-cell"-->
+            <!--                            [ngClass]="{-->
+            <!--                                'word-wrap text-right': true,-->
+            <!--                                'negative-balance':-->
+            <!--                                    account.openingBalance?.type === 'CREDIT' &&-->
+            <!--                                    formatAmountInCurrency(account.openingBalance?.amount) > 0-->
+            <!--                            }"-->
+            <!--                            [attr.data-title]="localeData?.opening"-->
+            <!--                            *ngIf="showFieldFilter.openingBalance"-->
+            <!--                        >-->
+            <!--                            <div class="d-flex justify-content-end">-->
+            <!--                                <span-->
+            <!--                                    *ngIf="-->
+            <!--                                        account.openingBalance?.type === 'CREDIT' &&-->
+            <!--                                        formatAmountInCurrency(account.openingBalance?.amount) > 0-->
+            <!--                                    "-->
+            <!--                                    >-</span-->
+            <!--                                >-->
+            <!--                                <span>-->
+            <!--                                    <amount-field-->
+            <!--                                        [amount]="account.openingBalance?.amount"-->
+            <!--                                        [currencySymbol]="false"-->
+            <!--                                        [currencyCode]="false"-->
+            <!--                                    >-->
+            <!--                                    </amount-field>-->
+            <!--                                </span>-->
+            <!--                            </div>-->
+            <!--                        </td>-->
+            <!--                        <td class="mat-cell word-wrap text-right" [attr.data-title]="commonLocaleData?.app_receipts">-->
+            <!--                            <span class="d-flex justify-content-end">-->
+            <!--                                <amount-field-->
+            <!--                                    [amount]="account.debitTotal"-->
+            <!--                                    [currencySymbol]="false"-->
+            <!--                                    [currencyCode]="false"-->
+            <!--                                >-->
+            <!--                                </amount-field>-->
+            <!--                            </span>-->
+            <!--                        </td>-->
+            <!--                        <td class="mat-cell word-wrap text-right" [attr.data-title]="commonLocaleData?.app_sales">-->
+            <!--                            <span class="d-flex justify-content-end">-->
+            <!--                                <amount-field-->
+            <!--                                    [amount]="account.creditTotal"-->
+            <!--                                    [currencySymbol]="false"-->
+            <!--                                    [currencyCode]="false"-->
+            <!--                                >-->
+            <!--                                </amount-field>-->
+            <!--                            </span>-->
+            <!--                        </td>-->
+            <!--                        <td-->
+            <!--                            class="mat-cell"-->
+            <!--                            [ngClass]="{-->
+            <!--                                'word-wrap text-right': true,-->
+            <!--                                'negative-balance':-->
+            <!--                                    account.closingBalance?.type === 'CREDIT' &&-->
+            <!--                                    formatAmountInCurrency(account.closingBalance?.amount) > 0-->
+            <!--                            }"-->
+            <!--                            [attr.data-title]="localeData?.closing"-->
+            <!--                        >-->
+            <!--                            <div class="d-flex justify-content-end">-->
+            <!--                                <span-->
+            <!--                                    *ngIf="-->
+            <!--                                        account.closingBalance?.type === 'CREDIT' &&-->
+            <!--                                        formatAmountInCurrency(account.closingBalance?.amount) > 0-->
+            <!--                                    "-->
+            <!--                                    >-</span-->
+            <!--                                >-->
+            <!--                                <span>-->
+            <!--                                    <amount-field-->
+            <!--                                        [amount]="account.closingBalance?.amount"-->
+            <!--                                        [currencySymbol]="false"-->
+            <!--                                        [currencyCode]="false"-->
+            <!--                                    >-->
+            <!--                                    </amount-field>-->
+            <!--                                </span>-->
+            <!--                            </div>-->
+            <!--                        </td>-->
+            <!--                        <td-->
+            <!--                            class="mat-cell text-lowercase word-wrap font-12"-->
+            <!--                            *ngIf="showFieldFilter.contact"-->
+            <!--                            [attr.data-title]="commonLocaleData?.app_email"-->
+            <!--                        >-->
+            <!--                            <div>-->
+            <!--                                {{ account.email || "-" }}-->
+            <!--                            </div>-->
+            <!--                            <div>-->
+            <!--                                {{ account.mobileNo || "-" }}-->
+            <!--                            </div>-->
+            <!--                        </td>-->
+            <!--                        <td-->
+            <!--                            class="word-wrap mat-cell"-->
+            <!--                            *ngIf="showFieldFilter.gstin && shouldShowTaxFilter"-->
+            <!--                            [attr.data-title]="commonLocaleData?.app_gstin"-->
+            <!--                        >-->
+            <!--                            {{ account.gstIn || "-" }}-->
+            <!--                        </td>-->
+            <!--                        <td-->
+            <!--                            class="word-wrap mat-cell"-->
+            <!--                            *ngIf="showFieldFilter.state"-->
+            <!--                            [attr.data-title]="commonLocaleData?.app_state"-->
+            <!--                        >-->
+            <!--                            {{ account?.state?.name || "-" }}-->
+            <!--                        </td>-->
+            <!--                        <td-->
+            <!--                            *ngIf="showFieldFilter.comment"-->
+            <!--                            (click)="updateCommentIdx = idx"-->
+            <!--                            [attr.data-title]="localeData?.comment"-->
+            <!--                            class="mat-cell comment-field text-break"-->
+            <!--                        >-->
+            <!--                            <ng-container *ngIf="updateCommentIdx != idx">-->
+            <!--                                {{ account.comment }}-->
+            <!--                                <span [class.text-gray]="!account.comment" *ngIf="!account.comment">{{-->
+            <!--                                    localeData?.add_comment-->
+            <!--                                }}</span>-->
+            <!--                            </ng-container>-->
+            <!--                            <ng-container *ngIf="updateCommentIdx === idx">-->
+            <!--                                <textarea-->
+            <!--                                    matInput-->
+            <!--                                    class="form-control"-->
+            <!--                                    maxlength="100"-->
+            <!--                                    autofocus="true"-->
+            <!--                                    [placeholder]="localeData?.enter_comment_here"-->
+            <!--                                    [(ngModel)]="account.comment"-->
+            <!--                                    (blur)="updateComment(account)"-->
+            <!--                                ></textarea>-->
+            <!--                            </ng-container>-->
+            <!--                        </td>-->
+            <!--                        <ng-container *ngFor="let item of account?.customFields">-->
+            <!--                            <td-->
+            <!--                                *ngIf="item.key && showFieldFilter[item?.uniqueName]"-->
+            <!--                                class="mat-cell word-wrap"-->
+            <!--                                [attr.data-title]="item.key"-->
+            <!--                            >-->
+            <!--                                {{ item.value || "-" }}-->
+            <!--                            </td>-->
+            <!--                        </ng-container>-->
+            <!--                    </tr>-->
+            <!--                </tbody>-->
+            <!--            </table>-->
+            <ng-container *ngIf="activeTab === 'customer'">
+                <ng-container *ngFor="let column of displayColumns$ | async">
+                    <p>{{ column }}</p>
+                </ng-container>
+                <!--    <table mat-table [dataSource]="sundryDebtorsAccounts" class="mat-elevation-z8">-->
+                <!--        <ng-container [matColumnDef]="column" *ngFor="let column of (displayedColumns)">-->
+                <!--            <th mat-header-cell *matHeaderCellDef> {{column}} </th>-->
+                <!--            <td mat-cell *matCellDef="let element"> {{element[column]}} </td>-->
+                <!--        </ng-container>-->
 
+                <!--        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>-->
+                <!--        <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>-->
+                <!--    </table>-->
+            </ng-container>
             <table class="mat-table table on-mobile-view w-100 vendor-tabel" *ngIf="activeTab === 'vendor'">
                 <thead class="table-header-fix" [hidden]="!searchStr && !sundryCreditorsAccounts?.length">
                     <tr class="mat-header-row">

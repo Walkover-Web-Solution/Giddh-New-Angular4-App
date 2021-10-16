@@ -20,9 +20,9 @@ import * as moment from "moment/moment";
 import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
 import { BsModalRef, BsModalService, ModalDirective, ModalOptions } from "ngx-bootstrap/modal";
 import { PaginationComponent } from "ngx-bootstrap/pagination";
-import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from "rxjs";
+import { BehaviorSubject, combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged, filter, take, takeUntil } from "rxjs/operators";
-import { cloneDeep, find, map as lodashMap, uniq } from "../../app/lodash-optimized";
+import { cloneDeep, find, isEqual, map as lodashMap, uniq } from "../../app/lodash-optimized";
 import { CommonActions } from "../actions/common.actions";
 import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
@@ -34,8 +34,7 @@ import { OnboardingFormRequest } from "../models/api-models/Common";
 import { StateDetailsRequest } from "../models/api-models/Company";
 import {
     ContactAdvanceSearchCommonModal,
-    ContactAdvanceSearchModal,
-    CustomerVendorFiledFilter,
+    ContactAdvanceSearchModal, CustomerVendorDefaultColumns,
     DueAmountReportQueryRequest,
     DueAmountReportResponse,
 } from "../models/api-models/Contact";
@@ -49,7 +48,7 @@ import { GroupService } from "../services/group.service";
 import { ToasterService } from "../services/toaster.service";
 import { ElementViewContainerRef } from "../shared/helpers/directives/elementViewChild/element.viewchild.directive";
 import { AppState } from "../store";
-import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "./../shared/helpers/defaultDateFormat";
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../shared/helpers/defaultDateFormat";
 import { SettingsBranchActions } from "../actions/settings/branch/settings.branch.action";
 import { OrganizationType } from "../models/user-login-state";
 import { GiddhCurrencyPipe } from "../shared/helpers/pipes/currencyPipe/currencyType.pipe";
@@ -113,7 +112,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     public activeAccountDetails: any;
     public allSelectionModel: boolean = false;
     public LOCAL_STORAGE_KEY_FOR_TABLE_COLUMN = "showTableColumn";
-    public localStorageKeysForFilters = { customer: "customerFilterStorage", vendor: "vendorFilterStorage" };
+    public localStorageKeysForFilters = { customer: "customerFilterStorageV2", vendor: "vendorFilterStorageV2" };
     public isMobileScreen: boolean = false;
     public modalConfig: ModalOptions = {
         animated: true,
@@ -127,7 +126,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** sorting */
     public key: string = "name"; // set default
     public order: string = "asc";
-    public showFieldFilter: CustomerVendorFiledFilter = new CustomerVendorFiledFilter();
+    public showFieldFilter: {
+        [columnname: string]: {
+            displayName: string;
+            visibility: boolean
+        }
+    } = {};
     public updateCommentIdx: number = null;
     public searchStr$ = new Subject<string>();
     public searchStr: string = "";
@@ -243,6 +247,9 @@ export class ContactComponent implements OnInit, OnDestroy {
     @ViewChild("mailModal") mailModalComponent: TemplateRef<any>;
     @ViewChild("template") bulkPaymentModalRef: TemplateRef<any>;
 
+    displayColumns: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
+    displayColumns$: Observable<string[]> = this.displayColumns.asObservable().pipe(takeUntil(this.destroyed$), distinctUntilChanged(isEqual));
+
     constructor(
         public dialog: MatDialog,
         private store: Store<AppState>,
@@ -289,6 +296,13 @@ export class ContactComponent implements OnInit, OnDestroy {
                 }
             }
         });
+        Object.keys(CustomerVendorDefaultColumns).forEach(key => {
+            this.showFieldFilter[key] = {
+                visibility: true,
+                displayName: key
+            };
+        });
+        this.setDisplayColumns();
     }
 
     public ngOnInit() {
@@ -305,7 +319,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                 if (showColumnObj.closingBalance !== undefined) {
                     delete showColumnObj.closingBalance;
                 }
-                ;
                 this.showFieldFilter = showColumnObj;
                 this.setTableColspan();
             }
@@ -578,13 +591,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     public setActiveTab(tabName: "customer" | "aging-report" | "vendor") {
         this.searchStr = "";
         this.tabSelected(tabName);
-        this.showFieldFilter = new CustomerVendorFiledFilter();
+        this.showFieldFilter = {};
         let showColumnObj = JSON.parse(localStorage.getItem(this.localStorageKeysForFilters[this.activeTab === "vendor" ? "vendor" : "customer"]));
         if (showColumnObj) {
             if (showColumnObj.closingBalance !== undefined) {
                 delete showColumnObj.closingBalance;
             }
-            ;
             this.showFieldFilter = showColumnObj;
             this.setTableColspan();
         }
@@ -1235,16 +1247,18 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
     }
 
-    public columnFilter(event, column) {
-        this.showFieldFilter[column] = event;
+    public columnFilter(event: boolean, column: string) {
+        if (this.showFieldFilter[column])
+            this.showFieldFilter[column].visibility = event;
         this.setTableColspan();
-        this.showFieldFilter.selectAll = Object.keys(this.showFieldFilter).filter((filterName) => filterName !== "selectAll").every(filterName => this.showFieldFilter[filterName]);
+        // this.showFieldFilter.selectAll = Object.keys(this.showFieldFilter).filter((filterName) => filterName !== "selectAll").every(filterName => this.showFieldFilter[filterName]);
         if (window.localStorage) {
             localStorage.setItem(this.localStorageKeysForFilters[this.activeTab === "vendor" ? "vendor" : "customer"], JSON.stringify(this.showFieldFilter));
         }
         setTimeout(() => {
-            this.showFieldFilter.selectAll = Object.keys(this.showFieldFilter).filter((filterName) => filterName !== "selectAll").every(filterName => this.showFieldFilter[filterName]);
+            // this.showFieldFilter.selectAll = Object.keys(this.showFieldFilter).filter((filterName) => filterName !== "selectAll").every(filterName => this.showFieldFilter[filterName]);
         }, 500);
+        this.setDisplayColumns();
     }
 
     /**
@@ -1343,11 +1357,12 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @memberof ContactComponent
      */
     public selectAllColumns(event: boolean): void {
-        Object.keys(this.showFieldFilter).forEach(key => this.showFieldFilter[key] = event);
+        Object.keys(this.showFieldFilter).forEach(key => this.showFieldFilter[key].visibility = event);
         this.setTableColspan();
         if (window.localStorage) {
             localStorage.setItem(this.localStorageKeysForFilters[this.activeTab === "vendor" ? "vendor" : "customer"], JSON.stringify(this.showFieldFilter));
         }
+        this.setDisplayColumns();
     }
 
     /**
@@ -1456,9 +1471,24 @@ export class ContactComponent implements OnInit, OnDestroy {
     public addNewFieldFilters(field: any): void {
         for (let key of field) {
             if (key?.uniqueName) {
-                this.showFieldFilter[key.uniqueName] = false;
+                this.showFieldFilter[key.uniqueName] = {
+                    visibility: true,
+                    displayName: key.key
+                };
             }
         }
+        console.log(this.showFieldFilter);
+        this.setDisplayColumns();
+    }
+
+    /**
+     * To add new properties in showFieldFilter object
+     *
+     * @memberof ContactComponent
+     */
+    public setDisplayColumns(): void {
+        console.log(Object.keys(this.showFieldFilter).filter(key => this.showFieldFilter[key].visibility).map(key => this.showFieldFilter[key].displayName));
+        this.displayColumns.next(Object.keys(this.showFieldFilter).filter(key => this.showFieldFilter[key].visibility));
     }
 
     /**
