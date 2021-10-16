@@ -131,7 +131,10 @@
                                                                         >
                                                                             {{ localeData?.change }}</a
                                                                         >
-                                                                        <mat-menu #billingAddressMenu="matMenu">
+                                                                        <mat-menu
+                                                                            #billingAddressMenu="matMenu"
+                                                                            class="change-address-mat-menu"
+                                                                        >
                                                                             <button
                                                                                 mat-menu-item
                                                                                 *ngFor="
@@ -933,8 +936,8 @@
                         </div>
                         <div class="col-sm-3 col-md-3 balance-due-absolute">
                             <div class="text-right">
-                                <p class="font-20 pb-r1">
-                                    <span class="balance-due">{{ commonLocaleData?.app_amount }}</span>
+                                <p class="font-20 pb-r1 d-flex justify-content-end">
+                                    <span class="balance-due pd-r05">{{ commonLocaleData?.app_amount }}</span>
                                     <span class="sp-rupees d-flex justify-content-end">
                                         <amount-field
                                             [amount]="totals.grandTotal"
@@ -943,8 +946,8 @@
                                         ></amount-field>
                                     </span>
                                 </p>
-                                <p class="font-20 pb-r1" *ngIf="isMultiCurrencyAccount">
-                                    <span class="balance-due">{{ commonLocaleData?.app_amount }}</span>
+                                <p class="font-20 pb-r1 d-flex justify-content-end" *ngIf="isMultiCurrencyAccount">
+                                    <span class="balance-due pd-r05">{{ commonLocaleData?.app_amount }}</span>
                                     <span class="sp-rupees d-flex justify-content-end">
                                         <amount-field
                                             [amount]="totals.grandTotalMultiCurrency"

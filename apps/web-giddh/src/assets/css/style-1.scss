@@ -3345,4 +3345,30 @@ td.mat-footer-cell {
         }
     }
 }
+.change-address-mat-menu {
+    .mat-menu-content {
+        .mat-menu-item {
+            border-bottom: 1px solid $gainsboro;
+            &:last-child {
+                border-bottom: none !important;
+            }
+            &:hover {
+                background: $lavender !important;
+                .dropdown-item {
+                    color: $chetwode-blue !important;
+                }
+            }
+            .dropdown-item {
+                padding: 0 !important;
+                white-space: normal;
+                word-break: break-word;
+                font-size: 12px;
+                &:hover {
+                    background: transparent;
+                }
+            }
+        }
+    }
+}
+
 /* material css for ledger end*/
