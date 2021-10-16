@@ -963,6 +963,8 @@ table.table.customer-invoice-table {
 section.static-invoice-table {
     padding-top: 20px;
     margin-top: -20px;
+    align-items: flex-start;
+    flex-direction: column;
 }
 
 .invoice-date-due-date {
