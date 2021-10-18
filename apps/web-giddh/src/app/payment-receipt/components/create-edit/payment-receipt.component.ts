@@ -7,18 +7,19 @@ import { ActivatedRoute } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import * as moment from "moment";
 import { UploaderOptions, UploadInput, UploadOutput } from "ngx-uploader";
-import { Observable, of as observableOf, ReplaySubject } from "rxjs";
+import { combineLatest, Observable, of as observableOf, ReplaySubject } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { CommonActions } from "../../../actions/common.actions";
 import { CompanyActions } from "../../../actions/company.actions";
 import { InvoiceActions } from "../../../actions/invoice/invoice.actions";
+import { InvoiceReceiptActions } from "../../../actions/invoice/receipt/receipt.actions";
 import { SalesActions } from "../../../actions/sales/sales.action";
 import { Configuration, SearchResultText, SubVoucher } from "../../../app.constant";
 import { cloneDeep, find, orderBy, uniqBy } from "../../../lodash-optimized";
 import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from "../../../models/api-models/Account";
 import { OnboardingFormRequest } from "../../../models/api-models/Common";
 import { TaxResponse } from "../../../models/api-models/Company";
-import { AccountDetailsClass, IForceClear, PaymentReceipt, StateCode, VoucherTypeEnum } from "../../../models/api-models/Sales";
+import { AccountDetailsClass, IForceClear, PaymentReceipt, PaymentReceiptTransaction, StateCode, VoucherClass, VoucherTypeEnum } from "../../../models/api-models/Sales";
 import { LEDGER_API } from "../../../services/apiurls/ledger.api";
 import { LedgerService } from "../../../services/ledger.service";
 import { SalesService } from "../../../services/sales.service";
@@ -205,6 +206,10 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     public receiptVoucherType: string = VoucherTypeEnum.receipt;
     /** Holds payment voucher type */
     public paymentVoucherType: string = VoucherTypeEnum.payment;
+    /** Holds voucher data */
+    public voucherDetails$: Observable<any>;
+    /** Holds account data */
+    private selectedAccountDetails$: Observable<AccountResponseV2>;
 
     /** @ignore */
     constructor(
@@ -220,16 +225,21 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         private dialog: MatDialog,
         private invoiceActions: InvoiceActions,
         private route: ActivatedRoute,
-        private titleCasePipe: TitleCasePipe
+        private titleCasePipe: TitleCasePipe,
+        private invoiceReceiptAction: InvoiceReceiptActions
     ) {
         this.voucherFormData = new PaymentReceipt();
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            if (params) {
+            if (params?.voucherType) {
                 this.voucherFormData.type = params.voucherType;
+            }
+            if (params?.uniqueName) {
+                this.getVoucherDetails(params);
             }
         });
 
+        this.selectedAccountDetails$ = this.store.pipe(select(state => state.sales.acDtl), takeUntil(this.destroyed$));
         this.sessionKey$ = this.store.pipe(select(state => state.session.user.session.id), takeUntil(this.destroyed$));
         this.companyTaxesList$ = this.store.pipe(select(state => state.company?.taxes), takeUntil(this.destroyed$));
         this.companyTaxesList$.subscribe(companyTaxesList => {
@@ -297,7 +307,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.store.pipe(select(state => state.sales.acDtl), takeUntil(this.destroyed$)).subscribe(response => {
+        this.selectedAccountDetails$.subscribe(response => {
             if (response) {
                 this.assignAccountDetailsValuesInForm(response);
             }
@@ -321,6 +331,8 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                 }
             }
         });
+
+        this.voucherDetails$ = this.store.pipe(select(state => { return state.receipt.voucher as any; }), takeUntil(this.destroyed$));
     }
 
     /**
@@ -343,6 +355,58 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         // listen for search field value changes
         this.searchBankAccount.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(() => {
             this.filterBankAccounts();
+        });
+
+        combineLatest([this.voucherDetails$, this.selectedAccountDetails$]).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if(response && response[0] && response[1]) {
+                console.log(response[0]);
+
+                this.voucherFormData.account = response[0].account;
+                this.voucherFormData.attachedFiles = response[0].attachedFiles;
+                this.voucherFormData.date = moment(response[0].date, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+
+                let entryLoop = 0;
+                response[0].entries.forEach(entry => {
+                    let transactionLoop = 0;
+                    entry.transactions.forEach(transaction => {
+                        if(!this.voucherFormData.entries[entryLoop].transactions[transactionLoop]) {
+                            this.voucherFormData.entries[entryLoop].transactions[transactionLoop] = new PaymentReceiptTransaction();
+                        }
+                        this.voucherFormData.entries[entryLoop].transactions[transactionLoop] = {
+                            account: {
+                                name: transaction.account.name,
+                                uniqueName: transaction.account.uniqueName
+                            },
+                            amount: {
+                                amountForAccount: transaction.amount.amountForAccount
+                            }
+                        };
+
+                        //this.voucherFormData.entries[entryLoop].chequeClearanceDate = "";
+                        //this.voucherFormData.entries[entryLoop].chequeNumber = "";
+                        this.voucherFormData.entries[entryLoop].date = this.voucherFormData.date;
+                        this.voucherFormData.entries[entryLoop].description = response[0].templateDetails?.other?.message2;
+                        this.voucherFormData.entries[entryLoop].taxes = entry.taxes;
+
+                        transactionLoop++;
+                    });
+                    entryLoop++;
+                });
+
+                this.voucherFormData.exchangeRate = response[0].exchangeRate;
+                this.voucherFormData.subVoucher = response[0].subVoucher;
+                this.voucherFormData.updateAccountDetails = true;
+                this.allowFocus = false;
+
+                if(this.voucherFormData.subVoucher) {
+                    this.isAdvanceReceipt = true;
+                }
+
+                this.calculateTax();
+                this.calculateTotals();
+
+                console.log(this.voucherFormData);
+            }
         });
     }
 
@@ -1007,7 +1071,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      */
     public assignAccountDetailsValuesInForm(data: AccountResponseV2): void {
         this.accountAddressList = data.addresses;
-        this.customerCountryName = data.country.countryName;
+        this.customerCountryName = data.country?.countryName;
         this.customerCountryCode = data?.country?.countryCode || 'IN';
         this.initializeAccountCurrencyDetails(data);
         this.showGstAndTrnUsingCountryName(this.customerCountryName);
@@ -1018,7 +1082,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         this.makeCustomerList();
         this.loadBankCashAccounts(data.currency);
 
-        this.getUpdatedStateCodes(data.country.countryCode).then(() => {
+        this.getUpdatedStateCodes(data.country?.countryCode).then(() => {
             if (data.addresses && data.addresses.length) {
                 data.addresses = [find(data.addresses, (tax) => tax.isDefault)];
             }
@@ -1354,5 +1418,19 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      */
     public closePrintDialog(): void {
         this.dialogRef.close();
+    }
+
+    private getVoucherDetails(request: any): void {
+        this.isUpdateMode = true;
+        this.getAccountDetails(request.accountUniqueName);
+
+        this.store.dispatch(this.invoiceReceiptAction.getVoucherDetailsV4(request.accountUniqueName, {
+            voucherType: request.voucherType,
+            uniqueName: request.uniqueName
+        }));
+    }
+
+    public updateVoucher(formObj: NgForm): void {
+        
     }
 }
