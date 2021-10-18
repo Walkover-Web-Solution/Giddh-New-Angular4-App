@@ -16,7 +16,7 @@ export interface ReciptDeleteRequest {
 }
 
 export class ReceiptVoucherDetailsRequest {
-    public invoiceNumber: string;
+    public invoiceNumber?: string;
     public voucherType: string;
     public uniqueName?: string;
 }

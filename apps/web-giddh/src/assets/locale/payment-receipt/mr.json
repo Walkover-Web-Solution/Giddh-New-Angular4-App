@@ -24,5 +24,8 @@
     "vendor_details": "विक्रेता तपशील",
     "payment_date": "पगाराची तारीख",
     "payment_mode": "पेमेंट मोड",
-    "file_uploaded": "फाईल यशस्वीरित्या अपलोड केली"
+    "file_uploaded": "फाईल यशस्वीरित्या अपलोड केली",
+    "update_receipt": "Update Receipt",
+    "create_payment": "Create Payment",
+    "update_payment": "Update Payment"
 }

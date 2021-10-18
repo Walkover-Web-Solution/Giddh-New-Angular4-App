@@ -352,7 +352,17 @@
                     <tbody *ngIf="!isLoading">
                         <tr *ngFor="let receipt of allReceipts; let i = index">
                             <td data-title="#">{{ i + 1 }}</td>
-                            <td width="13%" class="text-break" [attr.data-title]="localeData?.receipt_no_label">
+                            <td
+                                width="13%"
+                                class="text-break cp"
+                                [attr.data-title]="localeData?.receipt_no_label"
+                                [routerLink]="
+                                    '/pages/voucher/receipt/edit/' +
+                                    receipt.uniqueName +
+                                    '/' +
+                                    receipt.account?.uniqueName
+                                "
+                            >
                                 {{ voucherApiVersion === 2 ? receipt?.voucherNumber : receipt?.receiptNumber }}
                             </td>
                             <td class="entry-date" [attr.data-title]="localeData?.entry_date">
