@@ -101,6 +101,7 @@ export class CustomerVendorFiledFilter {
     public gstin: boolean = false;
     public comment: boolean = false;
     public openingBalance: boolean = false;
+
 }
 
 export enum CustomerVendorDefaultColumns {
@@ -110,6 +111,8 @@ export enum CustomerVendorDefaultColumns {
     gstin = "gstin",
     comment = "comment",
     openingBalance = "openingBalance",
+
+
 }
 
 /**
