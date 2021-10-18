@@ -47,20 +47,18 @@ export class LogsService {
      * API call to get audit log
      *
      * @param {LogsRequest} model Request model
-     * @param {number} [page=1] Page number
      * @returns {Observable<BaseResponse<any, GetAuditLogsRequest>>}
      * @memberof LogsService
      */
-    public getAuditLogs(model: GetAuditLogsRequest, page: number = 1): Observable<BaseResponse<AuditLogsResponse, GetAuditLogsRequest>> {
+    public getAuditLogs(model: GetAuditLogsRequest): Observable<BaseResponse<AuditLogsResponse, GetAuditLogsRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + LOGS_API.GET_AUDIT_LOGS_V2.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':page', String(page)), model).pipe(
+        return this.http.post(this.config.apiUrl + LOGS_API.GET_AUDIT_LOGS_V2.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
             map((res) => {
                 let data: BaseResponse<AuditLogsResponse, GetAuditLogsRequest> = res;
                 data.request = model;
-                data.queryString = { page };
                 return data;
             }),
-            catchError((e) => this.errorHandler.HandleCatch<AuditLogsResponse, GetAuditLogsRequest>(e, model, { page })));
+            catchError((e) => this.errorHandler.HandleCatch<AuditLogsResponse, GetAuditLogsRequest>(e, model)));
     }
 
 }
