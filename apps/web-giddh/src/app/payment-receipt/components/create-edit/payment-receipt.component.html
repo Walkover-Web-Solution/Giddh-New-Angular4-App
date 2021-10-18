@@ -1000,9 +1000,10 @@
                         <div class="col-12">
                             <div class="pull-right pr update-mode">
                                 <button
-                                    color="primary"
+                                    color="accent"
                                     type="button"
                                     mat-raised-button
+                                    *ngIf="!isUpdateMode"
                                     [disabled]="isLoading || isFileUploading"
                                     (click)="resetForm(receiptForm)"
                                 >
@@ -1012,12 +1013,40 @@
                                     color="primary"
                                     type="button"
                                     mat-raised-button
+                                    *ngIf="!isUpdateMode"
                                     [disabled]="isLoading || isFileUploading"
                                     (click)="createVoucher(receiptForm)"
                                 >
-                                    {{ localeData?.create_receipt }}
+                                    {{
+                                        voucherFormData.type === receiptVoucherType
+                                            ? localeData?.create_receipt
+                                            : localeData?.create_payment
+                                    }}
                                 </button>
-                                <span class="d-inline-block v-align-middle">
+                                <button
+                                    color="accent"
+                                    type="button"
+                                    mat-raised-button
+                                    *ngIf="isUpdateMode"
+                                    [routerLink]="'/pages/reports/' + voucherFormData.type"
+                                >
+                                    {{ commonLocaleData?.app_cancel }}
+                                </button>
+                                <button
+                                    color="primary"
+                                    type="button"
+                                    mat-raised-button
+                                    *ngIf="isUpdateMode"
+                                    [disabled]="isLoading || isFileUploading"
+                                    (click)="updateVoucher(receiptForm)"
+                                >
+                                    {{
+                                        voucherFormData.type === receiptVoucherType
+                                            ? localeData?.update_receipt
+                                            : localeData?.update_payment
+                                    }}
+                                </button>
+                                <span class="d-inline-block v-align-middle" *ngIf="!isUpdateMode">
                                     <div class="btn-group dropup">
                                         <button
                                             mat-icon-button

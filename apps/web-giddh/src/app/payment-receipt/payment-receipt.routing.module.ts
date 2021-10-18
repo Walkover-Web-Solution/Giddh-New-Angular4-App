@@ -14,7 +14,7 @@ import { MainComponent } from "./main.component";
                 children: [
                     { path: '', redirectTo: 'receipt/create', pathMatch: 'full' },
                     { path: ':voucherType/create', component: PaymentReceiptComponent },
-                    { path: ':voucherType/edit/:uniqueName', component: PaymentReceiptComponent }
+                    { path: ':voucherType/edit/:uniqueName/:accountUniqueName', component: PaymentReceiptComponent }
                 ]
             }
         ])

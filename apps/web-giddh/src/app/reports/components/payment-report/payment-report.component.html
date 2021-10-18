@@ -284,7 +284,17 @@
                     <tbody *ngIf="!isLoading">
                         <tr *ngFor="let payment of allPayments; let i = index">
                             <td data-title="#">{{ i + 1 }}</td>
-                            <td width="13%" class="text-break" [attr.data-title]="localeData?.payment_no_label">
+                            <td
+                                width="13%"
+                                class="text-break cp"
+                                [attr.data-title]="localeData?.payment_no_label"
+                                [routerLink]="
+                                    '/pages/voucher/payment/edit/' +
+                                    payment.uniqueName +
+                                    '/' +
+                                    payment.account?.uniqueName
+                                "
+                            >
                                 {{ voucherApiVersion === 2 ? payment?.voucherNumber : payment?.receiptNumber }}
                             </td>
                             <td class="entry-date" [attr.data-title]="localeData?.entry_date">
