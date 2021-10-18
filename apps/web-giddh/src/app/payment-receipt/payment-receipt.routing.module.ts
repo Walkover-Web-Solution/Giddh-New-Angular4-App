@@ -12,8 +12,9 @@ import { MainComponent } from "./main.component";
                 canActivate: [NeedsAuthentication],
                 component: MainComponent,
                 children: [
-                    { path: '', redirectTo: 'create', pathMatch: 'full' },
-                    { path: 'create', component: PaymentReceiptComponent }
+                    { path: '', redirectTo: 'receipt/create', pathMatch: 'full' },
+                    { path: ':voucherType/create', component: PaymentReceiptComponent },
+                    { path: ':voucherType/edit/:uniqueName', component: PaymentReceiptComponent }
                 ]
             }
         ])

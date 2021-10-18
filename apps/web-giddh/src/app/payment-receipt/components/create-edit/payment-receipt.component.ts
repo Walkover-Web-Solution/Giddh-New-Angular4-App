@@ -1,7 +1,9 @@
 import { animate, state, style, transition, trigger } from "@angular/animations";
+import { TitleCasePipe } from "@angular/common";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { FormControl, NgForm } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
+import { ActivatedRoute } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import * as moment from "moment";
 import { UploaderOptions, UploadInput, UploadOutput } from "ngx-uploader";
@@ -16,7 +18,7 @@ import { cloneDeep, find, orderBy, uniqBy } from "../../../lodash-optimized";
 import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from "../../../models/api-models/Account";
 import { OnboardingFormRequest } from "../../../models/api-models/Common";
 import { TaxResponse } from "../../../models/api-models/Company";
-import { AccountDetailsClass, IForceClear, PaymentReceipt, StateCode } from "../../../models/api-models/Sales";
+import { AccountDetailsClass, IForceClear, PaymentReceipt, StateCode, VoucherTypeEnum } from "../../../models/api-models/Sales";
 import { LEDGER_API } from "../../../services/apiurls/ledger.api";
 import { LedgerService } from "../../../services/ledger.service";
 import { SalesService } from "../../../services/sales.service";
@@ -95,6 +97,8 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     public uploadInput: EventEmitter<UploadInput>;
     /** True if file is uploading */
     public isFileUploading: boolean = false;
+    /** True if is uploading */
+    public isLoading: boolean = false;
     /** Holds selected file name */
     public selectedFileName: string = '';
     /** This will handle if focus should go in customer/vendor dropdown */
@@ -197,6 +201,10 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     public isValidForm: boolean = true;
     /** Holds selected taxes */
     public selectedTaxes: any[] = [];
+    /** Holds receipt voucher type */
+    public receiptVoucherType: string = VoucherTypeEnum.receipt;
+    /** Holds payment voucher type */
+    public paymentVoucherType: string = VoucherTypeEnum.payment;
 
     /** @ignore */
     constructor(
@@ -210,10 +218,17 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         private commonActions: CommonActions,
         private ledgerService: LedgerService,
         private dialog: MatDialog,
-        private invoiceActions: InvoiceActions
+        private invoiceActions: InvoiceActions,
+        private route: ActivatedRoute,
+        private titleCasePipe: TitleCasePipe
     ) {
         this.voucherFormData = new PaymentReceipt();
-        this.voucherFormData.type = "receipt";
+
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            if (params) {
+                this.voucherFormData.type = params.voucherType;
+            }
+        });
 
         this.sessionKey$ = this.store.pipe(select(state => state.session.user.session.id), takeUntil(this.destroyed$));
         this.companyTaxesList$ = this.store.pipe(select(state => state.company?.taxes), takeUntil(this.destroyed$));
@@ -317,7 +332,10 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.loadDefaultSearchSuggestions();
         this.loadBankCashAccounts('');
-        this.store.dispatch(this.companyActions.getTax());
+
+        if (this.voucherFormData.type === this.receiptVoucherType) {
+            this.store.dispatch(this.companyActions.getTax());
+        }
 
         this.uploadInput = new EventEmitter<UploadInput>();
         this.fileUploadOptions = { concurrency: 0 };
@@ -1229,12 +1247,15 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      */
     public createVoucher(formObj: NgForm, templateRef?: TemplateRef<any>): void {
         this.isValidForm = true;
+        this.isLoading = false;
 
         if (!this.voucherFormData.account.uniqueName?.trim() || !this.voucherFormData.date || !this.voucherFormData.entries[0].transactions[0].amount
             .amountForAccount || !this.voucherFormData.entries[0].transactions[0].account.uniqueName || (this.isAdvanceReceipt && this.selectedTaxes?.length === 0)) {
             this.isValidForm = false;
             return;
         }
+
+        this.isLoading = true;
 
         if (this.voucherFormData.date) {
             this.voucherFormData.date = moment(this.voucherFormData.date).format(GIDDH_DATE_FORMAT);
@@ -1260,7 +1281,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             if (response) {
                 if (response.status === "success") {
                     let message = this.localeData?.voucher_created;
-                    message = message.replace("[VOUCHER]", this.voucherFormData.type);
+                    message = message.replace("[VOUCHER]", this.titleCasePipe.transform(this.voucherFormData.type));
                     message = message.replace("[VOUCHER_NUMBER]", response.body?.number);
                     this.toaster.showSnackBar("success", message);
                     this.resetForm(formObj);
@@ -1278,6 +1299,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             } else {
                 this.toaster.showSnackBar("error", this.commonLocaleData?.app_something_went_wrong);
             }
+            this.isLoading = false;
         });
     }
 
