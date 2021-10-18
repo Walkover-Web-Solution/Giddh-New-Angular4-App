@@ -18,5 +18,11 @@
     "create_receipt": "पावती तयार करा",
     "create_send": "तयार करा आणि पाठवा",
     "create_print": "तयार करा आणि मुद्रित करा",
-    "voucher_created": "[VOUCHER] [VOUCHER_NUMBER] क्रमांकासह यशस्वीरित्या तयार केले"
+    "voucher_created": "[VOUCHER] [VOUCHER_NUMBER] क्रमांकासह यशस्वीरित्या तयार केले",
+    "vendor_name": "विक्रेता नाव",
+    "add_vendor": "विक्रेता जोडा",
+    "vendor_details": "विक्रेता तपशील",
+    "payment_date": "पगाराची तारीख",
+    "payment_mode": "पेमेंट मोड",
+    "file_uploaded": "फाईल यशस्वीरित्या अपलोड केली"
 }
