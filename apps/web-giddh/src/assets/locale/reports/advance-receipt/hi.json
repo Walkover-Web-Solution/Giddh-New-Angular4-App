@@ -20,5 +20,6 @@
         "advance_receipts": "अग्रिम प्राप्तियां"
     },
     "entry_date": "प्रवेश की तिथि",
-    "suppliers_name": "आपूर्तिकर्ता का नाम"
+    "suppliers_name": "आपूर्तिकर्ता का नाम",
+    "new_receipt": "+ नई रसीद"
 }
