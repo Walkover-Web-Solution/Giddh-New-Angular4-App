@@ -189,7 +189,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
     public getLogFilters(): void {
         let getAuditLogsRequest: GetAuditLogsRequest = new GetAuditLogsRequest();
         getAuditLogsRequest = cloneDeep(this.prepareAuditLogFormRequest());
-        this.store.dispatch(this.auditLogsActions.getAuditLogs(getAuditLogsRequest, 1));
+        this.store.dispatch(this.auditLogsActions.getAuditLogs(getAuditLogsRequest));
     }
 
     /**
