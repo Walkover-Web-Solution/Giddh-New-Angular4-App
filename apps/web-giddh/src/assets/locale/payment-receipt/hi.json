@@ -18,5 +18,11 @@
     "create_receipt": "रसीद बनाएं",
     "create_send": "बनाएं और भेजें",
     "create_print": "बनाएं और प्रिंट करें",
-    "voucher_created": "[VOUCHER] नंबर [VOUCHER_NUMBER] के साथ सफलतापूर्वक बनाया गया"
+    "voucher_created": "[VOUCHER] नंबर [VOUCHER_NUMBER] के साथ सफलतापूर्वक बनाया गया",
+    "vendor_name": "विक्रेता का नाम",
+    "add_vendor": "विक्रेता जोड़ें",
+    "vendor_details": "विक्रेता विवरण",
+    "payment_date": "भुगतान तिथि",
+    "payment_mode": "भुगतान का प्रकार",
+    "file_uploaded": "फ़ाइल सफलतापूर्वक अपलोड की गई"
 }

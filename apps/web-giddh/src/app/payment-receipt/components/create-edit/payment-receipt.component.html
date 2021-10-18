@@ -20,7 +20,14 @@
                             >
                                 <div class="row">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
-                                        <label>{{ localeData?.customer_name }} <span class="red-text">*</span></label>
+                                        <label
+                                            >{{
+                                                voucherFormData.type === receiptVoucherType
+                                                    ? localeData?.customer_name
+                                                    : localeData?.vendor_name
+                                            }}
+                                            <span class="red-text">*</span></label
+                                        >
                                     </div>
                                     <div class="col-sm-12 col-xl-7 col-lg-8 col-md-9 select-customer-name">
                                         <div class="clearfix d-flex flex-column">
@@ -51,7 +58,11 @@
                                                     (noResultsClicked)="addNewAccount()"
                                                     [multiple]="false"
                                                     [ItemHeight]="67"
-                                                    [notFoundLinkText]="localeData?.add_customer"
+                                                    [notFoundLinkText]="
+                                                        voucherFormData.type === receiptVoucherType
+                                                            ? localeData?.add_customer
+                                                            : localeData?.add_vendor
+                                                    "
                                                     (keyup)="resetCustomerName($event)"
                                                     (onClear)="resetCustomerName(null)"
                                                     [isOpen]="allowFocus"
@@ -75,7 +86,13 @@
                                                             "
                                                             [keyboardShortcut]="'alt+c'"
                                                         >
-                                                            <div class="item">{{ localeData?.add_customer }}</div>
+                                                            <div class="item">
+                                                                {{
+                                                                    voucherFormData.type === receiptVoucherType
+                                                                        ? localeData?.add_customer
+                                                                        : localeData?.add_vendor
+                                                                }}
+                                                            </div>
                                                             <div class="item">
                                                                 {{ commonLocaleData?.app_alt_c }}
                                                             </div>
@@ -86,7 +103,9 @@
                                             <div class="d-flex aqua-color" *ngIf="voucherFormData?.account.uniqueName">
                                                 <span class="cp aqua-color">
                                                     <a href="javascript:void(0)" (click)="getCustomerDetails()">{{
-                                                        localeData?.customer_details
+                                                        voucherFormData.type === receiptVoucherType
+                                                            ? localeData?.customer_details
+                                                            : localeData?.vendor_details
                                                     }}</a>
                                                 </span>
                                             </div>
@@ -94,6 +113,12 @@
                                         <ng-container *ngIf="!voucherFormData.account.uniqueName">
                                             <img
                                                 src="{{ imgPath }}new/search_customer.svg"
+                                                *ngIf="voucherFormData.type === receiptVoucherType"
+                                                class="img-responsive search-arrow-image"
+                                            />
+                                            <img
+                                                src="{{ imgPath }}new/search-vendor.svg"
+                                                *ngIf="voucherFormData.type !== receiptVoucherType"
                                                 class="img-responsive search-arrow-image"
                                             />
                                         </ng-container>
@@ -527,25 +552,52 @@
                     <div class="clearfix">
                         <div class="inner-container">
                             <div class="clearfix">
-                                <div class="row mr-b05">
-                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 mt-3">
-                                        <label>{{ localeData?.attention_to }}</label>
-                                    </div>
-                                    <div class="col-sm-12 col-xl-7 col-lg-8 col-md-9">
-                                        <mat-form-field appearance="fill" class="width-627">
-                                            <text-field
-                                                [cssClass]="'form-control mat-field-border'"
-                                                name="attention-to"
-                                                id="attention-to"
-                                                [placeholder]="localeData?.attention_to"
-                                                [(ngModel)]="voucherFormData.account.attentionTo"
-                                            >
-                                            </text-field>
-                                        </mat-form-field>
+                                <div class="clearfix">
+                                    <div class="row position-relative">
+                                        <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
+                                            <label>{{ localeData?.attention_to }}</label>
+                                        </div>
+                                        <div class="col-sm-12 col-xl-6 col-lg-5 col-md-10">
+                                            <mat-form-field appearance="fill" class="no-border-top">
+                                                <text-field
+                                                    [cssClass]="'form-control mat-field-border'"
+                                                    name="attention-to"
+                                                    id="attention-to"
+                                                    [placeholder]="localeData?.attention_to"
+                                                    [(ngModel)]="voucherFormData.account.attentionTo"
+                                                >
+                                                </text-field>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 cheque-details no-top">
+                                            <div class="form-inline flex-row flex-nowrap">
+                                                <div class="form-group">
+                                                    <label
+                                                        >{{
+                                                            voucherFormData.type === receiptVoucherType
+                                                                ? localeData?.receipt_date
+                                                                : localeData?.payment_date
+                                                        }}
+                                                        <span class="red-text">*</span></label
+                                                    >
+                                                    <giddh-datepicker
+                                                        class="inline mr-l1"
+                                                        [showError]="!isValidForm && !voucherFormData.date"
+                                                        name="receipt-date"
+                                                        [(ngModel)]="voucherFormData.date"
+                                                        [placeholder]="commonLocaleData?.app_select_date"
+                                                        [cssClass]="
+                                                            'mat-field-border border-left-right-none form-control w-100'
+                                                        "
+                                                        [showToggleIcon]="false"
+                                                    ></giddh-datepicker>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="clearfix">
+                            <div class="clearfix" *ngIf="voucherFormData.type === receiptVoucherType">
                                 <div class="row mr-b05">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>&nbsp;</label>
@@ -557,57 +609,8 @@
                                                 name="advance-receipt"
                                                 [(ngModel)]="isAdvanceReceipt"
                                             >
-                                                {{ commonLocaleData?.app_voucher_types?.advance_receipt }}</mat-checkbox
-                                            >
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="clearfix">
-                                <div class="row position-relative mr-b2">
-                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
-                                        <label>{{ localeData?.receipt_date }} <span class="red-text">*</span></label>
-                                    </div>
-                                    <div class="col-sm-12 col-xl-6 col-lg-5 col-md-10">
-                                        <giddh-datepicker
-                                            class="inline"
-                                            [showError]="!isValidForm && !voucherFormData.date"
-                                            name="receipt-date"
-                                            [(ngModel)]="voucherFormData.date"
-                                            [placeholder]="commonLocaleData?.app_select_date"
-                                            [cssClass]="'mat-field-border border-left-right-none form-control w-100'"
-                                            [showToggleIcon]="false"
-                                        ></giddh-datepicker>
-                                    </div>
-                                    <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 cheque-details">
-                                        <div class="form-inline flex-row flex-nowrap">
-                                            <div class="form-group">
-                                                <label
-                                                    >{{ commonLocaleData?.app_amount }}
-                                                    <span class="red-text">*</span></label
-                                                >
-                                                <mat-form-field appearance="fill" class="mr-l1">
-                                                    <text-field
-                                                        [cssClass]="'form-control mat-field-border'"
-                                                        [showError]="
-                                                            !isValidForm &&
-                                                            !voucherFormData.entries[0].transactions[0].amount
-                                                                .amountForAccount
-                                                        "
-                                                        name="receipt-amount"
-                                                        id="receipt-amount"
-                                                        [placeholder]="localeData?.enter_amount"
-                                                        decimalDigitsDirective
-                                                        [mask]="inputMaskFormat"
-                                                        [(ngModel)]="
-                                                            voucherFormData.entries[0].transactions[0].amount
-                                                                .amountForAccount
-                                                        "
-                                                        (ngModelChange)="calculateTotals()"
-                                                    >
-                                                    </text-field>
-                                                </mat-form-field>
-                                            </div>
+                                                {{ commonLocaleData?.app_voucher_types?.advance_receipt }}
+                                            </mat-checkbox>
                                         </div>
                                     </div>
                                 </div>
@@ -711,7 +714,15 @@
                                 <table class="table receipt-table" width="100%" cellpadding="0" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>{{ localeData?.receipt_mode }} <span class="red-text">*</span></th>
+                                            <th>
+                                                {{
+                                                    voucherFormData.type === receiptVoucherType
+                                                        ? localeData?.receipt_mode
+                                                        : localeData?.payment_mode
+                                                }}
+                                                <span class="red-text">*</span>
+                                            </th>
+                                            <th>{{ commonLocaleData?.app_amount }} <span class="red-text">*</span></th>
                                             <th>{{ localeData?.cheque_no }}</th>
                                             <th>{{ localeData?.cheque_date }}</th>
                                             <th *ngIf="isAdvanceReceipt">
@@ -781,6 +792,29 @@
                                                 <mat-form-field appearance="fill" class="no-border-top width-100">
                                                     <text-field
                                                         [cssClass]="'form-control mat-field-border'"
+                                                        [showError]="
+                                                            !isValidForm &&
+                                                            !voucherFormData.entries[0].transactions[0].amount
+                                                                .amountForAccount
+                                                        "
+                                                        name="receipt-amount"
+                                                        id="receipt-amount"
+                                                        [placeholder]="localeData?.enter_amount"
+                                                        decimalDigitsDirective
+                                                        [mask]="inputMaskFormat"
+                                                        [(ngModel)]="
+                                                            voucherFormData.entries[0].transactions[0].amount
+                                                                .amountForAccount
+                                                        "
+                                                        (ngModelChange)="calculateTotals()"
+                                                    >
+                                                    </text-field>
+                                                </mat-form-field>
+                                            </td>
+                                            <td>
+                                                <mat-form-field appearance="fill" class="no-border-top width-100">
+                                                    <text-field
+                                                        [cssClass]="'form-control mat-field-border'"
                                                         name="cheque-no"
                                                         id="cheque-no"
                                                         [placeholder]="localeData?.cheque_no"
@@ -839,20 +873,20 @@
                                     </div>
                                     <div class="col-sm-12 col-xl-4 col-lg-6 col-md-5">
                                         <label class="custom-file-label form-control cp position-relative" for="file">
-                                            <em *ngIf="!selectedFileName && !isFileUploading">{{
+                                            <em *ngIf="!selectedFileName && !isLoading">{{
                                                 localeData?.drag_drop_file
                                             }}</em>
                                             <div
-                                                *ngIf="isFileUploading"
+                                                *ngIf="isLoading"
                                                 class="d-flex justify-content-center align-items-center"
                                             >
                                                 <i class="fa fa-spinner rotate"></i>
                                             </div>
-                                            <em *ngIf="selectedFileName && !isFileUploading" class="text-success">{{
+                                            <em *ngIf="selectedFileName && !isLoading" class="text-success">{{
                                                 selectedFileName
                                             }}</em>
                                             <span class="text-success"
-                                                ><i class="fa fa-check" *ngIf="selectedFileName && !isFileUploading"></i
+                                                ><i class="fa fa-check" *ngIf="selectedFileName && !isLoading"></i
                                             ></span>
                                             <input
                                                 type="file"
@@ -969,6 +1003,7 @@
                                     color="primary"
                                     type="button"
                                     mat-raised-button
+                                    [disabled]="isLoading || isFileUploading"
                                     (click)="resetForm(receiptForm)"
                                 >
                                     {{ commonLocaleData?.app_clear }}
@@ -977,13 +1012,18 @@
                                     color="primary"
                                     type="button"
                                     mat-raised-button
+                                    [disabled]="isLoading || isFileUploading"
                                     (click)="createVoucher(receiptForm)"
                                 >
                                     {{ localeData?.create_receipt }}
                                 </button>
                                 <span class="d-inline-block v-align-middle">
                                     <div class="btn-group dropup">
-                                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                                        <button
+                                            mat-icon-button
+                                            [matMenuTriggerFor]="menu"
+                                            [disabled]="isLoading || isFileUploading"
+                                        >
                                             <span class="caret"></span>
                                         </button>
                                         <mat-menu #menu="matMenu" yPosition="above">

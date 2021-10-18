@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common";
+import { CommonModule, TitleCasePipe } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { MatCardModule } from '@angular/material/card';
 import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
@@ -57,7 +57,8 @@ import { PaymentReceiptRoutingModule } from "./payment-receipt.routing.module";
         TaxControlModule,
         SendEmailInvoiceModule,
         MatDialogModule
-    ]
+    ],
+    providers: [TitleCasePipe]
 })
 
 export class PaymentReceiptModule {

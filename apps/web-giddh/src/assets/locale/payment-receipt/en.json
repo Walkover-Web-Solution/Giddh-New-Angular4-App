@@ -18,5 +18,11 @@
     "create_receipt": "Create Receipt",
     "create_send": "Create & Send",
     "create_print": "Create & Print",
-    "voucher_created": "[VOUCHER] created successfully with number [VOUCHER_NUMBER]"
+    "voucher_created": "[VOUCHER] created successfully with voucher number [VOUCHER_NUMBER]",
+    "vendor_name": "Vendor Name",
+    "add_vendor": "Add Vendor",
+    "vendor_details": "Vendor Details",
+    "payment_date": "Payment Date",
+    "payment_mode": "Payment Mode",
+    "file_uploaded": "File uploaded successfully"
 }

@@ -18,5 +18,6 @@
         "advance_receipts": "Advance Receipts"
     },
     "entry_date": "Entry Date",
-    "suppliers_name": "Supplier's Name"
+    "suppliers_name": "Supplier's Name",
+    "new_payment": "+ New Payment"
 }

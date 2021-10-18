@@ -17,7 +17,8 @@ export enum VoucherTypeEnum {
     'estimate' = 'estimate',
     'generateEstimate' = 'estimates',
     'cash' = 'cash',
-    'receipt' = 'receipt'
+    'receipt' = 'receipt',
+    'payment' = 'payment'
 }
 
 export enum ActionTypeAfterVoucherGenerateOrUpdate {

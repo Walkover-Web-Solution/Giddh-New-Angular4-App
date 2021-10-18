@@ -5979,7 +5979,9 @@ highcharts-chart {
 .invoice-modal-content .app-aside-menu-other-taxes:host {
     top: 60px !important;
 }
-#top0 {
+
+#top0,
+.no-top {
     top: 0 !important;
 }
 #top0 app-aside-menu-other-taxes {
