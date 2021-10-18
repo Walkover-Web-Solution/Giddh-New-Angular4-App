@@ -250,29 +250,14 @@ export class ContactComponent implements OnInit, OnDestroy {
     displayColumns: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
     displayColumns$: Observable<string[]> = this.displayColumns.asObservable().pipe(takeUntil(this.destroyed$), distinctUntilChanged(isEqual));
 
-    constructor(
-        public dialog: MatDialog,
-        private store: Store<AppState>,
-        private router: Router,
-        private companyServices: CompanyService,
-        private commonActions: CommonActions,
-        private toaster: ToasterService,
-        private contactService: ContactService,
-        private settingsIntegrationActions: SettingsIntegrationActions,
-        private companyActions: CompanyActions,
-        private componentFactoryResolver: ComponentFactoryResolver,
-        private groupWithAccountsAction: GroupWithAccountsAction,
-        private cdRef: ChangeDetectorRef,
-        private generalService: GeneralService,
-        private route: ActivatedRoute,
-        private generalAction: GeneralActions,
-        private breakPointObservar: BreakpointObserver,
-        private modalService: BsModalService,
-        private settingsProfileActions: SettingsProfileActions,
-        private groupService: GroupService,
-        private settingsBranchAction: SettingsBranchActions,
-        public currencyPipe: GiddhCurrencyPipe,
-        private lightbox: Lightbox) {
+    customerColumns: string[] = ["customerName", "sales", "receipt", "closing" ]
+    vendorColumns: string[] = ["vendorName", "purchase", "payment", "closing", "action" ]
+
+    constructor( public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
+        private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver,
+        private groupWithAccountsAction: GroupWithAccountsAction, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
+        private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions, private groupService: GroupService,
+        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox) {
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
@@ -319,8 +304,8 @@ export class ContactComponent implements OnInit, OnDestroy {
                 if (showColumnObj.closingBalance !== undefined) {
                     delete showColumnObj.closingBalance;
                 }
-                this.showFieldFilter = showColumnObj;
-                this.setTableColspan();
+                // this.showFieldFilter = showColumnObj;
+                // this.setTableColspan();
             }
         }
 
@@ -591,14 +576,14 @@ export class ContactComponent implements OnInit, OnDestroy {
     public setActiveTab(tabName: "customer" | "aging-report" | "vendor") {
         this.searchStr = "";
         this.tabSelected(tabName);
-        this.showFieldFilter = {};
+        // this.showFieldFilter = {};
         let showColumnObj = JSON.parse(localStorage.getItem(this.localStorageKeysForFilters[this.activeTab === "vendor" ? "vendor" : "customer"]));
         if (showColumnObj) {
             if (showColumnObj.closingBalance !== undefined) {
                 delete showColumnObj.closingBalance;
             }
-            this.showFieldFilter = showColumnObj;
-            this.setTableColspan();
+            // this.showFieldFilter = showColumnObj;
+            // this.setTableColspan();
         }
 
         if (tabName === "vendor") {
@@ -1488,7 +1473,8 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     public setDisplayColumns(): void {
         console.log(Object.keys(this.showFieldFilter).filter(key => this.showFieldFilter[key].visibility).map(key => this.showFieldFilter[key].displayName));
-        this.displayColumns.next(Object.keys(this.showFieldFilter).filter(key => this.showFieldFilter[key].visibility));
+        const defaultColumms: string[] =  this.activeTab === "customer" ? this.customerColumns : this.vendorColumns;
+        this.displayColumns.next([...defaultColumms ,...Object.keys(this.showFieldFilter).filter(key => this.showFieldFilter[key].visibility)]);
     }
 
     /**
