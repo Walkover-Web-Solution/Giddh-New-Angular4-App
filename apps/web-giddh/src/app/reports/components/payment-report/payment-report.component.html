@@ -4,6 +4,7 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
+    *ngIf="!previewVoucherParams?.uniqueName"
 >
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="reverse-table-report">
@@ -447,3 +448,9 @@
         </div>
     </ng-template>
 </ng-container>
+<preview
+    *ngIf="previewVoucherParams?.uniqueName"
+    [params]="previewVoucherParams"
+    [voucherType]="'payment'"
+    [allVouchers]="allPayments"
+></preview>
