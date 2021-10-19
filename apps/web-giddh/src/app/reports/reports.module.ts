@@ -32,6 +32,11 @@ import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { PaymentReportComponent } from './components/payment-report/payment-report.component';
 import { PaymentAdvanceSearchComponent } from './components/payment-advance-search/payment-advance-search.component';
+import { PreviewComponent } from '../payment-receipt/components/preview/preview.component';
+import { MatCardModule } from '@angular/material/card';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
     declarations: [
@@ -50,7 +55,8 @@ import { PaymentAdvanceSearchComponent } from './components/payment-advance-sear
         ColumnarReportTableComponent,
         CashFlowStatementComponent,
         PaymentReportComponent,
-        PaymentAdvanceSearchComponent
+        PaymentAdvanceSearchComponent,
+        PreviewComponent
     ],
     entryComponents: [
         ReceiptAdvanceSearchComponent,
@@ -82,7 +88,11 @@ import { PaymentAdvanceSearchComponent } from './components/payment-advance-sear
         ModalModule.forRoot(),
         SharedModule,
         TaxSidebarModule,
-        NoDataModule
+        NoDataModule,
+        MatCardModule,
+        FormFieldsModule,
+        MatMenuModule,
+        MatButtonModule
     ]
 })
 

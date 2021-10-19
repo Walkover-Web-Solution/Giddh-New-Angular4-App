@@ -19,7 +19,7 @@ import { ElementViewContainerRef } from '../../../shared/helpers/directives/elem
 import { AppState } from '../../../store';
 import { PAYMENT_REPORT_FILTERS, PaymentAdvanceSearchModel } from '../../constants/reports.constant';
 import { PaymentAdvanceSearchComponent } from '../payment-advance-search/payment-advance-search.component';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'payment-report',
@@ -143,6 +143,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     public paymentAdvanceSearchAmountFilters: any;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
+    public previewVoucherParams: any = {};
 
     /** @ignore */
     constructor(
@@ -155,8 +156,17 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
         private generalService: GeneralService,
         private settingsBranchAction: SettingsBranchActions,
         private modalService: BsModalService,
-        private router: Router
-    ) { }
+        private router: Router,
+        private route: ActivatedRoute
+    ) { 
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            if(params?.uniqueName && params?.accountUniqueName) {
+                this.previewVoucherParams = params;
+            } else {
+                this.previewVoucherParams = {};
+            }
+        });
+    }
 
     /** Subscribe to universal date and set header title */
     public ngOnInit(): void {
@@ -231,7 +241,9 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
      * @memberof PaymentReportComponent
      */
     public ngAfterViewInit(): void {
-        this.subscribeToEvents();
+        if(!this.previewVoucherParams?.uniqueName) {
+            this.subscribeToEvents();
+        }
     }
 
     /**
@@ -616,7 +628,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
      */
     public previewVoucher(payment: any): void {
         if(this.voucherApiVersion === 2) {
-            this.router.navigate(['/pages/voucher/payment/edit/' + payment.uniqueName + '/' + payment.account?.uniqueName]);
+            this.router.navigate(['/pages/voucher/payment/preview/' + payment.uniqueName + '/' + payment.account?.uniqueName]);
         }
     }
 }

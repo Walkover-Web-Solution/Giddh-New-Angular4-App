@@ -1086,7 +1086,14 @@
                                         type="button"
                                         mat-raised-button
                                         *ngIf="isUpdateMode"
-                                        [routerLink]="'/pages/reports/' + voucherFormData.type"
+                                        [routerLink]="
+                                            '/pages/voucher/' +
+                                            voucherFormData.type +
+                                            '/preview/' +
+                                            queryParams?.uniqueName +
+                                            '/' +
+                                            queryParams?.accountUniqueName
+                                        "
                                     >
                                         {{ commonLocaleData?.app_cancel }}
                                     </button>
