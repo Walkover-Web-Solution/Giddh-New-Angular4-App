@@ -27,5 +27,8 @@
     "file_uploaded": "File uploaded successfully",
     "update_receipt": "Update Receipt",
     "create_payment": "Create Payment",
-    "update_payment": "Update Payment"
+    "update_payment": "Update Payment",
+    "voucher_updated": "[VOUCHER] updated successfully.",
+    "invalid_tax_field": "Invalid [TAX_NAME] in [FIELD_NAME]! Please fix and try again",
+    "invalid_tax": "Invalid [TAX_NAME]! Please fix and try again"
 }
