@@ -214,6 +214,8 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     private isEditFormPrefilled: boolean = false;
     /** This holds boolean if tax number is valid/invalid */
     private isValidTaxNumber: boolean = false;
+    /** This holds query params for edit voucher */
+    public queryParams: any = {};
 
     /** @ignore */
     constructor(
@@ -240,6 +242,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                 this.voucherFormData.type = params.voucherType;
             }
             if (params?.uniqueName) {
+                this.queryParams = params;
                 this.getVoucherDetails(params);
             }
         });
