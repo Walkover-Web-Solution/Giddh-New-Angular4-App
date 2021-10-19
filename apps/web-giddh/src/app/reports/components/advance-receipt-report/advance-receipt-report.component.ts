@@ -31,6 +31,7 @@ import {
     ReceiptAdvanceSearchModel,
 } from '../../constants/reports.constant';
 import { ReceiptAdvanceSearchComponent } from '../receipt-advance-search/receipt-advance-search.component';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'advance-receipt-report',
@@ -175,7 +176,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         private toastService: ToasterService,
         private generalService: GeneralService,
         private settingsBranchAction: SettingsBranchActions,
-        private modalService: BsModalService
+        private modalService: BsModalService,
+        private router: Router
     ) { }
 
     /** Subscribe to universal date and set header title */
@@ -673,5 +675,17 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      */
     public updateSearchQuery(value): void {
         this.searchQueryParams.q = value;
+    }
+
+    /**
+     * This will preview voucher
+     *
+     * @param {*} receipt
+     * @memberof AdvanceReceiptReportComponent
+     */
+    public previewVoucher(receipt: any): void {
+        if(this.voucherApiVersion === 2) {
+            this.router.navigate(['/pages/voucher/receipt/edit/' + receipt.uniqueName + '/' + receipt.account?.uniqueName]);
+        }
     }
 }

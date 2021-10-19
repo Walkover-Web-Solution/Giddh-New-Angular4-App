@@ -27,5 +27,8 @@
     "file_uploaded": "फाईल यशस्वीरित्या अपलोड केली",
     "update_receipt": "Update Receipt",
     "create_payment": "Create Payment",
-    "update_payment": "Update Payment"
+    "update_payment": "Update Payment",
+    "voucher_updated": "[VOUCHER] updated successfully.",
+    "invalid_tax_field": "[FIELD_NAME] मध्ये अवैध [TAX_NAME]! कृपया निराकरण करा आणि पुन्हा प्रयत्न करा",
+    "invalid_tax": "अवैध [TAX_NAME]! कृपया निराकरण करा आणि पुन्हा प्रयत्न करा"
 }

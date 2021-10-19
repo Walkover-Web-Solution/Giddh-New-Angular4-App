@@ -730,11 +730,12 @@ export class PaymentReceipt {
     account: AccountDetailsClass;
     updateAccountDetails: boolean;
     entries: PaymentReceiptEntry[];
-    date: string;
+    date: any;
     type: string;
     exchangeRate: number;
     attachedFiles: any[];
     subVoucher: any;
+    uniqueName?: any;
 
     constructor() {
         this.account = new AccountDetailsClass();

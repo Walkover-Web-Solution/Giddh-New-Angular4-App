@@ -286,14 +286,10 @@
                             <td data-title="#">{{ i + 1 }}</td>
                             <td
                                 width="13%"
-                                class="text-break cp"
+                                class="text-break"
+                                [ngClass]="{ 'cp': voucherApiVersion === 2 }"
                                 [attr.data-title]="localeData?.payment_no_label"
-                                [routerLink]="
-                                    '/pages/voucher/payment/edit/' +
-                                    payment.uniqueName +
-                                    '/' +
-                                    payment.account?.uniqueName
-                                "
+                                (click)="previewVoucher(payment)"
                             >
                                 {{ voucherApiVersion === 2 ? payment?.voucherNumber : payment?.receiptNumber }}
                             </td>
