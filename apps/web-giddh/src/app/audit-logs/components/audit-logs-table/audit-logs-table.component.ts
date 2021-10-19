@@ -73,8 +73,8 @@ export class AuditLogsTableComponent implements OnInit, OnDestroy {
     public loadMoreLogs(): void {
         this.store.pipe(select(state => state.auditlog), take(1)).subscribe((response) => {
             let request = cloneDeep(response.auditLogsRequest);
-            let page = response.currentPage + 1;
-            this.store.dispatch(this.auditLogsActions.getAuditLogs(request, page));
+            request.page = response.currentPage + 1;
+            this.store.dispatch(this.auditLogsActions.getAuditLogs(request));
         });
     }
 
