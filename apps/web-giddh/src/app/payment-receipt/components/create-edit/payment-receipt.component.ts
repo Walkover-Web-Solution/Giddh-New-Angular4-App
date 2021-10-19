@@ -3,12 +3,12 @@ import { TitleCasePipe } from "@angular/common";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { FormControl, NgForm } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import * as moment from "moment";
 import { UploaderOptions, UploadInput, UploadOutput } from "ngx-uploader";
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from "rxjs";
-import { take, takeUntil } from "rxjs/operators";
+import { auditTime, take, takeUntil } from "rxjs/operators";
 import { CommonActions } from "../../../actions/common.actions";
 import { CompanyActions } from "../../../actions/company.actions";
 import { InvoiceActions } from "../../../actions/invoice/invoice.actions";
@@ -19,7 +19,7 @@ import { cloneDeep, find, orderBy, uniqBy } from "../../../lodash-optimized";
 import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from "../../../models/api-models/Account";
 import { OnboardingFormRequest } from "../../../models/api-models/Common";
 import { TaxResponse } from "../../../models/api-models/Company";
-import { AccountDetailsClass, IForceClear, PaymentReceipt, PaymentReceiptTransaction, StateCode, VoucherClass, VoucherTypeEnum } from "../../../models/api-models/Sales";
+import { AccountDetailsClass, IForceClear, PaymentReceipt, PaymentReceiptTransaction, StateCode, VoucherTypeEnum } from "../../../models/api-models/Sales";
 import { LEDGER_API } from "../../../services/apiurls/ledger.api";
 import { LedgerService } from "../../../services/ledger.service";
 import { SalesService } from "../../../services/sales.service";
@@ -146,8 +146,6 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     public statesSource: IOption[] = [];
     /** This will hold states list with respect to country */
     public countryStates: any[] = [];
-    /* This will hold company's country states */
-    public companyStatesSource: IOption[] = [];
     /** True, if the Giddh supports the taxation of the country (not supported now: UK, US, Nepal, Australia) */
     public shouldShowTrnGstField: boolean = false;
     /** Holds onboarding form fields */
@@ -210,6 +208,12 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     public voucherDetails$: Observable<any>;
     /** Holds account data */
     private selectedAccountDetails$: Observable<AccountResponseV2>;
+    /** True if we need to show loader */
+    public showLoader: boolean = true;
+    /** This will hold boolean based on edit form is prefilled or not */
+    private isEditFormPrefilled: boolean = false;
+    /** This holds boolean if tax number is valid/invalid */
+    private isValidTaxNumber: boolean = false;
 
     /** @ignore */
     constructor(
@@ -226,7 +230,8 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         private invoiceActions: InvoiceActions,
         private route: ActivatedRoute,
         private titleCasePipe: TitleCasePipe,
-        private invoiceReceiptAction: InvoiceReceiptActions
+        private invoiceReceiptAction: InvoiceReceiptActions,
+        private router: Router
     ) {
         this.voucherFormData = new PaymentReceipt();
 
@@ -357,19 +362,20 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             this.filterBankAccounts();
         });
 
-        combineLatest([this.voucherDetails$, this.selectedAccountDetails$]).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if(response && response[0] && response[1]) {
-                console.log(response[0]);
+        combineLatest([this.voucherDetails$, this.selectedAccountDetails$]).pipe(takeUntil(this.destroyed$), auditTime(700)).subscribe(response => {
+            if (!this.isEditFormPrefilled && response && response[0] && response[1]) {
+                this.isEditFormPrefilled = true;
 
                 this.voucherFormData.account = response[0].account;
                 this.voucherFormData.attachedFiles = response[0].attachedFiles;
-                this.voucherFormData.date = moment(response[0].date, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                this.voucherFormData.date = moment(response[0].date, GIDDH_DATE_FORMAT).toDate();
+                this.getCurrencyRate(this.companyCurrency, this.voucherFormData.account?.currency?.code, moment(this.voucherFormData.date).format(GIDDH_DATE_FORMAT));
 
                 let entryLoop = 0;
                 response[0].entries.forEach(entry => {
                     let transactionLoop = 0;
                     entry.transactions.forEach(transaction => {
-                        if(!this.voucherFormData.entries[entryLoop].transactions[transactionLoop]) {
+                        if (!this.voucherFormData.entries[entryLoop].transactions[transactionLoop]) {
                             this.voucherFormData.entries[entryLoop].transactions[transactionLoop] = new PaymentReceiptTransaction();
                         }
                         this.voucherFormData.entries[entryLoop].transactions[transactionLoop] = {
@@ -396,16 +402,16 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                 this.voucherFormData.exchangeRate = response[0].exchangeRate;
                 this.voucherFormData.subVoucher = response[0].subVoucher;
                 this.voucherFormData.updateAccountDetails = true;
+                this.voucherFormData.uniqueName = response[0].uniqueName;
                 this.allowFocus = false;
 
-                if(this.voucherFormData.subVoucher) {
+                if (this.voucherFormData.subVoucher) {
                     this.isAdvanceReceipt = true;
                 }
 
                 this.calculateTax();
                 this.calculateTotals();
-
-                console.log(this.voucherFormData);
+                this.startLoading(false);
             }
         });
     }
@@ -416,6 +422,8 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * @memberof PaymentReceiptComponent
      */
     public ngOnDestroy(): void {
+        this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
+        this.store.dispatch(this.invoiceReceiptAction.ResetVoucherDetails());
         this.destroyed$.complete();
         this.destroyed$.next();
     }
@@ -573,6 +581,10 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     public makeCustomerList() {
         this.customerAccounts$ = observableOf(orderBy(this.sundryDebtorsAccountsList, 'label'));
         this.selectedGroupUniqueName = 'sundrydebtors';
+
+        if (!this.isUpdateMode) {
+            this.startLoading(false);
+        }
     }
 
     /**
@@ -969,27 +981,18 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      *
      * @private
      * @param {*} countryCode Country code for the user
-     * @param {boolean} isCompanyStates
      * @returns Promise to carry out further operations
      * @memberof PaymentReceiptComponent
      */
-    private getUpdatedStateCodes(countryCode: any, isCompanyStates?: boolean): Promise<any> {
+    private getUpdatedStateCodes(countryCode: any): Promise<any> {
         return new Promise((resolve: Function) => {
             if (countryCode) {
                 if (this.countryStates[countryCode]) {
-                    if (!isCompanyStates) {
-                        this.statesSource = this.countryStates[countryCode];
-                    } else {
-                        this.companyStatesSource = this.countryStates[countryCode];
-                    }
+                    this.statesSource = this.countryStates[countryCode];
                     resolve();
                 } else {
                     this.salesService.getStateCode(countryCode).pipe(takeUntil(this.destroyed$)).subscribe(resp => {
-                        if (!isCompanyStates) {
-                            this.statesSource = this.modifyStateResponse((resp.body) ? resp.body.stateList : [], countryCode);
-                        } else {
-                            this.companyStatesSource = this.modifyStateResponse((resp.body) ? resp.body.stateList : [], countryCode);
-                        }
+                        this.statesSource = this.modifyStateResponse((resp.body) ? resp.body.stateList : [], countryCode);
                         resolve();
                     }, () => {
                         resolve();
@@ -1021,7 +1024,6 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         });
 
         this.countryStates[countryCode] = stateListRet;
-
         return stateListRet;
     }
 
@@ -1117,7 +1119,9 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         }
 
         if (item && item.currency && item.currency !== this.companyCurrency) {
-            this.getCurrencyRate(this.companyCurrency, item.currency, moment(this.voucherFormData.date).format(GIDDH_DATE_FORMAT));
+            if (this.voucherFormData.date) {
+                this.getCurrencyRate(this.companyCurrency, item.currency, moment(this.voucherFormData.date).format(GIDDH_DATE_FORMAT));
+            }
         } else {
             this.previousExchangeRate = this.exchangeRate;
             this.originalExchangeRate = 1;
@@ -1140,9 +1144,6 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      */
     private async prepareCompanyCountryAndCurrencyFromProfile(profile: any): Promise<void> {
         if (profile) {
-            this.customerCountryName = profile.country;
-            this.showGstAndTrnUsingCountryName(profile.country);
-
             this.companyCurrency = profile.baseCurrency || 'INR';
             this.companyCurrencyName = profile.baseCurrency;
 
@@ -1154,11 +1155,9 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             }
             if (!this.isUpdateMode) {
                 await this.getUpdatedStateCodes(this.companyCountryCode);
-                await this.getUpdatedStateCodes(this.companyCountryCode, true);
             }
         } else {
             this.customerCountryName = '';
-            this.showGstAndTrnUsingCountryName('');
             this.companyCurrency = 'INR';
         }
     }
@@ -1420,6 +1419,13 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         this.dialogRef.close();
     }
 
+    /**
+     * This will get voucher details
+     *
+     * @private
+     * @param {*} request
+     * @memberof PaymentReceiptComponent
+     */
     private getVoucherDetails(request: any): void {
         this.isUpdateMode = true;
         this.getAccountDetails(request.accountUniqueName);
@@ -1430,7 +1436,140 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         }));
     }
 
-    public updateVoucher(formObj: NgForm): void {
-        
+    /**
+     * This will update voucher
+     *
+     * @returns {void}
+     * @memberof PaymentReceiptComponent
+     */
+    public updateVoucher(): void {
+        this.isValidForm = true;
+        this.isLoading = false;
+
+        if (!this.voucherFormData.account.uniqueName?.trim() || !this.voucherFormData.date || !this.voucherFormData.entries[0].transactions[0].amount
+            .amountForAccount || !this.voucherFormData.entries[0].transactions[0].account.uniqueName || (this.isAdvanceReceipt && this.selectedTaxes?.length === 0)) {
+            this.isValidForm = false;
+            return;
+        }
+
+        this.isLoading = true;
+
+        if (this.voucherFormData.date) {
+            this.voucherFormData.date = moment(this.voucherFormData.date).format(GIDDH_DATE_FORMAT);
+            this.voucherFormData.entries[0].date = this.voucherFormData.date;
+        }
+
+        if (this.voucherFormData.entries[0].chequeClearanceDate) {
+            this.voucherFormData.entries[0].chequeClearanceDate = moment(this.voucherFormData.entries[0].chequeClearanceDate).format(GIDDH_DATE_FORMAT);
+        }
+
+        if (this.isAdvanceReceipt) {
+            this.voucherFormData.subVoucher = SubVoucher.AdvanceReceipt;
+        }
+
+        let selectedTaxes = [];
+        this.voucherFormData.entries[0].taxes.filter(tax => tax.isChecked).forEach(tax => {
+            selectedTaxes.push({ uniqueName: tax.uniqueName });
+        });
+
+        this.voucherFormData.entries[0].taxes = selectedTaxes;
+
+        this.salesService.updateVoucherV4(this.voucherFormData).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                if (response.status === "success") {
+                    let message = this.localeData?.voucher_updated;
+                    message = message.replace("[VOUCHER]", this.titleCasePipe.transform(this.voucherFormData.type));
+                    this.toaster.showSnackBar("success", message);
+
+                    this.router.navigate(['/pages/reports/' + this.voucherFormData.type]);
+                } else {
+                    this.toaster.showSnackBar("error", response.message);
+                }
+            } else {
+                this.toaster.showSnackBar("error", this.commonLocaleData?.app_something_went_wrong);
+            }
+            this.isLoading = false;
+        });
+    }
+
+    /**
+     * This will start/stop loader
+     *
+     * @private
+     * @param {boolean} status
+     * @memberof PaymentReceiptComponent
+     */
+    private startLoading(status: boolean): void {
+        this.showLoader = status;
+        this.changeDetectionRef.detectChanges();
+    }
+
+    /**
+     * get state code using Tax number to prefill state
+     *
+     * @param {string} type billingDetails || shipping
+     * @param {SalesShSelectComponent} statesEle state input box
+     * @memberof PaymentReceiptComponent
+     */
+    public getStateCode(type: string, statesEle: SalesShSelectComponent): void {
+        let gstVal = cloneDeep(this.voucherFormData.account[type].gstNumber).toString();
+        if (gstVal && gstVal.length >= 2) {
+            const selectedState = this.statesSource.find(item => item.additional?.stateGstCode === gstVal.substring(0, 2));
+            if (selectedState) {
+                this.voucherFormData.account[type].stateCode = selectedState.value;
+                this.voucherFormData.account[type].state.code = selectedState.value;
+                statesEle.disabled = true;
+            } else {
+                this.checkTaxNumberValidation(gstVal);
+                if (!this.isValidTaxNumber) {
+                    /* Check for valid pattern such as 9918IND29061OSS through which state can't be determined
+                        and clear the state only when valid number is not provided */
+                    this.voucherFormData.account[type].stateCode = null;
+                    this.voucherFormData.account[type].state.code = null;
+                }
+                statesEle.disabled = false;
+            }
+        } else {
+            statesEle.disabled = false;
+            this.voucherFormData.account[type].stateCode = null;
+            this.voucherFormData.account[type].state.code = null;
+        }
+        this.checkTaxNumberValidation(gstVal);
+    }
+
+    /**
+     * To check Tax number validation using regex get by API
+     *
+     * @param {*} value Value to be validated
+     * @param {string} fieldName Field name for which the value is validated
+     * @memberof PaymentReceiptComponent
+     */
+    public checkTaxNumberValidation(value: any, fieldName?: string): void {
+        this.isValidTaxNumber = false;
+        if (value) {
+            if (this.formFields['taxName'] && this.formFields['taxName']['regex'] && this.formFields['taxName']['regex'].length > 0) {
+                for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
+                    let regex = new RegExp(this.formFields['taxName']['regex'][key]);
+                    if (regex.test(value)) {
+                        this.isValidTaxNumber = true;
+                    }
+                }
+            } else {
+                this.isValidTaxNumber = true;
+            }
+            if (!this.isValidTaxNumber) {
+                this.startLoading(false);
+                if (fieldName) {
+                    let invalidTax = this.localeData?.invalid_tax_field;
+                    invalidTax = invalidTax?.replace("[TAX_NAME]", this.formFields['taxName']?.label);
+                    invalidTax = invalidTax?.replace("[FIELD_NAME]", fieldName);
+                    this.toaster.showSnackBar("error", invalidTax);
+                } else {
+                    let invalidTax = this.localeData?.invalid_tax;
+                    invalidTax = invalidTax?.replace("[TAX_NAME]", this.formFields['taxName']?.label);
+                    this.toaster.showSnackBar("error", invalidTax);
+                }
+            }
+        }
     }
 }

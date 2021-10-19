@@ -25,6 +25,7 @@ import { PrintComponent } from "./components/print/print.component";
 import { MainComponent } from "./main.component";
 import { PaymentReceiptComponent } from "./components/create-edit/payment-receipt.component";
 import { PaymentReceiptRoutingModule } from "./payment-receipt.routing.module";
+import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
 
 @NgModule({
     declarations: [
@@ -56,7 +57,8 @@ import { PaymentReceiptRoutingModule } from "./payment-receipt.routing.module";
         SharedModule,
         TaxControlModule,
         SendEmailInvoiceModule,
-        MatDialogModule
+        MatDialogModule,
+        GiddhPageLoaderModule
     ],
     providers: [TitleCasePipe]
 })

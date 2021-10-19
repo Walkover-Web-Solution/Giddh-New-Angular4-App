@@ -155,14 +155,14 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
         private generalService: GeneralService,
         private settingsBranchAction: SettingsBranchActions,
         private modalService: BsModalService,
-        private route: Router
+        private router: Router
     ) { }
 
     /** Subscribe to universal date and set header title */
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         if(this.voucherApiVersion === 1) {
-            this.route.navigate(['pages', 'home']);
+            this.router.navigate(['pages', 'home']);
         }
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
@@ -606,5 +606,17 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
      */
     public updateSearchQuery(value): void {
         this.searchQueryParams.q = value;
+    }
+
+    /**
+     * This will preview voucher
+     *
+     * @param {*} payment
+     * @memberof PaymentReportComponent
+     */
+    public previewVoucher(payment: any): void {
+        if(this.voucherApiVersion === 2) {
+            this.router.navigate(['/pages/voucher/payment/edit/' + payment.uniqueName + '/' + payment.account?.uniqueName]);
+        }
     }
 }
