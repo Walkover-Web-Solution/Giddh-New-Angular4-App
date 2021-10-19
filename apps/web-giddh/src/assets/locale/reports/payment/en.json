@@ -19,5 +19,6 @@
     },
     "entry_date": "Entry Date",
     "suppliers_name": "Supplier's Name",
-    "new_payment": "+ New Payment"
+    "new_payment": "+ New Payment",
+    "preview_unavailable": "Preview is not available right now! Please try again..."
 }

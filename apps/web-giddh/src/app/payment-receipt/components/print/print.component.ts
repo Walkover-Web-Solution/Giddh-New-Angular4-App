@@ -1,6 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { DownloadVoucherRequest } from '../../../models/api-models/recipt';
-import { VoucherTypeEnum } from '../../../models/api-models/Sales';
 import { ToasterService } from '../../../services/toaster.service';
 import { ReceiptService } from '../../../services/receipt.service';
 import { takeUntil } from 'rxjs/operators';
