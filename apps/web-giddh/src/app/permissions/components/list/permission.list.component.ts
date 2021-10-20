@@ -56,7 +56,7 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
         // This module should be accessible to superuser only
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
-                let superAdminIndx = activeCompany.userEntityRoles.findIndex((entity) => entity.role.uniqueName === 'super_admin');
+                let superAdminIndx = activeCompany.userEntityRoles.findIndex((entity) => entity?.role?.uniqueName === 'super_admin');
                 if (superAdminIndx === -1) {
                     this.redirectToDashboard();
                 }
@@ -104,7 +104,7 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     public updateRole(role: NewRoleClass) {
-        let data = new NewRoleClass(role.name, role.scopes, role.isFixed, role.uniqueName, true);
+        let data = new NewRoleClass(role?.name, role?.scopes, role?.isFixed, role?.uniqueName, true);
         this.store.dispatch(this.permissionActions.PushTempRoleInStore(data));
         this.router.navigate(['/pages/permissions/details']);
     }
@@ -116,7 +116,7 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
 
     public deleteConfirmedRole() {
         this.permissionConfirmationModel.hide();
-        this.store.dispatch(this.permissionActions.DeleteRole(this.selectedRoleForDelete.uniqueName));
+        this.store.dispatch(this.permissionActions.DeleteRole(this.selectedRoleForDelete?.uniqueName));
     }
 
     public closeConfirmationPopup() {

@@ -186,7 +186,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
             if (listItem) {
                 listItem.parentGroups = newParents;
             }
-            if (listItem.groups.length > 0) {
+            if (listItem?.groups?.length > 0) {
                 result = this.flattenGroup(listItem.groups, newParents);
                 result.push(_.omit(listItem, 'groups'));
             } else {

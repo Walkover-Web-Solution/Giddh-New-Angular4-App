@@ -36,7 +36,7 @@
                             </tr>
                         </thead>
 
-                        <tbody *ngIf="!isLoading && availableTaxes.length">
+                        <tbody *ngIf="!isLoading && availableTaxes?.length">
                             <tr *ngFor="let tax of availableTaxes; let i = index">
                                 <td data-title="#">{{ i + 1 }}</td>
                                 <td *ngIf="!taxToEdit[i]" [attr.data-title]="localeData?.tax">{{ tax.taxNumber }}</td>
@@ -72,9 +72,9 @@
                                     </p>
                                 </td>
 
-                                <td *ngIf="!tax.taxDetail || !tax.taxDetail.length">--</td>
+                                <td *ngIf="!tax?.taxDetail?.length">--</td>
                                 <td
-                                    *ngIf="tax.taxDetail && tax.taxDetail.length && !taxToEdit[i]"
+                                    *ngIf="tax?.taxDetail?.length && !taxToEdit[i]"
                                     [attr.data-title]="localeData?.applied_from"
                                 >
                                     <div *ngFor="let t of tax.taxDetail">
@@ -83,7 +83,7 @@
                                 </td>
 
                                 <td
-                                    *ngIf="tax.taxDetail && tax.taxDetail.length && taxToEdit[i]"
+                                    *ngIf="tax?.taxDetail?.length && taxToEdit[i]"
                                     [attr.data-title]="localeData?.applied_from"
                                 >
                                     <div *ngFor="let t of tax.taxDetail; let j = index; let last = last" class="mr-b1">
@@ -118,10 +118,10 @@
                                     </div>
                                 </td>
 
-                                <td *ngIf="!tax.taxDetail || !tax.taxDetail.length">--</td>
+                                <td *ngIf="!tax?.taxDetail?.length">--</td>
 
                                 <td
-                                    *ngIf="tax.taxDetail && tax.taxDetail.length && !taxToEdit[i]"
+                                    *ngIf="tax?.taxDetail?.length && !taxToEdit[i]"
                                     [attr.data-title]="localeData?.tax_percentage"
                                 >
                                     <div *ngFor="let t of tax.taxDetail">
@@ -129,7 +129,7 @@
                                     </div>
                                 </td>
 
-                                <td *ngIf="tax.taxDetail && tax.taxDetail.length && taxToEdit[i]">
+                                <td *ngIf="tax?.taxDetail?.length && taxToEdit[i]">
                                     <div
                                         class="input-group mr-b1"
                                         *ngFor="let t of tax.taxDetail; let j = index; let last = last"
@@ -232,7 +232,7 @@
                     </table>
                 </div>
             </div>
-            <div class="no-data" *ngIf="!isLoading && !availableTaxes.length">
+            <div class="no-data" *ngIf="!isLoading && !availableTaxes?.length">
                 <no-data
                     [primaryMessage]="commonLocaleData?.app_no_entries_found"
                     [secondaryMessage]="' '"

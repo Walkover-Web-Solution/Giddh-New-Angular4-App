@@ -140,7 +140,7 @@
                                             [attr.data-title]="commonLocaleData?.app_particular"
                                             [id]="'debit-id-' + i"
                                             [ngClass]="{
-                                                'other-account-entry': txn.particular.uniqueName === 'others'
+                                                'other-account-entry': txn?.particular?.uniqueName === 'others'
                                             }"
                                             class="
                                                 col-5
@@ -155,7 +155,7 @@
                                                 <div class="d-flex update-ledger-account">
                                                     <span
                                                         *ngIf="
-                                                            (!dbtSelect.isOpen && txn.particular.uniqueName) ||
+                                                            (!dbtSelect.isOpen && txn?.particular?.uniqueName) ||
                                                             (dbtSelect.isOpen && dbtSelect.filter)
                                                         "
                                                         >{{ localeData?.to }}</span
@@ -443,14 +443,14 @@
                                                 justify-content-between
                                             "
                                             [ngClass]="{
-                                                'other-account-entry': txn.particular.uniqueName === 'others'
+                                                'other-account-entry': txn?.particular?.uniqueName === 'others'
                                             }"
                                         >
                                             <ng-template [ngIf]="!txn?.isDiscount">
                                                 <div class="d-flex update-ledger-account">
                                                     <span
                                                         *ngIf="
-                                                            (!crdSelect.isOpen && txn.particular.uniqueName) ||
+                                                            (!crdSelect.isOpen && txn?.particular?.uniqueName) ||
                                                             (crdSelect.isOpen && crdSelect.filter)
                                                         "
                                                         >{{ localeData?.by }}</span
