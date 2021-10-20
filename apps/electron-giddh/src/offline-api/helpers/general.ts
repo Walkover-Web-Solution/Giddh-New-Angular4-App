@@ -1,6 +1,7 @@
 import electron from "electron";
 import fs from "fs";
 import * as appAath from "path";
+import * as lockFile from "proper-lockfile";
 
 /**
  * This will return the config for internet connectivity check
@@ -73,4 +74,24 @@ export function getDefaultApiOptions(request: any, method: string): any {
  */
 export function getDefaultQueryParams(request: any): string {
     return 'branchUniqueName=' + request.query.branchUniqueName + '&lang=' + request.query.lang;
+}
+
+export function fileLock(file: string): any {
+    return lockFile.lockSync(file);
+}
+
+export function checkIfFileLocked(file: string): boolean {
+    return lockFile.checkSync(file);
+}
+
+export function fileUnlock(file: string): void {
+    lockFile.unlockSync(file);
+}
+
+export function waitForFileUnlock(): Promise<void> {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve();
+        }, 5000);
+    });
 }
