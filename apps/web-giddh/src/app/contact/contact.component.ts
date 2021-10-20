@@ -5,10 +5,11 @@ import {
     Component,
     ComponentFactoryResolver,
     ElementRef,
-    EventEmitter,
+    EventEmitter, OnChanges,
     OnDestroy,
     OnInit,
     Output,
+    SimpleChanges,
     TemplateRef,
     ViewChild,
 } from "@angular/core";
@@ -76,7 +77,7 @@ import { MatDialog } from "@angular/material/dialog";
         ]),
     ],
 })
-export class ContactComponent implements OnInit, OnDestroy {
+export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     // vendorDataColumns: string[] = ["app_parent_group", "opening", "app_sales_app_purchase", "app_receipt_app_payment",'closing','contacts','app_tax_number','app_state','comment','app_action'];
     // customerDataColumns: string[] = ["position", "name", "weight", "symbol"];
     // dataSource = this.sundryDebtorsAccounts [];
@@ -251,7 +252,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     displayColumns$: Observable<string[]> = this.displayColumns.asObservable().pipe(takeUntil(this.destroyed$), distinctUntilChanged(isEqual));
 
     customerColumns: string[] = ["customerName", "sales", "receipt", "closing" ]
-    vendorColumns: string[] = ["vendorName", "purchase", "payment", "closing", "action" ]
+    vendorColumns: string[] = ["vendorName", "purchase", "payment", "closing" ]
 
     constructor( public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver,
@@ -283,7 +284,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         });
         Object.keys(CustomerVendorDefaultColumns).forEach(key => {
             this.showFieldFilter[key] = {
-                visibility: true,
+                visibility: false,
                 displayName: key
             };
         });
@@ -329,6 +330,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 } else {
                     this.setActiveTab("aging-report");
                 }
+                this.setDisplayColumns();
             }
         });
 
@@ -462,6 +464,12 @@ export class ContactComponent implements OnInit, OnDestroy {
         });
     }
 
+    public ngOnChanges(changes: SimpleChanges) {
+        if(!isEqual(changes['activeTab'].previousValue,changes['activeTab'].currentValue)) {
+
+        }
+    }
+
     public performActions(type: number, account: any, event?: any) {
         switch (type) {
             case 0: // go to add and manage
@@ -509,7 +517,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         if (isElectron) {
             let ipcRenderer = (window as any).require("electron").ipcRenderer;
             url = location.origin + location.pathname + `#./pages/${part}/${accUniqueName}`;
-            console.log(ipcRenderer.send("open-url", url));
         } else {
             (window as any).open(url);
         }
@@ -815,7 +822,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         // this.mailModal.show();
         const dialogRef = this.dialog.open(this.mailModalComponent);
         dialogRef.afterClosed().subscribe(() => {
-            console.log("The dialog was closed");
+
         });
     }
 
@@ -1457,12 +1464,11 @@ export class ContactComponent implements OnInit, OnDestroy {
         for (let key of field) {
             if (key?.uniqueName) {
                 this.showFieldFilter[key.uniqueName] = {
-                    visibility: true,
+                    visibility: false,
                     displayName: key.key
                 };
             }
         }
-        console.log(this.showFieldFilter);
         this.setDisplayColumns();
     }
 
@@ -1472,9 +1478,12 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @memberof ContactComponent
      */
     public setDisplayColumns(): void {
-        console.log(Object.keys(this.showFieldFilter).filter(key => this.showFieldFilter[key].visibility).map(key => this.showFieldFilter[key].displayName));
         const defaultColumms: string[] =  this.activeTab === "customer" ? this.customerColumns : this.vendorColumns;
-        this.displayColumns.next([...defaultColumms ,...Object.keys(this.showFieldFilter).filter(key => this.showFieldFilter[key].visibility)]);
+        let computedColumns: string[] = [...defaultColumms ,...Object.keys(this.showFieldFilter).filter(key => this.showFieldFilter[key].visibility)];
+        if(this.activeTab === "vendor" && computedColumns?.length) {
+          computedColumns?.push("action");
+        }
+        this.displayColumns.next(computedColumns);
     }
 
     /**
@@ -1639,7 +1648,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             // this.bulkPaymentModalRef = this.modalService.show(template, Object.assign({}, { class: "payment-modal modal-xl" }),
             const dialogRef = this.dialog.open(this.bulkPaymentModalRef);
             dialogRef.afterClosed().subscribe(() => {
-                console.log("The dialog was closed");
             });
 
         }
