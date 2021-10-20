@@ -468,9 +468,13 @@ export class LedgerService {
      */
     public getInvoiceListsForCreditNote(model: any, date: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + LEDGER_API.GET_VOUCHER_INVOICE_LIST
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':voucherDate', encodeURIComponent(date)), model
+        let url = this.config.apiUrl + LEDGER_API.GET_VOUCHER_INVOICE_LIST
+        .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        .replace(':voucherDate', encodeURIComponent(date));
+        if (this.generalService.voucherApiVersion === 2) {
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        }
+        return this.http.post(url, model
         ).pipe(map((res) => {
             let data: BaseResponse<IUnpaidInvoiceListResponse, any> = res;
             data.request = '';
