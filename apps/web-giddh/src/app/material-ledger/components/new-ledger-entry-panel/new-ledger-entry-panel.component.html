@@ -810,13 +810,7 @@
                             class="pull-left"
                             name="generateInvoice"
                             [disabled]="
-                                ((isAdvanceReceipt ||
-                                    isAdjustReceiptSelected ||
-                                    isAdjustVoucherSelected ||
-                                    blankLedger.voucherType === 'credit note' ||
-                                    blankLedger.voucherType === 'debit note') &&
-                                    blankLedger.generateInvoice) ||
-                                isReadOnly
+                                isAdvanceReceipt || currentTxn?.voucherAdjustments?.adjustments?.length || isReadOnly
                                     ? 'disabled'
                                     : null
                             "

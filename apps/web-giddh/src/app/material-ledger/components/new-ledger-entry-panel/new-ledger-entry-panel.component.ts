@@ -1100,12 +1100,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.shouldShowAdvanceReceipt = false;
             this.removeSelectedInvoice();
             this.getInvoiceListsForCreditNote.emit(event.value);
-            this.blankLedger.generateInvoice = true;
             this.isAdvanceReceipt = false;
         } else {
             this.shouldShowAdvanceReceipt = false;
             this.isAdvanceReceipt = false;
         }
+
         this.handleAdvanceReceiptChange();
         this.currentVoucherLabel = this.generalService.getCurrentVoucherLabel(this.blankLedger?.voucherType, this.commonLocaleData);
     }
@@ -1351,7 +1351,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.isAdjustVoucherSelected) {
             this.prepareAdjustVoucherConfiguration();
             this.openAdjustPaymentModal();
-            this.blankLedger.generateInvoice = true;
         } else {
             this.removeAdjustment();
         }
@@ -1407,6 +1406,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     this.isAdjustReceiptSelected = false;
                 }
                 this.isAdjustVoucherSelected = false;
+
+                if(!this.selectedInvoiceForCreditNote) {
+                    this.blankLedger.generateInvoice = false;
+                }
             }
         }
 
@@ -1427,6 +1430,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.isAdjustReceiptSelected = false;
             }
             this.isAdjustVoucherSelected = false;
+
+            if(!this.selectedInvoiceForCreditNote) {
+                this.blankLedger.generateInvoice = false;
+            }
         }
         this.adjustmentDialogRef.close();
     }
