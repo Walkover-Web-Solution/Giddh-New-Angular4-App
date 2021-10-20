@@ -707,18 +707,31 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             //  It will execute when Bulk delete operation
             if (this.selectedInvoicesList.length > 1) {
-                let selectedinvoicesName = [];
-                this.selectedInvoicesList.forEach(item => {
-                    selectedinvoicesName.push(item?.voucherNumber);
-                });
-                let bulkDeleteModel = {
-                    voucherNumbers: selectedinvoicesName,
-                    voucherType: this.selectedVoucher
+                let bulkDeleteModel;
+                let selectedVouchers = [];
+
+                if (this.voucherApiVersion === 2) {
+                    this.selectedInvoicesList.forEach(item => {
+                        selectedVouchers.push(item?.uniqueName);
+                    });
+                    bulkDeleteModel = {
+                        voucherUniqueNames: selectedVouchers,
+                        voucherType: this.selectedVoucher
+                    }
+                } else {
+                    this.selectedInvoicesList.forEach(item => {
+                        selectedVouchers.push(item?.voucherNumber);
+                    });
+                    bulkDeleteModel = {
+                        voucherNumbers: selectedVouchers,
+                        voucherType: this.selectedVoucher
+                    }
                 }
-                if (bulkDeleteModel.voucherNumbers && bulkDeleteModel.voucherType) {
+                if (selectedVouchers?.length && bulkDeleteModel.voucherType) {
                     this._invoiceBulkUpdateService.bulkUpdateInvoice(bulkDeleteModel, 'delete').subscribe(response => {
                         if (response) {
                             if (response.status === "success") {
+                                this.getVoucher(this.isUniversalDateApplicable);
                                 this._toaster.successToast(response.body);
                             } else {
                                 this._toaster.errorToast(response.message);
@@ -1699,13 +1712,26 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof InvoicePreviewComponent
      */
     public createBulkEInvoice(): void {
-        const requestObject = {
-            model: {
-                voucherNumbers: this.selectedInvoicesList.map(item => item.voucherNumber),
-                voucherType: this.selectedVoucher
-            },
-            actionType: 'einvoice'
-        };
+        let requestObject;
+
+        if(this.voucherApiVersion === 2) {
+            requestObject = {
+                model: {
+                    voucherUniqueNames: this.selectedInvoicesList.map(item => item.uniqueName),
+                    voucherType: this.selectedVoucher
+                },
+                actionType: 'einvoice'
+            };
+        } else {
+            requestObject = {
+                model: {
+                    voucherNumbers: this.selectedInvoicesList.map(item => item.voucherNumber),
+                    voucherType: this.selectedVoucher
+                },
+                actionType: 'einvoice'
+            };
+        }
+
         this.store.dispatch(this.invoiceActions.generateBulkEInvoice(requestObject));
     }
 
