@@ -224,8 +224,10 @@
                             <div
                                 class="desktop-view-btn"
                                 *ngIf="
-                                    (selectedVoucher !== 'purchase' && selectedItems.length > 0) ||
-                                    (selectedItems.length === 1 && selectedVoucher === 'purchase')
+                                    (voucherApiVersion === 2 && selectedItems.length > 0) ||
+                                    (voucherApiVersion !== 2 &&
+                                        selectedItems.length === 1 &&
+                                        selectedVoucher === 'purchase')
                                 "
                             >
                                 <div *ngIf="!isCompany" class="btn-group" dropdown #dp="bs-dropdown">
@@ -281,13 +283,7 @@
                                                 {{ localeData?.create_e_invoice }}
                                             </a>
                                         </li>
-                                        <li
-                                            role="menuitem"
-                                            *ngIf="
-                                                selectedVoucher !== 'purchase' ||
-                                                (selectedItems.length === 1 && selectedVoucher === 'purchase')
-                                            "
-                                        >
+                                        <li role="menuitem">
                                             <a
                                                 class="dropdown-item cp"
                                                 href="javascript:void(0)"
