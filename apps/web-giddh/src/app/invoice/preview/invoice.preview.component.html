@@ -224,10 +224,10 @@
                             <div
                                 class="desktop-view-btn"
                                 *ngIf="
-                                    (voucherApiVersion === 2 && selectedItems.length > 0) ||
                                     (voucherApiVersion !== 2 &&
-                                        selectedItems.length === 1 &&
-                                        selectedVoucher === 'purchase')
+                                        selectedItems.length === 1 && selectedVoucher === 'purchase') ||
+                                    (selectedItems.length > 0 && selectedVoucher !== 'purchase') ||
+                                    (voucherApiVersion === 2 && selectedItems.length > 0)
                                 "
                             >
                                 <div *ngIf="!isCompany" class="btn-group" dropdown #dp="bs-dropdown">
