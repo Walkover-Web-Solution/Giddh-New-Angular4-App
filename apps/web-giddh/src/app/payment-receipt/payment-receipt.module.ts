@@ -19,13 +19,13 @@ import { TranslateDirectiveModule } from "../theme/translate/translate.directive
 import { KeyboardShortutModule } from "../shared/helpers/directives/keyboardShortcut/keyboardShortut.module";
 import { SharedModule } from "../shared/shared.module";
 import { TaxControlModule } from "../theme/tax-control/tax-control.module";
-import { SendEmailInvoiceModule } from "../shared/send-email-invoice/send-email-invoice.module";
 import { MatDialogModule } from "@angular/material/dialog";
 import { PrintComponent } from "./components/print/print.component";
 import { MainComponent } from "./main.component";
 import { PaymentReceiptComponent } from "./components/create-edit/payment-receipt.component";
 import { PaymentReceiptRoutingModule } from "./payment-receipt.routing.module";
 import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
+import { SendEmailModule } from "../shared/send-email/send-email.module";
 
 @NgModule({
     declarations: [
@@ -56,7 +56,7 @@ import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-lo
         KeyboardShortutModule,
         SharedModule,
         TaxControlModule,
-        SendEmailInvoiceModule,
+        SendEmailModule,
         MatDialogModule,
         GiddhPageLoaderModule
     ],

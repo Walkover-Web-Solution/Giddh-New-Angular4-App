@@ -20,5 +20,6 @@
     "entry_date": "प्रवेश की तिथि",
     "suppliers_name": "आपूर्तिकर्ता का नाम",
     "new_payment": "+ नया भुगतान",
-    "preview_unavailable": "Preview is not available right now! Please try again..."
+    "preview_unavailable": "Preview is not available right now! Please try again...",
+    "delete_voucher": "Do you want to delete the payment?"
 }
