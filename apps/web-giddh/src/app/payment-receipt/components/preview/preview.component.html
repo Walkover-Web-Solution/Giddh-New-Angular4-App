@@ -1,6 +1,6 @@
 <ng-container
     appTranslate
-    [file]="'reports/' + voucherType"
+    [file]="'reports/' + translationFile"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
@@ -21,7 +21,7 @@
                                 *ngIf="!isCompany"
                                 mat-raised-button
                                 color="primary"
-                                [routerLink]="['/pages/vouchers/' + voucherType + '/create']"
+                                [routerLink]="['/pages/voucher/' + voucherType + '/create']"
                             >
                                 {{
                                     voucherType === receiptVoucherType
@@ -93,26 +93,26 @@
                                         <div class="edit-change-status">
                                             <span
                                                 class="close-modal cp pull-right"
-                                                [routerLink]="['/pages/purchase-management/purchase']"
+                                                [routerLink]="['/pages/reports/' + voucherType]"
                                             >
                                                 <img src="assets/images/multiply.svg"
                                             /></span>
 
-                                            <button mat-raised-button color="primary" [matMenuTriggerFor]="action">
+                                            <!-- <button mat-raised-button color="primary" [matMenuTriggerFor]="action">
                                                 Change Status
                                             </button>
                                             <mat-menu #action="matMenu">
                                                 <button mat-menu-item>Vertebrates</button>
                                                 <button mat-menu-item>Invertebrates</button>
-                                            </mat-menu>
+                                            </mat-menu> -->
 
                                             <div class="wrap-edit-history-btn">
                                                 <div class="edit-action-btn-groups pull-right">
                                                     <span *ngIf="!isCompany">
                                                         <a
                                                             href="javascript:;"
-                                                            [tooltip]="commonLocaleData?.app_edit"
-                                                            placement="top"
+                                                            [matTooltip]="commonLocaleData?.app_edit"
+                                                            [matTooltipPosition]="'above'"
                                                             [routerLink]="
                                                                 '/pages/voucher/' +
                                                                 voucherType +
@@ -128,8 +128,9 @@
                                                     <span>
                                                         <a
                                                             href="javascript:;"
-                                                            [tooltip]="commonLocaleData?.app_send_email"
-                                                            placement="top"
+                                                            [matTooltip]="commonLocaleData?.app_send_email"
+                                                            [matTooltipPosition]="'above'"
+                                                            (click)="openSendEmailModal()"
                                                             ><i class="icon-envelope font-12"></i
                                                         ></a>
                                                     </span>
@@ -137,8 +138,9 @@
                                                     <span>
                                                         <a
                                                             href="javascript:;"
-                                                            [tooltip]="commonLocaleData?.app_print"
-                                                            placement="top"
+                                                            [matTooltip]="commonLocaleData?.app_print"
+                                                            [matTooltipPosition]="'above'"
+                                                            (click)="printVoucher()"
                                                             ><i class="fa fa-print"></i
                                                         ></a>
                                                     </span>
@@ -146,8 +148,9 @@
                                                     <span>
                                                         <a
                                                             href="javascript:;"
-                                                            [tooltip]="commonLocaleData?.app_download"
-                                                            placement="top"
+                                                            [matTooltip]="commonLocaleData?.app_download"
+                                                            [matTooltipPosition]="'above'"
+                                                            (click)="downloadFile()"
                                                             ><i class="icon-file"></i
                                                         ></a>
                                                     </span>
@@ -155,8 +158,9 @@
                                                     <span *ngIf="!isCompany">
                                                         <a
                                                             href="javascript:;"
-                                                            [tooltip]="commonLocaleData?.app_delete"
-                                                            placement="top"
+                                                            [matTooltip]="commonLocaleData?.app_delete"
+                                                            [matTooltipPosition]="'above'"
+                                                            (click)="deleteVoucher()"
                                                             ><i class="icon-trash"></i
                                                         ></a>
                                                     </span>
@@ -194,3 +198,10 @@
         </mat-card-content>
     </mat-card>
 </ng-container>
+<ng-template #sendEmail>
+    <send-email
+        [voucherType]="voucherType"
+        [email]="voucherDetails?.account?.email"
+        (successEvent)="sendVoucherEmail($event)"
+    ></send-email>
+</ng-template>
