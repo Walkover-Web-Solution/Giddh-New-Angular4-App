@@ -113,8 +113,7 @@ export class LedgerService {
         let url = LEDGER_API.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
         if (this.generalService.voucherApiVersion === 2) {
-            const delimiter = url.includes('?') ? '&' : '?';
-            url = url.concat(`${delimiter}voucherVersion=2`);
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
         return this.http.post(this.config.apiUrl + url, model).pipe(
             map((res) => {
