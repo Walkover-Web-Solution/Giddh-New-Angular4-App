@@ -715,7 +715,6 @@ export class PaymentReceiptAmount {
 export class PaymentReceiptEntry {
     transactions: PaymentReceiptTransaction[];
     date: string;
-    description: string;
     chequeNumber: string;
     chequeClearanceDate: string;
     taxes: TaxControlData[] = [];
@@ -736,10 +735,12 @@ export class PaymentReceipt {
     attachedFiles: any[];
     subVoucher: any;
     uniqueName?: any;
+    templateDetails?: TemplateDetailsClass;
 
     constructor() {
         this.account = new AccountDetailsClass();
         this.entries = [new PaymentReceiptEntry()];
+        this.templateDetails = new TemplateDetailsClass();
         this.date = "";
     }
 }

@@ -28,19 +28,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit {
     /** Vendor name search bar */
-    @ViewChild('vendorName', { static: true }) public vendorName: ElementRef;
+    @ViewChild('vendorName', { static: false }) public vendorName: ElementRef;
     /** Parent of vendor name search bar */
     @ViewChild('vendorNameParent', { static: true }) public vendorNameParent: ElementRef;
     /** Receipt number search bar */
-    @ViewChild('receiptNumber', { static: true }) public receiptNumber: ElementRef;
+    @ViewChild('receiptNumber', { static: false }) public receiptNumber: ElementRef;
     /** Parent of payment number search bar */
     @ViewChild('paymentNumberParent', { static: true }) public paymentNumberParent: ElementRef;
     /** Payment mode search bar */
-    @ViewChild('paymentMode', { static: true }) public paymentMode: ElementRef;
+    @ViewChild('paymentMode', { static: false }) public paymentMode: ElementRef;
     /** Parent of payment mode search bar */
     @ViewChild('paymentModeParent', { static: true }) public paymentModeParent: ElementRef;
     /** Invoice number search bar */
-    @ViewChild('invoiceNumber', { static: true }) public invoiceNumber: ElementRef;
+    @ViewChild('invoiceNumber', { static: false }) public invoiceNumber: ElementRef;
     /** Parent of invoice number search bar */
     @ViewChild('invoiceNumberParent', { static: true }) public invoiceNumberParent: ElementRef;
     /** Advance search modal instance */
@@ -143,6 +143,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     public paymentAdvanceSearchAmountFilters: any;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
+    /** Voucher params */
     public previewVoucherParams: any = {};
 
     /** @ignore */

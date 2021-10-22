@@ -22,5 +22,6 @@
     "entry_date": "Entry Date",
     "suppliers_name": "Supplier's Name",
     "new_receipt": "+ New Receipt",
-    "preview_unavailable": "Preview is not available right now! Please try again..."
+    "preview_unavailable": "Preview is not available right now! Please try again...",
+    "delete_voucher": "Do you want to delete the receipt?"
 }
