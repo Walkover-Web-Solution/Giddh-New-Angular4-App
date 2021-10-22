@@ -1,13 +1,18 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from "@angular/core";
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { DomSanitizer } from "@angular/platform-browser";
+import { Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { ReplaySubject } from "rxjs";
-import { debounceTime, distinctUntilChanged, map, takeUntil } from "rxjs/operators";
+import { debounceTime, distinctUntilChanged, map, take, takeUntil } from "rxjs/operators";
+import { InvoiceActions } from "../../../actions/invoice/invoice.actions";
 import { InvoiceReceiptActions } from "../../../actions/invoice/receipt/receipt.actions";
 import { VoucherTypeEnum } from "../../../models/api-models/Sales";
 import { GeneralService } from "../../../services/general.service";
 import { ReceiptService } from "../../../services/receipt.service";
+import { ToasterService } from "../../../services/toaster.service";
 import { AppState } from "../../../store";
+import { ConfirmModalComponent } from "../../../theme/new-confirm-modal/confirm-modal.component";
 
 @Component({
     selector: "preview",
@@ -16,8 +21,11 @@ import { AppState } from "../../../store";
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
+    /** Holds voucher type */
     @Input() public voucherType: string;
+    /** List of all vouchers */
     @Input() public allVouchers: any[] = [];
+    /** Voucher params */
     @Input() public params: any;
     /* Search element */
     @ViewChild('searchElement', { static: true }) public searchElement: ElementRef;
@@ -25,6 +33,8 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
     @ViewChild('pdfContainer', { static: false }) pdfContainer: ElementRef;
     /** Attached document preview container instance */
     @ViewChild('attachedDocumentPreview') attachedDocumentPreview: ElementRef;
+    /** Instance of send email modal */
+    @ViewChild('sendEmail', { static: false }) public sendEmail: any;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -45,7 +55,9 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
     public receiptVoucherType: string = VoucherTypeEnum.receipt;
     /** Holds payment voucher type */
     public paymentVoucherType: string = VoucherTypeEnum.payment;
+    /** Holds search term */
     public search: any = "";
+    /** Observable for search */
     public search$: ReplaySubject<any> = new ReplaySubject(1);
     /* This will hold if it's loading or not */
     public isLoading: boolean = false;
@@ -53,9 +65,12 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if left sidebar is expanded */
     private isSidebarExpanded: boolean = false;
+    /** Holds selected voucher details */
     public voucherDetails: any;
     /** Stores the BLOB of attached document */
     private attachedDocumentBlob: Blob;
+    /** Holds translation file */
+    public translationFile: string = "";
 
     constructor(
         private domSanitizer: DomSanitizer,
@@ -63,12 +78,27 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
         private store: Store<AppState>,
         private invoiceReceiptAction: InvoiceReceiptActions,
         private receiptService: ReceiptService,
-        private changeDetectionRef: ChangeDetectorRef
+        private changeDetectionRef: ChangeDetectorRef,
+        private dialog: MatDialog,
+        private toaster: ToasterService,
+        private route: Router,
+        private invoiceAction: InvoiceActions
     ) {
 
     }
 
+    /**
+     * Initializes the component
+     *
+     * @memberof PreviewComponent
+     */
     public ngOnInit(): void {
+        if (this.voucherType === this.receiptVoucherType) {
+            this.translationFile = "advance-receipt";
+        } else if (this.voucherType === this.paymentVoucherType) {
+            this.translationFile = "payment";
+        }
+
         if (document.getElementsByClassName("sidebar-collapse")?.length > 0) {
             this.isSidebarExpanded = false;
         } else {
@@ -89,6 +119,11 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
         this.getPdf();
     }
 
+    /**
+     * Releases the memory
+     *
+     * @memberof PreviewComponent
+     */
     public ngOnDestroy(): void {
         if (this.isSidebarExpanded) {
             this.isSidebarExpanded = false;
@@ -99,6 +134,12 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
         this.destroyed$.complete();
     }
 
+    /**
+     * Updates the data if input value changes
+     *
+     * @param {SimpleChanges} changes
+     * @memberof PreviewComponent
+     */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.allVouchers?.currentValue) {
             this.filteredData = changes.allVouchers.currentValue;
@@ -110,14 +151,12 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
             }
             this.getPdf();
         }
-
-        console.log(this.params);
     }
 
     /**
      * This will get called after component has initialized
      *
-     * @memberof PurchaseOrderPreviewComponent
+     * @memberof PreviewComponent
      */
     public ngAfterViewInit(): void {
         this.search$.pipe(
@@ -125,18 +164,18 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
             distinctUntilChanged(),
             takeUntil(this.destroyed$)
         ).subscribe((term => {
-            this.filterVoucher(this.search);
+            this.filterVoucher(term);
+            this.changeDetectionRef.detectChanges();
         }));
     }
 
     /**
-     * This will filter the purchase orders
+     * This will filter the vouchers
      *
      * @param {*} term
-     * @memberof PurchaseOrderPreviewComponent
+     * @memberof PreviewComponent
      */
     public filterVoucher(term: any): void {
-        this.search = term;
         this.filteredData = this.allVouchers.filter(item => {
             return item.voucherNumber.toLowerCase().includes(term.toLowerCase()) ||
                 item.account.name.toLowerCase().includes(term.toLowerCase()) ||
@@ -148,7 +187,7 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
     /**
      * This will get pdf preview
      *
-     * @memberof PurchaseOrderPreviewComponent
+     * @memberof PreviewComponent
      */
     public getPdf(): void {
         let model = {
@@ -172,6 +211,12 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
         });
     }
 
+    /**
+     * Gets voucher details
+     *
+     * @private
+     * @memberof PreviewComponent
+     */
     private getVoucherDetails(): void {
         this.store.dispatch(this.invoiceReceiptAction.getVoucherDetailsV4(this.params.accountUniqueName, {
             voucherType: this.voucherType,
@@ -183,20 +228,20 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
      * This will download the pdf
      *
      * @returns {void}
-     * @memberof PurchaseOrderPreviewComponent
+     * @memberof PreviewComponent
      */
     public downloadFile(): void {
         if (this.pdfPreviewHasError || !this.pdfPreviewLoaded) {
             return;
         }
-        saveAs(this.attachedDocumentBlob, this.localeData?.download_po_filename);
+        saveAs(this.attachedDocumentBlob, this.voucherType + '-' + this.voucherDetails?.number + '.pdf');
     }
 
     /**
      * This will print the voucher
      *
      * @returns {void}
-     * @memberof PurchaseOrderPreviewComponent
+     * @memberof PreviewComponent
      */
     public printVoucher(): void {
         if (this.pdfPreviewHasError || !this.pdfPreviewLoaded) {
@@ -221,6 +266,67 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
             printWindow.document.close();
             printWindow.focus();
             printWindow.print();
+        }
+    }
+
+    /**
+     * Deletes the voucher
+     *
+     * @memberof PreviewComponent
+     */
+    public deleteVoucher(): void {
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            data: {
+                title: this.commonLocaleData?.app_confirm,
+                body: this.localeData?.delete_voucher,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                let model = {
+                    uniqueName: this.voucherDetails?.uniqueName,
+                    voucherType: this.voucherType
+                }
+                this.receiptService.DeleteReceipt(this.voucherDetails.account?.uniqueName, model).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response?.status === 'success') {
+                        this.toaster.showSnackBar("success", response.body);
+                        this.route.navigate(["/pages/reports/" + this.voucherType]);
+                    } else {
+                        this.toaster.showSnackBar("error", response?.message);
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * Opens send email modal
+     *
+     * @memberof PreviewComponent
+     */
+    public openSendEmailModal(): void {
+        this.dialog.open(this.sendEmail, {
+            width: '500px'
+        });
+    }
+
+    /**
+     * Sends the selected download copy of vouchers
+     *
+     * @param {*} event
+     * @memberof PreviewComponent
+     */
+    public sendVoucherEmail(event: any): void {
+        if(event) {
+            this.store.dispatch(this.invoiceAction.SendInvoiceOnMail(this.voucherDetails?.account?.uniqueName, {
+                emailId: event.email?.split(','),
+                voucherNumber: [this.voucherDetails?.number],
+                voucherType: this.voucherDetails?.type,
+                typeOfInvoice: event.downloadCopy ? event.downloadCopy : []
+            }));
         }
     }
 }

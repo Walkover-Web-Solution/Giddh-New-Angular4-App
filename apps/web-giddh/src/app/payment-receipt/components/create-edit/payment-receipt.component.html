@@ -829,7 +829,9 @@
                                                                     min-height-100
                                                                 "
                                                                 name="description"
-                                                                [(ngModel)]="voucherFormData.entries[0].description"
+                                                                [(ngModel)]="
+                                                                    voucherFormData.templateDetails.other.message2
+                                                                "
                                                             ></textarea>
                                                         </mat-form-field>
                                                     </div>
@@ -1159,18 +1161,11 @@
     >
     </generic-aside-menu-account>
     <ng-template #sendEmailModal>
-        <mat-dialog-content>
-            <app-send-email-invoice-component
-                [voucherType]="paymentReceiptResponse?.type"
-                (successEvent)="sendEmail($event)"
-                [selectedItem]="{
-                    voucherNumber: paymentReceiptResponse?.number,
-                    uniqueName: paymentReceiptResponse?.account?.uniqueName,
-                    account: { email: paymentReceiptResponse?.account?.email }
-                }"
-                (cancelEvent)="closeEmailDialog()"
-            ></app-send-email-invoice-component>
-        </mat-dialog-content>
+        <send-email
+            [voucherType]="paymentReceiptResponse?.type"
+            [email]="paymentReceiptResponse?.account?.email"
+            (successEvent)="sendEmail($event)"
+        ></send-email>
     </ng-template>
     <ng-template #sendPrintModal>
         <div class="modal-dialog modal-xl">

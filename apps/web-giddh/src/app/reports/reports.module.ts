@@ -37,6 +37,10 @@ import { MatCardModule } from '@angular/material/card';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { NewConfirmModalModule } from '../theme/new-confirm-modal';
+import { MatDialogModule } from '@angular/material/dialog';
+import { SendEmailModule } from '../shared/send-email/send-email.module';
 
 @NgModule({
     declarations: [
@@ -92,7 +96,11 @@ import { MatButtonModule } from '@angular/material/button';
         MatCardModule,
         FormFieldsModule,
         MatMenuModule,
-        MatButtonModule
+        MatButtonModule,
+        MatTooltipModule,
+        NewConfirmModalModule,
+        MatDialogModule,
+        SendEmailModule
     ]
 })
 

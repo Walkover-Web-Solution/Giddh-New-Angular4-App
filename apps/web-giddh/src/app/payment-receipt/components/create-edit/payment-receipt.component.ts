@@ -394,7 +394,6 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                         //this.voucherFormData.entries[entryLoop].chequeClearanceDate = "";
                         //this.voucherFormData.entries[entryLoop].chequeNumber = "";
                         this.voucherFormData.entries[entryLoop].date = this.voucherFormData.date;
-                        this.voucherFormData.entries[entryLoop].description = response[0].templateDetails?.other?.message2;
                         this.voucherFormData.entries[entryLoop].taxes = entry.taxes;
 
                         transactionLoop++;
@@ -402,6 +401,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                     entryLoop++;
                 });
 
+                this.voucherFormData.templateDetails = response[0].templateDetails?.other?.message2;
                 this.voucherFormData.exchangeRate = response[0].exchangeRate;
                 this.voucherFormData.subVoucher = response[0].subVoucher;
                 this.voucherFormData.updateAccountDetails = true;
@@ -1217,17 +1217,18 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     /**
      * This will send email
      *
-     * @param {(string | { email: string, invoiceType: string[] })} request
+     * @param {*} event
      * @memberof PaymentReceiptComponent
      */
-    public sendEmail(request: string | { email: string, invoiceType: string[] }): void {
-        request = request as { email: string, invoiceType: string[] };
-        this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.paymentReceiptResponse?.account?.uniqueName, {
-            emailId: request.email.split(','),
-            voucherNumber: [this.paymentReceiptResponse?.number],
-            voucherType: this.paymentReceiptResponse?.type,
-            typeOfInvoice: request.invoiceType ? request.invoiceType : []
-        }));
+    public sendEmail(event: any): void {
+        if(event) {
+            this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.paymentReceiptResponse?.account?.uniqueName, {
+                emailId: event.email?.split(','),
+                voucherNumber: [this.paymentReceiptResponse?.number],
+                voucherType: this.paymentReceiptResponse?.type,
+                typeOfInvoice: event.downloadCopy ? event.downloadCopy : []
+            }));
+        }
         this.closeEmailDialog();
     }
 
