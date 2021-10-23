@@ -7,7 +7,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import * as moment from 'moment/moment';
-import { GenBulkInvoiceFinalObj, GenBulkInvoiceGroupByObj, GenerateBulkInvoiceRequest, GetAllLedgersForInvoiceResponse, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, InvoiceFilterClass, InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
+import { GenBulkInvoiceFinalObj, GenBulkInvoiceGroupByObj, GenerateBulkInvoiceObject, GenerateBulkInvoiceRequest, GetAllLedgersForInvoiceResponse, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, InvoiceFilterClass, InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
@@ -134,6 +134,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public customDateSelected: boolean = false;
     /* this will store active company data */
     public activeCompany: any = {};
+    /** Stores the voucher API version of company */
+    private voucherApiVersion: 1 | 2; 
 
     constructor(
         private store: Store<AppState>,
@@ -313,6 +315,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.store.pipe(select(state => state.invoice.hasPendingVouchersListPermissions), takeUntil(this.destroyed$)).subscribe(response => {
             this.hasPendingVouchersListPermissions = response;
         });
+
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -421,17 +425,28 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
         let res = groupBy(arr, 'accUniqueName');
-        let model: GenerateBulkInvoiceRequest[] = [];
-        forEach(res, (item: any): void => {
-            let obj: GenBulkInvoiceFinalObj = new GenBulkInvoiceFinalObj();
-            obj.entries = [];
-            forEach(item, (o: GenBulkInvoiceGroupByObj): void => {
-                obj.accountUniqueName = o.accUniqueName;
-                obj.entries.push(o.uniqueName);
+        if (this.voucherApiVersion === 2) {
+            let model: GenerateBulkInvoiceObject[] = [];
+            forEach(res, (item: any): void => {
+                forEach(item, (obj: GenBulkInvoiceGroupByObj): void => {
+                    model.push(obj.uniqueName);
+                });
             });
-            model.push(obj);
-        });
-        this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({ combined: action }, model));
+            this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({ combined: action }, { entryUniqueNames: model }));
+        } else {
+            let model: GenerateBulkInvoiceRequest[] = [];
+            forEach(res, (item: any): void => {
+                let obj: GenBulkInvoiceFinalObj = new GenBulkInvoiceFinalObj();
+                obj.entries = [];
+                forEach(item, (o: GenBulkInvoiceGroupByObj): void => {
+                    obj.accountUniqueName = o.accUniqueName;
+                    obj.entries.push(o.uniqueName);
+                });
+                model.push(obj);
+            });
+            this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({ combined: action }, model));
+        }
+        
         this.selectedLedgerItems = [];
         this.selectedCountOfAccounts = [];
     }
