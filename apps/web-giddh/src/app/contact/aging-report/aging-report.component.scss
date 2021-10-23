@@ -34,7 +34,9 @@
     background: transparent;
 }
 .pagination-wrapper {
-    width: 100%;
+    position: fixed !important;
+    bottom: 20px !important;
+    margin-left: 450px !important;
 }
 .wrap-searching-aging {
     display: none !important;

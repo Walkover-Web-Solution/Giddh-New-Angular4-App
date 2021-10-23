@@ -67,6 +67,11 @@
     right: 10px;
     top: 12px;
 }
+.pagination-wrapper {
+    position: fixed !important;
+    bottom: 20px !important;
+    margin-left: 450px !important;
+}
 
 .dropdown-menu > li > a:hover {
     color: $chetwode-blue;
