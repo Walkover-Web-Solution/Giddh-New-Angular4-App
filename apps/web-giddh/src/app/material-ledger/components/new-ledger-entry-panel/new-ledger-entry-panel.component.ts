@@ -238,6 +238,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public isMoreDetailsOpen: boolean;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
+    /** True if user itself checked the generate voucher  */
+    public manualGenerateVoucherChecked: boolean = false;
     /** Holds input to get invoice list request params */
     public invoiceListRequestParams: any = {};
 
@@ -1021,7 +1023,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.currentTxn.invoiceLinkingRequest = null;
         }
         this.selectedInvoiceForCreditNote = null;
-        this.blankLedger.generateInvoice = false;
+
+        if(!this.currentTxn?.voucherAdjustments?.adjustments?.length) {
+            this.blankLedger.generateInvoice = this.manualGenerateVoucherChecked;
+        }
     }
 
     /**
@@ -1345,6 +1350,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     this.isAdjustReceiptSelected = false;
                 }
                 this.isAdjustVoucherSelected = false;
+
+                if(!this.selectedInvoiceForCreditNote) {
+                    this.blankLedger.generateInvoice = this.manualGenerateVoucherChecked;
+                }
+            } else {
+                this.blankLedger.generateInvoice = true;
             }
         }
 
@@ -1365,6 +1376,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.isAdjustReceiptSelected = false;
             }
             this.isAdjustVoucherSelected = false;
+
+            if(!this.selectedInvoiceForCreditNote) {
+                this.blankLedger.generateInvoice = this.manualGenerateVoucherChecked;
+            }
         }
         this.adjustmentDialogRef.close();
     }
@@ -1380,6 +1395,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.isAdjustAdvanceReceiptSelected = false;
         this.isAdjustReceiptSelected = false;
         this.isAdjustVoucherSelected = false;
+        
+        if(!this.selectedInvoiceForCreditNote) {
+            this.blankLedger.generateInvoice = this.manualGenerateVoucherChecked;
+        }
     }
 
     /**
