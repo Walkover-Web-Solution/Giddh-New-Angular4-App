@@ -15,6 +15,7 @@ import {
     SimpleChanges,
     ViewChild,
     ViewChildren,
+    ChangeDetectorRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -251,16 +252,19 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         private _ledgerActions: LedgerActions,
         private store: Store<AppState>,
         private _keyboardService: KeyboardService,
-        private _toaster: ToasterService, private router: Router,
+        private _toaster: ToasterService, 
+        private router: Router,
         private tallyModuleService: TallyModuleService,
         private componentFactoryResolver: ComponentFactoryResolver,
         private inventoryService: InventoryService,
-        private fb: FormBuilder, public bsConfig: BsDatepickerConfig,
+        private fb: FormBuilder, 
+        public bsConfig: BsDatepickerConfig,
         private salesAction: SalesActions,
         private modalService: BsModalService,
         private salesService: SalesService,
         private searchService: SearchService,
-        private companyActions: CompanyActions) {
+        private companyActions: CompanyActions,
+        private changeDetectionRef: ChangeDetectorRef) {
 
         this.universalDate$ = this.store.pipe(select(sessionStore => sessionStore.session.applicationDate), takeUntil(this.destroyed$));
 
@@ -1169,21 +1173,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         //  }
     }
 
-    /**
-     * hideListItems
-     */
-    public hideListItems() {
-        // this.showLedgerAccountList = false;
-        // this.showStockList = false;
-    }
-
     public dateEntered() {
-        const date = moment(this.journalDate, GIDDH_DATE_FORMAT);
-        if (moment(date).format('dddd') !== 'Invalid date') {
-            this.displayDay = moment(date).format('dddd');
-        } else {
-            this.displayDay = '';
-        }
+        const date = moment(this.journalDate, GIDDH_DATE_FORMAT).format("dddd");
+        this.displayDay = (date !== 'Invalid date') ? date : '';
+        this.changeDetectionRef.detectChanges();
     }
 
     /**
