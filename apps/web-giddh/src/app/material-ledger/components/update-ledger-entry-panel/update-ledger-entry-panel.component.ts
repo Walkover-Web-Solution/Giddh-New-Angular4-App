@@ -1167,6 +1167,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     ]
                 }
             }
+            this.vm.selectedLedger.generateInvoice = true;
         } else {
             if (this.vm.selectedLedger) {
                 this.vm.selectedLedger.invoiceLinkingRequest = null;

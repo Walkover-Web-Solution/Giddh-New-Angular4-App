@@ -1744,8 +1744,10 @@
                                                         currentOrganizationType === 'COMPANY' &&
                                                         branches?.length > 1) ||
                                                     isAdvanceReceipt ||
-                                                        vm.selectedLedger?.voucherAdjustments?.adjustments?.length ||
-                                                        vm.selectedLedger?.invoiceLinkingRequest?.linkedInvoices?.length
+                                                    isAdjustReceiptSelected ||
+                                                    isAdjustVoucherSelected ||
+                                                    vm.selectedLedger?.voucherAdjustments?.adjustments?.length ||
+                                                    vm.selectedLedger?.invoiceLinkingRequest?.linkedInvoices?.length
                                                         ? 'disabled'
                                                         : null
                                                 "
