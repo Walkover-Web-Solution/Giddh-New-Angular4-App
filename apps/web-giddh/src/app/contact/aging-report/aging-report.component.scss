@@ -34,9 +34,10 @@
     background: transparent;
 }
 .pagination-wrapper {
+    width: 80%;
+    padding: 20px 0;
     position: fixed !important;
     bottom: 20px !important;
-    margin-left: 450px !important;
 }
 .wrap-searching-aging {
     display: none !important;
@@ -140,6 +141,8 @@ tr.aging-table-top td {
     }
     .pagination-wrapper {
         margin-bottom: 0px;
+        position: relative;
+        margin-top: 20px;
     }
     .wrap-searching-aging .max-width-250.default-width {
         max-width: calc(100% - 90px);
