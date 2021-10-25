@@ -313,7 +313,7 @@
                                     count-box
                                     align-items-end
                                 "
-                                style="position: relative"
+                                style="position: relative; min-width: 230px"
                             >
                                 <h5>
                                     <ng-container *ngIf="!selectedCheckedContacts?.length">{{
@@ -358,6 +358,7 @@
                             </div>
                             <div
                                 class="total-details-box mr-r05 border-none opening-box"
+                                style="min-width: 230px"
                                 *ngIf="showFieldFilter.openingBalance"
                             >
                                 <h5>
@@ -392,7 +393,7 @@
                                     </div>
                                 </h5>
                             </div>
-                            <div class="total-details-box mr-r05 border-none sales-purchase">
+                            <div class="total-details-box mr-r05 border-none sales-purchase" style="min-width: 230px">
                                 <h5>
                                     <span *ngIf="activeTab === 'vendor'">{{ commonLocaleData?.app_purchase }}</span>
                                     <span *ngIf="activeTab === 'customer'">{{ commonLocaleData?.app_sales }}</span>
@@ -409,7 +410,7 @@
                                     </div>
                                 </h5>
                             </div>
-                            <div class="total-details-box mr-r05 border-none payment-receipt">
+                            <div class="total-details-box mr-r05 border-none payment-receipt" style="min-width: 230px">
                                 <h5>
                                     <span *ngIf="activeTab === 'vendor'">{{ commonLocaleData?.app_payment }}</span>
                                     <span *ngIf="activeTab === 'customer'">{{ commonLocaleData?.app_receipt }}</span>
@@ -426,7 +427,7 @@
                                     </div>
                                 </h5>
                             </div>
-                            <div class="total-details-box border-none closing-box">
+                            <div class="total-details-box border-none closing-box" style="min-width: 230px">
                                 <h5>
                                     {{ localeData?.closing }}
                                     <div>
@@ -1141,7 +1142,7 @@
                             mat-cell
                             *matCellDef="let account"
                             class="position-relative word-wrap"
-                            data-title="{{ localeData?.customer }}"
+                            [attr.data-title]="localeData?.customer"
                         >
                             <div class="customer-name-filed">
                                 <div style="display: flex; align-items: center">
@@ -1219,7 +1220,7 @@
                                 ></ng-container>
                             </div>
                         </th>
-                        <td mat-cell *matCellDef="let account" [attr.data-title]="account.parentGroup">
+                        <td mat-cell *matCellDef="let account" [attr.data-title]="commonLocaleData?.app_parent_group">
                             {{ account?.groupUniqueName }}
                         </td>
                     </ng-container>
@@ -1272,7 +1273,7 @@
                                 </ng-container>
                             </div>
                         </th>
-                        <td mat-cell *matCellDef="let account" [attr.data-title]="account.sales">
+                        <td mat-cell *matCellDef="let account" [attr.data-title]="commonLocaleData?.app_sales">
                             <span class="d-flex justify-content-end">
                                 <amount-field
                                     [amount]="account.creditTotal"
@@ -1294,7 +1295,7 @@
                                 </ng-container>
                             </div>
                         </th>
-                        <td mat-cell *matCellDef="let account" [attr.data-title]="account.receipts">
+                        <td mat-cell *matCellDef="let account" [attr.data-title]="commonLocaleData?.app_receipt">
                             <span class="d-flex justify-content-end">
                                 <amount-field
                                     [amount]="account.debitTotal"
@@ -1318,7 +1319,7 @@
                             mat-cell
                             *matCellDef="let account"
                             class="word-wrap text-right"
-                            [attr.data-title]="account.closing"
+                            [attr.data-title]="localeData?.closing"
                             [ngClass]="{
                                 'negative-balance':
                                     account.closingBalance?.type === 'CREDIT' &&
@@ -1353,7 +1354,7 @@
                                 </div>
                             </div>
                         </th>
-                        <td mat-cell *matCellDef="let account" [attr.data-title]="account.contact" class="font-12">
+                        <td mat-cell *matCellDef="let account" [attr.data-title]="localeData?.contacts" class="font-12">
                             <div>
                                 {{ account.email || "-" }}
                             </div>
@@ -1371,7 +1372,7 @@
                                 </ng-container>
                             </div>
                         </th>
-                        <td mat-cell *matCellDef="let account" [attr.data-title]="account.gstIn">
+                        <td mat-cell *matCellDef="let account" [attr.data-title]="commonLocaleData?.app_tax_number">
                             {{ account.gstIn || "-" }}
                         </td>
                     </ng-container>
@@ -1384,7 +1385,7 @@
                                 </ng-container>
                             </div>
                         </th>
-                        <td mat-cell *matCellDef="let account" [attr.data-title]="account.gstIn">
+                        <td mat-cell *matCellDef="let account" [attr.data-title]="commonLocaleData?.app_state">
                             {{ account?.state?.name || "-" }}
                         </td>
                     </ng-container>
@@ -1396,7 +1397,7 @@
                         <td
                             mat-cell
                             *matCellDef="let account; let idx = index"
-                            [attr.data-title]="account.comment"
+                            [attr.data-title]="localeData?.comment"
                             (click)="updateCommentIdx = idx"
                         >
                             <ng-container *ngIf="updateCommentIdx != idx">
@@ -1422,7 +1423,9 @@
                     <ng-container *ngFor="let column of companyCustomFields$ | async">
                         <ng-container [matColumnDef]="column?.uniqueName">
                             <th mat-header-cell *matHeaderCellDef>{{ column?.key }}</th>
-                            <td mat-cell *matCellDef="let account">{{ account.column }}</td>
+                            <td mat-cell *matCellDef="let account" [attr.data-title]="column?.key">
+                                {{ account.column }}
+                            </td>
                         </ng-container>
                     </ng-container>
 
@@ -1477,7 +1480,7 @@
                             mat-cell
                             *matCellDef="let account"
                             class="position-relative word-wrap"
-                            [attr.data-title]="localeData?.vendor"
+                            [attr.data-title]="commonLocaleData?.app_vendor_name"
                         >
                             <div class="vendor-name-field">
                                 <div style="display: flex; align-items: center">
