@@ -188,6 +188,10 @@ td.position-relative.word-wrap.customer-name.vendor-customer-name.cursor-pointer
     border-right: none;
 }
 
+.checkbox-left-side-in-table {
+    visibility: hidden;
+}
+
 tr:last-child td.position-relative.word-wrap.customer-name.cursor-pointer,
 tr:last-child td.position-relative.word-wrap.vendor-customer-name.cursor-pointer {
     border-bottom: 1px solid $gainsboro !important;
@@ -206,6 +210,10 @@ tr:last-child td.position-relative.word-wrap.vendor-customer-name.cursor-pointer
     &:hover .table-menu-first-td {
         display: block;
         line-height: 1;
+    }
+
+    &:hover .checkbox-left-side-in-table {
+        visibility: visible;
     }
 }
 
@@ -721,7 +729,7 @@ button.btn.btn-filter span.icon-cross {
 }
 
 .negative-balance {
-    color: $red;
+    color: $red !important;
 }
 
 @media (min-width: 769px) {
@@ -741,4 +749,7 @@ button.btn.btn-filter span.icon-cross {
     height: 36px !important;
     border-right: 1px solid $gainsboro !important;
     cursor: pointer;
+}
+.visible-check-box {
+    visibility: visible !important;
 }

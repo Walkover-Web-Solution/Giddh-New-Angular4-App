@@ -251,14 +251,14 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     displayColumns: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
     displayColumns$: Observable<string[]> = this.displayColumns.asObservable().pipe(takeUntil(this.destroyed$), distinctUntilChanged(isEqual));
 
-    customerColumns: string[] = ["customerName", "sales", "receipt", "closing" ]
-    vendorColumns: string[] = ["vendorName", "purchase", "payment", "closing" ]
+    customerColumns: string[] = ["customerName", "sales", "receipt", "closing"];
+    vendorColumns: string[] = ["vendorName", "purchase", "payment", "closing"];
 
-    constructor( public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
-        private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver,
-        private groupWithAccountsAction: GroupWithAccountsAction, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
-        private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions, private groupService: GroupService,
-        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox) {
+    constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
+                private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver,
+                private groupWithAccountsAction: GroupWithAccountsAction, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
+                private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions, private groupService: GroupService,
+                private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox) {
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
@@ -285,7 +285,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         Object.keys(CustomerVendorDefaultColumns).forEach(key => {
             this.showFieldFilter[key] = {
                 visibility: false,
-                displayName: key
+                displayName: key,
             };
         });
         this.setDisplayColumns();
@@ -465,7 +465,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public ngOnChanges(changes: SimpleChanges) {
-        if(!isEqual(changes['activeTab'].previousValue,changes['activeTab'].currentValue)) {
+        if (!isEqual(changes["activeTab"].previousValue, changes["activeTab"].currentValue)) {
 
         }
     }
@@ -1465,7 +1465,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             if (key?.uniqueName) {
                 this.showFieldFilter[key.uniqueName] = {
                     visibility: false,
-                    displayName: key.key
+                    displayName: key.key,
                 };
             }
         }
@@ -1478,18 +1478,18 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof ContactComponent
      */
     public setDisplayColumns(): void {
-        const defaultColumms: string[] =  this.activeTab === "customer" ? this.customerColumns : this.vendorColumns;
-        let computedColumns: string[] = [...defaultColumms , ...Object.keys(this.showFieldFilter).filter(key => this.showFieldFilter[key].visibility)];
-        if(this.activeTab === "vendor" && computedColumns?.length) {
-          computedColumns?.push("action");
+        const defaultColumms: string[] = this.activeTab === "customer" ? this.customerColumns : this.vendorColumns;
+        let computedColumns: string[] = [...defaultColumms, ...Object.keys(this.showFieldFilter).filter(key => this.showFieldFilter[key].visibility)];
+        if (this.activeTab === "vendor" && computedColumns?.length) {
+            computedColumns?.push("action");
         }
-        if(computedColumns.findIndex(s => s === 'openingBalance') > -1) {
-            computedColumns = computedColumns.filter(s => s !== 'openingBalance');
-            computedColumns.splice(1, 0, 'openingBalance');
+        if (computedColumns.findIndex(s => s === "openingBalance") > -1) {
+            computedColumns = computedColumns.filter(s => s !== "openingBalance");
+            computedColumns.splice(1, 0, "openingBalance");
         }
-        if(computedColumns.findIndex(s => s === 'parentGroup') > -1) {
-            computedColumns = computedColumns.filter(s => s !== 'parentGroup');
-            computedColumns.splice(1, 0, 'parentGroup');
+        if (computedColumns.findIndex(s => s === "parentGroup") > -1) {
+            computedColumns = computedColumns.filter(s => s !== "parentGroup");
+            computedColumns.splice(1, 0, "parentGroup");
         }
         this.displayColumns.next(computedColumns);
     }
