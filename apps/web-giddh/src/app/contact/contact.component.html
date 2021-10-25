@@ -179,6 +179,7 @@
                                             <ng-container *ngFor="let item of showFieldFilter | keyvalue">
                                                 <button mat-menu-item>
                                                     <mat-checkbox
+                                                        style="text-transform: capitalize"
                                                         color="primary"
                                                         name="field_filter.parentGroup"
                                                         (ngModelChange)="columnFilter($event, item.key)"
@@ -1104,7 +1105,7 @@
                 <table mat-table [dataSource]="sundryDebtorsAccounts" class="w-100">
                     <ng-container matColumnDef="customerName">
                         <th mat-header-cell *matHeaderCellDef>
-                            <div class="d-flex" style="align-items: center; padding-left: 30px">
+                            <div class="d-flex" style="align-items: center; padding-left: 14px">
                                 <mat-checkbox
                                     style="position: absolute; left: 10px"
                                     color="primary"
@@ -1147,12 +1148,12 @@
                                     <mat-checkbox
                                         color="primary"
                                         class="mr-3 checkbox-left-side-in-table"
+                                        [ngClass]="{ 'visible-check-box': selectedCheckedContacts.length }"
                                         type="checkbox"
                                         [(ngModel)]="account.isSelected"
                                         (change)="selectAccount($event, account)"
                                     >
                                     </mat-checkbox>
-
                                     <span>{{ account.name }}</span>
                                 </div>
 
@@ -1232,7 +1233,17 @@
                                 ></ng-container>
                             </div>
                         </th>
-                        <td mat-cell *matCellDef="let account">
+                        <td
+                            mat-cell
+                            *matCellDef="let account"
+                            [ngClass]="{
+                                'word-wrap text-right': true,
+                                'negative-balance':
+                                    account.openingBalance?.type === 'CREDIT' &&
+                                    formatAmountInCurrency(account.openingBalance?.amount) > 0
+                            }"
+                            [attr.data-title]="localeData?.opening"
+                        >
                             <div class="d-flex justify-content-end">
                                 <span
                                     *ngIf="
@@ -1303,7 +1314,17 @@
                                 </ng-container>
                             </div>
                         </th>
-                        <td mat-cell *matCellDef="let account" [attr.data-title]="account.closing">
+                        <td
+                            mat-cell
+                            *matCellDef="let account"
+                            class="word-wrap text-right"
+                            [attr.data-title]="account.closing"
+                            [ngClass]="{
+                                'negative-balance':
+                                    account.closingBalance?.type === 'CREDIT' &&
+                                    formatAmountInCurrency(account.closingBalance?.amount) > 0
+                            }"
+                        >
                             <div class="d-flex justify-content-end">
                                 <span
                                     *ngIf="
@@ -1332,7 +1353,7 @@
                                 </div>
                             </div>
                         </th>
-                        <td mat-cell *matCellDef="let account" [attr.data-title]="account.contact">
+                        <td mat-cell *matCellDef="let account" [attr.data-title]="account.contact" class="font-12">
                             <div>
                                 {{ account.email || "-" }}
                             </div>
@@ -1419,7 +1440,7 @@
                             #searchCustomerContainer
                             (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')"
                         >
-                            <div class="d-flex" style="align-items: center; padding-left: 30px">
+                            <div class="d-flex" style="align-items: center; padding-left: 14px">
                                 <mat-checkbox
                                     style="position: absolute; left: 10px"
                                     color="primary"
@@ -1461,6 +1482,7 @@
                             <div class="vendor-name-field">
                                 <div style="display: flex; align-items: center">
                                     <mat-checkbox
+                                        [ngClass]="{ 'visible-check-box': selectedCheckedContacts.length }"
                                         type="checkbox"
                                         color="primary"
                                         class="mr-2 checkbox-left-side-in-table"
@@ -1644,7 +1666,17 @@
                                 </ng-container>
                             </div>
                         </th>
-                        <td mat-cell *matCellDef="let account" [attr.data-title]="localeData?.opening">
+                        <td
+                            mat-cell
+                            *matCellDef="let account"
+                            class="word-wrap text-right"
+                            [attr.data-title]="localeData?.opening"
+                            [ngClass]="{
+                                'negative-balance':
+                                    account.openingBalance?.type === 'DEBIT' &&
+                                    formatAmountInCurrency(account.openingBalance?.amount) > 0
+                            }"
+                        >
                             <div class="d-flex justify-content-end">
                                 <span
                                     *ngIf="
@@ -1715,7 +1747,17 @@
                                 </ng-container>
                             </div>
                         </th>
-                        <td mat-cell *matCellDef="let account" [attr.data-title]="localeData?.closing">
+                        <td
+                            mat-cell
+                            *matCellDef="let account"
+                            [attr.data-title]="localeData?.closing"
+                            [ngClass]="{
+                                'word-wrap text-right': true,
+                                'negative-balance':
+                                    account.closingBalance?.type === 'DEBIT' &&
+                                    formatAmountInCurrency(account.closingBalance?.amount) > 0
+                            }"
+                        >
                             <div class="d-flex justify-content-end">
                                 <span
                                     *ngIf="
@@ -1743,7 +1785,12 @@
                                 </div>
                             </div>
                         </th>
-                        <td mat-cell *matCellDef="let account" [attr.data-title]="commonLocaleData?.app_email">
+                        <td
+                            mat-cell
+                            *matCellDef="let account"
+                            [attr.data-title]="commonLocaleData?.app_email"
+                            class="font-12"
+                        >
                             <div>
                                 {{ account.email || "-" }}
                             </div>
