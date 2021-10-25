@@ -70,7 +70,8 @@
 .pagination-wrapper {
     position: fixed !important;
     bottom: 20px !important;
-    margin-left: 450px !important;
+    width: 80%;
+    padding: 20px 0;
 }
 
 .dropdown-menu > li > a:hover {
@@ -360,6 +361,11 @@ span.icon-advance-filter {
     }
     .form-inline {
         align-items: flex-start;
+    }
+    .pagination-wrapper {
+        position: relative;
+        margin-top: 20px;
+        margin-bottom: 0px;
     }
 }
 @media (max-width: 420px) {
