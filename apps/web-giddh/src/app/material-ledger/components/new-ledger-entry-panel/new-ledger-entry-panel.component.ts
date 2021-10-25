@@ -1019,7 +1019,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
 
         let classList = event.path.map(m => {
-            return m.classList;
+            return m?.classList;
         });
 
         if (classList && classList instanceof Array) {
@@ -1117,9 +1117,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public toggleBodyClass() {
         if (this.asideMenuStateForOtherTaxes === 'in') {
-            document.querySelector('body').classList.add('fixed');
+            document.querySelector('body')?.classList?.add('fixed');
         } else {
-            document.querySelector('body').classList.remove('fixed');
+            document.querySelector('body')?.classList?.remove('fixed');
         }
     }
 

@@ -859,9 +859,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         }
         if (this.isRcmEntry && (!requestObj.taxes || requestObj.taxes.length === 0)) {
-            if (this.taxControll && this.taxControll.taxInputElement && this.taxControll.taxInputElement.nativeElement) {
+            if (this.taxControll?.taxInputElement?.nativeElement) {
                 // Taxes are mandatory for RCM and Advance Receipt entries
-                this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
+                this.taxControll.taxInputElement.nativeElement?.classList?.add('error-box');
                 return;
             }
         }
