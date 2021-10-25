@@ -1519,7 +1519,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     uniqueName: this.baseAccountDetails.particular ? this.baseAccountDetails.particular.uniqueName : '',
                     parentGroups: (this.baseAccountDetails && this.baseAccountDetails.parentGroups) ? this.baseAccountDetails.parentGroups : []
                 }
-                const isRcmEntry = this.generalService.shouldShowRcmSection(activeAccountDetails, selectedAccountDetails);
+                const isRcmEntry = this.generalService.shouldShowRcmSection(activeAccountDetails, selectedAccountDetails, this.activeCompany);
                 if (isRcmEntry) {
                     return true;
                 }
