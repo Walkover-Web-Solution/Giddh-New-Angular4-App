@@ -165,10 +165,10 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         this.companies$?.pipe(take(1)).subscribe(cmps => companies = cmps);
 
         this.companyListForFilter = companies?.filter((cmp) => {
-            if (!cmp.alias) {
-                return cmp.name.toLowerCase().includes(event.toLowerCase());
+            if (!cmp?.alias) {
+                return cmp?.name.toLowerCase().includes(event.toLowerCase());
             } else {
-                return cmp.name.toLowerCase().includes(event.toLowerCase()) || cmp.alias.toLowerCase().includes(event.toLowerCase());
+                return cmp?.name.toLowerCase().includes(event.toLowerCase()) || cmp?.alias.toLowerCase().includes(event.toLowerCase());
             }
         });
     }
