@@ -1743,10 +1743,15 @@
                                                     (!isPettyCash &&
                                                         currentOrganizationType === 'COMPANY' &&
                                                         branches?.length > 1) ||
-                                                    (isAdvanceReceipt && vm.selectedLedger.generateInvoice)
+                                                    isAdvanceReceipt ||
+                                                    isAdjustReceiptSelected ||
+                                                    isAdjustVoucherSelected ||
+                                                    vm.selectedLedger?.voucherAdjustments?.adjustments?.length ||
+                                                    vm.selectedLedger?.invoiceLinkingRequest?.linkedInvoices?.length
                                                         ? 'disabled'
                                                         : null
                                                 "
+                                                (change)="manualGenerateVoucherChecked = $event?.checked"
                                             >
                                                 {{ commonLocaleData?.app_generate_voucher }}</mat-checkbox
                                             >

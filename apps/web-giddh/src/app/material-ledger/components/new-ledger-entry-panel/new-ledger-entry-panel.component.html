@@ -810,17 +810,15 @@
                             class="pull-left"
                             name="generateInvoice"
                             [disabled]="
-                                ((isAdvanceReceipt ||
-                                    isAdjustReceiptSelected ||
-                                    isAdjustVoucherSelected ||
-                                    blankLedger.voucherType === 'credit note' ||
-                                    blankLedger.voucherType === 'debit note') &&
-                                    blankLedger.generateInvoice) ||
+                                isAdvanceReceipt ||
+                                currentTxn?.voucherAdjustments?.adjustments?.length ||
+                                currentTxn?.invoiceLinkingRequest?.linkedInvoices?.length ||
                                 isReadOnly
                                     ? 'disabled'
                                     : null
                             "
                             [(ngModel)]="blankLedger.generateInvoice"
+                            (change)="manualGenerateVoucherChecked = $event?.checked"
                             >{{ commonLocaleData?.app_generate_voucher }}</mat-checkbox
                         >
                     </label>
