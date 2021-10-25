@@ -1656,7 +1656,10 @@
                                 <!-- for purchase record start -->
                                 <div
                                     class="row mt-1"
-                                    *ngIf="isPurchaseInvoice || currentVoucherFormDetails?.rcmAllowed"
+                                    *ngIf="
+                                        isPurchaseInvoice ||
+                                        (currentVoucherFormDetails?.rcmAllowed && companyCountryName === 'India')
+                                    "
                                 >
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3" *ngIf="!isMobileView">
                                         <label></label>
