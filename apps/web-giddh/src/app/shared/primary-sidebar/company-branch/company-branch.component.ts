@@ -176,12 +176,14 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
     /**
      * Change company callback method
      *
-     * @param {string} selectedCompanyUniqueName Selected company unique name
+     * @param {any} any Selected company
      * @param {boolean} [fetchLastState] True, if last state of the company needs to be fetched
      * @memberof CompanyBranchComponent
      */
-    public changeCompany(selectedCompanyUniqueName: string, selectBranchUniqueName: string, fetchLastState?: boolean) {
-        this.generalService.companyUniqueName = selectedCompanyUniqueName;
+    public changeCompany(company: any, selectBranchUniqueName: string, fetchLastState?: boolean) {
+        this.store.dispatch(this.companyActions.resetActiveCompanyData());
+        this.generalService.companyUniqueName = company?.uniqueName;
+        this.generalService.voucherApiVersion = company?.voucherVersion;
         const details = {
             branchDetails: {
                 uniqueName: selectBranchUniqueName
@@ -194,7 +196,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
             this.setOrganizationDetails(OrganizationType.Company, details);
         }
 
-        this.store.dispatch(this.loginAction.ChangeCompany(selectedCompanyUniqueName, fetchLastState));
+        this.store.dispatch(this.loginAction.ChangeCompany(company?.uniqueName, fetchLastState));
     }
 
     /**
@@ -338,7 +340,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
             }, 20);
         } else {
             if(company?.uniqueName !== this.activeCompany?.uniqueName) {
-                this.changeCompany(company?.uniqueName, '', false);
+                this.changeCompany(company, '', false);
             }
         }
     }
@@ -385,16 +387,16 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
     /**
      * Switches to branch mode
      *
-     * @param {string} companyUniqueName Company uniqueName
+     * @param {any} company Company object
      * @param {string} branchUniqueName Branch uniqueName
      * @memberof CompanyBranchComponent
      */
-    public changeBranch(companyUniqueName: string, branchUniqueName: string, event: any): void {
+    public changeBranch(company: any, branchUniqueName: string, event: any): void {
         event.stopPropagation();
         event.preventDefault();
 
-        if (this.activeCompany?.uniqueName !== companyUniqueName) {
-            this.changeCompany(companyUniqueName, branchUniqueName, false);
+        if (this.activeCompany?.uniqueName !== company?.uniqueName) {
+            this.changeCompany(company, branchUniqueName, false);
         } else if(branchUniqueName !== this.generalService.currentBranchUniqueName) {
             const details = {
                 branchDetails: {
