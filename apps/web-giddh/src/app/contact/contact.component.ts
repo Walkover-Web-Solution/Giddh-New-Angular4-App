@@ -1479,9 +1479,17 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
      */
     public setDisplayColumns(): void {
         const defaultColumms: string[] =  this.activeTab === "customer" ? this.customerColumns : this.vendorColumns;
-        let computedColumns: string[] = [...defaultColumms ,...Object.keys(this.showFieldFilter).filter(key => this.showFieldFilter[key].visibility)];
+        let computedColumns: string[] = [...defaultColumms , ...Object.keys(this.showFieldFilter).filter(key => this.showFieldFilter[key].visibility)];
         if(this.activeTab === "vendor" && computedColumns?.length) {
           computedColumns?.push("action");
+        }
+        if(computedColumns.findIndex(s => s === 'openingBalance') > -1) {
+            computedColumns = computedColumns.filter(s => s !== 'openingBalance');
+            computedColumns.splice(1, 0, 'openingBalance');
+        }
+        if(computedColumns.findIndex(s => s === 'parentGroup') > -1) {
+            computedColumns = computedColumns.filter(s => s !== 'parentGroup');
+            computedColumns.splice(1, 0, 'parentGroup');
         }
         this.displayColumns.next(computedColumns);
     }

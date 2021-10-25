@@ -1729,8 +1729,7 @@
                                         [amount]="account.closingBalance?.amount"
                                         [currencySymbol]="false"
                                         [currencyCode]="false"
-                                    >
-                                    </amount-field>
+                                    ></amount-field>
                                 </span>
                             </div>
                         </td>
@@ -1811,6 +1810,7 @@
                             <td mat-cell *matCellDef="let account">{{ account.column }}</td>
                         </ng-container>
                     </ng-container>
+
                     <ng-container matColumnDef="action">
                         <th mat-header-cell *matHeaderCellDef width="200px">
                             {{ commonLocaleData?.app_action }}
