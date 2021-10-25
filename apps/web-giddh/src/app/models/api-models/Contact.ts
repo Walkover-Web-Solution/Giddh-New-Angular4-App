@@ -106,11 +106,11 @@ export class CustomerVendorFiledFilter {
 
 export enum CustomerVendorDefaultColumns {
     parentGroup = "parentGroup",
+    openingBalance = "openingBalance",
     contact = "contact",
     state = "state",
     gstin = "gstin",
     comment = "comment",
-    openingBalance = "openingBalance",
 
 
 }
