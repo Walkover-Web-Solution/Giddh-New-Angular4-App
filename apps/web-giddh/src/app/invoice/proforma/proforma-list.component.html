@@ -248,7 +248,9 @@
             <!-- select app proforma -->
             <div class="clearfix">
                 <div class="table-responsive remove-responsive invoice-preview mr-t15">
-                    <table class="table basic giddh-table table-bordered invoice-table on-mobile-view">
+                    <table
+                        class="table basic pd-t15 giddh-table desktop-table table-bordered invoice-table on-mobile-view"
+                    >
                         <thead
                             class="thead-background1"
                             [attr.style]="
@@ -599,7 +601,7 @@
                             [hidden]="isGetAllInProcess$ | async"
                         >
                             <tr>
-                                <td colspan="100%" class="border-none">
+                                <td colspan="100%" class="border-none pagination-wrapper">
                                     <div class="text-center">
                                         <pagination
                                             [totalItems]="voucherData.totalItems"
