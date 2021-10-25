@@ -72,7 +72,7 @@ export class CompanyActions {
     public static SET_COMPANY_BRANCH = 'SET_COMPANY_BRANCH';
 
     public static SET_ACTIVE_COMPANY_DATA = 'SET_ACTIVE_COMPANY_DATA';
-
+    public static RESET_ACTIVE_COMPANY_DATA = 'ResetActiveCompanyData';
     public static GET_COMPANY_USER = 'GET_COMPANY_USER';
     public static GET_COMPANY_USER_RESPONSE = 'GET_COMPANY_USER_RESPONSE';
 
@@ -683,6 +683,20 @@ export class CompanyActions {
         return {
             type: CompanyActions.GET_COMPANY_USER_RESPONSE,
             payload: value
+        };
+    }
+
+    /**
+     * This will reset the active company data in store
+     *
+     * @param {*} data
+     * @returns {CustomActions}
+     * @memberof CompanyActions
+     */
+    public resetActiveCompanyData(): CustomActions {
+        return {
+            type: CompanyActions.RESET_ACTIVE_COMPANY_DATA,
+            payload: null
         };
     }
 }

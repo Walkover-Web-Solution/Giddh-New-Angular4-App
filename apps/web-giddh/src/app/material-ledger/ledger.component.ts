@@ -1902,7 +1902,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             uniqueName: transaction.selectedAccount ? transaction.selectedAccount.uniqueName : '',
             parentGroups: formattedCurrentLedgerAccountParentGroups.length ? formattedCurrentLedgerAccountParentGroups : transaction.selectedAccount ? transaction.selectedAccount.parentGroups : []
         };
-        const shouldShowRcmEntry = this.generalService.shouldShowRcmSection(currentLedgerAccountDetails, selectedAccountDetails);
+        const shouldShowRcmEntry = this.generalService.shouldShowRcmSection(currentLedgerAccountDetails, selectedAccountDetails, this.activeCompany);
         if (this.lc && this.lc.currentBlankTxn) {
             this.lc.currentBlankTxn['shouldShowRcmEntry'] = shouldShowRcmEntry;
         }
