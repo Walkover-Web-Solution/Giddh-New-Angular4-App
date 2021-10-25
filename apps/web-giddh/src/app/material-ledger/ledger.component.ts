@@ -1731,7 +1731,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public onSelectInvoiceGenerateOption(isCombined: boolean) {
         this.entryUniqueNamesForBulkAction = _.uniq(this.entryUniqueNamesForBulkAction);
-        this.store.dispatch(this.ledgerActions.GenerateBulkLedgerInvoice({ combined: isCombined }, [{ accountUniqueName: this.lc.accountUnq, entries: _.cloneDeep(this.entryUniqueNamesForBulkAction) }], 'ledger'));
+        if(this.voucherApiVersion === 2) {
+            this.store.dispatch(this.ledgerActions.GenerateBulkLedgerInvoice({ combined: isCombined }, { entryUniqueNames: _.cloneDeep(this.entryUniqueNamesForBulkAction) }, 'ledger'));
+        } else {
+            this.store.dispatch(this.ledgerActions.GenerateBulkLedgerInvoice({ combined: isCombined }, [{ accountUniqueName: this.lc.accountUnq, entries: _.cloneDeep(this.entryUniqueNamesForBulkAction) }], 'ledger'));
+        }
     }
 
     public openSelectFilePopup(fileInput: any) {
@@ -1902,7 +1906,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             uniqueName: transaction.selectedAccount ? transaction.selectedAccount.uniqueName : '',
             parentGroups: formattedCurrentLedgerAccountParentGroups.length ? formattedCurrentLedgerAccountParentGroups : transaction.selectedAccount ? transaction.selectedAccount.parentGroups : []
         };
-        const shouldShowRcmEntry = this.generalService.shouldShowRcmSection(currentLedgerAccountDetails, selectedAccountDetails);
+        const shouldShowRcmEntry = this.generalService.shouldShowRcmSection(currentLedgerAccountDetails, selectedAccountDetails, this.activeCompany);
         if (this.lc && this.lc.currentBlankTxn) {
             this.lc.currentBlankTxn['shouldShowRcmEntry'] = shouldShowRcmEntry;
         }

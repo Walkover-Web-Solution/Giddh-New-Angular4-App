@@ -370,6 +370,10 @@ export class GenBulkInvoiceFinalObj {
     public entries: string[];
 }
 
+export class GenerateBulkInvoiceObject {
+    public entryUniqueNames: string[];
+}
+
 /*
 * Get invoice template details response model
 */
