@@ -1900,7 +1900,11 @@
                                                 <div class="col-6 col-sm-6 pl-0" *ngIf="entry.entryDate">
                                                     <div class="entry-date">
                                                         <label>{{ localeData?.entry_date }}: </label>
-                                                        {{ entry?.entryDate | date: "dd-MM-yyyy" }}
+                                                        {{
+                                                            entry?.entryDate
+                                                                ? (entry.entryDate | date: "dd-MM-yyyy")
+                                                                : ""
+                                                        }}
                                                         <span class="edit-icon cp" *ngIf="!isUpdateMode">
                                                             <img src="assets/images/edit-pencilicon.svg" />
                                                         </span>
@@ -2338,7 +2342,11 @@
                                                             </span>
 
                                                             <span *ngIf="isUpdateMode">
-                                                                {{ entry?.entryDate | date: "dd-MM-yyyy" }}
+                                                                {{
+                                                                    entry?.entryDate
+                                                                        ? (entry.entryDate | date: "dd-MM-yyyy")
+                                                                        : ""
+                                                                }}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -3604,7 +3612,11 @@
                                                             <div class="entry-date">
                                                                 <label
                                                                     >{{ localeData?.entry_date }}:
-                                                                    {{ entry?.entryDate | date: "dd-MM-yyyy" }}
+                                                                    {{
+                                                                        entry?.entryDate
+                                                                            ? (entry.entryDate | date: "dd-MM-yyyy")
+                                                                            : ""
+                                                                    }}
                                                                 </label>
                                                             </div>
                                                         </div>
@@ -4004,7 +4016,12 @@
                                                                         </span>
 
                                                                         <span *ngIf="isUpdateMode">
-                                                                            {{ entry?.entryDate | date: "dd-MM-yyyy" }}
+                                                                            {{
+                                                                                entry?.entryDate
+                                                                                    ? (entry.entryDate
+                                                                                      | date: "dd-MM-yyyy")
+                                                                                    : ""
+                                                                            }}
                                                                         </span>
                                                                     </div>
                                                                 </div>

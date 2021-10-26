@@ -3440,7 +3440,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public addBlankRow(txn: SalesTransactionItemClass) {
-        if (!txn && this.invFormData.voucherDetails.voucherDate) {
+        if (!txn) {
             let entry: SalesEntryClass = new SalesEntryClass();
             if (this.isUpdateMode) {
                 entry.entryDate = this.invFormData.entries[0] ? this.invFormData.entries[0].entryDate : this.universalDate || new Date();
@@ -6876,7 +6876,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     public handleDateChangeConfirmation(action: string): void {
         if (action === this.commonLocaleData?.app_yes) {
-            if (this.dateChangeType === "voucher" && this.invFormData.voucherDetails.voucherDate) {
+            if (this.dateChangeType === "voucher") {
                 this.invFormData.entries.forEach(entry => {
                     entry.entryDate = this.invFormData.voucherDetails.voucherDate;
                 });
@@ -6884,7 +6884,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 let entryLoop = 0;
                 this.invFormData.entries.forEach(entry => {
                     if (entryLoop !== this.updatedEntryIndex) {
-                        entry.entryDate = this.invFormData?.entries[this.updatedEntryIndex]?.entryDate;
+                        entry.entryDate = this.invFormData.entries[this.updatedEntryIndex].entryDate;
                     }
                     entryLoop++;
                 });
