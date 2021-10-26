@@ -420,14 +420,16 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
      * @memberof PaymentReportComponent
      */
     private subscribeToEvents(): void {
-        merge(
-            fromEvent(this.vendorName?.nativeElement, 'input'),
-            fromEvent(this.receiptNumber?.nativeElement, 'input'),
-            fromEvent(this.paymentMode?.nativeElement, 'input'),
-            fromEvent(this.invoiceNumber?.nativeElement, 'input')).pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((value) => {
-                this.showClearFilter = true;
-                this.fetchAllPayments(this.searchQueryParams).pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleFetchAllPaymentResponse(response));
-            });
+        if(!this.previewVoucherParams?.uniqueName) {
+            merge(
+                fromEvent(this.vendorName?.nativeElement, 'input'),
+                fromEvent(this.receiptNumber?.nativeElement, 'input'),
+                fromEvent(this.paymentMode?.nativeElement, 'input'),
+                fromEvent(this.invoiceNumber?.nativeElement, 'input')).pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((value) => {
+                    this.showClearFilter = true;
+                    this.fetchAllPayments(this.searchQueryParams).pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleFetchAllPaymentResponse(response));
+                });
+        }
     }
 
     /**

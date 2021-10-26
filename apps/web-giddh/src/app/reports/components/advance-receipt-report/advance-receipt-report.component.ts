@@ -31,7 +31,7 @@ import {
     ReceiptAdvanceSearchModel,
 } from '../../constants/reports.constant';
 import { ReceiptAdvanceSearchComponent } from '../receipt-advance-search/receipt-advance-search.component';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'advance-receipt-report',
@@ -40,19 +40,19 @@ import { Router } from '@angular/router';
 })
 export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, OnInit {
     /** Customer name search bar */
-    @ViewChild('customerName', { static: true }) public customerName: ElementRef;
+    @ViewChild('customerName', { static: false }) public customerName: ElementRef;
     /** Parent of customer name search bar */
     @ViewChild('customerNameParent', { static: true }) public customerNameParent: ElementRef;
     /** Receipt number search bar */
-    @ViewChild('receiptNumber', { static: true }) public receiptNumber: ElementRef;
+    @ViewChild('receiptNumber', { static: false }) public receiptNumber: ElementRef;
     /** Parent of receipt number search bar */
     @ViewChild('receiptNumberParent', { static: true }) public receiptNumberParent: ElementRef;
     /** Payment mode search bar */
-    @ViewChild('paymentMode', { static: true }) public paymentMode: ElementRef;
+    @ViewChild('paymentMode', { static: false }) public paymentMode: ElementRef;
     /** Parent of payment mode search bar */
     @ViewChild('paymentModeParent', { static: true }) public paymentModeParent: ElementRef;
     /** Invoice number search bar */
-    @ViewChild('invoiceNumber', { static: true }) public invoiceNumber: ElementRef;
+    @ViewChild('invoiceNumber', { static: false }) public invoiceNumber: ElementRef;
     /** Parent of invoice number search bar */
     @ViewChild('invoiceNumberParent', { static: true }) public invoiceNumberParent: ElementRef;
     /** Advance search modal instance */
@@ -165,6 +165,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public receiptTypes: any;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
+    /** Voucher params */
+    public previewVoucherParams: any = {};
 
     /** @ignore */
     constructor(
@@ -177,8 +179,17 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         private generalService: GeneralService,
         private settingsBranchAction: SettingsBranchActions,
         private modalService: BsModalService,
-        private router: Router
-    ) { }
+        private router: Router,
+        private route: ActivatedRoute
+    ) { 
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            if(params?.uniqueName && params?.accountUniqueName) {
+                this.previewVoucherParams = params;
+            } else {
+                this.previewVoucherParams = {};
+            }
+        });
+    }
 
     /** Subscribe to universal date and set header title */
     public ngOnInit(): void {
@@ -249,7 +260,9 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @memberof AdvanceReceiptReportComponent
      */
     public ngAfterViewInit(): void {
-        this.subscribeToEvents();
+        if(!this.previewVoucherParams?.uniqueName) {
+            this.subscribeToEvents();
+        }
     }
 
     /**
@@ -454,7 +467,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             fromEvent(this.invoiceNumber?.nativeElement, 'input')).pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((value) => {
                 this.showClearFilter = true;
                 this.fetchAllReceipts(this.searchQueryParams).pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleFetchAllReceiptResponse(response));
-            });
+            });  
     }
 
     /**

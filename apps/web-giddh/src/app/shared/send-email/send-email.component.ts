@@ -22,6 +22,10 @@ export class SendEmailComponent implements OnInit {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Holds receipt voucher type */
+    public receiptVoucherType: string = VoucherTypeEnum.receipt;
+    /** Holds payment voucher type */
+    public paymentVoucherType: string = VoucherTypeEnum.payment;
 
     constructor() {
     }
