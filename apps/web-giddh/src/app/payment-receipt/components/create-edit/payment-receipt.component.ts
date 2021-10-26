@@ -369,10 +369,39 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             if (!this.isEditFormPrefilled && response && response[0] && response[1]) {
                 this.isEditFormPrefilled = true;
 
-                this.voucherFormData.account = response[0].account;
+                let accountDetails = response[0].account;
+                if(!accountDetails?.billingDetails?.country) {
+                    accountDetails.billingDetails.country = {
+                        code: '',
+                        name: ''
+                    }
+                }
+                if(!accountDetails?.billingDetails?.state) {
+                    accountDetails.billingDetails.state = {
+                        code: '',
+                        name: ''
+                    }
+                }
+
+                if(!accountDetails?.shippingDetails?.country) {
+                    accountDetails.shippingDetails.country = {
+                        code: '',
+                        name: ''
+                    }
+                }
+                if(!accountDetails?.shippingDetails?.state) {
+                    accountDetails.shippingDetails.state = {
+                        code: '',
+                        name: ''
+                    }
+                }
+
+                this.voucherFormData.account = accountDetails;
+
                 this.voucherFormData.attachedFiles = response[0].attachedFiles;
                 this.voucherFormData.date = moment(response[0].date, GIDDH_DATE_FORMAT).toDate();
-                this.getCurrencyRate(this.companyCurrency, this.voucherFormData.account?.currency?.code, moment(this.voucherFormData.date).format(GIDDH_DATE_FORMAT));
+                
+                // this.getCurrencyRate(this.companyCurrency, this.voucherFormData.account?.currency?.code, moment(this.voucherFormData.date).format(GIDDH_DATE_FORMAT));
 
                 let entryLoop = 0;
                 response[0].entries.forEach(entry => {
@@ -391,8 +420,10 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                             }
                         };
 
-                        //this.voucherFormData.entries[entryLoop].chequeClearanceDate = "";
-                        //this.voucherFormData.entries[entryLoop].chequeNumber = "";
+                        if(entry.chequeClearanceDate) {
+                            this.voucherFormData.entries[entryLoop].chequeClearanceDate = moment(entry.chequeClearanceDate, GIDDH_DATE_FORMAT).toDate();
+                        }
+                        this.voucherFormData.entries[entryLoop].chequeNumber = entry.chequeNumber;
                         this.voucherFormData.entries[entryLoop].date = this.voucherFormData.date;
                         this.voucherFormData.entries[entryLoop].taxes = entry.taxes;
 
@@ -401,7 +432,12 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                     entryLoop++;
                 });
 
-                this.voucherFormData.templateDetails = response[0].templateDetails?.other?.message2;
+                if(response[0].templateDetails?.other?.message2) {
+                    this.voucherFormData.templateDetails = response[0].templateDetails;
+                }
+                
+                this.exchangeRate = response[0].exchangeRate;
+                this.originalExchangeRate = this.exchangeRate;
                 this.voucherFormData.exchangeRate = response[0].exchangeRate;
                 this.voucherFormData.subVoucher = response[0].subVoucher;
                 this.voucherFormData.updateAccountDetails = true;
@@ -1174,7 +1210,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * @memberof PaymentReceiptComponent
      */
     public getCurrencyRate(to: any, from: any, date = moment().format(GIDDH_DATE_FORMAT)): void {
-        if (from && to) {
+        if (from && to && !this.isUpdateMode) {
             this.ledgerService.GetCurrencyRateNewApi(from, to, date).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 let rate = response.body;
                 if (rate) {
@@ -1229,16 +1265,6 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                 typeOfInvoice: event.downloadCopy ? event.downloadCopy : []
             }));
         }
-        this.closeEmailDialog();
-    }
-
-    /**
-     * This will close email dialog
-     *
-     * @memberof PaymentReceiptComponent
-     */
-    public closeEmailDialog(): void {
-        this.dialogRef.close();
     }
 
     /**
@@ -1248,11 +1274,12 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * @memberof PaymentReceiptComponent
      */
     public resetForm(formObj: NgForm): void {
+        const voucherType = this.voucherFormData.type;
         if (formObj) {
             formObj.form.reset();
         }
         this.voucherFormData = new PaymentReceipt();
-        this.voucherFormData.type = "receipt";
+        this.voucherFormData.type = voucherType;
         this.voucherFormData.date = this.universalDate;
         this.forceClear$ = observableOf({ status: true });
         this.allowFocus = true;
@@ -1343,6 +1370,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         });
 
         this.voucherFormData.entries[0].taxes = selectedTaxes;
+        this.voucherFormData.exchangeRate = this.exchangeRate;
 
         this.salesService.generateGenericItem(this.voucherFormData, true).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -1477,6 +1505,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         });
 
         this.voucherFormData.entries[0].taxes = selectedTaxes;
+        this.voucherFormData.exchangeRate = this.exchangeRate;
 
         this.salesService.updateVoucherV4(this.voucherFormData).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -1485,7 +1514,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                     message = message.replace("[VOUCHER]", this.titleCasePipe.transform(this.voucherFormData.type));
                     this.toaster.showSnackBar("success", message);
 
-                    this.router.navigate(['/pages/reports/' + this.voucherFormData.type]);
+                    this.router.navigate(['/pages/voucher/' + this.voucherFormData.type + '/preview/' + this.voucherFormData.uniqueName + '/' + this.voucherFormData.account?.uniqueName]);
                 } else {
                     this.toaster.showSnackBar("error", response.message);
                 }
@@ -1493,6 +1522,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                 this.toaster.showSnackBar("error", this.commonLocaleData?.app_something_went_wrong);
             }
             this.isLoading = false;
+            this.changeDetectionRef.detectChanges();
         });
     }
 

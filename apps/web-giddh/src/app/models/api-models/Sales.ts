@@ -714,9 +714,9 @@ export class PaymentReceiptAmount {
 
 export class PaymentReceiptEntry {
     transactions: PaymentReceiptTransaction[];
-    date: string;
+    date: any;
     chequeNumber: string;
-    chequeClearanceDate: string;
+    chequeClearanceDate: any;
     taxes: TaxControlData[] = [];
 
     constructor() {
