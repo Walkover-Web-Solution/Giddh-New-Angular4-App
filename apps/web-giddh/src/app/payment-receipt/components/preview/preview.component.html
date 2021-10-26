@@ -4,14 +4,16 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <mat-card class="receipt-preview-card">
+    <mat-card class="receipt-preview-card p-0">
         <mat-card-content>
             <div class="row mr-0 ml-0">
-                <div class="col-sm-12 col-lg-4 invoice-sidebar-wrapper pr-0">
+                <div class="col-sm-12 col-lg-4 voucher-sidebar-wrapper pr-0">
                     <div>
-                        <div class="invoice-search-box">
+                        <div class="voucher-search-box">
+                            <span matPrefix><i class="icon-search position-absolute"></i></span>
                             <text-field
-                                [cssClass]="'form-control input-custom'"
+                                class="width-70"
+                                [cssClass]="'form-control mat-field-border search-icon-field'"
                                 [placeholder]="commonLocaleData?.app_search"
                                 [(ngModel)]="search"
                                 (ngModelChange)="search$.next(search)"
@@ -19,21 +21,18 @@
                             ></text-field>
                             <button
                                 *ngIf="!isCompany"
+                                class="mr-l1"
                                 mat-raised-button
                                 color="primary"
                                 [routerLink]="['/pages/voucher/' + voucherType + '/create']"
                             >
-                                {{
-                                    voucherType === receiptVoucherType
-                                        ? localocaleData?.new_receipt
-                                        : localeData?.new_payment
-                                }}
+                                {{ localeData?.new_voucher }}
                             </button>
                         </div>
-                        <ul class="invoice-sidebar">
+                        <ul class="voucher-sidebar">
                             <perfect-scrollbar *ngIf="filteredData && filteredData.length > 0">
                                 <li
-                                    class="single-invoice-detail cp"
+                                    class="single-voucher-details cp"
                                     [ngClass]="{ 'activeItem': row.uniqueName === params?.uniqueName }"
                                     *ngFor="let row of filteredData; let i = index"
                                 >
@@ -42,25 +41,25 @@
                                         [routerLink]="
                                             '/pages/voucher/' +
                                             voucherType +
-                                            '/edit/' +
+                                            '/preview/' +
                                             row?.uniqueName +
                                             '/' +
                                             row?.account?.uniqueName
                                         "
                                     >
-                                        <div class="col-7 col-sm-7">
-                                            <div class="invoice-number-date">
+                                        <div class="col-7 col-sm-7 pl-0">
+                                            <div class="voucher-number-date font-12">
                                                 <span class="order-number">
                                                     {{ row.voucherNumber }}
                                                 </span>
                                                 <span class="order-date"> | {{ row.voucherDate }} </span>
                                             </div>
-                                            <div class="invoice-holder-name">
+                                            <div class="voucher-holder-name">
                                                 <p>{{ row.account?.name }}</p>
                                             </div>
                                         </div>
                                         <div class="col-5 col-sm-5">
-                                            <div class="invoice-amount pull-right">
+                                            <div class="voucher-amount pull-right">
                                                 <amount-field
                                                     [amount]="row.grandTotal?.amountForAccount"
                                                     [currencySymbol]="false"
@@ -77,14 +76,14 @@
                 </div>
                 <!-- endregion -->
 
-                <div class="col-sm-12 col-lg-8 p-0 invoice-detail-wrapper">
+                <div class="col-sm-12 col-lg-8 p-0 voucher-detail-wrapper">
                     <div class="scroll-half">
-                        <div class="invoice-detail">
-                            <div class="invoice-detail-header col-md-12">
+                        <div class="voucher-detail">
+                            <div class="voucher-detail-header col-md-12">
                                 <div class="row">
                                     <div class="col-xl-4 col-lg-3 col-sm-12">
-                                        <div class="invoice-number-holder">
-                                            <h3 class="invoice-number">{{ voucherDetails?.number }}</h3>
+                                        <div class="voucher-number-holder">
+                                            <h3 class="voucher-number">{{ voucherDetails?.number }}</h3>
                                             <p class="account-holder-name">{{ voucherDetails?.account?.name }}</p>
                                         </div>
                                     </div>
@@ -97,14 +96,6 @@
                                             >
                                                 <img src="assets/images/multiply.svg"
                                             /></span>
-
-                                            <!-- <button mat-raised-button color="primary" [matMenuTriggerFor]="action">
-                                                Change Status
-                                            </button>
-                                            <mat-menu #action="matMenu">
-                                                <button mat-menu-item>Vertebrates</button>
-                                                <button mat-menu-item>Invertebrates</button>
-                                            </mat-menu> -->
 
                                             <div class="wrap-edit-history-btn">
                                                 <div class="edit-action-btn-groups pull-right">
@@ -140,7 +131,7 @@
                                                             href="javascript:;"
                                                             [matTooltip]="commonLocaleData?.app_print"
                                                             [matTooltipPosition]="'above'"
-                                                            (click)="printVoucher()"
+                                                            (click)="!pdfPreviewHasError ? printVoucher() : ''"
                                                             ><i class="fa fa-print"></i
                                                         ></a>
                                                     </span>
@@ -150,7 +141,7 @@
                                                             href="javascript:;"
                                                             [matTooltip]="commonLocaleData?.app_download"
                                                             [matTooltipPosition]="'above'"
-                                                            (click)="downloadFile()"
+                                                            (click)="!pdfPreviewHasError ? downloadFile() : ''"
                                                             ><i class="icon-file"></i
                                                         ></a>
                                                     </span>
@@ -170,11 +161,29 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="pd-l15" *ngIf="attachedDocumentType">
+                                <h5 class="pd-b05 font-16">
+                                    <strong>Uploaded Bill</strong>
+                                </h5>
+                            </div>
                         </div>
-                        <div class="invoice-image-section">
+                        <div class="voucher-image-section mr-l1 mr-t1">
                             <div class="relative">
                                 <div class="position-relative" *ngIf="!pdfPreviewHasError && !pdfPreviewLoaded">
                                     <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+                                </div>
+                                <div
+                                    class="preview-not-supported-attachment"
+                                    *ngIf="attachedDocumentType?.type === 'unsupported'"
+                                >
+                                    <span class="text-warning">{{ localeData?.preview_formats }} </span>
+                                </div>
+                                <div
+                                    *ngIf="attachedDocumentType?.type === 'image'"
+                                    class="img-expand-collapse"
+                                    [ngClass]="{ 'image-collapsed': !isAttachmentExpanded }"
+                                >
+                                    <img class="image-preview img-expand w-100" [src]="imagePreviewSource" />
                                 </div>
                                 <div class="error" [hidden]="!pdfPreviewHasError">
                                     <span>
@@ -189,6 +198,25 @@
                                         height="100%"
                                         [src]="sanitizedPdfFileUrl"
                                     ></iframe>
+                                </div>
+
+                                <div class="expand-file" *ngIf="imagePreviewSource || attachedPdfFileUrl">
+                                    <a
+                                        href="javascript:;"
+                                        *ngIf="!isAttachmentExpanded"
+                                        class="cp"
+                                        (click)="isAttachmentExpanded = true"
+                                        ><span><img src="assets/images/expand.svg" /></span
+                                        >{{ commonLocaleData?.app_expand }}</a
+                                    >
+                                    <a
+                                        href="javascript:;"
+                                        *ngIf="isAttachmentExpanded"
+                                        class="cp"
+                                        (click)="isAttachmentExpanded = false"
+                                        ><span><img src="assets/images/expand.svg" class="collapse-icon" /></span
+                                        >{{ commonLocaleData?.app_collapse }}</a
+                                    >
                                 </div>
                             </div>
                         </div>
