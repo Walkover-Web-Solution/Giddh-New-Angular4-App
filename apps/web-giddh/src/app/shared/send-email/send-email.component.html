@@ -13,14 +13,14 @@
         <div class="row mr-b1">
             <div class="col-sm-12">
                 <text-field
-                    [cssClass]="'form-control'"
+                    [cssClass]="'form-control mat-field-border'"
                     [placeholder]="localeData?.enter_email_address"
                     [(ngModel)]="emailAddresses"
                 ></text-field>
             </div>
         </div>
 
-        <div class="clearfix">
+        <div class="clearfix" *ngIf="![receiptVoucherType, paymentVoucherType].includes(voucherType)">
             <h3 class="font-16 mr-b05">{{ localeData?.invoice_copy }}</h3>
             <hr />
             <div class="checkbox">
@@ -65,6 +65,7 @@
                         mat-raised-button
                         [disabled]="!emailAddresses || !downloadCopy?.length"
                         (click)="sendEmail()"
+                        mat-dialog-close
                     >
                         {{ commonLocaleData?.app_send }}
                     </button>

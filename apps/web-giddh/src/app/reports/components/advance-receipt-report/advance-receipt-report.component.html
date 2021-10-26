@@ -4,6 +4,7 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
+    *ngIf="!previewVoucherParams?.uniqueName"
 >
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="reverse-table-report">
@@ -19,7 +20,7 @@
                         class="btn btn-sky-blue dropdown-btn-new"
                         [routerLink]="'/pages/voucher/receipt/create'"
                     >
-                        {{ localeData?.new_receipt }}
+                        {{ localeData?.new_voucher }}
                     </button>
                     <div
                         class="input-group linked-entities mr-r15"
@@ -518,3 +519,9 @@
         </div>
     </ng-template>
 </ng-container>
+<preview
+    *ngIf="previewVoucherParams?.uniqueName"
+    [params]="previewVoucherParams"
+    [voucherType]="'receipt'"
+    [allVouchers]="allReceipts"
+></preview>
