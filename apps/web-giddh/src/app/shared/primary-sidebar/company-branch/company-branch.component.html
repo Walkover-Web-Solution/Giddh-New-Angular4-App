@@ -66,10 +66,10 @@
                     >
                         <li
                             class="btn-group"
-                            *ngFor="let company of companyListForFilter"
+                            *ngFor="let company of companyListForFilter; let i = index"
                             [ngClass]="{ 'active': company?.uniqueName === activeCompany?.uniqueName }"
                             [tooltip]="company?.name"
-                            placement="top"
+                            [placement]="i === 0 ? 'bottom' : 'top'"
                         >
                             <span
                                 id="button-basic"
@@ -132,7 +132,7 @@
                                     activeCompany?.uniqueName !== companyBranches?.uniqueName || currentBranchUniqueName
                                 "
                                 [tooltip]="companyBranches.name"
-                                placement="top"
+                                placement="bottom"
                             >
                                 <a
                                     class="d-flex align-items-center head-branch"
