@@ -254,9 +254,9 @@
                                                     <a class="dropdown-item">
                                                         <input
                                                             type="checkbox"
-                                                            name="{{ item.uniqueName }}"
-                                                            (ngModelChange)="columnFilter($event, item.uniqueName)"
-                                                            [(ngModel)]="showFieldFilter[item.uniqueName]"
+                                                            name="{{ item?.uniqueName }}"
+                                                            (ngModelChange)="columnFilter($event, item?.uniqueName)"
+                                                            [(ngModel)]="showFieldFilter[item?.uniqueName]"
                                                         />
                                                         {{ item.key | titlecase }}
                                                     </a>
@@ -350,14 +350,14 @@
                                         <li role="menuitem" class="pointer" (click)="downloadCSV()">
                                             {{ commonLocaleData?.app_download_csv }}
                                         </li>
-                                        <!-- <li
+                                        <li
                                             role="menuitem"
                                             class="pointer"
                                             *ngIf="selectedAccountsList?.length > 0 && activeTab === 'vendor'"
                                             (click)="openBulkPaymentModal(template)"
                                         >
                                             {{ localeData?.bulk_payment }}
-                                        </li> -->
+                                        </li>
                                     </ul>
                                 </div>
                             </div>

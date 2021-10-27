@@ -783,7 +783,7 @@
                     <button
                         (click)="submit()"
                         class="btn btn-primary update-btn-zindex"
-                        [ladda]="createAccountInProcess$ | async"
+                        [ladda]="updateAccountInProcess$ | async"
                         [disabled]="addAccountForm.invalid || !(isGstValid$ | async)"
                     >
                         {{ commonLocaleData?.app_update }}
@@ -1037,7 +1037,7 @@
                     <button
                         (click)="submit()"
                         class="btn btn-primary update-btn-zindex"
-                        [ladda]="createAccountInProcess$ | async"
+                        [ladda]="updateAccountInProcess$ | async"
                         [disabled]="addAccountForm.invalid || !(isGstValid$ | async)"
                     >
                         {{ commonLocaleData?.app_update }}
