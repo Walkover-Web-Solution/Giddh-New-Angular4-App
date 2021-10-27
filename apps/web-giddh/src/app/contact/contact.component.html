@@ -324,7 +324,14 @@
                                         >
                                     </div>
                                 </h5>
-                                <div class="btn-group more-button align-items-center" dropdown container="body">
+                                <div
+                                    class="btn-group more-button align-items-center"
+                                    dropdown
+                                    #dropdown="bs-dropdown"
+                                    container="body"
+                                    [autoClose]="false"
+                                    (clickOutside)="dropdown.isOpen = false"
+                                >
                                     <button
                                         *ngIf="selectedCheckedContacts?.length"
                                         id="button-basic"
@@ -648,7 +655,12 @@
 
     <ng-template #mainTable>
         <div class="mobile-card-wrapper table-responsive vendor-page">
-            <table class="table on-mobile-view aging-table mr-b260 giddh-table" *ngIf="activeTab !== 'aging'">
+            <table
+                class="table on-mobile-view aging-table mr-b260 giddh-table"
+                *ngIf="activeTab !== 'aging'"
+                (mouseenter)="showSelectAll = true"
+                (mouseleave)="showSelectAll = false"
+            >
                 <thead
                     [hidden]="
                         !searchStr &&
@@ -666,7 +678,7 @@
                                 <label></label>
                                 <input
                                     type="checkbox"
-                                    *ngIf="selectedCheckedContacts?.length"
+                                    *ngIf="selectedCheckedContacts?.length || showSelectAll"
                                     [(ngModel)]="allSelectionModel"
                                     (ngModelChange)="toggleAllSelection(allSelectionModel)"
                                 />
