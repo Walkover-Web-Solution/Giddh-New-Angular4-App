@@ -723,11 +723,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                             if (response.status === "success") {
                                 this.getVoucher(this.isUniversalDateApplicable);
                                 this._toaster.successToast(response.body);
+                                this.getVoucher(false);
+                                this.toggleAllItems(false);
                             } else {
                                 this._toaster.errorToast(response.message);
                             }
-                            this.getVoucher(false);
-                            this.toggleAllItems(false);
                         }
                     });
                 }
