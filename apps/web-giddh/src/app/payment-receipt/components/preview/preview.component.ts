@@ -97,7 +97,7 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
         private route: Router,
         private invoiceAction: InvoiceActions
     ) {
-
+        document.querySelector("body")?.classList.add("update-scroll-hidden");
     }
 
     /**
@@ -118,7 +118,7 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
             this.isSidebarExpanded = true;
             this.generalService.collapseSidebar();
         }
-        document.querySelector('body').classList.add('setting-sidebar-open');
+        document.querySelector('body')?.classList?.add('setting-sidebar-open');
 
         if (this.allVouchers) {
             this.filteredData = this.allVouchers;
@@ -143,7 +143,8 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
             this.isSidebarExpanded = false;
             this.generalService.expandSidebar();
         }
-        document.querySelector('body').classList.remove('setting-sidebar-open');
+        document.querySelector("body")?.classList.remove("update-scroll-hidden");
+        document.querySelector('body')?.classList.remove('setting-sidebar-open');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
