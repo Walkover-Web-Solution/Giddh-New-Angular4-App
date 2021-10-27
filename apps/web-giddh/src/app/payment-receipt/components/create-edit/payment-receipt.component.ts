@@ -216,6 +216,10 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     private isValidTaxNumber: boolean = false;
     /** This holds query params for edit voucher */
     public queryParams: any = {};
+    /** True if voucher date is invalid */
+    public isInvalidVoucherDate: boolean = false;
+    /** True if cheque date is invalid */
+    public isInvalidChequeDate: boolean = false;
 
     /** @ignore */
     constructor(
@@ -370,26 +374,26 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                 this.isEditFormPrefilled = true;
 
                 let accountDetails = response[0].account;
-                if(!accountDetails?.billingDetails?.country) {
+                if (!accountDetails?.billingDetails?.country) {
                     accountDetails.billingDetails.country = {
                         code: '',
                         name: ''
                     }
                 }
-                if(!accountDetails?.billingDetails?.state) {
+                if (!accountDetails?.billingDetails?.state) {
                     accountDetails.billingDetails.state = {
                         code: '',
                         name: ''
                     }
                 }
 
-                if(!accountDetails?.shippingDetails?.country) {
+                if (!accountDetails?.shippingDetails?.country) {
                     accountDetails.shippingDetails.country = {
                         code: '',
                         name: ''
                     }
                 }
-                if(!accountDetails?.shippingDetails?.state) {
+                if (!accountDetails?.shippingDetails?.state) {
                     accountDetails.shippingDetails.state = {
                         code: '',
                         name: ''
@@ -400,8 +404,6 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
 
                 this.voucherFormData.attachedFiles = response[0].attachedFiles;
                 this.voucherFormData.date = moment(response[0].date, GIDDH_DATE_FORMAT).toDate();
-                
-                // this.getCurrencyRate(this.companyCurrency, this.voucherFormData.account?.currency?.code, moment(this.voucherFormData.date).format(GIDDH_DATE_FORMAT));
 
                 let entryLoop = 0;
                 response[0].entries.forEach(entry => {
@@ -420,11 +422,18 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                             }
                         };
 
-                        if(entry.chequeClearanceDate) {
+                        if (entry.chequeClearanceDate) {
                             this.voucherFormData.entries[entryLoop].chequeClearanceDate = moment(entry.chequeClearanceDate, GIDDH_DATE_FORMAT).toDate();
                         }
                         this.voucherFormData.entries[entryLoop].chequeNumber = entry.chequeNumber;
                         this.voucherFormData.entries[entryLoop].date = this.voucherFormData.date;
+
+                        entry.taxes?.forEach(entryTax => {
+                            let selectedTax = this.companyTaxesList.find(tax => tax.uniqueName === entryTax.uniqueName);
+                            entryTax.name = entryTax?.name || selectedTax?.name || entryTax?.uniqueName;
+                            entryTax.isChecked = true;
+                        });
+
                         this.voucherFormData.entries[entryLoop].taxes = entry.taxes;
 
                         transactionLoop++;
@@ -432,10 +441,10 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                     entryLoop++;
                 });
 
-                if(response[0].templateDetails?.other?.message2) {
+                if (response[0].templateDetails?.other?.message2) {
                     this.voucherFormData.templateDetails = response[0].templateDetails;
                 }
-                
+
                 this.exchangeRate = response[0].exchangeRate;
                 this.originalExchangeRate = this.exchangeRate;
                 this.voucherFormData.exchangeRate = response[0].exchangeRate;
@@ -1130,7 +1139,10 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             // auto fill all the details
             this.voucherFormData.account = new AccountDetailsClass(data);
             this.voucherFormData.account.currencyCode = this.voucherFormData.account.currency.code;
-            this.changeDetectionRef.detectChanges();
+
+            setTimeout(() => {
+                this.changeDetectionRef.detectChanges();
+            }, 50);
         });
     }
 
@@ -1257,7 +1269,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * @memberof PaymentReceiptComponent
      */
     public sendEmail(event: any): void {
-        if(event) {
+        if (event) {
             this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.paymentReceiptResponse?.account?.uniqueName, {
                 emailId: event.email?.split(','),
                 voucherNumber: [this.paymentReceiptResponse?.number],
@@ -1287,6 +1299,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         this.isMultiCurrencyAccount = false;
         this.accountAddressList = [];
         this.isValidForm = true;
+        this.totals = { subTotal: 0, taxTotal: 0, grandTotal: 0, grandTotalMultiCurrency: 0 };
     }
 
     /**
@@ -1440,6 +1453,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         if (isNaN(this.totals.taxTotal)) {
             this.totals.taxTotal = 0;
         }
+        this.changeDetectionRef.detectChanges();
     }
 
     /**
@@ -1604,6 +1618,30 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                     this.toaster.showSnackBar("error", invalidTax);
                 }
             }
+        }
+    }
+
+    /**
+     * Validates the voucher date
+     *
+     * @memberof PaymentReceiptComponent
+     */
+    public validateVoucherDate(): void {
+        this.isInvalidVoucherDate = false;
+        if (this.voucherFormData.date && moment(this.voucherFormData.date).format(GIDDH_DATE_FORMAT) === "Invalid date") {
+            this.isInvalidVoucherDate = true;
+        }
+    }
+
+    /**
+     * Validates the cheque date
+     *
+     * @memberof PaymentReceiptComponent
+     */
+    public validateChequeDate(): void {
+        this.isInvalidChequeDate = false;
+        if (this.voucherFormData.entries[0].chequeClearanceDate && moment(this.voucherFormData.entries[0].chequeClearanceDate).format(GIDDH_DATE_FORMAT) === "Invalid date") {
+            this.isInvalidChequeDate = true;
         }
     }
 }
