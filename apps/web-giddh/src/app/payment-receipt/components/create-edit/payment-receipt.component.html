@@ -233,32 +233,62 @@
                                                                         </div>
 
                                                                         <div class="col-sm-12 col-md-6" #billingState>
-                                                                            <sales-sh-select
-                                                                                [placeholder]="
-                                                                                    commonLocaleData?.app_state
-                                                                                "
-                                                                                class="square pd-b01"
-                                                                                (selected)="
-                                                                                    fillShippingBillingDetails(
-                                                                                        $event,
-                                                                                        true
-                                                                                    );
-                                                                                    autoFillShippingDetails()
-                                                                                "
-                                                                                #statesBilling
-                                                                                [showBottomBorderOnly]="true"
-                                                                                [forceClearReactive]="
-                                                                                    billingShippingForceClearReactive$
-                                                                                        | async
-                                                                                "
-                                                                                [options]="statesSource"
-                                                                                name="billingdetails-statecode"
-                                                                                [(ngModel)]="
-                                                                                    voucherFormData.account
-                                                                                        .billingDetails.state.code
+                                                                            <mat-form-field
+                                                                                appearance="fill"
+                                                                                class="
+                                                                                    mat-field-select
+                                                                                    width-100
+                                                                                    only-bottom-border
                                                                                 "
                                                                             >
-                                                                            </sales-sh-select>
+                                                                                <mat-label
+                                                                                    *ngIf="
+                                                                                        !voucherFormData.account
+                                                                                            .billingDetails.state.code
+                                                                                    "
+                                                                                >
+                                                                                    {{
+                                                                                        commonLocaleData?.app_state
+                                                                                    }}</mat-label
+                                                                                >
+                                                                                <mat-select
+                                                                                    name="billingdetails-statecode"
+                                                                                    disableOptionCentering
+                                                                                    [(ngModel)]="
+                                                                                        voucherFormData.account
+                                                                                            .billingDetails.state.code
+                                                                                    "
+                                                                                    (selectionChange)="
+                                                                                        fillShippingBillingDetails(
+                                                                                            $event,
+                                                                                            true
+                                                                                        );
+                                                                                        autoFillShippingDetails()
+                                                                                    "
+                                                                                >
+                                                                                    <mat-option>
+                                                                                        <ngx-mat-select-search
+                                                                                            [formControl]="
+                                                                                                searchBillingStates
+                                                                                            "
+                                                                                            [placeholderLabel]="
+                                                                                                commonLocaleData?.app_search
+                                                                                            "
+                                                                                            [noEntriesFoundLabel]="
+                                                                                                commonLocaleData?.app_no_records_found
+                                                                                            "
+                                                                                        >
+                                                                                        </ngx-mat-select-search>
+                                                                                    </mat-option>
+                                                                                    <mat-option
+                                                                                        *ngFor="
+                                                                                            let state of filteredBillingStates
+                                                                                        "
+                                                                                        [value]="state.value"
+                                                                                        >{{ state?.label }}
+                                                                                    </mat-option>
+                                                                                </mat-select>
+                                                                            </mat-form-field>
                                                                         </div>
 
                                                                         <div
@@ -455,32 +485,64 @@
                                                                                 class="col-sm-12 col-md-6"
                                                                                 #shippingState
                                                                             >
-                                                                                <sales-sh-select
-                                                                                    [disabled]="autoFillShipping"
-                                                                                    [placeholder]="
-                                                                                        commonLocaleData?.app_state
-                                                                                    "
-                                                                                    class="square pd-b01"
-                                                                                    #statesShipping
-                                                                                    [forceClearReactive]="
-                                                                                        billingShippingForceClearReactive$
-                                                                                            | async
-                                                                                    "
-                                                                                    [showBottomBorderOnly]="true"
-                                                                                    (selected)="
-                                                                                        fillShippingBillingDetails(
-                                                                                            $event,
-                                                                                            false
-                                                                                        )
-                                                                                    "
-                                                                                    [options]="statesSource"
-                                                                                    name="shippingdetails-statecode"
-                                                                                    [(ngModel)]="
-                                                                                        voucherFormData.account
-                                                                                            .shippingDetails.state.code
+                                                                                <mat-form-field
+                                                                                    appearance="fill"
+                                                                                    class="
+                                                                                        mat-field-select
+                                                                                        width-100
+                                                                                        only-bottom-border
                                                                                     "
                                                                                 >
-                                                                                </sales-sh-select>
+                                                                                    <mat-label
+                                                                                        *ngIf="
+                                                                                            !voucherFormData.account
+                                                                                                .shippingDetails.state
+                                                                                                .code
+                                                                                        "
+                                                                                    >
+                                                                                        {{
+                                                                                            commonLocaleData?.app_state
+                                                                                        }}</mat-label
+                                                                                    >
+                                                                                    <mat-select
+                                                                                        name="shippingdetails-statecode"
+                                                                                        disableOptionCentering
+                                                                                        [(ngModel)]="
+                                                                                            voucherFormData.account
+                                                                                                .shippingDetails.state
+                                                                                                .code
+                                                                                        "
+                                                                                        (selectionChange)="
+                                                                                            fillShippingBillingDetails(
+                                                                                                $event,
+                                                                                                false
+                                                                                            )
+                                                                                        "
+                                                                                        [disabled]="autoFillShipping"
+                                                                                    >
+                                                                                        <mat-option>
+                                                                                            <ngx-mat-select-search
+                                                                                                [formControl]="
+                                                                                                    searchShippingStates
+                                                                                                "
+                                                                                                [placeholderLabel]="
+                                                                                                    commonLocaleData?.app_search
+                                                                                                "
+                                                                                                [noEntriesFoundLabel]="
+                                                                                                    commonLocaleData?.app_no_records_found
+                                                                                                "
+                                                                                            >
+                                                                                            </ngx-mat-select-search>
+                                                                                        </mat-option>
+                                                                                        <mat-option
+                                                                                            *ngFor="
+                                                                                                let state of filteredShippingStates
+                                                                                            "
+                                                                                            [value]="state.value"
+                                                                                            >{{ state?.label }}
+                                                                                        </mat-option>
+                                                                                    </mat-select>
+                                                                                </mat-form-field>
                                                                             </div>
 
                                                                             <div
@@ -797,7 +859,12 @@
                                                             >
                                                             <mat-select
                                                                 name="receipt-mode"
+                                                                disableOptionCentering
                                                                 [(ngModel)]="
+                                                                    voucherFormData.entries[0].transactions[0].account
+                                                                        .uniqueName
+                                                                "
+                                                                [(value)]="
                                                                     voucherFormData.entries[0].transactions[0].account
                                                                         .uniqueName
                                                                 "
@@ -931,20 +998,23 @@
                                                 class="custom-file-label form-control cp position-relative"
                                                 for="file"
                                             >
-                                                <em *ngIf="!selectedFileName && !isLoading">{{
+                                                <em *ngIf="!selectedFileName && !isFileUploading">{{
                                                     localeData?.drag_drop_file
                                                 }}</em>
                                                 <div
-                                                    *ngIf="isLoading"
+                                                    *ngIf="isFileUploading"
                                                     class="d-flex justify-content-center align-items-center"
                                                 >
                                                     <i class="fa fa-spinner rotate"></i>
                                                 </div>
-                                                <em *ngIf="selectedFileName && !isLoading" class="text-success">{{
+                                                <em *ngIf="selectedFileName && !isFileUploading" class="text-success">{{
                                                     selectedFileName
                                                 }}</em>
                                                 <span class="text-success"
-                                                    ><i class="fa fa-check" *ngIf="selectedFileName && !isLoading"></i
+                                                    ><i
+                                                        class="fa fa-check"
+                                                        *ngIf="selectedFileName && !isFileUploading"
+                                                    ></i
                                                 ></span>
                                                 <input
                                                     type="file"
