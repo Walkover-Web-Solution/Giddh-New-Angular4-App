@@ -114,6 +114,10 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     public bankAccounts: IOption[] = [];
     /** control for the MatSelect filter keyword */
     public searchBankAccount: FormControl = new FormControl();
+    /** control for the MatSelect filter keyword */
+    public searchBillingStates: FormControl = new FormControl();
+    /** control for the MatSelect filter keyword */
+    public searchShippingStates: FormControl = new FormControl();
     /** Input mask format */
     public inputMaskFormat: string = '';
     /* This will hold local JSON data */
@@ -142,6 +146,10 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     public customerCountryCode: string = '';
     /** Force clear for billing-shipping dropdown */
     public billingShippingForceClearReactive$: Observable<IForceClear> = observableOf({ status: false });
+    /** Billing States list */
+    public filteredBillingStates: IOption[] = [];
+    /** Shipping States list */
+    public filteredShippingStates: IOption[] = [];
     /** States list */
     public statesSource: IOption[] = [];
     /** This will hold states list with respect to country */
@@ -367,6 +375,14 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         // listen for search field value changes
         this.searchBankAccount.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(() => {
             this.filterBankAccounts();
+        });
+
+        this.searchBillingStates.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(() => {
+            this.filterStates(true);
+        });
+
+        this.searchShippingStates.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(() => {
+            this.filterStates(false);
         });
 
         combineLatest([this.voucherDetails$, this.selectedAccountDetails$]).pipe(takeUntil(this.destroyed$), auditTime(700)).subscribe(response => {
@@ -993,22 +1009,19 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     /**
      * This will copy the billing details in shipping details
      *
-     * @param {*} $event
+     * @param {*} event
      * @param {boolean} isBilling
      * @memberof PaymentReceiptComponent
      */
-    public fillShippingBillingDetails($event: any, isBilling: boolean): void {
-        let stateName = $event.label;
-        let stateCode = $event.value;
+    public fillShippingBillingDetails(event: any, isBilling: boolean): void {
+        let stateCode = event?.value;
 
         if (isBilling) {
             // update account details address if it's billing details
             if (this.billingState && this.billingState.nativeElement) {
                 this.billingState.nativeElement.classList.remove('error-box');
             }
-            this.voucherFormData.account.billingDetails.state.name = stateName;
-            this.voucherFormData.account.billingDetails.stateName = stateName;
-            this.voucherFormData.account.billingDetails.stateCode = stateCode;
+            this.voucherFormData.account.billingDetails.state.code = stateCode;
         } else {
             if (this.shippingState && this.shippingState.nativeElement) {
                 this.shippingState.nativeElement.classList.remove('error-box');
@@ -1016,9 +1029,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             // if it's not billing address then only update shipping details
             // check if it's not auto fill shipping address from billing address then and then only update shipping details
             if (!this.autoFillShipping) {
-                this.voucherFormData.account.shippingDetails.stateName = stateName;
-                this.voucherFormData.account.shippingDetails.stateCode = stateCode;
-                this.voucherFormData.account.shippingDetails.state.name = stateName;
+                this.voucherFormData.account.shippingDetails.state.code = stateCode;
             }
         }
     }
@@ -1037,10 +1048,14 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             if (countryCode) {
                 if (this.countryStates[countryCode]) {
                     this.statesSource = this.countryStates[countryCode];
+                    this.filteredBillingStates = cloneDeep(this.statesSource);
+                    this.filteredShippingStates = cloneDeep(this.statesSource);
                     resolve();
                 } else {
                     this.salesService.getStateCode(countryCode).pipe(takeUntil(this.destroyed$)).subscribe(resp => {
                         this.statesSource = this.modifyStateResponse((resp.body) ? resp.body.stateList : [], countryCode);
+                        this.filteredBillingStates = cloneDeep(this.statesSource);
+                        this.filteredShippingStates = cloneDeep(this.statesSource);
                         resolve();
                     }, () => {
                         resolve();
@@ -1253,9 +1268,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             }
 
             data.state.code = (address.state) ? address.state.code : "";
-            data.stateCode = data.state.code;
             data.state.name = (address.state) ? address.state.name : "";
-            data.stateName = data.state.name;
             data.gstNumber = address.gstNumber;
             data.pincode = address.pincode;
             this.autoFillShippingDetails();
@@ -1299,6 +1312,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         this.isMultiCurrencyAccount = false;
         this.accountAddressList = [];
         this.isValidForm = true;
+        this.autoFillShipping = true;
         this.totals = { subTotal: 0, taxTotal: 0, grandTotal: 0, grandTotalMultiCurrency: 0 };
     }
 
@@ -1453,7 +1467,10 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         if (isNaN(this.totals.taxTotal)) {
             this.totals.taxTotal = 0;
         }
-        this.changeDetectionRef.detectChanges();
+
+        setTimeout(() => {
+            this.changeDetectionRef.detectChanges();
+        }, 50);
     }
 
     /**
@@ -1564,7 +1581,6 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         if (gstVal && gstVal.length >= 2) {
             const selectedState = this.statesSource.find(item => item.additional?.stateGstCode === gstVal.substring(0, 2));
             if (selectedState) {
-                this.voucherFormData.account[type].stateCode = selectedState.value;
                 this.voucherFormData.account[type].state.code = selectedState.value;
                 statesEle.disabled = true;
             } else {
@@ -1572,14 +1588,12 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                 if (!this.isValidTaxNumber) {
                     /* Check for valid pattern such as 9918IND29061OSS through which state can't be determined
                         and clear the state only when valid number is not provided */
-                    this.voucherFormData.account[type].stateCode = null;
                     this.voucherFormData.account[type].state.code = null;
                 }
                 statesEle.disabled = false;
             }
         } else {
             statesEle.disabled = false;
-            this.voucherFormData.account[type].stateCode = null;
             this.voucherFormData.account[type].state.code = null;
         }
         this.checkTaxNumberValidation(gstVal);
@@ -1642,6 +1656,30 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         this.isInvalidChequeDate = false;
         if (this.voucherFormData.entries[0].chequeClearanceDate && moment(this.voucherFormData.entries[0].chequeClearanceDate).format(GIDDH_DATE_FORMAT) === "Invalid date") {
             this.isInvalidChequeDate = true;
+        }
+    }
+
+    /**
+     * This will filter states
+     *
+     * @private
+     * @memberof PaymentReceiptComponent
+     */
+    private filterStates(isBillingStates: boolean = true): void {
+        let filteredStates: IOption[] = [];
+        const search = (isBillingStates) ? this.searchBillingStates : this.searchShippingStates;
+        this.statesSource.forEach(state => {
+            if (state?.label?.toLowerCase()?.indexOf(search?.value?.toLowerCase()) > -1) {
+                filteredStates.push({ label: state.label, value: state.value, additional: state });
+            }
+        });
+
+        filteredStates = orderBy(filteredStates, 'label');
+
+        if (isBillingStates) {
+            this.filteredBillingStates = filteredStates;
+        } else {
+            this.filteredShippingStates = filteredStates;
         }
     }
 }
