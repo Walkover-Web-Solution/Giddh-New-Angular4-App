@@ -214,6 +214,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     public imgPath: string = '';
     /** True if single icici bank account is there and is pending for approval */
     public isIciciAccountPendingForApproval: boolean = false;
+    /** True if we should select all checkbox */
+    public showSelectAll: boolean = false;
 
     constructor(
         private store: Store<AppState>,
