@@ -2833,6 +2833,16 @@ td.mat-footer-cell {
         }
     }
     .mat-field-select {
+        &.only-bottom-border {
+            .mat-form-field-wrapper {
+                .mat-form-field-flex {
+                    border-top: 0px;
+                    border-left: 0px;
+                    border-right: 0px;
+                    margin-bottom: 1px !important;
+                }
+            }
+        }
         .mat-form-field-wrapper {
             .mat-form-field-flex {
                 border: 1px solid $very-light-gray;
