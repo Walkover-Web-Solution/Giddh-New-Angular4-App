@@ -27,6 +27,21 @@
     position: absolute;
     right: 0;
     top: 30px;
+
+    .balance-due {
+        display: block;
+        color: #666;
+        line-height: 1.2rem;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .sp-rupees {
+        display: block;
+        font-size: 26px;
+        line-height: 1.2;
+        font-family: opensans-semibold;
+    }
 }
 .action-buttons {
     width: 100%;
@@ -141,7 +156,6 @@ section.billing-address-wrap {
     margin-top: 15px;
     margin-bottom: 5px;
     input,
-    .sales-country-label,
     sales-sh-select input {
         padding: 0 !important;
     }
@@ -149,13 +163,14 @@ section.billing-address-wrap {
         padding-left: 0 !important;
     }
 }
-.aqua-color a {
-    color: $deep-sky-blue;
-    font-size: 12px;
-}
-
-.aqua-color i {
-    font-size: 16px;
+.aqua-color {
+    a {
+        color: $deep-sky-blue;
+        font-size: 12px;
+    }
+    i {
+        font-size: 16px;
+    }
 }
 
 .input-custom {
@@ -172,6 +187,10 @@ input.mat-input-element {
     padding-bottom: 1px;
 }
 
+.mr-l4 {
+    margin-left: 4px;
+}
+
 .switch-currency {
     font-size: 14px;
     color: $night-rider;
@@ -181,13 +200,17 @@ input.mat-input-element {
     width: 100%;
 }
 
-.switch-currency .switch-icon {
-    padding: 0 10px;
-    cursor: pointer;
+.switch-currency {
+    .switch-icon {
+        padding: 0 10px;
+        cursor: pointer;
+    }
 }
 
-.receipt-card-table .form-control {
-    margin-bottom: 5px;
+.receipt-card-table {
+    .form-control {
+        margin-bottom: 5px;
+    }
 }
 
 input.form-control.edit-currency {

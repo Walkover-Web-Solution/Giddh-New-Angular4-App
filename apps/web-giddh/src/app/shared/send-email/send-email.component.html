@@ -61,7 +61,7 @@
                 <div class="btn-group" role="group">
                     <button
                         type="button"
-                        color="primary"
+                        class="btn btn-success"
                         mat-raised-button
                         [disabled]="!emailAddresses || !downloadCopy?.length"
                         (click)="sendEmail()"
@@ -70,7 +70,7 @@
                         {{ commonLocaleData?.app_send }}
                     </button>
 
-                    <button type="button" color="warn" mat-raised-button mat-dialog-close>
+                    <button type="button" class="btn btn-danger" mat-raised-button mat-dialog-close>
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>

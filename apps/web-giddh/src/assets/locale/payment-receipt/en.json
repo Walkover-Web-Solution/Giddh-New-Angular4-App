@@ -30,5 +30,6 @@
     "update_payment": "Update Payment",
     "voucher_updated": "[VOUCHER] updated successfully.",
     "invalid_tax_field": "Invalid [TAX_NAME] in [FIELD_NAME]! Please fix and try again",
-    "invalid_tax": "Invalid [TAX_NAME]! Please fix and try again"
+    "invalid_tax": "Invalid [TAX_NAME]! Please fix and try again",
+    "description": "Description"
 }

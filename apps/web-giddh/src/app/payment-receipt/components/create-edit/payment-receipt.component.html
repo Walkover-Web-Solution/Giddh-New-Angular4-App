@@ -615,9 +615,13 @@
                                                         >
                                                         <giddh-datepicker
                                                             class="inline mr-l1"
-                                                            [showError]="!isValidForm && !voucherFormData.date"
+                                                            [showError]="
+                                                                (!isValidForm && !voucherFormData.date) ||
+                                                                isInvalidVoucherDate
+                                                            "
                                                             name="receipt-date"
                                                             [(ngModel)]="voucherFormData.date"
+                                                            (ngModelChange)="validateVoucherDate()"
                                                             [placeholder]="commonLocaleData?.app_select_date"
                                                             [cssClass]="
                                                                 'mat-field-border border-left-right-none form-control w-100'
@@ -654,7 +658,7 @@
                                             class="switch-currency d-flex align-items-center"
                                             *ngIf="isMultiCurrencyAccount && !showSwitchCurrency"
                                         >
-                                            <span class="left-currency mr-r1"
+                                            <span class="left-currency mr-r05"
                                                 >{{ commonLocaleData?.app_numbers?.one }}
                                                 {{ companyCurrencyName }}</span
                                             >
@@ -676,7 +680,7 @@
                                                     [cssClass]="'form-control edit-currency'"
                                                 >
                                                 </text-field>
-                                                {{ companyCurrency }}
+                                                <span class="mr-l4">{{ companyCurrency }}</span>
                                             </span>
 
                                             <span class="edit-icon cp">
@@ -832,6 +836,7 @@
                                                                 [(ngModel)]="
                                                                     voucherFormData.templateDetails.other.message2
                                                                 "
+                                                                [placeholder]="localeData?.description"
                                                             ></textarea>
                                                         </mat-form-field>
                                                     </div>
@@ -877,9 +882,11 @@
                                                         [cssClass]="
                                                             'mat-field-border border-left-right-none form-control w-100'
                                                         "
+                                                        [showError]="isInvalidChequeDate"
                                                         [showToggleIcon]="false"
                                                         name="cheque-clearance-date"
                                                         [(ngModel)]="voucherFormData.entries[0].chequeClearanceDate"
+                                                        (ngModelChange)="validateChequeDate()"
                                                     >
                                                     </giddh-datepicker>
                                                 </td>
@@ -888,7 +895,7 @@
                                                         [ngClass]="{
                                                             'error-box': !isValidForm && selectedTaxes?.length === 0
                                                         }"
-                                                        class="d-inline-block w-100"
+                                                        class="dropdown-container w-100"
                                                         [taxes]="companyTaxesList"
                                                         [date]="voucherFormData?.date"
                                                         [taxRenderData]="voucherFormData.entries[0].taxes"
@@ -943,6 +950,7 @@
                                                     type="file"
                                                     name="file"
                                                     id="file"
+                                                    class="cp"
                                                     [options]="fileUploadOptions"
                                                     ngFileSelect
                                                     [uploadInput]="uploadInput"
@@ -992,16 +1000,27 @@
                                                         </div>
                                                     </div>
                                                     <div class="table-row">
-                                                        <div class="table-cell">{{ commonLocaleData?.app_total }}</div>
+                                                        <div class="table-cell">
+                                                            <b
+                                                                >{{ commonLocaleData?.app_total }}
+                                                                <span *ngIf="isMultiCurrencyAccount">{{
+                                                                    voucherFormData?.account?.currencySymbol
+                                                                }}</span></b
+                                                            >
+                                                        </div>
                                                         <div class="table-cell figure-cell">
                                                             <span class="d-flex justify-content-end">
                                                                 <amount-field
                                                                     [amount]="totals.grandTotal"
                                                                     [currencyCode]="
-                                                                        voucherFormData?.account?.currencyCode
+                                                                        isMultiCurrencyAccount
+                                                                            ? voucherFormData?.account?.currencyCode
+                                                                            : ''
                                                                     "
                                                                     [currencySymbol]="
-                                                                        voucherFormData?.account?.currencySymbol
+                                                                        isMultiCurrencyAccount
+                                                                            ? voucherFormData?.account?.currencySymbol
+                                                                            : ''
                                                                     "
                                                                 >
                                                                 </amount-field>
@@ -1009,7 +1028,14 @@
                                                         </div>
                                                     </div>
                                                     <div class="table-row" *ngIf="isMultiCurrencyAccount">
-                                                        <div class="table-cell">{{ commonLocaleData?.app_total }}</div>
+                                                        <div class="table-cell">
+                                                            <b
+                                                                >{{ commonLocaleData?.app_total }}
+                                                                <span *ngIf="isMultiCurrencyAccount">{{
+                                                                    activeCompany.baseCurrencySymbol
+                                                                }}</span></b
+                                                            >
+                                                        </div>
                                                         <div class="table-cell figure-cell">
                                                             <span class="d-flex justify-content-end">
                                                                 <amount-field
@@ -1029,7 +1055,7 @@
                             </div>
                             <div class="col-sm-3 col-md-3 balance-due-absolute">
                                 <div class="text-right">
-                                    <p class="font-20 pb-r1 d-flex justify-content-end">
+                                    <p class="font-20 pb-r1 justify-content-end">
                                         <span class="balance-due pd-r05">{{ commonLocaleData?.app_amount }}</span>
                                         <span class="sp-rupees d-flex justify-content-end">
                                             <amount-field
@@ -1039,10 +1065,10 @@
                                             >
                                             </amount-field>
                                         </span>
-                                    </p>
-                                    <p class="font-20 pb-r1 d-flex justify-content-end" *ngIf="isMultiCurrencyAccount">
-                                        <span class="balance-due pd-r05">{{ commonLocaleData?.app_amount }}</span>
-                                        <span class="sp-rupees d-flex justify-content-end">
+                                        <span
+                                            class="sp-rupees d-flex justify-content-end"
+                                            *ngIf="isMultiCurrencyAccount"
+                                        >
                                             <amount-field
                                                 [amount]="totals.grandTotalMultiCurrency"
                                                 [currencyCode]="companyCurrency"
@@ -1114,7 +1140,8 @@
                                     <span class="d-inline-block v-align-middle" *ngIf="!isUpdateMode">
                                         <div class="btn-group dropup">
                                             <button
-                                                mat-icon-button
+                                                class="caret-button"
+                                                mat-raised-button
                                                 [matMenuTriggerFor]="menu"
                                                 [disabled]="isLoading || isFileUploading"
                                             >
