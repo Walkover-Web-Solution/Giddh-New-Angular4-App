@@ -27,7 +27,6 @@ export class PrintComponent implements OnInit, OnDestroy {
     public sanitizedPdfFileUrl: any = '';
     /** PDF src */
     public pdfFileURL: any = '';
-
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 

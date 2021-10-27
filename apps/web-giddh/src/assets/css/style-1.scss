@@ -2839,13 +2839,15 @@ td.mat-footer-cell {
                 height: 36px;
                 border-radius: 4px;
                 .mat-select-arrow-wrapper {
-                    vertical-align: inherit !important;
+                    transform: translateY(0%) !important;
                 }
                 .mat-form-field-infix {
+                    border-top: 6px solid transparent !important;
                     .mat-select {
                         padding-left: 6px;
                     }
                     .mat-form-field-label-wrapper {
+                        top: -5px !important;
                         .mat-form-field-label {
                             mat-label {
                                 padding-left: 6px;
@@ -2860,6 +2862,10 @@ td.mat-footer-cell {
 
     .disabled .form-control {
         background: $whisper-light !important;
+    }
+    .caret-button {
+        min-width: 20px !important;
+        margin-top: -3px !important;
     }
 }
 .border-left-right-none {
@@ -2899,5 +2905,15 @@ td.mat-footer-cell {
         }
     }
 }
-
+.error-box {
+    .tax-control-cmp {
+        a {
+            #tax-control-multi-select {
+                .tax-input {
+                    border: 2px solid $red !important;
+                }
+            }
+        }
+    }
+}
 /* material css for ledger end*/
