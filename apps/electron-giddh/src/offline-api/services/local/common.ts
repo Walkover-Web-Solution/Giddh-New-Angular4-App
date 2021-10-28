@@ -1,6 +1,6 @@
 import Datastore from "nedb";
 import { findAsync, insertAsync, loadDatabase, removeAsync } from "../../helpers/nedb_async";
-import { getPath } from "../../helpers/general";
+import { checkIfFileLocked, getPath, lockFile, unlockFile, waitForFileUnlock } from "../../helpers/general";
 
 /**
  * This will save the currencies list
@@ -12,6 +12,10 @@ export async function saveCurrenciesLocal(response: any): Promise<any> {
     if (response && response.status === "success") {
         const currenciesList = response.body;
         const filename = getPath("currencies.db");
+        if(checkIfFileLocked(filename)) {
+            await waitForFileUnlock(filename);
+        }
+        lockFile(filename);
         const db = new Datastore({ filename: filename });
 
         /** Connecting to database */
@@ -20,6 +24,8 @@ export async function saveCurrenciesLocal(response: any): Promise<any> {
         await removeAsync(db, {}, { multi: true });
         /** Inserting the currencies list */
         await insertAsync(db, currenciesList);
+
+        unlockFile(filename);
 
         return { status: "success", body: currenciesList };
     } else {
@@ -59,6 +65,10 @@ export async function getCurrenciesLocal(request: any): Promise<any> {
     if (response && response.status === "success") {
         const sidebarMenusList = response.body;
         const filename = getPath("sidebar-menus-" + request.params.companyUniqueName + ".db");
+        if(checkIfFileLocked(filename)) {
+            await waitForFileUnlock(filename);
+        }
+        lockFile(filename);
         const db = new Datastore({ filename: filename });
 
         /** Connecting to database */
@@ -67,6 +77,8 @@ export async function getCurrenciesLocal(request: any): Promise<any> {
         await removeAsync(db, {}, { multi: true });
         /** Inserting the sidebar menus list */
         await insertAsync(db, sidebarMenusList);
+
+        unlockFile(filename);
 
         return { status: "success", body: sidebarMenusList };
     } else {
@@ -106,6 +118,10 @@ export async function getSidebarMenusLocal(request: any): Promise<any> {
     if (response && response.status === "success") {
         const entrySettings = response.body;
         const filename = getPath("entry-settings-" + request.params.companyUniqueName + ".db");
+        if(checkIfFileLocked(filename)) {
+            await waitForFileUnlock(filename);
+        }
+        lockFile(filename);
         const db = new Datastore({ filename: filename });
 
         /** Connecting to database */
@@ -114,6 +130,8 @@ export async function getSidebarMenusLocal(request: any): Promise<any> {
         await removeAsync(db, {}, {});
         /** Inserting the entry settings */
         await insertAsync(db, entrySettings);
+
+        unlockFile(filename);
 
         return { status: "success", body: entrySettings };
     } else {

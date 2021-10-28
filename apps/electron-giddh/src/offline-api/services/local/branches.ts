@@ -1,6 +1,6 @@
 import Datastore from "nedb";
 import { findAsync, insertAsync, loadDatabase, removeAsync } from "../../helpers/nedb_async";
-import { checkIfFileLocked, fileLock, fileUnlock, getPath, waitForFileUnlock } from "../../helpers/general";
+import { checkIfFileLocked, getPath, lockFile, unlockFile, waitForFileUnlock } from "../../helpers/general";
 
 /**
  * This will save the branches list
@@ -14,9 +14,9 @@ export async function saveBranchesLocal(request: any, response: any): Promise<an
         const branchesList = response.body;
         const filename = getPath("branches-" + request.params.companyUniqueName + ".db");
         if(checkIfFileLocked(filename)) {
-            await waitForFileUnlock();
+            await waitForFileUnlock(filename);
         }
-        fileLock(filename);
+        lockFile(filename);
         const db = new Datastore({ filename: filename });
 
         /** Connecting to database */
@@ -26,7 +26,7 @@ export async function saveBranchesLocal(request: any, response: any): Promise<an
         /** Inserting the branches list */
         await insertAsync(db, branchesList);
 
-        fileUnlock(filename);
+        unlockFile(filename);
 
         return { status: "success", body: branchesList };
     } else {

@@ -1,6 +1,6 @@
 import Datastore from "nedb";
 import { findAsync, insertAsync, loadDatabase, removeAsync } from "../../helpers/nedb_async";
-import { getPath } from "../../helpers/general";
+import { checkIfFileLocked, getPath, lockFile, unlockFile, waitForFileUnlock } from "../../helpers/general";
 
 /**
  * This will save the financial years list
@@ -13,6 +13,10 @@ export async function saveFinancialYearsLocal(request: any, response: any): Prom
     if (response && response.status === "success") {
         const financialYearsList = response.body;
         const filename = getPath("financial-years-" + request.params.companyUniqueName + ".db");
+        if(checkIfFileLocked(filename)) {
+            await waitForFileUnlock(filename);
+        }
+        lockFile(filename);
         const db = new Datastore({ filename: filename });
 
         /** Connecting to database */
@@ -21,6 +25,8 @@ export async function saveFinancialYearsLocal(request: any, response: any): Prom
         await removeAsync(db, {}, { multi: true });
         /** Inserting the financial years list */
         await insertAsync(db, financialYearsList);
+
+        unlockFile(filename);
 
         return { status: "success", body: financialYearsList };
     } else {

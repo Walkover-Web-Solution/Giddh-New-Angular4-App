@@ -1,7 +1,6 @@
 import electron from "electron";
 import fs from "fs";
 import * as appAath from "path";
-import * as lockFile from "proper-lockfile";
 
 /**
  * This will return the config for internet connectivity check
@@ -76,19 +75,62 @@ export function getDefaultQueryParams(request: any): string {
     return 'branchUniqueName=' + request.query.branchUniqueName + '&lang=' + request.query.lang;
 }
 
-export function fileLock(file: string): any {
-    return lockFile.lockSync(file);
+/**
+ * This will return the locked filename
+ *
+ * @param {string} filename
+ * @returns {string}
+ */
+function getLockedFileName(filename: string) : string {
+    return filename?.replace(".db", "-lock.db");
 }
 
-export function checkIfFileLocked(file: string): boolean {
-    return lockFile.checkSync(file);
+/**
+ * Locks the file
+ *
+ * @export
+ * @param {string} filename
+ * @returns {string}
+ */
+export function lockFile(filename: string): string {
+    const lockedFile = getLockedFileName(filename);
+    getPath(lockedFile);
+    return lockedFile;
 }
 
-export function fileUnlock(file: string): void {
-    lockFile.unlockSync(file);
+/**
+ * Checks if file is locked
+ *
+ * @export
+ * @param {string} filename
+ * @returns {boolean}
+ */
+export function checkIfFileLocked(filename: string): boolean {
+    const lockedFile = getLockedFileName(filename);
+    return fs.existsSync(lockedFile);
 }
 
-export function waitForFileUnlock(): Promise<void> {
+/**
+ * Unlocks the file
+ *
+ * @export
+ * @param {string} filename
+ */
+export function unlockFile(filename: string): void {
+    if(checkIfFileLocked(filename)) {
+        const lockedFile = getLockedFileName(filename);
+        fs.unlinkSync(lockedFile);
+    }
+}
+
+/**
+ * This will wait till file is unlocked
+ *
+ * @export
+ * @param {string} filename
+ * @returns {Promise<void>}
+ */
+export function waitForFileUnlock(filename: string): Promise<void> {
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve();

@@ -1,6 +1,6 @@
 import Datastore from "nedb";
 import { findAsync, insertAsync, loadDatabase, removeAsync } from "../../helpers/nedb_async";
-import { getPath } from "../../helpers/general";
+import { checkIfFileLocked, getPath, lockFile, unlockFile, waitForFileUnlock } from "../../helpers/general";
 
 /**
  * This will save the active company information
@@ -13,6 +13,10 @@ export async function saveCompanyLocal(request: any, response: any): Promise<any
     if (response && response.status === "success") {
         const companyData = response.body;
         const filename = getPath("company-" + request.params.companyUniqueName + ".db");
+        if(checkIfFileLocked(filename)) {
+            await waitForFileUnlock(filename);
+        }
+        lockFile(filename);
         const db = new Datastore({ filename: filename });
 
         /** Connecting to database */
@@ -21,6 +25,8 @@ export async function saveCompanyLocal(request: any, response: any): Promise<any
         await removeAsync(db, {}, {});
         /** Inserting the company data */
         await insertAsync(db, companyData);
+
+        unlockFile(filename);
 
         return { status: "success", body: companyData };
     } else {
