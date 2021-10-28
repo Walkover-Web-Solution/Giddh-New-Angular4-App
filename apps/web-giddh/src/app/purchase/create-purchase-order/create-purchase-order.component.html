@@ -1202,7 +1202,7 @@
                             </div>
                         </td>
                         <td class="text-right item-amount">
-                            <div class="td-wrapper">
+                            <div class="td-wrapper ravinder">
                                 <div>
                                     <div class="wrap-td-data">
                                         <span class="d-flex justify-content-end">
@@ -1228,7 +1228,7 @@
                             <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                 <span class="d-flex justify-content-end">
                                     <amount-field
-                                        [amount]="transaction.amount * exchangeRate || 0"
+                                        [amount]="transaction.convertedAmount || 0"
                                         [currencySymbol]="baseCurrencySymbol"
                                         [currencyCode]="companyCurrency"
                                     >
@@ -1372,7 +1372,7 @@
                                 <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                     <span class="d-flex justify-content-end">
                                         <amount-field
-                                            [amount]="transaction.total * exchangeRate"
+                                            [amount]="transaction.convertedTotal"
                                             [currencySymbol]="baseCurrencySymbol"
                                             [currencyCode]="companyCurrency"
                                         >
@@ -1668,7 +1668,7 @@
                                 <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                     <span class="d-flex justify-content-end">
                                         <amount-field
-                                            [amount]="transaction.amount * exchangeRate || 0"
+                                            [amount]="transaction.convertedAmount || 0"
                                             [currencySymbol]="baseCurrencySymbol"
                                             [currencyCode]="companyCurrency"
                                         >
@@ -1825,7 +1825,7 @@
                                 <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                     <span class="d-flex justify-content-end">
                                         <amount-field
-                                            [amount]="transaction.total * exchangeRate"
+                                            [amount]="transaction.convertedTotal"
                                             [currencySymbol]="baseCurrencySymbol"
                                             [currencyCode]="companyCurrency"
                                         >
@@ -2426,7 +2426,7 @@
                                         <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                             <span>
                                                 <amount-field
-                                                    [amount]="transaction.total * exchangeRate"
+                                                    [amount]="transaction.convertedTotal"
                                                     [currencySymbol]="baseCurrencySymbol"
                                                     [currencyCode]="companyCurrency"
                                                 >
@@ -2925,7 +2925,7 @@
                                         <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                             <span>
                                                 <amount-field
-                                                    [amount]="transaction.total * exchangeRate"
+                                                    [amount]="transaction.convertedTotal"
                                                     [currencySymbol]="baseCurrencySymbol"
                                                     [currencyCode]="companyCurrency"
                                                 >
