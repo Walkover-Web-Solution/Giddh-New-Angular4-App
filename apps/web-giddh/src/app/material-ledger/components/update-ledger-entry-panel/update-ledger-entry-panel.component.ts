@@ -79,10 +79,8 @@ const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make ad
             transition('in => out', animate('400ms ease-in-out')),
             transition('out => in', animate('400ms ease-in-out'))
         ]),
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    ]
 })
-
 export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
     /** Instance of mat accordion */
     @ViewChild(MatAccordion) public accordion: MatAccordion;
