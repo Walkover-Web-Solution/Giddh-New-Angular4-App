@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, OnDestroy, TemplateRef, ViewContainerRef, NgZone, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, OnDestroy, TemplateRef, ViewContainerRef, NgZone, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { Observable, ReplaySubject, of as observableOf, combineLatest } from 'rxjs';
@@ -379,7 +379,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         private commonActions: CommonActions,
         private companyActions: CompanyActions,
         private generalService: GeneralService,
-        public purchaseOrderService: PurchaseOrderService,
+        private purchaseOrderService: PurchaseOrderService,
         private loaderService: LoaderService,
         private route: ActivatedRoute,
         private router: Router,
@@ -389,7 +389,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         private modalService: BsModalService,
         private settingsBranchAction: SettingsBranchActions,
         private searchService: SearchService,
-        private ngZone: NgZone
+        private ngZone: NgZone,
+        private changeDetection: ChangeDetectorRef
     ) {
         this.selectedAccountDetails$ = this.store.pipe(select(state => state.sales.acDtl), takeUntil(this.destroyed$));
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.sales.createAccountSuccess), takeUntil(this.destroyed$));
@@ -537,6 +538,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.companyCountryCode = profile.countryV2.alpha2CountryCode;
                     this.getUpdatedStateCodes(profile.countryV2.alpha2CountryCode, true);
                 }
+
+                this.changeDetection.detectChanges();
             }
         });
 
@@ -1494,6 +1497,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             trx.rate = giddhRoundOff((trx.amount / trx.quantity), this.ratePrecision);
         }
 
+        this.calculateConvertedAmount(trx);
         this.calculateTotalDiscountOfEntry(entry, trx, false);
         this.calculateEntryTaxSum(entry, trx, false);
         this.calculateEntryTotal(entry, trx);
@@ -1501,6 +1505,22 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.calculateTcsTdsTotal();
 
         this.transactionAmount = 0;
+    }
+
+    /**
+     * Calculates the converted amount
+     *
+     * @param {SalesTransactionItemClass} transaction Current edited transaction
+     * @memberof CreatePurchaseOrderComponent
+     */
+     public calculateConvertedAmount(transaction: SalesTransactionItemClass): void {
+        if (this.isMulticurrencyAccount) {
+            if (transaction.isStockTxn) {
+                transaction.convertedAmount = giddhRoundOff(transaction.quantity * ((transaction.rate * this.exchangeRate) ? transaction.rate * this.exchangeRate : 0), 2);
+            } else {
+                transaction.convertedAmount = giddhRoundOff(transaction.amount * this.exchangeRate, 2);
+            }
+        }
     }
 
     /**
@@ -1758,7 +1778,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             this.calculatedRoundOff = 0;
         }
         this.purchaseOrder.voucherDetails.grandTotal = calculatedGrandTotal;
-        this.grandTotalMulDum = calculatedGrandTotal * this.exchangeRate;
+        this.grandTotalMulDum = giddhRoundOff(calculatedGrandTotal * this.exchangeRate, 2);
     }
 
     /**
@@ -2844,11 +2864,12 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public updateExchangeRate(val: any): void {
-        val = val.replace(this.baseCurrencySymbol, '');
-        let total = parseFloat(val.replace(/,/g, "")) || 0;
+        val = (val) ? val.replace(this.baseCurrencySymbol, '') : '';
+        let total = (val) ? (parseFloat(this.generalService.removeSpecialCharactersFromAmount(val)) || 0) : 0;
         if (this.isMulticurrencyAccount) {
             this.exchangeRate = total / this.purchaseOrder.voucherDetails.grandTotal || 0;
             this.originalExchangeRate = this.exchangeRate;
+            this.previousExchangeRate = this.exchangeRate;
         }
     }
 
