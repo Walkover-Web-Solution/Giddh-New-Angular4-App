@@ -51,6 +51,7 @@ import { SalesService } from '../../services/sales.service';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { CommonActions } from '../../actions/common.actions';
+import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 
 /** Multi currency modules includes Cash/Sales Invoice and CR/DR note */
 const MULTI_CURRENCY_MODULES = [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase];
@@ -1327,8 +1328,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     private parseBalRes(res) {
         if (res && res.body) {
-            this.totalSale = res.body.grandTotal;
-            this.totalDue = res.body.totalDue;
+            this.totalSale = giddhRoundOff(res.body.grandTotal, 2);
+            this.totalDue = giddhRoundOff(res.body.totalDue, 2);
         }
         // get user country from his profile
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
