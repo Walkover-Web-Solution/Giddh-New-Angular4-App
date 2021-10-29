@@ -211,7 +211,7 @@
 </ng-template>
 <!-- endregion -->
 <ng-template #mainTable>
-    <table class="table giddh-table aging-table table-aging-report">
+    <table class="table basic pd-t15 giddh-table aging-table desktop-table table-aging-report on-mobile-view">
         <thead [hidden]="!(dueAmountReportData$ | async)?.results?.length && !dueAmountReportRequest?.q">
             <tr class="aging-table-top">
                 <td></td>
@@ -426,7 +426,7 @@
     </table>
     <div *ngIf="(dueAmountReportData$ | async)?.totalItems >= 20" class="pagination-wrapper">
         <div class="xs-pl-0">
-            <div class="text-center">
+            <div class="text-center unbold">
                 <div id="pagination" element-view-container-ref #paginationChild="elementviewcontainerref"></div>
             </div>
         </div>
