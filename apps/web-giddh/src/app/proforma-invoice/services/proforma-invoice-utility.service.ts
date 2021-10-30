@@ -92,6 +92,16 @@ export class ProformaInvoiceUtilityService {
                 });
             });
         }
+        if(data?.company) {
+            if (data.company.billingDetails) {
+                data.company.billingDetails.taxNumber = data.company.billingDetails.gstNumber;
+                delete data.company.billingDetails.gstNumber;
+            }
+            if (data.company.shippingDetails) {
+                data.company.shippingDetails.taxNumber = data.company.shippingDetails.gstNumber;
+                delete data.company.shippingDetails.gstNumber;
+            }
+        }
         if([VoucherTypeEnum.debitNote, VoucherTypeEnum.creditNote].includes(data.type)) {
             data.number = data.invoiceNumberAgainstVoucher || data.number || '';
         }
