@@ -217,10 +217,6 @@ export class AccountsAction {
                     this._generalServices.invokeEvent.next(["accountUpdated", resData]);
                     this._generalServices.eventHandler.next({ name: eventsConst.accountUpdated, payload: resData });
                     this._toasty.successToast(this.localeService.translate("app_messages.account_updated"));
-
-                    setTimeout(() => {
-                        this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm());
-                    }, 1000);
                     this.store.dispatch(this.getAccountDetails(resData.body.uniqueName));
                 }
                 return { type: 'EmptyAction' };
