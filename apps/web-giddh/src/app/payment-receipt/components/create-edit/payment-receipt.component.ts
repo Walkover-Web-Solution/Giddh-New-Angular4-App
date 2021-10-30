@@ -486,6 +486,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * @memberof PaymentReceiptComponent
      */
     public ngOnDestroy(): void {
+        this.resetForm();
         this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
         this.store.dispatch(this.invoiceReceiptAction.ResetVoucherDetails());
         this.destroyed$.complete();
@@ -1298,7 +1299,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * @param {NgForm} formObj
      * @memberof PaymentReceiptComponent
      */
-    public resetForm(formObj: NgForm): void {
+    public resetForm(formObj?: NgForm): void {
         const voucherType = this.voucherFormData.type;
         if (formObj) {
             formObj.form.reset();
