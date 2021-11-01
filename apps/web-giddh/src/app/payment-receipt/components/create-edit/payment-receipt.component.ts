@@ -250,6 +250,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         this.voucherFormData = new PaymentReceipt();
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            this.store.dispatch(this.invoiceReceiptAction.ResetVoucherDetails());
             if (params?.voucherType) {
                 this.voucherFormData.type = params.voucherType;
             }
