@@ -78,10 +78,6 @@ import { MatDialog } from "@angular/material/dialog";
     ],
 })
 export class ContactComponent implements OnInit, OnDestroy, OnChanges {
-    // vendorDataColumns: string[] = ["app_parent_group", "opening", "app_sales_app_purchase", "app_receipt_app_payment",'closing','contacts','app_tax_number','app_state','comment','app_action'];
-    // customerDataColumns: string[] = ["position", "name", "weight", "symbol"];
-    // dataSource = this.sundryDebtorsAccounts [];
-
     /** Stores the current range of date picker */
     public selectedDateRange: any;
     public selectedDateRangeUi: any;
