@@ -115,7 +115,6 @@ import { AccountsAction } from '../actions/accounts.actions';
 import { VoucherTypeToNamePipe } from '../shared/header/pipe/voucherTypeToNamePipe/voucherTypeToNamePipe.pipe';
 import { Location, TitleCasePipe } from '@angular/common';
 import { VoucherForm } from '../models/api-models/Voucher';
-import { data } from 'jquery';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
