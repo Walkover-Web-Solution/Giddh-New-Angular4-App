@@ -115,6 +115,7 @@ import { AccountsAction } from '../actions/accounts.actions';
 import { VoucherTypeToNamePipe } from '../shared/header/pipe/voucherTypeToNamePipe/voucherTypeToNamePipe.pipe';
 import { Location, TitleCasePipe } from '@angular/common';
 import { VoucherForm } from '../models/api-models/Voucher';
+import { data } from 'jquery';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
@@ -3725,6 +3726,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.startLoader(false);
             return;
         }
+
+        requestObject.voucher.entries.map(entry => {
+            entry.discounts.map(discount => {
+                if(!discount.discountValue) {
+                    discount.discountValue = 0;
+                }
+                return discount;
+            });
+        });
+
         if (this.isProformaInvoice || this.isEstimateInvoice) {
             let data = requestObject.voucher;
             let exRate = this.originalExchangeRate;
