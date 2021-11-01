@@ -547,9 +547,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 remarks: '',
                 vendorUniqueName: ''
             };
-            transaction.amount = item.closingBalanceAmount;
-            transaction.remarks = item.remarks;
-            transaction.vendorUniqueName = item.uniqueName;
+            transaction.amount = item?.closingBalanceAmount;
+            transaction.remarks = item?.remarks;
+            transaction.vendorUniqueName = item?.uniqueName;
             this.requestObjectToGetOTP.bankPaymentTransactions.push(transaction);
         });
     }
