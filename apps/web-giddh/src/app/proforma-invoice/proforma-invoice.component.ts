@@ -3727,7 +3727,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
 
         requestObject.voucher.entries.map(entry => {
-            entry.discounts.map(discount => {
+            entry.discounts?.map(discount => {
                 if(!discount.discountValue) {
                     discount.discountValue = 0;
                 }
