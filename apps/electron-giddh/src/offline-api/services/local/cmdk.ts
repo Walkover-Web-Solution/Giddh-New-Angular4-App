@@ -42,6 +42,9 @@ export async function saveCmdkLocal(request: any, response: any): Promise<any> {
  */
 export async function getCmdkLocal(request: any): Promise<any> {
     const filename = getPath("cmdk-" + request.params.companyUniqueName + ".db");
+    if(checkIfFileLocked(filename)) {
+        await waitForFileUnlock(filename);
+    }
     const db = new Datastore({ filename: filename });
 
     /** Connecting to database */

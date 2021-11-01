@@ -42,6 +42,9 @@ export async function saveBranchesLocal(request: any, response: any): Promise<an
  */
 export async function getBranchesLocal(request: any): Promise<any> {
     const filename = getPath("branches-" + request.params.companyUniqueName + ".db");
+    if(checkIfFileLocked(filename)) {
+        await waitForFileUnlock(filename);
+    }
     const db = new Datastore({ filename: filename });
 
     /** Connecting to database */

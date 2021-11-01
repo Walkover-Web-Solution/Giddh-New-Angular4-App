@@ -41,6 +41,9 @@ export async function saveCurrenciesLocal(response: any): Promise<any> {
  */
 export async function getCurrenciesLocal(request: any): Promise<any> {
     const filename = getPath("currencies.db");
+    if(checkIfFileLocked(filename)) {
+        await waitForFileUnlock(filename);
+    }
     const db = new Datastore({ filename: filename });
 
     /** Connecting to database */
@@ -94,6 +97,9 @@ export async function getCurrenciesLocal(request: any): Promise<any> {
  */
 export async function getSidebarMenusLocal(request: any): Promise<any> {
     const filename = getPath("sidebar-menus-" + request.params.companyUniqueName + ".db");
+    if(checkIfFileLocked(filename)) {
+        await waitForFileUnlock(filename);
+    }
     const db = new Datastore({ filename: filename });
 
     /** Connecting to database */
@@ -147,6 +153,9 @@ export async function getSidebarMenusLocal(request: any): Promise<any> {
  */
  export async function getEntrySettingsLocal(request: any): Promise<any> {
     const filename = getPath("entry-settings-" + request.params.companyUniqueName + ".db");
+    if(checkIfFileLocked(filename)) {
+        await waitForFileUnlock(filename);
+    }
     const db = new Datastore({ filename: filename });
 
     /** Connecting to database */

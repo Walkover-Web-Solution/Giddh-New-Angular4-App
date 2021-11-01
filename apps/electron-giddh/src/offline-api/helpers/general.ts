@@ -94,7 +94,7 @@ function getLockedFileName(filename: string) : string {
  */
 export function lockFile(filename: string): string {
     const lockedFile = getLockedFileName(filename);
-    getPath(lockedFile);
+    fs.writeFileSync(lockedFile, "", "utf-8");
     return lockedFile;
 }
 
@@ -132,8 +132,11 @@ export function unlockFile(filename: string): void {
  */
 export function waitForFileUnlock(filename: string): Promise<void> {
     return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve();
-        }, 5000);
+        const interval = setInterval(() => {
+            if(!checkIfFileLocked(filename)) {
+                clearInterval(interval);
+                resolve();
+            }
+        }, 500);
     });
 }

@@ -41,6 +41,9 @@ export async function saveUserLocal(response: any): Promise<any> {
  */
 export async function getUserLocal(request: any): Promise<any> {
     const filename = getPath("user.db");
+    if(checkIfFileLocked(filename)) {
+        await waitForFileUnlock(filename);
+    }
     const db = new Datastore({ filename: filename });
 
     /** Connecting to database */

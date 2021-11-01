@@ -42,6 +42,9 @@ export async function saveFinancialYearsLocal(request: any, response: any): Prom
  */
 export async function getFinancialYearsLocal(request: any): Promise<any> {
     const filename = getPath("financial-years-" + request.params.companyUniqueName + ".db");
+    if(checkIfFileLocked(filename)) {
+        await waitForFileUnlock(filename);
+    }
     const db = new Datastore({ filename: filename });
 
     /** Connecting to database */
@@ -67,6 +70,10 @@ export async function getFinancialYearsLocal(request: any): Promise<any> {
     if (response && response.status === "success") {
         const financialYearsLimits = response.body;
         const filename = getPath("financial-year-limits-" + request.params.companyUniqueName + ".db");
+        if(checkIfFileLocked(filename)) {
+            await waitForFileUnlock(filename);
+        }
+        lockFile(filename);
         const db = new Datastore({ filename: filename });
 
         /** Connecting to database */
@@ -75,6 +82,8 @@ export async function getFinancialYearsLocal(request: any): Promise<any> {
         await removeAsync(db, {}, {});
         /** Inserting the financial years limits */
         await insertAsync(db, financialYearsLimits);
+
+        unlockFile(filename);
 
         return { status: "success", body: financialYearsLimits };
     } else {
@@ -90,6 +99,9 @@ export async function getFinancialYearsLocal(request: any): Promise<any> {
  */
 export async function getFinancialYearLimitsLocal(request: any): Promise<any> {
     const filename = getPath("financial-year-limits-" + request.params.companyUniqueName + ".db");
+    if(checkIfFileLocked(filename)) {
+        await waitForFileUnlock(filename);
+    }
     const db = new Datastore({ filename: filename });
 
     /** Connecting to database */

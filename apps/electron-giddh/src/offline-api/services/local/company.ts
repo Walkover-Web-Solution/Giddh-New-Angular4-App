@@ -42,6 +42,9 @@ export async function saveCompanyLocal(request: any, response: any): Promise<any
  */
 export async function getCompanyLocal(request: any): Promise<any> {
     const filename = getPath("company-" + request.params.companyUniqueName + ".db");
+    if(checkIfFileLocked(filename)) {
+        await waitForFileUnlock(filename);
+    }
     const db = new Datastore({ filename: filename });
 
     /** Connecting to database */
