@@ -44,12 +44,15 @@ export async function getCurrenciesLocal(request: any): Promise<any> {
     if(checkIfFileLocked(filename)) {
         await waitForFileUnlock(filename);
     }
+    lockFile(filename);
     const db = new Datastore({ filename: filename });
 
     /** Connecting to database */
     await loadDatabase(db);
     /** Finding the currencies list */
     const response = await findAsync(db, {});
+
+    unlockFile(filename);
 
     if (response?.length > 0) {
         return { status: "success", body: response };
@@ -100,12 +103,15 @@ export async function getSidebarMenusLocal(request: any): Promise<any> {
     if(checkIfFileLocked(filename)) {
         await waitForFileUnlock(filename);
     }
+    lockFile(filename);
     const db = new Datastore({ filename: filename });
 
     /** Connecting to database */
     await loadDatabase(db);
     /** Finding the sidebar menus list */
     const response = await findAsync(db, {});
+
+    unlockFile(filename);
 
     if (response?.length > 0) {
         return { status: "success", body: response };
@@ -156,12 +162,15 @@ export async function getSidebarMenusLocal(request: any): Promise<any> {
     if(checkIfFileLocked(filename)) {
         await waitForFileUnlock(filename);
     }
+    lockFile(filename);
     const db = new Datastore({ filename: filename });
 
     /** Connecting to database */
     await loadDatabase(db);
     /** Finding the entry settings */
     const response = await findAsync(db, {});
+
+    unlockFile(filename);
 
     if (response?.length > 0) {
         return { status: "success", body: response[0] };
