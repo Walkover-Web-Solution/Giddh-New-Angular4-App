@@ -38,7 +38,10 @@
                         [minBufferPx]="400"
                         [maxBufferPx]="800"
                     >
-                        <li *cdkVirtualFor="let item of col.Items; let j = index" class="list-item sidebarTooltip">
+                        <li
+                            *cdkVirtualFor="let item of col.Items; let j = index"
+                            class="list-item sidebarTooltip text-overflow"
+                        >
                             <ng-container *ngIf="item.isGroup">
                                 <a
                                     href="javascript:void(0);"
