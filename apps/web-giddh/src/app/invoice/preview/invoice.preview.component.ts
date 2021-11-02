@@ -52,6 +52,7 @@ import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { CommonActions } from '../../actions/common.actions';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
+import { GeneralActions } from '../../actions/general/general.actions';
 
 /** Multi currency modules includes Cash/Sales Invoice and CR/DR note */
 const MULTI_CURRENCY_MODULES = [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase];
@@ -243,6 +244,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         private _invoiceService: InvoiceService,
         private _toaster: ToasterService,
         private _activatedRoute: ActivatedRoute,
+        private generalActions: GeneralActions,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private cdr: ChangeDetectorRef,
         private _breakPointObservar: BreakpointObserver,
@@ -1251,6 +1253,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             this.getVouchersList(this.isUniversalDateApplicable);
         }
+
+        setTimeout(() => {
+            if(!document.getElementsByClassName("sidebar-collapse")?.length) {
+                this.store.dispatch(this.generalActions.openSideMenu(true));
+            }
+        }, 200);
     }
 
     public ngOnDestroy() {
