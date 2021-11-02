@@ -1,5 +1,5 @@
 import checkInternetConnected from "check-internet-connected";
-import { getInternetConnectedConfig } from "../helpers/general";
+import { checkIfFileLocked, getInternetConnectedConfig, getPath, lockFile, unlockFile, waitForFileUnlock } from "../helpers/general";
 import { getUserGiddh } from "../services/giddh/user";
 import { getUserLocal, saveUserLocal } from "../services/local/user";
 
@@ -9,20 +9,38 @@ import { getUserLocal, saveUserLocal } from "../services/local/user";
  * @param {*} req
  * @param {*} res
  */
-export function getUserController(req, res) {
+export function getUserController(req: any, res: any) {
+    const filename = getPath("user.db");
     checkInternetConnected(getInternetConnectedConfig).then(async connected => {
         try {
             const response = await getUserGiddh(req, res);
-            const finalResponse = await saveUserLocal(response);
+
+            if (checkIfFileLocked(filename)) {
+                await waitForFileUnlock(filename);
+            }
+            lockFile(filename);
+
+            const finalResponse = await saveUserLocal(filename, response);
+
+            unlockFile(filename);
             res.json(finalResponse);
         } catch (error) {
+            unlockFile(filename);
             res.json({ status: "error", "message": error.message });
         }
     }).catch(async error => {
         try {
-            const finalResponse = await getUserLocal(req);
+            if (checkIfFileLocked(filename)) {
+                await waitForFileUnlock(filename);
+            }
+            lockFile(filename);
+            
+            const finalResponse = await getUserLocal(filename, req);
+
+            unlockFile(filename);
             res.json(finalResponse);
         } catch (error) {
+            unlockFile(filename);
             res.json({ status: "error", "message": error.message });
         }
     });

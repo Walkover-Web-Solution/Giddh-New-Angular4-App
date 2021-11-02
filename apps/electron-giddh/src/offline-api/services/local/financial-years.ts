@@ -1,22 +1,17 @@
 import Datastore from "nedb";
 import { findAsync, insertAsync, loadDatabase, removeAsync } from "../../helpers/nedb_async";
-import { checkIfFileLocked, getPath, lockFile, unlockFile, waitForFileUnlock } from "../../helpers/general";
 
 /**
  * This will save the financial years list
  *
+ * @param {string} filename
  * @param {*} request
  * @param {*} response
  * @returns
  */
-export async function saveFinancialYearsLocal(request: any, response: any): Promise<any> {
+export async function saveFinancialYearsLocal(filename: string, request: any, response: any): Promise<any> {
     if (response && response.status === "success") {
         const financialYearsList = response.body;
-        const filename = getPath("financial-years-" + request.params.companyUniqueName + ".db");
-        if(checkIfFileLocked(filename)) {
-            await waitForFileUnlock(filename);
-        }
-        lockFile(filename);
         const db = new Datastore({ filename: filename });
 
         /** Connecting to database */
@@ -25,8 +20,6 @@ export async function saveFinancialYearsLocal(request: any, response: any): Prom
         await removeAsync(db, {}, { multi: true });
         /** Inserting the financial years list */
         await insertAsync(db, financialYearsList);
-
-        unlockFile(filename);
 
         return { status: "success", body: financialYearsList };
     } else {
@@ -37,23 +30,17 @@ export async function saveFinancialYearsLocal(request: any, response: any): Prom
 /**
  * This will return the list of financial years
  *
+ * @param {string} filename
  * @param {*} request
  * @returns
  */
-export async function getFinancialYearsLocal(request: any): Promise<any> {
-    const filename = getPath("financial-years-" + request.params.companyUniqueName + ".db");
-    if(checkIfFileLocked(filename)) {
-        await waitForFileUnlock(filename);
-    }
-    lockFile(filename);
+export async function getFinancialYearsLocal(filename: string, request: any): Promise<any> {
     const db = new Datastore({ filename: filename });
 
     /** Connecting to database */
     await loadDatabase(db);
     /** Finding the financial years list */
     const response = await findAsync(db, {});
-    
-    unlockFile(filename);
 
     if (response?.length > 0) {
         return { status: "success", body: response[0] };
@@ -65,18 +52,14 @@ export async function getFinancialYearsLocal(request: any): Promise<any> {
 /**
  * This will save the financial year limits
  *
+ * @param {string} filename
  * @param {*} request
  * @param {*} response
  * @returns
  */
- export async function saveFinancialYearLimitsLocal(request: any, response: any): Promise<any> {
+export async function saveFinancialYearLimitsLocal(filename: string, request: any, response: any): Promise<any> {
     if (response && response.status === "success") {
         const financialYearsLimits = response.body;
-        const filename = getPath("financial-year-limits-" + request.params.companyUniqueName + ".db");
-        if(checkIfFileLocked(filename)) {
-            await waitForFileUnlock(filename);
-        }
-        lockFile(filename);
         const db = new Datastore({ filename: filename });
 
         /** Connecting to database */
@@ -85,8 +68,6 @@ export async function getFinancialYearsLocal(request: any): Promise<any> {
         await removeAsync(db, {}, {});
         /** Inserting the financial years limits */
         await insertAsync(db, financialYearsLimits);
-
-        unlockFile(filename);
 
         return { status: "success", body: financialYearsLimits };
     } else {
@@ -97,23 +78,17 @@ export async function getFinancialYearsLocal(request: any): Promise<any> {
 /**
  * This will return the limits of financial years
  *
+ * @param {string} filename
  * @param {*} request
  * @returns
  */
-export async function getFinancialYearLimitsLocal(request: any): Promise<any> {
-    const filename = getPath("financial-year-limits-" + request.params.companyUniqueName + ".db");
-    if(checkIfFileLocked(filename)) {
-        await waitForFileUnlock(filename);
-    }
-    lockFile(filename);
+export async function getFinancialYearLimitsLocal(filename: string, request: any): Promise<any> {
     const db = new Datastore({ filename: filename });
 
     /** Connecting to database */
     await loadDatabase(db);
     /** Finding the financial years limits */
     const response = await findAsync(db, {});
-
-    unlockFile(filename);
 
     if (response?.length > 0) {
         return { status: "success", body: response[0] };

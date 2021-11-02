@@ -44,28 +44,62 @@ export function insertAsync<T>(db: any, newDoc: T): Promise<T> {
  * @export
  * @template T
  * @param {*} db
- * @param {*} query
+ * @param {*} params
  * @param {T} [projection]
  * @returns {Promise<Array<T>>}
  */
-export function findAsync<T>(db: any, query: any, projection?: T): Promise<Array<T>> {
+export function findAsync<T>(db: any, params: any, projection?: T): Promise<Array<T>> {
     if (projection) {
         return new Promise((resolve, reject) => {
-            db.find(query, projection, (err, documents) => {
+            db.find(params?.query, projection).skip(params?.start).limit(params?.limit).exec((err, data) => {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve(documents);
+                    resolve(data);
                 }
             });
         });
     } else {
         return new Promise((resolve, reject) => {
-            db.find(query, (err, documents) => {
+            db.find(params?.query).skip(params?.start).limit(params?.limit).exec((err, data) => {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve(documents);
+                    resolve(data);
+                }
+            });
+        });
+    }
+}
+
+/**
+ * Counts from local database
+ *
+ * @export
+ * @template T
+ * @param {*} db
+ * @param {*} params
+ * @param {T} [projection]
+ * @returns {Promise<Array<T>>}
+ */
+export function countAsync<T>(db: any, params: any, projection?: T): Promise<Array<T>> {
+    if (projection) {
+        return new Promise((resolve, reject) => {
+            db.count(params?.query, projection, (err, data) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(data);
+                }
+            });
+        });
+    } else {
+        return new Promise((resolve, reject) => {
+            db.count(params?.query, (err, data) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(data);
                 }
             });
         });
@@ -81,15 +115,15 @@ export function findAsync<T>(db: any, query: any, projection?: T): Promise<Array
  * @param {*} query
  * @param {*} updateQuery
  * @param {*} options
- * @returns {Promise<{ numberOfUpdated: number, affectedDocuments: any, upsert: boolean }>}
+ * @returns {Promise<{ numberOfUpdated: number, affectedData: any, upsert: boolean }>}
  */
-export function updateAsync<T>(db: any, query: any, updateQuery: any, options: any): Promise<{ numberOfUpdated: number, affectedDocuments: any, upsert: boolean }> {
+export function updateAsync<T>(db: any, query: any, updateQuery: any, options: any): Promise<{ numberOfUpdated: number, affectedData: any, upsert: boolean }> {
     return new Promise((resolve, reject) => {
-        db.update(query, updateQuery, options, (err, numberOfUpdated, affectedDocuments, upsert) => {
+        db.update(query, updateQuery, options, (err, numberOfUpdated, affectedData, upsert) => {
             if (err) {
                 reject(err);
             } else {
-                resolve({ numberOfUpdated, affectedDocuments, upsert });
+                resolve({ numberOfUpdated, affectedData, upsert });
             }
         });
     });

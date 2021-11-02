@@ -1,6 +1,6 @@
 import checkInternetConnected from "check-internet-connected";
 import { getBranchesGiddh } from "../services/giddh/branches";
-import { getInternetConnectedConfig } from "../helpers/general";
+import { checkIfFileLocked, getInternetConnectedConfig, getPath, lockFile, unlockFile, waitForFileUnlock } from "../helpers/general";
 import { getBranchesLocal, saveBranchesLocal } from "../services/local/branches";
 
 /**
@@ -9,20 +9,38 @@ import { getBranchesLocal, saveBranchesLocal } from "../services/local/branches"
  * @param {*} req
  * @param {*} res
  */
-export function getBranchesController(req, res) {
+export function getBranchesController(req: any, res: any) {
+    const filename = getPath("branches-" + req.params.companyUniqueName + ".db");
     checkInternetConnected(getInternetConnectedConfig).then(async connected => {
         try {
             const response = await getBranchesGiddh(req, res);
-            const finalResponse = await saveBranchesLocal(req, response);
+
+            if (checkIfFileLocked(filename)) {
+                await waitForFileUnlock(filename);
+            }
+            lockFile(filename);
+
+            const finalResponse = await saveBranchesLocal(filename, req, response);
+
+            unlockFile(filename);
             res.json(finalResponse);
         } catch (error) {
+            unlockFile(filename);
             res.json({ status: "error", "message": error.message });
         }
     }).catch(async error => {
         try {
-            const finalResponse = await getBranchesLocal(req);
+            if (checkIfFileLocked(filename)) {
+                await waitForFileUnlock(filename);
+            }
+            lockFile(filename);
+
+            const finalResponse = await getBranchesLocal(filename, req);
+            
+            unlockFile(filename);
             res.json(finalResponse);
         } catch (error) {
+            unlockFile(filename);
             res.json({ status: "error", "message": error.message });
         }
     });

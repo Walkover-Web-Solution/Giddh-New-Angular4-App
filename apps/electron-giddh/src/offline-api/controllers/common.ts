@@ -1,5 +1,5 @@
 import checkInternetConnected from "check-internet-connected";
-import { getInternetConnectedConfig } from "../helpers/general";
+import { checkIfFileLocked, getInternetConnectedConfig, getPath, lockFile, unlockFile, waitForFileUnlock } from "../helpers/general";
 import { getCurrenciesGiddh, getEntrySettingsGiddh, getSidebarMenusGiddh } from "../services/giddh/common";
 import { getCurrenciesLocal, getEntrySettingsLocal, getSidebarMenusLocal, saveCurrenciesLocal, saveEntrySettingsLocal, saveSidebarMenusLocal } from "../services/local/common";
 
@@ -9,20 +9,38 @@ import { getCurrenciesLocal, getEntrySettingsLocal, getSidebarMenusLocal, saveCu
  * @param {*} req
  * @param {*} res
  */
-export function getCurrenciesController(req, res) {
+export function getCurrenciesController(req: any, res: any) {
+    const filename = getPath("currencies.db");
     checkInternetConnected(getInternetConnectedConfig).then(async connected => {
         try {
             const response = await getCurrenciesGiddh(req, res);
-            const finalResponse = await saveCurrenciesLocal(response);
+
+            if (checkIfFileLocked(filename)) {
+                await waitForFileUnlock(filename);
+            }
+            lockFile(filename);
+
+            const finalResponse = await saveCurrenciesLocal(filename, response);
+
+            unlockFile(filename);
             res.json(finalResponse);
         } catch (error) {
+            unlockFile(filename);
             res.json({ status: "error", "message": error.message });
         }
     }).catch(async error => {
         try {
-            const finalResponse = await getCurrenciesLocal(req);
+            if (checkIfFileLocked(filename)) {
+                await waitForFileUnlock(filename);
+            }
+            lockFile(filename);
+
+            const finalResponse = await getCurrenciesLocal(filename, req);
+
+            unlockFile(filename);
             res.json(finalResponse);
         } catch (error) {
+            unlockFile(filename);
             res.json({ status: "error", "message": error.message });
         }
     });
@@ -34,20 +52,38 @@ export function getCurrenciesController(req, res) {
  * @param {*} req
  * @param {*} res
  */
-export function getSidebarMenusController(req, res) {
+export function getSidebarMenusController(req: any, res: any) {
+    const filename = getPath("sidebar-menus-" + req.params.companyUniqueName + ".db");
     checkInternetConnected(getInternetConnectedConfig).then(async connected => {
         try {
             const response = await getSidebarMenusGiddh(req, res);
-            const finalResponse = await saveSidebarMenusLocal(req, response);
+
+            if (checkIfFileLocked(filename)) {
+                await waitForFileUnlock(filename);
+            }
+            lockFile(filename);
+
+            const finalResponse = await saveSidebarMenusLocal(filename, req, response);
+
+            unlockFile(filename);
             res.json(finalResponse);
         } catch (error) {
+            unlockFile(filename);
             res.json({ status: "error", "message": error.message });
         }
     }).catch(async error => {
         try {
-            const finalResponse = await getSidebarMenusLocal(req);
+            if (checkIfFileLocked(filename)) {
+                await waitForFileUnlock(filename);
+            }
+            lockFile(filename);
+
+            const finalResponse = await getSidebarMenusLocal(filename, req);
+
+            unlockFile(filename);
             res.json(finalResponse);
         } catch (error) {
+            unlockFile(filename);
             res.json({ status: "error", "message": error.message });
         }
     });
@@ -59,20 +95,38 @@ export function getSidebarMenusController(req, res) {
  * @param {*} req
  * @param {*} res
  */
-export function getEntrySettingsController(req, res) {
+export function getEntrySettingsController(req: any, res: any) {
+    const filename = getPath("entry-settings-" + req.params.companyUniqueName + ".db");
     checkInternetConnected(getInternetConnectedConfig).then(async connected => {
         try {
             const response = await getEntrySettingsGiddh(req, res);
-            const finalResponse = await saveEntrySettingsLocal(req, response);
+
+            if (checkIfFileLocked(filename)) {
+                await waitForFileUnlock(filename);
+            }
+            lockFile(filename);
+
+            const finalResponse = await saveEntrySettingsLocal(filename, req, response);
+
+            unlockFile(filename);
             res.json(finalResponse);
         } catch (error) {
+            unlockFile(filename);
             res.json({ status: "error", "message": error.message });
         }
     }).catch(async error => {
         try {
-            const finalResponse = await getEntrySettingsLocal(req);
+            if (checkIfFileLocked(filename)) {
+                await waitForFileUnlock(filename);
+            }
+            lockFile(filename);
+
+            const finalResponse = await getEntrySettingsLocal(filename, req);
+
+            unlockFile(filename);
             res.json(finalResponse);
         } catch (error) {
+            unlockFile(filename);
             res.json({ status: "error", "message": error.message });
         }
     });

@@ -1,6 +1,6 @@
 import checkInternetConnected from "check-internet-connected";
 import { getCompaniesGiddh } from "../services/giddh/companies";
-import { getInternetConnectedConfig } from "../helpers/general";
+import { checkIfFileLocked, getInternetConnectedConfig, getPath, lockFile, unlockFile, waitForFileUnlock } from "../helpers/general";
 import { getCompaniesLocal, saveCompaniesLocal } from "../services/local/companies";
 
 /**
@@ -9,20 +9,38 @@ import { getCompaniesLocal, saveCompaniesLocal } from "../services/local/compani
  * @param {*} req
  * @param {*} res
  */
-export function getCompaniesController(req, res) {
+export function getCompaniesController(req: any, res: any) {
+    const filename = getPath("companies.db");
     checkInternetConnected(getInternetConnectedConfig).then(async connected => {
         try {
             const response = await getCompaniesGiddh(req, res);
-            const finalResponse = await saveCompaniesLocal(response);
+
+            if (checkIfFileLocked(filename)) {
+                await waitForFileUnlock(filename);
+            }
+            lockFile(filename);
+
+            const finalResponse = await saveCompaniesLocal(filename, response);
+
+            unlockFile(filename);
             res.json(finalResponse);
         } catch (error) {
+            unlockFile(filename);
             res.json({ status: "error", "message": error.message });
         }
     }).catch(async error => {
         try {
-            const finalResponse = await getCompaniesLocal(req);
+            if (checkIfFileLocked(filename)) {
+                await waitForFileUnlock(filename);
+            }
+            lockFile(filename);
+
+            const finalResponse = await getCompaniesLocal(filename, req);
+
+            unlockFile(filename);
             res.json(finalResponse);
         } catch (error) {
+            unlockFile(filename);
             res.json({ status: "error", "message": error.message });
         }
     });

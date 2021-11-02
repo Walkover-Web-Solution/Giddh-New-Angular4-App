@@ -1,22 +1,17 @@
 import Datastore from "nedb";
 import { findAsync, insertAsync, loadDatabase, removeAsync } from "../../helpers/nedb_async";
-import { checkIfFileLocked, getPath, lockFile, unlockFile, waitForFileUnlock } from "../../helpers/general";
 
 /**
  * This will save the branches list
  *
+ * @param {string} filename
  * @param {*} request
  * @param {*} response
  * @returns
  */
-export async function saveBranchesLocal(request: any, response: any): Promise<any> {
+export async function saveBranchesLocal(filename: string, request: any, response: any): Promise<any> {
     if (response && response.status === "success") {
         const branchesList = response.body;
-        const filename = getPath("branches-" + request.params.companyUniqueName + ".db");
-        if(checkIfFileLocked(filename)) {
-            await waitForFileUnlock(filename);
-        }
-        lockFile(filename);
         const db = new Datastore({ filename: filename });
 
         /** Connecting to database */
@@ -25,8 +20,6 @@ export async function saveBranchesLocal(request: any, response: any): Promise<an
         await removeAsync(db, {}, { multi: true });
         /** Inserting the branches list */
         await insertAsync(db, branchesList);
-
-        unlockFile(filename);
 
         return { status: "success", body: branchesList };
     } else {
@@ -37,23 +30,17 @@ export async function saveBranchesLocal(request: any, response: any): Promise<an
 /**
  * This will return the list of branches
  *
+ * @param {string} filename
  * @param {*} request
  * @returns
  */
-export async function getBranchesLocal(request: any): Promise<any> {
-    const filename = getPath("branches-" + request.params.companyUniqueName + ".db");
-    if(checkIfFileLocked(filename)) {
-        await waitForFileUnlock(filename);
-    }
-    lockFile(filename);
+export async function getBranchesLocal(filename: string, request: any): Promise<any> {
     const db = new Datastore({ filename: filename });
 
     /** Connecting to database */
     await loadDatabase(db);
     /** Finding the branches list */
     const response = await findAsync(db, {});
-
-    unlockFile(filename);
 
     if (response?.length > 0) {
         return { status: "success", body: response };

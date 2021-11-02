@@ -1,6 +1,5 @@
 import Datastore from "nedb";
 import { findAsync, insertAsync, loadDatabase, removeAsync } from "../../helpers/nedb_async";
-import { checkIfFileLocked, getPath, lockFile, unlockFile, waitForFileUnlock } from "../../helpers/general";
 
 /**
  * This will save the active user information
@@ -8,14 +7,9 @@ import { checkIfFileLocked, getPath, lockFile, unlockFile, waitForFileUnlock } f
  * @param {*} response
  * @returns
  */
-export async function saveUserLocal(response: any): Promise<any> {
+export async function saveUserLocal(filename: string, response: any): Promise<any> {
     if (response && response.status === "success") {
         const userData = response.body;
-        const filename = getPath("user.db");
-        if(checkIfFileLocked(filename)) {
-            await waitForFileUnlock(filename);
-        }
-        lockFile(filename);
         const db = new Datastore({ filename: filename });
 
         /** Connecting to database */
@@ -24,8 +18,6 @@ export async function saveUserLocal(response: any): Promise<any> {
         await removeAsync(db, {}, {});
         /** Inserting the user data */
         await insertAsync(db, userData);
-
-        unlockFile(filename);
 
         return { status: "success", body: userData };
     } else {
@@ -39,20 +31,13 @@ export async function saveUserLocal(response: any): Promise<any> {
  * @param {*} request
  * @returns
  */
-export async function getUserLocal(request: any): Promise<any> {
-    const filename = getPath("user.db");
-    if(checkIfFileLocked(filename)) {
-        await waitForFileUnlock(filename);
-    }
-    lockFile(filename);
+export async function getUserLocal(filename: string, request: any): Promise<any> {
     const db = new Datastore({ filename: filename });
 
     /** Connecting to database */
     await loadDatabase(db);
     /** Finding the user data */
     const response = await findAsync(db, {});
-
-    unlockFile(filename);
 
     if (response?.length > 0) {
         return { status: "success", body: response[0] };
