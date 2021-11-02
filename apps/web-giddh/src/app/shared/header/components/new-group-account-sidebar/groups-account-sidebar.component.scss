@@ -10,6 +10,11 @@
     min-height: 300px;
 }
 
+.text-overflow-ellipsis {
+    text-overflow: ellipsis;
+    width: 230px;
+}
+
 @media (max-width: 1024px) {
     .virtual-group-list {
         display: table-cell;
