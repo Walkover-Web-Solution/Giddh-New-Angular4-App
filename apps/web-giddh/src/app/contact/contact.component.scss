@@ -748,6 +748,32 @@ button.btn.btn-filter span.icon-cross {
     border-right: 1px solid $gainsboro !important;
     cursor: pointer;
 }
+
 .visible-check-box {
     visibility: visible !important;
+}
+
+::ng-deep.search-table {
+    background-color: $white-smoke !important;
+}
+
+:hover.menu-table-item {
+    color: $chetwode-blue;
+}
+
+::ng-deep.mail-model-container {
+    width: 590px;
+}
+
+@media screen and (max-width: 768px) {
+    .mail-model-container {
+        width: 100% !important;
+    }
+}
+
+.close-btn-in-mat-model {
+    position: absolute;
+    right: 9px;
+    top: 9px;
+    font-size: 25px;
 }
