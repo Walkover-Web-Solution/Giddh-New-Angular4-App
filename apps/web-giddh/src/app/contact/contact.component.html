@@ -412,7 +412,7 @@
                 <button
                     mat-icon-button
                     aria-hidden="true"
-                    class="close"
+                    class="close-btn-in-mat-model"
                     data-dismiss="modal"
                     [attr.aria-label]="commonLocaleData?.app_close"
                     (click)="onNoClick()"
@@ -469,7 +469,7 @@
                 <h3 class="modal-title bg" id="modal-title-mail-customer">{{ messageBody.header.set }}</h3>
                 <button
                     mat-icon-button
-                    class="close"
+                    class="close-btn-in-mat-model"
                     [attr.aria-label]="commonLocaleData?.app_close"
                     (click)="onNoClick()"
                 >
@@ -549,12 +549,17 @@
     </div>
 
     <ng-template #mainTable>
-        <div class="mobile-card-wrapper table-responsive vendor-page mt-3">
+        <div class="mobile-card-wrapper table-responsive vendor-page">
             <ng-container *ngIf="activeTab === 'customer'">
                 <table mat-table [dataSource]="sundryDebtorsAccounts" class="w-100">
                     <ng-container matColumnDef="customerName">
-                        <th mat-header-cell *matHeaderCellDef>
-                            <div class="d-flex" style="align-items: center; padding-left: 14px">
+                        <th
+                            mat-header-cell
+                            *matHeaderCellDef
+                            #searchCustomerContainer
+                            (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')"
+                        >
+                            <div class="d-flex" style="align-items: center; padding-left: 11px">
                                 <mat-checkbox
                                     style="position: absolute; left: 10px"
                                     color="primary"
@@ -596,7 +601,7 @@
                                 <div style="display: flex; align-items: center">
                                     <mat-checkbox
                                         color="primary"
-                                        class="mr-3 checkbox-left-side-in-table"
+                                        class="mr-2 checkbox-left-side-in-table"
                                         [ngClass]="{ 'visible-check-box': selectedCheckedContacts.length }"
                                         type="checkbox"
                                         [(ngModel)]="account.isSelected"
@@ -643,15 +648,19 @@
                                     <button
                                         mat-menu-item
                                         *ngIf="!isMobileScreen"
-                                        class="font-12"
+                                        class="menu-table-item"
                                         (click)="performActions(1, account)"
                                     >
                                         {{ commonLocaleData?.app_goto_ledger }}
                                     </button>
-                                    <button mat-menu-item class="font-12" (click)="performActions(2, account)">
+                                    <button mat-menu-item class="menu-table-item" (click)="performActions(2, account)">
                                         {{ commonLocaleData?.app_generate_invoice }}
                                     </button>
-                                    <button mat-menu-item class="font-12" (click)="performActions(4, account, $event)">
+                                    <button
+                                        mat-menu-item
+                                        class="menu-table-item"
+                                        (click)="performActions(4, account, $event)"
+                                    >
                                         {{ commonLocaleData?.app_send_email }}
                                     </button>
                                 </mat-menu>
@@ -891,7 +900,7 @@
                             #searchCustomerContainer
                             (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')"
                         >
-                            <div class="d-flex" style="align-items: center; padding-left: 14px">
+                            <div class="d-flex" style="align-items: center; padding-left: 11px">
                                 <mat-checkbox
                                     style="position: absolute; left: 10px"
                                     color="primary"
@@ -979,15 +988,19 @@
                                     <button
                                         mat-menu-item
                                         *ngIf="!isMobileScreen"
-                                        class="font-12"
+                                        class="menu-table-item"
                                         (click)="performActions(1, account)"
                                     >
                                         {{ commonLocaleData?.app_goto_ledger }}
                                     </button>
-                                    <button mat-menu-item class="font-12" (click)="performActions(2, account)">
+                                    <button mat-menu-item class="menu-table-item" (click)="performActions(2, account)">
                                         {{ commonLocaleData?.app_record_bill }}
                                     </button>
-                                    <button mat-menu-item class="font-12" (click)="performActions(4, account, $event)">
+                                    <button
+                                        mat-menu-item
+                                        class="menu-table-item"
+                                        (click)="performActions(4, account, $event)"
+                                    >
                                         {{ commonLocaleData?.app_send_email }}
                                     </button>
                                 </mat-menu>
@@ -1521,11 +1534,11 @@
 
             <span class=""> {{ title }}</span>
         </div>
-        <div class="align-items-center d-flex" [hidden]="!show">
+        <div class="align-items-center d-flex" [hidden]="!show" style="padding-left: 14px">
             <text-field
                 type="text"
                 [placeholder]="getSearchFieldText(fieldName)"
-                [cssClass]="'form-control'"
+                [cssClass]="'form-control search-table'"
                 #searchBox
                 [formControl]="formControl"
             ></text-field>

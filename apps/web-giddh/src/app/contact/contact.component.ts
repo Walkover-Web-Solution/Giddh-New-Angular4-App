@@ -816,7 +816,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.messageBody.btn.set = this.messageBody.btn.email;
         this.messageBody.header.set = this.messageBody.header.email;
         // this.mailModal.show();
-        const dialogRef = this.dialog.open(this.mailModalComponent);
+        const dialogRef = this.dialog.open(this.mailModalComponent, {
+            panelClass: 'mail-model-container'
+        });
         dialogRef.afterClosed().subscribe(() => {
 
         });
