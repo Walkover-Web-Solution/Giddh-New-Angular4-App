@@ -1,0 +1,13 @@
+.text-field-container {
+    position: relative;
+
+    span {
+        position: absolute;
+        top: 11px;
+        left: 6px;
+    }
+
+    .pd-l25 {
+        padding-left: 25px !important;
+    }
+}

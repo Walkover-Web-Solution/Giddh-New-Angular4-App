@@ -1,0 +1,21 @@
+@import "../../../../assets/css/color.scss";
+
+.buy-plan-wrapper {
+    position: absolute;
+    top: 4px;
+    right: 8px;
+    z-index: 9;
+}
+.subscription-card {
+    .mat-card-content {
+        .row {
+            .subscription-left-panel {
+            }
+            .subscription-right-panel {
+                .no-plan-selected {
+                    justify-content: center;
+                }
+            }
+        }
+    }
+}

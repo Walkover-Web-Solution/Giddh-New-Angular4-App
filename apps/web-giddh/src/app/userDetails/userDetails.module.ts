@@ -11,7 +11,7 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/lib/perfe
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { SharedModule } from "../shared/shared.module";
 import { ElementViewChildModule } from "../shared/helpers/directives/elementViewChild/elementViewChild.module";
-import { SubscriptionsComponent } from './components/subscriptions/subscriptions.component';
+import { SubscriptionComponent } from './components/subscription/subscription.component';
 import { UserDetailsPipe } from './userDetails.pipe';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
@@ -23,6 +23,13 @@ import { AllFeaturesComponent } from './components/all-features/all-features.com
 import { AddCompanyComponent } from './components/add-company/add-company.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { NoDataModule } from '../shared/no-data/no-data.module';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatListModule } from '@angular/material/list';
+import { MatTabsModule } from '@angular/material/tabs';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -33,7 +40,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     declarations: [
         // Components / Directives/ Pipes
         UserDetailsComponent,
-        SubscriptionsComponent,
+        SubscriptionComponent,
         UserDetailsPipe,
         SubscriptionsPlansComponent,
         CompanyDetailsSidebarComponent,
@@ -58,7 +65,14 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         BsDropdownModule.forRoot(),
         TooltipModule.forRoot(),
         ScrollingModule,
-        NoDataModule
+        NoDataModule,
+        MatGridListModule,
+        FormFieldsModule,
+        MatSelectModule,
+        MatButtonModule,
+        MatCardModule,
+        MatListModule,
+        MatTabsModule
     ],
     providers: [
         {

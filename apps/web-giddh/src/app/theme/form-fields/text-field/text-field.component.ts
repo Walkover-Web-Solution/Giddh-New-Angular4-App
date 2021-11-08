@@ -27,6 +27,8 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     @Input() public id: any = "";
     /** True if we need input field with matInput directive */
     @Input() public useMaterial: boolean = false;
+    /** Css Class for prefix icon */
+    @Input() public prefixIconClass: string = "";
     /** ngModel of input */
     public ngModel: any;
     /** Used for change detection */

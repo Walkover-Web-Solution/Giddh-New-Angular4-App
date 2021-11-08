@@ -1,4 +1,5 @@
 <div class="text-field-container">
+    <span matPrefix *ngIf="prefixIconClass" [class]="prefixIconClass"></span>
     <input
         type="text"
         *ngIf="useMaterial"

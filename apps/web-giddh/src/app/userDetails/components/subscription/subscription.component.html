@@ -1,0 +1,185 @@
+<div class="xs-mt-4 search-subscription">
+    <div class="d-flex justify-content-between">
+        <div class="form-group subscription-dropdown-wrapper mb-0 w-100">
+            <mat-grid-list [cols]="5" rowHeight="50px">
+                <mat-grid-tile>
+                    <text-field
+                        class="w-100"
+                        [cssClass]="'form-control pd-l25'"
+                        [prefixIconClass]="'icon-search'"
+                        [placeholder]="'Search Plans and Companies'"
+                        [formControl]="searchSubscription"
+                    ></text-field>
+                </mat-grid-tile>
+                <mat-grid-tile class="mr-l1">
+                    <label>Plan</label>
+                    <mat-select
+                        class="form-control mat-field-border"
+                        [(ngModel)]="filters.plan"
+                        (selectionChange)="filterSubscriptions()"
+                    >
+                        <mat-option value="">Select</mat-option>
+                        <mat-option *ngFor="let plan of plansList" [value]="plan?.uniqueName"
+                            >{{ plan?.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-grid-tile>
+                <mat-grid-tile class="mr-l1">
+                    <label>Expiring Within</label>
+                    <mat-select
+                        class="form-control mat-field-border"
+                        [(ngModel)]="filters.expiration"
+                        (selectionChange)="filterSubscriptions()"
+                    >
+                        <mat-option value="">Select</mat-option>
+                        <mat-option *ngFor="let expiring of expiringList" [value]="expiring?.value"
+                            >{{ expiring?.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-grid-tile>
+                <mat-grid-tile class="mr-l1">
+                    <label>Transactions Balance</label>
+                    <mat-select
+                        class="form-control mat-field-border"
+                        [(ngModel)]="filters.transactionBalance"
+                        (selectionChange)="filterSubscriptions()"
+                    >
+                        <mat-option value="">Select</mat-option>
+                        <mat-option
+                            *ngFor="let transactionBalance of transactionBalanceList"
+                            [value]="transactionBalance?.value"
+                            >{{ transactionBalance?.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-grid-tile>
+                <mat-grid-tile class="mr-l1">
+                    <button
+                        mat-button
+                        color="primary"
+                        *ngIf="
+                            searchSubscription?.value ||
+                            filters?.plan ||
+                            filters?.expiration ||
+                            filters?.transactionBalance
+                        "
+                        (click)="clearFilters()"
+                    >
+                        Clear
+                    </button>
+                </mat-grid-tile>
+            </mat-grid-list>
+        </div>
+        <div class="buy-plan-wrapper">
+            <button mat-raised-button color="primary" class="mr-0">
+                {{ commonLocaleData?.app_buy_new_plan }}
+            </button>
+        </div>
+    </div>
+</div>
+<mat-card class="subscription-card p-0">
+    <mat-card-content>
+        <div class="row mr-0 ml-0">
+            <div class="col-sm-12 col-lg-4 subscription-left-panel pr-0">
+                <mat-list>
+                    <ng-container *ngFor="let subscription of subscriptions; let i = index">
+                        <mat-list-item (click)="selectSubscription(subscription)">
+                            <span> {{ subscription?.planDetails?.name }} - {{ subscription?.subscriptionId }} </span>
+                            <span
+                                >Transactions:
+                                {{
+                                    subscription?.planDetails?.transactionLimit
+                                        ? (subscription?.planDetails?.transactionLimit | number)
+                                        : "0"
+                                }}
+                                <span>Left</span></span
+                            >
+                            <span>Companies: {{ subscription?.totalCompanies | number }}</span>
+                            <span>Plan Timeline: {{ subscription?.startedAt }} - {{ subscription?.expiry }}</span>
+                        </mat-list-item>
+                        <mat-divider *ngIf="i < subscriptions?.length"></mat-divider>
+                    </ng-container>
+                </mat-list>
+            </div>
+            <div class="col-sm-12 col-lg-8 subscription-right-panel">
+                <div class="d-flex no-plan-selected" *ngIf="!selectedSubscription && plansList?.length">
+                    Select a plan to see it's overall consumption and balance summary<br /><br /><br />You have total
+                    {{ plansList?.length }} plans
+                </div>
+                <div class="d-flex" *ngIf="selectedSubscription">
+                    <div>
+                        <div>
+                            {{ selectedSubscription?.planDetails?.name }} <br />
+                            {{ selectedSubscription?.subscriptionId }}
+                        </div>
+                        <div>
+                            <span
+                                >{{ selectedSubscription?.remainingDays > 0 ? "Expires" : "Expired" }} on:
+                                {{ selectedSubscription?.expiry }}</span
+                            >
+                            <span
+                                *ngIf="
+                                    selectedSubscription?.remainingDays > 0 && selectedSubscription?.remainingDays <= 7
+                                "
+                                >{{ selectedSubscription?.remainingDays + " days left" }}</span
+                            >
+                        </div>
+                        <div>
+                            <button mat-raised-button color="primary">Renew Plan</button>
+                        </div>
+                    </div>
+                    <div class="w-100">
+                        <span>Overall summary</span>
+                        <div>
+                            <mat-grid-list [cols]="2" rowHeight="100px">
+                                <mat-grid-tile>
+                                    <span>Transaction Balance</span>
+                                    <span>{{
+                                        selectedSubscription?.planDetails?.transactionLimit
+                                            ? (selectedSubscription?.planDetails?.transactionLimit | number)
+                                            : "0"
+                                    }}</span>
+                                </mat-grid-tile>
+                                <mat-grid-tile>
+                                    <span>Companies Active</span>
+                                    <span
+                                        ><b>{{ selectedSubscription?.companyCount }}</b></span
+                                    >
+                                </mat-grid-tile>
+                            </mat-grid-list>
+                        </div>
+                    </div>
+                    <div class="w-100">
+                        <mat-tab-group>
+                            <mat-tab label="Companies">
+                                <mat-list>
+                                    <ng-container
+                                        *ngFor="
+                                            let company of selectedSubscription?.companiesWithTransactions;
+                                            let i = index
+                                        "
+                                    >
+                                        <mat-list-item>
+                                            <div>
+                                                <span>
+                                                    {{ company?.name }}
+                                                </span>
+                                                <span class="pull-right">
+                                                    <button mat-button color="primary">Move</button>
+                                                </span>
+                                            </div>
+                                            <div>{{ company?.transactions }} transactions used</div>
+                                        </mat-list-item>
+                                        <mat-divider
+                                            *ngIf="i < selectedSubscription?.companiesWithTransactions?.length"
+                                        >
+                                        </mat-divider>
+                                    </ng-container>
+                                </mat-list>
+                            </mat-tab>
+                        </mat-tab-group>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
