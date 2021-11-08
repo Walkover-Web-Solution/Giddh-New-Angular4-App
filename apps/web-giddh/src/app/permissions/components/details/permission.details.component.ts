@@ -61,7 +61,9 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
                 return o?.uniqueName === 'view';
             });
             this.rawDataForAllRoles = cloneDeep(this.singlePageForFreshStart?.scopes[0]?.permissions);
-            this.allRolesOfPage = this.getAllRolesOfPageReady(cloneDeep(this.rawDataForAllRoles));
+            if (this.rawDataForAllRoles) {
+                this.allRolesOfPage = this.getAllRolesOfPageReady(cloneDeep(this.rawDataForAllRoles));
+            }
             this.newRole = permission.newRole;
             this.pageList = permission.pages;
         });
