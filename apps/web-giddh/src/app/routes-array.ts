@@ -44,8 +44,6 @@ export const ROUTES = [
     { path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice' },
     { path: 'mobile-home', redirectTo: 'pages/mobile-home', pathMatch: 'full' },
     { path: 'select-plan' },
-    { path: 'billing-detail' },
-    { path: 'billing-detail/buy-plan' },
     //{ path: 'new-inventory/create-group', component: InventoryCreateGroupComponent },
     {
         path: 'pages',
@@ -106,6 +104,8 @@ export const ROUTES = [
             { path: 'reports', loadChildren: () => import('./reports/reports.module').then(module => module.ReportsModule) },
             { path: 'purchase-management', loadChildren: () => import('./purchase/purchase.module').then(module => module.PurchaseModule) },
             { path: 'verify-email', loadChildren: () => import('./verify-email/verify-email.module').then(module => module.VerifyEmailModule) },
+            { path: 'billing-detail' },
+            { path: 'billing-detail/buy-plan' },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
         ]
     },
