@@ -1653,7 +1653,10 @@
                                 <!-- for purchase record start -->
                                 <div
                                     class="row mt-1"
-                                    *ngIf="isPurchaseInvoice || currentVoucherFormDetails?.rcmAllowed"
+                                    *ngIf="
+                                        isPurchaseInvoice ||
+                                        (currentVoucherFormDetails?.rcmAllowed && companyCountryName === 'India')
+                                    "
                                 >
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3" *ngIf="!isMobileView">
                                         <label></label>
@@ -1925,7 +1928,7 @@
                                         </p>
                                         <div class="date-hsn-code">
                                             <div class="row mr-0 ml-0">
-                                                <div class="col-6 col-sm-6 pr-0" *ngIf="entry.entryDate">
+                                                <div class="col-6 col-sm-6 pl-0" *ngIf="entry.entryDate">
                                                     <div class="entry-date">
                                                         <label>{{ localeData?.entry_date }}: </label>
                                                         {{ entry.entryDate | date: "dd-MM-yyyy" }}
@@ -2332,7 +2335,7 @@
                                             <!-- region entry date/ hsncode -->
                                             <div class="date-hsn-code">
                                                 <div class="row mr-0 ml-0">
-                                                    <div class="col-6 col-sm-6 pr-0">
+                                                    <div class="col-6 col-sm-6 pl-0">
                                                         <div class="entry-date">
                                                             <label>{{ localeData?.entry_date }}: </label>
                                                             <span *ngIf="!isUpdateMode">

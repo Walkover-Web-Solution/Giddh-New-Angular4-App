@@ -79,21 +79,25 @@ export class InvoiceService {
     * url: '/company/:companyUniqueName/invoices/bulk-generate?combined=:combined'
     */
 
-    public GenerateBulkInvoice(reqObj: { combined: boolean }, model: GenerateBulkInvoiceRequest[], requestedFrom?: string): Observable<BaseResponse<any, GenerateBulkInvoiceRequest[]>> {
+    public GenerateBulkInvoice(reqObj: { combined: boolean }, model: any, requestedFrom?: string): Observable<BaseResponse<any, any[]>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         // create url
-        let url = this.config.apiUrl + INVOICE_API.GENERATE_BULK_INVOICE + '=' + reqObj.combined;
+        let url;
         if (this.generalService.voucherApiVersion === 2) {
+            url = this.config.apiUrl + INVOICE_API_2.GENERATE_BULK_INVOICE + '=' + reqObj.combined;
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        } else {
+            url = this.config.apiUrl + INVOICE_API.GENERATE_BULK_INVOICE + '=' + reqObj.combined;
+            url = url.replace(':accountuniquename', encodeURIComponent(model[0].accountUniqueName));
         }
-        return this.http.post(url.replace(':companyUniqueName', this.companyUniqueName).replace(':accountuniquename', encodeURIComponent(model[0].accountUniqueName)), model).pipe(
+        return this.http.post(url.replace(':companyUniqueName', this.companyUniqueName), model).pipe(
             map((res) => {
-                let data: BaseResponse<any, GenerateBulkInvoiceRequest[]> = res;
+                let data: BaseResponse<any, any[]> = res;
                 data.request = model;
                 data.queryString = { reqObj, requestedFrom };
                 return data;
             }),
-            catchError((e) => this.errorHandler.HandleCatch<any, GenerateBulkInvoiceRequest[]>(e, reqObj, model)));
+            catchError((e) => this.errorHandler.HandleCatch<any, any[]>(e, reqObj, model)));
     }
 
     /**
@@ -717,6 +721,11 @@ export class InvoiceService {
                 contextPath += `${delimiter}${key}=${encodeURIComponent(requestObject[key])}`
             }
         });
+
+        if (this.generalService.voucherApiVersion === 2) {
+            contextPath = this.generalService.addVoucherVersion(contextPath, this.generalService.voucherApiVersion);
+        }
+
         return this.http.post(contextPath, postObject).pipe(
             catchError((error) => this.errorHandler.HandleCatch<string, any>(error)));
     }

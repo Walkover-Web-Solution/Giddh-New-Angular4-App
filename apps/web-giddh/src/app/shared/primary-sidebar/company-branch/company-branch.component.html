@@ -66,10 +66,10 @@
                     >
                         <li
                             class="btn-group"
-                            *ngFor="let company of companyListForFilter"
+                            *ngFor="let company of companyListForFilter; let i = index"
                             [ngClass]="{ 'active': company?.uniqueName === activeCompany?.uniqueName }"
                             [tooltip]="company?.name"
-                            placement="top"
+                            [placement]="i === 0 ? 'bottom' : 'top'"
                         >
                             <span
                                 id="button-basic"
@@ -132,13 +132,13 @@
                                     activeCompany?.uniqueName !== companyBranches?.uniqueName || currentBranchUniqueName
                                 "
                                 [tooltip]="companyBranches.name"
-                                placement="top"
+                                placement="bottom"
                             >
                                 <a
                                     class="d-flex align-items-center head-branch"
                                     href="javascript:;"
-                                    (keydown.enter)="changeCompany(companyBranches?.uniqueName, '', false)"
-                                    (click)="changeCompany(companyBranches?.uniqueName, '', false)"
+                                    (keydown.enter)="changeCompany(companyBranches, '', false)"
+                                    (click)="changeCompany(companyBranches, '', false)"
                                 >
                                     <i class="icon-head-branch mr-2"></i>
                                     <span class="d-flex flex-column">
@@ -154,7 +154,7 @@
                                     class="d-flex align-items-center"
                                     [ngClass]="{ 'active': branch?.uniqueName === currentBranchUniqueName }"
                                     href="javascript:;"
-                                    (click)="changeBranch(companyBranches?.uniqueName, branch?.uniqueName, $event)"
+                                    (click)="changeBranch(companyBranches, branch?.uniqueName, $event)"
                                     [tooltip]="branch?.alias"
                                     placement="top"
                                 >

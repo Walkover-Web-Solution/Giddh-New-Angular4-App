@@ -696,6 +696,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         );
         this.getOnboardingFormInProcess$ = this.store.pipe(select(s => s.common.getOnboardingFormInProcess), takeUntil(this.destroyed$));
         this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     public ngAfterViewInit() {
@@ -1098,7 +1099,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 }
                             });
                             if (this.isPurchaseInvoice) {
-                                this.isRcmEntry = (results[0]) ? results[0].subVoucher === SubVoucher.ReverseCharge : false;
                                 this.assignCompanyBillingShipping(obj.companyDetails);
                                 if (this.copyPurchaseBill) {
                                     if (obj && obj.entries) {
@@ -1116,6 +1116,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                     obj.voucherDetails.voucherNumber = "";
                                 }
                             }
+                            this.isRcmEntry = results[0]?.subVoucher === SubVoucher.ReverseCharge;
                         } else {
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
                             if (results[0].account.currency) {
@@ -1486,7 +1487,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.onSearchQueryChanged(value[1]?.body?.name, 1, 'customer');
             }
         });
-        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     /**
@@ -3725,6 +3725,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.startLoader(false);
             return;
         }
+
+        requestObject.voucher.entries.map(entry => {
+            entry.discounts?.map(discount => {
+                if(!discount.discountValue) {
+                    discount.discountValue = 0;
+                }
+                return discount;
+            });
+        });
+
         if (this.isProformaInvoice || this.isEstimateInvoice) {
             let data = requestObject.voucher;
             let exRate = this.originalExchangeRate;
@@ -4890,7 +4900,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public updateExchangeRate(val) {
         val = (val) ? val.replace(this.baseCurrencySymbol, '') : '';
-        let total = (val) ? (parseFloat(val.replace(/,/g, "")) || 0) : 0;
+        let total = (val) ? (parseFloat(this.generalService.removeSpecialCharactersFromAmount(val)) || 0) : 0;
         if (this.isMulticurrencyAccount) {
             this.exchangeRate = total / this.invFormData.voucherDetails.grandTotal || 0;
             this.originalExchangeRate = this.exchangeRate;

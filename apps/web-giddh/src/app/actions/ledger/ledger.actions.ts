@@ -597,7 +597,7 @@ export class LedgerActions {
         };
     }
 
-    public GenerateBulkLedgerInvoice(reqObj: { combined: boolean }, model: GenerateBulkInvoiceRequest[], requestedFrom?: string): CustomActions {
+    public GenerateBulkLedgerInvoice(reqObj: { combined: boolean }, model: any, requestedFrom?: string): CustomActions {
         return {
             type: LEDGER.GENERATE_BULK_LEDGER_INVOICE,
             payload: { reqObj, body: model, requestedFrom }

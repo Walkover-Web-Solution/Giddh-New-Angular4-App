@@ -122,6 +122,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     /** Observable if loading in process */
     public getAgingReportRequestInProcess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True if due range request is in progress */
+    private isDueRangeRequestInProgress: boolean = false;
 
     constructor(
         public dialog: MatDialog,
@@ -177,7 +179,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
                 let universalDate = cloneDeep(dateObj);
-
                 this.dueAmountReportRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.dueAmountReportRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
@@ -216,10 +217,10 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
-                    label: branch.alias,
-                    value: branch.uniqueName,
-                    name: branch.name,
-                    parentBranch: branch.parentBranch,
+                    label: branch?.alias,
+                    value: branch?.uniqueName,
+                    name: branch?.name,
+                    parentBranch: branch?.parentBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : "",
@@ -234,7 +235,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : "";
                         this.currentBranch = {
@@ -258,6 +259,17 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
             this.searchStr$.next(searchedText);
+        });
+
+        this.store.pipe(select(state => state.agingreport.setDueRangeRequestInFlight), takeUntil(this.destroyed$)).subscribe(response => {
+            if(response) {
+                this.isDueRangeRequestInProgress = true;
+            } else {
+                if(this.isDueRangeRequestInProgress) {
+                    this.isDueRangeRequestInProgress = false;
+                    this.getDueReport();
+                }
+            }
         });
     }
 

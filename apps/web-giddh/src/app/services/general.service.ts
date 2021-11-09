@@ -242,16 +242,17 @@ export class GeneralService {
      *
      * @param {*} currentLedgerAccountDetails Current ledger detail
      * @param {*} selectedAccountDetails User selected particular account
+     * @param {*} activeCompany Active Company
      * @returns {boolean} True, if the current ledger and user selected particular account belongs to RCM category accounts
      * @memberof GeneralService
      */
-    public shouldShowRcmSection(currentLedgerAccountDetails: any, selectedAccountDetails: any): boolean {
+    public shouldShowRcmSection(currentLedgerAccountDetails: any, selectedAccountDetails: any, activeCompany?: any): boolean {
         if (currentLedgerAccountDetails && selectedAccountDetails) {
             if (![currentLedgerAccountDetails.uniqueName, selectedAccountDetails.uniqueName].includes('roundoff')) {
                 // List of allowed first level parent groups
-                const allowedFirstLevelUniqueNames = (this.voucherApiVersion === 2) ? ['operatingcost', 'indirectexpenses', 'fixedassets', 'revenuefromoperations', 'otherincome'] : ['operatingcost', 'indirectexpenses', 'fixedassets'];
+                const allowedFirstLevelUniqueNames = (this.voucherApiVersion === 2 && activeCompany?.country === "India") ? ['operatingcost', 'indirectexpenses', 'fixedassets', 'revenuefromoperations', 'otherincome'] : ['operatingcost', 'indirectexpenses', 'fixedassets'];
                 // List of not allowed second level parent groups
-                const disallowedSecondLevelUniqueNames = (this.voucherApiVersion === 2) ? ['discount', 'exchangeloss', 'roundoff', 'exchangegain', 'dividendincome', 'interestincome', 'dividendexpense', 'interestexpense'] : ['discount', 'exchangeloss'];
+                const disallowedSecondLevelUniqueNames = (this.voucherApiVersion === 2 && activeCompany?.country === "India") ? ['discount', 'exchangeloss', 'roundoff', 'exchangegain', 'dividendincome', 'interestincome', 'dividendexpense', 'interestexpense'] : ['discount', 'exchangeloss'];
                 const currentLedgerFirstParent = (currentLedgerAccountDetails.parentGroups && currentLedgerAccountDetails.parentGroups[0]) ? currentLedgerAccountDetails.parentGroups[0].uniqueName : '';
                 const currentLedgerSecondParent = (currentLedgerAccountDetails.parentGroups && currentLedgerAccountDetails.parentGroups[1]) ? currentLedgerAccountDetails.parentGroups[1].uniqueName : '';
                 const selectedAccountFirstParent = (selectedAccountDetails.parentGroups && selectedAccountDetails.parentGroups[0]) ? selectedAccountDetails.parentGroups[0].uniqueName : '';
@@ -940,5 +941,17 @@ export class GeneralService {
     public addVoucherVersion(url: string, voucherVersion: number): string {
         const delimiter = url.includes('?') ? '&' : '?';
         return url.concat(`${delimiter}voucherVersion=${voucherVersion}`);
+    }
+
+    /**
+     * This will remove special characters and spaces from amount
+     *
+     * @param {string} amount
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public removeSpecialCharactersFromAmount(amount: any): string {
+        amount = amount.toString();
+        return amount?.replace(/,/g, "")?.replace(/ /g, "")?.replace(/'/g, "").trim();
     }
 }

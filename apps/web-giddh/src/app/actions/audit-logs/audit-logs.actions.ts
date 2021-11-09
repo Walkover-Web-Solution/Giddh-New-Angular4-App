@@ -45,7 +45,7 @@ export class AuditLogsActions {
     public getAuditLogs$: Observable<Action> = createEffect(() => this.action$
         .pipe(ofType(AUDIT_LOGS_ACTIONS_V2.GET_LOGS_REQUEST),
             switchMap((action: CustomActions) => {
-                return this.logService.getAuditLogs(action.payload.request, action.payload.page).pipe(
+                return this.logService.getAuditLogs(action.payload).pipe(
                     map((response) => this.validateResponse<AuditLogsResponse, GetAuditLogsRequest>(response, {
                         type: AUDIT_LOGS_ACTIONS_V2.GET_LOGS_RESPONSE_V2,
                         payload: response
@@ -85,14 +85,13 @@ export class AuditLogsActions {
      * Action to get new audit logs
      *
      * @param {GetAuditLogsRequest} request to get audit logs request object
-     * @param {number} page Page number
      * @returns {CustomActions}
      * @memberof AuditLogsActions
      */
-    public getAuditLogs(request: GetAuditLogsRequest, page: number): CustomActions {
+    public getAuditLogs(request: GetAuditLogsRequest): CustomActions {
         return {
             type: AUDIT_LOGS_ACTIONS_V2.GET_LOGS_REQUEST,
-            payload: { request, page }
+            payload: request
         };
     }
     private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {

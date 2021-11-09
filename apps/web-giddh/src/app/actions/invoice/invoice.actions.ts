@@ -11,7 +11,6 @@ import { ToasterService } from '../../services/toaster.service';
 import { Router } from '@angular/router';
 import {
     CommonPaginatedRequest,
-    GenerateBulkInvoiceRequest,
     GenerateInvoiceRequestClass,
     GetAllLedgersForInvoiceResponse,
     GetInvoiceTemplateDetailsResponse,
@@ -121,7 +120,7 @@ export class InvoiceActions {
         .pipe(
             ofType(INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE),
             map((response: CustomActions) => {
-                let data: BaseResponse<any, GenerateBulkInvoiceRequest[]> = response.payload;
+                let data: BaseResponse<any, any> = response.payload;
                 if (data.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -897,7 +896,7 @@ export class InvoiceActions {
         };
     }
 
-    public GenerateBulkInvoice(reqObj: { combined: boolean }, model: GenerateBulkInvoiceRequest[], requestedFrom?: string): CustomActions {
+    public GenerateBulkInvoice(reqObj: { combined: boolean }, model: any, requestedFrom?: string): CustomActions {
         return {
             type: INVOICE_ACTIONS.GENERATE_BULK_INVOICE,
             payload: { reqObj, body: model, requestedFrom }

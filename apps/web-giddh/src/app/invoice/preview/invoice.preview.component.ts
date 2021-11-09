@@ -51,6 +51,8 @@ import { SalesService } from '../../services/sales.service';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { CommonActions } from '../../actions/common.actions';
+import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
+import { GeneralActions } from '../../actions/general/general.actions';
 
 /** Multi currency modules includes Cash/Sales Invoice and CR/DR note */
 const MULTI_CURRENCY_MODULES = [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase];
@@ -242,6 +244,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         private _invoiceService: InvoiceService,
         private _toaster: ToasterService,
         private _activatedRoute: ActivatedRoute,
+        private generalActions: GeneralActions,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private cdr: ChangeDetectorRef,
         private _breakPointObservar: BreakpointObserver,
@@ -676,55 +679,58 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     public deleteConfirmedInvoice(selectedVoucher?: any) {
         this.invoiceConfirmationModel.hide();
-        if (this.selectedVoucher === VoucherTypeEnum.purchase) {
-            if (this.voucherApiVersion === 2) {
-                let model = {
-                    uniqueName: (selectedVoucher) ? encodeURIComponent(selectedVoucher.uniqueName) : (this.selectedInvoice) ? encodeURIComponent(this.selectedInvoice.uniqueName) : (this.selectedInvoiceForDetails) ? encodeURIComponent(this.selectedInvoiceForDetails.uniqueName) : '',
-                    voucherType: this.selectedVoucher
-                };
-
-                let account = (selectedVoucher) ? encodeURIComponent(selectedVoucher.account?.uniqueName) : (this.selectedInvoice) ? encodeURIComponent(this.selectedInvoice.account?.uniqueName) : (this.selectedInvoiceForDetails) ? encodeURIComponent(this.selectedInvoiceForDetails.account?.uniqueName) : '';
-                this.store.dispatch(this.invoiceReceiptActions.DeleteInvoiceReceiptRequest(model, account));
-            } else {
-                const requestObject = {
-                    uniqueName: (selectedVoucher) ? encodeURIComponent(selectedVoucher.uniqueName) : (this.selectedInvoice) ? encodeURIComponent(this.selectedInvoice.uniqueName) : (this.selectedInvoiceForDetails) ? encodeURIComponent(this.selectedInvoiceForDetails.uniqueName) : ''
-                };
-                this.purchaseRecordService.deletePurchaseRecord(requestObject).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-                    this.selectedItems = [];
-                    if (response.status === 'success') {
-                        this._toaster.successToast(response.body);
-                        this.selectedInvoiceForDetails = null;
-                        this.getVoucher(this.isUniversalDateApplicable);
-                    } else {
-                        this._toaster.errorToast(response.message);
-                        this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.lastListingFilters, this.selectedVoucher));
-                        this._receiptServices.getAllReceiptBalanceDue(this.lastListingFilters, this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-                            this.parseBalRes(res);
-                        });
-                    }
-                });
-            }
+        if (this.selectedVoucher === VoucherTypeEnum.purchase && this.voucherApiVersion !== 2) {
+            const requestObject = {
+                uniqueName: (selectedVoucher) ? encodeURIComponent(selectedVoucher.uniqueName) : (this.selectedInvoice) ? encodeURIComponent(this.selectedInvoice.uniqueName) : (this.selectedInvoiceForDetails) ? encodeURIComponent(this.selectedInvoiceForDetails.uniqueName) : ''
+            };
+            this.purchaseRecordService.deletePurchaseRecord(requestObject).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                this.selectedItems = [];
+                if (response.status === 'success') {
+                    this._toaster.successToast(response.body);
+                    this.selectedInvoiceForDetails = null;
+                    this.getVoucher(this.isUniversalDateApplicable);
+                } else {
+                    this._toaster.errorToast(response.message);
+                    this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.lastListingFilters, this.selectedVoucher));
+                    this._receiptServices.getAllReceiptBalanceDue(this.lastListingFilters, this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+                        this.parseBalRes(res);
+                    });
+                }
+            });
         } else {
             //  It will execute when Bulk delete operation
             if (this.selectedInvoicesList.length > 1) {
-                let selectedinvoicesName = [];
-                this.selectedInvoicesList.forEach(item => {
-                    selectedinvoicesName.push(item?.voucherNumber);
-                });
-                let bulkDeleteModel = {
-                    voucherNumbers: selectedinvoicesName,
-                    voucherType: this.selectedVoucher
+                let bulkDeleteModel;
+                let selectedVouchers = [];
+
+                if (this.voucherApiVersion === 2) {
+                    this.selectedInvoicesList.forEach(item => {
+                        selectedVouchers.push(item?.uniqueName);
+                    });
+                    bulkDeleteModel = {
+                        voucherUniqueNames: selectedVouchers,
+                        voucherType: this.selectedVoucher
+                    }
+                } else {
+                    this.selectedInvoicesList.forEach(item => {
+                        selectedVouchers.push(item?.voucherNumber);
+                    });
+                    bulkDeleteModel = {
+                        voucherNumbers: selectedVouchers,
+                        voucherType: this.selectedVoucher
+                    }
                 }
-                if (bulkDeleteModel.voucherNumbers && bulkDeleteModel.voucherType) {
+                if (selectedVouchers?.length && bulkDeleteModel.voucherType) {
                     this._invoiceBulkUpdateService.bulkUpdateInvoice(bulkDeleteModel, 'delete').subscribe(response => {
                         if (response) {
                             if (response.status === "success") {
+                                this.getVoucher(this.isUniversalDateApplicable);
                                 this._toaster.successToast(response.body);
+                                this.getVoucher(false);
+                                this.toggleAllItems(false);
                             } else {
                                 this._toaster.errorToast(response.message);
                             }
-                            this.getVoucher(false);
-                            this.toggleAllItems(false);
                         }
                     });
                 }
@@ -1247,6 +1253,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             this.getVouchersList(this.isUniversalDateApplicable);
         }
+
+        setTimeout(() => {
+            if(!document.getElementsByClassName("sidebar-collapse")?.length) {
+                this.store.dispatch(this.generalActions.openSideMenu(true));
+            }
+        }, 200);
     }
 
     public ngOnDestroy() {
@@ -1324,8 +1336,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     private parseBalRes(res) {
         if (res && res.body) {
-            this.totalSale = res.body.grandTotal;
-            this.totalDue = res.body.totalDue;
+            this.totalSale = giddhRoundOff(res.body.grandTotal, 2);
+            this.totalDue = giddhRoundOff(res.body.totalDue, 2);
         }
         // get user country from his profile
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
@@ -1699,13 +1711,26 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof InvoicePreviewComponent
      */
     public createBulkEInvoice(): void {
-        const requestObject = {
-            model: {
-                voucherNumbers: this.selectedInvoicesList.map(item => item.voucherNumber),
-                voucherType: this.selectedVoucher
-            },
-            actionType: 'einvoice'
-        };
+        let requestObject;
+
+        if(this.voucherApiVersion === 2) {
+            requestObject = {
+                model: {
+                    voucherUniqueNames: this.selectedInvoicesList.map(item => item.uniqueName),
+                    voucherType: this.selectedVoucher
+                },
+                actionType: 'einvoice'
+            };
+        } else {
+            requestObject = {
+                model: {
+                    voucherNumbers: this.selectedInvoicesList.map(item => item.voucherNumber),
+                    voucherType: this.selectedVoucher
+                },
+                actionType: 'einvoice'
+            };
+        }
+
         this.store.dispatch(this.invoiceActions.generateBulkEInvoice(requestObject));
     }
 

@@ -51,6 +51,9 @@ $custom-typography: mat-typography-config(
 .basic {
     background: $white;
 }
+.overflow-x-hidden {
+    overflow-x: hidden;
+}
 
 @media (max-width: 768px) {
     .text-left-sm {
