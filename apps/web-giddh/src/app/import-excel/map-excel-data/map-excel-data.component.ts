@@ -54,7 +54,7 @@ export class MapExcelDataComponent implements OnInit {
     private _clonedMappings: Mappings;
 
     constructor(private toaster: ToasterService) {
-        
+
     }
 
     public ngOnInit() {
@@ -78,7 +78,7 @@ export class MapExcelDataComponent implements OnInit {
         this.importRequestData = {
             ...this._importData,
             data: {
-                items: this._importData.data.items
+                items: this._importData?.data?.items
                     .map(p => {
                         p.row = p.row.map((pr, index) => {
                             pr.columnNumber = index.toString();
