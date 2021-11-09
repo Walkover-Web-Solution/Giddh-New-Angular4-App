@@ -63,8 +63,6 @@ export const ROUTES: Routes = [
     { path: 'reports', redirectTo: 'pages/reports', pathMatch: 'full' },
     { path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice' },
     { path: 'mobile-home', redirectTo: 'pages/mobile-home', pathMatch: 'full' },
-    { path: 'billing-detail', component: BillingDetailComponent },
-    { path: 'billing-detail/buy-plan', component: BillingDetailComponent },
     {
         path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
         children: [
@@ -110,6 +108,8 @@ export const ROUTES: Routes = [
             { path: 'expenses-manager', loadChildren: () => import('./expenses/expenses.module').then(module => module.ExpensesModule), canActivate: [NeedsAuthorization] },
             { path: 'vat-report', loadChildren: () => import('./vat-report/vatReport.module').then(module => module.VatReportModule), canActivate: [NeedsAuthorization] },
             { path: 'purchase-management', loadChildren: () => import('./purchase/purchase.module').then(module => module.PurchaseModule), canActivate: [NeedsAuthorization] },
+            { path: 'billing-detail', component: BillingDetailComponent },
+            { path: 'billing-detail/buy-plan', component: BillingDetailComponent },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
         ]
     },
