@@ -684,8 +684,7 @@ export class InvoiceService {
      * @memberof InvoiceService
      */
     public verifyEmail(params: any): Observable<BaseResponse<any, string>> {
-        this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + INVOICE_API.VERIFY_EMAIL.replace(':companyUniqueName', this.companyUniqueName).replace(':emailAddress', params.emailAddress).replace(':scope', params.scope);
+        let url = this.config.apiUrl + INVOICE_API.VERIFY_EMAIL.replace(':companyUniqueName', params.companyUniqueName).replace(':branchUniqueName', params.branchUniqueName).replace(':emailAddress', params.emailAddress).replace(':scope', params.scope);
         return this.http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<any, string> = res;

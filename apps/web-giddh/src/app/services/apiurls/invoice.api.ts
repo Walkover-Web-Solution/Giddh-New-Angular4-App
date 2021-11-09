@@ -24,7 +24,7 @@ export const INVOICE_API = {
     REMOVE_IMAGE_SIGNATURE: COMMON_URL + '/delete-image?imgUniqueName=:imgUniqueName',
     CANCEL_E_INVOICE_API: COMMON_URL + 'invoice/:invoiceUniqueName/cancel-einvoice',
     CANCEL_CN_DN_E_INVOICE_API: COMMON_URL + 'voucher/:voucherUniqueName/cancel-einvoice',
-    VERIFY_EMAIL: COMMON_URL + 'invoice-setting/verify-email?emailAddress=:emailAddress&scope=:scope'
+    VERIFY_EMAIL: COMMON_URL + 'invoice-setting/verify-email?emailAddress=:emailAddress&scope=:scope&branchUniqueName=:branchUniqueName'
 };
 
 export const INVOICE_API_2 = {

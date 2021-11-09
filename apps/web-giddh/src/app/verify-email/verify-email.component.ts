@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { InvoiceService } from "../services/invoice.service";
+import { PurchaseOrderService } from "../services/purchase-order.service";
 import { ToasterService } from "../services/toaster.service";
 
 @Component({
@@ -17,6 +18,7 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
 
     constructor(
         private invoiceService: InvoiceService,
+        private purchaseOrderService: PurchaseOrderService,
         private router: Router,
         private route: ActivatedRoute,
         private toaster: ToasterService
@@ -44,13 +46,21 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
      * @memberof VerifyEmailComponent
      */
     public verifyEmail(params: any): void {
-        this.invoiceService.verifyEmail(params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        let apiObservable;
+
+        if (params?.module === "invoice") {
+            apiObservable = this.invoiceService.verifyEmail(params);
+        } else if (params?.module === "purchase") {
+            apiObservable = this.purchaseOrderService.verifyEmail(params);
+        }
+
+        apiObservable?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.toaster.showSnackBar("success", response?.body);
             } else {
                 this.toaster.showSnackBar("error", response?.message);
             }
-            this.router.navigate([params.redirect]);
+            this.emailVerificationCompleted(params);
         });
     }
 
@@ -62,5 +72,24 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * This will do the after verification process
+     *
+     * @private
+     * @param {*} params
+     * @memberof VerifyEmailComponent
+     */
+    private emailVerificationCompleted(params: any): void {
+        let redirect = "/pages/home";
+
+        if (params?.module === "invoice") {
+            redirect = "/pages/invoice/preview/settings/sales";
+        } else if (params?.module === "purchase") {
+            redirect = "/pages/purchase-management/purchase/settings";
+        }
+
+        this.router.navigate([redirect]);
     }
 }
