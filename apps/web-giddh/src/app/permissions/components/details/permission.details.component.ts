@@ -159,7 +159,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     }
 
     public getAllRolesOfPageReady(arr) {
-        return arr.map((o: Permission) => {
+        return arr?.map((o: Permission) => {
             return o = new NewPermissionObj(o.code, false);
         });
     }
