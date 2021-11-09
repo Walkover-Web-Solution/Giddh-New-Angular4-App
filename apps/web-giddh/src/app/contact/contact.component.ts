@@ -191,7 +191,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     private createAccountIsSuccess$: Observable<boolean>;
     public universalDate: any;
     /** model reference to open/close bulk payment model */
-        // public bulkPaymentModalRef: BsModalRef;
+    // public bulkPaymentModalRef: BsModalRef;
     public modalRef: BsModalRef;
     public selectedRangeLabel: any = "";
     public dateFieldPosition: any = { x: 0, y: 0 };
@@ -251,10 +251,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     vendorColumns: string[] = ["vendorName", "purchase", "payment", "closing"];
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
-                private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver,
-                private groupWithAccountsAction: GroupWithAccountsAction, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
-                private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions, private groupService: GroupService,
-                private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox) {
+        private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver,
+        private groupWithAccountsAction: GroupWithAccountsAction, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
+        private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions, private groupService: GroupService,
+        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox) {
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
@@ -572,6 +572,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             } else {
                 this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=1`);
             }
+            console.log(tabName);
             this.router.navigate(["/pages/contact/", tabName], { replaceUrl: true });
         }
     }
@@ -604,14 +605,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             this.cdRef.detectChanges();
         }
     }
-
-    // openDialog(): void {
-    //     const dialogRef = this.dialog.open(this.customTemplate);
-    //
-    //     dialogRef.afterClosed().subscribe(() => {
-    //         console.log('The dialog was closed');
-    //     });
-    // }
 
     public updateCustomerAcc(openFor: "customer" | "vendor", account: any) {
         this.activeAccountDetails = account;
@@ -1129,7 +1122,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof ContactComponent
      */
     private getAccounts(fromDate: string, toDate: string, pageNumber?: number, refresh?: string, count: number = PAGINATION_LIMIT, query?: string,
-                        sortBy: string = "", order: string = "asc", branchUniqueName?: string): void {
+        sortBy: string = "", order: string = "asc", branchUniqueName?: string): void {
         this.isGetAccountsInProcess = true;
         pageNumber = pageNumber ? pageNumber : 1;
         refresh = refresh ? refresh : "false";
@@ -1228,15 +1221,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         });
     }
 
-    public editCustomerPosition(ev) {
-        let offset = $("#edit-model-basic").position();
-        if (offset) {
-            let exactPositionTop = offset.top;
-
-            $("#edit-model-basic").css("top", exactPositionTop);
-        }
-    }
-
     public columnFilter(event: boolean, column: string) {
         if (this.showFieldFilter[column])
             this.showFieldFilter[column].visibility = event;
@@ -1245,9 +1229,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         if (window.localStorage) {
             localStorage.setItem(this.localStorageKeysForFilters[this.activeTab === "vendor" ? "vendor" : "customer"], JSON.stringify(this.showFieldFilter));
         }
-        setTimeout(() => {
+        //setTimeout(() => {
             // this.showFieldFilter.selectAll = Object.keys(this.showFieldFilter).filter((filterName) => filterName !== "selectAll").every(filterName => this.showFieldFilter[filterName]);
-        }, 500);
+        //}, 500);
         this.setDisplayColumns();
     }
 
@@ -1652,10 +1636,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         if (this.selectedAccountsList?.length || this.selectedAccForPayment) {
             this.selectedAccountsList = [this.selectedAccountsList[0]]; // since we don't have bulk payment now, we are only passing 1st available value, once bulk payment is done from API, we will remove this line of code
             // this.bulkPaymentModalRef = this.modalService.show(template, Object.assign({}, { class: "payment-modal modal-xl" }),
-            const dialogRef = this.dialog.open(this.bulkPaymentModalRef);
-            dialogRef.afterClosed().subscribe(() => {
-            });
-
+            this.dialog.open(this.bulkPaymentModalRef);
         }
     }
 
@@ -1693,5 +1674,21 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         const images = [];
         images.push({ src: this.imgPath + "icici-integration-process.gif" });
         this.lightbox.open(images, 0);
+    }
+
+    /**
+     * Callback for tab change event
+     *
+     * @param {*} event
+     * @memberof ContactComponent
+     */
+    public tabChange(event: any): void {
+        if (event?.tab?.textLabel === this.localeData?.customer) {
+            this.tabSelected("customer");
+        } else if (event?.tab?.textLabel === this.localeData?.vendor) {
+            this.tabSelected("vendor");
+        } else if (event?.tab?.textLabel === this.localeData?.aging_report) {
+            this.tabSelected("aging-report");
+        }
     }
 }

@@ -13,10 +13,14 @@
             #staticTabs
             class="custom-mat-tabs customer-aging"
             [ngClass]="{ 'hide-header': activeTab === 'vendor' }"
-            (selectedTabChange)="tabSelected(activeTab === 'vendor' ? 'vendor' : 'customer')"
-            label="First"
+            (selectedTabChange)="tabChange($event)"
+            [selectedIndex]="activeTab === 'customer' || activeTab === 'vendor' ? 0 : 1"
+            animationDuration="0ms"
         >
-            <mat-tab label="{{ localeData?.customer }}" [id]="activeTab !== 'aging-report' ? 'giddh-page-heading' : ''">
+            <mat-tab
+                [label]="activeTab === 'customer' ? localeData?.customer : localeData?.vendor"
+                [id]="activeTab !== 'aging-report' ? 'giddh-page-heading' : ''"
+            >
                 <div class="container-fluid">
                     <div
                         class="top-bar customer-top-bar clearfix"
@@ -389,10 +393,7 @@
                     </div>
                 </div>
             </mat-tab>
-            <mat-tab
-                label="{{ localeData?.aging_report }}"
-                [id]="activeTab === 'aging-report' ? 'giddh-page-heading' : ''"
-            >
+            <mat-tab [label]="localeData?.aging_report" [id]="activeTab === 'aging-report' ? 'giddh-page-heading' : ''">
                 <aging-report
                     *ngIf="activeTab === 'aging-report'"
                     [localeData]="localeData"
