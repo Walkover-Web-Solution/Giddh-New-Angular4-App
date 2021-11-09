@@ -5,11 +5,10 @@ import {
     Component,
     ComponentFactoryResolver,
     ElementRef,
-    EventEmitter, OnChanges,
+    EventEmitter,
     OnDestroy,
     OnInit,
     Output,
-    SimpleChanges,
     TemplateRef,
     ViewChild,
 } from "@angular/core";
@@ -77,7 +76,7 @@ import { MatDialog } from "@angular/material/dialog";
         ]),
     ],
 })
-export class ContactComponent implements OnInit, OnDestroy, OnChanges {
+export class ContactComponent implements OnInit, OnDestroy {
     /** Stores the current range of date picker */
     public selectedDateRange: any;
     public selectedDateRangeUi: any;
@@ -241,14 +240,12 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public imgPath: string = "";
     /** True if single icici bank account is there and is pending for approval */
     public isIciciAccountPendingForApproval: boolean = false;
-    @ViewChild("mailModal") mailModalComponent: TemplateRef<any>;
-    @ViewChild("template") bulkPaymentModalRef: TemplateRef<any>;
-
-    displayColumns: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
-    displayColumns$: Observable<string[]> = this.displayColumns.asObservable().pipe(takeUntil(this.destroyed$), distinctUntilChanged(isEqual));
-
-    customerColumns: string[] = ["customerName", "sales", "receipt", "closing"];
-    vendorColumns: string[] = ["vendorName", "purchase", "payment", "closing"];
+    @ViewChild("mailModal") public mailModalComponent: TemplateRef<any>;
+    @ViewChild("template") public bulkPaymentModalRef: TemplateRef<any>;
+    public displayColumns: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
+    public displayColumns$: Observable<string[]> = this.displayColumns.asObservable().pipe(takeUntil(this.destroyed$), distinctUntilChanged(isEqual));
+    public customerColumns: string[] = ["customerName", "sales", "receipt", "closing"];
+    public vendorColumns: string[] = ["vendorName", "purchase", "payment", "closing"];
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver,
@@ -458,12 +455,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             }
             this.cdRef.detectChanges();
         });
-    }
-
-    public ngOnChanges(changes: SimpleChanges) {
-        if (!isEqual(changes["activeTab"].previousValue, changes["activeTab"].currentValue)) {
-
-        }
     }
 
     public performActions(type: number, account: any, event?: any) {
@@ -808,16 +799,12 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.messageBody.type = "Email";
         this.messageBody.btn.set = this.messageBody.btn.email;
         this.messageBody.header.set = this.messageBody.header.email;
-        // this.mailModal.show();
-        const dialogRef = this.dialog.open(this.mailModalComponent, {
+        this.dialog.open(this.mailModalComponent, {
             panelClass: 'mail-model-container'
-        });
-        dialogRef.afterClosed().subscribe(() => {
-
         });
     }
 
-    onNoClick(): void {
+    public closeAllDialogs(): void {
         this.dialog.closeAll();
     }
 

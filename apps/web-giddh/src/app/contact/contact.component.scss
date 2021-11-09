@@ -84,8 +84,9 @@
 .account-detail-custom-header {
     border-right: 0;
     padding: 11px 10px 10px 10px;
-    width: 100%;
     background: $lavender;
+    width: 260px;
+    margin-top: -8px;
 }
 
 .account-detail-custom-title {
@@ -778,4 +779,29 @@ button.btn.btn-filter span.icon-cross {
     right: 9px;
     top: 9px;
     font-size: 25px;
+}
+.min-width-230 {
+    min-width: 230px;
+}
+.arrow-icon {
+    top: 11px;
+    right: 11px;
+}
+.select-all-checkbox-wrapper {
+    align-items: center;
+    padding-left: 11px;
+    .mat-checkbox {
+        left: 10px;
+    }
+}
+.select-single-checkbox-wrapper {
+    display: flex;
+    align-items: center;
+}
+.mat-chip-wrapper {
+    border: unset;
+    margin-top: 20px;
+}
+.min-width-137 {
+    min-width: 137px;
 }

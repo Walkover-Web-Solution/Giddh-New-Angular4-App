@@ -10541,7 +10541,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
 .table-header-fix {
     position: sticky;
     top: 0;
-    background-color: white;
+    background-color: $white;
     z-index: 100;
 }
 
