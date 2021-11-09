@@ -169,7 +169,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public goToBillingDetails() {
-        this.route.navigate(['billing-detail', 'buy-plan']);
+        this.route.navigate(['pages', 'billing-detail', 'buy-plan']);
     }
 
     public selectedSubscriptionPlan(subscription: SubscriptionsUser) {
@@ -298,7 +298,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, OnDestroy {
                 totalTransactions: this.seletedUserPlans.totalTransactions
             };
 
-            this.route.navigate(['billing-detail', 'buy-plan']);
+            this.route.navigate(['pages', 'billing-detail', 'buy-plan']);
             this.store.dispatch(this.companyActions.selectedPlan(this.subscriptionPlan));
         } else {
             this.subscriptionRequestObj.userUniqueName = this.loggedInUser.uniqueName;
