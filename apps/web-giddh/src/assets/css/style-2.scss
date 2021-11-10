@@ -51,6 +51,7 @@ $custom-typography: mat-typography-config(
 .basic {
     background: $white;
 }
+
 .overflow-x-hidden {
     overflow-x: hidden;
 }
@@ -859,15 +860,15 @@ ul.sub-list {
 }
 
 .top-aging-table-top1 {
-    background: $white;
-    position: absolute;
-    left: 0;
-    right: 0;
-    border-radius: 5px;
-    padding: 20px;
-    box-shadow: 0 0 19px rgba(0, 0, 0, 0.2);
-    top: 93px;
-    z-index: 1;
+    //background: $white;
+    //position: absolute;
+    //left: 0;
+    //right: 0;
+    //border-radius: 5px;
+    padding: 5px 15px;
+    //box-shadow: 0 0 19px rgba(0, 0, 0, 0.2);
+    //top: 93px;
+    //z-index: 1;
 }
 
 .top-aging-table-top1 p {
@@ -898,6 +899,7 @@ ul.sub-list {
     border: 1px solid $gainsboro;
     padding: 5px;
     text-align: center;
+    font-weight: bold;
     color: $gray;
 }
 
@@ -10554,10 +10556,12 @@ input[type="checkbox"].cdk-visually-hidden::after {
     .mat-ink-bar {
         height: 3px !important;
     }
+
     .mat-tab-header {
         display: none;
     }
 }
+
 @media screen and (max-width: 768px) {
     .custom-mat-tabs {
         .mat-tab-header {

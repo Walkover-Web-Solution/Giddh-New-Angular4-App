@@ -16,7 +16,7 @@ import {
     AgingDropDownoptions,
     ContactAdvanceSearchCommonModal,
     DueAmountReportQueryRequest,
-    DueAmountReportResponse,
+    DueAmountReportResponse, Result,
 } from "../../models/api-models/Contact";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../store";
@@ -40,6 +40,7 @@ import { OrganizationType } from "../../models/user-login-state";
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from "../../app.constant";
 import { FormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
+import { MatTableDataSource } from "@angular/material/table";
 
 @Component({
     selector: "aging-report",
@@ -125,6 +126,9 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     /** True if due range request is in progress */
     private isDueRangeRequestInProgress: boolean = false;
 
+    agingReportDisplayedColumns: string[] = ['customerName', 'parentGroup', 'app_upcoming_due', 'app_days_1', 'app_days_2', 'app_days_3', 'app_days_4', 'app_total_due'];
+    agingReportDataSource =  new MatTableDataSource<Result>([]);
+
     constructor(
         public dialog: MatDialog,
         private store: Store<AppState>,
@@ -145,6 +149,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public getDueAmountreportData() {
         this.store.pipe(select(s => s.agingreport.data), takeUntil(this.destroyed$)).subscribe((data) => {
             if (data && data.results) {
+                this.agingReportDataSource.data = data.results;
                 this.dueAmountReportRequest.page = data.page;
                 setTimeout(() => this.loadPaginationComponent(data)); // Pagination issue fix
                 this.totalDueAmounts = data.overAllDueAmount;
