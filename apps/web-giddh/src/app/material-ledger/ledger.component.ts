@@ -871,11 +871,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         if (event && event.path) {
             let classList = event.path.map(element => {
-                return element.classList;
+                return element?.classList;
             });
 
             if (classList && classList instanceof Array) {
-                const shouldNotClose = classList.some((className: DOMTokenList) => {
+                const shouldNotClose = classList?.some((className: DOMTokenList) => {
                     if (!className) {
                         return;
                     }
@@ -1115,11 +1115,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         if (event && event.path) {
             let classList = event.path.map(m => {
-                return m.classList;
+                return m?.classList;
             });
 
             if (classList && classList instanceof Array) {
-                const shouldNotClose = classList.some((className: DOMTokenList) => {
+                const shouldNotClose = classList?.some((className: DOMTokenList) => {
                     if (!className) {
                         return;
                     }
@@ -1713,9 +1713,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public toggleBodyClass() {
         if (this.asideMenuState === 'in' || this.asideMenuStateForOtherTaxes === 'in') {
-            document.querySelector('body').classList.add('fixed');
+            document.querySelector('body')?.classList?.add('fixed');
         } else {
-            document.querySelector('body').classList.remove('fixed');
+            document.querySelector('body')?.classList?.remove('fixed');
         }
     }
 

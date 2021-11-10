@@ -675,4 +675,21 @@ export class InvoiceService {
         return this.http.post(contextPath, {}).pipe(
             catchError((error) => this.errorHandler.HandleCatch<string, any>(error)));
     }
+
+    /**
+     * This will verify the email
+     *
+     * @param {*} params
+     * @returns {Observable<BaseResponse<any, string>>}
+     * @memberof InvoiceService
+     */
+    public verifyEmail(params: any): Observable<BaseResponse<any, string>> {
+        let url = this.config.apiUrl + INVOICE_API.VERIFY_EMAIL.replace(':companyUniqueName', params.companyUniqueName).replace(':branchUniqueName', params.branchUniqueName).replace(':emailAddress', params.emailAddress).replace(':scope', params.scope);
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<any, string> = res;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
 }
