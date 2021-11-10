@@ -125,9 +125,10 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if due range request is in progress */
     private isDueRangeRequestInProgress: boolean = false;
-
-    agingReportDisplayedColumns: string[] = ['customerName', 'parentGroup', 'app_upcoming_due', 'app_days_1', 'app_days_2', 'app_days_3', 'app_days_4', 'app_total_due'];
-    agingReportDataSource =  new MatTableDataSource<Result>([]);
+    /** List of columns for table */
+    public agingReportDisplayedColumns: string[] = ['customerName', 'parentGroup', 'app_upcoming_due', 'app_days_1', 'app_days_2', 'app_days_3', 'app_days_4', 'app_total_due'];
+    /** Datasource of aging report */
+    public agingReportDataSource = new MatTableDataSource<Result>([]);
 
     constructor(
         public dialog: MatDialog,
