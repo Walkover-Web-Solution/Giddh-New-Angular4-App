@@ -871,7 +871,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      */
     public getVoucherLogText(log: any): string {
         let voucherLog = this.localeData?.voucher_log;
-        voucherLog = voucherLog?.replace("[ACTION]", log.action).replace("[TOTAL]", log.grandTotal).replace("[USER]", log.user?.name);
+        voucherLog = voucherLog?.replace("[ACTION]", log.action)?.replace("[TOTAL]", log.grandTotal)?.replace("[USER]", log.user?.name);
         return voucherLog;
     }
 
