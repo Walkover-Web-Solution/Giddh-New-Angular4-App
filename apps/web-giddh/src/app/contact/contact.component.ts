@@ -1321,11 +1321,11 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     public prepareSelectedContactsList(element: any, isChecked: boolean): void {
         // selected accounts or creditors list for bulk payment
-        let indexOfEntry = this.selectedAccountsList.indexOf(element);
-        if (indexOfEntry === -1 && isChecked) {
+        let indexOfEntry = this.selectedAccountsList?.filter(account => account.uniqueName === element?.uniqueName);
+        if (!indexOfEntry?.length && isChecked) {
             this.selectedAccountsList.push(element);
-        } else if (indexOfEntry > -1 && !isChecked) {
-            this.selectedAccountsList.splice(indexOfEntry, 1);
+        } else if (indexOfEntry?.length > 0 && !isChecked) {
+            this.selectedAccountsList = this.selectedAccountsList?.filter(account => account.uniqueName !== element?.uniqueName);
         }
         // selected contacts list
         let indexOfEntrySelected = this.selectedCheckedContacts.indexOf(element?.uniqueName);
@@ -1552,7 +1552,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.toaster.infoToast(message);
         }
         if (this.selectedAccountsList?.length || this.selectedAccForPayment) {
-            this.selectedAccountsList = [this.selectedAccountsList[0]]; // since we don't have bulk payment now, we are only passing 1st available value, once bulk payment is done from API, we will remove this line of code
             this.bulkPaymentModalRef = this.modalService.show(template,
                 Object.assign({}, { class: 'payment-modal modal-xl' })
             );
