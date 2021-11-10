@@ -57,7 +57,7 @@
                             <li
                                 class="single-invoice-detail cp"
                                 *ngFor="let item of filteredData"
-                                [ngClass]="{ 'activeItem': item.uniqueName === selectedItem.uniqueName }"
+                                [ngClass]="{ 'activeItem': item?.uniqueName === selectedItem?.uniqueName }"
                                 (click)="selectVoucher(item)"
                             >
                                 <div class="row mr-0">
@@ -531,7 +531,9 @@
                                 <a
                                     href="javascript:;"
                                     class="aqua-color"
-                                    (click)="openPurchaseOrderPreviewPopup(purchaseOrderPreviewModal, order.uniqueName)"
+                                    (click)="
+                                        openPurchaseOrderPreviewPopup(purchaseOrderPreviewModal, order?.uniqueName)
+                                    "
                                     *ngFor="let order of purchaseOrderNumbers; let i = index"
                                     >{{ order.number }}<span *ngIf="checkIfPipeSymbolRequired(i)">|</span></a
                                 >
