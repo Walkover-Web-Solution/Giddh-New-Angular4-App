@@ -29,19 +29,23 @@
 .icon-pointer .font-xxs {
     font-size: 12px;
 }
+
 .aging-table {
     width: 100%;
     background: transparent;
 }
+
 .pagination-wrapper {
     width: 80%;
     padding: 20px 0;
     position: fixed;
     bottom: 20px;
 }
+
 .wrap-searching-aging {
     display: none !important;
 }
+
 .advance-icon {
     display: inline-flex;
     justify-content: center;
@@ -55,15 +59,18 @@
     position: relative;
     margin-bottom: 0;
 }
+
 .search-field input {
     width: 235px;
     background-color: $whisper !important;
     border-color: $whisper !important;
 }
+
 .search-field input:focus {
     background-color: $white !important;
     border-color: $midnight-express !important;
 }
+
 span.input-addon {
     position: absolute;
     right: 0px;
@@ -101,6 +108,7 @@ tr.aging-table-top td {
 .word-break {
     word-break: break-word !important;
 }
+
 .input-container {
     input {
         height: 36px;
@@ -113,9 +121,11 @@ tr.aging-table-top td {
         border-radius: 5px;
     }
 }
+
 .top-aging-table-top {
     background: none !important;
 }
+
 .empty-table {
     height: 120px;
 }
@@ -135,6 +145,7 @@ tr.aging-table-top td {
         justify-content: flex-start !important;
     }
 }
+
 @media (max-width: 767px) {
     span.input-addon {
         top: 0;
@@ -152,10 +163,12 @@ tr.aging-table-top td {
         display: flex;
         width: auto !important;
         margin-left: auto !important;
+
         span {
             justify-content: center;
             align-items: center;
             display: flex;
+
             i {
                 color: $gray;
             }
@@ -165,13 +178,16 @@ tr.aging-table-top td {
         flex-direction: column-reverse;
         display: flex;
         margin-bottom: 15px;
+
         .linked-entities {
             margin-right: 0;
             margin-bottom: 0;
             width: 100%;
         }
+
         .btn-group {
             width: 100%;
+
             .btn {
                 width: 100%;
             }
@@ -179,9 +195,11 @@ tr.aging-table-top td {
     }
     .wrap-searching-aging {
         display: flex !important;
+
         a {
             color: $gray;
         }
+
         .max-width-250 {
             max-width: 250px;
             width: 100%;
@@ -209,12 +227,14 @@ tr.aging-table-top td {
         display: block;
     }
 }
+
 @media (max-width: 575px) {
     .top-aging-table-top {
         padding: 8px 3px !important;
         font-size: 14px;
     }
 }
+
 @media (max-width: 575px) {
     .btn-group.plus-btn {
         float: none;
@@ -230,8 +250,10 @@ tr.aging-table-top td {
             margin-bottom: 0;
             width: 100%;
         }
+
         .btn-group {
             width: 100%;
+
             .btn {
                 width: 100%;
             }
@@ -254,6 +276,7 @@ tr.aging-table-top td {
         }
     }
 }
+
 .icon-calender {
     position: absolute;
     z-index: 9;
@@ -265,4 +288,13 @@ tr.aging-table-top td {
     height: 36px !important;
     border-right: 1px solid $gainsboro !important;
     cursor: pointer;
+}
+
+.m-0 {
+    margin: 0 !important;
+}
+
+::ng-deep.aging-dropdown-table {
+    max-width: 100%;
+    width: 514px;
 }
