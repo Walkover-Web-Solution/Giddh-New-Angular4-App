@@ -1,0 +1,134 @@
+<div class="selling-product-block mr-t15">
+    <div class="box">
+        <div class="top-selling-heading d-flex justify-content-between">
+            <div class="btn-group" dropdown>
+                <button
+                    id="button-basic"
+                    dropdownToggle
+                    type="button"
+                    class="btn font-16 top-selling-btn no-btn dropdown-toggle p-0 mr-0"
+                    aria-controls="dropdown-basic"
+                >
+                    Top 5 Selling <span class="caret"></span>
+                </button>
+                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                    <li role="menuitem"><a class="dropdown-item" href="#">Top 10 Selling</a></li>
+                    <li role="menuitem"><a class="dropdown-item" href="#">Top 15 Selling</a></li>
+                    <li role="menuitem"><a class="dropdown-item" href="#">Top 50 Selling</a></li>
+                    <li role="menuitem"><a class="dropdown-item" href="#">Top 100 Selling</a></li>
+                </ul>
+            </div>
+            <div class="d-flex align-items-center">
+                <span>
+                    <div class="btn-group" dropdown>
+                        <button
+                            id="month-btn"
+                            dropdownToggle
+                            type="button"
+                            class="btn font-16 no-btn dropdown-toggle p-0 text-primary"
+                            aria-controls="month-dropdown"
+                        >
+                            This Month <span class="caret"></span>
+                        </button>
+                        <ul
+                            id="month-dropdown"
+                            *dropdownMenu
+                            class="dropdown-menu"
+                            role="menu"
+                            aria-labelledby="month-btn"
+                        >
+                            <li role="menuitem"><a class="dropdown-item" href="#">This Week</a></li>
+                            <li role="menuitem"><a class="dropdown-item" href="#">Last Month</a></li>
+                        </ul>
+                    </div>
+                </span>
+                <span
+                    class="expand-selling-icon text-gray d-flex cursor-pointer"
+                    [routerLink]="['/pages/new-inventory/top-selling-report']"
+                    ><i class="icon-expand"></i
+                ></span>
+            </div>
+        </div>
+        <div class="selling-container">
+            <tabset class="custom-tabs location-data-tabs">
+                <tab heading="Location">
+                    <!-- div will show if no any data on list -->
+                    <div class="no-data-contain" hidden>
+                        <img src="{{ imgPath }}error.svg" />
+                        <p class="text-gray mr-t15">No items were invoiced in this time frame</p>
+                    </div>
+                    <div class="location-data">
+                        <div class="state-location-data d-flex">
+                            <label>Madhya Pradesh</label>
+                            <span class="progress-bar"></span> ₹15,00,000
+                        </div>
+                        <div class="state-location-data d-flex">
+                            <label>Uttar Pradesh</label>
+                            <span class="progress-bar"></span> ₹12,00,000
+                        </div>
+                        <div class="state-location-data d-flex">
+                            <label>Tamilnadu</label>
+                            <span class="progress-bar"></span> ₹6,00,000
+                        </div>
+                        <div class="state-location-data d-flex">
+                            <label>Karnataka</label>
+                            <span class="progress-bar"></span> ₹9,00,000
+                        </div>
+                        <div class="state-location-data d-flex">
+                            <label>Maharashtra</label>
+                            <span class="progress-bar"></span> ₹7,20,000
+                        </div>
+                    </div>
+                </tab>
+                <tab heading="Product">
+                    <div class="location-data">
+                        <div class="state-location-data d-flex">
+                            <label>Madhya Pradesh</label>
+                            <span class="progress-bar"></span> ₹15,00,000
+                        </div>
+                        <div class="state-location-data d-flex">
+                            <label>Uttar Pradesh</label>
+                            <span class="progress-bar"></span> ₹12,00,000
+                        </div>
+                        <div class="state-location-data d-flex">
+                            <label>Tamilnadu</label>
+                            <span class="progress-bar"></span> ₹6,00,000
+                        </div>
+                        <div class="state-location-data d-flex">
+                            <label>Karnataka</label>
+                            <span class="progress-bar"></span> ₹9,00,000
+                        </div>
+                        <div class="state-location-data d-flex">
+                            <label>Maharashtra</label>
+                            <span class="progress-bar"></span> ₹7,20,000
+                        </div>
+                    </div>
+                </tab>
+                <tab heading="Serive">
+                    <div class="location-data">
+                        <div class="state-location-data d-flex">
+                            <label>Madhya Pradesh</label>
+                            <span class="progress-bar"></span> ₹15,00,000
+                        </div>
+                        <div class="state-location-data d-flex">
+                            <label>Uttar Pradesh</label>
+                            <span class="progress-bar"></span> ₹12,00,000
+                        </div>
+                        <div class="state-location-data d-flex">
+                            <label>Tamilnadu</label>
+                            <span class="progress-bar"></span> ₹6,00,000
+                        </div>
+                        <div class="state-location-data d-flex">
+                            <label>Karnataka</label>
+                            <span class="progress-bar"></span> ₹9,00,000
+                        </div>
+                        <div class="state-location-data d-flex">
+                            <label>Maharashtra</label>
+                            <span class="progress-bar"></span> ₹7,20,000
+                        </div>
+                    </div>
+                </tab>
+            </tabset>
+        </div>
+    </div>
+</div>

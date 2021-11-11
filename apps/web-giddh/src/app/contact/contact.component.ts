@@ -190,12 +190,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     public openingBalance: any;
     /** This will hold closing balance amount */
     public closingBalance: number = 0;
-    /** Stores the current organization type */
-    public currentOrganizationType: OrganizationType;
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
     /** Listens for Master open/close event, required to load the data once master is closed */
     public isAddAndManageOpenedFromOutside$: Observable<boolean>;
     /** This will store screen size */
@@ -508,8 +508,8 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
             this.commonRequest = new ContactAdvanceSearchCommonModal();
             this.isAdvanceSearchApplied = false;
-            this.key = 'name';
-            this.order = 'asc';
+            this.key = (tabName === "vendor") ? 'amountDue' : "name";
+            this.order = (tabName === "vendor") ? 'desc' : 'asc';
             this.activeTab = tabName;
 
             if (this.universalDate && this.universalDate[0] && this.universalDate[1] && !this.todaySelected) {
@@ -950,8 +950,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
         this.commonRequest = new ContactAdvanceSearchCommonModal();
         this.isAdvanceSearchApplied = false;
-        this.key = 'name';
-        this.order = 'asc';
+        this.key = (this.activeTab === "vendor") ? 'amountDue' : "name";
+        this.order = (this.activeTab === "vendor") ? 'desc' : "asc";
         this.getAccounts(this.fromDate, this.toDate,
             null, 'true', PAGINATION_LIMIT, '', '', null, (this.currentBranch ? this.currentBranch.uniqueName : ""));
     }
@@ -1178,10 +1178,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     public columnFilter(event, column) {
         this.showFieldFilter[column] = event;
         this.setTableColspan();
-        this.showFieldFilter.selectAll = Object.keys(this.showFieldFilter).filter((filterName) => filterName !== 'selectAll').every(filterName => this.showFieldFilter[filterName]);
         if (window.localStorage) {
             localStorage.setItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer'], JSON.stringify(this.showFieldFilter));
         }
+        setTimeout(() => {
+            this.showFieldFilter.selectAll = Object.keys(this.showFieldFilter).filter((filterName) => filterName !== 'selectAll').every(filterName => this.showFieldFilter[filterName]);
+        }, 500);
     }
 
     /**

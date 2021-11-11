@@ -1,6 +1,6 @@
 import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild, ChangeDetectorRef, Input, OnDestroy, ElementRef } from '@angular/core';
 import { AgingAdvanceSearchModal, AgingDropDownoptions, ContactAdvanceSearchCommonModal, DueAmountReportQueryRequest, DueAmountReportResponse } from '../../models/api-models/Contact';
-import { select, Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { AgingReportActions } from '../../actions/aging-report.actions';
 import { cloneDeep, map as lodashMap } from '../../lodash-optimized';
@@ -98,6 +98,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     /** Observable if loading in process */
     public getAgingReportRequestInProcess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True if due range request is in progress */
+    private isDueRangeRequestInProgress: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -152,12 +154,10 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
                 let universalDate = cloneDeep(dateObj);
-
                 this.dueAmountReportRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.dueAmountReportRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
                 this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-
                 this.getDueReport();
             }
         });
@@ -234,6 +234,17 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$)
         ).subscribe(searchedText => {
             this.searchStr$.next(searchedText);
+        });
+
+        this.store.pipe(select(state => state.agingreport.setDueRangeRequestInFlight), takeUntil(this.destroyed$)).subscribe(response => {
+            if(response) {
+                this.isDueRangeRequestInProgress = true;
+            } else {
+                if(this.isDueRangeRequestInProgress) {
+                    this.isDueRangeRequestInProgress = false;
+                    this.getDueReport();
+                }
+            }
         });
     }
 

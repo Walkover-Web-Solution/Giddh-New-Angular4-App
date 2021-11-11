@@ -139,7 +139,7 @@ $greyClr: #6d6d6d;
     }
     /* Transition */
     &:hover::after {
-        color: $silver;
+        color: $gray;
     }
     &::after {
         -webkit-transition: 0.25s all ease;
@@ -441,8 +441,8 @@ textarea:focus {
                 }
                 &:nth-child(3) {
                     white-space: normal;
-                    width: 90px;
-                    min-width: 90px;
+                    width: 100px;
+                    min-width: 100px;
                 }
                 &:last-child {
                     //border-right: none !important;
@@ -465,7 +465,7 @@ textarea:focus {
                 }
                 &:nth-child(3) {
                     white-space: normal;
-                    width: 90px;
+                    width: 100px;
                 }
                 &.error-box.item-tax {
                     border: 2px solid $red !important;
@@ -977,10 +977,6 @@ section.static-invoice-table {
     max-width: 485px;
 }
 
-.m-l-10 {
-    margin-left: 10px;
-}
-
 // redesign in DIV formate css
 // .customer-invoice-table:nth-child(2) {
 //   padding-top: 10px;
@@ -1238,7 +1234,7 @@ section.new-table {
 
 .add-bulk-item-modal .right-content hr {
     color: $black;
-    border-color: $very-light-gray;
+    border-color: $gainsboro;
     margin: 10px -15px;
     margin-left: -15px;
 }
@@ -1355,7 +1351,8 @@ section.new-table {
     min-width: 40px;
 }
 
-table.table.table-custom-invoice.basic {
+table.table.table-custom-invoice.basic,
+.other-details-section {
     max-width: 1025px;
     width: 100%;
 }
@@ -1655,7 +1652,6 @@ span.eligible-ITC {
 .height-rate {
     height: 1px;
 }
-
 .other-detail-card {
     textarea {
         min-height: 100px;
@@ -1782,7 +1778,7 @@ span.eligible-ITC {
         border-bottom: none;
         margin-bottom: 0;
     }
-    .showInMobile {
+    .show-in-mobile {
         background: $white;
         border-top: 1px solid $gainsboro;
         padding-right: 15px;

@@ -1,7 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
     AfterViewInit,
-    ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component, ElementRef,
     EventEmitter,
@@ -79,10 +78,8 @@ const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make ad
             transition('in => out', animate('400ms ease-in-out')),
             transition('out => in', animate('400ms ease-in-out'))
         ]),
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    ]
 })
-
 export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
     /** Instance of mat accordion */
     @ViewChild(MatAccordion) public accordion: MatAccordion;
@@ -238,7 +235,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     /** No results found label for dynamic search */
     public noResultsFoundLabel = SearchResultText.NewSearch;
-
     /** True, if all the transactions are of type 'Tax' or 'Reverse Charge' */
     private taxOnlyTransactions: boolean;
     /** Remove Advance receipt confirmation flag */
@@ -268,6 +264,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public advanceReceiptRemoveDialogRef: any;
     /** True if more details is open */
     public isMoreDetailOpen: boolean;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
+    /** True if user itself checked the generate voucher  */
+    public manualGenerateVoucherChecked: boolean = false;
 
     constructor(
         private accountService: AccountService,
@@ -427,6 +427,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }
                 });
         }
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     public toggleShow(): void {
@@ -947,16 +948,20 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
     }
 
-    public downloadInvoice(invoiceName: string, voucherType: string, e: Event) {
+    public downloadInvoice(transaction: any, e: Event) {
         e.stopPropagation();
         let downloadRequest = new DownloadLedgerRequest();
-        downloadRequest.invoiceNumber = [invoiceName];
-        downloadRequest.voucherType = voucherType;
+        if(this.voucherApiVersion === 2) {
+            downloadRequest.uniqueName = transaction.voucherUniqueName;
+        } else {
+            downloadRequest.invoiceNumber = [transaction.voucherNumber];
+        }
+        downloadRequest.voucherType = (transaction.voucherGeneratedType) ? transaction.voucherGeneratedType : transaction.voucher?.name;
 
         this.ledgerService.DownloadInvoice(downloadRequest, this.activeAccount?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d.status === 'success') {
                 let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
-                return saveAs(blob, `${this.activeAccount.name} - ${invoiceName}.pdf`);
+                return saveAs(blob, `${this.activeAccount.name} - ${transaction.voucherNumber}.pdf`);
             } else {
                 this.toaster.showSnackBar("error", d.message);
             }
@@ -1011,7 +1016,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public getInvoiceListsData(event: any): void {
         if (event.value === VoucherTypeEnum.creditNote || event.value === VoucherTypeEnum.debitNote) {
             this.getInvoiceListsForCreditNote();
-            this.vm.selectedLedger.generateInvoice = true;
         }
         this.isAdvanceReceipt = (event.value === 'advance-receipt');
         this.currentVoucherLabel = this.generalService.getCurrentVoucherLabel(this.vm.selectedLedger?.voucher?.shortCode, this.commonLocaleData);
@@ -1113,6 +1117,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public removeSelectedInvoice(): void {
         this.forceClear$ = observableOf({ status: true });
         this.selectedInvoice = '';
+
+        if(!this.vm.selectedLedger?.voucherAdjustments?.adjustments?.length) {
+            this.vm.selectedLedger.generateInvoice = this.manualGenerateVoucherChecked;
+        }
     }
 
     public getInvoiceLists() {
@@ -1156,6 +1164,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     ]
                 }
             }
+            this.vm.selectedLedger.generateInvoice = true;
         } else {
             if (this.vm.selectedLedger) {
                 this.vm.selectedLedger.invoiceLinkingRequest = null;
@@ -1512,7 +1521,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     uniqueName: this.baseAccountDetails.particular ? this.baseAccountDetails.particular.uniqueName : '',
                     parentGroups: (this.baseAccountDetails && this.baseAccountDetails.parentGroups) ? this.baseAccountDetails.parentGroups : []
                 }
-                const isRcmEntry = this.generalService.shouldShowRcmSection(activeAccountDetails, selectedAccountDetails);
+                const isRcmEntry = this.generalService.shouldShowRcmSection(activeAccountDetails, selectedAccountDetails, this.activeCompany);
                 if (isRcmEntry) {
                     return true;
                 }
@@ -1708,6 +1717,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.isAdjustVoucherSelected = false;
                     this.isAdjustAdvanceReceiptSelected = false;
                     this.isAdjustVoucherSelected = false;
+
+                    if(!this.selectInvoice) {
+                        this.vm.selectedLedger.generateInvoice = this.manualGenerateVoucherChecked;
+                    }
+                } else {
+                    this.vm.selectedLedger.generateInvoice = true;
                 }
             }
         }
@@ -1729,7 +1744,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.isAdjustAdvanceReceiptSelected = false;
 
             if (!this.vm.isInvoiceGeneratedAlready) {
-                this.vm.selectedLedger.voucherGenerated = false;
+                this.vm.selectedLedger.voucherGenerated = this.manualGenerateVoucherChecked;
             }
         }
         this.adjustmentDialogRef.close();

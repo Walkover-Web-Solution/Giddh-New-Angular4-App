@@ -69,7 +69,7 @@ export class LedgerActions {
             }, true, {
                 type: LEDGER.CREATE_BLANK_LEDGER_RESPONSE,
                 payload: res
-            }))));
+            }, true))));
 
     public DeleteTrxEntry$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -161,6 +161,11 @@ export class LedgerActions {
                 } else if (response.status === 'no-network') {
                     this.ResetUpdateLedger();
                     return { type: 'EmptyAction' };
+                } else if(response.status === 'confirm') {
+                    return {
+                        type: LEDGER.SHOW_DUPLICATE_VOUCHER_CONFIRMATION,
+                        payload: response
+                    }
                 } else {
                     this.toaster.showSnackBar("success", this.localeService.translate("app_messages.entry_updated"));
                     if (action && action.payload && action.payload.request && action.payload.request.refreshLedger) {
@@ -592,7 +597,7 @@ export class LedgerActions {
         };
     }
 
-    public GenerateBulkLedgerInvoice(reqObj: { combined: boolean }, model: GenerateBulkInvoiceRequest[], requestedFrom?: string): CustomActions {
+    public GenerateBulkLedgerInvoice(reqObj: { combined: boolean }, model: any, requestedFrom?: string): CustomActions {
         return {
             type: LEDGER.GENERATE_BULK_LEDGER_INVOICE,
             payload: { reqObj, body: model, requestedFrom }
@@ -662,12 +667,19 @@ export class LedgerActions {
         };
     }
 
-    private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
+    private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }, isCreateLedger?: boolean): CustomActions {
         if (response.status === 'error') {
             if (showToast) {
                 this.toaster.showSnackBar("error", response.message);
             }
             return errorAction;
+        } else if(response.status === "confirm") {
+            if(isCreateLedger) {
+                return {
+                    type: LEDGER.SHOW_DUPLICATE_VOUCHER_CONFIRMATION,
+                    payload: response
+                }
+            }
         } else {
             if (showToast && typeof response.body === 'string') {
                 this.toaster.showSnackBar("success", response.body);

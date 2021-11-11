@@ -39,6 +39,8 @@ export const INVOICE_API_2 = {
     DELETE_VOUCHER: COMMON_URL + 'accounts/:accountUniqueName/vouchers',
     PREVIEW_VOUCHERS: COMMON_URL + 'accounts/:accountUniqueName/vouchers/preview',
     DOWNLOAD_INVOICE_V3: COMMON_URL + ':companyUniqueName/accounts/:accountUniqueName/vouchers/mail',
+    CANCEL_E_INVOICE: COMMON_URL + 'accounts/:accountUniqueName/vouchers/cancel-einvoice',
+    GENERATE_BULK_INVOICE: COMMON_URL_V4 + 'vouchers/bulk-generate?combined'
 };
 
 export const EWAYBILL_API = {

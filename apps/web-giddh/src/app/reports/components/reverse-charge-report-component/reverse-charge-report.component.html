@@ -18,7 +18,7 @@
     </div>
     <div class="reverse-table-report">
         <div class="container-fluid">
-            <div class="mr-t1 mr-b15 input-grp-date-range-picker d-flex flex-sm-row flex-column">
+            <div class="mr-t1 input-grp-date-range-picker d-flex flex-sm-row flex-column">
                 <div class="input-group flex-nowrap mr-b15">
                     <div
                         class="form-group linked-entities mr-r15 mb-0"
@@ -43,12 +43,12 @@
                                             <i
                                                 class="icon-branch-icon pull-right"
                                                 *ngIf="!option.isCompany"
-                                                tooltip="{{ commonLocaleData?.app_branch }}"
+                                                [tooltip]="commonLocaleData?.app_branch"
                                             ></i>
                                             <i
                                                 class="icon-company-profile pull-right"
                                                 *ngIf="option.isCompany"
-                                                tooltip="{{ commonLocaleData?.app_company }}"
+                                                [tooltip]="commonLocaleData?.app_company"
                                             ></i>
                                         </span>
                                         <span class="entity-details">
@@ -143,7 +143,7 @@
                                 {{ localeData?.entry_date }}
                                 <span
                                     [ngClass]="{
-                                        'sortingIcon icon-pointer': true,
+                                        'sorting-icon icon-pointer': true,
                                         'active-text-color': reverseChargeReportGetRequest.sortBy === 'entryDate',
                                         'icon-sort-asc':
                                             !reverseChargeReportGetRequest.sort ||
@@ -249,7 +249,7 @@
                                 {{ localeData?.suppliers_invoice_date }}
                                 <span
                                     [ngClass]="{
-                                        'sortingIcon icon-pointer': true,
+                                        'sorting-icon icon-pointer': true,
                                         'active-text-color':
                                             reverseChargeReportGetRequest.sortBy === 'supplierInvoiceDate',
                                         'icon-sort-asc':
@@ -285,7 +285,7 @@
                                 {{ commonLocaleData?.app_taxable_value }}
                                 <span
                                     [ngClass]="{
-                                        'sortingIcon icon-pointer': true,
+                                        'sorting-icon icon-pointer': true,
                                         'active-text-color': reverseChargeReportGetRequest.sortBy === 'taxableValue',
                                         'icon-sort-asc':
                                             !reverseChargeReportGetRequest.sort ||
@@ -303,7 +303,7 @@
                                 {{ commonLocaleData?.app_tax_amount }}
                                 <span
                                     [ngClass]="{
-                                        'sortingIcon icon-pointer': true,
+                                        'sorting-icon icon-pointer': true,
                                         'active-text-color': reverseChargeReportGetRequest.sortBy === 'taxAmount',
                                         'icon-sort-asc':
                                             !reverseChargeReportGetRequest.sort ||

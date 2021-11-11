@@ -9,6 +9,7 @@ import { combineLatest, ReplaySubject } from 'rxjs';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { VoucherTypeEnum } from '../models/api-models/Sales';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { GeneralService } from '../services/general.service';
 @Component({
     templateUrl: './invoice.component.html',
     styleUrls: [`./invoice.component.scss`]
@@ -16,7 +17,6 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
 
-    public tabsDropdown: boolean = false;
     public selectedVoucherType: VoucherTypeEnum;
     public activeTab: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -25,10 +25,17 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     public localeData: any = {};
     /* This will store screen size */
     public isMobileScreen: boolean = false;
+    /** Stores the voucher API version of the company */
+    public voucherApiVersion: 1 | 2;
 
-    constructor(private store: Store<AppState>,
+    constructor(
+        private store: Store<AppState>,
         private companyActions: CompanyActions,
-        private router: Router, private _activatedRoute: ActivatedRoute, private _breakPointObservar: BreakpointObserver) {
+        private router: Router,
+        private _activatedRoute: ActivatedRoute,
+        private _breakPointObservar: BreakpointObserver,
+        private generalService: GeneralService
+    ) {
 
         this._breakPointObservar.observe([
             '(max-width: 1023px)',
@@ -79,6 +86,11 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.activeTab = (params) ? params.voucherType : "";
                 }
             });
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.voucherApiVersion = this.generalService.voucherApiVersion;
+            }
+        });
     }
 
     public voucherChanged(tab: string) {

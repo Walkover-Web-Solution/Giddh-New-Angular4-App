@@ -9,7 +9,6 @@
     "tax_deducted": "Tax Deducted?",
     "excess_amount": "Excess amount",
     "adjustment_note": "We do not support all the vouchers for adjustment from this module. Please go to LEDGER to access this.",
-    "voucher_unavailable": "There is no voucher for adjustment.",
     "post_adj": "(Post Adj):",
     "voucher_label": "[VOUCHER_TYPE]",
     "exchange_gain_loss_label": "Exchange [PROFIT_TYPE]: "

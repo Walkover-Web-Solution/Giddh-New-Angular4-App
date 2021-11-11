@@ -409,6 +409,7 @@ export class BlankLedgerVM {
     public passportNumber?: string;
     public touristSchemeApplicable?: boolean;
     public index?: number;
+    public mergePB?: boolean;
 }
 
 export class IInvoiceLinkingRequest {
