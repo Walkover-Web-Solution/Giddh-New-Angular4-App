@@ -130,7 +130,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         DecoratorsModule.forRoot(),
         ShSelectModule,
         ToastrModule.forRoot({ preventDuplicates: true, maxOpened: 3 }),
-        StoreModule.forRoot(reducers, { metaReducers }),
+        StoreModule.forRoot(reducers, { metaReducers, runtimeChecks: {strictStateImmutability: false, strictActionImmutability: false} }),
         PerfectScrollbarModule,
         RouterModule.forRoot(ROUTES, {
             useHash: IS_ELECTRON_WA,
