@@ -656,5 +656,8 @@
         "monthly": "मासिक",
         "unlimited": "अमर्यादित"
     },
-    "app_create_custom_field": "सानुकूल फील्डस तयार करा"
+    "app_voucher_unavailable": "समायोजनासाठी कोणतेही व्हाउचर नाही.",
+    "app_reference_invoice": "संदर्भ पावती",
+    "app_create_custom_field": "सानुकूल फील्डस तयार करा",
+    "app_validation": "प्रमाणीकरण"
 }
