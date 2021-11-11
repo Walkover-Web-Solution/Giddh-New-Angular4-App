@@ -1813,7 +1813,7 @@
                     <div *ngIf="bulkUpdate?.isShown" class="modal-dialog">
                         <div class="modal-content">
                             <invoice-bulk-update-modal-component
-                                (closeModelEvent)="toggleBulkUpdatePopup(true)"
+                                (closeModelEvent)="toggleBulkUpdatePopup(true, $event)"
                                 [voucherType]="selectedVoucher"
                                 [selectedInvoices]="selectedInvoicesList"
                                 [localeData]="localeData"
