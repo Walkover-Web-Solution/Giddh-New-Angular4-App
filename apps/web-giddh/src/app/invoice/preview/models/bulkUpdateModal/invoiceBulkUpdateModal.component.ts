@@ -177,13 +177,14 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
     /**
      * Cancel bulk update
      *
+     * @param {boolean} [refreshVouchers=false]
      * @memberof InvoiceBulkUpdateModalComponent
      */
-    public onCancel(): void {
+    public onCancel(refreshVouchers: boolean = false): void {
         this.selectedField = '';
         this.signatureOptions = '';
         this.bulkUpdateForm.reset();
-        this.closeModelEvent.emit(true);
+        this.closeModelEvent.emit(refreshVouchers);
     }
 
 
@@ -395,19 +396,13 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
             if (requestModel.voucherNumbers && requestModel.voucherType) {
                 this.updateInProcess = true;
                 this._invoiceBulkUpdateService.bulkUpdateInvoice(requestModel, actionType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-
                     if (response.status === "success") {
                         this._toaster.successToast(response.body);
-                        if (actionType === 'imagesignature' || actionType === 'slogan') {
-                            this.onCancel();
-                        }
-
+                        this.onCancel(true);
                     } else {
-                        this.onCancel();
                         this._toaster.errorToast(response.message);
                     }
                     this.updateInProcess = false;
-
                 });
             }
         }
