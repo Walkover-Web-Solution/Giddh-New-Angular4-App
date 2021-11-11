@@ -641,7 +641,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             let objToSend = cloneDeep(f);
             this.store.dispatch(this.settingsIntegrationActions.SaveCashfreeDetails(objToSend));
         } else {
-            this.toaster.errorToast(this.localeData?.cashfree_details_required_message, "Validation");
+            this.toaster.showSnackBar("error", this.localeData?.cashfree_details_required_message, this.commonLocaleData?.app_validation);
             return;
         }
     }
@@ -848,7 +848,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         if (this.messageBody.btn.set === this.commonLocaleData?.app_send_email) {
             return this.companyServices.sendEmail(request).pipe(takeUntil(this.destroyed$))
                 .subscribe((r) => {
-                    r.status === "success" ? this.toaster.successToast(r.body) : this.toaster.errorToast(r.message);
+                    r.status === "success" ? this.toaster.showSnackBar("success", r.body) : this.toaster.showSnackBar("error", r.message);
                     this.checkboxInfo = {
                         selectedPage: 1,
                     };
@@ -860,7 +860,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             delete temp.data["subject"];
             return this.companyServices.sendSms(temp).pipe(takeUntil(this.destroyed$))
                 .subscribe((r) => {
-                    r.status === "success" ? this.toaster.successToast(r.body) : this.toaster.errorToast(r.message);
+                    r.status === "success" ? this.toaster.showSnackBar("success", r.body) : this.toaster.showSnackBar("error", r.message);
                     this.checkboxInfo = {
                         selectedPage: 1,
                     };
@@ -1418,7 +1418,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     this.addNewFieldFilters(response.body);
                 }
             } else {
-                this.toaster.errorToast(response.message);
+                this.toaster.showSnackBar("error", response.message);
             }
         });
     }
@@ -1618,7 +1618,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             message = message.replace("[SUCCESS]", this.selectedCheckedContacts.length - this.selectedAccountsList.length);
             message = message.replace("[TOTAL]", this.selectedCheckedContacts.length);
 
-            this.toaster.infoToast(message);
+            this.toaster.showSnackBar("info", message);
         }
         if (this.selectedAccountsList?.length || this.selectedAccForPayment) {
             this.selectedAccountsList = [this.selectedAccountsList[0]]; // since we don't have bulk payment now, we are only passing 1st available value, once bulk payment is done from API, we will remove this line of code
