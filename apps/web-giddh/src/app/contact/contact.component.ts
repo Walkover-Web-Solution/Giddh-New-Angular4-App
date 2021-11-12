@@ -214,6 +214,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     public imgPath: string = '';
     /** True if single icici bank account is there and is pending for approval */
     public isIciciAccountPendingForApproval: boolean = false;
+    /** True if we should select all checkbox */
+    public showSelectAll: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -358,10 +360,10 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
-                    label: branch.alias,
-                    value: branch.uniqueName,
-                    name: branch.name,
-                    parentBranch: branch.parentBranch
+                    label: branch?.alias,
+                    value: branch?.uniqueName,
+                    name: branch?.name,
+                    parentBranch: branch?.parentBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
@@ -376,7 +378,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
@@ -635,16 +637,16 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     public updateComment(account) {
         if (account.comment) {
-            let canUpdate = this.canUpdateComment(account.uniqueName, account.comment);
+            let canUpdate = this.canUpdateComment(account?.uniqueName, account?.comment);
             if (canUpdate) {
                 this.addComment(account);
             } else {
                 this.updateCommentIdx = null;
             }
         } else {
-            let canDelete = this.canDeleteComment(account.uniqueName);
+            let canDelete = this.canDeleteComment(account?.uniqueName);
             if (canDelete) {
-                this.deleteComment(account.uniqueName);
+                this.deleteComment(account?.uniqueName);
             } else {
                 this.updateCommentIdx = null;
             }
@@ -679,11 +681,11 @@ export class ContactComponent implements OnInit, OnDestroy {
         let account;
         if (this.activeTab === 'customer') {
             account = find(this.sundryDebtorsAccountsBackup.results, (o: any) => {
-                return o.uniqueName === accountUniqueName;
+                return o?.uniqueName === accountUniqueName;
             });
         } else {
             account = find(this.sundryCreditorsAccountsBackup.results, (o: any) => {
-                return o.uniqueName === accountUniqueName;
+                return o?.uniqueName === accountUniqueName;
             });
         }
         if (account.comment) {
@@ -706,11 +708,11 @@ export class ContactComponent implements OnInit, OnDestroy {
         let account;
         if (this.activeTab === 'customer') {
             account = find(this.sundryDebtorsAccountsBackup.results, (o: any) => {
-                return o.uniqueName === accountUniqueName;
+                return o?.uniqueName === accountUniqueName;
             });
         } else {
             account = find(this.sundryCreditorsAccountsBackup.results, (o: any) => {
-                return o.uniqueName === accountUniqueName;
+                return o?.uniqueName === accountUniqueName;
             });
         }
         if (account.comment !== comment) {
@@ -723,7 +725,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     public addComment(account) {
         setTimeout(() => {
-            this.contactService.addComment(account.comment, account.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            this.contactService.addComment(account?.comment, account?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res.status === 'success') {
                     this.updateCommentIdx = null;
                     account.comment = cloneDeep(res.body.description);
@@ -1122,7 +1124,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     });
                     this.sundryDebtorsAccounts = cloneDeep(res.body.results);
                     this.sundryDebtorsAccounts = this.sundryDebtorsAccounts.map(element => {
-                        let indexOfItem = this.selectedCheckedContacts.indexOf(element.uniqueName);
+                        let indexOfItem = this.selectedCheckedContacts.indexOf(element?.uniqueName);
                         if (indexOfItem === -1) {
                             element.isSelected = false;
                         } else {
@@ -1142,7 +1144,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     });
                     this.sundryCreditorsAccounts = cloneDeep(res.body.results);
                     this.sundryCreditorsAccounts = this.sundryCreditorsAccounts.map(element => {
-                        let indexOfItem = this.selectedCheckedContacts.indexOf(element.uniqueName);
+                        let indexOfItem = this.selectedCheckedContacts.indexOf(element?.uniqueName);
                         if (indexOfItem === -1) {
                             element.isSelected = false;
                         } else {
@@ -1319,11 +1321,11 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     public prepareSelectedContactsList(element: any, isChecked: boolean): void {
         // selected accounts or creditors list for bulk payment
-        let indexOfEntry = this.selectedAccountsList.indexOf(element);
-        if (indexOfEntry === -1 && isChecked) {
+        let indexOfEntry = this.selectedAccountsList?.filter(account => account.uniqueName === element?.uniqueName);
+        if (!indexOfEntry?.length && isChecked) {
             this.selectedAccountsList.push(element);
-        } else if (indexOfEntry > -1 && !isChecked) {
-            this.selectedAccountsList.splice(indexOfEntry, 1);
+        } else if (indexOfEntry?.length > 0 && !isChecked) {
+            this.selectedAccountsList = this.selectedAccountsList?.filter(account => account.uniqueName !== element?.uniqueName);
         }
         // selected contacts list
         let indexOfEntrySelected = this.selectedCheckedContacts.indexOf(element?.uniqueName);
@@ -1550,7 +1552,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.toaster.infoToast(message);
         }
         if (this.selectedAccountsList?.length || this.selectedAccForPayment) {
-            this.selectedAccountsList = [this.selectedAccountsList[0]]; // since we don't have bulk payment now, we are only passing 1st available value, once bulk payment is done from API, we will remove this line of code
             this.bulkPaymentModalRef = this.modalService.show(template,
                 Object.assign({}, { class: 'payment-modal modal-xl' })
             );
