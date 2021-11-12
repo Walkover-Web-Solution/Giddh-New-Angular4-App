@@ -44,13 +44,6 @@
                         (change)="invoiceTypeChanged($event)"
                     />
                     {{ localeData?.original }}
-                    <input
-                        type="checkbox"
-                        value="Transport"
-                        (change)="invoiceTypeChanged($event)"
-                        [(ngModel)]="isTransport"
-                    />
-                    {{ localeData?.transport }}
                 </label>
             </div>
 
