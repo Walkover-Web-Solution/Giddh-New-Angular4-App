@@ -67,6 +67,12 @@
     right: 10px;
     top: 12px;
 }
+.pagination-wrapper {
+    position: fixed;
+    bottom: 20px;
+    width: 80%;
+    padding: 20px 0;
+}
 
 .dropdown-menu > li > a:hover {
     color: $chetwode-blue;
@@ -355,6 +361,11 @@ span.icon-advance-filter {
     }
     .form-inline {
         align-items: flex-start;
+    }
+    .pagination-wrapper {
+        position: relative;
+        margin-top: 20px;
+        margin-bottom: 0px;
     }
 }
 @media (max-width: 420px) {
