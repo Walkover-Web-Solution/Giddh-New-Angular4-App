@@ -4,11 +4,8 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
+    <hamburger-menu [pageHeading]="localeData?.welcome_to_giddh"></hamburger-menu>
     <div *ngIf="!isCreateAndSwitchCompanyInProcess && localeData?.welcome_to_giddh" id="main" class="welcome-outer">
-        <div class="welcome-header">
-            <h2>{{ localeData?.welcome_to_giddh }}</h2>
-        </div>
-        <hr />
         <div class="welcome-msg">
             <div class="row">
                 <div class="col-sm-10">

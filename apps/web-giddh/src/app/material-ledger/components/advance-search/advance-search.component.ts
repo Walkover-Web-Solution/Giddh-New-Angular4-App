@@ -533,7 +533,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
 
         this.modalService.onHidden.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             setTimeout(() => {
-                document.querySelector('body').classList.add('modal-open');
+                document.querySelector('body')?.classList?.add('modal-open');
             }, 500);
         });
     }
