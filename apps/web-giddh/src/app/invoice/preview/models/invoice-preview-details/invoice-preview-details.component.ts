@@ -21,6 +21,7 @@ import { select, Store } from '@ngrx/store';
 import { Configuration, FILE_ATTACHMENT_TYPE } from 'apps/web-giddh/src/app/app.constant';
 import { LEDGER_API } from 'apps/web-giddh/src/app/services/apiurls/ledger.api';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { PurchaseRecordService } from 'apps/web-giddh/src/app/services/purchase-record.service';
 import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
 import { saveAs } from 'file-saver';
@@ -164,6 +165,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         private _breakPointObservar: BreakpointObserver,
         private router: Router,
         private _invoiceReceiptActions: InvoiceReceiptActions,
+        private invoiceService: InvoiceService,
         private _generalActions: GeneralActions,
         private _generalService: GeneralService,
         private purchaseRecordService: PurchaseRecordService,
@@ -470,12 +472,15 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     if (result) {
                         this.selectedItem.blob = result;
                         const file = new Blob([result], { type: 'application/pdf' });
+                        this.attachedDocumentBlob = file;
                         URL.revokeObjectURL(this.pdfFileURL);
                         this.pdfFileURL = URL.createObjectURL(file);
                         this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
                         this.isVoucherDownloadError = false;
+                        this.pdfPreviewLoaded = true;
                     } else {
                         this.isVoucherDownloadError = true;
+                        this.pdfPreviewHasError = true;
                         this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
                     }
                     this.isVoucherDownloading = false;
@@ -550,6 +555,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             } else {
                 return;
             }
+        } else if (this.selectedItem?.voucherType === VoucherTypeEnum.creditNote || this.selectedItem?.voucherType === VoucherTypeEnum.debitNote) {
+            this.downloadCreditDebitNotePdf();
         } else {
             this.downloadVoucherModal.show();
         }
@@ -882,5 +889,30 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         let editVoucher = this.localeData?.edit_voucher;
         editVoucher = editVoucher?.replace("[VOUCHER]", voucherType);
         return editVoucher;
+    }
+
+    /**
+     * Downloads the CN/DN generated voucher PDF
+     *
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public downloadCreditDebitNotePdf(): void {
+        let voucherType = this.selectedItem?.voucherType;
+        let dataToSend = {
+            voucherNumber: [this.selectedItem?.voucherNumber],
+            voucherType
+        };
+        if (voucherType) {
+            this.invoiceService.DownloadInvoice(this.selectedItem.account.uniqueName, dataToSend).pipe(takeUntil(this.destroyed$))
+                .subscribe(res => {
+                    if (res) {
+                        saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
+                    } else {
+                        this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                    }
+                }, (error => {
+                    this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                }));
+        }
     }
 }
