@@ -19,13 +19,15 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-    public invoiceType: string[] = ['Original'];
+    public invoiceType: string[] = [];
     /** True, when original copy is to be downloaded */
-    public isOriginal: boolean = true;
+    public isOriginal: boolean = false;
     public isTransport: boolean = false;
     public isCustomer: boolean = false;
     public isProformaEstimatesInvoice: boolean = false;
     @Output() public cancelEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -38,6 +40,13 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
+
+        if(this.voucherApiVersion === 2) {
+            this.isOriginal = true;
+            this.invoiceType.push('Original');
+        }
+
         this.isProformaEstimatesInvoice = (this.selectedItem) ? [VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.selectedItem.voucherType) : false;
     }
 
