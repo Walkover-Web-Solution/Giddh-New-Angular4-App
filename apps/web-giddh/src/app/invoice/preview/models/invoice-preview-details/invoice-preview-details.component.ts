@@ -472,12 +472,15 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     if (result) {
                         this.selectedItem.blob = result;
                         const file = new Blob([result], { type: 'application/pdf' });
+                        this.attachedDocumentBlob = file;
                         URL.revokeObjectURL(this.pdfFileURL);
                         this.pdfFileURL = URL.createObjectURL(file);
                         this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
                         this.isVoucherDownloadError = false;
+                        this.pdfPreviewLoaded = true;
                     } else {
                         this.isVoucherDownloadError = true;
+                        this.pdfPreviewHasError = true;
                         this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
                     }
                     this.isVoucherDownloading = false;
