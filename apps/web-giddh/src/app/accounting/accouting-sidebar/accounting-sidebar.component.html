@@ -2,8 +2,8 @@
     <li>
         <a
             class="cp"
-            (click)="setSelectedPage('Contra', 'voucher', 'purchases')"
-            [ngClass]="{ 'active-parent': selectedVoucher === 'Contra' }"
+            (click)="setSelectedPage(accountingVouchers.CONTRA, 'voucher', 'purchases')"
+            [ngClass]="{ 'active-parent': selectedVoucher === accountingVouchers.CONTRA }"
             >{{ commonLocaleData?.app_keys?.f4 }}: {{ commonLocaleData?.app_voucher_types?.contra }}</a
         >
     </li>
@@ -15,8 +15,8 @@
     <li>
         <a
             class="cp"
-            (click)="setSelectedPage('Receipt', 'voucher', 'purchases')"
-            [ngClass]="{ 'active-parent': selectedVoucher === 'Receipt' }"
+            (click)="setSelectedPage(accountingVouchers.RECEIPT, 'voucher', 'purchases')"
+            [ngClass]="{ 'active-parent': selectedVoucher === accountingVouchers.RECEIPT }"
             >{{ commonLocaleData?.app_keys?.f6 }}: {{ commonLocaleData?.app_voucher_types?.receipt }}</a
         >
     </li>

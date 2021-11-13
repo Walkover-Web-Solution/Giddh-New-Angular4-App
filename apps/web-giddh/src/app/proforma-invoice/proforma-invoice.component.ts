@@ -5069,9 +5069,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.dateChangeConfirmationModel.show();
         }
 
-        this.voucherDateBeforeUpdate = "";
-
-        this.updateDueDate();
+        if(this.voucherDateBeforeUpdate) {
+            this.voucherDateBeforeUpdate = "";
+            this.updateDueDate();
+        }
     }
 
     /**

@@ -3,6 +3,7 @@ import { IPageInfo, TallyModuleService } from './../tally-service';
 import { ReplaySubject } from 'rxjs';
 import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
+import { VOUCHERS } from '../constants/accounting.constant';
 
 @Component({
     selector: 'accounting-sidebar',
@@ -23,6 +24,7 @@ export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy 
     public selectedVoucher: string = null;
     public selectedGrid: string = null;
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public accountingVouchers: any = VOUCHERS;
 
     constructor(private _tallyModuleService: TallyModuleService) {
         //
