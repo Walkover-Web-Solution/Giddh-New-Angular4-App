@@ -91,6 +91,10 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
 
+        if(this.voucherApiVersion === 2) {
+            this.invoiceType.push('Original');
+        }
+
         this.voucherPreview$.subscribe((o: any) => {
             if (o) {
                 const reader = new FileReader();
@@ -152,8 +156,8 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
         this.store.pipe(select(p => p.receipt.voucher), takeUntil(this.destroyed$)).subscribe((o: any) => {
             if (o) {
                 this.accountUniqueName = o.account.uniqueName;
-                if(o.templateDetails.templateUniqueName) {
-                    this.store.dispatch(this._invoiceActions.GetTemplateDetailsOfInvoice(o.templateDetails.templateUniqueName));
+                if(o.templateDetails?.templateUniqueName) {
+                    this.store.dispatch(this._invoiceActions.GetTemplateDetailsOfInvoice(o.templateDetails?.templateUniqueName));
                 }
             }
         });

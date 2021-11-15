@@ -33,7 +33,7 @@
             <h3 class="font-16 mr-b05">{{ localeData?.invoice_copy }}</h3>
             <hr />
 
-            <div class="checkbox">
+            <div class="checkbox" *ngIf="voucherApiVersion === 2">
                 <label>
                     <input
                         name="originalCopy"
@@ -76,7 +76,12 @@
         <div class="row mr-t2 mr-b1">
             <div class="col-sm-12">
                 <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-success" [disabled]="!emailAddresses" (click)="sendEmail()">
+                    <button
+                        type="button"
+                        class="btn btn-success"
+                        [disabled]="!emailAddresses || (!isTransport && !isOriginal && !isCustomer)"
+                        (click)="sendEmail()"
+                    >
                         {{ commonLocaleData?.app_send }}
                     </button>
 
