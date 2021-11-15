@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'app-send-email-invoice-component',
@@ -13,7 +14,7 @@ export class SendEmailInvoiceComponent implements OnInit {
     @Output() public successEvent: EventEmitter<any> = new EventEmitter<any>();
     @Output() public cancelEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
     public emailAddresses: string = '';
-    public invoiceType: string[] = ['Original'];
+    public invoiceType: string[] = [];
     public isTransport: boolean = false;
     public isCustomer: boolean = false;
     public activeTab: string = 'email';
@@ -23,11 +24,21 @@ export class SendEmailInvoiceComponent implements OnInit {
     public commonLocaleData: any = {};
     /** True, when original copy is to be downloaded */
     public isOriginal: boolean = true;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
-    constructor() {
+    constructor(
+        private generalService: GeneralService
+    ) {
     }
 
     ngOnInit() {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
+
+        if(this.voucherApiVersion === 2) {
+            this.invoiceType.push('Original');
+        }
+
         if (this.selectedItem && this.selectedItem.account && this.selectedItem.account.email) {
             this.emailAddresses = this.selectedItem.account.email;
         }
