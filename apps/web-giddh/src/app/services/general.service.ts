@@ -942,4 +942,16 @@ export class GeneralService {
         const delimiter = url.includes('?') ? '&' : '?';
         return url.concat(`${delimiter}voucherVersion=${voucherVersion}`);
     }
+
+    /**
+     * This will remove special characters and spaces from amount
+     *
+     * @param {string} amount
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public removeSpecialCharactersFromAmount(amount: any): string {
+        amount = amount.toString();
+        return amount?.replace(/,/g, "")?.replace(/ /g, "")?.replace(/'/g, "").trim();
+    }
 }

@@ -122,12 +122,14 @@ export class UploadFileComponent implements OnInit, OnDestroy {
                 }));
                 const hoBranch = response.find(branch => !branch.parentBranch);
                 const currentBranchUniqueName = this.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch.uniqueName : '';
-                if (!this.currentBranch.uniqueName) {
+                if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
                     this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
-                    this.currentBranch.name = (this.currentBranch ? this.currentBranch.name : '') + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
+                    if (this.currentBranch) {
+                        this.currentBranch.name = (this.currentBranch ? this.currentBranch.name : '') + (this.currentBranch?.alias ? ` (${this.currentBranch.alias})` : '');
+                    }
                 }
             } else {
                 if (this.generalService.companyUniqueName) {
@@ -185,7 +187,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     public handleFileUpload(file: File): void {
         this.onFileUpload.emit({
             file,
-            branchUniqueName: this.entity === 'entries' ? this.currentBranch.uniqueName : ''
+            branchUniqueName: this.entity === 'entries' && this.currentBranch ? this.currentBranch.uniqueName : ''
         });
     }
 }

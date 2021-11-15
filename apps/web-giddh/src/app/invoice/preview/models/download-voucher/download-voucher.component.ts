@@ -6,6 +6,7 @@ import { InvoicePreviewDetailsVm } from '../../../../models/api-models/Invoice';
 import { VoucherTypeEnum } from '../../../../models/api-models/Sales';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 
 @Component({
     selector: 'download-voucher',
@@ -18,21 +19,34 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-    public invoiceType: string[] = ['Original'];
+    public invoiceType: string[] = [];
     /** True, when original copy is to be downloaded */
-    public isOriginal: boolean = true;
+    public isOriginal: boolean = false;
     public isTransport: boolean = false;
     public isCustomer: boolean = false;
     public isProformaEstimatesInvoice: boolean = false;
     @Output() public cancelEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
-
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private _invoiceService: InvoiceService, private _toaster: ToasterService) {
+    constructor(
+        private _invoiceService: InvoiceService, 
+        private _toaster: ToasterService, 
+        private generalService: GeneralService
+    ) {
+
     }
 
     ngOnInit() {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
+
+        if(this.voucherApiVersion === 2) {
+            this.isOriginal = true;
+            this.invoiceType.push('Original');
+        }
+
         this.isProformaEstimatesInvoice = (this.selectedItem) ? [VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.selectedItem.voucherType) : false;
     }
 
@@ -51,17 +65,23 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
         let dataToSend = {
             voucherNumber: [this.selectedItem.voucherNumber],
             typeOfInvoice: this.invoiceType,
-            voucherType: voucherType
+            voucherType: voucherType,
+            uniqueName: undefined
         };
+
+        if(this.generalService.voucherApiVersion === 2) {
+            dataToSend.uniqueName = this.selectedItem.uniqueName;
+        }
 
         this._invoiceService.DownloadInvoice(this.selectedItem.account.uniqueName, dataToSend).pipe(takeUntil(this.destroyed$))
             .subscribe(res => {
-                if (res) {
+                if (res?.status !== "error") {
                     if (dataToSend.typeOfInvoice.length > 1) {
                         saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'zip');
                     } else {
                         saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
                     }
+                    this.cancel();
                 } else {
                     this._toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
                 }

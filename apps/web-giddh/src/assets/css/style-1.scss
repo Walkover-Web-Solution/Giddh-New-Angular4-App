@@ -2430,6 +2430,10 @@ perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bot
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
+
+    .p-modal-tooltip {
+        position: relative !important;
+    }
 }
 
 .custom-item:hover,

@@ -650,9 +650,11 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             if(document.getElementsByClassName("gst-sidebar-open")?.length > 0) {
                 document.querySelector(".nav-left-bar").classList.add("create-account");
             }
+            document.querySelector(".sidebar-slide-right")?.classList?.add("z-index-990");
         } else {
             document.querySelector('body')?.classList?.remove('fixed');
             document.querySelector(".nav-left-bar").classList.remove("create-account");
+            document.querySelector(".sidebar-slide-right")?.classList?.remove("z-index-990");
         }
     }
 

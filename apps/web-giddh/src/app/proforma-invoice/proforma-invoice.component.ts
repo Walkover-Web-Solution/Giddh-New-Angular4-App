@@ -3725,6 +3725,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.startLoader(false);
             return;
         }
+
+        requestObject.voucher.entries.map(entry => {
+            entry.discounts?.map(discount => {
+                if(!discount.discountValue) {
+                    discount.discountValue = 0;
+                }
+                return discount;
+            });
+        });
+
         if (this.isProformaInvoice || this.isEstimateInvoice) {
             let data = requestObject.voucher;
             let exRate = this.originalExchangeRate;
@@ -3803,6 +3813,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             // sales and cash invoice uses v4 api so need to parse main object to regarding that
             if (this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote) {
+                if (this.isRcmEntry && !this.validateTaxes(cloneDeep(data))) {
+                    this.startLoader(false);
+                    return;
+                }
+
                 const deposit = new AmountClassMulticurrency();
                 deposit.accountUniqueName = this.depositAccountUniqueName;
                 deposit.amountForAccount = this.depositAmount;
@@ -3818,6 +3833,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     number: this.invoiceNo,
                     uniqueName: unqName,
                     roundOffApplicable: this.applyRoundOff,
+                    subVoucher: (this.isRcmEntry) ? SubVoucher.ReverseCharge : undefined,
                     deposit
                 } as GenericRequestForGenerateSCD;
                 if (this.isCreditNote || this.isDebitNote) {
@@ -3936,11 +3952,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (this.isSalesInvoice || this.isCashInvoice) {
                 this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
                 // To get re-assign receipts voucher store
-                this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(response.body.account?.uniqueName, {
-                    invoiceNumber: response.body.number,
-                    voucherType: response.body.type,
-                    uniqueName: (this.voucherApiVersion === 2) ? response.body.uniqueName : undefined
-                }));
+                // this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(response.body.account?.uniqueName, {
+                //     invoiceNumber: response.body.number,
+                //     voucherType: response.body.type,
+                //     uniqueName: (this.voucherApiVersion === 2) ? response.body.uniqueName : undefined
+                // }));
             }
             // reset form and other
             this.resetInvoiceForm(invoiceForm);
@@ -4890,7 +4906,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public updateExchangeRate(val) {
         val = (val) ? val.replace(this.baseCurrencySymbol, '') : '';
-        let total = (val) ? (parseFloat(val.replace(/,/g, "")) || 0) : 0;
+        let total = (val) ? (parseFloat(this.generalService.removeSpecialCharactersFromAmount(val)) || 0) : 0;
         if (this.isMulticurrencyAccount) {
             this.exchangeRate = total / this.invFormData.voucherDetails.grandTotal || 0;
             this.originalExchangeRate = this.exchangeRate;
@@ -4923,9 +4939,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.dateChangeConfirmationModel.show();
         }
 
-        this.voucherDateBeforeUpdate = "";
-
-        this.updateDueDate();
+        if(this.voucherDateBeforeUpdate) {
+            this.voucherDateBeforeUpdate = "";
+            this.updateDueDate();
+        }
     }
 
     /**

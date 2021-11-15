@@ -306,6 +306,9 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             let accountUniqueName: string = this.selectedInvoice.account?.uniqueName;
             this.receiptService.DownloadVoucher(model, accountUniqueName, false).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res) {
+                    if (model.typeOfInvoice.length > 1) {
+                        return saveAs(res, `${model.voucherNumber[0]}.` + 'zip');
+                    }
                     return saveAs(res, `${this.selectedInvoice.voucherNumber}.` + 'pdf');
                 } else {
                     this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);

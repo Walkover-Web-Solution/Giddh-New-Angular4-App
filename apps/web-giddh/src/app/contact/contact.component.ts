@@ -214,6 +214,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     public imgPath: string = '';
     /** True if single icici bank account is there and is pending for approval */
     public isIciciAccountPendingForApproval: boolean = false;
+    /** True if we should select all checkbox */
+    public showSelectAll: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -1321,11 +1323,11 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     public prepareSelectedContactsList(element: any, isChecked: boolean): void {
         // selected accounts or creditors list for bulk payment
-        let indexOfEntry = this.selectedAccountsList.indexOf(element);
-        if (indexOfEntry === -1 && isChecked) {
+        let accountExists = this.selectedAccountsList?.filter(account => account.uniqueName === element?.uniqueName);
+        if (!accountExists?.length && isChecked) {
             this.selectedAccountsList.push(element);
-        } else if (indexOfEntry > -1 && !isChecked) {
-            this.selectedAccountsList.splice(indexOfEntry, 1);
+        } else if (accountExists?.length > 0 && !isChecked) {
+            this.selectedAccountsList = this.selectedAccountsList?.filter(account => account.uniqueName !== element?.uniqueName);
         }
         // selected contacts list
         let indexOfEntrySelected = this.selectedCheckedContacts.indexOf(element?.uniqueName);

@@ -51,6 +51,8 @@ import { SalesService } from '../../services/sales.service';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { CommonActions } from '../../actions/common.actions';
+import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
+import { GeneralActions } from '../../actions/general/general.actions';
 
 /** Multi currency modules includes Cash/Sales Invoice and CR/DR note */
 const MULTI_CURRENCY_MODULES = [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase];
@@ -242,6 +244,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         private _invoiceService: InvoiceService,
         private _toaster: ToasterService,
         private _activatedRoute: ActivatedRoute,
+        private generalActions: GeneralActions,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private cdr: ChangeDetectorRef,
         private _breakPointObservar: BreakpointObserver,
@@ -603,15 +606,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * Bulk update model show hide
      *
      * @param {boolean} isClose Boolean to check model need to close or not
+     * @param {boolean} [refreshVouchers]
      * @memberof InvoicePreviewComponent
      */
-    public toggleBulkUpdatePopup(isClose: boolean): void {
+    public toggleBulkUpdatePopup(isClose: boolean, refreshVouchers?: boolean): void {
         if (isClose) {
             this.bulkUpdate.hide();
+            if (refreshVouchers) {
+                this.getVoucher(this.isUniversalDateApplicable);
+            }
         } else {
             this.bulkUpdate.show();
         }
-
     }
 
     public toggleEwayBillPopup() {
@@ -723,11 +729,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                             if (response.status === "success") {
                                 this.getVoucher(this.isUniversalDateApplicable);
                                 this._toaster.successToast(response.body);
+                                this.getVoucher(false);
+                                this.toggleAllItems(false);
                             } else {
                                 this._toaster.errorToast(response.message);
                             }
-                            this.getVoucher(false);
-                            this.toggleAllItems(false);
                         }
                     });
                 }
@@ -1250,6 +1256,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             this.getVouchersList(this.isUniversalDateApplicable);
         }
+
+        setTimeout(() => {
+            if(!document.getElementsByClassName("sidebar-collapse")?.length) {
+                this.store.dispatch(this.generalActions.openSideMenu(true));
+            }
+        }, 200);
     }
 
     public ngOnDestroy() {
@@ -1327,8 +1339,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     private parseBalRes(res) {
         if (res && res.body) {
-            this.totalSale = res.body.grandTotal;
-            this.totalDue = res.body.totalDue;
+            this.totalSale = giddhRoundOff(res.body.grandTotal, 2);
+            this.totalDue = giddhRoundOff(res.body.totalDue, 2);
         }
         // get user country from his profile
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
