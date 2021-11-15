@@ -33,7 +33,7 @@
             <h3 class="font-16 mr-b05">{{ localeData?.invoice_copy }}</h3>
             <hr />
 
-            <div class="checkbox">
+            <div class="checkbox" *ngIf="voucherApiVersion === 2">
                 <label>
                     <input
                         name="originalCopy"
