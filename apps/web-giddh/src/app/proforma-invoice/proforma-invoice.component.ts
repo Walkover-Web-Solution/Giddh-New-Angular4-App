@@ -4652,7 +4652,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let voucherClassConversion = new VoucherClass();
         let voucherDetails = new VoucherDetailsClass();
         if (!this.isLastInvoiceCopied && shouldLoadState) {
-            await this.getUpdatedStateCodes(result.account.billingDetails.countryCode);
+            await this.getUpdatedStateCodes(result?.account?.billingDetails?.countryCode);
         }
         voucherClassConversion.entries = [];
         result.entries.forEach(entry => {
@@ -4853,7 +4853,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         if (!this.isLastInvoiceCopied) {
             if (!this.isPurchaseInvoice) {
-                this.isMulticurrencyAccount = result.multiCurrency;
+                this.isMulticurrencyAccount = result?.multiCurrency;
             }
             this.customerCountryName = result.account.billingDetails.countryName ?? result?.account?.billingDetails?.country?.name;
             this.customerCountryCode = result?.account?.billingDetails?.countryCode ?? result?.account?.billingDetails?.country?.code ?? 'IN';
@@ -7308,9 +7308,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private setSelectedItem(): void {
         this.route.queryParams.pipe(take(1)).subscribe((params) => {
             if(params.uniqueName) {
-                this.selectedItem = { 
-                    uniqueName: params.uniqueName, 
-                    voucherNumber: params.invoiceNo, 
+                this.selectedItem = {
+                    uniqueName: params.uniqueName,
+                    voucherNumber: params.invoiceNo,
                     account: { name: params.accUniqueName, uniqueName: params.accUniqueName },
                     grandTotal: undefined,
                     voucherDate: undefined,
