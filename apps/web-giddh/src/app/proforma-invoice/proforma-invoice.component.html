@@ -210,13 +210,21 @@
                                                                 isUpdateMode &&
                                                                 invoiceType !== 'sales' &&
                                                                 invoiceType !== 'cash' &&
-                                                                invoiceType !== 'purchase'
+                                                                invoiceType !== 'purchase' &&
+                                                                (voucherApiVersion === 1 ||
+                                                                    (voucherApiVersion === 2 &&
+                                                                        invoiceType !== 'debit note' &&
+                                                                        invoiceType !== 'credit note'))
                                                             "
                                                             [fixedValue]="
                                                                 isUpdateMode &&
                                                                 invoiceType !== 'sales' &&
                                                                 invoiceType !== 'cash' &&
-                                                                invoiceType !== 'purchase'
+                                                                invoiceType !== 'purchase' &&
+                                                                (voucherApiVersion === 1 ||
+                                                                    (voucherApiVersion === 2 &&
+                                                                        invoiceType !== 'debit note' &&
+                                                                        invoiceType !== 'credit note'))
                                                                     ? invFormData.voucherDetails.customerName
                                                                     : ''
                                                             "
