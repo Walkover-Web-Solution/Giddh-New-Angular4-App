@@ -210,13 +210,17 @@
                                                                 isUpdateMode &&
                                                                 invoiceType !== 'sales' &&
                                                                 invoiceType !== 'cash' &&
-                                                                invoiceType !== 'purchase'
+                                                                invoiceType !== 'purchase' &&
+                                                                invoiceType !== 'debit note' &&
+                                                                invoiceType !== 'credit note'
                                                             "
                                                             [fixedValue]="
                                                                 isUpdateMode &&
                                                                 invoiceType !== 'sales' &&
                                                                 invoiceType !== 'cash' &&
-                                                                invoiceType !== 'purchase'
+                                                                invoiceType !== 'purchase' &&
+                                                                invoiceType !== 'debit note' &&
+                                                                invoiceType !== 'credit note'
                                                                     ? invFormData.voucherDetails.customerName
                                                                     : ''
                                                             "
