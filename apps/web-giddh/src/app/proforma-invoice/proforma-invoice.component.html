@@ -198,18 +198,20 @@
                                                                 invoiceType !== 'sales' &&
                                                                 invoiceType !== 'cash' &&
                                                                 invoiceType !== 'purchase' &&
-                                                                voucherApiVersion === 2 &&
-                                                                    invoiceType !== 'debit note' &&
-                                                                    invoiceType !== 'credit note'
+                                                                (voucherApiVersion === 1 ||
+                                                                    (voucherApiVersion === 2 &&
+                                                                        invoiceType !== 'debit note' &&
+                                                                        invoiceType !== 'credit note'))
                                                             "
                                                             [fixedValue]="
                                                                 isUpdateMode &&
                                                                 invoiceType !== 'sales' &&
                                                                 invoiceType !== 'cash' &&
                                                                 invoiceType !== 'purchase' &&
-                                                                voucherApiVersion === 2 &&
-                                                                    invoiceType !== 'debit note' &&
-                                                                    invoiceType !== 'credit note'
+                                                                (voucherApiVersion === 1 ||
+                                                                    (voucherApiVersion === 2 &&
+                                                                        invoiceType !== 'debit note' &&
+                                                                        invoiceType !== 'credit note'))
                                                                     ? invFormData.voucherDetails.customerName
                                                                     : ''
                                                             "
