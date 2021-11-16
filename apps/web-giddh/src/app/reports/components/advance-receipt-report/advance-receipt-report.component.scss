@@ -123,6 +123,12 @@
 .entity-dropdown {
     width: 200px;
 }
+.check-image {
+    img {
+        max-height: 14px;
+        cursor: pointer;
+    }
+}
 @media screen and (max-width: 1199px) {
     .clear-filter {
         margin-left: 15px;
