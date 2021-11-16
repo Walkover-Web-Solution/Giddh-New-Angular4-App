@@ -787,19 +787,19 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         const foundContraEntry: boolean = this.validateForContraEntry(data);
         const foundSalesAndBankEntry: boolean = this.validateForSalesAndPurchaseEntry(data);
 
-        if (foundContraEntry && data.voucherType !== 'Contra') {
+        if (foundContraEntry && data.voucherType !== VOUCHERS.CONTRA) {
             let message = this.localeData?.contra_entry_notallowed;
             message = message?.replace("[VOUCHER_TYPE]", data.voucherType);
             this._toaster.errorToast(message, this.commonLocaleData?.app_error);
             return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
-        if (!foundContraEntry && data.voucherType === 'Contra') {
+        if (!foundContraEntry && data.voucherType === VOUCHERS.CONTRA) {
             this._toaster.errorToast(this.localeData?.contra_entry_error, this.commonLocaleData?.app_error);
             return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
 
         // This suggestion was given by Sandeep
-        if (foundSalesAndBankEntry && data.voucherType === 'Journal') {
+        if (foundSalesAndBankEntry && data.voucherType === VOUCHERS.JOURNAL) {
             this._toaster.errorToast(this.localeData?.sales_purchase_entry_error, this.commonLocaleData?.app_error);
             return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
@@ -924,8 +924,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public validatePaymentAndReceipt(data) {
-        if (data.voucherType === 'Payment' || data.voucherType === 'Receipt') {
-            const byOrTo = data.voucherType === 'Payment' ? 'to' : 'by';
+        if (data.voucherType === VOUCHERS.PAYMENT || data.voucherType === VOUCHERS.RECEIPT) {
+            const byOrTo = data.voucherType === VOUCHERS.PAYMENT ? 'to' : 'by';
             const toAccounts = data.transactions.filter((acc) => acc.type === byOrTo);
             const AccountOfCashOrBank = toAccounts.filter((acc) => {
                 const indexOfCashOrBank = acc.selectedAccount.parentGroups.findIndex((pg) => pg.uniqueName === 'cash' || pg.uniqueName === 'bankaccounts');
