@@ -139,8 +139,15 @@ export class InvoiceService {
 
     public PreviewInvoice(accountUniqueName: string, model: PreviewInvoiceRequest): Observable<BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + INVOICE_API_2.PREVIEW_VOUCHERS
-            .replace(':companyUniqueName', this.companyUniqueName)
+        let url = this.config.apiUrl;
+
+        if(this.generalService.voucherApiVersion === 2) {
+            url = url + INVOICE_API_2.PREVIEW_VOUCHERS_V4;
+        } else {
+            url = url + INVOICE_API_2.PREVIEW_VOUCHERS;
+        }
+
+        url = url.replace(':companyUniqueName', this.companyUniqueName)
             .replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
