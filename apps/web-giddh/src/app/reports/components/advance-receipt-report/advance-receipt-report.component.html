@@ -93,6 +93,34 @@
                     </button>
                 </div>
                 <div
+                    *ngIf="!isCompany && selectedReceipts?.length > 0"
+                    class="btn-group ml-auto"
+                    dropdown
+                    #dp="bs-dropdown"
+                >
+                    <button
+                        dropdownToggle
+                        type="button"
+                        class="btn btn-primary more-btn-dropdown dropdown-toggle mr-0"
+                        aria-controls="dropdown-basic"
+                    >
+                        {{ commonLocaleData?.app_more }}
+                        <span class="caret"></span>
+                    </button>
+                    <ul
+                        *dropdownMenu
+                        class="dropdown-menu fixed-dropdown-plus"
+                        role="menu"
+                        aria-labelledby="button-basic"
+                    >
+                        <li role="menuitem">
+                            <a class="dropdown-item cp" href="javascript:void(0)" (click)="openConfirmationPopup()">{{
+                                commonLocaleData?.app_delete
+                            }}</a>
+                        </li>
+                    </ul>
+                </div>
+                <div
                     class="advance-icon cursor-pointer btn btn-primary mr-0"
                     [tooltip]="commonLocaleData?.app_advance_search"
                     (click)="openModal()"
@@ -169,7 +197,11 @@
             </div>
 
             <div class="invoice-preview table-responsive">
-                <table class="table basic giddh-table on-mobile-view">
+                <table
+                    class="table basic giddh-table on-mobile-view"
+                    (mouseover)="hoveredReceiptTable = true"
+                    (mouseleave)="hoveredReceiptTable = false"
+                >
                     <thead
                         class="thead-background1"
                         [hidden]="
@@ -182,7 +214,26 @@
                         "
                     >
                         <tr>
-                            <th>#</th>
+                            <th>
+                                <div *ngIf="!hoveredReceiptTable && !allReceiptsSelected && !selectedReceipts?.length">
+                                    #
+                                </div>
+                                <div
+                                    *ngIf="hoveredReceiptTable || allReceiptsSelected || selectedReceipts?.length > 0"
+                                    class="check-image d-flex justify-content-start"
+                                >
+                                    <img
+                                        src="assets/images/unchecked.png"
+                                        *ngIf="!allReceiptsSelected"
+                                        (click)="toggleAllReceipts()"
+                                    />
+                                    <img
+                                        src="assets/images/checked.png"
+                                        *ngIf="allReceiptsSelected"
+                                        (click)="toggleAllReceipts()"
+                                    />
+                                </div>
+                            </th>
                             <th #receiptNumberParent width="13%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="showReceiptSearchBar">
                                     <i class="icon-search" (click)="searchBy(null, 'receipt', true)"></i>
@@ -350,9 +401,41 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody *ngIf="!isLoading">
-                        <tr *ngFor="let receipt of allReceipts; let i = index">
-                            <td data-title="#">{{ i + 1 }}</td>
+                    <tbody *ngIf="!isLoading" (mouseleave)="hoveredReceiptUniqueName = ''">
+                        <tr
+                            *ngFor="let receipt of allReceipts; let i = index"
+                            (mouseover)="hoveredReceiptUniqueName = receipt?.uniqueName"
+                        >
+                            <td data-title="#">
+                                <div
+                                    *ngIf="
+                                        hoveredReceiptUniqueName !== receipt?.uniqueName &&
+                                        !receipt.isSelected &&
+                                        !selectedReceipts?.length
+                                    "
+                                >
+                                    {{ i + 1 }}
+                                </div>
+                                <div
+                                    class="check-image d-flex justify-content-start"
+                                    *ngIf="
+                                        hoveredReceiptUniqueName === receipt?.uniqueName ||
+                                        receipt.isSelected ||
+                                        selectedReceipts?.length > 0
+                                    "
+                                >
+                                    <img
+                                        *ngIf="!receipt.isSelected"
+                                        src="assets/images/unchecked.png"
+                                        (click)="toggleReceipt(receipt, true)"
+                                    />
+                                    <img
+                                        *ngIf="receipt.isSelected"
+                                        src="assets/images/checked.png"
+                                        (click)="toggleReceipt(receipt, false)"
+                                    />
+                                </div>
+                            </td>
                             <td
                                 width="13%"
                                 class="text-break"
@@ -518,6 +601,26 @@
             </div>
         </div>
     </ng-template>
+    <!-- Delete confirmation model -->
+    <div
+        bsModal
+        #receiptConfirmationModel="bs-modal"
+        class="modal fade"
+        role="dialog"
+        [config]="{ keyboard: true }"
+        tabindex="-1"
+    >
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <confirm-modal
+                    [body]="'Do you want to delete the voucher(s) / receipt(s)?'"
+                    (successCallBack)="deleteReceipts()"
+                    (cancelCallBack)="closeConfirmationPopup()"
+                >
+                </confirm-modal>
+            </div>
+        </div>
+    </div>
 </ng-container>
 <preview
     *ngIf="previewVoucherParams?.uniqueName"

@@ -41,6 +41,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { NewConfirmModalModule } from '../theme/new-confirm-modal';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SendEmailModule } from '../shared/send-email/send-email.module';
+import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
 
 @NgModule({
     declarations: [
@@ -100,7 +101,8 @@ import { SendEmailModule } from '../shared/send-email/send-email.module';
         MatTooltipModule,
         NewConfirmModalModule,
         MatDialogModule,
-        SendEmailModule
+        SendEmailModule,
+        ConfirmModalModule
     ]
 })
 

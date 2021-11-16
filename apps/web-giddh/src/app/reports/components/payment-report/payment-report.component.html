@@ -93,6 +93,34 @@
                     </button>
                 </div>
                 <div
+                    *ngIf="!isCompany && selectedPayments?.length > 0"
+                    class="btn-group ml-auto"
+                    dropdown
+                    #dp="bs-dropdown"
+                >
+                    <button
+                        dropdownToggle
+                        type="button"
+                        class="btn btn-primary more-btn-dropdown dropdown-toggle mr-0"
+                        aria-controls="dropdown-basic"
+                    >
+                        {{ commonLocaleData?.app_more }}
+                        <span class="caret"></span>
+                    </button>
+                    <ul
+                        *dropdownMenu
+                        class="dropdown-menu fixed-dropdown-plus"
+                        role="menu"
+                        aria-labelledby="button-basic"
+                    >
+                        <li role="menuitem">
+                            <a class="dropdown-item cp" href="javascript:void(0)" (click)="openConfirmationPopup()">{{
+                                commonLocaleData?.app_delete
+                            }}</a>
+                        </li>
+                    </ul>
+                </div>
+                <div
                     class="advance-icon cursor-pointer btn btn-primary mr-0"
                     [tooltip]="commonLocaleData?.app_advance_search"
                     (click)="openModal()"
@@ -139,7 +167,11 @@
             </div>
 
             <div class="invoice-preview table-responsive">
-                <table class="table basic giddh-table on-mobile-view">
+                <table
+                    class="table basic giddh-table on-mobile-view"
+                    (mouseover)="hoveredPaymentTable = true"
+                    (mouseleave)="hoveredPaymentTable = false"
+                >
                     <thead
                         class="thead-background1"
                         [hidden]="
@@ -152,7 +184,26 @@
                         "
                     >
                         <tr>
-                            <th>#</th>
+                            <th>
+                                <div *ngIf="!hoveredPaymentTable && !allPaymentsSelected && !selectedPayments?.length">
+                                    #
+                                </div>
+                                <div
+                                    *ngIf="hoveredPaymentTable || allPaymentsSelected || selectedPayments?.length > 0"
+                                    class="check-image d-flex justify-content-start"
+                                >
+                                    <img
+                                        src="assets/images/unchecked.png"
+                                        *ngIf="!allPaymentsSelected"
+                                        (click)="toggleAllPayments()"
+                                    />
+                                    <img
+                                        src="assets/images/checked.png"
+                                        *ngIf="allPaymentsSelected"
+                                        (click)="toggleAllPayments()"
+                                    />
+                                </div>
+                            </th>
                             <th #paymentNumberParent width="13%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="showPaymentSearchBar">
                                     <i class="icon-search" (click)="searchBy(null, 'payment', true)"></i>
@@ -282,9 +333,41 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody *ngIf="!isLoading">
-                        <tr *ngFor="let payment of allPayments; let i = index">
-                            <td data-title="#">{{ i + 1 }}</td>
+                    <tbody *ngIf="!isLoading" (mouseleave)="hoveredPaymentUniqueName = ''">
+                        <tr
+                            *ngFor="let payment of allPayments; let i = index"
+                            (mouseover)="hoveredPaymentUniqueName = payment?.uniqueName"
+                        >
+                            <td data-title="#">
+                                <div
+                                    *ngIf="
+                                        hoveredPaymentUniqueName !== payment?.uniqueName &&
+                                        !payment.isSelected &&
+                                        !selectedPayments?.length
+                                    "
+                                >
+                                    {{ i + 1 }}
+                                </div>
+                                <div
+                                    class="check-image d-flex justify-content-start"
+                                    *ngIf="
+                                        hoveredPaymentUniqueName === payment?.uniqueName ||
+                                        payment.isSelected ||
+                                        selectedPayments?.length > 0
+                                    "
+                                >
+                                    <img
+                                        *ngIf="!payment.isSelected"
+                                        src="assets/images/unchecked.png"
+                                        (click)="togglePayment(payment, true)"
+                                    />
+                                    <img
+                                        *ngIf="payment.isSelected"
+                                        src="assets/images/checked.png"
+                                        (click)="togglePayment(payment, false)"
+                                    />
+                                </div>
+                            </td>
                             <td
                                 width="13%"
                                 class="text-break"
@@ -447,6 +530,26 @@
             </div>
         </div>
     </ng-template>
+    <!-- Delete confirmation model -->
+    <div
+        bsModal
+        #paymentConfirmationModel="bs-modal"
+        class="modal fade"
+        role="dialog"
+        [config]="{ keyboard: true }"
+        tabindex="-1"
+    >
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <confirm-modal
+                    [body]="'Do you want to delete the voucher(s) / payment(s)?'"
+                    (successCallBack)="deletePayments()"
+                    (cancelCallBack)="closeConfirmationPopup()"
+                >
+                </confirm-modal>
+            </div>
+        </div>
+    </div>
 </ng-container>
 <preview
     *ngIf="previewVoucherParams?.uniqueName"

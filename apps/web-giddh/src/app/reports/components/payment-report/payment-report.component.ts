@@ -20,6 +20,7 @@ import { AppState } from '../../../store';
 import { PAYMENT_REPORT_FILTERS, PaymentAdvanceSearchModel } from '../../constants/reports.constant';
 import { PaymentAdvanceSearchComponent } from '../payment-advance-search/payment-advance-search.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { InvoiceBulkUpdateService } from '../../../services/invoice.bulkupdate.service';
 
 @Component({
     selector: 'payment-report',
@@ -47,11 +48,12 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     @ViewChild('paymentSearchFilterModal', { static: true }) public paymentSearchFilterModal: ElementViewContainerRef;
     /** Container of Advance search modal instance */
     @ViewChild('paymentSearchModalContainer', { static: true }) public paymentSearchModalContainer: ModalDirective;
+    /** Instance of receipt confirmation modal */
+    @ViewChild('paymentConfirmationModel', { static: false }) public paymentConfirmationModel: ModalDirective;
     /** Moment method */
     public moment = moment;
+    /** Modal reference */
     public modalRef: BsModalRef;
-    public message: string;
-    public showEntryDate = true;
     /** Stores the list of all payments */
     public allPayments: Array<any>;
     /** Stores summary data of all payments based on filters applied */
@@ -117,7 +119,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     private activeCompanyUniqueName: string;
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** directive to get reference of element */
+    /** Directive to get reference of element */
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
@@ -145,6 +147,14 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     public voucherApiVersion: 1 | 2;
     /** Voucher params */
     public previewVoucherParams: any = {};
+    /** List of selected payments */
+    public selectedPayments: any[] = [];
+    /** True if all payments are selected */
+    public allPaymentsSelected: boolean = false;
+    /** Uniquename of payment user hovered */
+    public hoveredPaymentUniqueName: string = "";
+    /** True if table is hovered */
+    public hoveredPaymentTable: boolean = false;
 
     /** @ignore */
     constructor(
@@ -158,10 +168,11 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
         private settingsBranchAction: SettingsBranchActions,
         private modalService: BsModalService,
         private router: Router,
-        private route: ActivatedRoute
-    ) { 
+        private route: ActivatedRoute,
+        private invoiceBulkUpdateService: InvoiceBulkUpdateService
+    ) {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            if(params?.uniqueName && params?.accountUniqueName) {
+            if (params?.uniqueName && params?.accountUniqueName) {
                 this.previewVoucherParams = params;
             } else {
                 this.previewVoucherParams = {};
@@ -172,7 +183,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     /** Subscribe to universal date and set header title */
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        if(this.voucherApiVersion === 1) {
+        if (this.voucherApiVersion === 1) {
             this.router.navigate(['pages', 'home']);
         }
 
@@ -242,7 +253,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
      * @memberof PaymentReportComponent
      */
     public ngAfterViewInit(): void {
-        if(!this.previewVoucherParams?.uniqueName) {
+        if (!this.previewVoucherParams?.uniqueName) {
             this.subscribeToEvents();
         }
     }
@@ -420,7 +431,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
      * @memberof PaymentReportComponent
      */
     private subscribeToEvents(): void {
-        if(!this.previewVoucherParams?.uniqueName) {
+        if (!this.previewVoucherParams?.uniqueName) {
             merge(
                 fromEvent(this.vendorName?.nativeElement, 'input'),
                 fromEvent(this.receiptNumber?.nativeElement, 'input'),
@@ -459,7 +470,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
             companyUniqueName: this.activeCompanyUniqueName,
             from: this.fromDate,
             to: this.toDate,
-            count: PAGINATION_LIMIT,
+            count: this.paginationLimit,
             q: this.searchQueryParams.q,
             totalAmount: (this.advanceSearchModel.totalAmountFilter) ? this.advanceSearchModel.totalAmountFilter.amount : "",
             totalAmountOperation: (this.advanceSearchModel.totalAmountFilter) ? this.advanceSearchModel.totalAmountFilter.selectedValue : "",
@@ -516,6 +527,15 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
                 this.pageConfiguration.totalPages = response.body.totalPages;
                 this.pageConfiguration.totalItems = response.body.totalItems;
                 this.allPayments = response.body.items;
+
+                this.allPayments.map(payment => {
+                    let isSeleted = this.selectedPayments.filter(selectedPayment => selectedPayment === payment?.uniqueName);
+                    if (isSeleted?.length > 0) {
+                        payment.isSelected = true;
+                    }
+                    return payment;
+                });
+
                 this.changeDetectorRef.detectChanges();
                 return response.body;
             } else {
@@ -630,8 +650,98 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
      * @memberof PaymentReportComponent
      */
     public previewVoucher(payment: any): void {
-        if(this.voucherApiVersion === 2) {
+        if (this.voucherApiVersion === 2) {
             this.router.navigate(['/pages/voucher/payment/preview/' + payment.uniqueName + '/' + payment.account?.uniqueName]);
         }
+    }
+
+    /**
+     * This will check/uncheck the selected payment for bulk operations
+     *
+     * @param {*} payment
+     * @memberof PaymentReportComponent
+     */
+    public togglePayment(payment: any): void {
+        if (payment.isSelected) {
+            this.selectedPayments = this.selectedPayments.filter(selectedPayment => selectedPayment !== payment?.uniqueName);
+            this.allPaymentsSelected = false;
+        } else {
+            this.selectedPayments.push(payment?.uniqueName);
+        }
+        payment.isSelected = !payment.isSelected;
+    }
+
+    /**
+     * This will check/uncheck all payments for bulk operations
+     *
+     * @param {boolean} [uncheckAll]
+     * @memberof PaymentReportComponent
+     */
+    public toggleAllPayments(uncheckAll?: boolean): void {
+        if (this.allPaymentsSelected || uncheckAll) {
+            this.selectedPayments = [];
+
+            this.allPayments.map(payment => {
+                payment.isSelected = false;
+                return payment;
+            });
+        } else {
+            this.allPayments.forEach(payment => {
+                payment.isSelected = true;
+                this.selectedPayments.push(payment?.uniqueName);
+            });
+        }
+
+        if (uncheckAll) {
+            this.allPaymentsSelected = false;
+        } else {
+            this.allPaymentsSelected = !this.allPaymentsSelected;
+        }
+    }
+
+    /**
+     * This will delete the payment if confirmed to delete
+     *
+     * @memberof PaymentReportComponent
+     */
+    public deletePayments(): void {
+        this.closeConfirmationPopup();
+
+        let bulkDeleteModel = {
+            voucherUniqueNames: this.selectedPayments,
+            voucherType: "payment"
+        }
+
+        this.invoiceBulkUpdateService.bulkUpdateInvoice(bulkDeleteModel, 'delete').subscribe(response => {
+            if (response) {
+                if (response.status === "success") {
+                    this.toastService.successToast(response.body);
+                    this.fetchPaymentsData();
+                    this.toggleAllPayments(true);
+                } else {
+                    this.toastService.errorToast(response.message);
+                }
+            } else {
+                this.toastService.errorToast(this.commonLocaleData?.app_something_went_wrong);
+            }
+        });
+    }
+
+    /**
+     * This will open delete confirmation modal
+     *
+     * @memberof PaymentReportComponent
+     */
+    public openConfirmationPopup() {
+        this.paymentConfirmationModel?.show();
+    }
+
+    /**
+     * This will close delete confirmation modal
+     *
+     * @memberof PaymentReportComponent
+     */
+    public closeConfirmationPopup() {
+        this.paymentConfirmationModel?.hide();
     }
 }
