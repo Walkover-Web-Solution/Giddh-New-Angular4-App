@@ -28,6 +28,7 @@ import { ToasterService } from "../../../services/toaster.service";
 import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
 import { giddhRoundOff } from "../../../shared/helpers/helperFunctions";
 import { AppState } from "../../../store";
+import { ConfirmModalComponent } from "../../../theme/new-confirm-modal/confirm-modal.component";
 import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
 import { SalesShSelectComponent } from "../../../theme/sales-ng-virtual-select/sh-select.component";
 
@@ -420,6 +421,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                 this.voucherFormData.account = accountDetails;
 
                 this.voucherFormData.attachedFiles = response[0].attachedFiles;
+                this.selectedFileName = response[0].attachedFileName;
                 this.voucherFormData.date = moment(response[0].date, GIDDH_DATE_FORMAT).toDate();
 
                 let entryLoop = 0;
@@ -1683,5 +1685,46 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         } else {
             this.filteredShippingStates = filteredStates;
         }
+    }
+
+    /**
+     * Opens confirmation modal to delete attachment
+     *
+     * @memberof PaymentReceiptComponent
+     */
+    public showAttachmentDeleteConfirmationModal(): void {
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            data: {
+                title: this.commonLocaleData?.app_confirm,
+                body: this.localeData?.confirm_delete_file,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no,
+                permanentlyDeleteMessage: ' '
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.deleteAttachment();
+            }
+        });
+    }
+
+    /**
+     * Deletes the attached file
+     *
+     * @memberof PaymentReceiptComponent
+     */
+    public deleteAttachment(): void {
+        this.ledgerService.removeAttachment(this.voucherFormData.attachedFiles[0]).subscribe((response) => {
+            if (response?.status === 'success') {
+                this.selectedFileName = '';
+                this.voucherFormData.attachedFiles[0] = '';
+                this.toaster.showSnackBar("success", response?.body);
+                this.changeDetectionRef.detectChanges();
+            } else {
+                this.toaster.showSnackBar("error", response?.message)
+            }
+        });
     }
 }

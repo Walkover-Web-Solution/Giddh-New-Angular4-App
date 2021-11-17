@@ -1016,6 +1016,15 @@
                                                         *ngIf="selectedFileName && !isFileUploading"
                                                     ></i
                                                 ></span>
+                                                <span
+                                                    class="delete-image"
+                                                    (click)="
+                                                        showAttachmentDeleteConfirmationModal(); $event.preventDefault()
+                                                    "
+                                                    *ngIf="selectedFileName && !isFileUploading"
+                                                >
+                                                    <img src="assets/images/multiply.svg" />
+                                                </span>
                                                 <input
                                                     type="file"
                                                     name="file"
