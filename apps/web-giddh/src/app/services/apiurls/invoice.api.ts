@@ -40,7 +40,8 @@ export const INVOICE_API_2 = {
     PREVIEW_VOUCHERS: COMMON_URL + 'accounts/:accountUniqueName/vouchers/preview',
     DOWNLOAD_INVOICE_V3: COMMON_URL + ':companyUniqueName/accounts/:accountUniqueName/vouchers/mail',
     CANCEL_E_INVOICE: COMMON_URL + 'accounts/:accountUniqueName/vouchers/cancel-einvoice',
-    GENERATE_BULK_INVOICE: COMMON_URL_V4 + 'vouchers/bulk-generate?combined'
+    GENERATE_BULK_INVOICE: COMMON_URL_V4 + 'vouchers/bulk-generate?combined',
+    PREVIEW_VOUCHERS_V4: COMMON_URL_V4 + 'accounts/:accountUniqueName/vouchers',
 };
 
 export const EWAYBILL_API = {

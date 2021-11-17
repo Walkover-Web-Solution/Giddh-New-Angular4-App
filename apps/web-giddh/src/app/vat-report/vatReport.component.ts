@@ -144,7 +144,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
                     isCompany: true
                 });
                 let currentBranchUniqueName;
-                if (!this.currentBranch.uniqueName) {
+                if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded

@@ -21,6 +21,21 @@
                             type="button"
                             class="btn more-btn-dropdown dropdown-toggle"
                             aria-controls="dropdown-basic"
+                            *ngIf="!isUpdateMode"
+                        >
+                            <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
+                                {{ localeData?.invoice_types?.cash }}
+                            </span>
+
+                            <small *ngIf="invoiceType === 'estimates'"> ({{ commonLocaleData?.app_beta }}) </small>
+                            <span class="caret"></span>
+                        </button>
+                        <button
+                            id="giddh-page-heading-link"
+                            type="button"
+                            class="btn more-btn-dropdown dropdown-toggle"
+                            aria-controls="dropdown-basic"
+                            *ngIf="isUpdateMode"
                         >
                             <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
                                 {{ localeData?.invoice_types?.cash }}
@@ -195,13 +210,21 @@
                                                                 isUpdateMode &&
                                                                 invoiceType !== 'sales' &&
                                                                 invoiceType !== 'cash' &&
-                                                                invoiceType !== 'purchase'
+                                                                invoiceType !== 'purchase' &&
+                                                                (voucherApiVersion === 1 ||
+                                                                    (voucherApiVersion === 2 &&
+                                                                        invoiceType !== 'debit note' &&
+                                                                        invoiceType !== 'credit note'))
                                                             "
                                                             [fixedValue]="
                                                                 isUpdateMode &&
                                                                 invoiceType !== 'sales' &&
                                                                 invoiceType !== 'cash' &&
-                                                                invoiceType !== 'purchase'
+                                                                invoiceType !== 'purchase' &&
+                                                                (voucherApiVersion === 1 ||
+                                                                    (voucherApiVersion === 2 &&
+                                                                        invoiceType !== 'debit note' &&
+                                                                        invoiceType !== 'credit note'))
                                                                     ? invFormData.voucherDetails.customerName
                                                                     : ''
                                                             "
