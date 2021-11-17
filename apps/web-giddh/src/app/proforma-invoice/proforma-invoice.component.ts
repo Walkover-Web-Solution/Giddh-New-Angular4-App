@@ -7449,6 +7449,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.selectedFileName = '';
                 this.invFormData.entries[0].attachedFile = '';
                 this._toasty.successToast(response?.body);
+                this._cdr.detectChanges();
             } else {
                 this._toasty.errorToast(response?.message)
             }
