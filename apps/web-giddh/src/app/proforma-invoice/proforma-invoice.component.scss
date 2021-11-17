@@ -554,6 +554,13 @@ textarea:focus {
         left: 0;
         overflow: hidden;
     }
+    .delete-image {
+        top: -7px;
+        position: absolute;
+        right: -20px;
+        width: 4%;
+        cursor: pointer;
+    }
 }
 
 #actionPane {
