@@ -2994,6 +2994,13 @@
                                         <span class="text-success"
                                             ><i class="fa fa-check" *ngIf="selectedFileName && !isFileUploading"></i
                                         ></span>
+                                        <span
+                                            class="delete-image"
+                                            (click)="attachmentDeleteConfirmationModel.show(); $event.preventDefault()"
+                                            *ngIf="voucherApiVersion === 2 && selectedFileName && !isFileUploading"
+                                        >
+                                            <img src="assets/images/multiply.svg" />
+                                        </span>
                                         <input
                                             type="file"
                                             name="invoiceFile"
@@ -5469,6 +5476,25 @@
                     [configuration]="dateChangeConfiguration"
                     (buttonClicked)="handleDateChangeConfirmation($event)"
                 ></confirmation-modal>
+            </div>
+        </div>
+    </div>
+
+    <div
+        bsModal
+        #attachmentDeleteConfirmationModel="bs-modal"
+        class="modal fade"
+        role="dialog"
+        [config]="{ animated: true, keyboard: false, backdrop: false, ignoreBackdropClick: true }"
+        tabindex="-1"
+    >
+        <div class="modal-dialog modal-md">
+            <div class="modal-content" *ngIf="attachmentDeleteConfirmationModel?.isShown">
+                <confirm-modal
+                    [body]="localeData?.confirm_delete_file"
+                    (successCallBack)="deleteAttachment(); attachmentDeleteConfirmationModel.hide()"
+                    (cancelCallBack)="attachmentDeleteConfirmationModel.hide()"
+                ></confirm-modal>
             </div>
         </div>
     </div>

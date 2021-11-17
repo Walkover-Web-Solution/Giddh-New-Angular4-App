@@ -103,5 +103,6 @@
     "date_change_confirmation_heading": "तिथि परिवर्तन की पुष्टि",
     "change_single_entry_date": "क्या आप प्रवेश तिथि भी बदलना चाहते हैं?",
     "change_all_entry_dates": "क्या आप इस तिथि के साथ सभी प्रविष्टियों की तारीख बदलना चाहते हैं?",
-    "exchange_label": "विनिमय"
+    "exchange_label": "विनिमय",
+    "confirm_delete_file": "क्या आप वाकई संलग्न फ़ाइल को हटाना चाहते हैं?"
 }
