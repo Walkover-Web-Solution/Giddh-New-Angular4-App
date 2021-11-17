@@ -2433,7 +2433,10 @@
                                 <div class="ledger-state-box">
                                     <h1>{{ localeData?.net_total }}</h1>
                                     <div class="d-flex justify-content-between">
-                                        <div *ngIf="ledgerTxnBalance?.creditTotal > ledgerTxnBalance?.debitTotal">
+                                        <div
+                                            class="d-flex flex-column justify-content-between"
+                                            *ngIf="ledgerTxnBalance?.creditTotal > ledgerTxnBalance?.debitTotal"
+                                        >
                                             <h3 class="digit-blue d-flex">
                                                 <amount-field
                                                     [amount]="
@@ -2447,7 +2450,7 @@
                                                 <span class="text-capitalize">{{ commonLocaleData?.app_cr }}</span>
                                             </h3>
                                             <h3
-                                                class="digit-blue sub-total font-12 d-inline-flex"
+                                                class="digit-blue sub-total font-12 d-flex"
                                                 *ngIf="isLedgerAccountAllowsMultiCurrency"
                                             >
                                                 <amount-field
@@ -2465,7 +2468,10 @@
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-between">
-                                        <div *ngIf="ledgerTxnBalance?.creditTotal < ledgerTxnBalance?.debitTotal">
+                                        <div
+                                            class="d-flex flex-column justify-content-between"
+                                            *ngIf="ledgerTxnBalance?.creditTotal < ledgerTxnBalance?.debitTotal"
+                                        >
                                             <h3 class="digit-blue d-inline-flex">
                                                 <amount-field
                                                     [amount]="
@@ -2479,7 +2485,7 @@
                                                 <span class="text-capitalize">{{ commonLocaleData?.app_dr }}</span>
                                             </h3>
                                             <h3
-                                                class="digit-blue sub-total font-12 d-inline-flex"
+                                                class="digit-blue sub-total font-12 d-flex"
                                                 *ngIf="isLedgerAccountAllowsMultiCurrency"
                                             >
                                                 <amount-field
@@ -2574,7 +2580,10 @@
                                                 }}
                                             </span>
                                         </h3>
-                                        <h3 class="digit-blue d-flex" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                        <h3
+                                            class="digit-blue font-12 d-flex"
+                                            *ngIf="isLedgerAccountAllowsMultiCurrency"
+                                        >
                                             <span
                                                 class="d-flex"
                                                 [matTooltip]="
