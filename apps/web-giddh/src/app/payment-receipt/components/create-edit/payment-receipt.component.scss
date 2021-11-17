@@ -213,6 +213,14 @@ input.mat-input-element {
     }
 }
 
+.delete-image {
+    top: 5px;
+    position: absolute;
+    right: -25px;
+    width: 4%;
+    cursor: pointer;
+}
+
 input.form-control.edit-currency {
     display: inline-block !important;
     width: 80px;

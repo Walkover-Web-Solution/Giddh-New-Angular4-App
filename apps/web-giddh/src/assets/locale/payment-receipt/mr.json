@@ -31,5 +31,6 @@
     "voucher_updated": "[VOUCHER] updated successfully.",
     "invalid_tax_field": "[FIELD_NAME] मध्ये अवैध [TAX_NAME]! कृपया निराकरण करा आणि पुन्हा प्रयत्न करा",
     "invalid_tax": "अवैध [TAX_NAME]! कृपया निराकरण करा आणि पुन्हा प्रयत्न करा",
-    "description": "वर्णन"
+    "description": "वर्णन",
+    "confirm_delete_file": "आपली खात्री आहे की आपण संलग्न केलेली फाइल हटवू इच्छिता?"
 }

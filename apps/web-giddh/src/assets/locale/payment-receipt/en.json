@@ -31,5 +31,6 @@
     "voucher_updated": "[VOUCHER] updated successfully.",
     "invalid_tax_field": "Invalid [TAX_NAME] in [FIELD_NAME]! Please fix and try again",
     "invalid_tax": "Invalid [TAX_NAME]! Please fix and try again",
-    "description": "Description"
+    "description": "Description",
+    "confirm_delete_file": "Are you sure you want to delete the attached file?"
 }
