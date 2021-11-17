@@ -7438,4 +7438,21 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
         });
     }
+
+    /**
+     * Deletes the attached file
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public deleteAttachment(): void {
+        this._ledgerService.removeAttachment(this.invFormData.entries[0].attachedFile).subscribe((response) => {
+            if (response?.status === 'success') {
+                this.selectedFileName = '';
+                this.invFormData.entries[0].attachedFile = '';
+                this._toasty.successToast(response?.body);
+            } else {
+                this._toasty.errorToast(response?.message)
+            }
+        });
+    }
 }
