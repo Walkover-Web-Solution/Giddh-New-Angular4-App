@@ -5530,7 +5530,7 @@
         tabindex="-1"
     >
         <div class="modal-dialog modal-md">
-            <div class="modal-content">
+            <div class="modal-content" *ngIf="attachmentDeleteConfirmationModel?.isShown">
                 <confirm-modal
                     [body]="localeData?.confirm_delete_file"
                     (successCallBack)="deleteAttachment(); attachmentDeleteConfirmationModel.hide()"
