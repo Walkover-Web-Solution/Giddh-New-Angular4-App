@@ -857,7 +857,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.invoiceSearch = term;
         this.invoiceSearchEvent.emit(this.invoiceSearch);
         this.filteredData = this.items.filter(item => {
-            return item.voucherNumber.toLowerCase().includes(term.toLowerCase()) ||
+            return item.voucherNumber?.toLowerCase()?.includes(term?.toLowerCase()) ||
                 item.account.name.toLowerCase().includes(term.toLowerCase()) ||
                 item.voucherDate.includes(term) ||
                 item.grandTotal.toString().includes(term);
