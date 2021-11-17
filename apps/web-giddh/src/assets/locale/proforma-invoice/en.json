@@ -103,5 +103,6 @@
     "date_change_confirmation_heading": "Date Change Confirmation",
     "change_single_entry_date": "Do you want to change the entry date as well?",
     "change_all_entry_dates": "Do you want to change the all entries date with this date?",
-    "exchange_label": "Exchange"
+    "exchange_label": "Exchange",
+    "confirm_delete_file": "Are you sure you want to delete the attached file?"
 }
