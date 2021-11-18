@@ -5,5 +5,6 @@ export const COMMON_API = {
     CALLING_CODES: 'ui/calling-code',
     FORM: 'ui/forms?formName=:formName&country=:country&refresh=false',
     PARTY_TYPE: 'ui/party-types',
-    COMMAND_K: 'company/:companyUniqueName/cmdk?page=:page&q=:q&group=:group&refresh=false&isMobile=:isMobile'
+    COMMAND_K: 'company/:companyUniqueName/cmdk?page=:page&q=:q&group=:group&refresh=false&isMobile=:isMobile',
+    DOWNLOAD_FILE: 'company/:companyUniqueName/download-file?voucherVersion=2&fileType=:fileType'
 };
