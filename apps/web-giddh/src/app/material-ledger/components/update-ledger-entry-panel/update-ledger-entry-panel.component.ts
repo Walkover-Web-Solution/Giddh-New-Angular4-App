@@ -59,6 +59,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../../theme/new-confirm-modal/confirm-modal.component';
 import { SettingsTagService } from '../../../services/settings.tag.service';
 import { MatAccordion } from '@angular/material/expansion';
+import { CommonService } from '../../../services/common.service';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';
@@ -282,7 +283,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         private toaster: ToasterService,
         private warehouseActions: WarehouseActions,
         private changeDetectorRef: ChangeDetectorRef,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private commonService: CommonService
     ) {
 
         this.vm = new UpdateLedgerVm();
@@ -2204,5 +2206,27 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.vm.generatePanelAmount();
         this.activeAccountSubject.next(this.activeAccount);
         this.changeDetectorRef.detectChanges();
+    }
+
+    public downloadFiles(transaction: any): void {
+        console.log(this.vm.selectedLedger);
+
+        let dataToSend = {
+            voucherType: this.vm.selectedLedger.voucherGeneratedType,
+            entryUniqueName: (this.vm.selectedLedger.voucherUniqueName) ? undefined : this.vm.selectedLedger.uniqueName,
+            uniqueName: (this.vm.selectedLedger.voucherUniqueName) ? this.vm.selectedLedger.voucherUniqueName : undefined
+        };
+
+        let fileName = (this.vm.selectedLedger.voucherNumber && this.vm.selectedLedger.attachedFile) ? this.vm.selectedLedger.voucherNumber + '.zip' : this.vm.selectedLedger.voucherNumber ? this.vm.selectedLedger.voucherNumber + '.pdf' : this.vm.selectedLedger.attachedFile;
+
+        this.commonService.downloadFile(dataToSend, 'pdf').pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status !== "error") {
+                saveAs(response, fileName);
+            } else {
+                this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
+            }
+        }, (error => {
+            this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
+        }));
     }
 }

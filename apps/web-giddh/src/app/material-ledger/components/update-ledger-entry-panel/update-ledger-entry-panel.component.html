@@ -250,6 +250,7 @@
                                             <span
                                                 class="download-invoice-ledger"
                                                 *ngIf="
+                                                    voucherApiVersion !== 2 &&
                                                     vm.selectedLedger.attachedFile &&
                                                     vm.selectedLedger.attachedFile.length > 0 &&
                                                     (txn?.particular?.name || txn?.particular?.uniqueName)
@@ -268,6 +269,7 @@
                                             <span
                                                 class="download-invoice-ledger"
                                                 *ngIf="
+                                                    voucherApiVersion !== 2 &&
                                                     vm.selectedLedger.voucherNumber &&
                                                     vm.selectedLedger.voucherNumber.length > 0 &&
                                                     (txn?.particular?.name || txn?.particular?.uniqueName)
@@ -284,6 +286,38 @@
                                                     vm.selectedLedger.voucherNumber
                                                 "
                                                 (click)="downloadInvoice(vm.selectedLedger, $event)"
+                                                matTooltipClass="tooltip-black"
+                                            >
+                                                <i class="icon-download-circle pull-left"></i>
+                                            </span>
+                                            <span
+                                                class="download-invoice-ledger d-flex"
+                                                *ngIf="
+                                                    voucherApiVersion === 2 &&
+                                                    (vm.selectedLedger.attachedFile ||
+                                                        vm.selectedLedger.voucherNumber) &&
+                                                    (txn?.particular?.name || txn?.particular?.uniqueName)
+                                                "
+                                                (click)="downloadFiles(txn)"
+                                                [matTooltip]="
+                                                    vm.selectedLedger.attachedFileName &&
+                                                    vm.selectedLedger.voucherNumber
+                                                        ? localeData?.download_file
+                                                        : vm.selectedLedger.attachedFileName
+                                                        ? localeData?.download_file +
+                                                          ' : ' +
+                                                          vm.selectedLedger.attachedFileName
+                                                        : vm.selectedLedger.voucherGeneratedType === 'sales'
+                                                        ? localeData?.download_file +
+                                                          ' : ' +
+                                                          commonLocaleData?.app_invoice
+                                                        : localeData?.download_file +
+                                                          ' : ' +
+                                                          commonLocaleData?.app_voucher +
+                                                          ' : ' +
+                                                          vm.selectedLedger.voucherNumber
+                                                "
+                                                [matTooltipPosition]="'right'"
                                                 matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-download-circle pull-left"></i>
@@ -547,6 +581,7 @@
                                             <span
                                                 class="download-invoice-ledger"
                                                 *ngIf="
+                                                    voucherApiVersion !== 2 &&
                                                     vm.selectedLedger.attachedFile?.length > 0 &&
                                                     (txn?.particular?.name || txn?.particular?.uniqueName)
                                                 "
@@ -566,6 +601,7 @@
                                             <span
                                                 class="download-invoice-ledger"
                                                 *ngIf="
+                                                    voucherApiVersion !== 2 &&
                                                     vm.selectedLedger.voucherNumber &&
                                                     vm.selectedLedger.voucherNumber.length > 0 &&
                                                     (txn?.particular?.name || txn?.particular?.uniqueName)
@@ -583,6 +619,38 @@
                                                 "
                                                 matTooltipClass="tooltip-black"
                                                 (click)="downloadInvoice(vm.selectedLedger, $event)"
+                                            >
+                                                <i class="icon-download-circle pull-left"></i>
+                                            </span>
+                                            <span
+                                                class="download-invoice-ledger d-flex"
+                                                *ngIf="
+                                                    voucherApiVersion === 2 &&
+                                                    (vm.selectedLedger.attachedFile ||
+                                                        vm.selectedLedger.voucherNumber) &&
+                                                    (txn?.particular?.name || txn?.particular?.uniqueName)
+                                                "
+                                                (click)="downloadFiles(txn)"
+                                                [matTooltip]="
+                                                    vm.selectedLedger.attachedFileName &&
+                                                    vm.selectedLedger.voucherNumber
+                                                        ? localeData?.download_file
+                                                        : vm.selectedLedger.attachedFileName
+                                                        ? localeData?.download_file +
+                                                          ' : ' +
+                                                          vm.selectedLedger.attachedFileName
+                                                        : vm.selectedLedger.voucherGeneratedType === 'sales'
+                                                        ? localeData?.download_file +
+                                                          ' : ' +
+                                                          commonLocaleData?.app_invoice
+                                                        : localeData?.download_file +
+                                                          ' : ' +
+                                                          commonLocaleData?.app_voucher +
+                                                          ' : ' +
+                                                          vm.selectedLedger.voucherNumber
+                                                "
+                                                [matTooltipPosition]="'right'"
+                                                matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-download-circle pull-left"></i>
                                             </span>

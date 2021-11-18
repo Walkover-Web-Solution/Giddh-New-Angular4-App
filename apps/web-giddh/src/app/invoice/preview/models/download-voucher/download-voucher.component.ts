@@ -7,12 +7,12 @@ import { VoucherTypeEnum } from '../../../../models/api-models/Sales';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
 
 @Component({
     selector: 'download-voucher',
     templateUrl: './download-voucher.component.html'
 })
-
 export class DownloadVoucherComponent implements OnInit, OnDestroy {
     @Input() public selectedItem: InvoicePreviewDetailsVm;
     /* This will hold local JSON data */
@@ -32,17 +32,18 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
-        private _invoiceService: InvoiceService, 
-        private _toaster: ToasterService, 
-        private generalService: GeneralService
+        private invoiceService: InvoiceService,
+        private toaster: ToasterService,
+        private generalService: GeneralService,
+        private commonService: CommonService
     ) {
 
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
 
-        if(this.voucherApiVersion === 2) {
+        if (this.voucherApiVersion === 2) {
             this.isOriginal = true;
             this.invoiceType.push('Original');
         }
@@ -50,7 +51,7 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
         this.isProformaEstimatesInvoice = (this.selectedItem) ? [VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.selectedItem.voucherType) : false;
     }
 
-    invoiceTypeChanged(event) {
+    public invoiceTypeChanged(event): void {
         let val = event.target.value;
         if (event.target.checked) {
             this.invoiceType.push(val);
@@ -59,44 +60,63 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
         }
     }
 
-    public onDownloadInvoiceEvent() {
+    public onDownloadInvoiceEvent(): void {
         // as discussed with backend team voucherType will never be cash, It will be sales always for download vouchers
-        let voucherType = this.selectedItem && this.selectedItem.voucherType === 'cash' ? 'sales' : this.selectedItem.voucherType;
-        let dataToSend = {
-            voucherNumber: [this.selectedItem.voucherNumber],
-            typeOfInvoice: this.invoiceType,
-            voucherType: voucherType,
-            uniqueName: undefined
-        };
+        let voucherType = this.selectedItem && this.selectedItem.voucherType === VoucherTypeEnum.cash ? VoucherTypeEnum.sales : this.selectedItem.voucherType;
 
-        if(this.generalService.voucherApiVersion === 2) {
-            dataToSend.uniqueName = this.selectedItem.uniqueName;
-        }
+        if (this.generalService.voucherApiVersion === 2) {
+            let dataToSend = {
+                typeOfInvoice: this.invoiceType,
+                voucherType: voucherType,
+                uniqueName: this.selectedItem.uniqueName
+            };
 
-        this._invoiceService.DownloadInvoice(this.selectedItem.account.uniqueName, dataToSend).pipe(takeUntil(this.destroyed$))
-            .subscribe(res => {
-                if (res?.status !== "error") {
+            this.commonService.downloadFile(dataToSend, 'pdf').pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status !== "error") {
                     if (dataToSend.typeOfInvoice.length > 1) {
-                        saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'zip');
+                        saveAs(response, `${this.selectedItem.voucherNumber}.` + 'zip');
                     } else {
-                        saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
+                        saveAs(response, `${this.selectedItem.voucherNumber}.` + 'pdf');
                     }
                     this.cancel();
                 } else {
-                    this._toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                    this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
                 }
             }, (error => {
-                this._toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
             }));
+        } else {
+            let dataToSend = {
+                voucherNumber: [this.selectedItem.voucherNumber],
+                typeOfInvoice: this.invoiceType,
+                voucherType: voucherType
+            };
+
+            this.invoiceService.DownloadInvoice(this.selectedItem.account.uniqueName, dataToSend).pipe(takeUntil(this.destroyed$))
+                .subscribe(res => {
+                    if (res?.status !== "error") {
+                        if (dataToSend.typeOfInvoice.length > 1) {
+                            saveAs(res, `${this.selectedItem.voucherNumber}.` + 'zip');
+                        } else {
+                            saveAs(res, `${this.selectedItem.voucherNumber}.` + 'pdf');
+                        }
+                        this.cancel();
+                    } else {
+                        this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                    }
+                }, (error => {
+                    this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                }));
+        }
     }
 
-    resetModal() {
+    public resetModal(): void {
         this.invoiceType = [];
         this.isTransport = false;
         this.isCustomer = false;
     }
 
-    cancel() {
+    public cancel(): void {
         this.resetModal();
         this.cancelEvent.emit(true);
     }
