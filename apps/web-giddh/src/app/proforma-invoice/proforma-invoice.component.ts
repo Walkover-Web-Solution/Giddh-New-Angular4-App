@@ -1507,7 +1507,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             });
         // endregion
 
-        this.initiateVoucherModule();
         // listen for newly added stock and assign value
         combineLatest([this.newlyCreatedStockAc$, this.salesAccounts$]).subscribe((resp: any[]) => {
             let o = resp[0];
