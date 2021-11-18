@@ -127,6 +127,7 @@ export class LedgerResponse {
     public voucherAdjustments?: VoucherAdjustments;
     public unitRates?: Array<any>;
     public entryVoucherTotals?: any;
+    public voucherUniqueName?: string;
 }
 
 /** Model adjusted amounts for invoices */

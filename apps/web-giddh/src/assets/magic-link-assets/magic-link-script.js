@@ -97,7 +97,8 @@ var app = new Vue({
         cForm: {},
         txn: {},
         folderPath: '',
-        isSmall: false
+        isSmall: false,
+        voucherVersion: 1
     },
     mounted: function () {
         this.folderPath = window.location.hostname === 'localhost' ? '' : 'app/';
@@ -274,6 +275,7 @@ var app = new Vue({
             var apiBaseUrl = this.getApi();
             if (id) {
                 var voucherVersion = this.getParameterByName('voucherVersion');
+                this.voucherVersion = voucherVersion;
                 var apiObservable;
                 if(voucherVersion == 2) {
                     apiObservable = axios.post(apiBaseUrl + 'magic-link/' + id + '/download-voucher?voucherVersion=2', {
