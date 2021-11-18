@@ -942,7 +942,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.loadDefaultSearchSuggestions();
             }
             this.getAllLastInvoices();
-            this.fillDeliverToAddress();
+
+            if(!this.isUpdateMode) {
+                this.fillDeliverToAddress();
+            }
+
+            this.initiateVoucherModule();
 
             if (this.translationLoaded) {
                 this.translationComplete(true);
@@ -4058,6 +4063,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                 if(this.voucherApiVersion === 2) {
                     requestObject = <GenericRequestForGenerateSCD>this.updateData(requestObject, data);
+                    requestObject = this.proformaInvoiceUtilityService.getVoucherRequestObjectForInvoice(requestObject);
                 } else {
                     requestObject = this.updateData(requestObject, data);
                 }
@@ -6680,18 +6686,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.purchaseBillCompany = {
                 billingDetails: {
                     address: company?.billingDetails?.address,
-                    state: { code: company?.billingDetails?.stateCode, name: company?.billingDetails?.stateName },
-                    gstNumber: company?.billingDetails?.gstNumber,
-                    stateName: company?.billingDetails?.stateName,
-                    stateCode: company?.billingDetails?.stateCode,
+                    state: { code: company?.billingDetails?.state?.code, name: company?.billingDetails?.state?.name },
+                    gstNumber: company?.billingDetails?.taxNumber,
+                    stateName: company?.billingDetails?.state?.name,
+                    stateCode: company?.billingDetails?.state?.code,
                     pincode: company?.billingDetails?.pincode
                 },
                 shippingDetails: {
                     address: company?.shippingDetails?.address,
-                    state: { code: company?.shippingDetails?.stateCode, name: company?.shippingDetails?.stateName },
-                    gstNumber: company?.shippingDetails?.gstNumber,
-                    stateName: company?.shippingDetails?.stateName,
-                    stateCode: company?.shippingDetails?.stateCode,
+                    state: { code: company?.shippingDetails?.state?.code, name: company?.shippingDetails?.state?.name },
+                    gstNumber: company?.shippingDetails?.taxNumber,
+                    stateName: company?.shippingDetails?.state?.name,
+                    stateCode: company?.shippingDetails?.state?.code,
                     pincode: company?.shippingDetails?.pincode
                 }
             }
