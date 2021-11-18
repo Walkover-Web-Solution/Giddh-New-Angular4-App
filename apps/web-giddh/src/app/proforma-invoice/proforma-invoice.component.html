@@ -21,6 +21,21 @@
                             type="button"
                             class="btn more-btn-dropdown dropdown-toggle"
                             aria-controls="dropdown-basic"
+                            *ngIf="!isUpdateMode"
+                        >
+                            <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
+                                {{ localeData?.invoice_types?.cash }}
+                            </span>
+
+                            <small *ngIf="invoiceType === 'estimates'"> ({{ commonLocaleData?.app_beta }}) </small>
+                            <span class="caret"></span>
+                        </button>
+                        <button
+                            id="giddh-page-heading-link"
+                            type="button"
+                            class="btn more-btn-dropdown dropdown-toggle"
+                            aria-controls="dropdown-basic"
+                            *ngIf="isUpdateMode"
                         >
                             <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
                                 {{ localeData?.invoice_types?.cash }}
