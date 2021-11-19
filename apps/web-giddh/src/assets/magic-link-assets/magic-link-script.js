@@ -282,16 +282,19 @@ var app = new Vue({
                         voucherNumber: [entry.voucherNumber],
                         voucherType: entry.voucherName,
                         uniqueName: entry.voucherUniqueName
+                    }, {
+                        responseType: 'blob'
                     });
                 } else {
                     apiObservable = axios.get(apiBaseUrl + 'magic-link/' + id + '/download-invoice/' + entry.voucherNumber);
                 }
 
+                let fileName = (entry.voucherNumber && entry.attachedFileUniqueName) ? entry.voucherNumber + '.zip' : entry.voucherNumber ? entry.voucherNumber + '.pdf' : entry.attachedFileUniqueName;
+
                 apiObservable.then(response => {
                     // JSON responses are automatically parsed.
-                    if (response.status === 200 && response.data.status === 'success') {
-                        var blobData = this.base64ToBlob(response.data.body, 'application/pdf', 512);
-                        return saveAs(blobData, entry.voucherNumber + '.pdf');
+                    if (response?.data?.status !== "error") {
+                        return saveAs(response?.data, fileName);
                     } else {
                         this.$toaster.error('Invoice for ' + entry.voucherNumber + ' cannot be downloaded now.');
                     }
