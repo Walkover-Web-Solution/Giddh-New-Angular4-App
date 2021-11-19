@@ -2209,8 +2209,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public downloadFiles(transaction: any): void {
-        console.log(this.vm.selectedLedger);
-
         let dataToSend = {
             voucherType: this.vm.selectedLedger.voucherGeneratedType,
             entryUniqueName: (this.vm.selectedLedger.voucherUniqueName) ? undefined : this.vm.selectedLedger.uniqueName,
