@@ -1567,12 +1567,16 @@
                                             (click)="downloadFiles(txn)"
                                             [matTooltip]="
                                                 txn.attachedFileName && txn.voucherGenerated
-                                                    ? localeData?.download_file
+                                                    ? localeData?.download_files
                                                     : txn.attachedFileName
                                                     ? localeData?.download_file + ' : ' + txn.attachedFileName
                                                     : txn.voucherGeneratedType === 'sales'
-                                                    ? localeData?.download_file + ' : ' + commonLocaleData?.app_invoice
-                                                    : localeData?.download_file +
+                                                    ? commonLocaleData?.app_download +
+                                                      ' : ' +
+                                                      commonLocaleData?.app_invoice +
+                                                      ' : ' +
+                                                      txn.voucherNumber
+                                                    : commonLocaleData?.app_download +
                                                       ' : ' +
                                                       commonLocaleData?.app_voucher +
                                                       ' : ' +
@@ -1998,12 +2002,16 @@
                                             (click)="downloadFiles(txn)"
                                             [matTooltip]="
                                                 txn.attachedFileName && txn.voucherGenerated
-                                                    ? localeData?.download_file
+                                                    ? localeData?.download_files
                                                     : txn.attachedFileName
                                                     ? localeData?.download_file + ' : ' + txn.attachedFileName
                                                     : txn.voucherGeneratedType === 'sales'
-                                                    ? localeData?.download_file + ' : ' + commonLocaleData?.app_invoice
-                                                    : localeData?.download_file +
+                                                    ? commonLocaleData?.app_download +
+                                                      ' : ' +
+                                                      commonLocaleData?.app_invoice +
+                                                      ' : ' +
+                                                      txn.voucherNumber
+                                                    : commonLocaleData?.app_download +
                                                       ' : ' +
                                                       commonLocaleData?.app_voucher +
                                                       ' : ' +
