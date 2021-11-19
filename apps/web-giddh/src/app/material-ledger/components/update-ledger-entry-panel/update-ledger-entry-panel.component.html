@@ -302,16 +302,18 @@
                                                 [matTooltip]="
                                                     vm.selectedLedger.attachedFileName &&
                                                     vm.selectedLedger.voucherNumber
-                                                        ? localeData?.download_file
+                                                        ? localeData?.download_files
                                                         : vm.selectedLedger.attachedFileName
                                                         ? localeData?.download_file +
                                                           ' : ' +
                                                           vm.selectedLedger.attachedFileName
                                                         : vm.selectedLedger.voucherGeneratedType === 'sales'
-                                                        ? localeData?.download_file +
+                                                        ? commonLocaleData?.app_download +
                                                           ' : ' +
-                                                          commonLocaleData?.app_invoice
-                                                        : localeData?.download_file +
+                                                          commonLocaleData?.app_invoice +
+                                                          ' : ' +
+                                                          vm.selectedLedger.voucherNumber
+                                                        : commonLocaleData?.app_download +
                                                           ' : ' +
                                                           commonLocaleData?.app_voucher +
                                                           ' : ' +
@@ -634,16 +636,18 @@
                                                 [matTooltip]="
                                                     vm.selectedLedger.attachedFileName &&
                                                     vm.selectedLedger.voucherNumber
-                                                        ? localeData?.download_file
+                                                        ? localeData?.download_files
                                                         : vm.selectedLedger.attachedFileName
                                                         ? localeData?.download_file +
                                                           ' : ' +
                                                           vm.selectedLedger.attachedFileName
                                                         : vm.selectedLedger.voucherGeneratedType === 'sales'
-                                                        ? localeData?.download_file +
+                                                        ? commonLocaleData?.app_download +
                                                           ' : ' +
-                                                          commonLocaleData?.app_invoice
-                                                        : localeData?.download_file +
+                                                          commonLocaleData?.app_invoice +
+                                                          ' : ' +
+                                                          vm.selectedLedger.voucherNumber
+                                                        : commonLocaleData?.app_download +
                                                           ' : ' +
                                                           commonLocaleData?.app_voucher +
                                                           ' : ' +
@@ -1904,11 +1908,12 @@
                                             *ngIf="vm.selectedLedger?.attachedFile?.length > 0"
                                         >
                                             <span>{{ vm.selectedLedger?.attachedFileName }}</span>
-                                            <label
-                                                class="remove cp pl-1 text-danger"
-                                                (click)="showDeleteAttachedFileModal()"
-                                                >({{ commonLocaleData?.app_remove | lowercase }})</label
-                                            >
+                                            <span class="delete-attachment cursor-pointer">
+                                                <img
+                                                    (click)="showDeleteAttachedFileModal()"
+                                                    src="assets/images/multiply.svg"
+                                                />
+                                            </span>
                                         </div>
 
                                         <label class="upload-div" [ngClass]="{ hide: vm.selectedLedger.attachedFile }">
