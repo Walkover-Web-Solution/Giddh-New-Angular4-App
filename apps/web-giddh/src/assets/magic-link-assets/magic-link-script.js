@@ -103,7 +103,8 @@ var app = new Vue({
     mounted: function () {
         this.folderPath = window.location.hostname === 'localhost' ? '' : 'app/';
         var id = this.getParameterByName('id');
-        this.getMagicLinkData(id)
+        this.getMagicLinkData(id);
+        this.voucherVersion = this.getParameterByName('voucherVersion');
     },
     created: function () {
         window.addEventListener('resize', this.handleResize);
@@ -274,8 +275,7 @@ var app = new Vue({
             var id = this.getParameterByName('id');
             var apiBaseUrl = this.getApi();
             if (id) {
-                var voucherVersion = this.getParameterByName('voucherVersion');
-                this.voucherVersion = voucherVersion;
+                var voucherVersion = this.voucherVersion;
                 var apiObservable;
                 if(voucherVersion == 2) {
                     apiObservable = axios.post(apiBaseUrl + 'magic-link/' + id + '/download-voucher?voucherVersion=2', {
