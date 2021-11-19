@@ -179,7 +179,7 @@ export interface ReciptRequest {
 }
 
 export interface DownloadVoucherRequest {
-    voucherNumber: string[];
+    voucherNumber?: string[];
     voucherType: string;
     uniqueName?: string;
     typeOfInvoice?: string[];
