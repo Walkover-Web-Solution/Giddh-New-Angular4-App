@@ -1000,7 +1000,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public openBaseAccountModal() {
-        if (this.vm.selectedLedger.voucherGenerated) {
+        if (this.voucherApiVersion !== 2 && this.vm.selectedLedger.voucherGenerated) {
             this.toaster.showSnackBar("error", this.localeData?.base_account_change_error);
             return;
         }
@@ -1180,7 +1180,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.generalService.currentOrganizationType === OrganizationType.Branch || (this.branches && this.branches.length === 1)) {
             this.entryAccountUniqueName = "";
 
-            if (!this.vm.selectedLedger.voucherGenerated || this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.sales) {
+            if (this.voucherApiVersion === 2 || !this.vm.selectedLedger.voucherGenerated || this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.sales) {
                 this.entryAccountUniqueName = this.vm.selectedLedger.particular?.uniqueName;
                 this.openDropDown = true;
             } else {
