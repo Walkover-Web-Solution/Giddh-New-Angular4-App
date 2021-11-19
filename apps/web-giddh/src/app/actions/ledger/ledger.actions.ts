@@ -17,6 +17,7 @@ import { GenerateBulkInvoiceRequest, IBulkInvoiceGenerationFalingError } from '.
 import { InvoiceService } from '../../services/invoice.service';
 import { DaybookQueryRequest } from '../../models/api-models/DaybookRequest';
 import { LocaleService } from '../../services/locale.service';
+import { GeneralService } from '../../services/general.service';
 
 @Injectable()
 export class LedgerActions {
@@ -172,7 +173,7 @@ export class LedgerActions {
                         this.store.dispatch(this.refreshLedger(true));
                     }
 
-                    if (response.request.generateInvoice && !response.body.voucherGenerated) {
+                    if (this.generalService.voucherApiVersion !== 2 && response.request.generateInvoice && !response.body.voucherGenerated) {
                         let invoiceGenModel: GenerateBulkInvoiceRequest[] = [];
                         let entryUniqueName = response.queryString.entryUniqueName.split('?')[0];
                         invoiceGenModel.push({
@@ -386,7 +387,8 @@ export class LedgerActions {
         private ledgerService: LedgerService,
         private accountService: AccountService,
         private invoiceServices: InvoiceService,
-        private localeService: LocaleService) {
+        private localeService: LocaleService,
+        private generalService: GeneralService) {
     }
 
     public GetTransactions(request: TransactionsRequest): CustomActions {
