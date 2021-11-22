@@ -19,6 +19,7 @@ import { GeneralService } from '../../services/general.service';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ReceiptService } from '../../services/receipt.service';
+import { CommonService } from '../../services/common.service';
 
 @Component({
     selector: 'app-vat-report-transactions',
@@ -61,7 +62,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
 
-    constructor(private store: Store<AppState>, private vatService: VatService, private toasty: ToasterService, private cdRef: ChangeDetectorRef, public route: ActivatedRoute, private router: Router, private invoiceReceiptActions: InvoiceReceiptActions, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private invoiceService: InvoiceService, private generalService: GeneralService, private breakpointObserver: BreakpointObserver, private receiptService: ReceiptService) {
+    constructor(private store: Store<AppState>, private vatService: VatService, private toasty: ToasterService, private cdRef: ChangeDetectorRef, public route: ActivatedRoute, private router: Router, private invoiceReceiptActions: InvoiceReceiptActions, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private invoiceService: InvoiceService, private generalService: GeneralService, private breakpointObserver: BreakpointObserver, private receiptService: ReceiptService, private commonService: CommonService) {
 
     }
 
@@ -173,13 +174,16 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
         } else {
             if (invoice.voucherNumber) {
                 this.selectedInvoice = invoice;
+                this.selectedInvoice.uniqueName = invoice.purchaseRecordUniqueName;
 
-                let downloadVoucherRequestObject = {
-                    voucherNumber: [invoice.voucherNumber],
-                    voucherType: invoice.voucherType,
-                    accountUniqueName: invoice.accountUniqueName
-                };
-                this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
+                if(this.voucherApiVersion !== 2) {
+                    let downloadVoucherRequestObject = {
+                        voucherNumber: [invoice.voucherNumber],
+                        voucherType: invoice.voucherType,
+                        accountUniqueName: invoice.accountUniqueName
+                    };
+                    this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
+                }
 
                 this.loadDownloadOrSendMailComponent();
                 this.downloadOrSendMailModel.show();
@@ -201,6 +205,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
         viewContainerRef.insert(componentInstanceView.hostView);
 
         let componentInstance = componentInstanceView.instance as DownloadOrSendInvoiceOnMailComponent;
+        componentInstance.selectedVoucher = this.selectedInvoice;
         componentInstance.downloadOrSendMailEvent.subscribe(e => this.onDownloadOrSendMailEvent(e));
         componentInstance.downloadInvoiceEvent.subscribe(e => this.ondownloadInvoiceEvent(e));
         componentInstance.closeModelEvent.subscribe(e => this.closeDownloadOrSendMailPopup(e));
