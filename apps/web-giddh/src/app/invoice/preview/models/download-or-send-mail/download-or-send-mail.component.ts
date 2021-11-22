@@ -22,6 +22,7 @@ import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
 })
 
 export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
+    /** Selected voucher details */
     @Input() public selectedVoucher: any;
     @Input() public base64Data: any;
     @Input() public selectedInvoiceForDelete: ILedgersInvoiceResult;
@@ -113,6 +114,14 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                     this.selectedInvoiceNo = this.selectedVoucher.voucherNumber;
                     this.selectedVoucherType = this.selectedVoucher.voucherType;
                     this.selectedVoucherUniqueName = this.selectedVoucher.uniqueName;
+
+                    let accountUniqueName = (this.selectedVoucher?.accountUniqueName || this.selectedVoucher.account?.uniqueName);
+
+                    this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(accountUniqueName, {
+                        invoiceNumber:this.selectedVoucher.voucherNumber,
+                        voucherType: this.selectedVoucher.voucherType,
+                        uniqueName: this.selectedVoucher.uniqueName
+                    }));
 
                     this.showPdfWrap = true;
                     this.showEditButton = true;
