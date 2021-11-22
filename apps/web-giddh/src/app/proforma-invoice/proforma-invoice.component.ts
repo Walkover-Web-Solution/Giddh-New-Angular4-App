@@ -3409,7 +3409,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (item.value) {
             this.invFormData.voucherDetails.customerName = item.label;
             this.getAccountDetails(item.value);
-            if (this.invFormData.voucherDetails.customerUniquename && this.invFormData.voucherDetails.voucherDate && this.voucherApiVersion !== 2) {
+            if (this.invFormData.voucherDetails.customerUniquename && this.invFormData.voucherDetails.voucherDate) {
                 this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT))
             }
             this.isCustomerSelected = true;
@@ -5071,7 +5071,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
         if (selectedDate && modelDate && selectedDate !== modelDate && this.invFormData &&
             this.invFormData.voucherDetails && this.invFormData.voucherDetails.voucherDate &&
-            this.invFormData.accountDetails && this.invFormData.accountDetails.uniqueName && this.voucherApiVersion !== 2) {
+            this.invFormData.accountDetails && this.invFormData.accountDetails.uniqueName) {
             this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, moment(selectedDate).format(GIDDH_DATE_FORMAT));
         }
         if (selectedDate && modelDate && selectedDate !== modelDate && (this.isCreditNote || this.isDebitNote)) {
@@ -5934,14 +5934,26 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     public getAllAdvanceReceipts(customerUniqueName: string, voucherDate: string): void {
         if (customerUniqueName && voucherDate) {
-            let requestObject = {
-                accountUniqueName: customerUniqueName,
-                invoiceDate: voucherDate
-            };
-            this.salesService.getAllAdvanceReceiptVoucher(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            let apiCallObservable: Observable<any>;
+            if (this.voucherApiVersion !== 2) {
+                const requestObject = {
+                    accountUniqueName: customerUniqueName,
+                    invoiceDate: voucherDate
+                };
+                apiCallObservable = this.salesService.getAllAdvanceReceiptVoucher(requestObject);
+            } else {
+                const requestObject = {
+                    accountUniqueNames: [this.selectedVoucherType, customerUniqueName],
+                    voucherType: this.selectedVoucherType
+                }
+                apiCallObservable = this.salesService.getInvoiceList(requestObject, voucherDate);
+            }
+
+            apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res && res.status === 'success') {
-                    this.voucherForAdjustment = res.body.map(result => ({ ...result, adjustmentAmount: { amountForAccount: result.balanceDue.amountForAccount, amountForCompany: result.balanceDue.amountForCompany } }));;
-                    if (res.body && res.body.length) {
+                    const results = (res.body?.results || res.body?.items || res.body);
+                    this.voucherForAdjustment = results?.map(result => ({ ...result, adjustmentAmount: { amountForAccount: result.balanceDue?.amountForAccount, amountForCompany: result.balanceDue?.amountForCompany } }));;
+                    if (results?.length) {
                         this.isAccountHaveAdvanceReceipts = true;
                     } else {
                         this.isAccountHaveAdvanceReceipts = false;

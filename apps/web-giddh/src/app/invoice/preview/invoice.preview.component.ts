@@ -1423,7 +1423,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         // To get re-assign receipts voucher store
         this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(customerUniqueName, {
             invoiceNumber: item.voucherNumber,
-            voucherType: VoucherTypeEnum.sales
+            voucherType: VoucherTypeEnum.sales,
+            uniqueName: item.uniqueName
         }));
     }
 
@@ -1507,8 +1508,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             }
             apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res && res.status === 'success') {
-                    if (res.body && (res.body.length || res.body.results?.length)) {
-                        this.voucherForAdjustment = res.body;
+                    if (res.body && (res.body.length || res.body.results?.length || res.body.items?.length)) {
+                        this.voucherForAdjustment = (res.body.items?.length) ? res.body.items : (res.body.results?.length) ? res.body.results : res.body;
                         this.isAccountHaveAdvanceReceipts = true;
                         this.showAdvanceReceiptAdjust = true;
                         this.adjustPaymentModal.show();
