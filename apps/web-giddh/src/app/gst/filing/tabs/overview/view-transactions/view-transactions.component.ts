@@ -168,23 +168,18 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     public onSelectInvoice(invoice) {
         let downloadVoucherRequestObject;
         if (invoice && invoice.account) {
-            if(this.voucherApiVersion === 2) {
-                downloadVoucherRequestObject = {
-                    voucherNumber: [invoice.voucherNumber],
-                    uniqueName: invoice.voucherUniqueName,
-                    voucherType: invoice.voucherType,
-                    accountUniqueName: invoice.account.uniqueName
-                };
-            } else {
-                downloadVoucherRequestObject = {
-                    voucherNumber: [invoice.voucherNumber],
-                    voucherType: invoice.voucherType,
-                    accountUniqueName: invoice.account.uniqueName
-                };
-            }
-            
             this.selectedInvoice = invoice;
-            this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
+            this.selectedInvoice.uniqueName = invoice.voucherUniqueName;
+
+            if(this.voucherApiVersion !== 2) {
+                downloadVoucherRequestObject = {
+                    voucherNumber: [invoice.voucherNumber],
+                    voucherType: invoice.voucherType,
+                    accountUniqueName: invoice.account.uniqueName
+                };
+            
+                this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
+            }
         }
         this.loadDownloadOrSendMailComponent();
         this.downloadOrSendMailModel.show();
@@ -199,6 +194,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         viewContainerRef.insert(componentInstanceView.hostView);
 
         let componentInstance = componentInstanceView.instance as DownloadOrSendInvoiceOnMailComponent;
+        componentInstance.selectedVoucher = this.selectedInvoice;
         componentInstance.closeModelEvent.subscribe(e => this.closeDownloadOrSendMailPopup(e));
         componentInstance.downloadOrSendMailEvent.subscribe(e => this.onDownloadOrSendMailEvent(e));
         componentInstance.downloadInvoiceEvent.subscribe(e => this.onDownloadInvoiceEvent(e));
