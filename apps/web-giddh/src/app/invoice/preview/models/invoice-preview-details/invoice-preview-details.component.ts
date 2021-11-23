@@ -375,6 +375,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.shouldShowUploadAttachment = false;
         this.attachedPdfFileUrl = null;
         this.imagePreviewSource = null;
+        this.selectedItem.hasAttachment = false;
 
         if(this._generalService.voucherApiVersion === 2 && ![VoucherTypeEnum.generateEstimate, VoucherTypeEnum.generateProforma].includes(this.voucherType)) {
             let getRequest = {
@@ -398,6 +399,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
                     if(result.body.attachments?.length > 0) {
                         /** Creating attachment start */
+                        this.selectedItem.hasAttachment = true;
                         this.isAttachmentExpanded = false;
                         const fileExtention = result.body.attachments[0].type.toLowerCase();
                         if (FILE_ATTACHMENT_TYPE.IMAGE.includes(fileExtention)) {
