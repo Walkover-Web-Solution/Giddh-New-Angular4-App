@@ -257,8 +257,8 @@
                                 [applicableTaxes]="
                                     taxListForStock?.length
                                         ? taxListForStock
-                                        : currentTxn.selectedAccount?.applicableTaxes
-                                        ? currentTxn.selectedAccount?.applicableTaxes
+                                        : currentTxn?.selectedAccount?.applicableTaxes
+                                        ? currentTxn?.selectedAccount?.applicableTaxes
                                         : currentAccountApplicableTaxes?.length
                                         ? currentAccountApplicableTaxes
                                         : []
@@ -347,7 +347,7 @@
                 </div>
             </div>
             <div class="col-md-8" [ngClass]="{ 'offset-md-4': !currentTxn?.selectedAccount?.stock }">
-                <div class="text-right mr-b1" *ngIf="currentTxn.selectedAccount && showTaxationDiscountBox">
+                <div class="text-right mr-b1" *ngIf="currentTxn?.selectedAccount && showTaxationDiscountBox">
                     <ng-container *ngIf="isTcsTdsApplicable">
                         <mat-checkbox
                             color="primary"
@@ -395,9 +395,9 @@
         <div
             [class.words-inline]="shouldShowRcmTaxableAmount || shouldShowItcSection"
             class="pd-b1 in-words"
-            *ngIf="currentTxn.total"
+            *ngIf="currentTxn?.total"
         >
-            {{ currentTxn.total | myNumberToWordsPipe | lowercase }}
+            {{ currentTxn?.total | myNumberToWordsPipe | lowercase }}
         </div>
         <ng-container *ngIf="shouldShowRcmTaxableAmount">
             <div class="taxable-amount-section mr-1">
