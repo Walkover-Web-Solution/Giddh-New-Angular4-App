@@ -922,11 +922,14 @@
                             {{ localeData?.attach_file }}</label
                         >
                     </label>
-                    <div class="file_attached clearfix text-right pd-r15" *ngIf="blankLedger?.attachedFile?.length > 0">
+                    <div
+                        class="file_attached clearfix text-right pd-r15 d-inline-block"
+                        *ngIf="blankLedger?.attachedFile?.length > 0"
+                    >
                         <span>{{ blankLedger.attachedFileName }}</span>
-                        <button mat-button class="remove cp text-danger pl-1" (click)="showDeleteAttachedFileModal()">
-                            ({{ commonLocaleData?.app_remove | lowercase }})
-                        </button>
+                        <span class="delete-attachment cursor-pointer">
+                            <img (click)="showDeleteAttachedFileModal()" src="assets/images/multiply.svg" />
+                        </span>
                     </div>
                 </div>
             </div>
