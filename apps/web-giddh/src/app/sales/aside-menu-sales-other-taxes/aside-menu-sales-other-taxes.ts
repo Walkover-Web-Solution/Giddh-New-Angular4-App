@@ -20,13 +20,12 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
     public isDisabledCalMethod: boolean = false;
     public taxesOptions: IOption[] = [];
     public selectedTaxUniqueName: string;
-
     public calculationMethodOptions: IOption[];
 
     constructor() {
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.calculationMethodOptions = [
             { label: this.commonLocaleData?.app_on_taxable_value, value: 'OnTaxableAmount' },
             { label: this.commonLocaleData?.app_on_total_value, value: 'OnTotalAmount' },
@@ -39,7 +38,7 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
             })
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
+    public ngOnChanges(changes: SimpleChanges): void {
         if ('otherTaxesModal' in changes && changes.otherTaxesModal.currentValue !== changes.otherTaxesModal.previousValue) {
             this.otherTaxesModal = changes.otherTaxesModal.currentValue;
             if (this.otherTaxesModal.appliedOtherTax) {
@@ -50,21 +49,26 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
 
     }
 
-    public applyTax(tax: IOption) {
+    public applyTax(tax: IOption): void {
         if (tax && tax.value) {
             this.otherTaxesModal.appliedOtherTax = { name: tax.label, uniqueName: tax.value };
             let taxType = this.taxes.find(f => f.uniqueName === tax.value).taxType;
             this.isDisabledCalMethod = ['tdsrc', 'tdspay'].includes(taxType);
+            if(!this.isDisabledCalMethod) {
+                this.otherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTotalAmount;
+            } else {
+                this.otherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+            }
         }
     }
 
-    public onClear() {
+    public onClear(): void {
         this.otherTaxesModal.appliedOtherTax = null;
         this.isDisabledCalMethod = false;
         this.otherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
     }
 
-    public saveTaxes() {
+    public saveTaxes(): void {
         this.applyTaxes.emit(this.otherTaxesModal);
     }
 }
