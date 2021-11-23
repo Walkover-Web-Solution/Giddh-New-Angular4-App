@@ -68,6 +68,8 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     public voucherApiVersion: 1 | 2;
     /** Holds voucher unique name */
     public selectedVoucherUniqueName: string = "";
+    /** Voucher has attachments */
+    public voucherHasAttachments: boolean = false;
 
     constructor(
         private _toasty: ToasterService,
@@ -104,6 +106,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
             };
 
             this.sanitizedPdfFileUrl = null;
+            this.voucherHasAttachments = false;
             this.commonService.downloadFile(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                 if (result?.body) {
                     /** Creating voucher pdf start */
@@ -127,6 +130,10 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
 
                     this.showPdfWrap = true;
                     this.showEditButton = true;
+
+                    if(result.body.attachments?.length > 0) {
+                        this.voucherHasAttachments = true;
+                    }
                 }
             });
         } else {
@@ -261,7 +268,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
 
             this.commonService.downloadFile(dataToSend, 'pdf').pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status !== "error") {
-                    if (dataToSend.typeOfInvoice.length > 1) {
+                    if (dataToSend.typeOfInvoice.length > 1 || this.voucherHasAttachments) {
                         saveAs(response, `${this.selectedVoucher?.voucherNumber}.` + 'zip');
                     } else {
                         saveAs(response, `${this.selectedVoucher?.voucherNumber}.` + 'pdf');

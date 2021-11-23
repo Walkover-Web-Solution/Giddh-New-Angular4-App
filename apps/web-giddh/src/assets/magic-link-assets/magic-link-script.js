@@ -114,6 +114,9 @@ var app = new Vue({
     },
     methods: {
         getMagicLinkData: function (id, from, to) {
+            $('tr').tooltip('dispose');
+            $('span').tooltip('dispose');
+
             var url = '';
             var apiBaseUrl = this.getApi();
             if (from && to) {
@@ -132,7 +135,6 @@ var app = new Vue({
                             this.dateRange = {};
                             this.dateRange.startDate = moment(this.ledgerData.ledgersTransactions.from, 'DD-MM-YYYY');
                             this.dateRange.endDate = moment(this.ledgerData.ledgersTransactions.to, 'DD-MM-YYYY');
-                            $('tr').tooltip('hide');
                         }
 
                         // hide loader and show app
@@ -230,7 +232,7 @@ var app = new Vue({
             this.ledgerData = ledgerData;
         },
         customFilter: function (txn) {
-            return txn.particular.name.indexOf(this.searchText) != -1;
+            return (txn.particular && txn.particular.name.indexOf(this.searchText) != -1);
         },
         filterBy: function (list, value) {
             let arrayList = [];
@@ -241,7 +243,7 @@ var app = new Vue({
             }
 
             return arrayList.filter(function (txn) {
-                return txn.particular.name.toLowerCase().includes(value.toLowerCase()) || String(txn.amount).includes(value.toLowerCase());
+                return (txn.particular && txn.particular.name.toLowerCase().includes(value.toLowerCase())) || String(txn.amount).includes(value.toLowerCase());
             });
         },
         onDateRangeChanged: function (picker) {
