@@ -820,7 +820,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.isFileUploading = false;
                 this.blankLedger.attachedFile = '';
                 this.blankLedger.attachedFileName = '';
-                this.toaster.showSnackBar("success", output.file.response.message);
+                this.toaster.showSnackBar("error", output.file.response.message);
             }
         }
     }
