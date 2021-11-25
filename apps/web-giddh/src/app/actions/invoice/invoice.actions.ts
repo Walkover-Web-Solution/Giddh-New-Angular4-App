@@ -757,10 +757,10 @@ export class InvoiceActions {
             ofType(INVOICE.TEMPLATE.DELETE_TEMPLATE_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
-                    this._toasty.errorToast(data.message, data.code);
+                if (data?.status === 'error') {
+                    this._toasty.errorToast(data?.message, data?.code);
                 } else {
-                    this._toasty.successToast(data.body);
+                    this._toasty.successToast(data?.body);
                 }
                 return { type: 'EmptyAction' };
             })));
