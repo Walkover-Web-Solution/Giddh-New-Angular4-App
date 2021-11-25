@@ -3981,6 +3981,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     uniqueName: unqName,
                     roundOffApplicable: this.applyRoundOff,
                     subVoucher: (this.isRcmEntry) ? SubVoucher.ReverseCharge : undefined,
+                    attachedFiles: (this.invFormData.entries[0] && this.invFormData.entries[0].attachedFile) ? [this.invFormData.entries[0].attachedFile] : [],
                     deposit
                 } as GenericRequestForGenerateSCD;
                 if (this.isCreditNote || this.isDebitNote) {
