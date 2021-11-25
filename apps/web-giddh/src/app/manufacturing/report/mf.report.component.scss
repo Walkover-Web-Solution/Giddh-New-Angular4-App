@@ -120,6 +120,9 @@
 }
 .mf-report-head {
     margin-top: 15px;
+    &.parent {
+        margin-top: 55px !important;
+    }
 }
 
 .table-responsive {
@@ -213,6 +216,9 @@
             flex: 0 0 100%;
             max-width: 100%;
         }
+    }
+    .mf-report-head {
+        margin-top: 15px;
     }
 }
 
