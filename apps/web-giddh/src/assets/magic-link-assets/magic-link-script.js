@@ -281,9 +281,9 @@ var app = new Vue({
                 var apiObservable;
                 if(voucherVersion == 2) {
                     apiObservable = axios.post(apiBaseUrl + 'magic-link/' + id + '/download-voucher?voucherVersion=2', {
-                        voucherNumber: [entry.voucherNumber],
                         voucherType: entry.voucherName,
-                        uniqueName: entry.voucherUniqueName
+                        uniqueName: (entry.voucherUniqueName) ? entry.voucherUniqueName : undefined,
+                        entryUniqueName: (entry.voucherUniqueName) ? undefined : entry.entryUniqueName
                     }, {
                         responseType: 'blob'
                     });
