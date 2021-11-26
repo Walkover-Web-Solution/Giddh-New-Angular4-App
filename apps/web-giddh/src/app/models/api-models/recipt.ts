@@ -170,6 +170,7 @@ export interface Voucher {
     accountDetails: AccountDetails;
     templateDetails: TemplateDetails;
     entries: Entry[];
+    deposit?: any;
 }
 
 export interface ReciptRequest {
