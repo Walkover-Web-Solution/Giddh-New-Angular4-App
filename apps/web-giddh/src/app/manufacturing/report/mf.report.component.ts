@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
@@ -45,7 +45,8 @@ const filter2 = [
 })
 
 export class MfReportComponent implements OnInit, OnDestroy {
-
+    /** True if component is getting input in some parent component */
+    @Input() public fromParentComponent: boolean = false;
     public mfStockSearchRequest: IMfStockSearchRequest = new MfStockSearchRequestClass();
     public filtersForSearchBy: IOption[] = filter2;
     public filtersForSearchOperation: IOption[] = filter1;
