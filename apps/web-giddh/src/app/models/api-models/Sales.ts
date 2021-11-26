@@ -567,6 +567,7 @@ export class VoucherClass {
     public attachedFileName?: string;
     public attachedFiles?: Array<string>;
     public purchaseOrderDetails?: any;
+    public deposit?: any;
 
     constructor() {
         this.accountDetails = new AccountDetailsClass();

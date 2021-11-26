@@ -3443,7 +3443,7 @@
                                                                         calculateBalanceDue();
                                                                         updateDepositAmount($event.target.value)
                                                                     "
-                                                                    placeholder="Amount"
+                                                                    [placeholder]="commonLocaleData?.app_amount"
                                                                     name="dueAmount"
                                                                     class="
                                                                         form-control
@@ -4879,10 +4879,7 @@
                                 <div
                                     class="table-row"
                                     *ngIf="
-                                        (isSalesInvoice ||
-                                            isCashInvoice ||
-                                            currentVoucherFormDetails?.depositAllowed) &&
-                                        !isUpdateMode
+                                        (isSalesInvoice || currentVoucherFormDetails?.depositAllowed) && !isUpdateMode
                                     "
                                 >
                                     <div class="table-cell deposit-section">
