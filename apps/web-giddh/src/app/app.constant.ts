@@ -349,7 +349,7 @@ export const GIDDH_VOUCHER_FORM = [
         type: "cash",
         advanceReceiptAllowed: false,
         rcmAllowed: false,
-        depositAllowed: true,
+        depositAllowed: false,
         taxesAllowed: true,
         quantityAllowed: true,
         rateAllowed: true,
