@@ -4920,10 +4920,7 @@
                                 <div
                                     class="table-row"
                                     *ngIf="
-                                        (isSalesInvoice ||
-                                            isCashInvoice ||
-                                            currentVoucherFormDetails?.depositAllowed) &&
-                                        !isUpdateMode
+                                        (isSalesInvoice || currentVoucherFormDetails?.depositAllowed) && !isUpdateMode
                                     "
                                 >
                                     <div class="table-cell deposit-section">

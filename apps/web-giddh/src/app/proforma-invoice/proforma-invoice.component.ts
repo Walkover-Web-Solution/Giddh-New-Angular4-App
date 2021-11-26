@@ -606,6 +606,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public voucherUniqueName: string = "";
     /** User filled deposit amount */
     private userDeposit: number = null;
+    /** This will hold previous deposit (in case of update only) */
+    private previousDeposit: any;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -1243,6 +1245,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         obj.voucherDetails.voucherDate = voucherDate;
                         obj.voucherDetails.dueDate = dueDate;
                     } else {
+                        this.previousDeposit = results[0]?.deposit;
                         if (this.isMultiCurrencyModule()) {
                             // parse normal response to multi currency response
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
@@ -2429,13 +2432,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let exRate = this.originalExchangeRate;
         let requestObject: any;
         let voucherDate: any;
-        let deposit = new AmountClassMulticurrency();
-        if (this.userDeposit >= 0 || this.voucherApiVersion !== 2) {
-            deposit.accountUniqueName = this.depositAccountUniqueName;
-            deposit.amountForAccount = this.depositAmount;
-        } else {
-            deposit = null;
-        }
+        const deposit = this.getDeposit();
         if (!this.isPurchaseInvoice) {
             voucherDate = data.voucherDetails.voucherDate;
             requestObject = {
@@ -3976,9 +3973,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     return;
                 }
 
-                const deposit = new AmountClassMulticurrency();
-                deposit.accountUniqueName = this.depositAccountUniqueName;
-                deposit.amountForAccount = this.depositAmount;
+                const deposit = this.getDeposit();
                 requestObject = {
                     account: data.accountDetails,
                     updateAccountDetails: this.updateAccount,
@@ -4734,10 +4729,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         let salesEntryClassArray: SalesEntryClassMulticurrency[] = [];
         let entries = data.entries;
-        let deposit = new AmountClassMulticurrency();
-
-        deposit.accountUniqueName = this.depositAccountUniqueName;
-        deposit.amountForAccount = this.depositAmount;
 
         entries.forEach(e => {
             let salesEntryClass = new SalesEntryClassMulticurrency();
@@ -7492,5 +7483,28 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public updateDepositAmount(depositAmount: any): void {
         depositAmount = String(depositAmount)?.replace(/[^0-9]/g, '');
         this.userDeposit = depositAmount ? Number(depositAmount) : null;
+    }
+
+    /**
+     * This will return deposit object
+     *
+     * @private
+     * @returns {AmountClassMulticurrency}
+     * @memberof ProformaInvoiceComponent
+     */
+    private getDeposit(): AmountClassMulticurrency {
+        let deposit = new AmountClassMulticurrency();
+        if ((this.userDeposit !== null && this.userDeposit !== undefined) || this.voucherApiVersion !== 2) {
+            deposit.accountUniqueName = this.depositAccountUniqueName;
+            deposit.amountForAccount = this.depositAmount;
+        } else {
+            if(this.isUpdateMode) {
+                deposit = this.previousDeposit;
+            } else {
+                deposit = null;
+            }
+        }
+
+        return deposit;
     }
 }
