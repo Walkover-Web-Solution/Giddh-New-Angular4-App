@@ -604,6 +604,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public voucherApiVersion: 1 | 2;
     /** This holds the voucher uniquename which needs to be copied */
     public voucherUniqueName: string = "";
+    /** User filled deposit amount */
+    private userDeposit: number = null;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -1697,7 +1699,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.invFormData.accountDetails.uniqueName = 'cash';
             }
         }
-        this.depositAccountUniqueName = 'cash';
         this.startLoader(false);
         this.focusInCustomerName();
     }
@@ -2179,6 +2180,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.allowFocus = true;
         this.clickAdjustAmount(false);
         this.autoFillCompanyShipping = false;
+        this.userDeposit = null;
         this.fillDeliverToAddress();
         this.createEmbeddedViewAtIndex(0);
     }
@@ -2225,6 +2227,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public onSubmitInvoiceForm(form?: NgForm) {
+        if ((this.isSalesInvoice || this.isPurchaseInvoice) && this.depositAccountUniqueName && (this.userDeposit === null || this.userDeposit === undefined)) {
+            this._toasty.errorToast(this.localeData?.enter_amount);
+            this.startLoader(false);
+            return;
+        }
 
         let data: VoucherClass = cloneDeep(this.invFormData);
 
@@ -2422,9 +2429,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let exRate = this.originalExchangeRate;
         let requestObject: any;
         let voucherDate: any;
-        const deposit = new AmountClassMulticurrency();
-        deposit.accountUniqueName = this.depositAccountUniqueName;
-        deposit.amountForAccount = this.depositAmount;
+        let deposit = new AmountClassMulticurrency();
+        if (this.userDeposit >= 0 || this.voucherApiVersion !== 2) {
+            deposit.accountUniqueName = this.depositAccountUniqueName;
+            deposit.amountForAccount = this.depositAmount;
+        } else {
+            deposit = null;
+        }
         if (!this.isPurchaseInvoice) {
             voucherDate = data.voucherDetails.voucherDate;
             requestObject = {
@@ -3642,8 +3653,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
-    public onSelectPaymentMode(event: any) {
-        if (event && event.value) {
+    public onSelectPaymentMode(event: any, isCleared: boolean = false) {
+        if (event && event.value && !isCleared) {
             if (this.isCashInvoice && this.invFormData.accountDetails) {
                 this.invFormData.accountDetails.name = event.label;
                 this.invFormData.accountDetails.uniqueName = event.value;
@@ -5273,12 +5284,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         } else {
             this.showGSTINNo = false;
             this.showTRNNo = false;
-        }
-    }
-
-    public selectDefaultbank() {
-        if (!this.depositAccountUniqueName) {
-            this.depositAccountUniqueName = 'cash';
         }
     }
 
@@ -7477,5 +7482,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this._toasty.errorToast(response?.message)
             }
         });
+    }
+
+    /**
+     * This will update the deposit amount updated by user
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public updateDepositAmount(depositAmount: any): void {
+        depositAmount = String(depositAmount)?.replace(/[^0-9]/g, '');
+        this.userDeposit = depositAmount ? Number(depositAmount) : null;
     }
 }
