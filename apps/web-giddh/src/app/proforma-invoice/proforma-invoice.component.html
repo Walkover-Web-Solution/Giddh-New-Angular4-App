@@ -271,7 +271,6 @@
                                                             class="form-control cash-invoice-input"
                                                             [(ngModel)]="invFormData.voucherDetails.customerName"
                                                             (change)="handleCustomerChange($event)"
-                                                            (blur)="selectDefaultbank()"
                                                             [readOnly]="
                                                                 isUpdateMode &&
                                                                 invoiceType !== 'sales' &&
@@ -3260,9 +3259,7 @@
                                     <div
                                         class="table-row"
                                         *ngIf="
-                                            (isSalesInvoice ||
-                                                isCashInvoice ||
-                                                currentVoucherFormDetails?.depositAllowed) &&
+                                            (isSalesInvoice || currentVoucherFormDetails?.depositAllowed) &&
                                             !(isPendingVoucherType && isCashInvoice) &&
                                             !(
                                                 !(
@@ -3290,7 +3287,10 @@
                                                             <li role="menuitem" class="mr-t1">
                                                                 <div class="clearfix payment-mode deposit-payment-mode">
                                                                     <div class="pull-right balance-due-text">
-                                                                        <div class="clearfix mr-b1 text-left">
+                                                                        <div
+                                                                            class="clearfix mr-b1 text-left"
+                                                                            *ngIf="voucherApiVersion !== 2"
+                                                                        >
                                                                             <span class="p-0 mr-2 d-inline-block">
                                                                                 <input
                                                                                     class="radio-custom cp ml-0"
@@ -3390,6 +3390,7 @@
                                                                         [options]="bankAccounts$ | async"
                                                                         [(ngModel)]="depositAccountUniqueName"
                                                                         (selected)="onSelectPaymentMode($event)"
+                                                                        (onClear)="onSelectPaymentMode($event, true)"
                                                                         [placeholder]="
                                                                             commonLocaleData?.app_select_account
                                                                         "
@@ -3438,8 +3439,11 @@
                                                             >
                                                                 <input
                                                                     type="text"
-                                                                    (blur)="calculateBalanceDue()"
-                                                                    placeholder="Amount"
+                                                                    (blur)="
+                                                                        calculateBalanceDue();
+                                                                        updateDepositAmount($event.target.value)
+                                                                    "
+                                                                    [placeholder]="commonLocaleData?.app_amount"
                                                                     name="dueAmount"
                                                                     class="
                                                                         form-control
@@ -3452,6 +3456,9 @@
                                                                     [prefix]="depositCurrSymbol"
                                                                     [suffix]="selectedSuffixForCurrency"
                                                                     [mask]="inputMaskFormat"
+                                                                    [attr.required]="
+                                                                        depositAccountUniqueName ? true : false
+                                                                    "
                                                                 />
                                                                 <label class="pull-right">{{
                                                                     commonLocaleData?.app_amount
@@ -4872,10 +4879,7 @@
                                 <div
                                     class="table-row"
                                     *ngIf="
-                                        (isSalesInvoice ||
-                                            isCashInvoice ||
-                                            currentVoucherFormDetails?.depositAllowed) &&
-                                        !isUpdateMode
+                                        (isSalesInvoice || currentVoucherFormDetails?.depositAllowed) && !isUpdateMode
                                     "
                                 >
                                     <div class="table-cell deposit-section">
@@ -4895,6 +4899,7 @@
                                                                 [options]="bankAccounts$ | async"
                                                                 [(ngModel)]="depositAccountUniqueName"
                                                                 (selected)="onSelectPaymentMode($event)"
+                                                                (onClear)="onSelectPaymentMode($event, true)"
                                                                 [placeholder]="commonLocaleData?.app_select_account"
                                                                 [notFoundLink]="false"
                                                                 [forceClearReactive]="forceClear$ | async"
@@ -4932,7 +4937,10 @@
                                                     >
                                                         <input
                                                             type="text"
-                                                            (blur)="calculateBalanceDue()"
+                                                            (blur)="
+                                                                calculateBalanceDue();
+                                                                updateDepositAmount($event.target.value)
+                                                            "
                                                             [placeholder]="commonLocaleData?.app_amount"
                                                             name="dueAmount"
                                                             class="
@@ -4946,6 +4954,7 @@
                                                             [prefix]="depositCurrSymbol"
                                                             [suffix]="selectedSuffixForCurrency"
                                                             [mask]="inputMaskFormat"
+                                                            [attr.required]="depositAccountUniqueName ? true : false"
                                                         />
                                                         <label class="pull-right pt-1">{{
                                                             commonLocaleData?.app_amount

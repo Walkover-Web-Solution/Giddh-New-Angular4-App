@@ -108,7 +108,6 @@ export class GstDetailsClass {
     public state?: StateCode;
     public panNumber?: any;
     public countryName?: string;
-
     /*Keeping both as API team is too confused to Map one variable type
     *thus kept both whichever is needed on run time we can send that in request mapping.
     * */
@@ -569,6 +568,7 @@ export class VoucherClass {
     public attachedFileName?: string;
     public attachedFiles?: Array<string>;
     public purchaseOrderDetails?: any;
+    public deposit?: any;
 
     constructor() {
         this.accountDetails = new AccountDetailsClass();

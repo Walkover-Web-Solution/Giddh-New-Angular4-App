@@ -97,12 +97,14 @@ var app = new Vue({
         cForm: {},
         txn: {},
         folderPath: '',
-        isSmall: false
+        isSmall: false,
+        voucherVersion: 1
     },
     mounted: function () {
         this.folderPath = window.location.hostname === 'localhost' ? '' : 'app/';
         var id = this.getParameterByName('id');
-        this.getMagicLinkData(id)
+        this.getMagicLinkData(id);
+        this.voucherVersion = this.getParameterByName('voucherVersion');
     },
     created: function () {
         window.addEventListener('resize', this.handleResize);
@@ -112,6 +114,9 @@ var app = new Vue({
     },
     methods: {
         getMagicLinkData: function (id, from, to) {
+            $('tr').tooltip('dispose');
+            $('span').tooltip('dispose');
+
             var url = '';
             var apiBaseUrl = this.getApi();
             if (from && to) {
@@ -130,7 +135,6 @@ var app = new Vue({
                             this.dateRange = {};
                             this.dateRange.startDate = moment(this.ledgerData.ledgersTransactions.from, 'DD-MM-YYYY');
                             this.dateRange.endDate = moment(this.ledgerData.ledgersTransactions.to, 'DD-MM-YYYY');
-                            $('tr').tooltip('hide');
                         }
 
                         // hide loader and show app
@@ -228,7 +232,7 @@ var app = new Vue({
             this.ledgerData = ledgerData;
         },
         customFilter: function (txn) {
-            return txn.particular.name.indexOf(this.searchText) != -1;
+            return (txn.particular && txn.particular.name.indexOf(this.searchText) != -1);
         },
         filterBy: function (list, value) {
             let arrayList = [];
@@ -239,7 +243,7 @@ var app = new Vue({
             }
 
             return arrayList.filter(function (txn) {
-                return txn.particular.name.toLowerCase().includes(value.toLowerCase()) || String(txn.amount).includes(value.toLowerCase());
+                return (txn.particular && txn.particular.name.toLowerCase().includes(value.toLowerCase())) || String(txn.amount).includes(value.toLowerCase());
             });
         },
         onDateRangeChanged: function (picker) {
@@ -273,23 +277,26 @@ var app = new Vue({
             var id = this.getParameterByName('id');
             var apiBaseUrl = this.getApi();
             if (id) {
-                var voucherVersion = this.getParameterByName('voucherVersion');
+                var voucherVersion = this.voucherVersion;
                 var apiObservable;
                 if(voucherVersion == 2) {
                     apiObservable = axios.post(apiBaseUrl + 'magic-link/' + id + '/download-voucher?voucherVersion=2', {
-                        voucherNumber: [entry.voucherNumber],
                         voucherType: entry.voucherName,
-                        uniqueName: entry.voucherUniqueName
+                        uniqueName: (entry.voucherUniqueName) ? entry.voucherUniqueName : undefined,
+                        entryUniqueName: (entry.voucherUniqueName) ? undefined : entry.entryUniqueName
+                    }, {
+                        responseType: 'blob'
                     });
                 } else {
                     apiObservable = axios.get(apiBaseUrl + 'magic-link/' + id + '/download-invoice/' + entry.voucherNumber);
                 }
 
+                let fileName = (entry.voucherNumber && entry.attachedFileUniqueName) ? entry.voucherNumber + '.zip' : entry.voucherNumber ? entry.voucherNumber + '.pdf' : entry.attachedFileUniqueName;
+
                 apiObservable.then(response => {
                     // JSON responses are automatically parsed.
-                    if (response.status === 200 && response.data.status === 'success') {
-                        var blobData = this.base64ToBlob(response.data.body, 'application/pdf', 512);
-                        return saveAs(blobData, entry.voucherNumber + '.pdf');
+                    if (response?.data?.status !== "error") {
+                        return saveAs(response?.data, fileName);
                     } else {
                         this.$toaster.error('Invoice for ' + entry.voucherNumber + ' cannot be downloaded now.');
                     }

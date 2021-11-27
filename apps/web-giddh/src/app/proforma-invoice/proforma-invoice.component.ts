@@ -603,6 +603,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public voucherApiVersion: 1 | 2;
     /** This holds the voucher uniquename which needs to be copied */
     public voucherUniqueName: string = "";
+    /** User filled deposit amount */
+    private userDeposit: number = null;
+    /** This will hold previous deposit (in case of update only) */
+    private previousDeposit: any;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -941,7 +945,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.loadDefaultSearchSuggestions();
             }
             this.getAllLastInvoices();
-            this.fillDeliverToAddress();
+
+            if(!this.isUpdateMode) {
+                this.fillDeliverToAddress();
+            }
+
             this.initiateVoucherModule();
 
             if (this.translationLoaded) {
@@ -1084,6 +1092,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         obj.voucherDetails.voucherDate = voucherDate;
                         obj.voucherDetails.dueDate = dueDate;
                     } else {
+                        this.previousDeposit = results[0]?.deposit;
                         if (this.isMultiCurrencyModule()) {
                             // parse normal response to multi currency response
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
@@ -1538,7 +1547,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.invFormData.accountDetails.uniqueName = 'cash';
             }
         }
-        this.depositAccountUniqueName = 'cash';
         this.startLoader(false);
         this.focusInCustomerName();
     }
@@ -2020,6 +2028,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.allowFocus = true;
         this.clickAdjustAmount(false);
         this.autoFillCompanyShipping = false;
+        this.userDeposit = null;
         this.fillDeliverToAddress();
         this.createEmbeddedViewAtIndex(0);
     }
@@ -2066,6 +2075,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public onSubmitInvoiceForm(form?: NgForm) {
+        if ((this.isSalesInvoice || this.isPurchaseInvoice) && this.depositAccountUniqueName && (this.userDeposit === null || this.userDeposit === undefined)) {
+            this._toasty.errorToast(this.localeData?.enter_amount);
+            this.startLoader(false);
+            return;
+        }
 
         let data: VoucherClass = cloneDeep(this.invFormData);
 
@@ -2263,9 +2277,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let exRate = this.originalExchangeRate;
         let requestObject: any;
         let voucherDate: any;
-        const deposit = new AmountClassMulticurrency();
-        deposit.accountUniqueName = this.depositAccountUniqueName;
-        deposit.amountForAccount = this.depositAmount;
+        const deposit = this.getDeposit();
         if (!this.isPurchaseInvoice) {
             voucherDate = data.voucherDetails.voucherDate;
             requestObject = {
@@ -2423,10 +2435,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             } else {
                 if (this.isPendingVoucherType) {
+                    let apiCallObservable;
                     if (this.voucherApiVersion === 2) {
                         updatedData = this.proformaInvoiceUtilityService.getVoucherRequestObjectForInvoice(updatedData);
+                        apiCallObservable = this.salesService.generateGenericItem(updatedData, isVoucherV4);
+                    } else {
+                        apiCallObservable = this.salesService.generatePendingVoucherGenericItem(updatedData);
                     }
-                    this.salesService.generatePendingVoucherGenericItem(updatedData).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
+
+                    apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
                         this.handleGenerateResponse(response, form);
                     }, () => {
                         this.startLoader(false);
@@ -3262,7 +3279,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (item.value) {
             this.invFormData.voucherDetails.customerName = item.label;
             this.getAccountDetails(item.value);
-            if (this.invFormData.voucherDetails.customerUniquename && this.invFormData.voucherDetails.voucherDate && this.voucherApiVersion !== 2) {
+            if (this.invFormData.voucherDetails.customerUniquename && this.invFormData.voucherDetails.voucherDate) {
                 this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT))
             }
             this.isCustomerSelected = true;
@@ -3495,8 +3512,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
-    public onSelectPaymentMode(event: any) {
-        if (event && event.value) {
+    public onSelectPaymentMode(event: any, isCleared: boolean = false) {
+        if (event && event.value && !isCleared) {
             if (this.isCashInvoice && this.invFormData.accountDetails) {
                 this.invFormData.accountDetails.name = event.label;
                 this.invFormData.accountDetails.uniqueName = event.value;
@@ -3818,9 +3835,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     return;
                 }
 
-                const deposit = new AmountClassMulticurrency();
-                deposit.accountUniqueName = this.depositAccountUniqueName;
-                deposit.amountForAccount = this.depositAmount;
+                const deposit = this.getDeposit();
                 requestObject = {
                     account: data.accountDetails,
                     updateAccountDetails: this.updateAccount,
@@ -3834,6 +3849,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     uniqueName: unqName,
                     roundOffApplicable: this.applyRoundOff,
                     subVoucher: (this.isRcmEntry) ? SubVoucher.ReverseCharge : undefined,
+                    attachedFiles: (this.invFormData.entries[0] && this.invFormData.entries[0].attachedFile) ? [this.invFormData.entries[0].attachedFile] : [],
                     deposit
                 } as GenericRequestForGenerateSCD;
                 if (this.isCreditNote || this.isDebitNote) {
@@ -3920,6 +3936,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                 if(this.voucherApiVersion === 2) {
                     requestObject = <GenericRequestForGenerateSCD>this.updateData(requestObject, data);
+                    requestObject = this.proformaInvoiceUtilityService.getVoucherRequestObjectForInvoice(requestObject);
                 } else {
                     requestObject = this.updateData(requestObject, data);
                 }
@@ -4575,10 +4592,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         let salesEntryClassArray: SalesEntryClassMulticurrency[] = [];
         let entries = data.entries;
-        let deposit = new AmountClassMulticurrency();
-
-        deposit.accountUniqueName = this.depositAccountUniqueName;
-        deposit.amountForAccount = this.depositAmount;
 
         entries.forEach(e => {
             let salesEntryClass = new SalesEntryClassMulticurrency();
@@ -4925,7 +4938,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
         if (selectedDate && modelDate && selectedDate !== modelDate && this.invFormData &&
             this.invFormData.voucherDetails && this.invFormData.voucherDetails.voucherDate &&
-            this.invFormData.accountDetails && this.invFormData.accountDetails.uniqueName && this.voucherApiVersion !== 2) {
+            this.invFormData.accountDetails && this.invFormData.accountDetails.uniqueName) {
             this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, moment(selectedDate).format(GIDDH_DATE_FORMAT));
         }
         if (selectedDate && modelDate && selectedDate !== modelDate && (this.isCreditNote || this.isDebitNote)) {
@@ -5127,12 +5140,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         } else {
             this.showGSTINNo = false;
             this.showTRNNo = false;
-        }
-    }
-
-    public selectDefaultbank() {
-        if (!this.depositAccountUniqueName) {
-            this.depositAccountUniqueName = 'cash';
         }
     }
 
@@ -5790,14 +5797,26 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     public getAllAdvanceReceipts(customerUniqueName: string, voucherDate: string): void {
         if (customerUniqueName && voucherDate) {
-            let requestObject = {
-                accountUniqueName: customerUniqueName,
-                invoiceDate: voucherDate
-            };
-            this.salesService.getAllAdvanceReceiptVoucher(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            let apiCallObservable: Observable<any>;
+            if (this.voucherApiVersion !== 2) {
+                const requestObject = {
+                    accountUniqueName: customerUniqueName,
+                    invoiceDate: voucherDate
+                };
+                apiCallObservable = this.salesService.getAllAdvanceReceiptVoucher(requestObject);
+            } else {
+                const requestObject = {
+                    accountUniqueNames: [this.selectedVoucherType, customerUniqueName],
+                    voucherType: this.selectedVoucherType
+                }
+                apiCallObservable = this.salesService.getInvoiceList(requestObject, voucherDate);
+            }
+
+            apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res && res.status === 'success') {
-                    this.voucherForAdjustment = res.body.map(result => ({ ...result, adjustmentAmount: { amountForAccount: result.balanceDue.amountForAccount, amountForCompany: result.balanceDue.amountForCompany } }));;
-                    if (res.body && res.body.length) {
+                    const results = (res.body?.results || res.body?.items || res.body);
+                    this.voucherForAdjustment = results?.map(result => ({ ...result, adjustmentAmount: { amountForAccount: result.balanceDue?.amountForAccount, amountForCompany: result.balanceDue?.amountForCompany } }));;
+                    if (results?.length) {
                         this.isAccountHaveAdvanceReceipts = true;
                     } else {
                         this.isAccountHaveAdvanceReceipts = false;
@@ -6547,18 +6566,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.purchaseBillCompany = {
                 billingDetails: {
                     address: company?.billingDetails?.address,
-                    state: { code: company?.billingDetails?.stateCode, name: company?.billingDetails?.stateName },
-                    gstNumber: company?.billingDetails?.gstNumber,
-                    stateName: company?.billingDetails?.stateName,
-                    stateCode: company?.billingDetails?.stateCode,
+                    state: { code: company?.billingDetails?.state?.code, name: company?.billingDetails?.state?.name },
+                    gstNumber: company?.billingDetails?.taxNumber,
+                    stateName: company?.billingDetails?.state?.name,
+                    stateCode: company?.billingDetails?.state?.code,
                     pincode: company?.billingDetails?.pincode
                 },
                 shippingDetails: {
                     address: company?.shippingDetails?.address,
-                    state: { code: company?.shippingDetails?.stateCode, name: company?.shippingDetails?.stateName },
-                    gstNumber: company?.shippingDetails?.gstNumber,
-                    stateName: company?.shippingDetails?.stateName,
-                    stateCode: company?.shippingDetails?.stateCode,
+                    state: { code: company?.shippingDetails?.state?.code, name: company?.shippingDetails?.state?.name },
+                    gstNumber: company?.shippingDetails?.taxNumber,
+                    stateName: company?.shippingDetails?.state?.name,
+                    stateCode: company?.shippingDetails?.state?.code,
                     pincode: company?.shippingDetails?.pincode
                 }
             }
@@ -7331,9 +7350,43 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.selectedFileName = '';
                 this.invFormData.entries[0].attachedFile = '';
                 this._toasty.successToast(response?.body);
+                this._cdr.detectChanges();
             } else {
                 this._toasty.errorToast(response?.message)
             }
         });
+    }
+
+    /**
+     * This will update the deposit amount updated by user
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public updateDepositAmount(depositAmount: any): void {
+        depositAmount = String(depositAmount)?.replace(/[^0-9]/g, '');
+        this.userDeposit = depositAmount ? Number(depositAmount) : null;
+    }
+
+    /**
+     * This will return deposit object
+     *
+     * @private
+     * @returns {AmountClassMulticurrency}
+     * @memberof ProformaInvoiceComponent
+     */
+    private getDeposit(): AmountClassMulticurrency {
+        let deposit = new AmountClassMulticurrency();
+        if ((this.userDeposit !== null && this.userDeposit !== undefined) || this.voucherApiVersion !== 2) {
+            deposit.accountUniqueName = this.depositAccountUniqueName;
+            deposit.amountForAccount = this.depositAmount;
+        } else {
+            if(this.isUpdateMode) {
+                deposit = this.previousDeposit;
+            } else {
+                deposit = null;
+            }
+        }
+
+        return deposit;
     }
 }
