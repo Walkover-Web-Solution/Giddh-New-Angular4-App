@@ -1007,6 +1007,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 };
                 this.onSelectCustomer(item);
             }
+
+            if(o) {
+                if(this.invFormData?.accountDetails?.currency?.code) {
+                    this.loadBankCashAccounts(this.invFormData?.accountDetails?.currency?.code);
+                } else {
+                    this.loadBankCashAccounts("");
+                }
+            }
         });
 
         // create account success then hide aside pane
