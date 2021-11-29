@@ -2222,23 +2222,38 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.changeDetectorRef.detectChanges();
     }
 
-    public downloadFiles(transaction: any): void {
-        let dataToSend = {
-            voucherType: this.vm.selectedLedger.voucherGeneratedType,
-            entryUniqueName: (this.vm.selectedLedger.voucherUniqueName) ? undefined : this.vm.selectedLedger.uniqueName,
-            uniqueName: (this.vm.selectedLedger.voucherUniqueName) ? this.vm.selectedLedger.voucherUniqueName : undefined
-        };
+    /**
+     * Download files (voucher/attachment)
+     *
+     * @param {string} downloadOption
+     * @param {*} event
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public downloadFiles(downloadOption: string, event: any): void {
+        if(this.voucherApiVersion === 2) {
+            let dataToSend = {
+                voucherType: this.vm.selectedLedger.voucherGeneratedType,
+                entryUniqueName: (this.vm.selectedLedger.voucherUniqueName) ? undefined : this.vm.selectedLedger.uniqueName,
+                uniqueName: (this.vm.selectedLedger.voucherUniqueName) ? this.vm.selectedLedger.voucherUniqueName : undefined
+            };
 
-        let fileName = (this.vm.selectedLedger.voucherNumber && this.vm.selectedLedger.attachedFile) ? this.vm.selectedLedger.voucherNumber + '.zip' : this.vm.selectedLedger.voucherNumber ? this.vm.selectedLedger.voucherNumber + '.pdf' : this.vm.selectedLedger.attachedFile;
+            let fileName = (downloadOption === "VOUCHER") ? this.vm.selectedLedger.voucherNumber + '.pdf' : this.vm.selectedLedger.attachedFile;
 
-        this.commonService.downloadFile(dataToSend, 'pdf').pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status !== "error") {
-                saveAs(response, fileName);
-            } else {
+            this.commonService.downloadFile(dataToSend, downloadOption, 'pdf').pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status !== "error") {
+                    saveAs(response, fileName);
+                } else {
+                    this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                }
+            }, (error => {
                 this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
+            }));
+        } else {
+            if(downloadOption === "VOUCHER") {
+                this.downloadInvoice(this.vm.selectedLedger, event);
+            } else {
+                this.downloadAttachedFile(this.vm.selectedLedger.attachedFile, event);
             }
-        }, (error => {
-            this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
-        }));
+        }
     }
 }
