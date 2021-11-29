@@ -475,14 +475,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length > 0) {
             this.accountOtherApplicableDiscount.forEach(item => {
                 if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
-                    item.isActive = event.isActive.target.checked;
+                    item.isActive = event.isActive.target?.checked;
                 }
             });
         }
         if (this.currentTxn && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.accountApplicableDiscounts) {
             this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(item => {
                 if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
-                    item.isActive = event.isActive.target.checked;
+                    item.isActive = event.isActive.target?.checked;
                 }
             });
         }
@@ -851,7 +851,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public deleteAttachedFile() {
-        this.ledgerService.removeAttachment(this.blankLedger.attachedFile).subscribe((response) => {
+        this.ledgerService.removeAttachment(this.blankLedger?.attachedFile).subscribe((response) => {
             if (response?.status === 'success') {
                 this.blankLedger.attachedFile = '';
                 this.blankLedger.attachedFileName = '';
@@ -1036,8 +1036,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public selectInvoice(invoiceNo, ev) {
-        invoiceNo.isSelected = ev.target.checked;
-        if (ev.target.checked) {
+        invoiceNo.isSelected = ev?.target?.checked;
+        if (ev?.target?.checked) {
             this.blankLedger.invoicesToBePaid.push(invoiceNo.label);
         } else {
             let indx = this.blankLedger.invoicesToBePaid.indexOf(invoiceNo.label);
