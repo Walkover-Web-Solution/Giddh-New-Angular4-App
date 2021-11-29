@@ -2421,25 +2421,34 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * Download files (voucher/attachment)
      *
      * @param {*} transaction
+     * @param {string} downloadOption
      * @memberof LedgerComponent
      */
-    public downloadFiles(transaction: any): void {
-        let dataToSend = {
-            voucherType: transaction.voucherGeneratedType,
-            entryUniqueName: (transaction.voucherUniqueName) ? undefined : transaction.entryUniqueName,
-            uniqueName: (transaction.voucherUniqueName) ? transaction.voucherUniqueName : undefined
-        };
+    public downloadFiles(transaction: any, downloadOption: string, event: any): void {
+        if(this.voucherApiVersion === 2) {
+            let dataToSend = {
+                voucherType: transaction.voucherGeneratedType,
+                entryUniqueName: (transaction.voucherUniqueName) ? undefined : transaction.entryUniqueName,
+                uniqueName: (transaction.voucherUniqueName) ? transaction.voucherUniqueName : undefined
+            };
 
-        let fileName = (transaction.voucherNumber && transaction.attachedFileUniqueName) ? transaction.voucherNumber + '.zip' : transaction.voucherNumber ? transaction.voucherNumber + '.pdf' : transaction.attachedFileUniqueName;
+            let fileName = (downloadOption === "VOUCHER") ? transaction.voucherNumber + '.pdf' : transaction.attachedFileName;
 
-        this.commonService.downloadFile(dataToSend, 'pdf').pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status !== "error") {
-                saveAs(response, fileName);
-            } else {
+            this.commonService.downloadFile(dataToSend, downloadOption, 'pdf').pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status !== "error") {
+                    saveAs(response, fileName);
+                } else {
+                    this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                }
+            }, (error => {
                 this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
+            }));
+        } else {
+            if(downloadOption === "VOUCHER") {
+                this.downloadInvoice(transaction, event);
+            } else {
+                this.downloadAttachedFile(transaction.attachedFileUniqueName, event);
             }
-        }, (error => {
-            this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
-        }));
+        }
     }
 }
