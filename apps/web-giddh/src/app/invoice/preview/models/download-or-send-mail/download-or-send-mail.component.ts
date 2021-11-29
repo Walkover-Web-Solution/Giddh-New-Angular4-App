@@ -107,7 +107,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
 
             this.sanitizedPdfFileUrl = null;
             this.voucherHasAttachments = false;
-            this.commonService.downloadFile(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.commonService.downloadFile(getRequest, "VOUCHER").pipe(takeUntil(this.destroyed$)).subscribe(result => {
                 if (result?.body) {
                     /** Creating voucher pdf start */
                     const blob = this.generalService.base64ToBlob(result.body.data, 'application/pdf', 512);
@@ -266,7 +266,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                 uniqueName: this.selectedVoucher?.uniqueName
             };
 
-            this.commonService.downloadFile(dataToSend, 'pdf').pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.commonService.downloadFile(dataToSend, "VOUCHER", "pdf").pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status !== "error") {
                     if (dataToSend.typeOfInvoice.length > 1 || this.voucherHasAttachments) {
                         saveAs(response, `${this.selectedVoucher?.voucherNumber}.` + 'zip');
